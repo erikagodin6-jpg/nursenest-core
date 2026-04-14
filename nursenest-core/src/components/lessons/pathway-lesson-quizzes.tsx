@@ -1,10 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { CheckCircle2, XCircle } from "lucide-react";
 import type { PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
 
 const OPTION_LETTERS = ["A", "B", "C", "D", "E", "F"];
 
+/**
+ * Marketing pathway pre/post quizzes — immediate per-question feedback when `fullAccess`
+ * (legacy monolith embed pattern), preview-safe when locked.
+ */
 function QuizSet({
   title,
   items,
@@ -16,7 +21,6 @@ function QuizSet({
 }) {
   if (!items?.length) return null;
   const [answers, setAnswers] = useState<Record<number, number | null>>({});
-  const [submitted, setSubmitted] = useState(false);
 
   const total = items.length;
   const answeredCount = useMemo(
@@ -25,7 +29,7 @@ function QuizSet({
   );
   const allAnswered = answeredCount === total;
   const score =
-    submitted && fullAccess
+    fullAccess && allAnswered
       ? items.reduce((acc, q, i) => (answers[i] === q.correct ? acc + 1 : acc), 0)
       : null;
 
@@ -33,82 +37,106 @@ function QuizSet({
     <section className="border-b border-[var(--semantic-border-soft)] pb-8 last:border-b-0 last:pb-0">
       <h2 className="nn-marketing-h3 text-[var(--theme-heading-text)]">{title}</h2>
       <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-        Answer all questions, then submit once to review your rationale feedback.
+        {fullAccess
+          ? "Choose an answer for each question — feedback and rationales appear as you go."
+          : "Work through each question. Highlights and rationales unlock with full lesson access."}
       </p>
-      <ol className="mt-5 space-y-7 pl-0 list-none">
-        {items.map((q, i) => (
-          <li key={i}>
-            <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 sm:p-5">
-              <p className="text-[0.9375rem] font-semibold leading-snug text-[var(--theme-heading-text)]">
-                <span className="mr-2 text-[var(--semantic-text-secondary)]">{i + 1}.</span>
-                {q.question}
-              </p>
-              <fieldset className="mt-3 space-y-2 border-0 p-0">
-                {q.options.map((opt, j) => (
-                  <label
-                    key={j}
-                    className={`flex items-baseline gap-2.5 rounded-lg px-3 py-2 text-[0.9rem] leading-relaxed transition-colors ${
-                      submitted && fullAccess && j === q.correct
-                        ? "bg-[color-mix(in_srgb,var(--semantic-success)_12%,var(--semantic-surface))] text-[var(--semantic-success-contrast)] font-medium"
-                        : submitted && fullAccess && answers[i] === j && j !== q.correct
-                          ? "bg-[color-mix(in_srgb,var(--semantic-danger)_12%,var(--semantic-surface))] text-[var(--semantic-danger-contrast)] font-medium"
-                          : "text-[var(--theme-body-text)]"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name={`${title}-${i}`}
-                      value={String(j)}
-                      checked={answers[i] === j}
-                      onChange={() => setAnswers((prev) => ({ ...prev, [i]: j }))}
-                      className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--semantic-brand)]"
-                    />
-                    <span
-                      className={`shrink-0 rounded-md px-1.5 py-0.5 text-[0.7rem] font-bold uppercase tracking-wider ${
-                        submitted && fullAccess && j === q.correct
-                          ? "bg-[var(--semantic-success)] text-[var(--text-on-dark)]"
-                          : "bg-[color-mix(in_srgb,var(--theme-primary)_12%,var(--bg-card))] text-[var(--semantic-text-secondary)]"
-                      }`}
-                    >
-                      {OPTION_LETTERS[j] ?? String(j + 1)}
-                    </span>
-                    <span>{opt}</span>
-                  </label>
-                ))}
-              </fieldset>
-            </div>
-            {submitted && fullAccess && q.rationale ? (
-              <div className="nn-lesson-rationale mt-3">
-                <p className="text-[0.675rem] font-bold uppercase tracking-widest text-[var(--semantic-success-contrast)]">
-                  Rationale
+      <ol className="mt-5 list-none space-y-7 pl-0">
+        {items.map((q, i) => {
+          const picked = answers[i];
+          const showGrading = fullAccess && typeof picked === "number";
+          const isCorrect = showGrading && picked === q.correct;
+          return (
+            <li key={i}>
+              <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 sm:p-5">
+                <p className="text-[0.9375rem] font-semibold leading-snug text-[var(--theme-heading-text)]">
+                  <span className="mr-2 text-[var(--semantic-text-secondary)]">{i + 1}.</span>
+                  {q.question}
                 </p>
-                <p className="mt-1 text-[0.875rem] leading-relaxed text-[var(--semantic-text-secondary)] whitespace-pre-wrap">
-                  {q.rationale}
-                </p>
+                <fieldset className="mt-3 space-y-2 border-0 p-0">
+                  {q.options.map((opt, j) => {
+                    const selected = answers[i] === j;
+                    let rowClass =
+                      "flex items-baseline gap-2.5 rounded-lg px-3 py-2 text-[0.9rem] leading-relaxed transition-colors text-[var(--theme-body-text)]";
+                    if (showGrading) {
+                      if (j === q.correct) {
+                        rowClass =
+                          "flex items-baseline gap-2.5 rounded-lg px-3 py-2 text-[0.9rem] leading-relaxed font-medium";
+                        rowClass += " bg-[color-mix(in_srgb,var(--semantic-success)_14%,var(--semantic-surface))] text-[var(--semantic-success-contrast)]";
+                      } else if (selected && j !== q.correct) {
+                        rowClass =
+                          "flex items-baseline gap-2.5 rounded-lg px-3 py-2 text-[0.9rem] leading-relaxed font-medium";
+                        rowClass += " bg-[color-mix(in_srgb,var(--semantic-danger)_12%,var(--semantic-surface))] text-[var(--semantic-danger-contrast)]";
+                      }
+                    }
+                    return (
+                      <label key={j} className={rowClass}>
+                        <input
+                          type="radio"
+                          name={`${title}-${i}`}
+                          value={String(j)}
+                          checked={selected}
+                          onChange={() => setAnswers((prev) => ({ ...prev, [i]: j }))}
+                          className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--semantic-brand)]"
+                        />
+                        <span
+                          className={`shrink-0 rounded-md px-1.5 py-0.5 text-[0.7rem] font-bold uppercase tracking-wider ${
+                            showGrading && j === q.correct
+                              ? "bg-[var(--semantic-success)] text-[var(--text-on-dark)]"
+                              : "bg-[color-mix(in_srgb,var(--theme-primary)_12%,var(--bg-card))] text-[var(--semantic-text-secondary)]"
+                          }`}
+                        >
+                          {OPTION_LETTERS[j] ?? String(j + 1)}
+                        </span>
+                        <span className="flex min-w-0 flex-1 items-start gap-2">
+                          {showGrading && j === q.correct ? (
+                            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+                          ) : null}
+                          {showGrading && selected && j !== q.correct ? (
+                            <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-danger)]" aria-hidden />
+                          ) : null}
+                          <span>{opt}</span>
+                        </span>
+                      </label>
+                    );
+                  })}
+                </fieldset>
               </div>
-            ) : null}
-          </li>
-        ))}
+              {showGrading && q.rationale ? (
+                <div
+                  className="nn-lesson-rationale mt-3 rounded-xl border border-[var(--semantic-border-soft)] p-4"
+                  style={{
+                    background: isCorrect
+                      ? "color-mix(in srgb, var(--semantic-panel-positive) 35%, var(--semantic-surface))"
+                      : "color-mix(in srgb, var(--semantic-panel-warm) 28%, var(--semantic-surface))",
+                  }}
+                >
+                  <p className="text-[0.675rem] font-bold uppercase tracking-widest text-[var(--semantic-text-secondary)]">
+                    Rationale
+                  </p>
+                  <p className="mt-1 text-[0.875rem] leading-relaxed text-[var(--theme-body-text)] whitespace-pre-wrap">
+                    {q.rationale}
+                  </p>
+                </div>
+              ) : null}
+            </li>
+          );
+        })}
       </ol>
       <div className="mt-5 flex flex-wrap items-center gap-3">
-        <button
-          type="button"
-          onClick={() => setSubmitted(true)}
-          disabled={!allAnswered}
-          className="inline-flex min-h-[42px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-5 py-2 text-sm font-semibold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Submit {title}
-        </button>
-        {!allAnswered ? (
+        {!fullAccess ? (
           <p className="text-xs text-[var(--semantic-warning-contrast)]">
-            Answer all questions before submitting ({answeredCount}/{total} answered).
+            {answeredCount}/{total} answered · full access unlocks answer highlights and rationales.
           </p>
-        ) : null}
-        {submitted && fullAccess && score !== null ? (
+        ) : allAnswered && score !== null ? (
           <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
             Score: {score}/{total}
           </p>
-        ) : null}
+        ) : (
+          <p className="text-xs text-[var(--theme-muted-text)]">
+            Progress: {answeredCount}/{total} answered
+          </p>
+        )}
       </div>
     </section>
   );

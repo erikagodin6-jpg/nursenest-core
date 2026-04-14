@@ -2,15 +2,15 @@
 
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ChevronDown, User } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { isStaffRole } from "@/lib/auth/staff-roles";
 import { formatTitleCase } from "@/lib/format/text-case";
-import { PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { getNavChromeStyle } from "@/lib/theme/nav-chrome";
 import { UserFeedbackAccountMenuItem } from "@/components/feedback/user-feedback-account-menu-item";
 
@@ -37,9 +37,20 @@ function useLocalizeHref() {
 /**
  * Marketing header: Sign in + Get Started (guests) or account menu (signed-in). Same component at all breakpoints.
  */
+function useGuestMarketingSignupHref(localizeHref: (href: string) => string) {
+  const pathname = usePathname();
+  return useMemo(() => {
+    const base = `/signup?callbackUrl=${encodeURIComponent("/app")}`;
+    const stripped = stripMarketingLocalePrefix(pathname ?? "/").pathname;
+    const isHome = stripped === "/" || stripped === "";
+    return localizeHref(isHome ? `${base}&entry=homepage` : base);
+  }, [localizeHref, pathname]);
+}
+
 export function MarketingHeaderAuthDesktop() {
   const { t, locale } = useMarketingI18n();
   const localizeHref = useLocalizeHref();
+  const guestMarketingSignupHref = useGuestMarketingSignupHref(localizeHref);
   const { data: session, status } = useSession();
   const { theme } = useTheme();
   const navChromeStyle = getNavChromeStyle(theme);
@@ -62,14 +73,18 @@ export function MarketingHeaderAuthDesktop() {
 
   if (status !== "authenticated" || !session?.user) {
     const loginToApp = localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`);
-    const signupToApp = localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`);
     return (
       <div style={navChromeStyle} className="flex max-w-[100vw] items-center gap-2">
-        <Link href={loginToApp} className={SIGN_IN_CLASS}>
-          {formatTitleCase(t("nav.logIn"), locale)}
+        <Link href={loginToApp} className={SIGN_IN_CLASS} aria-label="Log in to your NurseNest account">
+          {formatTitleCase("Log in", locale)}
         </Link>
-        <Link href={signupToApp} className={GET_STARTED_CLASS}>
-          {formatTitleCase(PRIMARY_CTA, locale)}
+        <Link
+          href={guestMarketingSignupHref}
+          className={GET_STARTED_CLASS}
+          aria-label="Start free account — nursing and healthcare exam prep"
+          title="Start free — no credit card required"
+        >
+          {formatTitleCase("Start Free", locale)}
         </Link>
       </div>
     );
@@ -149,6 +164,7 @@ export function MarketingHeaderAuthDesktop() {
 export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => void }) {
   const { t, locale } = useMarketingI18n();
   const localizeHref = useLocalizeHref();
+  const guestMarketingSignupHref = useGuestMarketingSignupHref(localizeHref);
   const { data: session, status } = useSession();
 
   if (status === "loading") {
@@ -157,14 +173,24 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
 
   if (status !== "authenticated" || !session?.user) {
     const loginToApp = localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`);
-    const signupToApp = localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`);
     return (
       <div className="mt-4 flex gap-2">
-        <Link href={loginToApp} className={`${SIGN_IN_CLASS} flex-1 justify-center border border-[var(--nav-border)] py-2`} onClick={onNavigate}>
-          {formatTitleCase(t("nav.logIn"), locale)}
+        <Link
+          href={loginToApp}
+          className={`${SIGN_IN_CLASS} flex-1 justify-center border border-[var(--nav-border)] py-2`}
+          onClick={onNavigate}
+          aria-label="Log in to your NurseNest account"
+        >
+          {formatTitleCase("Log in", locale)}
         </Link>
-        <Link href={signupToApp} className={`${GET_STARTED_CLASS} flex-1`} onClick={onNavigate}>
-          {formatTitleCase(PRIMARY_CTA, locale)}
+        <Link
+          href={guestMarketingSignupHref}
+          className={`${GET_STARTED_CLASS} flex-1`}
+          onClick={onNavigate}
+          aria-label="Start free account — nursing and healthcare exam prep"
+          title="Start free — no credit card required"
+        >
+          {formatTitleCase("Start Free", locale)}
         </Link>
       </div>
     );

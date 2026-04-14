@@ -1,17 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useMemo } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useMemo } from "react";
 
 /**
- * Suppresses the main learner marketing-style header during active exam-style sessions
+ * Suppresses the main learner marketing-style header during active CAT / practice-test sessions
  * so the experience feels closer to a testing environment. Shows a minimal exit strip instead.
- * Does not claim to replicate any vendor’s proprietary exam UI.
+ *
+ * Important: focus mode is **pathname-only** (`/app/practice-tests/:sessionId`). The legacy
+ * `?examShell=1` flag must NOT hide chrome globally — it leaked onto account/settings when
+ * present in the URL and removed the main nav site-wide via `data-learner-exam-chrome`.
  */
-function isFocusedExamSessionPath(pathname: string): boolean {
+function isFocusedPracticeTestSessionPath(pathname: string): boolean {
   // Hide learner chrome only for the live session route (`/app/practice-tests/:id`).
-  // Keep chrome visible on start, list, history, and results routes.
+  // Keep chrome visible on list, start, cat-insights, and `/practice-tests/:id/results` (4 segments).
   const parts = pathname.split("/").filter(Boolean);
   if (parts.length !== 3) return false;
   if (parts[0] !== "app" || parts[1] !== "practice-tests") return false;
@@ -20,15 +23,9 @@ function isFocusedExamSessionPath(pathname: string): boolean {
   return leaf.length > 0;
 }
 
-function LearnerExamChromeGateInner({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const examFocus = useMemo(() => {
-    const shell = searchParams.get("examShell");
-    if (shell === "1" || shell === "true") return true;
-    return isFocusedExamSessionPath(pathname);
-  }, [pathname, searchParams]);
+export function LearnerExamChromeGate({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname() ?? "";
+  const examFocus = useMemo(() => isFocusedPracticeTestSessionPath(pathname), [pathname]);
 
   useEffect(() => {
     if (examFocus) {
@@ -57,13 +54,5 @@ function LearnerExamChromeGateInner({ children }: { children: React.ReactNode })
       ) : null}
       {children}
     </>
-  );
-}
-
-export function LearnerExamChromeGate({ children }: { children: React.ReactNode }) {
-  return (
-    <Suspense fallback={<>{children}</>}>
-      <LearnerExamChromeGateInner>{children}</LearnerExamChromeGateInner>
-    </Suspense>
   );
 }

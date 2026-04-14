@@ -1,0 +1,78 @@
+{
+  "generatedAt": "2026-04-14",
+  "typecheck": {
+    "errorsBefore": 28,
+    "errorsAfter": 13,
+    "command": "npx tsc --noEmit",
+    "cwd": "nursenest-core"
+  },
+  "buckets": {
+    "learner_flow_critical": {
+      "description": "Subscriber dashboard, study settings API, learner utilities",
+      "fixed": [
+        "src/app/(student)/app/(learner)/page.tsx — TS7034/TS7005 implicit any on snapshot; TS18047 let-binding narrowing",
+        "src/app/api/learner/study-settings/route.ts — Prisma null vs PartialStudySettings; PATCH body session length typing",
+        "src/lib/learner/study-settings.ts — rowToStudySettings / persistence row null mapping",
+        "src/lib/learner/study-settings.test.ts — invalid session length test input typing"
+      ],
+      "remaining": []
+    },
+    "cat_flow_critical": {
+      "description": "CAT coach, enriched CAT helpers, CAT tests",
+      "fixed": [
+        "src/lib/practice-tests/cat-results-coach.ts — sanitizeCatExamReportForCoach missing CatExamReport fields (result, readinessLevel, abilityScore, confidenceLevelLabel)",
+        "src/lib/practice-tests/cat-results-coach.test.ts — makeReport() base object satisfies CatExamReport",
+        "src/lib/practice-tests/enrich-cat-results-coach.ts — PathwayLesson status filter DRAFT vs draft"
+      ],
+      "remaining": []
+    },
+    "shell_header_critical": {
+      "description": "Site header and learner shell document listeners",
+      "fixed": [
+        "src/components/auth/learner-shell-user-bar.tsx — document click handler PointerEvent vs MouseEvent",
+        "src/components/layout/site-header.tsx — same"
+      ],
+      "remaining": []
+    },
+    "lesson_adjacent": {
+      "description": "Lesson study loop bank pack / Prisma row typing",
+      "fixed": [
+        "src/lib/lessons/load-lesson-study-loop-bank-pack.ts — Row.options / correctAnswer JsonValue vs unknown"
+      ],
+      "remaining": []
+    },
+    "deferred_marketing": {
+      "description": "Marketing routes (out of scope for this pass)",
+      "remaining": [
+        "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/questions/page.tsx — ExamPathwayDefinition shape",
+        "src/app/(marketing)/(default)/pre-nursing/mini-cat/page.tsx — BreadcrumbCrumb name vs label",
+        "src/app/(marketing)/(default)/pre-nursing/practice/[slug]/page.tsx — BreadcrumbCrumb name vs label"
+      ]
+    },
+    "deferred_blog_admin": {
+      "description": "Blog and admin blog API (de-prioritized)",
+      "remaining": [
+        "src/app/api/admin/blog/generate-ai/route.ts",
+        "src/app/api/admin/blog/localized/generate/route.ts",
+        "src/lib/blog/blog-automation-engine.ts",
+        "src/lib/blog/blog-publish-scheduler.ts",
+        "src/lib/blog/blog-recover-missed-posts.ts",
+        "src/lib/blog/safe-localized-blog-queries.ts"
+      ]
+    },
+    "deferred_checkout": {
+      "description": "Subscriptions checkout (not learner shell core)",
+      "remaining": [
+        "src/app/api/subscriptions/checkout/route.ts — Stripe Status | null"
+      ]
+    },
+    "deferred_linking": {
+      "description": "Internal link density config",
+      "remaining": [
+        "src/lib/linking/link-density-config.ts — LinkTargetKind index on SurfaceDensityConfig"
+      ]
+    }
+  },
+  "learnerLessonCatShellTypeSafe": true,
+  "note": "After this pass, `rg '^src/'` on tsc output lists only deferred buckets (13 errors); no remaining errors under learner app, study-settings, CAT coach, site header, learner shell, or load-lesson-study-loop-bank-pack."
+}

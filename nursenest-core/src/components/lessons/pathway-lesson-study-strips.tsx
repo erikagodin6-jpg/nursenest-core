@@ -1,39 +1,17 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { examTakeawaysHeadingForPathway } from "@/lib/lessons/exam-takeaways-heading";
+import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 
-/**
- * High-yield takeaways — rendered twice (top + bottom) when items exist.
- */
-export function PathwayLessonStudyTakeawaysStrip({
-  pathway,
-  items,
-  position,
-}: {
+/** Alias for {@link ExamTakeawaysBlock} — stable import path for existing callers. */
+export function PathwayLessonStudyTakeawaysStrip(props: {
   pathway: ExamPathwayDefinition;
   items: string[];
   position: "top" | "bottom";
+  alliedProfessionLabel?: string | null;
 }) {
-  if (items.length < 2) return null;
-  const label = examTakeawaysHeadingForPathway(pathway);
-  const headingId = `lesson-takeaways-${position}`;
-  return (
-    <section
-      className={`nn-lesson-hy-takeaways nn-lesson-hy-takeaways--${position}`}
-      aria-labelledby={headingId}
-    >
-      <h2 id={headingId} className="nn-lesson-hy-takeaways__title">
-        {position === "top" ? label : `${label} · review`}
-      </h2>
-      <ul className="nn-lesson-hy-takeaways__list">
-        {items.map((line, i) => (
-          <li key={`tw-${position}-${i}`} className="nn-lesson-hy-takeaways__item">
-            {line}
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
+  return <ExamTakeawaysBlock {...props} />;
 }
+
+export { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 
 /** Soft-warning panel for traps / distractors (no alarm styling). */
 export function PathwayLessonCommonTrapsStrip({ items }: { items: string[] }) {

@@ -1,0 +1,1407 @@
+{
+  "generatedAt": "2026-04-14T13:40:47.001Z",
+  "conclusion": "Static inventory cannot prove HTTP route bugs (no request/response). Entries below are lessons with substantial body text that still fail publicComplete — strong evidence of strict gating or authoring depth, not Next.js routing.",
+  "provenRouteBugs": [],
+  "substantialContentButGateFailed": [
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "12-lead-ecg-advanced-interpretation-np-level-np",
+      "totalBodyChars": 7025,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "a1c-interpretation-np",
+      "totalBodyChars": 5744,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "abcde-melanoma-rule-np",
+      "totalBodyChars": 5536,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "abdominal-pain-algorithm-np",
+      "totalBodyChars": 6359,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "abg-advanced-np",
+      "totalBodyChars": 14983,
+      "structureMode": "premium",
+      "issueCount": 7
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "abg-interpretation-np",
+      "totalBodyChars": 6122,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "acei-arb-selection-np",
+      "totalBodyChars": 6170,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "acetaminophen-od-np",
+      "totalBodyChars": 6687,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "acid-base-electrolyte-patho-np",
+      "totalBodyChars": 7059,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "acid-base-physiology-np",
+      "totalBodyChars": 6087,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "acne-np",
+      "totalBodyChars": 6992,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "acs-diagnostic-criteria-np",
+      "totalBodyChars": 7008,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "actinic-keratosis-np",
+      "totalBodyChars": 6910,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "acute-abdomen-np",
+      "totalBodyChars": 7328,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "acute-coronary-syndrome-np",
+      "totalBodyChars": 7487,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "acute-glomerulonephritis-np",
+      "totalBodyChars": 8295,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "acute-kidney-injury-management-np",
+      "totalBodyChars": 4190,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "acute-liver-failure-np",
+      "totalBodyChars": 12429,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "acute-low-back-pain-algorithm-np",
+      "totalBodyChars": 7210,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "acute-pancreatitis-criteria-np",
+      "totalBodyChars": 7891,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "acute-testicular-pain-np",
+      "totalBodyChars": 7257,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "acute-visual-loss-np",
+      "totalBodyChars": 6714,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "adaptive-immunity-np",
+      "totalBodyChars": 6739,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "additive-hypotension-np",
+      "totalBodyChars": 5969,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "adhd-basics-np",
+      "totalBodyChars": 6519,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "adhd-dsm5-criteria-np",
+      "totalBodyChars": 7705,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "adhd-pharmacology-np",
+      "totalBodyChars": 8282,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "adrenal-crisis-np",
+      "totalBodyChars": 7668,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "adrenal-disorders-basics-np",
+      "totalBodyChars": 7656,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "adrenal-disorders-patho-np",
+      "totalBodyChars": 7975,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "adrenal-hemorrhage-np",
+      "totalBodyChars": 7259,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "adrenal-incidentaloma-np",
+      "totalBodyChars": 7276,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "adult-immunizations-np",
+      "totalBodyChars": 6535,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "advance-directives-ethics-np",
+      "totalBodyChars": 6858,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "advanced-pathophysiology-foundations-np",
+      "totalBodyChars": 7123,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "afib-diagnostic-criteria-np",
+      "totalBodyChars": 7020,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "aging-physiology-changes-np",
+      "totalBodyChars": 7516,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "airflow-dynamics-np",
+      "totalBodyChars": 7892,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "aki-diagnostic-criteria-np",
+      "totalBodyChars": 7959,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "aki-mechanisms-np",
+      "totalBodyChars": 5820,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "aki-vs-ckd-np",
+      "totalBodyChars": 6524,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "alcohol-use-screening-np",
+      "totalBodyChars": 8567,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "alcohol-withdrawal-np",
+      "totalBodyChars": 4635,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "alpha-1-antitrypsin-deficiency-np",
+      "totalBodyChars": 3528,
+      "structureMode": "legacy",
+      "issueCount": 3
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "als-management-np",
+      "totalBodyChars": 5844,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "altered-mental-status-algorithm-np",
+      "totalBodyChars": 7162,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "amenorrhea-np",
+      "totalBodyChars": 7106,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "amniotic-fluid-embolism-dic-pathway-np",
+      "totalBodyChars": 8020,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "amputation-care-np",
+      "totalBodyChars": 8514,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "amyloidosis-np",
+      "totalBodyChars": 8091,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "ana-interpretation-np",
+      "totalBodyChars": 8236,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "anaphylaxis-advanced-np",
+      "totalBodyChars": 5859,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "androgen-insensitivity-np",
+      "totalBodyChars": 7973,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "anemia-chronic-disease-np",
+      "totalBodyChars": 6202,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "anemia-mechanisms-np",
+      "totalBodyChars": 6587,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "angelman-syndrome-np",
+      "totalBodyChars": 6724,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "anion-gap-metabolic-acidosis-np",
+      "totalBodyChars": 6567,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "ankylosing-spondylitis-np",
+      "totalBodyChars": 7308,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "antibiotic-duration-decisions-np",
+      "totalBodyChars": 5017,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "antibiotic-resistance-np",
+      "totalBodyChars": 5573,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "antibiotic-selection-logic-np",
+      "totalBodyChars": 5015,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "antibiotic-stewardship-np",
+      "totalBodyChars": 5019,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "anticholinergic-toxidrome-np",
+      "totalBodyChars": 5263,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "anticholinergics-resp-np",
+      "totalBodyChars": 3024,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "anticoagulants-doac-warfarin-np",
+      "totalBodyChars": 5577,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "anticoagulants-np",
+      "totalBodyChars": 8058,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "anticoagulation-therapy-np",
+      "totalBodyChars": 4624,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "antiepileptics-basics-np",
+      "totalBodyChars": 6086,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "antifungal-basics-np",
+      "totalBodyChars": 6239,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "antihypertensives-comparison-np",
+      "totalBodyChars": 6359,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "antimicrobial-stewardship-np",
+      "totalBodyChars": 5917,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "antiphospholipid-syndrome-np",
+      "totalBodyChars": 6262,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "antiplatelets-np",
+      "totalBodyChars": 5759,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "antipsychotic-metabolic-monitoring-np",
+      "totalBodyChars": 5525,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "antipsychotic-profiles-np",
+      "totalBodyChars": 6326,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "antipsychotic-qt-risk-np",
+      "totalBodyChars": 5993,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "antipsychotics-core-np",
+      "totalBodyChars": 7168,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "antisynthetase-syndrome-np",
+      "totalBodyChars": 5071,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "antiviral-basics-np",
+      "totalBodyChars": 5574,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "anxiety-disorders-core-np",
+      "totalBodyChars": 6348,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "anxiety-disorders-patho-np",
+      "totalBodyChars": 6850,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "anxiety-ssri-firstline-np",
+      "totalBodyChars": 6221,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "aortic-dissection-np",
+      "totalBodyChars": 5536,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "apoptosis-necrosis-np",
+      "totalBodyChars": 10774,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "ards-management-np",
+      "totalBodyChars": 5299,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "ards-np",
+      "totalBodyChars": 7730,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "arrhythmia-recognition-np",
+      "totalBodyChars": 6408,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "arrhythmogenesis-np",
+      "totalBodyChars": 7751,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "ascvd-risk-calculation-np",
+      "totalBodyChars": 7177,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "aspirin-od-np",
+      "totalBodyChars": 7899,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "asthma-diagnostic-criteria-np",
+      "totalBodyChars": 3254,
+      "structureMode": "legacy",
+      "issueCount": 3
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "asthma-outpatient-np",
+      "totalBodyChars": 11099,
+      "structureMode": "premium",
+      "issueCount": 7
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "asthma-pathophysiology-np",
+      "totalBodyChars": 3160,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "asthma-pathophysiology-np-level-np",
+      "totalBodyChars": 10402,
+      "structureMode": "premium",
+      "issueCount": 8
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "atherosclerosis-plaque-biology-np",
+      "totalBodyChars": 10444,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "atypical-antipsychotics-rx-np",
+      "totalBodyChars": 6085,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "aub-mechanisms-np",
+      "totalBodyChars": 6551,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "aub-np",
+      "totalBodyChars": 6763,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "augmentation-strategies-np",
+      "totalBodyChars": 7403,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "autism-screening-np",
+      "totalBodyChars": 7327,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "autoimmune-np",
+      "totalBodyChars": 7755,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "autoimmune-pathogenesis-np",
+      "totalBodyChars": 8404,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "b12-deficiency-criteria-np",
+      "totalBodyChars": 8441,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "b12-deficiency-np",
+      "totalBodyChars": 8959,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "bacterial-meningitis-np",
+      "totalBodyChars": 5258,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "balanitis-np",
+      "totalBodyChars": 8885,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "bartholinitis-np",
+      "totalBodyChars": 7735,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "beers-criteria-np",
+      "totalBodyChars": 6361,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "beers-criteria-prescribing-np",
+      "totalBodyChars": 6907,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "behcet-disease-np",
+      "totalBodyChars": 7477,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "bells-palsy-np",
+      "totalBodyChars": 8106,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "benign-ovarian-cysts-np",
+      "totalBodyChars": 9377,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "benzodiazepine-pharmacology-np",
+      "totalBodyChars": 7986,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "benzodiazepine-risks-rx-np",
+      "totalBodyChars": 7759,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "beta-agonists-saba-laba-np",
+      "totalBodyChars": 6996,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "beta-blocker-overdose-np",
+      "totalBodyChars": 7840,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "beta-blocker-selection-np",
+      "totalBodyChars": 7716,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "biliary-atresia-np",
+      "totalBodyChars": 7911,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "bilirubin-metabolism-np",
+      "totalBodyChars": 8607,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "bipolar-diagnostic-criteria-np",
+      "totalBodyChars": 8792,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "bipolar-disorder-core-np",
+      "totalBodyChars": 7119,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "bipolar-disorder-np",
+      "totalBodyChars": 8523,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "bisphosphonate-prescribing-np",
+      "totalBodyChars": 9266,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "black-box-warnings-np",
+      "totalBodyChars": 7730,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "bleeding-risk-stacking-np",
+      "totalBodyChars": 9397,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "bnp-interpretation-np",
+      "totalBodyChars": 10021,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "borderline-lab-values-np",
+      "totalBodyChars": 9242,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "bowel-obstruction-np",
+      "totalBodyChars": 3368,
+      "structureMode": "legacy",
+      "issueCount": 3
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "bph-turp-np",
+      "totalBodyChars": 5900,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "bppv-management-np",
+      "totalBodyChars": 4684,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "breast-cancer-np",
+      "totalBodyChars": 9451,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "breast-exam-np",
+      "totalBodyChars": 6935,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "bronchiectasis-management-np",
+      "totalBodyChars": 5674,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "bronchiolitis-np",
+      "totalBodyChars": 8280,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "bronchiolitis-patho-np",
+      "totalBodyChars": 11626,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "brown-sequard-syndrome-np",
+      "totalBodyChars": 6872,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "brugada-syndrome-np",
+      "totalBodyChars": 5657,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "burn-resuscitation-np",
+      "totalBodyChars": 8850,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "calcium-regulation-np",
+      "totalBodyChars": 6224,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "calcium-vitamin-d-logic-np",
+      "totalBodyChars": 6818,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cancer-screening-guidelines-np",
+      "totalBodyChars": 7800,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "capacity-assessment-np",
+      "totalBodyChars": 7088,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "carbon-monoxide-poisoning-np",
+      "totalBodyChars": 4223,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "carcinoid-syndrome-np",
+      "totalBodyChars": 7416,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cardiac-cath-care-np",
+      "totalBodyChars": 6305,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cardiac-conduction-system-np",
+      "totalBodyChars": 5190,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cardiac-output-determinants-np",
+      "totalBodyChars": 5369,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cardiac-tamponade-np",
+      "totalBodyChars": 4432,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cardiomyopathy-differential-np",
+      "totalBodyChars": 5239,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cardiopulm-critical-np",
+      "totalBodyChars": 5804,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cardiovascular-diagnostic-criteria-np",
+      "totalBodyChars": 5436,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cardiovascular-np",
+      "totalBodyChars": 20252,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cardiovascular-np-exp",
+      "totalBodyChars": 4506,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cardiovascular-pathophysiology-np",
+      "totalBodyChars": 5909,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cardiovascular-prescribing-np",
+      "totalBodyChars": 4992,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cavernous-sinus-thrombosis-np",
+      "totalBodyChars": 5764,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cbc-interpretation-np",
+      "totalBodyChars": 6460,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "ccb-dhp-nondhp-np",
+      "totalBodyChars": 5023,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "celiac-disease-atypical-np",
+      "totalBodyChars": 5756,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cellular-injury-adaptation-np",
+      "totalBodyChars": 5607,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cellulitis-np",
+      "totalBodyChars": 6429,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "central-line-np",
+      "totalBodyChars": 6225,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "central-pontine-myelinolysis-np",
+      "totalBodyChars": 6381,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cerebellar-exam-np",
+      "totalBodyChars": 4243,
+      "structureMode": "legacy",
+      "issueCount": 3
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cervical-cancer-screening-np",
+      "totalBodyChars": 6226,
+      "structureMode": "legacy",
+      "issueCount": 3
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cervical-insufficiency-np",
+      "totalBodyChars": 5439,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cervicitis-np",
+      "totalBodyChars": 7653,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "chest-drainage-system-np",
+      "totalBodyChars": 6279,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "chest-pain-workup-np",
+      "totalBodyChars": 5918,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "chlamydia-management-np",
+      "totalBodyChars": 4243,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cholecystectomy-np",
+      "totalBodyChars": 6384,
+      "structureMode": "legacy",
+      "issueCount": 3
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cholecystitis-np",
+      "totalBodyChars": 3149,
+      "structureMode": "legacy",
+      "issueCount": 3
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cholesterol-embolization-np",
+      "totalBodyChars": 4712,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cholinergic-toxidrome-np",
+      "totalBodyChars": 3313,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "chorioamnionitis-np",
+      "totalBodyChars": 3095,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "chronic-diarrhea-algorithm-np",
+      "totalBodyChars": 3238,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "chronic-disease-management-plans-np",
+      "totalBodyChars": 7498,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "chronic-inflammation-mechanisms-np",
+      "totalBodyChars": 3374,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "chronic-inflammatory-states-np",
+      "totalBodyChars": 3426,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "chronic-kidney-disease-np",
+      "totalBodyChars": 4681,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "chronic-mesenteric-ischemia-np",
+      "totalBodyChars": 3411,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "chronic-pain-mgmt-np",
+      "totalBodyChars": 7356,
+      "structureMode": "legacy",
+      "issueCount": 1
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "chronic-pancreatitis-management-np",
+      "totalBodyChars": 3517,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cirrhosis-core-np",
+      "totalBodyChars": 5200,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cirrhosis-diagnostic-criteria-np",
+      "totalBodyChars": 4952,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cirrhosis-management-np",
+      "totalBodyChars": 4758,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cirrhosis-patho-np",
+      "totalBodyChars": 5575,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "ckd-diagnostic-criteria-np",
+      "totalBodyChars": 5524,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "ckd-progression-patho-np",
+      "totalBodyChars": 5053,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "ckd-staging-np",
+      "totalBodyChars": 4801,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "clinical-prioritization-np",
+      "totalBodyChars": 5087,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "clinical-reasoning-np",
+      "totalBodyChars": 5328,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cml-management-np",
+      "totalBodyChars": 5257,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cmp-interpretation-np",
+      "totalBodyChars": 5692,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "coagulation-cascade-np",
+      "totalBodyChars": 5973,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "coagulation-disorders-patho-np",
+      "totalBodyChars": 5750,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "coagulopathies-basics-np",
+      "totalBodyChars": 5575,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cognitive-decline-np",
+      "totalBodyChars": 6012,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "cognitive-screening-np",
+      "totalBodyChars": 5689,
+      "structureMode": "legacy",
+      "issueCount": 2
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "slug": "colon-cancer-screening-np",
+      "totalBodyChars": 5618,
+      "structureMode": "legacy",
+      "issueCount": 1
+    }
+  ]
+}

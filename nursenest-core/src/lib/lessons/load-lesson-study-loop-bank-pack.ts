@@ -1,6 +1,7 @@
 import "server-only";
 
 import crypto from "crypto";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
@@ -91,8 +92,8 @@ function stripEnriched(it: EnrichedItem): LessonBankQuizItem {
 type Row = {
   id: string;
   stem: string;
-  options: unknown;
-  correctAnswer: unknown;
+  options: Prisma.JsonValue;
+  correctAnswer: Prisma.JsonValue;
   questionType: string;
   rationale: string | null;
   difficulty: number | null;

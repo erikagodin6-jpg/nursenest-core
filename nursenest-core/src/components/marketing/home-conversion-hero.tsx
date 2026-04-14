@@ -80,7 +80,7 @@ export function HomeConversionHero() {
                   data-testid="text-hero-subheading"
                 >
                   {formatSentenceCase(
-                    "Use pathway-scoped questions, full rationales, and readiness signals so each session supports a clear prep plan.",
+                    "Exam prep for nursing and allied health careers: pathway-scoped questions, full rationales, and readiness signals so each session supports a clear prep plan.",
                     locale,
                   )}
                 </p>

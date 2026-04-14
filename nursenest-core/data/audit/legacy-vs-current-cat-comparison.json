@@ -1,0 +1,150 @@
+{
+  "generatedAt": "2026-04-14T13:47:11.287Z",
+  "summary": "Legacy monolith mock/CAT is feature-rich on the client (checkpoint/recovery) but split from production data model. Current stack is the source of truth for adaptive logic and results quality.",
+  "topAreasLegacyStronger": [
+    {
+      "rank": 1,
+      "area": "progress_resume",
+      "summary": "Explicit checkpoint + recovery prompts in mock-exam-session and session-checkpoint utilities."
+    },
+    {
+      "rank": 2,
+      "area": "offline_resilience_surface_area",
+      "summary": "exam-fallbacks bundles many guards (media, translation, rationale, printable backup) in one legacy module."
+    },
+    {
+      "rank": 3,
+      "area": "client_blueprint_mock_config",
+      "summary": "flagship-mock-exam-configs + client cat-engine tie blueprint meta to a single long-lived page (useful reference for edge cases)."
+    },
+    {
+      "rank": 4,
+      "area": "mlt_allied_simulation",
+      "summary": "server/mlt-adaptive-engine provides self-contained CAT simulation for MLT workflows."
+    },
+    {
+      "rank": 5,
+      "area": "express_cat_debuggability",
+      "summary": "server/cat-session-api is small and easy to trace for ability updates (dev/legacy only — not a prod replacement for current API)."
+    }
+  ],
+  "topAreasCurrentStronger": [
+    {
+      "rank": 1,
+      "area": "adaptive_engine_integrity",
+      "summary": "Blueprint-aware selection, diagnostics, and stopping in lib/exams/cat-engine."
+    },
+    {
+      "rank": 2,
+      "area": "results_and_coaching",
+      "summary": "cat-results-coach + enrich layer with reliability rules and theta history."
+    },
+    {
+      "rank": 3,
+      "area": "security_and_entitlements",
+      "summary": "Subscriber session gates, Prisma-backed sessions, content-access scopes."
+    },
+    {
+      "rank": 4,
+      "area": "question_delivery_shape",
+      "summary": "One-question API + overlays keeps payloads bounded and i18n-safe."
+    },
+    {
+      "rank": 5,
+      "area": "learner_ui_consistency",
+      "summary": "Exam session shell, semantic styling, CAT-specific layout components."
+    }
+  ],
+  "categories": [
+    {
+      "id": "start_flow",
+      "legacyBetter": false,
+      "currentBetter": true,
+      "equal": false,
+      "unclear": false,
+      "verdict": "current_better",
+      "why": "Current flow is integrated with Next.js app routes, Prisma PracticeTest, subscriber gates, and pathway registry. Legacy split between giant client mock page and Express /api/cat with separate PG mock_exam_attempts."
+    },
+    {
+      "id": "question_flow",
+      "legacyBetter": false,
+      "currentBetter": true,
+      "equal": false,
+      "unclear": false,
+      "verdict": "current_better",
+      "why": "Current one-question-at-a-time API reduces payload size and aligns with overlay/i18n. Legacy mock-exam-session is powerful but monolithic (~2.6k lines) and harder to maintain."
+    },
+    {
+      "id": "adaptive_behavior",
+      "legacyBetter": false,
+      "currentBetter": true,
+      "equal": false,
+      "unclear": false,
+      "verdict": "current_better",
+      "why": "exams/cat-engine ties to blueprint diagnostics, stem hash, exam simulation, and validated stopping. Legacy Express cat uses simpler ability delta; client cat-engine is rich but duplicated. NP stack adds second adaptive engine under lib/cat."
+    },
+    {
+      "id": "progress_resume",
+      "legacyBetter": true,
+      "currentBetter": false,
+      "equal": false,
+      "unclear": false,
+      "verdict": "legacy_better",
+      "why": "Legacy mock-exam-session + session-checkpoint + exam-fallbacks explicitly model checkpoints and recovery UX. Current runner has resume paths but legacy surface area for edge-case recovery is larger — selective port of recovery/checkpoint patterns is worth study."
+    },
+    {
+      "id": "exam_simulation",
+      "legacyBetter": false,
+      "currentBetter": true,
+      "equal": false,
+      "unclear": false,
+      "verdict": "current_better",
+      "why": "cat-exam-simulation and presentation modes are first-class in current code. Legacy relies on blueprint meta in client configs."
+    },
+    {
+      "id": "rationale_review",
+      "legacyBetter": true,
+      "currentBetter": true,
+      "equal": false,
+      "unclear": false,
+      "verdict": "equal",
+      "why": "Both have strong rationale paths: legacy RationaleGuard/fallbacks; current PracticeRationaleFullPanel + cat-rationale-panel + teaching review. Merge ideas, not wholesale swap."
+    },
+    {
+      "id": "results_page",
+      "legacyBetter": false,
+      "currentBetter": true,
+      "equal": false,
+      "unclear": false,
+      "verdict": "current_better",
+      "why": "cat-results-coach + theta stability + reliability language is richer and test-backed. Legacy mock-exam-report is static compared."
+    },
+    {
+      "id": "readiness_ux",
+      "legacyBetter": false,
+      "currentBetter": true,
+      "equal": false,
+      "unclear": false,
+      "verdict": "current_better",
+      "why": "Current integrates pathway CAT start, readiness dashboard copy, and coach snapshots. Legacy marketing pages explain CAT textually; less integrated with learner product."
+    },
+    {
+      "id": "visual_clarity",
+      "legacyBetter": false,
+      "currentBetter": true,
+      "equal": false,
+      "unclear": false,
+      "verdict": "current_better",
+      "why": "Current uses design-system session shell, semantic tokens, and focused CAT layout. Legacy mock session predates NurseNest learner shell — do not import old global styles."
+    },
+    {
+      "id": "perceived_stability",
+      "legacyBetter": false,
+      "currentBetter": true,
+      "equal": false,
+      "unclear": false,
+      "verdict": "current_better",
+      "why": "Centralized API + Sentry context + entitlement checks improve operability vs split Express + client sync."
+    }
+  ]
+}

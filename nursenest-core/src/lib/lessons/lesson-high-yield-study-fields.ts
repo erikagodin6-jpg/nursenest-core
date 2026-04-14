@@ -76,11 +76,11 @@ export function deriveLessonHighYieldStudyFields(
   let studyTakeaways = explicitTakeaways;
   const omitHighYieldSectionIds: string[] = [];
 
-  if (!studyTakeaways || studyTakeaways.length < 2) {
+  if (!studyTakeaways?.length) {
     const tw = sections.find((s) => s.kind === "takeaways");
     if (tw && typeof tw.body === "string") {
       const extracted = extractBulletLinesFromLessonBody(tw.body);
-      if (extracted.length >= 2) {
+      if (extracted.length >= 1) {
         studyTakeaways = extracted;
         omitHighYieldSectionIds.push(tw.id);
       }
@@ -108,7 +108,7 @@ export function deriveLessonHighYieldStudyFields(
   }
 
   const out: LessonHighYieldStudyDerivation = {};
-  if (studyTakeaways && studyTakeaways.length >= 2) {
+  if (studyTakeaways && studyTakeaways.length >= 1) {
     out.studyTakeaways = studyTakeaways;
   }
   if (studyCommonTraps && studyCommonTraps.length > 0) {

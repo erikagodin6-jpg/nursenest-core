@@ -1,0 +1,412 @@
+{
+  "generatedAt": "2026-04-14T13:45:36.569Z",
+  "duplicateIdsAppearingInMultipleFiles": [
+    {
+      "flashcardId": "rn-onc-q1",
+      "files": [
+        "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-onc-q2",
+      "files": [
+        "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-onc-q3",
+      "files": [
+        "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-onc-q4",
+      "files": [
+        "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-onc-q5",
+      "files": [
+        "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-onc-q6",
+      "files": [
+        "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-onc-q7",
+      "files": [
+        "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-onc-q8",
+      "files": [
+        "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-onc-q9",
+      "files": [
+        "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-onc-q10",
+      "files": [
+        "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-onc-q11",
+      "files": [
+        "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-onc-q12",
+      "files": [
+        "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-onc-q13",
+      "files": [
+        "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-onc-q14",
+      "files": [
+        "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-onc-q15",
+      "files": [
+        "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-cc-q1",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-cc-q2",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-cc-q3",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-cc-q4",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-cc-q5",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-cc-q6",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-cc-q7",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-cc-q8",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-cc-q9",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-cc-q10",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-emerg-q1",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-emerg-q2",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-emerg-q3",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-emerg-q4",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-emerg-q5",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-emerg-q6",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-emerg-q7",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-emerg-q8",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-emerg-q9",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-emerg-q10",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-emerg-q11",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-emerg-q12",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-emerg-q13",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-emerg-q14",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-emerg-q15",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-fe-q1",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-fe-q2",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-fe-q3",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-fe-q4",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-fe-q5",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-fe-q6",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-fe-q7",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-fe-q8",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-fe-q9",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-fe-q10",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-pain-q1",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-pain-q2",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-pain-q3",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-pain-q4",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-pain-q5",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-pain-q6",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-pain-q7",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    },
+    {
+      "flashcardId": "rn-pain-q8",
+      "files": [
+        "client/src/data/flashcards-rn.ts",
+        "client/src/data/flashcards-rn.ts"
+      ]
+    }
+  ],
+  "count": 58
+}

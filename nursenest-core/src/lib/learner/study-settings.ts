@@ -82,8 +82,27 @@ export const studySettingsUserSelect = {
   preferredSessionLength: true,
 } as const;
 
+/** Maps DB nulls to undefined so `normalizeStudySettings` accepts Prisma rows. */
+function persistenceRowToPartial(row: StudySettingsPersistenceRow): Partial<StudySettings> {
+  return {
+    enableAdaptivePlan: row.enableAdaptivePlan ?? undefined,
+    enableSpacedRepetition: row.enableSpacedRepetition ?? undefined,
+    enableConfidenceTracking: row.enableConfidenceTracking ?? undefined,
+    enablePrePostQuizzes: row.enablePrePostQuizzes ?? undefined,
+    lessonStudyLoopEnabled: row.lessonStudyLoopEnabled ?? undefined,
+    showHeatmap: row.showHeatmap ?? undefined,
+    showAdvancedInsights: row.showAdvancedInsights ?? undefined,
+    enableWeaknessAlerts: row.enableWeaknessAlerts ?? undefined,
+    enableDecayAlerts: row.enableDecayAlerts ?? undefined,
+    preferredSessionLength:
+      row.preferredSessionLength != null
+        ? (normalizeSessionLength(row.preferredSessionLength) as StudySessionLength)
+        : undefined,
+  };
+}
+
 export function rowToStudySettings(row: StudySettingsPersistenceRow | null | undefined): StudySettings {
-  return normalizeStudySettings(row ?? undefined);
+  return normalizeStudySettings(row ? persistenceRowToPartial(row) : undefined);
 }
 
 export function studySettingsToPersistenceInput(

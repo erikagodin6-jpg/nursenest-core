@@ -45,7 +45,7 @@ export async function getLastTouchedPathwayLesson(
       pathwayId: true,
     },
   });
-  if (!lesson || !normalizeLesson(pathwayLessonRowToInput({ ...lesson, id: `${pathwayId}:${slug}` }), pathwayId).structuralQuality?.publicComplete) {
+  if (!lesson || !normalizeLesson(pathwayLessonRowToInput(lesson), pathwayId).structuralQuality?.publicComplete) {
     return null;
   }
   const title = lesson.title?.trim() || slug;
@@ -113,7 +113,7 @@ export async function loadPathwayHubSubscriberData(
     });
     const title =
       titleRow &&
-      normalizeLesson(pathwayLessonRowToInput({ ...titleRow, id: `${pathway.id}:${batch.lastForResume.slug}` }), pathway.id).structuralQuality?.publicComplete
+      normalizeLesson(pathwayLessonRowToInput(titleRow), pathway.id).structuralQuality?.publicComplete
         ? (titleRow.title?.trim() ?? batch.lastForResume.slug)
         : null;
     if (!title) {

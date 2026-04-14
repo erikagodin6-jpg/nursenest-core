@@ -1,0 +1,36 @@
+{
+  "generatedAt": "2026-04-14T13:45:37.200Z",
+  "phase": "audit_only_no_import",
+  "auditOutputsWritten": [
+    "data/audit/legacy-flashcards-questionbank-inventory.json",
+    "data/audit/legacy-image-inventory.json",
+    "data/audit/legacy-flashcards-questionbank-map.json",
+    "data/audit/legacy-question-duplicates.json",
+    "data/audit/legacy-flashcard-duplicates.json",
+    "data/audit/flashcards-questionbank-post-legacy-merge.json"
+  ],
+  "constraints": {
+    "prismaSchemaChanged": false,
+    "routingChanged": false,
+    "authChanged": false,
+    "entitlementsChanged": false
+  },
+  "flashcardsMergedCount": 0,
+  "questionsMergedCount": 0,
+  "newFlashcardsCreatedCount": 0,
+  "newQuestionsCreatedCount": 0,
+  "imagesMappedCount": 0,
+  "lessonImagesAddedCount": 0,
+  "duplicateFlashcardIdsFlagged": 58,
+  "duplicateQuestionStemGroupsFlagged": 137,
+  "filesTouchedByThisScript": [
+    "scripts/build-legacy-flashcards-questionbank-audit.mts"
+  ],
+  "currentUiFilesUpdated": [],
+  "themePreserved": true,
+  "gaps": [
+    "No bulk import run — use editorial pipeline + stem_hash / id matching against ExamQuestion before inserts.",
+    "External volumes (e.g. /Volumes/Backup Plus) not visible on this host — mount or symlink under repo to include in a future scan.",
+    "Replit JSON exports may be very large; counts use parse when under size cap."
+  ]
+}

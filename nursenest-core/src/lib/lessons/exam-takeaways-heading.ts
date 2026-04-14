@@ -1,16 +1,27 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { ExamFamily } from "@prisma/client";
 
+export type ExamTakeawaysHeadingOpts = {
+  /** Short profession line for allied hubs, e.g. “Physical therapist assistant exam prep”. */
+  alliedProfessionLabel?: string;
+};
+
 /**
- * Dynamic label for high-yield takeaways strips — avoids hardcoding NCLEX for every pathway.
+ * Dynamic label for exam takeaway blocks — driven by pathway id + exam family (no page-level hardcoding).
  */
 export function examTakeawaysHeadingForPathway(
   pathway: Pick<ExamPathwayDefinition, "id" | "examFamily">,
+  opts?: ExamTakeawaysHeadingOpts,
 ): string {
   if (pathway.examFamily === ExamFamily.NP || /(^|-)np-/.test(pathway.id)) {
     return "NP Exam Takeaways";
   }
-  if (pathway.id.includes("allied")) {
+  if (pathway.examFamily === ExamFamily.ALLIED || pathway.id.includes("allied")) {
+    const p = opts?.alliedProfessionLabel?.trim();
+    if (p) {
+      const short = p.length > 48 ? `${p.slice(0, 45).trim()}…` : p;
+      return `Exam Takeaways · ${short}`;
+    }
     return "Exam Takeaways";
   }
   if (pathway.id === "ca-rpn-rex-pn") {

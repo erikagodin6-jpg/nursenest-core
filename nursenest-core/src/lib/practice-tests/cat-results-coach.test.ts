@@ -6,6 +6,10 @@ import { buildCatResultsCoach } from "@/lib/practice-tests/cat-results-coach";
 function makeReport(overrides: Partial<CatExamReport> = {}): CatExamReport {
   return {
     decision: "pass",
+    result: "PASS",
+    readinessLevel: "Likely Pass",
+    abilityScore: 63,
+    confidenceLevelLabel: "High",
     theta: 0.68,
     se: 0.24,
     totalQuestions: 52,

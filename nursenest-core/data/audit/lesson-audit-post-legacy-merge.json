@@ -1,0 +1,104 @@
+{
+  "generatedAt": "2026-04-14T13:42:03.521Z",
+  "phase": "pre_merge_audit",
+  "note": "No catalog rows were modified by this script. Merge batches should use convert-legacy-lesson-to-enrichment.ts + editorial review. Allied pathway buckets are absent from catalog.json today — add us-allied-core / ca-allied-core lessons via controlled JSON commits after mapping.",
+  "constraintsVerified": {
+    "prismaSchemaChanged": false,
+    "authChanged": false,
+    "routingChanged": false,
+    "lessonSlugsChanged": false
+  },
+  "legacySourcesUsed": [
+    "client/src/data/lessons"
+  ],
+  "lessonsMergedFromLegacyCount": 0,
+  "lessonsCreatedFromLegacyOnlyCount": 0,
+  "duplicatesFlaggedCount": 367,
+  "externalVolumesRequested": [
+    "/Volumes/Backup Plus/11",
+    "/Volumes/Backup Plus/NurseNest"
+  ],
+  "externalVolumesMountedInThisEnvironment": false,
+  "prePostLessonTestUx": {
+    "marketingAssessmentFlow": "PathwayLessonAssessmentExperience: controls → pre-test before lesson body → post-test after completion (matches learner LessonAssessmentFlow).",
+    "marketingQuizzes": "PathwayLessonQuizzes: per-question feedback and rationale when fullAccess; preview hides grading (legacy embed-style flow, themed).",
+    "learnerAppUnchanged": "LessonAssessmentFlow + LessonPreAssessmentCard / LessonPostAssessmentCard already used correct ordering; no routing change.",
+    "filesImplementingPrePostUx": [
+      "src/components/lessons/pathway-lesson-assessment-experience.tsx",
+      "src/components/lessons/pathway-lesson-quizzes.tsx",
+      "src/components/lessons/lesson-assessment-flow.tsx",
+      "src/components/lessons/lesson-pre-assessment-card.tsx",
+      "src/components/lessons/lesson-post-assessment-card.tsx",
+      "src/components/lessons/lesson-assessment-quiz.tsx"
+    ]
+  },
+  "uiHarmonization": {
+    "oldLayoutCodeReused": false,
+    "currentLessonUiFilesTouched": [],
+    "themeTokensNote": "Reuse fixed bottom nav / sticky patterns only after porting to semantic tokens (see pathway lesson layout); do not copy client gray-* hex from fixed-lesson-nav."
+  },
+  "mappingSummary": {
+    "high": 3,
+    "medium": 0,
+    "low": 0,
+    "none": 4220,
+    "mergeIntoExisting": 3,
+    "createMissing": 4220,
+    "reviewNeeded": 0,
+    "duplicateFlag": 0
+  },
+  "interpretation": {
+    "createMissingCurrentLesson": "Rows with action create_missing_current_lesson lack exact slug match to catalog AND lack unique normalized title match — use supplementalSlugMaps, editorial review, and convert-legacy-lesson-to-enrichment before adding catalog.json entries."
+  },
+  "catalogSnapshotByPathway": {
+    "ca-rn-nclex-rn": {
+      "tier": "RN",
+      "totalLessons": 188,
+      "completePublic": 36,
+      "incomplete": 152
+    },
+    "ca-rpn-rex-pn": {
+      "tier": "PN",
+      "totalLessons": 150,
+      "completePublic": 74,
+      "incomplete": 76
+    },
+    "us-rn-nclex-rn": {
+      "tier": "RN",
+      "totalLessons": 187,
+      "completePublic": 36,
+      "incomplete": 151
+    },
+    "us-lpn-nclex-pn": {
+      "tier": "PN",
+      "totalLessons": 150,
+      "completePublic": 74,
+      "incomplete": 76
+    },
+    "us-np-fnp": {
+      "tier": "NP",
+      "totalLessons": 161,
+      "completePublic": 115,
+      "incomplete": 46
+    }
+  },
+  "completenessByTier": {
+    "PN": 300,
+    "RN": 375,
+    "NP": 161,
+    "Allied": 0,
+    "Other": 0
+  },
+  "completePublicByTier": {
+    "PN": 148,
+    "RN": 72,
+    "NP": 115,
+    "Allied": 0,
+    "Other": 0
+  },
+  "lessonsNeedingManualReview": 0,
+  "exactFilesModifiedThisRun": [
+    "scripts/build-legacy-audit-bundle.mts",
+    "scripts/lib/legacy-audit-helpers.mts"
+  ]
+}

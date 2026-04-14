@@ -554,7 +554,7 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
   const hy = deriveLessonHighYieldStudyFields(expanded, raw as { studyTakeaways?: unknown; studyCommonTraps?: unknown; memoryAnchor?: unknown });
   const withStudyStrips: PathwayLessonRecord = {
     ...withQuizzes,
-    ...(hy.studyTakeaways && hy.studyTakeaways.length >= 2 ? { studyTakeaways: hy.studyTakeaways } : {}),
+    ...(hy.studyTakeaways && hy.studyTakeaways.length >= 1 ? { studyTakeaways: hy.studyTakeaways } : {}),
     ...(hy.studyCommonTraps && hy.studyCommonTraps.length > 0 ? { studyCommonTraps: hy.studyCommonTraps } : {}),
     ...(hy.memoryAnchor ? { memoryAnchor: hy.memoryAnchor } : {}),
     ...(hy.omitHighYieldSectionIds && hy.omitHighYieldSectionIds.length > 0
@@ -580,11 +580,18 @@ export function getCatalogPathwayLessonsSync(pathwayId: string): PathwayLessonRe
 }
 
 /**
- * Audit / inventory tooling: catalog + scoped-gold merge, normalized, then the same exam/country filter
- * as pathway lesson hubs when the hub falls back to the bundled catalog (no published DB rows).
+ * Audit / inventory tooling: bundled `catalog.json` + scoped-gold, normalized, then the same exam/country filter
+ * as catalog-backed hub paths. **Does not include Prisma-published lessons.** If a pathway only ships content
+ * via the database (e.g. allied health today: no rows under `pathways[pathwayId]` in `catalog.json`), this returns
+ * an empty array while `getPathwayLessonsPage` (pathway-lesson-loader) may still list DB rows.
  */
 export function getEffectiveCatalogLessonsForPathwaySync(pathwayId: string): PathwayLessonRecord[] {
   return sortAndFilterLessonsForPathwayContext(pathwayId, getCatalogPathwayLessonsSync(pathwayId));
+}
+
+/** True when the bundled catalog path yields at least one lesson (JSON slice and/or scoped-gold for this pathway). */
+export function pathwayHasBundledCatalogLessonsSync(pathwayId: string): boolean {
+  return getCatalogPathwayLessonsSync(pathwayId).length > 0;
 }
 
 /** Pathway ids that have at least one catalog (+ scoped-gold) lesson row. */

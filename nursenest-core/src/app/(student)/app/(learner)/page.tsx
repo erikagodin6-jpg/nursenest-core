@@ -18,7 +18,10 @@ import {
 import { loadLearnerRetentionPreferences } from "@/lib/learner/load-learner-retention-preferences";
 import { loadTodayGoalProgress } from "@/lib/learner/load-today-goal-progress";
 import { loadDailyQuestionGoalProgress } from "@/lib/learner/load-daily-question-goal-progress";
-import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
+import {
+  loadPremiumDashboardSnapshot,
+  type PremiumDashboardSnapshot,
+} from "@/lib/learner/premium-dashboard-snapshot";
 import { loadRecentLearnerNotesSummary } from "@/lib/learner/load-recent-learner-notes-summary";
 import { LearnerStudyHome } from "@/components/student/learner-study-home";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
@@ -176,7 +179,7 @@ export default async function LearnerDashboardPage() {
     );
   }
 
-  let snapshot = null;
+  let snapshot: PremiumDashboardSnapshot | null = null;
   let studySnap: Awaited<ReturnType<typeof buildLearnerStudySnapshot>> = null;
   let weakTopicTitles: string[] = [];
   let benchmark: BenchmarkData | null = null;
@@ -202,22 +205,26 @@ export default async function LearnerDashboardPage() {
     benchmark = snap ? await computeBenchmarkData(userId, snap.readiness) : null;
     const progressFeedbackLine = studySnap?.topicTrends.find((r) => r.momentum === "improving")?.summary ?? null;
     if (snapshot) {
+      const premiumSnapshot = snapshot;
       const resume =
-        snapshot.continueLesson ??
-        (snapshot.lessonContinuations[0]
-          ? { title: snapshot.lessonContinuations[0].title, href: snapshot.lessonContinuations[0].href }
+        premiumSnapshot.continueLesson ??
+        (premiumSnapshot.lessonContinuations[0]
+          ? {
+              title: premiumSnapshot.lessonContinuations[0].title,
+              href: premiumSnapshot.lessonContinuations[0].href,
+            }
           : null);
-      const momentumLine = snapshot.momentumMessages[0] ?? null;
-      const continueLinks = continueLearningItemsToLinks(buildContinueLearningItems(snapshot), t);
+      const momentumLine = premiumSnapshot.momentumMessages[0] ?? null;
+      const continueLinks = continueLearningItemsToLinks(buildContinueLearningItems(premiumSnapshot), t);
       const personalNote = retentionPersonalNote(t, retentionPrefs);
       const streakProtect =
-        todayGoal != null && snapshot.studyStreakDays > 0 && todayGoal.credits < todayGoal.target;
+        todayGoal != null && premiumSnapshot.studyStreakDays > 0 && todayGoal.credits < todayGoal.target;
 
-      const dashModel = buildDashboardModel(snapshot, studySnap, todayGoal, studySettings);
+      const dashModel = buildDashboardModel(premiumSnapshot, studySnap, todayGoal, studySettings);
       const preferredPathwayId =
-        snapshot.pathways.find((p) => p.pathwayId === snapshot.learnerPath)?.pathwayId ??
-        snapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
-        snapshot.pathways[0]?.pathwayId ??
+        premiumSnapshot.pathways.find((p) => p.pathwayId === premiumSnapshot.learnerPath)?.pathwayId ??
+        premiumSnapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
+        premiumSnapshot.pathways[0]?.pathwayId ??
         null;
       const scopedContinueLinks = continueLinks.map((link) => ({
         ...link,
@@ -254,9 +261,9 @@ export default async function LearnerDashboardPage() {
       });
 
       const coachSummary =
-        snapshot && studySnap
+        studySnap
           ? (() => {
-              const b = buildCoachDashboardBundle(snapshot, studySnap, daysSinceLastActivity);
+              const b = buildCoachDashboardBundle(premiumSnapshot, studySnap, daysSinceLastActivity);
               return {
                 readiness: b.readiness,
                 priorities: b.priorities,
@@ -272,7 +279,7 @@ export default async function LearnerDashboardPage() {
           t={t}
           identity={identity}
           heroHeading={userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
-          snapshot={snapshot}
+          snapshot={premiumSnapshot}
           studySnap={studySnap}
           benchmark={benchmark}
           heatmapTopics={heatmapTopics}

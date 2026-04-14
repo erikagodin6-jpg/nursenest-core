@@ -291,7 +291,7 @@ export async function loadPathwayStudySummaries(
 
   const totalsByPathway = new Map<string, number>();
   for (const row of lessonRows) {
-    if (!normalizeLesson(pathwayLessonRowToInput({ ...row, id: `${row.pathwayId}:${row.slug}` }), row.pathwayId).structuralQuality?.publicComplete) {
+    if (!normalizeLesson(pathwayLessonRowToInput(row), row.pathwayId).structuralQuality?.publicComplete) {
       continue;
     }
     totalsByPathway.set(row.pathwayId, (totalsByPathway.get(row.pathwayId) ?? 0) + 1);

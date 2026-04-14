@@ -173,7 +173,10 @@ function main() {
   const report = {
     generatedAt: new Date().toISOString(),
     source: "catalog.json + scoped-gold prepend, normalized (pathway-lesson-catalog-sync)",
-    note: "Subscriber/DB pathway_lessons rows are not merged in this pass.",
+    note:
+      "Subscriber/DB pathway_lessons rows are not merged in this pass. " +
+      "Legacy monolith content (client/src/data/lessons contentMap) is a separate source of truth; " +
+      "run `npm run audit:legacy-vs-catalog` for overlap and tier heuristics before merging recovered lessons.",
     pathways,
     tierSummary: (() => {
       const byTier: Record<TierBucket, { lessons: number; complete: number; pathways: number }> = {

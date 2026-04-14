@@ -47,7 +47,7 @@ import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exa
 import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
 import { ALLIED_PROFESSIONS, ALLIED_HUB_CATEGORY_ORDER, ALLIED_HUB_CATEGORY_META } from "@/lib/allied/allied-professions-registry";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
-import { CONTINUE_STUDYING_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
+import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { CountrySelector } from "@/components/layout/global-context-switcher";
 import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
@@ -438,7 +438,7 @@ export function SiteHeader() {
   );
 
   useEffect(() => {
-    const close = (e: MouseEvent) => {
+    const close = (e: PointerEvent) => {
       if (!desktopCountryRef.current?.contains(e.target as Node)) setDesktopCountryOpen(false);
       if (!desktopLangRef.current?.contains(e.target as Node)) setDesktopLangOpen(false);
       if (!mobileLangRef.current?.contains(e.target as Node)) setMobileLangOpen(false);
@@ -608,6 +608,16 @@ export function SiteHeader() {
 
   const strippedPath = stripMarketingLocalePrefix(pathname).pathname;
 
+  /** Homepage-only acquisition param; other marketing pages keep plain signup URL. */
+  const guestMarketingSignupHref = useMemo(() => {
+    const base = `/signup?callbackUrl=${encodeURIComponent("/app")}`;
+    const isHome = strippedPath === "/" || strippedPath === "";
+    const raw = isHome ? `${base}&entry=homepage` : base;
+    const mapped = mapLegacyMarketingHref(raw);
+    if (mapped.startsWith("http://") || mapped.startsWith("https://")) return mapped;
+    return withMarketingLocale(locale, mapped);
+  }, [locale, strippedPath]);
+
   useEffect(() => {
     if (!isMarketingNav) {
       setOpenMegaMenu(null);
@@ -687,15 +697,18 @@ export function SiteHeader() {
                   href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)}
                   className="inline-flex min-h-[36px] max-w-[38%] shrink-0 items-center justify-center rounded-xl border border-[var(--nav-border)] px-2 py-1.5 text-xs font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] sm:max-w-none sm:min-h-[38px] sm:px-3 sm:text-sm"
                   onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
+                  aria-label="Log in to your NurseNest account"
                 >
-                  {formatTitleCase("Login", locale)}
+                  {formatTitleCase("Log in", locale)}
                 </Link>
                 <Link
-                  href={localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`)}
+                  href={guestMarketingSignupHref}
                   className="nn-nav-cta inline-flex min-h-[36px] min-w-0 max-w-[52%] shrink items-center justify-center rounded-xl px-2.5 py-1.5 text-xs font-semibold sm:min-h-[38px] sm:max-w-none sm:px-4 sm:text-sm"
                   onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
+                  aria-label="Start free account — nursing and healthcare exam prep"
+                  title="Start free — no credit card required"
                 >
-                  {formatTitleCase(PRIMARY_CTA, locale)}
+                  {formatTitleCase("Start Free", locale)}
                 </Link>
               </div>
             ) : null}
@@ -822,15 +835,18 @@ export function SiteHeader() {
                     href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)}
                     className={HEADER_SECONDARY_ACTION_CLASS}
                     onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
+                    aria-label="Log in to your NurseNest account"
                   >
-                    {formatTitleCase("Login", locale)}
+                    {formatTitleCase("Log in", locale)}
                   </Link>
                   <Link
-                    href={localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`)}
+                    href={guestMarketingSignupHref}
                     className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold"
                     onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
+                    aria-label="Start free account — nursing and healthcare exam prep"
+                    title="Start free — no credit card required"
                   >
-                    {formatTitleCase(PRIMARY_CTA, locale)}
+                    {formatTitleCase("Start Free", locale)}
                   </Link>
                 </div>
               ) : isLearnerAuthenticated ? (
@@ -1321,18 +1337,21 @@ export function SiteHeader() {
                 {!isAuthenticated ? (
                   <>
                     <Link
-                      href={localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`)}
+                      href={guestMarketingSignupHref}
                       className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold"
                       onClick={() => setMobileOpen(false)}
+                      aria-label="Start free account — nursing and healthcare exam prep"
+                      title="Start free — no credit card required"
                     >
-                      {formatTitleCase(PRIMARY_CTA, locale)}
+                      {formatTitleCase("Start Free", locale)}
                     </Link>
                     <Link
                       href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)}
                       className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-4 py-3 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                       onClick={() => setMobileOpen(false)}
+                      aria-label="Log in to your NurseNest account"
                     >
-                      {formatTitleCase("Login", locale)}
+                      {formatTitleCase("Log in", locale)}
                     </Link>
                   </>
                 ) : isLearnerAuthenticated ? (

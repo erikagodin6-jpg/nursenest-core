@@ -27,7 +27,9 @@ test("normalizeStudySettings merges partial values without dropping defaults", (
 });
 
 test("normalizeStudySettings clamps unsupported preferred session lengths to the shared default", () => {
-  const invalid = normalizeStudySettings({ preferredSessionLength: 999 });
+  const invalid = normalizeStudySettings({
+    preferredSessionLength: 999,
+  } as unknown as Parameters<typeof normalizeStudySettings>[0]);
   assert.ok(ALLOWED_STUDY_SESSION_LENGTHS.includes(DEFAULT_STUDY_SETTINGS.preferredSessionLength));
   assert.equal(invalid.preferredSessionLength, DEFAULT_STUDY_SETTINGS.preferredSessionLength);
 });

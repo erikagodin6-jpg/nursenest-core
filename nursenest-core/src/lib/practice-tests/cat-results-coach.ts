@@ -817,8 +817,42 @@ export function sanitizeCatExamReportForCoach(input: unknown): CatExamReport | n
       ? r.readinessHeadline.trim()
       : "Readiness summary";
 
+  const result: CatExamReport["result"] =
+    r.result === "PASS" || r.result === "BORDERLINE" || r.result === "FAIL"
+      ? r.result
+      : r.decision === "pass"
+        ? "PASS"
+        : r.decision === "fail"
+          ? "FAIL"
+          : "BORDERLINE";
+
+  const readinessLevel: CatExamReport["readinessLevel"] =
+    r.readinessLevel === "Likely Pass" || r.readinessLevel === "Borderline" || r.readinessLevel === "At Risk"
+      ? r.readinessLevel
+      : readinessScore >= 70
+        ? "Likely Pass"
+        : readinessScore >= 50
+          ? "Borderline"
+          : "At Risk";
+
+  const abilityScore =
+    typeof r.abilityScore === "number" && Number.isFinite(r.abilityScore) ? r.abilityScore : readinessScore;
+
+  const confidenceLevelLabel: CatExamReport["confidenceLevelLabel"] =
+    r.confidenceLevelLabel === "High" || r.confidenceLevelLabel === "Moderate" || r.confidenceLevelLabel === "Low"
+      ? r.confidenceLevelLabel
+      : confidenceLevel === "high"
+        ? "High"
+        : confidenceLevel === "medium"
+          ? "Moderate"
+          : "Low";
+
   return {
     decision: r.decision,
+    result,
+    readinessLevel,
+    abilityScore,
+    confidenceLevelLabel,
     theta,
     se,
     totalQuestions,

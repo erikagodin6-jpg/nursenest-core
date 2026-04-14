@@ -1,0 +1,81 @@
+{
+  "generatedAt": "2026-04-14T13:40:47.007Z",
+  "note": "topicSlugsIn on ALLIED_PROFESSIONS restricts which lessons appear per profession hub. Inventory hub rows use getEffectiveCatalogLessonsForPathwaySync (exam filter), then alliedLessonMatchesProfessionFilter.",
+  "externalVolumesAvailable": false,
+  "professions": [
+    {
+      "professionKey": "pta",
+      "pathwayId": "us-allied-core",
+      "topicSlugsIn": null,
+      "catalogEffectiveTotal": 0,
+      "afterTopicFilterCount": 0,
+      "marketingWouldRenderApprox": 0
+    },
+    {
+      "professionKey": "ota",
+      "pathwayId": "us-allied-core",
+      "topicSlugsIn": null,
+      "catalogEffectiveTotal": 0,
+      "afterTopicFilterCount": 0,
+      "marketingWouldRenderApprox": 0
+    },
+    {
+      "professionKey": "mlt",
+      "pathwayId": "us-allied-core",
+      "topicSlugsIn": null,
+      "catalogEffectiveTotal": 0,
+      "afterTopicFilterCount": 0,
+      "marketingWouldRenderApprox": 0
+    },
+    {
+      "professionKey": "imaging",
+      "pathwayId": "us-allied-core",
+      "topicSlugsIn": null,
+      "catalogEffectiveTotal": 0,
+      "afterTopicFilterCount": 0,
+      "marketingWouldRenderApprox": 0
+    },
+    {
+      "professionKey": "respiratory",
+      "pathwayId": "us-allied-core",
+      "topicSlugsIn": null,
+      "catalogEffectiveTotal": 0,
+      "afterTopicFilterCount": 0,
+      "marketingWouldRenderApprox": 0
+    },
+    {
+      "professionKey": "paramedic",
+      "pathwayId": "us-allied-core",
+      "topicSlugsIn": null,
+      "catalogEffectiveTotal": 0,
+      "afterTopicFilterCount": 0,
+      "marketingWouldRenderApprox": 0
+    },
+    {
+      "professionKey": "pharmacy-tech",
+      "pathwayId": "us-allied-core",
+      "topicSlugsIn": null,
+      "catalogEffectiveTotal": 0,
+      "afterTopicFilterCount": 0,
+      "marketingWouldRenderApprox": 0
+    },
+    {
+      "professionKey": "social-work",
+      "pathwayId": "us-allied-core",
+      "topicSlugsIn": null,
+      "catalogEffectiveTotal": 0,
+      "afterTopicFilterCount": 0,
+      "marketingWouldRenderApprox": 0
+    }
+  ],
+  "pathway_us-allied-core_inventory_snapshot": {
+    "catalogEffectiveCount": 0,
+    "dbPublishedEnCount": 23,
+    "mergedUniqueSlugCount": 23
+  },
+  "pathway_ca-allied-core_inventory_snapshot": {
+    "catalogEffectiveCount": 0,
+    "dbPublishedEnCount": 23,
+    "mergedUniqueSlugCount": 23
+  }
+}

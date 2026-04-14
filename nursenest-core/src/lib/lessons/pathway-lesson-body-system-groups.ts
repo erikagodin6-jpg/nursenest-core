@@ -72,9 +72,12 @@ function lessonPriorityScore(lesson: PathwayLessonRecord): number {
  * then falls back to title/topic/topicSlug keyword matching. This correctly handles
  * catalog lessons where `system` is absent or set to a broad value like "General".
  */
-export function classifyLessonForHub(lesson: PathwayLessonRecord): PathwayLessonSystemLabel {
+export function classifyLessonForHub(
+  lesson: PathwayLessonRecord,
+  pathwayId?: string | null,
+): PathwayLessonSystemLabel {
   const h = `${lesson.system ?? ""} ${lesson.bodySystem ?? ""} ${lesson.title} ${lesson.topic} ${lesson.topicSlug} ${lesson.seoDescription}`.toLowerCase();
-  const classified = classifyLearningTopic(h, lesson.pathwayId);
+  const classified = classifyLearningTopic(h, pathwayId ?? null);
   return classified.subcategoryId ?? classified.categoryId;
 }
 
@@ -83,10 +86,10 @@ export function buildPathwayLessonSystemSections(
   pathwayId?: string | null,
 ): PathwayLessonSystemSection[] {
   const grouped = new Map<string, PathwayLessonRecord[]>();
-  const config = learningConfigForPathwayId(pathwayId ?? lessons[0]?.pathwayId ?? null);
+  const config = learningConfigForPathwayId(pathwayId ?? null);
 
   for (const lesson of lessons) {
-    const label = classifyLessonForHub(lesson);
+    const label = classifyLessonForHub(lesson, pathwayId);
     const bucket = grouped.get(label) ?? [];
     bucket.push(lesson);
     grouped.set(label, bucket);

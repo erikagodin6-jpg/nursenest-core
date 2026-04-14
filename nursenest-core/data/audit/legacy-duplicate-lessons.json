@@ -1,0 +1,3108 @@
+{
+  "generatedAt": "2026-04-14T13:42:01.919Z",
+  "duplicateTitleGroups": [
+    {
+      "normalizedTitle": "advance care planning goals of care conversations",
+      "legacyLessonIds": [
+        "advance-care-planning-np",
+        "palliative-ethics-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "polypharmacy deprescribing frameworks",
+      "legacyLessonIds": [
+        "polypharmacy-deprescribing-np",
+        "geriatric-medicine-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "heart sounds",
+      "legacyLessonIds": [
+        "heart-sounds-2-rpn",
+        "heart-sounds-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "marfan syndrome",
+      "legacyLessonIds": [
+        "marfan-syndrome-2-rpn",
+        "marfan-syndrome-rpn",
+        "marfan-syndrome-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "airway suctioning for practical nurses",
+      "legacyLessonIds": [
+        "airway-suctioning-for-practical-nurses-rpn",
+        "suctioning-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "abdominal aortic aneurysm aaa",
+      "legacyLessonIds": [
+        "aaa-rupture",
+        "rpn-aortic-aneurysm"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "aortic dissection",
+      "legacyLessonIds": [
+        "aortic-dissection",
+        "aortic-dissection-rpn",
+        "aortic-dissection-rn"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "advanced cardiovascular nursing",
+      "legacyLessonIds": [
+        "cardiovascular-rn",
+        "cardiovascular-rn-exp"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "acute myocardial infarction",
+      "legacyLessonIds": [
+        "mi-acute",
+        "acute-myocardial-infarction"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "cardiac monitoring and telemetry",
+      "legacyLessonIds": [
+        "cardiac-monitoring",
+        "cardiac-monitoring-and-telemetry"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "cardiogenic shock",
+      "legacyLessonIds": [
+        "cardiogenic-shock",
+        "rpn-cardiogenic-shock"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "hypertension",
+      "legacyLessonIds": [
+        "hypertension",
+        "rn-hypertension"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "raynaud s phenomenon",
+      "legacyLessonIds": [
+        "raynauds-phenomenon-rpn",
+        "raynauds-phenomenon-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "venous insufficiency",
+      "legacyLessonIds": [
+        "venous-insufficiency-rpn",
+        "venous-insufficiency-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "varicose veins",
+      "legacyLessonIds": [
+        "varicose-veins-rpn",
+        "varicose-veins-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "rheumatic fever",
+      "legacyLessonIds": [
+        "rheumatic-fever-rpn",
+        "rheumatic-fever-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "kawasaki disease",
+      "legacyLessonIds": [
+        "kawasaki-disease-rpn",
+        "kawasaki-disease-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "shock types recognition",
+      "legacyLessonIds": [
+        "shock-types-recognition-rpn",
+        "shock-types-recognition-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "chest pain differential",
+      "legacyLessonIds": [
+        "chest-pain-differential-rpn",
+        "chest-pain-differential-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "endocarditis infection",
+      "legacyLessonIds": [
+        "endocarditis-infection-rpn",
+        "endocarditis-infection-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "toxic shock syndrome",
+      "legacyLessonIds": [
+        "toxic-shock-syndrome-rpn",
+        "toxic-shock-syndrome-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "pulmonary hypertension",
+      "legacyLessonIds": [
+        "pulmonary-hypertension-np",
+        "pulmonary-hypertension-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "cerebral venous sinus thrombosis",
+      "legacyLessonIds": [
+        "cerebral-venous-sinus-thrombosis-np",
+        "cerebral-venous-sinus-thrombosis-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "portal hypertension",
+      "legacyLessonIds": [
+        "portal-hypertension-np",
+        "portal-hypertension"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "tetralogy of fallot",
+      "legacyLessonIds": [
+        "tetralogy-of-fallot",
+        "tetralogy-of-fallot-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "ards management",
+      "legacyLessonIds": [
+        "ards-management",
+        "ards-management-rrt"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "advanced abg interpretation",
+      "legacyLessonIds": [
+        "abg-interpretation-rn",
+        "abg-interpretation-advanced-rrt"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "rhonchi assessment clinical significance",
+      "legacyLessonIds": [
+        "rhonchi-rpn",
+        "rhonchi-assessment-and-clinical-significance-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "febrile seizures",
+      "legacyLessonIds": [
+        "febrile-seizure",
+        "febrile-seizures-rpn",
+        "febrile-seizures-rn",
+        "febrile-seizures-np",
+        "rpn-febrile-seizures"
+      ],
+      "count": 5
+    },
+    {
+      "normalizedTitle": "delirium vs dementia",
+      "legacyLessonIds": [
+        "delirium-vs-dementia",
+        "delirium-dementia",
+        "neuro-delirium-dementia-np",
+        "delirium-vs-dementia-rpn",
+        "delirium-vs-dementia-rn",
+        "delirium-vs-dementia-np"
+      ],
+      "count": 6
+    },
+    {
+      "normalizedTitle": "gi bleeding obstruction",
+      "legacyLessonIds": [
+        "gi-bleed",
+        "gastrointestinal-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "peptic ulcer disease",
+      "legacyLessonIds": [
+        "peptic-ulcer",
+        "pud-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "ulcerative colitis",
+      "legacyLessonIds": [
+        "ulcerative-colitis",
+        "ulcerative-colitis-rpn",
+        "ulcerative-colitis-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "cholecystectomy",
+      "legacyLessonIds": [
+        "cholecystectomy-rpn",
+        "cholecystectomy-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "av fistula care",
+      "legacyLessonIds": [
+        "av-fistula",
+        "av-fistula-care"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "acute postinfectious glomerulonephritis",
+      "legacyLessonIds": [
+        "glomerulonephritis-basics-rpn",
+        "acute-glomerulonephritis",
+        "acute-glomerulonephritis-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "siadh vs diabetes insipidus",
+      "legacyLessonIds": [
+        "siadh-di",
+        "endocrine-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "siadh syndrome of inappropriate adh",
+      "legacyLessonIds": [
+        "siadh-basics-rpn",
+        "siadh-syndrome-of-inappropriate-adh-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "thyrotoxicosis thyroid storm",
+      "legacyLessonIds": [
+        "thyrotoxicosis-basics",
+        "thyrotoxicosis-thyroid-storm"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "anaphylactic transfusion reaction",
+      "legacyLessonIds": [
+        "anaphylactic-transfusion-rpn",
+        "anaphylactic-transfusion-reaction"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "separation anxiety disorder",
+      "legacyLessonIds": [
+        "separation-anxiety-rn",
+        "separation-anxiety-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "pediatric dehydration",
+      "legacyLessonIds": [
+        "dehydration-peds",
+        "pediatric-dehydration-rpn",
+        "pediatric-dehydration-rn",
+        "pediatric-dehydration-np"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "androgen insensitivity syndrome",
+      "legacyLessonIds": [
+        "androgen-insensitivity-rpn",
+        "androgen-insensitivity",
+        "androgen-insensitivity-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "neonatal respiratory distress syndrome",
+      "legacyLessonIds": [
+        "neonatal-respiratory-distress",
+        "neonatal-respiratory-distress-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "necrotizing enterocolitis nec",
+      "legacyLessonIds": [
+        "nec-necrotizing",
+        "necrotizing-enterocolitis-basics-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "meconium aspiration syndrome",
+      "legacyLessonIds": [
+        "meconium-aspiration-basics-rpn",
+        "meconium-aspiration"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "meconium ileus",
+      "legacyLessonIds": [
+        "meconium-ileus-rpn",
+        "meconium-ileus",
+        "meconium-ileus-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "fetal monitoring late variable decels",
+      "legacyLessonIds": [
+        "fetal-monitoring-advanced",
+        "fetal-monitoring-late-and-variable-decels"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "prenatal care essentials",
+      "legacyLessonIds": [
+        "prenatal-basics",
+        "maternity-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "postpartum hemorrhage",
+      "legacyLessonIds": [
+        "postpartum-hemorrhage",
+        "postpartum-hemorrhage-basics-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "fetal heart rate monitoring",
+      "legacyLessonIds": [
+        "fetal-monitoring-rn",
+        "fetal-heart-rate-monitoring-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "blood transfusion administration",
+      "legacyLessonIds": [
+        "blood-transfusion",
+        "blood-transfusion-reactions-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "osteoporosis",
+      "legacyLessonIds": [
+        "osteoporosis-basics",
+        "osteoporosis-advanced-np",
+        "osteoporosis-management-rpn",
+        "osteoporosis-management-np",
+        "osteoporosis-core-np",
+        "rpn-osteoporosis"
+      ],
+      "count": 6
+    },
+    {
+      "normalizedTitle": "wound irrigation",
+      "legacyLessonIds": [
+        "wound-irrigation",
+        "wound-irrigation-rpn",
+        "wound-irrigation-rn",
+        "wound-irrigation-np"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "methotrexate",
+      "legacyLessonIds": [
+        "methotrexate-safety",
+        "methotrexate-safety-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "oral candidiasis",
+      "legacyLessonIds": [
+        "oral-candidiasis-rn",
+        "oral-candidiasis-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "glasgow coma scale gcs",
+      "legacyLessonIds": [
+        "gcs-assessment-rpn",
+        "glasgow-coma-scale-gcs-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "braden scale for pressure injury risk",
+      "legacyLessonIds": [
+        "braden-scale-rpn",
+        "braden-scale-for-pressure-injury-risk-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "airborne precautions",
+      "legacyLessonIds": [
+        "airborne-precautions",
+        "foundations-rn",
+        "airborne-precautions-rpn"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "droplet precautions",
+      "legacyLessonIds": [
+        "droplet-precautions",
+        "droplet-precautions-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "compartment syndrome",
+      "legacyLessonIds": [
+        "compartment-syndrome",
+        "compartment-syndrome-rpn",
+        "compartment-syndrome-rn",
+        "compartment-syndrome-np",
+        "compartment-np",
+        "msk-rn"
+      ],
+      "count": 6
+    },
+    {
+      "normalizedTitle": "malignant hyperthermia",
+      "legacyLessonIds": [
+        "malignant-hyperthermia",
+        "malignant-hyperthermia-rpn",
+        "malignant-hyperthermia-rn",
+        "malignant-hyperthermia-np"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "anaphylaxis management",
+      "legacyLessonIds": [
+        "anaphylaxis",
+        "anaphylaxis-management-paramedic"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "schizophrenia",
+      "legacyLessonIds": [
+        "schizophrenia",
+        "schizophrenia-basics-np",
+        "schizophrenia-rpn",
+        "schizophrenia-rn",
+        "schizophrenia-np"
+      ],
+      "count": 5
+    },
+    {
+      "normalizedTitle": "major depressive disorder",
+      "legacyLessonIds": [
+        "major-depressive-disorder",
+        "major-depressive-disorder-rpn",
+        "major-depressive-disorder-rn",
+        "major-depression"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "post traumatic stress disorder",
+      "legacyLessonIds": [
+        "ptsd",
+        "stress-ptsd-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "alcohol withdrawal",
+      "legacyLessonIds": [
+        "alcohol-withdrawal",
+        "alcohol-withdrawal-rpn",
+        "alcohol-withdrawal-rn",
+        "alcohol-withdrawal-np"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "intimate partner violence",
+      "legacyLessonIds": [
+        "intimate-partner-violence",
+        "intimate-partner-violence-rpn",
+        "intimate-partner-violence-rn",
+        "intimate-partner-violence-np"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "postmortem care",
+      "legacyLessonIds": [
+        "postmortem-care",
+        "postmortem-care-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "serotonin syndrome",
+      "legacyLessonIds": [
+        "serotonin-syndrome",
+        "serotonin-syndrome-rpn",
+        "serotonin-syndrome-rn",
+        "serotonin-syndrome-np",
+        "serotonergic-toxidrome-np"
+      ],
+      "count": 5
+    },
+    {
+      "normalizedTitle": "tardive dyskinesia",
+      "legacyLessonIds": [
+        "tardive-dyskinesia",
+        "tardive-dyskinesia-rpn",
+        "tardive-dyskinesia-2-rpn"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "osteogenesis imperfecta",
+      "legacyLessonIds": [
+        "osteogenesis-imperfecta",
+        "osteogenesis-imperfecta-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "ankylosing spondylitis",
+      "legacyLessonIds": [
+        "ankylosing-spondylitis",
+        "ankylosing-spondylitis-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "rib fractures",
+      "legacyLessonIds": [
+        "rib-fractures",
+        "rib-fractures-np",
+        "rib-fractures-rpn"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "acute lumbosacral strain",
+      "legacyLessonIds": [
+        "acute-lumbosacral-strain",
+        "rn-acute-lumbosacral-strain"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "lumbosacral disc herniation",
+      "legacyLessonIds": [
+        "lumbosacral-disc-herniation",
+        "rn-lumbosacral-disc-herniation"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "septic arthritis",
+      "legacyLessonIds": [
+        "septic-arthritis",
+        "septic-arthritis-np",
+        "rpn-septic-arthritis",
+        "rn-septic-arthritis"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "scoliosis",
+      "legacyLessonIds": [
+        "scoliosis",
+        "scoliosis-basics"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "multiple myeloma",
+      "legacyLessonIds": [
+        "multiple-myeloma",
+        "multiple-myeloma-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "breast cancer",
+      "legacyLessonIds": [
+        "breast-cancer",
+        "breast-cancer-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "mastectomy post operative care",
+      "legacyLessonIds": [
+        "mastectomy",
+        "mastectomy-post-operative-care"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "prostate cancer",
+      "legacyLessonIds": [
+        "prostate-cancer",
+        "prostate-cancer-rpn",
+        "prostate-cancer-rn",
+        "prostate-cancer-np"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "radiation therapy nursing care",
+      "legacyLessonIds": [
+        "radiation-therapy",
+        "radiation-therapy-basics-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "penile cancer",
+      "legacyLessonIds": [
+        "penile-cancer",
+        "penile-cancer-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "contraceptive methods",
+      "legacyLessonIds": [
+        "contraceptives",
+        "contraceptive-methods"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "rotavirus gastroenteritis",
+      "legacyLessonIds": [
+        "rotavirus-rpn",
+        "rotavirus",
+        "rotavirus-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "glaucoma",
+      "legacyLessonIds": [
+        "glaucoma",
+        "glaucoma-rpn",
+        "glaucoma-2-rpn"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "retinal detachment",
+      "legacyLessonIds": [
+        "retinal-detachment",
+        "retinal-detachment-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "otitis media",
+      "legacyLessonIds": [
+        "otitis-media",
+        "otitis-media-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "cholecystitis",
+      "legacyLessonIds": [
+        "cholecystitis",
+        "cholecystitis-rpn",
+        "cholecystitis-rn",
+        "cholecystitis-np"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "cirrhosis",
+      "legacyLessonIds": [
+        "cirrhosis",
+        "cirrhosis-management-rpn",
+        "cirrhosis-management-rn",
+        "cirrhosis-management-np"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "hepatitis",
+      "legacyLessonIds": [
+        "hepatitis",
+        "hepatitis-core-np",
+        "hepatitis-management"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "pancreatitis",
+      "legacyLessonIds": [
+        "pancreatitis",
+        "pancreatitis-management-rpn",
+        "pancreatitis-management-rn",
+        "pancreatitis-management-np"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "diverticulitis",
+      "legacyLessonIds": [
+        "diverticulitis",
+        "diverticulitis-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "hemorrhoids",
+      "legacyLessonIds": [
+        "hemorrhoids",
+        "hemorrhoids-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "biliary atresia",
+      "legacyLessonIds": [
+        "biliary-atresia-rpn",
+        "biliary-atresia",
+        "biliary-atresia-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "eosinophilic esophagitis",
+      "legacyLessonIds": [
+        "eosinophilic-esophagitis-rpn",
+        "eosinophilic-esophagitis",
+        "eosinophilic-esophagitis-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "meckel s diverticulum",
+      "legacyLessonIds": [
+        "meckel-diverticulum-rpn",
+        "meckel-diverticulum",
+        "meckel-diverticulum-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "sucralfate",
+      "legacyLessonIds": [
+        "sucralfate-rpn",
+        "sucralfate",
+        "sucralfate-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "coagulation studies pt inr aptt",
+      "legacyLessonIds": [
+        "coagulation-studies",
+        "pt-inr-aptt-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "anthrax bacillus anthracis",
+      "legacyLessonIds": [
+        "anthrax",
+        "anthrax-bacillus-anthracis"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "disseminated intravascular coagulation dic",
+      "legacyLessonIds": [
+        "dic-pregnancy",
+        "icu-dic-management",
+        "rpn-dic",
+        "dic-expanded-rn"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "hyperemesis gravidarum",
+      "legacyLessonIds": [
+        "hyperemesis-gravidarum",
+        "hyperemesis-gravidarum-rpn",
+        "hyperemesis-gravidarum-rn",
+        "hyperemesis-gravidarum-np"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "uterine rupture",
+      "legacyLessonIds": [
+        "uterine-rupture",
+        "rn-uterine-rupture"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "antenatal diagnostic testing",
+      "legacyLessonIds": [
+        "antenatal-testing",
+        "antenatal-diagnostic-testing"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "mastitis",
+      "legacyLessonIds": [
+        "mastitis-rpn",
+        "mastitis",
+        "mastitis-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "infant reflexes",
+      "legacyLessonIds": [
+        "infant-reflexes-rpn",
+        "infant-reflexes-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "vaccine reactions safety management",
+      "legacyLessonIds": [
+        "vaccine-reactions",
+        "vaccine-reactions-and-safety-management"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "endometriosis",
+      "legacyLessonIds": [
+        "endometriosis",
+        "endometriosis-rpn",
+        "endometriosis-np",
+        "womens-health-rn"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "polycystic ovary syndrome pcos",
+      "legacyLessonIds": [
+        "polycystic-ovary-syndrome",
+        "pcos-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "pelvic inflammatory disease pid",
+      "legacyLessonIds": [
+        "pelvic-inflammatory-disease",
+        "pid-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "testicular cancer",
+      "legacyLessonIds": [
+        "testicular-cancer",
+        "testicular-cancer-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "erectile dysfunction",
+      "legacyLessonIds": [
+        "erectile-dysfunction",
+        "mens-health-ed-np",
+        "erectile-dysfunction-rpn"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "menopause",
+      "legacyLessonIds": [
+        "menopause",
+        "menopause-basics",
+        "rn-menopause"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "infertility",
+      "legacyLessonIds": [
+        "infertility",
+        "infertility-rpn",
+        "infertility-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "delayed puberty",
+      "legacyLessonIds": [
+        "delayed-puberty",
+        "delayed-puberty-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "precocious puberty",
+      "legacyLessonIds": [
+        "precocious-puberty",
+        "precocious-puberty-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "dysmenorrhea",
+      "legacyLessonIds": [
+        "dysmenorrhea",
+        "dysmenorrhea-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "vaginitis",
+      "legacyLessonIds": [
+        "vaginitis",
+        "vaginitis-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "bacterial vaginosis",
+      "legacyLessonIds": [
+        "bacterial-vaginosis",
+        "bacterial-vaginosis-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "cervicitis",
+      "legacyLessonIds": [
+        "cervicitis",
+        "cervicitis-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "vulvodynia",
+      "legacyLessonIds": [
+        "vulvodynia",
+        "vulvodynia-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "bartholinitis",
+      "legacyLessonIds": [
+        "bartholinitis",
+        "bartholinitis-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "uterine prolapse",
+      "legacyLessonIds": [
+        "uterine-prolapse",
+        "uterine-prolapse-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "benign ovarian cysts",
+      "legacyLessonIds": [
+        "benign-ovarian-cysts",
+        "benign-ovarian-cysts-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "galactorrhea",
+      "legacyLessonIds": [
+        "galactorrhea",
+        "galactorrhea-rpn",
+        "galactorrhea-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "urethritis",
+      "legacyLessonIds": [
+        "urethritis",
+        "urethritis-rpn",
+        "urethritis-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "urethral stricture",
+      "legacyLessonIds": [
+        "urethral-stricture",
+        "urethral-stricture-rpn",
+        "urethral-stricture-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "phimosis",
+      "legacyLessonIds": [
+        "phimosis",
+        "phimosis-rpn",
+        "phimosis-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "priapism",
+      "legacyLessonIds": [
+        "priapism",
+        "priapism-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "balanitis",
+      "legacyLessonIds": [
+        "balanitis",
+        "balanitis-rpn",
+        "balanitis-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "cryptorchidism",
+      "legacyLessonIds": [
+        "cryptorchidism",
+        "cryptorchidism-rpn",
+        "cryptorchidism-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "orchitis",
+      "legacyLessonIds": [
+        "orchitis",
+        "orchitis-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "prostatitis",
+      "legacyLessonIds": [
+        "prostatitis",
+        "prostatitis-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "third degree complete heart block",
+      "legacyLessonIds": [
+        "heart-block-complete",
+        "third-degree-avb-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "cellulitis",
+      "legacyLessonIds": [
+        "cellulitis",
+        "cellulitis-np",
+        "cellulitis-standalone-rpn",
+        "cellulitis-rpn"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "scabies",
+      "legacyLessonIds": [
+        "scabies",
+        "scabies-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "pemphigus vulgaris",
+      "legacyLessonIds": [
+        "pemphigus-vulgaris",
+        "pemphigus-vulgaris-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "tracheostomy care",
+      "legacyLessonIds": [
+        "tracheostomy-care-rpn",
+        "tracheostomy-care-rrt"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "pulmonary valve stenosis",
+      "legacyLessonIds": [
+        "pulmonary-valve-stenosis-rn",
+        "pulmonary-valve-stenosis-2-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "benign prostatic hyperplasia",
+      "legacyLessonIds": [
+        "mens-health-bph-np",
+        "bph-management"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "rheumatoid arthritis",
+      "legacyLessonIds": [
+        "msk-rheumatoid-arthritis-np",
+        "rheumatoid-arthritis-rpn",
+        "rheumatoid-arthritis-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "male infertility",
+      "legacyLessonIds": [
+        "mens-health-infertility-np",
+        "male-infertility-rpn",
+        "male-infertility-rn",
+        "male-infertility-np"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "parkinson disease",
+      "legacyLessonIds": [
+        "neuro-parkinsons-np",
+        "rpn-parkinson-disease"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "diabetic ketoacidosis",
+      "legacyLessonIds": [
+        "endo-dka-np",
+        "dka-management-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "palliative and end of life care foundations",
+      "legacyLessonIds": [
+        "palliative-rpn",
+        "palliative-and-end-of-life-care-foundations-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "palliative end of life care",
+      "legacyLessonIds": [
+        "palliative-rn",
+        "palliative-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "community health nursing foundations",
+      "legacyLessonIds": [
+        "community-nursing-rpn",
+        "community-health-nursing-foundations-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "community health nursing",
+      "legacyLessonIds": [
+        "community-nursing-rn",
+        "community-nursing-np",
+        "community-health-rpn"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "pain assessment and management foundations",
+      "legacyLessonIds": [
+        "pain-management-rpn",
+        "pain-assessment-and-management-foundations-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "wound care and management",
+      "legacyLessonIds": [
+        "wound-care-rpn",
+        "wound-care-and-management-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "core nursing fundamentals",
+      "legacyLessonIds": [
+        "core-fundamentals-rpn",
+        "core-fundamentals-rn",
+        "core-nursing-fundamentals-rpn"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "delegation and prioritization",
+      "legacyLessonIds": [
+        "delegation-rpn-expanded",
+        "delegation-rn-expanded",
+        "delegation-np-expanded"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "renal system foundations",
+      "legacyLessonIds": [
+        "renal-rpn",
+        "renal-system-foundations-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "gastrointestinal system foundations",
+      "legacyLessonIds": [
+        "gi-rpn",
+        "gastrointestinal-system-foundations-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "endocrine system foundations",
+      "legacyLessonIds": [
+        "endocrine-rpn",
+        "endocrine-system-foundations-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "immune system foundations",
+      "legacyLessonIds": [
+        "immune-rpn",
+        "immune-system-foundations-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "hematology foundations",
+      "legacyLessonIds": [
+        "hematology-rpn",
+        "hematology-foundations-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "heent assessment foundations",
+      "legacyLessonIds": [
+        "heent-rpn",
+        "heent-assessment-foundations-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "integumentary system foundations",
+      "legacyLessonIds": [
+        "skin-rpn",
+        "integumentary-system-foundations-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "musculoskeletal system foundations",
+      "legacyLessonIds": [
+        "musculoskeletal-rpn",
+        "musculoskeletal-system-foundations-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "neonatal care",
+      "legacyLessonIds": [
+        "neonatal-rpn-exp",
+        "neonatal-rn-exp",
+        "neonatal-np-exp"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "mental health nursing",
+      "legacyLessonIds": [
+        "mental-health-rpn-exp",
+        "mental-health-rn-exp",
+        "mental-health-np-exp",
+        "mental-health-rpn"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "infection control and infectious diseases",
+      "legacyLessonIds": [
+        "infections-rpn",
+        "infection-control-and-infectious-diseases-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "foundational assessment skills",
+      "legacyLessonIds": [
+        "assessment-skills-rpn",
+        "foundational-assessment-skills-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "fluid and electrolyte balance",
+      "legacyLessonIds": [
+        "fluid-electrolytes-rpn",
+        "fluid-and-electrolyte-balance-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "nutrition and supplements foundations",
+      "legacyLessonIds": [
+        "nutrition-supplements-rpn",
+        "nutrition-and-supplements-foundations-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "patient safety and ethical practice",
+      "legacyLessonIds": [
+        "safety-ethics-rpn",
+        "patient-safety-and-ethical-practice-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "gerontological nursing foundations",
+      "legacyLessonIds": [
+        "gerontology-rpn",
+        "gerontological-nursing-foundations-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "oncology",
+      "legacyLessonIds": [
+        "oncology-rpn-exp",
+        "oncology-rn-exp"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "toxicology and environmental health",
+      "legacyLessonIds": [
+        "toxicology-rpn-exp",
+        "toxicology-rn-exp"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "hemodialysis nursing fundamentals",
+      "legacyLessonIds": [
+        "hemodialysis-rpn",
+        "hemodialysis-nursing-fundamentals-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "patient positioning and body mechanics",
+      "legacyLessonIds": [
+        "patient-positioning-rpn",
+        "patient-positioning-and-body-mechanics-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "therapeutic communication",
+      "legacyLessonIds": [
+        "therapeutic-comm-rpn",
+        "therapeutic-comm-rn",
+        "therapeutic-comm-np",
+        "therapeutic-communication",
+        "therapeutic-communication-rpn",
+        "therapeutic-communication-rn",
+        "therapeutic-communication-np"
+      ],
+      "count": 7
+    },
+    {
+      "normalizedTitle": "labs and diagnostics",
+      "legacyLessonIds": [
+        "labs-diagnostics-rpn",
+        "labs-diagnostics-rn",
+        "labs-diagnostics-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "leadership and management",
+      "legacyLessonIds": [
+        "leadership-mgmt-rn",
+        "leadership-mgmt-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "health promotion and disease prevention",
+      "legacyLessonIds": [
+        "health-promotion-rpn",
+        "rpn-health-promotion-and-disease-prevention-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "maternal newborn essentials",
+      "legacyLessonIds": [
+        "maternal-newborn-edge-rpn",
+        "rpn-maternal-newborn-essentials-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "high risk prescribing and safety",
+      "legacyLessonIds": [
+        "pharm-np-high-risk",
+        "np-high-risk-prescribing-and-safety"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "respiratory pharmacology",
+      "legacyLessonIds": [
+        "pharm-respiratory",
+        "respiratory-pharmacology-rrt"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "endocrine pharmacology",
+      "legacyLessonIds": [
+        "pharm-endocrine",
+        "endocrine-pharmacology"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "gi and renal pharmacology",
+      "legacyLessonIds": [
+        "pharm-gi-renal",
+        "gi-and-renal-pharmacology"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "myocardial infarction",
+      "legacyLessonIds": [
+        "mi-management-rpn",
+        "myocardial-infarction-rn",
+        "myocardial-infarction-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "appendicitis",
+      "legacyLessonIds": [
+        "appendicitis-rpn",
+        "appendicitis-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "bowel obstruction",
+      "legacyLessonIds": [
+        "bowel-obstruction-rpn",
+        "bowel-obstruction-rn",
+        "bowel-obstruction-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "iron deficiency anemia",
+      "legacyLessonIds": [
+        "iron-deficiency-anemia-rpn",
+        "iron-deficiency-anemia-rn",
+        "iron-deficiency-anemia-np",
+        "iron-deficiency-anemia",
+        "rpn-iron-deficiency-anemia"
+      ],
+      "count": 5
+    },
+    {
+      "normalizedTitle": "sickle cell vaso occlusive crisis",
+      "legacyLessonIds": [
+        "sickle-cell-crisis-rpn",
+        "sickle-cell-crisis-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "sepsis septic shock",
+      "legacyLessonIds": [
+        "sepsis-management-rpn",
+        "sepsis-management-rn",
+        "sepsis-management-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "antibiotic stewardship",
+      "legacyLessonIds": [
+        "antibiotic-stewardship-rpn",
+        "antibiotic-stewardship-rn",
+        "antibiotic-stewardship-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "cardiac tamponade",
+      "legacyLessonIds": [
+        "cardiac-tamponade-rpn",
+        "cardiac-tamponade-rn",
+        "cardiac-tamponade-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "pulmonary embolism",
+      "legacyLessonIds": [
+        "pulmonary-embolism-rpn",
+        "pulmonary-embolism-rn",
+        "pulmonary-embolism-np",
+        "pulmonary-embolism-rrt"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "fat embolism syndrome",
+      "legacyLessonIds": [
+        "fat-embolism-rpn",
+        "fat-embolism-rn",
+        "fat-embolism-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "pneumothorax management",
+      "legacyLessonIds": [
+        "pneumothorax-management-rpn",
+        "pneumothorax-management-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "chest drainage systems",
+      "legacyLessonIds": [
+        "chest-drainage-system-rpn",
+        "chest-drainage-system-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "placenta previa",
+      "legacyLessonIds": [
+        "placenta-previa-management-rpn",
+        "placenta-previa-management-rn",
+        "placenta-previa-management-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "umbilical cord prolapse",
+      "legacyLessonIds": [
+        "umbilical-cord-prolapse-rpn",
+        "umbilical-cord-prolapse-rn",
+        "umbilical-cord-prolapse-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "rh alloimmunization",
+      "legacyLessonIds": [
+        "rh-alloimmunization-rpn",
+        "rh-alloimmunization-rn",
+        "rh-alloimmunization-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "conduct disorder",
+      "legacyLessonIds": [
+        "conduct-disorder-rpn",
+        "conduct-disorder-rn",
+        "conduct-disorder-np",
+        "conduct-disorder"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "vancomycin therapy",
+      "legacyLessonIds": [
+        "vancomycin-therapy-rpn",
+        "vancomycin-therapy-rn",
+        "vancomycin-therapy-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "insulin pump management",
+      "legacyLessonIds": [
+        "insulin-pump-management-rpn",
+        "insulin-pump-management-rn",
+        "insulin-pump-management-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "anticoagulation therapy",
+      "legacyLessonIds": [
+        "anticoagulation-therapy-rpn",
+        "anticoagulation-therapy-rn",
+        "anticoagulation-therapy-np",
+        "anticoagulation-therapy-expanded-rn"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "opioid management",
+      "legacyLessonIds": [
+        "opioid-management-rpn",
+        "opioid-management-rn",
+        "opioid-management-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "trisomy 21 down syndrome",
+      "legacyLessonIds": [
+        "trisomy-21-management-rpn",
+        "trisomy-21-management-rn",
+        "trisomy-21-management-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "hypospadias",
+      "legacyLessonIds": [
+        "hypospadias-management-rpn",
+        "hypospadias-management-rn",
+        "hypospadias-management-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "duchenne muscular dystrophy",
+      "legacyLessonIds": [
+        "duchenne-md-management-rpn",
+        "duchenne-md-management-rn",
+        "duchenne-md-management-np",
+        "dmd-peds"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "ventriculoperitoneal shunt",
+      "legacyLessonIds": [
+        "vp-shunt-management-rpn",
+        "vp-shunt-management-rn",
+        "vp-shunt-management-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "chlamydia",
+      "legacyLessonIds": [
+        "chlamydia-management-rpn",
+        "chlamydia-management-rn",
+        "chlamydia-management-np",
+        "chlamydia"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "syphilis",
+      "legacyLessonIds": [
+        "syphilis-management-rpn",
+        "syphilis-management-rn",
+        "syphilis-management-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "bacterial meningitis",
+      "legacyLessonIds": [
+        "bacterial-meningitis-rpn",
+        "bacterial-meningitis-rn",
+        "bacterial-meningitis-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "chronic kidney disease",
+      "legacyLessonIds": [
+        "chronic-kidney-disease-rpn",
+        "chronic-kidney-disease-rn",
+        "chronic-kidney-disease-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "tonsillectomy care",
+      "legacyLessonIds": [
+        "tonsillectomy-care-rpn",
+        "tonsillectomy-care-rn",
+        "tonsillectomy-care-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "alzheimer disease",
+      "legacyLessonIds": [
+        "alzheimer-disease-rpn",
+        "alzheimer-disease-rn",
+        "alzheimer-disease"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "guillain barr syndrome",
+      "legacyLessonIds": [
+        "guillain-barre-rpn",
+        "guillain-barre-rn",
+        "guillain-barre"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "myasthenia gravis",
+      "legacyLessonIds": [
+        "myasthenia-gravis-rpn",
+        "myasthenia-gravis-rn",
+        "myasthenia-gravis"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "newborn of diabetic mother",
+      "legacyLessonIds": [
+        "newborn-diabetic-mother-rpn",
+        "newborn-diabetic-mother-rn",
+        "newborn-diabetic-mother-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "meniere s disease",
+      "legacyLessonIds": [
+        "menieres-disease-rpn",
+        "menieres-disease-rn",
+        "menieres-disease-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "labyrinthitis vestibular neuritis",
+      "legacyLessonIds": [
+        "labyrinthitis-rpn",
+        "labyrinthitis-rn",
+        "labyrinthitis-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "ramsay hunt syndrome",
+      "legacyLessonIds": [
+        "ramsay-hunt-rpn",
+        "ramsay-hunt-rn",
+        "ramsay-hunt-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "rhinosinusitis",
+      "legacyLessonIds": [
+        "rhinosinusitis-rpn",
+        "rhinosinusitis-rn",
+        "rhinosinusitis-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "pharyngitis strep throat",
+      "legacyLessonIds": [
+        "pharyngitis-management-rpn",
+        "pharyngitis-management-rn",
+        "pharyngitis-management-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "otitis externa",
+      "legacyLessonIds": [
+        "otitis-externa-rpn",
+        "otitis-externa-rn",
+        "otitis-externa-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "papilledema optic nerve disorders",
+      "legacyLessonIds": [
+        "papilledema-rpn",
+        "papilledema-rn",
+        "papilledema-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "hpa axis cortisol stress response",
+      "legacyLessonIds": [
+        "hpa-axis-stress-rpn",
+        "hpa-axis-stress-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "bph turp",
+      "legacyLessonIds": [
+        "bph-turp-rpn",
+        "bph-turp-rn",
+        "bph-turp-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "hearing loss conductive vs sensorineural",
+      "legacyLessonIds": [
+        "hearing-loss-differential-rpn",
+        "hearing-loss-differential-rn",
+        "hearing-loss-differential-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "continuous bladder irrigation cbi",
+      "legacyLessonIds": [
+        "continuous-bladder-irrigation-rpn",
+        "continuous-bladder-irrigation-rn",
+        "continuous-bladder-irrigation-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "abg interpretation",
+      "legacyLessonIds": [
+        "abg-interpretation-rrt",
+        "abg-interpretation-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "obstetric emergencies",
+      "legacyLessonIds": [
+        "ob-emergencies-paramedic",
+        "obstetric-emergencies-paramedic"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "quality control and quality assurance",
+      "legacyLessonIds": [
+        "quality-control-mlt",
+        "quality-control-qa-mlt"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "crisis intervention",
+      "legacyLessonIds": [
+        "crisis-intervention-model-sw",
+        "crisis-intervention",
+        "crisis-intervention-rn",
+        "crisis-intervention-np"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "couples therapy approaches",
+      "legacyLessonIds": [
+        "couples-therapy-approaches-sw",
+        "couples-therapy-approaches-pt"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "mechanical ventilation fundamentals",
+      "legacyLessonIds": [
+        "mechanical-ventilation-basics-rrt",
+        "icu-mechanical-ventilation"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "laboratory mathematics and calculations",
+      "legacyLessonIds": [
+        "laboratory-mathematics-mlt",
+        "laboratory-math-calculations-mlt"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "surgical site infection prevention",
+      "legacyLessonIds": [
+        "surgtech-ssi-prevention",
+        "surgical-site-infection-prevention-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "acute dystonic reaction",
+      "legacyLessonIds": [
+        "acute-dystonic-reaction-rpn",
+        "acute-dystonic-reaction-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "alopecia for practical nurses",
+      "legacyLessonIds": [
+        "alopecia-rpn",
+        "alopecia-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "antepartum complications for practical nurses",
+      "legacyLessonIds": [
+        "antepartum-complications-rpn",
+        "antepartum-complications-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "antibody types and functions",
+      "legacyLessonIds": [
+        "antibody-types",
+        "antibody-types-and-functions"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "anxiety disorders",
+      "legacyLessonIds": [
+        "anxiety-disorders",
+        "anxiety-disorders-core-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "cardiac arrhythmias and acls management",
+      "legacyLessonIds": [
+        "arrhythmias-rn",
+        "cardiac-arrhythmias-and-acls-management-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "ascites assessment and management",
+      "legacyLessonIds": [
+        "ascites-assessment-rn",
+        "ascites-assessment-and-management-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "comprehensive nursing assessment",
+      "legacyLessonIds": [
+        "assessment-rn",
+        "assessment-rpn",
+        "comprehensive-nursing-assessment-rn"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "behcet disease",
+      "legacyLessonIds": [
+        "behcet-disease-np",
+        "behcet-disease-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "bipolar disorder",
+      "legacyLessonIds": [
+        "bipolar-disorder",
+        "bipolar-disorder-core-np",
+        "bipolar-disorder-rpn",
+        "bipolar-disorder-rn",
+        "bipolar-disorder-np"
+      ],
+      "count": 5
+    },
+    {
+      "normalizedTitle": "blood glucose monitoring and glycemic management for practical nurses",
+      "legacyLessonIds": [
+        "blood-glucose-monitoring-rpn",
+        "blood-glucose-monitoring-and-glycemic-management-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "bone marrow failure syndromes",
+      "legacyLessonIds": [
+        "bone-marrow-failure-rn",
+        "bone-marrow-failure-syndromes-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "benign prostatic hyperplasia bph assessment and nursing care",
+      "legacyLessonIds": [
+        "bph-basics-rpn",
+        "benign-prostatic-hyperplasia-bph-assessment-and-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "bronchiolitis",
+      "legacyLessonIds": [
+        "bronchiolitis-np",
+        "rn-bronchiolitis"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "burn assessment and management",
+      "legacyLessonIds": [
+        "burn-assessment-rn",
+        "burn-assessment-and-management-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "calcium imbalance hypocalcemia and hypercalcemia",
+      "legacyLessonIds": [
+        "calcium-imbalance-rpn",
+        "calcium-imbalance-hypocalcemia-and-hypercalcemia-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "carpal tunnel syndrome",
+      "legacyLessonIds": [
+        "carpal-tunnel-syndrome-rpn",
+        "carpal-tunnel-syndrome-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "congenital diaphragmatic hernia cdh",
+      "legacyLessonIds": [
+        "cdh-rn",
+        "congenital-diaphragmatic-hernia-cdh-rn",
+        "congenital-diaphragmatic-hernia-rrt"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "coagulation cascade",
+      "legacyLessonIds": [
+        "coagulation-cascade",
+        "coagulation-cascade-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "coarctation of the aorta",
+      "legacyLessonIds": [
+        "coarctation-of-aorta-rn",
+        "coarctation-expanded-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "contact precautions",
+      "legacyLessonIds": [
+        "contact-precautions",
+        "contact-precautions-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "covid 19 basics",
+      "legacyLessonIds": [
+        "covid-basics-rpn",
+        "covid-19-basics-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "cushing syndrome",
+      "legacyLessonIds": [
+        "cushings-syndrome-basics-rpn",
+        "cushing-syndrome",
+        "cushing-syndrome-np",
+        "rpn-cushing-syndrome"
+      ],
+      "count": 4
+    },
+    {
+      "normalizedTitle": "dehydration",
+      "legacyLessonIds": [
+        "dehydration-rpn",
+        "dehydration-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "delirium screening and management",
+      "legacyLessonIds": [
+        "delirium-screening-rn",
+        "delirium-screening-and-management-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "dermatological assessment in nursing",
+      "legacyLessonIds": [
+        "dermatology-rn",
+        "dermatological-assessment-in-nursing-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "developmental milestones assessment",
+      "legacyLessonIds": [
+        "developmental-milestones-rn",
+        "developmental-milestones-assessment-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "diabetic nephropathy",
+      "legacyLessonIds": [
+        "diabetic-nephropathy-rpn",
+        "diabetic-nephropathy-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "digoxin toxicity",
+      "legacyLessonIds": [
+        "digoxin-toxicity-np",
+        "digoxin-toxicity-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "surgical drain management for practical nurses",
+      "legacyLessonIds": [
+        "drain-management-rpn",
+        "surgical-drain-management-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "early warning score systems",
+      "legacyLessonIds": [
+        "early-warning-score-rn",
+        "early-warning-scores-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "encephalitis brain inflammation recognition and care for practical nurses",
+      "legacyLessonIds": [
+        "encephalitis-basics-rpn",
+        "encephalitis-brain-inflammation-recognition-and-care-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "hypothalamic pituitary axis",
+      "legacyLessonIds": [
+        "endocrine-core-np",
+        "hypothalamic-pituitary-axis-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "end of life care for practical nurses",
+      "legacyLessonIds": [
+        "eol-basics-rpn",
+        "end-of-life-care-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "epidural analgesia labor pain management for practical nurses",
+      "legacyLessonIds": [
+        "epidural-analgesia-rpn",
+        "epidural-analgesia-labor-pain-management-for-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "fall risk assessment",
+      "legacyLessonIds": [
+        "fall-risk-assessment-rpn",
+        "fall-risk-elderly-rpn",
+        "geriatric-falls-prevention-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "febrile neutropenia for practical nurses",
+      "legacyLessonIds": [
+        "febrile-neutropenia-basics-rpn",
+        "febrile-neutropenia-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "electronic fetal monitoring for practical nurses",
+      "legacyLessonIds": [
+        "fetal-monitoring-basics-rpn",
+        "electronic-fetal-monitoring-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "fluid balance monitoring for practical nurses",
+      "legacyLessonIds": [
+        "fluid-balance-monitoring-rpn",
+        "fluid-balance-monitoring-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "fluid resuscitation principles and monitoring for practical nurses",
+      "legacyLessonIds": [
+        "fluid-resuscitation-logic-rpn",
+        "fluid-resuscitation-principles-and-monitoring-for-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "uterine fundal assessment for practical nurses",
+      "legacyLessonIds": [
+        "fundal-height-rpn",
+        "uterine-fundal-assessment-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "fungal infections overview for practical nurses",
+      "legacyLessonIds": [
+        "fungal-infections-overview-rpn",
+        "fungal-infections-overview-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "gastrointestinal system for practical nurses",
+      "legacyLessonIds": [
+        "gastrointestinal-rpn",
+        "gastrointestinal-system-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "gi bleeding basics",
+      "legacyLessonIds": [
+        "gi-bleed-basics-rpn",
+        "gi-bleeding-basics-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "hemochromatosis",
+      "legacyLessonIds": [
+        "hemochromatosis-np",
+        "hemochromatosis-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "hemophilia",
+      "legacyLessonIds": [
+        "hemophilia-basics-rpn",
+        "rn-hemophilia"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "hepatic encephalopathy",
+      "legacyLessonIds": [
+        "hepatic-encephalopathy-np",
+        "hepatic-encephalopathy-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "hepatitis basics",
+      "legacyLessonIds": [
+        "hepatitis-basics-np",
+        "hepatitis-basics-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "hiv basics",
+      "legacyLessonIds": [
+        "hiv-basics-np",
+        "hiv-basics-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "hypoparathyroidism",
+      "legacyLessonIds": [
+        "hypoparathyroidism-rpn",
+        "rn-hypoparathyroidism"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "informed consent and capacity assessment for practical nurses",
+      "legacyLessonIds": [
+        "informed-consent-rpn",
+        "informed-consent-and-capacity-assessment-for-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "intake and output monitoring for practical nurses",
+      "legacyLessonIds": [
+        "intake-output-rpn",
+        "intake-and-output-monitoring-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "intestinal malrotation and midgut volvulus for practical nurses",
+      "legacyLessonIds": [
+        "intestinal-malrotation-rpn",
+        "intestinal-malrotation-and-midgut-volvulus-for-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "kidney stones nephrolithiasis",
+      "legacyLessonIds": [
+        "kidney-stone-basics-rpn",
+        "kidney-stones-nephrolithiasis-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "leukemia basics for practical nurses",
+      "legacyLessonIds": [
+        "leukemia-basics-rpn",
+        "leukemia-basics-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "macular degeneration",
+      "legacyLessonIds": [
+        "macular-degeneration-rpn",
+        "macular-degeneration-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "massive hemorrhage protocol",
+      "legacyLessonIds": [
+        "massive-hemorrhage-rn",
+        "massive-hemorrhage-protocol"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "metabolic syndrome",
+      "legacyLessonIds": [
+        "metabolic-syndrome-np",
+        "metabolic-syndrome-rpn",
+        "rpn-metabolic-syndrome"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "mobility decline and immobility complications for practical nurses",
+      "legacyLessonIds": [
+        "mobility-decline-rpn",
+        "mobility-decline-and-immobility-complications-for-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "infectious mononucleosis for practical nurses",
+      "legacyLessonIds": [
+        "mononucleosis-rpn",
+        "infectious-mononucleosis-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "mood stabilizers",
+      "legacyLessonIds": [
+        "mood-stabilizers-core-np",
+        "mood-stabilizers"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "multimodal analgesia",
+      "legacyLessonIds": [
+        "multimodal-analgesia-np",
+        "multimodal-analgesia-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "multiple sclerosis basics",
+      "legacyLessonIds": [
+        "multiple-sclerosis-basics-rpn",
+        "multiple-sclerosis-basics-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "myasthenia gravis basics",
+      "legacyLessonIds": [
+        "myasthenia-gravis-basics-rpn",
+        "myasthenia-gravis-basics-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "narcolepsy for practical nurses",
+      "legacyLessonIds": [
+        "narcolepsy-rpn",
+        "narcolepsy-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "neonatal abstinence syndrome",
+      "legacyLessonIds": [
+        "neonatal-abstinence-basics-rpn",
+        "rn-neonatal-abstinence-syndrome"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "neuroblastoma recognition and nursing care for practical nurses",
+      "legacyLessonIds": [
+        "neuroblastoma-rpn",
+        "neuroblastoma-recognition-and-nursing-care-for-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "neurogenic bladder for practical nurses",
+      "legacyLessonIds": [
+        "neurogenic-bladder-rpn",
+        "neurogenic-bladder-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "neurogenic shock basics for practical nurses",
+      "legacyLessonIds": [
+        "neurogenic-shock-basics-rpn",
+        "neurogenic-shock-basics-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "nutritional screening tools and assessment for practical nurses",
+      "legacyLessonIds": [
+        "nutritional-screening-rpn",
+        "nutritional-screening-tools-and-assessment-for-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "nutrition in the elderly for practical nurses",
+      "legacyLessonIds": [
+        "nutrition-elderly-rpn",
+        "nutrition-in-the-elderly-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "clinical nutrition and enteral feeding management for practical nurses",
+      "legacyLessonIds": [
+        "nutrition-rpn",
+        "clinical-nutrition-and-enteral-feeding-management-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "obstructive uropathy for practical nurses",
+      "legacyLessonIds": [
+        "obstructive-uropathy-rpn",
+        "obstructive-uropathy-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "obsessive compulsive disorder",
+      "legacyLessonIds": [
+        "ocd",
+        "ocd-rpn",
+        "obsessive-compulsive-disorder"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "cancer pathophysiology and staging for practical nurses",
+      "legacyLessonIds": [
+        "oncology-rpn",
+        "cancer-pathophysiology-and-staging-for-practical-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "organophosphate poisoning",
+      "legacyLessonIds": [
+        "organophosphate-poisoning-np",
+        "organophosphate-poisoning-rn",
+        "organophosphate-poisoning-rpn"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "osteomyelitis",
+      "legacyLessonIds": [
+        "osteomyelitis",
+        "osteomyelitis-basics-rpn",
+        "rpn-osteomyelitis"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "pain pathways and nociception for practical nurses",
+      "legacyLessonIds": [
+        "pain-pathways-rpn",
+        "pain-pathways-and-nociception-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "palliative chemotherapy concepts for practical nurses",
+      "legacyLessonIds": [
+        "palliative-chemo-concepts-rpn",
+        "palliative-chemotherapy-concepts-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "end of life care principles for practical nurses",
+      "legacyLessonIds": [
+        "palliative-eol-rpn",
+        "end-of-life-care-principles-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "palliative symptom management for practical nurses",
+      "legacyLessonIds": [
+        "palliative-symptom-mgmt-rpn",
+        "palliative-symptom-management-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "pavlik harness",
+      "legacyLessonIds": [
+        "pavlik-harness",
+        "pavlik-harness-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "pediatric weight based dosing",
+      "legacyLessonIds": [
+        "pediatric-dosing-logic-np",
+        "pediatric-prescribing-np",
+        "pediatric-weight-based-dosing-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "pediatric nursing fundamentals for practical nurses",
+      "legacyLessonIds": [
+        "pediatrics-rpn",
+        "pediatric-nursing-fundamentals-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "pemphigus autoimmune blistering disease for practical nurses",
+      "legacyLessonIds": [
+        "pemphigus-rpn",
+        "pemphigus-autoimmune-blistering-disease-for-practical-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "peptic ulcer disease basics",
+      "legacyLessonIds": [
+        "peptic-ulcer-basics-rpn",
+        "peptic-ulcer-disease-basics-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "pre and post operative care for practical nurses",
+      "legacyLessonIds": [
+        "pre-post-op-care-rpn",
+        "pre-and-post-operative-care-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "evidence based practice",
+      "legacyLessonIds": [
+        "professional-practice-np",
+        "evidence-based-practice-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "antibiotic stewardship principles",
+      "legacyLessonIds": [
+        "resistance-principles-np",
+        "antibiotic-stewardship-principles"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "restless leg syndrome",
+      "legacyLessonIds": [
+        "restless-leg-syndrome-rpn",
+        "restless-leg-syndrome-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "sepsis basics",
+      "legacyLessonIds": [
+        "sepsis-basics-rpn",
+        "sepsis-basics-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "shingles herpes zoster",
+      "legacyLessonIds": [
+        "shingles-herpes-zoster-rpn",
+        "shingles-herpes-zoster-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "sickle cell disease",
+      "legacyLessonIds": [
+        "sickle-cell-np",
+        "rn-sickle-cell-disease"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "comprehensive skin assessment for practical nurses",
+      "legacyLessonIds": [
+        "skin-assessment-rpn",
+        "comprehensive-skin-assessment-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "skin tear prevention and management for practical nurses",
+      "legacyLessonIds": [
+        "skin-tears-rpn",
+        "skin-tear-prevention-and-management-for-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "suctioning technique oropharyngeal nasopharyngeal and endotracheal",
+      "legacyLessonIds": [
+        "suctioning-technique-rpn",
+        "suctioning-technique-oropharyngeal-nasopharyngeal-and-endotracheal-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "syringomyelia for practical nurses",
+      "legacyLessonIds": [
+        "syringomyelia-rpn",
+        "syringomyelia-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "thrombocytopenia",
+      "legacyLessonIds": [
+        "thrombocytopenia-np",
+        "thrombocytopenia-rpn",
+        "rn-thrombocytopenia"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "tinnitus for practical nurses",
+      "legacyLessonIds": [
+        "tinnitus-rpn",
+        "tinnitus-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "tetralogy of fallot tof",
+      "legacyLessonIds": [
+        "tof-rn",
+        "tetralogy-of-fallot-expanded-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "toxicology assessment for practical nurses",
+      "legacyLessonIds": [
+        "toxicology-rpn",
+        "toxicology-assessment-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "toxic shock syndrome gynecologic for practical nurses",
+      "legacyLessonIds": [
+        "toxic-shock-gynecologic-rpn",
+        "toxic-shock-syndrome-gynecologic-for-practical-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "trigeminal neuralgia",
+      "legacyLessonIds": [
+        "trigeminal-neuralgia-rpn",
+        "trigeminal-neuralgia-2-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "tuberous sclerosis",
+      "legacyLessonIds": [
+        "tuberous-sclerosis-np",
+        "tuberous-sclerosis-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "turner syndrome for practical nurses",
+      "legacyLessonIds": [
+        "turner-syndrome-rpn",
+        "turner-syndrome-for-practical-nurses-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "urinary tract infection basics",
+      "legacyLessonIds": [
+        "uti-basics-rpn",
+        "urinary-tract-infection-basics-rpn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "wernicke encephalopathy",
+      "legacyLessonIds": [
+        "wernicke-encephalopathy-np",
+        "wernicke-encephalopathy-rpn",
+        "wernicke-encephalopathy-2-rpn"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "wilms tumor nephroblastoma",
+      "legacyLessonIds": [
+        "wilms-tumor-rpn",
+        "wilms-tumor-nephroblastoma-for-practical-nurses-rpn",
+        "rn-wilms-tumor"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "wilson disease",
+      "legacyLessonIds": [
+        "wilson-disease-np",
+        "wilson-disease-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "acute coronary syndrome acs",
+      "legacyLessonIds": [
+        "acute-coronary-syndrome-rpn",
+        "acute-coronary-syndrome-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "stable angina",
+      "legacyLessonIds": [
+        "stable-angina-rpn",
+        "stable-angina-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "unstable angina",
+      "legacyLessonIds": [
+        "unstable-angina-rpn",
+        "unstable-angina-rn",
+        "unstable-angina-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "pericardial effusion",
+      "legacyLessonIds": [
+        "pericardial-effusion-rpn",
+        "pericardial-effusion-rn",
+        "pericardial-effusion-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "second degree av block type i",
+      "legacyLessonIds": [
+        "second-degree-avb-type-i-rn",
+        "second-degree-avb-type-i-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "third degree av block",
+      "legacyLessonIds": [
+        "third-degree-avb-rn",
+        "third-degree-avb-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "cardiac catheterization",
+      "legacyLessonIds": [
+        "cardiac-cath-care-rn",
+        "cardiac-cath-care-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "post angiography care",
+      "legacyLessonIds": [
+        "post-angiography-care-rn",
+        "post-angiography-care-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "hypertensive crisis",
+      "legacyLessonIds": [
+        "hypertensive-crisis-rpn",
+        "hypertensive-crisis-rn",
+        "hypertensive-crisis-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "orthostatic hypotension",
+      "legacyLessonIds": [
+        "orthostatic-hypotension-rpn",
+        "orthostatic-hypotension-rn",
+        "orthostatic-hypotension-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "thoracic aortic aneurysm",
+      "legacyLessonIds": [
+        "thoracic-aortic-aneurysm-rpn",
+        "thoracic-aortic-aneurysm-rn",
+        "thoracic-aortic-aneurysm-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "nephrotic syndrome",
+      "legacyLessonIds": [
+        "nephrotic-syndrome-rpn",
+        "nephrotic-syndrome-rn",
+        "rn-nephrotic-syndrome"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "fracture types",
+      "legacyLessonIds": [
+        "fracture-types-rn",
+        "fracture-types-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "amputation care",
+      "legacyLessonIds": [
+        "amputation-care-rpn",
+        "amputation-care-rn",
+        "amputation-care-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "generalized anxiety disorder",
+      "legacyLessonIds": [
+        "generalized-anxiety-disorder-rpn",
+        "generalized-anxiety-disorder"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "substance use disorders",
+      "legacyLessonIds": [
+        "substance-use-disorders-rpn",
+        "substance-use-disorders-rn"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "eating disorders",
+      "legacyLessonIds": [
+        "eating-disorders-rpn",
+        "eating-disorders-rn",
+        "eating-disorders-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "personality disorders",
+      "legacyLessonIds": [
+        "personality-disorders-rpn",
+        "personality-disorders-rn",
+        "personality-disorders-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "suicide assessment",
+      "legacyLessonIds": [
+        "suicide-assessment-rn",
+        "suicide-assessment-np"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "anticoagulant therapy",
+      "legacyLessonIds": [
+        "anticoagulants-rpn",
+        "anticoagulants-rn",
+        "anticoagulants-np"
+      ],
+      "count": 3
+    },
+    {
+      "normalizedTitle": "increased intracranial pressure",
+      "legacyLessonIds": [
+        "increased-intracranial-pressure",
+        "rn-increased-intracranial-pressure"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "hiatal hernia",
+      "legacyLessonIds": [
+        "hiatal-hernia-rpn",
+        "rn-hiatal-hernia"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "cystic fibrosis",
+      "legacyLessonIds": [
+        "cystic-fibrosis-rrt",
+        "rn-cystic-fibrosis"
+      ],
+      "count": 2
+    },
+    {
+      "normalizedTitle": "testicular torsion",
+      "legacyLessonIds": [
+        "testicular-torsion-rpn",
+        "rn-testicular-torsion"
+      ],
+      "count": 2
+    }
+  ],
+  "idAppearsInMultipleFiles": []
+}

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { Layers } from "lucide-react";
 import { ExamFamily, type TierCode } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
@@ -69,11 +68,9 @@ import {
   pathwayLessonSectionPrefersWideColumn,
   shouldRenderPathwayLessonSection,
 } from "@/lib/lessons/lesson-section-page-layout";
-import {
-  PathwayLessonCommonTrapsStrip,
-  PathwayLessonMemoryAnchorStrip,
-  PathwayLessonStudyTakeawaysStrip,
-} from "@/components/lessons/pathway-lesson-study-strips";
+import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
+import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
+import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
 export const dynamic = "force-dynamic";
@@ -284,17 +281,19 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
             ) : null
           }
         />
+        {lessonHasExamTakeaways(lesson.studyTakeaways) ? (
+          <div className="mt-4 max-w-5xl">
+            <ExamTakeawaysBlock pathway={pathway} items={lesson.studyTakeaways} position="top" />
+          </div>
+        ) : null}
         <div className="mt-4 space-y-2">
           <PremiumLessonPublishNotice validation={lesson.premiumValidation} />
           <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
           <PathwayLessonQuickReview bullets={quickReviewBullets} />
         </div>
-        {(lesson.studyTakeaways && lesson.studyTakeaways.length >= 2) || lesson.memoryAnchor ? (
-          <div className="mt-4 space-y-3">
-            {lesson.studyTakeaways && lesson.studyTakeaways.length >= 2 ? (
-              <PathwayLessonStudyTakeawaysStrip pathway={pathway} items={lesson.studyTakeaways} position="top" />
-            ) : null}
-            {lesson.memoryAnchor ? <PathwayLessonMemoryAnchorStrip text={lesson.memoryAnchor} /> : null}
+        {lesson.memoryAnchor ? (
+          <div className="mt-4 max-w-5xl">
+            <PathwayLessonMemoryAnchorStrip text={lesson.memoryAnchor} />
           </div>
         ) : null}
         {showLocaleFallbackNotice ? (
@@ -422,6 +421,11 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
                 </div>
               ) : null}
             </main>
+            {lessonHasExamTakeaways(lesson.studyTakeaways) ? (
+              <div className="mx-auto mt-6 max-w-5xl">
+                <ExamTakeawaysBlock pathway={pathway} items={lesson.studyTakeaways} position="bottom" />
+              </div>
+            ) : null}
           </LessonRecallProvider>
 
           {lockedSections.length > 0 ? (
@@ -439,11 +443,6 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
             canMarkComplete={fullAccess}
             initialProgress={lessonProgress}
           />
-          {lesson.studyTakeaways && lesson.studyTakeaways.length >= 2 ? (
-            <div className="mx-auto mt-8 max-w-5xl">
-              <PathwayLessonStudyTakeawaysStrip pathway={pathway} items={lesson.studyTakeaways} position="bottom" />
-            </div>
-          ) : null}
         </PathwayLessonAssessmentExperience>
 
         <Suspense fallback={<PathwayLessonDetailDeferredSkeleton />}>
@@ -455,43 +454,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           />
         </Suspense>
 
-        {/* Flashcard cross-link — always shown; links to topic-scoped flashcard page when topic exists */}
-        {lesson.topicSlug ? (
-          <aside
-            className="nn-lesson-support-card mx-auto mt-8 max-w-5xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-info)_8%)] bg-[color-mix(in_srgb,var(--bg-card)_92%,var(--semantic-info-soft)_8%)] px-4 py-3.5"
-            aria-label="Flashcard study suggestion"
-          >
-            <div className="flex items-start gap-3">
-              <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--bg-card))]" aria-hidden>
-                <Layers className="h-3.5 w-3.5 text-[var(--semantic-brand)]" strokeWidth={1.75} />
-              </span>
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
-                  Study {lesson.topic ? `${lesson.topic} ` : ""}with flashcards
-                </p>
-                <p className="mt-0.5 text-xs leading-relaxed text-[var(--theme-muted-text)] sm:text-sm sm:leading-6">
-                  Reinforce what you just read with active recall. Review key terms, lab values, medications, and nursing interventions for this topic.
-                </p>
-                <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
-                  <Link
-                    href={`/flashcards/${lesson.topicSlug}`}
-                    className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--semantic-brand)] hover:underline focus-visible:outline-none focus-visible:underline"
-                  >
-                    Open {lesson.topic ? `${lesson.topic} ` : ""}decks →
-                  </Link>
-                  <Link
-                    href="/flashcards"
-                    className="text-sm text-[var(--theme-muted-text)] hover:text-[var(--theme-heading-text)] hover:underline focus-visible:outline-none focus-visible:underline"
-                  >
-                    Browse all flashcards
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </aside>
-        ) : null}
-
-        <p className="mt-10 text-center text-xs text-[var(--theme-muted-text)]">
+        <p className="mt-8 text-center text-xs text-[var(--theme-muted-text)]">
           <Link href={blogHubPath} className="font-medium text-primary hover:underline">
             {examName} blog posts
           </Link>

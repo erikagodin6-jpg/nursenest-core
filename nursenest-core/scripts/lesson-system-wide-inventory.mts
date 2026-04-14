@@ -21,6 +21,7 @@ import { prisma } from "../src/lib/db";
 import {
   getEffectiveCatalogLessonsForPathwaySync,
   normalizeLesson,
+  pathwayHasBundledCatalogLessonsSync,
   pathwayLessonRowToInput,
 } from "../src/lib/lessons/pathway-lesson-catalog-sync";
 import { prependScopedGoldCatalogLessons } from "../src/lib/lessons/scoped-lessons/scoped-gold-registry";
@@ -297,16 +298,23 @@ async function main() {
 
   const alliedProfessions = ALLIED_PROFESSIONS.map((prof) => {
     const pathwayId = prof.pathwayId;
-    const catalogEffective = getEffectiveCatalogLessonsForPathwaySync(pathwayId);
-    const filtered = catalogEffective.filter((l) => alliedLessonMatchesProfessionFilter(l, prof.topicSlugsIn));
+    const pw = byPathway[pathwayId] as { lessons: LessonAuditRow[] } | undefined;
+    const mergedRows = pw?.lessons ?? [];
+    const filtered = mergedRows.filter((r) => alliedLessonMatchesProfessionFilter({ topicSlug: r.topicSlug }, prof.topicSlugsIn));
     const urlBase = alliedHealthLessonDetailPath(prof.professionKey, "{slug}");
-    const wouldRender = filtered.filter((l) => l.structuralQuality?.publicComplete).length;
+    const wouldRender = filtered.filter((r) => r.marketingWouldRender).length;
+    const bundledOnly = getEffectiveCatalogLessonsForPathwaySync(pathwayId).filter((l) =>
+      alliedLessonMatchesProfessionFilter(l, prof.topicSlugsIn),
+    );
     return {
       professionKey: prof.professionKey,
       pathwayId,
       lessonsIndex: `/allied-health/${prof.professionKey}/lessons`,
       lessonDetailPattern: urlBase,
-      catalogEffectiveCount: filtered.length,
+      /** Bundled `catalog.json` + scoped-gold only (often 0 for allied — no JSON bucket). */
+      bundledCatalogFilteredCount: bundledOnly.length,
+      /** DB + catalog merge, then profession topic filter — matches hub-visible universe for inventory. */
+      mergedAfterProfessionFilterCount: filtered.length,
       marketingWouldRenderCount: wouldRender,
       structuralGateFailedCount: filtered.length - wouldRender,
     };

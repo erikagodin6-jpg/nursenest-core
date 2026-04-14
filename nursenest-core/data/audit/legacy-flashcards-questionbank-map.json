@@ -1,0 +1,2785 @@
+{
+  "generatedAt": "2026-04-14T13:45:37.197Z",
+  "mapping": [
+    {
+      "legacySourcePath": "client/src/data/flashcards-community.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-icu-critical-care.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-labor-delivery.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-np-enrichment-1.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-np-enrichment-2.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-np-enrichment-3.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-np-enrichment-4.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-np-enrichment-5.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-np-enrichment-6.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-np-patho.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-np-subspecialties.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-np.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-postpartum.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-public-health.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-rn-arrhythmias-chd-anticoag.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-rn-expansion-2.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-rn-expansion.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-rn-infectious-disease.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-rn-patho-cardio-neuro.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-rn-patho-expansion.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-rn-resp-renal-batch2.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-rn-resp-renal.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-rn-shock-critical.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-rn.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-rpn-expansion.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/flashcards-rpn.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-bowtie-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-bowtie-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-bowtie-03.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-case_study-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-case_study-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-case_study-03.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-drag_drop-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-drag_drop-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-highlight-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-highlight-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-image_based-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-image_based-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-matrix-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-matrix-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-mcq-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-mcq-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-mcq-03.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-mcq-04.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-mcq-05.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-mcq-06.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-mcq-07.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-mcq-08.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-mcq-09.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-mcq-10.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-mcq-11.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-mcq-12.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-sata-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-sata-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-sata-03.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-sata-04.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-sata-05.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-trend-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/np-advanced-trend-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "NP",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-bowtie-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-bowtie-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-bowtie-03.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-case_study-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-case_study-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-drag_drop-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-drag_drop-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-highlight-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-highlight-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-image_based-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-image_based-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-matrix-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-matrix-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-mcq-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-mcq-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-mcq-03.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-mcq-04.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-mcq-05.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-mcq-06.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-mcq-07.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-mcq-08.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-mcq-09.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-mcq-10.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-sata-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-sata-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-sata-03.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-sata-04.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-trend-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rn-advanced-trend-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "RN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-bowtie-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-bowtie-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-case_study.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-drag_drop.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-highlight.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-image_based.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-matrix.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-mcq-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-mcq-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-mcq-03.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-mcq-04.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-mcq-05.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-mcq-06.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-sata-01.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-sata-02.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-sata-03.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "client/src/data/advanced-questions/rpn-advanced-trend.ts",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "PN",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/addictions-counsellor-questions-batch2.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/addictions-counsellor-questions-batch3.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/addictions-counsellor-questions-batch4.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/addictions-counsellor-questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/cardiac-sonographer-questions-batch2.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/cardiac-sonographer-questions-batch3.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/cardiac-sonographer-questions-batch4.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/cardiac-sonographer-questions-batch5.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/cardiac-sonographer-questions-batch6.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/cardiac-sonographer-questions-batch7.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/cardiac-sonographer-questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/him-questions-batch2.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/him-questions-batch3.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/him-questions-batch4.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/him-questions-batch5.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/him-questions-batch6.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/him-questions-batch7.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/him-questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/imaging-questions-batch2.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/imaging-questions-batch3.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/imaging-questions-batch4.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/imaging-questions-batch5.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/imaging-questions-batch6.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/imaging-questions-expansion-2.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/imaging-questions-expansion.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/imaging-questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/mlt-questions-batch2.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/mlt-questions-batch3.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/mlt-questions-batch4.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/mlt-questions-batch5.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/mlt-questions-batch6.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/mlt-questions-batch7.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/mlt-questions-expansion.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/mlt-questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/mlt-seed-questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/ota-questions-batch10.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/ota-questions-batch11.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/ota-questions-batch12.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/ota-questions-batch13.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/ota-questions-batch14.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/ota-questions-batch15.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/ota-questions-batch2.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/ota-questions-batch3.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/ota-questions-batch4.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/ota-questions-batch5.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/ota-questions-batch6.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/ota-questions-batch7.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/ota-questions-batch8.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/ota-questions-batch9.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/ota-questions-expansion.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/ota-questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/paramedic-questions-batch2.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/paramedic-questions-batch3.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/paramedic-questions-batch4.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/paramedic-questions-batch5.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/paramedic-questions-batch6.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/paramedic-questions-expansion.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/paramedic-questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pharmacy-tech-questions-batch2.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pharmacy-tech-questions-batch3.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pharmacy-tech-questions-batch4.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pharmacy-tech-questions-batch5.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pharmacy-tech-questions-batch6.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pharmacy-tech-questions-batch7.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pharmacy-tech-questions-batch8.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pharmacy-tech-questions-batch9.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pharmacy-tech-questions-expansion.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pharmacy-tech-questions-extended.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pharmacy-tech-questions-pebc.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pharmacy-tech-questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/psychotherapist-questions-batch2.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/psychotherapist-questions-batch3.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/psychotherapist-questions-batch4.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/psychotherapist-questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "unknown",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch1.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch10.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch11.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch12.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch13.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch14.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch15.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch16.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch17.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch18.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch19.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch2.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch20.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch21.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch22.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch23.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch24.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch25.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch26.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch27.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch28.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch29.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch3.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch30.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch31.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch32.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch33.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch34.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch35.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch4.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch5.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch6.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch7.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch8.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-batch9.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions-expansion.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/pta-questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/rrt-questions-batch1.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/rrt-questions-batch2.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/rrt-questions-batch3.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/rrt-questions-batch4.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/rrt-questions-batch5.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/rrt-questions-batch6.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/rrt-questions-batch7.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/rrt-questions-batch8.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/rrt-questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch10.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch11.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch12.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch13.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch14.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch15.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch16.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch17.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch18.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch19.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch2.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch20.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch21.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch22.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch23.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch24.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch25.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch26.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch27.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch3.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch4.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch5.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch6.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch7.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch8.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions-batch9.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/social-worker-questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/sonography-questions-batch2.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/sonography-questions-batch3.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/sonography-questions-batch4.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/sonography-questions-batch5.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/sonography-questions-batch6.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/sonography-questions-batch7.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/sonography-questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/surgical-technologist-questions-10.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/surgical-technologist-questions-11.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/surgical-technologist-questions-2.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/surgical-technologist-questions-3.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/surgical-technologist-questions-4.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/surgical-technologist-questions-5.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/surgical-technologist-questions-6.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/surgical-technologist-questions-7.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/surgical-technologist-questions-8.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/surgical-technologist-questions-9.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "data/career-questions/surgical-technologist-questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "nursenest-core/data/replit-exports/exam_questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "mixed",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "nursenest-core/data/replit-exports/allied_questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "Allied",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "nursenest-core/data/replit-exports/generated_questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "mixed",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "nursenest-core/data/replit-exports/imaging_questions.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "mixed",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "nursenest-core/data/replit-exports/question_type_registry.json",
+      "currentTargetArea": "legacy_monolith_ts_or_json",
+      "targetProfessionTier": "mixed",
+      "matchConfidence": "medium",
+      "action": "review_needed",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "nursenest-core/data/materialized/np-clinical-layer-2026/questions.json",
+      "currentTargetArea": "materialized_import_pipeline",
+      "targetProfessionTier": "np-clinical-layer-2026",
+      "matchConfidence": "high",
+      "action": "merge_into_existing",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    },
+    {
+      "legacySourcePath": "nursenest-core/data/materialized/rn-pn-replit-batch-2026/questions.json",
+      "currentTargetArea": "materialized_import_pipeline",
+      "targetProfessionTier": "rn-pn-replit-batch-2026",
+      "matchConfidence": "high",
+      "action": "merge_into_existing",
+      "notes": [
+        "DB ExamQuestion rows not queried in this audit; use Prisma or admin export to diff against legacy bundles before import."
+      ]
+    }
+  ]
+}

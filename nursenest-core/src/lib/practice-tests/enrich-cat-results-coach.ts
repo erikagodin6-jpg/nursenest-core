@@ -30,7 +30,7 @@ async function loadLessonContentSignal(pathwayId: string | null | undefined): Pr
   if (!pathwayId?.trim()) return null;
   try {
     const rows = await prisma.pathwayLesson.findMany({
-      where: { pathwayId, status: { not: "draft" } },
+      where: { pathwayId, status: { not: "DRAFT" } },
       select: {
         id: true,
         title: true,

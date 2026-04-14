@@ -1,0 +1,389 @@
+{
+  "generatedAt": "2026-04-14T13:47:11.282Z",
+  "externalVolumesMounted": false,
+  "note": "Legacy monolith paths under workspace root (client/, server/). Mount external drives and re-run to include out-of-repo copies.",
+  "workspaceRoot": "/root/nursenest-core",
+  "entryCount": 19,
+  "files": [
+    {
+      "filePath": "/root/nursenest-core/client/src/lib/cat-engine.ts",
+      "repoRelativePath": "client/src/lib/cat-engine.ts",
+      "exists": true,
+      "componentOrModule": "cat-engine (client)",
+      "purpose": "Client-side CAT state: initCAT, domain coverage, ability history, stopping, readiness/scaled score helpers for mock exam UI.",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": true,
+        "adaptiveSelection": true,
+        "progress": true,
+        "resume": false,
+        "scoring": true,
+        "results": true,
+        "rationaleReview": false,
+        "readinessUx": true,
+        "layoutPresentation": false
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/pages/mock-exam-session.tsx",
+      "repoRelativePath": "client/src/pages/mock-exam-session.tsx",
+      "exists": true,
+      "componentOrModule": "MockExamSession",
+      "purpose": "Large mock/CAT session page: blueprint-driven pools, option shuffle, timer, flags, pause, checkpoints, error recovery, optional server sync.",
+      "controls": {
+        "sessionStart": true,
+        "questionDelivery": true,
+        "adaptiveSelection": true,
+        "progress": true,
+        "resume": true,
+        "scoring": true,
+        "results": false,
+        "rationaleReview": true,
+        "readinessUx": true,
+        "layoutPresentation": true
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/pages/mock-exam-report.tsx",
+      "repoRelativePath": "client/src/pages/mock-exam-report.tsx",
+      "exists": true,
+      "componentOrModule": "MockExamReport",
+      "purpose": "Post-session report / analytics for mock exams.",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": false,
+        "resume": false,
+        "scoring": true,
+        "results": true,
+        "rationaleReview": true,
+        "readinessUx": true,
+        "layoutPresentation": true
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/lib/flagship-mock-exam-configs.ts",
+      "repoRelativePath": "client/src/lib/flagship-mock-exam-configs.ts",
+      "exists": true,
+      "componentOrModule": "flagship-mock-exam-configs",
+      "purpose": "Blueprint/time limits and exam metadata for flagship mock flows.",
+      "controls": {
+        "sessionStart": true,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": false,
+        "resume": false,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": true,
+        "layoutPresentation": false
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/lib/session-checkpoint.ts",
+      "repoRelativePath": "client/src/lib/session-checkpoint.ts",
+      "exists": true,
+      "componentOrModule": "session-checkpoint",
+      "purpose": "Checkpoint manager for long exam sessions (resume / recovery).",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": true,
+        "resume": true,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/lib/exam-session-checkpoint.ts",
+      "repoRelativePath": "client/src/lib/exam-session-checkpoint.ts",
+      "exists": true,
+      "componentOrModule": "exam-session-checkpoint",
+      "purpose": "Clear/persist exam checkpoint helpers.",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": true,
+        "resume": true,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/components/exam-fallbacks.tsx",
+      "repoRelativePath": "client/src/components/exam-fallbacks.tsx",
+      "exists": true,
+      "componentOrModule": "exam-fallbacks",
+      "purpose": "Guards for media/translation/rationale, safe player, recovery prompts, printable backup.",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": true,
+        "adaptiveSelection": false,
+        "progress": false,
+        "resume": true,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": true,
+        "readinessUx": false,
+        "layoutPresentation": true
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/server/cat-session-api.ts",
+      "repoRelativePath": "server/cat-session-api.ts",
+      "exists": true,
+      "componentOrModule": "cat-session-api",
+      "purpose": "Express routes /api/cat/start and /api/cat/:id/answer with PG exam_questions; simple logistic IRT-ish ability update; entitlement gate cat_exams.",
+      "controls": {
+        "sessionStart": true,
+        "questionDelivery": true,
+        "adaptiveSelection": true,
+        "progress": true,
+        "resume": false,
+        "scoring": true,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/server/cat-engine.ts",
+      "repoRelativePath": "server/cat-engine.ts",
+      "exists": true,
+      "componentOrModule": "cat-engine (server)",
+      "purpose": "Server-side ability estimation helpers, expected accuracy bands, candidate scoring utilities (used with adaptive flows).",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": true,
+        "progress": false,
+        "resume": false,
+        "scoring": true,
+        "results": true,
+        "rationaleReview": false,
+        "readinessUx": true,
+        "layoutPresentation": false
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/server/cat-exam-resilience.ts",
+      "repoRelativePath": "server/cat-exam-resilience.ts",
+      "exists": true,
+      "componentOrModule": "cat-exam-resilience",
+      "purpose": "Resilience helpers for CAT exam delivery.",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": true,
+        "adaptiveSelection": false,
+        "progress": true,
+        "resume": true,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/server/mlt-adaptive-engine.ts",
+      "repoRelativePath": "server/mlt-adaptive-engine.ts",
+      "exists": true,
+      "componentOrModule": "mlt-adaptive-engine",
+      "purpose": "MLT-specific CAT simulation: selectNextQuestion, shouldStopCAT, simulateCAT, session state.",
+      "controls": {
+        "sessionStart": true,
+        "questionDelivery": true,
+        "adaptiveSelection": true,
+        "progress": true,
+        "resume": false,
+        "scoring": true,
+        "results": true,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/pages/admin-mock-exam-templates.tsx",
+      "repoRelativePath": "client/src/pages/admin-mock-exam-templates.tsx",
+      "exists": true,
+      "componentOrModule": "admin-mock-exam-templates",
+      "purpose": "Related exam/mock/practice entry or support module (auto-discovered).",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": false,
+        "resume": false,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": true
+      },
+      "source": "auto_discovered"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/pages/exam-landing.tsx",
+      "repoRelativePath": "client/src/pages/exam-landing.tsx",
+      "exists": true,
+      "componentOrModule": "exam-landing",
+      "purpose": "Related exam/mock/practice entry or support module (auto-discovered).",
+      "controls": {
+        "sessionStart": true,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": false,
+        "resume": false,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": true
+      },
+      "source": "auto_discovered"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/pages/exam-practice-landing.tsx",
+      "repoRelativePath": "client/src/pages/exam-practice-landing.tsx",
+      "exists": true,
+      "componentOrModule": "exam-practice-landing",
+      "purpose": "Related exam/mock/practice entry or support module (auto-discovered).",
+      "controls": {
+        "sessionStart": true,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": false,
+        "resume": false,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": true
+      },
+      "source": "auto_discovered"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/pages/free-demo-exam.tsx",
+      "repoRelativePath": "client/src/pages/free-demo-exam.tsx",
+      "exists": true,
+      "componentOrModule": "free-demo-exam",
+      "purpose": "Related exam/mock/practice entry or support module (auto-discovered).",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": false,
+        "resume": false,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": true,
+        "layoutPresentation": true
+      },
+      "source": "auto_discovered"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/pages/mock-exams.tsx",
+      "repoRelativePath": "client/src/pages/mock-exams.tsx",
+      "exists": true,
+      "componentOrModule": "mock-exams",
+      "purpose": "Related exam/mock/practice entry or support module (auto-discovered).",
+      "controls": {
+        "sessionStart": true,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": false,
+        "resume": false,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": true
+      },
+      "source": "auto_discovered"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/pages/trial-results.tsx",
+      "repoRelativePath": "client/src/pages/trial-results.tsx",
+      "exists": true,
+      "componentOrModule": "trial-results",
+      "purpose": "Related exam/mock/practice entry or support module (auto-discovered).",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": false,
+        "resume": false,
+        "scoring": false,
+        "results": true,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": true
+      },
+      "source": "auto_discovered"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/lib/career-question-pool.ts",
+      "repoRelativePath": "client/src/lib/career-question-pool.ts",
+      "exists": true,
+      "componentOrModule": "career-question-pool",
+      "purpose": "Related exam/mock/practice entry or support module (auto-discovered).",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": false,
+        "resume": false,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "auto_discovered"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/lib/question-pool.ts",
+      "repoRelativePath": "client/src/lib/question-pool.ts",
+      "exists": true,
+      "componentOrModule": "question-pool",
+      "purpose": "Related exam/mock/practice entry or support module (auto-discovered).",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": false,
+        "resume": false,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "auto_discovered"
+    }
+  ]
+}

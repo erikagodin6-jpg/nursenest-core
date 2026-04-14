@@ -2569,7 +2569,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   border: 1px solid color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-border-soft));
   background: color-mix(in srgb, var(--semantic-panel-cool) 22%, var(--bg-card));
   padding: 1.1rem 1.2rem 1.2rem;
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--theme-heading-text) 6%, transparent);
 }
 
 .nn-lesson-hy-takeaways--bottom {
@@ -2702,7 +2702,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 
 /* Color bullet markers with the section's semantic hue */
 .nn-lesson-section-card .nn-lesson-prose li::marker {
-  color: color-mix(in srgb, var(--lsc-color) 75%, currentColor);
+  color: color-mix(in srgb, var(--lsc-color) 52%, currentColor);
 }
 
 /* Header line preceding a bullet list (parsed "headed-list" pattern) */
@@ -2729,7 +2729,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   --lsc-soft: var(--semantic-info-soft);
   --lsc-contrast: var(--semantic-info-contrast);
   /* Mute per-role tints toward card base for calmer, editorial panels */
-  --lsc-surface: color-mix(in srgb, var(--lsc-soft) 48%, var(--bg-card, var(--theme-card-bg)) 52%);
+  --lsc-surface: color-mix(in srgb, var(--lsc-soft) 38%, var(--bg-card, var(--theme-card-bg)) 62%);
 
   border-radius: 0.875rem;
   border: 1px solid color-mix(in srgb, var(--lsc-color) 14%, var(--semantic-border-soft));

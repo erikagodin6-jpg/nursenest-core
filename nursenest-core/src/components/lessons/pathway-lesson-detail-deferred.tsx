@@ -1,5 +1,6 @@
 import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
 import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
+import { PathwayLessonWayfinding } from "@/components/lessons/pathway-lesson-wayfinding";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import {
@@ -48,6 +49,14 @@ export async function PathwayLessonDetailDeferred({
 
   return (
     <>
+      <PathwayLessonWayfinding
+        pathway={pathway}
+        lessonsBasePath={lessonsBasePath}
+        lessonTopic={lesson.topic}
+        topicSlug={lesson.topicSlug}
+        currentSlug={lesson.slug}
+        relatedLessonRefs={lesson.relatedLessonRefs}
+      />
       <PathwayLessonRelatedQuestions
         pathway={pathway}
         lessonTopic={lesson.topic}

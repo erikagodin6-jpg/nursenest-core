@@ -1,0 +1,4042 @@
+{
+  "generatedAt": "2026-04-14T13:45:37.198Z",
+  "externalVolumesMounted": false,
+  "note": "Mount or symlink external drives under repo paths to include them in a future scan.",
+  "repoRoot": "/root/nursenest-core",
+  "totals": {
+    "legacyFlashcardTsFiles": 27,
+    "advancedQuestionTsFiles": 79,
+    "careerQuestionJsonFiles": 165,
+    "inventoryRows": 278
+  },
+  "sources": [
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-community.ts",
+      "repoRelativePath": "client/src/data/flashcards-community.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateCardCount": 55,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": false,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-icu-critical-care.ts",
+      "repoRelativePath": "client/src/data/flashcards-icu-critical-care.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "unknown",
+      "approximateCardCount": 70,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": true,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-labor-delivery.ts",
+      "repoRelativePath": "client/src/data/flashcards-labor-delivery.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "unknown",
+      "approximateCardCount": 60,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": false,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-np-enrichment-1.ts",
+      "repoRelativePath": "client/src/data/flashcards-np-enrichment-1.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateCardCount": 70,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": true,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-np-enrichment-2.ts",
+      "repoRelativePath": "client/src/data/flashcards-np-enrichment-2.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateCardCount": 49,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": false,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-np-enrichment-3.ts",
+      "repoRelativePath": "client/src/data/flashcards-np-enrichment-3.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateCardCount": 35,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": false,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-np-enrichment-4.ts",
+      "repoRelativePath": "client/src/data/flashcards-np-enrichment-4.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateCardCount": 35,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": false,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-np-enrichment-5.ts",
+      "repoRelativePath": "client/src/data/flashcards-np-enrichment-5.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateCardCount": 35,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": false,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-np-enrichment-6.ts",
+      "repoRelativePath": "client/src/data/flashcards-np-enrichment-6.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateCardCount": 28,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": false,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-np-patho.ts",
+      "repoRelativePath": "client/src/data/flashcards-np-patho.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateCardCount": 215,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": true,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-np-subspecialties.ts",
+      "repoRelativePath": "client/src/data/flashcards-np-subspecialties.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateCardCount": 46,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": true,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-np.ts",
+      "repoRelativePath": "client/src/data/flashcards-np.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateCardCount": 526,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": true,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": true,
+        "getAssetUrlCount": 17
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-postpartum.ts",
+      "repoRelativePath": "client/src/data/flashcards-postpartum.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "unknown",
+      "approximateCardCount": 55,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": false,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-public-health.ts",
+      "repoRelativePath": "client/src/data/flashcards-public-health.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateCardCount": 55,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": false,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-rn-arrhythmias-chd-anticoag.ts",
+      "repoRelativePath": "client/src/data/flashcards-rn-arrhythmias-chd-anticoag.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateCardCount": 350,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": false,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-rn-expansion-2.ts",
+      "repoRelativePath": "client/src/data/flashcards-rn-expansion-2.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateCardCount": 12,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": true,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-rn-expansion.ts",
+      "repoRelativePath": "client/src/data/flashcards-rn-expansion.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateCardCount": 32,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": false,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+      "repoRelativePath": "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateCardCount": 400,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": true,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-rn-infectious-disease.ts",
+      "repoRelativePath": "client/src/data/flashcards-rn-infectious-disease.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateCardCount": 75,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": false,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-rn-patho-cardio-neuro.ts",
+      "repoRelativePath": "client/src/data/flashcards-rn-patho-cardio-neuro.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateCardCount": 275,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": true,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-rn-patho-expansion.ts",
+      "repoRelativePath": "client/src/data/flashcards-rn-patho-expansion.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateCardCount": 300,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": true,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-rn-resp-renal-batch2.ts",
+      "repoRelativePath": "client/src/data/flashcards-rn-resp-renal-batch2.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateCardCount": 120,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": false,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-rn-resp-renal.ts",
+      "repoRelativePath": "client/src/data/flashcards-rn-resp-renal.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateCardCount": 105,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": false,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-rn-shock-critical.ts",
+      "repoRelativePath": "client/src/data/flashcards-rn-shock-critical.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateCardCount": 268,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": true,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-rn.ts",
+      "repoRelativePath": "client/src/data/flashcards-rn.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateCardCount": 442,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": true,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": true,
+        "getAssetUrlCount": 27
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-rpn-expansion.ts",
+      "repoRelativePath": "client/src/data/flashcards-rpn-expansion.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateCardCount": 16,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": true,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": false,
+        "getAssetUrlCount": 0
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/flashcards-rpn.ts",
+      "repoRelativePath": "client/src/data/flashcards-rpn.ts",
+      "sourceType": "legacy_ts_flashcards",
+      "contentType": [
+        "flashcards"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateCardCount": 651,
+      "features": {
+        "promptOrStem": true,
+        "options": true,
+        "correctAnswer": true,
+        "rationale": true,
+        "difficulty": true,
+        "tagsOrCategories": true,
+        "imageReferences": true,
+        "getAssetUrlCount": 246
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-bowtie-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-bowtie-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": false,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-bowtie-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-bowtie-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": false,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-bowtie-03.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-bowtie-03.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": false,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-case_study-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-case_study-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": false,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-case_study-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-case_study-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": false,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-case_study-03.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-case_study-03.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 200,
+      "features": {
+        "stem": false,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-drag_drop-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-drag_drop-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-drag_drop-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-drag_drop-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 300,
+      "features": {
+        "stem": true,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-highlight-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-highlight-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-highlight-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-highlight-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 200,
+      "features": {
+        "stem": true,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-image_based-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-image_based-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-image_based-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-image_based-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 200,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-matrix-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-matrix-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-matrix-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-matrix-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 200,
+      "features": {
+        "stem": true,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-mcq-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-mcq-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-mcq-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-mcq-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-mcq-03.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-mcq-03.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-mcq-04.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-mcq-04.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-mcq-05.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-mcq-05.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-mcq-06.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-mcq-06.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-mcq-07.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-mcq-07.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-mcq-08.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-mcq-08.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-mcq-09.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-mcq-09.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-mcq-10.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-mcq-10.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-mcq-11.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-mcq-11.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-mcq-12.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-mcq-12.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-sata-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-sata-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-sata-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-sata-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-sata-03.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-sata-03.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-sata-04.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-sata-04.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-sata-05.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-sata-05.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-trend-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-trend-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/np-advanced-trend-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/np-advanced-trend-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "NP",
+      "approximateQuestionCount": 200,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-bowtie-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-bowtie-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": false,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-bowtie-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-bowtie-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": false,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-bowtie-03.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-bowtie-03.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 200,
+      "features": {
+        "stem": false,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-case_study-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-case_study-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": false,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-case_study-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-case_study-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 300,
+      "features": {
+        "stem": false,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-drag_drop-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-drag_drop-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-drag_drop-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-drag_drop-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 200,
+      "features": {
+        "stem": true,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-highlight-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-highlight-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-highlight-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-highlight-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 100,
+      "features": {
+        "stem": true,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-image_based-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-image_based-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-image_based-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-image_based-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 100,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-matrix-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-matrix-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-matrix-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-matrix-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 100,
+      "features": {
+        "stem": true,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-mcq-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-mcq-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-mcq-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-mcq-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-mcq-03.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-mcq-03.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-mcq-04.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-mcq-04.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-mcq-05.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-mcq-05.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-mcq-06.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-mcq-06.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-mcq-07.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-mcq-07.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-mcq-08.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-mcq-08.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-mcq-09.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-mcq-09.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-mcq-10.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-mcq-10.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-sata-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-sata-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-sata-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-sata-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-sata-03.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-sata-03.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-sata-04.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-sata-04.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-trend-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-trend-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rn-advanced-trend-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rn-advanced-trend-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "RN",
+      "approximateQuestionCount": 100,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-bowtie-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-bowtie-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": false,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-bowtie-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-bowtie-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 100,
+      "features": {
+        "stem": false,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-case_study.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-case_study.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 400,
+      "features": {
+        "stem": false,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-drag_drop.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-drag_drop.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 400,
+      "features": {
+        "stem": true,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-highlight.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-highlight.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 300,
+      "features": {
+        "stem": true,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-image_based.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-image_based.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 300,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-matrix.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-matrix.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 300,
+      "features": {
+        "stem": true,
+        "options": false,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-mcq-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-mcq-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-mcq-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-mcq-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-mcq-03.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-mcq-03.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-mcq-04.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-mcq-04.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-mcq-05.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-mcq-05.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-mcq-06.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-mcq-06.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-sata-01.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-sata-01.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-sata-02.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-sata-02.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 500,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-sata-03.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-sata-03.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 200,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/client/src/data/advanced-questions/rpn-advanced-trend.ts",
+      "repoRelativePath": "client/src/data/advanced-questions/rpn-advanced-trend.ts",
+      "sourceType": "legacy_ts_advanced_questions",
+      "contentType": [
+        "question_bank",
+        "practice_test_items"
+      ],
+      "pathwayOrProfession": "PN",
+      "approximateQuestionCount": 300,
+      "features": {
+        "stem": true,
+        "options": true,
+        "rationale": true,
+        "difficulty": true,
+        "imageReferences": false
+      }
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/addictions-counsellor-questions-batch2.json",
+      "repoRelativePath": "data/career-questions/addictions-counsellor-questions-batch2.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 66058
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/addictions-counsellor-questions-batch3.json",
+      "repoRelativePath": "data/career-questions/addictions-counsellor-questions-batch3.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 68997
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/addictions-counsellor-questions-batch4.json",
+      "repoRelativePath": "data/career-questions/addictions-counsellor-questions-batch4.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 33000
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/addictions-counsellor-questions.json",
+      "repoRelativePath": "data/career-questions/addictions-counsellor-questions.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 500,
+      "parseStatus": "ok",
+      "byteSize": 303751
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/cardiac-sonographer-questions-batch2.json",
+      "repoRelativePath": "data/career-questions/cardiac-sonographer-questions-batch2.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 44,
+      "parseStatus": "ok",
+      "byteSize": 22502
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/cardiac-sonographer-questions-batch3.json",
+      "repoRelativePath": "data/career-questions/cardiac-sonographer-questions-batch3.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 55982
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/cardiac-sonographer-questions-batch4.json",
+      "repoRelativePath": "data/career-questions/cardiac-sonographer-questions-batch4.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 54321
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/cardiac-sonographer-questions-batch5.json",
+      "repoRelativePath": "data/career-questions/cardiac-sonographer-questions-batch5.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 58287
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/cardiac-sonographer-questions-batch6.json",
+      "repoRelativePath": "data/career-questions/cardiac-sonographer-questions-batch6.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 63991
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/cardiac-sonographer-questions-batch7.json",
+      "repoRelativePath": "data/career-questions/cardiac-sonographer-questions-batch7.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 65033
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/cardiac-sonographer-questions.json",
+      "repoRelativePath": "data/career-questions/cardiac-sonographer-questions.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 311,
+      "parseStatus": "ok",
+      "byteSize": 162617
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/him-questions-batch2.json",
+      "repoRelativePath": "data/career-questions/him-questions-batch2.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 127,
+      "parseStatus": "ok",
+      "byteSize": 52632
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/him-questions-batch3.json",
+      "repoRelativePath": "data/career-questions/him-questions-batch3.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 44999
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/him-questions-batch4.json",
+      "repoRelativePath": "data/career-questions/him-questions-batch4.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 43643
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/him-questions-batch5.json",
+      "repoRelativePath": "data/career-questions/him-questions-batch5.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 43826
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/him-questions-batch6.json",
+      "repoRelativePath": "data/career-questions/him-questions-batch6.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 58355
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/him-questions-batch7.json",
+      "repoRelativePath": "data/career-questions/him-questions-batch7.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 60986
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/him-questions.json",
+      "repoRelativePath": "data/career-questions/him-questions.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 310,
+      "parseStatus": "ok",
+      "byteSize": 165143
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/imaging-questions-batch2.json",
+      "repoRelativePath": "data/career-questions/imaging-questions-batch2.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 58141
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/imaging-questions-batch3.json",
+      "repoRelativePath": "data/career-questions/imaging-questions-batch3.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 59483
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/imaging-questions-batch4.json",
+      "repoRelativePath": "data/career-questions/imaging-questions-batch4.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 60380
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/imaging-questions-batch5.json",
+      "repoRelativePath": "data/career-questions/imaging-questions-batch5.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 56073
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/imaging-questions-batch6.json",
+      "repoRelativePath": "data/career-questions/imaging-questions-batch6.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 56512
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/imaging-questions-expansion-2.json",
+      "repoRelativePath": "data/career-questions/imaging-questions-expansion-2.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 310,
+      "parseStatus": "ok",
+      "byteSize": 194900
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/imaging-questions-expansion.json",
+      "repoRelativePath": "data/career-questions/imaging-questions-expansion.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 68,
+      "parseStatus": "ok",
+      "byteSize": 36623
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/imaging-questions.json",
+      "repoRelativePath": "data/career-questions/imaging-questions.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 500,
+      "parseStatus": "ok",
+      "byteSize": 314286
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/mlt-questions-batch2.json",
+      "repoRelativePath": "data/career-questions/mlt-questions-batch2.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 500,
+      "parseStatus": "ok",
+      "byteSize": 358284
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/mlt-questions-batch3.json",
+      "repoRelativePath": "data/career-questions/mlt-questions-batch3.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 59623
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/mlt-questions-batch4.json",
+      "repoRelativePath": "data/career-questions/mlt-questions-batch4.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 59495
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/mlt-questions-batch5.json",
+      "repoRelativePath": "data/career-questions/mlt-questions-batch5.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 55014
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/mlt-questions-batch6.json",
+      "repoRelativePath": "data/career-questions/mlt-questions-batch6.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 61563
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/mlt-questions-batch7.json",
+      "repoRelativePath": "data/career-questions/mlt-questions-batch7.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 66173
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/mlt-questions-expansion.json",
+      "repoRelativePath": "data/career-questions/mlt-questions-expansion.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 64,
+      "parseStatus": "ok",
+      "byteSize": 34291
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/mlt-questions.json",
+      "repoRelativePath": "data/career-questions/mlt-questions.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 500,
+      "parseStatus": "ok",
+      "byteSize": 264481
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/mlt-seed-questions.json",
+      "repoRelativePath": "data/career-questions/mlt-seed-questions.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 206,
+      "parseStatus": "ok",
+      "byteSize": 393921
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/ota-questions-batch10.json",
+      "repoRelativePath": "data/career-questions/ota-questions-batch10.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 69191
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/ota-questions-batch11.json",
+      "repoRelativePath": "data/career-questions/ota-questions-batch11.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 67055
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/ota-questions-batch12.json",
+      "repoRelativePath": "data/career-questions/ota-questions-batch12.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 68613
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/ota-questions-batch13.json",
+      "repoRelativePath": "data/career-questions/ota-questions-batch13.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 70587
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/ota-questions-batch14.json",
+      "repoRelativePath": "data/career-questions/ota-questions-batch14.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 72089
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/ota-questions-batch15.json",
+      "repoRelativePath": "data/career-questions/ota-questions-batch15.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 73371
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/ota-questions-batch2.json",
+      "repoRelativePath": "data/career-questions/ota-questions-batch2.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 215,
+      "parseStatus": "ok",
+      "byteSize": 115394
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/ota-questions-batch3.json",
+      "repoRelativePath": "data/career-questions/ota-questions-batch3.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 115,
+      "parseStatus": "ok",
+      "byteSize": 65796
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/ota-questions-batch4.json",
+      "repoRelativePath": "data/career-questions/ota-questions-batch4.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 90,
+      "parseStatus": "ok",
+      "byteSize": 57100
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/ota-questions-batch5.json",
+      "repoRelativePath": "data/career-questions/ota-questions-batch5.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 95,
+      "parseStatus": "ok",
+      "byteSize": 59026
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/ota-questions-batch6.json",
+      "repoRelativePath": "data/career-questions/ota-questions-batch6.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 185,
+      "parseStatus": "ok",
+      "byteSize": 113655
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/ota-questions-batch7.json",
+      "repoRelativePath": "data/career-questions/ota-questions-batch7.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 63208
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/ota-questions-batch8.json",
+      "repoRelativePath": "data/career-questions/ota-questions-batch8.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 101,
+      "parseStatus": "ok",
+      "byteSize": 65797
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/ota-questions-batch9.json",
+      "repoRelativePath": "data/career-questions/ota-questions-batch9.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 101,
+      "parseStatus": "ok",
+      "byteSize": 67693
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/ota-questions-expansion.json",
+      "repoRelativePath": "data/career-questions/ota-questions-expansion.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 82,
+      "parseStatus": "ok",
+      "byteSize": 47429
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/ota-questions.json",
+      "repoRelativePath": "data/career-questions/ota-questions.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 900,
+      "parseStatus": "ok",
+      "byteSize": 571376
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/paramedic-questions-batch2.json",
+      "repoRelativePath": "data/career-questions/paramedic-questions-batch2.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 64536
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/paramedic-questions-batch3.json",
+      "repoRelativePath": "data/career-questions/paramedic-questions-batch3.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 66734
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/paramedic-questions-batch4.json",
+      "repoRelativePath": "data/career-questions/paramedic-questions-batch4.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 73778
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/paramedic-questions-batch5.json",
+      "repoRelativePath": "data/career-questions/paramedic-questions-batch5.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 68518
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/paramedic-questions-batch6.json",
+      "repoRelativePath": "data/career-questions/paramedic-questions-batch6.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 81436
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/paramedic-questions-expansion.json",
+      "repoRelativePath": "data/career-questions/paramedic-questions-expansion.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 72,
+      "parseStatus": "ok",
+      "byteSize": 39684
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/paramedic-questions.json",
+      "repoRelativePath": "data/career-questions/paramedic-questions.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 500,
+      "parseStatus": "ok",
+      "byteSize": 314956
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pharmacy-tech-questions-batch2.json",
+      "repoRelativePath": "data/career-questions/pharmacy-tech-questions-batch2.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 200,
+      "parseStatus": "ok",
+      "byteSize": 115233
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pharmacy-tech-questions-batch3.json",
+      "repoRelativePath": "data/career-questions/pharmacy-tech-questions-batch3.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 200,
+      "parseStatus": "ok",
+      "byteSize": 122120
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pharmacy-tech-questions-batch4.json",
+      "repoRelativePath": "data/career-questions/pharmacy-tech-questions-batch4.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 130,
+      "parseStatus": "ok",
+      "byteSize": 72518
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pharmacy-tech-questions-batch5.json",
+      "repoRelativePath": "data/career-questions/pharmacy-tech-questions-batch5.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 50309
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pharmacy-tech-questions-batch6.json",
+      "repoRelativePath": "data/career-questions/pharmacy-tech-questions-batch6.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 53282
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pharmacy-tech-questions-batch7.json",
+      "repoRelativePath": "data/career-questions/pharmacy-tech-questions-batch7.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 55900
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pharmacy-tech-questions-batch8.json",
+      "repoRelativePath": "data/career-questions/pharmacy-tech-questions-batch8.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 56801
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pharmacy-tech-questions-batch9.json",
+      "repoRelativePath": "data/career-questions/pharmacy-tech-questions-batch9.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 57712
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pharmacy-tech-questions-expansion.json",
+      "repoRelativePath": "data/career-questions/pharmacy-tech-questions-expansion.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 60,
+      "parseStatus": "ok",
+      "byteSize": 32915
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pharmacy-tech-questions-extended.json",
+      "repoRelativePath": "data/career-questions/pharmacy-tech-questions-extended.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 355,
+      "parseStatus": "ok",
+      "byteSize": 205939
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pharmacy-tech-questions-pebc.json",
+      "repoRelativePath": "data/career-questions/pharmacy-tech-questions-pebc.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 130,
+      "parseStatus": "ok",
+      "byteSize": 82033
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pharmacy-tech-questions.json",
+      "repoRelativePath": "data/career-questions/pharmacy-tech-questions.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 500,
+      "parseStatus": "ok",
+      "byteSize": 316236
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/psychotherapist-questions-batch2.json",
+      "repoRelativePath": "data/career-questions/psychotherapist-questions-batch2.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 61687
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/psychotherapist-questions-batch3.json",
+      "repoRelativePath": "data/career-questions/psychotherapist-questions-batch3.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 62842
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/psychotherapist-questions-batch4.json",
+      "repoRelativePath": "data/career-questions/psychotherapist-questions-batch4.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 31436
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/psychotherapist-questions.json",
+      "repoRelativePath": "data/career-questions/psychotherapist-questions.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "unknown",
+      "questionCountApprox": 500,
+      "parseStatus": "ok",
+      "byteSize": 303391
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch1.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch1.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 97,
+      "parseStatus": "ok",
+      "byteSize": 58793
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch10.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch10.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 63860
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch11.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch11.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 101,
+      "parseStatus": "ok",
+      "byteSize": 67206
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch12.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch12.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 101,
+      "parseStatus": "ok",
+      "byteSize": 67862
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch13.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch13.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 99,
+      "parseStatus": "ok",
+      "byteSize": 68288
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch14.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch14.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 43,
+      "parseStatus": "ok",
+      "byteSize": 22914
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch15.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch15.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 35,
+      "parseStatus": "ok",
+      "byteSize": 19295
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch16.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch16.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 32,
+      "parseStatus": "ok",
+      "byteSize": 17307
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch17.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch17.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 28,
+      "parseStatus": "ok",
+      "byteSize": 15642
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch18.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch18.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 13,
+      "parseStatus": "ok",
+      "byteSize": 7038
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch19.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch19.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 69392
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch2.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch2.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 135,
+      "parseStatus": "ok",
+      "byteSize": 73447
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch20.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch20.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 66445
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch21.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch21.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 62346
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch22.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch22.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 63991
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch23.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch23.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 65306
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch24.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch24.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 55,
+      "parseStatus": "ok",
+      "byteSize": 73990
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch25.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch25.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 55,
+      "parseStatus": "ok",
+      "byteSize": 76026
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch26.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch26.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 55,
+      "parseStatus": "ok",
+      "byteSize": 75630
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch27.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch27.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 40,
+      "parseStatus": "ok",
+      "byteSize": 55434
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch28.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch28.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 30,
+      "parseStatus": "ok",
+      "byteSize": 41241
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch29.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch29.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 30,
+      "parseStatus": "ok",
+      "byteSize": 40337
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch3.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch3.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 110,
+      "parseStatus": "ok",
+      "byteSize": 66698
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch30.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch30.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 20,
+      "parseStatus": "ok",
+      "byteSize": 27912
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch31.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch31.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 20,
+      "parseStatus": "ok",
+      "byteSize": 28988
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch32.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch32.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 20,
+      "parseStatus": "ok",
+      "byteSize": 29243
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch33.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch33.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 20,
+      "parseStatus": "ok",
+      "byteSize": 28404
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch34.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch34.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 80,
+      "parseStatus": "ok",
+      "byteSize": 118390
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch35.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch35.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 80,
+      "parseStatus": "ok",
+      "byteSize": 111311
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch4.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch4.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 105,
+      "parseStatus": "ok",
+      "byteSize": 66045
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch5.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch5.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 70,
+      "parseStatus": "ok",
+      "byteSize": 44487
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch6.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch6.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 80,
+      "parseStatus": "ok",
+      "byteSize": 47477
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch7.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch7.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 80,
+      "parseStatus": "ok",
+      "byteSize": 49498
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch8.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch8.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 80,
+      "parseStatus": "ok",
+      "byteSize": 51143
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-batch9.json",
+      "repoRelativePath": "data/career-questions/pta-questions-batch9.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 40,
+      "parseStatus": "ok",
+      "byteSize": 24492
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions-expansion.json",
+      "repoRelativePath": "data/career-questions/pta-questions-expansion.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 76,
+      "parseStatus": "ok",
+      "byteSize": 42575
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/pta-questions.json",
+      "repoRelativePath": "data/career-questions/pta-questions.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 900,
+      "parseStatus": "ok",
+      "byteSize": 561633
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/rrt-questions-batch1.json",
+      "repoRelativePath": "data/career-questions/rrt-questions-batch1.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 500,
+      "parseStatus": "ok",
+      "byteSize": 637608
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/rrt-questions-batch2.json",
+      "repoRelativePath": "data/career-questions/rrt-questions-batch2.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 500,
+      "parseStatus": "ok",
+      "byteSize": 231489
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/rrt-questions-batch3.json",
+      "repoRelativePath": "data/career-questions/rrt-questions-batch3.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 839,
+      "parseStatus": "ok",
+      "byteSize": 390110
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/rrt-questions-batch4.json",
+      "repoRelativePath": "data/career-questions/rrt-questions-batch4.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 74664
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/rrt-questions-batch5.json",
+      "repoRelativePath": "data/career-questions/rrt-questions-batch5.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 56518
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/rrt-questions-batch6.json",
+      "repoRelativePath": "data/career-questions/rrt-questions-batch6.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 65181
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/rrt-questions-batch7.json",
+      "repoRelativePath": "data/career-questions/rrt-questions-batch7.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 78475
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/rrt-questions-batch8.json",
+      "repoRelativePath": "data/career-questions/rrt-questions-batch8.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 69339
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/rrt-questions.json",
+      "repoRelativePath": "data/career-questions/rrt-questions.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 510,
+      "parseStatus": "ok",
+      "byteSize": 505697
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch10.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch10.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 50521
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch11.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch11.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 50534
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch12.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch12.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 49668
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch13.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch13.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 50972
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch14.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch14.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 25,
+      "parseStatus": "ok",
+      "byteSize": 24853
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch15.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch15.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 49378
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch16.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch16.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 51164
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch17.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch17.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 52357
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch18.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch18.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 54064
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch19.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch19.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 54444
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch2.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch2.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 42592
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch20.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch20.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 25,
+      "parseStatus": "ok",
+      "byteSize": 28270
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch21.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch21.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 25,
+      "parseStatus": "ok",
+      "byteSize": 28196
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch22.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch22.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 56254
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch23.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch23.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 99387
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch24.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch24.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 93319
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch25.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch25.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 96416
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch26.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch26.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 115514
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch27.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch27.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 83889
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch3.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch3.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 47238
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch4.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch4.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 48188
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch5.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch5.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 47682
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch6.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch6.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 47345
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch7.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch7.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 47240
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch8.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch8.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 49609
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions-batch9.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions-batch9.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 50,
+      "parseStatus": "ok",
+      "byteSize": 47679
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/social-worker-questions.json",
+      "repoRelativePath": "data/career-questions/social-worker-questions.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 25,
+      "parseStatus": "ok",
+      "byteSize": 27040
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/sonography-questions-batch2.json",
+      "repoRelativePath": "data/career-questions/sonography-questions-batch2.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 80,
+      "parseStatus": "ok",
+      "byteSize": 39257
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/sonography-questions-batch3.json",
+      "repoRelativePath": "data/career-questions/sonography-questions-batch3.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 51693
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/sonography-questions-batch4.json",
+      "repoRelativePath": "data/career-questions/sonography-questions-batch4.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 52865
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/sonography-questions-batch5.json",
+      "repoRelativePath": "data/career-questions/sonography-questions-batch5.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 55830
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/sonography-questions-batch6.json",
+      "repoRelativePath": "data/career-questions/sonography-questions-batch6.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 58418
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/sonography-questions-batch7.json",
+      "repoRelativePath": "data/career-questions/sonography-questions-batch7.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 56575
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/sonography-questions.json",
+      "repoRelativePath": "data/career-questions/sonography-questions.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 310,
+      "parseStatus": "ok",
+      "byteSize": 162690
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/surgical-technologist-questions-10.json",
+      "repoRelativePath": "data/career-questions/surgical-technologist-questions-10.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 63548
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/surgical-technologist-questions-11.json",
+      "repoRelativePath": "data/career-questions/surgical-technologist-questions-11.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 64754
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/surgical-technologist-questions-2.json",
+      "repoRelativePath": "data/career-questions/surgical-technologist-questions-2.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 300,
+      "parseStatus": "ok",
+      "byteSize": 280454
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/surgical-technologist-questions-3.json",
+      "repoRelativePath": "data/career-questions/surgical-technologist-questions-3.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 300,
+      "parseStatus": "ok",
+      "byteSize": 287229
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/surgical-technologist-questions-4.json",
+      "repoRelativePath": "data/career-questions/surgical-technologist-questions-4.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 300,
+      "parseStatus": "ok",
+      "byteSize": 293339
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/surgical-technologist-questions-5.json",
+      "repoRelativePath": "data/career-questions/surgical-technologist-questions-5.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 300,
+      "parseStatus": "ok",
+      "byteSize": 240743
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/surgical-technologist-questions-6.json",
+      "repoRelativePath": "data/career-questions/surgical-technologist-questions-6.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 2,
+      "parseStatus": "ok",
+      "byteSize": 1450
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/surgical-technologist-questions-7.json",
+      "repoRelativePath": "data/career-questions/surgical-technologist-questions-7.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 65593
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/surgical-technologist-questions-8.json",
+      "repoRelativePath": "data/career-questions/surgical-technologist-questions-8.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 65972
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/surgical-technologist-questions-9.json",
+      "repoRelativePath": "data/career-questions/surgical-technologist-questions-9.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 100,
+      "parseStatus": "ok",
+      "byteSize": 61148
+    },
+    {
+      "filePath": "/root/nursenest-core/data/career-questions/surgical-technologist-questions.json",
+      "repoRelativePath": "data/career-questions/surgical-technologist-questions.json",
+      "sourceType": "legacy_json_career_questions",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 300,
+      "parseStatus": "ok",
+      "byteSize": 280302
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/data/replit-exports/exam_questions.json",
+      "repoRelativePath": "nursenest-core/data/replit-exports/exam_questions.json",
+      "sourceType": "replit_export_json",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "mixed",
+      "questionCountApprox": 0,
+      "byteSize": 23680677,
+      "parseStatus": "too_large_for_full_parse"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/data/replit-exports/allied_questions.json",
+      "repoRelativePath": "nursenest-core/data/replit-exports/allied_questions.json",
+      "sourceType": "replit_export_json",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "Allied",
+      "questionCountApprox": 0,
+      "byteSize": 47205668,
+      "parseStatus": "too_large_for_full_parse"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/data/replit-exports/generated_questions.json",
+      "repoRelativePath": "nursenest-core/data/replit-exports/generated_questions.json",
+      "sourceType": "replit_export_json",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "mixed",
+      "questionCountApprox": 0,
+      "byteSize": 38041425,
+      "parseStatus": "too_large_for_full_parse"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/data/replit-exports/imaging_questions.json",
+      "repoRelativePath": "nursenest-core/data/replit-exports/imaging_questions.json",
+      "sourceType": "replit_export_json",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "mixed",
+      "questionCountApprox": 72,
+      "byteSize": 54513,
+      "parseStatus": "ok"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/data/replit-exports/question_type_registry.json",
+      "repoRelativePath": "nursenest-core/data/replit-exports/question_type_registry.json",
+      "sourceType": "replit_export_json",
+      "contentType": [
+        "question_bank"
+      ],
+      "pathwayOrProfession": "mixed",
+      "questionCountApprox": 27,
+      "byteSize": 7050,
+      "parseStatus": "ok"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/data/materialized/np-clinical-layer-2026/questions.json",
+      "repoRelativePath": "nursenest-core/data/materialized/np-clinical-layer-2026/questions.json",
+      "sourceType": "materialized_questions_snapshot",
+      "contentType": [
+        "question_bank",
+        "current_pipeline_output"
+      ],
+      "pathwayOrProfession": "np-clinical-layer-2026",
+      "questionCountApprox": 2838,
+      "byteSize": 4279560,
+      "parseStatus": "ok"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/data/materialized/rn-pn-replit-batch-2026/questions.json",
+      "repoRelativePath": "nursenest-core/data/materialized/rn-pn-replit-batch-2026/questions.json",
+      "sourceType": "materialized_questions_snapshot",
+      "contentType": [
+        "question_bank",
+        "current_pipeline_output"
+      ],
+      "pathwayOrProfession": "rn-pn-replit-batch-2026",
+      "questionCountApprox": 7304,
+      "byteSize": 11188754,
+      "parseStatus": "ok"
+    }
+  ]
+}

@@ -204,6 +204,7 @@ export async function resolvePathwayLessonForWeakTopic(
       take: 250,
       select: {
         id: true,
+        slug: true,
         title: true,
         topic: true,
         topicSlug: true,

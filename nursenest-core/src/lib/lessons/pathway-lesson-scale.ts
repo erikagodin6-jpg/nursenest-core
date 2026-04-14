@@ -31,3 +31,6 @@ export const LEARNER_APP_LESSONS_PAGE_SIZE = 24;
 
 /** When hub has more pages than this, show First/Last links (see pathway-lesson-pagination). */
 export const PATHWAY_HUB_PAGINATION_SHOW_ENDLINKS_MIN_PAGES = 3;
+
+/** Absolute safety cap: catalog pathways with more lessons are truncated for list/hub pagination math. */
+export const PATHWAY_CATALOG_LIST_HARD_CAP = 2_000;

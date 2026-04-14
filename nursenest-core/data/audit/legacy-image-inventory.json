@@ -1,0 +1,2517 @@
+{
+  "generatedAt": "2026-04-14T13:45:36.565Z",
+  "externalVolumesMounted": false,
+  "note": "Full public/ image walk capped for CI; extend cap or narrow dirs for exhaustive asset audit.",
+  "getAssetUrlUniqueStringsFromFlashcardTs": [
+    "ACS_1773517432559.jpeg",
+    "APGAR_1773340419064.png",
+    "BBB_1773517432559.png",
+    "BPH_1773374688442.png",
+    "BPPV_1773374688442.png",
+    "CBI_1773269538451.png",
+    "CKD.png",
+    "DIC_1773374816805.png",
+    "DKA_1773374816805.png",
+    "EBV_1773374816805.png",
+    "GAS_1773374861631.png",
+    "GERD_1773374861631.png",
+    "HELLP_1773340513136.png",
+    "HELLP_1773374903956.png",
+    "HFM_1773374903956.png",
+    "HG_1773374903956.png",
+    "HIV_1773374903956.png",
+    "ICP_1773374939606.png",
+    "IDA_1773374939606.png",
+    "MRSA_1773374978769.png",
+    "MS_1773375043083.png",
+    "Meningitis_1773374978769.png",
+    "PD_1773375118294.png",
+    "ROP_1773340545537.png",
+    "Rhincompatibility_1773340545537.png",
+    "SIADH_1773375229956.png",
+    "SJS_1773375229956.png",
+    "TRALI_1773268456011.png",
+    "TSS_1773375196271.png",
+    "TURP_1773375196271.png",
+    "Thermoregulation_1773340545537.png",
+    "US_1773375165171.png",
+    "VP_1773375165171.png",
+    "acromegaly_1773374656571.png",
+    "acutehemolyticreaction_1773269538451.png",
+    "airembolism_1773269538451.png",
+    "alcoholwithdrawal_1773374656571.png",
+    "allergictransfusionreaction_1773269538451.png",
+    "alopecia_1773374656571.png",
+    "amnioticfluid_1773340419064.png",
+    "antepartum_1773340419064.png",
+    "anxiety_1773374656571.png",
+    "aorticrootdilation_1773517432559.png",
+    "aplasticanemia_1773269538451.png",
+    "atopicdermatitis_1773269538451.png",
+    "avfistula_1773517432559.png",
+    "bacterialmeningitis_1773374688442.png",
+    "bariatricsurgery_1773517432559.png",
+    "breastfeeding_1773340419064.png",
+    "c-section_1773374688442.png",
+    "c76038a7-89d5-40c5-ba1f-837a6b77833f_1773269538451.png",
+    "carseatsafety_1773340419064.png",
+    "castcareandtraction_1773269538451.png",
+    "cellulitis_1773269507783.png",
+    "chlamydia_1773340419064.png",
+    "clubfoot.png",
+    "compartmentsyndrome.png",
+    "congenitalhypothyroidism_1773340513136.png",
+    "conjunctivitis_1773269507783.png",
+    "contracture.png",
+    "crutchparalysis_1773517432559.png",
+    "cushing.png",
+    "decels_1773517432559.png",
+    "delayedhemolyticreaction_1773269507783.png",
+    "depression_1773340419064.png",
+    "developmentalhipdysplasia_1773269507783.png",
+    "diabetes_1773269507783.png",
+    "diabetesinsipidus.png",
+    "diabeticnephropathy.png",
+    "disuseatrophy_1773374816805.png",
+    "diverticulitis_1773374816805.png",
+    "duchenne_1773374816805.png",
+    "dvt_1773517432559.png",
+    "dysmenorrhea_1773374816805.png",
+    "dysphagia_1773374816805.png",
+    "ectopicpregnancy_1773374816805.png",
+    "edema_1773374816805.png",
+    "encephalitis_1773374816805.png",
+    "endocarditis_1773374816805.png",
+    "endometriosis_1773374816805.png",
+    "enteralfeeding_1773374816805.png",
+    "epiglottitis_1773374816805.png",
+    "episiotomy_1773374816805.png",
+    "epistaxis_1773374816805.png",
+    "epsteinbarrvirus_1773340513136.png",
+    "erisypelas_1773374861631.png",
+    "esophagealvarices_1773374861631.png",
+    "fallprevention_1773269471822.png",
+    "febrileneutropenia_1773269471822.png",
+    "febrilenonhemolytic_1773269471822.png",
+    "febrileseizures_1773374861631.png",
+    "fetalmonitoring_1773340513136.png",
+    "fibro_1773374861631.png",
+    "firstdegreeblock_1773517432559.png",
+    "foreignbodyaspiration_1773374861631.png",
+    "fracture_1773374861631.png",
+    "fundalheight_1773374861631.jpeg",
+    "fungal_1773374861631.jpeg",
+    "galactorrhea_1773374861631.png",
+    "galactosemia_1773374861631.png",
+    "gestational_1773374861631.png",
+    "gestationaldiabetes_1773340513136.png",
+    "gibleed_1773374861631.png",
+    "glaucoma_1773374861631.png",
+    "glomerulonephritis_1773374861631.png",
+    "gout_1773269471822.png",
+    "graftvshose_1773269471822.png",
+    "graves_1773374861631.png",
+    "guillainbarrre_1773374861631.png",
+    "hashimotothyroiditis_1773269471822.png",
+    "healing_1773374903956.jpeg",
+    "heatstroke_1773374903956.png",
+    "hemodialysis_1773374903956.png",
+    "hemophilia_1773269471822.png",
+    "hemorrhoids_1773374903956.png",
+    "hepatitis_1773374903956.png",
+    "hepatitisb_1773340513136.png",
+    "hepatitisc_1773340513136.png",
+    "herpes_1773374903956.png",
+    "hiatalhernia_1773374903956.png",
+    "hidra_1773374903956.png",
+    "hidradenitis_1773374903956.png",
+    "hipdysplasia_1773374903956.png",
+    "hirschsprung_1773374903956.png",
+    "hydrocephalus_1773374903956.png",
+    "hyperemesisgravidarum_1773340649073.png",
+    "hyperthyroidism_1773374903956.png",
+    "hypospadias_1773374903956.png",
+    "hypothyroidism_1773374939606.png",
+    "impetigo_1773340649073.png",
+    "infantreflexes_1773340649073.png",
+    "intestinalmalrotation_1773340649073.png",
+    "intussusception_1773340649073.png",
+    "kaposisarcoma_1773517523349.png",
+    "kidneystone_1773374939606.png",
+    "labyrinthitis_1773374939606.png",
+    "leadpoisoning_1773374978769.png",
+    "lethaldysrhythmias_1773517523349.png",
+    "leukemia_1773374978769.png",
+    "lice_1773374978769.png",
+    "lochia_1773374978769.png",
+    "lungcancer_1773374978769.png",
+    "mastitis_1773374978769.png",
+    "measles_1773374978769.png",
+    "mecil_1773374978769.png",
+    "meconiumaspiration_1773340649073.png",
+    "menopause_1773374978769.png",
+    "metabolicsyndrome_1773374978769.png",
+    "mumps_1773375043083.png",
+    "myastheniagravis_1773375043083.png",
+    "narcolepsy_1773375043083.png",
+    "nec_1773375043083.png",
+    "neonatalfeeding_1773340572673.png",
+    "neonatalhypoglycemia_1773340572673.png",
+    "neonataljaundice_1773375043083.jpeg",
+    "neonatalreflex_1773375043083.png",
+    "neonatalsepsis_1773375043083.png",
+    "neuroblastoma_1773340609815.png",
+    "newbornofdiabetic_1773375043083.png",
+    "ngtube_1773375043083.png",
+    "obstructiveuropathy_1773375043083.png",
+    "opioid_1773375043083.png",
+    "osteogenesis_1773375043083.png",
+    "osteoporosis_1773375043083.png",
+    "otitismedia_1773375043083.png",
+    "ovarianhyperstimulation_1773340572673.png",
+    "pancreaticpseudocyst_1773375043083.png",
+    "pancreatitis_1773375043083.png",
+    "papilledema_1773375043083.png",
+    "parkinson_1773375118294.png",
+    "patentductusarteriosus_1773340609815.png",
+    "pavlik_1773340609815.png",
+    "pcos_1773375118294.png",
+    "pediatric_vitals_chart_fixed_1773340572673.png",
+    "pediatricdehydration_1773340572673.png",
+    "pediatricseizures_1773375118294.png",
+    "pemphigus_1773375118294.png",
+    "pepticulcer_1773269379973.png",
+    "pepticulcer_1773375118294.png",
+    "peripheralneuropathy_1773375118294.png",
+    "peritonealdialysis_1773269379973.png",
+    "pharyngitis_1773269379973.png",
+    "phimosis_1773375118294.png",
+    "pinworms_1773340572673.png",
+    "pituitaryglands_1773269379973.png",
+    "pku_1773340572673.png",
+    "placentalabruption_1773340609815.png",
+    "placentaprevia_1773340609815.png",
+    "polycystickidney_1773269379973.png",
+    "polycythemia_1773269379973.png",
+    "polyp_1773375118294.png",
+    "postpartumhemorrhage_1773340609815.png",
+    "pressure-injuries-v2.png",
+    "pressure-injury-stages-v2.png",
+    "pressureinjuries_1773375118294.png",
+    "pyloricstenosis_1773340609815.png",
+    "renal-calculi.png",
+    "retinal-detachment-v2.png",
+    "reye_1773340545537.png",
+    "rheumatoid-arthritis.png",
+    "rib-fractures.png",
+    "rostatitis_1773375229956.png",
+    "rotavirus_1773375229956.png",
+    "rubella_1773375229956.png",
+    "rythemamultiforme_1773375229956.png",
+    "scabies_1773375229956.png",
+    "scarletfever_1773375229956.png",
+    "scoli_1773375229956.png",
+    "separationanxiety_1773340545537.png",
+    "serotoninsyndrome_1773340545537.png",
+    "shingles-v2.png",
+    "shortbowelsyndrome_1773375229956.png",
+    "sicklecell_1773375229956.png",
+    "skinassesssment_1773375229956.png",
+    "spinalstenosis_1773375229956.png",
+    "sprain_1773375229956.png",
+    "stages_1773375229956.png",
+    "stoma_1773375229956.png",
+    "stricture_1773375229956.png",
+    "stroke_1773375229956.png",
+    "substanceabuse_1773340545537.png",
+    "sucralfate_1773375196270.png",
+    "syndactyly_1773375196271.png",
+    "syringomyelia_1773375196271.png",
+    "tardivedyskinesia_1773375196271.png",
+    "tetanus_1773375196271.png",
+    "thalassemia_1773268456011.png",
+    "thalassemia_1773375196271.png",
+    "thermoregulation_1773375196271.png",
+    "thrombocytopenia_1773268456011.png",
+    "thrombocytopenia_1773375196271.png",
+    "thyroidstorm_1773268456011.png",
+    "thyroidstorm_1773375196271.png",
+    "tinnitus_1773375196271.png",
+    "tonsillectomy_1773340545537.png",
+    "tonsillectomy_1773375196271.png",
+    "toxicshocksyndrome_1773340545537.png",
+    "traction_1773375196271.png",
+    "trigeminalneuralgia_1773375196271.png",
+    "trisomy21_1773340545537.png",
+    "trisomy21_1773375196271.png",
+    "tumormarkers_1773375196271.png",
+    "turner_1773375196271.png",
+    "turnersyndrome_1773340545537.png",
+    "ulcerativecolitis_1773268105077.png",
+    "umbilicalcordcare_1773340545537.png",
+    "umbilicalcordprolapse_1773340545537.png",
+    "urethralstricture_1773375165171.png",
+    "urinarycatheterization_1773268105077.png",
+    "vaginalhematoma_1773375165171.png",
+    "varicella_1773375165171.png",
+    "vestibularneuritis_1773268105077.png",
+    "vitiligo_1773375165171.png",
+    "vonwillebrand_1773268105077.png",
+    "vre_1773375165171.png",
+    "wenicke_1773375165171.png",
+    "wilms_1773375165171.png",
+    "woundassessment_1773375165171.png",
+    "woundinfection_1773375165171.png",
+    "woundvac_1773375165171.jpeg"
+  ],
+  "samplePublicImageFiles": [
+    {
+      "filePath": "/root/nursenest-core/client/public/brand-logo.gif",
+      "repoRelativePath": "client/public/brand-logo.gif",
+      "filename": "brand-logo.gif",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/favicon.gif",
+      "repoRelativePath": "client/public/favicon.gif",
+      "filename": "favicon.gif",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/favicon.png",
+      "repoRelativePath": "client/public/favicon.png",
+      "filename": "favicon.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/favicon.svg",
+      "repoRelativePath": "client/public/favicon.svg",
+      "filename": "favicon.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/apple-touch-icon.png",
+      "repoRelativePath": "client/public/icons/apple-touch-icon.png",
+      "filename": "apple-touch-icon.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/apple-touch-icon.svg",
+      "repoRelativePath": "client/public/icons/apple-touch-icon.svg",
+      "filename": "apple-touch-icon.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/icon-128x128.png",
+      "repoRelativePath": "client/public/icons/icon-128x128.png",
+      "filename": "icon-128x128.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/icon-128x128.svg",
+      "repoRelativePath": "client/public/icons/icon-128x128.svg",
+      "filename": "icon-128x128.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/icon-144x144.png",
+      "repoRelativePath": "client/public/icons/icon-144x144.png",
+      "filename": "icon-144x144.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/icon-144x144.svg",
+      "repoRelativePath": "client/public/icons/icon-144x144.svg",
+      "filename": "icon-144x144.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/icon-152x152.png",
+      "repoRelativePath": "client/public/icons/icon-152x152.png",
+      "filename": "icon-152x152.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/icon-152x152.svg",
+      "repoRelativePath": "client/public/icons/icon-152x152.svg",
+      "filename": "icon-152x152.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/icon-192x192.png",
+      "repoRelativePath": "client/public/icons/icon-192x192.png",
+      "filename": "icon-192x192.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/icon-192x192.svg",
+      "repoRelativePath": "client/public/icons/icon-192x192.svg",
+      "filename": "icon-192x192.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/icon-384x384.png",
+      "repoRelativePath": "client/public/icons/icon-384x384.png",
+      "filename": "icon-384x384.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/icon-384x384.svg",
+      "repoRelativePath": "client/public/icons/icon-384x384.svg",
+      "filename": "icon-384x384.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/icon-512x512.png",
+      "repoRelativePath": "client/public/icons/icon-512x512.png",
+      "filename": "icon-512x512.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/icon-512x512.svg",
+      "repoRelativePath": "client/public/icons/icon-512x512.svg",
+      "filename": "icon-512x512.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/icon-72x72.png",
+      "repoRelativePath": "client/public/icons/icon-72x72.png",
+      "filename": "icon-72x72.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/icon-72x72.svg",
+      "repoRelativePath": "client/public/icons/icon-72x72.svg",
+      "filename": "icon-72x72.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/icon-96x96.png",
+      "repoRelativePath": "client/public/icons/icon-96x96.png",
+      "filename": "icon-96x96.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/icons/icon-96x96.svg",
+      "repoRelativePath": "client/public/icons/icon-96x96.svg",
+      "filename": "icon-96x96.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/logo-icon.gif",
+      "repoRelativePath": "client/public/logo-icon.gif",
+      "filename": "logo-icon.gif",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/opengraph.jpg",
+      "repoRelativePath": "client/public/opengraph.jpg",
+      "filename": "opengraph.jpg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot10_1773379293573-1200w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot10_1773379293573-1200w.webp",
+      "filename": "screenshot10_1773379293573-1200w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot10_1773379293573-480w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot10_1773379293573-480w.webp",
+      "filename": "screenshot10_1773379293573-480w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot10_1773379293573-768w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot10_1773379293573-768w.webp",
+      "filename": "screenshot10_1773379293573-768w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot10_1773379293573-full.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot10_1773379293573-full.webp",
+      "filename": "screenshot10_1773379293573-full.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot10_1773379293573-thumb-160w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot10_1773379293573-thumb-160w.webp",
+      "filename": "screenshot10_1773379293573-thumb-160w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot10_1773379293573-thumb-240w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot10_1773379293573-thumb-240w.webp",
+      "filename": "screenshot10_1773379293573-thumb-240w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot11_1773379293573-1200w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot11_1773379293573-1200w.webp",
+      "filename": "screenshot11_1773379293573-1200w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot11_1773379293573-480w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot11_1773379293573-480w.webp",
+      "filename": "screenshot11_1773379293573-480w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot11_1773379293573-768w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot11_1773379293573-768w.webp",
+      "filename": "screenshot11_1773379293573-768w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot11_1773379293573-full.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot11_1773379293573-full.webp",
+      "filename": "screenshot11_1773379293573-full.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot11_1773379293573-thumb-160w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot11_1773379293573-thumb-160w.webp",
+      "filename": "screenshot11_1773379293573-thumb-160w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot11_1773379293573-thumb-240w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot11_1773379293573-thumb-240w.webp",
+      "filename": "screenshot11_1773379293573-thumb-240w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot2_1773379293573-1200w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot2_1773379293573-1200w.webp",
+      "filename": "screenshot2_1773379293573-1200w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot2_1773379293573-480w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot2_1773379293573-480w.webp",
+      "filename": "screenshot2_1773379293573-480w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot2_1773379293573-768w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot2_1773379293573-768w.webp",
+      "filename": "screenshot2_1773379293573-768w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot2_1773379293573-full.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot2_1773379293573-full.webp",
+      "filename": "screenshot2_1773379293573-full.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot2_1773379293573-thumb-160w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot2_1773379293573-thumb-160w.webp",
+      "filename": "screenshot2_1773379293573-thumb-160w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot2_1773379293573-thumb-240w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot2_1773379293573-thumb-240w.webp",
+      "filename": "screenshot2_1773379293573-thumb-240w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot3_1773379293573-1200w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot3_1773379293573-1200w.webp",
+      "filename": "screenshot3_1773379293573-1200w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot3_1773379293573-480w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot3_1773379293573-480w.webp",
+      "filename": "screenshot3_1773379293573-480w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot3_1773379293573-768w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot3_1773379293573-768w.webp",
+      "filename": "screenshot3_1773379293573-768w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot3_1773379293573-full.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot3_1773379293573-full.webp",
+      "filename": "screenshot3_1773379293573-full.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot3_1773379293573-thumb-160w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot3_1773379293573-thumb-160w.webp",
+      "filename": "screenshot3_1773379293573-thumb-160w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot3_1773379293573-thumb-240w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot3_1773379293573-thumb-240w.webp",
+      "filename": "screenshot3_1773379293573-thumb-240w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot5_1773379293573-1200w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot5_1773379293573-1200w.webp",
+      "filename": "screenshot5_1773379293573-1200w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot5_1773379293573-480w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot5_1773379293573-480w.webp",
+      "filename": "screenshot5_1773379293573-480w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot5_1773379293573-768w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot5_1773379293573-768w.webp",
+      "filename": "screenshot5_1773379293573-768w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot5_1773379293573-full.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot5_1773379293573-full.webp",
+      "filename": "screenshot5_1773379293573-full.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot5_1773379293573-thumb-160w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot5_1773379293573-thumb-160w.webp",
+      "filename": "screenshot5_1773379293573-thumb-160w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot5_1773379293573-thumb-240w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot5_1773379293573-thumb-240w.webp",
+      "filename": "screenshot5_1773379293573-thumb-240w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot6_1773379293573-1200w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot6_1773379293573-1200w.webp",
+      "filename": "screenshot6_1773379293573-1200w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot6_1773379293573-480w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot6_1773379293573-480w.webp",
+      "filename": "screenshot6_1773379293573-480w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot6_1773379293573-768w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot6_1773379293573-768w.webp",
+      "filename": "screenshot6_1773379293573-768w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot6_1773379293573-full.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot6_1773379293573-full.webp",
+      "filename": "screenshot6_1773379293573-full.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot6_1773379293573-thumb-160w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot6_1773379293573-thumb-160w.webp",
+      "filename": "screenshot6_1773379293573-thumb-160w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot6_1773379293573-thumb-240w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot6_1773379293573-thumb-240w.webp",
+      "filename": "screenshot6_1773379293573-thumb-240w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot9_1773379293573-1200w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot9_1773379293573-1200w.webp",
+      "filename": "screenshot9_1773379293573-1200w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot9_1773379293573-480w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot9_1773379293573-480w.webp",
+      "filename": "screenshot9_1773379293573-480w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot9_1773379293573-768w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot9_1773379293573-768w.webp",
+      "filename": "screenshot9_1773379293573-768w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot9_1773379293573-full.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot9_1773379293573-full.webp",
+      "filename": "screenshot9_1773379293573-full.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot9_1773379293573-thumb-160w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot9_1773379293573-thumb-160w.webp",
+      "filename": "screenshot9_1773379293573-thumb-160w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshot9_1773379293573-thumb-240w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshot9_1773379293573-thumb-240w.webp",
+      "filename": "screenshot9_1773379293573-thumb-240w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshottest_1773379293573-1200w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshottest_1773379293573-1200w.webp",
+      "filename": "screenshottest_1773379293573-1200w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshottest_1773379293573-480w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshottest_1773379293573-480w.webp",
+      "filename": "screenshottest_1773379293573-480w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshottest_1773379293573-768w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshottest_1773379293573-768w.webp",
+      "filename": "screenshottest_1773379293573-768w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshottest_1773379293573-full.webp",
+      "repoRelativePath": "client/public/screenshots/screenshottest_1773379293573-full.webp",
+      "filename": "screenshottest_1773379293573-full.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshottest_1773379293573-thumb-160w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshottest_1773379293573-thumb-160w.webp",
+      "filename": "screenshottest_1773379293573-thumb-160w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/client/public/screenshots/screenshottest_1773379293573-thumb-240w.webp",
+      "repoRelativePath": "client/public/screenshots/screenshottest_1773379293573-thumb-240w.webp",
+      "filename": "screenshottest_1773379293573-thumb-240w.webp",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/apple-touch-icon.png",
+      "repoRelativePath": "nursenest-core/public/apple-touch-icon.png",
+      "filename": "apple-touch-icon.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/nursenest-logo.png",
+      "repoRelativePath": "nursenest-core/public/branding/nursenest-logo.png",
+      "filename": "nursenest-logo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/nursenest-mark.svg",
+      "repoRelativePath": "nursenest-core/public/branding/nursenest-mark.svg",
+      "filename": "nursenest-mark.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/berrybrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/berrybrandlogo_transparent.png",
+      "filename": "berrybrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/blueberry-sherbetbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/blueberry-sherbetbrandlogo_transparent.png",
+      "filename": "blueberry-sherbetbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/blushbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/blushbrandlogo_transparent.png",
+      "filename": "blushbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/clinical-lightbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/clinical-lightbrandlogo_transparent.png",
+      "filename": "clinical-lightbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/coralbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/coralbrandlogo_transparent.png",
+      "filename": "coralbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/dark-academiabrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/dark-academiabrandlogo_transparent.png",
+      "filename": "dark-academiabrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/dark-clinicalbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/dark-clinicalbrandlogo_transparent.png",
+      "filename": "dark-clinicalbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/dark-modebrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/dark-modebrandlogo_transparent.png",
+      "filename": "dark-modebrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/deep-twilightbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/deep-twilightbrandlogo_transparent.png",
+      "filename": "deep-twilightbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/forestbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/forestbrandlogo_transparent.png",
+      "filename": "forestbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/indigobrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/indigobrandlogo_transparent.png",
+      "filename": "indigobrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/lavender-dreambrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/lavender-dreambrandlogo_transparent.png",
+      "filename": "lavender-dreambrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/lavenderbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/lavenderbrandlogo_transparent.png",
+      "filename": "lavenderbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/midnightbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/midnightbrandlogo_transparent.png",
+      "filename": "midnightbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/mintbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/mintbrandlogo_transparent.png",
+      "filename": "mintbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/neutral-sandbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/neutral-sandbrandlogo_transparent.png",
+      "filename": "neutral-sandbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/neutral-slatebrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/neutral-slatebrandlogo_transparent.png",
+      "filename": "neutral-slatebrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/oceanbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/oceanbrandlogo_transparent.png",
+      "filename": "oceanbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/pastel-blushbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/pastel-blushbrandlogo_transparent.png",
+      "filename": "pastel-blushbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/pastel-lavenderbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/pastel-lavenderbrandlogo_transparent.png",
+      "filename": "pastel-lavenderbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/pastel-lilacbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/pastel-lilacbrandlogo_transparent.png",
+      "filename": "pastel-lilacbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/pastel-mintbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/pastel-mintbrandlogo_transparent.png",
+      "filename": "pastel-mintbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/rose-goldbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/rose-goldbrandlogo_transparent.png",
+      "filename": "rose-goldbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/slatebrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/slatebrandlogo_transparent.png",
+      "filename": "slatebrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/soft-sagebrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/soft-sagebrandlogo_transparent.png",
+      "filename": "soft-sagebrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/theme-logos/tealbrandlogo_transparent.png",
+      "repoRelativePath": "nursenest-core/public/branding/theme-logos/tealbrandlogo_transparent.png",
+      "filename": "tealbrandlogo_transparent.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/themes/logo-berry.png",
+      "repoRelativePath": "nursenest-core/public/branding/themes/logo-berry.png",
+      "filename": "logo-berry.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/themes/logo-blue.png",
+      "repoRelativePath": "nursenest-core/public/branding/themes/logo-blue.png",
+      "filename": "logo-blue.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/themes/logo-dark.png",
+      "repoRelativePath": "nursenest-core/public/branding/themes/logo-dark.png",
+      "filename": "logo-dark.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/branding/themes/logo-default.png",
+      "repoRelativePath": "nursenest-core/public/branding/themes/logo-default.png",
+      "filename": "logo-default.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/file.svg",
+      "repoRelativePath": "nursenest-core/public/file.svg",
+      "filename": "file.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/globe.svg",
+      "repoRelativePath": "nursenest-core/public/globe.svg",
+      "filename": "globe.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/icon.png",
+      "repoRelativePath": "nursenest-core/public/icon.png",
+      "filename": "icon.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/_template-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/_template-brandlogo.svg",
+      "filename": "_template-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/arctic-frost-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/arctic-frost-brandlogo.png",
+      "filename": "arctic-frost-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/arctic-frost-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/arctic-frost-brandlogo.svg",
+      "filename": "arctic-frost-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/berry-bonbon-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/berry-bonbon-brandlogo.svg",
+      "filename": "berry-bonbon-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/berry-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/berry-brandlogo.png",
+      "filename": "berry-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/berry-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/berry-brandlogo.svg",
+      "filename": "berry-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/blueberry-sherbet-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/blueberry-sherbet-brandlogo.png",
+      "filename": "blueberry-sherbet-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/blueberry-sherbet-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/blueberry-sherbet-brandlogo.svg",
+      "filename": "blueberry-sherbet-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/bluebird-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/bluebird-brandlogo.svg",
+      "filename": "bluebird-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/blush-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/blush-brandlogo.png",
+      "filename": "blush-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/blush-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/blush-brandlogo.svg",
+      "filename": "blush-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/clinical-light-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/clinical-light-brandlogo.png",
+      "filename": "clinical-light-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/clinical-light-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/clinical-light-brandlogo.svg",
+      "filename": "clinical-light-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/coral-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/coral-brandlogo.png",
+      "filename": "coral-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/coral-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/coral-brandlogo.svg",
+      "filename": "coral-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/coral-sunset-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/coral-sunset-brandlogo.png",
+      "filename": "coral-sunset-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/coral-sunset-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/coral-sunset-brandlogo.svg",
+      "filename": "coral-sunset-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/cotton-candy-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/cotton-candy-brandlogo.svg",
+      "filename": "cotton-candy-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/dark-academia-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/dark-academia-brandlogo.png",
+      "filename": "dark-academia-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/dark-academia-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/dark-academia-brandlogo.svg",
+      "filename": "dark-academia-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/dark-clinical-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/dark-clinical-brandlogo.png",
+      "filename": "dark-clinical-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/dark-clinical-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/dark-clinical-brandlogo.svg",
+      "filename": "dark-clinical-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/dark-mode-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/dark-mode-brandlogo.png",
+      "filename": "dark-mode-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/dark-mode-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/dark-mode-brandlogo.svg",
+      "filename": "dark-mode-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/deep-twilight-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/deep-twilight-brandlogo.png",
+      "filename": "deep-twilight-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/deep-twilight-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/deep-twilight-brandlogo.svg",
+      "filename": "deep-twilight-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/dusty-rose-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/dusty-rose-brandlogo.png",
+      "filename": "dusty-rose-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/dusty-rose-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/dusty-rose-brandlogo.svg",
+      "filename": "dusty-rose-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/evergreen-steel-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/evergreen-steel-brandlogo.svg",
+      "filename": "evergreen-steel-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/forest-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/forest-brandlogo.png",
+      "filename": "forest-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/forest-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/forest-brandlogo.svg",
+      "filename": "forest-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/golden-hour-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/golden-hour-brandlogo.png",
+      "filename": "golden-hour-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/golden-hour-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/golden-hour-brandlogo.svg",
+      "filename": "golden-hour-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/graphite-blue-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/graphite-blue-brandlogo.svg",
+      "filename": "graphite-blue-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/honey-cream-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/honey-cream-brandlogo.png",
+      "filename": "honey-cream-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/honey-cream-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/honey-cream-brandlogo.svg",
+      "filename": "honey-cream-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/indigo-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/indigo-brandlogo.png",
+      "filename": "indigo-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/indigo-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/indigo-brandlogo.svg",
+      "filename": "indigo-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/lavender-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/lavender-brandlogo.png",
+      "filename": "lavender-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/lavender-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/lavender-brandlogo.svg",
+      "filename": "lavender-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/lavender-dream-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/lavender-dream-brandlogo.png",
+      "filename": "lavender-dream-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/lavender-dream-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/lavender-dream-brandlogo.svg",
+      "filename": "lavender-dream-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/midnight-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/midnight-brandlogo.png",
+      "filename": "midnight-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/midnight-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/midnight-brandlogo.svg",
+      "filename": "midnight-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/midnight-indigo-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/midnight-indigo-brandlogo.png",
+      "filename": "midnight-indigo-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/midnight-indigo-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/midnight-indigo-brandlogo.svg",
+      "filename": "midnight-indigo-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/midnight-ink-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/midnight-ink-brandlogo.svg",
+      "filename": "midnight-ink-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/mint-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/mint-brandlogo.png",
+      "filename": "mint-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/mint-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/mint-brandlogo.svg",
+      "filename": "mint-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/mint-breeze-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/mint-breeze-brandlogo.png",
+      "filename": "mint-breeze-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/mint-breeze-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/mint-breeze-brandlogo.svg",
+      "filename": "mint-breeze-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/multi-pastel-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/multi-pastel-brandlogo.png",
+      "filename": "multi-pastel-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/multi-pastel-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/multi-pastel-brandlogo.svg",
+      "filename": "multi-pastel-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/neutral-sand-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/neutral-sand-brandlogo.png",
+      "filename": "neutral-sand-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/neutral-sand-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/neutral-sand-brandlogo.svg",
+      "filename": "neutral-sand-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/neutral-slate-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/neutral-slate-brandlogo.png",
+      "filename": "neutral-slate-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/neutral-slate-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/neutral-slate-brandlogo.svg",
+      "filename": "neutral-slate-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/north-sea-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/north-sea-brandlogo.svg",
+      "filename": "north-sea-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/ocean-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/ocean-brandlogo.png",
+      "filename": "ocean-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/ocean-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/ocean-brandlogo.svg",
+      "filename": "ocean-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/ocean-mist-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/ocean-mist-brandlogo.png",
+      "filename": "ocean-mist-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/ocean-mist-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/ocean-mist-brandlogo.svg",
+      "filename": "ocean-mist-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/pastel-blush-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/pastel-blush-brandlogo.png",
+      "filename": "pastel-blush-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/pastel-blush-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/pastel-blush-brandlogo.svg",
+      "filename": "pastel-blush-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/pastel-lavender-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/pastel-lavender-brandlogo.png",
+      "filename": "pastel-lavender-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/pastel-lavender-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/pastel-lavender-brandlogo.svg",
+      "filename": "pastel-lavender-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/pastel-lilac-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/pastel-lilac-brandlogo.png",
+      "filename": "pastel-lilac-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/pastel-lilac-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/pastel-lilac-brandlogo.svg",
+      "filename": "pastel-lilac-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/pastel-mint-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/pastel-mint-brandlogo.png",
+      "filename": "pastel-mint-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/pastel-mint-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/pastel-mint-brandlogo.svg",
+      "filename": "pastel-mint-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/pastel-party-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/pastel-party-brandlogo.svg",
+      "filename": "pastel-party-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/petal-pop-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/petal-pop-brandlogo.svg",
+      "filename": "petal-pop-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/pink-skies-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/pink-skies-brandlogo.svg",
+      "filename": "pink-skies-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/plum-mist-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/plum-mist-brandlogo.svg",
+      "filename": "plum-mist-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/plum-velvet-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/plum-velvet-brandlogo.png",
+      "filename": "plum-velvet-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/plum-velvet-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/plum-velvet-brandlogo.svg",
+      "filename": "plum-velvet-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/rainbow-sherbet-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/rainbow-sherbet-brandlogo.svg",
+      "filename": "rainbow-sherbet-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/rose-gold-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/rose-gold-brandlogo.png",
+      "filename": "rose-gold-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/rose-gold-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/rose-gold-brandlogo.svg",
+      "filename": "rose-gold-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/rose-quartz-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/rose-quartz-brandlogo.png",
+      "filename": "rose-quartz-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/rose-quartz-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/rose-quartz-brandlogo.svg",
+      "filename": "rose-quartz-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/sage-garden-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/sage-garden-brandlogo.png",
+      "filename": "sage-garden-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/sage-garden-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/sage-garden-brandlogo.svg",
+      "filename": "sage-garden-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/sky-kiss-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/sky-kiss-brandlogo.svg",
+      "filename": "sky-kiss-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/slate-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/slate-brandlogo.png",
+      "filename": "slate-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/slate-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/slate-brandlogo.svg",
+      "filename": "slate-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/soft-sage-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/soft-sage-brandlogo.png",
+      "filename": "soft-sage-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/soft-sage-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/soft-sage-brandlogo.svg",
+      "filename": "soft-sage-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/storm-slate-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/storm-slate-brandlogo.svg",
+      "filename": "storm-slate-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/strawberry-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/strawberry-brandlogo.png",
+      "filename": "strawberry-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/strawberry-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/strawberry-brandlogo.svg",
+      "filename": "strawberry-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/strawberry-cream-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/strawberry-cream-brandlogo.png",
+      "filename": "strawberry-cream-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/strawberry-cream-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/strawberry-cream-brandlogo.svg",
+      "filename": "strawberry-cream-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/sunny-lilac-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/sunny-lilac-brandlogo.svg",
+      "filename": "sunny-lilac-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/teal-brandlogo.png",
+      "repoRelativePath": "nursenest-core/public/logos/teal-brandlogo.png",
+      "filename": "teal-brandlogo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/teal-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/teal-brandlogo.svg",
+      "filename": "teal-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-arctic-frost.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-arctic-frost.png",
+      "filename": "nursenest-logo-arctic-frost.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-arctic-frost.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-arctic-frost.svg",
+      "filename": "nursenest-logo-arctic-frost.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-berry-bonbon.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-berry-bonbon.png",
+      "filename": "nursenest-logo-berry-bonbon.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-berry-bonbon.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-berry-bonbon.svg",
+      "filename": "nursenest-logo-berry-bonbon.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-berry.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-berry.png",
+      "filename": "nursenest-logo-berry.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-berry.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-berry.svg",
+      "filename": "nursenest-logo-berry.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-blueberry-sherbet.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-blueberry-sherbet.png",
+      "filename": "nursenest-logo-blueberry-sherbet.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-blueberry-sherbet.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-blueberry-sherbet.svg",
+      "filename": "nursenest-logo-blueberry-sherbet.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-bluebird.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-bluebird.png",
+      "filename": "nursenest-logo-bluebird.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-bluebird.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-bluebird.svg",
+      "filename": "nursenest-logo-bluebird.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-blush.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-blush.png",
+      "filename": "nursenest-logo-blush.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-blush.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-blush.svg",
+      "filename": "nursenest-logo-blush.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-clinical-light.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-clinical-light.png",
+      "filename": "nursenest-logo-clinical-light.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-clinical-light.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-clinical-light.svg",
+      "filename": "nursenest-logo-clinical-light.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-coral-sunset.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-coral-sunset.png",
+      "filename": "nursenest-logo-coral-sunset.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-coral-sunset.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-coral-sunset.svg",
+      "filename": "nursenest-logo-coral-sunset.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-coral.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-coral.png",
+      "filename": "nursenest-logo-coral.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-coral.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-coral.svg",
+      "filename": "nursenest-logo-coral.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-cotton-candy.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-cotton-candy.png",
+      "filename": "nursenest-logo-cotton-candy.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-cotton-candy.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-cotton-candy.svg",
+      "filename": "nursenest-logo-cotton-candy.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-dark-academia.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-dark-academia.png",
+      "filename": "nursenest-logo-dark-academia.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-dark-academia.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-dark-academia.svg",
+      "filename": "nursenest-logo-dark-academia.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-dark-clinical.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-dark-clinical.png",
+      "filename": "nursenest-logo-dark-clinical.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-dark-clinical.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-dark-clinical.svg",
+      "filename": "nursenest-logo-dark-clinical.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-dark-mode.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-dark-mode.png",
+      "filename": "nursenest-logo-dark-mode.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-dark-mode.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-dark-mode.svg",
+      "filename": "nursenest-logo-dark-mode.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-deep-twilight.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-deep-twilight.png",
+      "filename": "nursenest-logo-deep-twilight.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-deep-twilight.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-deep-twilight.svg",
+      "filename": "nursenest-logo-deep-twilight.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-dusty-rose.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-dusty-rose.png",
+      "filename": "nursenest-logo-dusty-rose.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-dusty-rose.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-dusty-rose.svg",
+      "filename": "nursenest-logo-dusty-rose.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-evergreen-steel.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-evergreen-steel.png",
+      "filename": "nursenest-logo-evergreen-steel.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-evergreen-steel.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-evergreen-steel.svg",
+      "filename": "nursenest-logo-evergreen-steel.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-forest.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-forest.png",
+      "filename": "nursenest-logo-forest.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-forest.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-forest.svg",
+      "filename": "nursenest-logo-forest.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-golden-hour.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-golden-hour.png",
+      "filename": "nursenest-logo-golden-hour.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-golden-hour.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-golden-hour.svg",
+      "filename": "nursenest-logo-golden-hour.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-graphite-blue.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-graphite-blue.png",
+      "filename": "nursenest-logo-graphite-blue.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-graphite-blue.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-graphite-blue.svg",
+      "filename": "nursenest-logo-graphite-blue.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-honey-cream.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-honey-cream.png",
+      "filename": "nursenest-logo-honey-cream.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-honey-cream.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-honey-cream.svg",
+      "filename": "nursenest-logo-honey-cream.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-indigo.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-indigo.png",
+      "filename": "nursenest-logo-indigo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-indigo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-indigo.svg",
+      "filename": "nursenest-logo-indigo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-lavender-dream.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-lavender-dream.png",
+      "filename": "nursenest-logo-lavender-dream.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-lavender-dream.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-lavender-dream.svg",
+      "filename": "nursenest-logo-lavender-dream.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-lavender.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-lavender.png",
+      "filename": "nursenest-logo-lavender.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-lavender.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-lavender.svg",
+      "filename": "nursenest-logo-lavender.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-midnight-indigo.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-midnight-indigo.png",
+      "filename": "nursenest-logo-midnight-indigo.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-midnight-indigo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-midnight-indigo.svg",
+      "filename": "nursenest-logo-midnight-indigo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-midnight-ink.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-midnight-ink.png",
+      "filename": "nursenest-logo-midnight-ink.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-midnight-ink.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-midnight-ink.svg",
+      "filename": "nursenest-logo-midnight-ink.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-midnight.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-midnight.png",
+      "filename": "nursenest-logo-midnight.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-midnight.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-midnight.svg",
+      "filename": "nursenest-logo-midnight.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-mint-breeze.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-mint-breeze.png",
+      "filename": "nursenest-logo-mint-breeze.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-mint-breeze.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-mint-breeze.svg",
+      "filename": "nursenest-logo-mint-breeze.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-mint.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-mint.png",
+      "filename": "nursenest-logo-mint.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-mint.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-mint.svg",
+      "filename": "nursenest-logo-mint.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-multi-pastel.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-multi-pastel.png",
+      "filename": "nursenest-logo-multi-pastel.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-multi-pastel.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-multi-pastel.svg",
+      "filename": "nursenest-logo-multi-pastel.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-neutral-sand.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-neutral-sand.png",
+      "filename": "nursenest-logo-neutral-sand.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-neutral-sand.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-neutral-sand.svg",
+      "filename": "nursenest-logo-neutral-sand.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-neutral-slate.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-neutral-slate.png",
+      "filename": "nursenest-logo-neutral-slate.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-neutral-slate.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-neutral-slate.svg",
+      "filename": "nursenest-logo-neutral-slate.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-north-sea.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-north-sea.png",
+      "filename": "nursenest-logo-north-sea.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-north-sea.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-north-sea.svg",
+      "filename": "nursenest-logo-north-sea.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-ocean-mist.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-ocean-mist.png",
+      "filename": "nursenest-logo-ocean-mist.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-ocean-mist.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-ocean-mist.svg",
+      "filename": "nursenest-logo-ocean-mist.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-ocean.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-ocean.png",
+      "filename": "nursenest-logo-ocean.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-ocean.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-ocean.svg",
+      "filename": "nursenest-logo-ocean.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-pastel-blush.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-pastel-blush.png",
+      "filename": "nursenest-logo-pastel-blush.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-pastel-blush.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-pastel-blush.svg",
+      "filename": "nursenest-logo-pastel-blush.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-pastel-lavender.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-pastel-lavender.png",
+      "filename": "nursenest-logo-pastel-lavender.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-pastel-lavender.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-pastel-lavender.svg",
+      "filename": "nursenest-logo-pastel-lavender.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-pastel-lilac.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-pastel-lilac.png",
+      "filename": "nursenest-logo-pastel-lilac.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-pastel-lilac.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-pastel-lilac.svg",
+      "filename": "nursenest-logo-pastel-lilac.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-pastel-mint.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-pastel-mint.png",
+      "filename": "nursenest-logo-pastel-mint.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-pastel-mint.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-pastel-mint.svg",
+      "filename": "nursenest-logo-pastel-mint.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-pastel-party.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-pastel-party.png",
+      "filename": "nursenest-logo-pastel-party.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-pastel-party.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-pastel-party.svg",
+      "filename": "nursenest-logo-pastel-party.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-petal-pop.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-petal-pop.png",
+      "filename": "nursenest-logo-petal-pop.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-petal-pop.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-petal-pop.svg",
+      "filename": "nursenest-logo-petal-pop.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-pink-skies.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-pink-skies.png",
+      "filename": "nursenest-logo-pink-skies.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-pink-skies.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-pink-skies.svg",
+      "filename": "nursenest-logo-pink-skies.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-plum-mist.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-plum-mist.png",
+      "filename": "nursenest-logo-plum-mist.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-plum-mist.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-plum-mist.svg",
+      "filename": "nursenest-logo-plum-mist.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-plum-velvet.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-plum-velvet.png",
+      "filename": "nursenest-logo-plum-velvet.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-plum-velvet.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-plum-velvet.svg",
+      "filename": "nursenest-logo-plum-velvet.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-rainbow-sherbet.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-rainbow-sherbet.png",
+      "filename": "nursenest-logo-rainbow-sherbet.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-rainbow-sherbet.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-rainbow-sherbet.svg",
+      "filename": "nursenest-logo-rainbow-sherbet.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-rose-gold.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-rose-gold.png",
+      "filename": "nursenest-logo-rose-gold.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-rose-gold.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-rose-gold.svg",
+      "filename": "nursenest-logo-rose-gold.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-rose-quartz.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-rose-quartz.png",
+      "filename": "nursenest-logo-rose-quartz.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-rose-quartz.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-rose-quartz.svg",
+      "filename": "nursenest-logo-rose-quartz.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-sage-garden.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-sage-garden.png",
+      "filename": "nursenest-logo-sage-garden.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-sage-garden.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-sage-garden.svg",
+      "filename": "nursenest-logo-sage-garden.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-sky-kiss.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-sky-kiss.png",
+      "filename": "nursenest-logo-sky-kiss.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-sky-kiss.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-sky-kiss.svg",
+      "filename": "nursenest-logo-sky-kiss.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-slate.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-slate.png",
+      "filename": "nursenest-logo-slate.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-slate.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-slate.svg",
+      "filename": "nursenest-logo-slate.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-soft-sage.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-soft-sage.png",
+      "filename": "nursenest-logo-soft-sage.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-soft-sage.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-soft-sage.svg",
+      "filename": "nursenest-logo-soft-sage.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-storm-slate.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-storm-slate.png",
+      "filename": "nursenest-logo-storm-slate.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-storm-slate.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-storm-slate.svg",
+      "filename": "nursenest-logo-storm-slate.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-strawberry-cream.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-strawberry-cream.png",
+      "filename": "nursenest-logo-strawberry-cream.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-strawberry-cream.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-strawberry-cream.svg",
+      "filename": "nursenest-logo-strawberry-cream.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-strawberry.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-strawberry.png",
+      "filename": "nursenest-logo-strawberry.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-strawberry.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-strawberry.svg",
+      "filename": "nursenest-logo-strawberry.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-sunny-lilac.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-sunny-lilac.png",
+      "filename": "nursenest-logo-sunny-lilac.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-sunny-lilac.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-sunny-lilac.svg",
+      "filename": "nursenest-logo-sunny-lilac.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-teal.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-teal.png",
+      "filename": "nursenest-logo-teal.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-teal.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-teal.svg",
+      "filename": "nursenest-logo-teal.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-violet-night.png",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-violet-night.png",
+      "filename": "nursenest-logo-violet-night.png",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/themes/nursenest-logo-violet-night.svg",
+      "repoRelativePath": "nursenest-core/public/logos/themes/nursenest-logo-violet-night.svg",
+      "filename": "nursenest-logo-violet-night.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/logos/violet-night-brandlogo.svg",
+      "repoRelativePath": "nursenest-core/public/logos/violet-night-brandlogo.svg",
+      "filename": "violet-night-brandlogo.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/marketing/hero-fallback.svg",
+      "repoRelativePath": "nursenest-core/public/marketing/hero-fallback.svg",
+      "filename": "hero-fallback.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/next.svg",
+      "repoRelativePath": "nursenest-core/public/next.svg",
+      "filename": "next.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/vercel.svg",
+      "repoRelativePath": "nursenest-core/public/vercel.svg",
+      "filename": "vercel.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/public/window.svg",
+      "repoRelativePath": "nursenest-core/public/window.svg",
+      "filename": "window.svg",
+      "imageType": "general_asset",
+      "referencedInCodeScan": "use_getAssetUrl_inventory_from_flashcard_ts"
+    }
+  ],
+  "totalPublicImageFilesSampled": 321
+}

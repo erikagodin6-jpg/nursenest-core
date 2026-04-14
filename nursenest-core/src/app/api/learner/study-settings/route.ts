@@ -2,9 +2,10 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import type { StudySettings } from "@/lib/learner/study-settings";
 import {
   ALLOWED_STUDY_SESSION_LENGTHS,
-  normalizeStudySettings,
+  rowToStudySettings,
   studySettingsToPersistenceInput,
   studySettingsUserSelect,
 } from "@/lib/learner/study-settings";
@@ -38,7 +39,7 @@ export async function GET() {
       where: { id: userId },
       select: studySettingsUserSelect,
     });
-    return NextResponse.json({ settings: normalizeStudySettings(row) });
+    return NextResponse.json({ settings: rowToStudySettings(row) });
   } catch {
     return NextResponse.json({ error: "Unable to load study settings." }, { status: 503 });
   }
@@ -64,13 +65,13 @@ export async function PATCH(req: Request) {
   }
 
   try {
-    const data = studySettingsToPersistenceInput(parsed.data);
+    const data = studySettingsToPersistenceInput(parsed.data as Partial<StudySettings>);
     const updated = await prisma.user.update({
       where: { id: userId },
       data,
       select: studySettingsUserSelect,
     });
-    return NextResponse.json({ ok: true, settings: normalizeStudySettings(updated) });
+    return NextResponse.json({ ok: true, settings: rowToStudySettings(updated) });
   } catch {
     return NextResponse.json({ error: "Unable to save study settings." }, { status: 503 });
   }

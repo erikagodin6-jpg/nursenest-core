@@ -1,0 +1,447 @@
+{
+  "generatedAt": "2026-04-14T13:47:11.287Z",
+  "nursenestCoreRoot": "/root/nursenest-core/nursenest-core",
+  "entryCount": 22,
+  "files": [
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/lib/exams/cat-engine.ts",
+      "repoRelativePath": "nursenest-core/src/lib/exams/cat-engine.ts",
+      "exists": true,
+      "componentOrModule": "exams/cat-engine",
+      "purpose": "Production CAT for practice tests: Prisma pool rows, blueprint diagnostics, theta/SE, stopping rules, exam simulation bounds, CAT report.",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": true,
+        "adaptiveSelection": true,
+        "progress": true,
+        "resume": false,
+        "scoring": true,
+        "results": true,
+        "rationaleReview": false,
+        "readinessUx": true,
+        "layoutPresentation": false
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/lib/exams/cat-types.ts",
+      "repoRelativePath": "nursenest-core/src/lib/exams/cat-types.ts",
+      "exists": true,
+      "componentOrModule": "exams/cat-types",
+      "purpose": "Types for adaptive state, answers, presentation mode, exam report.",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": true,
+        "adaptiveSelection": true,
+        "progress": true,
+        "resume": false,
+        "scoring": true,
+        "results": true,
+        "rationaleReview": false,
+        "readinessUx": true,
+        "layoutPresentation": false
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/lib/practice-tests/cat-session.ts",
+      "repoRelativePath": "nursenest-core/src/lib/practice-tests/cat-session.ts",
+      "exists": true,
+      "componentOrModule": "practice-tests/cat-session",
+      "purpose": "Orchestrates CAT practice test scoring, pool fetch, weak-topic boost, results enrichment, persistence hooks.",
+      "controls": {
+        "sessionStart": true,
+        "questionDelivery": true,
+        "adaptiveSelection": true,
+        "progress": true,
+        "resume": false,
+        "scoring": true,
+        "results": true,
+        "rationaleReview": false,
+        "readinessUx": true,
+        "layoutPresentation": false
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/lib/practice-tests/cat-pool.ts",
+      "repoRelativePath": "nursenest-core/src/lib/practice-tests/cat-pool.ts",
+      "exists": true,
+      "componentOrModule": "cat-pool",
+      "purpose": "Loads eligible ExamQuestion rows for CAT with entitlements and pathway filters.",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": true,
+        "adaptiveSelection": false,
+        "progress": false,
+        "resume": false,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/lib/practice-tests/cat-results-coach.ts",
+      "repoRelativePath": "nursenest-core/src/lib/practice-tests/cat-results-coach.ts",
+      "exists": true,
+      "componentOrModule": "cat-results-coach",
+      "purpose": "Readiness coaching copy from CAT report (theta stability, reliability, weak domains) — presentation only.",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": false,
+        "resume": false,
+        "scoring": false,
+        "results": true,
+        "rationaleReview": false,
+        "readinessUx": true,
+        "layoutPresentation": true
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/components/student/practice-test-runner-client.tsx",
+      "repoRelativePath": "nursenest-core/src/components/student/practice-test-runner-client.tsx",
+      "exists": true,
+      "componentOrModule": "PracticeTestRunnerClient",
+      "purpose": "Main learner UI: CAT + linear modes, timer, rationale panels, coach, teaching review, notes, exam shell.",
+      "controls": {
+        "sessionStart": true,
+        "questionDelivery": true,
+        "adaptiveSelection": true,
+        "progress": true,
+        "resume": true,
+        "scoring": true,
+        "results": true,
+        "rationaleReview": true,
+        "readinessUx": true,
+        "layoutPresentation": true
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/components/study/cat-session-layout.tsx",
+      "repoRelativePath": "nursenest-core/src/components/study/cat-session-layout.tsx",
+      "exists": true,
+      "componentOrModule": "CatSessionLayout",
+      "purpose": "CAT session grid/chrome layout.",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": true,
+        "resume": false,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": true
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/components/study/cat-question-card.tsx",
+      "repoRelativePath": "nursenest-core/src/components/study/cat-question-card.tsx",
+      "exists": true,
+      "componentOrModule": "QuestionCard (CAT)",
+      "purpose": "Question stem/options presentation for CAT mode.",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": true,
+        "adaptiveSelection": false,
+        "progress": false,
+        "resume": false,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": true
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/components/study/cat-rationale-panel.tsx",
+      "repoRelativePath": "nursenest-core/src/components/study/cat-rationale-panel.tsx",
+      "exists": true,
+      "componentOrModule": "RationalePanel",
+      "purpose": "Rationale reveal for CAT items.",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": false,
+        "resume": false,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": true,
+        "readinessUx": false,
+        "layoutPresentation": true
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/components/study/cat-results-summary.tsx",
+      "repoRelativePath": "nursenest-core/src/components/study/cat-results-summary.tsx",
+      "exists": true,
+      "componentOrModule": "ResultsSummary",
+      "purpose": "In-flow CAT results summary.",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": false,
+        "resume": false,
+        "scoring": true,
+        "results": true,
+        "rationaleReview": false,
+        "readinessUx": true,
+        "layoutPresentation": true
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/lib/cat/cat-engine.ts",
+      "repoRelativePath": "nursenest-core/src/lib/cat/cat-engine.ts",
+      "exists": true,
+      "componentOrModule": "lib/cat/cat-engine (NP)",
+      "purpose": "Separate NP CAT engine: weakness priority, floor enforcement, 1PL-style selection — used by /api/cat/np/* not main practice-tests pipeline.",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": true,
+        "adaptiveSelection": true,
+        "progress": true,
+        "resume": false,
+        "scoring": true,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/app/api/practice-tests/[id]/question/route.ts",
+      "repoRelativePath": "nursenest-core/src/app/api/practice-tests/[id]/question/route.ts",
+      "exists": true,
+      "componentOrModule": "GET practice-tests question",
+      "purpose": "One question at a time for practice tests (keeps large sessions off the wire).",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": true,
+        "adaptiveSelection": false,
+        "progress": true,
+        "resume": false,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/app/api/practice-tests/[id]/route.ts",
+      "repoRelativePath": "nursenest-core/src/app/api/practice-tests/[id]/route.ts",
+      "exists": true,
+      "componentOrModule": "practice-tests [id] API",
+      "purpose": "Practice test session fetch/update (CAT state, answers, completion).",
+      "controls": {
+        "sessionStart": true,
+        "questionDelivery": true,
+        "adaptiveSelection": true,
+        "progress": true,
+        "resume": true,
+        "scoring": true,
+        "results": true,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "curated"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/app/api/practice-tests/[id]/cat-study-review/route.ts",
+      "repoRelativePath": "nursenest-core/src/app/api/practice-tests/[id]/cat-study-review/route.ts",
+      "exists": true,
+      "componentOrModule": "route",
+      "purpose": "Practice-test or NP CAT API route (auto-discovered).",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": true,
+        "progress": true,
+        "resume": true,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": true,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "auto_discovered"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/app/api/practice-tests/[id]/route-deps.ts",
+      "repoRelativePath": "nursenest-core/src/app/api/practice-tests/[id]/route-deps.ts",
+      "exists": true,
+      "componentOrModule": "route-deps",
+      "purpose": "Practice-test or NP CAT API route (auto-discovered).",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": true,
+        "progress": true,
+        "resume": true,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "auto_discovered"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/app/api/practice-tests/cat-insights/route.ts",
+      "repoRelativePath": "nursenest-core/src/app/api/practice-tests/cat-insights/route.ts",
+      "exists": true,
+      "componentOrModule": "route",
+      "purpose": "Practice-test or NP CAT API route (auto-discovered).",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": true,
+        "progress": true,
+        "resume": true,
+        "scoring": false,
+        "results": true,
+        "rationaleReview": false,
+        "readinessUx": true,
+        "layoutPresentation": false
+      },
+      "source": "auto_discovered"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/app/api/practice-tests/cat-readiness/route.ts",
+      "repoRelativePath": "nursenest-core/src/app/api/practice-tests/cat-readiness/route.ts",
+      "exists": true,
+      "componentOrModule": "route",
+      "purpose": "Practice-test or NP CAT API route (auto-discovered).",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": true,
+        "progress": true,
+        "resume": true,
+        "scoring": false,
+        "results": true,
+        "rationaleReview": false,
+        "readinessUx": true,
+        "layoutPresentation": false
+      },
+      "source": "auto_discovered"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/app/api/practice-tests/route.ts",
+      "repoRelativePath": "nursenest-core/src/app/api/practice-tests/route.ts",
+      "exists": true,
+      "componentOrModule": "route",
+      "purpose": "Practice-test or NP CAT API route (auto-discovered).",
+      "controls": {
+        "sessionStart": true,
+        "questionDelivery": false,
+        "adaptiveSelection": false,
+        "progress": true,
+        "resume": true,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "auto_discovered"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/app/api/cat/np/analysis/route.ts",
+      "repoRelativePath": "nursenest-core/src/app/api/cat/np/analysis/route.ts",
+      "exists": true,
+      "componentOrModule": "route",
+      "purpose": "Practice-test or NP CAT API route (auto-discovered).",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": true,
+        "progress": false,
+        "resume": true,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "auto_discovered"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/app/api/cat/np/answer/route.ts",
+      "repoRelativePath": "nursenest-core/src/app/api/cat/np/answer/route.ts",
+      "exists": true,
+      "componentOrModule": "route",
+      "purpose": "Practice-test or NP CAT API route (auto-discovered).",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": true,
+        "progress": false,
+        "resume": true,
+        "scoring": true,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "auto_discovered"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/app/api/cat/np/audit/route.ts",
+      "repoRelativePath": "nursenest-core/src/app/api/cat/np/audit/route.ts",
+      "exists": true,
+      "componentOrModule": "route",
+      "purpose": "Practice-test or NP CAT API route (auto-discovered).",
+      "controls": {
+        "sessionStart": false,
+        "questionDelivery": false,
+        "adaptiveSelection": true,
+        "progress": false,
+        "resume": true,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "auto_discovered"
+    },
+    {
+      "filePath": "/root/nursenest-core/nursenest-core/src/app/api/cat/np/session/route.ts",
+      "repoRelativePath": "nursenest-core/src/app/api/cat/np/session/route.ts",
+      "exists": true,
+      "componentOrModule": "route",
+      "purpose": "Practice-test or NP CAT API route (auto-discovered).",
+      "controls": {
+        "sessionStart": true,
+        "questionDelivery": false,
+        "adaptiveSelection": true,
+        "progress": false,
+        "resume": true,
+        "scoring": false,
+        "results": false,
+        "rationaleReview": false,
+        "readinessUx": false,
+        "layoutPresentation": false
+      },
+      "source": "auto_discovered"
+    }
+  ]
+}

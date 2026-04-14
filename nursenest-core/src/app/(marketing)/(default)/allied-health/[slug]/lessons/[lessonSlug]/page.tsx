@@ -75,11 +75,9 @@ import {
   pathwayLessonSectionPrefersWideColumn,
   shouldRenderPathwayLessonSection,
 } from "@/lib/lessons/lesson-section-page-layout";
-import {
-  PathwayLessonCommonTrapsStrip,
-  PathwayLessonMemoryAnchorStrip,
-  PathwayLessonStudyTakeawaysStrip,
-} from "@/components/lessons/pathway-lesson-study-strips";
+import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
+import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
+import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 86400;
@@ -273,16 +271,23 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       <p className="mt-2 text-sm text-muted">
         {compactExamLabel} · {pathway.countryCode === "CA" ? "Canada" : "United States"} · {lesson.bodySystem}
       </p>
+      {lessonHasExamTakeaways(lesson.studyTakeaways) ? (
+        <div className="mt-4">
+          <ExamTakeawaysBlock
+            pathway={pathway}
+            items={lesson.studyTakeaways}
+            position="top"
+            alliedProfessionLabel={prof.h1}
+          />
+        </div>
+      ) : null}
       <div className="mt-4 space-y-2">
         <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
         <PathwayLessonQuickReview bullets={quickReviewBullets} />
       </div>
-      {(lesson.studyTakeaways && lesson.studyTakeaways.length >= 2) || lesson.memoryAnchor ? (
-        <div className="mt-4 space-y-3">
-          {lesson.studyTakeaways && lesson.studyTakeaways.length >= 2 ? (
-            <PathwayLessonStudyTakeawaysStrip pathway={pathway} items={lesson.studyTakeaways} position="top" />
-          ) : null}
-          {lesson.memoryAnchor ? <PathwayLessonMemoryAnchorStrip text={lesson.memoryAnchor} /> : null}
+      {lesson.memoryAnchor ? (
+        <div className="mt-4">
+          <PathwayLessonMemoryAnchorStrip text={lesson.memoryAnchor} />
         </div>
       ) : null}
       {showLocaleFallbackNotice ? (
@@ -395,6 +400,16 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
               <PathwayLessonCommonTrapsStrip items={lesson.studyCommonTraps} />
             </div>
           ) : null}
+          {lessonHasExamTakeaways(lesson.studyTakeaways) ? (
+            <div className="mx-auto mt-6 max-w-5xl">
+              <ExamTakeawaysBlock
+                pathway={pathway}
+                items={lesson.studyTakeaways}
+                position="bottom"
+                alliedProfessionLabel={prof.h1}
+              />
+            </div>
+          ) : null}
         </LessonRecallProvider>
 
         {lockedSections.length > 0 ? <PathwayLessonLockedSectionsPreview sections={lockedSections} /> : null}
@@ -408,11 +423,6 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
           canMarkComplete={fullAccess}
           initialProgress={lessonProgress}
         />
-        {lesson.studyTakeaways && lesson.studyTakeaways.length >= 2 ? (
-          <div className="mx-auto mt-8 max-w-5xl">
-            <PathwayLessonStudyTakeawaysStrip pathway={pathway} items={lesson.studyTakeaways} position="bottom" />
-          </div>
-        ) : null}
       </PathwayLessonAssessmentExperience>
 
       <p className="mt-6 text-sm text-muted">

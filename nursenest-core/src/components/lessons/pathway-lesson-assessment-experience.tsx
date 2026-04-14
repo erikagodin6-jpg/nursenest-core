@@ -18,6 +18,10 @@ function storageUserId(userId: string): string {
   return trimmed.length > 0 ? trimmed : "public";
 }
 
+/**
+ * Marketing pathway lesson assessments — matches learner app flow:
+ * controls → **pre-test (before article)** → lesson content → post-test (after completion).
+ */
 export function PathwayLessonAssessmentExperience({
   userId,
   pathwayId,
@@ -75,14 +79,14 @@ export function PathwayLessonAssessmentExperience({
     }
     if (hasPre && hasPost) {
       return postTestReady
-        ? "Pre-test is active and your post-test is ready below."
-        : "Pre-test is active now. Complete the lesson to unlock the post-test.";
+        ? "Pre-test ran before the lesson; your post-test is ready below."
+        : "Pre-test runs first, then the lesson. Complete the lesson to unlock the post-test.";
     }
-    if (hasPre) return "Pre-test is active before the lesson content.";
+    if (hasPre) return "Pre-test runs before the lesson content.";
     if (hasPost) {
       return postTestReady
         ? "Post-test is active below."
-        : "Post-test is active, and it unlocks after you complete the lesson.";
+        : "Post-test unlocks after you complete the lesson.";
     }
     return "No lesson tests are attached to this lesson yet.";
   }, [enabled, hasPost, hasPre, postTestReady]);
@@ -93,7 +97,6 @@ export function PathwayLessonAssessmentExperience({
 
   return (
     <div className="space-y-6">
-      {children}
       <section className="nn-study-card nn-study-card--wash mx-auto max-w-5xl border border-[var(--semantic-border-soft)] p-4 sm:p-5">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
@@ -158,20 +161,24 @@ export function PathwayLessonAssessmentExperience({
             </p>
           )}
         </div>
-        {enabled && hasPre ? <PathwayLessonQuizzes preTest={preTest} fullAccess={fullAccess} /> : null}
-        {enabled && hasPost ? (
-          postTestReady ? (
-            <PathwayLessonQuizzes postTest={postTest} fullAccess={fullAccess} />
-          ) : (
-            <section className="nn-study-card mt-6 border border-[var(--semantic-border-soft)] p-5 text-sm text-[var(--theme-muted-text)]">
-              <p className="font-semibold text-[var(--theme-heading-text)]">Post-test waiting</p>
-              <p className="mt-2 leading-6">
-                Mark this lesson complete or finish the full reading flow to activate the post-test here.
-              </p>
-            </section>
-          )
-        ) : null}
       </section>
+
+      {enabled && hasPre ? <PathwayLessonQuizzes preTest={preTest} fullAccess={fullAccess} /> : null}
+
+      {children}
+
+      {enabled && hasPost ? (
+        postTestReady ? (
+          <PathwayLessonQuizzes postTest={postTest} fullAccess={fullAccess} />
+        ) : (
+          <section className="nn-study-card mx-auto max-w-5xl border border-[var(--semantic-border-soft)] p-5 text-sm text-[var(--theme-muted-text)]">
+            <p className="font-semibold text-[var(--theme-heading-text)]">Post-test waiting</p>
+            <p className="mt-2 leading-6">
+              Mark this lesson complete or finish the full reading flow to activate the post-test here.
+            </p>
+          </section>
+        )
+      ) : null}
     </div>
   );
 }

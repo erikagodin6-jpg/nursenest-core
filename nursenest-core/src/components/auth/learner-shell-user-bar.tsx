@@ -64,7 +64,7 @@ export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShort
   const close = useCallback(() => setOpen(false), []);
 
   useEffect(() => {
-    const onDoc = (e: MouseEvent) => {
+    const onDoc = (e: PointerEvent) => {
       if (!ref.current?.contains(e.target as Node)) close();
     };
     document.addEventListener("click", onDoc);

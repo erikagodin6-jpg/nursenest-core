@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { LearnerNoteScope, type TierCode } from "@prisma/client";
+import { ExamFamily, LearnerNoteScope, type TierCode } from "@prisma/client";
 import { auth } from "@/lib/auth";
+import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import { PremiumLessonShell } from "@/components/student/premium-lesson-shell";
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
@@ -71,11 +72,9 @@ import {
   pathwayLessonSectionPrefersWideColumn,
   shouldRenderPathwayLessonSection,
 } from "@/lib/lessons/lesson-section-page-layout";
-import {
-  PathwayLessonCommonTrapsStrip,
-  PathwayLessonMemoryAnchorStrip,
-  PathwayLessonStudyTakeawaysStrip,
-} from "@/components/lessons/pathway-lesson-study-strips";
+import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
+import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
+import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
 
 function LessonBody({
   content,
@@ -515,6 +514,11 @@ export default async function LessonDetailPage({ params }: Props) {
       stemPreviewByQuestionId[stem.id] = stem.stemPreview;
     }
 
+    const alliedExamTakeawaysLabel =
+      pathway?.examFamily === ExamFamily.ALLIED && entitlement.alliedCareer
+        ? getAlliedProfessionByProfessionKey(entitlement.alliedCareer)?.h1
+        : undefined;
+
     const pathwayLessonMainColumn = (
       <>
         {/* Top nav: back link */}
@@ -548,17 +552,10 @@ export default async function LessonDetailPage({ params }: Props) {
             sourceLabel={displayTitle}
             qualityNotice={<LessonQualityNotice tier={pathwayQuality.tier} wordCount={pathwayQuality.wordCount} />}
           >
-            {pathway ? (
-              <>
-                {(record.studyTakeaways && record.studyTakeaways.length >= 2) || record.memoryAnchor ? (
-                  <div className="mb-5 space-y-3">
-                    {record.studyTakeaways && record.studyTakeaways.length >= 2 ? (
-                      <PathwayLessonStudyTakeawaysStrip pathway={pathway} items={record.studyTakeaways} position="top" />
-                    ) : null}
-                    {record.memoryAnchor ? <PathwayLessonMemoryAnchorStrip text={record.memoryAnchor} /> : null}
-                  </div>
-                ) : null}
-              </>
+            {pathway && record.memoryAnchor ? (
+              <div className="mb-5">
+                <PathwayLessonMemoryAnchorStrip text={record.memoryAnchor} />
+              </div>
             ) : null}
             <article className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
               {displaySections.length > 0 ? (
@@ -603,14 +600,18 @@ export default async function LessonDetailPage({ params }: Props) {
                 <PathwayLessonCommonTrapsStrip items={record.studyCommonTraps} />
               </div>
             ) : null}
+            {pathway && lessonHasExamTakeaways(record.studyTakeaways) ? (
+              <div className="mt-6 max-w-5xl">
+                <ExamTakeawaysBlock
+                  pathway={pathway}
+                  items={record.studyTakeaways}
+                  position="bottom"
+                  alliedProfessionLabel={alliedExamTakeawaysLabel}
+                />
+              </div>
+            ) : null}
           </PremiumLessonShell>
         </LessonAssessmentFlow>
-
-        {pathway && record.studyTakeaways && record.studyTakeaways.length >= 2 ? (
-          <div className="mt-6 max-w-5xl">
-            <PathwayLessonStudyTakeawaysStrip pathway={pathway} items={record.studyTakeaways} position="bottom" />
-          </div>
-        ) : null}
 
         <LessonNavButtons
           position="bottom"
@@ -693,6 +694,17 @@ export default async function LessonDetailPage({ params }: Props) {
           audienceTiers={record.audienceTiers ?? null}
           progress={initialProgress}
         />
+
+        {pathway && lessonHasExamTakeaways(record.studyTakeaways) ? (
+          <div className="mt-5 max-w-5xl">
+            <ExamTakeawaysBlock
+              pathway={pathway}
+              items={record.studyTakeaways}
+              position="top"
+              alliedProfessionLabel={alliedExamTakeawaysLabel}
+            />
+          </div>
+        ) : null}
 
         {/* ── Two-column layout: article + sticky sidebar ────────────────── */}
         <div className="nn-lesson-layout mt-8">

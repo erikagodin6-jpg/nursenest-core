@@ -49,9 +49,11 @@ import type { LaunchBundleEntry, PathwayLaunchBundleSpec } from "@/lib/lessons/p
 import { getLaunchBundleSpec } from "@/lib/lessons/pathway-launch-bundle";
 import { maxSafeOffsetPage } from "@/lib/api/api-pagination-limits";
 import {
+  PATHWAY_CATALOG_LIST_HARD_CAP,
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   PATHWAY_HUB_PAGE_SIZE_MAX,
 } from "@/lib/lessons/pathway-lesson-scale";
+import { emptyPathwayLessonsPageResult } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import { dedupePathwayLessonsForLibrary } from "@/lib/lessons/pathway-lesson-dedupe";
 import type { LessonInput } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import {
@@ -76,7 +78,11 @@ export {
   sanitizeQuizItems,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
 
-export { PATHWAY_HUB_PAGE_SIZE_DEFAULT, PATHWAY_HUB_PAGE_SIZE_MAX } from "@/lib/lessons/pathway-lesson-scale";
+export {
+  PATHWAY_CATALOG_LIST_HARD_CAP,
+  PATHWAY_HUB_PAGE_SIZE_DEFAULT,
+  PATHWAY_HUB_PAGE_SIZE_MAX,
+} from "@/lib/lessons/pathway-lesson-scale";
 /** DB read timeout for pathway lesson queries (marketing paths). */
 export const PATHWAY_LESSON_DB_TIMEOUT_MS = 12_000;
 /**
@@ -93,8 +99,6 @@ export const RELATED_LESSONS_FOR_TOPIC_CAP = RELATED_PATHWAY_LESSONS_LIMIT;
 export const RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL = "__related_lessons_exclude_none__";
 /** Sitemap / batch reads: rows per round-trip. */
 export const PATHWAY_LESSON_SITEMAP_BATCH = 600;
-/** Absolute safety cap: catalog pathways with more lessons are truncated for list/hub pagination math. */
-export const PATHWAY_CATALOG_LIST_HARD_CAP = 2_000;
 /** Hub lesson search: ignore single-character noise; cap length for safety. */
 export const PATHWAY_HUB_SEARCH_MIN_LEN = 2;
 export const PATHWAY_HUB_SEARCH_MAX_LEN = 80;
@@ -113,6 +117,16 @@ function hubSearchHaystackLessonInput(l: LessonInput): string {
 
 function lessonInputMatchesHubSearch(l: LessonInput, qLower: string): boolean {
   return hubSearchHaystackLessonInput(l).includes(qLower);
+}
+
+function filterCatalogLessonsByTopicSlugs(
+  rows: LessonInput[],
+  topicSlugsIn: string[] | undefined,
+): LessonInput[] {
+  if (!topicSlugsIn?.length) return rows;
+  const set = new Set(topicSlugsIn.map((s) => s.trim()).filter(Boolean));
+  if (set.size === 0) return rows;
+  return rows.filter((row) => set.has(typeof row.topicSlug === "string" ? row.topicSlug.trim() : ""));
 }
 
 function pathwayLessonHubSearchWhere(q: string): Prisma.PathwayLessonWhereInput {
