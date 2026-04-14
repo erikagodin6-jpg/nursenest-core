@@ -56,7 +56,7 @@ const posts = batch.map((m) => {
     exam: "RN",
     postTemplate: "DISEASE_PROCESS_EXPLAINER",
     intent: "CONCEPT_EXPLAINER",
-    workflowStatus: "NEEDS_SOURCE_REVIEW",
+    workflowStatus: "NEEDS_MEDICAL_REVIEW",
     postStatus: "DRAFT",
     requiresReferences: true,
     apaReferences: [],
@@ -68,7 +68,7 @@ const payload = {
   generatedAt: new Date().toISOString(),
   batch: "nclex-seo-batch-01",
   manifestPath: path.relative(ROOT, MANIFEST),
-  note: "English source drafts. Do not publish until editorial review. apaReferences empty until verified sources replace References-to-verify sections in HTML.",
+  note: "English drafts: editorial pass on copy and links; clinical librarian review still required. apaReferences stays empty until sources in HTML editorial checklists are verified. postStatus DRAFT until explicit approval.",
   posts,
 };
 

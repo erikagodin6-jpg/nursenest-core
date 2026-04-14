@@ -45,8 +45,8 @@
       "shortDescription": "Explains intracellular shift and dehydration themes behind insulin and potassium safety items.",
       "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
       "suggestedRelatedLessonPaths": [
-        "/us/rn/nclex-rn/lessons/metformin-nclex-rn",
-        "/us/rn/nclex-rn/lessons/newborn-hypoglycemia-nclex-rn"
+        "/us/rn/nclex-rn/lessons/dka-hhs-hyperglycemic-emergencies-gold",
+        "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold"
       ],
       "suggestedRelatedTools": [
         "med-math",
@@ -79,13 +79,11 @@
       "shortDescription": "Connects ADH, water retention, and sodium dilution to fluid priority answers.",
       "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
       "suggestedRelatedLessonPaths": [
-        "/us/rn/nclex-rn/lessons/metformin-nclex-rn",
-        "/us/rn/nclex-rn/lessons/newborn-hypoglycemia-nclex-rn"
+        "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold"
       ],
       "suggestedRelatedTools": [
-        "med-math",
-        "iv-infusion",
-        "lab-values"
+        "lab-values",
+        "electrolyte-abg"
       ],
       "translationPriority": "high",
       "translationLocalesPlanned": {
