@@ -270,6 +270,7 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
   };
   const base = [
     add("/"),
+    add("/about"),
     add("/question-bank"),
     add("/practice-exams"),
     add("/lessons"),
@@ -282,6 +283,8 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     add("/refund-policy"),
     add("/acceptable-use"),
     add("/disclaimer"),
+    add("/editorial-policy"),
+    add("/content-review-policy"),
     add("/contact"),
     add("/tools"),
     add("/login"),
@@ -343,6 +346,8 @@ export function collectLocaleMarketingUrls(origin: string, locale: string): stri
   urls.push(add(`/${locale}/refund-policy`));
   urls.push(add(`/${locale}/acceptable-use`));
   urls.push(add(`/${locale}/disclaimer`));
+  urls.push(add(`/${locale}/editorial-policy`));
+  urls.push(add(`/${locale}/content-review-policy`));
   urls.push(add(`/${locale}/contact`));
   urls.push(add(`/${locale}/login`));
   urls.push(add(`/${locale}/signup`));

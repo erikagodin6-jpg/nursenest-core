@@ -84,21 +84,38 @@ export function BlogPostingJsonLd({
   title,
   description,
   datePublished,
+  dateModified,
   coverImage,
   keywords,
   articleSection,
+  authorName,
+  authorJobTitle,
 }: {
   slug: string;
   title: string;
   description: string;
   datePublished: string;
+  /** Prefer `post.updatedAt` when available for freshness signals. */
+  dateModified?: string | null;
   coverImage?: string | null;
   /** From SEO bundle / tags — comma-separated in JSON-LD. */
   keywords?: string[];
   articleSection?: string | null;
+  /** E-E-A-T: display name when set on BlogPost. */
+  authorName?: string | null;
+  /** E-E-A-T: credential line (e.g. RN, BSN). */
+  authorJobTitle?: string | null;
 }) {
   const url = absoluteUrl(`/blog/${slug}`);
   const kw = keywords?.map((k) => k.trim()).filter(Boolean) ?? [];
+  const author =
+    authorName?.trim() ?
+      {
+        "@type": "Person" as const,
+        name: authorName.trim(),
+        ...(authorJobTitle?.trim() ? { jobTitle: authorJobTitle.trim() } : {}),
+      }
+    : { "@id": ORG_ID };
   return (
     <JsonLd
       data={{
@@ -107,12 +124,57 @@ export function BlogPostingJsonLd({
         headline: title,
         description,
         datePublished,
+        ...(dateModified?.trim() ? { dateModified: dateModified.trim() } : {}),
         url,
         mainEntityOfPage: { "@type": "WebPage", "@id": url },
+        author,
         publisher: { "@id": ORG_ID },
         ...(coverImage ? { image: coverImage } : {}),
         ...(kw.length ? { keywords: kw.join(", ") } : {}),
         ...(articleSection?.trim() ? { articleSection: articleSection.trim() } : {}),
+      }}
+    />
+  );
+}
+
+/**
+ * YMYL nursing education: combines Article + MedicalWebPage + LearningResource for indexable lesson URLs.
+ * Dates omitted when only catalog fallback exists (no invented timestamps).
+ */
+export function PathwayLessonMedicalEducationJsonLd({
+  path,
+  headline,
+  description,
+  datePublished,
+  dateModified,
+  inLanguage = "en",
+}: {
+  path: string;
+  headline: string;
+  description: string;
+  datePublished?: string | null;
+  dateModified?: string | null;
+  inLanguage?: string;
+}) {
+  const url = absoluteUrl(path);
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": ["MedicalWebPage", "Article", "LearningResource"],
+        "@id": `${url}#lesson`,
+        url,
+        name: headline,
+        headline,
+        description,
+        isPartOf: { "@id": WEBSITE_ID },
+        publisher: { "@id": ORG_ID },
+        author: { "@id": ORG_ID },
+        educationalLevel: "Professional nursing and allied health licensure preparation",
+        learningResourceType: "Study guide",
+        ...(datePublished?.trim() ? { datePublished: datePublished.trim() } : {}),
+        ...(dateModified?.trim() ? { dateModified: dateModified.trim() } : {}),
+        ...(inLanguage ? { inLanguage } : {}),
       }}
     />
   );

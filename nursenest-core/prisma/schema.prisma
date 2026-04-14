@@ -774,6 +774,15 @@ model BlogPost {
   rankingNote  String? @db.Text
   /** Admin-only append-only JSON array: generation, saves, publish attempts, status transitions. */
   adminPublishLog Json @default("[]")
+  /** E-E-A-T public byline (display name). */
+  authorDisplayName            String?
+  /** E-E-A-T credential line (e.g. RN, BSN). */
+  authorCredentials          String?
+  /** E-E-A-T short bio for trust UI and schema. */
+  authorBio                    String? @db.Text
+  /** Optional clinical reviewer byline (YMYL). */
+  medicalReviewerName          String?
+  medicalReviewerCredentials   String?
 
   @@index([postStatus, publishAt])
   @@index([careerSlug, locale, postStatus, publishAt])

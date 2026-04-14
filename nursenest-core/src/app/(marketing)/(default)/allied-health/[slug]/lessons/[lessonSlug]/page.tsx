@@ -29,9 +29,12 @@ import {
 } from "@/lib/lessons/pathway-lesson-loader";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
+import { EeatContentAttribution } from "@/components/seo/eeat-content-attribution";
+import { PathwayLessonMedicalEducationJsonLd } from "@/components/seo/seo-json-ld";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { alliedLessonDetailBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
+import { getPathwayLessonContentDates } from "@/lib/seo/pathway-lesson-content-dates";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
@@ -226,6 +229,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
     lessonPath,
   );
   const lessonQuality = classifyPathwayLesson(lesson);
+  const contentDates = await getPathwayLessonContentDates(pathway.id, lesson.slug, lessonContentLocale);
   const quickReviewBullets = buildQuickReviewBullets(previewLesson);
   const matchedLessonImage = resolveLessonImage({
     slug: lesson.slug,
@@ -246,6 +250,13 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
 
   return (
     <div className="nn-marketing-surface mx-auto max-w-5xl px-4 py-5 sm:py-7">
+      <PathwayLessonMedicalEducationJsonLd
+        path={lessonPath}
+        headline={lesson.seoTitle}
+        description={lesson.seoDescription.slice(0, 320)}
+        datePublished={contentDates?.datePublished ?? null}
+        dateModified={contentDates?.dateModified ?? null}
+      />
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mb-4">
         <BreadcrumbTrail items={crumbs} />
@@ -286,6 +297,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       <div className="mt-4 space-y-2">
         <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
         <PathwayLessonQuickReview quickReviewLines={quickReviewBullets} />
+        <EeatContentAttribution variant="lesson" />
       </div>
       {lesson.memoryAnchor ? (
         <div className="mt-4">

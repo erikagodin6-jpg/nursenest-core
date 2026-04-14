@@ -375,6 +375,38 @@ function FinalCtaSection() {
   );
 }
 
+function EditorialTrustSection() {
+  return (
+    <section
+      className="border-b px-4 py-12 sm:px-6 lg:px-8"
+      style={{ borderColor: BORDER, background: SURFACE_SOFT }}
+      aria-labelledby="about-editorial-trust-heading"
+    >
+      <div className="mx-auto max-w-3xl text-center">
+        <h2 id="about-editorial-trust-heading" className="nn-marketing-h3" style={{ color: TEXT_HEADING }}>
+          Clinical education, structured for exams
+        </h2>
+        <p className="nn-marketing-body mt-3 leading-relaxed" style={{ color: TEXT_BODY }}>
+          NurseNest lessons and articles are written for high-stakes nursing and allied health exams. Materials are
+          produced under published editorial and review standards and are intended for preparation only — not as a
+          substitute for local protocols, orders, or independent clinical judgment.
+        </p>
+        <div className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm font-semibold">
+          <Link href="/editorial-policy" className="text-primary underline-offset-4 hover:underline">
+            Editorial policy
+          </Link>
+          <Link href="/content-review-policy" className="text-primary underline-offset-4 hover:underline">
+            Content review policy
+          </Link>
+          <Link href="/disclaimer" className="text-primary underline-offset-4 hover:underline">
+            Educational disclaimer
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ── Root export ───────────────────────────────────────────────────────────────
 
 export function AboutPageClient() {
@@ -384,6 +416,7 @@ export function AboutPageClient() {
       style={{ background: BG_BASE, color: TEXT_MUTED }}
     >
       <HeroSection />
+      <EditorialTrustSection />
       <HowItWorksSection />
       <FeatureDeepDivesSection />
       <PlatformPreviewSection />

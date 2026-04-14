@@ -9,6 +9,8 @@ export type LegalDocId =
   | "subscription-refund-policy"
   | "acceptable-use-policy"
   | "educational-disclaimer"
+  | "editorial-policy"
+  | "content-review-policy"
   | "faq"
   | "contact";
 

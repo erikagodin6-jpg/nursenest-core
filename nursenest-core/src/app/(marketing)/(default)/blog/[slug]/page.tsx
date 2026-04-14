@@ -11,6 +11,7 @@ import {
   getPublishedBlogPostBySlug,
   isBlogPostMetaVisible,
 } from "@/lib/blog/safe-blog-queries";
+import { EeatContentAttribution } from "@/components/seo/eeat-content-attribution";
 import { BlogFaqPageJsonLd, BlogPostingJsonLd } from "@/components/seo/seo-json-ld";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import {
@@ -93,9 +94,12 @@ export default async function BlogPostPage({ params }: Props) {
         title={post.seoTitle?.trim() || post.title}
         description={(post.seoDescription?.trim() || post.excerpt).slice(0, 320)}
         datePublished={publishedAt.toISOString()}
+        dateModified={post.updatedAt.toISOString()}
         coverImage={post.coverImage ?? null}
         keywords={schemaKeywords.length ? schemaKeywords : undefined}
         articleSection={post.category ?? null}
+        authorName={"authorDisplayName" in post ? post.authorDisplayName : null}
+        authorJobTitle={"authorCredentials" in post ? post.authorCredentials : null}
       />
       {emitFaqJsonLd ? (
         <BlogFaqPageJsonLd items={faqItems.map((f) => ({ question: f.q, answer: f.a }))} />
@@ -132,6 +136,16 @@ export default async function BlogPostPage({ params }: Props) {
           ) : null}
         </figure>
       ) : null}
+      <div className="mt-6">
+        <EeatContentAttribution
+          variant="blog"
+          authorDisplayName={"authorDisplayName" in post ? post.authorDisplayName : null}
+          authorCredentials={"authorCredentials" in post ? post.authorCredentials : null}
+          authorBio={"authorBio" in post ? post.authorBio : null}
+          medicalReviewerName={"medicalReviewerName" in post ? post.medicalReviewerName : null}
+          medicalReviewerCredentials={"medicalReviewerCredentials" in post ? post.medicalReviewerCredentials : null}
+        />
+      </div>
       <div
         className="prose prose-neutral mt-8 max-w-none dark:prose-invert [&_a]:text-primary [&_h2]:text-[var(--theme-heading-text)] [&_h3]:text-[var(--theme-heading-text)]"
         dangerouslySetInnerHTML={{ __html: bodyHtml }}

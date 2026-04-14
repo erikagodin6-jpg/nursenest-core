@@ -27,9 +27,12 @@ import { normalizePathwayLessonLocale } from "@/lib/lessons/pathway-lesson-local
 import { loadPathwayLessonWithLegacySlugRedirect } from "@/lib/lessons/pathway-lesson-detail-redirect";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
+import { EeatContentAttribution } from "@/components/seo/eeat-content-attribution";
+import { PathwayLessonMedicalEducationJsonLd } from "@/components/seo/seo-json-ld";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { pathwayLessonDetailBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { getPathwayLessonContentDates } from "@/lib/seo/pathway-lesson-content-dates";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
@@ -235,6 +238,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const displayLessonTitle = cleanLessonTitleForDisplay(lesson.title);
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, displayLessonTitle);
   const lessonQuality = classifyPathwayLesson(lesson);
+  const contentDates = await getPathwayLessonContentDates(pathway.id, lesson.slug, lessonContentLocale);
+  const jsonLdLessonPath = pathwayLessonPublicDetailPath(pathway, lesson.slug) ?? pathname;
   const quickReviewBullets = buildQuickReviewBullets(previewLesson);
   const matchedLessonImage = resolveLessonImage({
     slug: lesson.slug,
@@ -266,6 +271,13 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           topicSlug={lesson.topicSlug}
           topicLabel={lesson.topic}
           marketingLocale={marketingUiLocale}
+        />
+        <PathwayLessonMedicalEducationJsonLd
+          path={jsonLdLessonPath}
+          headline={lesson.seoTitle}
+          description={lesson.seoDescription.slice(0, 320)}
+          datePublished={contentDates?.datePublished ?? null}
+          dateModified={contentDates?.dateModified ?? null}
         />
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-4">
@@ -306,6 +318,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           <PremiumLessonPublishNotice validation={lesson.premiumValidation} />
           <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
           <PathwayLessonQuickReview quickReviewLines={quickReviewBullets} />
+          <EeatContentAttribution variant="lesson" />
         </div>
         {fullAccess && lesson.memoryAnchor ? (
           <div className="mt-4 max-w-5xl">
