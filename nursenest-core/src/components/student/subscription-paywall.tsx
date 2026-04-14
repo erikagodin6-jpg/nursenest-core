@@ -1,7 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";
+import { BrandTrustInline } from "@/components/brand/brand-trust-inline";
+import {
+  paywallTierLineI18nKey,
+  sampleLessonHref,
+  sampleQuestionsHref,
+} from "@/lib/brand/tier-brand-messaging";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
@@ -28,6 +35,12 @@ export function SubscriptionPaywall({
   freemiumRemainingLessons?: number;
 }) {
   const { t } = useMarketingI18n();
+  const { data: session } = useSession();
+  const tier = session?.user?.tier;
+  const region = session?.user?.country === "CA" ? "CA" : "US";
+  const tierLineKey = paywallTierLineI18nKey(tier);
+  const sampleLessons = sampleLessonHref(region, tier);
+  const sampleQuestions = sampleQuestionsHref(region, tier);
   const p = `paywall.${context}` as const;
   const progressBits: string[] = [];
   if (freemiumRemainingQuestions !== undefined && freemiumRemainingQuestions > 0) {
@@ -58,6 +71,7 @@ export function SubscriptionPaywall({
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("paywall.subscriptionBadge")}</p>
         <h2 className="mt-1 text-2xl font-bold">{t(`${p}.title`)}</h2>
         <p className="mt-2 text-sm text-muted">{t(`${p}.intro`)}</p>
+        <p className="mt-3 text-sm font-medium text-foreground">{t(tierLineKey)}</p>
       </div>
 
       <div>
@@ -79,6 +93,26 @@ export function SubscriptionPaywall({
       </div>
 
       <p className="rounded-xl border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-foreground">{progressLine}</p>
+
+      <BrandTrustInline variant="checkout" className="border-t border-border pt-4" />
+
+      <div>
+        <p className="text-xs font-medium text-muted-foreground">{t("paywall.sampleExploreLead")}</p>
+        <div className="mt-2 flex flex-wrap gap-3 text-sm">
+          <Link
+            href={sampleLessons}
+            className="font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline"
+          >
+            {t("paywall.sampleLessons")}
+          </Link>
+          <Link
+            href={sampleQuestions}
+            className="font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline"
+          >
+            {t("paywall.sampleQuestions")}
+          </Link>
+        </div>
+      </div>
 
       <div className="flex flex-wrap gap-3">
         <Link

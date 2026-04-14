@@ -344,6 +344,48 @@
   padding: 2rem 1.5rem;
 }
 
+/* ── Brand loader (inline; semantic brand dots) ───────────────────────── */
+
+.nn-brand-loader {
+  vertical-align: middle;
+}
+
+.nn-brand-loader__dot {
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: var(--semantic-brand);
+  animation: nn-brand-loader-pulse 0.65s ease-in-out infinite;
+}
+
+.nn-brand-loader__dot:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.nn-brand-loader__dot:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-brand-loader__dot {
+    animation: none;
+    opacity: 0.65;
+  }
+}
+
+@keyframes nn-brand-loader-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
 /* Stat grid rhythm when composing multiple AnalyticsMetricTile / stat cards */
 .nn-ls-stat-grid {
   display: grid;

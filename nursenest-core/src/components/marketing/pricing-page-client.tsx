@@ -38,6 +38,7 @@ import {
   MARKETING_TERTIARY_LINK_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
 import { getExamLabel, getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
+import { BrandTrustInline } from "@/components/brand/brand-trust-inline";
 import { PricingHero } from "@/components/marketing/pricing-hero";
 import {
   ValuePropsStrip,
@@ -480,7 +481,10 @@ export function PricingPageClient({
       />
 
       {/* ── Section 2: Trust + Value Strip ── */}
-      <ValuePropsStrip />
+      <div className="flex flex-col items-center gap-4 text-center">
+        <BrandTrustInline variant="pricing" className="justify-center" />
+        <ValuePropsStrip />
+      </div>
 
       {/* ── Section 3: Plan Selector + Section 4: Pricing Cards ── */}
       <section aria-labelledby="pricing-plans-heading" className="space-y-12">

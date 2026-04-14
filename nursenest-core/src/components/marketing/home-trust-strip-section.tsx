@@ -1,6 +1,7 @@
 "use client";
 
 import { BadgeCheck, Brain, ClipboardCheck, Globe2, Layers3 } from "lucide-react";
+import { BrandTrustInline } from "@/components/brand/brand-trust-inline";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { FadeUp } from "@/lib/motion";
@@ -50,6 +51,7 @@ export function HomeTrustStripSection({ questionCount, registeredLearners }: Pro
               {formatTitleCase("Built for nursing learners in the United States and Canada", locale)}
             </p>
           </div>
+          <BrandTrustInline variant="prep" className="mb-5 justify-center text-center" />
           {learners ? (
             <p className="nn-marketing-caption mb-5 text-center text-[var(--palette-text-muted)]">
               {formatSentenceCase(`${learners} registered learners are currently preparing in the platform.`, locale)}
