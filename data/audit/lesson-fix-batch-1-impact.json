@@ -1,28 +1,38 @@
 {
-  "generatedAt": "2026-04-14T22:34:30.842Z",
+  "generatedAt": "2026-04-14T22:39:06.777Z",
   "baseline": {
-    "ref": "HEAD",
+    "ref": "HEAD~1",
     "auditGeneratedAt": "2026-04-14T22:09:20.173Z",
-    "source": "git show HEAD:data/audit/lesson-completeness-audit.json"
+    "source": "git show HEAD~1:data/audit/lesson-completeness-audit.json"
   },
   "after": {
-    "auditGeneratedAt": "2026-04-14T22:32:55.928Z",
+    "auditGeneratedAt": "2026-04-14T22:38:54.184Z",
     "path": "data/audit/lesson-completeness-audit.json"
   },
   "batch1Report": {
     "path": "data/audit/lesson-fix-batch-1-report.json",
-    "lessonCount": 101
+    "lessonCount": 101,
+    "lessonsFixedField": 100,
+    "resultRows": 101,
+    "uniqueLessonIds": 101,
+    "note": "Batch-1 report row count / unique IDs differ from lessonsFixed; comparisons use all unique lessonIds in results."
   },
   "aggregate": {
     "lessonsCompared": 101,
-    "improvedOverallScore": 100,
+    "improvedOverallScore": 101,
     "regressedOverallScore": 0,
-    "unchangedOverallScore": 1,
-    "averageOverallScoreLift": 62.56,
+    "unchangedOverallScore": 0,
+    "averageOverallScoreLift": 63.71,
     "statusClassChanged": 100,
     "nowProductionReady": 0,
     "stillThinOrIncompleteOrOtherNonReady": 100,
-    "note": "production_ready threshold may be strict in current scoring; see lesson-completeness-summary.json methodology."
+    "nonProductionReady": 101,
+    "statusBreakdownAfter": {
+      "localization_incomplete": 99,
+      "usable_but_thin": 1,
+      "duplicate_or_unclear_source": 1
+    },
+    "note": "production_ready requires overall≥84, publicComplete, educational≥72, links≥55, words≥500 (see deriveStatus). Overlay absence caps localization and often blocks production_ready."
   },
   "topRemainingReasonsAfterBatch1": [
     {
@@ -87,8 +97,8 @@
     }
   ],
   "thresholdRecommendation": {
-    "suggestion": "Keep thresholds as-is until batch-2 completes and overlay/localization work is scoped; batch-1 lifted educational/structural/link signals but duplicate_or_unclear_source and no_educational_overlay often remain systemic.",
-    "rationale": "Adjusting thresholds now would mask remaining content and i18n gaps; prefer targeted batch fixes + overlay keys before relaxing gates."
+    "suggestion": "Keep thresholds as-is for now: batch-1 raised scores, but systemic gaps remain (especially no_educational_overlay_in_scanned_locales and missing_educational:core_concept_depth on legacy five-block lessons). Tackle batch-2 + overlay keys before relaxing gates.",
+    "rationale": "Lowering bars would hide thin word counts and missing educational buckets; production_ready should stay a high bar until overlays and spine depth are addressed pathway-wide."
   },
   "comparisons": [
     {
@@ -174,8 +184,8 @@
       },
       "educationalScore": {
         "before": 0,
-        "after": 80,
-        "delta": 80
+        "after": 83,
+        "delta": 83
       },
       "linkScore": {
         "before": 15,
@@ -189,8 +199,8 @@
       },
       "overallScore": {
         "before": 4.5,
-        "after": 76.6,
-        "delta": 72.1
+        "after": 77.6,
+        "delta": 73.1
       },
       "status": {
         "before": "structurally_incomplete",
@@ -253,8 +263,8 @@
       },
       "educationalScore": {
         "before": 0,
-        "after": 80,
-        "delta": 80
+        "after": 83,
+        "delta": 83
       },
       "linkScore": {
         "before": 15,
@@ -268,8 +278,8 @@
       },
       "overallScore": {
         "before": 4.5,
-        "after": 76.6,
-        "delta": 72.1
+        "after": 77.6,
+        "delta": 73.1
       },
       "status": {
         "before": "structurally_incomplete",
@@ -332,8 +342,8 @@
       },
       "educationalScore": {
         "before": 0,
-        "after": 80,
-        "delta": 80
+        "after": 83,
+        "delta": 83
       },
       "linkScore": {
         "before": 15,
@@ -347,8 +357,8 @@
       },
       "overallScore": {
         "before": 4.5,
-        "after": 75.7,
-        "delta": 71.2
+        "after": 76.7,
+        "delta": 72.2
       },
       "status": {
         "before": "structurally_incomplete",
@@ -411,8 +421,8 @@
       },
       "educationalScore": {
         "before": 0,
-        "after": 80,
-        "delta": 80
+        "after": 83,
+        "delta": 83
       },
       "linkScore": {
         "before": 15,
@@ -426,8 +436,8 @@
       },
       "overallScore": {
         "before": 4.5,
-        "after": 75.7,
-        "delta": 71.2
+        "after": 76.7,
+        "delta": 72.2
       },
       "status": {
         "before": "structurally_incomplete",
@@ -490,8 +500,8 @@
       },
       "educationalScore": {
         "before": 0,
-        "after": 80,
-        "delta": 80
+        "after": 83,
+        "delta": 83
       },
       "linkScore": {
         "before": 15,
@@ -505,8 +515,8 @@
       },
       "overallScore": {
         "before": 4.5,
-        "after": 75.7,
-        "delta": 71.2
+        "after": 76.7,
+        "delta": 72.2
       },
       "status": {
         "before": "structurally_incomplete",
@@ -569,8 +579,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -584,8 +594,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -642,8 +652,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -657,8 +667,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -715,8 +725,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -730,8 +740,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -788,8 +798,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -803,8 +813,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -861,8 +871,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -876,8 +886,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -934,8 +944,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -949,8 +959,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -1007,8 +1017,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -1022,8 +1032,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -1080,8 +1090,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -1095,8 +1105,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -1153,8 +1163,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -1168,8 +1178,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -1226,8 +1236,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -1241,8 +1251,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -1299,8 +1309,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -1314,8 +1324,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -1372,8 +1382,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -1387,8 +1397,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -1445,8 +1455,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -1460,8 +1470,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -1518,8 +1528,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -1533,8 +1543,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -1591,8 +1601,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -1606,8 +1616,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -1664,8 +1674,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -1679,8 +1689,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -1737,8 +1747,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -1752,8 +1762,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -1810,8 +1820,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -1825,8 +1835,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -1883,8 +1893,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -1898,8 +1908,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -1956,8 +1966,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -1971,8 +1981,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -2029,8 +2039,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -2044,8 +2054,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -2102,8 +2112,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -2117,8 +2127,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -2175,8 +2185,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -2190,8 +2200,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -2248,8 +2258,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -2263,8 +2273,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -2321,8 +2331,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -2336,8 +2346,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -2394,8 +2404,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -2409,8 +2419,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -2467,8 +2477,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -2482,8 +2492,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -2540,8 +2550,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -2555,8 +2565,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -2613,8 +2623,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -2628,8 +2638,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -2686,8 +2696,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -2701,8 +2711,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -2759,8 +2769,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -2774,8 +2784,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -2832,8 +2842,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -2847,8 +2857,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -2905,8 +2915,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -2920,8 +2930,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -2978,8 +2988,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -2993,8 +3003,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -3051,8 +3061,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -3066,8 +3076,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -3124,8 +3134,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -3139,8 +3149,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -3197,8 +3207,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -3212,8 +3222,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -3270,8 +3280,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -3285,8 +3295,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -3343,8 +3353,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -3358,8 +3368,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -3416,8 +3426,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -3431,8 +3441,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -3489,8 +3499,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -3504,8 +3514,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -3562,8 +3572,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -3577,8 +3587,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -3635,8 +3645,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -3650,8 +3660,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -3708,8 +3718,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -3723,8 +3733,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -3781,8 +3791,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -3796,8 +3806,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -3854,8 +3864,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -3869,8 +3879,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -3927,8 +3937,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -3942,8 +3952,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -4000,8 +4010,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -4015,8 +4025,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -4073,8 +4083,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -4088,8 +4098,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -4146,8 +4156,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -4161,8 +4171,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -4219,8 +4229,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -4234,8 +4244,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -4292,8 +4302,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -4307,8 +4317,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -4365,8 +4375,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -4380,8 +4390,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -4438,8 +4448,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -4453,8 +4463,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -4511,8 +4521,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -4526,8 +4536,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -4584,8 +4594,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -4599,8 +4609,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -4657,8 +4667,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -4672,8 +4682,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -4730,8 +4740,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -4745,8 +4755,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -4803,8 +4813,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -4818,8 +4828,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -4876,8 +4886,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -4891,8 +4901,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -4949,8 +4959,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -4964,8 +4974,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -5022,8 +5032,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -5037,8 +5047,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -5095,8 +5105,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -5110,8 +5120,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -5168,8 +5178,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -5183,8 +5193,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -5241,8 +5251,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -5256,8 +5266,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -5314,8 +5324,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -5329,8 +5339,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -5387,8 +5397,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -5402,8 +5412,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -5458,8 +5468,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -5473,8 +5483,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -5531,8 +5541,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -5546,8 +5556,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -5604,8 +5614,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -5619,8 +5629,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -5677,8 +5687,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -5692,8 +5702,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -5750,8 +5760,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -5765,8 +5775,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -5823,8 +5833,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -5838,8 +5848,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -5896,8 +5906,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -5911,8 +5921,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -5969,8 +5979,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -5984,8 +5994,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -6042,8 +6052,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -6057,8 +6067,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -6115,8 +6125,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -6130,8 +6140,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -6188,8 +6198,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -6203,8 +6213,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -6261,8 +6271,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -6276,8 +6286,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -6334,8 +6344,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -6349,8 +6359,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -6407,8 +6417,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -6422,8 +6432,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -6480,8 +6490,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -6495,8 +6505,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -6553,8 +6563,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -6568,8 +6578,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -6626,8 +6636,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -6641,8 +6651,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -6699,8 +6709,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -6714,8 +6724,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -6772,8 +6782,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -6787,8 +6797,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -6845,8 +6855,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -6860,8 +6870,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -6918,8 +6928,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -6933,8 +6943,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -6991,8 +7001,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -7006,8 +7016,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -7064,8 +7074,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -7079,8 +7089,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -7137,8 +7147,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -7152,8 +7162,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -7210,8 +7220,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 80,
-        "delta": 60
+        "after": 83,
+        "delta": 63
       },
       "linkScore": {
         "before": 15,
@@ -7225,8 +7235,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 74.2,
-        "delta": 62.7
+        "after": 75.3,
+        "delta": 63.8
       },
       "status": {
         "before": "structurally_incomplete",
@@ -7283,8 +7293,8 @@
       },
       "educationalScore": {
         "before": 0,
-        "after": 40,
-        "delta": 40
+        "after": 50,
+        "delta": 50
       },
       "linkScore": {
         "before": 15,
@@ -7298,8 +7308,8 @@
       },
       "overallScore": {
         "before": 4.5,
-        "after": 61.7,
-        "delta": 57.2
+        "after": 65.2,
+        "delta": 60.7
       },
       "status": {
         "before": "structurally_incomplete",
@@ -7364,8 +7374,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 60,
-        "delta": 40
+        "after": 67,
+        "delta": 47
       },
       "linkScore": {
         "before": 15,
@@ -7379,8 +7389,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 66.3,
-        "delta": 54.8
+        "after": 68.8,
+        "delta": 57.3
       },
       "status": {
         "before": "structurally_incomplete",
@@ -7438,8 +7448,8 @@
       },
       "educationalScore": {
         "before": 20,
-        "after": 20,
-        "delta": 0
+        "after": 33,
+        "delta": 13
       },
       "linkScore": {
         "before": 15,
@@ -7453,8 +7463,8 @@
       },
       "overallScore": {
         "before": 11.5,
-        "after": 11.5,
-        "delta": 0
+        "after": 16.1,
+        "delta": 4.6
       },
       "status": {
         "before": "duplicate_or_unclear_source",
@@ -7488,10 +7498,13 @@
           "missing_educational:summary_takeaways",
           "missing_educational:exam_or_reasoning_cues",
           "links:no_internal_study_links",
-          "no_educational_overlay_in_scanned_locales"
+          "no_educational_overlay_in_scanned_locales",
+          "isolated_no_internal_links_or_related_refs"
         ],
         "removed": [],
-        "added": [],
+        "added": [
+          "isolated_no_internal_links_or_related_refs"
+        ],
         "stillRemaining": [
           "Legacy section \"clinical_meaning\" is below the minimum depth (37 < 50 words).",
           "Legacy section \"exam_relevance\" is below the minimum depth (9 < 30 words).",

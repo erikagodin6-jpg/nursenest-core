@@ -1,26 +1,34 @@
 # Lesson fix batch 1 — impact summary
 
-Generated: 2026-04-14T22:34:30.842Z
+Generated: 2026-04-14T22:39:06.777Z
 
 ## Baseline vs after
-- **Baseline audit**: `git show HEAD:data/audit/lesson-completeness-audit.json` (generated 2026-04-14T22:09:20.173Z)
-- **After audit**: `data/audit/lesson-completeness-audit.json` (generated 2026-04-14T22:32:55.928Z)
+- **Baseline audit**: `git show HEAD~1:data/audit/lesson-completeness-audit.json` (generated 2026-04-14T22:09:20.173Z)
+- **After audit**: `data/audit/lesson-completeness-audit.json` (generated 2026-04-14T22:38:54.184Z)
 - **Batch 1 lessons compared**: 101
+- **Batch-1 report note**: Batch-1 report row count / unique IDs differ from lessonsFixed; comparisons use all unique lessonIds in results.
+- **Report rows / lessonsFixed field**: 101 rows · lessonsFixed=100 · unique IDs=101
 
 ## Score movement (overall)
-- Improved: **100**
+- Improved: **101**
 - Regressed: **0**
-- Unchanged: **1**
-- Average overall score lift: **62.56** points
+- Unchanged: **0**
+- Average overall score lift: **63.71** points
 
 ## Status
 - Status class changed: **100** lessons
 - Now `production_ready`: **0**
 - Still thin/incomplete (usable_but_thin, structurally_incomplete, content_incomplete, localization_incomplete): **100**
+- Non–production-ready (any status except `production_ready`): **101**
 
-> production_ready threshold may be strict in current scoring; see lesson-completeness-summary.json methodology.
+## Status breakdown after audit (batch-1 set)
+- `localization_incomplete`: **99**
+- `usable_but_thin`: **1**
+- `duplicate_or_unclear_source`: **1**
 
-## Top reasons remaining after batch 1 (among the 100 fixed lessons)
+> production_ready requires overall≥84, publicComplete, educational≥72, links≥55, words≥500 (see deriveStatus). Overlay absence caps localization and often blocks production_ready.
+
+## Top reasons remaining after batch 1 (among the batch-1 lesson set)
 - no_educational_overlay_in_scanned_locales: **101**
 - missing_educational:core_concept_depth: **94**
 - thin_total_word_count: **93**
@@ -38,8 +46,8 @@ Generated: 2026-04-14T22:34:30.842Z
 - links:no_internal_study_links: **1**
 
 ## Threshold recommendation
-- **Suggestion**: Keep thresholds as-is until batch-2 completes and overlay/localization work is scoped; batch-1 lifted educational/structural/link signals but duplicate_or_unclear_source and no_educational_overlay often remain systemic.
-- **Rationale**: Adjusting thresholds now would mask remaining content and i18n gaps; prefer targeted batch fixes + overlay keys before relaxing gates.
+- **Suggestion**: Keep thresholds as-is for now: batch-1 raised scores, but systemic gaps remain (especially no_educational_overlay_in_scanned_locales and missing_educational:core_concept_depth on legacy five-block lessons). Tackle batch-2 + overlay keys before relaxing gates.
+- **Rationale**: Lowering bars would hide thin word counts and missing educational buckets; production_ready should stay a high bar until overlays and spine depth are addressed pathway-wide.
 
 ## Batch 2 candidates
 - Next **100** lessons: `data/audit/lesson-fix-batch-2-candidates.json` (excludes batch-1 IDs and `production_ready` rows).

@@ -19,9 +19,14 @@ import { lessonCorpusForLinkCount } from "@/lib/lessons/pathway-lesson-premium";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import {
   buildRecommendedActions,
+  deriveContentReadinessStatus,
+  deriveLocalizationReadinessStatus,
   deriveStatus,
   detectPlaceholderSignals,
+  LEGACY_STATUS_DERIVATION,
+  type ContentReadinessStatus,
   type LessonCompletenessStatus,
+  type LocalizationReadinessStatus,
   lessonTotalWords,
   type OverlayIndex,
   scoreEducationalSubstance,
@@ -103,7 +108,12 @@ type LessonRow = {
   linkScore: number;
   localizationScore: number;
   overallScore: number;
+  /** Combined legacy field — unchanged deriveStatus(); see summary methodology. */
   status: LessonCompletenessStatus;
+  /** English / structural / educational spine (overlay does not gate this). */
+  contentReadinessStatus: ContentReadinessStatus;
+  /** Overlay depth / localization backlog (honest EN-primary vs localized-ready). */
+  localizationReadinessStatus: LocalizationReadinessStatus;
   reasons: string[];
   recommendedActions: string[];
   evidence: {
@@ -193,6 +203,26 @@ function processLesson(
     sectionCount,
   });
 
+  const contentReadinessStatus = deriveContentReadinessStatus({
+    structuralScore,
+    educationalScore,
+    linkScore,
+    publicComplete: Boolean(gate?.publicComplete),
+    routable,
+    duplicateCandidate,
+    placeholderFlags,
+    totalWords,
+    sectionCount,
+  });
+
+  const localizationReadinessStatus = deriveLocalizationReadinessStatus(
+    {
+      overlayLocalesWithDepth: loc.overlayLocalesWithDepth,
+      englishOnlyEducationalLikely: loc.englishOnlyEducationalLikely,
+    },
+    contentReadinessStatus,
+  );
+
   const reasons: string[] = [
     ...struct.reasons,
     ...edu.missing.map((m) => `missing_educational:${m}`),
@@ -203,7 +233,10 @@ function processLesson(
   if (!inEffectiveHub) reasons.push("not_in_exam_filtered_hub_list");
   if (isolatedLesson) reasons.push("isolated_no_internal_links_or_related_refs");
 
-  const recommendedActions = buildRecommendedActions(status, edu.missing);
+  const recommendedActions = buildRecommendedActions(status, edu.missing, {
+    isolatedLesson,
+    localizationReadinessStatus,
+  });
 
   return {
     lessonId: `${pathwayId}:${lesson.slug}`,
@@ -425,16 +458,34 @@ async function main() {
     }
   }
 
+  const notProductionReady = rows.filter((r) => r.status !== "production_ready").length;
+  const isolatedCount = rows.filter((r) => r.isolatedLesson).length;
+
   const summaryJson = {
     generatedAt,
     batchFixHints,
+    lessonsThatExistButNotComplete: {
+      description:
+        "Catalog-present lessons (bundled JSON) that are not classified production_ready — includes thin, structurally gated, localization-limited, non-routable pathway, or duplicate slug issues.",
+      catalogLessonRows: rows.length,
+      notProductionReady,
+      notProductionReadyByStatus: {
+        usable_but_thin: statusCounts.usable_but_thin,
+        structurally_incomplete: statusCounts.structurally_incomplete,
+        content_incomplete: statusCounts.content_incomplete,
+        localization_incomplete: statusCounts.localization_incomplete,
+        not_routable: statusCounts.not_routable,
+        duplicate_or_unclear_source: statusCounts.duplicate_or_unclear_source,
+      },
+      isolatedLessonsNoLinksOrRelatedRefs: isolatedCount,
+    },
     methodology: {
       dataSource: "Bundled pathway catalog (catalog.json + allied-bundled + new-grad + scoped-gold merge via getCatalogPathwayLessonsSync). Does not enumerate Prisma-only lessons.",
       scoringWeights: SCORE_WEIGHTS,
       structuralBasis:
         "evaluatePathwayLessonStructuralGate (pathway-lesson-premium): premium spine vs legacy five-block; subscriber completeness hooks.",
       educationalBasis:
-        "Heuristic buckets for intro/overview, core depth, application/scenario, summary, exam reasoning cues — not identical headings per lesson.",
+        "Heuristic buckets for intro/overview, core depth, application/scenario, summary, exam reasoning cues, safety/priority signals (regex + premium red_flags depth) — not identical headings per lesson.",
       linkBasis: "countInternalStudyLinks — target band 3–8; low counts penalize linkScore.",
       localizationBasis:
         "Presence of lesson key in public/i18n/educational-overlays/{es,fr,tl,...}/lessons.json — absence implies English-primary educational body with localized shell elsewhere.",
@@ -555,13 +606,28 @@ function buildMarkdownSummary(
   lines.push(`5. Resolve duplicate slugs across pathways with documented canonical routing.`);
   lines.push(``);
   lines.push(`## Lessons that exist but are not actually complete`);
+  const lp = summaryJson.lessonsThatExistButNotComplete as Record<string, unknown> | undefined;
+  if (lp && typeof lp.catalogLessonRows === "number") {
+    lines.push(
+      `- **Catalog rows scanned**: ${lp.catalogLessonRows} — **not production_ready**: **${String(lp.notProductionReady)}**.`,
+    );
+    const by = lp.notProductionReadyByStatus as Record<string, number> | undefined;
+    if (by) {
+      lines.push(
+        `- **By status** (non–production_ready): usable_but_thin **${by.usable_but_thin ?? 0}**, structurally_incomplete **${by.structurally_incomplete ?? 0}**, content_incomplete **${by.content_incomplete ?? 0}**, localization_incomplete **${by.localization_incomplete ?? 0}**, not_routable **${by.not_routable ?? 0}**, duplicate_or_unclear_source **${by.duplicate_or_unclear_source ?? 0}**.`,
+      );
+    }
+    lines.push(
+      `- **Isolated lessons** (no internal study links and no relatedLessonRefs): **${String(lp.isolatedLessonsNoLinksOrRelatedRefs)}**.`,
+    );
+  }
   lines.push(`- **Present in catalog**: Row exists in merged bundled JSON for a pathway.`);
   lines.push(`- **Routable**: Pathway registry status is \`active\` (marketing hub can exist).`);
   lines.push(`- **Structurally non-empty**: Sections array exists with bodies; may still fail premium/legacy gates.`);
-  lines.push(`- **Educationally complete**: Substance buckets + word depth + reasoning cues — not just non-blank fields.`);
+  lines.push(`- **Educationally complete**: Substance buckets (intro, core, application, summary, exam reasoning, safety/priority signals) + depth — not just non-blank fields.`);
   lines.push(`- **Production ready**: High overall score, gate passes, links in band, sufficient depth — rare by design under strict scoring.`);
   lines.push(
-    `Many lessons are **catalog-present** and **structurally non-empty** but still **not production-ready** because depth, links, or educational coverage fail the bar.`,
+    `Many lessons are **catalog-present** and **structurally non-empty** but still **not production-ready** because depth, links, educational coverage, or localization evidence fail the bar.`,
   );
   lines.push(``);
   lines.push(`## Honest limitations`);

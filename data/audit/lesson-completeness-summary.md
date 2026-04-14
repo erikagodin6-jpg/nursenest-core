@@ -1,6 +1,6 @@
 # Lesson completeness audit
 
-Generated: 2026-04-14T22:32:55.928Z
+Generated: 2026-04-14T22:38:54.184Z
 
 ## What was scanned
 - Bundled pathway lesson catalog (merged JSON: main catalog, allied-bundled, new-grad transition, scoped-gold prepend).
@@ -26,15 +26,15 @@ Generated: 2026-04-14T22:32:55.928Z
 - duplicate_or_unclear_source: **255**
 
 ## Top failing pathways (nursing-first, by volume)
-- **ca-rn-nclex-rn** (canada/rn/nclex-rn): 188 lessons · avg score 65.4 · ready 0 · thin 0 · structural gaps 42
-- **us-rn-nclex-rn** (us/rn/nclex-rn): 187 lessons · avg score 34.3 · ready 0 · thin 0 · structural gaps 134
-- **us-np-fnp** (us/np/fnp): 161 lessons · avg score 67.7 · ready 0 · thin 1 · structural gaps 26
-- **ca-rpn-rex-pn** (canada/rpn/rex-pn): 150 lessons · avg score 48.5 · ready 0 · thin 0 · structural gaps 61
-- **us-lpn-nclex-pn** (us/lpn/nclex-pn): 150 lessons · avg score 48.5 · ready 0 · thin 0 · structural gaps 61
+- **ca-rn-nclex-rn** (canada/rn/nclex-rn): 188 lessons · avg score 66.4 · ready 0 · thin 0 · structural gaps 42
+- **us-rn-nclex-rn** (us/rn/nclex-rn): 187 lessons · avg score 34.5 · ready 0 · thin 0 · structural gaps 134
+- **us-np-fnp** (us/np/fnp): 161 lessons · avg score 69.3 · ready 0 · thin 1 · structural gaps 26
+- **ca-rpn-rex-pn** (canada/rpn/rex-pn): 150 lessons · avg score 48.9 · ready 0 · thin 0 · structural gaps 61
+- **us-lpn-nclex-pn** (us/lpn/nclex-pn): 150 lessons · avg score 48.9 · ready 0 · thin 0 · structural gaps 61
 - **us-rn-new-grad-transition** (us/rn/new-grad-transition): 40 lessons · avg score 27.7 · ready 0 · thin 0 · structural gaps 40
 
 ## Top systemic issues (reason histogram)
-- no_educational_overlay_in_scanned_locales: **605**
+- no_educational_overlay_in_scanned_locales: **577**
 - missing_educational:core_concept_depth: **501**
 - missing_educational:summary_takeaways: **327**
 - missing_educational:overview_intro: **318**
@@ -42,13 +42,13 @@ Generated: 2026-04-14T22:32:55.928Z
 - low_total_word_count: **275**
 - missing_educational:clinical_application: **157**
 - Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).: **153**
-- links:no_internal_study_links: **125**
+- links:no_internal_study_links: **124**
 - Legacy section "clinical_scenario" is below the minimum depth (29 < 40 words).: **78**
 - Legacy section "core_concept" is below the minimum depth (30 < 40 words).: **62**
 - Legacy section "exam_relevance" is below the minimum depth (28 < 30 words).: **56**
+- isolated_no_internal_links_or_related_refs: **54**
 - Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).: **54**
 - Legacy section "exam_relevance" is below the minimum depth (27 < 30 words).: **53**
-- Legacy section "core_concept" is below the minimum depth (24 < 40 words).: **52**
 
 ## Batch-fix patterns (systemic)
 - ca-rn-nclex-rn: ≥45% of lessons missing core_concept_depth bucket — likely systematic spine depth gap.
@@ -70,12 +70,15 @@ Generated: 2026-04-14T22:32:55.928Z
 5. Resolve duplicate slugs across pathways with documented canonical routing.
 
 ## Lessons that exist but are not actually complete
+- **Catalog rows scanned**: 906 — **not production_ready**: **906**.
+- **By status** (non–production_ready): usable_but_thin **1**, structurally_incomplete **364**, content_incomplete **0**, localization_incomplete **286**, not_routable **0**, duplicate_or_unclear_source **255**.
+- **Isolated lessons** (no internal study links and no relatedLessonRefs): **369**.
 - **Present in catalog**: Row exists in merged bundled JSON for a pathway.
 - **Routable**: Pathway registry status is `active` (marketing hub can exist).
 - **Structurally non-empty**: Sections array exists with bodies; may still fail premium/legacy gates.
-- **Educationally complete**: Substance buckets + word depth + reasoning cues — not just non-blank fields.
+- **Educationally complete**: Substance buckets (intro, core, application, summary, exam reasoning, safety/priority signals) + depth — not just non-blank fields.
 - **Production ready**: High overall score, gate passes, links in band, sufficient depth — rare by design under strict scoring.
-Many lessons are **catalog-present** and **structurally non-empty** but still **not production-ready** because depth, links, or educational coverage fail the bar.
+Many lessons are **catalog-present** and **structurally non-empty** but still **not production-ready** because depth, links, educational coverage, or localization evidence fail the bar.
 
 ## Honest limitations
 - DB-only lessons not in bundled JSON are omitted.

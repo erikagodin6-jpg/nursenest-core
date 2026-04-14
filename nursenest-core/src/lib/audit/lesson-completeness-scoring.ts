@@ -15,6 +15,32 @@ export type LessonCompletenessStatus =
   | "not_routable"
   | "duplicate_or_unclear_source";
 
+/** English / structural / educational spine — ignores overlay gating (see deriveContentReadinessStatus). */
+export type ContentReadinessStatus =
+  | "production_ready_en"
+  | "usable_but_thin_en"
+  | "content_incomplete"
+  | "structurally_incomplete"
+  | "not_routable"
+  | "duplicate_or_unclear_source";
+
+/** Overlay depth vs English-primary delivery (see deriveLocalizationReadinessStatus). */
+export type LocalizationReadinessStatus =
+  | "localized_ready"
+  | "partially_localized"
+  | "localized_shell_only"
+  | "english_only"
+  | "localization_incomplete";
+
+/**
+ * Legacy combined `status` is still produced by deriveStatus() — same branching order and numeric
+ * thresholds as before the split. It mixes overallScore (which weights localization at 8%) with a
+ * dedicated localization_incomplete shortcut when overlay score is low but content is otherwise strong.
+ * Prefer contentReadinessStatus + localizationReadinessStatus for remediation planning.
+ */
+export const LEGACY_STATUS_DERIVATION =
+  "status = deriveStatus({ overallScore, structuralScore, educationalScore, localizationScore, linkScore, publicComplete, routable, duplicateCandidate, placeholderFlags, totalWords, sectionCount }) unchanged; overallScore still uses SCORE_WEIGHTS including localization.";
+
 export const SCORE_WEIGHTS = {
   structural: 0.45,
   educational: 0.35,
@@ -246,6 +272,20 @@ export function weightedOverall(
   return Math.round(o * 10) / 10;
 }
 
+/** Same weights as overallScore but excludes localization; renormalized to 0–100 for apples-to-apples thresholds. */
+export function contentOnlyWeightedOverall(
+  structural: number,
+  educational: number,
+  links: number,
+): number {
+  const w = SCORE_WEIGHTS.structural + SCORE_WEIGHTS.educational + SCORE_WEIGHTS.links;
+  const raw =
+    structural * SCORE_WEIGHTS.structural +
+    educational * SCORE_WEIGHTS.educational +
+    links * SCORE_WEIGHTS.links;
+  return Math.round((raw / w) * 10) / 10;
+}
+
 export function deriveStatus(args: {
   overallScore: number;
   structuralScore: number;
@@ -290,8 +330,87 @@ export function deriveStatus(args: {
   return "content_incomplete";
 }
 
-export function buildRecommendedActions(status: LessonCompletenessStatus, missing: string[]): string[] {
+/**
+ * English-first production classification: same gates as deriveStatus but **without** the
+ * localization_incomplete shortcut (overlay absence must not hide strong EN lesson quality).
+ * Does not use localizationScore inside branch conditions except overallScore is not used here —
+ * thresholds match former production_ready / usable_but_thin using structural + educational + link + words only.
+ */
+export function deriveContentReadinessStatus(args: {
+  structuralScore: number;
+  educationalScore: number;
+  linkScore: number;
+  publicComplete: boolean;
+  routable: boolean;
+  duplicateCandidate: boolean;
+  placeholderFlags: string[];
+  totalWords: number;
+  sectionCount: number;
+}): ContentReadinessStatus {
+  if (args.duplicateCandidate) return "duplicate_or_unclear_source";
+  if (!args.routable) return "not_routable";
+  if (args.sectionCount === 0 || args.placeholderFlags.length > 0) {
+    return args.sectionCount === 0 ? "structurally_incomplete" : "content_incomplete";
+  }
+  if (!args.publicComplete && args.structuralScore < 42) return "structurally_incomplete";
+  const contentOverall = contentOnlyWeightedOverall(
+    args.structuralScore,
+    args.educationalScore,
+    args.linkScore,
+  );
+  if (
+    contentOverall >= 84 &&
+    args.publicComplete &&
+    args.educationalScore >= 72 &&
+    args.linkScore >= 55 &&
+    args.totalWords >= 500
+  ) {
+    return "production_ready_en";
+  }
+  if (
+    args.publicComplete &&
+    (contentOverall < 70 || args.totalWords < 450 || args.educationalScore < 58)
+  ) {
+    if (contentOverall >= 52) return "usable_but_thin_en";
+  }
+  if (!args.publicComplete) return "content_incomplete";
+  if (contentOverall >= 52 && args.publicComplete) return "usable_but_thin_en";
+  return "content_incomplete";
+}
+
+/**
+ * Overlay-based localization dimension. When English teaching is already strong (content spine),
+ * n===0 is labeled localization_incomplete so i18n backlog is visible without implying EN quality failed.
+ */
+export function deriveLocalizationReadinessStatus(
+  loc: {
+    overlayLocalesWithDepth: string[];
+    englishOnlyEducationalLikely: boolean;
+  },
+  content: ContentReadinessStatus,
+): LocalizationReadinessStatus {
+  const n = loc.overlayLocalesWithDepth.length;
+  if (n >= 2) return "localized_ready";
+  if (n === 1) return "partially_localized";
+  if (!loc.englishOnlyEducationalLikely) return "localized_shell_only";
+  if (content === "production_ready_en" || content === "usable_but_thin_en") {
+    return "localization_incomplete";
+  }
+  return "english_only";
+}
+
+export function buildRecommendedActions(
+  status: LessonCompletenessStatus,
+  missing: string[],
+  opts?: {
+    isolatedLesson?: boolean;
+    localizationReadinessStatus?: LocalizationReadinessStatus;
+  },
+): string[] {
   const a: string[] = [];
+  if (opts?.isolatedLesson) {
+    a.push("Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.");
+  }
   if (status === "structurally_incomplete" || status === "content_incomplete") {
     a.push("Address structural gate issues and section depth per pathway-lesson-premium targets.");
   }
@@ -300,6 +419,11 @@ export function buildRecommendedActions(status: LessonCompletenessStatus, missin
   }
   if (status === "localization_incomplete") {
     a.push("Add or expand educational overlays for target locales (public/i18n/educational-overlays).");
+  }
+  if (opts?.localizationReadinessStatus === "localization_incomplete") {
+    a.push(
+      "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
+    );
   }
   if (status === "usable_but_thin") {
     a.push("Expand prose depth; distinguish from shell-only completeness.");

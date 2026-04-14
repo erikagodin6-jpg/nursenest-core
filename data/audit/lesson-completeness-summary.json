@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T22:32:55.928Z",
+  "generatedAt": "2026-04-14T22:38:54.184Z",
   "batchFixHints": [
     "ca-rn-nclex-rn: ≥45% of lessons missing core_concept_depth bucket — likely systematic spine depth gap.",
     "ca-rn-nclex-rn: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only.",
@@ -12,6 +12,20 @@
     "us-lpn-nclex-pn: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only.",
     "us-rn-new-grad-transition: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only."
   ],
+  "lessonsThatExistButNotComplete": {
+    "description": "Catalog-present lessons (bundled JSON) that are not classified production_ready — includes thin, structurally gated, localization-limited, non-routable pathway, or duplicate slug issues.",
+    "catalogLessonRows": 906,
+    "notProductionReady": 906,
+    "notProductionReadyByStatus": {
+      "usable_but_thin": 1,
+      "structurally_incomplete": 364,
+      "content_incomplete": 0,
+      "localization_incomplete": 286,
+      "not_routable": 0,
+      "duplicate_or_unclear_source": 255
+    },
+    "isolatedLessonsNoLinksOrRelatedRefs": 369
+  },
   "methodology": {
     "dataSource": "Bundled pathway catalog (catalog.json + allied-bundled + new-grad + scoped-gold merge via getCatalogPathwayLessonsSync). Does not enumerate Prisma-only lessons.",
     "scoringWeights": {
@@ -21,7 +35,7 @@
       "localization": 0.08
     },
     "structuralBasis": "evaluatePathwayLessonStructuralGate (pathway-lesson-premium): premium spine vs legacy five-block; subscriber completeness hooks.",
-    "educationalBasis": "Heuristic buckets for intro/overview, core depth, application/scenario, summary, exam reasoning cues — not identical headings per lesson.",
+    "educationalBasis": "Heuristic buckets for intro/overview, core depth, application/scenario, summary, exam reasoning cues, safety/priority signals (regex + premium red_flags depth) — not identical headings per lesson.",
     "linkBasis": "countInternalStudyLinks — target band 3–8; low counts penalize linkScore.",
     "localizationBasis": "Presence of lesson key in public/i18n/educational-overlays/{es,fr,tl,...}/lessons.json — absence implies English-primary educational body with localized shell elsewhere.",
     "strictness": "Production-ready requires high overall, passing gate, educational depth, and sufficient word count. Catalog SEO padding is not treated as teaching substance."
@@ -70,7 +84,7 @@
   "globalTopFailureReasons": [
     {
       "reason": "no_educational_overlay_in_scanned_locales",
-      "count": 605
+      "count": 577
     },
     {
       "reason": "missing_educational:core_concept_depth",
@@ -102,7 +116,7 @@
     },
     {
       "reason": "links:no_internal_study_links",
-      "count": 125
+      "count": 124
     },
     {
       "reason": "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
@@ -115,6 +129,10 @@
     {
       "reason": "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
       "count": 56
+    },
+    {
+      "reason": "isolated_no_internal_links_or_related_refs",
+      "count": 54
     },
     {
       "reason": "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
@@ -149,6 +167,10 @@
       "count": 47
     },
     {
+      "reason": "missing_educational:safety_or_priority_mentioned",
+      "count": 46
+    },
+    {
       "reason": "missing_educational:summary_or_next_steps",
       "count": 44
     },
@@ -159,14 +181,6 @@
     {
       "reason": "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
       "count": 40
-    },
-    {
-      "reason": "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
-      "count": 35
-    },
-    {
-      "reason": "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
-      "count": 31
     }
   ],
   "limitations": [

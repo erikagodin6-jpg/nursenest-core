@@ -76,6 +76,7 @@
     "audit:legacy-recovery-second-pass": "node scripts/audit/second-pass-legacy-recovery-audit.mjs",
     "audit:full-parity": "tsx scripts/audit/generate-full-parity-audit.mts",
     "audit:lesson-completeness": "tsx scripts/audit/run-lesson-completeness-audit.mts",
+    "audit:lesson-fix-batch-1-impact": "tsx scripts/audit/measure-lesson-fix-batch-1-impact.mts",
     "audit:lesson-completeness-with-parity": "npm run audit:full-parity && npm run audit:lesson-completeness",
     "audit:parity-evidence-matrix": "tsx scripts/audit/generate-parity-evidence-matrix.mts",
     "audit:parity-suite": "npm run audit:full-parity && npm run audit:parity-evidence-matrix",

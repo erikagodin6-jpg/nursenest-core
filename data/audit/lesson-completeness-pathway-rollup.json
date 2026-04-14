@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T22:32:55.928Z",
+  "generatedAt": "2026-04-14T22:38:54.184Z",
   "pathways": [
     {
       "pathwayId": "ca-rn-nclex-rn",
@@ -15,7 +15,7 @@
       "localizationIncomplete": 95,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
-      "averageOverallScore": 65.4,
+      "averageOverallScore": 66.4,
       "topReasons": [
         {
           "reason": "no_educational_overlay_in_scanned_locales",
@@ -65,7 +65,7 @@
       "localizationIncomplete": 2,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
-      "averageOverallScore": 34.3,
+      "averageOverallScore": 34.5,
       "topReasons": [
         {
           "reason": "low_total_word_count",
@@ -115,7 +115,7 @@
       "localizationIncomplete": 83,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
-      "averageOverallScore": 67.7,
+      "averageOverallScore": 69.3,
       "topReasons": [
         {
           "reason": "no_educational_overlay_in_scanned_locales",
@@ -165,15 +165,15 @@
       "localizationIncomplete": 38,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
-      "averageOverallScore": 48.5,
+      "averageOverallScore": 48.9,
       "topReasons": [
-        {
-          "reason": "no_educational_overlay_in_scanned_locales",
-          "count": 111
-        },
         {
           "reason": "missing_educational:core_concept_depth",
           "count": 98
+        },
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 86
         },
         {
           "reason": "low_total_word_count",
@@ -215,7 +215,7 @@
       "localizationIncomplete": 38,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
-      "averageOverallScore": 48.5,
+      "averageOverallScore": 48.9,
       "topReasons": [
         {
           "reason": "missing_educational:core_concept_depth",
@@ -280,11 +280,11 @@
           "count": 40
         },
         {
-          "reason": "no_educational_overlay_in_scanned_locales",
-          "count": 38
+          "reason": "thin_total_word_count",
+          "count": 35
         },
         {
-          "reason": "thin_total_word_count",
+          "reason": "no_educational_overlay_in_scanned_locales",
           "count": 35
         },
         {
@@ -292,12 +292,12 @@
           "count": 23
         },
         {
-          "reason": "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-          "count": 14
+          "reason": "isolated_no_internal_links_or_related_refs",
+          "count": 21
         },
         {
-          "reason": "low_total_word_count",
-          "count": 5
+          "reason": "missing_educational:safety_or_priority_mentioned",
+          "count": 18
         }
       ]
     },
@@ -324,6 +324,10 @@
         {
           "reason": "no_educational_overlay_in_scanned_locales",
           "count": 15
+        },
+        {
+          "reason": "isolated_no_internal_links_or_related_refs",
+          "count": 15
         }
       ]
     },
@@ -349,6 +353,10 @@
         },
         {
           "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 15
+        },
+        {
+          "reason": "isolated_no_internal_links_or_related_refs",
           "count": 15
         }
       ]

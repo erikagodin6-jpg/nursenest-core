@@ -1,46 +1,8 @@
 {
-  "generatedAt": "2026-04-14T22:34:30.850Z",
+  "generatedAt": "2026-04-14T22:39:06.786Z",
   "selection": "Post-batch-1 audit rows; same ordering as lesson-completeness-priority-queue (nursing before allied, larger pathways, routable preferred, lowest overallScore); excludes batch-1 lessonIds and production_ready lessons.",
   "batch1LessonIdsExcluded": 101,
   "candidates": [
-    {
-      "lessonId": "ca-rn-nclex-rn:acute-coronary-syndrome-nclex-rn",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "acute-coronary-syndrome-nclex-rn",
-      "title": "Acute Coronary Syndrome (NCLEX-RN, Canada)",
-      "routable": true,
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (23 < 50 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (38 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (18 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application"
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:atrial-fibrillation-nclex-rn",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "atrial-fibrillation-nclex-rn",
-      "title": "Atrial Fibrillation (NCLEX-RN, Canada)",
-      "routable": true,
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (36 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (15 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application"
-      ]
-    },
     {
       "lessonId": "ca-rn-nclex-rn:cardiac-tamponade-nclex-rn",
       "pathwayId": "ca-rn-nclex-rn",
@@ -48,7 +10,7 @@
       "title": "Cardiac Tamponade (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 11.5,
+      "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (24 < 50 words).",
         "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
@@ -61,146 +23,13 @@
       ]
     },
     {
-      "lessonId": "ca-rn-nclex-rn:deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
-      "title": "Deep Vein Thrombosis (DVT): Prevention and Nursing Management (NCLEX-RN, Canada)",
-      "routable": true,
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (38 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (11 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:defibrillation-vs-synchronized-cardioversion-nclex-rn",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "defibrillation-vs-synchronized-cardioversion-nclex-rn",
-      "title": "Defibrillation vs Synchronized Cardioversion (NCLEX-RN, Canada)",
-      "routable": true,
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (23 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (37 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (10 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:heart-failure-nclex-rn",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "heart-failure-nclex-rn",
-      "title": "Heart Failure (NCLEX-RN, Canada)",
-      "routable": true,
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (32 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (23 < 30 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (35 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (26 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:hypertensive-encephalopathy-nclex-rn",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "hypertensive-encephalopathy-nclex-rn",
-      "title": "Hypertensive Encephalopathy (NCLEX-RN, Canada)",
-      "routable": true,
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (28 < 50 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (31 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (10 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application"
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:infective-endocarditis-nclex-rn",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "infective-endocarditis-nclex-rn",
-      "title": "Infective Endocarditis (NCLEX-RN, Canada)",
-      "routable": true,
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (32 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (24 < 30 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (13 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application"
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:myocardial-infarction-nclex-rn",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "myocardial-infarction-nclex-rn",
-      "title": "Myocardial Infarction (NCLEX-RN, Canada)",
-      "routable": true,
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (24 < 50 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (14 < 35 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways",
-        "links:no_internal_study_links"
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:peripheral-artery-disease-nclex-rn",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "peripheral-artery-disease-nclex-rn",
-      "title": "Peripheral Artery Disease (NCLEX-RN, Canada)",
-      "routable": true,
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (20 < 30 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (26 < 35 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ]
-    },
-    {
       "lessonId": "ca-rn-nclex-rn:phlebostatic-axis-nclex-rn",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "phlebostatic-axis-nclex-rn",
       "title": "Phlebostatic Axis (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 11.5,
+      "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (34 < 50 words).",
         "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
@@ -219,30 +48,11 @@
       "title": "Pulmonary Embolism (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 11.5,
+      "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (29 < 50 words).",
         "Legacy section \"exam_relevance\" is below the minimum depth (18 < 30 words).",
         "Legacy section \"takeaways\" is below the minimum depth (24 < 35 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:diuretics-electrolyte-shifts",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "diuretics-electrolyte-shifts",
-      "title": "Diuretics & Electrolyte Shifts (NCLEX-RN, Canada)",
-      "routable": true,
-      "status": "structurally_incomplete",
-      "overallScore": 16.2,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
         "low_total_word_count",
         "missing_educational:overview_intro",
         "missing_educational:core_concept_depth",
@@ -257,7 +67,7 @@
       "title": "Diabetes Self-Management Teaching (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 16.2,
+      "overallScore": 15.1,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
         "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
@@ -276,10 +86,200 @@
       "title": "Sepsis Early Recognition (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 16.2,
+      "overallScore": 15.1,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
         "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways"
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:acute-coronary-syndrome-nclex-rn",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-coronary-syndrome-nclex-rn",
+      "title": "Acute Coronary Syndrome (NCLEX-RN, Canada)",
+      "routable": true,
+      "status": "structurally_incomplete",
+      "overallScore": 16.1,
+      "reasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (23 < 50 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (38 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (18 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application"
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:atrial-fibrillation-nclex-rn",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "atrial-fibrillation-nclex-rn",
+      "title": "Atrial Fibrillation (NCLEX-RN, Canada)",
+      "routable": true,
+      "status": "structurally_incomplete",
+      "overallScore": 16.1,
+      "reasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (36 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (15 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application"
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+      "title": "Deep Vein Thrombosis (DVT): Prevention and Nursing Management (NCLEX-RN, Canada)",
+      "routable": true,
+      "status": "structurally_incomplete",
+      "overallScore": 16.1,
+      "reasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (38 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (11 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth"
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:defibrillation-vs-synchronized-cardioversion-nclex-rn",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "defibrillation-vs-synchronized-cardioversion-nclex-rn",
+      "title": "Defibrillation vs Synchronized Cardioversion (NCLEX-RN, Canada)",
+      "routable": true,
+      "status": "structurally_incomplete",
+      "overallScore": 16.1,
+      "reasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (23 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (37 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (10 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth"
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:heart-failure-nclex-rn",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "heart-failure-nclex-rn",
+      "title": "Heart Failure (NCLEX-RN, Canada)",
+      "routable": true,
+      "status": "structurally_incomplete",
+      "overallScore": 16.1,
+      "reasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (32 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (23 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (35 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (26 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth"
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:hypertensive-encephalopathy-nclex-rn",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypertensive-encephalopathy-nclex-rn",
+      "title": "Hypertensive Encephalopathy (NCLEX-RN, Canada)",
+      "routable": true,
+      "status": "structurally_incomplete",
+      "overallScore": 16.1,
+      "reasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (28 < 50 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (31 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (10 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application"
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:infective-endocarditis-nclex-rn",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "infective-endocarditis-nclex-rn",
+      "title": "Infective Endocarditis (NCLEX-RN, Canada)",
+      "routable": true,
+      "status": "structurally_incomplete",
+      "overallScore": 16.1,
+      "reasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (32 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (24 < 30 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (13 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application"
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:myocardial-infarction-nclex-rn",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "myocardial-infarction-nclex-rn",
+      "title": "Myocardial Infarction (NCLEX-RN, Canada)",
+      "routable": true,
+      "status": "structurally_incomplete",
+      "overallScore": 16.1,
+      "reasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (24 < 50 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (14 < 35 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "links:no_internal_study_links"
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:peripheral-artery-disease-nclex-rn",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "peripheral-artery-disease-nclex-rn",
+      "title": "Peripheral Artery Disease (NCLEX-RN, Canada)",
+      "routable": true,
+      "status": "structurally_incomplete",
+      "overallScore": 16.1,
+      "reasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (20 < 30 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (26 < 35 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways"
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:diuretics-electrolyte-shifts",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "diuretics-electrolyte-shifts",
+      "title": "Diuretics & Electrolyte Shifts (NCLEX-RN, Canada)",
+      "routable": true,
+      "status": "structurally_incomplete",
+      "overallScore": 20.7,
+      "reasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
         "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
         "low_total_word_count",
         "missing_educational:overview_intro",
@@ -295,7 +295,7 @@
       "title": "OB emergencies (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
-      "overallScore": 18.5,
+      "overallScore": 22,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (33 < 50 words).",
         "Legacy section \"exam_relevance\" is below the minimum depth (17 < 30 words).",
@@ -314,7 +314,7 @@
       "title": "Pediatric triage & dehydration (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
-      "overallScore": 18.5,
+      "overallScore": 22,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (33 < 50 words).",
         "Legacy section \"exam_relevance\" is below the minimum depth (16 < 30 words).",
@@ -327,32 +327,13 @@
       ]
     },
     {
-      "lessonId": "ca-rn-nclex-rn:ca-rn-antibiotics",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "ca-rn-antibiotics",
-      "title": "Antibiotics (NCLEX-RN, Canada)",
-      "routable": true,
-      "status": "structurally_incomplete",
-      "overallScore": 31.8,
-      "reasons": [
-        "Section \"introduction\" below minimum word count (119 < 180).",
-        "Missing required premium section: tier_specific_relevance",
-        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
-        "Missing required premium section: related_next_steps",
-        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
-        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
-        "missing_educational:summary_or_next_steps",
-        "missing_educational:exam_or_reasoning_cues"
-      ]
-    },
-    {
       "lessonId": "ca-rn-nclex-rn:cardiovascular-prioritization",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "cardiovascular-prioritization",
       "title": "Cardiovascular prioritization for Canadian NCLEX-RN",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 32.5,
+      "overallScore": 33.6,
       "reasons": [
         "Section \"introduction\" below minimum word count (101 < 180).",
         "Section \"labs_diagnostics\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
@@ -371,7 +352,7 @@
       "title": "Dysrhythmias (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 32.5,
+      "overallScore": 33.6,
       "reasons": [
         "Section \"introduction\" below minimum word count (114 < 180).",
         "Section \"red_flags\" below minimum word count (66 < 80).",
@@ -390,7 +371,7 @@
       "title": "Insulin & hypoglycemia (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 32.5,
+      "overallScore": 33.6,
       "reasons": [
         "Section \"introduction\" below minimum word count (116 < 180).",
         "Missing required premium section: tier_specific_relevance",
@@ -403,13 +384,32 @@
       ]
     },
     {
+      "lessonId": "ca-rn-nclex-rn:ca-rn-antibiotics",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-antibiotics",
+      "title": "Antibiotics (NCLEX-RN, Canada)",
+      "routable": true,
+      "status": "structurally_incomplete",
+      "overallScore": 34.3,
+      "reasons": [
+        "Section \"introduction\" below minimum word count (119 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+        "missing_educational:summary_or_next_steps",
+        "missing_educational:exam_or_reasoning_cues"
+      ]
+    },
+    {
       "lessonId": "ca-rn-nclex-rn:ca-rn-asthma",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "ca-rn-asthma",
       "title": "Asthma (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 36.1,
+      "overallScore": 37.2,
       "reasons": [
         "Section \"introduction\" below minimum word count (134 < 180).",
         "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
@@ -428,7 +428,7 @@
       "title": "Potassium imbalance (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 36.1,
+      "overallScore": 37.2,
       "reasons": [
         "Section \"introduction\" below minimum word count (111 < 180).",
         "Section \"signs_symptoms\" below minimum word count (83 < 120).",
@@ -447,7 +447,7 @@
       "title": "Pulmonary embolism (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 37,
+      "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (146 < 180).",
         "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
@@ -466,7 +466,7 @@
       "title": "Angina (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 37,
+      "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (138 < 180).",
         "Section \"signs_symptoms\" below minimum word count (109 < 120).",
@@ -485,7 +485,7 @@
       "title": "Hypertension (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 37,
+      "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (112 < 180).",
         "Section \"nursing_assessment_interventions\" below minimum word count (166 < 180).",
@@ -504,7 +504,7 @@
       "title": "Pneumonia (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 37,
+      "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (136 < 180).",
         "Section \"red_flags\" below minimum word count (62 < 80).",
@@ -523,7 +523,7 @@
       "title": "COPD & respiratory basics (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 37,
+      "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (136 < 180).",
         "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
@@ -542,7 +542,7 @@
       "title": "Acid–base disorders (advanced) (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 37,
+      "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (87 < 180).",
         "Section \"red_flags\" below minimum word count (62 < 80).",
@@ -561,7 +561,7 @@
       "title": "Sodium imbalance (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 37,
+      "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (123 < 180).",
         "Section \"signs_symptoms\" below minimum word count (112 < 120).",
@@ -580,7 +580,7 @@
       "title": "Pain management (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 37,
+      "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (173 < 180).",
         "Section \"labs_diagnostics\" below minimum word count (39 < 100).",
@@ -599,7 +599,7 @@
       "title": "Delegation & assignment (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 37,
+      "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (135 < 180).",
         "Section \"labs_diagnostics\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
@@ -618,7 +618,7 @@
       "title": "Myocardial infarction (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 38.8,
+      "overallScore": 39.9,
       "reasons": [
         "Section \"introduction\" below minimum word count (119 < 180).",
         "Missing required premium section: tier_specific_relevance",
@@ -637,7 +637,7 @@
       "title": "Shock (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 38.8,
+      "overallScore": 39.9,
       "reasons": [
         "Section \"introduction\" below minimum word count (129 < 180).",
         "Missing required premium section: tier_specific_relevance",
@@ -656,7 +656,7 @@
       "title": "ARDS (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 38.8,
+      "overallScore": 39.9,
       "reasons": [
         "Section \"introduction\" below minimum word count (121 < 180).",
         "Missing required premium section: tier_specific_relevance",
@@ -675,7 +675,7 @@
       "title": "ABG interpretation (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 38.8,
+      "overallScore": 39.9,
       "reasons": [
         "Section \"introduction\" below minimum word count (123 < 180).",
         "Missing required premium section: tier_specific_relevance",
@@ -694,7 +694,7 @@
       "title": "Infection control (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 38.8,
+      "overallScore": 39.9,
       "reasons": [
         "Section \"introduction\" below minimum word count (165 < 180).",
         "Missing required premium section: tier_specific_relevance",
@@ -713,7 +713,7 @@
       "title": "Anticoagulants (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 38.8,
+      "overallScore": 39.9,
       "reasons": [
         "Section \"introduction\" below minimum word count (139 < 180).",
         "Missing required premium section: tier_specific_relevance",
@@ -732,7 +732,7 @@
       "title": "Fluid deficit vs excess (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 38.8,
+      "overallScore": 39.9,
       "reasons": [
         "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
         "Missing required premium section: tier_specific_relevance",
@@ -751,7 +751,7 @@
       "title": "Prioritization, ABCs & safety (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 38.8,
+      "overallScore": 39.9,
       "reasons": [
         "Section \"introduction\" below minimum word count (150 < 180).",
         "Missing required premium section: tier_specific_relevance",
@@ -770,7 +770,7 @@
       "title": "General nursing clinical judgment (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 38.8,
+      "overallScore": 39.9,
       "reasons": [
         "Section \"introduction\" below minimum word count (115 < 180).",
         "Missing required premium section: tier_specific_relevance",
@@ -789,7 +789,7 @@
       "title": "Sepsis (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 41.7,
+      "overallScore": 42.7,
       "reasons": [
         "Section \"introduction\" below minimum word count (149 < 180).",
         "Section \"signs_symptoms\" below minimum word count (113 < 120).",
@@ -808,7 +808,7 @@
       "title": "Heart failure (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 43.5,
+      "overallScore": 44.5,
       "reasons": [
         "Section \"introduction\" below minimum word count (130 < 180).",
         "Missing required premium section: tier_specific_relevance",
@@ -832,7 +832,8 @@
         "Legacy section \"exam_relevance\" is below the minimum depth (24 < 30 words).",
         "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
         "links:no_internal_study_links",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "isolated_no_internal_links_or_related_refs"
       ]
     },
     {
@@ -998,10 +999,12 @@
       "title": "Wound care (NCLEX-RN, Canada)",
       "routable": true,
       "status": "localization_incomplete",
-      "overallScore": 76.4,
+      "overallScore": 70.5,
       "reasons": [
+        "missing_educational:safety_or_priority_mentioned",
         "links:no_internal_study_links",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "isolated_no_internal_links_or_related_refs"
       ]
     },
     {
@@ -1435,32 +1438,13 @@
       "reasons": []
     },
     {
-      "lessonId": "us-rn-nclex-rn:renal-dialysis-acute-complications-gold-standard",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "renal-dialysis-acute-complications-gold-standard",
-      "title": "Renal failure & dialysis acute management (NCLEX-RN, US)",
-      "routable": true,
-      "status": "duplicate_or_unclear_source",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (31 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (31 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ]
-    },
-    {
       "lessonId": "us-rn-nclex-rn:respiratory-assessment-ngn",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "respiratory-assessment-ngn",
       "title": "Respiratory assessment & oxygenation (NCLEX-RN, US)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 11.5,
+      "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (23 < 50 words).",
         "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
@@ -1479,7 +1463,7 @@
       "title": "Heart Failure Nursing Priorities (NCLEX-RN, US)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 11.5,
+      "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
         "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
@@ -1498,7 +1482,7 @@
       "title": "Acute Myocardial Infarction & Troponin (NCLEX-RN, US)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 11.5,
+      "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
         "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
@@ -1517,7 +1501,7 @@
       "title": "Shock Recognition & Fluids (NCLEX-RN, US)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 11.5,
+      "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
         "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
@@ -1536,7 +1520,7 @@
       "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, US)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 11.5,
+      "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
         "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
@@ -1555,11 +1539,30 @@
       "title": "Atrial Fibrillation & Rate Control (NCLEX-RN, US)",
       "routable": true,
       "status": "structurally_incomplete",
-      "overallScore": 11.5,
+      "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
         "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
         "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+        "low_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways"
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:endocarditis-blood-cultures",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "endocarditis-blood-cultures",
+      "title": "Endocarditis & Blood Cultures (NCLEX-RN, US)",
+      "routable": true,
+      "status": "structurally_incomplete",
+      "overallScore": 10.5,
+      "reasons": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
         "low_total_word_count",
         "missing_educational:overview_intro",
         "missing_educational:core_concept_depth",

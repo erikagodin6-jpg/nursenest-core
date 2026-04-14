@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "generatedAt": "2026-04-14T00:00:00.000Z",
+  "description": "Topic clusters for marketing default blog posts served from static fallback (src/content/blog-static-posts.ts). Database-published posts are not listed here; run a slug export from production to extend this map.",
+  "clusters": [
+    {
+      "id": "prioritization-exam-judgment",
+      "name": "Prioritization & clinical judgment",
+      "pillarSlug": "clinical-judgment-on-exam-day",
+      "pillarTitle": "Clinical judgment on exam day: turning cues into safe decisions",
+      "supportingSlugs": [
+        "pharmacology-without-memorization-chaos",
+        "lab-trends-and-acute-kidney-injury"
+      ],
+      "relatedLessonPaths": [
+        "/pre-nursing/lessons/study-strategies",
+        "/pre-nursing/lessons/human-factors",
+        "/pre-nursing/lessons/pathophysiology"
+      ],
+      "examHubPaths": ["/us/rn/nclex-rn/lessons", "/question-bank"]
+    },
+    {
+      "id": "pharmacology-safety",
+      "name": "Pharmacology & medication safety",
+      "pillarSlug": "pharmacology-without-memorization-chaos",
+      "pillarTitle": "Pharmacology study that sticks (without memorization chaos)",
+      "supportingSlugs": [
+        "clinical-judgment-on-exam-day",
+        "lab-trends-and-acute-kidney-injury"
+      ],
+      "relatedLessonPaths": [
+        "/pre-nursing/lessons/pharmacology",
+        "/pre-nursing/lessons/fluids-electrolytes",
+        "/pre-nursing/lessons/infection-control"
+      ],
+      "examHubPaths": ["/us/rn/nclex-rn/lessons", "/us/rn/nclex-rn/questions"]
+    },
+    {
+      "id": "med-surg-renal-labs",
+      "name": "Med-surg: renal function, labs & fluids",
+      "pillarSlug": "lab-trends-and-acute-kidney-injury",
+      "pillarTitle": "Lab trends that matter in acute kidney injury",
+      "supportingSlugs": [
+        "pharmacology-without-memorization-chaos",
+        "clinical-judgment-on-exam-day"
+      ],
+      "relatedLessonPaths": [
+        "/pre-nursing/lessons/fluids-electrolytes",
+        "/pre-nursing/lessons/pathophysiology",
+        "/pre-nursing/lessons/diagnostics"
+      ],
+      "examHubPaths": ["/us/rn/nclex-rn/lessons", "/question-bank"]
+    }
+  ],
+  "notes": [
+    "Electrolytes, OB, peds, mental health, and country-specific migration clusters are represented in regional SEO sources (e.g. src/lib/seo/blog-topic-clusters.ts, long-form posts) and in the database; this file covers only the three canonical /blog/* static fallbacks in-repo."
+  ]
+}

@@ -15,7 +15,12 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "../../..");
 
-const BASELINE_REF = process.env.LESSON_AUDIT_BASELINE_REF ?? "HEAD";
+/**
+ * Default `HEAD~1`: when the latest commit adds the post–batch-1 audit, `HEAD` matches
+ * “after” and hides deltas. Parent commit usually holds the prior audit run (e.g. pre-catalog enrichment).
+ * Override with LESSON_AUDIT_BASELINE_REF=HEAD for same-commit checks.
+ */
+const BASELINE_REF = process.env.LESSON_AUDIT_BASELINE_REF ?? "HEAD~1";
 const AFTER_AUDIT_PATH = join(REPO_ROOT, "data", "audit", "lesson-completeness-audit.json");
 const BATCH1_REPORT_PATH = join(REPO_ROOT, "data", "audit", "lesson-fix-batch-1-report.json");
 const IMPACT_JSON_PATH = join(REPO_ROOT, "data", "audit", "lesson-fix-batch-1-impact.json");
@@ -157,6 +162,7 @@ function main() {
   let nowProductionReady = 0;
   let stillThinOrIncomplete = 0;
   const overallDeltas: number[] = [];
+  const statusAfterCounts: Record<string, number> = {};
 
   for (const lessonId of batch1Ids) {
     const b = beforeMap.get(lessonId);
@@ -178,6 +184,9 @@ function main() {
     const statusAfter = a?.status ?? null;
     if (statusBefore !== statusAfter) statusChanged += 1;
     if (statusAfter === "production_ready") nowProductionReady += 1;
+    if (statusAfter) {
+      statusAfterCounts[statusAfter] = (statusAfterCounts[statusAfter] ?? 0) + 1;
+    }
     if (
       statusAfter === "usable_but_thin" ||
       statusAfter === "structurally_incomplete" ||
@@ -268,6 +277,7 @@ function main() {
     batch1Report: {
       path: "data/audit/lesson-fix-batch-1-report.json",
       lessonCount: batch1Ids.size,
+      ...batch1ReportMeta,
     },
     aggregate: {
       lessonsCompared: comparisons.length,
@@ -278,15 +288,17 @@ function main() {
       statusClassChanged: statusChanged,
       nowProductionReady,
       stillThinOrIncompleteOrOtherNonReady: stillThinOrIncomplete,
+      nonProductionReady: comparisons.filter((c) => c.status.after !== "production_ready").length,
+      statusBreakdownAfter: statusAfterCounts,
       note:
-        "production_ready threshold may be strict in current scoring; see lesson-completeness-summary.json methodology.",
+        "production_ready requires overall≥84, publicComplete, educational≥72, links≥55, words≥500 (see deriveStatus). Overlay absence caps localization and often blocks production_ready.",
     },
     topRemainingReasonsAfterBatch1: topRemainingReasons,
     thresholdRecommendation: {
       suggestion:
-        "Keep thresholds as-is until batch-2 completes and overlay/localization work is scoped; batch-1 lifted educational/structural/link signals but duplicate_or_unclear_source and no_educational_overlay often remain systemic.",
+        "Keep thresholds as-is for now: batch-1 raised scores, but systemic gaps remain (especially no_educational_overlay_in_scanned_locales and missing_educational:core_concept_depth on legacy five-block lessons). Tackle batch-2 + overlay keys before relaxing gates.",
       rationale:
-        "Adjusting thresholds now would mask remaining content and i18n gaps; prefer targeted batch fixes + overlay keys before relaxing gates.",
+        "Lowering bars would hide thin word counts and missing educational buckets; production_ready should stay a high bar until overlays and spine depth are addressed pathway-wide.",
     },
     comparisons: comparisons.sort((a, b) => (b.overallScore.delta ?? -999) - (a.overallScore.delta ?? -999)),
   };
@@ -333,6 +345,12 @@ function main() {
   );
   md.push(`- **After audit**: \`${summaryJson.after.path}\` (generated ${summaryJson.after.auditGeneratedAt})`);
   md.push(`- **Batch 1 lessons compared**: ${summaryJson.aggregate.lessonsCompared}`);
+  if (batch1ReportMeta.note) {
+    md.push(`- **Batch-1 report note**: ${batch1ReportMeta.note}`);
+  }
+  md.push(
+    `- **Report rows / lessonsFixed field**: ${batch1ReportMeta.resultRows} rows · lessonsFixed=${batch1ReportMeta.lessonsFixedField} · unique IDs=${batch1ReportMeta.uniqueLessonIds}`,
+  );
   md.push(``);
   md.push(`## Score movement (overall)`);
   md.push(`- Improved: **${summaryJson.aggregate.improvedOverallScore}**`);
@@ -346,10 +364,16 @@ function main() {
   md.push(
     `- Still thin/incomplete (usable_but_thin, structurally_incomplete, content_incomplete, localization_incomplete): **${summaryJson.aggregate.stillThinOrIncompleteOrOtherNonReady}**`,
   );
+  md.push(`- Non–production-ready (any status except \`production_ready\`): **${summaryJson.aggregate.nonProductionReady}**`);
+  md.push(``);
+  md.push(`## Status breakdown after audit (batch-1 set)`);
+  for (const [st, n] of Object.entries(summaryJson.aggregate.statusBreakdownAfter).sort((a, b) => b[1] - a[1])) {
+    md.push(`- \`${st}\`: **${n}**`);
+  }
   md.push(``);
   md.push(`> ${summaryJson.aggregate.note}`);
   md.push(``);
-  md.push(`## Top reasons remaining after batch 1 (among the 100 fixed lessons)`);
+  md.push(`## Top reasons remaining after batch 1 (among the batch-1 lesson set)`);
   for (const x of topRemainingReasons) {
     md.push(`- ${x.reason}: **${x.count}**`);
   }
