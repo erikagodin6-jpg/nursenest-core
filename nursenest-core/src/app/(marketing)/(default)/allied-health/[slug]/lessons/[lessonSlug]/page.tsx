@@ -75,6 +75,11 @@ import {
   pathwayLessonSectionPrefersWideColumn,
   shouldRenderPathwayLessonSection,
 } from "@/lib/lessons/lesson-section-page-layout";
+import {
+  PathwayLessonCommonTrapsStrip,
+  PathwayLessonMemoryAnchorStrip,
+  PathwayLessonStudyTakeawaysStrip,
+} from "@/components/lessons/pathway-lesson-study-strips";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 86400;
@@ -234,10 +239,13 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         (lesson.localeMeta.isCatalogEnglishSource && requestedNorm !== "en")),
   );
 
-  const displaySections = visible.filter((s) => shouldRenderPathwayLessonSection(s.kind));
+  const omitHighYieldIds = new Set(lesson.omitHighYieldSectionIds ?? []);
+  const displaySections = visible
+    .filter((s) => shouldRenderPathwayLessonSection(s.kind))
+    .filter((s) => !omitHighYieldIds.has(s.id));
 
   return (
-    <div className="nn-marketing-surface mx-auto max-w-5xl px-4 py-6 sm:py-8">
+    <div className="nn-marketing-surface mx-auto max-w-5xl px-4 py-5 sm:py-7">
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mb-4">
         <BreadcrumbTrail items={crumbs} />
@@ -252,7 +260,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         ← Lessons ({prof.h1})
       </Link>
       <div className="mt-2 flex flex-wrap items-start justify-between gap-3">
-        <h1 className="text-3xl font-extrabold text-[var(--theme-heading-text)]">{displayLessonTitle}</h1>
+        <h1 className="nn-lesson-page-title max-w-[min(100%,52rem)]">{displayLessonTitle}</h1>
         {userId && fullAccess ? (
           <PathwayLessonProgressBadgeLive
             pathwayId={pathway.id}
@@ -269,6 +277,14 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
         <PathwayLessonQuickReview bullets={quickReviewBullets} />
       </div>
+      {(lesson.studyTakeaways && lesson.studyTakeaways.length >= 2) || lesson.memoryAnchor ? (
+        <div className="mt-4 space-y-3">
+          {lesson.studyTakeaways && lesson.studyTakeaways.length >= 2 ? (
+            <PathwayLessonStudyTakeawaysStrip pathway={pathway} items={lesson.studyTakeaways} position="top" />
+          ) : null}
+          {lesson.memoryAnchor ? <PathwayLessonMemoryAnchorStrip text={lesson.memoryAnchor} /> : null}
+        </div>
+      ) : null}
       {showLocaleFallbackNotice ? (
         <aside
           className="nn-card mt-4 border-border bg-[var(--theme-muted-surface)] p-3 text-sm text-muted"
@@ -374,6 +390,11 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
               );
             })}
           </article>
+          {lesson.studyCommonTraps && lesson.studyCommonTraps.length > 0 ? (
+            <div className="mx-auto mt-6 max-w-5xl">
+              <PathwayLessonCommonTrapsStrip items={lesson.studyCommonTraps} />
+            </div>
+          ) : null}
         </LessonRecallProvider>
 
         {lockedSections.length > 0 ? <PathwayLessonLockedSectionsPreview sections={lockedSections} /> : null}
@@ -387,6 +408,11 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
           canMarkComplete={fullAccess}
           initialProgress={lessonProgress}
         />
+        {lesson.studyTakeaways && lesson.studyTakeaways.length >= 2 ? (
+          <div className="mx-auto mt-8 max-w-5xl">
+            <PathwayLessonStudyTakeawaysStrip pathway={pathway} items={lesson.studyTakeaways} position="bottom" />
+          </div>
+        ) : null}
       </PathwayLessonAssessmentExperience>
 
       <p className="mt-6 text-sm text-muted">

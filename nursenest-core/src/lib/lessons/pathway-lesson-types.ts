@@ -232,6 +232,16 @@ export type PathwayLessonRecord = {
    * Absent for most lessons — component renders nothing gracefully when null/undefined.
    */
   audioUrl?: string | null;
+  /**
+   * High-yield takeaways for top/bottom strips — authored in catalog/DB or derived from the takeaways section.
+   */
+  studyTakeaways?: string[];
+  /** Common exam traps — may be authored or derived from exam_focus.commonTraps text. */
+  studyCommonTraps?: string[];
+  /** “If you only remember one thing” — optional single line when authored. */
+  memoryAnchor?: string;
+  /** Section ids skipped in the article when takeaways bullets were hoisted to strips. */
+  omitHighYieldSectionIds?: string[];
 };
 
 /** Hub cards must not link with empty or whitespace slugs (defensive; DB/catalog should always set slug). */

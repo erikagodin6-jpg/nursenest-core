@@ -67,6 +67,15 @@ import {
 } from "@/lib/lessons/load-lesson-study-loop-bank-pack";
 import { PathwayLessonStudyLoopOrchestrator } from "@/components/lessons/pathway-lesson-study-loop-orchestrator";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
+import {
+  pathwayLessonSectionPrefersWideColumn,
+  shouldRenderPathwayLessonSection,
+} from "@/lib/lessons/lesson-section-page-layout";
+import {
+  PathwayLessonCommonTrapsStrip,
+  PathwayLessonMemoryAnchorStrip,
+  PathwayLessonStudyTakeawaysStrip,
+} from "@/components/lessons/pathway-lesson-study-strips";
 
 function LessonBody({
   content,
@@ -368,9 +377,20 @@ export default async function LessonDetailPage({ params }: Props) {
     const record = resolvedLesson.record;
     const displayTitle = cleanLessonTitleForDisplay(record.title);
     const visibleRaw = visibleSectionsForLesson(record, true);
-    const visible = filterLearnerPresentablePathwaySections(visibleRaw);
+    const visible = filterLearnerPresentablePathwaySections(
+      visibleRaw.filter((s) => shouldRenderPathwayLessonSection(s.kind)),
+    );
     if (visible.length === 0) {
       safeServerLog("page_lesson_detail", "pathway_lesson_no_presentable_sections", {
+        id,
+        slug: record.slug,
+      });
+      notFound();
+    }
+    const omitHy = new Set(record.omitHighYieldSectionIds ?? []);
+    const displaySections = visible.filter((s) => !omitHy.has(s.id));
+    if (displaySections.length === 0) {
+      safeServerLog("page_lesson_detail", "pathway_lesson_no_sections_after_hy_omit", {
         id,
         slug: record.slug,
       });
@@ -436,7 +456,7 @@ export default async function LessonDetailPage({ params }: Props) {
           record.topicSlug &&
           lessonTopicMatchesTopPriority(record.topicSlug, pathwayStudySnap),
       );
-    const pathwayCoachExcerpt = buildPathwayLessonCoachExcerpt(visible);
+    const pathwayCoachExcerpt = buildPathwayLessonCoachExcerpt(displaySections);
     const relatedLessonsDisplay = mergeRelatedLessonDisplayList(
       record.relatedLessonRefs,
       relatedLessonsRaw.filter(pathwayLessonHasRenderableHubSlug),
@@ -477,7 +497,7 @@ export default async function LessonDetailPage({ params }: Props) {
       examFraming.region !== "unknown" ? examFraming.examIdentityLabel : null;
 
     // Nav sections for quick-jump (aligned with rendered article sections)
-    const navSections = visible.map((s) => ({
+    const navSections = displaySections.map((s) => ({
       id: s.id,
       heading: s.heading?.trim() ?? "",
       kind: s.kind ?? null,
@@ -528,14 +548,31 @@ export default async function LessonDetailPage({ params }: Props) {
             sourceLabel={displayTitle}
             qualityNotice={<LessonQualityNotice tier={pathwayQuality.tier} wordCount={pathwayQuality.wordCount} />}
           >
-            <article className="space-y-8">
-              {visible.length > 0 ? (
-                visible.map((section) => (
+            {pathway ? (
+              <>
+                {(record.studyTakeaways && record.studyTakeaways.length >= 2) || record.memoryAnchor ? (
+                  <div className="mb-5 space-y-3">
+                    {record.studyTakeaways && record.studyTakeaways.length >= 2 ? (
+                      <PathwayLessonStudyTakeawaysStrip pathway={pathway} items={record.studyTakeaways} position="top" />
+                    ) : null}
+                    {record.memoryAnchor ? <PathwayLessonMemoryAnchorStrip text={record.memoryAnchor} /> : null}
+                  </div>
+                ) : null}
+              </>
+            ) : null}
+            <article className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
+              {displaySections.length > 0 ? (
+                displaySections.map((section) => {
+                  const wide = pathwayLessonSectionPrefersWideColumn(section.kind ?? null, {
+                    hasCheckpointQuestions: Boolean(section.checkpointQuestions?.length),
+                  });
+                  return (
                   <LessonSectionCard
                     key={section.id}
                     id={section.id}
                     heading={section.heading?.trim() || t("learner.lessons.detail.sectionFallback")}
                     kind={section.kind ?? null}
+                    className={wide ? "md:col-span-2" : undefined}
                   >
                     <PathwayLessonSectionContent
                       text={typeof section.body === "string" ? section.body : ""}
@@ -557,11 +594,23 @@ export default async function LessonDetailPage({ params }: Props) {
                       />
                     ) : null}
                   </LessonSectionCard>
-                ))
+                  );
+                })
                   ) : null}
             </article>
+            {pathway && record.studyCommonTraps && record.studyCommonTraps.length > 0 ? (
+              <div className="mt-6 max-w-5xl">
+                <PathwayLessonCommonTrapsStrip items={record.studyCommonTraps} />
+              </div>
+            ) : null}
           </PremiumLessonShell>
         </LessonAssessmentFlow>
+
+        {pathway && record.studyTakeaways && record.studyTakeaways.length >= 2 ? (
+          <div className="mt-6 max-w-5xl">
+            <PathwayLessonStudyTakeawaysStrip pathway={pathway} items={record.studyTakeaways} position="bottom" />
+          </div>
+        ) : null}
 
         <LessonNavButtons
           position="bottom"
@@ -639,7 +688,7 @@ export default async function LessonDetailPage({ params }: Props) {
           topicSlug={record.topicSlug}
           pathwayId={pathwayId}
           examFramingLabel={examFramingLabel}
-          sectionCount={visible.length > 0 ? visible.length : visibleRaw.length > 0 ? 1 : 0}
+          sectionCount={displaySections.length > 0 ? displaySections.length : 1}
           examRelevance={record.examRelevance ?? null}
           audienceTiers={record.audienceTiers ?? null}
           progress={initialProgress}

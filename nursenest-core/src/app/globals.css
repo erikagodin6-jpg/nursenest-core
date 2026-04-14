@@ -2563,6 +2563,102 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   border-color: color-mix(in srgb, var(--theme-primary) 14%, var(--border-subtle));
 }
 
+/* High-yield study strips — light pastel surfaces, readable contrast */
+.nn-lesson-hy-takeaways {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 22%, var(--bg-card));
+  padding: 1.1rem 1.2rem 1.2rem;
+  box-shadow: var(--shadow-card);
+}
+
+.nn-lesson-hy-takeaways--bottom {
+  background: color-mix(in srgb, var(--semantic-panel-positive) 14%, var(--bg-card));
+  border-color: color-mix(in srgb, var(--semantic-success) 16%, var(--semantic-border-soft));
+}
+
+.nn-lesson-hy-takeaways__title {
+  font-size: 0.82rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--semantic-text-secondary);
+  margin-bottom: 0.65rem;
+}
+
+.nn-lesson-hy-takeaways__list {
+  margin: 0;
+  padding-left: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--theme-body-text);
+}
+
+.nn-lesson-hy-takeaways__item::marker {
+  color: color-mix(in srgb, var(--semantic-brand) 55%, var(--semantic-text-muted));
+}
+
+.nn-lesson-hy-traps {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-warning) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-warning) 7%, var(--bg-card));
+  padding: 1.1rem 1.2rem 1.25rem;
+}
+
+.nn-lesson-hy-traps__title {
+  font-size: 0.95rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--theme-heading-text);
+}
+
+.nn-lesson-hy-traps__lede {
+  margin-top: 0.35rem;
+  margin-bottom: 0.65rem;
+}
+
+.nn-lesson-hy-traps__list {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--theme-body-text);
+}
+
+.nn-lesson-hy-traps__item::marker {
+  color: color-mix(in srgb, var(--semantic-warning) 70%, var(--semantic-text-muted));
+}
+
+.nn-lesson-hy-memory {
+  border-radius: 0.875rem;
+  border: 1px dashed color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 5%, var(--bg-card));
+  padding: 0.85rem 1rem;
+}
+
+.nn-lesson-hy-memory__label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--theme-muted-text);
+  margin-bottom: 0.35rem;
+}
+
+.nn-lesson-hy-memory__text {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--theme-heading-text);
+}
+
 .nn-lesson-prose {
   font-size: 0.9375rem;
   line-height: 1.65;

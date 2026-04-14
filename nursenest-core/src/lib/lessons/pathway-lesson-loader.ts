@@ -66,6 +66,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-scale";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
 import { dedupePathwayLessonsForLibrary } from "@/lib/lessons/pathway-lesson-dedupe";
+import { deriveLessonHighYieldStudyFields } from "@/lib/lessons/lesson-high-yield-study-fields";
 
 type CatalogShape = {
   version: number;
@@ -87,6 +88,9 @@ type CatalogShape = {
         postTest?: PathwayLessonQuizItem[];
         premiumOmittedSections?: PathwayLessonOmittedPremiumSection[];
         relatedLessonRefs?: PathwayLessonRelatedRef[];
+        studyTakeaways?: string[];
+        studyCommonTraps?: string[];
+        memoryAnchor?: string;
         audienceTiers?: PathwayLessonAudienceTier[];
         countryScope?: PathwayLessonCountryScope;
         examRelevance?: PathwayLessonExamRelevance;
@@ -676,11 +680,22 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
     ...(postTest ? { postTest } : {}),
   };
 
-  const structuralQuality = evaluatePathwayLessonStructuralGate(withQuizzes);
-  return {
+  const hy = deriveLessonHighYieldStudyFields(expanded, raw as { studyTakeaways?: unknown; studyCommonTraps?: unknown; memoryAnchor?: unknown });
+  const withStudyStrips: PathwayLessonRecord = {
     ...withQuizzes,
+    ...(hy.studyTakeaways && hy.studyTakeaways.length >= 2 ? { studyTakeaways: hy.studyTakeaways } : {}),
+    ...(hy.studyCommonTraps && hy.studyCommonTraps.length > 0 ? { studyCommonTraps: hy.studyCommonTraps } : {}),
+    ...(hy.memoryAnchor ? { memoryAnchor: hy.memoryAnchor } : {}),
+    ...(hy.omitHighYieldSectionIds && hy.omitHighYieldSectionIds.length > 0
+      ? { omitHighYieldSectionIds: hy.omitHighYieldSectionIds }
+      : {}),
+  };
+
+  const structuralQuality = evaluatePathwayLessonStructuralGate(withStudyStrips);
+  return {
+    ...withStudyStrips,
     structuralQuality,
-    ...(usePremium ? { premiumValidation: validatePathwayLessonPremium(withQuizzes) } : {}),
+    ...(usePremium ? { premiumValidation: validatePathwayLessonPremium(withStudyStrips) } : {}),
   };
 }
 

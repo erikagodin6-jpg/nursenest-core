@@ -69,6 +69,11 @@ import {
   pathwayLessonSectionPrefersWideColumn,
   shouldRenderPathwayLessonSection,
 } from "@/lib/lessons/lesson-section-page-layout";
+import {
+  PathwayLessonCommonTrapsStrip,
+  PathwayLessonMemoryAnchorStrip,
+  PathwayLessonStudyTakeawaysStrip,
+} from "@/components/lessons/pathway-lesson-study-strips";
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
 export const dynamic = "force-dynamic";
@@ -234,10 +239,13 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         (lesson.localeMeta.isCatalogEnglishSource && requestedNorm !== "en")),
   );
 
-  const displaySections = visible.filter((s) => shouldRenderPathwayLessonSection(s.kind));
+  const omitHighYieldIds = new Set(lesson.omitHighYieldSectionIds ?? []);
+  const displaySections = visible
+    .filter((s) => shouldRenderPathwayLessonSection(s.kind))
+    .filter((s) => !omitHighYieldIds.has(s.id));
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pt-2 pb-4 sm:px-6 sm:pt-3 sm:pb-5 lg:px-8">
+    <div className="mx-auto max-w-6xl px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
       <div
         className={`nn-lesson-page-shell px-3 py-3 sm:px-6 sm:py-5${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
       >
@@ -281,6 +289,14 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
           <PathwayLessonQuickReview bullets={quickReviewBullets} />
         </div>
+        {(lesson.studyTakeaways && lesson.studyTakeaways.length >= 2) || lesson.memoryAnchor ? (
+          <div className="mt-4 space-y-3">
+            {lesson.studyTakeaways && lesson.studyTakeaways.length >= 2 ? (
+              <PathwayLessonStudyTakeawaysStrip pathway={pathway} items={lesson.studyTakeaways} position="top" />
+            ) : null}
+            {lesson.memoryAnchor ? <PathwayLessonMemoryAnchorStrip text={lesson.memoryAnchor} /> : null}
+          </div>
+        ) : null}
         {showLocaleFallbackNotice ? (
           <aside
             className="nn-card mt-4 border-border bg-[var(--theme-muted-surface)] p-3 text-sm text-[var(--theme-body-text)]"
@@ -400,6 +416,11 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
                   );
                 })}
               </article>
+              {lesson.studyCommonTraps && lesson.studyCommonTraps.length > 0 ? (
+                <div className="mx-auto mt-6 max-w-5xl">
+                  <PathwayLessonCommonTrapsStrip items={lesson.studyCommonTraps} />
+                </div>
+              ) : null}
             </main>
           </LessonRecallProvider>
 
@@ -418,6 +439,11 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
             canMarkComplete={fullAccess}
             initialProgress={lessonProgress}
           />
+          {lesson.studyTakeaways && lesson.studyTakeaways.length >= 2 ? (
+            <div className="mx-auto mt-8 max-w-5xl">
+              <PathwayLessonStudyTakeawaysStrip pathway={pathway} items={lesson.studyTakeaways} position="bottom" />
+            </div>
+          ) : null}
         </PathwayLessonAssessmentExperience>
 
         <Suspense fallback={<PathwayLessonDetailDeferredSkeleton />}>

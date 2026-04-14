@@ -25,3 +25,44 @@ test("proxy matcher includes /app, /admin, and exam hub roots; auth-middleware u
   assert.match(am, /authorized/);
   assert.match(am, /\/app/);
 });
+
+test("proxy sets x-nn-admin-path for /admin and /api/admin (RBAC header for guards)", () => {
+  const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
+  assert.match(proxySrc, /x-nn-admin-path/);
+  assert.match(proxySrc, /startsWith\("\/admin"\)/);
+});
+
+test("edge auth requires a session for /admin (unauthenticated → NextAuth sign-in redirect)", () => {
+  const am = readFileSync(join(dir, "lib", "auth-middleware.ts"), "utf8");
+  assert.match(am, /path\.startsWith\("\/admin"\)/);
+  assert.match(am, /pages:\s*\{\s*signIn:\s*["']\/login["']/);
+});
+
+test("requireAdmin sends non-staff signed-in users to /app; tier mismatch to /admin", () => {
+  const guards = readFileSync(join(dir, "lib", "auth", "guards.ts"), "utf8");
+  assert.match(guards, /redirect\("\/app"\)/);
+  assert.match(guards, /redirect\("\/admin"\)/);
+  assert.match(guards, /x-nn-admin-path/);
+  assert.match(guards, /isPathAllowedForStaffTier/);
+});
+
+test("admin dashboard href constant is /admin", () => {
+  const link = readFileSync(join(dir, "lib", "auth", "admin-dashboard-link.ts"), "utf8");
+  assert.match(link, /\/admin/);
+});
+
+test("marketing header: staff see Admin link to /admin; learners use Dashboard to /app only", () => {
+  const header = readFileSync(join(dir, "components", "layout", "site-header.tsx"), "utf8");
+  assert.match(header, /const ADMIN_DASHBOARD_ROUTE = "\/admin"/);
+  assert.match(header, /href=\{ADMIN_DASHBOARD_ROUTE\}/);
+  assert.match(header, /isAdminAuthenticated.*isStaffRole/);
+  assert.match(header, /isLearnerAuthenticated/);
+  assert.match(header, /<Link href="\/app"/);
+});
+
+test("learner shell user bar: admin link only when isStaffRole", () => {
+  const bar = readFileSync(join(dir, "components", "auth", "learner-shell-user-bar.tsx"), "utf8");
+  assert.match(bar, /const ADMIN_DASHBOARD_ROUTE = "\/admin"/);
+  assert.match(bar, /href=\{ADMIN_DASHBOARD_ROUTE\}/);
+  assert.match(bar, /\{admin \? \(/);
+});
