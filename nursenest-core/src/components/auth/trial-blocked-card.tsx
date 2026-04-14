@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ShieldAlert } from "lucide-react";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 
 export function TrialBlockedCard({
@@ -9,30 +10,32 @@ export function TrialBlockedCard({
 }: {
   reason: "already_used" | "device_used" | "email_not_verified" | "rate_limited" | "generic";
 }) {
-  const messages: Record<string, { title: string; body: string }> = {
+  const { t } = useMarketingI18n();
+  const messages: Record<string, { titleKey: string; bodyKey: string }> = {
     already_used: {
-      title: "Trial Already Used",
-      body: "It looks like you have already used a free trial. Sign in to your existing account, or choose a plan to continue.",
+      titleKey: "auth.trialBlocked.alreadyUsedTitle",
+      bodyKey: "auth.trialBlocked.alreadyUsedBody",
     },
     device_used: {
-      title: "Trial Already Used",
-      body: "A free trial has already been used on this device. Sign in to your existing account, or choose a plan.",
+      titleKey: "auth.trialBlocked.alreadyUsedTitle",
+      bodyKey: "auth.trialBlocked.deviceUsedBody",
     },
     email_not_verified: {
-      title: "Verify Your Email First",
-      body: "Check your inbox for a verification link. Once verified, you can start your free trial.",
+      titleKey: "auth.trialBlocked.emailNotVerifiedTitle",
+      bodyKey: "auth.trialBlocked.emailNotVerifiedBody",
     },
     rate_limited: {
-      title: "Too Many Attempts",
-      body: "Please wait a moment before trying again. If you already have an account, sign in instead.",
+      titleKey: "auth.trialBlocked.rateLimitedTitle",
+      bodyKey: "auth.trialBlocked.rateLimitedBody",
     },
     generic: {
-      title: "Unable to Start Trial",
-      body: "Something went wrong. If you already have an account, sign in or choose a plan below.",
+      titleKey: "auth.trialBlocked.genericTitle",
+      bodyKey: "auth.trialBlocked.genericBody",
     },
   };
 
-  const msg = messages[reason] ?? messages.generic;
+  const keys = messages[reason] ?? messages.generic;
+  const msg = { title: t(keys.titleKey), body: t(keys.bodyKey) };
 
   return (
     <div className="nn-trial-blocked">
@@ -45,14 +48,14 @@ export function TrialBlockedCard({
           className="nn-trial-blocked__btn-primary"
           onClick={() => trackClientEvent("trial_blocked_sign_in_clicked", { reason })}
         >
-          Sign In
+          {t("auth.trialBlocked.signInCta")}
         </Link>
         <Link
           href="/pricing"
           className="nn-trial-blocked__btn-secondary"
           onClick={() => trackClientEvent("trial_blocked_pricing_clicked", { reason })}
         >
-          View Plans
+          {t("auth.trialBlocked.viewPlansCta")}
         </Link>
       </div>
     </div>
