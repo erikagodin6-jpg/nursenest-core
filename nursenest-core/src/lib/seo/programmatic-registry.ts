@@ -18,6 +18,7 @@
  * `buildProgrammaticMetadata`. JSON-LD: `ProgrammaticPageJsonLd` (LearningResource + optional FAQPage).
  */
 import type { SeoPageKind } from "@/lib/seo/programmatic-page-kind";
+import { PROGRAMMATIC_SEO_AUTHORITY_BATCH } from "@/lib/seo/programmatic-seo-authority-batch";
 
 /** Matches `revalidate` on `/seo/[slug]` and `/[locale]/[slug]` programmatic pages (24h ISR). */
 export const PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS = 86_400;
@@ -61,6 +62,15 @@ export type SeoPageDefinition = {
    * When omitted, links are inferred from `cluster` for exam pages, otherwise general test bank routing applies.
    */
   linkPack?: "nclex-rn" | "nclex-pn" | "np" | "allied" | "general";
+  /**
+   * Optional comparison table for “X vs Y” pages. Rendered after the first section
+   * (explanation first, then table, then remaining sections).
+   */
+  comparisonTable?: {
+    caption?: string;
+    columns: string[];
+    rows: string[][];
+  };
 };
 
 const SITE = "NurseNest";
@@ -893,6 +903,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
       },
     ],
   },
+  ...PROGRAMMATIC_SEO_AUTHORITY_BATCH,
 ];
 
 export function getAllProgrammaticSeoPages(): SeoPageDefinition[] {

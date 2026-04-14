@@ -179,6 +179,7 @@ export async function ProgrammaticSeoPage({
         <div className="prose prose-neutral max-w-none dark:prose-invert prose-headings:text-[var(--theme-body-text)] prose-p:text-[var(--theme-body-text)]/90 prose-li:text-[var(--theme-body-text)]/90">
           {page.sections.map((section, idx) => {
             const Tag = section.level === 2 ? "h2" : "h3";
+            const table = page.comparisonTable;
             return (
               <Fragment key={idx}>
                 <section className="mb-10">
@@ -189,6 +190,51 @@ export async function ProgrammaticSeoPage({
                     </p>
                   ))}
                 </section>
+                {idx === 0 && table ? (
+                  <div className="not-prose mb-10 overflow-x-auto rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[var(--theme-card-bg)] shadow-sm">
+                    <table className="w-full min-w-[min(100%,36rem)] border-collapse text-sm text-[var(--theme-body-text)]">
+                      {table.caption ? (
+                        <caption className="border-b border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_35%,var(--theme-card-bg))] px-4 py-3 text-left font-semibold text-[var(--theme-body-text)]">
+                          {table.caption}
+                        </caption>
+                      ) : null}
+                      <thead>
+                        <tr className="border-b border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-2)_14%,var(--theme-card-bg))]">
+                          {table.columns.map((col, c) => (
+                            <th
+                              key={c}
+                              scope="col"
+                              className="px-3 py-2.5 text-left font-semibold first:rounded-tl-xl last:rounded-tr-xl sm:px-4"
+                            >
+                              {col}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {table.rows.map((row, r) => (
+                          <tr
+                            key={r}
+                            className={
+                              r % 2 === 0
+                                ? "bg-[color-mix(in_srgb,var(--semantic-chart-4)_8%,var(--theme-card-bg))]"
+                                : "bg-[color-mix(in_srgb,var(--semantic-chart-5)_10%,var(--theme-card-bg))]"
+                            }
+                          >
+                            {row.map((cell, c) => (
+                              <td
+                                key={c}
+                                className="border-t border-[color-mix(in_srgb,var(--semantic-info)_12%,var(--semantic-border-soft))] px-3 py-2.5 align-top sm:px-4"
+                              >
+                                {cell}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : null}
                 {idx === 0 ? (
                   <ProgrammaticMidPagePracticeCta questionsHref={questions} pricingHref={pricing} signupHref={signup} t={t} />
                 ) : null}
