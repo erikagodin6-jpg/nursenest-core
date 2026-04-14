@@ -1,0 +1,40 @@
+{
+  "generatedAt": "2026-04-14T00:00:00.000Z",
+  "scanStatus": "aborted",
+  "reason": "External source directories were not accessible from the scan environment.",
+  "requestedPaths": [
+    "/Volumes/Backup Plus/NurseNest",
+    "/Volumes/Backup Plus/11",
+    "/media/usb/nurse nest"
+  ],
+  "pathsVerified": [
+    {
+      "path": "/Volumes/Backup Plus/NurseNest",
+      "exists": false,
+      "note": "macOS external volume path; not present on Linux scan host."
+    },
+    {
+      "path": "/Volumes/Backup Plus/11",
+      "exists": false,
+      "note": "macOS external volume path; not present on Linux scan host."
+    },
+    {
+      "path": "/media/usb/nurse nest",
+      "exists": false,
+      "note": "Alternative path from spec; not present."
+    }
+  ],
+  "systemSearchPerformed": {
+    "foldersSearched": ["/root (limited depth)"],
+    "matchesFound": []
+  },
+  "totalFilesScanned": 0,
+  "excludePatterns": ["**/node_modules/**", "**/build/**", "**/cache/**", "**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.gif", "**/*.webp", "**/*.svg", "**/images/**"],
+  "includeExtensions": [".ts", ".tsx", ".js", ".json", ".md", ".html"],
+  "inventoryByCategory": {},
+  "instructionsToCompleteScan": [
+    "Mount the Backup Plus volume on a machine where /Volumes/Backup Plus/... exists, OR copy NurseNest and 11 folders into this repo or an accessible path (e.g. /mnt/backup-nursenest).",
+    "Re-run the audit script locally with NODE_PATH or adjust ROOT in scripts/audit/scan-external-site.mjs.",
+    "Alternatively: zip the two folders and attach/extract under nursenest-core/data/external-mirror/ then request a re-scan."
+  ]
+}

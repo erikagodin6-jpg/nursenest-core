@@ -1,0 +1,1258 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T15:28:47.185Z",
+  "legacyRoot": "/root/nursenest-core/external/NurseNest",
+  "scanTool": "legacy-full-restoration-scan.mjs",
+  "caps": {
+    "maxLessonFileEntries": 600,
+    "maxQuestionFileEntries": 400,
+    "maxTranslationFileEntries": 400,
+    "maxBlogFileEntries": 200,
+    "maxActivityFileEntries": 250,
+    "assetSamplePaths": 120,
+    "maxTestsSampleFiles": 220
+  },
+  "summary": {
+    "rgHitsSample": 60,
+    "explicitScenarioFiles": 11
+  },
+  "entries": [
+    {
+      "sourcePath": "client/src/components/ngn-renderers/case-study-series-renderer.tsx",
+      "contentType": "clinical_scenario_or_case_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Case study / scenario content in current lesson or blog-like longform",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "optional-scenario-blocks",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Extract narrative; rebuild presentation."
+    },
+    {
+      "sourcePath": "client/src/pages/admin-case-studies.tsx",
+      "contentType": "clinical_scenario_or_case_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Case study / scenario content in current lesson or blog-like longform",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "optional-scenario-blocks",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Extract narrative; rebuild presentation."
+    },
+    {
+      "sourcePath": "client/src/pages/clinical-case-study.tsx",
+      "contentType": "clinical_scenario_or_case_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Case study / scenario content in current lesson or blog-like longform",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "optional-scenario-blocks",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Extract narrative; rebuild presentation."
+    },
+    {
+      "sourcePath": "client/src/pages/new-grad/clinical-scenario-page.tsx",
+      "contentType": "clinical_scenario_or_case_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Case study / scenario content in current lesson or blog-like longform",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "optional-scenario-blocks",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Extract narrative; rebuild presentation."
+    },
+    {
+      "sourcePath": "client/src/pages/newgrad/scenarios-page.tsx",
+      "contentType": "clinical_scenario_or_case_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Case study / scenario content in current lesson or blog-like longform",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "optional-scenario-blocks",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Extract narrative; rebuild presentation."
+    },
+    {
+      "sourcePath": "client/src/pages/nursing-clinical-scenarios-hub.tsx",
+      "contentType": "clinical_scenario_or_case_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Case study / scenario content in current lesson or blog-like longform",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "optional-scenario-blocks",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Extract narrative; rebuild presentation."
+    },
+    {
+      "sourcePath": "client/src/pages/demo-ngn-case-study.tsx",
+      "contentType": "clinical_scenario_or_case_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Case study / scenario content in current lesson or blog-like longform",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "optional-scenario-blocks",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Extract narrative; rebuild presentation."
+    },
+    {
+      "sourcePath": "client/src/allied/components/scenario-admin.tsx",
+      "contentType": "clinical_scenario_or_case_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Case study / scenario content in current lesson or blog-like longform",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "optional-scenario-blocks",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Extract narrative; rebuild presentation."
+    },
+    {
+      "sourcePath": "client/src/allied/pages/paramedic-scenario-player.tsx",
+      "contentType": "clinical_scenario_or_case_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Case study / scenario content in current lesson or blog-like longform",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "optional-scenario-blocks",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Extract narrative; rebuild presentation."
+    },
+    {
+      "sourcePath": "client/src/allied/pages/paramedic/paramedic-scenarios-hub.tsx",
+      "contentType": "clinical_scenario_or_case_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Case study / scenario content in current lesson or blog-like longform",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "optional-scenario-blocks",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Extract narrative; rebuild presentation."
+    },
+    {
+      "sourcePath": "client/src/allied/pages/paramedic-scenarios-hub.tsx",
+      "contentType": "clinical_scenario_or_case_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "Case study / scenario content in current lesson or blog-like longform",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "optional-scenario-blocks",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Extract narrative; rebuild presentation."
+    },
+    {
+      "sourcePath": "client/src/config/marketing-copy.ts",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/data/certification-exam-data.ts",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/data/rex-pn-hub-content.ts",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/data/np-exam-content-data.ts",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/data/certification-prep-content.ts",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/data/seo-blood-bank.ts",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/data/medical-abbreviations.ts",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/allied-seo-landing.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/underserved-seo-pages.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/components/career-exams-page.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/data/paramedic-cluster-data.ts",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/data/pta-seo-content-data.ts",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/allied-mock-exams.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/data/profession-hub-data.ts",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/data/imaging-career-data.ts",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/data/paramedic-blog-data.ts",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/allied-sims.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/data/hub-marketing-data.ts",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/data/med-math-questions.ts",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/career-landing.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/allied-question-seo.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/mlt-country-page.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/allied-home.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/rrt-pharmacology-hub.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/mlt-landing.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/exam-prep-cornerstone-pages.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/paramedic/paramedic-scenarios-hub.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/new-grad-hub.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/paramedic/paramedic-acp.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/paramedic/paramedic-landing.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/paramedic/paramedic-question-seo.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/paramedic/paramedic-pcp.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/paramedic/paramedic-nremt.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/mlt-lab-values-viral.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/mlt-seo-content-pages.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/allied-faculty-dashboard.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/allied/pages/career-study-page.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/data/healthcare-certification-data.ts",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/pages/case-simulation.tsx",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [
+        "tightly-coupled-ui"
+      ],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/lib/flagship-mock-exam-configs.ts",
+      "contentType": "case_study_reference",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "review-manually",
+      "riskFlags": [],
+      "recommendedDestination": "TBD after content QA",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    }
+  ]
+}

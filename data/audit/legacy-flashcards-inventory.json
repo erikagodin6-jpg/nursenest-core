@@ -1,0 +1,853 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T15:28:47.185Z",
+  "legacyRoot": "/root/nursenest-core/external/NurseNest",
+  "scanTool": "legacy-full-restoration-scan.mjs",
+  "caps": {
+    "maxLessonFileEntries": 600,
+    "maxQuestionFileEntries": 400,
+    "maxTranslationFileEntries": 400,
+    "maxBlogFileEntries": 200,
+    "maxActivityFileEntries": 250,
+    "assetSamplePaths": 120,
+    "maxTestsSampleFiles": 220
+  },
+  "summary": {
+    "flashcardTsFiles": 32,
+    "note": "Deck modules under client/src/data; IDs embedded as TS objects."
+  },
+  "entries": [
+    {
+      "sourcePath": "client/src/data/flashcards-np-subspecialties.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/pharmacy-tech-flashcards.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-np-enrichment-5.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-np.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-np-patho.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/mlt-flashcards.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-rn-infectious-disease.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-rn-expansion-2.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-rn-shock-critical.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-icu-critical-care.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-postpartum.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/rrt-flashcards.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-community.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-rn-arrhythmias-chd-anticoag.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-rpn.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-rn-expansion.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-rn.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-rn-patho-expansion.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-rn-patho-cardio-neuro.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/allied-health-flashcards.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-rn-resp-renal.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-np-enrichment-3.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-np-enrichment-2.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcard-types.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-rn-resp-renal-batch2.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-rn-gi-cancer-peds-integ.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-public-health.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-np-enrichment-6.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-np-enrichment-1.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-np-enrichment-4.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-rpn-expansion.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    },
+    {
+      "sourcePath": "client/src/data/flashcards-labor-delivery.ts",
+      "contentType": "flashcard_deck_data",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "duplicate-risk",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current flashcard pipeline / deck registry",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "rebuild-ui-parity",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "card-surface-semantic-tokens"
+      },
+      "notes": "Map deck IDs; avoid duplicate slugs."
+    }
+  ]
+}

@@ -54,6 +54,9 @@ import { RationalePanel } from "@/components/study/cat-rationale-panel";
 import { ResultsSummary } from "@/components/study/cat-results-summary";
 import type { StudySettings } from "@/lib/learner/study-settings";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
+import { captureClientException } from "@/lib/runtime/client-observability";
+import { PracticeTestRunPageSkeleton } from "@/components/skeletons/hub-page-skeleton";
 
 type QRow = {
   id: string;
@@ -184,9 +187,13 @@ export function PracticeTestRunnerClient({
     idxRef.current = idx;
   }, [idx]);
 
+  const debugEventCapRef = useRef(0);
   const logSessionEvent = useCallback(
     (event: string, detail?: Record<string, unknown>) => {
-      console.info("[practice-test-runner]", event, { testId, ...(detail ?? {}) });
+      if (process.env.NODE_ENV !== "development") return;
+      if (debugEventCapRef.current >= 48) return;
+      debugEventCapRef.current += 1;
+      console.debug("[practice-test-runner]", event, { testId, ...(detail ?? {}) });
     },
     [testId],
   );
@@ -196,7 +203,11 @@ export function PracticeTestRunnerClient({
     setError(null);
     autoSubmitRef.current = false;
     try {
-      const res = await fetch(`/api/practice-tests/${testId}?hydrate=minimal`);
+      const res = await fetchWithRetry(`/api/practice-tests/${testId}?hydrate=minimal`, undefined, {
+        attempts: 3,
+        baseDelayMs: 500,
+        timeoutMs: 45_000,
+      });
       const data = (await res.json()) as {
         error?: string;
         questionIds?: string[];
@@ -257,7 +268,10 @@ export function PracticeTestRunnerClient({
       if (catStudyAwaiting && data.status === "IN_PROGRESS") {
         void (async () => {
           try {
-            const fr = await fetch(`/api/practice-tests/${testId}/cat-study-review`);
+            const fr = await fetchWithRetry(`/api/practice-tests/${testId}/cat-study-review`, undefined, {
+              attempts: 2,
+              timeoutMs: 20_000,
+            });
             const fd = (await fr.json()) as { studyFeedback?: CatStudyFeedbackPayload; error?: string };
             if (fr.ok && fd.studyFeedback) setCatStudyFeedback(fd.studyFeedback);
           } catch {
@@ -280,6 +294,7 @@ export function PracticeTestRunnerClient({
       }
       setPhase("ready");
     } catch (e) {
+      captureClientException("practice_test_hydrate", e, { testId });
       const message = e instanceof Error ? e.message : "Error";
       setError(message);
       setPhase("error");
@@ -299,7 +314,11 @@ export function PracticeTestRunnerClient({
     setQLoading(true);
     void (async () => {
       try {
-        const res = await fetch(`/api/practice-tests/${testId}/question?index=${idx}`, { signal: ac.signal });
+        const res = await fetchWithRetry(`/api/practice-tests/${testId}/question?index=${idx}`, { signal: ac.signal }, {
+          attempts: 2,
+          baseDelayMs: 400,
+          timeoutMs: 25_000,
+        });
         const payload = (await res.json()) as { question?: QRow; error?: string };
         if (!res.ok) {
           if (!ac.signal.aborted) setError(payload.error ?? "Could not load question.");
@@ -766,20 +785,7 @@ export function PracticeTestRunnerClient({
   ) : null;
 
   if (phase === "loading") {
-    return (
-      <div className="nn-card space-y-3 p-6 text-sm text-muted-foreground" aria-busy="true">
-        <p className="font-medium text-foreground">
-          {tx("learner.practiceTests.run.loadingTest", "Loading test...")}
-        </p>
-        <div className="h-2 w-full animate-pulse rounded-full bg-muted" />
-        <p className="text-xs">
-          {tx(
-            "learner.practiceTests.run.restoringSession",
-            "Restoring session from the server.",
-          )}
-        </p>
-      </div>
-    );
+    return <PracticeTestRunPageSkeleton />;
   }
   if (phase === "error") {
     return (
@@ -813,7 +819,10 @@ export function PracticeTestRunnerClient({
   async function loadTeachingReview() {
     setTeachingReviewLoading(true);
     try {
-      const res = await fetch(`/api/practice-tests/${testId}?teachingReview=1`);
+      const res = await fetchWithRetry(`/api/practice-tests/${testId}?teachingReview=1`, undefined, {
+        attempts: 2,
+        timeoutMs: 30_000,
+      });
       const data = (await res.json()) as { teachingReview?: { items: PracticeTestTeachingItem[] }; error?: string };
       if (!res.ok) {
         setError(data.error ?? "Could not load teaching review.");

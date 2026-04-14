@@ -1,0 +1,95 @@
+{
+  "generatedAt": "2026-04-14T15:00:00.000Z",
+  "environment": "verification_host_linux_no_mac_volumes",
+  "overallResult": "pass",
+  "narrowFixesApplied": [],
+  "part1": {
+    "apiGetLessons": {
+      "result": "pass",
+      "files": [
+        "src/app/api/lessons/route.ts",
+        "src/lib/api/api-pagination-limits.ts",
+        "src/lib/api/lessons-list-cursor.ts"
+      ],
+      "notes": [
+        "Unauthenticated requests return 401 (session required). Live HTTP matrix not executed with a real session in CI; behavior verified against route implementation.",
+        "limit/pageSize: parseBoundedPageSize with LESSON_API_OFFSET_LIMIT min=1 max=50 default=20; invalid sizes return 400 with code page_size_limit or invalid_page_size.",
+        "Offset mode (default): page must be <= maxSafeOffsetPage(pageSize) (~201 for pageSize 20, MAX_LIST_SKIP_ROWS_DEFAULT=4000); page=999&limit=20 returns 400 code page_out_of_range.",
+        "Deep skip: skip beyond cap returns 400 code pagination_depth_limit.",
+        "Subscriber offset JSON includes totalCount (as total), currentPage (as page), totalPages (as pageCount), plus compatibility fields page, pageSize, total, pageCount, lessons, mode, pagination.",
+        "Cursor mode: paginationMode=cursor or non-empty cursor param; subscriber only; totalCount/currentPage/totalPages are null; pagination has nextCursor, hasMore, mode cursor.",
+        "Non-subscriber cursor: 400 cursor_requires_subscriber."
+      ],
+      "matrix": [
+        { "query": "page=1&limit=20", "expected": "200 subscriber: first page, pageSize 20" },
+        { "query": "page=2&limit=20", "expected": "200 skip=20" },
+        { "query": "page=1&limit=50", "expected": "200 pageSize 50" },
+        { "query": "page=999&limit=20", "expected": "400 page_out_of_range (maxPage ~201)" },
+        { "query": "paginationMode=cursor&limit=20", "expected": "200 or 400 if not subscriber" }
+      ]
+    },
+    "subscriberLessonLibraryAppLessons": {
+      "result": "pass",
+      "files": [
+        "src/app/(student)/app/(learner)/lessons/page.tsx",
+        "src/components/pathway-lessons/pathway-lesson-pagination.tsx",
+        "src/components/student/learner-lessons-search-toolbar.tsx",
+        "src/components/student/learner-lessons-virtual-list.tsx"
+      ],
+      "checks": [
+        { "id": "page_query", "pass": true, "detail": "searchParams.page; clamped with maxSafeOffsetPage(limit); rawPage > pageCount triggers redirect to canonical URL with appLessonsListQuery" },
+        { "id": "limit_query", "pass": true, "detail": "parseLessonLibraryLimit — same 1–50 bounds as API default 20" },
+        { "id": "q_before_pagination", "pass": true, "detail": "qEffective applied in Prisma AND for content_items and pathway_lessons branches before skip/take" },
+        { "id": "preserve_params", "pass": true, "detail": "PathwayLessonPagination hubQuery preserves topic|topicSlug|pathwayId|q|limit (non-default limit)" },
+        { "id": "out_of_range_redirect", "pass": true, "detail": "if rawPage !== lessonsBlock.page after clamp, redirect to /app/lessons?... canonical page" },
+        { "id": "showing_a_to_b", "pass": true, "detail": "from=(page-1)*pageSize+1, to=min(page*pageSize,total) in PathwayLessonPagination" },
+        { "id": "prev_next_numeric", "pass": true, "detail": "Previous/Next links and numeric page Links use href(p)" },
+        { "id": "ellipsis", "pass": true, "detail": "visiblePageNumbers: ellipsis when pageCount > 10 (collapse middle)" }
+      ]
+    },
+    "searchUx": {
+      "result": "pass",
+      "files": ["src/components/student/learner-lessons-search-toolbar.tsx", "src/app/(student)/app/(learner)/lessons/page.tsx"],
+      "checks": [
+        { "id": "debounce_ms", "pass": true, "detail": "setTimeout 300ms in LearnerLessonsSearchToolbar" },
+        { "id": "reset_page_1", "pass": true, "detail": "qs.set('page','1') on search commit" },
+        { "id": "preserve_other_params", "pass": true, "detail": "new URLSearchParams(searchParams.toString()) before q update" },
+        { "id": "suspense", "pass": true, "detail": "LearnerLessonsSearchToolbar wrapped in Suspense in page.tsx" }
+      ]
+    },
+    "virtualization": {
+      "result": "pass",
+      "files": ["src/components/student/learner-lessons-virtual-list.tsx"],
+      "checks": [
+        { "id": "tanstack_virtual", "pass": true, "detail": "useVirtualizer: only getVirtualItems() rows render; total height from getTotalSize()" },
+        { "id": "scroll_parent", "pass": true, "detail": "max-h overflow-auto on parentRef; overscan 6" },
+        { "id": "measure", "pass": true, "detail": "virtualizer.measureElement on row div" }
+      ],
+      "note": "E2E browser verification of DOM node count not run; implementation matches @tanstack/react-virtual window pattern."
+    },
+    "errorFallback": {
+      "result": "pass",
+      "files": ["src/app/(student)/app/(learner)/lessons/error.tsx"],
+      "checks": [
+        { "id": "segment_error_ui", "pass": true, "detail": "Could not load lessons + error.message" },
+        { "id": "try_again", "pass": true, "detail": "button onClick={() => reset()}" },
+        { "id": "back_to_app", "pass": true, "detail": "Link href=/app" }
+      ]
+    },
+    "safetyUnchanged": {
+      "result": "pass",
+      "detail": "No edits in this pass; routes /app/lessons, auth via session, schema untouched, entitlements via lessonAccessWhere / resolveEntitlement unchanged by verification-only work."
+    }
+  },
+  "part2_external_old_site": {
+    "status": "blocked_no_external_source",
+    "attemptedPaths": [
+      "/Volumes/Backup Plus/11",
+      "/Volumes/Backup Plus/NurseNest"
+    ],
+    "mountStatus": "paths_not_found",
+    "reason": "Host is Linux: /Volumes does not exist (macOS Backup Plus paths unavailable in this environment).",
+    "localSearch": "not_completed_wide_find_prior_interrupted",
+    "recommendedActionForUser": "Mount the external volume or copy the old-site folder into the workspace (e.g. under a path like /root/old-nurse-nest-site), then re-run the audit prompt with that path, or run Cursor on a machine where /Volumes/Backup Plus/... is mounted."
+  }
+}

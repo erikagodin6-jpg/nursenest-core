@@ -1,0 +1,110 @@
+{
+  "generatedAt": "2026-04-14T15:28:47.185Z",
+  "legacyRoot": "/root/nursenest-core/external/NurseNest",
+  "schemaVersion": 2,
+  "countsSnapshot": {
+    "lessonModuleFiles": 448,
+    "lessonKeysInContentMap": 4223,
+    "embeddedLessonQuestions": 11241,
+    "careerQuestionFiles": 201,
+    "examQuestionFiles": 260,
+    "flashcardFiles": 32,
+    "blogRelatedTotal": 47,
+    "i18nFiles": 105,
+    "activityHubPages": 55,
+    "catServerFiles": 9,
+    "publicAssetFiles": 2751,
+    "dashboardProgressFiles": 3,
+    "toolsPagesDiscovered": 64
+  },
+  "topNursingLessonFilesForReview": [
+    "client/src/data/lessons/cardiac-respiratory-critical.ts",
+    "client/src/data/lessons/rn-infection-control-expansion.ts",
+    "client/src/data/lessons/rn-incomplete-batch-2.ts",
+    "client/src/data/lessons/rn-respiratory-renal-expansion.ts",
+    "client/src/data/lessons/rn-shock-critical-care.ts",
+    "client/src/data/lessons/rpn-patho-hematology-endocrine.ts",
+    "client/src/data/lessons/rn-content-batch-008.ts",
+    "client/src/data/lessons/critical-care.ts",
+    "client/src/data/lessons/rn-heent-expansion.ts",
+    "client/src/data/lessons/rpn-patho-immunology.ts",
+    "client/src/data/lessons/rn-content-batch-007.ts",
+    "client/src/data/lessons/rpn-patho-neurology.ts",
+    "client/src/data/lessons/rn-infectious-disease-expansion.ts",
+    "client/src/data/lessons/rn-patho-cardio-neuro.ts",
+    "client/src/data/lessons/rn-content-batch-002.ts",
+    "client/src/data/lessons/rn-incomplete-batch-1.ts",
+    "client/src/data/lessons/rn-gi-cancer-peds-integ.ts",
+    "client/src/data/lessons/np-content-expansion-patho-2.ts",
+    "client/src/data/lessons/rn-content-batch-003.ts",
+    "client/src/data/lessons/rn-content-batch-005.ts",
+    "client/src/data/lessons/rn-arrhythmias-expansion.ts",
+    "client/src/data/lessons/rn-chd-anticoag-expansion.ts",
+    "client/src/data/lessons/rn-incomplete-batch-3.ts",
+    "client/src/data/lessons/rn-safety-forensic-expansion.ts",
+    "client/src/data/lessons/rn-content-batch-004.ts",
+    "client/src/data/lessons/rpn-patho-stress-metabolism.ts",
+    "client/src/data/lessons/rn-content-batch-006.ts",
+    "client/src/data/lessons/rn-content-batch-001.ts",
+    "client/src/data/lessons/rrt-critical-care-advanced.ts",
+    "client/src/data/lessons/rrt-cardiac-critical-care.ts",
+    "client/src/data/lessons/rn-incomplete-batch-6.ts",
+    "client/src/data/lessons/rn-incomplete-batch-7.ts",
+    "client/src/data/lessons/np-content-expansion-patho.ts",
+    "client/src/data/lessons/np-patho-expansion.ts",
+    "client/src/data/lessons/rn-msk-expansion.ts"
+  ],
+  "topLegacyItemsLowPriorityOrDoNotRestore": [
+    "client/src/data/lessons/lesson-repair-batch.ts",
+    "client/src/data/lessons/missing-batch-*.ts",
+    ".local/** Replit / IDE tooling"
+  ],
+  "migrateFirst": [
+    "client/src/data/lessons/** (order 1)",
+    "client/src/data/exam-questions/** (order 2)",
+    "embedded in LessonContent (order 3)"
+  ],
+  "migrateSecond": [
+    "client/src/data/*flashcard*.ts (order 4)",
+    "server/cat-engine.ts, server/adaptive-engine.ts (order 5)",
+    "tools/i18n/source/** (order 6)"
+  ],
+  "restoreSelectively": [
+    "server/cat-engine.ts + adaptive-engine.ts — diff vs nursenest-core",
+    "server/study-path.ts — ideas only",
+    "Blog automation — extract content only"
+  ],
+  "doNotMigrate": [
+    {
+      "slug": "ide-tooling",
+      "path": ".local/**, .agents/**"
+    },
+    {
+      "slug": "stale-artifacts",
+      "path": "artifacts/**, dist/**"
+    },
+    {
+      "slug": "legacy-admin-ops-only",
+      "path": "client/src/pages/admin-*.tsx (product admin differs)"
+    }
+  ],
+  "prioritizationNotes": "nursing lessons → nursing question banks → pre/post lesson tests → flashcards → CAT / adaptive improvements → translations → high-quality blogs → tools/calculators → case studies / activities / games → dashboard/progress ideas → allied after nursing stable",
+  "blockers": [
+    "Legacy contentMap size — chunked import only",
+    "CAT depends on legacy DB shapes — map to Prisma before porting logic",
+    "i18n compile pipeline differs — keys must match nursenest-core rules",
+    "Duplicate stem/slug risk — dedupe against production"
+  ],
+  "nextMigrationOrder": [
+    "1) Chunked lesson import + enrichment converter",
+    "2) Exam questions with stem-hash dedupe",
+    "3) Pre/post with lesson payloads",
+    "4) Flashcard deck mapping",
+    "5) CAT algorithm review",
+    "6) i18n bundle validation",
+    "7) Blog editorial extraction",
+    "8) Tools rebuild in tool hub",
+    "9) Allied content"
+  ],
+  "aestheticRule": "Valuable legacy content that looks dated should be migrated as data and rendered with current NurseNest components — never copy legacy Vite page chrome or raw nursenestTheme hex as the system of record."
+}

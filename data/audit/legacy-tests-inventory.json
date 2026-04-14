@@ -1,0 +1,5257 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T15:28:47.185Z",
+  "legacyRoot": "/root/nursenest-core/external/NurseNest",
+  "scanTool": "legacy-full-restoration-scan.mjs",
+  "caps": {
+    "maxLessonFileEntries": 600,
+    "maxQuestionFileEntries": 400,
+    "maxTranslationFileEntries": 400,
+    "maxBlogFileEntries": 200,
+    "maxActivityFileEntries": 250,
+    "assetSamplePaths": 120,
+    "maxTestsSampleFiles": 220
+  },
+  "summary": {
+    "note": "preTest/postTest/quiz live inside LessonContent; not separate relational tables in legacy client.",
+    "sampleFilesScannedForMarkers": 100,
+    "preTestOccurrencesInSample": 28,
+    "postTestOccurrencesInSample": 25
+  },
+  "entries": [
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-001.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/missing-batch-05.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "partial-data"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/reproductive-np.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-113.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/legal-edge-cases.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/clinical-scenarios.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-expanded-content.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/clinical-conditions-batch-n.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-generated-batch-1.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/oncology.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/clinical-conditions-batch-f.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-028.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-endo-content.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-061.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-020.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/vaccines.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/maternity-expanded.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-010.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-056.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/extra-questions-rpn.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/cardiac-respiratory-critical.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-006.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/nutrition.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/delegation.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/musculoskeletal-expanded.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/endocrine-immune-expanded.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/pediatrics.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/reproductive.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-123.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/missing-batch-03.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "partial-data"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-037.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-032.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/mlt-lessons-expanded-2.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/nutrition-supplements.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-generated-batch-3.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-091.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-infection-control-expansion.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-057.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-106.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-001.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-018.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/therapeutic-communication.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/mental-health.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-092.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/mlt-lessons.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-069.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-079.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-136.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/dermatology.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/ethics-comprehensive.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-080.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/labor-delivery.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/imaging-lessons.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-014.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-incomplete-batch-2.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-respiratory-renal-expansion.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/picu-lessons-batch-4.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-008.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-assessment-content-a.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-035.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/clinical-conditions-batch-j.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-shock-critical-care.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rrt-neonatal-expanded.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/pediatrics-expanded.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-144.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-013.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-107.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/occupational-therapy-lessons.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/addictions-counsellor-lessons.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-105.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-022.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-curriculum-batch-1.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-generated-batch-4.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/cultural-safety-equity.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/pharmacology-infectious-psych.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-138.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/echo-core-lessons.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-015.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-patho-hematology-endocrine.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-content-batch-008.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/respiratory.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-content-expansion-misc.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-096.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/cardiovascular-expanded.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-120.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-generated-batch-2.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/core-fundamentals.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/paramedic-lessons-expanded.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-065.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-cv-content.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-044.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/hemodialysis.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-097.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/extra-questions-rn.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-007.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-free-batch-1.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-clinical-batch-9.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/assessment.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rrt-lessons.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/pain-wound-care.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-042.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/missing-batch-09.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "partial-data"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/icu-lessons-batch-3.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/critical-care.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/clinical-conditions-batch-g.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-038.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-heent-expansion.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-089.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-041.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-patho-immunology.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-100.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-116.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-142.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-046.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/safety-ethics.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/respiratory-missing-np.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-128.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/pharmacology-cardio-resp.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-051.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/community-nursing.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-055.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-024.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-generated-batch-7.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/pharmacology-gi-renal-specialty.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-content-batch-007.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-093.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-047.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/mlt-lesson-repair-batch.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-073.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-119.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/picu-lessons-batch-1.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-104.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rrt-pharmacology-previews.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-patho-neurology.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-infectious-disease-expansion.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-patho-cardio-neuro.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-117.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-006.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-042.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-083.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/lesson-repair-batch.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/clinical-conditions-batch-d.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-076.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-016.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/allied-health-foundations-1.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-094.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-019.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-074.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/hematology-expanded.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-028.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/emergency.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rrt-lessons-expanded-3.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-resp-content.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-generated-batch-5.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-041.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-030.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/extra-questions-np.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-content-batch-002.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/missing-batch-01.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "partial-data"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-clinical-batch-6.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-098.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-021.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/surgical-tech-positioning.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/neurological.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-013.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-090.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-137.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-033.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rrt-pulmonary-diseases.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-clinical-units.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/missing-batch-10.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "partial-data"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-050.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-077.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-005.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/fluid-electrolytes.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-incomplete-batch-1.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-131.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/oncology-expanded.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/clinical-conditions-batch-h.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-011.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/neurology.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/blood-transfusion-reactions.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-140.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rrt-cardiac-expansion.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/palliative-care.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-gi-cancer-peds-integ.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-026.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/community-health.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-033.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-066.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-015.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-036.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/toxicology-environmental.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/assessment-skills.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-content-expansion-patho-2.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-122.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/clinical-conditions-batch-a.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/informatics-documentation.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-060.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/mlt-lessons-expanded.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/nursing-calculations.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/np-free-batch-2.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-031.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-023.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/surgical-tech-anesthesia-basics.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-content-batch-003.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-087.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-content-batch-005.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/icu-lessons-batch-4.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-arrhythmias-expansion.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rpn-content-batch-023.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-036.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-chd-anticoag-expansion.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/pta-core-lessons.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/generated-batch-010.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "legacy-format"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/maternity.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/poisoning.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/missing-batch-11.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [
+        "partial-data"
+      ],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-incomplete-batch-3.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    },
+    {
+      "sourcePath": "client/src/data/lessons/rn-safety-forensic-expansion.ts",
+      "contentType": "lesson_embedded_assessment",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "content-only",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson sections JSON (NN_LESSON_DB_PAYLOAD_V2) preTest/postTest",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes-embedded-in-lesson",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Migrated with parent lesson body."
+    }
+  ]
+}

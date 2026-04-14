@@ -1,0 +1,1451 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T15:28:47.185Z",
+  "legacyRoot": "/root/nursenest-core/external/NurseNest",
+  "scanTool": "legacy-full-restoration-scan.mjs",
+  "caps": {
+    "maxLessonFileEntries": 600,
+    "maxQuestionFileEntries": 400,
+    "maxTranslationFileEntries": 400,
+    "maxBlogFileEntries": 200,
+    "maxActivityFileEntries": 250,
+    "assetSamplePaths": 120,
+    "maxTestsSampleFiles": 220
+  },
+  "summary": {
+    "candidatePageFiles": 55,
+    "note": "Hub pages, qbank shells, pathway explorers — mostly route orchestration; content often in /data."
+  },
+  "entries": [
+    {
+      "sourcePath": "client/src/pages/rex-pn-content-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/exam-prep-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/nursing-certifications-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/nursing-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/profession-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/international-nursing-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/encyclopedia-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/medical-abbreviations-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/nursing-licensing-exams-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/exam-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/nurse-residency-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/medical-imaging-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/nurse-salary-guide-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/np-exam-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/jobs-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/admin-question-bank.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/career-tools/career-ai-simulator.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/new-grad/profession-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/herbal-supplements-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/qbank-exam.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/nclex-rn-content-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "RN",
+        "examHint": "NCLEX-RN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/profession-authority-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/allied-health-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/admin-qbank-import.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/admin-qbank-manage.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/study-pathways-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/qbank-preview.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/newgrad/certifications-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/newgrad/newgrad-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/clinical-skills-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/certification-exam-prep-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/admin-qbank-pipeline.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/healthcare-certifications-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/nursing-regulatory-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/pathways.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/nursing-skill-checklists-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/rex-pn-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "PN/RPN/LVN",
+        "examHint": "NCLEX-PN / REx-PN"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/nursing-clinical-scenarios-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/pharmacology-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/nursing-specialties-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/nursing-physiology-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/np-exam-prep-pillar.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/np-exam-content-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "NP",
+        "examHint": "NP boards"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/question-bank.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/healthcare-careers-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/nursing-schools-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/international-nursing-tools.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/new-graduate-support-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/qbank-study.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/exam-blueprint-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/healthcare-policy-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/allied-exam-prep-landing.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/qbank-factory.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/new-grad-hub.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    },
+    {
+      "sourcePath": "client/src/pages/exam-prep-cornerstone-pages.tsx",
+      "contentType": "activity_or_hub_page",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Equivalent Next.js routes / learner tools hub",
+      "recommendedMigrationOrder": 9,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "partial-pattern-only",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reuse IA ideas; rebuild UI with current shell."
+    }
+  ]
+}

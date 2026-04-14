@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T15:28:47.185Z",
+  "legacyRoot": "/root/nursenest-core/external/NurseNest",
+  "scanTool": "legacy-full-restoration-scan.mjs",
+  "caps": {
+    "maxLessonFileEntries": 600,
+    "maxQuestionFileEntries": 400,
+    "maxTranslationFileEntries": 400,
+    "maxBlogFileEntries": 200,
+    "maxActivityFileEntries": 250,
+    "assetSamplePaths": 120,
+    "maxTestsSampleFiles": 220
+  },
+  "summary": {
+    "principle": "Do not port Vite page chrome; reuse patterns as specs for React Server Components + current design tokens."
+  },
+  "entries": [
+    {
+      "sourcePath": "client/src/components/mobile-study-shell.tsx",
+      "contentType": "mobile_study_shell",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "all",
+        "examHint": "n/a"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [],
+      "recommendedDestination": "Learner shell responsive patterns",
+      "recommendedMigrationOrder": 10,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "current-marketing-study-surfaces"
+      },
+      "notes": "Useful IA; rebuild with current layout primitives."
+    },
+    {
+      "sourcePath": "client/src/components/deck-views.tsx",
+      "contentType": "flashcard_deck_views",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [],
+      "recommendedDestination": "Flashcard study UX",
+      "recommendedMigrationOrder": 4,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "inspire-layout-only",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/components/lesson-quiz-embed.tsx",
+      "contentType": "lesson_quiz_embed",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "rebuild-in-new-ui",
+      "riskFlags": [],
+      "recommendedDestination": "Pathway lesson assessment embeds",
+      "recommendedMigrationOrder": 3,
+      "matchCurrent": {
+        "lessonFormat": "yes",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": ""
+    },
+    {
+      "sourcePath": "client/src/components/content-gate.tsx",
+      "contentType": "content_gate",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "unknown-dependency"
+      ],
+      "recommendedDestination": "Entitlement gating — align with server paywall",
+      "recommendedMigrationOrder": 2,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Never client-only paywall; match current entitlements."
+    },
+    {
+      "sourcePath": "client/src/components/navigation.tsx",
+      "contentType": "legacy_navigation",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "deprecated",
+      "riskFlags": [
+        "tightly-coupled-ui",
+        "old-routing-assumption"
+      ],
+      "recommendedDestination": "Ignore — use current nav",
+      "recommendedMigrationOrder": 99,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Reference for IA only."
+    }
+  ]
+}

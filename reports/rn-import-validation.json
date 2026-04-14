@@ -1,0 +1,191 @@
+{
+  "generatedAt": "2026-04-14T14:51:02.990Z",
+  "pathwayId": "us-rn-nclex-rn",
+  "summary": {
+    "checked": 20,
+    "ok": 20,
+    "missingOrEmpty": 0
+  },
+  "items": [
+    {
+      "legacySlug": "thyroid-storm-rn",
+      "usRnSlug": "us-rn-thyroid-storm",
+      "title": "Thyroid Disease: Hypothyroidism, Hyperthyroidism & Thyroid Storm",
+      "found": true,
+      "sectionCount": 11,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "adrenal-crisis-rn",
+      "usRnSlug": "us-rn-adrenal-crisis",
+      "title": "Adrenal Disorders: HPA Axis, Cushing Syndrome & Adrenal Crisis",
+      "found": true,
+      "sectionCount": 11,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "hemorrhagic-stroke-rn",
+      "usRnSlug": "us-rn-hemorrhagic-stroke",
+      "title": "Hemorrhagic Stroke: Intracerebral & Subarachnoid Hemorrhage",
+      "found": true,
+      "sectionCount": 11,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "heart-failure-systolic-diastolic-rn",
+      "usRnSlug": "us-rn-heart-failure-systolic-diastolic",
+      "title": "Heart Failure: HFrEF vs HFpEF Comprehensive Management",
+      "found": true,
+      "sectionCount": 11,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "distributive-shock-overview-rn",
+      "usRnSlug": "us-rn-distributive-shock-overview",
+      "title": "Distributive Shock Overview: RN Clinical Management",
+      "found": true,
+      "sectionCount": 5,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "myocardial-infarction-comprehensive-rn",
+      "usRnSlug": "us-rn-myocardial-infarction-comprehensive",
+      "title": "Myocardial Infarction: Comprehensive RN Management",
+      "found": true,
+      "sectionCount": 5,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "sepsis-septic-shock-rn",
+      "usRnSlug": "us-rn-sepsis-septic-shock",
+      "title": "Sepsis & Septic Shock: RN Clinical Management",
+      "found": true,
+      "sectionCount": 5,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "infection-control-and-sepsis-management-rn-rn",
+      "usRnSlug": "us-rn-infection-control-and-sepsis-management",
+      "title": "Infection Control and Sepsis Management (RN)",
+      "found": true,
+      "sectionCount": 5,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "ards-pathophysiology-rn",
+      "usRnSlug": "us-rn-ards-pathophysiology",
+      "title": "Impaired Gas Exchange & ARDS Pathophysiology",
+      "found": true,
+      "sectionCount": 5,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "stroke-tia-comprehensive-rn",
+      "usRnSlug": "us-rn-stroke-tia-comprehensive",
+      "title": "Stroke and TIA: Comprehensive RN Management",
+      "found": true,
+      "sectionCount": 11,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "ie-embolic-stroke-rn",
+      "usRnSlug": "us-rn-ie-embolic-stroke",
+      "title": "Infective Endocarditis with Embolic Stroke",
+      "found": true,
+      "sectionCount": 11,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "anaphylactic-shock-rn",
+      "usRnSlug": "us-rn-anaphylactic-shock",
+      "title": "Anaphylactic Shock: RN Clinical Management",
+      "found": true,
+      "sectionCount": 5,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "epistaxis-management-rn",
+      "usRnSlug": "us-rn-epistaxis-management",
+      "title": "Epistaxis: Assessment & Hemorrhage Control",
+      "found": true,
+      "sectionCount": 5,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "hypovolemic-shock-rn",
+      "usRnSlug": "us-rn-hypovolemic-shock",
+      "title": "Hypovolemic Shock: RN Clinical Management",
+      "found": true,
+      "sectionCount": 5,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "obstructive-shock-rn",
+      "usRnSlug": "us-rn-obstructive-shock",
+      "title": "Obstructive Shock: RN Clinical Management",
+      "found": true,
+      "sectionCount": 5,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "neonatal-sepsis-early-onset-rn",
+      "usRnSlug": "us-rn-neonatal-sepsis-early-onset",
+      "title": "Early-Onset Neonatal Sepsis: Recognition",
+      "found": true,
+      "sectionCount": 11,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "neurogenic-shock-rn",
+      "usRnSlug": "us-rn-neurogenic-shock",
+      "title": "Neurogenic Shock: RN Clinical Management",
+      "found": true,
+      "sectionCount": 11,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "sepsis-screening-rn",
+      "usRnSlug": "us-rn-sepsis-screening",
+      "title": "Sepsis Screening (qSOFA, SIRS Criteria)",
+      "found": true,
+      "sectionCount": 5,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "infections-rn",
+      "usRnSlug": "us-rn-infections",
+      "title": "Infection Control and Sepsis Management",
+      "found": true,
+      "sectionCount": 5,
+      "hasPrePost": false,
+      "ok": true
+    },
+    {
+      "legacySlug": "secondary-survey-rn",
+      "usRnSlug": "us-rn-secondary-survey",
+      "title": "Secondary Survey: Head-to-Toe Trauma",
+      "found": true,
+      "sectionCount": 5,
+      "hasPrePost": false,
+      "ok": true
+    }
+  ]
+}

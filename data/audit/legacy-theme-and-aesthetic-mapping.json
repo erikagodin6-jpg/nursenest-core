@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T15:28:47.185Z",
+  "legacyRoot": "/root/nursenest-core/external/NurseNest",
+  "scanTool": "legacy-full-restoration-scan.mjs",
+  "caps": {
+    "maxLessonFileEntries": 600,
+    "maxQuestionFileEntries": 400,
+    "maxTranslationFileEntries": 400,
+    "maxBlogFileEntries": 200,
+    "maxActivityFileEntries": 250,
+    "assetSamplePaths": 120,
+    "maxTestsSampleFiles": 220
+  },
+  "summary": {
+    "legacyThemeFile": "client/src/theme/nursenestTheme.ts",
+    "legacyPalette": "pastel hex literals (pink/lavender) — differs from current semantic CSS variable system",
+    "currentTarget": "nursenest-core semantic tokens (semantic-status-tokens.css, theme-palettes, globals) — soft premium, multi-hue status, not flat gray"
+  },
+  "systems": [
+    {
+      "system": "lessons",
+      "legacyUx": "Long-form sections + embedded quiz cards; tabbed/mobile shells optional.",
+      "newAesthetic": "Pathway lesson premium sections, semantic panels, nn-progress / badges.",
+      "destinationSurface": "current lesson page design",
+      "migrateVisuals": "no — rebuild layout with current section cards",
+      "reuseAssets": "illustrations if HTTPS and on-brand; otherwise replace",
+      "mustRebuild": [
+        "section spacing",
+        "typography hierarchy",
+        "semantic borders",
+        "responsive lesson nav"
+      ]
+    },
+    {
+      "system": "blogs",
+      "legacyUx": "React pages + automation; mixed SEO clusters.",
+      "newAesthetic": "Current blog typography + marketing shells",
+      "destinationSurface": "current blog design",
+      "migrateVisuals": "no",
+      "reuseAssets": "hero images if licensed",
+      "mustRebuild": [
+        "MDX/HTML hygiene",
+        "internal linking to pathways"
+      ]
+    },
+    {
+      "system": "tools_calculators",
+      "legacyUx": "Standalone tool pages with legacy form styling.",
+      "newAesthetic": "Tool hub cards + semantic info/warning panels",
+      "destinationSurface": "current tool page structure",
+      "migrateVisuals": "no",
+      "reuseAssets": "formulas / question JSON",
+      "mustRebuild": [
+        "inputs",
+        "validation UX",
+        "mobile layout"
+      ]
+    },
+    {
+      "system": "flashcards",
+      "legacyUx": "Deck views + swipe/stack metaphors.",
+      "newAesthetic": "Current flashcard UX + motion discipline",
+      "destinationSurface": "current flashcard design",
+      "migrateVisuals": "no",
+      "reuseAssets": "card content",
+      "mustRebuild": [
+        "keyboard/a11y",
+        "progress sync"
+      ]
+    },
+    {
+      "system": "cat_practice",
+      "legacyUx": "Server-driven adaptive sessions + mock exams.",
+      "newAesthetic": "Current CAT / practice flows",
+      "destinationSurface": "current CAT/practice design",
+      "migrateVisuals": "n/a",
+      "reuseAssets": "item pools after dedupe",
+      "mustRebuild": [
+        "session state",
+        "explanation panels"
+      ]
+    },
+    {
+      "system": "dashboard_progress",
+      "legacyUx": "Metric tiles + study path hints.",
+      "newAesthetic": "Learner dashboard semantic charts",
+      "destinationSurface": "current learner dashboard",
+      "migrateVisuals": "no",
+      "reuseAssets": "none directly",
+      "mustRebuild": [
+        "widgets",
+        "data contracts"
+      ]
+    }
+  ]
+}

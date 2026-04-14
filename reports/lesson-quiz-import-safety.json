@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "lessonQuizMerge": {
+    "storageShape": "sections JSON may use nnLessonPayloadV2 wrapper with sections, preTest, postTest arrays",
+    "readPath": "unwrapPathwayLessonDbSections(rowL.sections) → sectionList, preTest, postTest",
+    "writePath": "sectionsToDbJson(sectionArr, nextPre, nextPost) preserves section list; only pre/post arrays grow",
+    "slotBehavior": {
+      "pre": "items append to preTest; postTest unchanged except when building merged arrays",
+      "post": "items append to postTest; preTest unchanged"
+    },
+    "implementationNote": "nextPre = slot === 'post' ? basePre : [...basePre, ...items]; nextPost = slot === 'post' ? [...basePost, ...items] : basePost",
+    "safety": "Does not replace sections array with items-only payload; malformed lesson_quiz rows quarantine with lesson_quiz_incomplete"
+  },
+  "activityPool": {
+    "stemHash": "Pool activities now set stemHash via stemHash(stem) (runtime ReferenceError fix)",
+    "dedupe": "Same as questions: flushQuestionBatch stemHash uniqueness"
+  },
+  "status": "pass_review"
+}

@@ -1,0 +1,21 @@
+{
+  "wave": 2,
+  "updatedAt": "2026-04-14T00:00:00.000Z",
+  "manifestPath": "data/blog-manifest/pathophysiology-200-wave2.manifest.json",
+  "baselinePath": "data/blog-manifest/existing-topics-wave1-baseline.json",
+  "postsPlanned": 200,
+  "postsGeneratedAsDraftJson": 5,
+  "englishWordCountRange": "1207–1394 (batch 1)",
+  "batchesCompleted": 1,
+  "batchSize": 5,
+  "clustersInManifest": 25,
+  "distributionTarget": { "RN": 80, "PN": 60, "NP": 60 },
+  "failures": [],
+  "duplicatesPrevented": 200,
+  "localizationNote": "Batch 1 ships full English (>=1200 words) + structured stubs for 19 locales. Localized expert drafts require the content pipeline; not machine-translated.",
+  "validation": {
+    "wave2ManifestUniqueAgainstWave1": "pass",
+    "batch1EnglishWordCount": "pass_gte_1200_per_post",
+    "nonEnglishLocales": "pending_generation"
+  }
+}

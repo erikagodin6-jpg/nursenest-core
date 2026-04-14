@@ -1,0 +1,255 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T15:28:47.185Z",
+  "legacyRoot": "/root/nursenest-core/external/NurseNest",
+  "scanTool": "legacy-full-restoration-scan.mjs",
+  "caps": {
+    "maxLessonFileEntries": 600,
+    "maxQuestionFileEntries": 400,
+    "maxTranslationFileEntries": 400,
+    "maxBlogFileEntries": 200,
+    "maxActivityFileEntries": 250,
+    "assetSamplePaths": 120,
+    "maxTestsSampleFiles": 220
+  },
+  "summary": {
+    "serverFiles": 9,
+    "note": "Compare algorithm + session persistence vs current CAT; do not import schema blindly."
+  },
+  "entries": [
+    {
+      "sourcePath": "server/cat-session-api.ts",
+      "contentType": "cat_adaptive_or_mock_exam_server",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current CAT/practice APIs — adapter or cherry-pick algorithms after audit",
+      "recommendedMigrationOrder": 5,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "diff-and-selective-port",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Requires Prisma parity mapping; high coupling to legacy DB."
+    },
+    {
+      "sourcePath": "server/mlt-adaptive-engine.ts",
+      "contentType": "cat_adaptive_or_mock_exam_server",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current CAT/practice APIs — adapter or cherry-pick algorithms after audit",
+      "recommendedMigrationOrder": 5,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "diff-and-selective-port",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Requires Prisma parity mapping; high coupling to legacy DB."
+    },
+    {
+      "sourcePath": "server/seed-cat-flashcards.ts",
+      "contentType": "cat_adaptive_or_mock_exam_server",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current CAT/practice APIs — adapter or cherry-pick algorithms after audit",
+      "recommendedMigrationOrder": 5,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "diff-and-selective-port",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Requires Prisma parity mapping; high coupling to legacy DB."
+    },
+    {
+      "sourcePath": "server/adaptive-engine.ts",
+      "contentType": "cat_adaptive_or_mock_exam_server",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current CAT/practice APIs — adapter or cherry-pick algorithms after audit",
+      "recommendedMigrationOrder": 5,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "diff-and-selective-port",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Requires Prisma parity mapping; high coupling to legacy DB."
+    },
+    {
+      "sourcePath": "server/mock-exam-assembly.ts",
+      "contentType": "cat_adaptive_or_mock_exam_server",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current CAT/practice APIs — adapter or cherry-pick algorithms after audit",
+      "recommendedMigrationOrder": 5,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "diff-and-selective-port",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Requires Prisma parity mapping; high coupling to legacy DB."
+    },
+    {
+      "sourcePath": "server/pharmtech-adaptive-engine.ts",
+      "contentType": "cat_adaptive_or_mock_exam_server",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "Allied",
+        "examHint": "profession-specific"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current CAT/practice APIs — adapter or cherry-pick algorithms after audit",
+      "recommendedMigrationOrder": 5,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "diff-and-selective-port",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Requires Prisma parity mapping; high coupling to legacy DB."
+    },
+    {
+      "sourcePath": "server/cat-exam-resilience.ts",
+      "contentType": "cat_adaptive_or_mock_exam_server",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current CAT/practice APIs — adapter or cherry-pick algorithms after audit",
+      "recommendedMigrationOrder": 5,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "diff-and-selective-port",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Requires Prisma parity mapping; high coupling to legacy DB."
+    },
+    {
+      "sourcePath": "server/cat-engine.ts",
+      "contentType": "cat_adaptive_or_mock_exam_server",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current CAT/practice APIs — adapter or cherry-pick algorithms after audit",
+      "recommendedMigrationOrder": 5,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "diff-and-selective-port",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Requires Prisma parity mapping; high coupling to legacy DB."
+    },
+    {
+      "sourcePath": "server/mock-exam-template-routes.ts",
+      "contentType": "cat_adaptive_or_mock_exam_server",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "en-primary (legacy Vite client)",
+      "reusability": "selective-logic-review",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "Current CAT/practice APIs — adapter or cherry-pick algorithms after audit",
+      "recommendedMigrationOrder": 5,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "diff-and-selective-port",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "rebuild-with-semantic-tokens"
+      },
+      "notes": "Requires Prisma parity mapping; high coupling to legacy DB."
+    }
+  ]
+}

@@ -1,0 +1,2685 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T15:28:47.185Z",
+  "legacyRoot": "/root/nursenest-core/external/NurseNest",
+  "scanTool": "legacy-full-restoration-scan.mjs",
+  "caps": {
+    "maxLessonFileEntries": 600,
+    "maxQuestionFileEntries": 400,
+    "maxTranslationFileEntries": 400,
+    "maxBlogFileEntries": 200,
+    "maxActivityFileEntries": 250,
+    "assetSamplePaths": 120,
+    "maxTestsSampleFiles": 220
+  },
+  "summary": {
+    "i18nRelatedFiles": 105,
+    "toolsI18nSource": "tools/i18n/source/*.ts (compile-time bundles)",
+    "completeness": "requires diff vs nursenest-core next-intl / compile pipeline — not assumed complete parity"
+  },
+  "entries": [
+    {
+      "sourcePath": "tools/i18n/source/i18n-id.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-es.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "es",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-th.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-zh-tw.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "zh",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-tl.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-tr.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-ko.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-ht.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-hi.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-vi.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-ja.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-zh.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "zh",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-de.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-ar.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-pt.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-fr.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "fr",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-pa.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-fa.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-ur.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "tools/i18n/source/i18n-en.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "scripts/i18n-scan.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/en.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/tr.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/ja.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/ar.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/zh-tw.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/fr.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "fr",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/ko.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/vi.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/th.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/pt.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/hi.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/fa.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/de.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/zh.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/pa.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/ur.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/ht.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/tl.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/es.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "es",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/i18n/id.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/ja.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/ar.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/zh-tw.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/fr.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "fr",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/ko.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/vi.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/th.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/pt.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/hi.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/fa.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/de.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/zh.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/pa.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/ur.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/ht.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/tl.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/es.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "es",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "replit-export/public/translations/id.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "unknown-dependency",
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "script/validate-i18n-keys.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "script/compile-i18n.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/en.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/tr.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/ja.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/ar.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/zh-tw.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/fr.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "fr",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/ko.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/vi.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/th.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/pt.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/hi.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/fa.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/de.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/zh.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/pa.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/ur.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/ht.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/tl.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/es.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "es",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/public/i18n/id.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/tr.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/ja.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/ar.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/zh-tw.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/fr.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "fr",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/ko.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/vi.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/th.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/pt.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/hi.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/fa.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/de.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/zh.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/pa.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/ur.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/ht.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/tl.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/es.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "es",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/data/translations/id.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/lib/i18n-translations.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "client/src/lib/i18n-types.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "i18n-scan.config.json",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "server/i18n/languageValidation.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    },
+    {
+      "sourcePath": "server/i18n-missing-keys-routes.ts",
+      "contentType": "translation_locale_bundle",
+      "estimatedRecordCount": null,
+      "professionTierExam": {
+        "tier": "mixed/unknown",
+        "examHint": "resolve per file"
+      },
+      "locale": "multi",
+      "reusability": "transform-needed",
+      "riskFlags": [
+        "schema-transform-needed"
+      ],
+      "recommendedDestination": "nursenest-core messages/*.json + docs/i18n-architecture compliance",
+      "recommendedMigrationOrder": 6,
+      "matchCurrent": {
+        "lessonFormat": "n/a",
+        "blogStructure": "n/a",
+        "flashcardUx": "n/a",
+        "catFlow": "n/a",
+        "toolPageStructure": "n/a",
+        "themeAesthetic": "n/a"
+      },
+      "notes": "Validate key parity and ICU/format rules in target app."
+    }
+  ]
+}

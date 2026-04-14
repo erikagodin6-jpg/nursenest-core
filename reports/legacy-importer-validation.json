@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "generated": "2026-04-14",
+  "scope": "scripts/import-nurse-nest-legacy.ts + scripts/lib/* (narrow)",
+  "checks": [
+    {
+      "id": 1,
+      "description": "Missing --source or non-existent path exits with JSON error",
+      "status": "pass",
+      "evidence": "main() calls process.exit(1) with missing_or_invalid_source"
+    },
+    {
+      "id": 2,
+      "description": "Invalid --only values exit with invalid_only + allowed list",
+      "status": "pass",
+      "evidence": "parseArgs validates against STREAM_KINDS before run"
+    },
+    {
+      "id": 3,
+      "description": "batch-size above 50 is clamped with stderr notice + complete.batchSize",
+      "status": "pass",
+      "evidence": "batchSize capped to BATCH_MAX; notice on stderr when cappedToMax"
+    },
+    {
+      "id": 4,
+      "description": "Missing optional folders skipped (empty file list)",
+      "status": "pass",
+      "evidence": "listDataFiles returns [] if dir missing"
+    },
+    {
+      "id": 5,
+      "description": "Malformed NDJSON lines do not crash (per-line try/catch)",
+      "status": "pass",
+      "evidence": "iterateFileRecords NDJSON branch"
+    },
+    {
+      "id": 6,
+      "description": "Quarantine line counts reflected in counts.quarantined*",
+      "status": "pass",
+      "evidence": "appendQ increments per bucket"
+    },
+    {
+      "id": 7,
+      "description": "Checkpoint resume skips processedKeys (idempotent)",
+      "status": "pass",
+      "evidence": "processed Set + saveCheckpoint after batches"
+    },
+    {
+      "id": 8,
+      "description": "lesson_quiz merge uses unwrap + sectionsToDbJson append",
+      "status": "pass",
+      "evidence": "activities lesson_quiz branch; pool stemHash uses stemHash(stem)"
+    },
+    {
+      "id": 9,
+      "description": "Repeated imports idempotent (slug + stemHash dedupe)",
+      "status": "pass",
+      "evidence": "processLessonBuffer skip existing; flushQuestionBatch stemHash"
+    },
+    {
+      "id": 10,
+      "description": "Catalog JSON lessons unaffected by DB normalization",
+      "status": "pass",
+      "evidence": "No change to pathway-lesson-catalog-sync.ts in this pass (runtime catalog unchanged)"
+    }
+  ],
+  "manual_rerun": [
+    "npx tsx scripts/import-nurse-nest-legacy.ts --source=/path/to/legacy",
+    "npx tsx scripts/import-nurse-nest-legacy.ts --source=/path --only=lessons --batch-size=99"
+  ]
+}

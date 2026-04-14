@@ -1,0 +1,24 @@
+{
+  "generatedAt": "2026-04-14T14:51:00.000Z",
+  "batch": "rn-high-yield-top-20",
+  "scope": "US_RN_NCLEX_only",
+  "lessonsAttempted": 0,
+  "lessonsCreated": 0,
+  "lessonsMerged": 0,
+  "lessonsSkippedByPolicy": 20,
+  "quarantinedItems": 0,
+  "errors": 0,
+  "notes": [
+    "All 20 audit candidates already exist in PathwayLesson as legacy slugs (e.g. thyroid-storm-rn) on pathway us-rn-nclex-rn.",
+    "An initial dry-run with proposed us-rn-* slugs quarantined all 20 rows (LESSON_TITLE_SLUG_COLLISION_DB vs existing legacy slug title keys).",
+    "Staging was cleared to [] after mapping preview; importer dry-run and apply ran with zero lesson rows (no-op, no duplicates).",
+    "Next steps (manual): slug canonicalization migration, or select candidates with no PathwayLesson row for a create batch."
+  ],
+  "artifacts": {
+    "mappingPreview": "data/audit/rn-import-mapping-preview.json",
+    "stagingLessonsJson": "data/import-staging/rn-batch-1/lessons/rn-high-yield-batch-1.json",
+    "validation": "reports/rn-import-validation.json",
+    "dryRunCheckpoint": "data/import-checkpoints/rn-batch-1-dry-run-v2.json",
+    "applyCheckpoint": "data/import-checkpoints/rn-batch-1-apply.json"
+  }
+}

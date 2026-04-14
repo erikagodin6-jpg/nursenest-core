@@ -29,7 +29,7 @@ export type NnErrorCardProps = {
  * Never renders "Internal Server Error" — always provides a recovery path.
  *
  * Design: centred card with logo, human title, retry + CTA buttons.
- * Logging: Sentry capture + console.error with surface tag on mount.
+ * Logging: Sentry capture; console only in development (one line) to avoid production spam.
  */
 export function NnErrorCard({
   error,
@@ -42,14 +42,12 @@ export function NnErrorCard({
   showDigest = true,
 }: NnErrorCardProps) {
   useEffect(() => {
-    console.error(`[nn-error:${surface}]`, {
-      message: error.message,
-      digest: error.digest,
-      stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
-    });
     Sentry.captureException(error, {
       tags: { surface, feature: "react_error_boundary" },
     });
+    if (process.env.NODE_ENV === "development") {
+      console.warn(`[nn-error:${surface}]`, error.message, error.digest ?? "");
+    }
   }, [error, surface]);
 
   const digest = showDigest ? error.digest : undefined;

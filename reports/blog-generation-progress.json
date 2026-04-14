@@ -1,0 +1,120 @@
+{
+  "updatedAt": "2026-04-14T15:24:51.500Z",
+  "pipeline": "pathophysiology-200",
+  "batchId": 2,
+  "batchSize": 5,
+  "posts": [
+    {
+      "slug": "w2v2-rn-cluster-respiratory-edges-59-why-pulse-oximetry-lags-in-carbon-monoxide-exposure-teaching",
+      "path": "/root/nursenest-core/nursenest-core/data/blog-import/w2v2-rn-cluster-respiratory-edges-59-why-pulse-oximetry-lags-in-carbon-monoxide-exposure-teaching.json",
+      "wordCounts": {
+        "en": 1263,
+        "fr": 1691,
+        "es": 1673,
+        "pt": 1557,
+        "tl": 1639,
+        "ar": 1414,
+        "hi": 1574,
+        "zh": 1947,
+        "pa": 1540,
+        "vi": 2021,
+        "ur": 1705,
+        "ko": 1589,
+        "ja": 1840,
+        "de": 1363,
+        "it": 1539
+      },
+      "allOk": true
+    },
+    {
+      "slug": "w2v2-np-cluster-shock-oxygenation-micro-1-cardiogenic-shock-vs-obstructive-shock-femoral-pulses-and-jvp-in-the-same-stem",
+      "path": "/root/nursenest-core/nursenest-core/data/blog-import/w2v2-np-cluster-shock-oxygenation-micro-1-cardiogenic-shock-vs-obstructive-shock-femoral-pulses-and-jvp-in-the-same-stem.json",
+      "wordCounts": {
+        "en": 1259,
+        "fr": 1654,
+        "es": 1566,
+        "pt": 1483,
+        "tl": 1560,
+        "ar": 1465,
+        "hi": 1578,
+        "zh": 1867,
+        "pa": 1510,
+        "vi": 1971,
+        "ur": 1656,
+        "ko": 1444,
+        "ja": 1730,
+        "de": 1312,
+        "it": 1493
+      },
+      "allOk": true
+    },
+    {
+      "slug": "w2v2-np-cluster-abg-nuance-10-delta-delta-gap-when-metabolic-acidosis-is-two-problems-at-once",
+      "path": "/root/nursenest-core/nursenest-core/data/blog-import/w2v2-np-cluster-abg-nuance-10-delta-delta-gap-when-metabolic-acidosis-is-two-problems-at-once.json",
+      "wordCounts": {
+        "en": 1247,
+        "fr": 1571,
+        "es": 1526,
+        "pt": 1454,
+        "tl": 1549,
+        "ar": 1362,
+        "hi": 1562,
+        "zh": 1864,
+        "pa": 1535,
+        "vi": 1868,
+        "ur": 1683,
+        "ko": 1455,
+        "ja": 1812,
+        "de": 1310,
+        "it": 1446
+      },
+      "allOk": true
+    },
+    {
+      "slug": "w2v2-rn-cluster-renal-micro-37-why-metabolic-acidosis-in-renal-failure-is-not-always-just-bicarbonate-loss",
+      "path": "/root/nursenest-core/nursenest-core/data/blog-import/w2v2-rn-cluster-renal-micro-37-why-metabolic-acidosis-in-renal-failure-is-not-always-just-bicarbonate-loss.json",
+      "wordCounts": {
+        "en": 1201,
+        "fr": 1622,
+        "es": 1519,
+        "pt": 1435,
+        "tl": 1550,
+        "ar": 1370,
+        "hi": 1542,
+        "zh": 1846,
+        "pa": 1526,
+        "vi": 1928,
+        "ur": 1668,
+        "ko": 1457,
+        "ja": 1817,
+        "de": 1277,
+        "it": 1444
+      },
+      "allOk": true
+    },
+    {
+      "slug": "w2v2-pn-cluster-labs-chem-panel-edges-167-why-chloride-trends-help-solve-metabolic-acidosis-mysteries",
+      "path": "/root/nursenest-core/nursenest-core/data/blog-import/w2v2-pn-cluster-labs-chem-panel-edges-167-why-chloride-trends-help-solve-metabolic-acidosis-mysteries.json",
+      "wordCounts": {
+        "en": 1221,
+        "fr": 1674,
+        "es": 1582,
+        "pt": 1508,
+        "tl": 1581,
+        "ar": 1393,
+        "hi": 1558,
+        "zh": 1919,
+        "pa": 1509,
+        "vi": 1899,
+        "ur": 1662,
+        "ko": 1500,
+        "ja": 1863,
+        "de": 1301,
+        "it": 1499
+      },
+      "allOk": true
+    }
+  ],
+  "failures": [],
+  "notes": "Validate: node scripts/blog-pipeline/validate-post.mjs data/blog-import/<slug>.json"
+}

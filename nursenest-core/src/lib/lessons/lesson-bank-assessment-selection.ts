@@ -76,7 +76,11 @@ export function mergeAssessmentWithBank(
     push(q);
     if (out.length >= max) break;
   }
-  return out.length >= min ? out.slice(0, Math.min(max, out.length)) : [];
+  const capped = out.slice(0, Math.min(max, out.length));
+  if (capped.length >= min) return capped;
+  /** Show thin catalog-only sets rather than hiding when the bank cannot pad to `min`. */
+  if (capped.length > 0) return capped;
+  return [];
 }
 
 async function rowsToItems(rows: ExamRow[]): Promise<LessonBankQuizItem[]> {
@@ -126,27 +130,30 @@ export async function loadLessonBankAssessmentItems(
   });
 
   const primaryRows = primaryWhere ? await fetchMcqRows(primaryWhere, RELATED_EXAM_QUESTIONS_CAP) : [];
-  let items = await rowsToItems(primaryRows);
-  const seen = new Set(items.map((i) => i.examQuestionId));
+  const primaryItems = await rowsToItems(primaryRows);
+  const seen = new Set(primaryItems.map((i) => i.examQuestionId));
 
-  if (items.length < LESSON_ASSESSMENT_PRE_MAX + LESSON_ASSESSMENT_POST_MAX) {
-    const base = pathwayExamQuestionMarketingWhere(pathway);
-    const exclude =
-      seen.size > 0
-        ? ({ id: { notIn: [...seen] } } satisfies Prisma.ExamQuestionWhereInput)
-        : ({} satisfies Prisma.ExamQuestionWhereInput);
-    const fallbackRows = await fetchMcqRows({ AND: [base, exclude] }, FETCH_CAP);
-    for (const r of fallbackRows) {
-      if (seen.has(r.id)) continue;
-      const item = examRowToLessonBankItem(r);
-      if (!item) continue;
-      seen.add(r.id);
-      items.push(item);
-      if (items.length >= FETCH_CAP) break;
-    }
+  if (primaryItems.length >= LESSON_ASSESSMENT_PRE_MAX + LESSON_ASSESSMENT_POST_MAX) {
+    return primaryItems;
   }
 
-  return items;
+  const base = pathwayExamQuestionMarketingWhere(pathway);
+  const exclude =
+    seen.size > 0
+      ? ({ id: { notIn: [...seen] } } satisfies Prisma.ExamQuestionWhereInput)
+      : ({} satisfies Prisma.ExamQuestionWhereInput);
+  const fallbackRows = await fetchMcqRows({ AND: [base, exclude] }, FETCH_CAP);
+  const extra: LessonBankQuizItem[] = [];
+  for (const r of fallbackRows) {
+    if (seen.has(r.id)) continue;
+    const item = examRowToLessonBankItem(r);
+    if (!item) continue;
+    seen.add(r.id);
+    extra.push(item);
+    if (primaryItems.length + extra.length >= FETCH_CAP) break;
+  }
+
+  return [...primaryItems, ...extra];
 }
 
 /**

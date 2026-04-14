@@ -1,0 +1,810 @@
+{
+  "source": "data/blog-manifest/nclex-seo-100.manifest.json",
+  "count": 100,
+  "slugs": [
+    "nclex-seo-001-why-does-heart-failure-cause-pulmonary-edema-pathophysiology-for-nclex",
+    "nclex-seo-002-why-does-k-rise-in-dka-before-insulin-nclex-trap-explained",
+    "nclex-seo-003-why-does-siadh-cause-hyponatremia-but-wet-on-exam-questions",
+    "nclex-seo-004-why-does-left-sided-hf-show-crackles-before-peripheral-edema",
+    "nclex-seo-005-why-does-hypoalbuminemia-cause-edema-fluid-shifts-nclex",
+    "nclex-seo-006-why-does-fever-tachycardia-happen-in-sepsis-not-just-anxiety",
+    "nclex-seo-007-why-does-hyperventilation-lower-co2-on-the-abg-quick-nclex-logic",
+    "nclex-seo-008-why-does-copd-sometimes-show-high-co2-while-satting-ok",
+    "nclex-seo-009-why-does-digoxin-toxicity-cause-vision-changes-and-bradycardia",
+    "nclex-seo-010-why-does-mannitol-lower-icp-but-risk-fluidelectrolyte-chaos",
+    "nclex-seo-011-why-does-tpn-increase-infection-risk-besides-the-line",
+    "nclex-seo-012-why-does-acute-kidney-injury-raise-potassium-fast",
+    "nclex-seo-013-why-does-liver-failure-cause-bleeding-and-low-platelets",
+    "nclex-seo-014-why-does-pregnancy-lower-blood-pressure-early-but-raise-risk-later",
+    "nclex-seo-015-why-does-insulin-drop-k-even-when-youre-treating-hyperglycemia",
+    "nclex-seo-016-why-does-sympathetic-surge-raise-blood-sugar-in-stress-and-shock",
+    "nclex-seo-017-why-does-bed-rest-increase-dvt-risk-even-with-stable-vitals",
+    "nclex-seo-018-why-does-dialysis-cause-cramping-and-hypotension-mid-treatment",
+    "nclex-seo-019-why-does-ssri-withdrawal-feel-like-brain-zaps-patient-teaching",
+    "nclex-seo-020-why-does-fever-spike-after-blood-transfusion-not-always-allergic",
+    "nclex-seo-021-nclex-practice-questions-acute-kidney-injury-with-rationales",
+    "nclex-seo-022-nclex-questions-about-pulmonary-embolism-practice-answers",
+    "nclex-seo-023-nclex-practice-questions-heart-failure-exacerbation-with-rationales",
+    "nclex-seo-024-nclex-questions-on-digoxin-toxicity-practice-items-answers",
+    "nclex-seo-025-nclex-practice-questions-dka-vs-hhs-clues-with-answers",
+    "nclex-seo-026-nclex-questions-about-siadh-vs-diabetes-insipidus-practice-rationales",
+    "nclex-seo-027-nclex-practice-questions-sepsis-recognition-with-answers",
+    "nclex-seo-028-nclex-questions-about-pressure-injuries-staging-practice-answers",
+    "nclex-seo-029-nclex-practice-questions-post-op-fever-causes-with-rationales",
+    "nclex-seo-030-nclex-questions-on-anticoagulation-teaching-warfarin-vs-doac-themes",
+    "nclex-seo-031-nclex-practice-questions-pediatric-dehydration-with-answers",
+    "nclex-seo-032-nclex-questions-about-preeclampsia-vs-gestational-hypertension",
+    "nclex-seo-033-nclex-practice-questions-suicide-risk-assessment-with-rationales",
+    "nclex-seo-034-nclex-questions-on-restraint-use-and-alternatives-practice-answers",
+    "nclex-seo-035-nclex-practice-questions-iv-infiltration-vs-phlebitis",
+    "nclex-seo-036-nclex-questions-about-chest-tube-air-leaks-with-rationales",
+    "nclex-seo-037-nclex-practice-questions-wound-infection-signs-with-answers",
+    "nclex-seo-038-nclex-questions-about-insulin-mixing-and-timing-practice-rationales",
+    "nclex-seo-039-nclex-practice-questions-stroke-nihssneuro-checks-simplified-for-rn",
+    "nclex-seo-040-nclex-practice-questions-catheter-associated-uti-prevention",
+    "nclex-seo-041-gastric-vs-duodenal-ulcer-pain-whats-the-difference-for-nclex",
+    "nclex-seo-042-copd-vs-asthma-on-the-nclex-overlap-clues-and-wrong-answers",
+    "nclex-seo-043-hypovolemic-vs-cardiogenic-shock-how-to-tell-fast-on-an-exam-stem",
+    "nclex-seo-044-arterial-vs-venous-ulcers-bedside-clues-nclex-loves",
+    "nclex-seo-045-crohns-disease-vs-uc-nclex-comparison-complications-teaching",
+    "nclex-seo-046-rheumatic-fever-vs-kawasaki-in-kids-comparison-for-pnrn-exams",
+    "nclex-seo-047-placenta-previa-vs-abruptio-placentae-ob-emergency-differentiation",
+    "nclex-seo-048-epidural-vs-spinal-anesthesia-what-nclex-expects-you-to-monitor",
+    "nclex-seo-049-schizophrenia-vs-schizoaffective-high-yield-exam-differences-nursing-f",
+    "nclex-seo-050-delirium-vs-dementia-quick-comparison-for-clinical-judgment-questions",
+    "nclex-seo-051-mi-vs-pericarditis-pain-ecgstory-clues-students-miss",
+    "nclex-seo-052-osteoarthritis-vs-rheumatoid-arthritis-nclex-comparison-symptoms-teach",
+    "nclex-seo-053-left-vs-right-heart-failure-comparison-table-nclex-traps",
+    "nclex-seo-054-ulcerative-colitis-flare-vs-infectious-diarrhea-nursing-differentiatio",
+    "nclex-seo-055-contact-vs-airborne-precautions-nclex-scenario-comparison",
+    "nclex-seo-056-warfarin-vs-heparin-monitoring-and-reversal-themes-for-exams",
+    "nclex-seo-057-levothyroxine-timing-vs-anytime-meds-what-exams-test",
+    "nclex-seo-058-central-vs-peripheral-cyanosis-what-each-implies-on-a-stem",
+    "nclex-seo-059-type-1-vs-type-2-diabetes-priorities-in-acute-vs-chronic-stems",
+    "nclex-seo-060-assault-vs-battery-in-nursing-documentationethics-questions-simplified",
+    "nclex-seo-061-iv-drip-rate-calculation-nursing-step-by-step-gttmin-with-nclex-logic",
+    "nclex-seo-062-mlhr-from-infuse-over-x-hours-step-by-step-pump-math",
+    "nclex-seo-063-weight-based-drug-math-mgkg-nursing-steps-that-stop-silly-errors",
+    "nclex-seo-064-heparin-units-to-ml-step-by-step-from-a-vial-label",
+    "nclex-seo-065-insulin-units-only-drawing-up-and-double-checking-exam-style-walkthrou",
+    "nclex-seo-066-tablet-splitting-and-dose-conversion-mg-mcg-step-by-step",
+    "nclex-seo-067-iv-bolus-push-over-x-minutes-rate-math-nurses-actually-use",
+    "nclex-seo-068-fluid-replacement-math-maintenance-vs-deficit-simplified-for-exams",
+    "nclex-seo-069-pediatric-dose-by-weight-step-by-step-with-a-safety-ceiling-check",
+    "nclex-seo-070-reconstitution-math-mixing-powdered-antibiotics-label-walkthrough",
+    "nclex-seo-071-titration-tables-converting-increase-by-x-unitshr-to-pump-settings",
+    "nclex-seo-072-meq-dosing-for-electrolytes-what-nclex-tests-and-what-it-doesnt",
+    "nclex-seo-073-percentage-based-solutions-step-by-step-dextrose-math",
+    "nclex-seo-074-body-surface-area-bsa-dosing-when-the-stem-gives-heightweight",
+    "nclex-seo-075-iv-piggyback-timing-run-over-30-minutes-math-line-patency-checks",
+    "nclex-seo-076-syringe-pump-mlhr-for-small-volumes-pedsnicu-style-practice",
+    "nclex-seo-077-oxygen-fio2-changes-vs-lmin-what-the-nclex-wants-concept-math-hygiene",
+    "nclex-seo-078-dilution-math-for-iv-meds-add-to-100-ml-ns-step-by-step",
+    "nclex-seo-079-gttmin-when-you-already-know-mlhr-drop-factor-shortcut",
+    "nclex-seo-080-how-many-tablets-dose-finding-with-fractional-tabs-nclex-style",
+    "nclex-seo-081-what-to-do-first-when-k-is-62-and-the-patient-looks-stable-nclex-prior",
+    "nclex-seo-082-abc-vs-nursing-process-when-nclex-wants-airway-before-assess-more",
+    "nclex-seo-083-new-onset-confusion-post-op-infection-vs-opioids-vs-hypoxia-pick-first",
+    "nclex-seo-084-chest-pain-in-the-clinic-who-goes-to-the-ed-first-judgment-drill",
+    "nclex-seo-085-sudden-shortness-of-breath-with-unilateral-leg-swelling-first-nursing-",
+    "nclex-seo-086-hypoglycemia-symptoms-but-glucose-borderline-what-nclex-is-testing",
+    "nclex-seo-087-patient-refuses-meds-priority-is-not-arguingits-assessment-first",
+    "nclex-seo-088-bleeding-after-heparin-what-to-check-before-you-panic-click-answers",
+    "nclex-seo-089-fall-risk-vs-impulsive-behavior-which-safety-action-comes-first",
+    "nclex-seo-090-postpartum-bleeding-first-line-nursing-actions-before-more-fluids",
+    "nclex-seo-091-pediatric-fever-petechial-rash-priority-actions-parents-and-exams-need",
+    "nclex-seo-092-stroke-symptoms-10-minutes-ago-what-nclex-wants-you-to-prioritize",
+    "nclex-seo-093-anaphylaxis-vs-mild-allergy-epi-first-or-assessment-first",
+    "nclex-seo-094-suicidal-ideation-disclosed-in-passing-immediate-nursing-priority",
+    "nclex-seo-095-digoxin-low-k-which-problem-do-you-address-first-on-the-exam",
+    "nclex-seo-096-patient-pulling-at-lines-behavioral-vs-safety-priority-in-med-surg",
+    "nclex-seo-097-post-extubation-stridor-nursing-priorities-in-the-first-minutes",
+    "nclex-seo-098-suspected-child-abuse-reporting-vs-rapportwhat-comes-first-legally-and",
+    "nclex-seo-099-transfusion-reaction-stop-the-line-vs-call-the-provider-nclex-order",
+    "nclex-seo-100-which-patient-do-you-see-first-charge-nurse-triage-4-patients-1-nurse"
+  ],
+  "primaryKeywords": [
+    "why does heart failure cause pulmonary edema nclex",
+    "why potassium increases in dka nursing",
+    "why siadh causes hyponatremia nclex",
+    "left sided heart failure pulmonary edema why",
+    "why low albumin causes edema nursing",
+    "why tachycardia in sepsis nursing",
+    "why hyperventilation decreases co2 abg",
+    "why copd retain co2 oxygen saturation",
+    "why digoxin toxicity symptoms nursing",
+    "why mannitol for increased intracranial pressure nursing",
+    "why tpn infection risk nursing",
+    "why aki causes hyperkalemia nursing",
+    "why liver failure bleeding nursing coagulation",
+    "why blood pressure changes pregnancy nursing",
+    "why insulin lowers potassium nursing",
+    "why stress increases blood glucose nursing",
+    "why immobility causes dvt nursing",
+    "why muscle cramps during dialysis nursing",
+    "ssri discontinuation syndrome nursing explained",
+    "febrile nonhemolytic transfusion reaction why nursing",
+    "nclex practice questions acute kidney injury with answers",
+    "nclex questions about pulmonary embolism practice",
+    "nclex heart failure exacerbation practice questions",
+    "nclex digoxin toxicity practice questions",
+    "nclex dka vs hhs practice questions",
+    "nclex siadh vs diabetes insipidus questions",
+    "nclex sepsis practice questions with rationales",
+    "nclex pressure injury staging practice questions",
+    "nclex postoperative fever practice questions",
+    "nclex anticoagulation teaching questions",
+    "nclex pediatric dehydration practice questions",
+    "nclex preeclampsia practice questions",
+    "nclex suicide risk assessment practice questions",
+    "nclex restraint use nursing questions",
+    "nclex iv complications practice questions",
+    "nclex chest tube nursing questions",
+    "nclex wound infection practice questions",
+    "nclex insulin administration practice questions",
+    "nclex stroke assessment practice questions",
+    "nclex cauti prevention practice questions",
+    "gastric vs duodenal ulcer nursing difference nclex",
+    "copd vs asthma nclex comparison",
+    "hypovolemic vs cardiogenic shock nursing difference",
+    "arterial vs venous ulcer nursing comparison",
+    "crohn's vs ulcerative colitis nclex nursing",
+    "kawasaki vs rheumatic fever nursing comparison",
+    "placenta previa vs abruptio placentae nclex",
+    "epidural vs spinal nursing monitoring nclex",
+    "schizophrenia vs schizoaffective nursing difference",
+    "delirium vs dementia nursing comparison nclex",
+    "mi vs pericarditis nursing comparison",
+    "oa vs ra nursing comparison nclex",
+    "left vs right heart failure nursing comparison",
+    "uc flare vs infectious diarrhea nursing",
+    "contact vs airborne precautions nursing nclex",
+    "warfarin vs heparin nursing monitoring nclex",
+    "levothyroxine administration nursing nclex tips",
+    "central vs peripheral cyanosis nursing difference",
+    "type 1 vs type 2 diabetes nursing priorities nclex",
+    "assault vs battery nursing ethics nclex",
+    "iv drip rate calculation nursing step by step",
+    "ml per hour infusion calculation nursing",
+    "mg kg dosage calculation nursing step by step",
+    "heparin dosage calculation nursing ml",
+    "insulin unit calculation nursing u-100",
+    "mg to mcg conversion nursing dosage",
+    "iv push rate calculation nursing",
+    "iv fluid calculation nursing step by step",
+    "pediatric dosage calculation nursing step by step",
+    "reconstitution medication calculation nursing",
+    "insulin drip titration nursing calculation",
+    "meq medication calculation nursing",
+    "percentage solution calculation nursing",
+    "bsa medication calculation nursing",
+    "iv piggyback infusion time calculation nursing",
+    "syringe pump rate calculation nursing",
+    "oxygen flow rate nursing calculation nclex",
+    "iv medication dilution calculation nursing",
+    "gtt min from ml hr calculation nursing",
+    "tablet dose calculation nursing half tablet",
+    "hyperkalemia priority nursing action nclex",
+    "abc priority nursing nclex first action",
+    "post op confusion priority nursing nclex",
+    "chest pain priority nursing assessment nclex",
+    "dvt pe priority nursing actions nclex",
+    "hypoglycemia priority nursing intervention nclex",
+    "patient refuses medication nursing priority nclex",
+    "heparin bleeding nursing priority nclex",
+    "fall risk nursing priority mental health nclex",
+    "postpartum hemorrhage nursing priority nclex",
+    "petechial rash fever pediatric nursing priority nclex",
+    "stroke nursing priority nclex first action",
+    "anaphylaxis nursing priority epinephrine nclex",
+    "suicidal ideation nursing priority nclex",
+    "digoxin toxicity hypokalemia priority nursing nclex",
+    "patient pulling iv line nursing priority nclex",
+    "post extubation stridor nursing priority nclex",
+    "suspected child abuse nursing priority nclex",
+    "transfusion reaction nursing priority first action nclex",
+    "nursing prioritization multiple patients nclex"
+  ],
+  "topics": [
+    {
+      "slug": "nclex-seo-001-why-does-heart-failure-cause-pulmonary-edema-pathophysiology-for-nclex",
+      "primaryKeyword": "why does heart failure cause pulmonary edema NCLEX",
+      "category": "Cardiac",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-002-why-does-k-rise-in-dka-before-insulin-nclex-trap-explained",
+      "primaryKeyword": "why potassium increases in DKA nursing",
+      "category": "Endocrine",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-003-why-does-siadh-cause-hyponatremia-but-wet-on-exam-questions",
+      "primaryKeyword": "why SIADH causes hyponatremia NCLEX",
+      "category": "Endocrine",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-004-why-does-left-sided-hf-show-crackles-before-peripheral-edema",
+      "primaryKeyword": "left sided heart failure pulmonary edema why",
+      "category": "Cardiac",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-005-why-does-hypoalbuminemia-cause-edema-fluid-shifts-nclex",
+      "primaryKeyword": "why low albumin causes edema nursing",
+      "category": "Med-Surg",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-006-why-does-fever-tachycardia-happen-in-sepsis-not-just-anxiety",
+      "primaryKeyword": "why tachycardia in sepsis nursing",
+      "category": "Med-Surg",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-007-why-does-hyperventilation-lower-co2-on-the-abg-quick-nclex-logic",
+      "primaryKeyword": "why hyperventilation decreases CO2 ABG",
+      "category": "Respiratory",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-008-why-does-copd-sometimes-show-high-co2-while-satting-ok",
+      "primaryKeyword": "why COPD retain CO2 oxygen saturation",
+      "category": "Respiratory",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-009-why-does-digoxin-toxicity-cause-vision-changes-and-bradycardia",
+      "primaryKeyword": "why digoxin toxicity symptoms nursing",
+      "category": "Pharmacology",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-010-why-does-mannitol-lower-icp-but-risk-fluidelectrolyte-chaos",
+      "primaryKeyword": "why mannitol for increased intracranial pressure nursing",
+      "category": "Neuro",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-011-why-does-tpn-increase-infection-risk-besides-the-line",
+      "primaryKeyword": "why TPN infection risk nursing",
+      "category": "Med-Surg",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-012-why-does-acute-kidney-injury-raise-potassium-fast",
+      "primaryKeyword": "why AKI causes hyperkalemia nursing",
+      "category": "Med-Surg",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-013-why-does-liver-failure-cause-bleeding-and-low-platelets",
+      "primaryKeyword": "why liver failure bleeding nursing coagulation",
+      "category": "Med-Surg",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-014-why-does-pregnancy-lower-blood-pressure-early-but-raise-risk-later",
+      "primaryKeyword": "why blood pressure changes pregnancy nursing",
+      "category": "OB/Maternity",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-015-why-does-insulin-drop-k-even-when-youre-treating-hyperglycemia",
+      "primaryKeyword": "why insulin lowers potassium nursing",
+      "category": "Endocrine",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-016-why-does-sympathetic-surge-raise-blood-sugar-in-stress-and-shock",
+      "primaryKeyword": "why stress increases blood glucose nursing",
+      "category": "Endocrine",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-017-why-does-bed-rest-increase-dvt-risk-even-with-stable-vitals",
+      "primaryKeyword": "why immobility causes DVT nursing",
+      "category": "Med-Surg",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-018-why-does-dialysis-cause-cramping-and-hypotension-mid-treatment",
+      "primaryKeyword": "why muscle cramps during dialysis nursing",
+      "category": "Med-Surg",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-019-why-does-ssri-withdrawal-feel-like-brain-zaps-patient-teaching",
+      "primaryKeyword": "SSRI discontinuation syndrome nursing explained",
+      "category": "Mental Health",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-020-why-does-fever-spike-after-blood-transfusion-not-always-allergic",
+      "primaryKeyword": "febrile nonhemolytic transfusion reaction why nursing",
+      "category": "Med-Surg",
+      "intentType": "explanation-pathophysiology"
+    },
+    {
+      "slug": "nclex-seo-021-nclex-practice-questions-acute-kidney-injury-with-rationales",
+      "primaryKeyword": "NCLEX practice questions acute kidney injury with answers",
+      "category": "Med-Surg",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-022-nclex-questions-about-pulmonary-embolism-practice-answers",
+      "primaryKeyword": "NCLEX questions about pulmonary embolism practice",
+      "category": "Respiratory",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-023-nclex-practice-questions-heart-failure-exacerbation-with-rationales",
+      "primaryKeyword": "NCLEX heart failure exacerbation practice questions",
+      "category": "Cardiac",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-024-nclex-questions-on-digoxin-toxicity-practice-items-answers",
+      "primaryKeyword": "NCLEX digoxin toxicity practice questions",
+      "category": "Pharmacology",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-025-nclex-practice-questions-dka-vs-hhs-clues-with-answers",
+      "primaryKeyword": "NCLEX DKA vs HHS practice questions",
+      "category": "Endocrine",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-026-nclex-questions-about-siadh-vs-diabetes-insipidus-practice-rationales",
+      "primaryKeyword": "NCLEX SIADH vs diabetes insipidus questions",
+      "category": "Endocrine",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-027-nclex-practice-questions-sepsis-recognition-with-answers",
+      "primaryKeyword": "NCLEX sepsis practice questions with rationales",
+      "category": "Med-Surg",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-028-nclex-questions-about-pressure-injuries-staging-practice-answers",
+      "primaryKeyword": "NCLEX pressure injury staging practice questions",
+      "category": "Nursing Skills",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-029-nclex-practice-questions-post-op-fever-causes-with-rationales",
+      "primaryKeyword": "NCLEX postoperative fever practice questions",
+      "category": "Med-Surg",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-030-nclex-questions-on-anticoagulation-teaching-warfarin-vs-doac-themes",
+      "primaryKeyword": "NCLEX anticoagulation teaching questions",
+      "category": "Pharmacology",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-031-nclex-practice-questions-pediatric-dehydration-with-answers",
+      "primaryKeyword": "NCLEX pediatric dehydration practice questions",
+      "category": "Pediatrics",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-032-nclex-questions-about-preeclampsia-vs-gestational-hypertension",
+      "primaryKeyword": "NCLEX preeclampsia practice questions",
+      "category": "OB/Maternity",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-033-nclex-practice-questions-suicide-risk-assessment-with-rationales",
+      "primaryKeyword": "NCLEX suicide risk assessment practice questions",
+      "category": "Mental Health",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-034-nclex-questions-on-restraint-use-and-alternatives-practice-answers",
+      "primaryKeyword": "NCLEX restraint use nursing questions",
+      "category": "Mental Health",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-035-nclex-practice-questions-iv-infiltration-vs-phlebitis",
+      "primaryKeyword": "NCLEX IV complications practice questions",
+      "category": "Nursing Skills",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-036-nclex-questions-about-chest-tube-air-leaks-with-rationales",
+      "primaryKeyword": "NCLEX chest tube nursing questions",
+      "category": "Respiratory",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-037-nclex-practice-questions-wound-infection-signs-with-answers",
+      "primaryKeyword": "NCLEX wound infection practice questions",
+      "category": "Nursing Skills",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-038-nclex-questions-about-insulin-mixing-and-timing-practice-rationales",
+      "primaryKeyword": "NCLEX insulin administration practice questions",
+      "category": "Pharmacology",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-039-nclex-practice-questions-stroke-nihssneuro-checks-simplified-for-rn",
+      "primaryKeyword": "NCLEX stroke assessment practice questions",
+      "category": "Neuro",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-040-nclex-practice-questions-catheter-associated-uti-prevention",
+      "primaryKeyword": "NCLEX CAUTI prevention practice questions",
+      "category": "Med-Surg",
+      "intentType": "practice-exam-prep"
+    },
+    {
+      "slug": "nclex-seo-041-gastric-vs-duodenal-ulcer-pain-whats-the-difference-for-nclex",
+      "primaryKeyword": "gastric vs duodenal ulcer nursing difference NCLEX",
+      "category": "Med-Surg",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-042-copd-vs-asthma-on-the-nclex-overlap-clues-and-wrong-answers",
+      "primaryKeyword": "COPD vs asthma NCLEX comparison",
+      "category": "Respiratory",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-043-hypovolemic-vs-cardiogenic-shock-how-to-tell-fast-on-an-exam-stem",
+      "primaryKeyword": "hypovolemic vs cardiogenic shock nursing difference",
+      "category": "Cardiac",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-044-arterial-vs-venous-ulcers-bedside-clues-nclex-loves",
+      "primaryKeyword": "arterial vs venous ulcer nursing comparison",
+      "category": "Med-Surg",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-045-crohns-disease-vs-uc-nclex-comparison-complications-teaching",
+      "primaryKeyword": "Crohn's vs ulcerative colitis NCLEX nursing",
+      "category": "Med-Surg",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-046-rheumatic-fever-vs-kawasaki-in-kids-comparison-for-pnrn-exams",
+      "primaryKeyword": "Kawasaki vs rheumatic fever nursing comparison",
+      "category": "Pediatrics",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-047-placenta-previa-vs-abruptio-placentae-ob-emergency-differentiation",
+      "primaryKeyword": "placenta previa vs abruptio placentae NCLEX",
+      "category": "OB/Maternity",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-048-epidural-vs-spinal-anesthesia-what-nclex-expects-you-to-monitor",
+      "primaryKeyword": "epidural vs spinal nursing monitoring NCLEX",
+      "category": "OB/Maternity",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-049-schizophrenia-vs-schizoaffective-high-yield-exam-differences-nursing-f",
+      "primaryKeyword": "schizophrenia vs schizoaffective nursing difference",
+      "category": "Mental Health",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-050-delirium-vs-dementia-quick-comparison-for-clinical-judgment-questions",
+      "primaryKeyword": "delirium vs dementia nursing comparison NCLEX",
+      "category": "Neuro",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-051-mi-vs-pericarditis-pain-ecgstory-clues-students-miss",
+      "primaryKeyword": "MI vs pericarditis nursing comparison",
+      "category": "Cardiac",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-052-osteoarthritis-vs-rheumatoid-arthritis-nclex-comparison-symptoms-teach",
+      "primaryKeyword": "OA vs RA nursing comparison NCLEX",
+      "category": "Med-Surg",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-053-left-vs-right-heart-failure-comparison-table-nclex-traps",
+      "primaryKeyword": "left vs right heart failure nursing comparison",
+      "category": "Cardiac",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-054-ulcerative-colitis-flare-vs-infectious-diarrhea-nursing-differentiatio",
+      "primaryKeyword": "UC flare vs infectious diarrhea nursing",
+      "category": "Med-Surg",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-055-contact-vs-airborne-precautions-nclex-scenario-comparison",
+      "primaryKeyword": "contact vs airborne precautions nursing NCLEX",
+      "category": "Nursing Skills",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-056-warfarin-vs-heparin-monitoring-and-reversal-themes-for-exams",
+      "primaryKeyword": "warfarin vs heparin nursing monitoring NCLEX",
+      "category": "Pharmacology",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-057-levothyroxine-timing-vs-anytime-meds-what-exams-test",
+      "primaryKeyword": "levothyroxine administration nursing NCLEX tips",
+      "category": "Pharmacology",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-058-central-vs-peripheral-cyanosis-what-each-implies-on-a-stem",
+      "primaryKeyword": "central vs peripheral cyanosis nursing difference",
+      "category": "Respiratory",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-059-type-1-vs-type-2-diabetes-priorities-in-acute-vs-chronic-stems",
+      "primaryKeyword": "type 1 vs type 2 diabetes nursing priorities NCLEX",
+      "category": "Endocrine",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-060-assault-vs-battery-in-nursing-documentationethics-questions-simplified",
+      "primaryKeyword": "assault vs battery nursing ethics NCLEX",
+      "category": "NCLEX Strategy",
+      "intentType": "comparison"
+    },
+    {
+      "slug": "nclex-seo-061-iv-drip-rate-calculation-nursing-step-by-step-gttmin-with-nclex-logic",
+      "primaryKeyword": "IV drip rate calculation nursing step by step",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-062-mlhr-from-infuse-over-x-hours-step-by-step-pump-math",
+      "primaryKeyword": "mL per hour infusion calculation nursing",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-063-weight-based-drug-math-mgkg-nursing-steps-that-stop-silly-errors",
+      "primaryKeyword": "mg kg dosage calculation nursing step by step",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-064-heparin-units-to-ml-step-by-step-from-a-vial-label",
+      "primaryKeyword": "heparin dosage calculation nursing mL",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-065-insulin-units-only-drawing-up-and-double-checking-exam-style-walkthrou",
+      "primaryKeyword": "insulin unit calculation nursing U-100",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-066-tablet-splitting-and-dose-conversion-mg-mcg-step-by-step",
+      "primaryKeyword": "mg to mcg conversion nursing dosage",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-067-iv-bolus-push-over-x-minutes-rate-math-nurses-actually-use",
+      "primaryKeyword": "IV push rate calculation nursing",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-068-fluid-replacement-math-maintenance-vs-deficit-simplified-for-exams",
+      "primaryKeyword": "IV fluid calculation nursing step by step",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-069-pediatric-dose-by-weight-step-by-step-with-a-safety-ceiling-check",
+      "primaryKeyword": "pediatric dosage calculation nursing step by step",
+      "category": "Pediatrics",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-070-reconstitution-math-mixing-powdered-antibiotics-label-walkthrough",
+      "primaryKeyword": "reconstitution medication calculation nursing",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-071-titration-tables-converting-increase-by-x-unitshr-to-pump-settings",
+      "primaryKeyword": "insulin drip titration nursing calculation",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-072-meq-dosing-for-electrolytes-what-nclex-tests-and-what-it-doesnt",
+      "primaryKeyword": "mEq medication calculation nursing",
+      "category": "Pharmacology",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-073-percentage-based-solutions-step-by-step-dextrose-math",
+      "primaryKeyword": "percentage solution calculation nursing",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-074-body-surface-area-bsa-dosing-when-the-stem-gives-heightweight",
+      "primaryKeyword": "BSA medication calculation nursing",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-075-iv-piggyback-timing-run-over-30-minutes-math-line-patency-checks",
+      "primaryKeyword": "IV piggyback infusion time calculation nursing",
+      "category": "Nursing Skills",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-076-syringe-pump-mlhr-for-small-volumes-pedsnicu-style-practice",
+      "primaryKeyword": "syringe pump rate calculation nursing",
+      "category": "Pediatrics",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-077-oxygen-fio2-changes-vs-lmin-what-the-nclex-wants-concept-math-hygiene",
+      "primaryKeyword": "oxygen flow rate nursing calculation NCLEX",
+      "category": "Respiratory",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-078-dilution-math-for-iv-meds-add-to-100-ml-ns-step-by-step",
+      "primaryKeyword": "IV medication dilution calculation nursing",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-079-gttmin-when-you-already-know-mlhr-drop-factor-shortcut",
+      "primaryKeyword": "gtt min from mL hr calculation nursing",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-080-how-many-tablets-dose-finding-with-fractional-tabs-nclex-style",
+      "primaryKeyword": "tablet dose calculation nursing half tablet",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to"
+    },
+    {
+      "slug": "nclex-seo-081-what-to-do-first-when-k-is-62-and-the-patient-looks-stable-nclex-prior",
+      "primaryKeyword": "hyperkalemia priority nursing action NCLEX",
+      "category": "Med-Surg",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-082-abc-vs-nursing-process-when-nclex-wants-airway-before-assess-more",
+      "primaryKeyword": "ABC priority nursing NCLEX first action",
+      "category": "NCLEX Strategy",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-083-new-onset-confusion-post-op-infection-vs-opioids-vs-hypoxia-pick-first",
+      "primaryKeyword": "post op confusion priority nursing NCLEX",
+      "category": "Med-Surg",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-084-chest-pain-in-the-clinic-who-goes-to-the-ed-first-judgment-drill",
+      "primaryKeyword": "chest pain priority nursing assessment NCLEX",
+      "category": "Cardiac",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-085-sudden-shortness-of-breath-with-unilateral-leg-swelling-first-nursing-",
+      "primaryKeyword": "DVT PE priority nursing actions NCLEX",
+      "category": "Respiratory",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-086-hypoglycemia-symptoms-but-glucose-borderline-what-nclex-is-testing",
+      "primaryKeyword": "hypoglycemia priority nursing intervention NCLEX",
+      "category": "Endocrine",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-087-patient-refuses-meds-priority-is-not-arguingits-assessment-first",
+      "primaryKeyword": "patient refuses medication nursing priority NCLEX",
+      "category": "NCLEX Strategy",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-088-bleeding-after-heparin-what-to-check-before-you-panic-click-answers",
+      "primaryKeyword": "heparin bleeding nursing priority NCLEX",
+      "category": "Pharmacology",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-089-fall-risk-vs-impulsive-behavior-which-safety-action-comes-first",
+      "primaryKeyword": "fall risk nursing priority mental health NCLEX",
+      "category": "Mental Health",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-090-postpartum-bleeding-first-line-nursing-actions-before-more-fluids",
+      "primaryKeyword": "postpartum hemorrhage nursing priority NCLEX",
+      "category": "OB/Maternity",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-091-pediatric-fever-petechial-rash-priority-actions-parents-and-exams-need",
+      "primaryKeyword": "petechial rash fever pediatric nursing priority NCLEX",
+      "category": "Pediatrics",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-092-stroke-symptoms-10-minutes-ago-what-nclex-wants-you-to-prioritize",
+      "primaryKeyword": "stroke nursing priority NCLEX first action",
+      "category": "Neuro",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-093-anaphylaxis-vs-mild-allergy-epi-first-or-assessment-first",
+      "primaryKeyword": "anaphylaxis nursing priority epinephrine NCLEX",
+      "category": "Med-Surg",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-094-suicidal-ideation-disclosed-in-passing-immediate-nursing-priority",
+      "primaryKeyword": "suicidal ideation nursing priority NCLEX",
+      "category": "Mental Health",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-095-digoxin-low-k-which-problem-do-you-address-first-on-the-exam",
+      "primaryKeyword": "digoxin toxicity hypokalemia priority nursing NCLEX",
+      "category": "Pharmacology",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-096-patient-pulling-at-lines-behavioral-vs-safety-priority-in-med-surg",
+      "primaryKeyword": "patient pulling IV line nursing priority NCLEX",
+      "category": "Med-Surg",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-097-post-extubation-stridor-nursing-priorities-in-the-first-minutes",
+      "primaryKeyword": "post extubation stridor nursing priority NCLEX",
+      "category": "Respiratory",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-098-suspected-child-abuse-reporting-vs-rapportwhat-comes-first-legally-and",
+      "primaryKeyword": "suspected child abuse nursing priority NCLEX",
+      "category": "Pediatrics",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-099-transfusion-reaction-stop-the-line-vs-call-the-provider-nclex-order",
+      "primaryKeyword": "transfusion reaction nursing priority first action NCLEX",
+      "category": "Med-Surg",
+      "intentType": "prioritization-traps"
+    },
+    {
+      "slug": "nclex-seo-100-which-patient-do-you-see-first-charge-nurse-triage-4-patients-1-nurse",
+      "primaryKeyword": "nursing prioritization multiple patients NCLEX",
+      "category": "NCLEX Strategy",
+      "intentType": "prioritization-traps"
+    }
+  ]
+}

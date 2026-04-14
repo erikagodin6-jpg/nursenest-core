@@ -1,0 +1,59 @@
+{
+  "generatedAt": "2026-04-14T14:22:28.207Z",
+  "methodology": "Semantic + repo-documented proxies; not a byte-level compare to external NurseNest export.",
+  "rows": [
+    {
+      "id": "external_drive_unavailable",
+      "status": "E",
+      "label": "Full old-site tree on external volume",
+      "rationale": "Cannot verify file-by-file parity with /Volumes/Backup Plus/NurseNest from this workspace; use in-repo client/server/tools as proxy.",
+      "migrationValue": "unknown_until_mounted",
+      "implementationRisk": "n/a"
+    },
+    {
+      "id": "legacy_lesson_ts_corpus",
+      "status": "C",
+      "label": "Legacy client/src/data/lessons TypeScript lesson corpus vs Prisma/pathway catalog",
+      "rationale": "Mapping summary: createMissing=4220, mergeIntoExisting=3. Most legacy IDs lack automatic slug match to current pathway lessons.",
+      "migrationValue": "high",
+      "implementationRisk": "medium_high_structured_import"
+    },
+    {
+      "id": "cat_progress_resume_ux",
+      "status": "B",
+      "label": "CAT / mock exam checkpoint & recovery UX",
+      "rationale": "Legacy mock-exam-session + session-checkpoint patterns richer than current; selective port of recovery UX.",
+      "migrationValue": "high_learner_trust",
+      "implementationRisk": "medium_must_not_fork_engine"
+    },
+    {
+      "id": "vite_monolith_parallel_marketing",
+      "status": "B",
+      "label": "Parallel Vite marketing / home vs Next marketing",
+      "rationale": "docs/legacy-restoration-map.md: client home components duplicate Next; long-term drift risk.",
+      "migrationValue": "medium_maintainability",
+      "implementationRisk": "low"
+    },
+    {
+      "id": "i18n_single_pipeline",
+      "status": "A",
+      "label": "i18n compile pipeline",
+      "rationale": "Current tools/i18n merged compile is canonical; do not reintroduce parallel loaders.",
+      "migrationValue": "n/a",
+      "implementationRisk": "low"
+    },
+    {
+      "id": "flashcards_qbank_alignment",
+      "status": "B",
+      "label": "Flashcards + question bank cross-links",
+      "rationale": "See legacy-flashcards-questionbank-inventory.json — alignment work may be partial.",
+      "migrationValue": "medium",
+      "implementationRisk": "low_medium"
+    }
+  ],
+  "references": [
+    "docs/legacy-restoration-map.md",
+    "data/audit/legacy-to-current-lesson-map.json",
+    "data/audit/legacy-vs-current-cat-comparison.json"
+  ]
+}

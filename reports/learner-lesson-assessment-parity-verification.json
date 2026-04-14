@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-04-14T00:00:00.000Z",
+  "eslint": {
+    "command": "npx eslint src/components/lessons/pathway-lesson-quiz-set.tsx src/components/lessons/pathway-lesson-quizzes.tsx src/components/lessons/lesson-pre-assessment-card.tsx src/components/lessons/lesson-post-assessment-card.tsx --max-warnings 0",
+    "result": "pass"
+  },
+  "manualChecks": [
+    { "id": 1, "description": "Pre-test renders when items exist", "result": "pass", "note": "hasPre + items; PathwayLessonQuizSet returns null if empty" },
+    { "id": 2, "description": "Post-test renders when items exist", "result": "pass", "note": "resolvedPhase + hasPost" },
+    { "id": 3, "description": "Post Practice mode works", "result": "pass", "note": "Immediate grading in PathwayLessonQuizSet" },
+    { "id": 4, "description": "Post Exam-style works", "result": "pass", "note": "Show results reveals rationales; onAssessmentFinished after reveal" },
+    { "id": 5, "description": "Practice ↔ Exam resets state", "result": "pass", "note": "key includes postMode on learner PathwayLessonQuizSet" },
+    { "id": 6, "description": "Progress updates", "result": "pass", "note": "Pill onQuestion/total in shared component" },
+    { "id": 7, "description": "Empty/missing items graceful", "result": "pass", "note": "lesson-assessment-flow returns children only; cards return null if !items.length" },
+    { "id": 8, "description": "ESLint --max-warnings 0 on touched files", "result": "pass" }
+  ],
+  "typecheck": "not run (project has unrelated tsc errors per task note)"
+}

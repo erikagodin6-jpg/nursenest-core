@@ -71,6 +71,7 @@ import {
 import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
+import { resolvePathwayLessonBankAssessments } from "@/lib/lessons/lesson-bank-assessment-selection";
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
 export const dynamic = "force-dynamic";
@@ -189,6 +190,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
       : entitlement;
 
   const fullAccess = canViewFullPathwayLesson(scope, pathway, learnerPathResolved);
+  const bankAssessments = await resolvePathwayLessonBankAssessments(pathway, lesson);
   const visible = visibleSectionsForLesson(lesson, fullAccess);
   const previewLesson =
     fullAccess
@@ -362,8 +364,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           pathwayId={pathway.id}
           lessonSlug={lesson.slug}
           initialProgress={lessonProgress}
-          preTest={fullAccess ? lesson.preTest : undefined}
-          postTest={fullAccess ? lesson.postTest : undefined}
+          preTest={fullAccess ? bankAssessments.preTest : undefined}
+          postTest={fullAccess ? bankAssessments.postTest : undefined}
           fullAccess={fullAccess}
           assessmentsEnabled={studySettings.enablePrePostQuizzes}
         >

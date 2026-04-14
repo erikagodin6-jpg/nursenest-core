@@ -13,10 +13,11 @@
  * can persist the score via the API.
  */
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
 import type { LessonAssessmentScore } from "@/lib/lessons/lesson-assessment-store";
-import { LessonAssessmentQuiz, QuizScoreSummary } from "@/components/lessons/lesson-assessment-quiz";
+import { QuizScoreSummary } from "@/components/lessons/lesson-assessment-quiz";
+import { PathwayLessonQuizSet, itemsResetKey } from "@/components/lessons/pathway-lesson-quiz-set";
 
 // ─── Idle card ─────────────────────────────────────────────────────────────────
 
@@ -155,9 +156,15 @@ function DiagnosticRunningCard({
           Pre-lesson diagnostic
         </p>
       </div>
-      <LessonAssessmentQuiz
+      <PathwayLessonQuizSet
+        key={`learner-pre-${itemsResetKey(items)}`}
+        variant="pre"
+        title="Pre-lesson diagnostic"
+        subtitle="Practice"
         items={items}
-        onComplete={({ score, total }) => onComplete(score, total)}
+        fullAccess
+        className="border-0 pb-0"
+        onAssessmentFinished={(score, total) => onComplete(score, total)}
       />
     </div>
   );
@@ -169,10 +176,13 @@ function DiagnosticCompleteCard({
   score,
   total,
   onContinue,
+  showScoreSummary = true,
 }: {
   score: number;
   total: number;
   onContinue: () => void;
+  /** When false, score was already shown in the quiz runner (avoid duplicate). */
+  showScoreSummary?: boolean;
 }) {
   const pct = total > 0 ? Math.round((score / total) * 100) : 0;
   const message =
@@ -205,9 +215,11 @@ function DiagnosticCompleteCard({
         </p>
       </div>
 
-      <div className="mt-4">
-        <QuizScoreSummary score={score} total={total} label="Baseline score" />
-      </div>
+      {showScoreSummary ? (
+        <div className="mt-4">
+          <QuizScoreSummary score={score} total={total} label="Baseline score" />
+        </div>
+      ) : null}
 
       <p className="mt-3 text-sm leading-6" style={{ color: "var(--theme-muted-text)" }}>
         {message}
@@ -251,6 +263,7 @@ export function LessonPreAssessmentCard({
 }) {
   const [phase, setPhase] = useState<PreAssessmentPhase>("idle");
   const [finalScore, setFinalScore] = useState<{ score: number; total: number } | null>(null);
+  const completionOnceRef = useRef(false);
 
   if (phase === "skipped" || !items.length) return null;
 
@@ -273,6 +286,8 @@ export function LessonPreAssessmentCard({
       <DiagnosticRunningCard
         items={items}
         onComplete={(score, total) => {
+          if (completionOnceRef.current) return;
+          completionOnceRef.current = true;
           setFinalScore({ score, total });
           setPhase("complete");
           onScoreRecorded(score, total);
@@ -286,6 +301,7 @@ export function LessonPreAssessmentCard({
       <DiagnosticCompleteCard
         score={finalScore.score}
         total={finalScore.total}
+        showScoreSummary={false}
         onContinue={() => setPhase("skipped")} // hides card, lesson becomes visible
       />
     );

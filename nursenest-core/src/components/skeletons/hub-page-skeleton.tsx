@@ -267,3 +267,83 @@ export function PricingPageSkeleton() {
     </main>
   );
 }
+
+/** Blog article: prose column + title/meta strip (marketing blog slug + tag pages). */
+export function BlogPostPageSkeleton() {
+  return (
+    <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6" aria-busy="true" aria-label="Loading article…">
+      <Bar w="40%" h="0.75rem" className="rounded-full" />
+      <Bar w="85%" h="2rem" className="mt-8 rounded-xl" />
+      <div className="mt-4 flex flex-wrap gap-3">
+        <Bar w="6rem" h="1.5rem" className="rounded-full" />
+        <Bar w="8rem" h="1.5rem" className="rounded-full" />
+      </div>
+      <div className="mt-10 space-y-3">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <Bar key={i} w={i % 4 === 3 ? "55%" : "100%"} h="0.875rem" />
+        ))}
+      </div>
+    </article>
+  );
+}
+
+/** Blog index: list of cards. */
+export function BlogIndexPageSkeleton() {
+  return (
+    <div className="mx-auto max-w-5xl px-4 py-12" aria-busy="true" aria-label="Loading blog…">
+      <Bar w="50%" h="2rem" className="rounded-xl" />
+      <div className="mt-10 grid gap-6 sm:grid-cols-2">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="nn-study-card nn-study-card--wash space-y-3 p-5">
+            <Bar w="70%" h="1.125rem" />
+            <Bar w="100%" h="0.75rem" />
+            <Bar w="90%" h="0.75rem" />
+            <Bar w="5rem" h="1.5rem" className="mt-2 rounded-full" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Learner practice test runner initial load (matches nn-card shell). */
+export function PracticeTestRunPageSkeleton() {
+  return (
+    <div className="mx-auto max-w-4xl px-4 py-6" aria-busy="true" aria-label="Loading practice test…">
+      <Bar w="12rem" h="0.75rem" className="rounded-full" />
+      <div className="nn-card mt-6 space-y-4 p-6">
+        <Bar w="40%" h="1rem" />
+        <Bar w="100%" h="0.5rem" className="rounded-full" />
+        <Bar w="100%" h="0.5rem" className="rounded-full" />
+        <div className="mt-6 space-y-3">
+          <Bar w="100%" h="4rem" className="rounded-xl" />
+          <Bar w="100%" h="4rem" className="rounded-xl" />
+          <Bar w="100%" h="4rem" className="rounded-xl" />
+        </div>
+        <div className="mt-8 flex gap-2">
+          <Bar w="8rem" h="2.75rem" className="rounded-full" />
+          <Bar w="8rem" h="2.75rem" className="rounded-full" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Single learner lesson document (article + sidebar hints). */
+export function LearnerLessonDetailSkeleton() {
+  return (
+    <div className="mx-auto max-w-4xl px-4 py-8" aria-busy="true" aria-label="Loading lesson…">
+      <Bar w="14rem" h="0.75rem" className="rounded-full" />
+      <Bar w="90%" h="2rem" className="mt-6 rounded-xl" />
+      <div className="mt-8 space-y-4">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <Bar key={i} w={i % 3 === 0 ? "100%" : "92%"} h="0.875rem" />
+        ))}
+      </div>
+      <div className="nn-card mt-10 space-y-3 p-5">
+        <Bar w="30%" h="1rem" />
+        <Bar w="100%" h="3rem" className="rounded-xl" />
+      </div>
+    </div>
+  );
+}

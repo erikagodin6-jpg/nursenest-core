@@ -16,10 +16,11 @@
  * On completion, calls onScoreRecorded so the parent persists via the API.
  */
 
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import type { PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
 import type { LessonAssessmentScore } from "@/lib/lessons/lesson-assessment-store";
-import { LessonAssessmentQuiz, QuizScoreSummary } from "@/components/lessons/lesson-assessment-quiz";
+import { QuizScoreSummary } from "@/components/lessons/lesson-assessment-quiz";
+import { PathwayLessonQuizSet, itemsResetKey } from "@/components/lessons/pathway-lesson-quiz-set";
 
 // ─── Delta badge ───────────────────────────────────────────────────────────────
 
@@ -249,9 +250,13 @@ function PostAssessmentIdleCard({
 
 function PostAssessmentRunningCard({
   items,
+  postMode,
+  onPostModeChange,
   onComplete,
 }: {
   items: PathwayLessonQuizItem[];
+  postMode: "practice" | "exam";
+  onPostModeChange: (mode: "practice" | "exam") => void;
   onComplete: (score: number, total: number) => void;
 }) {
   return (
@@ -274,9 +279,17 @@ function PostAssessmentRunningCard({
           Retention check
         </p>
       </div>
-      <LessonAssessmentQuiz
+      <PathwayLessonQuizSet
+        key={`learner-post-${itemsResetKey(items)}-${postMode}`}
+        variant="post"
+        title="Post-lesson retention"
+        subtitle={postMode === "practice" ? "Practice" : "Exam-style"}
         items={items}
-        onComplete={({ score, total }) => onComplete(score, total)}
+        fullAccess
+        postMode={postMode}
+        onPostModeChange={onPostModeChange}
+        className="border-0 pb-0"
+        onAssessmentFinished={(score, total) => onComplete(score, total)}
       />
     </div>
   );
@@ -289,11 +302,13 @@ function PostAssessmentCompleteCard({
   total,
   preScore,
   topic,
+  showScoreSummary = true,
 }: {
   score: number;
   total: number;
   preScore: LessonAssessmentScore | null;
   topic: string;
+  showScoreSummary?: boolean;
 }) {
   const pct = total > 0 ? Math.round((score / total) * 100) : 0;
 
@@ -325,9 +340,11 @@ function PostAssessmentCompleteCard({
         </p>
       </div>
 
-      <div className="mt-4">
-        <QuizScoreSummary score={score} total={total} label="Retention score" />
-      </div>
+      {showScoreSummary ? (
+        <div className="mt-4">
+          <QuizScoreSummary score={score} total={total} label="Retention score" />
+        </div>
+      ) : null}
 
       {/* Improvement delta — only show if there was a pre-score */}
       {preScore ? (
@@ -383,21 +400,26 @@ export function LessonPostAssessmentCard({
 }) {
   const [phase, setPhase] = useState<PostPhase>(lessonComplete ? "idle" : "locked");
   const [finalScore, setFinalScore] = useState<{ score: number; total: number } | null>(null);
+  const [postTestMode, setPostTestMode] = useState<"practice" | "exam">("practice");
+  const completionOnceRef = useRef(false);
+
+  /** Maps stored phase + lesson completion to the gate the learner should see (no effect-driven sync). */
+  const resolvedPhase = useMemo((): PostPhase => {
+    if (!lessonComplete) {
+      if (phase === "running" || phase === "complete") return phase;
+      return "locked";
+    }
+    if (phase === "locked") return "idle";
+    return phase;
+  }, [lessonComplete, phase]);
 
   if (!items.length) return null;
 
-  // Upgrade locked → idle when lesson completion arrives
-  if (!lessonComplete && phase === "idle") {
-    setPhase("locked");
-  } else if (lessonComplete && phase === "locked") {
-    setPhase("idle");
-  }
-
-  if (phase === "locked") {
+  if (resolvedPhase === "locked") {
     return <PostAssessmentLocked />;
   }
 
-  if (phase === "idle") {
+  if (resolvedPhase === "idle") {
     return (
       <PostAssessmentIdleCard
         itemCount={items.length}
@@ -408,11 +430,15 @@ export function LessonPostAssessmentCard({
     );
   }
 
-  if (phase === "running") {
+  if (resolvedPhase === "running") {
     return (
       <PostAssessmentRunningCard
         items={items}
+        postMode={postTestMode}
+        onPostModeChange={setPostTestMode}
         onComplete={(score, total) => {
+          if (completionOnceRef.current) return;
+          completionOnceRef.current = true;
           setFinalScore({ score, total });
           setPhase("complete");
           onScoreRecorded(score, total);
@@ -421,13 +447,14 @@ export function LessonPostAssessmentCard({
     );
   }
 
-  if (phase === "complete" && finalScore) {
+  if (resolvedPhase === "complete" && finalScore) {
     return (
       <PostAssessmentCompleteCard
         score={finalScore.score}
         total={finalScore.total}
         preScore={preScore}
         topic={topic}
+        showScoreSummary={false}
       />
     );
   }

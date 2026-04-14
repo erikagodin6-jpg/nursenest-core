@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "primaryDedupe": {
+    "lessons": "pathwayId + locale + slug (existing PathwayLesson unique)",
+    "questions": "stemHash",
+    "blogs": "slug"
+  },
+  "secondaryLessonTitleCollision": {
+    "enabled": true,
+    "description": "If two rows share the same pathway and lessonTitleCollisionKey(normalizeLessonTitleForCollision(title)) but different slugs, the later row is quarantined (high confidence). No merge, no overwrite.",
+    "normalization": "NFKC lowercase; non-alphanumeric → spaces; collapse whitespace; SHA-256 first 16 hex chars of normalized string",
+    "reasonCodes": {
+      "LESSON_TITLE_SLUG_COLLISION_IMPORT": "Title key collision with another row in the same import run (different slug).",
+      "LESSON_TITLE_SLUG_COLLISION_DB": "Title key matches an existing published lesson in DB for this pathway/locale with a different slug.",
+      "LESSON_DUPLICATE_SLUG_IMPORT_ROW": "A later row reused pathwayId+slug already seen in this run (first row wins for insert attempt)."
+    },
+    "quarantineVsReport": {
+      "highConfidence": ["LESSON_TITLE_SLUG_COLLISION_IMPORT", "LESSON_TITLE_SLUG_COLLISION_DB", "LESSON_DUPLICATE_SLUG_IMPORT_ROW"],
+      "lowConfidence": "Not used in v1; candidates increment lessonTitleCollisionCandidates only for high-confidence paths."
+    }
+  },
+  "counters": {
+    "lessonSlugDuplicates": "Rows skipped: duplicate pathwayId+slug within the same import run after the first occurrence.",
+    "lessonTitleCollisionCandidates": "Rows where a title-key vs slug mismatch was detected (import or DB).",
+    "quarantinedLessons": "Lesson rows written to quarantine log with a lesson-specific reason (includes collisions and validation failures logged there)."
+  }
+}

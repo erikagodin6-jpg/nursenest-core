@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-04-14T00:00:00.000Z",
+  "scope": "Learner app pathway lesson assessments vs marketing PathwayLessonQuizzes",
+  "components": [
+    {
+      "file": "src/components/lessons/lesson-assessment-flow.tsx",
+      "role": "Orchestrates toggle, pre card, lesson children, post card; loads prior scores via GET /api/learner/lesson-assessment.",
+      "preRenders": "LessonPreAssessmentCard when enabled && hasPre && !scoresLoading",
+      "postRenders": "LessonPostAssessmentCard when enabled && hasPost && !scoresLoading",
+      "progressTracking": "PathwayLessonProgressStatus from PATHWAY_LESSON_PROGRESS_EVENT; prior scores from API",
+      "parityGapBefore": "Pre/post used LessonAssessmentQuiz (submit-all-then-grade) vs marketing immediate per-item feedback; no n/total pill; no post Practice/Exam toggle; post card had invalid setState during render for locked/idle sync",
+      "safestFix": "Shared PathwayLessonQuizSet + itemsResetKey; derive post phase with useMemo; parent keys for mode/items"
+    },
+    {
+      "file": "src/components/lessons/lesson-pre-assessment-card.tsx",
+      "role": "Idle → running (LessonAssessmentQuiz) → complete → skipped",
+      "parityGapBefore": "No progress pill matching marketing; single-submit quiz UX differed",
+      "safestFix": "Swap running body for PathwayLessonQuizSet variant=pre; suppress duplicate score in complete card"
+    },
+    {
+      "file": "src/components/lessons/lesson-post-assessment-card.tsx",
+      "role": "locked → idle → running → complete",
+      "parityGapBefore": "No Practice/Exam post mode; render-time setState bug; LessonAssessmentQuiz only",
+      "safestFix": "postTestMode state + key remount; resolvedPhase useMemo; PathwayLessonQuizSet variant=post"
+    },
+    {
+      "file": "src/components/lessons/lesson-assessment-quiz.tsx",
+      "role": "Legacy submit-all MCQ runner (still used elsewhere if imported)",
+      "parityGapBefore": "Not used for pathway pre/post after parity pass in learner cards",
+      "safestFix": "Leave module intact for other consumers"
+    },
+    {
+      "file": "src/components/lessons/pathway-lesson-quizzes.tsx",
+      "role": "Marketing wrapper",
+      "parityGapBefore": "Duplicated inline QuizSet",
+      "safestFix": "Delegate to PathwayLessonQuizSet + export itemsResetKey"
+    },
+    {
+      "file": "src/components/lessons/pathway-lesson-quiz-set.tsx",
+      "role": "NEW shared presentational quiz (extracted)",
+      "parityGapBefore": "N/A",
+      "safestFix": "Single source for marketing + learner"
+    }
+  ],
+  "bankBackedAssumptions": "LessonAssessmentFlow receives preTest/postTest from page (same bank merge as marketing when wired); no API contract change."
+}

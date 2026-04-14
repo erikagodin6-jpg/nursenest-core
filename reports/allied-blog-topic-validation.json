@@ -1,0 +1,123 @@
+{
+  "generatedAt": "2026-04-14T15:05:33.966Z",
+  "totalTopicsGenerated": 400,
+  "perProfessionCounts": {
+    "Respiratory Therapy (RRT)": 80,
+    "Medical Laboratory Technology (MLT)": 70,
+    "Radiology & Medical Imaging": 60,
+    "Paramedic / EMS": 60,
+    "Pharmacy Technician": 50,
+    "Physical Therapist Assistant (PTA)": 20,
+    "Occupational Therapy Assistant (OTA)": 20,
+    "Clinical Social Work": 40
+  },
+  "duplicatesRejected": 0,
+  "averageUniquenessScore": 0.547,
+  "minUniquenessScore": 0.25,
+  "maxUniquenessScore": 1,
+  "averageNursingSeparationScore": 0.935,
+  "minNursingSeparationScore": 0.86,
+  "engineeringNote": "Peer uniqueness uses title-token Jaccard with an allied stopword list; thresholds were calibrated so 400 long-tail titles can pass without trivial overlap. Token Jaccard cannot capture all clinical semantics; editorial review recommended before publish.",
+  "clustersCreated": 68,
+  "clusterIds": [
+    "cluster-ems-airway-vent",
+    "cluster-ems-cardiac-arrest",
+    "cluster-ems-environmental",
+    "cluster-ems-ethics-law",
+    "cluster-ems-medical-respiratory",
+    "cluster-ems-neuro-stroke",
+    "cluster-ems-ob-peds",
+    "cluster-ems-operations",
+    "cluster-ems-pharm-scope",
+    "cluster-ems-trauma-bleeding",
+    "cluster-mlt-blood-bank",
+    "cluster-mlt-chemistry-renal",
+    "cluster-mlt-endocrine-tumor",
+    "cluster-mlt-hematology-coag",
+    "cluster-mlt-lab-operations",
+    "cluster-mlt-micro-id",
+    "cluster-mlt-molecular",
+    "cluster-mlt-qc-stats",
+    "cluster-mlt-safety-phlebotomy",
+    "cluster-mlt-urinalysis",
+    "cluster-ota-adl-iadl",
+    "cluster-ota-ethics-scope",
+    "cluster-ota-hand-splinting",
+    "cluster-ota-mental-health",
+    "cluster-ota-peds-behavior",
+    "cluster-pharm-calculations",
+    "cluster-pharm-compounding-nonsterile",
+    "cluster-pharm-compounding-sterile",
+    "cluster-pharm-dispensing-safety",
+    "cluster-pharm-ethics-scope",
+    "cluster-pharm-hospital-ops",
+    "cluster-pharm-informatics",
+    "cluster-pharm-inventory-receiving",
+    "cluster-pharm-patient-education",
+    "cluster-pharm-regulatory",
+    "cluster-pta-cardiopulm",
+    "cluster-pta-ethics-scope",
+    "cluster-pta-msk-ortho",
+    "cluster-pta-neuro",
+    "cluster-pta-peds-geriatrics",
+    "cluster-rad-bone-dexa",
+    "cluster-rad-ct-protocols",
+    "cluster-rad-ethics-privacy",
+    "cluster-rad-fluoro-interventional",
+    "cluster-rad-mammo-breast",
+    "cluster-rad-mri-safety",
+    "cluster-rad-nuclear-pet",
+    "cluster-rad-peds-alara",
+    "cluster-rad-us-doppler",
+    "cluster-rad-xr-positioning",
+    "cluster-rrt-airway-procedures",
+    "cluster-rrt-ethics-scope",
+    "cluster-rrt-hemodynamics-icu",
+    "cluster-rrt-home-equipment",
+    "cluster-rrt-infection-iso",
+    "cluster-rrt-neonatal-peds",
+    "cluster-rrt-pft-diagnostics",
+    "cluster-rrt-special-modes",
+    "cluster-rrt-ventilation-gas-exchange",
+    "cluster-rrt-weaning-extubation",
+    "cluster-sw-assessment-diagnosis",
+    "cluster-sw-documentation-supervision",
+    "cluster-sw-ethics-law",
+    "cluster-sw-intervention-planning",
+    "cluster-sw-policy-advocacy",
+    "cluster-sw-populations",
+    "cluster-sw-research-evidence",
+    "cluster-sw-trauma-crisis"
+  ],
+  "topPerformingKeywordCategories": [
+    {
+      "searchIntent": "mechanism",
+      "count": 58
+    },
+    {
+      "searchIntent": "clinical_decision",
+      "count": 57
+    },
+    {
+      "searchIntent": "interpretation",
+      "count": 57
+    },
+    {
+      "searchIntent": "micro_comparison",
+      "count": 57
+    },
+    {
+      "searchIntent": "failure_deterioration",
+      "count": 57
+    },
+    {
+      "searchIntent": "case_based",
+      "count": 57
+    },
+    {
+      "searchIntent": "procedure_logic",
+      "count": 57
+    }
+  ],
+  "nursingCorpusDocuments": 310
+}

@@ -1,0 +1,40 @@
+{
+  "generatedAt": "2026-04-14T14:22:28.207Z",
+  "items": [
+    {
+      "rank": 1,
+      "title": "Finish structured migration for legacy lesson IDs still in create_missing",
+      "bucket": "C",
+      "evidence": "legacy-to-current-lesson-map.json summary",
+      "effort": "larger_project"
+    },
+    {
+      "rank": 2,
+      "title": "Port selective CAT/mock checkpoint & recovery UX (not engine fork)",
+      "bucket": "B",
+      "evidence": "legacy-vs-current-cat-comparison.json progress_resume",
+      "effort": "medium"
+    },
+    {
+      "rank": 3,
+      "title": "Align flashcard decks with catalog exam questions (dedupe reports)",
+      "bucket": "B",
+      "evidence": "legacy-flashcards-questionbank-inventory.json",
+      "effort": "medium"
+    },
+    {
+      "rank": 4,
+      "title": "Close allied-health lesson coverage gaps vs legacy client corpus",
+      "bucket": "B",
+      "evidence": "legacy-lesson-source-inventory allied hints",
+      "effort": "medium"
+    },
+    {
+      "rank": 5,
+      "title": "Blog/SEO batch: data/blog-manifest pipelines to indexed pages",
+      "bucket": "B",
+      "evidence": "data/blog-manifest",
+      "effort": "quick_win_to_medium"
+    }
+  ]
+}

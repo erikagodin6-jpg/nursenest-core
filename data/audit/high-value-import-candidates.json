@@ -1,0 +1,127 @@
+{
+  "generatedAt": "2026-04-14T14:42:38.871Z",
+  "priority": "RN_first_exam_high_yield_title_match",
+  "criteria": "lesson + not_imported + pathwayGuess RN (from legacy id) + title matches high-yield clinical regex; longer titles preferred as completeness proxy",
+  "top20": [
+    {
+      "rank": 1,
+      "legacyLessonId": "thyroid-storm-rn",
+      "title": "Thyroid Disease: Hypothyroidism, Hyperthyroidism & Thyroid Storm",
+      "normalizedKey": "thyroid-storm"
+    },
+    {
+      "rank": 2,
+      "legacyLessonId": "adrenal-crisis-rn",
+      "title": "Adrenal Disorders: HPA Axis, Cushing Syndrome & Adrenal Crisis",
+      "normalizedKey": "adrenal-crisis"
+    },
+    {
+      "rank": 3,
+      "legacyLessonId": "hemorrhagic-stroke-rn",
+      "title": "Hemorrhagic Stroke: Intracerebral & Subarachnoid Hemorrhage",
+      "normalizedKey": "hemorrhagic-stroke"
+    },
+    {
+      "rank": 4,
+      "legacyLessonId": "heart-failure-systolic-diastolic-rn",
+      "title": "Heart Failure: HFrEF vs HFpEF Comprehensive Management",
+      "normalizedKey": "heart-failure-systolic-diastolic"
+    },
+    {
+      "rank": 5,
+      "legacyLessonId": "distributive-shock-overview-rn",
+      "title": "Distributive Shock Overview: RN Clinical Management",
+      "normalizedKey": "distributive-shock-overview"
+    },
+    {
+      "rank": 6,
+      "legacyLessonId": "myocardial-infarction-comprehensive-rn",
+      "title": "Myocardial Infarction: Comprehensive RN Management",
+      "normalizedKey": "myocardial-infarction-comprehensive"
+    },
+    {
+      "rank": 7,
+      "legacyLessonId": "sepsis-septic-shock-rn",
+      "title": "Sepsis & Septic Shock: RN Clinical Management",
+      "normalizedKey": "sepsis-septic-shock"
+    },
+    {
+      "rank": 8,
+      "legacyLessonId": "infection-control-and-sepsis-management-rn-rn",
+      "title": "Infection Control and Sepsis Management (RN)",
+      "normalizedKey": "infection-control-and-sepsis-management-rn"
+    },
+    {
+      "rank": 9,
+      "legacyLessonId": "ards-pathophysiology-rn",
+      "title": "Impaired Gas Exchange & ARDS Pathophysiology",
+      "normalizedKey": "ards-pathophysiology"
+    },
+    {
+      "rank": 10,
+      "legacyLessonId": "stroke-tia-comprehensive-rn",
+      "title": "Stroke and TIA: Comprehensive RN Management",
+      "normalizedKey": "stroke-tia-comprehensive"
+    },
+    {
+      "rank": 11,
+      "legacyLessonId": "ie-embolic-stroke-rn",
+      "title": "Infective Endocarditis with Embolic Stroke",
+      "normalizedKey": "ie-embolic-stroke"
+    },
+    {
+      "rank": 12,
+      "legacyLessonId": "anaphylactic-shock-rn",
+      "title": "Anaphylactic Shock: RN Clinical Management",
+      "normalizedKey": "anaphylactic-shock"
+    },
+    {
+      "rank": 13,
+      "legacyLessonId": "epistaxis-management-rn",
+      "title": "Epistaxis: Assessment & Hemorrhage Control",
+      "normalizedKey": "epistaxis-management"
+    },
+    {
+      "rank": 14,
+      "legacyLessonId": "hypovolemic-shock-rn",
+      "title": "Hypovolemic Shock: RN Clinical Management",
+      "normalizedKey": "hypovolemic-shock"
+    },
+    {
+      "rank": 15,
+      "legacyLessonId": "obstructive-shock-rn",
+      "title": "Obstructive Shock: RN Clinical Management",
+      "normalizedKey": "obstructive-shock"
+    },
+    {
+      "rank": 16,
+      "legacyLessonId": "neonatal-sepsis-early-onset-rn",
+      "title": "Early-Onset Neonatal Sepsis: Recognition",
+      "normalizedKey": "neonatal-sepsis-early-onset"
+    },
+    {
+      "rank": 17,
+      "legacyLessonId": "neurogenic-shock-rn",
+      "title": "Neurogenic Shock: RN Clinical Management",
+      "normalizedKey": "neurogenic-shock"
+    },
+    {
+      "rank": 18,
+      "legacyLessonId": "sepsis-screening-rn",
+      "title": "Sepsis Screening (qSOFA, SIRS Criteria)",
+      "normalizedKey": "sepsis-screening"
+    },
+    {
+      "rank": 19,
+      "legacyLessonId": "infections-rn",
+      "title": "Infection Control and Sepsis Management",
+      "normalizedKey": "infections"
+    },
+    {
+      "rank": 20,
+      "legacyLessonId": "secondary-survey-rn",
+      "title": "Secondary Survey: Head-to-Toe Trauma",
+      "normalizedKey": "secondary-survey"
+    }
+  ]
+}

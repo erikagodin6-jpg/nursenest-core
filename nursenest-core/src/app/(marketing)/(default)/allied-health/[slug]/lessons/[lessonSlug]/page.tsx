@@ -78,6 +78,7 @@ import {
 import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
+import { resolvePathwayLessonBankAssessments } from "@/lib/lessons/lesson-bank-assessment-selection";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 86400;
@@ -166,6 +167,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       : entitlement;
 
   const fullAccess = canViewFullPathwayLesson(scope, pathway, learnerPath);
+  const bankAssessments = await resolvePathwayLessonBankAssessments(pathway, lesson);
   const lessonMeasurementSystem = getMeasurementSystemForCountry(pathway.countryCode);
   const visible = visibleSectionsForLesson(lesson, fullAccess);
   const previewLesson = fullAccess ? lesson : { ...lesson, sections: visible, preTest: undefined, postTest: undefined };
@@ -348,8 +350,8 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         pathwayId={pathway.id}
         lessonSlug={lesson.slug}
         initialProgress={lessonProgress}
-        preTest={fullAccess ? lesson.preTest : undefined}
-        postTest={fullAccess ? lesson.postTest : undefined}
+        preTest={fullAccess ? bankAssessments.preTest : undefined}
+        postTest={fullAccess ? bankAssessments.postTest : undefined}
         fullAccess={fullAccess}
         assessmentsEnabled={studySettings.enablePrePostQuizzes}
       >

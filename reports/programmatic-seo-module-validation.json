@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "timestamp": "2026-04-14",
+  "checks": [
+    {
+      "id": "file-authority-batch",
+      "description": "programmatic-seo-authority-batch.ts exists and exports PROGRAMMATIC_SEO_AUTHORITY_BATCH",
+      "status": "pass",
+      "path": "src/lib/seo/programmatic-seo-authority-batch.ts"
+    },
+    {
+      "id": "registry-import",
+      "description": "programmatic-registry imports authority batch via sibling path only",
+      "status": "pass",
+      "import": "./programmatic-seo-authority-batch"
+    },
+    {
+      "id": "shared-types",
+      "description": "Shared types from programmatic-seo-definitions.ts",
+      "status": "pass",
+      "path": "src/lib/seo/programmatic-seo-definitions.ts"
+    },
+    {
+      "id": "no-circular-runtime",
+      "description": "Authority batch imports types from definitions, not programmatic-registry",
+      "status": "pass"
+    },
+    {
+      "id": "validate-script",
+      "description": "npm run validate:programmatic-seo",
+      "status": "pass",
+      "lastOutput": "[programmatic-seo] OK — 39 pages, 39 slugs, depth + uniqueness checks passed."
+    },
+    {
+      "id": "duplicate-slugs",
+      "description": "Validator rejects duplicate slugs across PROGRAMMATIC_SEO_PAGES",
+      "status": "pass"
+    },
+    {
+      "id": "consumer-stability",
+      "description": "programmatic-registry re-exports SeoCluster, SeoPageDefinition; getAllProgrammaticSlugs unchanged at call sites",
+      "status": "pass"
+    }
+  ]
+}

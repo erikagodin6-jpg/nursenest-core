@@ -1,0 +1,158 @@
+{
+  "generatedAt": "2026-04-14T15:18:33.472Z",
+  "pass": true,
+  "originalRowCount": 400,
+  "cleanedRowCount": 400,
+  "duplicatesAfterCleanup": 0,
+  "duplicateTitleList": [],
+  "replacementsCreated": 0,
+  "alternateSeedReplacements": 0,
+  "pillarSuffixAppliedToPassGates": 15,
+  "extraTitleDisambiguationSuffixes": 2,
+  "variantTemplateBumps": 116,
+  "averageUniquenessScore": 0.39,
+  "minUniquenessScore": 0.17,
+  "maxUniquenessScore": 1,
+  "averageExistingSeparationScore": 0.944,
+  "minExistingSeparationScore": 0.88,
+  "audienceDistribution": {
+    "nursing": 200,
+    "allied": 150,
+    "transition": 50
+  },
+  "unitCoverageTop": [
+    {
+      "unit": "n/a (role or career)",
+      "count": 200
+    },
+    {
+      "unit": "telemetry",
+      "count": 14
+    },
+    {
+      "unit": "med-surg",
+      "count": 14
+    },
+    {
+      "unit": "ED",
+      "count": 14
+    },
+    {
+      "unit": "step-down",
+      "count": 14
+    },
+    {
+      "unit": "ICU",
+      "count": 14
+    },
+    {
+      "unit": "same-day surgery",
+      "count": 13
+    },
+    {
+      "unit": "rehab",
+      "count": 13
+    },
+    {
+      "unit": "labor and delivery",
+      "count": 13
+    },
+    {
+      "unit": "oncology",
+      "count": 13
+    },
+    {
+      "unit": "pediatrics",
+      "count": 13
+    },
+    {
+      "unit": "psychiatry",
+      "count": 13
+    },
+    {
+      "unit": "dialysis",
+      "count": 13
+    },
+    {
+      "unit": "home health",
+      "count": 13
+    },
+    {
+      "unit": "LTC",
+      "count": 13
+    },
+    {
+      "unit": "PACU",
+      "count": 13
+    }
+  ],
+  "clusterCount": 45,
+  "existingCorpusDocuments": 710,
+  "titleRewriteSamples": [
+    {
+      "before": "What It’s Actually Like on same-day surgery When You Face Your first code blue (New Grad Nurse) (slot0001)",
+      "after": "First Code Blue on Same-Day Surgery as a New Grad Nurse: What to Do First"
+    },
+    {
+      "before": "What Happens If You Miss Cues During first rapid response on telemetry as a New Grad Nurse (slot0002)",
+      "after": "Rapid Response on Telemetry as a New Grad Nurse: Priorities and First Steps"
+    },
+    {
+      "before": "First Shift Reality on med-surg: Why first code blue Feels Different Than School (New Grad Nurse) (slot0003)",
+      "after": "Handling Code Blue on Med-Surg as a New Grad Nurse: First Priorities"
+    },
+    {
+      "before": "How to Handle first rapid response on the ED Without Losing Your Confidence (New Grad Nurse) (slot0004)",
+      "after": "New Grads on the ED: Staying Organized Around Rapid Response"
+    },
+    {
+      "before": "New Grad Survival: What to Do First When first code blue Hits During a Busy Shift on rehab (slot0005)",
+      "after": "On Rehab: How New Grad Nurses Handle Code Blue"
+    },
+    {
+      "before": "Why first code blue on labor and delivery Triggers Anxiety—And What Actually Helps (New Grad Nurse) (slot0006)",
+      "after": "After Code Blue on Labor & Delivery: Rebuilding Momentum on Your Shift"
+    },
+    {
+      "before": "From Classroom to step-down: first code blue and the Emotions Nobody Warned You About (slot0007)",
+      "after": "From Orientation to Step-Down: What Code Blue Really Looks Like"
+    },
+    {
+      "before": "Time Management Failure Mode: first rapid response on ICU and How to Recover (New Grad Nurse) (slot0008)",
+      "after": "Rapid Response on ICU: A Practical Checklist for New Grad Nurses"
+    },
+    {
+      "before": "What It’s Actually Like on oncology When You Face Your first death (New Grad Nurse) (slot0009)",
+      "after": "First Patient Death on Oncology as a New Grad Nurse: What to Do First"
+    },
+    {
+      "before": "What Happens If You Miss Cues During first rapid response on rehab as a New Grad Nurse (slot0010)",
+      "after": "Rapid Response on Rehab as a New Grad Nurse: Priorities and First Steps"
+    },
+    {
+      "before": "First Shift Reality on pediatrics: Why first rapid response Feels Different Than School (New Grad Nurse) (slot0011)",
+      "after": "Handling Rapid Response on Pediatrics as a New Grad Nurse: First Priorities"
+    },
+    {
+      "before": "How to Handle calling the provider on ICU Without Losing Your Confidence (New Grad Nurse) (slot0012)",
+      "after": "New Grads on ICU: Staying Organized Around Calling the Provider"
+    },
+    {
+      "before": "New Grad Survival: What to Do First When first code blue Hits During a Busy Shift on ICU (slot0013)",
+      "after": "On ICU: How New Grad Nurses Handle Code Blue"
+    },
+    {
+      "before": "Why med pass timing on telemetry Triggers Anxiety—And What Actually Helps (New Grad Nurse) (slot0014)",
+      "after": "After Med Pass Delays on Telemetry: Rebuilding Momentum on Your Shift"
+    },
+    {
+      "before": "From Classroom to step-down: first rapid response and the Emotions Nobody Warned You About (slot0015)",
+      "after": "From Orientation to Step-Down: What Rapid Response Really Looks Like"
+    }
+  ],
+  "verification": {
+    "forbiddenTokenViolationsInPublishFields": 0,
+    "slugCollision": false,
+    "sampleGrammarReviewNote": "Spot-check at least 50 titles in manifest JSON for readability."
+  }
+}

@@ -75,6 +75,7 @@ import {
 import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
+import { resolvePathwayLessonBankAssessments } from "@/lib/lessons/lesson-bank-assessment-selection";
 
 function LessonBody({
   content,
@@ -419,7 +420,10 @@ export default async function LessonDetailPage({ params }: Props) {
             targetRequested: 0,
           });
 
-    const [relatedQuestionStems, relatedLessonsRaw, initialProgress, pathwayStudySnap, bankLoopPack] =
+    const bankAssessmentsPromise =
+      pathway != null ? resolvePathwayLessonBankAssessments(pathway, record) : Promise.resolve({ preTest: [], postTest: [] });
+
+    const [relatedQuestionStems, relatedLessonsRaw, initialProgress, pathwayStudySnap, bankLoopPack, bankAssessments] =
       await Promise.all([
         pathway != null
           ? loadRelatedExamQuestionStemsForPathwayLesson({
@@ -448,6 +452,7 @@ export default async function LessonDetailPage({ params }: Props) {
           ? buildLearnerStudySnapshot(userId, entitlement, learnerPath).catch(() => null)
           : Promise.resolve(null),
         bankLoopPackPromise,
+        bankAssessmentsPromise,
       ]);
     const studyNextHint =
       Boolean(
@@ -536,8 +541,8 @@ export default async function LessonDetailPage({ params }: Props) {
           lessonSlug={record.slug}
           topic={record.topic}
           initialProgress={initialProgress}
-          preTest={record.preTest}
-          postTest={record.postTest}
+          preTest={pathway ? bankAssessments.preTest : record.preTest}
+          postTest={pathway ? bankAssessments.postTest : record.postTest}
           assessmentsEnabled={studySettings.enablePrePostQuizzes}
           disableCatalogAssessments={studyLoopBankActive}
         >

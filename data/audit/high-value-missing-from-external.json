@@ -1,0 +1,7 @@
+{
+  "generatedAt": "2026-04-14T00:00:00.000Z",
+  "scanStatus": "aborted",
+  "reason": "External directories unavailable; no high-value missing list could be produced.",
+  "topImportCandidates": [],
+  "note": "After a successful external scan, populate this array with slug/id, category, path, and rationale ranked by teaching value."
+}

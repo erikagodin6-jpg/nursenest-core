@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Illustrative manifest for folder layout + record shapes. Not loaded by the importer; use as documentation.",
+  "description": "Example Nurse Nest legacy export root (USB or disk folder passed to --source)",
+  "folders": {
+    "lessons": {
+      "required": false,
+      "fileTypes": [".json", ".ndjson"],
+      "shape": "Array of lesson objects OR NDJSON (one JSON object per line)"
+    },
+    "questions": {
+      "required": false,
+      "fileTypes": [".json", ".ndjson"]
+    },
+    "blogs": {
+      "required": false,
+      "fileTypes": [".json", ".ndjson"]
+    },
+    "activities": {
+      "required": false,
+      "fileTypes": [".json", ".ndjson"],
+      "kinds": ["pool", "lesson_quiz"]
+    }
+  },
+  "exampleLessonRecord": {
+    "pathwayId": "us-rn-nclex-rn",
+    "title": "Heart failure exacerbation",
+    "slug": "heart-failure-exacerbation",
+    "topic": "Cardiac",
+    "topicSlug": "cardiac",
+    "bodySystem": "Cardiovascular",
+    "sections": [],
+    "previewSectionCount": 2,
+    "seoTitle": "optional",
+    "seoDescription": "optional",
+    "preTest": [],
+    "postTest": []
+  },
+  "exampleLessonQuizActivity": {
+    "kind": "lesson_quiz",
+    "pathwayId": "us-rn-nclex-rn",
+    "lessonSlug": "heart-failure-exacerbation",
+    "slot": "pre",
+    "items": []
+  },
+  "examplePoolActivity": {
+    "kind": "pool",
+    "stem": "A client with CHF reports increased shortness of breath. What should the nurse assess first?",
+    "options": ["Oxygen saturation", "Daily weight", "Both", "Neither"],
+    "correctAnswer": 0
+  }
+}
