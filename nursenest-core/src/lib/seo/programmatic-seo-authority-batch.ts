@@ -215,13 +215,13 @@ export const PROGRAMMATIC_SEO_AUTHORITY_BATCH: SeoPageDefinition[] = [
   },
   {
     slug: "copd-nclex-clinical-guide",
-    title: "COPD NCLEX Guide | Oxygen, Breathing & Exacerbations",
+    title: "COPD Pathophysiology NCLEX: O2, CO2 & Exacerbation Care",
     description:
-      "COPD-focused NCLEX guide: gas exchange, oxygen safety, infection, and exacerbation care. Clinical relevance for RN judgment without duplicating generic reviews.",
+      "COPD NCLEX tests airflow, gas exchange, O₂ vs CO₂ retention, and infection flares—not definitions alone. Learn stem patterns and the trap: reassuring SpO₂ while work of breathing or mentation worsens.",
     h1: "COPD clinical guide for NCLEX nursing",
     cluster: "study-guide",
     pageKind: "condition-guide",
-    keywords: ["COPD", "NCLEX", "oxygen", "respiratory", "exacerbation"],
+    keywords: ["COPD pathophysiology NCLEX", "COPD NCLEX oxygen", "COPD", "NCLEX", "respiratory"],
     linkPack: "nclex-rn",
     breadcrumb: {
       midLabel: "NCLEX study guides",
@@ -233,8 +233,8 @@ export const PROGRAMMATIC_SEO_AUTHORITY_BATCH: SeoPageDefinition[] = [
         heading: "What NCLEX expects for COPD patients",
         level: 2,
         body: [
-          "Questions blend airway clearance, infection recognition, gas exchange, and safe oxygen use. You must read whether the patient is stable, retaining CO₂, or deteriorating—those cues change the priority answer.",
-          "Exacerbation items often add sputum change, increased work of breathing, or confusion; your plan should align with escalation, monitoring, and therapy appropriate to the setting in the stem.",
+          "Start with a three-step read: infection or flare clues, work of breathing and mentation, then oxygenation and ventilation context—teaching answers lose when the stem is unstable.",
+          "Exacerbation frames add sputum, fever, or sudden confusion; match escalation and monitoring to that story instead of defaulting to generic COPD teaching.",
         ],
       },
       {

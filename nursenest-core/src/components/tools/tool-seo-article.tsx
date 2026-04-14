@@ -105,20 +105,13 @@ const CONTENT: Record<ToolSlug, SeoBlock[]> = {
       children: (
         <>
           <p>
-            Need <strong>mL/hr</strong>, <strong>gtt/min</strong>, or <strong>infusion time</strong> from the numbers in the
-            stem? This <strong>IV drip calculator</strong> is built for the same structure as medication administration items on
-            the <strong>NCLEX</strong>: one primary unknown, clean inputs, and an answer you can cross-check against the order
-            before you click.
+            <strong>IV drip calculation nursing</strong> means solving <strong>mL/hr</strong>, <strong>gtt/min</strong>, or{" "}
+            <strong>infusion time</strong> from the volume, rate, and time clues in the order—the same setup as medication
+            administration stems. For <strong>NCLEX</strong> and shift work, cross-check every result with the order and the
+            patient; the common trap is correct math paired with a priority that ignores instability in the scenario.
           </p>
           <p>
-            Use it for <strong>study and exam practice</strong>—not as a substitute for orders. In real practice, follow the
-            active order, pump guardrails, unit policy, and the rights of medication administration; if the math and the scenario
-            disagree, stop and escalate.
-          </p>
-          <p>
-            Students searching for an <strong>IV drip calculator nursing</strong> resource usually need two things at once: fast arithmetic and a mental model for
-            checking whether the result is plausible. Always ask: Does this rate match the order&apos;s intent? Is the line patent? Is the patient appropriate for
-            this fluid or medication? Those questions are how NCLEX-style items turn a calculation into a safety judgment.
+            In practice, follow active orders, pump guardrails, and policy—escalate when the scenario and the numbers disagree.
           </p>
         </>
       ),

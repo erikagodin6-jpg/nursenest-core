@@ -600,12 +600,12 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
   },
   {
     slug: "respiratory-nursing-practice-questions",
-    title: "Respiratory NCLEX Practice | COPD, Asthma & Oxygen First",
+    title: "NCLEX Respiratory Practice: COPD, Asthma & Oxygen Items",
     description:
-      "Respiratory nursing exam practice: oxygen delivery, asthma and COPD flares, pneumonia, and airway priorities—written for NCLEX-style stems where the trend beats a single number.",
+      "NCLEX respiratory practice: oxygen, asthma and COPD flares, pneumonia, airway priorities—stems hide decline behind OK numbers. Choose the next action from trends and assessment, not saturation alone.",
     h1: "Respiratory nursing practice questions with oxygenation first",
     cluster: "category",
-    keywords: ["respiratory", "nursing"],
+    keywords: ["respiratory nursing practice questions", "COPD NCLEX", "asthma NCLEX", "nursing"],
     sections: [
       {
         heading: "SpO₂ is a clue, not the whole story",
@@ -676,19 +676,19 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
   },
   {
     slug: "nursing-lab-values-study-guide",
-    title: "Nursing Lab Values Guide | Critical Results & Next Steps",
+    title: "Nursing Lab Values Chart | Normal Ranges & NCLEX Actions",
     description:
-      "Interpret common nursing labs faster: critical highs and lows, what to recheck, and what the NCLEX expects you to do next—without memorizing tables you cannot use on a stem.",
+      "Normal lab values charts list ranges; NCLEX tests critical highs and lows and your next nursing action. Quick reference: pair abnormal labs with recheck, hold, notify, or escalate—not distractors.",
     h1: "Nursing lab values study guide for rapid bedside interpretation",
     cluster: "hub",
-    keywords: ["lab values", "nursing", "study guide"],
+    keywords: ["normal lab values nursing", "nursing lab values chart", "NCLEX lab values", "nursing"],
     sections: [
       {
         heading: "Build memory anchors, not isolated numbers",
         level: 2,
         body: [
-          "Stop studying labs as a flat list. Group them into a few repeating stories—renal injury panels, liver congestion patterns, infection and sepsis screens—so each abnormal value reminds you what else to look for.",
-          "On exams, every “bad lab” wants a partner action: recheck versus hold versus notify versus watch closer. If your answer does not match the patient’s stability in the stem, it is probably a distractor.",
+          "Quick reference flow: name the panel (renal, hepatic, infection, acid–base), then ask what single abnormal would change your first nursing move—before you memorize another number.",
+          "Every “bad lab” needs a paired action: recheck, hold, notify, or escalate. If your pick ignores stability cues in the stem, it is usually a distractor.",
         ],
       },
       {
