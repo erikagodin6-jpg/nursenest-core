@@ -288,6 +288,85 @@ function detectAbgAcidBaseMatch(haystack: string): PrecisionGateResult {
   };
 }
 
+const CARDIAC_STRONG_INCLUDE_RULES: TriggerRule[] = [
+  { id: "acs_ischemia_mi", re: /\b(acs|acute coronary syndrome|stemi|nstemi|myocardial infarction|mi\b|ischemi|unstable angina|angina)\b/i },
+  { id: "arrhythmia_dysrhythmia", re: /\b(arrhythm|dysrhythm|atrial fibrillation|afib|flutter|vtach|vfib|torsades|heart block|bradycardia|tachycardia)\b/i },
+  { id: "heart_failure", re: /\b(heart failure|hfrEF|hfpef|decompensated heart failure|pulmonary edema cardiogenic)\b/i },
+  { id: "cardiac_output_hemodynamics", re: /\b(cardiac output|preload|afterload|stroke volume|cardiogenic shock)\b/i },
+  { id: "ecg_cardiac_interpretation", re: /\b(ecg|ekg|st elevation|st depression|q waves|wide qrs|t wave inversion)\b/i },
+  { id: "cardiac_biomarker_context", re: /\b(troponin|ck-mb)\b.*\b(acs|mi\b|ischemi|angina|stemi|nstemi)\b/i },
+  { id: "cardiac_emergency_stabilization", re: /\b(cardioversion|defibrillation|code blue|chest pain protocol|cath lab activation)\b/i },
+  { id: "cardiac_medication_decision", re: /\b(antiarrhythmic|nitroglycerin|beta[- ]blocker|ace inhibitor|arb|diuretic|inotrope)\b.*\b(heart failure|acs|afib|arrhythm|ischemi|angina)\b/i },
+];
+
+const CARDIAC_CONTEXT_RULES: TriggerRule[] = [
+  { id: "cardiac_context", re: /\b(cardiac|cardiovascular|hemodynamic|perfusion)\b/i },
+  { id: "critical_care_overlap", re: /\b(shock|unstable|hypotension|pressors?)\b/i },
+];
+
+const CARDIAC_EXCLUSION_RULES: TriggerRule[] = [
+  { id: "hypertension_only", re: /\b(hypertension|htn|bp target|blood pressure control)\b/i },
+  { id: "renal_fluid_only", re: /\b(ckd|dialysis|aki|electrolyte imbalance|fluid overload|renal)\b/i },
+  { id: "respiratory_only", re: /\b(copd|asthma|peep|oxygenation|ventilation|airway)\b/i },
+  { id: "pulmonary_embolism_non_cardiac", re: /\b(pulmonary embolism|submassive pe|massive pe|rv strain from pe)\b/i },
+  { id: "medication_only_non_cardiac", re: /\b(insulin|metformin|antibiotic|steroid taper|pain regimen)\b/i },
+  { id: "non_cardiac_shock", re: /\b(septic shock|anaphylactic shock|neurogenic shock|hemorrhagic shock)\b/i },
+  { id: "non_clinical_meta", re: /\b(replit import|deck cards|placeholder)\b/i },
+];
+
+function detectCardiacMatch(haystack: string): PrecisionGateResult {
+  const inclusionHits = collectTriggerHits(haystack, CARDIAC_STRONG_INCLUDE_RULES);
+  const contextHits = collectTriggerHits(haystack, CARDIAC_CONTEXT_RULES);
+  const exclusionHits = collectTriggerHits(haystack, CARDIAC_EXCLUSION_RULES);
+  const hasStrong = inclusionHits.length > 0;
+  const hasExclusion = exclusionHits.length > 0;
+  const hasCardiacConditionSignal = /\b(acs|stemi|nstemi|mi\b|angina|arrhythm|afib|heart failure|cardiogenic|cardiac output|troponin)\b/i.test(
+    haystack,
+  );
+  const hasContextOnly = !hasStrong && contextHits.length > 0;
+
+  if (hasContextOnly) {
+    return {
+      matched: false,
+      precision: "borderline",
+      inclusionHits: contextHits,
+      exclusionHits,
+    };
+  }
+
+  if (hasStrong && hasExclusion && !hasCardiacConditionSignal) {
+    return {
+      matched: false,
+      precision: "false_positive",
+      inclusionHits: [...inclusionHits, ...contextHits],
+      exclusionHits,
+    };
+  }
+
+  if (hasStrong && !hasExclusion) {
+    return {
+      matched: true,
+      precision: "true_positive_estimate",
+      inclusionHits: [...inclusionHits, ...contextHits],
+      exclusionHits,
+    };
+  }
+  if (hasStrong && hasExclusion) {
+    return {
+      matched: true,
+      precision: "borderline",
+      inclusionHits: [...inclusionHits, ...contextHits],
+      exclusionHits,
+    };
+  }
+  return {
+    matched: false,
+    precision: hasExclusion ? "false_positive" : "borderline",
+    inclusionHits: [...inclusionHits, ...contextHits],
+    exclusionHits,
+  };
+}
+
 function detectBatch(seed: ControlledRationaleSeed): HighYieldRationaleBatchId | null {
   const haystack = [
     seed.topic,
@@ -303,8 +382,14 @@ function detectBatch(seed: ControlledRationaleSeed): HighYieldRationaleBatchId |
   if (electrolyteGate.matched) return "electrolytes";
   const abgGate = detectAbgAcidBaseMatch(haystack);
   if (abgGate.matched) return "abg_acid_base";
+  const cardiacGate = detectCardiacMatch(haystack);
+  if (cardiacGate.matched) return "cardiac";
   const match = HIGH_YIELD_RATIONALE_BATCHES.find(
-    (batch) => batch.id !== "electrolytes" && batch.id !== "abg_acid_base" && batch.patterns.some((re) => re.test(haystack)),
+    (batch) =>
+      batch.id !== "electrolytes" &&
+      batch.id !== "abg_acid_base" &&
+      batch.id !== "cardiac" &&
+      batch.patterns.some((re) => re.test(haystack)),
   );
   return match?.id ?? null;
 }
@@ -356,9 +441,16 @@ export function buildControlledRationaleEnrichment(seed: ControlledRationaleSeed
     .join(" ");
   const electrolytesGate = detectElectrolytesMatch(matchHaystack);
   const abgGate = detectAbgAcidBaseMatch(matchHaystack);
+  const cardiacGate = detectCardiacMatch(matchHaystack);
   const batchId = detectBatch(seed);
   const precisionGate: PrecisionGateResult | null =
-    batchId === "electrolytes" ? electrolytesGate : batchId === "abg_acid_base" ? abgGate : null;
+    batchId === "electrolytes"
+      ? electrolytesGate
+      : batchId === "abg_acid_base"
+        ? abgGate
+        : batchId === "cardiac"
+          ? cardiacGate
+          : null;
   const sourceAnchors = [
     seed.correctAnswerExplanation,
     seed.rationale,

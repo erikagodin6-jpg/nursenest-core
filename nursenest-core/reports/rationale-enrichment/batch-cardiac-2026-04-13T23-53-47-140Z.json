@@ -1,0 +1,1158 @@
+{
+  "generatedAt": "2026-04-13T23:53:47.140Z",
+  "config": {
+    "maxItems": 20,
+    "includeFlashcards": true,
+    "apply": true,
+    "trace": 20,
+    "batch": "cardiac"
+  },
+  "questionBreakdown": {
+    "totalScanned": 25000,
+    "candidateQuestionsMatched": 962,
+    "candidatesWithUsableSourceAnchors": 922,
+    "rejectedNoQuestionMatch": 24038,
+    "rejectedNoSourceAnchor": 0,
+    "rejectedWeakSource": 40,
+    "rejectedThreshold": 6,
+    "rejectedTargetAlreadyQuality": 6,
+    "rejectedWriteBlocked": 890,
+    "rejectedSchemaValidation": 0,
+    "candidatesSuccessfullyApplied": 20,
+    "eligibleDryRun": 0
+  },
+  "questionCount": 20,
+  "flashcardCount": 20,
+  "questions": [
+    {
+      "id": "b391b4b7-3613-4781-8a29-048c145cff9e",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:42:22.792Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "action": "applied",
+      "whyCorrect": "This is a submassive (intermediate-risk) pulmonary embolism: haemodynamically stable but with evidence of right ventricular strain (RV dilatation on CT, elevated troponin). Management starts with therapeutic anticoagulation: IV UFH (preferred for submassive PE due to short half-life and reversibility if deterioration requires escalation to thrombolysis) or weight-based LMWH.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Respiratory",
+      "skippedReason": null,
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 1,
+        "sourceAnchorWordCount": 106,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "ecg_cardiac_interpretation",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 1,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "a25ea9b7-0e78-478d-87b4-e1c4cc9102ea",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:42:22.768Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "action": "applied",
+      "whyCorrect": "Peripartum cardiomyopathy requires GDMT for HFrEF with modifications for breastfeeding. Most first-line HF medications are compatible: ACE inhibitors (enalapril, captopril have the most safety data), ARBs, metoprolol/carvedilol, and spironolactone are generally considered safe.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Cardiovascular",
+      "skippedReason": null,
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 1,
+        "sourceAnchorWordCount": 75,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "heart_failure",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 2,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "8517c837-e6b2-446a-a845-d827e9a390b8",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:42:22.731Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "action": "applied",
+      "whyCorrect": "SCAD is the most common cause of MI in young women, particularly in the peripartum period. It accounts for up to 25% of MI in women under 50.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Cardiovascular",
+      "skippedReason": null,
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 1,
+        "sourceAnchorWordCount": 61,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "ecg_cardiac_interpretation",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 2,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "0068bb8a-5374-4889-beeb-0865292e8e93",
+      "topic": "Heart Failure Management",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:14:41.602Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "Furosemide is a loop diuretic that increases renal excretion of sodium, potassium, and chloride. The most critical electrolyte to monitor is potassium due to the risk of hypokalemia, which can lead to serious cardiac complications.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Heart Failure Management · Cardiac",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 90,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "heart_failure",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 2,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "7f428f49-8b36-4141-ba41-e588bb34896d",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:10:16.958Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "Refractory angina despite optimal medical therapy (OMT) warrants coronary angiography to assess anatomy and suitability for revascularization (PCI or CABG). Revascularization improves symptoms and quality of life in patients with significant coronary disease failing medical therapy.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Cardiovascular",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 82,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "acs_ischemia_mi",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 3,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "26d6e644-d0d3-4906-81bc-6014ce0bec92",
+      "topic": "Heart failure management",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:10:16.658Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "Furosemide is a loop diuretic that can lead to significant potassium loss, resulting in hypokalemia. It is crucial to monitor potassium levels to prevent complications such as arrhythmias.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Heart failure management · Renal",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 74,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "borderline",
+        "topInclusionTrigger": "heart_failure",
+        "topExclusionTrigger": "renal_fluid_only",
+        "inclusionHitCount": 1,
+        "exclusionHitCount": 1
+      }
+    },
+    {
+      "id": "d2028843-f08e-4219-9359-0f0bb8929b85",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:10:16.499Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "DOACs (rivaroxaban, apixaban) have short half-lives (5-13 hours) and predictable pharmacokinetics, allowing simple perioperative management. For high-bleeding-risk procedures, rivaroxaban should be held 48 hours before surgery (longer if CrCl less than 30).",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Cardiovascular",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 90,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "arrhythmia_dysrhythmia",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 2,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "5fea0b11-9aea-4921-9c59-34fea3bbf9d9",
+      "topic": "Heart failure management",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:04:53.576Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "In chronic heart failure, the heart's reduced ability to pump effectively leads to fluid retention, resulting in symptoms like shortness of breath and peripheral edema. The hyponatremia and elevated BUN and creatinine suggest volume overload.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Heart failure management · Cardiac",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 115,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "borderline",
+        "topInclusionTrigger": "heart_failure",
+        "topExclusionTrigger": "renal_fluid_only",
+        "inclusionHitCount": 2,
+        "exclusionHitCount": 1
+      }
+    },
+    {
+      "id": "f6debd1a-f962-4566-a433-c6e4055dd114",
+      "topic": "Heart Failure Management",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T23:04:53.491Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "action": "skipped",
+      "whyCorrect": "Spironolactone is a potassium-sparing diuretic that can lead to hyperkalemia due to its mechanism of inhibiting aldosterone, which normally promotes potassium excretion. It is important to monitor potassium levels and warn patients about the risk of elevated potassium levels.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Heart Failure Management · Cardiac",
+      "skippedReason": "target_already_has_quality_rationale",
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 2,
+        "sourceAnchorWordCount": 95,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "heart_failure",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 2,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "1a4cfc79-4348-4a5d-b433-58dcde56c1cc",
+      "topic": "Atrial Fibrillation Management",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T20:05:56.545Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "action": "applied",
+      "whyCorrect": "Diltiazem, a calcium channel blocker, is effective for controlling heart rate in patients with atrial fibrillation. It helps to decrease the heart rate and is often used in the acute setting.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Atrial Fibrillation Management · Cardiac",
+      "skippedReason": null,
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 1,
+        "sourceAnchorWordCount": 79,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "arrhythmia_dysrhythmia",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 2,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "34f8f378-f862-4e9f-967d-1a2e0294ef5f",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T20:05:56.545Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "action": "applied",
+      "whyCorrect": "Stable narrow complex tachycardia (SVT) refractory to vagal maneuvers is treated with adenosine. The initial dose is 6 mg rapid IV push via proximal IV with immediate saline flush.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Cardiovascular",
+      "skippedReason": null,
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 1,
+        "sourceAnchorWordCount": 58,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "arrhythmia_dysrhythmia",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 3,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "67e88a20-9725-4d1e-94b1-d3bfdbbe3431",
+      "topic": "Cerebral Infarction",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T20:05:56.545Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "action": "applied",
+      "whyCorrect": "The patient's history of atrial fibrillation puts her at risk for thromboembolic strokes. The CT scan revealing multiple cerebral infarcts supports the diagnosis of stroke secondary to embolism, likely from the heart.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Cerebral Infarction · Neuro",
+      "skippedReason": null,
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 1,
+        "sourceAnchorWordCount": 69,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "arrhythmia_dysrhythmia",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 1,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "9729e6bb-036c-4f13-a9f0-ef434360a88b",
+      "topic": "Heart Failure Diagnosis",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T20:05:56.545Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "action": "applied",
+      "whyCorrect": "An echocardiogram is the most appropriate diagnostic tool to assess cardiac structure and function, confirming the diagnosis of heart failure by evaluating ejection fraction and chamber sizes. A chest X-ray (A) can show heart size and pulmonary congestion but is not definitive.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Heart Failure Diagnosis · Cardiovascular",
+      "skippedReason": null,
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 1,
+        "sourceAnchorWordCount": 67,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "heart_failure",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 2,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "d53dc88c-f905-4957-9de6-541e80725e74",
+      "topic": "Arrhythmias",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T20:05:56.545Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "action": "applied",
+      "whyCorrect": "The presentation of syncope and prolonged QT interval on ECG suggests Long QT syndrome, a condition that can lead to life-threatening arrhythmias. This condition is often genetic and may manifest during physical exertion.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Arrhythmias · Cardiac",
+      "skippedReason": null,
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 1,
+        "sourceAnchorWordCount": 97,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "ecg_cardiac_interpretation",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 2,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "d7227480-732c-4052-bbef-59495719bbef",
+      "topic": "Acute Coronary Syndrome",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T20:05:56.545Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "action": "applied",
+      "whyCorrect": "The patient’s presentation is consistent with an ST-Elevation Myocardial Infarction (STEMI). The appropriate immediate management step is to prepare for coronary angiography, as timely revascularization is crucial for improving outcomes in STEMI.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Acute Coronary Syndrome · Cardiac",
+      "skippedReason": null,
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 1,
+        "sourceAnchorWordCount": 62,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "acs_ischemia_mi",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 3,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "63bb51cb-be2d-4350-a9f7-5eb541cd6d73",
+      "topic": "Heart Failure and Myocardial Infarction",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T20:05:56.545Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "action": "applied",
+      "whyCorrect": "An echocardiogram is the essential diagnostic tool to evaluate left ventricular function and structure, especially in a patient with heart failure symptoms post-myocardial infarction. A chest X-ray (A) can assess for congestion but does not provide functional information.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Heart Failure and Myocardial Infarction · Cardiovascular",
+      "skippedReason": null,
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 1,
+        "sourceAnchorWordCount": 69,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "acs_ischemia_mi",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 3,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "1911a54c-b30b-4f9d-b4bc-aa3d17e5be08",
+      "topic": null,
+      "subtopic": null,
+      "updatedAt": "2026-04-13T20:05:56.545Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "action": "applied",
+      "whyCorrect": "In patients with heart failure, NSAIDs (including ibuprofen and celecoxib) are contraindicated due to sodium and fluid retention, worsened renal function, and increased risk of HF exacerbation. Acetaminophen at appropriate doses (reduced maximum in elderly) is the safest first-line analgesic.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Geriatrics",
+      "skippedReason": null,
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 1,
+        "sourceAnchorWordCount": 53,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "borderline",
+        "topInclusionTrigger": "heart_failure",
+        "topExclusionTrigger": "medication_only_non_cardiac",
+        "inclusionHitCount": 1,
+        "exclusionHitCount": 1
+      }
+    },
+    {
+      "id": "4dfdc69c-4765-4970-a61f-0927cda36617",
+      "topic": "Acute Coronary Syndrome Diagnosis",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T20:05:56.545Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "action": "applied",
+      "whyCorrect": "An electrocardiogram (ECG) is the initial test of choice to assess for acute coronary syndrome (ACS) as it can reveal ST-segment changes indicative of ischemia or infarction. Chest X-ray can rule out other causes of chest pain but is not specific for ACS.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Acute Coronary Syndrome Diagnosis · Cardiovascular",
+      "skippedReason": null,
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 1,
+        "sourceAnchorWordCount": 55,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "acs_ischemia_mi",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 2,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "a18c6345-9c3c-4eb6-8d2c-3cea9c41fa9d",
+      "topic": "Iron Deficiency Anemia",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T20:05:56.545Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "action": "applied",
+      "whyCorrect": "The patient's low hemoglobin level combined with elevated reticulocyte count and low ferritin suggests iron deficiency anemia, likely due to chronic disease. Initial management should include iron supplementation to replenish iron stores.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Iron Deficiency Anemia · Hematological",
+      "skippedReason": null,
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 1,
+        "sourceAnchorWordCount": 96,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "heart_failure",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 1,
+        "exclusionHitCount": 0
+      }
+    },
+    {
+      "id": "b1a1d42a-2ee4-4171-ba64-8e3a438e133b",
+      "topic": "Heart Failure Management",
+      "subtopic": null,
+      "updatedAt": "2026-04-13T20:05:56.545Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "action": "applied",
+      "whyCorrect": "Furosemide is a loop diuretic that promotes renal excretion of sodium and water, which can lead to hypokalemia as a common adverse effect. Bradycardia may occur but is not directly associated with furosemide.",
+      "whyWrong": "Detailed distractor explanations are not available for this item yet.",
+      "clinicalPearl": "Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Heart Failure Management · Cardiac",
+      "skippedReason": null,
+      "flags": [
+        "too_short",
+        "honest_distractor_fallback"
+      ],
+      "diagnostics": {
+        "sourceAnchorCount": 1,
+        "sourceAnchorWordCount": 53,
+        "minimumSubstanceMet": true,
+        "matchPrecision": "true_positive_estimate",
+        "topInclusionTrigger": "heart_failure",
+        "topExclusionTrigger": null,
+        "inclusionHitCount": 2,
+        "exclusionHitCount": 0
+      }
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "ffa4d12a-2ecf-44a0-a33e-f25e297be96e",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.488Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "fafb89df-d57a-4c62-b8cb-3290bb4bc8b6",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.200Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "fa96270f-38a9-4d7a-af24-2653831e1dfe",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.166Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "fa38d0d8-b442-4adb-9ac6-5773f50f4ebf",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.150Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f97684f0-50b9-42dc-b29e-72c908e169c0",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:36.101Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f5e49ed6-0255-45a5-911f-4353fae0822a",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.855Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "f38bf893-1ee0-463a-a413-a375cf815913",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.645Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "A) Take the medication only when you experience chest pain.",
+      "clinicalPearl": "A) Take the medication only when you experience chest pain. Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "f284a905-c023-47f5-8f2e-ce6d843ed48a",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.536Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "Zone of necrosis (irreversible death) → Zone of injury (reversible if reperfused) → Zone of ischemia (viable, at risk)",
+      "clinicalPearl": "Zone of necrosis (irreversible death) → Zone of injury (reversible if reperfused) → Zone of ischemia (viable, at risk) Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": []
+    },
+    {
+      "id": "f1b07415-3e5e-46a1-b680-b37b2390d0f9",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.467Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "Progressive ventricular dilation, wall thinning, and shape change from spherical transformation of the damaged ventricle",
+      "clinicalPearl": "Progressive ventricular dilation, wall thinning, and shape change from spherical transformation of the damaged ventricle Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": []
+    },
+    {
+      "id": "ec1997ba-4aca-4805-9bc2-643aa6fed27b",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:35.037Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e79dc963-1d5e-4b1d-a32b-54ec9a104f67",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.674Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "Myoglobin (1-3 hrs) → CK-MB (3-6 hrs) → Troponin I/T (3-6 hrs, peaks 12-24 hrs, elevated 7-14 days)",
+      "clinicalPearl": "Myoglobin (1-3 hrs) → CK-MB (3-6 hrs) → Troponin I/T (3-6 hrs, peaks 12-24 hrs, elevated 7-14 days) Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": []
+    },
+    {
+      "id": "e6d4b0ed-f8a8-4d39-8b02-4dff9b7f87d5",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.602Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "e6683856-704a-4343-af80-eca8de2b324f",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:34.568Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "Acute MI with loss of ≥40% of functioning LV myocardium",
+      "clinicalPearl": "Acute MI with loss of ≥40% of functioning LV myocardium Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": [
+        "too_short"
+      ]
+    },
+    {
+      "id": "dd583d26-6a81-40b8-8bc4-be5487aa8ca1",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.891Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "Pump failure → hypotension → decreased coronary perfusion → worsening ischemia → further pump failure → death",
+      "clinicalPearl": "Pump failure → hypotension → decreased coronary perfusion → worsening ischemia → further pump failure → death Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": []
+    },
+    {
+      "id": "dcac557d-ae70-43a2-9e3f-1ad2447b1c8f",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.846Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "db4d59c1-49c7-48ef-838e-b4a4078b059c",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.777Z",
+      "batchId": "cardiac",
+      "applied": true,
+      "whyCorrect": "Troponin is more specific to cardiac muscle, rises at same time as CK-MB, but stays elevated 7-14 days vs 2-3 days",
+      "clinicalPearl": "Troponin is more specific to cardiac muscle, rises at same time as CK-MB, but stays elevated 7-14 days vs 2-3 days Prioritize perfusion and rhythm instability; escalate rapidly for ischemic or hemodynamic red flags.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": null,
+      "flags": []
+    },
+    {
+      "id": "d86a87f9-2cee-4149-9f9a-1a59b675de94",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.585Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "d56b82fd-1d63-47f5-ae9f-8d7aac41ee6a",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.397Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "below_minimum_substance_threshold",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "d2cc7a31-f2c7-4ada-9cb6-7b3c09333b5f",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:33.214Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    },
+    {
+      "id": "cd673258-d722-45f5-971a-ad24f71030b8",
+      "topic": "Replit import — deck cards",
+      "subtopic": "replit-import",
+      "updatedAt": "2026-04-13T20:29:32.875Z",
+      "batchId": "cardiac",
+      "applied": false,
+      "whyCorrect": "Clinical reasoning is not yet on file for this item.",
+      "clinicalPearl": "A concise clinical pearl is not available for this item yet.",
+      "topicAnchor": "Replit import — deck cards · replit-import",
+      "skippedReason": "source_content_too_weak",
+      "flags": [
+        "too_short",
+        "too_short"
+      ]
+    }
+  ],
+  "questionTrace": [
+    {
+      "questionId": "b391b4b7-3613-4781-8a29-048c145cff9e",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 1,
+      "sourceAnchorWordCount": 106,
+      "thresholdScore": 3,
+      "eligible": true,
+      "finalAction": "applied",
+      "rejectionReason": null
+    },
+    {
+      "questionId": "a25ea9b7-0e78-478d-87b4-e1c4cc9102ea",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 1,
+      "sourceAnchorWordCount": 75,
+      "thresholdScore": 3,
+      "eligible": true,
+      "finalAction": "applied",
+      "rejectionReason": null
+    },
+    {
+      "questionId": "8517c837-e6b2-446a-a845-d827e9a390b8",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 1,
+      "sourceAnchorWordCount": 61,
+      "thresholdScore": 3,
+      "eligible": true,
+      "finalAction": "applied",
+      "rejectionReason": null
+    },
+    {
+      "questionId": "0068bb8a-5374-4889-beeb-0865292e8e93",
+      "topic": "Heart Failure Management",
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 90,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "7f428f49-8b36-4141-ba41-e588bb34896d",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 82,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "26d6e644-d0d3-4906-81bc-6014ce0bec92",
+      "topic": "Heart failure management",
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 74,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "d2028843-f08e-4219-9359-0f0bb8929b85",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 90,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "5fea0b11-9aea-4921-9c59-34fea3bbf9d9",
+      "topic": "Heart failure management",
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 115,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "f6debd1a-f962-4566-a433-c6e4055dd114",
+      "topic": "Heart Failure Management",
+      "sourceMatched": true,
+      "sourceAnchorCount": 2,
+      "sourceAnchorWordCount": 95,
+      "thresholdScore": 6,
+      "eligible": false,
+      "finalAction": "skipped",
+      "rejectionReason": "target_already_has_quality_rationale"
+    },
+    {
+      "questionId": "1a4cfc79-4348-4a5d-b433-58dcde56c1cc",
+      "topic": "Atrial Fibrillation Management",
+      "sourceMatched": true,
+      "sourceAnchorCount": 1,
+      "sourceAnchorWordCount": 79,
+      "thresholdScore": 3,
+      "eligible": true,
+      "finalAction": "applied",
+      "rejectionReason": null
+    },
+    {
+      "questionId": "34f8f378-f862-4e9f-967d-1a2e0294ef5f",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 1,
+      "sourceAnchorWordCount": 58,
+      "thresholdScore": 3,
+      "eligible": true,
+      "finalAction": "applied",
+      "rejectionReason": null
+    },
+    {
+      "questionId": "67e88a20-9725-4d1e-94b1-d3bfdbbe3431",
+      "topic": "Cerebral Infarction",
+      "sourceMatched": true,
+      "sourceAnchorCount": 1,
+      "sourceAnchorWordCount": 69,
+      "thresholdScore": 3,
+      "eligible": true,
+      "finalAction": "applied",
+      "rejectionReason": null
+    },
+    {
+      "questionId": "9729e6bb-036c-4f13-a9f0-ef434360a88b",
+      "topic": "Heart Failure Diagnosis",
+      "sourceMatched": true,
+      "sourceAnchorCount": 1,
+      "sourceAnchorWordCount": 67,
+      "thresholdScore": 3,
+      "eligible": true,
+      "finalAction": "applied",
+      "rejectionReason": null
+    },
+    {
+      "questionId": "d53dc88c-f905-4957-9de6-541e80725e74",
+      "topic": "Arrhythmias",
+      "sourceMatched": true,
+      "sourceAnchorCount": 1,
+      "sourceAnchorWordCount": 97,
+      "thresholdScore": 3,
+      "eligible": true,
+      "finalAction": "applied",
+      "rejectionReason": null
+    },
+    {
+      "questionId": "d7227480-732c-4052-bbef-59495719bbef",
+      "topic": "Acute Coronary Syndrome",
+      "sourceMatched": true,
+      "sourceAnchorCount": 1,
+      "sourceAnchorWordCount": 62,
+      "thresholdScore": 3,
+      "eligible": true,
+      "finalAction": "applied",
+      "rejectionReason": null
+    },
+    {
+      "questionId": "63bb51cb-be2d-4350-a9f7-5eb541cd6d73",
+      "topic": "Heart Failure and Myocardial Infarction",
+      "sourceMatched": true,
+      "sourceAnchorCount": 1,
+      "sourceAnchorWordCount": 69,
+      "thresholdScore": 3,
+      "eligible": true,
+      "finalAction": "applied",
+      "rejectionReason": null
+    },
+    {
+      "questionId": "1911a54c-b30b-4f9d-b4bc-aa3d17e5be08",
+      "topic": null,
+      "sourceMatched": true,
+      "sourceAnchorCount": 1,
+      "sourceAnchorWordCount": 53,
+      "thresholdScore": 3,
+      "eligible": true,
+      "finalAction": "applied",
+      "rejectionReason": null
+    },
+    {
+      "questionId": "4dfdc69c-4765-4970-a61f-0927cda36617",
+      "topic": "Acute Coronary Syndrome Diagnosis",
+      "sourceMatched": true,
+      "sourceAnchorCount": 1,
+      "sourceAnchorWordCount": 55,
+      "thresholdScore": 3,
+      "eligible": true,
+      "finalAction": "applied",
+      "rejectionReason": null
+    },
+    {
+      "questionId": "a18c6345-9c3c-4eb6-8d2c-3cea9c41fa9d",
+      "topic": "Iron Deficiency Anemia",
+      "sourceMatched": true,
+      "sourceAnchorCount": 1,
+      "sourceAnchorWordCount": 96,
+      "thresholdScore": 3,
+      "eligible": true,
+      "finalAction": "applied",
+      "rejectionReason": null
+    },
+    {
+      "questionId": "b1a1d42a-2ee4-4171-ba64-8e3a438e133b",
+      "topic": "Heart Failure Management",
+      "sourceMatched": true,
+      "sourceAnchorCount": 1,
+      "sourceAnchorWordCount": 53,
+      "thresholdScore": 3,
+      "eligible": true,
+      "finalAction": "applied",
+      "rejectionReason": null
+    }
+  ],
+  "batchPrecision": {
+    "sampleSize": 200,
+    "truePositiveEstimatedSampleCount": 173,
+    "borderlineSampleCount": 27,
+    "falsePositiveEstimatedSampleCount": 0,
+    "topInclusionTriggers": [
+      {
+        "trigger": "heart_failure",
+        "count": 68
+      },
+      {
+        "trigger": "arrhythmia_dysrhythmia",
+        "count": 64
+      },
+      {
+        "trigger": "acs_ischemia_mi",
+        "count": 41
+      },
+      {
+        "trigger": "ecg_cardiac_interpretation",
+        "count": 27
+      }
+    ],
+    "topExclusionTriggers": [
+      {
+        "trigger": "hypertension_only",
+        "count": 13
+      },
+      {
+        "trigger": "medication_only_non_cardiac",
+        "count": 6
+      },
+      {
+        "trigger": "renal_fluid_only",
+        "count": 5
+      },
+      {
+        "trigger": "respiratory_only",
+        "count": 3
+      }
+    ],
+    "appliedCandidatesAfterNarrowing": 20
+  }
+}
