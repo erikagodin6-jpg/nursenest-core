@@ -32,8 +32,8 @@ export const FRAG_B = {
     lessons: [L1, L2],
   },
   83: {
-    intro: `Missed assessment in the ED is not always negligence. Sometimes it is a door that never stopped spinning, a triage re sort, or a patient who looked fine until they did not. Still, the risk is real. This article is about recovery and prevention, not shame.`,
-    happens: `You may realize you never reassessed pain after opioids, never rechecked a limb after a fall complaint, or never followed up on a borderline ECG because the department surged. These gaps show up in hindsight, often when the patient returns or decompensates.`,
+    intro: `Missed assessment in the ED is not always negligence. Sometimes it is a door that never stopped spinning, a triage re sort, or a patient who looked fine until they did not. Still, the risk is real. This article is about recovery and prevention, not shame. A missed reassessment is a systems problem and a nursing accountability problem at the same time, and you handle both without lying to yourself or the chart.`,
+    happens: `You may realize you never reassessed pain after opioids, never rechecked a limb after a fall complaint, or never followed up on a borderline ECG because the department surged. These gaps show up in hindsight, often when the patient returns or decompensates. The ED also punishes memory: you think you will remember the soft abdomen or the faint neuro complaint, then three traumas arrive and the memory gets overwritten.`,
     struggle: `New grads struggle because the ED punishes delay, but assessments still take time. You may also rely on triage too heavily and miss change.`,
     steps: [
       "Tell charge and your preceptor immediately when you identify a gap.",
@@ -62,8 +62,8 @@ export const FRAG_B = {
     lessons: [L3, L1],
   },
   107: {
-    intro: `Unsafe staffing on med surg is not a private failure. It is a staffing mismatch between patient acuity and nurse capacity. You still have a license and a duty, which means you prioritize, escalate, and document in ways that protect patients without pretending you can be in four places at once.`,
-    happens: `You may carry six or seven patients with two discharges, two admissions, and one patient who keeps desaturating. Charge may be scrambling to find help. Families still press call lights. Providers still expect callbacks.`,
+    intro: `Unsafe staffing on med surg is not a private failure. It is a staffing mismatch between patient acuity and nurse capacity. You still have a license and a duty, which means you prioritize, escalate, and document in ways that protect patients without pretending you can be in four places at once. The guilt you feel is real, but guilt is not a staffing plan. Your job is to make risk visible and make help possible, even when the help is imperfect.`,
+    happens: `You may carry six or seven patients with two discharges, two admissions, and one patient who keeps desaturating. Charge may be scrambling to find help. Families still press call lights. Providers still expect callbacks. Meanwhile your bladder is empty on purpose and your charting is a half written novel you keep promising you will finish after the next task.`,
     struggle: `New grads struggle because you feel guilty saying no or asking for help. You may also skip assessments silently, which is the most dangerous shortcut.`,
     steps: [
       "Name the highest risk patients aloud to charge: new post op, sepsis concern, high fall risk, confused, on multiple high risk meds.",
@@ -92,8 +92,8 @@ export const FRAG_B = {
     lessons: [L2, L1],
   },
   119: {
-    intro: `End of shift anxiety in LTC is not drama. It is the feeling that you are leaving humans in a fragile state while your brain is still replaying tasks you did not finish. Orientation teaches skills, but it does not always teach how to tolerate that weight.`,
-    happens: `You may worry about behaviors, skin issues, nutrition, family conflict, or a resident who looked different at the end of the shift. You may also carry guilt about charting that waited.`,
+    intro: `End of shift anxiety in LTC is not drama. It is the feeling that you are leaving humans in a fragile state while your brain is still replaying tasks you did not finish. Orientation teaches skills, but it does not always teach how to tolerate that weight. You may walk to your car wondering if you forgot a skin check, a behavior note, or a subtle change in breathing that matters more than you admitted out loud.`,
+    happens: `You may worry about behaviors, skin issues, nutrition, family conflict, or a resident who looked different at the end of the shift. You may also carry guilt about charting that waited. You may replay one hallway conversation on loop, wishing you had said something kinder or firmer, depending on the day.`,
     struggle: `New grads struggle because LTC relationships feel personal. You know residents over time, which makes leaving feel morally loaded even when you did your job.`,
     steps: [
       "Use a structured handoff that names worries explicitly.",
@@ -122,8 +122,8 @@ export const FRAG_B = {
     lessons: [L2, L3],
   },
   122: {
-    intro: `Night shift on med surg flips your body clock and your social life, but the clinical work is still real. You get fewer providers in the building, quieter halls, and patients who sleep until they do not. Your prioritization has to be tighter because backup is thinner.`,
-    happens: `You may manage pain, confusion, low urine output, and unexpected fevers with fewer eyes around. Admissions still arrive. Emergencies still happen.`,
+    intro: `Night shift on med surg flips your body clock and your social life, but the clinical work is still real. You get fewer providers in the building, quieter halls, and patients who sleep until they do not. Your prioritization has to be tighter because backup is thinner. You also get a different kind of loneliness: fewer resources, slower lab turnaround stories, and the sense that if something goes wrong, you will wake a tired human being who does not know your patient the way you do.`,
+    happens: `You may manage pain, confusion, low urine output, and unexpected fevers with fewer eyes around. Admissions still arrive. Emergencies still happen. You may also manage family members who only visit at night, patients who sundown, and postoperative patients whose pain and sedation needs do not follow a convenient schedule. The hallway is quieter, but the work is not lighter, it is just differently timed.`,
     struggle: `New grads struggle with fatigue and slower labs. You may also feel isolated when questions arise.`,
     steps: [
       "Front load assessments early in the shift when you are most alert.",
@@ -152,9 +152,9 @@ export const FRAG_B = {
     lessons: [L1, L2],
   },
   123: {
-    intro: `Angry families on med surg often boil down to fear plus fatigue. The patient is uncomfortable, the room is small, and information feels slow. You are the visible face of the hospital, even when you did not cause the delay.`,
-    happens: `Conflict may be about pain control, discharge timing, test scheduling, or a perceived mistake. Med surg also has visiting limits, noise, and roommate issues that stack stress.`,
-    struggle: `New grads struggle to hold boundaries without sounding cold. You may over apologize for system problems you cannot fix.`,
+    intro: `Angry families on med surg often boil down to fear plus fatigue. The patient is uncomfortable, the room is small, and information feels slow. You are the visible face of the hospital, even when you did not cause the delay. People are not mean for no reason. They are scared, tired, hungry, and often carrying old trauma about healthcare before your shift ever started.`,
+    happens: `Conflict may be about pain control, discharge timing, test scheduling, or a perceived mistake. Med surg also has visiting limits, noise, and roommate issues that stack stress. You may hear yelling in the hallway while you are trying to hang blood or manage a postoperative patient who is quietly tanking. You may also get pulled into disputes between family members who disagree about goals of care, which is a different kind of pressure than a single angry voice.`,
+    struggle: `New grads struggle to hold boundaries without sounding cold. You may over apologize for system problems you cannot fix. You may also freeze when someone raises voice, even when your patient needs you to stay task focused and safe.`,
     steps: [
       "Acknowledge emotion without accepting abuse.",
       "Offer what you can do in the next thirty minutes: assessment, callback, care partner, chaplain.",
@@ -182,8 +182,8 @@ export const FRAG_B = {
     lessons: [L2, L1],
   },
   126: {
-    intro: `After med pass delays on med surg, the shift feels like a pile of tasks that grew teeth. You are catching up on insulin, pain meds, antibiotics, and PRNs while new orders keep landing. Rebuilding momentum means safety sequencing, not pretending you can move at simulation speed.`,
-    happens: `You may have patients on different schedules, patients who need crushing and feeding coordination, and patients who refuse until you are already behind. Pharmacy callbacks and IV issues add time.`,
+    intro: `After med pass delays on med surg, the shift feels like a pile of tasks that grew teeth. You are catching up on insulin, pain meds, antibiotics, and PRNs while new orders keep landing. Rebuilding momentum means safety sequencing, not pretending you can move at simulation speed. You will also feel the social pressure of patients comparing wait times across rooms, as if your body can be in multiple places without cost.`,
+    happens: `You may have patients on different schedules, patients who need crushing and feeding coordination, and patients who refuse until you are already behind. Pharmacy callbacks and IV issues add time. You may also be juggling patients who need glucose checks tied to insulin, patients who need vital signs before antihypertensives, and patients who are NPO for procedures that keep shifting. The delay is rarely one thing. It is a pile of small barriers that stack.`,
     struggle: `New grads struggle because guilt pushes unsafe rushing. You may also avoid telling the next nurse what is unfinished.`,
     steps: [
       "Triage meds by risk and time sensitivity.",
@@ -212,9 +212,9 @@ export const FRAG_B = {
     lessons: [L1, L2],
   },
   128: {
-    intro: `Your first night shift on telemetry can feel like the hospital becomes a different planet. Alarms feel louder at 0200, providers are harder to reach, and your body wants sleep while your patients still need trend watching.`,
-    happens: `You inherit rhythms that change, patients who sneak to the bathroom unsteady, and family calls that wake everyone. Telemetry packs lose signal when patients roll over or wander.`,
-    struggle: `New grads struggle with alarm fatigue and the temptation to silence without assessing.`,
+    intro: `Your first night shift on telemetry can feel like the hospital becomes a different planet. Alarms feel louder at 0200, providers are harder to reach, and your body wants sleep while your patients still need trend watching. You may also feel like the unit personality changes: fewer managers in the hallway, more reliance on your own judgment, and more temptation to silence alarms just to get three minutes of quiet.`,
+    happens: `You inherit rhythms that change, patients who sneak to the bathroom unsteady, and family calls that wake everyone. Telemetry packs lose signal when patients roll over or wander. You also inherit the night shift social rules: who answers which phone, where the spare leads live, and which patients are known to alarm every time they turn. Those details are not in a textbook. They live in your team.`,
+    struggle: `New grads struggle with alarm fatigue and the temptation to silence without assessing. You may also underestimate how much night shift dehydration and sleep debt affect your own attention, which is a patient safety variable too.`,
     steps: [
       "Start shift with lead quality checks and alarm limits review per policy.",
       "Set a pattern for who you assess first on telemetry when multiple alarms fire.",

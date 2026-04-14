@@ -2,8 +2,8 @@ import { L1, L2, L3, T1, T2 } from "./newgrad-batch-02-fragments-a.mjs";
 
 export const FRAG_C = {
   133: {
-    intro: `Calling the provider on telemetry is a rhythm plus patient story. The strip can look scary while the patient feels fine, or the strip can look fine while the patient is crashing. Your job is to integrate assessment, history, and monitoring before you pick up the phone.`,
-    happens: `Calls may be about chest pain, new ectopy, hypotension, bleeding risk on anticoagulation, or device issues. Sometimes you call because a protocol demands notification for a critical lab even if the patient looks stable.`,
+    intro: `Calling the provider on telemetry is a rhythm plus patient story. The strip can look scary while the patient feels fine, or the strip can look fine while the patient is crashing. Your job is to integrate assessment, history, and monitoring before you pick up the phone. If you only describe the monitor, you are doing half of nursing. If you only describe symptoms, you ignore data that may be the first warning.`,
+    happens: `Calls may be about chest pain, new ectopy, hypotension, bleeding risk on anticoagulation, or device issues. Sometimes you call because a protocol demands notification for a critical lab even if the patient looks stable. Sometimes you call because a patient looks terrible and the monitor looks boring, and that mismatch is exactly what worries you.`,
     struggle: `New grads struggle with alarm anxiety. You may call too late because you hoped the rhythm would fix itself, or too early without data because you panicked.`,
     steps: [
       "Do a focused assessment: symptoms, vitals, oxygen, perfusion, and relevant history.",
@@ -18,7 +18,7 @@ export const FRAG_C = {
       "Accepting 'watch them' without defining what worse looks like.",
       "Forgetting to update the bedside team after the call.",
     ],
-    preceptors: `Preceptors expect integration, not alarm theater. They want a calm story with numbers.`,
+    preceptors: `Preceptors expect integration, not alarm theater. They want a calm story with numbers. They also want to hear what you already tried within scope, so the call is not starting from zero.`,
     tips: `Use <a href="${L2}">heart failure</a> and ischemia thinking with <a href="${T1}">labs</a> when symptoms and rhythm do not match.`,
     mini: `The monitor alarms but the patient denies symptoms. What is your next step before calling?`,
     miniAns: `Assess, check lead placement, compare to prior trends, and follow policy for sustained arrhythmias. Call with data, not fear alone.`,
@@ -32,9 +32,9 @@ export const FRAG_C = {
     lessons: [L2, L1],
   },
   136: {
-    intro: `Oncology end of shift anxiety often mixes grief with responsibility. You may have patients in pain, families asking hard questions, and tasks you could not finish because time ran out. The shift ends, but your brain may not.`,
-    happens: `You hand off chemo schedules, symptom management plans, infection precautions, and psychosocial concerns. You may also carry emotional weight from honest conversations you witnessed.`,
-    struggle: `New grads struggle because oncology makes mortality visible. You may feel guilty for leaving, or numb, or both.`,
+    intro: `Oncology end of shift anxiety often mixes grief with responsibility. You may have patients in pain, families asking hard questions, and tasks you could not finish because time ran out. The shift ends, but your brain may not. You may replay one patient comment on the drive home, or wonder if you should have pushed pain control harder, or called the provider sooner, even when you followed orders and policy.`,
+    happens: `You hand off chemo schedules, symptom management plans, infection precautions, and psychosocial concerns. You may also carry emotional weight from honest conversations you witnessed. You may hand off patients whose stories sit heavy: young parents, older adults living alone, people who joke because that is how they survive fear.`,
+    struggle: `New grads struggle because oncology makes mortality visible. You may feel guilty for leaving, or numb, or both. You may also feel pressure to say something wise to patients when your real job is safe care and honest presence.`,
     steps: [
       "Hand off worries explicitly: symptoms not controlled, family distress, pending consults.",
       "Document pain and symptom trends honestly.",
@@ -62,9 +62,9 @@ export const FRAG_C = {
     lessons: [L3, L2],
   },
   143: {
-    intro: `Your first charting backlog in the ED is a special kind of stress because the department never stops moving. You may still have patients in rooms while unfinished notes pile up from earlier. The backlog is not proof you are bad. It is proof the work outpaced the time.`,
-    happens: `ED charting includes triage reasoning, interventions, reassessments, provider communications, and discharge instructions. If any piece waits, the legal story gets fuzzy.`,
-    struggle: `New grads struggle because you may chart narrative late and forget exact timing, or you may chart minimal detail under pressure.`,
+    intro: `Your first charting backlog in the ED is a special kind of stress because the department never stops moving. You may still have patients in rooms while unfinished notes pile up from earlier. The backlog is not proof you are bad. It is proof the work outpaced the time. You may also feel shame when a quality metric pings you about incomplete documentation, even when you were doing compressions or supporting a trauma team.`,
+    happens: `ED charting includes triage reasoning, interventions, reassessments, provider communications, and discharge instructions. If any piece waits, the legal story gets fuzzy. Backlog also collides with privacy and throughput: you chart in hallways, in corners, and sometimes while standing, which makes thoroughness harder than in a quiet med surg station.`,
+    struggle: `New grads struggle because you may chart narrative late and forget exact timing, or you may chart minimal detail under pressure. Both habits create risk when complaints or audits arrive later.`,
     steps: [
       "Use quick templates for common complaints, then personalize with key positives and negatives.",
       "Chart critical interventions immediately: meds given, procedures, restraints, informed consent themes per policy.",
@@ -92,15 +92,16 @@ export const FRAG_C = {
     lessons: [L1, L3],
   },
   152: {
-    intro: `Unsafe staffing on telemetry is dangerous because monitors create a false sense of control. You can watch rhythms all day and still miss the patient who is quietly failing. Staffing gaps mean you have less time at bedside, which is where telemetry must meet reality.`,
-    happens: `You may run more patients than you should, with alarms stacking and phones ringing. You may delay toileting, teaching, and thorough assessments.`,
-    struggle: `New grads struggle because you try to be heroic. Heroics are not a staffing model.`,
+    intro: `Unsafe staffing on telemetry is dangerous because monitors create a false sense of control. You can watch rhythms all day and still miss the patient who is quietly failing. Staffing gaps mean you have less time at bedside, which is where telemetry must meet reality. You may also feel pressure to "just watch the monitor" while your feet never make it to the room where ischemia shows up as nausea, fatigue, or silent symptoms.`,
+    happens: `You may run more patients than you should, with alarms stacking and phones ringing. You may delay toileting, teaching, and thorough assessments. You may also delay escalation because you are hoping the next hour will calm down, even when objective data says otherwise.`,
+    struggle: `New grads struggle because you try to be heroic. Heroics are not a staffing model. You may also feel guilt for saying no, even when saying yes would split your attention in unsafe ways.`,
     steps: [
       "Identify highest arrhythmia and ischemia risks early.",
       "Tell charge which patients need closer observation or relocation.",
       "Cluster tasks but never skip the correlation step: patient plus monitor.",
       "Document staffing concerns per policy.",
       "Escalate if you are asked to practice outside safe limits.",
+      "Say out loud what you are not doing yet, so the team cannot assume it is done.",
     ],
     mistakes: [
       "Silencing alarms to survive the shift.",
@@ -111,7 +112,7 @@ export const FRAG_C = {
     preceptors: `Preceptors expect advocacy and safety science, not martyrdom.`,
     tips: `Use <a href="${L2}">cardiac lessons</a> with <a href="${T1}">labs</a> for ischemia and electrolyte drivers.`,
     mini: `Charge asks you to take another patient and you are already at your limit. What do you say?`,
-    miniAns: `State your current acuity concerns clearly and ask for a plan: reassignment, help, or delay. Use professional language and document if needed.`,
+    miniAns: `State your current acuity concerns clearly and ask for a plan: reassignment, help, or delay. Use professional language and document if needed. Silence is not safer than respectful escalation.`,
     summary: [
       "Telemetry staffing gaps need risk triage and advocacy.",
       "Correlate patient to monitor always.",
@@ -122,20 +123,22 @@ export const FRAG_C = {
     lessons: [L2, L1],
   },
   169: {
-    intro: `First preceptor conflict on telemetry can feel like fighting in a glass room because everyone sees your dynamic while you are also trying to watch monitors. Conflict might be about alarm response time, about how you prioritized rooms, or about communication style.`,
-    happens: `Tension may spike during a busy hour when you both feel responsible for the same patients. Misunderstandings grow when pressure is high.`,
-    struggle: `New grads struggle because you fear evaluation and patient harm at the same time.`,
+    intro: `First preceptor conflict on telemetry can feel like fighting in a glass room because everyone sees your dynamic while you are also trying to watch monitors. Conflict might be about alarm response time, about how you prioritized rooms, or about communication style. You may feel exposed in a way that floor nursing does not always replicate, because telemetry makes your decisions visible on screens and in hallways.`,
+    happens: `Tension may spike during a busy hour when you both feel responsible for the same patients. Misunderstandings grow when pressure is high. You may also disagree about what counts as stable enough to delay a provider call, which is a high stakes difference on a unit where minutes matter.`,
+    struggle: `New grads struggle because you fear evaluation and patient harm at the same time. You may also feel torn between wanting to defend yourself and knowing you still have skills to learn, which makes every correction feel bigger than it is.`,
     steps: [
       "Debrief privately: behavior, expectation, next step.",
       "Ask for a clear model of what good looks like on telemetry.",
       "Separate personality friction from patient safety issues.",
       "Use educator support if the relationship blocks learning.",
       "Practice alarm response drills until the pattern feels automatic.",
+      "Write down one conflict trigger you can control, like phone placement or hallway pacing, and one you cannot, like patient volume.",
     ],
     mistakes: [
       "Debating at the nurses station in front of patients.",
       "Ignoring telemetry standards because you feel criticized.",
       "Avoiding asking questions when you need them most.",
+      "Letting conflict make you silent during real patient changes.",
     ],
     preceptors: `Preceptors should coach telemetry habits with specificity: lead checks, escalation thresholds, and communication scripts.`,
     tips: `Study rhythm context in <a href="${L2}">cardiac lessons</a> and keep <a href="${T1}">labs</a> accessible during ischemia evaluations.`,
@@ -151,22 +154,24 @@ export const FRAG_C = {
     lessons: [L2, L1],
   },
   176: {
-    intro: `Med pass delays in the ICU are high risk because many medications are not "a little late" in a harmless way. Vasopressors, sedatives, neuromuscular agents, and antibiotics tied to sepsis bundles all depend on timing. When delays happen, you recover with transparency and safety sequencing.`,
-    happens: `Delays may come from procedures, transport, pharmacy mixing, or a sudden intubation that reorganizes the whole assignment.`,
-    struggle: `New grads struggle because ICU urgency makes you feel like you should never be late, which makes you hide delays.`,
+    intro: `Med pass delays in the ICU are high risk because many medications are not "a little late" in a harmless way. Vasopressors, sedatives, neuromuscular agents, and antibiotics tied to sepsis bundles all depend on timing. When delays happen, you recover with transparency and safety sequencing. You are also working in a setting where patients cannot compensate the way a walkie talkie med surg patient might, which is why teams react fast when time critical meds slip.`,
+    happens: `Delays may come from procedures, transport, pharmacy mixing, or a sudden intubation that reorganizes the whole assignment. Delays may also come from line issues, incompatible infusions, or a sudden code down the hall that pulls your preceptor away.`,
+    struggle: `New grads struggle because ICU urgency makes you feel like you should never be late, which makes you hide delays. You may also feel tempted to "catch up" by rushing double checks, which is exactly where errors multiply.`,
     steps: [
       "Triage by hemodynamic impact: life support meds first.",
       "Notify providers when lateness crosses policy thresholds.",
       "Document reason and patient response.",
       "Rebuild a schedule for upcoming doses with pharmacy help if needed.",
       "Use two nurse checks when required without embarrassment.",
+      "If multiple patients are unstable, ask for help assigning priorities rather than improvising alone.",
     ],
     mistakes: [
       "Guessing a rate or dose after a delay.",
       "Skipping double checks under pressure.",
       "Blaming yourself without fixing the system issue.",
+      "Hiding a delay from the next nurse because you hope nobody notices.",
     ],
-    preceptors: `Preceptors expect strict med safety culture. They want immediate disclosure.`,
+    preceptors: `Preceptors expect strict med safety culture. They want immediate disclosure. They also want to hear your system barriers, not only your self criticism.`,
     tips: `Use <a href="${T2}">med math</a> for concentrated drips and <a href="${T1}">labs</a> when renal adjustment matters.`,
     mini: `A time critical antibiotic is late during a sepsis bundle. What matters most?`,
     miniAns: `Notify provider per sepsis protocol, give as soon as safe, document timing honestly, and watch hemodynamic response closely.`,
@@ -180,9 +185,9 @@ export const FRAG_C = {
     lessons: [L1, L3],
   },
   199: {
-    intro: `From orientation to ICU, end of shift anxiety can feel sharper because the patients are sicker and the machines are louder. You leave knowing one small miss can have big consequences. That pressure is real, but it cannot be your only teacher.`,
-    happens: `You hand off drips, vent settings, labs, and goals of care conversations. You may worry you missed a detail even when you did strong work.`,
-    struggle: `New grads struggle because ICU makes you feel responsible for everything, even team decisions that are not yours alone.`,
+    intro: `From orientation to ICU, end of shift anxiety can feel sharper because the patients are sicker and the machines are louder. You leave knowing one small miss can have big consequences. That pressure is real, but it cannot be your only teacher. Orientation also gives you a front row seat to complexity before you have muscle memory, which can make every alarm feel like a test you have not studied for enough.`,
+    happens: `You hand off drips, vent settings, labs, and goals of care conversations. You may worry you missed a detail even when you did strong work. You may also carry the sounds home: vent alarms, phone rings, and the fast speech of people deciding life support changes.`,
+    struggle: `New grads struggle because ICU makes you feel responsible for everything, even team decisions that are not yours alone. You may also compare yourself to nurses who move faster, and you may not see how many years built that speed.`,
     steps: [
       "Use a structured ICU handoff template every time.",
       "State unknowns explicitly rather than hiding them.",
