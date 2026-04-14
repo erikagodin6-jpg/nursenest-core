@@ -7,5 +7,15 @@
   "nav.country.philippines.nclexRn": "US NCLEX-RN lessons",
   "nav.country.philippines.nclexPn": "US NCLEX-PN lessons",
   "nav.country.philippines.tools": "Study tools",
-  "blog.country.philippines.tagName": "philippines-nle"
+  "blog.country.philippines.tagName": "philippines-nle",
+  "blog.country.philippines.featuredNote": "English is the default for NCLEX-style study; Tagalog appears on selected marketing routes. Regional Philippine languages are not fully localized in product UI.",
+  "blog.country.philippines.sampleListTitle": "Sample pilot topics (planned posts)",
+  "blog.country.philippines.sampleFootnote": "Sample titles support hub ranking only. NLE administration details belong to PRC; NurseNest does not mirror proprietary item banks.",
+  "featured.philippines.sectionTitle": "Featured Philippines nursing reads",
+  "featured.philippines.lead": "Start with the philippines-nle tag for long-form articles; English posts are primary with Tagalog on select routes.",
+  "featured.philippines.card1Title": "NLE orientation and domains",
+  "featured.philippines.card1Body": "PRC-aligned framing for the national exam—study discipline without claiming proprietary banks.",
+  "featured.philippines.card2Title": "NCLEX and migration next steps",
+  "featured.philippines.card2Body": "US and Canadian pathway orientation with NCLEX-style practice from NurseNest's own inventory.",
+  "featured.philippines.browseTag": "Browse philippines-nle articles"
 }

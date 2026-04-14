@@ -12,6 +12,7 @@ import { simpleMarketingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { PilotHubFeaturedBlog } from "@/components/marketing/pilot-hub-featured-blog";
 
 const PATH = "/exams/philippines";
 
@@ -370,6 +371,8 @@ export default function PhilippinesLicensingExamsPage() {
               </li>
             </ul>
           </section>
+
+          <PilotHubFeaturedBlog pilot="philippines" />
 
           <section className="mt-12" aria-labelledby="faq">
             <h2 id="faq" className="nn-marketing-h2">

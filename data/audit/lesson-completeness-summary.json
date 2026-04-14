@@ -1,7 +1,8 @@
 {
-  "generatedAt": "2026-04-14T22:09:20.173Z",
+  "generatedAt": "2026-04-14T22:32:55.928Z",
   "batchFixHints": [
     "ca-rn-nclex-rn: ≥45% of lessons missing core_concept_depth bucket — likely systematic spine depth gap.",
+    "ca-rn-nclex-rn: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only.",
     "us-rn-nclex-rn: ≥45% of lessons missing core_concept_depth bucket — likely systematic spine depth gap.",
     "us-np-fnp: ≥45% of lessons missing core_concept_depth bucket — likely systematic spine depth gap.",
     "us-np-fnp: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only.",
@@ -34,10 +35,10 @@
     "lessonsScanned": 906,
     "pathwaysWithLessons": 8,
     "production_ready": 0,
-    "usable_but_thin": 0,
-    "structurally_incomplete": 464,
+    "usable_but_thin": 1,
+    "structurally_incomplete": 364,
     "content_incomplete": 0,
-    "localization_incomplete": 187,
+    "localization_incomplete": 286,
     "not_routable": 0,
     "duplicate_or_unclear_source": 255,
     "byPathway": {
@@ -68,75 +69,59 @@
   },
   "globalTopFailureReasons": [
     {
-      "reason": "missing_educational:core_concept_depth",
-      "count": 507
+      "reason": "no_educational_overlay_in_scanned_locales",
+      "count": 605
     },
     {
-      "reason": "no_educational_overlay_in_scanned_locales",
-      "count": 505
+      "reason": "missing_educational:core_concept_depth",
+      "count": 501
     },
     {
       "reason": "missing_educational:summary_takeaways",
-      "count": 421
+      "count": 327
     },
     {
       "reason": "missing_educational:overview_intro",
-      "count": 411
-    },
-    {
-      "reason": "low_total_word_count",
-      "count": 375
-    },
-    {
-      "reason": "missing_educational:clinical_application",
-      "count": 250
+      "count": 318
     },
     {
       "reason": "thin_total_word_count",
-      "count": 193
+      "count": 286
+    },
+    {
+      "reason": "low_total_word_count",
+      "count": 275
+    },
+    {
+      "reason": "missing_educational:clinical_application",
+      "count": 157
     },
     {
       "reason": "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-      "count": 159
+      "count": 153
     },
     {
       "reason": "links:no_internal_study_links",
-      "count": 127
-    },
-    {
-      "reason": "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-      "count": 97
-    },
-    {
-      "reason": "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-      "count": 94
-    },
-    {
-      "reason": "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-      "count": 80
+      "count": 125
     },
     {
       "reason": "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
       "count": 78
     },
     {
-      "reason": "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-      "count": 76
+      "reason": "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
+      "count": 62
     },
     {
-      "reason": "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-      "count": 72
+      "reason": "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+      "count": 56
     },
     {
       "reason": "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
       "count": 54
     },
     {
-      "reason": "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-      "count": 54
-    },
-    {
-      "reason": "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+      "reason": "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
       "count": 53
     },
     {
@@ -160,12 +145,28 @@
       "count": 49
     },
     {
-      "reason": "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-      "count": 49
+      "reason": "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
+      "count": 47
     },
     {
       "reason": "missing_educational:summary_or_next_steps",
       "count": 44
+    },
+    {
+      "reason": "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+      "count": 42
+    },
+    {
+      "reason": "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+      "count": 40
+    },
+    {
+      "reason": "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
+      "count": 35
+    },
+    {
+      "reason": "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+      "count": 31
     }
   ],
   "limitations": [

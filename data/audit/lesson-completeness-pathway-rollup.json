@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T22:09:20.173Z",
+  "generatedAt": "2026-04-14T22:32:55.928Z",
   "pathways": [
     {
       "pathwayId": "ca-rn-nclex-rn",
@@ -10,44 +10,44 @@
       "totalLessons": 188,
       "productionReady": 0,
       "usableButThin": 0,
-      "structurallyIncomplete": 136,
+      "structurallyIncomplete": 42,
       "contentIncomplete": 0,
-      "localizationIncomplete": 1,
+      "localizationIncomplete": 95,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
-      "averageOverallScore": 34.1,
+      "averageOverallScore": 65.4,
       "topReasons": [
         {
-          "reason": "low_total_word_count",
-          "count": 113
-        },
-        {
-          "reason": "missing_educational:overview_intro",
-          "count": 112
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 143
         },
         {
           "reason": "missing_educational:core_concept_depth",
-          "count": 109
+          "count": 108
         },
         {
-          "reason": "missing_educational:clinical_application",
-          "count": 107
+          "reason": "thin_total_word_count",
+          "count": 95
         },
         {
-          "reason": "missing_educational:summary_takeaways",
-          "count": 99
+          "reason": "Missing required premium section: tier_specific_relevance",
+          "count": 26
         },
         {
-          "reason": "no_educational_overlay_in_scanned_locales",
-          "count": 49
+          "reason": "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+          "count": 26
         },
         {
-          "reason": "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-          "count": 43
+          "reason": "Missing required premium section: related_next_steps",
+          "count": 26
         },
         {
-          "reason": "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-          "count": 34
+          "reason": "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+          "count": 26
+        },
+        {
+          "reason": "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
+          "count": 25
         }
       ]
     },
@@ -60,16 +60,16 @@
       "totalLessons": 187,
       "productionReady": 0,
       "usableButThin": 0,
-      "structurallyIncomplete": 135,
+      "structurallyIncomplete": 134,
       "contentIncomplete": 0,
-      "localizationIncomplete": 1,
+      "localizationIncomplete": 2,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
-      "averageOverallScore": 33.9,
+      "averageOverallScore": 34.3,
       "topReasons": [
         {
           "reason": "low_total_word_count",
-          "count": 114
+          "count": 113
         },
         {
           "reason": "missing_educational:overview_intro",
@@ -77,7 +77,7 @@
         },
         {
           "reason": "missing_educational:core_concept_depth",
-          "count": 109
+          "count": 108
         },
         {
           "reason": "missing_educational:clinical_application",
@@ -89,7 +89,7 @@
         },
         {
           "reason": "no_educational_overlay_in_scanned_locales",
-          "count": 48
+          "count": 49
         },
         {
           "reason": "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
@@ -109,21 +109,21 @@
       "nursingPriority": true,
       "totalLessons": 161,
       "productionReady": 0,
-      "usableButThin": 0,
-      "structurallyIncomplete": 31,
+      "usableButThin": 1,
+      "structurallyIncomplete": 26,
       "contentIncomplete": 0,
-      "localizationIncomplete": 79,
+      "localizationIncomplete": 83,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
-      "averageOverallScore": 65.6,
+      "averageOverallScore": 67.7,
       "topReasons": [
         {
           "reason": "no_educational_overlay_in_scanned_locales",
-          "count": 144
+          "count": 149
         },
         {
           "reason": "missing_educational:core_concept_depth",
-          "count": 89
+          "count": 85
         },
         {
           "reason": "thin_total_word_count",
@@ -131,23 +131,23 @@
         },
         {
           "reason": "missing_educational:summary_takeaways",
-          "count": 79
+          "count": 78
         },
         {
           "reason": "missing_educational:overview_intro",
-          "count": 18
-        },
-        {
-          "reason": "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
           "count": 17
         },
         {
+          "reason": "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+          "count": 13
+        },
+        {
           "reason": "low_total_word_count",
-          "count": 15
+          "count": 10
         },
         {
           "reason": "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
-          "count": 13
+          "count": 9
         }
       ]
     },

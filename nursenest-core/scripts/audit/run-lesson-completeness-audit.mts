@@ -16,6 +16,7 @@ import {
   sortAndFilterLessonsForPathwayContext,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { lessonCorpusForLinkCount } from "@/lib/lessons/pathway-lesson-premium";
+import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import {
   buildRecommendedActions,
   deriveStatus,
@@ -85,6 +86,7 @@ function isAmbiguousCrossPathwaySlug(slug: string, slugToPathways: Map<string, S
 }
 
 type LessonRow = {
+  /** Stable key: pathwayId:slug (no separate DB id in bundled JSON). */
   lessonId: string;
   slug: string;
   title: string;
@@ -94,6 +96,8 @@ type LessonRow = {
   sourceType: "bundled_catalog";
   routable: boolean;
   inEffectiveHub: boolean;
+  /** True when no internal study links and few/no relatedLessonRefs — product isolation risk. */
+  isolatedLesson: boolean;
   structuralScore: number;
   educationalScore: number;
   linkScore: number;
@@ -108,6 +112,8 @@ type LessonRow = {
     gateIssues: string[];
     gateWarnings: string[];
     internalStudyLinkCount: number;
+    relatedLessonRefCount: number;
+    isolatedLesson: boolean;
     sectionCount: number;
     totalWords: number;
     placeholderSignals: string[];
@@ -149,6 +155,8 @@ function processLesson(
 ): LessonRow {
   const gate = lesson.structuralQuality;
   const internalStudyLinkCount = gate?.internalStudyLinkCount ?? 0;
+  const relatedLessonRefCount = lesson.relatedLessonRefs?.length ?? 0;
+  const isolatedLesson = internalStudyLinkCount === 0 && relatedLessonRefCount === 0;
   const corpus = lessonCorpusForLinkCount(lesson);
   const placeholderFlags = detectPlaceholderSignals(corpus + "\n" + (lesson.title ?? ""));
   const totalWords = lessonTotalWords(lesson);
@@ -193,6 +201,7 @@ function processLesson(
   ];
   if (placeholderFlags.length) reasons.push(...placeholderFlags.map((p) => `placeholder:${p}`));
   if (!inEffectiveHub) reasons.push("not_in_exam_filtered_hub_list");
+  if (isolatedLesson) reasons.push("isolated_no_internal_links_or_related_refs");
 
   const recommendedActions = buildRecommendedActions(status, edu.missing);
 
@@ -206,6 +215,7 @@ function processLesson(
     sourceType: "bundled_catalog",
     routable,
     inEffectiveHub,
+    isolatedLesson,
     structuralScore,
     educationalScore,
     linkScore,
@@ -220,6 +230,8 @@ function processLesson(
       gateIssues: gate?.issues ?? [],
       gateWarnings: gate?.warnings ?? [],
       internalStudyLinkCount,
+      relatedLessonRefCount,
+      isolatedLesson,
       sectionCount,
       totalWords,
       placeholderSignals: placeholderFlags,

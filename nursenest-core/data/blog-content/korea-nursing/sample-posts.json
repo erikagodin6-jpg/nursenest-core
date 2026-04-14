@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "countrySlug": "korea",
+  "entries": [
+    {
+      "slug": "kr-sample-001-kle-orientation-en",
+      "title": "Korean nursing licensure exam — orientation (sample topic)",
+      "language": "en",
+      "countryTargets": ["KR"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-kr-001",
+      "publicationPriority": 100,
+      "status": "sample"
+    },
+    {
+      "slug": "kr-sample-002-ko",
+      "title": "국가 간호사 시험 준비 개요 (예시 주제)",
+      "language": "ko",
+      "countryTargets": ["KR"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-kr-002",
+      "publicationPriority": 95,
+      "status": "sample"
+    },
+    {
+      "slug": "kr-sample-003-us-nclex-en",
+      "title": "US NCLEX-RN — next-step pathway notes for Korean nurses (sample)",
+      "language": "en",
+      "countryTargets": ["KR"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-kr-003",
+      "publicationPriority": 90,
+      "status": "sample"
+    },
+    {
+      "slug": "kr-sample-004-australia-en",
+      "title": "Australia registration — high-level evidence framing (sample)",
+      "language": "en",
+      "countryTargets": ["KR"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-kr-004",
+      "publicationPriority": 85,
+      "status": "sample"
+    },
+    {
+      "slug": "kr-sample-005-english-tests-en",
+      "title": "English proficiency tests — planning checklist (sample)",
+      "language": "en",
+      "countryTargets": ["KR"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-kr-005",
+      "publicationPriority": 80,
+      "status": "sample"
+    },
+    {
+      "slug": "kr-sample-006-clinical-reasoning-en",
+      "title": "Clinical judgment practice — NurseNest inventory alignment (sample)",
+      "language": "en",
+      "countryTargets": ["KR"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-kr-006",
+      "publicationPriority": 75,
+      "status": "sample"
+    }
+  ]
+}

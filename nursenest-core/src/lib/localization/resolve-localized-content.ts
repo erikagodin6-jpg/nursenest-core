@@ -7,12 +7,22 @@ import type {
 } from "@/config/country-localization-types";
 import { COUNTRY_LANGUAGE_PRIORITY_MAP } from "@/config/country-language-priority-map";
 
-/** Manifest / sample rows use these ISO-style targets per pilot hub. */
+/** Manifest / sample rows use these ISO-style targets per regional hub. */
 export const PILOT_COUNTRY_TARGETS: Record<PilotCountrySlug, readonly string[]> = {
   india: ["IN"],
   australia: ["AU"],
   /** GCC hubs + migration source countries used in pilot sample rows. */
   "middle-east": ["GCC", "ME", "AE", "SA", "QA", "IN"],
+  china: ["CN"],
+  korea: ["KR"],
+  japan: ["JP"],
+  germany: ["DE"],
+  france: ["FR"],
+  italy: ["IT"],
+  hungary: ["HU"],
+  portugal: ["PT"],
+  mexico: ["MX"],
+  philippines: ["PH"],
 };
 
 function targetsMatchCountry(entry: BlogSampleEntry, country: PilotCountrySlug): boolean {

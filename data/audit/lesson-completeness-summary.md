@@ -1,6 +1,6 @@
 # Lesson completeness audit
 
-Generated: 2026-04-14T22:09:20.173Z
+Generated: 2026-04-14T22:32:55.928Z
 
 ## What was scanned
 - Bundled pathway lesson catalog (merged JSON: main catalog, allied-bundled, new-grad transition, scoped-gold prepend).
@@ -18,40 +18,41 @@ Generated: 2026-04-14T22:09:20.173Z
 ## Totals (from lesson-completeness-summary.json)
 - Lessons scanned: **906**
 - production_ready: **0**
-- usable_but_thin: **0**
-- structurally_incomplete: **464**
+- usable_but_thin: **1**
+- structurally_incomplete: **364**
 - content_incomplete: **0**
-- localization_incomplete: **187**
+- localization_incomplete: **286**
 - not_routable: **0**
 - duplicate_or_unclear_source: **255**
 
 ## Top failing pathways (nursing-first, by volume)
-- **ca-rn-nclex-rn** (canada/rn/nclex-rn): 188 lessons · avg score 34.1 · ready 0 · thin 0 · structural gaps 136
-- **us-rn-nclex-rn** (us/rn/nclex-rn): 187 lessons · avg score 33.9 · ready 0 · thin 0 · structural gaps 135
-- **us-np-fnp** (us/np/fnp): 161 lessons · avg score 65.6 · ready 0 · thin 0 · structural gaps 31
+- **ca-rn-nclex-rn** (canada/rn/nclex-rn): 188 lessons · avg score 65.4 · ready 0 · thin 0 · structural gaps 42
+- **us-rn-nclex-rn** (us/rn/nclex-rn): 187 lessons · avg score 34.3 · ready 0 · thin 0 · structural gaps 134
+- **us-np-fnp** (us/np/fnp): 161 lessons · avg score 67.7 · ready 0 · thin 1 · structural gaps 26
 - **ca-rpn-rex-pn** (canada/rpn/rex-pn): 150 lessons · avg score 48.5 · ready 0 · thin 0 · structural gaps 61
 - **us-lpn-nclex-pn** (us/lpn/nclex-pn): 150 lessons · avg score 48.5 · ready 0 · thin 0 · structural gaps 61
 - **us-rn-new-grad-transition** (us/rn/new-grad-transition): 40 lessons · avg score 27.7 · ready 0 · thin 0 · structural gaps 40
 
 ## Top systemic issues (reason histogram)
-- missing_educational:core_concept_depth: **507**
-- no_educational_overlay_in_scanned_locales: **505**
-- missing_educational:summary_takeaways: **421**
-- missing_educational:overview_intro: **411**
-- low_total_word_count: **375**
-- missing_educational:clinical_application: **250**
-- thin_total_word_count: **193**
-- Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).: **159**
-- links:no_internal_study_links: **127**
-- Legacy section "exam_relevance" is below the minimum depth (28 < 30 words).: **97**
-- Legacy section "core_concept" is below the minimum depth (30 < 40 words).: **94**
-- Legacy section "exam_relevance" is below the minimum depth (27 < 30 words).: **80**
+- no_educational_overlay_in_scanned_locales: **605**
+- missing_educational:core_concept_depth: **501**
+- missing_educational:summary_takeaways: **327**
+- missing_educational:overview_intro: **318**
+- thin_total_word_count: **286**
+- low_total_word_count: **275**
+- missing_educational:clinical_application: **157**
+- Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).: **153**
+- links:no_internal_study_links: **125**
 - Legacy section "clinical_scenario" is below the minimum depth (29 < 40 words).: **78**
-- Legacy section "core_concept" is below the minimum depth (31 < 40 words).: **76**
-- Legacy section "clinical_meaning" is below the minimum depth (42 < 50 words).: **72**
+- Legacy section "core_concept" is below the minimum depth (30 < 40 words).: **62**
+- Legacy section "exam_relevance" is below the minimum depth (28 < 30 words).: **56**
+- Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).: **54**
+- Legacy section "exam_relevance" is below the minimum depth (27 < 30 words).: **53**
+- Legacy section "core_concept" is below the minimum depth (24 < 40 words).: **52**
 
 ## Batch-fix patterns (systemic)
 - ca-rn-nclex-rn: ≥45% of lessons missing core_concept_depth bucket — likely systematic spine depth gap.
+- ca-rn-nclex-rn: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only.
 - us-rn-nclex-rn: ≥45% of lessons missing core_concept_depth bucket — likely systematic spine depth gap.
 - us-np-fnp: ≥45% of lessons missing core_concept_depth bucket — likely systematic spine depth gap.
 - us-np-fnp: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only.

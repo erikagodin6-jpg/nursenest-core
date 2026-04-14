@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "countrySlug": "philippines",
+  "entries": [
+    {
+      "slug": "ph-sample-001-nle-orientation-en",
+      "title": "Philippines NLE — public scope orientation (sample topic)",
+      "language": "en",
+      "countryTargets": ["PH"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-ph-001",
+      "publicationPriority": 100,
+      "status": "sample"
+    },
+    {
+      "slug": "ph-sample-002-tl",
+      "title": "NLE at NCLEX — magkahiwalay na landas (halimbawa)",
+      "language": "tl",
+      "countryTargets": ["PH"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-ph-002",
+      "publicationPriority": 95,
+      "status": "sample"
+    },
+    {
+      "slug": "ph-sample-003-nclex-en",
+      "title": "NCLEX-RN after Philippine licensure — planning mindset (sample)",
+      "language": "en",
+      "countryTargets": ["PH"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-ph-003",
+      "publicationPriority": 90,
+      "status": "sample"
+    },
+    {
+      "slug": "ph-sample-004-canada-en",
+      "title": "Canada — provincial college evidence framing (sample)",
+      "language": "en",
+      "countryTargets": ["PH"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-ph-004",
+      "publicationPriority": 85,
+      "status": "sample"
+    },
+    {
+      "slug": "ph-sample-005-us-en",
+      "title": "United States — state board eligibility vs exam prep (sample)",
+      "language": "en",
+      "countryTargets": ["PH"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-ph-005",
+      "publicationPriority": 80,
+      "status": "sample"
+    },
+    {
+      "slug": "ph-sample-006-reasoning-en",
+      "title": "Transferable clinical reasoning — NurseNest inventory alignment (sample)",
+      "language": "en",
+      "countryTargets": ["PH"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-ph-006",
+      "publicationPriority": 75,
+      "status": "sample"
+    }
+  ]
+}

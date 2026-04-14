@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "countrySlug": "mexico",
+  "entries": [
+    {
+      "slug": "mx-sample-001-tmsp-en",
+      "title": "Mexico nursing licensure context — orientation (sample)",
+      "language": "en",
+      "countryTargets": ["MX"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-mx-001",
+      "publicationPriority": 100,
+      "status": "sample"
+    },
+    {
+      "slug": "mx-sample-002-es",
+      "title": "Examen ENARM — panorama (ejemplo)",
+      "language": "es",
+      "countryTargets": ["MX"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-mx-002",
+      "publicationPriority": 95,
+      "status": "sample"
+    },
+    {
+      "slug": "mx-sample-003-nclex-en",
+      "title": "US NCLEX-RN — next-step pathway for Mexico-trained nurses (sample)",
+      "language": "en",
+      "countryTargets": ["MX"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-mx-003",
+      "publicationPriority": 90,
+      "status": "sample"
+    },
+    {
+      "slug": "mx-sample-004-canada-en",
+      "title": "Canada — credential assessment framing (sample)",
+      "language": "en",
+      "countryTargets": ["MX"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-mx-004",
+      "publicationPriority": 85,
+      "status": "sample"
+    },
+    {
+      "slug": "mx-sample-005-english-en",
+      "title": "English proficiency planning — checklist (sample)",
+      "language": "en",
+      "countryTargets": ["MX"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-mx-005",
+      "publicationPriority": 80,
+      "status": "sample"
+    },
+    {
+      "slug": "mx-sample-006-reasoning-en",
+      "title": "Clinical judgment — aligned to public exam scope (sample)",
+      "language": "en",
+      "countryTargets": ["MX"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-mx-006",
+      "publicationPriority": 75,
+      "status": "sample"
+    }
+  ]
+}

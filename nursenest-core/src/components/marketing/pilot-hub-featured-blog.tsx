@@ -9,15 +9,26 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { rankAndSortBlogSamples, resolveLanguageTryOrder } from "@/lib/localization/resolve-localized-content";
 
+/** i18n segment for `featured.{prefix}.*` and `blog.country.{prefix}.*` (matches existing keys). */
 const FEATURED_PREFIX: Record<PilotCountrySlug, string> = {
   india: "india",
   "middle-east": "middleEast",
   australia: "australia",
+  china: "china",
+  korea: "korea",
+  japan: "japan",
+  germany: "germany",
+  france: "france",
+  italy: "italy",
+  hungary: "hungary",
+  portugal: "portugal",
+  mexico: "mexico",
+  philippines: "philippines",
 };
 
 /**
- * Pilot-only: language-ranked sample titles + i18n featured cards.
- * Does not import 200-row manifests client-side — only the 10-row sample batch.
+ * Regional hub: language-ranked sample titles + i18n featured cards.
+ * Imports only the small sample batch JSON — never the 200-row manifest.
  */
 export function PilotHubFeaturedBlog({ pilot }: { pilot: PilotCountrySlug }) {
   const { t, locale } = useMarketingI18n();
@@ -35,6 +46,19 @@ export function PilotHubFeaturedBlog({ pilot }: { pilot: PilotCountrySlug }) {
     `/blog/tag/${encodeURIComponent(t(`blog.country.${p}.tagName`))}`,
   );
 
+  const priorityNote = useMemo(() => {
+    if (pilot === "china" && (locale === "zh" || locale === "zh-tw")) {
+      return t("blog.country.china.zhPriorityNote");
+    }
+    if (pilot === "korea" && locale === "ko") {
+      return t("blog.country.korea.koPriorityNote");
+    }
+    if (pilot === "germany" && locale === "de") {
+      return t("blog.country.germany.dePriorityNote");
+    }
+    return t(`blog.country.${p}.featuredNote`);
+  }, [pilot, p, locale, t]);
+
   return (
     <section
       className="mt-12 rounded-2xl border border-[var(--semantic-border-soft)] p-8"
@@ -48,7 +72,7 @@ export function PilotHubFeaturedBlog({ pilot }: { pilot: PilotCountrySlug }) {
         {t(`featured.${p}.sectionTitle`)}
       </h2>
       <p className="mt-2 text-[var(--theme-muted-text)]">{t(`featured.${p}.lead`)}</p>
-      <p className="mt-3 text-sm text-[var(--semantic-text-muted)]">{t(`blog.country.${p}.featuredNote`)}</p>
+      <p className="mt-3 text-sm text-[var(--semantic-text-muted)]">{priorityNote}</p>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <article

@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "countrySlug": "japan",
+  "entries": [
+    {
+      "slug": "jp-sample-001-national-exam-en",
+      "title": "Japan national nursing examination — orientation (sample)",
+      "language": "en",
+      "countryTargets": ["JP"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-jp-001",
+      "publicationPriority": 100,
+      "status": "sample"
+    },
+    {
+      "slug": "jp-sample-002-ja",
+      "title": "看護師国家試験の学習設計（例）",
+      "language": "ja",
+      "countryTargets": ["JP"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-jp-002",
+      "publicationPriority": 95,
+      "status": "sample"
+    },
+    {
+      "slug": "jp-sample-003-us-en",
+      "title": "US NCLEX-RN — next-step pathway framing (sample)",
+      "language": "en",
+      "countryTargets": ["JP"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-jp-003",
+      "publicationPriority": 90,
+      "status": "sample"
+    },
+    {
+      "slug": "jp-sample-004-australia-en",
+      "title": "Australia — evidence and English tests overview (sample)",
+      "language": "en",
+      "countryTargets": ["JP"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-jp-004",
+      "publicationPriority": 85,
+      "status": "sample"
+    },
+    {
+      "slug": "jp-sample-005-uk-en",
+      "title": "UK NMC — internationally educated nurse framing (sample)",
+      "language": "en",
+      "countryTargets": ["JP"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-jp-005",
+      "publicationPriority": 80,
+      "status": "sample"
+    },
+    {
+      "slug": "jp-sample-006-reasoning-en",
+      "title": "Transferable clinical reasoning — study inventory alignment (sample)",
+      "language": "en",
+      "countryTargets": ["JP"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-jp-006",
+      "publicationPriority": 75,
+      "status": "sample"
+    }
+  ]
+}

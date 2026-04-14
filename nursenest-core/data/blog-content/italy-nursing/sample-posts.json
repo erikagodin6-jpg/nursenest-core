@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "countrySlug": "italy",
+  "entries": [
+    {
+      "slug": "it-sample-001-ordinamento-en",
+      "title": "Italian nursing qualification pathway — orientation (sample)",
+      "language": "en",
+      "countryTargets": ["IT"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-it-001",
+      "publicationPriority": 100,
+      "status": "sample"
+    },
+    {
+      "slug": "it-sample-002-it",
+      "title": "Esame di Stato — panoramica (esempio)",
+      "language": "it",
+      "countryTargets": ["IT"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-it-002",
+      "publicationPriority": 95,
+      "status": "sample"
+    },
+    {
+      "slug": "it-sample-003-nclex-en",
+      "title": "Parallel NCLEX study — next-step pathway (sample)",
+      "language": "en",
+      "countryTargets": ["IT"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-it-003",
+      "publicationPriority": 90,
+      "status": "sample"
+    },
+    {
+      "slug": "it-sample-004-eu-en",
+      "title": "EU mobility concepts — educational only (sample)",
+      "language": "en",
+      "countryTargets": ["IT"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-it-004",
+      "publicationPriority": 85,
+      "status": "sample"
+    },
+    {
+      "slug": "it-sample-005-english-en",
+      "title": "English tests for non-EU destinations — checklist (sample)",
+      "language": "en",
+      "countryTargets": ["IT"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-it-005",
+      "publicationPriority": 80,
+      "status": "sample"
+    },
+    {
+      "slug": "it-sample-006-reasoning-en",
+      "title": "Clinical reasoning — NurseNest inventory alignment (sample)",
+      "language": "en",
+      "countryTargets": ["IT"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-it-006",
+      "publicationPriority": 75,
+      "status": "sample"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "countrySlug": "germany",
+  "entries": [
+    {
+      "slug": "de-sample-001-anerkennung-en",
+      "title": "Nursing recognition (Anerkennung) — orientation (sample)",
+      "language": "en",
+      "countryTargets": ["DE"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-de-001",
+      "publicationPriority": 100,
+      "status": "sample"
+    },
+    {
+      "slug": "de-sample-002-de",
+      "title": "Kenntnisprüfung — Überblick (Beispiel)",
+      "language": "de",
+      "countryTargets": ["DE"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-de-002",
+      "publicationPriority": 95,
+      "status": "sample"
+    },
+    {
+      "slug": "de-sample-003-language-en",
+      "title": "German language requirements — planning notes (sample)",
+      "language": "en",
+      "countryTargets": ["DE"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-de-003",
+      "publicationPriority": 90,
+      "status": "sample"
+    },
+    {
+      "slug": "de-sample-004-nclex-en",
+      "title": "Parallel NCLEX prep for Germany-based candidates (sample)",
+      "language": "en",
+      "countryTargets": ["DE"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-de-004",
+      "publicationPriority": 85,
+      "status": "sample"
+    },
+    {
+      "slug": "de-sample-005-eu-en",
+      "title": "EU mobility concepts — educational only (sample)",
+      "language": "en",
+      "countryTargets": ["DE"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-de-005",
+      "publicationPriority": 80,
+      "status": "sample"
+    },
+    {
+      "slug": "de-sample-006-inventory-en",
+      "title": "Clinical reasoning practice — NurseNest inventory alignment (sample)",
+      "language": "en",
+      "countryTargets": ["DE"],
+      "intentType": "informational",
+      "translationGroupId": "pilot-de-006",
+      "publicationPriority": 75,
+      "status": "sample"
+    }
+  ]
+}

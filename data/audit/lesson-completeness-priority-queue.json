@@ -1,28 +1,6 @@
 {
-  "generatedAt": "2026-04-14T22:09:20.173Z",
+  "generatedAt": "2026-04-14T22:32:55.928Z",
   "queue": [
-    {
-      "lessonId": "ca-rn-nclex-rn:cabg-and-postoperative-cabg-complications-nclex-rn",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
-      "title": "CABG and Postoperative CABG Complications (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 4.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (27 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (22 < 30 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (34 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (17 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, exam_or_reasoning_cues."
-      ]
-    },
     {
       "lessonId": "ca-rn-nclex-rn:renal-dialysis-acute-complications-gold-standard",
       "pathwayId": "ca-rn-nclex-rn",
@@ -43,2052 +21,6 @@
       "recommendedActions": [
         "Strengthen educational buckets: overview_intro, clinical_application, summary_takeaways, exam_or_reasoning_cues.",
         "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:heart-failure-nursing-priorities-hy",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "heart-failure-nursing-priorities-hy",
-      "title": "Heart Failure Nursing Priorities (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:acute-myocardial-infarction-troponin",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "acute-myocardial-infarction-troponin",
-      "title": "Acute Myocardial Infarction & Troponin (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:shock-recognition-fluids",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "shock-recognition-fluids",
-      "title": "Shock Recognition & Fluids (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:hypertensive-crisis-vs-urgency",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "hypertensive-crisis-vs-urgency",
-      "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:atrial-fibrillation-rate-control",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "atrial-fibrillation-rate-control",
-      "title": "Atrial Fibrillation & Rate Control (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:endocarditis-blood-cultures",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "endocarditis-blood-cultures",
-      "title": "Endocarditis & Blood Cultures (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:pericarditis-ecg-clues",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "pericarditis-ecg-clues",
-      "title": "Pericarditis & ECG Clues (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:dvt-pe-nursing-priorities",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "dvt-pe-nursing-priorities",
-      "title": "DVT & PE Nursing Priorities (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:abg-interpretation-basics-hy",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "abg-interpretation-basics-hy",
-      "title": "ABG Interpretation Basics (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:copd-exacerbation-oxygen",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "copd-exacerbation-oxygen",
-      "title": "COPD Exacerbation & Oxygen (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:asthma-status-asthmaticus",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "asthma-status-asthmaticus",
-      "title": "Asthma & Status Asthmaticus (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:ards-ventilation-basics",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "ards-ventilation-basics",
-      "title": "ARDS & Ventilation Basics (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:pneumonia-oxygenation",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "pneumonia-oxygenation",
-      "title": "Pneumonia & Oxygenation (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:pulmonary-embolism-clues",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "pulmonary-embolism-clues",
-      "title": "Pulmonary Embolism Clues (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:tb-isolation-compliance",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "tb-isolation-compliance",
-      "title": "TB Isolation & Compliance (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:pleural-effusion-chest-tubes",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "pleural-effusion-chest-tubes",
-      "title": "Pleural Effusion & Chest Tubes (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:insulin-hypoglycemia-hy",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "insulin-hypoglycemia-hy",
-      "title": "Insulin & Hypoglycemia (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:anticoagulants-bleeding-risk",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "anticoagulants-bleeding-risk",
-      "title": "Anticoagulants & Bleeding Risk (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:antibiotic-classes-allergies-hy",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "antibiotic-classes-allergies-hy",
-      "title": "Antibiotic Classes & Allergies (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:opioids-respiratory-depression",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "opioids-respiratory-depression",
-      "title": "Opioids & Respiratory Depression (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:cardiac-glycosides-toxicity",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "cardiac-glycosides-toxicity",
-      "title": "Cardiac Glycosides & Toxicity (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:antihypertensive-combos",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "antihypertensive-combos",
-      "title": "Antihypertensive Combos (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (28 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:chemo-safe-handling-extravasation",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "chemo-safe-handling-extravasation",
-      "title": "Chemo Safe Handling & Extravasation (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:hyponatremia-vs-hypernatremia-hy",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "hyponatremia-vs-hypernatremia-hy",
-      "title": "Hyponatremia vs Hypernatremia (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:hypo-vs-hyperkalemia-hy",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "hypo-vs-hyperkalemia-hy",
-      "title": "Hypo- vs Hyperkalemia (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:fluid-volume-deficit",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "fluid-volume-deficit",
-      "title": "Fluid Volume Deficit (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:fluid-volume-excess",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "fluid-volume-excess",
-      "title": "Fluid Volume Excess (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:magnesium-arrhythmia-risk",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "magnesium-arrhythmia-risk",
-      "title": "Magnesium & Arrhythmia Risk (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:calcium-tetany",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "calcium-tetany",
-      "title": "Calcium & Tetany (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:phosphate-shifts-in-renal",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "phosphate-shifts-in-renal",
-      "title": "Phosphate Shifts in Renal (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:mixed-acid-base-patterns",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "mixed-acid-base-patterns",
-      "title": "Mixed Acid-Base Patterns (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:liver-failure-hepatic-encephalopathy",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "liver-failure-hepatic-encephalopathy",
-      "title": "Liver Failure & Hepatic Encephalopathy (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:acute-pancreatitis-nursing-care",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "acute-pancreatitis-nursing-care",
-      "title": "Acute Pancreatitis Nursing Care (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:bowel-obstruction-vs-paralytic-ileus",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "bowel-obstruction-vs-paralytic-ileus",
-      "title": "Bowel Obstruction vs Paralytic Ileus (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:gerd-pud-bleeding-clues",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "gerd-pud-bleeding-clues",
-      "title": "GERD & PUD Bleeding Clues (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:gi-bleed-assessment",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "gi-bleed-assessment",
-      "title": "GI Bleed Assessment (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:c-diff-infection-control",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "c-diff-infection-control",
-      "title": "C. diff Infection Control (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:ostomy-skin-protection",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "ostomy-skin-protection",
-      "title": "Ostomy & Skin Protection (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:stroke-assessment-tpa-window",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "stroke-assessment-tpa-window",
-      "title": "Stroke Assessment & tPA Window (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:seizure-precautions-rescue-meds",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "seizure-precautions-rescue-meds",
-      "title": "Seizure Precautions & Rescue Meds (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:increased-icp-positioning",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "increased-icp-positioning",
-      "title": "Increased ICP & Positioning (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:spinal-cord-injury-autonomic-dysreflexia",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "spinal-cord-injury-autonomic-dysreflexia",
-      "title": "Spinal Cord Injury Autonomic Dysreflexia (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:meningitis-isolation-assessment",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "meningitis-isolation-assessment",
-      "title": "Meningitis Isolation & Assessment (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:migraine-vs-red-flag-headache",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "migraine-vs-red-flag-headache",
-      "title": "Migraine vs Red-Flag Headache (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:parkinson-disease-med-timing",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "parkinson-disease-med-timing",
-      "title": "Parkinson Disease Med Timing (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:dka-vs-hhs-priorities-hy",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "dka-vs-hhs-priorities-hy",
-      "title": "DKA vs HHS Priorities (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:thyroid-storm-myxedema-clues",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "thyroid-storm-myxedema-clues",
-      "title": "Thyroid Storm & Myxedema Clues (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:addisonian-crisis",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "addisonian-crisis",
-      "title": "Addisonian Crisis (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (28 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:cushing-syndrome-assessment",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "cushing-syndrome-assessment",
-      "title": "Cushing Syndrome Assessment (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:siadh-vs-di-basics",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "siadh-vs-di-basics",
-      "title": "SIADH vs DI Basics (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:aki-prerenal-vs-intrarenal",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "aki-prerenal-vs-intrarenal",
-      "title": "AKI: Prerenal vs Intrarenal (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:hemodialysis-access-care",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "hemodialysis-access-care",
-      "title": "Hemodialysis Access Care (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:peritoneal-dialysis-complications",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "peritoneal-dialysis-complications",
-      "title": "Peritoneal Dialysis Complications (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:kidney-stones-strain-management",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "kidney-stones-strain-management",
-      "title": "Kidney Stones & Strain Management (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:uti-vs-pyelonephritis",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "uti-vs-pyelonephritis",
-      "title": "UTI vs Pyelonephritis (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:indwelling-catheter-risks",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "indwelling-catheter-risks",
-      "title": "Indwelling Catheter Risks (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:anemia-types-transfusion-thresholds",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "anemia-types-transfusion-thresholds",
-      "title": "Anemia Types & Transfusion Thresholds (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:transfusion-reaction-recognition",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "transfusion-reaction-recognition",
-      "title": "Transfusion Reaction Recognition (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:neutropenic-precautions",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "neutropenic-precautions",
-      "title": "Neutropenic Precautions (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:sickle-cell-pain-acs",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "sickle-cell-pain-acs",
-      "title": "Sickle Cell Pain & ACS (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:hip-fracture-fall-risk",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "hip-fracture-fall-risk",
-      "title": "Hip Fracture & Fall Risk (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:ra-flare-immune-modulators",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "ra-flare-immune-modulators",
-      "title": "RA Flare & Immune Modulators (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:immobility-dvt-prophylaxis",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "immobility-dvt-prophylaxis",
-      "title": "Immobility & DVT Prophylaxis (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:hiv-confidentiality-pep-basics",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "hiv-confidentiality-pep-basics",
-      "title": "HIV Confidentiality & PEP Basics (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:isolation-precautions-in-practice",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "isolation-precautions-in-practice",
-      "title": "Isolation Precautions in Practice (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:wound-infection-vs-colonization",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "wound-infection-vs-colonization",
-      "title": "Wound Infection vs Colonization (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:burn-depth-fluid-resuscitation-basics",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "burn-depth-fluid-resuscitation-basics",
-      "title": "Burn Depth & Fluid Resuscitation Basics (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways",
-        "links:no_internal_study_links"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:pressure-injury-staging",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "pressure-injury-staging",
-      "title": "Pressure Injury Staging (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:severe-dermatitis-skin-care",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "severe-dermatitis-skin-care",
-      "title": "Severe Dermatitis Skin Care (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:suicide-risk-assessment-hy",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "suicide-risk-assessment-hy",
-      "title": "Suicide Risk Assessment (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:psychotropic-side-effects",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "psychotropic-side-effects",
-      "title": "Psychotropic Side Effects (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:alcohol-withdrawal-ciwa",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "alcohol-withdrawal-ciwa",
-      "title": "Alcohol Withdrawal CIWA (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:preeclampsia-vs-eclampsia",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "preeclampsia-vs-eclampsia",
-      "title": "Preeclampsia vs Eclampsia (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:postpartum-hemorrhage",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "postpartum-hemorrhage",
-      "title": "Postpartum Hemorrhage (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (28 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:late-decelerations-fhr",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "late-decelerations-fhr",
-      "title": "Late Decelerations & FHR (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:newborn-thermoregulation-feeding",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "newborn-thermoregulation-feeding",
-      "title": "Newborn Thermoregulation & Feeding (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:rh-incompatibility-basics",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "rh-incompatibility-basics",
-      "title": "Rh Incompatibility Basics (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:pediatric-fever-dehydration",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "pediatric-fever-dehydration",
-      "title": "Pediatric Fever & Dehydration (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:rsv-pediatric-resp-distress",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "rsv-pediatric-resp-distress",
-      "title": "RSV & Pediatric Resp Distress (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:immunization-schedule-essentials",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "immunization-schedule-essentials",
-      "title": "Immunization Schedule Essentials (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:growth-failure-red-flags",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "growth-failure-red-flags",
-      "title": "Growth Failure Red Flags (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:non-accidental-trauma-suspicion",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "non-accidental-trauma-suspicion",
-      "title": "Non-Accidental Trauma Suspicion (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:assignment-vs-delegation",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "assignment-vs-delegation",
-      "title": "Assignment vs Delegation (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:ethical-distress-advocacy",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "ethical-distress-advocacy",
-      "title": "Ethical Distress & Advocacy (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:legal-nurse-practice-act",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "legal-nurse-practice-act",
-      "title": "Legal: Nurse Practice Act (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:qi-incident-reporting",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "qi-incident-reporting",
-      "title": "QI & Incident Reporting (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:falls-hourly-rounding",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "falls-hourly-rounding",
-      "title": "Falls & Hourly Rounding (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:restraint-alternatives-policy",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "restraint-alternatives-policy",
-      "title": "Restraint Alternatives & Policy (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:medication-error-disclosure",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "medication-error-disclosure",
-      "title": "Medication Error Disclosure (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:sharp-safety-exposure",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "sharp-safety-exposure",
-      "title": "Sharp Safety & Exposure (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:enteral-feeding-tube-safety",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "enteral-feeding-tube-safety",
-      "title": "Enteral Feeding Tube Safety (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:tpn-line-care-basics",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "tpn-line-care-basics",
-      "title": "TPN Line Care Basics (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:abdominal-aortic-aneurysm-nclex-rn",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "abdominal-aortic-aneurysm-nclex-rn",
-      "title": "Abdominal Aortic Aneurysm (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "overallScore": 11.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (36 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (17 < 30 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (22 < 35 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
       ]
     },
     {
@@ -3235,6 +1167,1588 @@
       ]
     },
     {
+      "lessonId": "ca-rn-nclex-rn:abdominal-aortic-aneurysm-nclex-rn",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "abdominal-aortic-aneurysm-nclex-rn",
+      "title": "Abdominal Aortic Aneurysm (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 66.3,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: overview_intro, core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:heart-failure-nursing-priorities-hy",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "heart-failure-nursing-priorities-hy",
+      "title": "Heart Failure Nursing Priorities (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:acute-myocardial-infarction-troponin",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-myocardial-infarction-troponin",
+      "title": "Acute Myocardial Infarction & Troponin (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:shock-recognition-fluids",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "shock-recognition-fluids",
+      "title": "Shock Recognition & Fluids (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:hypertensive-crisis-vs-urgency",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypertensive-crisis-vs-urgency",
+      "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:atrial-fibrillation-rate-control",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "atrial-fibrillation-rate-control",
+      "title": "Atrial Fibrillation & Rate Control (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:endocarditis-blood-cultures",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "endocarditis-blood-cultures",
+      "title": "Endocarditis & Blood Cultures (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:pericarditis-ecg-clues",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pericarditis-ecg-clues",
+      "title": "Pericarditis & ECG Clues (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:dvt-pe-nursing-priorities",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "dvt-pe-nursing-priorities",
+      "title": "DVT & PE Nursing Priorities (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:abg-interpretation-basics-hy",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "abg-interpretation-basics-hy",
+      "title": "ABG Interpretation Basics (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:copd-exacerbation-oxygen",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "copd-exacerbation-oxygen",
+      "title": "COPD Exacerbation & Oxygen (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:asthma-status-asthmaticus",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "asthma-status-asthmaticus",
+      "title": "Asthma & Status Asthmaticus (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:ards-ventilation-basics",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ards-ventilation-basics",
+      "title": "ARDS & Ventilation Basics (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:pneumonia-oxygenation",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pneumonia-oxygenation",
+      "title": "Pneumonia & Oxygenation (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:pulmonary-embolism-clues",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pulmonary-embolism-clues",
+      "title": "Pulmonary Embolism Clues (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:tb-isolation-compliance",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "tb-isolation-compliance",
+      "title": "TB Isolation & Compliance (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:pleural-effusion-chest-tubes",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pleural-effusion-chest-tubes",
+      "title": "Pleural Effusion & Chest Tubes (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:insulin-hypoglycemia-hy",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "insulin-hypoglycemia-hy",
+      "title": "Insulin & Hypoglycemia (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:anticoagulants-bleeding-risk",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "anticoagulants-bleeding-risk",
+      "title": "Anticoagulants & Bleeding Risk (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:antibiotic-classes-allergies-hy",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "antibiotic-classes-allergies-hy",
+      "title": "Antibiotic Classes & Allergies (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:opioids-respiratory-depression",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "opioids-respiratory-depression",
+      "title": "Opioids & Respiratory Depression (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:cardiac-glycosides-toxicity",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cardiac-glycosides-toxicity",
+      "title": "Cardiac Glycosides & Toxicity (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:antihypertensive-combos",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "antihypertensive-combos",
+      "title": "Antihypertensive Combos (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:chemo-safe-handling-extravasation",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "chemo-safe-handling-extravasation",
+      "title": "Chemo Safe Handling & Extravasation (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:hyponatremia-vs-hypernatremia-hy",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hyponatremia-vs-hypernatremia-hy",
+      "title": "Hyponatremia vs Hypernatremia (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:hypo-vs-hyperkalemia-hy",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypo-vs-hyperkalemia-hy",
+      "title": "Hypo- vs Hyperkalemia (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:fluid-volume-deficit",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-volume-deficit",
+      "title": "Fluid Volume Deficit (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:fluid-volume-excess",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-volume-excess",
+      "title": "Fluid Volume Excess (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:magnesium-arrhythmia-risk",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "magnesium-arrhythmia-risk",
+      "title": "Magnesium & Arrhythmia Risk (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:calcium-tetany",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "calcium-tetany",
+      "title": "Calcium & Tetany (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:phosphate-shifts-in-renal",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "phosphate-shifts-in-renal",
+      "title": "Phosphate Shifts in Renal (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:mixed-acid-base-patterns",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "mixed-acid-base-patterns",
+      "title": "Mixed Acid-Base Patterns (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:liver-failure-hepatic-encephalopathy",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "liver-failure-hepatic-encephalopathy",
+      "title": "Liver Failure & Hepatic Encephalopathy (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:acute-pancreatitis-nursing-care",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-pancreatitis-nursing-care",
+      "title": "Acute Pancreatitis Nursing Care (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:bowel-obstruction-vs-paralytic-ileus",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "bowel-obstruction-vs-paralytic-ileus",
+      "title": "Bowel Obstruction vs Paralytic Ileus (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:gerd-pud-bleeding-clues",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "gerd-pud-bleeding-clues",
+      "title": "GERD & PUD Bleeding Clues (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:gi-bleed-assessment",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "gi-bleed-assessment",
+      "title": "GI Bleed Assessment (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:c-diff-infection-control",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "c-diff-infection-control",
+      "title": "C. diff Infection Control (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:ostomy-skin-protection",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ostomy-skin-protection",
+      "title": "Ostomy & Skin Protection (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:stroke-assessment-tpa-window",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "stroke-assessment-tpa-window",
+      "title": "Stroke Assessment & tPA Window (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:seizure-precautions-rescue-meds",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "seizure-precautions-rescue-meds",
+      "title": "Seizure Precautions & Rescue Meds (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:increased-icp-positioning",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "increased-icp-positioning",
+      "title": "Increased ICP & Positioning (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:spinal-cord-injury-autonomic-dysreflexia",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "spinal-cord-injury-autonomic-dysreflexia",
+      "title": "Spinal Cord Injury Autonomic Dysreflexia (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:meningitis-isolation-assessment",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "meningitis-isolation-assessment",
+      "title": "Meningitis Isolation & Assessment (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:migraine-vs-red-flag-headache",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "migraine-vs-red-flag-headache",
+      "title": "Migraine vs Red-Flag Headache (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:parkinson-disease-med-timing",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "parkinson-disease-med-timing",
+      "title": "Parkinson Disease Med Timing (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:dka-vs-hhs-priorities-hy",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "dka-vs-hhs-priorities-hy",
+      "title": "DKA vs HHS Priorities (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:thyroid-storm-myxedema-clues",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "thyroid-storm-myxedema-clues",
+      "title": "Thyroid Storm & Myxedema Clues (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:addisonian-crisis",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "addisonian-crisis",
+      "title": "Addisonian Crisis (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:cushing-syndrome-assessment",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cushing-syndrome-assessment",
+      "title": "Cushing Syndrome Assessment (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:siadh-vs-di-basics",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "siadh-vs-di-basics",
+      "title": "SIADH vs DI Basics (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:aki-prerenal-vs-intrarenal",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "aki-prerenal-vs-intrarenal",
+      "title": "AKI: Prerenal vs Intrarenal (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:hemodialysis-access-care",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hemodialysis-access-care",
+      "title": "Hemodialysis Access Care (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:peritoneal-dialysis-complications",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "peritoneal-dialysis-complications",
+      "title": "Peritoneal Dialysis Complications (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:kidney-stones-strain-management",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "kidney-stones-strain-management",
+      "title": "Kidney Stones & Strain Management (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:uti-vs-pyelonephritis",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "uti-vs-pyelonephritis",
+      "title": "UTI vs Pyelonephritis (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:indwelling-catheter-risks",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "indwelling-catheter-risks",
+      "title": "Indwelling Catheter Risks (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:anemia-types-transfusion-thresholds",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "anemia-types-transfusion-thresholds",
+      "title": "Anemia Types & Transfusion Thresholds (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:transfusion-reaction-recognition",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "transfusion-reaction-recognition",
+      "title": "Transfusion Reaction Recognition (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:neutropenic-precautions",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "neutropenic-precautions",
+      "title": "Neutropenic Precautions (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:sickle-cell-pain-acs",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sickle-cell-pain-acs",
+      "title": "Sickle Cell Pain & ACS (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:hip-fracture-fall-risk",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hip-fracture-fall-risk",
+      "title": "Hip Fracture & Fall Risk (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:ra-flare-immune-modulators",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ra-flare-immune-modulators",
+      "title": "RA Flare & Immune Modulators (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:immobility-dvt-prophylaxis",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "immobility-dvt-prophylaxis",
+      "title": "Immobility & DVT Prophylaxis (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:hiv-confidentiality-pep-basics",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hiv-confidentiality-pep-basics",
+      "title": "HIV Confidentiality & PEP Basics (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:isolation-precautions-in-practice",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "isolation-precautions-in-practice",
+      "title": "Isolation Precautions in Practice (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:wound-infection-vs-colonization",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "wound-infection-vs-colonization",
+      "title": "Wound Infection vs Colonization (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:burn-depth-fluid-resuscitation-basics",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "burn-depth-fluid-resuscitation-basics",
+      "title": "Burn Depth & Fluid Resuscitation Basics (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:pressure-injury-staging",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pressure-injury-staging",
+      "title": "Pressure Injury Staging (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:severe-dermatitis-skin-care",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "severe-dermatitis-skin-care",
+      "title": "Severe Dermatitis Skin Care (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:suicide-risk-assessment-hy",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "suicide-risk-assessment-hy",
+      "title": "Suicide Risk Assessment (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:psychotropic-side-effects",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "psychotropic-side-effects",
+      "title": "Psychotropic Side Effects (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:alcohol-withdrawal-ciwa",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "alcohol-withdrawal-ciwa",
+      "title": "Alcohol Withdrawal CIWA (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:preeclampsia-vs-eclampsia",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "preeclampsia-vs-eclampsia",
+      "title": "Preeclampsia vs Eclampsia (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:postpartum-hemorrhage",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "postpartum-hemorrhage",
+      "title": "Postpartum Hemorrhage (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:late-decelerations-fhr",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "late-decelerations-fhr",
+      "title": "Late Decelerations & FHR (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:newborn-thermoregulation-feeding",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "newborn-thermoregulation-feeding",
+      "title": "Newborn Thermoregulation & Feeding (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:rh-incompatibility-basics",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "rh-incompatibility-basics",
+      "title": "Rh Incompatibility Basics (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:pediatric-fever-dehydration",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pediatric-fever-dehydration",
+      "title": "Pediatric Fever & Dehydration (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:rsv-pediatric-resp-distress",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "rsv-pediatric-resp-distress",
+      "title": "RSV & Pediatric Resp Distress (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:immunization-schedule-essentials",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "immunization-schedule-essentials",
+      "title": "Immunization Schedule Essentials (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:growth-failure-red-flags",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "growth-failure-red-flags",
+      "title": "Growth Failure Red Flags (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:non-accidental-trauma-suspicion",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "non-accidental-trauma-suspicion",
+      "title": "Non-Accidental Trauma Suspicion (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:assignment-vs-delegation",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "assignment-vs-delegation",
+      "title": "Assignment vs Delegation (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:ethical-distress-advocacy",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ethical-distress-advocacy",
+      "title": "Ethical Distress & Advocacy (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:legal-nurse-practice-act",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "legal-nurse-practice-act",
+      "title": "Legal: Nurse Practice Act (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:qi-incident-reporting",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "qi-incident-reporting",
+      "title": "QI & Incident Reporting (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:falls-hourly-rounding",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "falls-hourly-rounding",
+      "title": "Falls & Hourly Rounding (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:restraint-alternatives-policy",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "restraint-alternatives-policy",
+      "title": "Restraint Alternatives & Policy (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:medication-error-disclosure",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "medication-error-disclosure",
+      "title": "Medication Error Disclosure (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:sharp-safety-exposure",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sharp-safety-exposure",
+      "title": "Sharp Safety & Exposure (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:enteral-feeding-tube-safety",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "enteral-feeding-tube-safety",
+      "title": "Enteral Feeding Tube Safety (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:tpn-line-care-basics",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "tpn-line-care-basics",
+      "title": "TPN Line Care Basics (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 74.2,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
       "lessonId": "ca-rn-nclex-rn:ca-rn-wound-care",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "ca-rn-wound-care",
@@ -3246,6 +2760,23 @@
         "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:cabg-and-postoperative-cabg-complications-nclex-rn",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+      "title": "CABG and Postoperative CABG Complications (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "overallScore": 76.6,
+      "reasons": [
+        "missing_educational:overview_intro",
+        "links:internal_links_high_count(9)",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: overview_intro.",
         "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
       ]
     },
@@ -3749,28 +3280,6 @@
       "reasons": [],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:cabg-and-postoperative-cabg-complications-nclex-rn",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
-      "title": "CABG and Postoperative CABG Complications (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "overallScore": 4.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (27 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (22 < 30 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (34 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (17 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, exam_or_reasoning_cues."
       ]
     },
     {
@@ -6983,6 +6492,23 @@
       ]
     },
     {
+      "lessonId": "us-rn-nclex-rn:cabg-and-postoperative-cabg-complications-nclex-rn",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+      "title": "CABG and Postoperative CABG Complications (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "overallScore": 76.6,
+      "reasons": [
+        "missing_educational:overview_intro",
+        "links:internal_links_high_count(9)",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: overview_intro.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays)."
+      ]
+    },
+    {
       "lessonId": "us-rn-nclex-rn:clinical-judgment-prioritization-gold",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "clinical-judgment-prioritization-gold",
@@ -7485,116 +7011,6 @@
       ]
     },
     {
-      "lessonId": "us-np-fnp:fnp-differential-primary-care",
-      "pathwayId": "us-np-fnp",
-      "slug": "fnp-differential-primary-care",
-      "title": "Differential reasoning in primary care (FNP track)",
-      "status": "structurally_incomplete",
-      "overallScore": 4.5,
-      "reasons": [
-        "Legacy section \"takeaways\" is below the minimum depth (29 < 35 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways",
-        "missing_educational:exam_or_reasoning_cues",
-        "links:no_internal_study_links"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, exam_or_reasoning_cues."
-      ]
-    },
-    {
-      "lessonId": "us-np-fnp:fnp-womens-prenatal-anemia-workup",
-      "pathwayId": "us-np-fnp",
-      "slug": "fnp-womens-prenatal-anemia-workup",
-      "title": "Prenatal anemia: interpretation and escalation (FNP)",
-      "status": "structurally_incomplete",
-      "overallScore": 4.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (21 < 50 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (22 < 40 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (33 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, exam_or_reasoning_cues."
-      ]
-    },
-    {
-      "lessonId": "us-np-fnp:fnp-pediatric-fever-urgency",
-      "pathwayId": "us-np-fnp",
-      "slug": "fnp-pediatric-fever-urgency",
-      "title": "Pediatric fever: risk stratification without over-testing (FNP)",
-      "status": "structurally_incomplete",
-      "overallScore": 4.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (19 < 50 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (17 < 40 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (26 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, exam_or_reasoning_cues."
-      ]
-    },
-    {
-      "lessonId": "us-np-fnp:fnp-adult-hypertension-intensification",
-      "pathwayId": "us-np-fnp",
-      "slug": "fnp-adult-hypertension-intensification",
-      "title": "Adult hypertension: intensification and follow-up (FNP)",
-      "status": "structurally_incomplete",
-      "overallScore": 4.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (20 < 50 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (19 < 40 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (27 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, exam_or_reasoning_cues."
-      ]
-    },
-    {
-      "lessonId": "us-np-fnp:fnp-geriatric-falls-syncope",
-      "pathwayId": "us-np-fnp",
-      "slug": "fnp-geriatric-falls-syncope",
-      "title": "Geriatric falls and syncope: medication and rhythm (FNP)",
-      "status": "structurally_incomplete",
-      "overallScore": 4.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (22 < 50 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (16 < 40 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (22 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, exam_or_reasoning_cues."
-      ]
-    },
-    {
       "lessonId": "us-np-fnp:renal-dialysis-acute-complications-gold-standard",
       "pathwayId": "us-np-fnp",
       "slug": "renal-dialysis-acute-complications-gold-standard",
@@ -7930,6 +7346,25 @@
       ]
     },
     {
+      "lessonId": "us-np-fnp:fnp-geriatric-falls-syncope",
+      "pathwayId": "us-np-fnp",
+      "slug": "fnp-geriatric-falls-syncope",
+      "title": "Geriatric falls and syncope: medication and rhythm (FNP)",
+      "status": "usable_but_thin",
+      "overallScore": 61.7,
+      "reasons": [
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "links:internal_links_high_count(9)",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application.",
+        "Expand prose depth; distinguish from shell-only completeness."
+      ]
+    },
+    {
       "lessonId": "us-np-fnp:np-primary-care-foundations-gold",
       "pathwayId": "us-np-fnp",
       "slug": "np-primary-care-foundations-gold",
@@ -7983,6 +7418,66 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (97 < 100).",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Address structural gate issues and section depth per pathway-lesson-premium targets."
+      ]
+    },
+    {
+      "lessonId": "us-np-fnp:np-neurology-outpatient-primary-care-gold",
+      "pathwayId": "us-np-fnp",
+      "slug": "np-neurology-outpatient-primary-care-gold",
+      "title": "Outpatient neurology triage (FNP, US)",
+      "status": "structurally_incomplete",
+      "overallScore": 65,
+      "reasons": [
+        "Section \"labs_diagnostics\" below minimum word count (69 < 100).",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Address structural gate issues and section depth per pathway-lesson-premium targets."
+      ]
+    },
+    {
+      "lessonId": "us-np-fnp:np-mental-health-anxiety-depression-ptsd-gold",
+      "pathwayId": "us-np-fnp",
+      "slug": "np-mental-health-anxiety-depression-ptsd-gold",
+      "title": "Anxiety, depression & PTSD (FNP, US)",
+      "status": "structurally_incomplete",
+      "overallScore": 65,
+      "reasons": [
+        "Section \"labs_diagnostics\" below minimum word count (76 < 100).",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Address structural gate issues and section depth per pathway-lesson-premium targets."
+      ]
+    },
+    {
+      "lessonId": "us-np-fnp:np-sleep-insomnia-osa-primary-care-gold",
+      "pathwayId": "us-np-fnp",
+      "slug": "np-sleep-insomnia-osa-primary-care-gold",
+      "title": "Sleep: insomnia, OSA & RLS (FNP, US)",
+      "status": "structurally_incomplete",
+      "overallScore": 65,
+      "reasons": [
+        "Section \"labs_diagnostics\" below minimum word count (58 < 100).",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Address structural gate issues and section depth per pathway-lesson-premium targets."
+      ]
+    },
+    {
+      "lessonId": "us-np-fnp:np-reproductive-screening-prevention-gold",
+      "pathwayId": "us-np-fnp",
+      "slug": "np-reproductive-screening-prevention-gold",
+      "title": "Reproductive screening & prevention (FNP, US)",
+      "status": "structurally_incomplete",
+      "overallScore": 65,
+      "reasons": [
+        "Section \"labs_diagnostics\" below minimum word count (72 < 100).",
         "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [

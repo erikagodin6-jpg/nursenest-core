@@ -110,6 +110,23 @@ export function scoreEducationalSubstance(lesson: PathwayLessonRecord): {
     );
   buckets.push({ id: "exam_or_reasoning_cues", ok: examSignals });
 
+  const safetyOrPriority =
+    /\b(contraindicat|adverse|red flag|urgent|emergen|first-line|avoid|monitor|toxicity|fall risk|infection control)\b/i.test(
+      corpus,
+    ) || /\b(ABC|ABCDE|Maslow)\b/.test(corpus);
+  if (premium) {
+    const red = byKind.get("red_flags");
+    buckets.push({
+      id: "safety_or_priority_block",
+      ok: sectionWords(red) >= 40 || safetyOrPriority,
+    });
+  } else {
+    buckets.push({
+      id: "safety_or_priority_mentioned",
+      ok: safetyOrPriority,
+    });
+  }
+
   const satisfied = buckets.filter((b) => b.ok).map((b) => b.id);
   const missing = buckets.filter((b) => !b.ok).map((b) => b.id);
   const ratio = satisfied.length / Math.max(1, buckets.length);
