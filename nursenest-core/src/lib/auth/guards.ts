@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { isPathAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
+import { adminRouteGateDecision } from "@/lib/auth/admin-path-policy";
 import { getStaffSession } from "@/lib/auth/staff-session";
 
 /**
@@ -26,12 +26,10 @@ export async function requireUser() {
 export async function requireAdmin() {
   const session = await requireUser();
   const staff = await getStaffSession();
-  if (!staff) {
-    redirect("/app");
-  }
   const path = (await headers()).get("x-nn-admin-path") ?? "";
-  if (path && !isPathAllowedForStaffTier(staff.tier, path)) {
-    redirect("/admin");
+  const gate = adminRouteGateDecision(staff, path);
+  if (!gate.allow) {
+    redirect(gate.redirectTo);
   }
   return session;
 }

@@ -4,6 +4,7 @@ import { describe, it } from "node:test";
 import { filterEeatEditorialRows } from "@/lib/admin/eeat-editorial-filters";
 import {
   buildEeatEditorialRowFromRaw,
+  coerceAuditJsonRoot,
   normalizePrioritizedQueue,
   normalizeRawPage,
   rollupByPathway,
@@ -204,6 +205,36 @@ describe("eeat-editorial-dashboard", () => {
     );
   });
 
+  it("coerceAuditJsonRoot wraps page-scores array root as pages", () => {
+    const sink: string[] = [];
+    const r = coerceAuditJsonRoot([{ id: "lesson:x:y:z" }], "eeat-page-scores.json", "pageScores", sink);
+    assert.equal(r.ok, true);
+    if (r.ok) {
+      assert.ok(Array.isArray(r.data.pages));
+      assert.equal((r.data.pages as unknown[]).length, 1);
+    }
+    assert.ok(sink.some((m) => m.includes("array") && m.includes("pages")));
+  });
+
+  it("coerceAuditJsonRoot wraps completion-queue array root when entries look like queue rows", () => {
+    const sink: string[] = [];
+    const r = coerceAuditJsonRoot([{ id: "a", score: 1 }], "eeat-completion-queue.json", "completionQueue", sink);
+    assert.equal(r.ok, true);
+    if (r.ok) {
+      assert.ok(Array.isArray(r.data.prioritized));
+    }
+  });
+
+  it("coerceAuditJsonRoot rejects malformed completion-queue array entries with warning", () => {
+    const sink: string[] = [];
+    const r = coerceAuditJsonRoot([1, 2], "eeat-completion-queue.json", "completionQueue", sink);
+    assert.equal(r.ok, true);
+    if (r.ok) {
+      assert.deepEqual(r.data, {});
+    }
+    assert.ok(sink.some((m) => m.includes("not queue-shaped")));
+  });
+
   it("normalizePrioritizedQueue drops invalid entries and caps length", () => {
     const q = normalizePrioritizedQueue(
       [
@@ -218,6 +249,11 @@ describe("eeat-editorial-dashboard", () => {
     assert.equal(q[0].id, "a");
   });
 });
+
+function csvDataRowCount(csv: string): number {
+  const lines = csv.replace(/^\uFEFF/, "").split("\n").filter((line) => line.length > 0);
+  return Math.max(0, lines.length - 1);
+}
 
 describe("eeat-editorial-csv + filter parity", () => {
   it("CSV row count matches filtered rows; escapes quotes and newlines; BOM + headers", () => {
@@ -250,5 +286,84 @@ describe("eeat-editorial-csv + filter parity", () => {
     assert.equal(lines.length - 1, filtered.length);
     assert.ok(lines[0].includes("id") && lines[0].includes("pathwayKey"));
     assert.match(csv, /""/);
+  });
+
+  it("CSV data rows match filtered count for two non-trivial filter combinations; duplicate ids export as separate rows", () => {
+    const rows = [
+      buildEeatEditorialRowFromRaw(
+        normalizeRawPage(
+          {
+            id: "lesson:rn:dup:case",
+            contentType: "pathway_lesson",
+            eeatScore: 44,
+            flags: ["stale_content"],
+            urlPattern: "/lessons/a",
+          },
+          0,
+        ),
+      ),
+      buildEeatEditorialRowFromRaw(
+        normalizeRawPage(
+          {
+            id: "blog:post-one",
+            contentType: "blog",
+            eeatScore: 82,
+            urlPattern: "/blog/post-one",
+          },
+          1,
+        ),
+      ),
+      buildEeatEditorialRowFromRaw(
+        normalizeRawPage(
+          {
+            id: "lesson:rn:dup:case",
+            contentType: "pathway_lesson",
+            eeatScore: 38,
+            flags: ["internal_links_low"],
+            urlPattern: "/lessons/b",
+          },
+          2,
+        ),
+      ),
+    ];
+
+    const f1 = filterEeatEditorialRows(rows, {
+      contentType: "pathway_lesson",
+      pathway: "rn",
+      scoreBand: "all",
+      staleOnly: false,
+      thinOnly: false,
+      missingLinks: false,
+      missingAttr: false,
+    });
+    assert.equal(f1.length, 2);
+    assert.equal(csvDataRowCount(rowsToCsv(f1)), f1.length);
+
+    const f2 = filterEeatEditorialRows(rows, {
+      contentType: "all",
+      pathway: "all",
+      scoreBand: "critical",
+      staleOnly: false,
+      thinOnly: false,
+      missingLinks: false,
+      missingAttr: false,
+    });
+    assert.ok(f2.length >= 1);
+    assert.equal(csvDataRowCount(rowsToCsv(f2)), f2.length);
+
+    const all = filterEeatEditorialRows(rows, {
+      contentType: "all",
+      pathway: "all",
+      scoreBand: "all",
+      staleOnly: false,
+      thinOnly: false,
+      missingLinks: false,
+      missingAttr: false,
+    });
+    assert.equal(all.length, 3);
+    const fullCsv = rowsToCsv(all);
+    assert.equal(csvDataRowCount(fullCsv), 3);
+    const occurrences = fullCsv.split("\n").filter((line) => line.includes("lesson:rn:dup:case"));
+    assert.equal(occurrences.length, 2, "duplicate string ids should emit two CSV lines");
   });
 });

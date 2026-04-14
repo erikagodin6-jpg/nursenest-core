@@ -3,16 +3,11 @@
  * Bodies: `philippines-nle-blog-build-body.ts` (≥1200 words, varied structure). Used by
  * `import-philippines-nle-blog-seeds.mts` (Prisma). Not bundled in the Next app.
  */
-import {
-  buildPhilippinesBlogBody,
-  excerptFromBody,
-  MIN_WORDS,
-  wordCountFromHtml,
-} from "./philippines-nle-blog-build-body";
+import { buildPhilippinesBlogBody, MIN_WORDS, wordCountFromHtml } from "./philippines-nle-blog-build-body";
 import type { PhilippinesBlogAngle, PhilippinesBlogSeedTopic } from "./philippines-nle-blog-seed-types";
 
 export type { PhilippinesBlogAngle, PhilippinesBlogSeedTopic } from "./philippines-nle-blog-seed-types";
-export { buildPhilippinesBlogBody, excerptFromBody, wordCountFromHtml } from "./philippines-nle-blog-build-body";
+export { buildPhilippinesBlogBody, excerptFromBody, MIN_WORDS, wordCountFromHtml } from "./philippines-nle-blog-build-body";
 
 const DOMAINS: string[] = [
   "Medical-surgical nursing",

@@ -11,7 +11,7 @@ const EN_PATH = "/exams/india";
 
 function faqFromMessages(m: MarketingMessages) {
   const out: { question: string; answer: string }[] = [];
-  for (let i = 1; i <= 10; i += 1) {
+  for (let i = 1; i <= 11; i += 1) {
     const q = m[`exams.india.faq.q${i}`];
     const a = m[`exams.india.faq.a${i}`];
     if (q?.trim() && a?.trim()) out.push({ question: q, answer: a });

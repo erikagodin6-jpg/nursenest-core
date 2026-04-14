@@ -88,8 +88,8 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
         <section className="rounded-xl border border-amber-500/40 bg-amber-500/[0.07] p-4 text-sm">
           <p className="font-semibold text-amber-900 dark:text-amber-100">Audit file warnings</p>
           <ul className="mt-2 list-inside list-disc text-amber-900/90 dark:text-amber-100/90">
-            {vm.loadWarnings.map((w) => (
-              <li key={w}>{w}</li>
+            {vm.loadWarnings.map((w, i) => (
+              <li key={`audit-warn-${i}-${w.slice(0, 96)}`}>{w}</li>
             ))}
           </ul>
         </section>
@@ -131,7 +131,7 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
           <ul className="mt-3 max-h-64 space-y-2 overflow-auto text-sm">
             {vm.completionQueuePreview.map((q, idx) => (
               <li
-                key={`${q.id}-${idx}`}
+                key={`queue-${idx}-${q.score}-${q.id}`}
                 className="flex flex-wrap items-baseline justify-between gap-2 rounded-md bg-muted/35 px-2 py-1.5"
               >
                 <span className="min-w-0 max-w-full truncate font-mono text-[11px] leading-snug text-muted-foreground" title={q.id}>
@@ -153,8 +153,8 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
           </p>
           {Array.isArray(vm.finalStatusSummary.prioritizedActions) ? (
             <ol className="mt-3 list-decimal space-y-1 pl-5 text-sm text-muted-foreground">
-              {(vm.finalStatusSummary.prioritizedActions as string[]).map((a) => (
-                <li key={a}>{a}</li>
+              {(vm.finalStatusSummary.prioritizedActions as string[]).map((a, i) => (
+                <li key={`final-action-${i}-${a.slice(0, 80)}`}>{a}</li>
               ))}
             </ol>
           ) : null}
@@ -292,8 +292,8 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
           <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Stale blog sample (DB)</h2>
           <p className="mt-1 text-sm text-muted-foreground">From content-freshness.json when audit ran with DATABASE_URL.</p>
           <ul className="mt-3 max-h-48 space-y-1 overflow-auto text-sm">
-            {vm.freshnessMeta.staleBlogPostsSample.map((b) => (
-              <li key={b.slug} className="flex justify-between gap-2 rounded bg-muted/30 px-2 py-1">
+            {vm.freshnessMeta.staleBlogPostsSample.map((b, i) => (
+              <li key={`stale-blog-${i}-${b.slug}-${b.updatedAt}`} className="flex justify-between gap-2 rounded bg-muted/30 px-2 py-1">
                 <span className="min-w-0 truncate font-mono text-xs" title={b.slug}>
                   {b.slug}
                 </span>
@@ -349,7 +349,10 @@ export function EeatEditorialDashboardClient({ vm }: Props) {
                   </tr>
                 ) : (
                   filtered.map((r, rowIdx) => (
-                    <tr key={`${r.id}-${rowIdx}`} className="border-b border-border/50 align-top">
+                    <tr
+                      key={`row-${rowIdx}-${r.id}-${r.urlPattern}-${r.contentType}-${r.eeatScore}`}
+                      className="border-b border-border/50 align-top"
+                    >
                       <td className="py-2 pr-3 tabular-nums font-medium">{r.eeatScore}</td>
                       <td className="py-2 pr-3">
                         <span
@@ -401,7 +404,10 @@ function QueueSection({ title, rows, emptyHint }: { title: string; rows: EeatEdi
       {rows.length > 0 ? (
         <ul className="mt-3 max-h-56 space-y-2 overflow-auto text-sm">
           {rows.slice(0, 50).map((r, idx) => (
-            <li key={`${r.id}-${idx}`} className="flex flex-wrap items-start justify-between gap-2 rounded-md bg-muted/40 px-2 py-1.5">
+            <li
+              key={`qsec-${idx}-${r.id}-${r.urlPattern}-${r.eeatScore}`}
+              className="flex flex-wrap items-start justify-between gap-2 rounded-md bg-muted/40 px-2 py-1.5"
+            >
               <span className="min-w-0 max-w-[min(100%,24rem)] truncate font-mono text-[11px] text-muted-foreground" title={r.id}>
                 {r.id}
               </span>

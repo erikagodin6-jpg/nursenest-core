@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { isNavHrefAllowedForStaffTier, isPathAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
+import {
+  adminRouteGateDecision,
+  isNavHrefAllowedForStaffTier,
+  isPathAllowedForStaffTier,
+} from "@/lib/auth/admin-path-policy";
 
 test("super staff can access super-only and content-forbidden paths", () => {
   assert.equal(isPathAllowedForStaffTier("super", "/admin"), true);
@@ -44,4 +48,26 @@ test("support and content staff can access E-E-A-T editorial dashboard", () => {
 
 test("nav helper matches path policy", () => {
   assert.equal(isNavHrefAllowedForStaffTier("support", "/admin"), isPathAllowedForStaffTier("support", "/admin"));
+});
+
+test("adminRouteGateDecision: signed-in non-staff (no DB row) redirects to /app", () => {
+  assert.deepEqual(adminRouteGateDecision(null, "/admin/eeat-editorial"), {
+    allow: false,
+    redirectTo: "/app",
+  });
+});
+
+test("adminRouteGateDecision: wrong tier for path redirects to /admin", () => {
+  assert.deepEqual(adminRouteGateDecision({ tier: "content" }, "/admin/users"), {
+    allow: false,
+    redirectTo: "/admin",
+  });
+});
+
+test("adminRouteGateDecision: content staff allowed on eeat-editorial", () => {
+  assert.deepEqual(adminRouteGateDecision({ tier: "content" }, "/admin/eeat-editorial"), { allow: true });
+});
+
+test("adminRouteGateDecision: empty x-nn-admin-path allows staff (tier check only)", () => {
+  assert.deepEqual(adminRouteGateDecision({ tier: "support" }, ""), { allow: true });
 });

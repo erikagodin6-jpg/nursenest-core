@@ -30,6 +30,10 @@ export async function generateMetadata(): Promise<Metadata> {
           "how to become a nurse in India",
           "AIIMS nursing exam",
           "India nursing registration process",
+          "state nursing council India",
+          "NCLEX for Indian nurses",
+          "India nurse NCLEX pathway",
+          "nursing government jobs India",
         ],
         openGraph: {
           title,

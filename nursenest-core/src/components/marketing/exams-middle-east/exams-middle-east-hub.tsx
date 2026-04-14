@@ -62,6 +62,8 @@ export function ExamsMiddleEastHub() {
     "exams.middleEast.faq.a11",
     "exams.middleEast.faq.q12",
     "exams.middleEast.faq.a12",
+    "exams.middleEast.faq.q13",
+    "exams.middleEast.faq.a13",
   ] as const;
 
   const faqPairs: { q: string; a: string }[] = [];
@@ -83,6 +85,13 @@ export function ExamsMiddleEastHub() {
             {t("exams.middleEast.sections.overview.title")}
           </h2>
           <RichBody text={t("exams.middleEast.sections.overview.body")} />
+        </section>
+
+        <section className="mt-12" aria-labelledby="me-nursenest">
+          <h2 id="me-nursenest" className="nn-marketing-h2">
+            {t("exams.middleEast.sections.nurseNestCovers.title")}
+          </h2>
+          <RichBody text={t("exams.middleEast.sections.nurseNestCovers.body")} />
         </section>
 
         <section className="mt-12" aria-labelledby="me-major">
@@ -164,6 +173,14 @@ export function ExamsMiddleEastHub() {
             </li>
             <li>
               <ProseLink href={loginWithCallback("/app/study-plan")}>{formatTitleCase(t("exams.middleEast.links.studyPlan"), locale)}</ProseLink>
+            </li>
+            <li>
+              <ProseLink href={HUB.pricing}>{formatTitleCase(t("exams.middleEast.links.pricing"), locale)}</ProseLink>
+            </li>
+            <li>
+              <ProseLink href={withMarketingLocale(locale, `/blog/tag/${encodeURIComponent(t("blog.country.middleEast.tagName"))}`)}>
+                {formatTitleCase(t("exams.middleEast.links.blogTag"), locale)}
+              </ProseLink>
             </li>
           </ul>
         </section>

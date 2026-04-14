@@ -56,6 +56,8 @@ export function ExamsIndiaHub() {
     "exams.india.faq.a9",
     "exams.india.faq.q10",
     "exams.india.faq.a10",
+    "exams.india.faq.q11",
+    "exams.india.faq.a11",
   ] as const;
 
   const faqPairs: { q: string; a: string }[] = [];
@@ -140,6 +142,14 @@ export function ExamsIndiaHub() {
             </li>
             <li>
               <ProseLink href={loginWithCallback("/app/study-plan")}>{formatTitleCase(t("exams.india.links.studyPlan"), locale)}</ProseLink>
+            </li>
+            <li>
+              <ProseLink href={HUB.pricing}>{formatTitleCase(t("exams.india.links.pricing"), locale)}</ProseLink>
+            </li>
+            <li>
+              <ProseLink href={withMarketingLocale(locale, `/blog/tag/${encodeURIComponent(t("blog.country.india.tagName"))}`)}>
+                {formatTitleCase(t("exams.india.links.blogTag"), locale)}
+              </ProseLink>
             </li>
           </ul>
         </section>

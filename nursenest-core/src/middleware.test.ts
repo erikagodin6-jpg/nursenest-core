@@ -40,10 +40,13 @@ test("edge auth requires a session for /admin (unauthenticated → NextAuth sign
 
 test("requireAdmin sends non-staff signed-in users to /app; tier mismatch to /admin", () => {
   const guards = readFileSync(join(dir, "lib", "auth", "guards.ts"), "utf8");
-  assert.match(guards, /redirect\("\/app"\)/);
-  assert.match(guards, /redirect\("\/admin"\)/);
+  const policy = readFileSync(join(dir, "lib", "auth", "admin-path-policy.ts"), "utf8");
+  assert.match(guards, /redirect\(gate\.redirectTo\)/);
+  assert.match(guards, /adminRouteGateDecision/);
   assert.match(guards, /x-nn-admin-path/);
-  assert.match(guards, /isPathAllowedForStaffTier/);
+  assert.match(policy, /redirectTo: "\/app"/);
+  assert.match(policy, /redirectTo: "\/admin"/);
+  assert.match(policy, /isPathAllowedForStaffTier/);
 });
 
 test("admin dashboard href constant is /admin", () => {

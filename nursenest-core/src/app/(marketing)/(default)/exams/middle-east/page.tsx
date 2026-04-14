@@ -32,6 +32,10 @@ export async function generateMetadata(): Promise<Metadata> {
           "DHA exam nursing",
           "HAAD exam nurse",
           "how to work as a nurse in UAE",
+          "Gulf nursing license",
+          "DataFlow nursing verification",
+          "Qatar nursing exam",
+          "Middle East nurse licensing",
         ],
         openGraph: {
           title,

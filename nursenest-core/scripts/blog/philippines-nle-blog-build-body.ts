@@ -141,7 +141,9 @@ export function wordCountFromHtml(html: string): number {
 
 export function buildPhilippinesBlogBody(topic: PhilippinesBlogSeedTopic): string {
   const h = hashSlug(topic.slug);
-  const intro = INTROS[h % INTROS.length]!(topic);
+  const introRaw = INTROS[h % INTROS.length]!(topic);
+  /** Unique series marker reduces accidental duplicate openers across 200-topic rotation. */
+  const intro = introRaw.replace(/^<p>/, `<p><em>Series ${topic.index}.</em> `);
   const order = h % 4;
   const parts: string[] = [intro];
 

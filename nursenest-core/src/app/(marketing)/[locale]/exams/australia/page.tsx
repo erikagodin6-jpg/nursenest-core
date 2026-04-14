@@ -39,6 +39,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           "OSCE nursing Australia",
           "how to become a nurse in Australia",
           "Australia nursing exam for international nurses",
+          "OBA nursing Australia",
+          "NMBA registration",
+          "internationally qualified nurse Australia",
         ],
         openGraph: {
           title,

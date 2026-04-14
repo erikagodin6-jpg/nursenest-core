@@ -3,7 +3,7 @@
  * Read-only — no DB. Safe for admin reporting.
  */
 import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { basename, join } from "node:path";
 
 import { getMonorepoRoot } from "@/lib/monorepo-root";
 import type {
@@ -261,25 +261,84 @@ export function normalizePrioritizedQueue(input: unknown, max = 40): Array<{ id:
   return out;
 }
 
-async function readJsonSafe<T>(path: string): Promise<{ ok: true; data: T } | { ok: false; error: string; isMissing?: boolean }> {
+export type AuditJsonFileKind = "pageScores" | "completionQueue" | "genericObject";
+
+/**
+ * Coerce parsed audit JSON into an object record. Arrays are wrapped only for known exports
+ * (page list, completion queue). Exported for unit tests.
+ */
+export function coerceAuditJsonRoot(
+  parsed: unknown,
+  fileLabel: string,
+  kind: AuditJsonFileKind,
+  sink: string[],
+): { ok: true; data: Record<string, unknown> } | { ok: false; error: string } {
+  if (parsed === null) {
+    return { ok: false, error: `${fileLabel}: JSON root is null (expected object)` };
+  }
+  const t = typeof parsed;
+  if (t === "string" || t === "number" || t === "boolean") {
+    return { ok: false, error: `${fileLabel}: JSON root is ${t} (expected object)` };
+  }
+  if (Array.isArray(parsed)) {
+    if (kind === "pageScores") {
+      sink.push(
+        `${fileLabel}: JSON root is an array — wrapped as { pages: [...] } (expected an object with a "pages" field)`,
+      );
+      return { ok: true, data: { pages: parsed } };
+    }
+    if (kind === "completionQueue") {
+      const first = parsed[0];
+      const looksLikeQueueEntry =
+        first !== null &&
+        typeof first === "object" &&
+        !Array.isArray(first) &&
+        typeof (first as Record<string, unknown>).id === "string" &&
+        "score" in (first as Record<string, unknown>);
+      if (looksLikeQueueEntry) {
+        sink.push(
+          `${fileLabel}: JSON root is an array — wrapped as { prioritized: [...] } (expected an object with a "prioritized" field)`,
+        );
+        return { ok: true, data: { prioritized: parsed as unknown[] } };
+      }
+      sink.push(
+        `${fileLabel}: JSON root is an array but entries are not queue-shaped ({ id: string, score, ... }) — skipping queue preview`,
+      );
+      return { ok: true, data: {} };
+    }
+    sink.push(
+      `${fileLabel}: JSON root is an array (expected object) — cannot infer fields; using empty object`,
+    );
+    return { ok: true, data: {} };
+  }
+  return { ok: true, data: parsed as Record<string, unknown> };
+}
+
+async function readAuditJsonFile(
+  path: string,
+  kind: AuditJsonFileKind,
+  sink: string[],
+): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; error: string; isMissing?: boolean }> {
+  const fileLabel = basename(path);
   try {
     const raw = await readFile(path, "utf8");
     let parsed: unknown;
     try {
       parsed = JSON.parse(raw);
     } catch {
-      return { ok: false, error: "Invalid JSON (parse error)" };
+      return { ok: false, error: `${fileLabel}: invalid JSON (parse error)` };
     }
-    if (parsed === null || typeof parsed !== "object") {
-      return { ok: false, error: "JSON root must be an object" };
+    const coerced = coerceAuditJsonRoot(parsed, fileLabel, kind, sink);
+    if (!coerced.ok) {
+      return { ok: false, error: coerced.error };
     }
-    return { ok: true, data: parsed as T };
+    return { ok: true, data: coerced.data };
   } catch (e) {
     const err = e as NodeJS.ErrnoException;
     if (err.code === "ENOENT") {
-      return { ok: false, error: "File not found", isMissing: true };
+      return { ok: false, error: `${fileLabel}: file not found`, isMissing: true };
     }
-    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+    return { ok: false, error: `${fileLabel}: ${e instanceof Error ? e.message : String(e)}` };
   }
 }
 
@@ -305,11 +364,16 @@ function extractPageScoresPayload(
 
   const rawPages = data.pages;
   if (rawPages === undefined) {
-    warnings.push(`${AUDIT_FILES.pageScores}: missing "pages" key — treating as empty array`);
+    const keys = Object.keys(data);
+    warnings.push(
+      `${AUDIT_FILES.pageScores}: missing "pages" key — object keys: ${keys.length ? keys.slice(0, 16).join(", ") : "(none)"} — treating as empty array`,
+    );
     return { generatedAt, thresholds, summary, pages: [] };
   }
   if (!Array.isArray(rawPages)) {
-    warnings.push(`${AUDIT_FILES.pageScores}: "pages" must be an array — treating as empty`);
+    warnings.push(
+      `${AUDIT_FILES.pageScores}: "pages" field has wrong type (${typeof rawPages}) — expected array — treating as empty`,
+    );
     return { generatedAt, thresholds, summary, pages: [] };
   }
   if (rawPages.length === 0) {
@@ -345,11 +409,11 @@ export async function loadEeatEditorialDashboard(): Promise<EeatEditorialDashboa
   const queuePath = join(auditDir, AUDIT_FILES.completionQueue);
 
   const [scoresRes, finalRes, freshRes, clustersRes, queueRes] = await Promise.all([
-    readJsonSafe<Record<string, unknown>>(pageScoresPath),
-    readJsonSafe<Record<string, unknown>>(finalPath),
-    readJsonSafe<Record<string, unknown>>(freshnessPath),
-    readJsonSafe<Record<string, unknown>>(clustersPath),
-    readJsonSafe<Record<string, unknown>>(queuePath),
+    readAuditJsonFile(pageScoresPath, "pageScores", warnings),
+    readAuditJsonFile(finalPath, "genericObject", warnings),
+    readAuditJsonFile(freshnessPath, "genericObject", warnings),
+    readAuditJsonFile(clustersPath, "genericObject", warnings),
+    readAuditJsonFile(queuePath, "completionQueue", warnings),
   ]);
 
   if (!scoresRes.ok) {
@@ -443,7 +507,9 @@ export async function loadEeatEditorialDashboard(): Promise<EeatEditorialDashboa
     const prioritized = (queueRes.data as Record<string, unknown>).prioritized;
     completionQueuePreview = normalizePrioritizedQueue(prioritized, 40);
     if (prioritized !== undefined && !Array.isArray(prioritized)) {
-      warnings.push(`${AUDIT_FILES.completionQueue}: "prioritized" is not an array — queue preview empty`);
+      warnings.push(
+        `${AUDIT_FILES.completionQueue}: "prioritized" has wrong type (${typeof prioritized}) — expected array — queue preview empty`,
+      );
     }
   }
 

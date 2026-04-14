@@ -105,6 +105,25 @@ export function isPathAllowedForStaffTier(tier: StaffTier, pathname: string): bo
   return false;
 }
 
+/**
+ * Pure gate used by `requireAdmin` after `requireUser` succeeds. Makes redirect targets testable
+ * without mocking Next.js or the database session loader.
+ *
+ * - Signed-in learner (no staff DB row): redirect `/app`
+ * - Staff visiting a route their tier cannot access: redirect `/admin`
+ */
+export function adminRouteGateDecision(
+  staff: { tier: StaffTier } | null,
+  adminPathHeader: string,
+): { allow: true } | { allow: false; redirectTo: "/app" | "/admin" } {
+  if (!staff) return { allow: false, redirectTo: "/app" };
+  const path = adminPathHeader ?? "";
+  if (path && !isPathAllowedForStaffTier(staff.tier, path)) {
+    return { allow: false, redirectTo: "/admin" };
+  }
+  return { allow: true };
+}
+
 /** Hide nav links client-side (same rules as path policy). */
 export function isNavHrefAllowedForStaffTier(tier: StaffTier, href: string): boolean {
   return isPathAllowedForStaffTier(tier, href);
