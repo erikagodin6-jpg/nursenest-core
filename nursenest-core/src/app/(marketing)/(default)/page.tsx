@@ -15,6 +15,7 @@ import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { ExamSelectorGate } from "@/components/onboarding/exam-selector-gate";
+import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
 
 /** ISR: homepage shell — static with 10-min revalidation. No cookies; locale/region defaults to en/US. */
 export const revalidate = 600;
@@ -95,6 +96,7 @@ export default async function HomePage() {
               Clinical reasoning
             </Link>
           </div>
+          <MarketingBlogLatestLinks take={3} className="mt-4 border-t border-[var(--border-subtle)] pt-4" heading="Latest posts" />
         </div>
       </section>
       <ExamSelectorGate />

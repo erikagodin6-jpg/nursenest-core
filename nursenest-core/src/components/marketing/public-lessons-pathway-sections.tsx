@@ -10,6 +10,7 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
+import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
 import {
   pathwayMatchesMarketingRegion,
   publicLessonsHubSectionHeadingAllied,
@@ -145,6 +146,18 @@ export async function PublicLessonsPathwaySections({
           </section>
         );
       })}
+      <section className="mt-2 border-t border-[var(--border-subtle)] pt-6" aria-labelledby="lessons-blog-latest">
+        <h2 id="lessons-blog-latest" className="nn-marketing-h3">
+          Latest study articles
+        </h2>
+        <p className="mt-1 nn-marketing-body-sm text-muted">
+          Recently published guides linked from this public lessons hub.
+        </p>
+        <MarketingBlogLatestLinks take={3} className="mt-3" />
+        <Link href="/blog" className="mt-3 inline-block nn-marketing-body-sm font-semibold text-primary hover:underline">
+          View all blog posts
+        </Link>
+      </section>
     </div>
   );
 }

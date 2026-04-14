@@ -5,6 +5,8 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { loadAdminDashboardStats } from "@/lib/admin/load-admin-dashboard-stats";
 import { promoteScheduledBlogPosts } from "@/lib/blog/blog-publish-scheduler";
+import { countMissedBlogPostBacklog, recoverMissedBlogPostsBatch } from "@/lib/blog/blog-recover-missed-posts";
+import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-publishing";
 import { processPendingJobs } from "@/lib/jobs/process-pending";
 import { buildQuestionBankCoverageReport } from "@/lib/questions/build-question-bank-diagnostics";
 import { buildContentScalabilityReport } from "@/lib/scalability/build-content-scalability-report";
@@ -13,6 +15,7 @@ import { loadAdminQaIssueSnapshot } from "@/lib/admin/admin-qa-snapshot";
 const schema = z.object({
   action: z.enum([
     "run_blog_publish_scheduler",
+    "recover_missed_blog_posts_batch",
     "run_job_worker",
     "refresh_content_counts",
     "refresh_coverage_stats",
@@ -20,6 +23,8 @@ const schema = z.object({
     "reload_materialized_batch_metadata",
     "run_question_audit",
   ]),
+  /** Used by `recover_missed_blog_posts_batch` only; defaults to 5 server-side. */
+  batchSize: z.number().int().min(1).max(50).optional(),
 });
 
 /** Paths under `data/materialized/` only — keeps runtime reads and NFT tracing scoped (see turbopackIgnore). */
@@ -60,7 +65,22 @@ export async function POST(req: Request) {
   try {
     if (action === "run_blog_publish_scheduler") {
       const result = await promoteScheduledBlogPosts();
+      revalidateBlogPublishingSurfaces();
       return NextResponse.json({ ok: true, action, result });
+    }
+    if (action === "recover_missed_blog_posts_batch") {
+      const batchSize = parsed.data.batchSize ?? 5;
+      const backlogBefore = await countMissedBlogPostBacklog();
+      const result = await recoverMissedBlogPostsBatch(new Date(), batchSize);
+      revalidateBlogPublishingSurfaces();
+      return NextResponse.json({
+        ok: true,
+        action,
+        result: {
+          ...result,
+          backlogBefore,
+        },
+      });
     }
     if (action === "run_job_worker") {
       const result = await processPendingJobs();

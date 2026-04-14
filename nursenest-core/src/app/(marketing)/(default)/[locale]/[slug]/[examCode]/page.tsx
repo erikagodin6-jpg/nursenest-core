@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { NursingTierHubPage } from "@/components/marketing/nursing-tier-hub-page";
+import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
@@ -79,6 +80,7 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
               All blog posts
             </Link>
           </div>
+          <MarketingBlogLatestLinks take={3} className="mt-4 border-t border-[var(--border-subtle)] pt-4" heading="New on the blog" />
         </div>
       </section>
     </div>
