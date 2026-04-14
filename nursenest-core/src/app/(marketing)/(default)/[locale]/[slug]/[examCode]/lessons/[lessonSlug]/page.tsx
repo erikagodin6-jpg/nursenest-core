@@ -65,6 +65,10 @@ import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-l
 import { MarketingPathwayLessonDetailViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
+import {
+  pathwayLessonSectionPrefersWideColumn,
+  shouldRenderPathwayLessonSection,
+} from "@/lib/lessons/lesson-section-page-layout";
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
 export const dynamic = "force-dynamic";
@@ -207,7 +211,10 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   // teaser. This prevents accidental body serialization if the preview component ever becomes a Client Component.
   const lockedSections =
     !fullAccess && lesson.sections.length > visible.length
-      ? lesson.sections.slice(visible.length).map(({ id, heading }) => ({ id, heading }))
+      ? lesson.sections
+          .slice(visible.length)
+          .filter((s) => shouldRenderPathwayLessonSection(s.kind))
+          .map(({ id, heading }) => ({ id, heading }))
       : [];
   const displayLessonTitle = cleanLessonTitleForDisplay(lesson.title);
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, displayLessonTitle);
@@ -227,10 +234,12 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         (lesson.localeMeta.isCatalogEnglishSource && requestedNorm !== "en")),
   );
 
+  const displaySections = visible.filter((s) => shouldRenderPathwayLessonSection(s.kind));
+
   return (
-    <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
+    <div className="mx-auto max-w-6xl px-4 pt-2 pb-4 sm:px-6 sm:pt-3 sm:pb-5 lg:px-8">
       <div
-        className={`nn-lesson-page-shell px-4 py-4 sm:px-8 sm:py-6${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
+        className={`nn-lesson-page-shell px-3 py-3 sm:px-6 sm:py-5${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
       >
         <MarketingPathwayLessonDetailViewBeacon
           pathway={pathway}
@@ -240,7 +249,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           marketingLocale={marketingUiLocale}
         />
         <BreadcrumbJsonLd items={schemaItems} />
-        <div className="mb-6">
+        <div className="mb-4">
           <BreadcrumbTrail items={crumbs} />
         </div>
         <PathwayLessonProgressTracker
@@ -267,7 +276,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
             ) : null
           }
         />
-        <div className="mt-6 space-y-3">
+        <div className="mt-4 space-y-2">
           <PremiumLessonPublishNotice validation={lesson.premiumValidation} />
           <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
           <PathwayLessonQuickReview bullets={quickReviewBullets} />
@@ -320,17 +329,6 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           )
         ) : null}
 
-        {!fullAccess ? (
-          <aside className="nn-card mt-5 border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">
-              Lesson preview
-            </p>
-            <p className="mt-2 text-sm leading-6 text-[var(--theme-body-text)]">
-              {lesson.seoDescription || `Preview the first section of ${displayLessonTitle}. Subscribe to unlock full pathophysiology, interventions, and exam-focused breakdowns.`}
-            </p>
-          </aside>
-        ) : null}
-
         {matchedLessonImage.url ? (
           <LessonClinicalImageCard
             url={matchedLessonImage.url}
@@ -355,17 +353,22 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           assessmentsEnabled={studySettings.enablePrePostQuizzes}
         >
           <LessonRecallProvider>
-            <main className="mt-8">
-              <div className="mx-auto mb-3 flex max-w-[44rem] justify-end">
+            <main className="mt-5 sm:mt-6">
+              <div className="mx-auto mb-2 flex max-w-5xl justify-end px-0">
                 <LessonRecallToggle />
               </div>
-              <article className="mx-auto max-w-[44rem] space-y-8">
-                {visible.map((section) => (
+              <article className="mx-auto grid max-w-5xl grid-cols-1 gap-5 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
+                {displaySections.map((section) => {
+                  const wide = pathwayLessonSectionPrefersWideColumn(section.kind, {
+                    hasCheckpointQuestions: Boolean(section.checkpointQuestions?.length),
+                  });
+                  return (
                   <LessonSectionCard
                     key={section.id}
                     id={section.id}
                     heading={section.heading}
                     kind={section.kind}
+                    className={wide ? "md:col-span-2" : undefined}
                   >
                     {section.audioUrl ? (
                       <LessonSectionAudioButton
@@ -394,13 +397,14 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
                       <LessonCheckpointCard questions={section.checkpointQuestions} />
                     ) : null}
                   </LessonSectionCard>
-                ))}
+                  );
+                })}
               </article>
             </main>
           </LessonRecallProvider>
 
           {lockedSections.length > 0 ? (
-            <div className="mx-auto mt-6 max-w-[44rem]">
+            <div className="mx-auto mt-5 max-w-5xl">
               <PathwayLessonLockedSectionsPreview sections={lockedSections} />
             </div>
           ) : null}
@@ -428,18 +432,18 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         {/* Flashcard cross-link — always shown; links to topic-scoped flashcard page when topic exists */}
         {lesson.topicSlug ? (
           <aside
-            className="mx-auto mt-10 max-w-[44rem] rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-info)_20%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] px-5 py-4"
+            className="nn-lesson-support-card mx-auto mt-8 max-w-5xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-info)_8%)] bg-[color-mix(in_srgb,var(--bg-card)_92%,var(--semantic-info-soft)_8%)] px-4 py-3.5"
             aria-label="Flashcard study suggestion"
           >
             <div className="flex items-start gap-3">
-              <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))]" aria-hidden>
-                <Layers className="h-4 w-4 text-[var(--semantic-brand)]" strokeWidth={1.75} />
+              <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--bg-card))]" aria-hidden>
+                <Layers className="h-3.5 w-3.5 text-[var(--semantic-brand)]" strokeWidth={1.75} />
               </span>
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
                   Study {lesson.topic ? `${lesson.topic} ` : ""}with flashcards
                 </p>
-                <p className="mt-0.5 text-sm leading-6 text-[var(--theme-muted-text)]">
+                <p className="mt-0.5 text-xs leading-relaxed text-[var(--theme-muted-text)] sm:text-sm sm:leading-6">
                   Reinforce what you just read with active recall. Review key terms, lab values, medications, and nursing interventions for this topic.
                 </p>
                 <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">

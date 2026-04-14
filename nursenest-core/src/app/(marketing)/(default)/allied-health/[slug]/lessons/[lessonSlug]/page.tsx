@@ -71,6 +71,10 @@ import { LessonRecallBlock } from "@/components/lessons/lesson-recall-block";
 import { LessonKeyRecallChip } from "@/components/lessons/lesson-key-recall-chip";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { cleanLessonTitleForDisplay, compactPathwayLabel } from "@/lib/lessons/lesson-title-presentation";
+import {
+  pathwayLessonSectionPrefersWideColumn,
+  shouldRenderPathwayLessonSection,
+} from "@/lib/lessons/lesson-section-page-layout";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 86400;
@@ -164,7 +168,10 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   const previewLesson = fullAccess ? lesson : { ...lesson, sections: visible, preTest: undefined, postTest: undefined };
   const lockedSections =
     !fullAccess && lesson.sections.length > visible.length
-      ? lesson.sections.slice(visible.length).map(({ id, heading }) => ({ id, heading }))
+      ? lesson.sections
+          .slice(visible.length)
+          .filter((s) => shouldRenderPathwayLessonSection(s.kind))
+          .map(({ id, heading }) => ({ id, heading }))
       : [];
 
   const lessonProgress: PathwayLessonProgressStatus =
@@ -227,10 +234,12 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         (lesson.localeMeta.isCatalogEnglishSource && requestedNorm !== "en")),
   );
 
+  const displaySections = visible.filter((s) => shouldRenderPathwayLessonSection(s.kind));
+
   return (
-    <div className="nn-marketing-surface mx-auto max-w-3xl px-4 py-12">
+    <div className="nn-marketing-surface mx-auto max-w-5xl px-4 py-6 sm:py-8">
       <BreadcrumbJsonLd items={schemaItems} />
-      <div className="mb-6">
+      <div className="mb-4">
         <BreadcrumbTrail items={crumbs} />
       </div>
       <PathwayLessonProgressTracker
@@ -256,7 +265,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       <p className="mt-2 text-sm text-muted">
         {compactExamLabel} · {pathway.countryCode === "CA" ? "Canada" : "United States"} · {lesson.bodySystem}
       </p>
-      <div className="mt-4 space-y-3">
+      <div className="mt-4 space-y-2">
         <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
         <PathwayLessonQuickReview bullets={quickReviewBullets} />
       </div>
@@ -300,15 +309,6 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         )
       ) : null}
 
-      {!fullAccess ? (
-        <aside className="nn-card mt-5 border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">Lesson preview</p>
-          <p className="mt-2 text-sm leading-6 text-[var(--theme-body-text)]">
-            {lesson.seoDescription || `Preview the first section of ${displayLessonTitle}. Subscribe to unlock full lesson sections, interventions, and exam strategy guidance.`}
-          </p>
-        </aside>
-      ) : null}
-
       {matchedLessonImage.url ? (
         <LessonClinicalImageCard
           url={matchedLessonImage.url}
@@ -333,16 +333,21 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         assessmentsEnabled={studySettings.enablePrePostQuizzes}
       >
         <LessonRecallProvider>
-          <div className="mb-3 flex justify-end">
+          <div className="mb-2 flex justify-end">
             <LessonRecallToggle />
           </div>
-          <article className="mt-5 space-y-5">
-            {visible.map((section) => (
+          <article className="mt-4 grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
+            {displaySections.map((section) => {
+              const wide = pathwayLessonSectionPrefersWideColumn(section.kind, {
+                hasCheckpointQuestions: Boolean(section.checkpointQuestions?.length),
+              });
+              return (
               <LessonSectionCard
                 key={section.id}
                 id={section.id}
                 heading={section.heading}
                 kind={section.kind}
+                className={wide ? "md:col-span-2" : undefined}
               >
                 {section.audioUrl ? (
                   <LessonSectionAudioButton
@@ -366,7 +371,8 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
                   <LessonCheckpointCard questions={section.checkpointQuestions} />
                 ) : null}
               </LessonSectionCard>
-            ))}
+              );
+            })}
           </article>
         </LessonRecallProvider>
 

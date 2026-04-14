@@ -29,6 +29,7 @@ export function LessonSectionCard({
   heading,
   kind,
   chipLabel: chipLabelOverride,
+  className,
   children,
 }: {
   id: string;
@@ -36,6 +37,8 @@ export function LessonSectionCard({
   kind: PathwayLessonSectionKind | undefined | null;
   /** Override the auto-derived chip label from the section kind. */
   chipLabel?: string;
+  /** Grid column span etc. — parent controls responsive layout. */
+  className?: string;
   children: ReactNode;
 }) {
   const { chipLabel: derivedChipLabel, dataRole, role } = getLessonSectionTheme(kind);
@@ -58,7 +61,7 @@ export function LessonSectionCard({
   return (
     <section
       id={id}
-      className="nn-lesson-section-card scroll-mt-24"
+      className={["nn-lesson-section-card scroll-mt-24", className].filter(Boolean).join(" ")}
       data-lsc-role={dataRole}
       aria-label={heading?.trim() || "Lesson section"}
     >
@@ -66,10 +69,10 @@ export function LessonSectionCard({
         <ChipIcon className="nn-icon-sm" aria-hidden="true" />
         {chipLabel}
       </span>
-      <h2 className="nn-marketing-h3 mt-3 tracking-tight text-[var(--theme-heading-text)]">
+      <h2 className="nn-lesson-section-heading mt-2.5 text-[var(--theme-heading-text)]">
         {heading?.trim() || "Section"}
       </h2>
-      <div className="mt-5">{children}</div>
+      <div className="mt-4">{children}</div>
     </section>
   );
 }

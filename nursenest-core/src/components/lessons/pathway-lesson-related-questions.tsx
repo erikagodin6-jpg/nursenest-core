@@ -43,7 +43,7 @@ export function PathwayLessonRelatedQuestions({
 
   return (
     <section
-      className="nn-study-card nn-study-card--wash nn-study-card--accent-leading mt-10 p-5 sm:p-6"
+      className="nn-study-card nn-study-card--wash nn-study-card--accent-leading mx-auto mt-8 max-w-5xl p-4 sm:p-5"
       aria-labelledby="lesson-related-questions-heading"
       data-testid="lesson-practice-questions-topic"
     >
@@ -51,7 +51,10 @@ export function PathwayLessonRelatedQuestions({
         <p className="nn-marketing-label nn-marketing-label--accent">Question bank · lesson-linked</p>
         <LessonCardChip variant="exam">{pathway.shortName}</LessonCardChip>
       </div>
-      <h2 id="lesson-related-questions-heading" className="nn-marketing-h3 mt-2 text-[var(--theme-heading-text)]">
+      <h2
+        id="lesson-related-questions-heading"
+        className="mt-1.5 text-lg font-semibold tracking-tight text-[var(--theme-heading-text)]"
+      >
         Practice questions for this topic
       </h2>
       <p className="nn-marketing-body-sm mt-2 max-w-prose text-[var(--theme-muted-text)]">

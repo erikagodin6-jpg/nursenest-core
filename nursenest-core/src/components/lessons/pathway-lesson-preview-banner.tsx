@@ -54,7 +54,7 @@ export function PathwayLessonPreviewBanner({ kind, pathwayShortName, pathwayCoun
 
   return (
     <aside
-      className="nn-card mt-6 overflow-hidden border-primary/25 bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] to-[var(--semantic-surface)] p-5 sm:p-6"
+      className="nn-card mt-4 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--bg-card)_94%,var(--semantic-brand-soft)_6%)] p-4 sm:p-5"
       aria-label="Lesson access"
     >
       {/* Badge + title */}
@@ -63,8 +63,8 @@ export function PathwayLessonPreviewBanner({ kind, pathwayShortName, pathwayCoun
           {badge}
         </span>
       </div>
-      <p className="mt-2 text-lg font-semibold leading-snug text-[var(--theme-heading-text)]">{title}</p>
-      <p className="mt-1.5 text-sm leading-6 text-[var(--theme-muted-text)]">{body}</p>
+      <p className="mt-1.5 text-base font-semibold leading-snug text-[var(--theme-heading-text)]">{title}</p>
+      <p className="mt-1 text-sm leading-relaxed text-[var(--theme-body-text)]">{body}</p>
 
       {/* Feature bullets */}
       {showFeatureBullets ? (

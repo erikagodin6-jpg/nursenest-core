@@ -48,7 +48,7 @@ export function PathwayLessonStudyLoopCta({
 
   return (
     <section
-      className="nn-study-loop-outer relative mt-12 overflow-hidden p-5 sm:p-8"
+      className="nn-study-loop-outer relative mx-auto mt-10 max-w-5xl overflow-hidden rounded-xl p-4 sm:p-6"
       aria-labelledby="lesson-study-loop-heading"
       data-nn-qa-study-loop="true"
     >
@@ -58,7 +58,10 @@ export function PathwayLessonStudyLoopCta({
       />
       <div className="relative">
         <p className="nn-marketing-label nn-marketing-label--accent">After this lesson</p>
-        <h2 id="lesson-study-loop-heading" className="nn-marketing-h3 mt-2 text-balance text-[var(--theme-heading-text)]">
+        <h2
+          id="lesson-study-loop-heading"
+          className="mt-1.5 text-balance text-lg font-semibold tracking-tight text-[var(--theme-heading-text)]"
+        >
           Your next step on {pathway.shortName}
         </h2>
         <p className="nn-marketing-body-sm mt-2 max-w-2xl text-[var(--theme-muted-text)]">

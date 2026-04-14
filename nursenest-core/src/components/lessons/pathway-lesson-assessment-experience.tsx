@@ -92,15 +92,15 @@ export function PathwayLessonAssessmentExperience({
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {children}
-      <section className="nn-study-card nn-study-card--wash border border-[var(--semantic-border-soft)] p-5 sm:p-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <section className="nn-study-card nn-study-card--wash mx-auto max-w-5xl border border-[var(--semantic-border-soft)] p-4 sm:p-5">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--semantic-text-secondary)]">
               Lesson checks
             </p>
-            <h2 className="mt-2 text-xl font-semibold text-[var(--theme-heading-text)]">Pre/post lesson tests</h2>
+            <h2 className="mt-1.5 text-lg font-semibold text-[var(--theme-heading-text)]">Pre/post lesson tests</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--theme-muted-text)]">{statusCopy}</p>
           </div>
           {assessmentsEnabled ? (

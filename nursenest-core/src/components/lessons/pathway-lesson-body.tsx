@@ -91,11 +91,10 @@ function pathwayLessonExamFocusHasStructured(examFocus?: PathwayLessonExamFocus 
 function LearnerSparsePanel({ children }: { children: ReactNode }) {
   return (
     <div
-      className="rounded-xl border px-4 py-3 text-sm leading-relaxed"
+      className="rounded-lg border px-3 py-2.5 text-sm leading-relaxed text-[var(--theme-body-text)]"
       style={{
-        borderColor: "color-mix(in srgb, var(--semantic-info) 32%, var(--semantic-border-soft))",
-        background: "color-mix(in srgb, var(--semantic-panel-cool) 50%, transparent)",
-        color: "var(--semantic-text-secondary)",
+        borderColor: "color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft))",
+        background: "color-mix(in srgb, var(--semantic-panel-cool) 35%, var(--bg-card))",
       }}
     >
       {children}
@@ -126,11 +125,13 @@ function PathwayLessonExamFocusInlineBlocks({
   }
   if (blocks.length === 0) return null;
   return (
-    <div className="space-y-5 rounded-xl border border-primary/20 bg-primary/[0.04] p-4">
+    <div className="space-y-4 rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-brand)_10%)] bg-[color-mix(in_srgb,var(--bg-card)_94%,var(--semantic-brand-soft)_6%)] p-3.5">
       {blocks.map((b) => (
         <div key={b.title}>
-          <h3 className="nn-marketing-label nn-marketing-label--accent">{b.title}</h3>
-          <div className="mt-2">
+          <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-[var(--theme-muted-text)]">
+            {b.title}
+          </h3>
+          <div className="mt-1.5">
             <PathwayLessonBody
               text={b.text}
               viewerTier={viewerTier}
@@ -219,7 +220,7 @@ export function PathwayLessonBody({
     return null;
   }
   return (
-    <div className="nn-lesson-prose space-y-6">
+    <div className="nn-lesson-prose space-y-4">
       {paragraphs.map((p, idx) => {
         const block = parseParagraphBlock(p);
 
@@ -318,7 +319,7 @@ export function PathwayLessonSectionContent({
   const showEmptyPanel = !bodyEl && !examEl && !hasFigures;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {bodyEl}
       {examEl}
       {showFiguresLead ? <LearnerSparsePanel>{figuresVisualLeadMessage}</LearnerSparsePanel> : null}

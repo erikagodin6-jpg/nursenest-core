@@ -747,6 +747,14 @@ function getCatalogPathwayLessonsSync(pathwayId: string): PathwayLessonRecord[] 
   return getCatalogLessonsRaw(pathwayId).map((raw) => normalizeLesson(raw, pathwayId));
 }
 
+/**
+ * Audit / inventory tooling: catalog + scoped-gold merge, normalized, then the same exam/country filter
+ * as pathway lesson hubs when the hub falls back to the bundled catalog (no published DB rows).
+ */
+export function getEffectiveCatalogLessonsForPathwaySync(pathwayId: string): PathwayLessonRecord[] {
+  return sortAndFilterLessonsForPathwayContext(pathwayId, getCatalogPathwayLessonsSync(pathwayId));
+}
+
 /** First N lesson titles from the static catalog (public marketing previews). Empty when catalog has no rows for the pathway. */
 export function getCatalogLessonPreviewTitles(pathwayId: string, limit = 4): string[] {
   const lessons = sortPathwayLessonsForPublicPreview(pathwayId, getCatalogPathwayLessonsSync(pathwayId));
