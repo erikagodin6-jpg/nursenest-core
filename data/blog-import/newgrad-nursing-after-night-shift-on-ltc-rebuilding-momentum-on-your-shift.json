@@ -1,0 +1,49 @@
+{
+  "slug": "newgrad-nursing-after-night-shift-on-ltc-rebuilding-momentum-on-your-shift",
+  "source": "newgrad-400-batch-03",
+  "wave": "newgrad-400",
+  "manifestId": 54,
+  "batch": "newgrad-prod-batch-03",
+  "batchIndex": 39,
+  "title": "After Night Shift on LTC: Rebuilding Momentum on Your Shift",
+  "audience": "nursing",
+  "unit": "LTC",
+  "keywords": {
+    "primary": "after night shift on ltc rebuilding momentum on your shift",
+    "secondary": [
+      "first year nurse",
+      "transition to practice",
+      "new grad",
+      "clinical confidence",
+      "unit culture"
+    ]
+  },
+  "relatedLessonPaths": [
+    "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+    "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn"
+  ],
+  "relatedToolPaths": [
+    "/tools/lab-values",
+    "/tools/med-math"
+  ],
+  "internalLinks": {
+    "lessons": [
+      "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+      "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn"
+    ],
+    "tools": [
+      "/tools/lab-values",
+      "/tools/med-math"
+    ],
+    "blogPost": "/blog/newgrad-nursing-first-code-blue-on-same-day-surgery-as-a-new-grad-nurse-what-to-do-first"
+  },
+  "content": {
+    "format": "html-fragment",
+    "bodyPath": "data/blog-content/newgrad-prod-batch-03/body-39.html",
+    "placeholderRelatedBlogBlock": "{{RELATED_BLOG_BLOCK}}"
+  },
+  "seo": {
+    "title": "After Night Shift on LTC: Rebuilding Momentum on Your Shift… | NurseNest",
+    "description": "Practical new grad nursing guidance on LTC: after night shift on ltc: rebuilding momentum on your shift. Real workflow, escalation, documentation, and what preceptors expect—without fluff."
+  }
+}

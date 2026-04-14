@@ -1,0 +1,49 @@
+{
+  "slug": "newgrad-nursing-on-pediatrics-how-new-grad-nurses-handle-calling-the-provider",
+  "source": "newgrad-400-batch-03",
+  "wave": "newgrad-400",
+  "manifestId": 69,
+  "batch": "newgrad-prod-batch-03",
+  "batchIndex": 50,
+  "title": "On Pediatrics: How New Grad Nurses Handle Calling the Provider",
+  "audience": "nursing",
+  "unit": "pediatrics",
+  "keywords": {
+    "primary": "on pediatrics how new grad nurses handle calling the provider",
+    "secondary": [
+      "first year nurse",
+      "transition to practice",
+      "new grad",
+      "clinical confidence",
+      "unit culture"
+    ]
+  },
+  "relatedLessonPaths": [
+    "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+    "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn"
+  ],
+  "relatedToolPaths": [
+    "/tools/lab-values",
+    "/tools/med-math"
+  ],
+  "internalLinks": {
+    "lessons": [
+      "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+      "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn"
+    ],
+    "tools": [
+      "/tools/lab-values",
+      "/tools/med-math"
+    ],
+    "blogPost": "/blog/newgrad-nursing-first-code-blue-on-same-day-surgery-as-a-new-grad-nurse-what-to-do-first"
+  },
+  "content": {
+    "format": "html-fragment",
+    "bodyPath": "data/blog-content/newgrad-prod-batch-03/body-50.html",
+    "placeholderRelatedBlogBlock": "{{RELATED_BLOG_BLOCK}}"
+  },
+  "seo": {
+    "title": "On Pediatrics: How New Grad Nurses Handle Calling the Provider… | NurseNest",
+    "description": "Practical new grad nursing guidance on pediatrics: on pediatrics: how new grad nurses handle calling the provider. Real workflow, escalation, documentation, and what preceptors expect—without fluff."
+  }
+}

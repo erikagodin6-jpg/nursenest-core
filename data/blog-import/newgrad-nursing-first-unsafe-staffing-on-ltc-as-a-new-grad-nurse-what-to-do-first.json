@@ -1,0 +1,49 @@
+{
+  "slug": "newgrad-nursing-first-unsafe-staffing-on-ltc-as-a-new-grad-nurse-what-to-do-first",
+  "source": "newgrad-400-batch-03",
+  "wave": "newgrad-400",
+  "manifestId": 41,
+  "batch": "newgrad-prod-batch-03",
+  "batchIndex": 27,
+  "title": "First Unsafe Staffing on LTC as a New Grad Nurse: What to Do First",
+  "audience": "nursing",
+  "unit": "LTC",
+  "keywords": {
+    "primary": "first unsafe staffing on ltc as a new grad nurse what to do first",
+    "secondary": [
+      "first year nurse",
+      "transition to practice",
+      "new grad",
+      "clinical confidence",
+      "unit culture"
+    ]
+  },
+  "relatedLessonPaths": [
+    "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+    "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn"
+  ],
+  "relatedToolPaths": [
+    "/tools/lab-values",
+    "/tools/med-math"
+  ],
+  "internalLinks": {
+    "lessons": [
+      "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+      "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn"
+    ],
+    "tools": [
+      "/tools/lab-values",
+      "/tools/med-math"
+    ],
+    "blogPost": "/blog/newgrad-nursing-first-code-blue-on-same-day-surgery-as-a-new-grad-nurse-what-to-do-first"
+  },
+  "content": {
+    "format": "html-fragment",
+    "bodyPath": "data/blog-content/newgrad-prod-batch-03/body-27.html",
+    "placeholderRelatedBlogBlock": "{{RELATED_BLOG_BLOCK}}"
+  },
+  "seo": {
+    "title": "First Unsafe Staffing on LTC as a New Grad Nurse: What to Do F… | NurseNest",
+    "description": "Practical new grad nursing guidance on LTC: first unsafe staffing on ltc as a new grad nurse: what to do first. Real workflow, escalation, documentation, and what preceptors expect—without fluff."
+  }
+}

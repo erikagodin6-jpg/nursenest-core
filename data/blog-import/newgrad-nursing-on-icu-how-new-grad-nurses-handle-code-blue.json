@@ -1,0 +1,49 @@
+{
+  "slug": "newgrad-nursing-on-icu-how-new-grad-nurses-handle-code-blue",
+  "source": "newgrad-400-batch-03",
+  "wave": "newgrad-400",
+  "manifestId": 13,
+  "batch": "newgrad-prod-batch-03",
+  "batchIndex": 6,
+  "title": "On ICU: How New Grad Nurses Handle Code Blue",
+  "audience": "nursing",
+  "unit": "ICU",
+  "keywords": {
+    "primary": "on icu how new grad nurses handle code blue",
+    "secondary": [
+      "first year nurse",
+      "transition to practice",
+      "new grad",
+      "clinical confidence",
+      "unit culture"
+    ]
+  },
+  "relatedLessonPaths": [
+    "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+    "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn"
+  ],
+  "relatedToolPaths": [
+    "/tools/lab-values",
+    "/tools/med-math"
+  ],
+  "internalLinks": {
+    "lessons": [
+      "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+      "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn"
+    ],
+    "tools": [
+      "/tools/lab-values",
+      "/tools/med-math"
+    ],
+    "blogPost": "/blog/newgrad-nursing-first-code-blue-on-same-day-surgery-as-a-new-grad-nurse-what-to-do-first"
+  },
+  "content": {
+    "format": "html-fragment",
+    "bodyPath": "data/blog-content/newgrad-prod-batch-03/body-06.html",
+    "placeholderRelatedBlogBlock": "{{RELATED_BLOG_BLOCK}}"
+  },
+  "seo": {
+    "title": "On ICU: How New Grad Nurses Handle Code Blue | NurseNest",
+    "description": "Practical new grad nursing guidance on ICU: on icu: how new grad nurses handle code blue. Real workflow, escalation, documentation, and what preceptors expect—without fluff."
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "slug": "newgrad-nursing-missed-assessment-on-psychiatry-a-practical-checklist-for-new-grad-nurses",
+  "source": "newgrad-400-batch-03",
+  "wave": "newgrad-400",
+  "manifestId": 16,
+  "batch": "newgrad-prod-batch-03",
+  "batchIndex": 8,
+  "title": "Missed Assessment on Psychiatry: A Practical Checklist for New Grad Nurses",
+  "audience": "nursing",
+  "unit": "psychiatry",
+  "keywords": {
+    "primary": "missed assessment on psychiatry a practical checklist for new grad nurses",
+    "secondary": [
+      "first year nurse",
+      "transition to practice",
+      "new grad",
+      "clinical confidence",
+      "unit culture"
+    ]
+  },
+  "relatedLessonPaths": [
+    "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+    "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn"
+  ],
+  "relatedToolPaths": [
+    "/tools/lab-values",
+    "/tools/med-math"
+  ],
+  "internalLinks": {
+    "lessons": [
+      "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+      "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn"
+    ],
+    "tools": [
+      "/tools/lab-values",
+      "/tools/med-math"
+    ],
+    "blogPost": "/blog/newgrad-nursing-first-code-blue-on-same-day-surgery-as-a-new-grad-nurse-what-to-do-first"
+  },
+  "content": {
+    "format": "html-fragment",
+    "bodyPath": "data/blog-content/newgrad-prod-batch-03/body-08.html",
+    "placeholderRelatedBlogBlock": "{{RELATED_BLOG_BLOCK}}"
+  },
+  "seo": {
+    "title": "Missed Assessment on Psychiatry: A Practical Checklist for New… | NurseNest",
+    "description": "Practical new grad nursing guidance on psychiatry: missed assessment on psychiatry: a practical checklist for new grad nurses. Real workflow, escalation, documentation, and what preceptors expect—without fluff."
+  }
+}

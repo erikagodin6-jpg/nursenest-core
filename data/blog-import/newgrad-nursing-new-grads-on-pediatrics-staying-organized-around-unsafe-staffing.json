@@ -1,0 +1,49 @@
+{
+  "slug": "newgrad-nursing-new-grads-on-pediatrics-staying-organized-around-unsafe-staffing",
+  "source": "newgrad-400-batch-03",
+  "wave": "newgrad-400",
+  "manifestId": 44,
+  "batch": "newgrad-prod-batch-03",
+  "batchIndex": 29,
+  "title": "New Grads on Pediatrics: Staying Organized Around Unsafe Staffing",
+  "audience": "nursing",
+  "unit": "pediatrics",
+  "keywords": {
+    "primary": "new grads on pediatrics staying organized around unsafe staffing",
+    "secondary": [
+      "first year nurse",
+      "transition to practice",
+      "new grad",
+      "clinical confidence",
+      "unit culture"
+    ]
+  },
+  "relatedLessonPaths": [
+    "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+    "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn"
+  ],
+  "relatedToolPaths": [
+    "/tools/lab-values",
+    "/tools/med-math"
+  ],
+  "internalLinks": {
+    "lessons": [
+      "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+      "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn"
+    ],
+    "tools": [
+      "/tools/lab-values",
+      "/tools/med-math"
+    ],
+    "blogPost": "/blog/newgrad-nursing-first-code-blue-on-same-day-surgery-as-a-new-grad-nurse-what-to-do-first"
+  },
+  "content": {
+    "format": "html-fragment",
+    "bodyPath": "data/blog-content/newgrad-prod-batch-03/body-29.html",
+    "placeholderRelatedBlogBlock": "{{RELATED_BLOG_BLOCK}}"
+  },
+  "seo": {
+    "title": "New Grads on Pediatrics: Staying Organized Around Unsafe Staff… | NurseNest",
+    "description": "Practical new grad nursing guidance on pediatrics: new grads on pediatrics: staying organized around unsafe staffing. Real workflow, escalation, documentation, and what preceptors expect—without fluff."
+  }
+}
