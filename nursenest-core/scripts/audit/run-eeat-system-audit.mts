@@ -15,11 +15,11 @@ import {
   lessonInternalLinkCount,
   sectionCompletenessFraction,
   type LessonLike,
-} from "@/lib/eeat/eeat-scoring";
+} from "../../src/lib/eeat/eeat-scoring";
 import {
   getAllProgrammaticSeoPages,
   getRelatedProgrammaticPages,
-} from "@/lib/seo/programmatic-registry";
+} from "../../src/lib/seo/programmatic-registry";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const APP_ROOT = join(__dirname, "../..");

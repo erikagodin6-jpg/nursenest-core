@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T17:19:00.640Z",
+  "generatedAt": "2026-04-14T17:23:48.307Z",
   "scope": {
     "pathwayCatalogFile": "nursenest-core/src/content/pathway-lessons/catalog.json",
     "note": "DB-backed pathway lessons not fully enumerated here; production uses pathway_lessons + loader. Section-kind checklist maps both premium spine kinds and legacy five-block kinds (e.g. clinical_meaning → overview). Re-run after major imports."

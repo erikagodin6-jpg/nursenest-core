@@ -34,6 +34,7 @@
     "audit:paywall-security": "node scripts/audit/run-paywall-penetration-audit.mjs",
     "audit:entitlements": "tsx scripts/audit/run-entitlement-audit.mts",
     "audit:eeat-content": "tsx scripts/audit/run-eeat-content-audit.mts",
+    "audit:eeat-system": "tsx scripts/audit/run-eeat-system-audit.mts",
     "test:lesson-links-audit": "tsx --test scripts/audit-lesson-links.test.ts",
     "build:allied-bundled-catalog": "tsx scripts/build-allied-bundled-catalog.mts",
     "audit:pathway-lessons": "tsx scripts/audit-pathway-lesson-inventory.ts",
