@@ -292,6 +292,7 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     add("/forgot-password"),
     add("/reset-password"),
     add("/case-studies"),
+    add("/exams/canada"),
   ];
   const lessonUrls = await collectPathwayLessonSeoUrls(o);
   return [

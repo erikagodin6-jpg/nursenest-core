@@ -1,0 +1,257 @@
+{
+  "generatedAt": "2026-04-14T17:51:27.124Z",
+  "requiredUserUiChrome": {
+    "keyCount": 79,
+    "allLocalesPass": true,
+    "failures": []
+  },
+  "criticalPrefixesVsEnglish": [
+    {
+      "locale": "ar",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "fr",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "tl",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "footer.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "es",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "hi",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "zh",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "pt",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "ko",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "footer.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "pa",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "vi",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "ht",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "footer.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "ur",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "ja",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "fa",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "footer.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "zh-tw",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "de",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "th",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "footer.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "tr",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "footer.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "id",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "footer.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "it",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "ru",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    },
+    {
+      "locale": "en",
+      "missingCriticalPrefixes": [
+        "nav.",
+        "footer.",
+        "pages.home.",
+        "pages.pricing.",
+        "pages.faq.",
+        "pages.lessons.",
+        "pages.questionBank."
+      ]
+    }
+  ]
+}

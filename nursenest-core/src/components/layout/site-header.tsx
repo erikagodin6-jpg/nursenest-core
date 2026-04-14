@@ -169,18 +169,47 @@ function examIndicatorLabel(country: LearnerCountry, tier: LearnerTier, alliedPr
   return `${regionLabel} ${tier}`;
 }
 
-function createLearnerNavLinks(locale: string, pathwayId: string | null): HeaderNavLink[] {
+function createLearnerNavLinks(
+  t: (key: string) => string,
+  locale: string,
+  pathwayId: string | null,
+): HeaderNavLink[] {
   const lessonsHref = pathwayId ? `/app/lessons?pathwayId=${encodeURIComponent(pathwayId)}` : "/app/lessons";
   const catHref = resolveStudySurfaceCatHref({
     pathwayId,
     availablePathwayIds: pathwayId ? [pathwayId] : [],
   });
   return [
-    { key: "questions", href: "/app/questions", matchBase: "/app/questions", label: formatTitleCase("Questions", locale) },
-    { key: "lessons", href: lessonsHref, matchBase: "/app/lessons", label: formatTitleCase("Lessons", locale) },
-    { key: "cat", href: catHref, matchBase: "/app/practice-tests", label: formatTitleCase("CAT", locale) },
-    { key: "flashcards", href: "/app/flashcards", matchBase: "/app/flashcards", label: formatTitleCase("Flashcards", locale) },
-    { key: "progress", href: "/app/account/progress", matchBase: "/app/account/progress", label: formatTitleCase("Progress", locale) },
+    {
+      key: "questions",
+      href: "/app/questions",
+      matchBase: "/app/questions",
+      label: formatTitleCase(t("learner.shell.nav.questions"), locale),
+    },
+    {
+      key: "lessons",
+      href: lessonsHref,
+      matchBase: "/app/lessons",
+      label: formatTitleCase(t("learner.shell.nav.lessons"), locale),
+    },
+    {
+      key: "cat",
+      href: catHref,
+      matchBase: "/app/practice-tests",
+      label: formatTitleCase(t("learner.shell.nav.cat"), locale),
+    },
+    {
+      key: "flashcards",
+      href: "/app/flashcards",
+      matchBase: "/app/flashcards",
+      label: formatTitleCase(t("learner.shell.nav.flashcards"), locale),
+    },
+    {
+      key: "progress",
+      href: "/app/account/progress",
+      matchBase: "/app/account/progress",
+      label: formatTitleCase(t("learner.shell.nav.progress"), locale),
+    },
   ];
 }
 
@@ -504,7 +533,10 @@ export function SiteHeader() {
           offeringIdForTier(user.tier as LearnerTier),
         )
       : null;
-  const learnerLinks = useMemo(() => createLearnerNavLinks(locale, learnerPathwayId), [locale, learnerPathwayId]);
+  const learnerLinks = useMemo(
+    () => createLearnerNavLinks(t, locale, learnerPathwayId),
+    [t, locale, learnerPathwayId],
+  );
   const learnerExamBadge =
     isLearnerAuthenticated && user
       ? examIndicatorLabel(user.country as LearnerCountry, user.tier as LearnerTier, (user as { alliedProfessionKey?: string | null }).alliedProfessionKey)
@@ -513,19 +545,31 @@ export function SiteHeader() {
     ? (user.tier === "RPN" || user.tier === "LVN_LPN" ? "pn" : user.tier === "NP" ? "np" : user.tier === "ALLIED" ? "allied" : "rn")
     : "rn";
   const activeExam: string | null = null;
-  const pricingNav = {
-    key: "pricing",
-    href: HUB.pricing,
-    matchBase: HUB.pricing,
-    label: formatTitleCase("Pricing", locale),
-  };
-  const marketingBrowseLinks: HeaderNavLink[] = [
-    pricingNav,
-    { key: "blog", href: "/blog", matchBase: "/blog", label: formatTitleCase("Blog", locale) },
-    { key: "faq", href: "/faq", matchBase: "/faq", label: formatTitleCase(t("footer.faq"), locale) },
-    { key: "pre-nursing", href: "/pre-nursing", matchBase: "/pre-nursing", label: formatTitleCase(t("nav.preNursing"), locale) },
-    { key: "tools", href: HUB.tools, matchBase: HUB.tools, label: formatTitleCase(t("nav.tools"), locale) },
-  ];
+  const marketingBrowseLinks: HeaderNavLink[] = useMemo(
+    () => [
+      {
+        key: "pricing",
+        href: HUB.pricing,
+        matchBase: HUB.pricing,
+        label: formatTitleCase(t("nav.pricing"), locale),
+      },
+      {
+        key: "blog",
+        href: "/blog",
+        matchBase: "/blog",
+        label: formatTitleCase(t("footer.blog"), locale),
+      },
+      { key: "faq", href: "/faq", matchBase: "/faq", label: formatTitleCase(t("footer.faq"), locale) },
+      {
+        key: "pre-nursing",
+        href: "/pre-nursing",
+        matchBase: "/pre-nursing",
+        label: formatTitleCase(t("nav.preNursing"), locale),
+      },
+      { key: "tools", href: HUB.tools, matchBase: HUB.tools, label: formatTitleCase(t("nav.tools"), locale) },
+    ],
+    [t, locale],
+  );
   const openMega = megaMenus.find((menu) => menu.key === openMegaMenu) ?? null;
 
   const darkHeaderShadow = useMemo(() => {
@@ -699,7 +743,7 @@ export function SiteHeader() {
                   onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
                   aria-label="Log in to your NurseNest account"
                 >
-                  {formatTitleCase("Log in", locale)}
+                  {formatTitleCase(t("nav.logIn"), locale)}
                 </Link>
                 <Link
                   href={guestMarketingSignupHref}
@@ -708,7 +752,7 @@ export function SiteHeader() {
                   aria-label="Start free account — nursing and healthcare exam prep"
                   title="Start free — no credit card required"
                 >
-                  {formatTitleCase("Start Free", locale)}
+                  {formatTitleCase(t("nav.signup"), locale)}
                 </Link>
               </div>
             ) : null}
@@ -748,7 +792,7 @@ export function SiteHeader() {
                     {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                   </Link>
                   <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
-                    {formatTitleCase("Dashboard", locale)}
+                    {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
                 </div>
               ) : (
@@ -761,7 +805,7 @@ export function SiteHeader() {
                     {formatTitleCase(t("nav.admin"), locale)}
                   </Link>
                   <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
-                    {formatTitleCase("Dashboard", locale)}
+                    {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
                 </div>
               )}
@@ -837,7 +881,7 @@ export function SiteHeader() {
                     onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
                     aria-label="Log in to your NurseNest account"
                   >
-                    {formatTitleCase("Log in", locale)}
+                    {formatTitleCase(t("nav.logIn"), locale)}
                   </Link>
                   <Link
                     href={guestMarketingSignupHref}
@@ -846,7 +890,7 @@ export function SiteHeader() {
                     aria-label="Start free account — nursing and healthcare exam prep"
                     title="Start free — no credit card required"
                   >
-                    {formatTitleCase("Start Free", locale)}
+                    {formatTitleCase(t("nav.signup"), locale)}
                   </Link>
                 </div>
               ) : isLearnerAuthenticated ? (
@@ -858,7 +902,7 @@ export function SiteHeader() {
                     {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                   </Link>
                   <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
-                    {formatTitleCase("Dashboard", locale)}
+                    {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
                 </div>
               ) : (
@@ -871,7 +915,7 @@ export function SiteHeader() {
                     {formatTitleCase(t("nav.admin"), locale)}
                   </Link>
                   <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
-                    {formatTitleCase("Dashboard", locale)}
+                    {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
                 </div>
               )}
@@ -1343,7 +1387,7 @@ export function SiteHeader() {
                       aria-label="Start free account — nursing and healthcare exam prep"
                       title="Start free — no credit card required"
                     >
-                      {formatTitleCase("Start Free", locale)}
+                      {formatTitleCase(t("nav.signup"), locale)}
                     </Link>
                     <Link
                       href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)}
@@ -1351,7 +1395,7 @@ export function SiteHeader() {
                       onClick={() => setMobileOpen(false)}
                       aria-label="Log in to your NurseNest account"
                     >
-                      {formatTitleCase("Log in", locale)}
+                      {formatTitleCase(t("nav.logIn"), locale)}
                     </Link>
                   </>
                 ) : isLearnerAuthenticated ? (
@@ -1369,10 +1413,10 @@ export function SiteHeader() {
                       {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                     </Link>
                     <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS} onClick={() => setMobileOpen(false)}>
-                      {formatTitleCase("Dashboard", locale)}
+                      {formatTitleCase(t("nav.dashboard"), locale)}
                     </Link>
                     <Link href="/app/account/overview" className={HEADER_SECONDARY_ACTION_CLASS} onClick={() => setMobileOpen(false)}>
-                      {formatTitleCase("Account", locale)}
+                      {formatTitleCase(t("nav.account"), locale)}
                     </Link>
                   </>
                 ) : (
@@ -1392,14 +1436,14 @@ export function SiteHeader() {
                       className={HEADER_SECONDARY_ACTION_CLASS}
                       onClick={() => setMobileOpen(false)}
                     >
-                      {formatTitleCase("Dashboard", locale)}
+                      {formatTitleCase(t("nav.dashboard"), locale)}
                     </Link>
                     <Link
                       href="/app/account/overview"
                       className={HEADER_SECONDARY_ACTION_CLASS}
                       onClick={() => setMobileOpen(false)}
                     >
-                      {formatTitleCase("Account", locale)}
+                      {formatTitleCase(t("nav.account"), locale)}
                     </Link>
                   </>
                 )}

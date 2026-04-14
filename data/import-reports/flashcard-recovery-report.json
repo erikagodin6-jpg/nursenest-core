@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-14T17:57:03.815Z",
+  "itemsExamined": null,
+  "itemsChanged": 0,
+  "itemsSkipped": 0,
+  "duplicatesSkipped": 0,
+  "itemsStillBlocked": null,
+  "reasonsForBlocking": [
+    "Subscriber decks excluded from public /flashcards hub — see flashcard-content-completeness-audit.json flashcardUiGaps."
+  ],
+  "flashcardCompletenessPointer": {
+    "description": "Public hub uses loadPublicFlashcardHub → prisma.flashcardDeck with publicMarketingFlashcardDeckWhere (published + PUBLIC_PREVIEW + cardCount>0). Subscriber decks or pathway-tagged decks with SUBSCRIBER visibility do not appear on /flashcards.",
+    "pathwayDecksPublished": [],
+    "evidenceFiles": [
+      "src/lib/seo/public-flashcard-landing.ts",
+      "src/lib/entitlements/content-access-scope.ts (publicMarketingFlashcardDeckWhere)",
+      "src/app/(marketing)/(default)/flashcards/page.tsx"
+    ]
+  },
+  "prismaSkipped": true,
+  "mutationsExecuted": []
+}

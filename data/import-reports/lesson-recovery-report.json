@@ -1,0 +1,1315 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-14T17:57:03.815Z",
+  "itemsExamined": 1089,
+  "itemsChanged": 0,
+  "itemsSkipped": 0,
+  "duplicatesSkipped": 0,
+  "itemsStillBlocked": 633,
+  "reasonsForBlocking": [
+    "Structural gate failures — editorial pass or legacy import (see lesson-content-completeness-audit.json).",
+    "Class C legacy keys need slug mapping before bulk import (unimported-legacy-content.json)."
+  ],
+  "beforeAfter": {
+    "lessonsStructurallyIncomplete": 633,
+    "cappedIncompleteList": 800
+  },
+  "incompleteSamples": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ob-emergencies-gold-standard",
+      "title": "OB emergencies (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (33 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (17 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (30 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (30 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pediatric-triage-emergencies-gold-standard",
+      "title": "Pediatric triage & dehydration (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (33 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (16 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (27 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (27 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "renal-dialysis-acute-complications-gold-standard",
+      "title": "Renal failure & dialysis complications (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (37 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (9 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (18 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (31 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pulmonary-embolism-recognition-gold",
+      "title": "Pulmonary embolism: recognition (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"labs_diagnostics\" below minimum word count (69 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "atrial-fibrillation-stroke-prevention-gold",
+      "title": "Atrial fibrillation: stroke prevention (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"labs_diagnostics\" below minimum word count (65 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pneumonia-cap-nursing-gold",
+      "title": "Pneumonia (CAP): nursing priorities (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"labs_diagnostics\" below minimum word count (40 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "upper-gi-bleed-prioritization-gold",
+      "title": "Upper GI bleed: priorities (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"labs_diagnostics\" below minimum word count (40 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-kidney-injury-nursing-gold",
+      "title": "Acute kidney injury: nursing surveillance (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"labs_diagnostics\" below minimum word count (26 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "meningitis-emergency-recognition-gold",
+      "title": "Meningitis: emergency recognition (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"labs_diagnostics\" below minimum word count (28 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "opioid-toxicity-naloxone-gold",
+      "title": "Opioid toxicity & naloxone safety (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"labs_diagnostics\" below minimum word count (27 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "falls-injury-prevention-gold",
+      "title": "Falls & injury prevention (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"labs_diagnostics\" below minimum word count (17 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "adrenal-crisis-addisonian-gold",
+      "title": "Adrenal crisis (Addisonian) (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"labs_diagnostics\" below minimum word count (16 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ards-acute-respiratory-failure-gold",
+      "title": "ARDS & acute respiratory failure (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"labs_diagnostics\" below minimum word count (21 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "thyroid-storm-emergency-gold",
+      "title": "Thyroid storm: emergency recognition (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"labs_diagnostics\" below minimum word count (17 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "delirium-acute-confusion-gold",
+      "title": "Delirium: acute confusion & safety (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"labs_diagnostics\" below minimum word count (16 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-balance-acute-care",
+      "title": "Fluid balance & IV therapy judgment (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"exam_relevance\" is below the minimum depth (24 < 30 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cardiovascular-prioritization",
+      "title": "Cardiovascular prioritization for Canadian NCLEX-RN",
+      "issues": [
+        "Section \"introduction\" below minimum word count (101 < 180).",
+        "Section \"labs_diagnostics\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pulmonary-embolism",
+      "title": "Pulmonary embolism (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (146 < 180).",
+        "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-heart-failure",
+      "title": "Heart failure (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (130 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-myocardial-infarction",
+      "title": "Myocardial infarction (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (119 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-angina",
+      "title": "Angina (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (138 < 180).",
+        "Section \"signs_symptoms\" below minimum word count (109 < 120).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-dysrhythmias",
+      "title": "Dysrhythmias (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (114 < 180).",
+        "Section \"red_flags\" below minimum word count (66 < 80).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-hypertension",
+      "title": "Hypertension (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (112 < 180).",
+        "Section \"nursing_assessment_interventions\" below minimum word count (166 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-shock",
+      "title": "Shock (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (129 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-asthma",
+      "title": "Asthma (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (134 < 180).",
+        "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
+        "Section \"red_flags\" below minimum word count (70 < 80).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-ards",
+      "title": "ARDS (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (121 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pneumonia",
+      "title": "Pneumonia (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (136 < 180).",
+        "Section \"red_flags\" below minimum word count (62 < 80).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-copd-respiratory",
+      "title": "COPD & respiratory basics (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (136 < 180).",
+        "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-abg-interpretation",
+      "title": "ABG interpretation (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (123 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-acid-base-advanced",
+      "title": "Acid–base disorders (advanced) (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (87 < 180).",
+        "Section \"red_flags\" below minimum word count (62 < 80).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-sodium-imbalance",
+      "title": "Sodium imbalance (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (123 < 180).",
+        "Section \"signs_symptoms\" below minimum word count (112 < 120).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-potassium-imbalance",
+      "title": "Potassium imbalance (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (111 < 180).",
+        "Section \"signs_symptoms\" below minimum word count (83 < 120).",
+        "Section \"red_flags\" below minimum word count (52 < 80).",
+        "Section \"labs_diagnostics\" below minimum word count (84 < 100).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-insulin-hypoglycemia",
+      "title": "Insulin & hypoglycemia (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (116 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-sepsis",
+      "title": "Sepsis (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (149 < 180).",
+        "Section \"signs_symptoms\" below minimum word count (113 < 120).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-infection-control",
+      "title": "Infection control (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (165 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-anticoagulants",
+      "title": "Anticoagulants (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (139 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-antibiotics",
+      "title": "Antibiotics (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (119 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pain-management",
+      "title": "Pain management (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (173 < 180).",
+        "Section \"labs_diagnostics\" below minimum word count (39 < 100).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-delegation",
+      "title": "Delegation & assignment (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (135 < 180).",
+        "Section \"labs_diagnostics\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-fluid-balance",
+      "title": "Fluid deficit vs excess (NCLEX-RN, Canada)",
+      "issues": [
+        "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-prioritization-abcs",
+      "title": "Prioritization, ABCs & safety (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (150 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-general-nursing-clinical",
+      "title": "General nursing clinical judgment (NCLEX-RN, Canada)",
+      "issues": [
+        "Section \"introduction\" below minimum word count (115 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: related_next_steps",
+        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+        "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "heart-failure-nursing-priorities-hy",
+      "title": "Heart Failure Nursing Priorities (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-myocardial-infarction-troponin",
+      "title": "Acute Myocardial Infarction & Troponin (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "shock-recognition-fluids",
+      "title": "Shock Recognition & Fluids (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypertensive-crisis-vs-urgency",
+      "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "atrial-fibrillation-rate-control",
+      "title": "Atrial Fibrillation & Rate Control (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "endocarditis-blood-cultures",
+      "title": "Endocarditis & Blood Cultures (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pericarditis-ecg-clues",
+      "title": "Pericarditis & ECG Clues (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "dvt-pe-nursing-priorities",
+      "title": "DVT & PE Nursing Priorities (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "abg-interpretation-basics-hy",
+      "title": "ABG Interpretation Basics (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "copd-exacerbation-oxygen",
+      "title": "COPD Exacerbation & Oxygen (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "asthma-status-asthmaticus",
+      "title": "Asthma & Status Asthmaticus (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ards-ventilation-basics",
+      "title": "ARDS & Ventilation Basics (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pneumonia-oxygenation",
+      "title": "Pneumonia & Oxygenation (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pulmonary-embolism-clues",
+      "title": "Pulmonary Embolism Clues (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "tb-isolation-compliance",
+      "title": "TB Isolation & Compliance (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pleural-effusion-chest-tubes",
+      "title": "Pleural Effusion & Chest Tubes (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "insulin-hypoglycemia-hy",
+      "title": "Insulin & Hypoglycemia (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "anticoagulants-bleeding-risk",
+      "title": "Anticoagulants & Bleeding Risk (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "antibiotic-classes-allergies-hy",
+      "title": "Antibiotic Classes & Allergies (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "opioids-respiratory-depression",
+      "title": "Opioids & Respiratory Depression (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cardiac-glycosides-toxicity",
+      "title": "Cardiac Glycosides & Toxicity (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "diuretics-electrolyte-shifts",
+      "title": "Diuretics & Electrolyte Shifts (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "antihypertensive-combos",
+      "title": "Antihypertensive Combos (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (28 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "chemo-safe-handling-extravasation",
+      "title": "Chemo Safe Handling & Extravasation (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hyponatremia-vs-hypernatremia-hy",
+      "title": "Hyponatremia vs Hypernatremia (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypo-vs-hyperkalemia-hy",
+      "title": "Hypo- vs Hyperkalemia (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-volume-deficit",
+      "title": "Fluid Volume Deficit (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-volume-excess",
+      "title": "Fluid Volume Excess (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "magnesium-arrhythmia-risk",
+      "title": "Magnesium & Arrhythmia Risk (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "calcium-tetany",
+      "title": "Calcium & Tetany (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "phosphate-shifts-in-renal",
+      "title": "Phosphate Shifts in Renal (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "mixed-acid-base-patterns",
+      "title": "Mixed Acid-Base Patterns (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "liver-failure-hepatic-encephalopathy",
+      "title": "Liver Failure & Hepatic Encephalopathy (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-pancreatitis-nursing-care",
+      "title": "Acute Pancreatitis Nursing Care (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "bowel-obstruction-vs-paralytic-ileus",
+      "title": "Bowel Obstruction vs Paralytic Ileus (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "gerd-pud-bleeding-clues",
+      "title": "GERD & PUD Bleeding Clues (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "gi-bleed-assessment",
+      "title": "GI Bleed Assessment (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "c-diff-infection-control",
+      "title": "C. diff Infection Control (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ostomy-skin-protection",
+      "title": "Ostomy & Skin Protection (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "stroke-assessment-tpa-window",
+      "title": "Stroke Assessment & tPA Window (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "seizure-precautions-rescue-meds",
+      "title": "Seizure Precautions & Rescue Meds (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "increased-icp-positioning",
+      "title": "Increased ICP & Positioning (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "spinal-cord-injury-autonomic-dysreflexia",
+      "title": "Spinal Cord Injury Autonomic Dysreflexia (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "meningitis-isolation-assessment",
+      "title": "Meningitis Isolation & Assessment (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "migraine-vs-red-flag-headache",
+      "title": "Migraine vs Red-Flag Headache (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "parkinson-disease-med-timing",
+      "title": "Parkinson Disease Med Timing (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "dka-vs-hhs-priorities-hy",
+      "title": "DKA vs HHS Priorities (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "thyroid-storm-myxedema-clues",
+      "title": "Thyroid Storm & Myxedema Clues (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "addisonian-crisis",
+      "title": "Addisonian Crisis (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (28 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cushing-syndrome-assessment",
+      "title": "Cushing Syndrome Assessment (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "diabetes-self-management-teaching",
+      "title": "Diabetes Self-Management Teaching (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "siadh-vs-di-basics",
+      "title": "SIADH vs DI Basics (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "aki-prerenal-vs-intrarenal",
+      "title": "AKI: Prerenal vs Intrarenal (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hemodialysis-access-care",
+      "title": "Hemodialysis Access Care (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "peritoneal-dialysis-complications",
+      "title": "Peritoneal Dialysis Complications (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "kidney-stones-strain-management",
+      "title": "Kidney Stones & Strain Management (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "uti-vs-pyelonephritis",
+      "title": "UTI vs Pyelonephritis (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "indwelling-catheter-risks",
+      "title": "Indwelling Catheter Risks (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "anemia-types-transfusion-thresholds",
+      "title": "Anemia Types & Transfusion Thresholds (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "transfusion-reaction-recognition",
+      "title": "Transfusion Reaction Recognition (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "neutropenic-precautions",
+      "title": "Neutropenic Precautions (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sickle-cell-pain-acs",
+      "title": "Sickle Cell Pain & ACS (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hip-fracture-fall-risk",
+      "title": "Hip Fracture & Fall Risk (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ra-flare-immune-modulators",
+      "title": "RA Flare & Immune Modulators (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "immobility-dvt-prophylaxis",
+      "title": "Immobility & DVT Prophylaxis (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sepsis-early-recognition-hy",
+      "title": "Sepsis Early Recognition (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hiv-confidentiality-pep-basics",
+      "title": "HIV Confidentiality & PEP Basics (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "isolation-precautions-in-practice",
+      "title": "Isolation Precautions in Practice (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "wound-infection-vs-colonization",
+      "title": "Wound Infection vs Colonization (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "burn-depth-fluid-resuscitation-basics",
+      "title": "Burn Depth & Fluid Resuscitation Basics (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pressure-injury-staging",
+      "title": "Pressure Injury Staging (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "severe-dermatitis-skin-care",
+      "title": "Severe Dermatitis Skin Care (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "suicide-risk-assessment-hy",
+      "title": "Suicide Risk Assessment (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "psychotropic-side-effects",
+      "title": "Psychotropic Side Effects (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "alcohol-withdrawal-ciwa",
+      "title": "Alcohol Withdrawal CIWA (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "preeclampsia-vs-eclampsia",
+      "title": "Preeclampsia vs Eclampsia (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "postpartum-hemorrhage",
+      "title": "Postpartum Hemorrhage (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (28 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "late-decelerations-fhr",
+      "title": "Late Decelerations & FHR (NCLEX-RN, Canada)",
+      "issues": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    }
+  ],
+  "gapAnalysisPointer": {
+    "legacyLessonRows": 4223,
+    "currentCatalogPathways": 8,
+    "approximateMissingLessonTopics": 4084,
+    "lessonClassification": {
+      "A_alreadyImportedMaterialized": 29,
+      "B_partialMasterMapOnly": 107,
+      "B_partialMergeIntoExisting": 3,
+      "C_notOnCatalogOrMaster": 4084
+    },
+    "pathwayGuessOnMissing": {
+      "RN": 658,
+      "PN": 928,
+      "NP": 1190,
+      "Allied": 240,
+      "unknown": 1068
+    },
+    "questionsLegacyItems": 22742,
+    "parityNote": "Majority of legacy lesson keys are not imported as pathway lessons; see unimported-legacy-content.json classification."
+  },
+  "mutationsExecuted": []
+}

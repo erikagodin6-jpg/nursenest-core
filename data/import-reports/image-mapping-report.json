@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-14T17:57:03.815Z",
+  "pass": "emit-recovery-import-reports",
+  "itemsExamined": 1089,
+  "itemsChanged": 0,
+  "itemsSkipped": 0,
+  "duplicatesSkipped": 0,
+  "itemsStillBlocked": 400,
+  "reasonsForBlocking": [
+    "No automatic URL migration from legacy public/ tree to Next public/CDN in this audit-only script.",
+    "Figures must be authored as PathwayLessonFigure (HTTPS) in catalog or DB payloads."
+  ],
+  "beforeAfter": {
+    "note": "Audit-only — no image rows mutated."
+  },
+  "summary": {
+    "catalogPathwaysWithLessons": 8,
+    "totalCatalogLessonsExamined": 1089,
+    "lessonsWithStructuredFigures": 0,
+    "lessonsWithInlineImageMarkdown": 0,
+    "lessonsWithNoFiguresOrInlineImages": 1089,
+    "legacyPublicAssetFilesApprox": 2751,
+    "legacyExtensionBuckets": {
+      ".json": 101,
+      ".jpg": 3,
+      ".gif": 9,
+      ".png": 989,
+      ".js": 1409,
+      ".webp": 144,
+      ".html": 5,
+      ".css": 4,
+      ".svg": 34,
+      ".mp4": 30,
+      ".jpeg": 23
+    }
+  }
+}

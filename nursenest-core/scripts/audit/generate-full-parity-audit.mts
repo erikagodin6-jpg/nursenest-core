@@ -41,8 +41,10 @@ type PathwayRow = {
   contentStatus:
     | "full"
     | "catalog_only"
+    | "catalog_only_db_unverified"
     | "db_only"
     | "route_only"
+    | "no_catalog_db_unverified"
     | "partial"
     | "unknown";
   evidence: string[];
@@ -121,9 +123,12 @@ async function main() {
     const hasDecks = (dbPublishedFlashcardDeckCount ?? 0) > 0;
 
     let contentStatus: PathwayRow["contentStatus"] = "unknown";
-    if (hasCatalogLessons || hasDbLessons) {
-      if (dbOk && hasCatalogLessons && hasDbLessons) contentStatus = "full";
-      else if (hasCatalogLessons && (!dbOk || !hasDbLessons)) contentStatus = "catalog_only";
+    if (!dbOk) {
+      if (hasCatalogLessons) contentStatus = "catalog_only_db_unverified";
+      else contentStatus = "no_catalog_db_unverified";
+    } else if (hasCatalogLessons || hasDbLessons) {
+      if (hasCatalogLessons && hasDbLessons) contentStatus = "full";
+      else if (hasCatalogLessons && !hasDbLessons) contentStatus = "catalog_only";
       else if (!hasCatalogLessons && hasDbLessons) contentStatus = "db_only";
       else contentStatus = "partial";
     } else {
@@ -154,7 +159,7 @@ async function main() {
       evidence,
     };
     pathwayRows.push(row);
-    if (contentStatus === "route_only") routeableNoContent.push(row);
+    if (dbOk && contentStatus === "route_only") routeableNoContent.push(row);
   }
 
   /** Lessons: structural completeness (catalog, EN) */
@@ -513,7 +518,7 @@ Generated: ${generatedAt}
 
 ### 1. Country + exam + locale combinations that are routeable but lack content
 
-**Definition used**: Public registry pathway where **catalogLessonCount = 0** AND **published DB lessons (locale en) = 0** (when DB available).
+**Definition used**: Public registry pathway where **catalogLessonCount = 0** AND **published DB lessons (locale en) = 0** — only computed when **DB is connected**.
 
 See \`routeableButNoLessonOrDbContent\` in \`data/audit/country-exam-locale-parity.json\`.
 
@@ -522,8 +527,12 @@ ${
     ? routeableNoContent
         .map((r) => `- \`${r.pathwayId}\` → ${r.routeLessonsIndex}`)
         .join("\n")
-    : "- None matched this definition in this run."
+    : dbOk
+      ? "- None matched this definition in this run."
+      : "- **Not evaluated** — re-run audit with \`DATABASE_URL\` to detect DB-only or empty pathways."
 }
+
+Pathways with **no bundled catalog rows** but possible DB content are flagged as \`no_catalog_db_unverified\` in the matrix when DB is skipped.
 
 **Important**: Marketing UI locales (\`MARKETING_LOCALE_CODES\`) add a **language prefix** for many marketing pages; exam hub paths still use **\`us\` / \`canada\`** as the first segment in \`(default)/[locale]/[slug]/[examCode]\` (that \`locale\` param is **country**, not UI language). Localized *lesson bodies* are mostly **EN** in catalog; DB may store other locales separately.
 
@@ -550,6 +559,15 @@ See \`flashcard-content-completeness-audit.json\`.
 ## Verification
 
 Run from \`nursenest-core/\`: \`npm run typecheck\`
+
+## Repository state (manual)
+
+- **Merge conflicts**: verify with \`git diff --name-only --diff-filter=U\` before merging.
+- **Allied health**: see \`alliedHealthMarketingProfessions\` in \`parity-final-status.json\`; routes \`/allied-health/{professionKey}/…\` complement \`us-allied-core\` / \`ca-allied-core\`.
+
+## Audit tooling
+
+- Generator: \`nursenest-core/scripts/audit/generate-full-parity-audit.mts\` (reports only; no runtime behavior changes).
 
 `;
 

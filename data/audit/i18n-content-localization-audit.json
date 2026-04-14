@@ -1,0 +1,26 @@
+{
+  "generatedAt": "2026-04-14T17:51:27.124Z",
+  "educationalOverlayLocales": [
+    "es",
+    "fr",
+    "tl"
+  ],
+  "perLocaleFiles": {
+    "es": {
+      "lessons": true,
+      "questions": true,
+      "flashcards": false
+    },
+    "fr": {
+      "lessons": true,
+      "questions": true,
+      "flashcards": true
+    },
+    "tl": {
+      "lessons": true,
+      "questions": true,
+      "flashcards": false
+    }
+  },
+  "note": "Lesson/question/flashcard body text is primarily DB + catalog; overlays supplement. See docs/i18n-architecture.md."
+}

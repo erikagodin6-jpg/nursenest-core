@@ -1,0 +1,159 @@
+{
+  "generatedAt": "2026-04-14T17:51:27.124Z",
+  "locales": [
+    {
+      "locale": "en",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "fr",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "es",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "tl",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "hi",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "zh",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "zh-tw",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "ar",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "ko",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "pt",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "pa",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "vi",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "ht",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "ur",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "ja",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "fa",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "de",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "th",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "tr",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "id",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "it",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    },
+    {
+      "locale": "ru",
+      "missingVsEnglish": [],
+      "empty": [],
+      "requiredUserUiMissing": [],
+      "requiredUserUiEmpty": []
+    }
+  ]
+}

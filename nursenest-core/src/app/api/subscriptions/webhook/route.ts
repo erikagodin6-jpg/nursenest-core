@@ -21,6 +21,7 @@ import {
   syncUserFromCheckoutSessionMetadata,
   syncUserFromStripePriceId,
 } from "@/lib/stripe/sync-user-from-stripe-subscription";
+import { pastDueSinceForStatusTransition } from "@/lib/stripe/subscription-past-due-since";
 
 type LifecycleData = ReturnType<typeof billingLifecycleFields>;
 
@@ -112,6 +113,7 @@ export async function POST(req: Request) {
             where: { stripeSubscriptionId: subId },
             update: {
               status: SubscriptionStatus.ACTIVE,
+              pastDueSince: null,
               ...(plan ? { planTier: plan.tier, planCountry: plan.country } : {}),
               ...(durationMeta ? { planDuration: durationMeta } : {}),
               ...(alliedCareerMeta ? { alliedCareer: alliedCareerMeta } : {}),
@@ -124,6 +126,7 @@ export async function POST(req: Request) {
             create: {
               userId,
               status: SubscriptionStatus.ACTIVE,
+              pastDueSince: null,
               stripeSubscriptionId: subId,
               stripeCustomerId: customerId,
               planTier: plan?.tier,
@@ -153,10 +156,10 @@ export async function POST(req: Request) {
 
     if (event.type === "customer.subscription.updated") {
       const sub = event.data.object as Stripe.Subscription;
-      const status = mapStripeSubscriptionStatus(sub.status);
+      const mappedStatus = mapStripeSubscriptionStatus(sub.status);
       const row = await prisma.subscription.findUnique({
         where: { stripeSubscriptionId: sub.id },
-        select: { userId: true },
+        select: { id: true, userId: true, status: true },
       });
       const priceId = firstSubscriptionPriceId(sub);
       const mapped = priceId ? findTierCountryByPriceId(priceId) : undefined;
@@ -168,40 +171,50 @@ export async function POST(req: Request) {
       if (row?.userId && priceId) {
         await syncUserFromStripePriceId(row.userId, priceId);
       }
-      const lifecycle = billingLifecycleFields(sub);
-      const data: Prisma.SubscriptionUpdateManyMutationInput = {
-        currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
-        trialEnd: lifecycle.trialEnd ?? null,
-        cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
-      };
-      if (status !== null) data.status = status;
-      if (mapped) {
-        data.planTier = mapped.tier;
-        data.planCountry = mapped.country;
-        if (mapped.alliedCareer) data.alliedCareer = mapped.alliedCareer;
-      }
-      await prisma.$transaction(async (tx) => {
-        await tx.subscription.updateMany({
-          where: { stripeSubscriptionId: sub.id },
+      if (row) {
+        const lifecycle = billingLifecycleFields(sub);
+        const data: Prisma.SubscriptionUpdateInput = {
+          currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
+          trialEnd: lifecycle.trialEnd ?? null,
+          cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
+        };
+        if (mappedStatus !== null) {
+          data.status = mappedStatus;
+          const pastPatch = pastDueSinceForStatusTransition(mappedStatus, row.status);
+          if (pastPatch) Object.assign(data, pastPatch);
+        }
+        if (mapped) {
+          data.planTier = mapped.tier;
+          data.planCountry = mapped.country;
+          if (mapped.alliedCareer) data.alliedCareer = mapped.alliedCareer;
+        }
+        await prisma.subscription.update({
+          where: { id: row.id },
           data,
         });
-      });
+      }
     }
 
     if (event.type === "customer.subscription.deleted") {
       const sub = event.data.object as Stripe.Subscription;
       const lifecycle = billingLifecycleFields(sub);
-      await prisma.$transaction(async (tx) => {
-        await tx.subscription.updateMany({
-          where: { stripeSubscriptionId: sub.id },
+      const existing = await prisma.subscription.findUnique({
+        where: { stripeSubscriptionId: sub.id },
+        select: { id: true, status: true },
+      });
+      if (existing) {
+        const pastPatch = pastDueSinceForStatusTransition(SubscriptionStatus.CANCELLED, existing.status);
+        await prisma.subscription.update({
+          where: { id: existing.id },
           data: {
             status: SubscriptionStatus.CANCELLED,
             cancelAtPeriodEnd: true,
             currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
             trialEnd: lifecycle.trialEnd ?? null,
+            ...(pastPatch ?? {}),
           },
         });
-      });
+      }
     }
 
     if (event.type === "invoice.payment_succeeded") {
@@ -210,12 +223,20 @@ export async function POST(req: Request) {
       const subRaw = (invoice as unknown as { subscription?: string | { id: string } | null }).subscription;
       const subId = typeof subRaw === "string" ? subRaw : subRaw?.id;
       if (subId) {
-        await prisma.$transaction(async (tx) => {
-          await tx.subscription.updateMany({
-            where: { stripeSubscriptionId: subId },
-            data: { status: SubscriptionStatus.ACTIVE },
-          });
+        const row = await prisma.subscription.findUnique({
+          where: { stripeSubscriptionId: subId },
+          select: { id: true, status: true },
         });
+        if (row) {
+          const pastPatch = pastDueSinceForStatusTransition(SubscriptionStatus.ACTIVE, row.status);
+          await prisma.subscription.update({
+            where: { id: row.id },
+            data: {
+              status: SubscriptionStatus.ACTIVE,
+              ...(pastPatch ?? {}),
+            },
+          });
+        }
         if (billingReason === "subscription_cycle") {
           const row = await prisma.subscription.findUnique({
             where: { stripeSubscriptionId: subId },
@@ -236,12 +257,20 @@ export async function POST(req: Request) {
       const subRaw = (invoice as unknown as { subscription?: string | { id: string } | null }).subscription;
       const subId = typeof subRaw === "string" ? subRaw : subRaw?.id;
       if (subId) {
-        await prisma.$transaction(async (tx) => {
-          await tx.subscription.updateMany({
-            where: { stripeSubscriptionId: subId },
-            data: { status: SubscriptionStatus.PAST_DUE },
-          });
+        const row = await prisma.subscription.findUnique({
+          where: { stripeSubscriptionId: subId },
+          select: { id: true, status: true },
         });
+        if (row) {
+          const pastPatch = pastDueSinceForStatusTransition(SubscriptionStatus.PAST_DUE, row.status);
+          await prisma.subscription.update({
+            where: { id: row.id },
+            data: {
+              status: SubscriptionStatus.PAST_DUE,
+              ...(pastPatch ?? {}),
+            },
+          });
+        }
       }
     }
 

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-14T17:57:03.815Z",
+  "currentSourcesScanned": [
+    "pathway-lesson-catalog-sync bundled lessons"
+  ],
+  "summary": {
+    "totalCatalogLessons": 1089,
+    "withPreTest": 593,
+    "withPostTest": 633,
+    "withBothPreAndPost": 593,
+    "withNeitherPreNorPost": 456
+  },
+  "note": "Pre/post lesson quizzes live on PathwayLessonRecord.preTest/postTest (catalog or DB JSON). DB-only lessons are not included here.",
+  "itemsExamined": 1089,
+  "itemsChanged": 0,
+  "itemsSkipped": 0,
+  "duplicatesSkipped": 0,
+  "itemsStillBlocked": 0,
+  "mutationsExecuted": []
+}

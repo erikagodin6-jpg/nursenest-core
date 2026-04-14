@@ -1,0 +1,234 @@
+{
+  "generatedAt": "2026-04-14T17:51:27.124Z",
+  "compileTimeEnglishAlignment": "Non-en locales are aligned to English key set; identical string values indicate untranslated or same-as-English copy — see identicalToEnglishCount per locale in key coverage.",
+  "placeholderInterpolationFallbacks": {
+    "generatedAt": "2026-04-14T17:45:51.209Z",
+    "totalFallbacks": 18,
+    "byLocale": {
+      "fr": 4,
+      "ko": 3,
+      "ht": 3,
+      "fa": 3,
+      "th": 2,
+      "tr": 1,
+      "id": 2
+    },
+    "events": [
+      {
+        "locale": "fr",
+        "key": "glossary.relatedTerms",
+        "localizedValue": "Termes connexes",
+        "englishValue": "Related {{category}} Terms",
+        "placeholdersInEnglish": [
+          "category"
+        ],
+        "placeholdersInLocalized": []
+      },
+      {
+        "locale": "fr",
+        "key": "pricing.save",
+        "localizedValue": "Enregistrer",
+        "englishValue": "Save {{percent}}%",
+        "placeholdersInEnglish": [
+          "percent"
+        ],
+        "placeholdersInLocalized": []
+      },
+      {
+        "locale": "fr",
+        "key": "qbank.startPracticeExam",
+        "localizedValue": "Commencer l",
+        "englishValue": "Start Practice Exam ({{count}} questions, {{time}} min)",
+        "placeholdersInEnglish": [
+          "count",
+          "time"
+        ],
+        "placeholdersInLocalized": []
+      },
+      {
+        "locale": "fr",
+        "key": "upgrade.usageNote",
+        "localizedValue": "Vous avez utilisé {{used}} sur {{limit}} ({{percentage}}%) de vos questions gratuites.",
+        "englishValue": "You",
+        "placeholdersInEnglish": [],
+        "placeholdersInLocalized": [
+          "limit",
+          "percentage",
+          "used"
+        ]
+      },
+      {
+        "locale": "ko",
+        "key": "glossary.relatedTerms",
+        "localizedValue": "관련 용어",
+        "englishValue": "Related {{category}} Terms",
+        "placeholdersInEnglish": [
+          "category"
+        ],
+        "placeholdersInLocalized": []
+      },
+      {
+        "locale": "ko",
+        "key": "pricing.save",
+        "localizedValue": "절약",
+        "englishValue": "Save {{percent}}%",
+        "placeholdersInEnglish": [
+          "percent"
+        ],
+        "placeholdersInLocalized": []
+      },
+      {
+        "locale": "ko",
+        "key": "upgrade.usageNote",
+        "localizedValue": "무료 카드 {{limit}}개 중 {{used}}개 사용 ({{percentage}}%)",
+        "englishValue": "You",
+        "placeholdersInEnglish": [],
+        "placeholdersInLocalized": [
+          "limit",
+          "percentage",
+          "used"
+        ]
+      },
+      {
+        "locale": "ht",
+        "key": "glossary.relatedTerms",
+        "localizedValue": "Tèm ki Gen Rapò",
+        "englishValue": "Related {{category}} Terms",
+        "placeholdersInEnglish": [
+          "category"
+        ],
+        "placeholdersInLocalized": []
+      },
+      {
+        "locale": "ht",
+        "key": "pricing.save",
+        "localizedValue": "Save",
+        "englishValue": "Save {{percent}}%",
+        "placeholdersInEnglish": [
+          "percent"
+        ],
+        "placeholdersInLocalized": []
+      },
+      {
+        "locale": "ht",
+        "key": "upgrade.usageNote",
+        "localizedValue": "Ou te itilize {{used}} nan {{limit}} kat gratis ({{percentage}}%)",
+        "englishValue": "You",
+        "placeholdersInEnglish": [],
+        "placeholdersInLocalized": [
+          "limit",
+          "percentage",
+          "used"
+        ]
+      },
+      {
+        "locale": "fa",
+        "key": "glossary.relatedTerms",
+        "localizedValue": "اصطلاحات مرتبط",
+        "englishValue": "Related {{category}} Terms",
+        "placeholdersInEnglish": [
+          "category"
+        ],
+        "placeholdersInLocalized": []
+      },
+      {
+        "locale": "fa",
+        "key": "pricing.save",
+        "localizedValue": "Save",
+        "englishValue": "Save {{percent}}%",
+        "placeholdersInEnglish": [
+          "percent"
+        ],
+        "placeholdersInLocalized": []
+      },
+      {
+        "locale": "fa",
+        "key": "upgrade.usageNote",
+        "localizedValue": "شما از {{used}} از {{limit}} کارت رایگان استفاده کرده‌اید ({{percentage}}%)",
+        "englishValue": "You",
+        "placeholdersInEnglish": [],
+        "placeholdersInLocalized": [
+          "limit",
+          "percentage",
+          "used"
+        ]
+      },
+      {
+        "locale": "th",
+        "key": "pricing.save",
+        "localizedValue": "ประหยัด",
+        "englishValue": "Save {{percent}}%",
+        "placeholdersInEnglish": [
+          "percent"
+        ],
+        "placeholdersInLocalized": []
+      },
+      {
+        "locale": "th",
+        "key": "upgrade.usageNote",
+        "localizedValue": "คุณได้ใช้ {{used}} จาก {{limit}} การ์ดฟรี ({{percentage}}%)",
+        "englishValue": "You",
+        "placeholdersInEnglish": [],
+        "placeholdersInLocalized": [
+          "limit",
+          "percentage",
+          "used"
+        ]
+      },
+      {
+        "locale": "tr",
+        "key": "upgrade.title",
+        "localizedValue": "Premium",
+        "englishValue": "Pass Your NCLEX or {{examName}} With Structured Exam-Level Practice",
+        "placeholdersInEnglish": [
+          "examName"
+        ],
+        "placeholdersInLocalized": []
+      },
+      {
+        "locale": "id",
+        "key": "pricing.save",
+        "localizedValue": "Hemat",
+        "englishValue": "Save {{percent}}%",
+        "placeholdersInEnglish": [
+          "percent"
+        ],
+        "placeholdersInLocalized": []
+      },
+      {
+        "locale": "id",
+        "key": "upgrade.title",
+        "localizedValue": "Tingkatkan ke NurseNest Pro",
+        "englishValue": "Pass Your NCLEX or {{examName}} With Structured Exam-Level Practice",
+        "placeholdersInEnglish": [
+          "examName"
+        ],
+        "placeholdersInLocalized": []
+      }
+    ]
+  },
+  "byLocaleIdenticalToEnglish": {
+    "en": 0,
+    "fr": 5990,
+    "es": 15206,
+    "tl": 11557,
+    "hi": 16452,
+    "zh": 16343,
+    "zh-tw": 17013,
+    "ar": 5706,
+    "ko": 16518,
+    "pt": 16390,
+    "pa": 16470,
+    "vi": 16497,
+    "ht": 16618,
+    "ur": 16488,
+    "ja": 16484,
+    "fa": 16527,
+    "de": 17094,
+    "th": 17161,
+    "tr": 17186,
+    "id": 17217,
+    "it": 20325,
+    "ru": 20321
+  }
+}

@@ -21,6 +21,7 @@ import {
   guardSubscriptionCreateCustomerConsistency,
   isTrustedStripeReconciliationUserId,
 } from "@/lib/stripe/stripe-reconcile-metadata";
+import { pastDueSinceForStatusTransition } from "@/lib/stripe/subscription-past-due-since";
 
 export type DiscrepancyBase = { stripeSubscriptionId: string };
 
@@ -290,6 +291,7 @@ export async function runStripeSubscriptionReconciliation(
                   stripeSubscriptionId: sub.id,
                   stripeCustomerId: customerId,
                   status: mappedStatus,
+                  ...(mappedStatus === SubscriptionStatus.PAST_DUE ? { pastDueSince: new Date() } : {}),
                   planTier: mapped?.tier ?? undefined,
                   planCountry: mapped?.country ?? undefined,
                   currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
@@ -370,6 +372,8 @@ export async function runStripeSubscriptionReconciliation(
 
     if (mappedStatus !== null && row.status !== mappedStatus) {
       patch.status = mappedStatus;
+      const pastPatch = pastDueSinceForStatusTransition(mappedStatus, row.status);
+      if (pastPatch) Object.assign(patch, pastPatch);
     }
 
     if (stripeEnd && dbEnd) {

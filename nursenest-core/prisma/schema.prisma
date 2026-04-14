@@ -512,6 +512,8 @@ model Subscription {
   currentPeriodEnd     DateTime?
   trialEnd             DateTime?
   cancelAtPeriodEnd    Boolean            @default(false)
+  /** First time this row entered PAST_DUE (entitlement grace anchor). Cleared when status leaves PAST_DUE. */
+  pastDueSince         DateTime?
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
 }

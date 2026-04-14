@@ -86,6 +86,7 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
     su.subscriptionStatus =
       token.subscriptionStatus === "active" ||
       token.subscriptionStatus === "grace" ||
+      token.subscriptionStatus === "past_due_grace" ||
       token.subscriptionStatus === "past_due"
         ? token.subscriptionStatus
         : "none";

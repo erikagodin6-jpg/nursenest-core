@@ -1,0 +1,38 @@
+{
+  "generatedAt": "2026-04-14T17:51:27.124Z",
+  "risks": [
+    {
+      "id": "placeholder-mismatch",
+      "severity": "medium",
+      "detail": "Locale strings missing {{vars}} vs English — see tools/i18n/reports/placeholder-fallbacks.json",
+      "count": 18
+    },
+    {
+      "id": "wide-english-copy",
+      "severity": "low",
+      "detail": "High identicalToEnglishCount means UI may read as English for that locale",
+      "locales": [
+        "es",
+        "tl",
+        "hi",
+        "zh",
+        "zh-tw",
+        "ko",
+        "pt",
+        "pa",
+        "vi",
+        "ht",
+        "ur",
+        "ja",
+        "fa",
+        "de",
+        "th",
+        "tr",
+        "id",
+        "it",
+        "ru"
+      ]
+    }
+  ],
+  "adminExcludedFromPass": true
+}

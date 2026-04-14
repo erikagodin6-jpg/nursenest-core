@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-14T17:57:09.531Z",
+  "risks": [
+    {
+      "id": "R1",
+      "title": "Bulk lesson import without dedupe",
+      "severity": "high",
+      "mitigation": "Use stable pathwayId+slug; run dedupe reports; incremental batches only"
+    },
+    {
+      "id": "R2",
+      "title": "Client-side paywall bypass",
+      "severity": "critical",
+      "mitigation": "Server getUserAccess / resolveEntitlement — never import routes that skip gates"
+    },
+    {
+      "id": "R3",
+      "title": "Parallel i18n loaders",
+      "severity": "high",
+      "mitigation": "Single compile pipeline per docs/i18n-architecture.md"
+    },
+    {
+      "id": "R4",
+      "title": "Oversized list renders",
+      "severity": "medium",
+      "mitigation": "Pagination / ISR — see rn-lesson-library-safety rule"
+    },
+    {
+      "id": "R5",
+      "title": "External legacy mirror unavailable",
+      "severity": "low",
+      "mitigation": "Mount/copy NurseNest mirror; re-run external scan"
+    },
+    {
+      "id": "R6",
+      "title": "Schema mismatch for legacy record shape",
+      "severity": "medium",
+      "mitigation": "Park in holding JSON + import-reports; transform before Prisma write"
+    }
+  ]
+}

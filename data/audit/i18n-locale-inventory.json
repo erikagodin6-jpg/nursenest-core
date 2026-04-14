@@ -1,0 +1,216 @@
+{
+  "generatedAt": "2026-04-14T17:51:27.124Z",
+  "supportedMarketingLocales": [
+    "en",
+    "fr",
+    "es",
+    "tl",
+    "hi",
+    "zh",
+    "zh-tw",
+    "ar",
+    "ko",
+    "pt",
+    "pa",
+    "vi",
+    "ht",
+    "ur",
+    "ja",
+    "fa",
+    "de",
+    "th",
+    "tr",
+    "id",
+    "it",
+    "ru"
+  ],
+  "marketingLanguageMetadata": [
+    {
+      "code": "en",
+      "name": "English",
+      "flag": "🇬🇧",
+      "tier": "full"
+    },
+    {
+      "code": "fr",
+      "name": "Français",
+      "flag": "🇫🇷",
+      "tier": "full"
+    },
+    {
+      "code": "es",
+      "name": "Español",
+      "flag": "🇪🇸",
+      "tier": "full"
+    },
+    {
+      "code": "tl",
+      "name": "Tagalog",
+      "flag": "🇵🇭",
+      "tier": "partial"
+    },
+    {
+      "code": "hi",
+      "name": "हिन्दी",
+      "flag": "🇮🇳",
+      "tier": "partial"
+    },
+    {
+      "code": "zh",
+      "name": "中文",
+      "flag": "🇨🇳",
+      "tier": "incomplete"
+    },
+    {
+      "code": "zh-tw",
+      "name": "繁體中文",
+      "flag": "🇹🇼",
+      "tier": "incomplete"
+    },
+    {
+      "code": "ar",
+      "name": "العربية",
+      "flag": "🇸🇦",
+      "tier": "incomplete"
+    },
+    {
+      "code": "ko",
+      "name": "한국어",
+      "flag": "🇰🇷",
+      "tier": "incomplete"
+    },
+    {
+      "code": "pt",
+      "name": "Português",
+      "flag": "🇧🇷",
+      "tier": "incomplete"
+    },
+    {
+      "code": "pa",
+      "name": "ਪੰਜਾਬੀ",
+      "flag": "🇨🇦",
+      "tier": "incomplete"
+    },
+    {
+      "code": "vi",
+      "name": "Tiếng Việt",
+      "flag": "🇻🇳",
+      "tier": "incomplete"
+    },
+    {
+      "code": "ht",
+      "name": "Kreyòl",
+      "flag": "🇭🇹",
+      "tier": "incomplete"
+    },
+    {
+      "code": "ur",
+      "name": "اردو",
+      "flag": "🇵🇰",
+      "tier": "incomplete"
+    },
+    {
+      "code": "ja",
+      "name": "日本語",
+      "flag": "🇯🇵",
+      "tier": "incomplete"
+    },
+    {
+      "code": "fa",
+      "name": "فارسی",
+      "flag": "🇮🇷",
+      "tier": "incomplete"
+    },
+    {
+      "code": "de",
+      "name": "Deutsch",
+      "flag": "🇩🇪",
+      "tier": "incomplete"
+    },
+    {
+      "code": "th",
+      "name": "ไทย",
+      "flag": "🇹🇭",
+      "tier": "incomplete"
+    },
+    {
+      "code": "tr",
+      "name": "Türkçe",
+      "flag": "🇹🇷",
+      "tier": "incomplete"
+    },
+    {
+      "code": "id",
+      "name": "Indonesia",
+      "flag": "🇮🇩",
+      "tier": "incomplete"
+    },
+    {
+      "code": "it",
+      "name": "Italiano",
+      "flag": "🇮🇹",
+      "tier": "incomplete"
+    },
+    {
+      "code": "ru",
+      "name": "Русский",
+      "flag": "🇷🇺",
+      "tier": "incomplete"
+    }
+  ],
+  "compilePipelineLanguages": [
+    "en",
+    "fr",
+    "tl",
+    "hi",
+    "es",
+    "zh",
+    "zh-tw",
+    "ar",
+    "ko",
+    "pt",
+    "pa",
+    "vi",
+    "ht",
+    "ur",
+    "ja",
+    "fa",
+    "de",
+    "th",
+    "tr",
+    "id",
+    "it",
+    "ru"
+  ],
+  "compileVsMarketingMismatch": null,
+  "defaultLocale": "en",
+  "bundleLoadPath": "nursenest-core/public/i18n/{locale}.json",
+  "sources": {
+    "monolith": "tools/i18n/source/i18n-{lang}.ts",
+    "marketingEnglish": "tools/i18n/marketing/marketing-en.json",
+    "marketingOverlays": {
+      "ar": "tools/i18n/marketing/locale/marketing-ar.json",
+      "de": "tools/i18n/marketing/locale/marketing-de.json",
+      "es": "tools/i18n/marketing/locale/marketing-es.json",
+      "fa": "tools/i18n/marketing/locale/marketing-fa.json",
+      "fr": "tools/i18n/marketing/locale/marketing-fr.json",
+      "hi": "tools/i18n/marketing/locale/marketing-hi.json",
+      "ht": "tools/i18n/marketing/locale/marketing-ht.json",
+      "id": "tools/i18n/marketing/locale/marketing-id.json",
+      "it": "tools/i18n/marketing/locale/marketing-it.json",
+      "ja": "tools/i18n/marketing/locale/marketing-ja.json",
+      "ko": "tools/i18n/marketing/locale/marketing-ko.json",
+      "pa": "tools/i18n/marketing/locale/marketing-pa.json",
+      "pt": "tools/i18n/marketing/locale/marketing-pt.json",
+      "ru": "tools/i18n/marketing/locale/marketing-ru.json",
+      "th": "tools/i18n/marketing/locale/marketing-th.json",
+      "tl": "tools/i18n/marketing/locale/marketing-tl.json",
+      "tr": "tools/i18n/marketing/locale/marketing-tr.json",
+      "ur": "tools/i18n/marketing/locale/marketing-ur.json",
+      "vi": "tools/i18n/marketing/locale/marketing-vi.json",
+      "zh-tw": "tools/i18n/marketing/locale/marketing-zh-tw.json",
+      "zh": "tools/i18n/marketing/locale/marketing-zh.json"
+    }
+  },
+  "rtlLocalesNote": "ar, fa, ur — see marketing-locale-policy isRtlMarketingLocale"
+}

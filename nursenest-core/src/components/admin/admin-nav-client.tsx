@@ -36,6 +36,7 @@ import {
   TestTube2,
   Workflow,
   MessageSquare,
+  ShieldCheck,
 } from "lucide-react";
 import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
 import type { StaffTier } from "@/lib/auth/staff-roles";
@@ -92,6 +93,7 @@ const GROUPS: NavGroup[] = [
       { href: "/admin/blog/generate", label: "Blog generator", icon: Sparkles },
       { href: "/admin/blog/scheduler", label: "Scheduler", icon: BookOpen },
       { href: "/admin/seo", label: "SEO & internal links", icon: Search },
+      { href: "/admin/eeat-editorial", label: "E-E-A-T editorial", icon: ShieldCheck },
     ],
   },
   {

@@ -41,6 +41,7 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/admin/automation-logs",
   "/admin/generation",
   "/admin/content-coverage",
+  "/admin/eeat-editorial",
   "/admin/queue",
   "/admin/diagnostics",
   "/admin/operations",

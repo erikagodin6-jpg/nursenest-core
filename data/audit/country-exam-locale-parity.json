@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T17:41:20.982Z",
+  "generatedAt": "2026-04-14T17:56:51.860Z",
   "dbConnected": false,
   "legacySourcesScanned": [
     "data/audit/legacy-lessons-inventory.json (summary)",
@@ -57,7 +57,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only",
+      "contentStatus": "catalog_only_db_unverified",
       "evidence": [
         "registry:ca-rpn-rex-pn",
         "catalog.sync.lessons=150",
@@ -78,7 +78,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only",
+      "contentStatus": "catalog_only_db_unverified",
       "evidence": [
         "registry:ca-rn-nclex-rn",
         "catalog.sync.lessons=188",
@@ -99,7 +99,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only",
+      "contentStatus": "catalog_only_db_unverified",
       "evidence": [
         "registry:ca-np-cnple",
         "catalog.sync.lessons=21",
@@ -120,7 +120,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only",
+      "contentStatus": "catalog_only_db_unverified",
       "evidence": [
         "registry:us-lpn-nclex-pn",
         "catalog.sync.lessons=150",
@@ -141,7 +141,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only",
+      "contentStatus": "catalog_only_db_unverified",
       "evidence": [
         "registry:us-rn-nclex-rn",
         "catalog.sync.lessons=187",
@@ -162,7 +162,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only",
+      "contentStatus": "catalog_only_db_unverified",
       "evidence": [
         "registry:us-rn-new-grad-transition",
         "catalog.sync.lessons=40",
@@ -183,7 +183,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only",
+      "contentStatus": "catalog_only_db_unverified",
       "evidence": [
         "registry:us-np-fnp",
         "catalog.sync.lessons=161",
@@ -204,7 +204,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only",
+      "contentStatus": "catalog_only_db_unverified",
       "evidence": [
         "registry:us-np-agpcnp",
         "catalog.sync.lessons=70",
@@ -225,7 +225,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only",
+      "contentStatus": "catalog_only_db_unverified",
       "evidence": [
         "registry:us-np-pmhnp",
         "catalog.sync.lessons=50",
@@ -246,7 +246,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only",
+      "contentStatus": "catalog_only_db_unverified",
       "evidence": [
         "registry:us-np-whnp",
         "catalog.sync.lessons=21",
@@ -267,7 +267,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only",
+      "contentStatus": "catalog_only_db_unverified",
       "evidence": [
         "registry:us-np-pnp-pc",
         "catalog.sync.lessons=21",
@@ -288,7 +288,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only",
+      "contentStatus": "catalog_only_db_unverified",
       "evidence": [
         "registry:ca-allied-core",
         "catalog.sync.lessons=15",
@@ -309,7 +309,7 @@
       "dbPublishedLessonCount": null,
       "dbPublishedQuestionCount": null,
       "dbPublishedFlashcardDeckCount": null,
-      "contentStatus": "catalog_only",
+      "contentStatus": "catalog_only_db_unverified",
       "evidence": [
         "registry:us-allied-core",
         "catalog.sync.lessons=15",

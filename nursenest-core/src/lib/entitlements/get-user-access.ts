@@ -7,62 +7,14 @@ import {
 } from "@/lib/entitlements/past-due-policy";
 import { effectiveTierCountryForAccess } from "@/lib/entitlements/subscription-plan";
 import type { AlliedCareerKey } from "@/lib/pricing/display-catalog";
+import type { AccessScope, SubscriptionPlanStatus, UserAccess } from "./user-access-types";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { withRetry } from "@/lib/resilience/with-retry";
 
-/** Narrow legacy shape for question/lesson SQL helpers (shared type; avoid circular imports). */
-export type AccessScope = {
-  hasAccess: boolean;
-  reason:
-    | "active_subscription"
-    | "admin_override"
-    | "grace_period"
-    | "past_due_grace"
-    | "active_trial"
-    | "no_access";
-  tier: TierCode | null;
-  country: CountryCode | null;
-  /** When tier is ALLIED, the specific career line the user purchased. */
-  alliedCareer: AlliedCareerKey | null;
-};
-
-/** Normalized subscription lifecycle for product UI and server gates. */
-export type SubscriptionPlanStatus = "none" | "active" | "canceled" | "grace" | "past_due";
-
-/**
- * Canonical access snapshot for a learner: mirrors Stripe `Subscription` + `User` profile.
- * Use {@link accessScopeFromUserAccess} / `resolveEntitlement` when only tier/country/`hasAccess` is needed.
- */
-export type UserAccess = {
-  userId: string;
-  /** True when the learner may use premium lessons, bank, CAT, etc. */
-  hasPremium: boolean;
-  /** Same semantics as {@link AccessScope.reason}. */
-  reason: AccessScope["reason"];
-  allowedRegion: {
-    country: CountryCode | null;
-    /** Global pricing region from checkout metadata, when set. */
-    billingRegionSlug: string | null;
-  };
-  allowedProfession: {
-    tier: TierCode | null;
-    alliedCareer: AlliedCareerKey | null;
-  };
-  allowedExam: {
-    /** Learner goal pathway; optional future hard-lock from subscription metadata. */
-    pathwayId: string | null;
-  };
-  plan: {
-    planCode: string | null;
-    duration: string | null;
-    status: SubscriptionPlanStatus;
-    /** Best-effort access end: current period end, else trial end. */
-    expiresAt: Date | null;
-    cancelAtPeriodEnd: boolean;
-  };
-};
+export type { AccessScope, SubscriptionPlanStatus, UserAccess } from "./user-access-types";
+export { subscriptionStatusForSession, type SessionSubscriptionStatus } from "./subscription-session-status";
 
 function mapSubscriptionPlanStatus(status: SubscriptionStatus | undefined | null): SubscriptionPlanStatus {
   if (!status) return "none";
@@ -98,6 +50,7 @@ type SubscriptionSelect = {
   trialEnd: Date | null;
   cancelAtPeriodEnd: boolean;
   updatedAt: Date;
+  pastDueSince: Date | null;
 };
 
 function emptyAccess(userId: string): UserAccess {
@@ -162,6 +115,7 @@ export async function getUserAccess(userId: string): Promise<UserAccess> {
           trialEnd: true,
           cancelAtPeriodEnd: true,
           updatedAt: true,
+          pastDueSince: true,
         },
       }),
     ),
@@ -181,6 +135,7 @@ export async function getUserAccess(userId: string): Promise<UserAccess> {
           trialEnd: true,
           cancelAtPeriodEnd: true,
           updatedAt: true,
+          pastDueSince: true,
         },
       }),
     ),
@@ -285,6 +240,7 @@ export async function getUserAccess(userId: string): Promise<UserAccess> {
     const grantPastDue = pastDueSubscriptionGrantsPremium(pastDuePolicy, {
       updatedAt: activeSubscription.updatedAt,
       currentPeriodEnd: activeSubscription.currentPeriodEnd,
+      pastDueSince: activeSubscription.pastDueSince,
     });
     if (grantPastDue) {
       return {
@@ -351,21 +307,6 @@ export async function getUserAccess(userId: string): Promise<UserAccess> {
       cancelAtPeriodEnd,
     },
   };
-}
-
-/**
- * Maps DB-backed access to a coarse session flag for UI (JWT / sync-session).
- * Server gates still use {@link getUserAccess} / {@link resolveEntitlement}.
- */
-export function subscriptionStatusForSession(
-  ua: UserAccess,
-): "active" | "grace" | "none" | "past_due" {
-  if (ua.hasPremium) {
-    if (ua.reason === "grace_period" || ua.reason === "past_due_grace") return "grace";
-    return "active";
-  }
-  if (ua.plan.status === "past_due") return "past_due";
-  return "none";
 }
 
 /** Narrow legacy shape for question/lesson SQL helpers. */
