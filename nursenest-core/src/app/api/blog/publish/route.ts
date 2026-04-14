@@ -4,9 +4,8 @@ import { verifyBlogPublishSchemaColumns } from "@/lib/blog/blog-publish-db-guard
 import { promoteScheduledBlogPosts } from "@/lib/blog/blog-publish-scheduler";
 
 /**
- * Promotes scheduled blog posts whose publishAt has passed to PUBLISHED.
- * Call from your scheduler every 5-10 minutes with Authorization: Bearer CRON_SECRET.
- * Public pages already show SCHEDULED posts when publishAt <= now; this keeps status aligned for ops.
+ * Lightweight publish endpoint for external schedulers.
+ * Run this endpoint every 5-10 minutes.
  */
 export async function POST(req: Request) {
   const secret = process.env.CRON_SECRET?.trim();
@@ -22,7 +21,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         ok: false,
-        error: "Blog publish schema mismatch",
+        error: "Blog schema is not ready for publishing.",
         missingColumns: schema.missing,
         checkedAt: schema.checkedAt,
         reason: schema.reason ?? null,
@@ -37,6 +36,7 @@ export async function POST(req: Request) {
   revalidatePath("/sitemap.xml");
   revalidatePath("/sitemaps/blog.xml");
   revalidatePath("/sitemaps/localized-blog.xml");
+
   return NextResponse.json({
     ok: true,
     promoted: result.count,
@@ -44,6 +44,5 @@ export async function POST(req: Request) {
     skippedMaxRetries: result.skippedMaxRetries,
     failedCount: result.failures.length,
     failures: result.failures,
-    recommendedCronMinutes: "5-10",
   });
 }

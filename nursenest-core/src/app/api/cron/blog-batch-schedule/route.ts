@@ -1,11 +1,12 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { processDueBlogBatchScheduleItems } from "@/lib/blog/blog-batch-schedule";
+import { promoteScheduledBlogPosts } from "@/lib/blog/blog-publish-scheduler";
 
 /**
  * Generates and schedules blog posts from **active** topic batch schedules.
  *
- * **DigitalOcean App Platform:** add a Scheduled Job (Cron) component that POSTs to this URL every 5–15 minutes:
+ * **DigitalOcean App Platform:** add a Scheduled Job (Cron) component that POSTs to this URL every 5-10 minutes:
  * `Authorization: Bearer $CRON_SECRET` (same as `/api/cron/blog-publish` and `/api/cron/jobs`).
  *
  * Flow: finds `BlogBatchScheduleItem` rows with `status=PENDING` and `plannedPublishAt <= now` (schedule active),
@@ -20,8 +21,21 @@ export async function POST(req: Request) {
     }
   }
 
-  const result = await processDueBlogBatchScheduleItems();
+  const [result, promoted] = await Promise.all([
+    processDueBlogBatchScheduleItems(),
+    promoteScheduledBlogPosts(),
+  ]);
   revalidatePath("/blog");
   revalidatePath("/blog", "layout");
-  return NextResponse.json({ ok: true, ...result });
+  revalidatePath("/sitemap.xml");
+  revalidatePath("/sitemaps/blog.xml");
+  revalidatePath("/sitemaps/localized-blog.xml");
+  return NextResponse.json({
+    ok: true,
+    ...result,
+    promotedScheduled: promoted.count,
+    publishFailedCount: promoted.failures.length,
+    publishFailures: promoted.failures,
+    publishSkippedMaxRetries: promoted.skippedMaxRetries,
+  });
 }
