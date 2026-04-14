@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import { useTheme } from "next-themes";
 import { getNavChromeStyle, getNavChromeVars } from "@/lib/theme/nav-chrome";
 import { ChevronDown, ChevronRight, MapPin, Menu, Settings, X } from "lucide-react";
@@ -51,7 +51,8 @@ import { CONTINUE_STUDYING_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { CountrySelector } from "@/components/layout/global-context-switcher";
 import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
-import { ADMIN_DASHBOARD_HREF } from "@/lib/auth/admin-dashboard-link";
+
+const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
 
 /** Keep desktop nav pills single-line and compact so the full global IA fits cleanly. */
 const NAV_LINK_CLASS =
@@ -370,6 +371,7 @@ function createMegaMenus(region: "US" | "CA"): MegaMenuConfig[] {
 export function SiteHeader() {
   const { t, locale } = useMarketingI18n();
   const pathname = usePathname() ?? "/";
+  const router = useRouter();
   const { theme } = useTheme();
   const navChromeStyle = getNavChromeStyle(theme);
   const navChromeVars = getNavChromeVars(theme);
@@ -408,6 +410,19 @@ export function SiteHeader() {
     if (mapped.startsWith("http://") || mapped.startsWith("https://")) return mapped;
     return withMarketingLocale(locale, mapped);
   };
+
+  const navigateToAdminDashboard = useCallback(
+    (source: "desktop_cta" | "mobile_drawer") => (event: MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault();
+      console.info("[admin_nav_debug] click", { source, href: ADMIN_DASHBOARD_ROUTE });
+      if (source === "mobile_drawer") {
+        setMobileOpen(false);
+      }
+      console.info("[admin_nav_debug] router.push", { source, to: ADMIN_DASHBOARD_ROUTE });
+      router.push(ADMIN_DASHBOARD_ROUTE);
+    },
+    [router],
+  );
 
   const clearMegaCloseTimer = () => {
     if (!closeMegaTimeoutRef.current) return;
@@ -785,8 +800,9 @@ export function SiteHeader() {
               ) : (
                 <div className="flex items-center gap-2">
                   <Link
-                    href={ADMIN_DASHBOARD_HREF}
+                    href={ADMIN_DASHBOARD_ROUTE}
                     className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold"
+                    onClick={navigateToAdminDashboard("desktop_cta")}
                   >
                     {formatTitleCase(t("nav.admin"), locale)}
                   </Link>
@@ -1295,9 +1311,9 @@ export function SiteHeader() {
                 ) : (
                   <>
                     <Link
-                      href={ADMIN_DASHBOARD_HREF}
+                      href={ADMIN_DASHBOARD_ROUTE}
                       className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold"
-                      onClick={() => setMobileOpen(false)}
+                      onClick={navigateToAdminDashboard("mobile_drawer")}
                     >
                       {formatTitleCase(t("nav.admin"), locale)}
                     </Link>
