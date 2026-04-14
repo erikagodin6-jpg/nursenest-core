@@ -4,7 +4,7 @@
  *
  * Add future batches here or in a new module; use `scripts/programmatic-seo-batch-dry-run.ts` to check slugs.
  */
-import type { SeoPageDefinition } from "@/lib/seo/programmatic-registry";
+import type { SeoPageDefinition } from "./programmatic-registry";
 
 const SITE = "NurseNest";
 

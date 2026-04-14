@@ -18,7 +18,7 @@
  * `buildProgrammaticMetadata`. JSON-LD: `ProgrammaticPageJsonLd` (LearningResource + optional FAQPage).
  */
 import type { SeoPageKind } from "@/lib/seo/programmatic-page-kind";
-import { PROGRAMMATIC_SEO_AUTHORITY_BATCH } from "@/lib/seo/programmatic-seo-authority-batch";
+import { PROGRAMMATIC_SEO_AUTHORITY_BATCH } from "./programmatic-seo-authority-batch";
 
 /** Matches `revalidate` on `/seo/[slug]` and `/[locale]/[slug]` programmatic pages (24h ISR). */
 export const PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS = 86_400;
