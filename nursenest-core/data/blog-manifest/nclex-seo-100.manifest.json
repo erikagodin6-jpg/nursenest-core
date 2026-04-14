@@ -1,0 +1,3738 @@
+{
+  "generatedAt": "2026-04-14T03:37:01.307Z",
+  "count": 100,
+  "posts": [
+    {
+      "id": 1,
+      "title": "Why Does Heart Failure Cause Pulmonary Edema? (Pathophysiology for NCLEX)",
+      "slug": "nclex-seo-001-why-does-heart-failure-cause-pulmonary-edema-pathophysiology-for-nclex",
+      "primaryKeyword": "why does heart failure cause pulmonary edema NCLEX",
+      "category": "Cardiac",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Links pump failure to pulmonary congestion so exam items on crackles, orthopnea, and priority make sense.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn",
+        "/us/rn/nclex-rn/lessons/cardiac-tamponade-nclex-rn",
+        "/us/rn/nclex-rn/lessons/milrinone-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 1,
+        "rank": 1
+      },
+      "translationGroupId": "nclex-seo-2026-001",
+      "status": "planned"
+    },
+    {
+      "id": 2,
+      "title": "Why Does K+ Rise in DKA Before Insulin? (NCLEX Trap Explained)",
+      "slug": "nclex-seo-002-why-does-k-rise-in-dka-before-insulin-nclex-trap-explained",
+      "primaryKeyword": "why potassium increases in DKA nursing",
+      "category": "Endocrine",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Explains intracellular shift and dehydration themes behind insulin and potassium safety items.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/metformin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/newborn-hypoglycemia-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion",
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 1,
+        "rank": 2
+      },
+      "translationGroupId": "nclex-seo-2026-002",
+      "status": "planned"
+    },
+    {
+      "id": 3,
+      "title": "Why Does SIADH Cause Hyponatremia but “Wet” on Exam Questions?",
+      "slug": "nclex-seo-003-why-does-siadh-cause-hyponatremia-but-wet-on-exam-questions",
+      "primaryKeyword": "why SIADH causes hyponatremia NCLEX",
+      "category": "Endocrine",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Connects ADH, water retention, and sodium dilution to fluid priority answers.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/metformin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/newborn-hypoglycemia-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion",
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 1,
+        "rank": 3
+      },
+      "translationGroupId": "nclex-seo-2026-003",
+      "status": "planned"
+    },
+    {
+      "id": 4,
+      "title": "Why Does Left-Sided HF Show Crackles Before Peripheral Edema?",
+      "slug": "nclex-seo-004-why-does-left-sided-hf-show-crackles-before-peripheral-edema",
+      "primaryKeyword": "left sided heart failure pulmonary edema why",
+      "category": "Cardiac",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Separates pulmonary congestion patterns from systemic congestion for L vs R failure stems.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn",
+        "/us/rn/nclex-rn/lessons/cardiac-tamponade-nclex-rn",
+        "/us/rn/nclex-rn/lessons/milrinone-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 1,
+        "rank": 4
+      },
+      "translationGroupId": "nclex-seo-2026-004",
+      "status": "planned"
+    },
+    {
+      "id": 5,
+      "title": "Why Does Hypoalbuminemia Cause Edema? (Fluid Shifts NCLEX)",
+      "slug": "nclex-seo-005-why-does-hypoalbuminemia-cause-edema-fluid-shifts-nclex",
+      "primaryKeyword": "why low albumin causes edema nursing",
+      "category": "Med-Surg",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Oncotic pressure logic for edema and third-spacing questions.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 1,
+        "rank": 5
+      },
+      "translationGroupId": "nclex-seo-2026-005",
+      "status": "planned"
+    },
+    {
+      "id": 6,
+      "title": "Why Does Fever Tachycardia Happen in Sepsis (Not “Just Anxiety”)?",
+      "slug": "nclex-seo-006-why-does-fever-tachycardia-happen-in-sepsis-not-just-anxiety",
+      "primaryKeyword": "why tachycardia in sepsis nursing",
+      "category": "Med-Surg",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Inflammation and perfusion framing for early recognition items.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 1,
+        "rank": 6
+      },
+      "translationGroupId": "nclex-seo-2026-006",
+      "status": "planned"
+    },
+    {
+      "id": 7,
+      "title": "Why Does Hyperventilation Lower CO2 on the ABG (Quick NCLEX Logic)?",
+      "slug": "nclex-seo-007-why-does-hyperventilation-lower-co2-on-the-abg-quick-nclex-logic",
+      "primaryKeyword": "why hyperventilation decreases CO2 ABG",
+      "category": "Respiratory",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Minute ventilation and acid-base ties for ABG interpretation drills.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/positive-pressure-ventilation-nclex-rn",
+        "/us/rn/nclex-rn/lessons/chest-tubes-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 1,
+        "rank": 7
+      },
+      "translationGroupId": "nclex-seo-2026-007",
+      "status": "planned"
+    },
+    {
+      "id": 8,
+      "title": "Why Does COPD Sometimes Show High CO2 While “Satting OK”?",
+      "slug": "nclex-seo-008-why-does-copd-sometimes-show-high-co2-while-satting-ok",
+      "primaryKeyword": "why COPD retain CO2 oxygen saturation",
+      "category": "Respiratory",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Ventilation and oxygenation mismatch for respiratory exam traps.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/positive-pressure-ventilation-nclex-rn",
+        "/us/rn/nclex-rn/lessons/chest-tubes-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 1,
+        "rank": 8
+      },
+      "translationGroupId": "nclex-seo-2026-008",
+      "status": "planned"
+    },
+    {
+      "id": 9,
+      "title": "Why Does Digoxin Toxicity Cause Vision Changes and Bradycardia?",
+      "slug": "nclex-seo-009-why-does-digoxin-toxicity-cause-vision-changes-and-bradycardia",
+      "primaryKeyword": "why digoxin toxicity symptoms nursing",
+      "category": "Pharmacology",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Mechanism-linked assessment for polypharmacy and hold-parameter stems.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/digoxin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ace-inhibitors-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 1,
+        "rank": 9
+      },
+      "translationGroupId": "nclex-seo-2026-009",
+      "status": "planned"
+    },
+    {
+      "id": 10,
+      "title": "Why Does Mannitol Lower ICP but Risk Fluid/Electrolyte Chaos?",
+      "slug": "nclex-seo-010-why-does-mannitol-lower-icp-but-risk-fluidelectrolyte-chaos",
+      "primaryKeyword": "why mannitol for increased intracranial pressure nursing",
+      "category": "Neuro",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Osmotic diuresis and monitoring priorities for neuro scenarios.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/abnormal-neurological-assessment-findings-nclex-rn",
+        "/us/rn/nclex-rn/lessons/memantine-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 1,
+        "rank": 10
+      },
+      "translationGroupId": "nclex-seo-2026-010",
+      "status": "planned"
+    },
+    {
+      "id": 11,
+      "title": "Why Does TPN Increase Infection Risk (Besides the Line)?",
+      "slug": "nclex-seo-011-why-does-tpn-increase-infection-risk-besides-the-line",
+      "primaryKeyword": "why TPN infection risk nursing",
+      "category": "Med-Surg",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Line care, glucose, and immune context for infection control items.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 11
+      },
+      "translationGroupId": "nclex-seo-2026-011",
+      "status": "planned"
+    },
+    {
+      "id": 12,
+      "title": "Why Does Acute Kidney Injury Raise Potassium Fast?",
+      "slug": "nclex-seo-012-why-does-acute-kidney-injury-raise-potassium-fast",
+      "primaryKeyword": "why AKI causes hyperkalemia nursing",
+      "category": "Med-Surg",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Renal excretion failure and emergent rhythm implications.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 12
+      },
+      "translationGroupId": "nclex-seo-2026-012",
+      "status": "planned"
+    },
+    {
+      "id": 13,
+      "title": "Why Does Liver Failure Cause Bleeding and Low Platelets?",
+      "slug": "nclex-seo-013-why-does-liver-failure-cause-bleeding-and-low-platelets",
+      "primaryKeyword": "why liver failure bleeding nursing coagulation",
+      "category": "Med-Surg",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Clotting and portal themes for bleed-risk teaching questions.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 13
+      },
+      "translationGroupId": "nclex-seo-2026-013",
+      "status": "planned"
+    },
+    {
+      "id": 14,
+      "title": "Why Does Pregnancy Lower Blood Pressure Early but Raise Risk Later?",
+      "slug": "nclex-seo-014-why-does-pregnancy-lower-blood-pressure-early-but-raise-risk-later",
+      "primaryKeyword": "why blood pressure changes pregnancy nursing",
+      "category": "OB/Maternity",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Physiology vs preeclampsia cues on timelines.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/oxytocin-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 14
+      },
+      "translationGroupId": "nclex-seo-2026-014",
+      "status": "planned"
+    },
+    {
+      "id": 15,
+      "title": "Why Does Insulin Drop K+ Even When You’re Treating Hyperglycemia?",
+      "slug": "nclex-seo-015-why-does-insulin-drop-k-even-when-youre-treating-hyperglycemia",
+      "primaryKeyword": "why insulin lowers potassium nursing",
+      "category": "Endocrine",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Shift mechanism for DKA and infusion safety.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/metformin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/newborn-hypoglycemia-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion",
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 15
+      },
+      "translationGroupId": "nclex-seo-2026-015",
+      "status": "planned"
+    },
+    {
+      "id": 16,
+      "title": "Why Does Sympathetic Surge Raise Blood Sugar in Stress and Shock?",
+      "slug": "nclex-seo-016-why-does-sympathetic-surge-raise-blood-sugar-in-stress-and-shock",
+      "primaryKeyword": "why stress increases blood glucose nursing",
+      "category": "Endocrine",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Stress hyperglycemia in acute illness stems.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/metformin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/newborn-hypoglycemia-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion",
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 16
+      },
+      "translationGroupId": "nclex-seo-2026-016",
+      "status": "planned"
+    },
+    {
+      "id": 17,
+      "title": "Why Does Bed Rest Increase DVT Risk (Even With “Stable” Vitals)?",
+      "slug": "nclex-seo-017-why-does-bed-rest-increase-dvt-risk-even-with-stable-vitals",
+      "primaryKeyword": "why immobility causes DVT nursing",
+      "category": "Med-Surg",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Stasis and Virchow framing for prevention items.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 17
+      },
+      "translationGroupId": "nclex-seo-2026-017",
+      "status": "planned"
+    },
+    {
+      "id": 18,
+      "title": "Why Does Dialysis Cause Cramping and Hypotension Mid-Treatment?",
+      "slug": "nclex-seo-018-why-does-dialysis-cause-cramping-and-hypotension-mid-treatment",
+      "primaryKeyword": "why muscle cramps during dialysis nursing",
+      "category": "Med-Surg",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Fluid shift and electrolyte themes for HD scenarios.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 18
+      },
+      "translationGroupId": "nclex-seo-2026-018",
+      "status": "planned"
+    },
+    {
+      "id": 19,
+      "title": "Why Does SSRI Withdrawal Feel Like “Brain Zaps” (Patient Teaching)?",
+      "slug": "nclex-seo-019-why-does-ssri-withdrawal-feel-like-brain-zaps-patient-teaching",
+      "primaryKeyword": "SSRI discontinuation syndrome nursing explained",
+      "category": "Mental Health",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Safe taper and symptom reporting for psych med teaching.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/neuroleptic-malignant-syndrome-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ziprasidone-and-qt-prolongation-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 19
+      },
+      "translationGroupId": "nclex-seo-2026-019",
+      "status": "planned"
+    },
+    {
+      "id": 20,
+      "title": "Why Does Fever Spike After Blood Transfusion (Not Always “Allergic”)?",
+      "slug": "nclex-seo-020-why-does-fever-spike-after-blood-transfusion-not-always-allergic",
+      "primaryKeyword": "febrile nonhemolytic transfusion reaction why nursing",
+      "category": "Med-Surg",
+      "intentType": "explanation-pathophysiology",
+      "shortDescription": "Reaction-type differentiation for stop, notify, monitor paths.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 20
+      },
+      "translationGroupId": "nclex-seo-2026-020",
+      "status": "planned"
+    },
+    {
+      "id": 21,
+      "title": "NCLEX Practice Questions: Acute Kidney Injury (With Rationales)",
+      "slug": "nclex-seo-021-nclex-practice-questions-acute-kidney-injury-with-rationales",
+      "primaryKeyword": "NCLEX practice questions acute kidney injury with answers",
+      "category": "Med-Surg",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Scenario AKI items with rationales focused on labs and priority.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 21
+      },
+      "translationGroupId": "nclex-seo-2026-021",
+      "status": "planned"
+    },
+    {
+      "id": 22,
+      "title": "NCLEX Questions About Pulmonary Embolism (Practice + Answers)",
+      "slug": "nclex-seo-022-nclex-questions-about-pulmonary-embolism-practice-answers",
+      "primaryKeyword": "NCLEX questions about pulmonary embolism practice",
+      "category": "Respiratory",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "O2, anticoagulation safety, instability patterns with explained answers.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/positive-pressure-ventilation-nclex-rn",
+        "/us/rn/nclex-rn/lessons/chest-tubes-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 22
+      },
+      "translationGroupId": "nclex-seo-2026-022",
+      "status": "planned"
+    },
+    {
+      "id": 23,
+      "title": "NCLEX Practice Questions: Heart Failure Exacerbation (With Rationales)",
+      "slug": "nclex-seo-023-nclex-practice-questions-heart-failure-exacerbation-with-rationales",
+      "primaryKeyword": "NCLEX heart failure exacerbation practice questions",
+      "category": "Cardiac",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Diuretics, weights, and escalation teaching in item form.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn",
+        "/us/rn/nclex-rn/lessons/cardiac-tamponade-nclex-rn",
+        "/us/rn/nclex-rn/lessons/milrinone-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 23
+      },
+      "translationGroupId": "nclex-seo-2026-023",
+      "status": "planned"
+    },
+    {
+      "id": 24,
+      "title": "NCLEX Questions on Digoxin Toxicity (Practice Items + Answers)",
+      "slug": "nclex-seo-024-nclex-questions-on-digoxin-toxicity-practice-items-answers",
+      "primaryKeyword": "NCLEX digoxin toxicity practice questions",
+      "category": "Pharmacology",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Classic assessment traps with hold and lab rationales.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/digoxin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ace-inhibitors-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 24
+      },
+      "translationGroupId": "nclex-seo-2026-024",
+      "status": "planned"
+    },
+    {
+      "id": 25,
+      "title": "NCLEX Practice Questions: DKA vs HHS Clues (With Answers)",
+      "slug": "nclex-seo-025-nclex-practice-questions-dka-vs-hhs-clues-with-answers",
+      "primaryKeyword": "NCLEX DKA vs HHS practice questions",
+      "category": "Endocrine",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Side-by-side recognition drills before memorizing cutoffs.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/metformin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/newborn-hypoglycemia-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion",
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 25
+      },
+      "translationGroupId": "nclex-seo-2026-025",
+      "status": "planned"
+    },
+    {
+      "id": 26,
+      "title": "NCLEX Questions About SIADH vs Diabetes Insipidus (Practice + Rationales)",
+      "slug": "nclex-seo-026-nclex-questions-about-siadh-vs-diabetes-insipidus-practice-rationales",
+      "primaryKeyword": "NCLEX SIADH vs diabetes insipidus questions",
+      "category": "Endocrine",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Sodium and urine concentration patterns with wrong-answer review.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/metformin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/newborn-hypoglycemia-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion",
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 26
+      },
+      "translationGroupId": "nclex-seo-2026-026",
+      "status": "planned"
+    },
+    {
+      "id": 27,
+      "title": "NCLEX Practice Questions: Sepsis Recognition (With Answers)",
+      "slug": "nclex-seo-027-nclex-practice-questions-sepsis-recognition-with-answers",
+      "primaryKeyword": "NCLEX sepsis practice questions with rationales",
+      "category": "Med-Surg",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Escalation vs distractor tasks for recognition stems.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 27
+      },
+      "translationGroupId": "nclex-seo-2026-027",
+      "status": "planned"
+    },
+    {
+      "id": 28,
+      "title": "NCLEX Questions About Pressure Injuries Staging (Practice + Answers)",
+      "slug": "nclex-seo-028-nclex-questions-about-pressure-injuries-staging-practice-answers",
+      "primaryKeyword": "NCLEX pressure injury staging practice questions",
+      "category": "Nursing Skills",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Staging scenarios with documentation and prevention.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/chest-tubes-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 28
+      },
+      "translationGroupId": "nclex-seo-2026-028",
+      "status": "planned"
+    },
+    {
+      "id": 29,
+      "title": "NCLEX Practice Questions: Post-Op Fever Causes (With Rationales)",
+      "slug": "nclex-seo-029-nclex-practice-questions-post-op-fever-causes-with-rationales",
+      "primaryKeyword": "NCLEX postoperative fever practice questions",
+      "category": "Med-Surg",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Timing-based differential for prioritization drills.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 29
+      },
+      "translationGroupId": "nclex-seo-2026-029",
+      "status": "planned"
+    },
+    {
+      "id": 30,
+      "title": "NCLEX Questions on Anticoagulation Teaching (Warfarin vs DOAC Themes)",
+      "slug": "nclex-seo-030-nclex-questions-on-anticoagulation-teaching-warfarin-vs-doac-themes",
+      "primaryKeyword": "NCLEX anticoagulation teaching questions",
+      "category": "Pharmacology",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Bleeding precautions and follow-up teaching in MCQ form.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/digoxin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ace-inhibitors-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 2,
+        "rank": 30
+      },
+      "translationGroupId": "nclex-seo-2026-030",
+      "status": "planned"
+    },
+    {
+      "id": 31,
+      "title": "NCLEX Practice Questions: Pediatric Dehydration (With Answers)",
+      "slug": "nclex-seo-031-nclex-practice-questions-pediatric-dehydration-with-answers",
+      "primaryKeyword": "NCLEX pediatric dehydration practice questions",
+      "category": "Pediatrics",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Clinical dehydration cues and therapy priorities for PN/RN.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/bronchiolitis-and-rsv-nclex-rn",
+        "/us/rn/nclex-rn/lessons/febrile-seizures-nclex-rn",
+        "/us/rn/nclex-rn/lessons/newborn-hypoglycemia-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 31
+      },
+      "translationGroupId": "nclex-seo-2026-031",
+      "status": "planned"
+    },
+    {
+      "id": 32,
+      "title": "NCLEX Questions About Preeclampsia vs Gestational Hypertension",
+      "slug": "nclex-seo-032-nclex-questions-about-preeclampsia-vs-gestational-hypertension",
+      "primaryKeyword": "NCLEX preeclampsia practice questions",
+      "category": "OB/Maternity",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Proteinuria and BP thresholds in scenario form.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/oxytocin-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 32
+      },
+      "translationGroupId": "nclex-seo-2026-032",
+      "status": "planned"
+    },
+    {
+      "id": 33,
+      "title": "NCLEX Practice Questions: Suicide Risk Assessment (With Rationales)",
+      "slug": "nclex-seo-033-nclex-practice-questions-suicide-risk-assessment-with-rationales",
+      "primaryKeyword": "NCLEX suicide risk assessment practice questions",
+      "category": "Mental Health",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Safety planning and scope-appropriate nursing actions.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/neuroleptic-malignant-syndrome-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ziprasidone-and-qt-prolongation-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 33
+      },
+      "translationGroupId": "nclex-seo-2026-033",
+      "status": "planned"
+    },
+    {
+      "id": 34,
+      "title": "NCLEX Questions on Restraint Use and Alternatives (Practice + Answers)",
+      "slug": "nclex-seo-034-nclex-questions-on-restraint-use-and-alternatives-practice-answers",
+      "primaryKeyword": "NCLEX restraint use nursing questions",
+      "category": "Mental Health",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Legal and ethical guardrails with frequent distractors explained.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/neuroleptic-malignant-syndrome-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ziprasidone-and-qt-prolongation-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 34
+      },
+      "translationGroupId": "nclex-seo-2026-034",
+      "status": "planned"
+    },
+    {
+      "id": 35,
+      "title": "NCLEX Practice Questions: IV Infiltration vs Phlebitis",
+      "slug": "nclex-seo-035-nclex-practice-questions-iv-infiltration-vs-phlebitis",
+      "primaryKeyword": "NCLEX IV complications practice questions",
+      "category": "Nursing Skills",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Site assessment and escalation versus watch-and-wait.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/chest-tubes-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 35
+      },
+      "translationGroupId": "nclex-seo-2026-035",
+      "status": "planned"
+    },
+    {
+      "id": 36,
+      "title": "NCLEX Questions About Chest Tube Air Leaks (With Rationales)",
+      "slug": "nclex-seo-036-nclex-questions-about-chest-tube-air-leaks-with-rationales",
+      "primaryKeyword": "NCLEX chest tube nursing questions",
+      "category": "Respiratory",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Bubbling, suction, and escalation in acute care stems.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/positive-pressure-ventilation-nclex-rn",
+        "/us/rn/nclex-rn/lessons/chest-tubes-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 36
+      },
+      "translationGroupId": "nclex-seo-2026-036",
+      "status": "planned"
+    },
+    {
+      "id": 37,
+      "title": "NCLEX Practice Questions: Wound Infection Signs (With Answers)",
+      "slug": "nclex-seo-037-nclex-practice-questions-wound-infection-signs-with-answers",
+      "primaryKeyword": "NCLEX wound infection practice questions",
+      "category": "Nursing Skills",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Erythema, drainage, fever combos with culture priorities.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/chest-tubes-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 37
+      },
+      "translationGroupId": "nclex-seo-2026-037",
+      "status": "planned"
+    },
+    {
+      "id": 38,
+      "title": "NCLEX Questions About Insulin Mixing and Timing (Practice + Rationales)",
+      "slug": "nclex-seo-038-nclex-questions-about-insulin-mixing-and-timing-practice-rationales",
+      "primaryKeyword": "NCLEX insulin administration practice questions",
+      "category": "Pharmacology",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Draw order and meal timing traps in items.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/digoxin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ace-inhibitors-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 38
+      },
+      "translationGroupId": "nclex-seo-2026-038",
+      "status": "planned"
+    },
+    {
+      "id": 39,
+      "title": "NCLEX Practice Questions: Stroke NIHSS/Neuro Checks (Simplified for RN)",
+      "slug": "nclex-seo-039-nclex-practice-questions-stroke-nihssneuro-checks-simplified-for-rn",
+      "primaryKeyword": "NCLEX stroke assessment practice questions",
+      "category": "Neuro",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Sudden deficits and escalation without over-testing detail.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/abnormal-neurological-assessment-findings-nclex-rn",
+        "/us/rn/nclex-rn/lessons/memantine-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 39
+      },
+      "translationGroupId": "nclex-seo-2026-039",
+      "status": "planned"
+    },
+    {
+      "id": 40,
+      "title": "NCLEX Practice Questions: Catheter-Associated UTI Prevention",
+      "slug": "nclex-seo-040-nclex-practice-questions-catheter-associated-uti-prevention",
+      "primaryKeyword": "NCLEX CAUTI prevention practice questions",
+      "category": "Med-Surg",
+      "intentType": "practice-exam-prep",
+      "shortDescription": "Indication, maintenance, removal timing with infection control rationales.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "high",
+      "translationLocalesPlanned": {
+        "tier": "high",
+        "localesNext": [
+          "fr",
+          "es"
+        ],
+        "note": "After English approval, translate to fr and es first."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 40
+      },
+      "translationGroupId": "nclex-seo-2026-040",
+      "status": "planned"
+    },
+    {
+      "id": 41,
+      "title": "Gastric vs Duodenal Ulcer Pain: What’s the Difference for NCLEX?",
+      "slug": "nclex-seo-041-gastric-vs-duodenal-ulcer-pain-whats-the-difference-for-nclex",
+      "primaryKeyword": "gastric vs duodenal ulcer nursing difference NCLEX",
+      "category": "Med-Surg",
+      "intentType": "comparison",
+      "shortDescription": "Timing and food-relief patterns for “which statement fits” items.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 41
+      },
+      "translationGroupId": "nclex-seo-2026-041",
+      "status": "planned"
+    },
+    {
+      "id": 42,
+      "title": "COPD vs Asthma on the NCLEX: Overlap, Clues, and Wrong Answers",
+      "slug": "nclex-seo-042-copd-vs-asthma-on-the-nclex-overlap-clues-and-wrong-answers",
+      "primaryKeyword": "COPD vs asthma NCLEX comparison",
+      "category": "Respiratory",
+      "intentType": "comparison",
+      "shortDescription": "Reversible versus chronic framing with exacerbation priorities.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/positive-pressure-ventilation-nclex-rn",
+        "/us/rn/nclex-rn/lessons/chest-tubes-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "electrolyte-abg"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 42
+      },
+      "translationGroupId": "nclex-seo-2026-042",
+      "status": "planned"
+    },
+    {
+      "id": 43,
+      "title": "Hypovolemic vs Cardiogenic Shock: How to Tell Fast on an Exam Stem",
+      "slug": "nclex-seo-043-hypovolemic-vs-cardiogenic-shock-how-to-tell-fast-on-an-exam-stem",
+      "primaryKeyword": "hypovolemic vs cardiogenic shock nursing difference",
+      "category": "Cardiac",
+      "intentType": "comparison",
+      "shortDescription": "Preload and clinical picture cues for fluid versus inotrope thinking.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn",
+        "/us/rn/nclex-rn/lessons/cardiac-tamponade-nclex-rn",
+        "/us/rn/nclex-rn/lessons/milrinone-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "electrolyte-abg"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 43
+      },
+      "translationGroupId": "nclex-seo-2026-043",
+      "status": "planned"
+    },
+    {
+      "id": 44,
+      "title": "Arterial vs Venous Ulcers: Bedside Clues NCLEX Loves",
+      "slug": "nclex-seo-044-arterial-vs-venous-ulcers-bedside-clues-nclex-loves",
+      "primaryKeyword": "arterial vs venous ulcer nursing comparison",
+      "category": "Med-Surg",
+      "intentType": "comparison",
+      "shortDescription": "Location, pulses, pain patterns without relying on photos.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 44
+      },
+      "translationGroupId": "nclex-seo-2026-044",
+      "status": "planned"
+    },
+    {
+      "id": 45,
+      "title": "Crohn’s Disease vs UC: NCLEX Comparison (Complications + Teaching)",
+      "slug": "nclex-seo-045-crohns-disease-vs-uc-nclex-comparison-complications-teaching",
+      "primaryKeyword": "Crohn's vs ulcerative colitis NCLEX nursing",
+      "category": "Med-Surg",
+      "intentType": "comparison",
+      "shortDescription": "Distribution, stool patterns, and surgery risk themes.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 45
+      },
+      "translationGroupId": "nclex-seo-2026-045",
+      "status": "planned"
+    },
+    {
+      "id": 46,
+      "title": "Rheumatic Fever vs Kawasaki in Kids: Comparison for PN/RN Exams",
+      "slug": "nclex-seo-046-rheumatic-fever-vs-kawasaki-in-kids-comparison-for-pnrn-exams",
+      "primaryKeyword": "Kawasaki vs rheumatic fever nursing comparison",
+      "category": "Pediatrics",
+      "intentType": "comparison",
+      "shortDescription": "Fever duration, criteria mnemonics, and priority actions.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/bronchiolitis-and-rsv-nclex-rn",
+        "/us/rn/nclex-rn/lessons/febrile-seizures-nclex-rn",
+        "/us/rn/nclex-rn/lessons/newborn-hypoglycemia-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 46
+      },
+      "translationGroupId": "nclex-seo-2026-046",
+      "status": "planned"
+    },
+    {
+      "id": 47,
+      "title": "Placenta Previa vs Abruptio Placentae: OB Emergency Differentiation",
+      "slug": "nclex-seo-047-placenta-previa-vs-abruptio-placentae-ob-emergency-differentiation",
+      "primaryKeyword": "placenta previa vs abruptio placentae NCLEX",
+      "category": "OB/Maternity",
+      "intentType": "comparison",
+      "shortDescription": "Bleeding pain patterns and immediate nursing priorities.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/oxytocin-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 47
+      },
+      "translationGroupId": "nclex-seo-2026-047",
+      "status": "planned"
+    },
+    {
+      "id": 48,
+      "title": "Epidural vs Spinal Anesthesia: What NCLEX Expects You to Monitor",
+      "slug": "nclex-seo-048-epidural-vs-spinal-anesthesia-what-nclex-expects-you-to-monitor",
+      "primaryKeyword": "epidural vs spinal nursing monitoring NCLEX",
+      "category": "OB/Maternity",
+      "intentType": "comparison",
+      "shortDescription": "BP, motor block, and headache themes for procedure-adjacent safety.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/oxytocin-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 48
+      },
+      "translationGroupId": "nclex-seo-2026-048",
+      "status": "planned"
+    },
+    {
+      "id": 49,
+      "title": "Schizophrenia vs Schizoaffective: High-Yield Exam Differences (Nursing Focus)",
+      "slug": "nclex-seo-049-schizophrenia-vs-schizoaffective-high-yield-exam-differences-nursing-f",
+      "primaryKeyword": "schizophrenia vs schizoaffective nursing difference",
+      "category": "Mental Health",
+      "intentType": "comparison",
+      "shortDescription": "Mood episode criteria affecting communication and safety planning.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/neuroleptic-malignant-syndrome-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ziprasidone-and-qt-prolongation-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 49
+      },
+      "translationGroupId": "nclex-seo-2026-049",
+      "status": "planned"
+    },
+    {
+      "id": 50,
+      "title": "Delirium vs Dementia: Quick Comparison for Clinical Judgment Questions",
+      "slug": "nclex-seo-050-delirium-vs-dementia-quick-comparison-for-clinical-judgment-questions",
+      "primaryKeyword": "delirium vs dementia nursing comparison NCLEX",
+      "category": "Neuro",
+      "intentType": "comparison",
+      "shortDescription": "Onset, attention, reversibility for priority splits.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/abnormal-neurological-assessment-findings-nclex-rn",
+        "/us/rn/nclex-rn/lessons/memantine-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 50
+      },
+      "translationGroupId": "nclex-seo-2026-050",
+      "status": "planned"
+    },
+    {
+      "id": 51,
+      "title": "MI vs Pericarditis Pain: ECG/Story Clues Students Miss",
+      "slug": "nclex-seo-051-mi-vs-pericarditis-pain-ecgstory-clues-students-miss",
+      "primaryKeyword": "MI vs pericarditis nursing comparison",
+      "category": "Cardiac",
+      "intentType": "comparison",
+      "shortDescription": "Positional pain and friction rub hints with safe escalation.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn",
+        "/us/rn/nclex-rn/lessons/cardiac-tamponade-nclex-rn",
+        "/us/rn/nclex-rn/lessons/milrinone-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "electrolyte-abg"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 51
+      },
+      "translationGroupId": "nclex-seo-2026-051",
+      "status": "planned"
+    },
+    {
+      "id": 52,
+      "title": "Osteoarthritis vs Rheumatoid Arthritis: NCLEX Comparison (Symptoms + Teaching)",
+      "slug": "nclex-seo-052-osteoarthritis-vs-rheumatoid-arthritis-nclex-comparison-symptoms-teach",
+      "primaryKeyword": "OA vs RA nursing comparison NCLEX",
+      "category": "Med-Surg",
+      "intentType": "comparison",
+      "shortDescription": "Morning stiffness length, joint pattern, systemic signs.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 52
+      },
+      "translationGroupId": "nclex-seo-2026-052",
+      "status": "planned"
+    },
+    {
+      "id": 53,
+      "title": "Left vs Right Heart Failure: Comparison Table + NCLEX Traps",
+      "slug": "nclex-seo-053-left-vs-right-heart-failure-comparison-table-nclex-traps",
+      "primaryKeyword": "left vs right heart failure nursing comparison",
+      "category": "Cardiac",
+      "intentType": "comparison",
+      "shortDescription": "Congestion mapping you can reuse on mixed stems.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn",
+        "/us/rn/nclex-rn/lessons/cardiac-tamponade-nclex-rn",
+        "/us/rn/nclex-rn/lessons/milrinone-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "electrolyte-abg"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 53
+      },
+      "translationGroupId": "nclex-seo-2026-053",
+      "status": "planned"
+    },
+    {
+      "id": 54,
+      "title": "Ulcerative Colitis Flare vs Infectious Diarrhea: Nursing Differentiation",
+      "slug": "nclex-seo-054-ulcerative-colitis-flare-vs-infectious-diarrhea-nursing-differentiatio",
+      "primaryKeyword": "UC flare vs infectious diarrhea nursing",
+      "category": "Med-Surg",
+      "intentType": "comparison",
+      "shortDescription": "Isolation versus chronic disease management split.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 54
+      },
+      "translationGroupId": "nclex-seo-2026-054",
+      "status": "planned"
+    },
+    {
+      "id": 55,
+      "title": "Contact vs Airborne Precautions: NCLEX Scenario Comparison",
+      "slug": "nclex-seo-055-contact-vs-airborne-precautions-nclex-scenario-comparison",
+      "primaryKeyword": "contact vs airborne precautions nursing NCLEX",
+      "category": "Nursing Skills",
+      "intentType": "comparison",
+      "shortDescription": "PPE and room rules with common mix-ups.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/chest-tubes-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 55
+      },
+      "translationGroupId": "nclex-seo-2026-055",
+      "status": "planned"
+    },
+    {
+      "id": 56,
+      "title": "Warfarin vs Heparin: Monitoring and Reversal Themes for Exams",
+      "slug": "nclex-seo-056-warfarin-vs-heparin-monitoring-and-reversal-themes-for-exams",
+      "primaryKeyword": "warfarin vs heparin nursing monitoring NCLEX",
+      "category": "Pharmacology",
+      "intentType": "comparison",
+      "shortDescription": "Labs, onset, bridging concepts without pharmacy rabbit holes.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/digoxin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ace-inhibitors-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 56
+      },
+      "translationGroupId": "nclex-seo-2026-056",
+      "status": "planned"
+    },
+    {
+      "id": 57,
+      "title": "Levothyroxine Timing vs “Anytime Meds”: What Exams Test",
+      "slug": "nclex-seo-057-levothyroxine-timing-vs-anytime-meds-what-exams-test",
+      "primaryKeyword": "levothyroxine administration nursing NCLEX tips",
+      "category": "Pharmacology",
+      "intentType": "comparison",
+      "shortDescription": "Absorption interactions and teaching beats flashcards alone.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/digoxin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ace-inhibitors-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 57
+      },
+      "translationGroupId": "nclex-seo-2026-057",
+      "status": "planned"
+    },
+    {
+      "id": 58,
+      "title": "Central vs Peripheral Cyanosis: What Each Implies on a Stem",
+      "slug": "nclex-seo-058-central-vs-peripheral-cyanosis-what-each-implies-on-a-stem",
+      "primaryKeyword": "central vs peripheral cyanosis nursing difference",
+      "category": "Respiratory",
+      "intentType": "comparison",
+      "shortDescription": "Oxygenation versus perfusion framing for answers.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/positive-pressure-ventilation-nclex-rn",
+        "/us/rn/nclex-rn/lessons/chest-tubes-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "electrolyte-abg"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 58
+      },
+      "translationGroupId": "nclex-seo-2026-058",
+      "status": "planned"
+    },
+    {
+      "id": 59,
+      "title": "Type 1 vs Type 2 Diabetes Priorities in Acute vs Chronic Stems",
+      "slug": "nclex-seo-059-type-1-vs-type-2-diabetes-priorities-in-acute-vs-chronic-stems",
+      "primaryKeyword": "type 1 vs type 2 diabetes nursing priorities NCLEX",
+      "category": "Endocrine",
+      "intentType": "comparison",
+      "shortDescription": "DKA frequency versus hyperosmolar patterns and home care contrast.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/metformin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/newborn-hypoglycemia-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion",
+        "lab-values"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 59
+      },
+      "translationGroupId": "nclex-seo-2026-059",
+      "status": "planned"
+    },
+    {
+      "id": 60,
+      "title": "Assault vs Battery in Nursing Documentation/Ethics Questions (Simplified)",
+      "slug": "nclex-seo-060-assault-vs-battery-in-nursing-documentationethics-questions-simplified",
+      "primaryKeyword": "assault vs battery nursing ethics NCLEX",
+      "category": "NCLEX Strategy",
+      "intentType": "comparison",
+      "shortDescription": "Legal vocabulary as tested in leadership and ethics items.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 3,
+        "rank": 60
+      },
+      "translationGroupId": "nclex-seo-2026-060",
+      "status": "planned"
+    },
+    {
+      "id": 61,
+      "title": "IV Drip Rate Calculation Nursing: Step-by-Step (gtt/min) With NCLEX Logic",
+      "slug": "nclex-seo-061-iv-drip-rate-calculation-nursing-step-by-step-gttmin-with-nclex-logic",
+      "primaryKeyword": "IV drip rate calculation nursing step by step",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Drop factor, unit cancellation, and sanity checks exam writers expect.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 61
+      },
+      "translationGroupId": "nclex-seo-2026-061",
+      "status": "planned"
+    },
+    {
+      "id": 62,
+      "title": "mL/hr from “Infuse Over X Hours”: Step-by-Step Pump Math",
+      "slug": "nclex-seo-062-mlhr-from-infuse-over-x-hours-step-by-step-pump-math",
+      "primaryKeyword": "mL per hour infusion calculation nursing",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Time conversion traps between minutes and hours.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 62
+      },
+      "translationGroupId": "nclex-seo-2026-062",
+      "status": "planned"
+    },
+    {
+      "id": 63,
+      "title": "Weight-Based Drug Math (mg/kg): Nursing Steps That Stop Silly Errors",
+      "slug": "nclex-seo-063-weight-based-drug-math-mgkg-nursing-steps-that-stop-silly-errors",
+      "primaryKeyword": "mg kg dosage calculation nursing step by step",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Rounding and double-check patterns for high-stakes meds.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 63
+      },
+      "translationGroupId": "nclex-seo-2026-063",
+      "status": "planned"
+    },
+    {
+      "id": 64,
+      "title": "Heparin Units to mL: Step-by-Step From a Vial Label",
+      "slug": "nclex-seo-064-heparin-units-to-ml-step-by-step-from-a-vial-label",
+      "primaryKeyword": "heparin dosage calculation nursing mL",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Concentration reads and protocol safety checks.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 64
+      },
+      "translationGroupId": "nclex-seo-2026-064",
+      "status": "planned"
+    },
+    {
+      "id": 65,
+      "title": "Insulin Units Only: Drawing Up and Double-Checking (Exam-Style Walkthrough)",
+      "slug": "nclex-seo-065-insulin-units-only-drawing-up-and-double-checking-exam-style-walkthrou",
+      "primaryKeyword": "insulin unit calculation nursing U-100",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Syringe selection and U-100 guardrails.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 65
+      },
+      "translationGroupId": "nclex-seo-2026-065",
+      "status": "planned"
+    },
+    {
+      "id": 66,
+      "title": "Tablet Splitting and Dose Conversion (mg ↔ mcg) Step-by-Step",
+      "slug": "nclex-seo-066-tablet-splitting-and-dose-conversion-mg-mcg-step-by-step",
+      "primaryKeyword": "mg to mcg conversion nursing dosage",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Metric ladder with cancellation exam style.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 66
+      },
+      "translationGroupId": "nclex-seo-2026-066",
+      "status": "planned"
+    },
+    {
+      "id": 67,
+      "title": "IV Bolus “Push Over X Minutes”: Rate Math Nurses Actually Use",
+      "slug": "nclex-seo-067-iv-bolus-push-over-x-minutes-rate-math-nurses-actually-use",
+      "primaryKeyword": "IV push rate calculation nursing",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to",
+      "shortDescription": "mL per minute to syringe timing with stability caveats.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 67
+      },
+      "translationGroupId": "nclex-seo-2026-067",
+      "status": "planned"
+    },
+    {
+      "id": 68,
+      "title": "Fluid Replacement Math: Maintenance vs Deficit (Simplified for Exams)",
+      "slug": "nclex-seo-068-fluid-replacement-math-maintenance-vs-deficit-simplified-for-exams",
+      "primaryKeyword": "IV fluid calculation nursing step by step",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Structured setup when stems give losses or maintenance goals.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 68
+      },
+      "translationGroupId": "nclex-seo-2026-068",
+      "status": "planned"
+    },
+    {
+      "id": 69,
+      "title": "Pediatric Dose by Weight: Step-by-Step With a Safety Ceiling Check",
+      "slug": "nclex-seo-069-pediatric-dose-by-weight-step-by-step-with-a-safety-ceiling-check",
+      "primaryKeyword": "pediatric dosage calculation nursing step by step",
+      "category": "Pediatrics",
+      "intentType": "calculation-how-to",
+      "shortDescription": "kg conversions and “does this dose make sense” habits.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/bronchiolitis-and-rsv-nclex-rn",
+        "/us/rn/nclex-rn/lessons/febrile-seizures-nclex-rn",
+        "/us/rn/nclex-rn/lessons/newborn-hypoglycemia-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 69
+      },
+      "translationGroupId": "nclex-seo-2026-069",
+      "status": "planned"
+    },
+    {
+      "id": 70,
+      "title": "Reconstitution Math: Mixing Powdered Antibiotics (Label Walkthrough)",
+      "slug": "nclex-seo-070-reconstitution-math-mixing-powdered-antibiotics-label-walkthrough",
+      "primaryKeyword": "reconstitution medication calculation nursing",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Final concentration and mL to draw for pump programming items.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "medium",
+      "translationLocalesPlanned": {
+        "tier": "medium",
+        "localesNext": [
+          "tl",
+          "hi"
+        ],
+        "note": "Queue Tagalog and Hindi after high-tier backlog is reviewed."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 70
+      },
+      "translationGroupId": "nclex-seo-2026-070",
+      "status": "planned"
+    },
+    {
+      "id": 71,
+      "title": "Titration Tables: Converting “Increase by X units/hr” to Pump Settings",
+      "slug": "nclex-seo-071-titration-tables-converting-increase-by-x-unitshr-to-pump-settings",
+      "primaryKeyword": "insulin drip titration nursing calculation",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Stepwise titration interpretation without ICU overload.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 71
+      },
+      "translationGroupId": "nclex-seo-2026-071",
+      "status": "planned"
+    },
+    {
+      "id": 72,
+      "title": "mEq Dosing for Electrolytes: What NCLEX Tests (and What It Doesn’t)",
+      "slug": "nclex-seo-072-meq-dosing-for-electrolytes-what-nclex-tests-and-what-it-doesnt",
+      "primaryKeyword": "mEq medication calculation nursing",
+      "category": "Pharmacology",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Practical setup for replacement scenarios with monitoring pairs.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/digoxin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ace-inhibitors-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 72
+      },
+      "translationGroupId": "nclex-seo-2026-072",
+      "status": "planned"
+    },
+    {
+      "id": 73,
+      "title": "Percentage-Based Solutions: Step-by-Step (Dextrose Math)",
+      "slug": "nclex-seo-073-percentage-based-solutions-step-by-step-dextrose-math",
+      "primaryKeyword": "percentage solution calculation nursing",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Percent to usable concentration reasoning for stems.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 73
+      },
+      "translationGroupId": "nclex-seo-2026-073",
+      "status": "planned"
+    },
+    {
+      "id": 74,
+      "title": "Body Surface Area (BSA) Dosing: When the Stem Gives Height/Weight",
+      "slug": "nclex-seo-074-body-surface-area-bsa-dosing-when-the-stem-gives-heightweight",
+      "primaryKeyword": "BSA medication calculation nursing",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Formula plus exam simplifications and policy reality.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 74
+      },
+      "translationGroupId": "nclex-seo-2026-074",
+      "status": "planned"
+    },
+    {
+      "id": 75,
+      "title": "IV Piggyback Timing: “Run Over 30 Minutes” Math + Line Patency Checks",
+      "slug": "nclex-seo-075-iv-piggyback-timing-run-over-30-minutes-math-line-patency-checks",
+      "primaryKeyword": "IV piggyback infusion time calculation nursing",
+      "category": "Nursing Skills",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Secondary line math paired with medication safety.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/chest-tubes-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 75
+      },
+      "translationGroupId": "nclex-seo-2026-075",
+      "status": "planned"
+    },
+    {
+      "id": 76,
+      "title": "Syringe Pump mL/hr for Small Volumes (Peds/NICU-Style Practice)",
+      "slug": "nclex-seo-076-syringe-pump-mlhr-for-small-volumes-pedsnicu-style-practice",
+      "primaryKeyword": "syringe pump rate calculation nursing",
+      "category": "Pediatrics",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Micro-volume rates with rounding discipline.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/bronchiolitis-and-rsv-nclex-rn",
+        "/us/rn/nclex-rn/lessons/febrile-seizures-nclex-rn",
+        "/us/rn/nclex-rn/lessons/newborn-hypoglycemia-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 76
+      },
+      "translationGroupId": "nclex-seo-2026-076",
+      "status": "planned"
+    },
+    {
+      "id": 77,
+      "title": "Oxygen FiO2 Changes vs L/min: What the NCLEX Wants (Concept + Math Hygiene)",
+      "slug": "nclex-seo-077-oxygen-fio2-changes-vs-lmin-what-the-nclex-wants-concept-math-hygiene",
+      "primaryKeyword": "oxygen flow rate nursing calculation NCLEX",
+      "category": "Respiratory",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Device limits and false precision traps.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/positive-pressure-ventilation-nclex-rn",
+        "/us/rn/nclex-rn/lessons/chest-tubes-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 77
+      },
+      "translationGroupId": "nclex-seo-2026-077",
+      "status": "planned"
+    },
+    {
+      "id": 78,
+      "title": "Dilution Math for IV Meds: “Add to 100 mL NS” Step-by-Step",
+      "slug": "nclex-seo-078-dilution-math-for-iv-meds-add-to-100-ml-ns-step-by-step",
+      "primaryKeyword": "IV medication dilution calculation nursing",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Final concentration linked to pump rate stems.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 78
+      },
+      "translationGroupId": "nclex-seo-2026-078",
+      "status": "planned"
+    },
+    {
+      "id": 79,
+      "title": "gtt/min When You Already Know mL/hr (Drop Factor Shortcut)",
+      "slug": "nclex-seo-079-gttmin-when-you-already-know-mlhr-drop-factor-shortcut",
+      "primaryKeyword": "gtt min from mL hr calculation nursing",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Two-step bridge for gravity tubing items.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 79
+      },
+      "translationGroupId": "nclex-seo-2026-079",
+      "status": "planned"
+    },
+    {
+      "id": 80,
+      "title": "“How Many Tablets?” Dose-Finding With Fractional Tabs (NCLEX-Style)",
+      "slug": "nclex-seo-080-how-many-tablets-dose-finding-with-fractional-tabs-nclex-style",
+      "primaryKeyword": "tablet dose calculation nursing half tablet",
+      "category": "Dosage Calculations",
+      "intentType": "calculation-how-to",
+      "shortDescription": "Rounding boundaries and when to verify orders.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 80
+      },
+      "translationGroupId": "nclex-seo-2026-080",
+      "status": "planned"
+    },
+    {
+      "id": 81,
+      "title": "What to Do First When K+ Is 6.2 and the Patient Looks “Stable” (NCLEX Priority)",
+      "slug": "nclex-seo-081-what-to-do-first-when-k-is-62-and-the-patient-looks-stable-nclex-prior",
+      "primaryKeyword": "hyperkalemia priority nursing action NCLEX",
+      "category": "Med-Surg",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Rhythm risk versus busywork answers on electrolyte stems.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 81
+      },
+      "translationGroupId": "nclex-seo-2026-081",
+      "status": "planned"
+    },
+    {
+      "id": 82,
+      "title": "ABC vs Nursing Process: When NCLEX Wants Airway Before “Assess More”",
+      "slug": "nclex-seo-082-abc-vs-nursing-process-when-nclex-wants-airway-before-assess-more",
+      "primaryKeyword": "ABC priority nursing NCLEX first action",
+      "category": "NCLEX Strategy",
+      "intentType": "prioritization-traps",
+      "shortDescription": "When to stop collecting data and act on airway threat.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 82
+      },
+      "translationGroupId": "nclex-seo-2026-082",
+      "status": "planned"
+    },
+    {
+      "id": 83,
+      "title": "New Onset Confusion Post-Op: Infection vs Opioids vs Hypoxia (Pick First)",
+      "slug": "nclex-seo-083-new-onset-confusion-post-op-infection-vs-opioids-vs-hypoxia-pick-first",
+      "primaryKeyword": "post op confusion priority nursing NCLEX",
+      "category": "Med-Surg",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Elimination order for common post-op change scenarios.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 83
+      },
+      "translationGroupId": "nclex-seo-2026-083",
+      "status": "planned"
+    },
+    {
+      "id": 84,
+      "title": "Chest Pain in the Clinic: Who Goes to the ED First (Judgment Drill)",
+      "slug": "nclex-seo-084-chest-pain-in-the-clinic-who-goes-to-the-ed-first-judgment-drill",
+      "primaryKeyword": "chest pain priority nursing assessment NCLEX",
+      "category": "Cardiac",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Red-flag clustering versus benign explanations.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/heart-failure-nclex-rn",
+        "/us/rn/nclex-rn/lessons/cardiac-tamponade-nclex-rn",
+        "/us/rn/nclex-rn/lessons/milrinone-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "electrolyte-abg"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 84
+      },
+      "translationGroupId": "nclex-seo-2026-084",
+      "status": "planned"
+    },
+    {
+      "id": 85,
+      "title": "Sudden Shortness of Breath With Unilateral Leg Swelling: First Nursing Moves",
+      "slug": "nclex-seo-085-sudden-shortness-of-breath-with-unilateral-leg-swelling-first-nursing-",
+      "primaryKeyword": "DVT PE priority nursing actions NCLEX",
+      "category": "Respiratory",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Safety, monitoring, and escalation patterns.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/positive-pressure-ventilation-nclex-rn",
+        "/us/rn/nclex-rn/lessons/chest-tubes-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "electrolyte-abg"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 85
+      },
+      "translationGroupId": "nclex-seo-2026-085",
+      "status": "planned"
+    },
+    {
+      "id": 86,
+      "title": "Hypoglycemia Symptoms but Glucose “Borderline”: What NCLEX Is Testing",
+      "slug": "nclex-seo-086-hypoglycemia-symptoms-but-glucose-borderline-what-nclex-is-testing",
+      "primaryKeyword": "hypoglycemia priority nursing intervention NCLEX",
+      "category": "Endocrine",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Treat symptoms versus chase numbers trap.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/metformin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/newborn-hypoglycemia-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion",
+        "lab-values"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 86
+      },
+      "translationGroupId": "nclex-seo-2026-086",
+      "status": "planned"
+    },
+    {
+      "id": 87,
+      "title": "“Patient Refuses Meds”: Priority Is Not Arguing—It’s Assessment First",
+      "slug": "nclex-seo-087-patient-refuses-meds-priority-is-not-arguingits-assessment-first",
+      "primaryKeyword": "patient refuses medication nursing priority NCLEX",
+      "category": "NCLEX Strategy",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Rights, capacity, and therapeutic communication sequence.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 87
+      },
+      "translationGroupId": "nclex-seo-2026-087",
+      "status": "planned"
+    },
+    {
+      "id": 88,
+      "title": "Bleeding After Heparin: What to Check Before You Panic-Click Answers",
+      "slug": "nclex-seo-088-bleeding-after-heparin-what-to-check-before-you-panic-click-answers",
+      "primaryKeyword": "heparin bleeding nursing priority NCLEX",
+      "category": "Pharmacology",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Assessment sequence with labs and protocol language.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/digoxin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ace-inhibitors-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 88
+      },
+      "translationGroupId": "nclex-seo-2026-088",
+      "status": "planned"
+    },
+    {
+      "id": 89,
+      "title": "Fall Risk vs Impulsive Behavior: Which Safety Action Comes First?",
+      "slug": "nclex-seo-089-fall-risk-vs-impulsive-behavior-which-safety-action-comes-first",
+      "primaryKeyword": "fall risk nursing priority mental health NCLEX",
+      "category": "Mental Health",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Environment, 1:1, and least restrictive effective options.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/neuroleptic-malignant-syndrome-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ziprasidone-and-qt-prolongation-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 89
+      },
+      "translationGroupId": "nclex-seo-2026-089",
+      "status": "planned"
+    },
+    {
+      "id": 90,
+      "title": "Postpartum Bleeding: First-Line Nursing Actions Before “More Fluids”",
+      "slug": "nclex-seo-090-postpartum-bleeding-first-line-nursing-actions-before-more-fluids",
+      "primaryKeyword": "postpartum hemorrhage nursing priority NCLEX",
+      "category": "OB/Maternity",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Fundus, bleeding quantification, activation cues.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/oxytocin-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 90
+      },
+      "translationGroupId": "nclex-seo-2026-090",
+      "status": "planned"
+    },
+    {
+      "id": 91,
+      "title": "Pediatric Fever + Petechial Rash: Priority Actions Parents (and Exams) Need",
+      "slug": "nclex-seo-091-pediatric-fever-petechial-rash-priority-actions-parents-and-exams-need",
+      "primaryKeyword": "petechial rash fever pediatric nursing priority NCLEX",
+      "category": "Pediatrics",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Escalation framing without diagnosing in nursing scope.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/bronchiolitis-and-rsv-nclex-rn",
+        "/us/rn/nclex-rn/lessons/febrile-seizures-nclex-rn",
+        "/us/rn/nclex-rn/lessons/newborn-hypoglycemia-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 91
+      },
+      "translationGroupId": "nclex-seo-2026-091",
+      "status": "planned"
+    },
+    {
+      "id": 92,
+      "title": "Stroke Symptoms <10 Minutes Ago: What NCLEX Wants You to Prioritize",
+      "slug": "nclex-seo-092-stroke-symptoms-10-minutes-ago-what-nclex-wants-you-to-prioritize",
+      "primaryKeyword": "stroke nursing priority NCLEX first action",
+      "category": "Neuro",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Time-sensitive pathway thinking versus documentation rabbit holes.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/abnormal-neurological-assessment-findings-nclex-rn",
+        "/us/rn/nclex-rn/lessons/memantine-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 92
+      },
+      "translationGroupId": "nclex-seo-2026-092",
+      "status": "planned"
+    },
+    {
+      "id": 93,
+      "title": "Anaphylaxis vs Mild Allergy: Epi First or Assessment First?",
+      "slug": "nclex-seo-093-anaphylaxis-vs-mild-allergy-epi-first-or-assessment-first",
+      "primaryKeyword": "anaphylaxis nursing priority epinephrine NCLEX",
+      "category": "Med-Surg",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Clears “call provider before med” traps on airway items.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 93
+      },
+      "translationGroupId": "nclex-seo-2026-093",
+      "status": "planned"
+    },
+    {
+      "id": 94,
+      "title": "Suicidal Ideation Disclosed in Passing: Immediate Nursing Priority",
+      "slug": "nclex-seo-094-suicidal-ideation-disclosed-in-passing-immediate-nursing-priority",
+      "primaryKeyword": "suicidal ideation nursing priority NCLEX",
+      "category": "Mental Health",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Safety assessment hierarchy and therapeutic response patterns.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/neuroleptic-malignant-syndrome-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ziprasidone-and-qt-prolongation-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 94
+      },
+      "translationGroupId": "nclex-seo-2026-094",
+      "status": "planned"
+    },
+    {
+      "id": 95,
+      "title": "Digoxin + Low K+: Which Problem Do You Address First on the Exam?",
+      "slug": "nclex-seo-095-digoxin-low-k-which-problem-do-you-address-first-on-the-exam",
+      "primaryKeyword": "digoxin toxicity hypokalemia priority nursing NCLEX",
+      "category": "Pharmacology",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Electrolyte versus drug hold sequencing with rationales.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/digoxin-nclex-rn",
+        "/us/rn/nclex-rn/lessons/heparin-and-aptt-monitoring-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ace-inhibitors-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "med-math",
+        "iv-infusion"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 95
+      },
+      "translationGroupId": "nclex-seo-2026-095",
+      "status": "planned"
+    },
+    {
+      "id": 96,
+      "title": "“Patient Pulling at Lines”: Behavioral vs Safety Priority in Med-Surg",
+      "slug": "nclex-seo-096-patient-pulling-at-lines-behavioral-vs-safety-priority-in-med-surg",
+      "primaryKeyword": "patient pulling IV line nursing priority NCLEX",
+      "category": "Med-Surg",
+      "intentType": "prioritization-traps",
+      "shortDescription": "De-escalation and injury prevention without restraint-first answers.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 96
+      },
+      "translationGroupId": "nclex-seo-2026-096",
+      "status": "planned"
+    },
+    {
+      "id": 97,
+      "title": "Post-Extubation Stridor: Nursing Priorities in the First Minutes",
+      "slug": "nclex-seo-097-post-extubation-stridor-nursing-priorities-in-the-first-minutes",
+      "primaryKeyword": "post extubation stridor nursing priority NCLEX",
+      "category": "Respiratory",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Airway-focused actions versus sedating traps.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/positive-pressure-ventilation-nclex-rn",
+        "/us/rn/nclex-rn/lessons/chest-tubes-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "electrolyte-abg"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 97
+      },
+      "translationGroupId": "nclex-seo-2026-097",
+      "status": "planned"
+    },
+    {
+      "id": 98,
+      "title": "Suspected Child Abuse: Reporting vs Rapport—What Comes First Legally and Clinically",
+      "slug": "nclex-seo-098-suspected-child-abuse-reporting-vs-rapportwhat-comes-first-legally-and",
+      "primaryKeyword": "suspected child abuse nursing priority NCLEX",
+      "category": "Pediatrics",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Safety, documentation, and mandated reporting sequence.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/bronchiolitis-and-rsv-nclex-rn",
+        "/us/rn/nclex-rn/lessons/febrile-seizures-nclex-rn",
+        "/us/rn/nclex-rn/lessons/newborn-hypoglycemia-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 98
+      },
+      "translationGroupId": "nclex-seo-2026-098",
+      "status": "planned"
+    },
+    {
+      "id": 99,
+      "title": "Transfusion Reaction: Stop the Line vs Call the Provider (NCLEX Order)",
+      "slug": "nclex-seo-099-transfusion-reaction-stop-the-line-vs-call-the-provider-nclex-order",
+      "primaryKeyword": "transfusion reaction nursing priority first action NCLEX",
+      "category": "Med-Surg",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Immediate patient safety sequencing with reaction nuances.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn",
+        "/us/rn/nclex-rn/lessons/pulmonary-embolism-nclex-rn",
+        "/us/rn/nclex-rn/lessons/ards-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values",
+        "electrolyte-abg"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 99
+      },
+      "translationGroupId": "nclex-seo-2026-099",
+      "status": "planned"
+    },
+    {
+      "id": 100,
+      "title": "“Which Patient Do You See First?” Charge Nurse Triage (4 Patients, 1 Nurse)",
+      "slug": "nclex-seo-100-which-patient-do-you-see-first-charge-nurse-triage-4-patients-1-nurse",
+      "primaryKeyword": "nursing prioritization multiple patients NCLEX",
+      "category": "NCLEX Strategy",
+      "intentType": "prioritization-traps",
+      "shortDescription": "Acuity habits for leadership and multi-patient items.",
+      "targetAudience": "Nursing students (PN, RN), NCLEX candidates, new grads, clinical rotation students",
+      "suggestedRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/sepsis-nclex-rn"
+      ],
+      "suggestedRelatedTools": [
+        "lab-values"
+      ],
+      "translationPriority": "deferred",
+      "translationLocalesPlanned": {
+        "tier": "deferred",
+        "localesNext": [
+          "zh",
+          "zh-tw",
+          "ar",
+          "ko",
+          "pt",
+          "pa",
+          "ja",
+          "vi",
+          "de",
+          "th",
+          "tr",
+          "id",
+          "it",
+          "ru",
+          "fa",
+          "ht",
+          "ur"
+        ],
+        "note": "Defer until medical localization QA capacity exists."
+      },
+      "publicationPriority": {
+        "wave": 4,
+        "rank": 100
+      },
+      "translationGroupId": "nclex-seo-2026-100",
+      "status": "planned"
+    }
+  ]
+}

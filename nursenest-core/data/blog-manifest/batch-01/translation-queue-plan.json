@@ -1,0 +1,27 @@
+{
+  "policy": "English source posts must be editorially approved before any localized publish.",
+  "tiers": {
+    "high": {
+      "locales": ["fr", "es"],
+      "when": "After Wave 1 and Wave 2 English posts pass medical accuracy and internal link QA.",
+      "notes": "Core commercial locales. Use professional medical translators, not raw machine output."
+    },
+    "medium": {
+      "locales": ["tl", "hi"],
+      "when": "After high-tier backlog is stable in Search Console and support load is acceptable.",
+      "notes": "Tagalog and Hindi: partial UI tier today. Label translated posts honestly if overlay copy is incomplete."
+    },
+    "deferred": {
+      "locales": ["zh", "zh-tw", "ar", "ko", "pt", "pa", "ja", "vi", "de", "th", "tr", "id", "it", "ru", "fa", "ht", "ur"],
+      "when": "Only with native clinical localization budget and hreflang audit.",
+      "notes": "Do not bulk machine-translate pathophysiology or medication content without review."
+    }
+  },
+  "databaseFlags": {
+    "locale": "en for source",
+    "isAutoTranslated": false,
+    "translationSource": null,
+    "canonicalPostId": null,
+    "futureVariants": "Set translationGroupId identical across locales; point canonicalPostId from variant to approved English row when ready."
+  }
+}
