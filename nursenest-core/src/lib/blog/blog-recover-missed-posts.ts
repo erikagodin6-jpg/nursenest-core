@@ -38,11 +38,15 @@ export function missedFailedBlogWhere() {
 
 export async function countMissedBlogPostBacklog(now: Date = new Date()): Promise<number> {
   if (!isDatabaseUrlConfigured()) return 0;
-  const [scheduledLike, failed] = await Promise.all([
-    prisma.blogPost.count({ where: missedScheduledBlogWhere(now) }),
-    prisma.blogPost.count({ where: missedFailedBlogWhere() }),
-  ]);
-  return scheduledLike + failed;
+  const scheduledLike = await prisma.blogPost.count({ where: missedScheduledBlogWhere(now) });
+  const failedHeavyRows = await prisma.$queryRaw<{ c: bigint }[]>`
+    SELECT COUNT(*)::bigint AS c
+    FROM "BlogPost"
+    WHERE "postStatus" = 'FAILED'
+      AND char_length("body") >= ${MIN_BODY_CHARS_FOR_FAILED_RECOVERY}
+  `;
+  const failedHeavy = Number(failedHeavyRows[0]?.c ?? 0);
+  return scheduledLike + failedHeavy;
 }
 
 export type RecoverMissedBlogPostsBatchResult = {
