@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T13:42:01.892Z",
+  "generatedAt": "2026-04-14T13:57:17.916Z",
   "repoRoot": "/root/nursenest-core",
   "note": "Inventory covers in-repo workspace paths; an external drive must be mounted under this repo (or symlinked) to appear here.",
   "totals": {
@@ -25,6 +25,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -52,6 +54,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -79,6 +83,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -106,6 +112,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -133,6 +141,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -160,6 +170,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -187,6 +199,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -214,6 +228,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -241,6 +257,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": false,
         "quizGeneric": true
       },
@@ -268,6 +286,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -295,6 +315,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -322,6 +344,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -349,6 +373,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -376,6 +402,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -403,6 +431,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -430,6 +460,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -457,6 +489,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -484,6 +518,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -511,6 +547,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -538,6 +576,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -565,6 +605,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -592,6 +634,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -619,6 +663,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -646,6 +692,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -673,6 +721,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -700,6 +750,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -727,6 +779,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -754,6 +808,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -781,6 +837,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -808,6 +866,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -835,6 +895,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -862,6 +924,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -889,6 +953,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -916,6 +982,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -943,6 +1011,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -970,6 +1040,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -997,6 +1069,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -1024,6 +1098,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -1051,6 +1127,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -1078,6 +1156,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1105,6 +1185,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -1132,6 +1214,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -1159,6 +1243,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1186,6 +1272,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -1213,6 +1301,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -1240,6 +1330,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1267,6 +1359,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -1294,6 +1388,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1321,6 +1417,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -1348,6 +1446,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -1375,6 +1475,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1402,6 +1504,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1429,6 +1533,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -1456,6 +1562,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -1483,6 +1591,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -1510,6 +1620,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -1537,6 +1649,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -1564,6 +1678,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1591,6 +1707,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1618,6 +1736,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1645,6 +1765,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1672,6 +1794,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1699,6 +1823,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1726,6 +1852,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -1753,6 +1881,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1780,6 +1910,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -1807,6 +1939,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -1834,6 +1968,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1861,6 +1997,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1888,6 +2026,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1915,6 +2055,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -1942,6 +2084,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -1969,6 +2113,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -1996,6 +2142,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2023,6 +2171,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2050,6 +2200,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2077,6 +2229,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2104,6 +2258,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2131,6 +2287,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2158,6 +2316,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2185,6 +2345,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2212,6 +2374,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2239,6 +2403,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2266,6 +2432,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2293,6 +2461,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2320,6 +2490,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2347,6 +2519,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2374,6 +2548,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2401,6 +2577,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2428,6 +2606,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2455,6 +2635,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2482,6 +2664,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2509,6 +2693,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2536,6 +2722,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2563,6 +2751,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2590,6 +2780,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2617,6 +2809,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2644,6 +2838,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2671,6 +2867,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2698,6 +2896,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2725,6 +2925,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2752,6 +2954,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2779,6 +2983,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -2806,6 +3012,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2833,6 +3041,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2860,6 +3070,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2887,6 +3099,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2914,6 +3128,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2941,6 +3157,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -2968,6 +3186,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -2995,6 +3215,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3022,6 +3244,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3049,6 +3273,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3076,6 +3302,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3103,6 +3331,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3130,6 +3360,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3157,6 +3389,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3184,6 +3418,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -3211,6 +3447,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3238,6 +3476,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3265,6 +3505,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3292,6 +3534,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3319,6 +3563,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3346,6 +3592,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3373,6 +3621,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3400,6 +3650,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3427,6 +3679,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3454,6 +3708,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3481,6 +3737,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3508,6 +3766,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3535,6 +3795,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -3562,6 +3824,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3589,6 +3853,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3616,6 +3882,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3643,6 +3911,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3670,6 +3940,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3697,6 +3969,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3724,6 +3998,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3751,6 +4027,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3778,6 +4056,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3805,6 +4085,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3832,6 +4114,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -3859,6 +4143,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -3886,6 +4172,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3913,6 +4201,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3940,6 +4230,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3967,6 +4259,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -3994,6 +4288,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4021,6 +4317,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4048,6 +4346,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4075,6 +4375,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4102,6 +4404,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4129,6 +4433,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -4156,6 +4462,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -4183,6 +4491,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -4210,6 +4520,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4237,6 +4549,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4264,6 +4578,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4291,6 +4607,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4318,6 +4636,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4345,6 +4665,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -4372,6 +4694,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4399,6 +4723,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -4426,6 +4752,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4453,6 +4781,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4480,6 +4810,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4507,6 +4839,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4534,6 +4868,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4561,6 +4897,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4588,6 +4926,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4615,6 +4955,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4642,6 +4984,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4669,6 +5013,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4696,6 +5042,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4723,6 +5071,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4750,6 +5100,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4777,6 +5129,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4804,6 +5158,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4831,6 +5187,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4858,6 +5216,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4885,6 +5245,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4912,6 +5274,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4939,6 +5303,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4966,6 +5332,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -4993,6 +5361,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5020,6 +5390,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5047,6 +5419,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5074,6 +5448,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5101,6 +5477,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -5128,6 +5506,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5155,6 +5535,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5182,6 +5564,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5209,6 +5593,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5236,6 +5622,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5263,6 +5651,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5290,6 +5680,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5317,6 +5709,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5344,6 +5738,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5371,6 +5767,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5398,6 +5796,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5425,6 +5825,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5452,6 +5854,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5479,6 +5883,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -5506,6 +5912,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5533,6 +5941,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5560,6 +5970,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5587,6 +5999,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": false,
         "quizGeneric": true
       },
@@ -5614,6 +6028,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": false,
         "quizGeneric": true
       },
@@ -5641,6 +6057,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5668,6 +6086,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5695,6 +6115,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5722,6 +6144,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5749,6 +6173,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5776,6 +6202,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5803,6 +6231,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5830,6 +6260,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5857,6 +6289,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5884,6 +6318,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -5911,6 +6347,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -5938,6 +6376,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5965,6 +6405,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -5992,6 +6434,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6019,6 +6463,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6046,6 +6492,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -6073,6 +6521,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6100,6 +6550,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6127,6 +6579,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -6154,6 +6608,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -6181,6 +6637,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6208,6 +6666,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6235,6 +6695,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": false,
         "quizGeneric": true
       },
@@ -6262,6 +6724,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": false,
         "quizGeneric": true
       },
@@ -6289,6 +6753,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -6316,6 +6782,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -6343,6 +6811,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6370,6 +6840,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -6397,6 +6869,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6424,6 +6898,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6451,6 +6927,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6478,6 +6956,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6505,6 +6985,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6532,6 +7014,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6559,6 +7043,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6586,6 +7072,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6613,6 +7101,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6640,6 +7130,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6667,6 +7159,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6694,6 +7188,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -6721,6 +7217,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -6748,6 +7246,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -6775,6 +7275,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6802,6 +7304,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6829,6 +7333,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -6856,6 +7362,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -6883,6 +7391,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6910,6 +7420,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6937,6 +7449,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -6964,6 +7478,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -6991,6 +7507,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7018,6 +7536,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7045,6 +7565,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7072,6 +7594,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7099,6 +7623,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7126,6 +7652,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7153,6 +7681,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7180,6 +7710,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7207,6 +7739,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7234,6 +7768,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -7261,6 +7797,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7288,6 +7826,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7315,6 +7855,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7342,6 +7884,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7369,6 +7913,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7396,6 +7942,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7423,6 +7971,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7450,6 +8000,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7477,6 +8029,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7504,6 +8058,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7531,6 +8087,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7558,6 +8116,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7585,6 +8145,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7612,6 +8174,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7639,6 +8203,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7666,6 +8232,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7693,6 +8261,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7720,6 +8290,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7747,6 +8319,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -7774,6 +8348,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7801,6 +8377,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7828,6 +8406,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -7855,6 +8435,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7882,6 +8464,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7909,6 +8493,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7936,6 +8522,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7963,6 +8551,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -7990,6 +8580,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8017,6 +8609,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8044,6 +8638,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8071,6 +8667,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -8098,6 +8696,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8125,6 +8725,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -8152,6 +8754,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -8179,6 +8783,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8206,6 +8812,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -8233,6 +8841,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8260,6 +8870,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8287,6 +8899,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8314,6 +8928,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8341,6 +8957,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -8368,6 +8986,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8395,6 +9015,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -8422,6 +9044,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8449,6 +9073,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -8476,6 +9102,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8503,6 +9131,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8530,6 +9160,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8557,6 +9189,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8584,6 +9218,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8611,6 +9247,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8638,6 +9276,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8665,6 +9305,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8692,6 +9334,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8719,6 +9363,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -8746,6 +9392,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8773,6 +9421,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -8800,6 +9450,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8827,6 +9479,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8854,6 +9508,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -8881,6 +9537,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8908,6 +9566,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -8935,6 +9595,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -8962,6 +9624,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -8989,6 +9653,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -9016,6 +9682,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -9043,6 +9711,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -9070,6 +9740,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9097,6 +9769,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9124,6 +9798,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -9151,6 +9827,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9178,6 +9856,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": true
       },
@@ -9205,6 +9885,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9232,6 +9914,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9259,6 +9943,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9286,6 +9972,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -9313,6 +10001,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -9340,6 +10030,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -9367,6 +10059,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -9394,6 +10088,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9421,6 +10117,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9448,6 +10146,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9475,6 +10175,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9502,6 +10204,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9529,6 +10233,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9556,6 +10262,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9583,6 +10291,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9610,6 +10320,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9637,6 +10349,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9664,6 +10378,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9691,6 +10407,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9718,6 +10436,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -9745,6 +10465,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9772,6 +10494,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9799,6 +10523,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -9826,6 +10552,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9853,6 +10581,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9880,6 +10610,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9907,6 +10639,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9934,6 +10668,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9961,6 +10697,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -9988,6 +10726,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10015,6 +10755,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10042,6 +10784,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10069,6 +10813,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10096,6 +10842,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10123,6 +10871,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10150,6 +10900,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10177,6 +10929,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10204,6 +10958,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10231,6 +10987,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10258,6 +11016,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10285,6 +11045,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10312,6 +11074,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10339,6 +11103,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10366,6 +11132,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10393,6 +11161,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10420,6 +11190,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10447,6 +11219,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10474,6 +11248,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -10501,6 +11277,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10528,6 +11306,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10555,6 +11335,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10582,6 +11364,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10609,6 +11393,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10636,6 +11422,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10663,6 +11451,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -10690,6 +11480,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10717,6 +11509,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10744,6 +11538,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10771,6 +11567,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10798,6 +11596,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10825,6 +11625,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10852,6 +11654,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10879,6 +11683,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10906,6 +11712,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -10933,6 +11741,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -10960,6 +11770,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -10987,6 +11799,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11014,6 +11828,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11041,6 +11857,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11068,6 +11886,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -11095,6 +11915,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -11122,6 +11944,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -11149,6 +11973,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11176,6 +12002,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11203,6 +12031,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -11230,6 +12060,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11257,6 +12089,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11284,6 +12118,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11311,6 +12147,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -11338,6 +12176,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11365,6 +12205,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -11392,6 +12234,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11419,6 +12263,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11446,6 +12292,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11473,6 +12321,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -11500,6 +12350,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11527,6 +12379,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11554,6 +12408,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -11581,6 +12437,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11608,6 +12466,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11635,6 +12495,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11662,6 +12524,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11689,6 +12553,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -11716,6 +12582,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11743,6 +12611,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11770,6 +12640,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11797,6 +12669,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11824,6 +12698,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11851,6 +12727,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -11878,6 +12756,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -11905,6 +12785,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -11932,6 +12814,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -11959,6 +12843,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -11986,6 +12872,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -12013,6 +12901,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -12040,6 +12930,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": true
       },
@@ -12067,6 +12959,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": true,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": true
       },
@@ -12094,6 +12988,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -12121,6 +13017,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -12148,6 +13046,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": true,
         "activities": true,
         "quizGeneric": false
       },
@@ -12175,6 +13075,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -12202,6 +13104,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -12229,6 +13133,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -12256,6 +13162,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -12283,6 +13191,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -12310,6 +13220,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -12337,6 +13249,8 @@
         "structuredSections": false,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -12364,6 +13278,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },
@@ -12391,6 +13307,8 @@
         "structuredSections": false,
         "preTestQuestions": false,
         "postTestQuestions": false,
+        "rationales": false,
+        "imageReferences": false,
         "activities": true,
         "quizGeneric": false
       },
@@ -12418,6 +13336,8 @@
         "structuredSections": true,
         "preTestQuestions": true,
         "postTestQuestions": true,
+        "rationales": false,
+        "imageReferences": false,
         "activities": false,
         "quizGeneric": false
       },

@@ -1,0 +1,117 @@
+{
+  "generatedAt": "2026-04-14T13:49:08.789Z",
+  "sources": {
+    "lessonRootCauseBuckets": "reports/lesson-root-cause-buckets.json",
+    "lessonSystemInventory": "reports/lesson-system-inventory.json",
+    "bucketsGeneratedAt": "2026-04-14T13:48:14.729Z",
+    "inventoryGeneratedAt": "2026-04-14T13:48:46.974Z"
+  },
+  "alliedBundledCatalogAnalysis": {
+    "summary": "Not a sync bug: `catalog.json` omits `us-allied-core` / `ca-allied-core` pathways, so bundled helpers return zero rows. Hubs use published DB lessons when present (`getPathwayLessonsPage` DB branch).",
+    "pathwayHasBundledCatalogLessonsSync": {
+      "us-allied-core": false,
+      "ca-allied-core": false
+    },
+    "inventorySnapshots": {
+      "us-allied-core": {
+        "catalogEffectiveCount": 0,
+        "dbPublishedEnCount": 23
+      },
+      "ca-allied-core": {
+        "catalogEffectiveCount": 0,
+        "dbPublishedEnCount": 23
+      }
+    }
+  },
+  "counts": {
+    "nonPublicCompleteLessons": 11675,
+    "substantialBodyCharsButNotPublic": 8595,
+    "executionCategorySplit": {
+      "gatingPrimaryOrSubstantialBody": 4580,
+      "missingSectionsPrimaryThinBody": 2883,
+      "missingSectionsPrimarySubstantialBody": 4196,
+      "trulyMissingOrPlaceholder": 16,
+      "otherBuckets": 0
+    },
+    "sourcesBreakdownNonPublic": {
+      "catalogOnly": 185,
+      "databaseOnly": 11043,
+      "both": 447,
+      "unknown": 0
+    }
+  },
+  "legacyAndRestoreHints": {
+    "databaseOnlyNonPublic": 11043,
+    "catalogOnlyNonPublic": 185,
+    "bothSourcesNonPublic": 447,
+    "note": "database-only failures may be restored/enriched from legacy pipelines; catalog-only may need section completion without DB drift; both — reconcile merge order first."
+  },
+  "rankedPhases": [
+    {
+      "rank": 1,
+      "name": "Structural + premium gate compliance (NP/RN/PN bulk)",
+      "focus": "missing_required_content_sections — add/expand premium spine sections and metadata where body already exists",
+      "estimatedLessonsInBucket": 7079
+    },
+    {
+      "rank": 2,
+      "name": "Gating / depth / relatedLessonRefs (no route changes)",
+      "focus": "present_but_gating_or_merge_logic — editorial passes on clinical_scenario depth, relatedLessonRefs targets, subscriber/premium completeness",
+      "estimatedLessonsInBucket": 4580
+    },
+    {
+      "rank": 3,
+      "name": "Placeholder / banned phrasing cleanup",
+      "focus": "truly_missing_or_placeholder_content — replace stubs; cross-check legacy map where applicable",
+      "estimatedLessonsInBucket": 16
+    },
+    {
+      "rank": 4,
+      "name": "Allied: optional future bundled catalog",
+      "focus": "Until `catalog.json` includes allied buckets, rely on DB + merged inventory for counts; add JSON only when offline/bundle parity is required",
+      "estimatedLessonsInBucket": 0
+    }
+  ],
+  "tierRollup": {
+    "Allied": {
+      "gatingPrimaryOrSubstantialBody": 0,
+      "missingSectionsPrimaryThinBody": 46,
+      "missingSectionsPrimarySubstantialBody": 0,
+      "trulyMissingOrPlaceholder": 0,
+      "otherBuckets": 0
+    },
+    "NP": {
+      "gatingPrimaryOrSubstantialBody": 2987,
+      "missingSectionsPrimaryThinBody": 1800,
+      "missingSectionsPrimarySubstantialBody": 3191,
+      "trulyMissingOrPlaceholder": 12,
+      "otherBuckets": 0
+    },
+    "RN": {
+      "gatingPrimaryOrSubstantialBody": 644,
+      "missingSectionsPrimaryThinBody": 475,
+      "missingSectionsPrimarySubstantialBody": 583,
+      "trulyMissingOrPlaceholder": 0,
+      "otherBuckets": 0
+    },
+    "PN": {
+      "gatingPrimaryOrSubstantialBody": 949,
+      "missingSectionsPrimaryThinBody": 328,
+      "missingSectionsPrimarySubstantialBody": 422,
+      "trulyMissingOrPlaceholder": 4,
+      "otherBuckets": 0
+    },
+    "Other": {
+      "gatingPrimaryOrSubstantialBody": 0,
+      "missingSectionsPrimaryThinBody": 234,
+      "missingSectionsPrimarySubstantialBody": 0,
+      "trulyMissingOrPlaceholder": 0,
+      "otherBuckets": 0
+    }
+  },
+  "remainingBlockersBeforeBulkImport": [
+    "Product rules for relaxing vs enforcing premium structural gates (especially NP volume).",
+    "Legacy import: use existing convert/enrichment scripts; dedupe by pathway+slug.",
+    "Allied: no bundled JSON required for hub correctness — optional parity if offline catalog needed."
+  ]
+}

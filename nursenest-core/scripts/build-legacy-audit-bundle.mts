@@ -22,6 +22,7 @@ import {
   normalizeTitleKey,
   walkTsFiles,
 } from "./lib/legacy-audit-helpers.mts";
+import type { PathwayLessonRecord } from "../src/lib/lessons/pathway-lesson-types";
 import {
   getCatalogPathwayLessonsSync,
   listCatalogPathwayIdsWithLessonsSync,
@@ -54,6 +55,10 @@ type InventoryEntry = {
     structuredSections: boolean;
     preTestQuestions: boolean;
     postTestQuestions: boolean;
+    /** Legacy quiz items with rationale fields */
+    rationales: boolean;
+    /** getAssetUrl(…), common image extensions */
+    imageReferences: boolean;
     activities: boolean;
     quizGeneric: boolean;
   };
@@ -99,6 +104,8 @@ function scanFileFeatures(absPath: string, src: string): InventoryEntry["contain
     structuredSections: /\bkind:\s*["']/.test(src) || /\bsections\s*:\s*\[/.test(src),
     preTestQuestions: /\bpreTest\b/.test(src),
     postTestQuestions: /\bpostTest\b/.test(src),
+    rationales: /\brationale\s*:/.test(src) || /\bdetailedRationale\b/.test(src),
+    imageReferences: /getAssetUrl\s*\(|\.(png|jpe?g|webp|gif)\b/i.test(src),
     activities: /\bactivity|activities\b/i.test(src) && /\.tsx?$/.test(absPath),
     quizGeneric: /\bquiz\b/.test(src) && /options:\s*\[/.test(src),
   };
@@ -141,6 +148,23 @@ function buildCatalogSlugTitleIndexes(catalog: CatalogJson): {
     }
   }
   return { slugToPathways, titleKeyToTargets, allRows };
+}
+
+function nursingTierForMapRow(
+  row: MapRow,
+  idToFiles: Map<string, string[]>,
+  tierOfPathway: (pid: string) => string,
+): "PN" | "RN" | "NP" | "Allied" | "Other" {
+  if (row.targetPathwayId) {
+    const t = tierOfPathway(row.targetPathwayId);
+    if (t === "PN" || t === "RN" || t === "NP" || t === "Allied") return t;
+  }
+  const f = idToFiles.get(row.legacyLessonId)?.[0];
+  if (f) {
+    const lt = likelyTierFromPath(f);
+    if (lt === "PN" || lt === "RN" || lt === "NP" || lt === "Allied") return lt;
+  }
+  return "Other";
 }
 
 function classifyRow(
@@ -273,6 +297,8 @@ async function main() {
         structuredSections: feat.structuredSections,
         preTestQuestions: feat.preTestQuestions,
         postTestQuestions: feat.postTestQuestions,
+        rationales: feat.rationales,
+        imageReferences: feat.imageReferences,
         activities: feat.activities,
         quizGeneric: feat.quizGeneric,
       },
@@ -306,6 +332,8 @@ async function main() {
         structuredSections: feat.structuredSections,
         preTestQuestions: feat.preTestQuestions,
         postTestQuestions: feat.postTestQuestions,
+        rationales: feat.rationales,
+        imageReferences: feat.imageReferences,
         activities: false,
         quizGeneric: feat.quizGeneric,
       },
@@ -343,6 +371,8 @@ async function main() {
           structuredSections: feat.structuredSections,
           preTestQuestions: feat.preTestQuestions,
           postTestQuestions: feat.postTestQuestions,
+          rationales: feat.rationales,
+          imageReferences: feat.imageReferences,
           activities: feat.activities,
           quizGeneric: feat.quizGeneric,
         },
@@ -396,6 +426,8 @@ async function main() {
         structuredSections: feat.structuredSections,
         preTestQuestions: feat.preTestQuestions,
         postTestQuestions: feat.postTestQuestions,
+        rationales: feat.rationales,
+        imageReferences: feat.imageReferences,
         activities: feat.activities,
         quizGeneric: feat.quizGeneric,
       },
@@ -585,6 +617,165 @@ async function main() {
     (postAudit.completePublicByTier as Record<string, number>)[t] += complete;
   }
 
+  const catLessonByPath = new Map<string, PathwayLessonRecord>();
+  for (const pid of pathwayIds) {
+    const t = tierOf(pid);
+    if (t !== "PN" && t !== "RN" && t !== "NP") continue;
+    for (const lesson of getCatalogPathwayLessonsSync(pid)) {
+      catLessonByPath.set(`${pid}::${lesson.slug}`, lesson);
+    }
+  }
+
+  const nursingMapActions: Record<MapRow["action"], number> = {
+    merge_into_existing: 0,
+    create_missing_current_lesson: 0,
+    duplicate_flag: 0,
+    review_needed: 0,
+  };
+  const prePostMergeCandidates: Record<string, unknown>[] = [];
+  for (const row of mapRows) {
+    const nt = nursingTierForMapRow(row, idToFiles, (p) => tierOf(p));
+    if (nt !== "PN" && nt !== "RN" && nt !== "NP") continue;
+    nursingMapActions[row.action] += 1;
+
+    if (
+      row.action === "merge_into_existing" &&
+      row.targetPathwayId &&
+      row.targetSlug &&
+      prePostMergeCandidates.length < 450
+    ) {
+      const key = `${row.targetPathwayId}::${row.targetSlug}`;
+      const catL = catLessonByPath.get(key);
+      const files = idToFiles.get(row.legacyLessonId);
+      if (!catL || !files?.length) continue;
+      let legacySrc = "";
+      try {
+        legacySrc = fs.readFileSync(path.join(REPO, files[0]!), "utf8");
+      } catch {
+        continue;
+      }
+      const legPre = /\bpreTest\s*:/.test(legacySrc);
+      const legPost = /\bpostTest\s*:/.test(legacySrc);
+      const catPre = Array.isArray(catL.preTest) && catL.preTest.length > 0;
+      const catPost = Array.isArray(catL.postTest) && catL.postTest.length > 0;
+      const incomplete = !catL.structuralQuality?.publicComplete;
+      if (
+        (legPre && !catPre) ||
+        (legPost && !catPost) ||
+        (incomplete && (legPre || legPost))
+      ) {
+        prePostMergeCandidates.push({
+          legacyLessonId: row.legacyLessonId,
+          targetPathwayId: row.targetPathwayId,
+          targetSlug: row.targetSlug,
+          nursingTier: nt,
+          legacySourceFile: files[0],
+          legacyHasPreTest: legPre,
+          legacyHasPostTest: legPost,
+          catalogHasPreTest: catPre,
+          catalogHasPostTest: catPost,
+          catalogPublicComplete: Boolean(catL.structuralQuality?.publicComplete),
+        });
+      }
+    }
+  }
+
+  const pnSnap = { total: 0, complete: 0, incomplete: 0 };
+  const rnSnap = { total: 0, complete: 0, incomplete: 0 };
+  const npSnap = { total: 0, complete: 0, incomplete: 0 };
+  const snap = postAudit.catalogSnapshotByPathway as Record<
+    string,
+    { tier: string; totalLessons: number; completePublic: number; incomplete: number }
+  >;
+  for (const [pid, row] of Object.entries(snap)) {
+    if (row.tier === "PN") {
+      pnSnap.total += row.totalLessons;
+      pnSnap.complete += row.completePublic;
+      pnSnap.incomplete += row.incomplete;
+    } else if (row.tier === "RN") {
+      rnSnap.total += row.totalLessons;
+      rnSnap.complete += row.completePublic;
+      rnSnap.incomplete += row.incomplete;
+    } else if (row.tier === "NP") {
+      npSnap.total += row.totalLessons;
+      npSnap.complete += row.completePublic;
+      npSnap.incomplete += row.incomplete;
+    }
+  }
+
+  const nursingRestore = {
+    generatedAt: new Date().toISOString(),
+    phase: "nursing_restore_batch_planning",
+    note:
+      "Audit-only: no catalog.json mutations in this run. Use prePostMergeCandidates + convert-legacy-lesson-to-enrichment.ts for editorial merges. External Backup Plus paths were requested but are not mounted in this Linux workspace — symlink or copy under repo to include.",
+    priorityOrder: ["PN", "RN", "NP", "pre_post_tests", "layout_harmonization", "crash_prevention", "Allied_last"],
+    externalVolumes: {
+      requested: ["/Volumes/Backup Plus/11", "/Volumes/Backup Plus/NurseNest"],
+      mountedHere: false,
+    },
+    constraintsVerified: postAudit.constraintsVerified,
+    catalogNursingCompleteness: { PN: pnSnap, RN: rnSnap, NP: npSnap },
+    legacyContentMapLessonCount: legacyIds.length,
+    nursingOnlyMappingActions: nursingMapActions,
+    prePostMergeCandidatesCount: prePostMergeCandidates.length,
+    prePostMergeCandidatesSample: prePostMergeCandidates.slice(0, 80),
+    lessonsMergedFromLegacyCount: 0,
+    lessonsCreatedFromScratchCount: 0,
+    preTestsRestoredCount: 0,
+    postTestsRestoredCount: 0,
+    layoutFilesTouched: [] as string[],
+    crashPreventionFilesTouched: [] as string[],
+    duplicatesFlaggedCount: dupOut.idAppearsInMultipleFiles.length + duplicateTitleGroups.length,
+    alliedPending: true,
+    remainingNursingGapsBeforeAllied:
+      "Clear merge_into_existing + pre/post gaps using legacy TS sources; promote publicComplete via pathway-lesson-premium gates; then run allied-bundled catalog batches.",
+  };
+
+  fs.writeFileSync(path.join(AUDIT_DIR, "lesson-audit-post-nursing-restore.json"), JSON.stringify(nursingRestore, null, 2));
+
+  const md = `# Lesson audit — post–nursing-restore planning
+
+Generated: ${nursingRestore.generatedAt}
+
+## Nursing catalog completeness (bundled catalog.json)
+
+| Tier | Total lessons | Public complete | Incomplete |
+|------|---------------|-----------------|------------|
+| PN | ${pnSnap.total} | ${pnSnap.complete} | ${pnSnap.incomplete} |
+| RN | ${rnSnap.total} | ${rnSnap.complete} | ${rnSnap.incomplete} |
+| NP | ${npSnap.total} | ${npSnap.complete} | ${npSnap.incomplete} |
+
+## Legacy → current mapping (PN / RN / NP rows only)
+
+- merge_into_existing: ${nursingMapActions.merge_into_existing}
+- create_missing_current_lesson: ${nursingMapActions.create_missing_current_lesson}
+- review_needed: ${nursingMapActions.review_needed}
+- duplicate_flag: ${nursingMapActions.duplicate_flag}
+
+## Pre/post test merge candidates
+
+Count: **${prePostMergeCandidates.length}** (catalog row missing pre/post or structurally incomplete while legacy source contains preTest/postTest patterns).
+
+First rows are listed in \`lesson-audit-post-nursing-restore.json\` as \`prePostMergeCandidatesSample\`.
+
+## Execution status
+
+- **Content merges applied this run:** 0 (audit only).
+- **Schema / auth / routes:** unchanged.
+- **External volumes:** not mounted; use repo \`client/src/data/lessons\` as legacy source of truth here.
+
+## Next batches
+
+1. PN lesson enrichment merges (editorial + \`convert-legacy-lesson-to-enrichment.ts\`).
+2. RN, then NP.
+3. Pre/post restoration from candidate list.
+4. Layout harmonization (semantic tokens only).
+5. Performance guards where loaders exceed safe size.
+6. Allied after nursing stabilizes.
+`;
+
+  fs.writeFileSync(path.join(AUDIT_DIR, "lesson-audit-post-nursing-restore-summary.md"), md);
+
   fs.writeFileSync(path.join(AUDIT_DIR, "lesson-audit-post-legacy-merge.json"), JSON.stringify(postAudit, null, 2));
 
   console.log("Wrote:");
@@ -592,6 +783,8 @@ async function main() {
   console.log(" - data/audit/legacy-to-current-lesson-map.json");
   console.log(" - data/audit/legacy-duplicate-lessons.json");
   console.log(" - data/audit/lesson-audit-post-legacy-merge.json");
+  console.log(" - data/audit/lesson-audit-post-nursing-restore.json");
+  console.log(" - data/audit/lesson-audit-post-nursing-restore-summary.md");
   console.log(JSON.stringify({ legacyKeys: legacyIds.length, mappingSummary: summary }, null, 2));
 }
 

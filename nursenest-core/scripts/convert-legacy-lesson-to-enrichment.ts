@@ -16,6 +16,8 @@
  * The output is a JSON snippet you can paste into a data/lesson-enrichments/ file.
  */
 
+import path from "node:path";
+
 type QuizQuestion = {
   question: string;
   options: string[];
@@ -295,4 +297,12 @@ async function main() {
   }
 }
 
-main().catch(console.error);
+const invokedDirectly = (() => {
+  const entry = process.argv[1] ? path.resolve(process.argv[1]) : "";
+  const base = path.basename(entry);
+  return base.startsWith("convert-legacy-lesson-to-enrichment");
+})();
+
+if (invokedDirectly) {
+  main().catch(console.error);
+}

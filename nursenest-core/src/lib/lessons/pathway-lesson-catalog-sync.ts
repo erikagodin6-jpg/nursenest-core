@@ -3,6 +3,7 @@
  * Split from `pathway-lesson-loader.ts` so CLI audits and tooling can import without the `server-only` graph.
  */
 import catalog from "@/content/pathway-lessons/catalog.json";
+import alliedBundledCatalog from "@/content/pathway-lessons/allied-bundled-catalog.json";
 import { inferExamAudienceFromPathwayId } from "@/lib/lessons/exam-complete-lesson-template";
 import { deriveLessonHighYieldStudyFields } from "@/lib/lessons/lesson-high-yield-study-fields";
 import { resolveLessonContextForPathwayId } from "@/lib/lessons/lesson-region-exam";
@@ -72,6 +73,15 @@ type CatalogShape = {
 };
 
 const data = catalog as CatalogShape;
+
+const alliedBundledPathways =
+  (alliedBundledCatalog as { pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]> }).pathways ??
+  {};
+
+function alliedBundledLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = alliedBundledPathways[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
 
 export type LessonInput = CatalogShape["pathways"][string]["lessons"][number];
 const CANONICAL_ORDER: PathwayLessonSectionKind[] = [
@@ -572,7 +582,10 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
 export function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
   const bucket = data.pathways[pathwayId];
   const fromJson = bucket?.lessons?.length ? bucket.lessons.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
-  return prependScopedGoldCatalogLessons(pathwayId, fromJson);
+  const allied = alliedBundledLessonsForPathway(pathwayId);
+  const seen = new Set(fromJson.map((l) => l.slug));
+  const merged = [...fromJson, ...allied.filter((l) => !seen.has(l.slug))];
+  return prependScopedGoldCatalogLessons(pathwayId, merged);
 }
 
 export function getCatalogPathwayLessonsSync(pathwayId: string): PathwayLessonRecord[] {
@@ -580,10 +593,9 @@ export function getCatalogPathwayLessonsSync(pathwayId: string): PathwayLessonRe
 }
 
 /**
- * Audit / inventory tooling: bundled `catalog.json` + scoped-gold, normalized, then the same exam/country filter
- * as catalog-backed hub paths. **Does not include Prisma-published lessons.** If a pathway only ships content
- * via the database (e.g. allied health today: no rows under `pathways[pathwayId]` in `catalog.json`), this returns
- * an empty array while `getPathwayLessonsPage` (pathway-lesson-loader) may still list DB rows.
+ * Audit / inventory tooling: bundled `catalog.json` + optional `allied-bundled-catalog.json` + scoped-gold,
+ * normalized, then the same exam/country filter as catalog-backed hub paths. **Does not include Prisma-published
+ * lessons.** DB-only pathways still list via `getPathwayLessonsPage` when published rows exist.
  */
 export function getEffectiveCatalogLessonsForPathwaySync(pathwayId: string): PathwayLessonRecord[] {
   return sortAndFilterLessonsForPathwayContext(pathwayId, getCatalogPathwayLessonsSync(pathwayId));
@@ -594,9 +606,10 @@ export function pathwayHasBundledCatalogLessonsSync(pathwayId: string): boolean 
   return getCatalogPathwayLessonsSync(pathwayId).length > 0;
 }
 
-/** Pathway ids that have at least one catalog (+ scoped-gold) lesson row. */
+/** Pathway ids that have at least one catalog (+ allied bundled slice + scoped-gold) lesson row. */
 export function listCatalogPathwayIdsWithLessonsSync(): string[] {
-  return Object.keys(data.pathways).filter((id) => getCatalogPathwayLessonsSync(id).length > 0);
+  const ids = new Set<string>([...Object.keys(data.pathways ?? {}), ...Object.keys(alliedBundledPathways)]);
+  return [...ids].filter((id) => getCatalogPathwayLessonsSync(id).length > 0);
 }
 
 export function pathwayLessonRowToInput(row: {

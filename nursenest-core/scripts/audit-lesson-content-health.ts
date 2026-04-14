@@ -1,6 +1,6 @@
 #!/usr/bin/env npx tsx
 /**
- * Code-level pathway lesson health using catalog.json + scoped-gold merge only.
+ * Code-level pathway lesson health using catalog.json + allied-bundled-catalog.json + scoped-gold merge only.
  * Avoids importing pathway-lesson-loader (server-only / DB graph) so this runs under plain `tsx`.
  *
  * Run: npx tsx scripts/audit-lesson-content-health.ts
@@ -14,6 +14,7 @@ import { listExamPathways } from "../src/lib/exam-pathways/exam-product-registry
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
 const CATALOG = path.join(ROOT, "src/content/pathway-lessons/catalog.json");
+const ALLIED_BUNDLED = path.join(ROOT, "src/content/pathway-lessons/allied-bundled-catalog.json");
 
 type RawLesson = {
   slug: string;
@@ -22,6 +23,21 @@ type RawLesson = {
 };
 
 type CatalogJson = { pathways?: Record<string, { lessons?: RawLesson[] }> };
+
+function loadAlliedBundledLessons(pathwayId: string): RawLesson[] {
+  if (!fs.existsSync(ALLIED_BUNDLED)) return [];
+  const j = JSON.parse(fs.readFileSync(ALLIED_BUNDLED, "utf8")) as {
+    pathways?: Record<string, RawLesson[]>;
+  };
+  return j.pathways?.[pathwayId] ?? [];
+}
+
+function mergeCatalogBucketWithAllied(pathwayId: string, raw: CatalogJson): RawLesson[] {
+  const bucket = raw.pathways?.[pathwayId]?.lessons ?? [];
+  const allied = loadAlliedBundledLessons(pathwayId);
+  const seen = new Set(bucket.map((l) => l.slug));
+  return [...bucket, ...allied.filter((l) => !seen.has(l.slug))];
+}
 
 function wordCountSections(sections: Array<{ body?: string }> | undefined): number {
   if (!Array.isArray(sections)) return 0;
@@ -44,8 +60,8 @@ function main() {
   /** All lesson slugs across pathways — `LESSON:slug` links may target another hub’s slug. */
   const globalSlugs = new Set<string>();
   for (const p of pathways) {
-    const bucket = raw.pathways?.[p.id]?.lessons ?? [];
-    const merged = prependScopedGoldCatalogLessons(p.id, bucket);
+    const combined = mergeCatalogBucketWithAllied(p.id, raw);
+    const merged = prependScopedGoldCatalogLessons(p.id, combined);
     for (const l of merged) {
       const s = typeof l.slug === "string" ? l.slug.trim() : "";
       if (s) globalSlugs.add(s);
@@ -65,8 +81,8 @@ function main() {
 
   for (const p of pathways) {
     byPathway[p.id] = { lessons: 0, thin: 0, fewSec: 0, badRelated: 0, badWiki: 0 };
-    const bucket = raw.pathways?.[p.id]?.lessons ?? [];
-    const merged = prependScopedGoldCatalogLessons(p.id, bucket);
+    const combined = mergeCatalogBucketWithAllied(p.id, raw);
+    const merged = prependScopedGoldCatalogLessons(p.id, combined);
 
     for (const lesson of merged) {
       totalLessons += 1;
@@ -105,7 +121,9 @@ function main() {
     }
   }
 
-  console.log("Pathway lesson content health (catalog.json + scoped gold, raw — no DB, no normalizeLesson)\n");
+  console.log(
+    "Pathway lesson content health (catalog.json + allied-bundled-catalog.json + scoped gold, raw — no DB, no normalizeLesson)\n",
+  );
   console.log(`Total lesson rows: ${totalLessons}`);
   console.log(`Thin body (<80 words in section bodies): ${thinBody}`);
   console.log(`Few sections (<3, when any sections exist): ${fewSections}`);

@@ -1,8 +1,113 @@
 {
-  "generatedAt": "2026-04-14T13:40:47.001Z",
+  "generatedAt": "2026-04-14T13:52:50.934Z",
   "conclusion": "Static inventory cannot prove HTTP route bugs (no request/response). Entries below are lessons with substantial body text that still fail publicComplete — strong evidence of strict gating or authoring depth, not Next.js routing.",
   "provenRouteBugs": [],
   "substantialContentButGateFailed": [
+    {
+      "pathwayId": "ca-allied-core",
+      "slug": "allied-clinical-documentation",
+      "totalBodyChars": 13566,
+      "structureMode": "premium",
+      "issueCount": 10
+    },
+    {
+      "pathwayId": "ca-allied-core",
+      "slug": "allied-emergency-response",
+      "totalBodyChars": 14818,
+      "structureMode": "premium",
+      "issueCount": 9
+    },
+    {
+      "pathwayId": "ca-allied-core",
+      "slug": "allied-healthcare-teamwork",
+      "totalBodyChars": 11484,
+      "structureMode": "premium",
+      "issueCount": 10
+    },
+    {
+      "pathwayId": "ca-allied-core",
+      "slug": "allied-human-anatomy",
+      "totalBodyChars": 10248,
+      "structureMode": "premium",
+      "issueCount": 10
+    },
+    {
+      "pathwayId": "ca-allied-core",
+      "slug": "allied-human-physiology",
+      "totalBodyChars": 11766,
+      "structureMode": "premium",
+      "issueCount": 10
+    },
+    {
+      "pathwayId": "ca-allied-core",
+      "slug": "allied-imaging-basics",
+      "totalBodyChars": 10816,
+      "structureMode": "premium",
+      "issueCount": 10
+    },
+    {
+      "pathwayId": "ca-allied-core",
+      "slug": "allied-infection-control",
+      "totalBodyChars": 11772,
+      "structureMode": "premium",
+      "issueCount": 10
+    },
+    {
+      "pathwayId": "ca-allied-core",
+      "slug": "allied-lab-values",
+      "totalBodyChars": 9799,
+      "structureMode": "premium",
+      "issueCount": 11
+    },
+    {
+      "pathwayId": "ca-allied-core",
+      "slug": "allied-medical-ethics",
+      "totalBodyChars": 13850,
+      "structureMode": "premium",
+      "issueCount": 10
+    },
+    {
+      "pathwayId": "ca-allied-core",
+      "slug": "allied-medical-terminology",
+      "totalBodyChars": 10636,
+      "structureMode": "premium",
+      "issueCount": 11
+    },
+    {
+      "pathwayId": "ca-allied-core",
+      "slug": "allied-medication-safety",
+      "totalBodyChars": 10501,
+      "structureMode": "premium",
+      "issueCount": 10
+    },
+    {
+      "pathwayId": "ca-allied-core",
+      "slug": "allied-patient-assessment",
+      "totalBodyChars": 11630,
+      "structureMode": "premium",
+      "issueCount": 10
+    },
+    {
+      "pathwayId": "ca-allied-core",
+      "slug": "allied-patient-communication",
+      "totalBodyChars": 11364,
+      "structureMode": "premium",
+      "issueCount": 10
+    },
+    {
+      "pathwayId": "ca-allied-core",
+      "slug": "allied-pharmacology-basics",
+      "totalBodyChars": 11980,
+      "structureMode": "premium",
+      "issueCount": 10
+    },
+    {
+      "pathwayId": "ca-allied-core",
+      "slug": "allied-vital-signs",
+      "totalBodyChars": 14645,
+      "structureMode": "premium",
+      "issueCount": 10
+    },
     {
       "pathwayId": "ca-np-cnple",
       "slug": "12-lead-ecg-advanced-interpretation-np-level-np",
@@ -1297,111 +1402,6 @@
       "totalBodyChars": 4952,
       "structureMode": "legacy",
       "issueCount": 2
-    },
-    {
-      "pathwayId": "ca-np-cnple",
-      "slug": "cirrhosis-management-np",
-      "totalBodyChars": 4758,
-      "structureMode": "legacy",
-      "issueCount": 2
-    },
-    {
-      "pathwayId": "ca-np-cnple",
-      "slug": "cirrhosis-patho-np",
-      "totalBodyChars": 5575,
-      "structureMode": "legacy",
-      "issueCount": 2
-    },
-    {
-      "pathwayId": "ca-np-cnple",
-      "slug": "ckd-diagnostic-criteria-np",
-      "totalBodyChars": 5524,
-      "structureMode": "legacy",
-      "issueCount": 2
-    },
-    {
-      "pathwayId": "ca-np-cnple",
-      "slug": "ckd-progression-patho-np",
-      "totalBodyChars": 5053,
-      "structureMode": "legacy",
-      "issueCount": 2
-    },
-    {
-      "pathwayId": "ca-np-cnple",
-      "slug": "ckd-staging-np",
-      "totalBodyChars": 4801,
-      "structureMode": "legacy",
-      "issueCount": 2
-    },
-    {
-      "pathwayId": "ca-np-cnple",
-      "slug": "clinical-prioritization-np",
-      "totalBodyChars": 5087,
-      "structureMode": "legacy",
-      "issueCount": 2
-    },
-    {
-      "pathwayId": "ca-np-cnple",
-      "slug": "clinical-reasoning-np",
-      "totalBodyChars": 5328,
-      "structureMode": "legacy",
-      "issueCount": 2
-    },
-    {
-      "pathwayId": "ca-np-cnple",
-      "slug": "cml-management-np",
-      "totalBodyChars": 5257,
-      "structureMode": "legacy",
-      "issueCount": 2
-    },
-    {
-      "pathwayId": "ca-np-cnple",
-      "slug": "cmp-interpretation-np",
-      "totalBodyChars": 5692,
-      "structureMode": "legacy",
-      "issueCount": 2
-    },
-    {
-      "pathwayId": "ca-np-cnple",
-      "slug": "coagulation-cascade-np",
-      "totalBodyChars": 5973,
-      "structureMode": "legacy",
-      "issueCount": 2
-    },
-    {
-      "pathwayId": "ca-np-cnple",
-      "slug": "coagulation-disorders-patho-np",
-      "totalBodyChars": 5750,
-      "structureMode": "legacy",
-      "issueCount": 2
-    },
-    {
-      "pathwayId": "ca-np-cnple",
-      "slug": "coagulopathies-basics-np",
-      "totalBodyChars": 5575,
-      "structureMode": "legacy",
-      "issueCount": 2
-    },
-    {
-      "pathwayId": "ca-np-cnple",
-      "slug": "cognitive-decline-np",
-      "totalBodyChars": 6012,
-      "structureMode": "legacy",
-      "issueCount": 2
-    },
-    {
-      "pathwayId": "ca-np-cnple",
-      "slug": "cognitive-screening-np",
-      "totalBodyChars": 5689,
-      "structureMode": "legacy",
-      "issueCount": 2
-    },
-    {
-      "pathwayId": "ca-np-cnple",
-      "slug": "colon-cancer-screening-np",
-      "totalBodyChars": 5618,
-      "structureMode": "legacy",
-      "issueCount": 1
     }
   ]
 }

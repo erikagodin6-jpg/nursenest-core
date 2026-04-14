@@ -16,4 +16,4 @@
 - "Other" tier group pathways (e.g. upcoming): confirm intentional non-publish.
 
 ## Top primary buckets (this run)
-missing_required_content_sections: 7079; present_but_gating_or_merge_logic: 4580; truly_missing_or_placeholder_content: 16; missing_pre_test_items: 0; missing_post_test_items: 0
+missing_required_content_sections: 7079; present_but_gating_or_merge_logic: 4610; truly_missing_or_placeholder_content: 16; missing_pre_test_items: 0; missing_post_test_items: 0

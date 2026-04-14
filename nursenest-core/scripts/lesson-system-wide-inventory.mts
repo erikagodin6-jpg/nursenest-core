@@ -21,7 +21,6 @@ import { prisma } from "../src/lib/db";
 import {
   getEffectiveCatalogLessonsForPathwaySync,
   normalizeLesson,
-  pathwayHasBundledCatalogLessonsSync,
   pathwayLessonRowToInput,
 } from "../src/lib/lessons/pathway-lesson-catalog-sync";
 import { prependScopedGoldCatalogLessons } from "../src/lib/lessons/scoped-lessons/scoped-gold-registry";
@@ -228,6 +227,7 @@ async function main() {
     notes: [
       "Marketing lesson pages call notFound() when structuralQuality.publicComplete is false — counted as non-resolving for public learners.",
       "When the hub uses published DB rows, catalog-only rows may not appear in the hub even if present in catalog.json; this report merges DB + effective catalog where possible.",
+      "Allied (`us-allied-core` / `ca-allied-core`): `catalog.json` has no pathway bucket today — bundled effective count is 0 while merged DB rows can still populate hubs and this inventory.",
       "takeaways/commonTraps as string[] are not in PathwayLessonRecord yet; exam_focus.commonTraps is a single string in the current schema.",
     ],
   };
@@ -346,13 +346,13 @@ async function main() {
     );
   }
   md.push("");
-  md.push(`## Allied profession slices (catalog + topic filter)`);
+  md.push(`## Allied profession slices (merged DB + catalog, then topic filter)`);
   md.push("");
-  md.push("| Profession | Pathway | Effective | Would render | Gate failed |");
-  md.push("| --- | --- | ---: | ---: | ---: |");
+  md.push("| Profession | Pathway | Bundled-only (JSON+gold) | Merged filtered | Would render | Gate failed |");
+  md.push("| --- | --- | ---: | ---: | ---: | ---: |");
   for (const a of alliedProfessions) {
     md.push(
-      `| ${a.professionKey} | ${a.pathwayId} | ${a.catalogEffectiveCount} | ${a.marketingWouldRenderCount} | ${a.structuralGateFailedCount} |`,
+      `| ${a.professionKey} | ${a.pathwayId} | ${a.bundledCatalogFilteredCount} | ${a.mergedAfterProfessionFilterCount} | ${a.marketingWouldRenderCount} | ${a.structuralGateFailedCount} |`,
     );
   }
   md.push("");

@@ -1,81 +1,86 @@
 {
-  "generatedAt": "2026-04-14T13:40:47.007Z",
-  "note": "topicSlugsIn on ALLIED_PROFESSIONS restricts which lessons appear per profession hub. Inventory hub rows use getEffectiveCatalogLessonsForPathwaySync (exam filter), then alliedLessonMatchesProfessionFilter.",
+  "generatedAt": "2026-04-14T13:52:51.332Z",
+  "alliedBundledCatalogRootCause": "Allied bundled lessons ship in `src/content/pathway-lessons/allied-bundled-catalog.json` (legacy allied-health-foundations 1–3 via `convertLegacyLesson`), merged in `getCatalogLessonsRaw`. Main `catalog.json` still has no `pathways.us-allied-core` keys — intentional to avoid duplicating the large allied JSON inside the primary file.",
+  "pathwayHasBundledCatalogLessonsSync": {
+    "us-allied-core": true,
+    "ca-allied-core": true
+  },
+  "note": "Profession topicSlugsIn still filters merged hub inventory rows (same as runtime). Compare bundledCatalogFilteredCount (JSON+gold only) vs mergedAfterProfessionFilterCount (DB+catalog merge from lesson-system-inventory).",
   "externalVolumesAvailable": false,
   "professions": [
     {
       "professionKey": "pta",
       "pathwayId": "us-allied-core",
       "topicSlugsIn": null,
-      "catalogEffectiveTotal": 0,
-      "afterTopicFilterCount": 0,
+      "bundledCatalogFilteredCount": 15,
+      "mergedAfterProfessionFilterCount": 38,
       "marketingWouldRenderApprox": 0
     },
     {
       "professionKey": "ota",
       "pathwayId": "us-allied-core",
       "topicSlugsIn": null,
-      "catalogEffectiveTotal": 0,
-      "afterTopicFilterCount": 0,
+      "bundledCatalogFilteredCount": 15,
+      "mergedAfterProfessionFilterCount": 38,
       "marketingWouldRenderApprox": 0
     },
     {
       "professionKey": "mlt",
       "pathwayId": "us-allied-core",
       "topicSlugsIn": null,
-      "catalogEffectiveTotal": 0,
-      "afterTopicFilterCount": 0,
+      "bundledCatalogFilteredCount": 15,
+      "mergedAfterProfessionFilterCount": 38,
       "marketingWouldRenderApprox": 0
     },
     {
       "professionKey": "imaging",
       "pathwayId": "us-allied-core",
       "topicSlugsIn": null,
-      "catalogEffectiveTotal": 0,
-      "afterTopicFilterCount": 0,
+      "bundledCatalogFilteredCount": 15,
+      "mergedAfterProfessionFilterCount": 38,
       "marketingWouldRenderApprox": 0
     },
     {
       "professionKey": "respiratory",
       "pathwayId": "us-allied-core",
       "topicSlugsIn": null,
-      "catalogEffectiveTotal": 0,
-      "afterTopicFilterCount": 0,
+      "bundledCatalogFilteredCount": 15,
+      "mergedAfterProfessionFilterCount": 38,
       "marketingWouldRenderApprox": 0
     },
     {
       "professionKey": "paramedic",
       "pathwayId": "us-allied-core",
       "topicSlugsIn": null,
-      "catalogEffectiveTotal": 0,
-      "afterTopicFilterCount": 0,
+      "bundledCatalogFilteredCount": 15,
+      "mergedAfterProfessionFilterCount": 38,
       "marketingWouldRenderApprox": 0
     },
     {
       "professionKey": "pharmacy-tech",
       "pathwayId": "us-allied-core",
       "topicSlugsIn": null,
-      "catalogEffectiveTotal": 0,
-      "afterTopicFilterCount": 0,
+      "bundledCatalogFilteredCount": 15,
+      "mergedAfterProfessionFilterCount": 38,
       "marketingWouldRenderApprox": 0
     },
     {
       "professionKey": "social-work",
       "pathwayId": "us-allied-core",
       "topicSlugsIn": null,
-      "catalogEffectiveTotal": 0,
-      "afterTopicFilterCount": 0,
+      "bundledCatalogFilteredCount": 15,
+      "mergedAfterProfessionFilterCount": 38,
       "marketingWouldRenderApprox": 0
     }
   ],
   "pathway_us-allied-core_inventory_snapshot": {
-    "catalogEffectiveCount": 0,
+    "catalogEffectiveCount": 15,
     "dbPublishedEnCount": 23,
-    "mergedUniqueSlugCount": 23
+    "mergedUniqueSlugCount": 38
   },
   "pathway_ca-allied-core_inventory_snapshot": {
-    "catalogEffectiveCount": 0,
+    "catalogEffectiveCount": 15,
     "dbPublishedEnCount": 23,
-    "mergedUniqueSlugCount": 23
+    "mergedUniqueSlugCount": 38
   }
 }

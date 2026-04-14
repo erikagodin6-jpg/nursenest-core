@@ -12,6 +12,21 @@ export const LESSON_PAGE = {
   default: 12,
 } as const;
 
+/** GET `/api/lessons` offset mode: `limit` or `pageSize` (default 20, max 50). */
+export const LESSON_API_OFFSET_LIMIT = {
+  min: 1,
+  max: 50,
+  default: 20,
+} as const;
+
+/** `/app/lessons` `limit` query — aligned with {@link LESSON_API_OFFSET_LIMIT}. */
+export function parseLessonLibraryLimit(raw: string | null | undefined): number {
+  if (raw == null || raw === "") return LESSON_API_OFFSET_LIMIT.default;
+  const n = Number(raw);
+  if (!Number.isFinite(n) || !Number.isInteger(n)) return LESSON_API_OFFSET_LIMIT.default;
+  return Math.min(LESSON_API_OFFSET_LIMIT.max, Math.max(LESSON_API_OFFSET_LIMIT.min, n));
+}
+
 export const FLASHCARD_PAGE = {
   min: 5,
   max: 30,

@@ -19,7 +19,7 @@ import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sent
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { CountryCode, TierCode } from "@prisma/client";
 import {
-  LESSON_PAGE,
+  LESSON_API_OFFSET_LIMIT,
   MAX_LIST_SKIP_ROWS_DEFAULT,
   isSkipBeyondLimit,
   listSkipRows,
@@ -45,7 +45,8 @@ export async function GET(req: NextRequest) {
 
   const useCursor = wantsCursorMode(req);
 
-  const sizeParsed = parseBoundedPageSize(req.nextUrl.searchParams.get("pageSize"), LESSON_PAGE);
+  const rawLimit = req.nextUrl.searchParams.get("limit") ?? req.nextUrl.searchParams.get("pageSize");
+  const sizeParsed = parseBoundedPageSize(rawLimit, LESSON_API_OFFSET_LIMIT);
   if (!sizeParsed.ok) {
     return NextResponse.json(
       {
@@ -160,6 +161,9 @@ export async function GET(req: NextRequest) {
         const subscriberCursorBody = {
           pageSize,
           lessons,
+          totalCount: null as number | null,
+          currentPage: null as number | null,
+          totalPages: null as number | null,
           mode: "subscriber" as const,
           pagination: {
             mode: "cursor" as const,
@@ -200,6 +204,9 @@ export async function GET(req: NextRequest) {
         total,
         pageCount,
         lessons,
+        totalCount: total,
+        currentPage: page,
+        totalPages: pageCount,
         mode: "subscriber" as const,
         pagination: {
           mode: "offset" as const,
@@ -282,6 +289,9 @@ export async function GET(req: NextRequest) {
       page: 1,
       pageSize: take,
       lessons: trimmedSummary,
+      totalCount: trimmedSummary.length,
+      currentPage: 1,
+      totalPages: 1,
       mode: "freemium" as const,
       freemiumRemainingAfterBatch: remaining,
       pagination: {

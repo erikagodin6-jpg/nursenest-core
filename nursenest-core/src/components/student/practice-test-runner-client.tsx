@@ -347,6 +347,18 @@ export function PracticeTestRunnerClient({
     return () => window.clearInterval(t);
   }, [phase, timedMode, status]);
 
+  /** Reduce accidental navigation away during adaptive or timed runs (legacy mock-exam checkpoint intent, browser-native). */
+  useEffect(() => {
+    if (status !== "IN_PROGRESS" || phase !== "ready") return;
+    if (!catMode && !timedMode) return;
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [status, phase, catMode, timedMode]);
+
   const submitTest = useCallback(
     async (fromTimer = false) => {
       if (submitInFlightRef.current) return;
@@ -715,6 +727,44 @@ export function PracticeTestRunnerClient({
     }
   }
 
+  /** Inline recovery when PATCH save / CAT advance / linear commit fails but the item is still visible (legacy exam-fallbacks recovery intent). */
+  const sessionRecoverable =
+    phase === "ready" &&
+    status === "IN_PROGRESS" &&
+    Boolean(current) &&
+    Boolean(error) &&
+    !qLoading;
+  const sessionRecoveryBanner = sessionRecoverable ? (
+    <div
+      role="alert"
+      className="mb-4 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-primary)] shadow-sm"
+    >
+      <p className="font-semibold text-[var(--semantic-text-primary)]">
+        {tx("learner.practiceTests.run.sessionIssueTitle", "We could not sync that step")}
+      </p>
+      <p className="mt-1 text-[var(--semantic-text-secondary)]">{error}</p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button
+          type="button"
+          className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
+          onClick={() => {
+            setError(null);
+            void load();
+          }}
+        >
+          {tx("learner.practiceTests.run.sessionTryAgain", "Try again")}
+        </button>
+        <button
+          type="button"
+          className="rounded-full border border-transparent px-4 py-2 text-xs font-semibold text-[var(--semantic-text-muted)] underline-offset-2 hover:underline"
+          onClick={() => setError(null)}
+        >
+          {tx("learner.practiceTests.run.sessionDismiss", "Dismiss")}
+        </button>
+      </div>
+    </div>
+  ) : null;
+
   if (phase === "loading") {
     return (
       <div className="nn-card space-y-3 p-6 text-sm text-muted-foreground" aria-busy="true">
@@ -733,11 +783,29 @@ export function PracticeTestRunnerClient({
   }
   if (phase === "error") {
     return (
-      <div className="nn-card p-6 text-sm text-muted-foreground">
+      <div className="nn-card space-y-4 p-6 text-sm text-muted-foreground">
+        <p className="font-medium text-foreground">
+          {tx("learner.practiceTests.run.loadFailedTitle", "Could not load this practice test")}
+        </p>
         <p>{error ?? tx("learner.practiceTests.run.error", "Error")}</p>
-        <Link className="mt-2 inline-block font-medium text-primary" href="/app/practice-tests">
-          {tx("learner.practiceTests.run.backToBank", "Back to test bank")}
-        </Link>
+        <p className="text-xs text-[var(--semantic-text-secondary)]">
+          {tx(
+            "learner.practiceTests.run.loadFailedHint",
+            "Check your connection and try again. If you were already in progress, your session may still be on the server.",
+          )}
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
+            onClick={() => void load()}
+          >
+            {tx("learner.practiceTests.run.retryLoad", "Retry")}
+          </button>
+          <Link className="inline-flex items-center font-medium text-primary underline" href="/app/practice-tests">
+            {tx("learner.practiceTests.run.backToBank", "Back to test bank")}
+          </Link>
+        </div>
       </div>
     );
   }
@@ -1271,6 +1339,7 @@ export function PracticeTestRunnerClient({
                 ),
               }}
             />
+            {sessionRecoveryBanner}
 
             {/*
              * Layout switch (spec §1, §14):
@@ -1647,6 +1716,7 @@ export function PracticeTestRunnerClient({
             progressAria: tx("learner.practiceTests.run.examProgressAria", `${examName} progress`),
           }}
         />
+        {sessionRecoveryBanner}
         <PracticeSessionGrid>
           {/* LEFT — question + options + nav */}
           <div>

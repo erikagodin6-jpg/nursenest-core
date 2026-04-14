@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T13:42:03.521Z",
+  "generatedAt": "2026-04-14T13:57:19.707Z",
   "phase": "pre_merge_audit",
   "note": "No catalog rows were modified by this script. Merge batches should use convert-legacy-lesson-to-enrichment.ts + editorial review. Allied pathway buckets are absent from catalog.json today — add us-allied-core / ca-allied-core lessons via controlled JSON commits after mapping.",
   "constraintsVerified": {
@@ -80,13 +80,25 @@
       "totalLessons": 161,
       "completePublic": 115,
       "incomplete": 46
+    },
+    "us-allied-core": {
+      "tier": "Allied",
+      "totalLessons": 15,
+      "completePublic": 0,
+      "incomplete": 15
+    },
+    "ca-allied-core": {
+      "tier": "Allied",
+      "totalLessons": 15,
+      "completePublic": 0,
+      "incomplete": 15
     }
   },
   "completenessByTier": {
     "PN": 300,
     "RN": 375,
     "NP": 161,
-    "Allied": 0,
+    "Allied": 30,
     "Other": 0
   },
   "completePublicByTier": {

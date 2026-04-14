@@ -1,0 +1,49 @@
+{
+  "generatedAt": "2026-04-14T14:15:00.000Z",
+  "sources": [
+    "data/audit/legacy-vs-current-cat-comparison.json",
+    "data/audit/cat-selective-restoration-plan.json",
+    "data/audit/legacy-cat-source-inventory.json",
+    "data/audit/current-cat-source-inventory.json"
+  ],
+  "summary": "Map audit recommendations to concrete current files. Legacy checkpoint/session-checkpoint and exam-fallbacks inform UX only — no port of Express checkpoint APIs or monolith routes.",
+  "targets": [
+    {
+      "priority": 1,
+      "theme": "resume_checkpoint_hardening",
+      "legacyReference": "client/src/lib/session-checkpoint.ts (24h local TTL, periodic save intent)",
+      "currentFile": "nursenest-core/src/components/student/practice-test-runner-client.tsx",
+      "safeAction": "Server-authoritative load() already restores session; add beforeunload guard for CAT/timed IN_PROGRESS to reduce accidental tab-close during adaptive/timed runs.",
+      "explicitlyOutOfScope": "New localStorage checkpoint keys, new API routes, copying legacy server checkpoint endpoints."
+    },
+    {
+      "priority": 2,
+      "theme": "recovery_fallback_ux",
+      "legacyReference": "client/src/components/exam-fallbacks.tsx (FallbackErrorBoundary, recovery copy)",
+      "currentFile": "nursenest-core/src/components/student/practice-test-runner-client.tsx",
+      "safeAction": "When PATCH save / cat_advance / linear_commit fails but a question is on-screen, show inline alert with Try again (reload from server) + Dismiss; improve full-page load error with Retry.",
+      "explicitlyOutOfScope": "Replacing runner with mock-exam-session, importing legacy global styles."
+    },
+    {
+      "priority": 3,
+      "theme": "media_rationale_guards",
+      "legacyReference": "exam-fallbacks MediaGuard, QuestionGuard",
+      "currentFile": "nursenest-core/src/components/study/cat-rationale-panel.tsx",
+      "safeAction": "Existing FeedbackContent already guards empty correct keys and empty explanation layers; practice runner already handles empty options and missing stem copy.",
+      "explicitlyOutOfScope": "New image pipeline in this pass (stems are text-only in runner QRow)."
+    },
+    {
+      "priority": 4,
+      "theme": "print_export",
+      "legacyReference": "exam-fallbacks PrintableBackup",
+      "currentFile": null,
+      "safeAction": "Deferred — no existing premium-gated print hook in runner; would touch layout/product scope.",
+      "explicitlyOutOfScope": "Adding print routes or new export APIs."
+    }
+  ],
+  "adaptiveEngineFilesDoNotModify": [
+    "nursenest-core/src/lib/exams/cat-engine.ts",
+    "nursenest-core/src/lib/practice-tests/cat-session.ts",
+    "nursenest-core/src/lib/practice-tests/cat-pool.ts"
+  ]
+}

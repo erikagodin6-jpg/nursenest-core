@@ -1,0 +1,62 @@
+{
+  "generatedAt": "2026-04-14T13:57:22.872Z",
+  "phase": "nursing_restore_batch_planning",
+  "note": "Audit-only: no catalog.json mutations in this run. Use prePostMergeCandidates + convert-legacy-lesson-to-enrichment.ts for editorial merges. External Backup Plus paths were requested but are not mounted in this Linux workspace — symlink or copy under repo to include.",
+  "priorityOrder": [
+    "PN",
+    "RN",
+    "NP",
+    "pre_post_tests",
+    "layout_harmonization",
+    "crash_prevention",
+    "Allied_last"
+  ],
+  "externalVolumes": {
+    "requested": [
+      "/Volumes/Backup Plus/11",
+      "/Volumes/Backup Plus/NurseNest"
+    ],
+    "mountedHere": false
+  },
+  "constraintsVerified": {
+    "prismaSchemaChanged": false,
+    "authChanged": false,
+    "routingChanged": false,
+    "lessonSlugsChanged": false
+  },
+  "catalogNursingCompleteness": {
+    "PN": {
+      "total": 300,
+      "complete": 148,
+      "incomplete": 152
+    },
+    "RN": {
+      "total": 375,
+      "complete": 72,
+      "incomplete": 303
+    },
+    "NP": {
+      "total": 161,
+      "complete": 115,
+      "incomplete": 46
+    }
+  },
+  "legacyContentMapLessonCount": 4223,
+  "nursingOnlyMappingActions": {
+    "merge_into_existing": 3,
+    "create_missing_current_lesson": 1123,
+    "duplicate_flag": 0,
+    "review_needed": 0
+  },
+  "prePostMergeCandidatesCount": 0,
+  "prePostMergeCandidatesSample": [],
+  "lessonsMergedFromLegacyCount": 0,
+  "lessonsCreatedFromScratchCount": 0,
+  "preTestsRestoredCount": 0,
+  "postTestsRestoredCount": 0,
+  "layoutFilesTouched": [],
+  "crashPreventionFilesTouched": [],
+  "duplicatesFlaggedCount": 367,
+  "alliedPending": true,
+  "remainingNursingGapsBeforeAllied": "Clear merge_into_existing + pre/post gaps using legacy TS sources; promote publicComplete via pathway-lesson-premium gates; then run allied-bundled catalog batches."
+}

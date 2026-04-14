@@ -149,13 +149,22 @@ export async function paginateLegacyContentMapLessons(
   scope: AccessScope,
   page: number,
   pageSize: number,
+  q?: string | null,
 ): Promise<{ total: number; page: number; pageCount: number; rows: LegacyContentMapListRow[] }> {
   const all = await listLegacyContentMapLessonsForScope(scope);
-  const total = all.length;
+  const qn = q?.trim().toLowerCase() ?? "";
+  const filtered =
+    qn.length > 0
+      ? all.filter((r) => {
+          const s = (r.summary ?? "").toLowerCase();
+          return r.title.toLowerCase().includes(qn) || s.includes(qn) || r.category.toLowerCase().includes(qn);
+        })
+      : all;
+  const total = filtered.length;
   const pageCount = Math.max(1, Math.ceil(total / pageSize) || 1);
   const safePage = Math.min(Math.max(1, page), pageCount);
   const start = (safePage - 1) * pageSize;
-  const rows = all.slice(start, start + pageSize);
+  const rows = filtered.slice(start, start + pageSize);
   return { total, page: safePage, pageCount, rows };
 }
 

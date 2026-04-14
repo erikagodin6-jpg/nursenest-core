@@ -26,8 +26,10 @@ export const PATHWAY_HUB_PAGE_SIZE_DEFAULT = 48;
  */
 export const PATHWAY_HUB_PAGE_SIZE_MAX = PATHWAY_LESSONS_SCALE_CEILING; // 500
 
-/** Subscriber app `/app/lessons` list — small pages + indexed skip/take. */
-export const LEARNER_APP_LESSONS_PAGE_SIZE = 24;
+/** Subscriber app `/app/lessons` default page size when `limit` is omitted (max 50 via {@link parseLessonLibraryLimit}). */
+export const LEARNER_APP_LESSONS_PAGE_SIZE_DEFAULT = 20;
+/** @deprecated Use {@link LEARNER_APP_LESSONS_PAGE_SIZE_DEFAULT} or per-request `limit`. */
+export const LEARNER_APP_LESSONS_PAGE_SIZE = LEARNER_APP_LESSONS_PAGE_SIZE_DEFAULT;
 
 /** When hub has more pages than this, show First/Last links (see pathway-lesson-pagination). */
 export const PATHWAY_HUB_PAGINATION_SHOW_ENDLINKS_MIN_PAGES = 3;

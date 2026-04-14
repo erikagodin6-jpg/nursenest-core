@@ -10,6 +10,7 @@ import { ALLIED_PROFESSIONS } from "../src/lib/allied/allied-professions-registr
 import { alliedLessonMatchesProfessionFilter } from "../src/lib/allied/allied-lesson-access";
 import {
   getEffectiveCatalogLessonsForPathwaySync,
+  pathwayHasBundledCatalogLessonsSync,
 } from "../src/lib/lessons/pathway-lesson-catalog-sync";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -294,22 +295,28 @@ function main() {
   };
   fs.writeFileSync(OUT_ROUTE, JSON.stringify(routeReport, null, 2), "utf8");
 
-  /** Allied: catalog effective vs profession topic filter */
+  /** Allied: bundled slice from `allied-bundled-catalog.json` (legacy foundations) + scoped-gold; DB rows still merge in inventory. */
   const alliedPathways = ["us-allied-core", "ca-allied-core"] as const;
   const professionRows: object[] = [];
 
   for (const prof of ALLIED_PROFESSIONS) {
     const pathwayId = prof.pathwayId;
     try {
-      const effective = getEffectiveCatalogLessonsForPathwaySync(pathwayId);
-      const filtered = effective.filter((l) => alliedLessonMatchesProfessionFilter(l, prof.topicSlugsIn));
-      const wouldRender = filtered.filter((l) => l.structuralQuality?.publicComplete).length;
+      const bundledFiltered = getEffectiveCatalogLessonsForPathwaySync(pathwayId).filter((l) =>
+        alliedLessonMatchesProfessionFilter(l, prof.topicSlugsIn),
+      );
+      const pw = inv.byPathway[pathwayId];
+      const mergedRows = pw?.lessons ?? [];
+      const mergedFiltered = mergedRows.filter((r) =>
+        alliedLessonMatchesProfessionFilter({ topicSlug: r.topicSlug }, prof.topicSlugsIn),
+      );
+      const wouldRender = mergedFiltered.filter((r) => r.marketingWouldRender).length;
       professionRows.push({
         professionKey: prof.professionKey,
         pathwayId,
         topicSlugsIn: prof.topicSlugsIn ?? null,
-        catalogEffectiveTotal: effective.length,
-        afterTopicFilterCount: filtered.length,
+        bundledCatalogFilteredCount: bundledFiltered.length,
+        mergedAfterProfessionFilterCount: mergedFiltered.length,
         marketingWouldRenderApprox: wouldRender,
       });
     } catch (e) {
@@ -319,7 +326,13 @@ function main() {
 
   const alliedReport: Record<string, unknown> = {
     generatedAt: new Date().toISOString(),
-    note: "topicSlugsIn on ALLIED_PROFESSIONS restricts which lessons appear per profession hub. Inventory hub rows use getEffectiveCatalogLessonsForPathwaySync (exam filter), then alliedLessonMatchesProfessionFilter.",
+    alliedBundledCatalogRootCause:
+      "Allied bundled lessons ship in `src/content/pathway-lessons/allied-bundled-catalog.json` (legacy allied-health-foundations 1–3 via `convertLegacyLesson`), merged in `getCatalogLessonsRaw`. Main `catalog.json` still has no `pathways.us-allied-core` keys — intentional to avoid duplicating the large allied JSON inside the primary file.",
+    pathwayHasBundledCatalogLessonsSync: {
+      "us-allied-core": pathwayHasBundledCatalogLessonsSync("us-allied-core"),
+      "ca-allied-core": pathwayHasBundledCatalogLessonsSync("ca-allied-core"),
+    },
+    note: "Profession topicSlugsIn still filters merged hub inventory rows (same as runtime). Compare bundledCatalogFilteredCount (JSON+gold only) vs mergedAfterProfessionFilterCount (DB+catalog merge from lesson-system-inventory).",
     externalVolumesAvailable: false,
     professions: professionRows,
   };

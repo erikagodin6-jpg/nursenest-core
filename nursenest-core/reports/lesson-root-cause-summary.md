@@ -1,7 +1,7 @@
 # Lesson root-cause bucket summary
 
-Source: `reports/lesson-system-inventory.json` (inventory generated: 2026-04-14T13:23:17.230Z)
-Diagnostic generated: 2026-04-14T13:40:47.000Z
+Source: `reports/lesson-system-inventory.json` (inventory generated: 2026-04-14T13:52:25.407Z)
+Diagnostic generated: 2026-04-14T13:52:50.933Z
 
 ## Non–public-complete lessons: primary bucket counts
 
@@ -15,7 +15,7 @@ Diagnostic generated: 2026-04-14T13:40:47.000Z
 | route_mismatch | 0 |
 | pathway_mapping_mismatch | 0 |
 | filtered_out_by_topicSlugsIn | 0 |
-| present_but_gating_or_merge_logic | 4580 |
+| present_but_gating_or_merge_logic | 4610 |
 | truly_missing_or_placeholder_content | 16 |
 
 ## By tier (PN / RN / NP / Allied / Other) — primary bucket
@@ -77,7 +77,7 @@ Diagnostic generated: 2026-04-14T13:40:47.000Z
 | route_mismatch | 0 |
 | pathway_mapping_mismatch | 0 |
 | filtered_out_by_topicSlugsIn | 0 |
-| present_but_gating_or_merge_logic | 0 |
+| present_but_gating_or_merge_logic | 30 |
 | truly_missing_or_placeholder_content | 0 |
 
 ### Other
@@ -143,6 +143,14 @@ Diagnostic generated: 2026-04-14T13:40:47.000Z
     "failedCount": 91
   },
   {
+    "pathwayId": "ca-allied-core",
+    "failedCount": 38
+  },
+  {
+    "pathwayId": "us-allied-core",
+    "failedCount": 38
+  },
+  {
     "pathwayId": "pre-nursing-pathophysiology",
     "failedCount": 27
   },
@@ -153,14 +161,6 @@ Diagnostic generated: 2026-04-14T13:40:47.000Z
   {
     "pathwayId": "pre-nursing-chemistry",
     "failedCount": 25
-  },
-  {
-    "pathwayId": "ca-allied-core",
-    "failedCount": 23
-  },
-  {
-    "pathwayId": "us-allied-core",
-    "failedCount": 23
   },
   {
     "pathwayId": "pre-nursing-math",

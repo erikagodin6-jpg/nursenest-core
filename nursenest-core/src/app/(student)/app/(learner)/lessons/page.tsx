@@ -1,13 +1,14 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import { auth } from "@/lib/auth";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { maxSafeOffsetPage } from "@/lib/api/api-pagination-limits";
+import { maxSafeOffsetPage, parseLessonLibraryLimit } from "@/lib/api/api-pagination-limits";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
 import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
@@ -23,15 +24,15 @@ import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-p
 import { FreemiumLessonPeek } from "@/components/student/freemium-lesson-peek";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
-import { LEARNER_APP_LESSONS_PAGE_SIZE } from "@/lib/lessons/pathway-lesson-scale";
+import { LEARNER_APP_LESSONS_PAGE_SIZE_DEFAULT } from "@/lib/lessons/pathway-lesson-scale";
+import { LearnerLessonsVirtualList } from "@/components/student/learner-lessons-virtual-list";
+import { LearnerLessonsSearchToolbar } from "@/components/student/learner-lessons-search-toolbar";
 import {
   loadPathwayLessonProgressMap,
   type PathwayLessonProgressStatus,
 } from "@/lib/lessons/pathway-lesson-progress";
-import { LessonCard, LessonCardChip } from "@/components/student/product/lesson-card";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { freemiumLessonsExhausted, freemiumQuestionsExhausted } from "@/lib/conversion/freemium-gates";
-import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 type AppLessonListRow = {
   id: string;
@@ -85,13 +86,24 @@ function pathwayLessonSafetyGateWhere() {
   };
 }
 
-type Props = { searchParams: Promise<{ page?: string; topic?: string; topicSlug?: string; pathwayId?: string }> };
+type Props = {
+  searchParams: Promise<{
+    page?: string;
+    topic?: string;
+    topicSlug?: string;
+    pathwayId?: string;
+    limit?: string;
+    q?: string;
+  }>;
+};
 
 function appLessonsListQuery(
   page: number,
   topic: string | null,
   topicSlug: string | null,
   pathwayId: string | null,
+  q: string | null,
+  limit: number,
 ): string {
   const qs = new URLSearchParams();
   if (page > 1) qs.set("page", String(page));
@@ -99,6 +111,9 @@ function appLessonsListQuery(
   if (ts) qs.set("topicSlug", ts);
   else if (topic?.trim()) qs.set("topic", topic.trim());
   if (pathwayId?.trim()) qs.set("pathwayId", pathwayId.trim());
+  const qt = q?.trim();
+  if (qt) qs.set("q", qt);
+  if (limit !== LEARNER_APP_LESSONS_PAGE_SIZE_DEFAULT) qs.set("limit", String(limit));
   const s = qs.toString();
   return s ? `?${s}` : "";
 }
@@ -159,8 +174,11 @@ export default async function LessonsPage({ searchParams }: Props) {
   }
 
   const sp = await searchParams;
+  const limitParsed = parseLessonLibraryLimit(typeof sp.limit === "string" ? sp.limit : undefined);
+  const qEffective =
+    typeof sp.q === "string" && sp.q.trim().length > 0 ? sp.q.trim() : null;
   const rawPage = Math.max(1, Number(sp.page ?? "1") || 1);
-  const maxOffsetPage = maxSafeOffsetPage(LEARNER_APP_LESSONS_PAGE_SIZE);
+  const maxOffsetPage = maxSafeOffsetPage(limitParsed);
   const pageRequested = Math.min(rawPage, maxOffsetPage);
   const topicSlugFilter =
     typeof sp.topicSlug === "string" && sp.topicSlug.trim().length > 0 ? sp.topicSlug.trim().toLowerCase() : null;
@@ -196,6 +214,15 @@ export default async function LessonsPage({ searchParams }: Props) {
         });
       }
     }
+    if (qEffective) {
+      contentFilters.push({
+        OR: [
+          { title: { contains: qEffective, mode: "insensitive" } },
+          { bodySystem: { contains: qEffective, mode: "insensitive" } },
+          { category: { contains: qEffective, mode: "insensitive" } },
+        ],
+      });
+    }
     const contentScopedWhere =
       contentFilters.length > 0
         ? {
@@ -206,14 +233,14 @@ export default async function LessonsPage({ searchParams }: Props) {
 
     // Route scoped pathway lessons first whenever pathway-specific filters are active.
     if (contentTotal > 0 && !pathwayIdFilter) {
-      const pageCount = Math.max(1, Math.ceil(contentTotal / LEARNER_APP_LESSONS_PAGE_SIZE) || 1);
+      const pageCount = Math.max(1, Math.ceil(contentTotal / limitParsed) || 1);
       const safePage = Math.min(pageRequested, pageCount);
       const rowsRaw = await prisma.contentItem.findMany({
         where: contentScopedWhere,
         select: { id: true, title: true, summary: true },
         orderBy: { updatedAt: "desc" },
-        skip: (safePage - 1) * LEARNER_APP_LESSONS_PAGE_SIZE,
-        take: LEARNER_APP_LESSONS_PAGE_SIZE,
+        skip: (safePage - 1) * limitParsed,
+        take: limitParsed,
       });
       const rows: AppLessonListRow[] = rowsRaw.map((r) => ({
         id: r.id,
@@ -235,7 +262,23 @@ export default async function LessonsPage({ searchParams }: Props) {
       pathwayId: pathwayIdFilter,
     });
     const pathwayWhereWithSafety = {
-      AND: [pathwayWhere, pathwayLessonSafetyGateWhere()],
+      AND: [
+        pathwayWhere,
+        pathwayLessonSafetyGateWhere(),
+        ...(qEffective
+          ? [
+              {
+                OR: [
+                  { title: { contains: qEffective, mode: "insensitive" as const } },
+                  { topic: { contains: qEffective, mode: "insensitive" as const } },
+                  { bodySystem: { contains: qEffective, mode: "insensitive" as const } },
+                  { slug: { contains: qEffective, mode: "insensitive" as const } },
+                  { seoTitle: { contains: qEffective, mode: "insensitive" as const } },
+                ],
+              },
+            ]
+          : []),
+      ],
     };
     const pathwaySample = await prisma.pathwayLesson.findFirst({
       where: pathwayWhereWithSafety,
@@ -244,7 +287,7 @@ export default async function LessonsPage({ searchParams }: Props) {
 
     if (pathwaySample) {
       const pathwayTotal = await prisma.pathwayLesson.count({ where: pathwayWhereWithSafety });
-      const pageCount = Math.max(1, Math.ceil(pathwayTotal / LEARNER_APP_LESSONS_PAGE_SIZE) || 1);
+      const pageCount = Math.max(1, Math.ceil(pathwayTotal / limitParsed) || 1);
       const safePage = Math.min(pageRequested, pageCount);
       const pathwayRows = await prisma.pathwayLesson.findMany({
         where: pathwayWhereWithSafety,
@@ -264,8 +307,8 @@ export default async function LessonsPage({ searchParams }: Props) {
           locale: true,
         },
         orderBy: { updatedAt: "desc" },
-        skip: (safePage - 1) * LEARNER_APP_LESSONS_PAGE_SIZE,
-        take: LEARNER_APP_LESSONS_PAGE_SIZE,
+        skip: (safePage - 1) * limitParsed,
+        take: limitParsed,
       });
       const rows: AppLessonListRow[] = pathwayRows.map((r) => ({
         id: r.id,
@@ -284,7 +327,7 @@ export default async function LessonsPage({ searchParams }: Props) {
       };
     }
 
-    const legacy = await paginateLegacyContentMapLessons(entitlement, pageRequested, LEARNER_APP_LESSONS_PAGE_SIZE);
+    const legacy = await paginateLegacyContentMapLessons(entitlement, pageRequested, limitParsed, qEffective);
     const rows: AppLessonListRow[] = legacy.rows.map((r) => ({
       id: r.id,
       title: r.title,
@@ -304,7 +347,7 @@ export default async function LessonsPage({ searchParams }: Props) {
     lessonsBlock = lessonsBlockFromDb;
   } else {
     safeServerLog("page_lessons", "lesson_list_db_unavailable_fallback_legacy", {});
-    const legacy = await paginateLegacyContentMapLessons(entitlement, pageRequested, LEARNER_APP_LESSONS_PAGE_SIZE);
+    const legacy = await paginateLegacyContentMapLessons(entitlement, pageRequested, limitParsed, qEffective);
     const rows: AppLessonListRow[] = legacy.rows.map((r) => ({
       id: r.id,
       title: r.title,
@@ -320,7 +363,14 @@ export default async function LessonsPage({ searchParams }: Props) {
   }
 
   if (rawPage !== lessonsBlock.page) {
-    const q = appLessonsListQuery(lessonsBlock.page, topicFilter, topicSlugFilter, pathwayIdFilter);
+    const q = appLessonsListQuery(
+      lessonsBlock.page,
+      topicFilter,
+      topicSlugFilter,
+      pathwayIdFilter,
+      qEffective,
+      limitParsed,
+    );
     redirect(q ? `/app/lessons${q}` : "/app/lessons");
   }
 
@@ -393,38 +443,19 @@ export default async function LessonsPage({ searchParams }: Props) {
           </div>
         </div>
       ) : null}
-      <div className="mt-4 space-y-3">
-        {lessons.map((lesson) => {
-          const chips =
-            lesson.topic?.trim() || lesson.bodySystem?.trim() ? (
-              <>
-                {lesson.topic?.trim() ? (
-                  <LessonCardChip variant="category">{lesson.topic.trim()}</LessonCardChip>
-                ) : null}
-                {lesson.bodySystem?.trim() ? (
-                  <LessonCardChip variant="body">{lesson.bodySystem.trim()}</LessonCardChip>
-                ) : null}
-              </>
-            ) : undefined;
-          return (
-            <LessonCard
-              key={lesson.id}
-              href={`/app/lessons/${lesson.id}`}
-              title={cleanLessonTitleForDisplay(lesson.title)}
-              summary={lesson.summary}
-              chips={chips}
-              progressStatus={lesson.pathwayMeta ? (progressByRowId[lesson.id] ?? "not_started") : undefined}
-              footer={
-                <Link
-                  href={`/app/lessons/${lesson.id}`}
-                  className="inline-flex text-sm font-semibold text-[var(--semantic-brand)] hover:underline"
-                >
-                  {t("learner.lessons.list.openLessonCta")}
-                </Link>
-              }
-            />
-          );
-        })}
+      <Suspense fallback={<div className="h-24 animate-pulse rounded-xl bg-[var(--semantic-panel-muted)]" />}>
+        <LearnerLessonsSearchToolbar
+          initialQ={qEffective ?? ""}
+          label="Search lessons"
+          placeholder="Search by title, topic, or keyword"
+        />
+      </Suspense>
+      <div className="mt-4">
+        <LearnerLessonsVirtualList
+          lessons={lessons}
+          progressByRowId={progressByRowId}
+          openLessonCta={t("learner.lessons.list.openLessonCta")}
+        />
       </div>
 
       <PathwayLessonPagination
@@ -432,9 +463,12 @@ export default async function LessonsPage({ searchParams }: Props) {
         page={lessonsBlock.page}
         pageCount={lessonsBlock.pageCount}
         total={lessonsBlock.total}
-        pageSize={LEARNER_APP_LESSONS_PAGE_SIZE}
+        pageSize={limitParsed}
         topic={topicFilter ?? undefined}
         topicSlug={topicSlugFilter ?? undefined}
+        pathwayId={pathwayIdFilter ?? undefined}
+        limit={limitParsed}
+        q={qEffective ?? undefined}
       />
 
       <LearnerStudyQuickLinksCard t={t} id="lessons-study-quick-links" catHref={catHref} />
@@ -443,7 +477,7 @@ export default async function LessonsPage({ searchParams }: Props) {
         <p className="mt-1">{t("learner.lessons.list.studyRhythmBody")}</p>
       </aside>
       <p className="text-sm text-[var(--semantic-text-secondary)]">
-        {t("learner.lessons.list.paginationExplainer", { pageSize: LEARNER_APP_LESSONS_PAGE_SIZE })}{" "}
+        {t("learner.lessons.list.paginationExplainer", { pageSize: limitParsed })}{" "}
         <Link
           className="font-medium text-[var(--semantic-info)] underline decoration-[color-mix(in_srgb,var(--semantic-info)_35%,transparent)] underline-offset-2"
           href="/lessons"
