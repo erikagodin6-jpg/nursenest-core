@@ -421,6 +421,12 @@ export function SiteHeader() {
     closeMegaTimeoutRef.current = setTimeout(() => setOpenMegaMenu(null), 120);
   };
 
+  /** Close mega menu before following in-header auth links so no high-z panel intercepts the next paint. */
+  const closeMegaBeforeAuthNav = useCallback(() => {
+    clearMegaCloseTimer();
+    setOpenMegaMenu(null);
+  }, []);
+
   const handleDesktopRegionSelect = useCallback(
     (newRegion: GlobalRegionSlug) => {
       if (newRegion === "us") setRegionAndRefresh("US");
@@ -666,7 +672,7 @@ export function SiteHeader() {
         ) : null}
         <div className="nn-section-shell flex flex-col overflow-visible">
           {/* ── Mobile brand row ── */}
-          <div className="flex h-[4.5rem] items-center justify-between gap-4 overflow-visible border-b border-[var(--header-border)] lg:hidden">
+          <div className="flex h-[4.5rem] items-center gap-2 overflow-visible border-b border-[var(--header-border)] sm:gap-4 lg:hidden">
             <Link
               href={localizeHref("/")}
               className="nn-header-logo-link group flex min-w-0 shrink-0 items-center gap-2.5 overflow-visible bg-transparent"
@@ -674,8 +680,27 @@ export function SiteHeader() {
             >
               <HeaderBrandLockup />
             </Link>
+            {/* Guests: Login + primary CTA live in this row so they are never only in a secondary strip or hamburger. */}
+            {!isAuthenticated ? (
+              <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2">
+                <Link
+                  href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)}
+                  className="inline-flex min-h-[36px] max-w-[38%] shrink-0 items-center justify-center rounded-xl border border-[var(--nav-border)] px-2 py-1.5 text-xs font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] sm:max-w-none sm:min-h-[38px] sm:px-3 sm:text-sm"
+                  onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
+                >
+                  {formatTitleCase("Login", locale)}
+                </Link>
+                <Link
+                  href={localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`)}
+                  className="nn-nav-cta inline-flex min-h-[36px] min-w-0 max-w-[52%] shrink items-center justify-center rounded-xl px-2.5 py-1.5 text-xs font-semibold sm:min-h-[38px] sm:max-w-none sm:px-4 sm:text-sm"
+                  onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
+                >
+                  {formatTitleCase(PRIMARY_CTA, locale)}
+                </Link>
+              </div>
+            ) : null}
             {/* Mobile controls — only visible below lg */}
-            <div className="flex items-center gap-2 lg:hidden">
+            <div className={`flex shrink-0 items-center gap-2 lg:hidden ${isAuthenticated ? "ml-auto" : ""}`}>
               <button
                 type="button"
                 onClick={() => setMobileContextOpen(true)}
@@ -698,46 +723,37 @@ export function SiteHeader() {
             </div>
           </div>
 
-          {/* Mobile/tablet: auth CTAs — the main header row below is `lg` only, so guests never saw Login/Sign up in the top bar */}
-          <div className="flex items-center justify-end gap-2 border-b border-[var(--header-border)] bg-[var(--nav-bg)] px-4 py-2.5 lg:hidden">
-            {!isAuthenticated ? (
-              <div className="flex w-full min-w-0 items-center justify-end gap-2">
-                <Link href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)} className={HEADER_SECONDARY_ACTION_CLASS}>
-                  {formatTitleCase("Login", locale)}
-                </Link>
-                <Link
-                  href={localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`)}
-                  className="nn-nav-cta inline-flex min-h-0 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold sm:flex-initial sm:px-4"
-                >
-                  {formatTitleCase(PRIMARY_CTA, locale)}
-                </Link>
-              </div>
-            ) : isLearnerAuthenticated ? (
-              <div className="flex w-full min-w-0 items-center justify-end gap-2">
-                <Link
-                  href={resumeStudyingCta?.href ?? "/app"}
-                  className="nn-nav-cta inline-flex min-h-0 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold sm:flex-initial sm:px-4"
-                >
-                  {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
-                </Link>
-                <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
-                  {formatTitleCase("Dashboard", locale)}
-                </Link>
-              </div>
-            ) : (
-              <div className="flex w-full min-w-0 items-center justify-end gap-2">
-                <Link
-                  href={ADMIN_DASHBOARD_ROUTE}
-                  className="nn-nav-cta inline-flex min-h-0 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold sm:flex-initial sm:px-4"
-                >
-                  {formatTitleCase(t("nav.admin"), locale)}
-                </Link>
-                <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
-                  {formatTitleCase("Dashboard", locale)}
-                </Link>
-              </div>
-            )}
-          </div>
+          {/* Mobile/tablet: signed-in CTAs (learners/staff) — guests use the top row above */}
+          {isAuthenticated ? (
+            <div className="relative z-[130] flex items-center justify-end gap-2 border-b border-[var(--header-border)] bg-[var(--nav-bg)] px-4 py-2.5 lg:hidden">
+              {isLearnerAuthenticated ? (
+                <div className="flex w-full min-w-0 items-center justify-end gap-2">
+                  <Link
+                    href={resumeStudyingCta?.href ?? "/app"}
+                    className="nn-nav-cta inline-flex min-h-0 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold sm:flex-initial sm:px-4"
+                  >
+                    {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
+                  </Link>
+                  <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
+                    {formatTitleCase("Dashboard", locale)}
+                  </Link>
+                </div>
+              ) : (
+                <div className="flex w-full min-w-0 items-center justify-end gap-2">
+                  <Link
+                    href={ADMIN_DASHBOARD_ROUTE}
+                    className="nn-nav-cta inline-flex min-h-0 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold sm:flex-initial sm:px-4"
+                    onClick={closeMegaBeforeAuthNav}
+                  >
+                    {formatTitleCase(t("nav.admin"), locale)}
+                  </Link>
+                  <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
+                    {formatTitleCase("Dashboard", locale)}
+                  </Link>
+                </div>
+              )}
+            </div>
+          ) : null}
 
           {/* ── Desktop main header row ── */}
           <div className="hidden min-h-[4.5rem] items-center gap-3 overflow-visible py-3 lg:flex">
@@ -799,15 +815,20 @@ export function SiteHeader() {
               </nav>
             )}
 
-          <div className="flex shrink-0 items-center justify-end gap-2">
+          <div className="relative z-[130] flex shrink-0 items-center justify-end gap-2">
               {!isAuthenticated ? (
                 <div className="flex items-center gap-2">
-                  <Link href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)} className={HEADER_SECONDARY_ACTION_CLASS}>
+                  <Link
+                    href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)}
+                    className={HEADER_SECONDARY_ACTION_CLASS}
+                    onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
+                  >
                     {formatTitleCase("Login", locale)}
                   </Link>
                   <Link
                     href={localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`)}
                     className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold"
+                    onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
                   >
                     {formatTitleCase(PRIMARY_CTA, locale)}
                   </Link>
@@ -829,6 +850,7 @@ export function SiteHeader() {
                   <Link
                     href={ADMIN_DASHBOARD_ROUTE}
                     className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold"
+                    onClick={closeMegaBeforeAuthNav}
                   >
                     {formatTitleCase(t("nav.admin"), locale)}
                   </Link>
@@ -1339,7 +1361,10 @@ export function SiteHeader() {
                     <Link
                       href={ADMIN_DASHBOARD_ROUTE}
                       className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold"
-                      onClick={() => setMobileOpen(false)}
+                      onClick={() => {
+                        closeMegaBeforeAuthNav();
+                        setMobileOpen(false);
+                      }}
                     >
                       {formatTitleCase(t("nav.admin"), locale)}
                     </Link>

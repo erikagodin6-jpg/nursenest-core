@@ -25,8 +25,8 @@ function seoDescriptionFrom(shortDescription, title) {
 }
 
 function seoTitleFrom(title) {
-  if (title.length <= 62) return title;
-  return title.slice(0, 59).trim() + "...";
+  if (title.length <= 70) return title;
+  return title.slice(0, 67).trim() + "...";
 }
 
 const posts = batch.map((m) => {
