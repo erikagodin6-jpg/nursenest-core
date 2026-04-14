@@ -44,9 +44,9 @@ function weightedAccuracy(results: CatAnswerResult[]): number {
 
 function consistencyScore(results: CatAnswerResult[]): number {
   if (results.length < 3) return 0.5;
-  const binary = results.map((r) => (r.correct ? 1 : 0));
-  const mean = binary.reduce((sum, x) => sum + x, 0) / binary.length;
-  const variance = binary.reduce((sum, x) => sum + (x - mean) ** 2, 0) / binary.length;
+  const binary: number[] = results.map((r) => (r.correct ? 1 : 0));
+  const mean = binary.reduce<number>((sum, x) => sum + x, 0) / binary.length;
+  const variance = binary.reduce<number>((sum, x) => sum + (x - mean) ** 2, 0) / binary.length;
   const std = Math.sqrt(variance);
   let transitions = 0;
   for (let i = 1; i < binary.length; i++) {

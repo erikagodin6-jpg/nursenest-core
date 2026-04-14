@@ -1,28 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { buildPracticeExamStartPayload } from "@/lib/practice-tests/practice-exam-start-payload";
 
-type PracticeModeId = "weak_areas" | "by_system" | "mixed_all_categories";
-type SessionMode = "tutor" | "exam";
-type RationaleVisibilityMode = "immediate" | "review";
+type PracticeModeId = "weak_areas" | "by_system" | "random_mix" | "custom_quiz" | "review_incorrect";
 
 const PRACTICE_MODES: Array<{ id: PracticeModeId; label: string; description: string }> = [
-  {
-    id: "mixed_all_categories",
-    label: "Mixed all categories",
-    description: "Build a balanced exam across all available systems.",
-  },
-  {
-    id: "by_system",
-    label: "By category/system",
-    description: "Restrict the exam to selected systems.",
-  },
-  {
-    id: "weak_areas",
-    label: "Target weak areas",
-    description: "Use your low-performing topics for focused remediation.",
-  },
+  { id: "weak_areas", label: "Weak areas", description: "Focus on topics where your performance is lowest." },
+  { id: "by_system", label: "By body system", description: "Practice questions from specific systems only." },
+  { id: "random_mix", label: "Random mix", description: "Get a mixed set across your pathway." },
+  { id: "review_incorrect", label: "Review incorrect answers", description: "Retry questions you previously missed." },
+  { id: "custom_quiz", label: "Custom quiz", description: "Build a quiz with your own filters." },
 ];
 
 const SYSTEM_OPTIONS = [
@@ -41,16 +28,16 @@ export function QuestionBankPracticeSetupClient({ pathwayId }: { pathwayId: stri
   const [questionCount, setQuestionCount] = useState<5 | 10 | 20 | 50 | "custom">(10);
   const [customQuestionCount, setCustomQuestionCount] = useState("20");
   const [timedMode, setTimedMode] = useState(false);
-  const [sessionMode, setSessionMode] = useState<SessionMode>("tutor");
-  const [rationaleVisibility, setRationaleVisibility] = useState<RationaleVisibilityMode>("immediate");
+  const [tutorMode, setTutorMode] = useState(true);
   const [selectedSystems, setSelectedSystems] = useState<string[]>([]);
-  const [timeLimitMin, setTimeLimitMin] = useState("30");
-  const [difficultyMin, setDifficultyMin] = useState("");
-  const [difficultyMax, setDifficultyMax] = useState("");
+  const [customWeakOnly, setCustomWeakOnly] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const needsSystemSelector = selectedMode === "by_system";
+  const isBySystem = selectedMode === "by_system";
+  const isCustomQuiz = selectedMode === "custom_quiz";
+  const reviewIncorrectUnsupported = selectedMode === "review_incorrect";
+  const needsSystemSelector = isBySystem || isCustomQuiz;
 
   const resolvedQuestionCount = useMemo(() => {
     if (questionCount !== "custom") return questionCount;
@@ -58,18 +45,6 @@ export function QuestionBankPracticeSetupClient({ pathwayId }: { pathwayId: stri
     if (!Number.isFinite(parsed)) return 20;
     return Math.max(5, Math.min(100, parsed));
   }, [customQuestionCount, questionCount]);
-
-  const resolvedTimeLimitSec = useMemo(() => {
-    if (!timedMode) return null;
-    const parsed = Number.parseInt(timeLimitMin, 10);
-    if (!Number.isFinite(parsed)) return 30 * 60;
-    return Math.max(2 * 60, Math.min(240 * 60, parsed * 60));
-  }, [timeLimitMin, timedMode]);
-
-  function setSessionModeWithRationale(mode: SessionMode) {
-    setSessionMode(mode);
-    setRationaleVisibility(mode === "tutor" ? "immediate" : "review");
-  }
 
   function toggleSystem(system: string) {
     setSelectedSystems((prev) =>
@@ -79,41 +54,39 @@ export function QuestionBankPracticeSetupClient({ pathwayId }: { pathwayId: stri
 
   async function handleStartPractice() {
     if (!selectedMode) {
-      setError("Choose a practice exam mode to continue.");
+      setError("Select a practice mode to continue.");
+      return;
+    }
+    if (reviewIncorrectUnsupported) {
+      setError("Review incorrect answers is not supported by the current start-practice API yet.");
       return;
     }
     if (needsSystemSelector && selectedSystems.length === 0) {
-      setError("Select at least one category/system.");
+      setError("Select at least one system for this mode.");
       return;
     }
     setError(null);
     setIsSubmitting(true);
     try {
-      const selectionMode =
-        selectedMode === "weak_areas" ? "weak" : selectedMode === "by_system" ? "targeted" : "random";
+      let selectionMode: "random" | "targeted" | "weak" = "random";
+      if (selectedMode === "weak_areas") selectionMode = "weak";
+      if (selectedMode === "by_system") selectionMode = "targeted";
+      if (selectedMode === "custom_quiz") selectionMode = customWeakOnly ? "weak" : "targeted";
 
-      const min = difficultyMin.trim();
-      const max = difficultyMax.trim();
-      const parsedMin = min ? Number.parseInt(min, 10) : null;
-      const parsedMax = max ? Number.parseInt(max, 10) : null;
-
-      const payload = buildPracticeExamStartPayload({
-        questionCount: resolvedQuestionCount,
-        selectionMode,
-        topicNames: needsSystemSelector ? selectedSystems : [],
-        pathwayId: pathwayId ?? null,
-        timedMode,
-        timeLimitSec: resolvedTimeLimitSec,
-        difficultyMin: Number.isFinite(parsedMin ?? NaN) ? Math.min(5, Math.max(1, parsedMin!)) : null,
-        difficultyMax: Number.isFinite(parsedMax ?? NaN) ? Math.min(5, Math.max(1, parsedMax!)) : null,
-        sessionMode,
-        rationaleVisibilityMode: rationaleVisibility,
-      });
-
+      const topicNames = needsSystemSelector ? selectedSystems : [];
       const res = await fetch("/api/practice-tests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          selectionMode,
+          questionCount: resolvedQuestionCount,
+          timedMode,
+          topicNames,
+          pathwayId: pathwayId ?? null,
+          linearDeliveryMode: tutorMode ? "practice" : "exam",
+          difficultyMin: null,
+          difficultyMax: null,
+        }),
       });
       const data = (await res.json()) as { id?: string; error?: string };
       if (!res.ok) {
@@ -133,9 +106,9 @@ export function QuestionBankPracticeSetupClient({ pathwayId }: { pathwayId: stri
   return (
     <section className="nn-card space-y-6 p-6">
       <div className="space-y-2">
-        <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">Build Practice Exam</h1>
+        <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">Question Bank</h1>
         <p className="text-sm text-[var(--semantic-text-secondary)]">
-          Use CAT-grade session plumbing with your own fixed exam settings, mode, and rationale timing.
+          Choose how you want your practice questions delivered.
         </p>
       </div>
 
@@ -234,28 +207,15 @@ export function QuestionBankPracticeSetupClient({ pathwayId }: { pathwayId: stri
                   Timed
                 </button>
               </div>
-              {timedMode ? (
-                <label className="text-sm">
-                  <span className="text-[var(--semantic-text-secondary)]">Time limit (minutes)</span>
-                  <input
-                    type="number"
-                    min={2}
-                    max={240}
-                    value={timeLimitMin}
-                    onChange={(event) => setTimeLimitMin(event.target.value)}
-                    className="mt-1 block min-h-11 w-32 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
-                  />
-                </label>
-              ) : null}
             </div>
             <div className="space-y-2">
               <p className="text-sm text-[var(--semantic-text-secondary)]">Session mode</p>
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
-                  onClick={() => setSessionModeWithRationale("tutor")}
+                  onClick={() => setTutorMode(true)}
                   className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
-                    sessionMode === "tutor"
+                    tutorMode
                       ? "border-[color-mix(in_srgb,var(--semantic-success)_34%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_12%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
                       : "border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)]"
                   }`}
@@ -264,9 +224,9 @@ export function QuestionBankPracticeSetupClient({ pathwayId }: { pathwayId: stri
                 </button>
                 <button
                   type="button"
-                  onClick={() => setSessionModeWithRationale("exam")}
+                  onClick={() => setTutorMode(false)}
                   className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
-                    sessionMode === "exam"
+                    !tutorMode
                       ? "border-[color-mix(in_srgb,var(--semantic-success)_34%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_12%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
                       : "border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)]"
                   }`}
@@ -274,38 +234,6 @@ export function QuestionBankPracticeSetupClient({ pathwayId }: { pathwayId: stri
                   Exam mode
                 </button>
               </div>
-            </div>
-            <div className="space-y-2">
-              <p className="text-sm text-[var(--semantic-text-secondary)]">Rationale visibility</p>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={() => setRationaleVisibility("immediate")}
-                  disabled={sessionMode === "exam"}
-                  className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
-                    rationaleVisibility === "immediate"
-                      ? "border-[color-mix(in_srgb,var(--semantic-info)_34%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_12%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
-                      : "border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)]"
-                  } disabled:opacity-55`}
-                >
-                  Immediate after each question
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRationaleVisibility("review")}
-                  disabled={sessionMode === "tutor"}
-                  className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
-                    rationaleVisibility === "review"
-                      ? "border-[color-mix(in_srgb,var(--semantic-info)_34%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_12%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
-                      : "border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)]"
-                  } disabled:opacity-55`}
-                >
-                  End/review only
-                </button>
-              </div>
-              <p className="text-xs text-[var(--semantic-text-secondary)]">
-                Tutor mode enforces immediate rationales; Exam mode keeps rationales for review/results.
-              </p>
             </div>
           </div>
 
@@ -333,32 +261,22 @@ export function QuestionBankPracticeSetupClient({ pathwayId }: { pathwayId: stri
               </div>
             </div>
           ) : null}
-          <div className="grid gap-3 sm:grid-cols-2">
-            <label className="text-sm">
-              <span className="text-[var(--semantic-text-secondary)]">Difficulty min (optional)</span>
+          {isCustomQuiz ? (
+            <label className="flex items-center gap-2 text-sm text-[var(--semantic-text-primary)]">
               <input
-                type="number"
-                min={1}
-                max={5}
-                value={difficultyMin}
-                onChange={(event) => setDifficultyMin(event.target.value)}
-                className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
-                placeholder="1-5"
+                type="checkbox"
+                checked={customWeakOnly}
+                onChange={(event) => setCustomWeakOnly(event.target.checked)}
               />
+              Weak-only focus
             </label>
-            <label className="text-sm">
-              <span className="text-[var(--semantic-text-secondary)]">Difficulty max (optional)</span>
-              <input
-                type="number"
-                min={1}
-                max={5}
-                value={difficultyMax}
-                onChange={(event) => setDifficultyMax(event.target.value)}
-                className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
-                placeholder="1-5"
-              />
-            </label>
-          </div>
+          ) : null}
+          {reviewIncorrectUnsupported ? (
+            <p className="text-xs text-[var(--semantic-warning-contrast)]">
+              This mode is shown for transparency, but direct incorrect-only session creation is not currently supported
+              by the existing start-practice API.
+            </p>
+          ) : null}
         </div>
       ) : null}
 
@@ -367,10 +285,10 @@ export function QuestionBankPracticeSetupClient({ pathwayId }: { pathwayId: stri
       <button
         type="button"
         onClick={() => void handleStartPractice()}
-        disabled={!selectedMode || isSubmitting}
+        disabled={!selectedMode || isSubmitting || reviewIncorrectUnsupported}
         className="nn-btn-primary inline-flex min-h-11 items-center justify-center rounded-full px-6 py-2.5 text-sm font-semibold disabled:opacity-50"
       >
-        {isSubmitting ? "Starting..." : "Start Practice Exam"}
+        {isSubmitting ? "Starting..." : "Start Practice"}
       </button>
     </section>
   );
