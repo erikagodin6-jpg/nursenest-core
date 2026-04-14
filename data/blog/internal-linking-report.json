@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "generatedAt": "2026-04-14T00:00:00.000Z",
+  "scope": "Marketing default static blog fallbacks (nursenest-core/src/content/blog-static-posts.ts)",
+  "posts": [
+    {
+      "slug": "clinical-judgment-on-exam-day",
+      "linksToBlog": [
+        { "href": "/blog/pharmacology-without-memorization-chaos", "anchor": "pharmacology study that sticks" },
+        { "href": "/blog/lab-trends-and-acute-kidney-injury", "anchor": "lab trends in acute kidney injury" },
+        { "href": "/blog/lab-trends-and-acute-kidney-injury", "anchor": "AKI lab trends" }
+      ],
+      "linksToLessonsOrHubs": [
+        { "href": "/pre-nursing/lessons/study-strategies", "type": "lesson_module" },
+        { "href": "/pre-nursing/lessons/human-factors", "type": "lesson_module" },
+        { "href": "/pre-nursing/lessons/pathophysiology", "type": "lesson_module" },
+        { "href": "/us/rn/nclex-rn/lessons", "type": "exam_pathway_hub" },
+        { "href": "/question-bank", "type": "question_bank" },
+        { "href": "/tools", "type": "tools" }
+      ],
+      "notes": "Migration section included (international nurses). Blog cross-links include summary duplicates phrased distinctly from in-body links."
+    },
+    {
+      "slug": "pharmacology-without-memorization-chaos",
+      "linksToBlog": [
+        { "href": "/blog/clinical-judgment-on-exam-day", "anchor": "clinical judgment strategy" },
+        { "href": "/blog/clinical-judgment-on-exam-day", "anchor": "exam-day clinical judgment" },
+        { "href": "/blog/lab-trends-and-acute-kidney-injury", "anchor": "lab trends in acute kidney injury" }
+      ],
+      "linksToLessonsOrHubs": [
+        { "href": "/pre-nursing/lessons/pharmacology", "type": "lesson_module" },
+        { "href": "/pre-nursing/lessons/fluids-electrolytes", "type": "lesson_module" },
+        { "href": "/pre-nursing/lessons/infection-control", "type": "lesson_module" },
+        { "href": "/us/rn/nclex-rn/lessons", "type": "exam_pathway_hub" },
+        { "href": "/question-bank", "type": "question_bank" },
+        { "href": "/tools", "type": "tools" }
+      ],
+      "notes": "Migration section included (Canada/US). Meets 2–3 blog + 2–3 lesson + hub + optional tools pattern."
+    },
+    {
+      "slug": "lab-trends-and-acute-kidney-injury",
+      "linksToBlog": [
+        { "href": "/blog/pharmacology-without-memorization-chaos", "anchor": "pharmacology study that sticks" },
+        { "href": "/blog/clinical-judgment-on-exam-day", "anchor": "clinical judgment on exam day" }
+      ],
+      "linksToLessonsOrHubs": [
+        { "href": "/pre-nursing/lessons/fluids-electrolytes", "type": "lesson_module" },
+        { "href": "/pre-nursing/lessons/pathophysiology", "type": "lesson_module" },
+        { "href": "/pre-nursing/lessons/diagnostics", "type": "lesson_module" },
+        { "href": "/us/rn/nclex-rn/lessons", "type": "exam_pathway_hub" },
+        { "href": "/question-bank", "type": "question_bank" },
+        { "href": "/tools", "type": "tools" }
+      ],
+      "notes": "Migration section included. Third explicit blog link appears in summary alongside in-body links to sister posts."
+    }
+  ],
+  "limitations": [
+    "Database-published blog posts were not modified; slugs and bodies in Prisma require export or admin tooling for the same editorial pass.",
+    "src/content/blog-static-posts.json is not imported by the app and was left unchanged."
+  ]
+}

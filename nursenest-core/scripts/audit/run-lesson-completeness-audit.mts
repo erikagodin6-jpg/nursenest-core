@@ -149,8 +149,14 @@ type PathwayRollup = {
   localizationIncomplete: number;
   notRoutable: number;
   duplicateOrUnclear: number;
+  /** production_ready_en (English spine) */
+  productionReadyEn: number;
+  /** production_ready_en but not localized_ready */
+  goodEnglishNotLocalizationComplete: number;
   averageOverallScore: number;
   topReasons: Array<{ reason: string; count: number }>;
+  contentReadinessBreakdown: Partial<Record<ContentReadinessStatus, number>>;
+  localizationReadinessBreakdown: Partial<Record<LocalizationReadinessStatus, number>>;
 };
 
 function processLesson(
@@ -255,6 +261,8 @@ function processLesson(
     localizationScore,
     overallScore,
     status,
+    contentReadinessStatus,
+    localizationReadinessStatus,
     reasons: [...new Set(reasons)].slice(0, 24),
     recommendedActions,
     evidence: {
@@ -351,6 +359,32 @@ async function main() {
     statusCounts[r.status] += 1;
   }
 
+  const contentReadinessTotals: Record<ContentReadinessStatus, number> = {
+    production_ready_en: 0,
+    usable_but_thin_en: 0,
+    content_incomplete: 0,
+    structurally_incomplete: 0,
+    not_routable: 0,
+    duplicate_or_unclear_source: 0,
+  };
+  const localizationReadinessTotals: Record<LocalizationReadinessStatus, number> = {
+    localized_ready: 0,
+    partially_localized: 0,
+    localized_shell_only: 0,
+    english_only: 0,
+    localization_incomplete: 0,
+  };
+  for (const r of rows) {
+    contentReadinessTotals[r.contentReadinessStatus] += 1;
+    localizationReadinessTotals[r.localizationReadinessStatus] += 1;
+  }
+  const goodEnglishNotLocalizationComplete = rows.filter(
+    (r) =>
+      r.contentReadinessStatus === "production_ready_en" &&
+      r.localizationReadinessStatus !== "localized_ready",
+  ).length;
+  const blockedMainlyByLocalization = rows.filter((r) => r.status === "localization_incomplete").length;
+
   const byPathway = new Map<string, LessonRow[]>();
   for (const r of rows) {
     const list = byPathway.get(r.pathwayId) ?? [];
@@ -378,6 +412,21 @@ async function main() {
       .sort((a, b) => b.count - a.count)
       .slice(0, 8);
 
+    const contentReadinessBreakdown: Partial<Record<ContentReadinessStatus, number>> = {};
+    const localizationReadinessBreakdown: Partial<Record<LocalizationReadinessStatus, number>> = {};
+    for (const x of list) {
+      contentReadinessBreakdown[x.contentReadinessStatus] =
+        (contentReadinessBreakdown[x.contentReadinessStatus] ?? 0) + 1;
+      localizationReadinessBreakdown[x.localizationReadinessStatus] =
+        (localizationReadinessBreakdown[x.localizationReadinessStatus] ?? 0) + 1;
+    }
+    const productionReadyEn = list.filter((x) => x.contentReadinessStatus === "production_ready_en").length;
+    const goodEnglishNotLocalizationComplete = list.filter(
+      (x) =>
+        x.contentReadinessStatus === "production_ready_en" &&
+        x.localizationReadinessStatus !== "localized_ready",
+    ).length;
+
     pathwayRollups.push({
       pathwayId: pid,
       country: p?.countrySlug ?? "unknown",
@@ -392,8 +441,12 @@ async function main() {
       localizationIncomplete: list.filter((x) => x.status === "localization_incomplete").length,
       notRoutable: list.filter((x) => x.status === "not_routable").length,
       duplicateOrUnclear: list.filter((x) => x.status === "duplicate_or_unclear_source").length,
+      productionReadyEn,
+      goodEnglishNotLocalizationComplete,
       averageOverallScore: Math.round(avg * 10) / 10,
       topReasons,
+      contentReadinessBreakdown,
+      localizationReadinessBreakdown,
     });
   }
 
@@ -437,6 +490,8 @@ async function main() {
       slug: r.slug,
       title: r.title,
       status: r.status,
+      contentReadinessStatus: r.contentReadinessStatus,
+      localizationReadinessStatus: r.localizationReadinessStatus,
       overallScore: r.overallScore,
       reasons: r.reasons.slice(0, 8),
       recommendedActions: r.recommendedActions,
@@ -464,6 +519,19 @@ async function main() {
   const summaryJson = {
     generatedAt,
     batchFixHints,
+    statusModel: {
+      legacyCombinedStatusField: LEGACY_STATUS_DERIVATION,
+      contentReadinessStatus:
+        "English/structural/educational spine. production_ready_en uses contentOnlyWeightedOverall (structural/educational/link only, renormalized) plus the same educational/link/word gates as before — overlay does not decide this label.",
+      localizationReadinessStatus:
+        "Overlay key depth in scanned non-EN educational-overlays/*/lessons.json. Strong EN spine + 0 overlays → localization_incomplete; weaker spine + 0 overlays → english_only.",
+    },
+    statusDimensions: {
+      contentReadinessTotals,
+      localizationReadinessTotals,
+      goodEnglishLessonsNotLocalizationComplete: goodEnglishNotLocalizationComplete,
+      blockedMainlyByLocalizationLegacyStatus: blockedMainlyByLocalization,
+    },
     lessonsThatExistButNotComplete: {
       description:
         "Catalog-present lessons (bundled JSON) that are not classified production_ready — includes thin, structurally gated, localization-limited, non-routable pathway, or duplicate slug issues.",
@@ -481,6 +549,7 @@ async function main() {
     },
     methodology: {
       dataSource: "Bundled pathway catalog (catalog.json + allied-bundled + new-grad + scoped-gold merge via getCatalogPathwayLessonsSync). Does not enumerate Prisma-only lessons.",
+      legacyStatus: LEGACY_STATUS_DERIVATION,
       scoringWeights: SCORE_WEIGHTS,
       structuralBasis:
         "evaluatePathwayLessonStructuralGate (pathway-lesson-premium): premium spine vs legacy five-block; subscriber completeness hooks.",
@@ -497,6 +566,8 @@ async function main() {
       lessonsScanned: rows.length,
       pathwaysWithLessons: pathwayRollups.length,
       ...statusCounts,
+      contentReadinessByStatus: contentReadinessTotals,
+      localizationReadinessByStatus: localizationReadinessTotals,
       byPathway: Object.fromEntries(
         [...byPathway.entries()].map(([k, v]) => [k, v.length]).sort((a, b) => b[1] - a[1]),
       ),
@@ -529,7 +600,13 @@ async function main() {
 
   console.log(`Wrote ${rows.length} lesson rows under ${OUT_DIR}`);
   console.log(
-    `Status: production_ready=${statusCounts.production_ready} usable_but_thin=${statusCounts.usable_but_thin} structurally_incomplete=${statusCounts.structurally_incomplete}`,
+    `Legacy status: production_ready=${statusCounts.production_ready} usable_but_thin=${statusCounts.usable_but_thin} structurally_incomplete=${statusCounts.structurally_incomplete} localization_incomplete=${statusCounts.localization_incomplete}`,
+  );
+  console.log(
+    `Content EN: production_ready_en=${contentReadinessTotals.production_ready_en} usable_but_thin_en=${contentReadinessTotals.usable_but_thin_en} | Localization: localized_ready=${localizationReadinessTotals.localized_ready} localization_incomplete=${localizationReadinessTotals.localization_incomplete} english_only=${localizationReadinessTotals.english_only}`,
+  );
+  console.log(
+    `Good EN not localization-complete: ${goodEnglishNotLocalizationComplete} (production_ready_en && not localized_ready)`,
   );
 }
 
@@ -564,11 +641,15 @@ function buildMarkdownSummary(
   );
   lines.push(`- **Strictness**: A lesson is not “complete” merely because sections exist or SEO fields pass padding.`);
   lines.push(`- **Nursing-first reporting**: Pathways sorted with nursing tiers before allied in rollups and priority queue.`);
+  lines.push(
+    `- **Split status model**: \`contentReadinessStatus\` (English spine) and \`localizationReadinessStatus\` (overlay depth) are reported alongside legacy \`status\` — scores are unchanged; overallScore still weights localization at ${SCORE_WEIGHTS.localization}.`,
+  );
   lines.push(``);
   lines.push(`## Totals (from lesson-completeness-summary.json)`);
   lines.push(`- Lessons scanned: **${rows.length}**`);
   const t = summaryJson.totals as Record<string, unknown> | undefined;
   if (t && typeof t === "object") {
+    lines.push(`- **Legacy combined \`status\`** (unchanged thresholds):`);
     lines.push(`- production_ready: **${String(t.production_ready)}**`);
     lines.push(`- usable_but_thin: **${String(t.usable_but_thin)}**`);
     lines.push(`- structurally_incomplete: **${String(t.structurally_incomplete)}**`);
@@ -576,12 +657,42 @@ function buildMarkdownSummary(
     lines.push(`- localization_incomplete: **${String(t.localization_incomplete)}**`);
     lines.push(`- not_routable: **${String(t.not_routable)}**`);
     lines.push(`- duplicate_or_unclear_source: **${String(t.duplicate_or_unclear_source)}**`);
+    const cr = t.contentReadinessByStatus as Record<string, number> | undefined;
+    const lr = t.localizationReadinessByStatus as Record<string, number> | undefined;
+    if (cr) {
+      lines.push(`- **Content readiness (English spine)** — production_ready_en: **${cr.production_ready_en ?? 0}**, usable_but_thin_en: **${cr.usable_but_thin_en ?? 0}**, structurally_incomplete: **${cr.structurally_incomplete ?? 0}**, content_incomplete: **${cr.content_incomplete ?? 0}**, not_routable: **${cr.not_routable ?? 0}**, duplicate_or_unclear_source: **${cr.duplicate_or_unclear_source ?? 0}**.`);
+    }
+    if (lr) {
+      lines.push(`- **Localization readiness (overlays)** — localized_ready: **${lr.localized_ready ?? 0}**, partially_localized: **${lr.partially_localized ?? 0}**, localization_incomplete: **${lr.localization_incomplete ?? 0}**, english_only: **${lr.english_only ?? 0}**, localized_shell_only: **${lr.localized_shell_only ?? 0}**.`);
+    }
+  }
+  const sd = summaryJson.statusDimensions as
+    | {
+        goodEnglishLessonsNotLocalizationComplete?: number;
+        blockedMainlyByLocalizationLegacyStatus?: number;
+      }
+    | undefined;
+  if (sd) {
+    lines.push(
+      `- **Good English lessons not yet localization-complete** (\`production_ready_en\` and not \`localized_ready\`): **${sd.goodEnglishLessonsNotLocalizationComplete ?? 0}**`,
+    );
+    lines.push(
+      `- **Blocked mainly by localization** (legacy \`status === localization_incomplete\`): **${sd.blockedMainlyByLocalizationLegacyStatus ?? 0}**`,
+    );
+  }
+  lines.push(``);
+  lines.push(`## Good English lessons that are not yet localization-complete`);
+  lines.push(
+    `Lessons with **\`contentReadinessStatus === production_ready_en\`** but **\`localizationReadinessStatus !== localized_ready\`** (overlays missing or only one scanned locale). These have a strong English teaching spine under the same depth gates as before; remaining work is primarily **educational overlay expansion** (or documenting English-primary intent), not fixing a broken lesson shell.`,
+  );
+  if (sd?.goodEnglishLessonsNotLocalizationComplete != null) {
+    lines.push(`- **Count**: **${sd.goodEnglishLessonsNotLocalizationComplete}**`);
   }
   lines.push(``);
   lines.push(`## Top failing pathways (nursing-first, by volume)`);
   for (const p of nursingRollups) {
     lines.push(
-      `- **${p.pathwayId}** (${p.country}/${p.roleTrack}/${p.exam}): ${p.totalLessons} lessons · avg score ${p.averageOverallScore} · ready ${p.productionReady} · thin ${p.usableButThin} · structural gaps ${p.structurallyIncomplete}`,
+      `- **${p.pathwayId}** (${p.country}/${p.roleTrack}/${p.exam}): ${p.totalLessons} lessons · avg score ${p.averageOverallScore} · legacy ready ${p.productionReady} · **production_ready_en ${p.productionReadyEn}** · thin ${p.usableButThin} · structural gaps ${p.structurallyIncomplete}`,
     );
   }
   lines.push(``);

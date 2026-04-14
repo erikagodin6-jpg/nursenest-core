@@ -116,17 +116,31 @@ export const STATIC_BLOG_POSTS: StaticBlogPostRecord[] = [
 
 <h2>Real-world application: the med pass you cannot pause</h2>
 <p>In practice you verify orders, allergies, vitals, labs, interactions, and teach—all under time pressure. Simulate that mentally: after each practice question, state the single monitoring parameter you would recheck in the next hour. That habit converts knowledge into the safety mindset the NCLEX encodes in options.</p>
+<p>Pair every new admission medication list with “what must never be double-dosed” and “what needs a baseline lab”: anticoagulants, digoxin in older adults, lithium, insulin, and nephrotoxic combinations. On the exam, those are the classes that sneak into SATA items as “select all nursing actions before administration.”</p>
 
 <h2>If you are an international nurse planning to work in Canada or the United States</h2>
 <p>Formulary names and units may differ from what you used at home, but mechanisms do not. Focus on high-alert medication classes, insulin concentrations, anticoagulant monitoring expectations, and opioid sedation scales used in North American protocols. Pair pharmacology review with the <a href="/us/rn/nclex-rn/lessons">NCLEX-RN lesson hub</a> so scope and documentation language match what items assume.</p>
 
-<h2>Practice question</h2>
+<h2>Practice questions</h2>
+<h3>Question 1</h3>
 <p><strong>Stem:</strong> A patient on a loop diuretic reports dizziness when standing and has a downward blood pressure trend. What is the priority?</p>
 <p><strong>Best answer:</strong> Assess orthostatic symptoms and volume status, protect from falls, and communicate findings for possible regimen review—evaluate electrolytes and renal trends as part of that assessment.</p>
 <p><strong>Rationale:</strong> Orthostasis with BP decline suggests over-diuresis or hypovolemia risk; safety and reassessment precede blind continuation.</p>
+<h3>Question 2</h3>
+<p><strong>Stem:</strong> A patient with a new penicillin allergy history is ordered a cephalosporin for infection. What is the essential nursing consideration before administration?</p>
+<p><strong>Best answer:</strong> Clarify allergy details with the provider/pharmacist per protocol, verify appropriateness of the class choice, and follow institutional policy for administration and monitoring—do not assume cross-reactivity is negligible without review.</p>
+<p><strong>Rationale:</strong> Beta-lactam allergy documentation is a safety crossroads; the exam rewards verification and scope-appropriate escalation over silent administration.</p>
+<h3>Question 3</h3>
+<p><strong>Stem:</strong> A patient on an opioid reports increased sedation after a new benzodiazepine was added. What is the priority?</p>
+<p><strong>Best answer:</strong> Assess airway, breathing, sedation level, and vital signs; follow protocol for respiratory safety and notify the provider about additive CNS depression risk.</p>
+<p><strong>Rationale:</strong> Sedation stacking threatens ventilation; nursing assessment and safety actions precede routine comfort measures.</p>
+
+<h2>Putting it together under time pressure</h2>
+<p>Before each timed block, pick three drug classes you will watch for in every stem—often anticoagulation, opioids plus adjuvants, and insulin—and rehearse the monitoring sentence you would chart aloud. That narrow ritual keeps pharmacology from ballooning into endless facts while still covering the classes that drive harm when missed.</p>
+<p>End each study session with one sentence: “Which class did I almost confuse, and what monitoring would have saved me?” That single line turns errors into durable rules instead of one-off misses.</p>
 
 <h2>Summary</h2>
-<p>Pharmacology mastery for the NCLEX is structured reasoning: class mechanism, predictable harms, monitoring, teaching. Prototypes reduce memorization load while increasing accuracy on unfamiliar brand names. Keep linking meds to scenarios—especially renal, cardiac, and infectious disease contexts—so answers feel like patient care, not recall.</p>
+<p>Pharmacology mastery for the NCLEX is structured reasoning: class mechanism, predictable harms, monitoring, teaching. Prototypes reduce memorization load while increasing accuracy on unfamiliar brand names. Keep linking meds to scenarios—especially renal, cardiac, infectious disease, and polypharmacy contexts—so answers feel like patient care, not recall.</p>
 <p>Continue with mixed questions in the <a href="/question-bank">question bank</a>, deepen electrolyte physiology in <a href="/pre-nursing/lessons/fluids-electrolytes">fluids and electrolytes</a>, and browse <a href="/tools">study tools</a> when you want quick formats outside standard quizzes.</p>
 `,
   },
@@ -147,6 +161,7 @@ export const STATIC_BLOG_POSTS: StaticBlogPostRecord[] = [
 <p><strong>Intrinsic:</strong> parenchymal injury—ischemic ATN, nephrotoxins, glomerular or interstitial processes. Creatinine may rise despite fluid resuscitation; urinalysis clues sometimes appear in stems.</p>
 <p><strong>Postrenal:</strong> obstruction—BPH, stones, catheters, bilateral ureteric issues. Sudden anuria or high residual can be hints; relief of obstruction can reverse injury if identified promptly.</p>
 <p>You rarely need a definitive label to pick the safest nursing action—often the stem wants recognition that filtration is worsening <em>now</em> and that complications like hyperkalemia or pulmonary edema must be managed urgently.</p>
+<p>Staging frameworks such as KDIGO combine creatinine change from baseline, urine output thresholds, and time windows. You do not need to memorize milligram cutoffs for the NCLEX; you need the instinct that a sudden creatinine jump plus oliguria is a higher level of concern than a chronic stable elevation in an asymptomatic outpatient. Staging language in a stem (“Stage 2 AKI”) is a cue to escalate surveillance and avoid nephrotoxic stacking, not a trivia label.</p>
 
 <h2>The trend panel that should change your pulse</h2>
 <ul>
@@ -159,6 +174,8 @@ export const STATIC_BLOG_POSTS: StaticBlogPostRecord[] = [
 
 <h2>Deeper clinical explanation: why creatinine lags</h2>
 <p>Creatinine is a filtration marker, not a real-time injury tracer. Early AKI can exist with modest creatinine changes while output already fell—hence KDIGO criteria combining creatinine change and urine output for staging. When the stem gives hourly urine totals, treat output as part of the clinical picture, not background noise.</p>
+<p>Fluid balance is equally narrative: a patient may be “net even” on paper yet intravascularly dry if losses were insensible or third-spacing occurred. Conversely, aggressive crystalloid in a patient with reduced forward flow can tip into pulmonary edema while creatinine still looks only mildly abnormal. The NCLEX tests whether you integrate lung sounds, oxygen needs, and weight trends—not whether you can recite a fluid equation.</p>
+<p>Contrast exposure, rhabdomyolysis, and sepsis bundle timing show up as story elements. You are not diagnosing from the stem; you are recognizing that certain insults raise AKI probability and that nursing priorities shift toward strict I/O, daily weights when ordered, avoiding nephrotoxic combinations, and watching potassium before it becomes a code.</p>
 
 <h2>NCLEX traps in renal scenarios</h2>
 <ul>
@@ -173,14 +190,26 @@ export const STATIC_BLOG_POSTS: StaticBlogPostRecord[] = [
 
 <h2>Real-world application: handoff that saves kidneys</h2>
 <p>When you notice downward urine output with a climbing creatinine, communicate trend, not just numbers: baseline versus current, intake/output summary, hemodynamic status, nephrotoxin exposure, and anticoagulation or potassium intake when relevant. That mirrors safe escalation and is the professional habit exams reward in “notify the provider” options—paired with bedside assessment findings.</p>
+<p>Renal replacement therapy decisions belong to the provider, but nursing items test recognition of indications you must not miss: refractory hyperkalemia with ECG changes, life-threatening acidosis, volume overload refractory to diuretics, uremic complications such as pericardial signs or severe encephalopathy when described. Your role in the stem is early identification and urgent collaboration—not choosing the dialyzer.</p>
+<p>Catheter and drainage issues matter in postrenal pictures: kinked Foley, clot retention, or inadequate intermittent catheterization can masquerade as intrinsic AKI until flow is restored. If a stem mentions sudden anuria with lower abdominal discomfort, think obstruction before you accept “just push fluids” as the best answer.</p>
+<p>Nutrition and protein catabolism shift BUN independently of creatinine; a disproportionately high BUN relative to creatinine can hint at prerenal physiology or GI bleeding—but always interpret alongside the scenario rather than as a standalone rule.</p>
 
 <h2>If you are an international nurse planning to work in Canada or the United States</h2>
 <p>Renal dosing, contrast protocols, and medication brand names may differ from your home setting, but early recognition of AKI and hyperkalemia translates everywhere. Emphasize practice with US-style delegation questions alongside labs—your trend awareness is an asset once paired with <a href="/us/rn/nclex-rn/lessons">NCLEX-RN scope expectations</a>.</p>
 
-<h2>Practice question</h2>
+<h2>Practice questions</h2>
+<h3>Question 1</h3>
 <p><strong>Stem:</strong> A patient with sepsis has rising creatinine, urine output down each shift, and soft blood pressure with tachycardia. What is the best interpretation?</p>
 <p><strong>Best answer:</strong> This pattern suggests evolving AKI with possible hypoperfusion component and requires urgent reassessment, resuscitation support per orders, and escalation—rather than “normal post-op course” thinking.</p>
 <p><strong>Rationale:</strong> Combined renal and perfusion trends indicate active injury risk; early intervention limits progression.</p>
+<h3>Question 2</h3>
+<p><strong>Stem:</strong> A patient with AKI develops widening QRS on the monitor, peaked T waves are noted, and potassium is reported critically high. What is the priority?</p>
+<p><strong>Best answer:</strong> Initiate emergent treatment for hyperkalemia per protocol (including continuous monitoring) and notify the provider immediately for definitive management.</p>
+<p><strong>Rationale:</strong> Hyperkalemia with ECG changes is an immediate dysrhythmia risk; stabilization precedes routine documentation or patient teaching.</p>
+<h3>Question 3</h3>
+<p><strong>Stem:</strong> A patient with oliguric AKI has new crackles, hypoxia, and jugular distension. What is the priority nursing focus?</p>
+<p><strong>Best answer:</strong> Assess respiratory status and volume overload severity, position for breathing, provide oxygen per orders, and escalate for evaluation of fluid management—avoid assuming more crystalloid is automatically indicated.</p>
+<p><strong>Rationale:</strong> Pulmonary edema in the setting of renal dysfunction is a life-threatening fluid balance problem; airway and breathing come first.</p>
 
 <h2>Summary</h2>
 <p>AKI questions reward trend literacy, symptom integration, and immediate-threat triage. Learn to read creatinine together with output, potassium, acid-base status, and respiratory findings. Pair every AKI stem with a silent question: <em>What could kill this patient fastest, and what nursing action addresses that first?</em></p>

@@ -44,6 +44,8 @@ type LessonRow = {
   localizationScore: number;
   overallScore: number;
   status: string;
+  contentReadinessStatus?: string;
+  localizationReadinessStatus?: string;
   reasons: string[];
 };
 
@@ -145,6 +147,8 @@ function main() {
     localizationScore: { before: number | null; after: number | null; delta: number | null };
     overallScore: { before: number | null; after: number | null; delta: number | null };
     status: { before: string | null; after: string | null; changed: boolean };
+    contentReadinessStatus: { before: string | null; after: string | null };
+    localizationReadinessStatus: { before: string | null; after: string | null };
     reasons: {
       before: string[];
       after: string[];
@@ -161,6 +165,10 @@ function main() {
   let statusChanged = 0;
   let nowProductionReady = 0;
   let stillThinOrIncomplete = 0;
+  let nowProductionReadyEn = 0;
+  let afterBlockedOnlyByLocalization = 0;
+  let afterThinOrContentIncomplete = 0;
+  let afterDuplicateOrUnclear = 0;
   const overallDeltas: number[] = [];
   const statusAfterCounts: Record<string, number> = {};
 
@@ -187,6 +195,24 @@ function main() {
     if (statusAfter) {
       statusAfterCounts[statusAfter] = (statusAfterCounts[statusAfter] ?? 0) + 1;
     }
+    const crAfter = a?.contentReadinessStatus;
+    const locAfter = a?.localizationReadinessStatus;
+    if (crAfter === "production_ready_en") nowProductionReadyEn += 1;
+    if (
+      crAfter === "production_ready_en" &&
+      locAfter &&
+      locAfter !== "localized_ready"
+    ) {
+      afterBlockedOnlyByLocalization += 1;
+    }
+    if (
+      crAfter === "usable_but_thin_en" ||
+      crAfter === "content_incomplete" ||
+      crAfter === "structurally_incomplete"
+    ) {
+      afterThinOrContentIncomplete += 1;
+    }
+    if (crAfter === "duplicate_or_unclear_source") afterDuplicateOrUnclear += 1;
     if (
       statusAfter === "usable_but_thin" ||
       statusAfter === "structurally_incomplete" ||
@@ -236,6 +262,14 @@ function main() {
         before: statusBefore,
         after: statusAfter,
         changed: statusBefore !== statusAfter,
+      },
+      contentReadinessStatus: {
+        before: b?.contentReadinessStatus ?? null,
+        after: a?.contentReadinessStatus ?? null,
+      },
+      localizationReadinessStatus: {
+        before: b?.localizationReadinessStatus ?? null,
+        after: a?.localizationReadinessStatus ?? null,
       },
       reasons: {
         before: b?.reasons ?? [],
@@ -287,11 +321,17 @@ function main() {
       averageOverallScoreLift: avgLift,
       statusClassChanged: statusChanged,
       nowProductionReady,
+      nowProductionReadyEn,
+      goodEnglishBlockedOnlyOnLocalizationAfter:
+        "production_ready_en && localizationReadinessStatus !== localized_ready",
+      countGoodEnglishBlockedOnlyOnLocalizationAfter: afterBlockedOnlyByLocalization,
+      countThinOrContentIncompleteEnAfter: afterThinOrContentIncomplete,
+      countDuplicateOrUnclearSourceAfter: afterDuplicateOrUnclear,
       stillThinOrIncompleteOrOtherNonReady: stillThinOrIncomplete,
       nonProductionReady: comparisons.filter((c) => c.status.after !== "production_ready").length,
       statusBreakdownAfter: statusAfterCounts,
       note:
-        "production_ready requires overall≥84, publicComplete, educational≥72, links≥55, words≥500 (see deriveStatus). Overlay absence caps localization and often blocks production_ready.",
+        "Legacy `status` still uses deriveStatus (overallScore includes localization weight). `production_ready_en` uses content-only weighting — see lesson-completeness-summary.json statusModel.",
     },
     topRemainingReasonsAfterBatch1: topRemainingReasons,
     thresholdRecommendation: {
@@ -360,13 +400,21 @@ function main() {
   md.push(``);
   md.push(`## Status`);
   md.push(`- Status class changed: **${summaryJson.aggregate.statusClassChanged}** lessons`);
-  md.push(`- Now \`production_ready\`: **${summaryJson.aggregate.nowProductionReady}**`);
+  md.push(`- Now \`production_ready\` (legacy combined): **${summaryJson.aggregate.nowProductionReady}**`);
+  md.push(`- Now \`production_ready_en\` (content spine): **${summaryJson.aggregate.nowProductionReadyEn}**`);
   md.push(
-    `- Still thin/incomplete (usable_but_thin, structurally_incomplete, content_incomplete, localization_incomplete): **${summaryJson.aggregate.stillThinOrIncompleteOrOtherNonReady}**`,
+    `- **Strong EN, localization backlog** (\`production_ready_en\` and not \`localized_ready\`): **${summaryJson.aggregate.countGoodEnglishBlockedOnlyOnLocalizationAfter}**`,
+  );
+  md.push(
+    `- Still thin/content-incomplete on EN spine (\`usable_but_thin_en\`, \`content_incomplete\`, \`structurally_incomplete\`): **${summaryJson.aggregate.countThinOrContentIncompleteEnAfter}**`,
+  );
+  md.push(`- \`duplicate_or_unclear_source\` on content dimension: **${summaryJson.aggregate.countDuplicateOrUnclearSourceAfter}**`);
+  md.push(
+    `- Still thin/incomplete (legacy: usable_but_thin, structurally_incomplete, content_incomplete, localization_incomplete): **${summaryJson.aggregate.stillThinOrIncompleteOrOtherNonReady}**`,
   );
   md.push(`- Non–production-ready (any status except \`production_ready\`): **${summaryJson.aggregate.nonProductionReady}**`);
   md.push(``);
-  md.push(`## Status breakdown after audit (batch-1 set)`);
+  md.push(`## Status breakdown after audit (batch-1 set, legacy \`status\`)`);
   for (const [st, n] of Object.entries(summaryJson.aggregate.statusBreakdownAfter).sort((a, b) => b[1] - a[1])) {
     md.push(`- \`${st}\`: **${n}**`);
   }
