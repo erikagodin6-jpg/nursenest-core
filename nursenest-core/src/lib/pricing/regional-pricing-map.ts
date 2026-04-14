@@ -59,6 +59,7 @@ const REGION_PRICING_TIER: Record<GlobalRegionSlug, PricingTier> = {
   ireland: "mid",
   "new-zealand": "mid",
   japan: "mid",
+  china: "mid",
   "south-korea": "mid",
   indonesia: "low",
   vietnam: "low",
@@ -169,6 +170,10 @@ const LOCAL_CURRENCY_OVERRIDES: Partial<
   japan: {
     nursing: { monthly: 3_980, "3-month": 9_800, "6-month": 14_800, yearly: 21_800 },
     allied: { monthly: 2_980, "3-month": 7_800, "6-month": 11_800, yearly: 17_800 },
+  },
+  china: {
+    nursing: { monthly: 168, "3-month": 418, "6-month": 628, yearly: 928 },
+    allied: { monthly: 138, "3-month": 338, "6-month": 508, yearly: 748 },
   },
   "south-korea": {
     nursing: { monthly: 32_900, "3-month": 79_900, "6-month": 119_900, yearly: 179_900 },

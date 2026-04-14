@@ -10,6 +10,7 @@ import {
 import { blogIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { RegionalBlogDiscoveryHint } from "@/components/marketing/regional-blog-discovery-hint";
 
 export async function generateMetadata({
   searchParams,
@@ -57,6 +58,7 @@ export default async function BlogIndexPage({ searchParams }: Props) {
       <div className="mb-6">
         <BreadcrumbTrail items={crumbs} />
       </div>
+      <RegionalBlogDiscoveryHint />
       <header className="mb-10">
         <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">Clinical education blog</h1>
         <p className="mt-2 text-[var(--theme-muted-text)]">Scholarly articles for nursing and allied health exam preparation.</p>

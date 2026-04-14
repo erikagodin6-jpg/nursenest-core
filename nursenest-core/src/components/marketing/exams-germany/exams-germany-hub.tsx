@@ -7,6 +7,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { ALLIED, HUB, NP, PN, RN, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { simpleMarketingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { formatTitleCase } from "@/lib/format/text-case";
+import { RegionalHubTruthStrip } from "@/components/marketing/regional-hub-truth-strip";
 import { GermanyHubFeaturedBlog } from "./germany-hub-featured-blog";
 
 const PATH = "/exams/germany";
@@ -184,6 +185,8 @@ export function ExamsGermanyHub() {
           </h2>
           <RichBody text={t("exams.germany.sections.blogIntegration.body")} />
         </section>
+
+        <RegionalHubTruthStrip />
 
         <GermanyHubFeaturedBlog />
 

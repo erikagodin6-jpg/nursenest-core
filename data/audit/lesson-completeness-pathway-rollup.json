@@ -1,0 +1,357 @@
+{
+  "generatedAt": "2026-04-14T22:09:20.173Z",
+  "pathways": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "country": "canada",
+      "exam": "nclex-rn",
+      "roleTrack": "rn",
+      "nursingPriority": true,
+      "totalLessons": 188,
+      "productionReady": 0,
+      "usableButThin": 0,
+      "structurallyIncomplete": 136,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 1,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 51,
+      "averageOverallScore": 34.1,
+      "topReasons": [
+        {
+          "reason": "low_total_word_count",
+          "count": 113
+        },
+        {
+          "reason": "missing_educational:overview_intro",
+          "count": 112
+        },
+        {
+          "reason": "missing_educational:core_concept_depth",
+          "count": 109
+        },
+        {
+          "reason": "missing_educational:clinical_application",
+          "count": 107
+        },
+        {
+          "reason": "missing_educational:summary_takeaways",
+          "count": 99
+        },
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 49
+        },
+        {
+          "reason": "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+          "count": 43
+        },
+        {
+          "reason": "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+          "count": 34
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "country": "us",
+      "exam": "nclex-rn",
+      "roleTrack": "rn",
+      "nursingPriority": true,
+      "totalLessons": 187,
+      "productionReady": 0,
+      "usableButThin": 0,
+      "structurallyIncomplete": 135,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 1,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 51,
+      "averageOverallScore": 33.9,
+      "topReasons": [
+        {
+          "reason": "low_total_word_count",
+          "count": 114
+        },
+        {
+          "reason": "missing_educational:overview_intro",
+          "count": 113
+        },
+        {
+          "reason": "missing_educational:core_concept_depth",
+          "count": 109
+        },
+        {
+          "reason": "missing_educational:clinical_application",
+          "count": 107
+        },
+        {
+          "reason": "missing_educational:summary_takeaways",
+          "count": 100
+        },
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 48
+        },
+        {
+          "reason": "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+          "count": 44
+        },
+        {
+          "reason": "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+          "count": 35
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "country": "us",
+      "exam": "fnp",
+      "roleTrack": "np",
+      "nursingPriority": true,
+      "totalLessons": 161,
+      "productionReady": 0,
+      "usableButThin": 0,
+      "structurallyIncomplete": 31,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 79,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 51,
+      "averageOverallScore": 65.6,
+      "topReasons": [
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 144
+        },
+        {
+          "reason": "missing_educational:core_concept_depth",
+          "count": 89
+        },
+        {
+          "reason": "thin_total_word_count",
+          "count": 79
+        },
+        {
+          "reason": "missing_educational:summary_takeaways",
+          "count": 79
+        },
+        {
+          "reason": "missing_educational:overview_intro",
+          "count": 18
+        },
+        {
+          "reason": "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+          "count": 17
+        },
+        {
+          "reason": "low_total_word_count",
+          "count": 15
+        },
+        {
+          "reason": "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
+          "count": 13
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "country": "canada",
+      "exam": "rex-pn",
+      "roleTrack": "rpn",
+      "nursingPriority": true,
+      "totalLessons": 150,
+      "productionReady": 0,
+      "usableButThin": 0,
+      "structurallyIncomplete": 61,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 38,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 51,
+      "averageOverallScore": 48.5,
+      "topReasons": [
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 111
+        },
+        {
+          "reason": "missing_educational:core_concept_depth",
+          "count": 98
+        },
+        {
+          "reason": "low_total_word_count",
+          "count": 64
+        },
+        {
+          "reason": "missing_educational:overview_intro",
+          "count": 64
+        },
+        {
+          "reason": "missing_educational:summary_takeaways",
+          "count": 64
+        },
+        {
+          "reason": "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+          "count": 38
+        },
+        {
+          "reason": "thin_total_word_count",
+          "count": 38
+        },
+        {
+          "reason": "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
+          "count": 34
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "country": "us",
+      "exam": "nclex-pn",
+      "roleTrack": "lpn",
+      "nursingPriority": true,
+      "totalLessons": 150,
+      "productionReady": 0,
+      "usableButThin": 0,
+      "structurallyIncomplete": 61,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 38,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 51,
+      "averageOverallScore": 48.5,
+      "topReasons": [
+        {
+          "reason": "missing_educational:core_concept_depth",
+          "count": 99
+        },
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 85
+        },
+        {
+          "reason": "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+          "count": 64
+        },
+        {
+          "reason": "low_total_word_count",
+          "count": 64
+        },
+        {
+          "reason": "missing_educational:overview_intro",
+          "count": 64
+        },
+        {
+          "reason": "missing_educational:summary_takeaways",
+          "count": 39
+        },
+        {
+          "reason": "thin_total_word_count",
+          "count": 38
+        },
+        {
+          "reason": "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
+          "count": 36
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-rn-new-grad-transition",
+      "country": "us",
+      "exam": "new-grad-transition",
+      "roleTrack": "rn",
+      "nursingPriority": true,
+      "totalLessons": 40,
+      "productionReady": 0,
+      "usableButThin": 0,
+      "structurallyIncomplete": 40,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 0,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 0,
+      "averageOverallScore": 27.7,
+      "topReasons": [
+        {
+          "reason": "missing_educational:overview_intro",
+          "count": 40
+        },
+        {
+          "reason": "missing_educational:summary_takeaways",
+          "count": 40
+        },
+        {
+          "reason": "links:no_internal_study_links",
+          "count": 40
+        },
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 38
+        },
+        {
+          "reason": "thin_total_word_count",
+          "count": 35
+        },
+        {
+          "reason": "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
+          "count": 23
+        },
+        {
+          "reason": "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+          "count": 14
+        },
+        {
+          "reason": "low_total_word_count",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "pathwayId": "us-allied-core",
+      "country": "us",
+      "exam": "allied-health",
+      "roleTrack": "allied",
+      "nursingPriority": false,
+      "totalLessons": 15,
+      "productionReady": 0,
+      "usableButThin": 0,
+      "structurallyIncomplete": 0,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 15,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 0,
+      "averageOverallScore": 77.3,
+      "topReasons": [
+        {
+          "reason": "links:no_internal_study_links",
+          "count": 15
+        },
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 15
+        }
+      ]
+    },
+    {
+      "pathwayId": "ca-allied-core",
+      "country": "canada",
+      "exam": "allied-health",
+      "roleTrack": "allied",
+      "nursingPriority": false,
+      "totalLessons": 15,
+      "productionReady": 0,
+      "usableButThin": 0,
+      "structurallyIncomplete": 0,
+      "contentIncomplete": 0,
+      "localizationIncomplete": 15,
+      "notRoutable": 0,
+      "duplicateOrUnclear": 0,
+      "averageOverallScore": 77.3,
+      "topReasons": [
+        {
+          "reason": "links:no_internal_study_links",
+          "count": 15
+        },
+        {
+          "reason": "no_educational_overlay_in_scanned_locales",
+          "count": 15
+        }
+      ]
+    }
+  ]
+}

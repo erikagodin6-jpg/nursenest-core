@@ -150,12 +150,78 @@ export function buildAustraliaManifestBlogBody(row: ManifestBlogRow, index: numb
   return padToMin(core, h + index);
 }
 
+function internationalPathwayBlock(row: ManifestBlogRow): string {
+  const blob = `${row.primaryKeyword} ${row.slug}`.toLowerCase();
+  if (!/(nclex|abroad|australia|canada|uk|gulf|international|migration|overseas|working)/.test(blob)) {
+    return "";
+  }
+  return `<h2>International pathway angle (when relevant)</h2><p>Chinese or Korean national licensure evidence supports credential review for many regulators, but it does not replace target-country rules. Plan English tests, evaluation services, and employer timelines separately. NurseNest helps internationally educated nurses prepare for next-step pathways using practice aligned to public exam scope and based on NurseNest’s own lesson and question inventory—not proprietary national item banks.</p>`;
+}
+
+export function buildChinaManifestBlogBody(row: ManifestBlogRow, index: number): string {
+  const h = hashSlug(row.slug);
+  const kw = esc(row.primaryKeyword);
+  const hub = `<a href="/exams/china">China nursing exams hub</a>`;
+  const guide = `<a href="/china/nursing-exam">NNQE / China nursing exam guide</a>`;
+  const blog = `<a href="/blog/tag/China%20nursing">China nursing articles</a>`;
+  const nclexTopic = `<a href="/china/nclex-for-chinese-nurses">NCLEX for Chinese nurses (topic)</a>`;
+  const rnL = `<a href="/us/rn/nclex-rn/lessons">NCLEX-RN lessons (US)</a>`;
+  const rnQ = `<a href="/us/rn/nclex-rn/questions">NCLEX-RN practice questions</a>`;
+  const pricing = `<a href="/pricing">pricing</a>`;
+  const tools = `<a href="/tools">study tools</a>`;
+  const qb = `<a href="/question-bank">question bank</a>`;
+  const lessons = `<a href="/lessons">lessons library</a>`;
+
+  const intro = `<p><em>Series ${index}.</em> This article discusses <strong>${kw}</strong> in the China nursing context. The National Nurse Qualification Examination (NNQE) and domestic rules are authoritative in Chinese materials. NurseNest does not reproduce NNQE item banks or other proprietary national exam content—our practice supports transferable clinical reasoning from NurseNest’s own inventory when you also pursue NCLEX or other international routes.</p>`;
+
+  const core = `${intro}${langNote(row.language)}
+<h2>Exam and scope orientation</h2><p>Anchor administrative facts in National Health Commission–aligned bulletins and authorised examination channels. For ${kw}, separate domestic blueprint study from English NCLEX-style practice so item styles do not blur.</p>
+<h2>Practical study approach</h2><p>Use timed mixed sets, error logs, and spaced review. Official Chinese syllabi stay primary for NNQE; use ${lessons} and ${qb} when your parallel goal is US-style clinical judgement after a board authorises NCLEX practice.</p>
+<h2>Mistakes to avoid</h2><ul><li>Treating unofficial question dumps as substitutes for bulletins.</li><li>Assuming NCLEX and NNQE share the same blueprint.</li><li>Neglecting English reading speed if you plan US/Canada routes.</li></ul>
+${internationalPathwayBlock(row)}
+<h2>Practice question (illustrative)</h2><p><strong>Stem (illustrative):</strong> In a scenario touching ${kw}, which nursing action best reflects safe prioritisation and scope?</p><p><strong>Rationale:</strong> Identify acute risk first; verify identity, allergies, and critical labs; communicate changes; document clearly. Illustrative only—not copied from any proprietary examination bank.</p>
+<h2>Internal links</h2><p>Continue with ${hub}, ${guide}, and ${blog}; compare ${nclexTopic}; open ${pricing}, ${tools}, ${rnL}, ${rnQ}, and ${qb}.</p>
+<h2>Summary</h2><p>Use official Chinese sources for NNQE administration. Use NurseNest for transferable reasoning aligned to public NCLEX domains when internationally relevant—practice based on our own lesson and question inventory.</p>`;
+
+  return padToMin(core, h + index);
+}
+
+export function buildKoreaManifestBlogBody(row: ManifestBlogRow, index: number): string {
+  const h = hashSlug(row.slug);
+  const kw = esc(row.primaryKeyword);
+  const hub = `<a href="/exams/korea">Korea nursing exams hub</a>`;
+  const guide = `<a href="/korea/nursing-exam">Korean national nursing exam guide</a>`;
+  const blog = `<a href="/blog/tag/Korea%20nursing">Korea nursing articles</a>`;
+  const nclexTopic = `<a href="/korea/nclex-for-korean-nurses">NCLEX for Korean nurses (topic)</a>`;
+  const rnL = `<a href="/us/rn/nclex-rn/lessons">NCLEX-RN lessons (US)</a>`;
+  const rnQ = `<a href="/us/rn/nclex-rn/questions">NCLEX-RN practice questions</a>`;
+  const pricing = `<a href="/pricing">pricing</a>`;
+  const tools = `<a href="/tools">study tools</a>`;
+  const qb = `<a href="/question-bank">question bank</a>`;
+  const lessons = `<a href="/lessons">lessons library</a>`;
+
+  const intro = `<p><em>Series ${index}.</em> This article discusses <strong>${kw}</strong> for South Korea’s national health personnel licensing context (KHPLEI administration in official materials). NurseNest does not reproduce Korean national licensing examination items—content here supports transferable clinical reasoning from our own inventory for parallel NCLEX preparation when a US or Canadian board clears you.</p>`;
+
+  const core = `${intro}${langNote(row.language)}
+<h2>Exam and scope orientation</h2><p>Domestic licensure is Korean-language and bulletin-led. Keep ${kw} study tied to official syllabi; treat English NCLEX resources as a separate track unless you only need conceptual overlap.</p>
+<h2>Practical study approach</h2><p>Build Korean reading stamina, vocabulary notebooks, and timed practice per official guidance. For NCLEX parallel goals, use ${lessons} and ${qb} in English on a distinct schedule.</p>
+<h2>Mistakes to avoid</h2><ul><li>Assuming conversational Korean replaces academic exam Korean.</li><li>Mixing US state rules with Korean registration steps.</li><li>Relying on translated rumours instead of primary Korean notices.</li></ul>
+${internationalPathwayBlock(row)}
+<h2>Practice question (illustrative)</h2><p><strong>Stem (illustrative):</strong> For a vignette related to ${kw}, which response best demonstrates patient safety and professional boundaries?</p><p><strong>Rationale:</strong> Prioritise life-sustaining interventions; verify orders; escalate when unstable. Illustrative—not copied from protected test banks.</p>
+<h2>Internal links</h2><p>Use ${hub}, ${guide}, and ${blog}; read ${nclexTopic}; review ${pricing}, ${tools}, ${rnL}, ${rnQ}, and ${qb}.</p>
+<h2>Summary</h2><p>Follow Korean official materials for the national examination. Use NurseNest for English NCLEX-oriented practice aligned to public exam scope when that pathway applies—based on our own content inventory.</p>`;
+
+  return padToMin(core, h + index);
+}
+
 export function buildBodyForRegion(
-  region: "india" | "middle-east" | "australia",
+  region: "india" | "middle-east" | "australia" | "china" | "korea",
   row: ManifestBlogRow,
   index: number,
 ): string {
   if (region === "india") return buildIndiaManifestBlogBody(row, index);
   if (region === "middle-east") return buildMiddleEastManifestBlogBody(row, index);
-  return buildAustraliaManifestBlogBody(row, index);
+  if (region === "australia") return buildAustraliaManifestBlogBody(row, index);
+  if (region === "china") return buildChinaManifestBlogBody(row, index);
+  return buildKoreaManifestBlogBody(row, index);
 }

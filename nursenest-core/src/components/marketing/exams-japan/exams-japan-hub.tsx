@@ -7,6 +7,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { ALLIED, HUB, NP, PN, RN, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { simpleMarketingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { formatTitleCase } from "@/lib/format/text-case";
+import { RegionalHubTruthStrip } from "@/components/marketing/regional-hub-truth-strip";
 import { JapanHubFeaturedBlog } from "./japan-hub-featured-blog";
 
 const PATH = "/exams/japan";
@@ -198,6 +199,8 @@ export function ExamsJapanHub() {
           </h2>
           <RichBody text={t("exams.japan.sections.blogIntegration.body")} />
         </section>
+
+        <RegionalHubTruthStrip />
 
         <JapanHubFeaturedBlog />
 

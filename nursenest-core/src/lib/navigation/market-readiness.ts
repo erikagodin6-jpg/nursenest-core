@@ -193,6 +193,18 @@ export const MARKET_READINESS: Record<GlobalRegionSlug, MarketReadinessConfig> =
     seoEnabled: true,
     blogEnabled: true,
   },
+  china: {
+    region: "china",
+    supportTier: "marketing",
+    questionsAdapted: false,
+    hasTranslatedContent: false,
+    pricingConfigured: false,
+    conversionFunnelReady: false,
+    seoEnabled: true,
+    blogEnabled: true,
+    notes:
+      "NNQE-aligned marketing hub. Content is based on NurseNest's own lesson and question inventory; not a proprietary national item bank.",
+  },
   "south-korea": {
     region: "south-korea",
     supportTier: "marketing",

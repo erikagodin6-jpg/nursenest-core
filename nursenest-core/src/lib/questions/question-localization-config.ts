@@ -304,6 +304,26 @@ export const QUESTION_LOCALIZATION_PROFILES: Record<GlobalRegionSlug, Localizati
     toneGuidance: "Professional, clear, localized when available.",
     sensitivityNotes: ["Prefer Japanese localization where approved"],
   },
+  china: {
+    region: "china",
+    displayName: "China",
+    defaultLocale: "zh",
+    allowedLocales: ["zh", "en", "zh-tw"],
+    unitSystem: "si",
+    medicationNaming: "generic_international",
+    terminologyStyle: "international",
+    audienceType: "mixed",
+    examRelevance: ["NCLEX-RN"],
+    professionRelevance: ["rn"],
+    temperatureUnit: "celsius",
+    weightUnit: "kg",
+    bilingualDeliveryPreferred: true,
+    toneGuidance:
+      "Prefer clear clinical English for explanations where UI translation is partial; Chinese labels where merged in i18n.",
+    sensitivityNotes: [
+      "Do not imply reproduction of proprietary national exam banks; align to public exam scope with NurseNest's own inventory.",
+    ],
+  },
   "south-korea": {
     region: "south-korea",
     displayName: "South Korea",

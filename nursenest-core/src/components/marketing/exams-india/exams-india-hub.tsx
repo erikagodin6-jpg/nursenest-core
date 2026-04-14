@@ -8,6 +8,7 @@ import { ALLIED, HUB, NP, PN, RN, loginWithCallback } from "@/lib/marketing/mark
 import { simpleMarketingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { PilotHubFeaturedBlog } from "@/components/marketing/pilot-hub-featured-blog";
+import { RegionalHubTruthStrip } from "@/components/marketing/regional-hub-truth-strip";
 
 const PATH = "/exams/india";
 
@@ -153,6 +154,8 @@ export function ExamsIndiaHub() {
             </li>
           </ul>
         </section>
+
+        <RegionalHubTruthStrip />
 
         <PilotHubFeaturedBlog pilot="india" />
 

@@ -62,6 +62,20 @@ export function ExamsChinaHub() {
           <RichBody text={t("exams.china.sections.overview.body")} />
         </section>
 
+        <section className="mt-12" aria-labelledby="cn-nursenest">
+          <h2 id="cn-nursenest" className="nn-marketing-h2">
+            {t("exams.china.sections.nurseNestCovers.title")}
+          </h2>
+          <RichBody text={t("exams.china.sections.nurseNestCovers.body")} />
+        </section>
+
+        <section className="mt-12" aria-labelledby="cn-languages">
+          <h2 id="cn-languages" className="nn-marketing-h2">
+            {t("exams.china.sections.languageHonesty.title")}
+          </h2>
+          <RichBody text={t("exams.china.sections.languageHonesty.body")} />
+        </section>
+
         <section className="mt-12" aria-labelledby="cn-nnqe">
           <h2 id="cn-nnqe" className="nn-marketing-h2">
             {t("exams.china.sections.nnqe.title")}
@@ -194,6 +208,8 @@ export function ExamsChinaHub() {
             </li>
             <li>
               <ProseLink href={HUB.tools}>{formatTitleCase(t("exams.china.links.tools"), locale)}</ProseLink>
+              {" · "}
+              <ProseLink href={HUB.pricing}>{formatTitleCase(t("exams.china.links.pricing"), locale)}</ProseLink>
             </li>
           </ul>
           <p className="mt-6 text-sm text-[var(--semantic-text-muted)]">{t("exams.china.paginationNote")}</p>

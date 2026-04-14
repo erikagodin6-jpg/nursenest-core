@@ -28,10 +28,14 @@ export async function generateMetadata(): Promise<Metadata> {
         robots: { index: true, follow: true },
         keywords: [
           "National Nurse Qualification Examination",
+          "NNQE China",
           "China nursing exam",
-          "National Health Commission",
+          "National Health Commission nursing",
+          "护士执业资格考试",
           "NCLEX for Chinese nurses",
           "nurse working abroad from China",
+          "China nurse Canada pathway",
+          "China nurse Australia AHPRA",
         ],
         openGraph: {
           title,

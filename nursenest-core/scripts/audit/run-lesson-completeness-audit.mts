@@ -8,17 +8,14 @@ import { mkdirSync, writeFileSync, readdirSync, readFileSync, existsSync } from 
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { ExamFamily } from "@prisma/client";
-import { TierCode } from "@prisma/client";
-import { buildExamPathwayPath, getExamPathwayById, listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
-import { stripToPlainText } from "@/lib/content-quality/plain-text";
+import { ExamFamily, TierCode } from "@prisma/client";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import {
   getCatalogPathwayLessonsSync,
   listCatalogPathwayIdsWithLessonsSync,
   sortAndFilterLessonsForPathwayContext,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { lessonCorpusForLinkCount } from "@/lib/lessons/pathway-lesson-premium";
-import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import {
   buildRecommendedActions,
   deriveStatus,
@@ -32,7 +29,7 @@ import {
   scoreStructuralFromGate,
   SCORE_WEIGHTS,
   weightedOverall,
-} from "@/scripts/audit/lib/lesson-completeness-scoring";
+} from "@/lib/audit/lesson-completeness-scoring";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "../../..");
@@ -69,6 +66,22 @@ function isAlliedPathway(p: { stripeTier?: TierCode; examFamily?: ExamFamily }):
 
 function isRoutablePathway(p: { status?: string } | undefined): boolean {
   return p?.status === "active";
+}
+
+/** US/Canada parallel hubs often share the same lesson slugs intentionally — not “duplicate source”. */
+const PARALLEL_PATHWAY_GROUPS: ReadonlyArray<ReadonlySet<string>> = [
+  new Set(["us-rn-nclex-rn", "ca-rn-nclex-rn", "us-rn-new-grad-transition"]),
+  new Set(["us-lpn-nclex-pn", "ca-rpn-rex-pn"]),
+  new Set(["us-allied-core", "ca-allied-core"]),
+];
+
+function isAmbiguousCrossPathwaySlug(slug: string, slugToPathways: Map<string, Set<string>>): boolean {
+  const pathways = [...(slugToPathways.get(slug) ?? [])];
+  if (pathways.length <= 1) return false;
+  for (const group of PARALLEL_PATHWAY_GROUPS) {
+    if (pathways.every((p) => group.has(p))) return false;
+  }
+  return true;
 }
 
 type LessonRow = {
@@ -240,7 +253,14 @@ async function main() {
   const catalogIds = listCatalogPathwayIdsWithLessonsSync();
   const sortedPathwayIds = sortPathwayIds(catalogIds);
 
-  const slugOccurrences = new Map<string, string[]>();
+  const slugToPathways = new Map<string, Set<string>>();
+  for (const pathwayId of sortedPathwayIds) {
+    for (const lesson of getCatalogPathwayLessonsSync(pathwayId)) {
+      if (!slugToPathways.has(lesson.slug)) slugToPathways.set(lesson.slug, new Set());
+      slugToPathways.get(lesson.slug)!.add(pathwayId);
+    }
+  }
+
   const rows: LessonRow[] = [];
 
   for (const pathwayId of sortedPathwayIds) {
@@ -253,19 +273,11 @@ async function main() {
     const exam = pathway?.examCode ?? "unknown";
     const country = pathway?.countrySlug ?? "unknown";
 
-    for (const lesson of lessons) {
-      const key = lesson.slug;
-      const arr = slugOccurrences.get(key) ?? [];
-      arr.push(pathwayId);
-      slugOccurrences.set(key, arr);
-    }
-
     const batchSize = 80;
     for (let i = 0; i < lessons.length; i += batchSize) {
       const chunk = lessons.slice(i, i + batchSize);
       for (const lesson of chunk) {
-        const dupList = slugOccurrences.get(lesson.slug) ?? [];
-        const duplicateCandidate = dupList.length > 1;
+        const duplicateCandidate = isAmbiguousCrossPathwaySlug(lesson.slug, slugToPathways);
         const row = processLesson(
           lesson,
           pathwayId,
@@ -302,20 +314,21 @@ async function main() {
   }
 
   const pathwayRollups: PathwayRollup[] = [];
-  const reasonHistogram = new Map<string, number>();
+  const globalReasonHistogram = new Map<string, number>();
 
   for (const [pid, list] of byPathway) {
     const p = getExamPathwayById(pid);
     const nursingPriority = p ? !isAlliedPathway(p) : true;
     const scores = list.map((x) => x.overallScore);
     const avg = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
+    const localHist = new Map<string, number>();
     for (const lesson of list) {
-      for (const reason of lesson.reasons.slice(0, 6)) {
-        reasonHistogram.set(reason, (reasonHistogram.get(reason) ?? 0) + 1);
+      for (const reason of lesson.reasons.slice(0, 8)) {
+        localHist.set(reason, (localHist.get(reason) ?? 0) + 1);
+        globalReasonHistogram.set(reason, (globalReasonHistogram.get(reason) ?? 0) + 1);
       }
     }
-    const topReasons = [...reasonHistogram.entries()]
-      .filter(([k]) => list.some((l) => l.reasons.includes(k)))
+    const topReasons = [...localHist.entries()]
       .map(([reason, count]) => ({ reason, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 8);
@@ -344,7 +357,7 @@ async function main() {
     return b.totalLessons - a.totalLessons;
   });
 
-  const globalTopReasons = [...reasonHistogram.entries()]
+  const globalTopReasons = [...globalReasonHistogram.entries()]
     .sort((a, b) => b[1] - a[1])
     .slice(0, 25)
     .map(([reason, count]) => ({ reason, count }));
@@ -384,8 +397,25 @@ async function main() {
       recommendedActions: r.recommendedActions,
     }));
 
+  const batchFixHints: string[] = [];
+  for (const pr of pathwayRollups) {
+    const missCore = pr.topReasons.find((r) => r.reason.includes("core_concept_depth"));
+    if (missCore && missCore.count >= Math.ceil(pr.totalLessons * 0.45)) {
+      batchFixHints.push(
+        `${pr.pathwayId}: ≥45% of lessons missing core_concept_depth bucket — likely systematic spine depth gap.`,
+      );
+    }
+    const noOverlay = pr.topReasons.find((r) => r.reason.includes("no_educational_overlay"));
+    if (noOverlay && noOverlay.count >= Math.ceil(pr.totalLessons * 0.4) && pr.nursingPriority) {
+      batchFixHints.push(
+        `${pr.pathwayId}: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only.`,
+      );
+    }
+  }
+
   const summaryJson = {
     generatedAt,
+    batchFixHints,
     methodology: {
       dataSource: "Bundled pathway catalog (catalog.json + allied-bundled + new-grad + scoped-gold merge via getCatalogPathwayLessonsSync). Does not enumerate Prisma-only lessons.",
       scoringWeights: SCORE_WEIGHTS,
@@ -431,13 +461,7 @@ async function main() {
     JSON.stringify({ generatedAt, pathways: pathwayRollups }, null, 2),
   );
 
-  const md = buildMarkdownSummary({
-    generatedAt,
-    rows,
-    summaryJson,
-    pathwayRollups,
-    priorityQueue,
-  });
+  const md = buildMarkdownSummary(generatedAt, rows, summaryJson, pathwayRollups);
   writeFileSync(join(OUT_DIR, "lesson-completeness-summary.md"), md);
 
   console.log(`Wrote ${rows.length} lesson rows under ${OUT_DIR}`);
@@ -446,20 +470,20 @@ async function main() {
   );
 }
 
-function buildMarkdownSummary(args: {
-  generatedAt: string;
-  rows: LessonRow[];
-  summaryJson: Record<string, unknown>;
-  pathwayRollups: PathwayRollup[];
-  priorityQueue: ReturnType<typeof main> extends Promise<void> ? never : unknown;
-}): string {
-  const nursingRollups = args.pathwayRollups.filter((p) => p.nursingPriority).slice(0, 12);
-  const topSystemic = (args.summaryJson.globalTopFailureReasons as { reason: string; count: number }[])?.slice(0, 15) ?? [];
+function buildMarkdownSummary(
+  generatedAt: string,
+  rows: LessonRow[],
+  summaryJson: Record<string, unknown>,
+  pathwayRollups: PathwayRollup[],
+): string {
+  const nursingRollups = pathwayRollups.filter((p) => p.nursingPriority).slice(0, 12);
+  const topSystemic =
+    (summaryJson.globalTopFailureReasons as { reason: string; count: number }[] | undefined)?.slice(0, 15) ?? [];
 
   const lines: string[] = [];
   lines.push(`# Lesson completeness audit`);
   lines.push(``);
-  lines.push(`Generated: ${args.generatedAt}`);
+  lines.push(`Generated: ${generatedAt}`);
   lines.push(``);
   lines.push(`## What was scanned`);
   lines.push(
@@ -479,8 +503,8 @@ function buildMarkdownSummary(args: {
   lines.push(`- **Nursing-first reporting**: Pathways sorted with nursing tiers before allied in rollups and priority queue.`);
   lines.push(``);
   lines.push(`## Totals (from lesson-completeness-summary.json)`);
-  lines.push(`- Lessons scanned: **${args.rows.length}**`);
-  const t = args.summaryJson.totals as Record<string, unknown> | undefined;
+  lines.push(`- Lessons scanned: **${rows.length}**`);
+  const t = summaryJson.totals as Record<string, unknown> | undefined;
   if (t && typeof t === "object") {
     lines.push(`- production_ready: **${String(t.production_ready)}**`);
     lines.push(`- usable_but_thin: **${String(t.usable_but_thin)}**`);
@@ -503,6 +527,14 @@ function buildMarkdownSummary(args: {
     lines.push(`- ${x.reason}: **${x.count}**`);
   }
   lines.push(``);
+  const hints = summaryJson.batchFixHints as string[] | undefined;
+  if (hints?.length) {
+    lines.push(`## Batch-fix patterns (systemic)`);
+    for (const h of hints.slice(0, 12)) {
+      lines.push(`- ${h}`);
+    }
+    lines.push(``);
+  }
   lines.push(`## Suggested remediation order`);
   lines.push(`1. Fix structural gate failures on high-volume nursing pathways (NCLEX-RN, NCLEX-PN, etc.).`);
   lines.push(`2. Add internal study links (3–8) and relatedLessonRefs where missing.`);

@@ -62,6 +62,20 @@ export function ExamsKoreaHub() {
           <RichBody text={t("exams.korea.sections.overview.body")} />
         </section>
 
+        <section className="mt-12" aria-labelledby="kr-nursenest">
+          <h2 id="kr-nursenest" className="nn-marketing-h2">
+            {t("exams.korea.sections.nurseNestCovers.title")}
+          </h2>
+          <RichBody text={t("exams.korea.sections.nurseNestCovers.body")} />
+        </section>
+
+        <section className="mt-12" aria-labelledby="kr-languages">
+          <h2 id="kr-languages" className="nn-marketing-h2">
+            {t("exams.korea.sections.languageHonesty.title")}
+          </h2>
+          <RichBody text={t("exams.korea.sections.languageHonesty.body")} />
+        </section>
+
         <section className="mt-12" aria-labelledby="kr-khplei">
           <h2 id="kr-khplei" className="nn-marketing-h2">
             {t("exams.korea.sections.khplei.title")}
@@ -187,6 +201,8 @@ export function ExamsKoreaHub() {
             </li>
             <li>
               <ProseLink href={HUB.tools}>{formatTitleCase(t("exams.korea.links.tools"), locale)}</ProseLink>
+              {" · "}
+              <ProseLink href={HUB.pricing}>{formatTitleCase(t("exams.korea.links.pricing"), locale)}</ProseLink>
             </li>
           </ul>
           <p className="mt-6 text-sm text-[var(--semantic-text-muted)]">{t("exams.korea.paginationNote")}</p>

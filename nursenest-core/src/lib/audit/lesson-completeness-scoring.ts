@@ -3,11 +3,7 @@
  * Weights and thresholds align with pathway-lesson-premium structural gates.
  */
 import { stripToPlainText, countWords } from "@/lib/content-quality/plain-text";
-import {
-  countInternalStudyLinks,
-  lessonCorpusForLinkCount,
-  lessonUsesPremiumStructure,
-} from "@/lib/lessons/pathway-lesson-premium";
+import { lessonCorpusForLinkCount, lessonUsesPremiumStructure } from "@/lib/lessons/pathway-lesson-premium";
 import type { PathwayLessonRecord, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
 
 export type LessonCompletenessStatus =

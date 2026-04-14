@@ -42,6 +42,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           "NCLEX for Korean nurses",
           "KHPLEI",
           "Korea Health Personnel Licensing Examination Institute",
+          "South Korea nurse exam",
+          "Korean nurse UK NMC",
+          "Korean nurse Australia",
         ],
         openGraph: {
           title,

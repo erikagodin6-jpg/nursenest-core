@@ -1,6 +1,20 @@
 import type { CountryRouteEntry, PilotCountrySlug } from "./country-localization-types";
 
-export const PILOT_COUNTRY_SLUGS: readonly PilotCountrySlug[] = ["india", "middle-east", "australia"];
+export const PILOT_COUNTRY_SLUGS: readonly PilotCountrySlug[] = [
+  "india",
+  "middle-east",
+  "australia",
+  "china",
+  "korea",
+  "japan",
+  "germany",
+  "france",
+  "italy",
+  "hungary",
+  "portugal",
+  "mexico",
+  "philippines",
+];
 
 export const COUNTRY_ROUTE_MAP: Record<PilotCountrySlug, CountryRouteEntry> = {
   india: {

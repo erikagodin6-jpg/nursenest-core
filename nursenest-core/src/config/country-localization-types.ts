@@ -1,13 +1,27 @@
 /**
  * Shared types for country + language aware marketing content (incremental rollout).
- * Pilot countries: India, Middle East (Gulf), Australia.
+ * Reference hubs: India, Middle East (Gulf), Australia — extended to all regional nursing verticals
+ * using the same resolver, sample batches, and server-only manifest summaries.
  */
 
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import type { RegionalMarketingStrip } from "@/lib/marketing/regional-marketing-nav-priority";
 
-/** URL / i18n segment for pilot hubs (matches `/exams/{slug}` when applicable). */
-export type PilotCountrySlug = "india" | "middle-east" | "australia";
+/** URL / i18n segment for regional exam hubs (`/exams/{slug}` and related marketing routes). */
+export type PilotCountrySlug =
+  | "india"
+  | "middle-east"
+  | "australia"
+  | "china"
+  | "korea"
+  | "japan"
+  | "germany"
+  | "france"
+  | "italy"
+  | "hungary"
+  | "portugal"
+  | "mexico"
+  | "philippines";
 
 export type NursingScopeTier = "EN" | "RN" | "NP" | "PN" | "ALLIED";
 
@@ -108,7 +122,7 @@ export type LocalizationTier = 1 | 2 | 3 | 4 | 5 | 6;
 
 export type Ranked<T> = { item: T; tier: LocalizationTier; score: number };
 
-/** Maps marketing strip + cookie to pilot slug (null = not a pilot hub context). */
+/** Maps marketing strip + cookie to regional hub slug (null = not a regional exam hub context). */
 export function regionalStripToPilotCountry(
   strip: RegionalMarketingStrip | null,
   globalRegion: GlobalRegionSlug | null | undefined,
@@ -116,8 +130,29 @@ export function regionalStripToPilotCountry(
   if (strip === "india") return "india";
   if (strip === "middle_east") return "middle-east";
   if (strip === "australia") return "australia";
+  if (strip === "china") return "china";
+  if (strip === "korea") return "korea";
+  if (strip === "japan") return "japan";
+  if (strip === "germany") return "germany";
+  if (strip === "france") return "france";
+  if (strip === "italy") return "italy";
+  if (strip === "hungary") return "hungary";
+  if (strip === "portugal") return "portugal";
+  if (strip === "mexico") return "mexico";
+  if (strip === "philippines") return "philippines";
+
   if (!strip && globalRegion === "india") return "india";
   if (!strip && (globalRegion === "uae" || globalRegion === "saudi-arabia")) return "middle-east";
   if (!strip && globalRegion === "aus") return "australia";
+  if (!strip && globalRegion === "china") return "china";
+  if (!strip && globalRegion === "south-korea") return "korea";
+  if (!strip && globalRegion === "japan") return "japan";
+  if (!strip && globalRegion === "germany") return "germany";
+  if (!strip && globalRegion === "france") return "france";
+  if (!strip && globalRegion === "italy") return "italy";
+  if (!strip && globalRegion === "hungary") return "hungary";
+  if (!strip && globalRegion === "portugal") return "portugal";
+  if (!strip && globalRegion === "mexico") return "mexico";
+  if (!strip && globalRegion === "philippines") return "philippines";
   return null;
 }

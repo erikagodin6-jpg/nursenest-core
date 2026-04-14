@@ -7,6 +7,9 @@
  *   npx tsx scripts/blog/materialize-regional-blog-batches.mts --region india --dry-run
  *   npx tsx scripts/blog/materialize-regional-blog-batches.mts --region middle-east --from 0 --limit 50
  *   npx tsx scripts/blog/materialize-regional-blog-batches.mts --region australia --batch-size 25
+ *
+ * Validate manifests (all regional *-nursing-200 manifests):
+ *   npx tsx scripts/blog/validate-regional-blog-manifests.mts
  */
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
