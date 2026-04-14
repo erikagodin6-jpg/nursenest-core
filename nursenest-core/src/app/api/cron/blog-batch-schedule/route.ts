@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
-import { processDueBlogBatchScheduleItems } from "@/lib/blog/blog-batch-schedule";
+import { ensureDailyBlogQueue, processDueBlogBatchScheduleItems } from "@/lib/blog/blog-batch-schedule";
 import { promoteScheduledBlogPosts } from "@/lib/blog/blog-publish-scheduler";
 
 /**
@@ -21,7 +21,8 @@ export async function POST(req: Request) {
     }
   }
 
-  const [result, promoted] = await Promise.all([
+  const [queue, result, promoted] = await Promise.all([
+    ensureDailyBlogQueue(),
     processDueBlogBatchScheduleItems(),
     promoteScheduledBlogPosts(),
   ]);
@@ -32,6 +33,17 @@ export async function POST(req: Request) {
   revalidatePath("/sitemaps/localized-blog.xml");
   return NextResponse.json({
     ok: true,
+    dailyPublishingConfirmed: queue.dailyCadence >= 1 && queue.dailyCadence <= 3,
+    dailyCadence: queue.dailyCadence,
+    queueSize: queue.queueSize,
+    queueTargetMin: queue.queueTargetMin,
+    queueTargetMax: queue.queueTargetMax,
+    generationTriggered: queue.generationTriggered,
+    generatedTopicsAdded: queue.generatedTopicsAdded,
+    queueNotes: queue.notes,
+    queueContentTypes: queue.contentTypes,
+    queueScheduleId: queue.activeScheduleId,
+    queueNextPublishAt: queue.nextPublishAt,
     ...result,
     promotedScheduled: promoted.count,
     publishFailedCount: promoted.failures.length,

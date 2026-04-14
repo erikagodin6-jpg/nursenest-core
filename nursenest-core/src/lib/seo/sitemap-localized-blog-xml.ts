@@ -19,11 +19,17 @@ import {
   minimalUrlsetSingleHome,
   normalizeOrigin,
   resolveSitemapOrigin,
+  type SitemapUrlEntry,
 } from "@/lib/seo/sitemap-static-xml";
 
 export async function listLocalizedBlogSitemapUrlsSafe(): Promise<string[]> {
+  const entries = await listLocalizedBlogSitemapEntriesSafe();
+  return entries.map((entry) => entry.loc);
+}
+
+export async function listLocalizedBlogSitemapEntriesSafe(): Promise<SitemapUrlEntry[]> {
   const origin = normalizeOrigin(resolveSitemapOrigin());
-  const urls: string[] = [];
+  const entries: SitemapUrlEntry[] = [];
 
   try {
     const rows = await getSitemapLocalizedBlogRows();
@@ -42,7 +48,10 @@ export async function listLocalizedBlogSitemapUrlsSafe(): Promise<string[]> {
       parts.push("blog", r.localizedSlug);
 
       const path = parts.map(encodeURIComponent).join("/");
-      urls.push(`${origin}/${path}`);
+      entries.push({
+        loc: `${origin}/${path}`,
+        lastmod: r.updatedAt.toISOString(),
+      });
     }
 
     if (excluded > 0) {
@@ -58,14 +67,14 @@ export async function listLocalizedBlogSitemapUrlsSafe(): Promise<string[]> {
     });
   }
 
-  return urls;
+  return entries;
 }
 
 export async function buildLocalizedBlogSitemapXmlSafe(): Promise<string> {
   try {
-    const urls = await listLocalizedBlogSitemapUrlsSafe();
-    if (urls.length === 0) return minimalUrlsetSingleHome();
-    return buildSitemapUrlsetFromAbsoluteUrls(urls);
+    const entries = await listLocalizedBlogSitemapEntriesSafe();
+    if (entries.length === 0) return minimalUrlsetSingleHome();
+    return buildSitemapUrlsetFromAbsoluteUrls(entries);
   } catch {
     return minimalUrlsetSingleHome();
   }

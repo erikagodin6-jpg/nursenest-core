@@ -208,13 +208,21 @@ function escapeXml(s: string): string {
     .replace(/'/g, "&apos;");
 }
 
+export type SitemapUrlEntry = {
+  loc: string;
+  lastmod?: string;
+};
+
 /** Public: reusable urlset builder from absolute URLs (used by blog sitemap). */
-export function buildSitemapUrlsetFromAbsoluteUrls(urls: string[]): string {
+export function buildSitemapUrlsetFromAbsoluteUrls(urls: string[] | SitemapUrlEntry[]): string {
   if (urls.length === 0) return minimalUrlsetSingleHome();
-  const lastmod = safeLastmodDate();
+  const defaultLastmod = safeLastmodDate();
   const body = urls
     .map((u) => {
-      const loc = escapeXml(u);
+      const locValue = typeof u === "string" ? u : u.loc;
+      const entryLastmod = typeof u === "string" ? defaultLastmod : (u.lastmod?.slice(0, 25) || defaultLastmod);
+      const loc = escapeXml(locValue);
+      const lastmod = escapeXml(entryLastmod);
       return `  <url>
     <loc>${loc}</loc>
     <lastmod>${lastmod}</lastmod>

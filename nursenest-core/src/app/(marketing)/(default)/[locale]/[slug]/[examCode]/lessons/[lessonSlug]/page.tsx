@@ -196,6 +196,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const lessonMeasurementSystem = getMeasurementSystemForCountry(pathway.countryCode);
 
   const base = marketingPathwayLessonsIndexPath(pathway);
+  const blogHubPath = buildExamPathwayPath(pathway, "blog");
 
   const lessonProgress =
     userId && fullAccess
@@ -461,8 +462,12 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         ) : null}
 
         <p className="mt-10 text-center text-xs text-[var(--theme-muted-text)]">
-          <Link href="/blog" className="font-medium text-primary hover:underline">
-            Clinical blog
+          <Link href={blogHubPath} className="font-medium text-primary hover:underline">
+            {examName} blog posts
+          </Link>
+          {" · "}
+          <Link href={`/blog/tag/${encodeURIComponent(lesson.topicSlug)}`} className="font-medium text-primary hover:underline">
+            {lesson.topic} articles
           </Link>
           {" · "}
           <Link href="/tools" className="font-medium text-primary hover:underline">

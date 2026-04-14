@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { NursingTierHubPage } from "@/components/marketing/nursing-tier-hub-page";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
@@ -64,6 +65,22 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
         heroTitle={npPracticeSeo?.heroTitle}
         npSeoAliasSegment={npPracticeSeo ? examCode : undefined}
       />
+      <section className="mt-6">
+        <div className="nn-card border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-4 sm:p-5">
+          <h2 className="nn-marketing-h4">Recommended blog reading</h2>
+          <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">
+            Explore exam-focused blog posts to reinforce lessons and question practice.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-3 text-sm">
+            <Link href={buildExamPathwayPath(pathway, "blog")} className="font-semibold text-primary hover:underline">
+              Open {pathway.shortName} blog hub
+            </Link>
+            <Link href="/blog" className="font-medium text-primary hover:underline">
+              All blog posts
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

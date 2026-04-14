@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
@@ -77,6 +78,25 @@ export default async function HomePage() {
         </div>
       ) : null}
       <HomeRestoredClient />
+      <section className="mx-auto mt-6 w-full max-w-7xl px-4 pb-2 sm:px-6 lg:px-8">
+        <div className="nn-card border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-5">
+          <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">From the NurseNest blog</h2>
+          <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
+            Fresh NCLEX guides, symptom explainers, and clinical breakdowns are published daily.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-3 text-sm">
+            <Link href="/blog" className="font-semibold text-primary hover:underline">
+              View all blog posts
+            </Link>
+            <Link href="/blog/tag/nclex" className="font-medium text-primary hover:underline">
+              NCLEX guides
+            </Link>
+            <Link href="/blog/tag/clinical-reasoning" className="font-medium text-primary hover:underline">
+              Clinical reasoning
+            </Link>
+          </div>
+        </div>
+      </section>
       <ExamSelectorGate />
     </>
   );

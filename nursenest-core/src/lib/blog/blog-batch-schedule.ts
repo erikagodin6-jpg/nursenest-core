@@ -175,6 +175,267 @@ export type ProcessBatchSchedulesResult = {
 };
 
 const MAX_ITEMS_PER_INVOCATION = 12;
+const AUTOPILOT_QUEUE_TARGET_MIN = 20;
+const AUTOPILOT_QUEUE_TARGET_MAX = 50;
+const AUTOPILOT_REFILL_TRIGGER = 5;
+
+const AUTOPILOT_SYMPTOM_TOPICS = [
+  "chest pain triage priorities",
+  "shortness of breath initial nursing actions",
+  "sudden confusion and delirium workup cues",
+  "new onset edema assessment priorities",
+  "fever source tracing in inpatient units",
+  "acute abdominal pain red flags",
+  "post-op hypotension bedside response",
+  "headache danger signs and escalation",
+];
+
+const AUTOPILOT_CLINICAL_TOPICS = [
+  "sepsis bundle nursing breakdown",
+  "DKA nursing management flow",
+  "heart failure exacerbation bedside algorithm",
+  "stroke code nursing timeline",
+  "postpartum hemorrhage first-hour actions",
+  "acute kidney injury monitoring plan",
+  "GI bleed stabilization checklist",
+  "respiratory failure escalation ladder",
+];
+
+const AUTOPILOT_COMPARISON_TOPICS = [
+  "hypovolemia vs sepsis in early presentation",
+  "stable angina vs myocardial infarction priorities",
+  "COPD exacerbation vs asthma exacerbation response",
+  "DKA vs HHS bedside nursing differences",
+  "SIADH vs diabetes insipidus exam traps",
+  "ischemic stroke vs hemorrhagic stroke first actions",
+];
+
+type DailyBlogAutopilotResult = {
+  dailyCadence: number;
+  queueSize: number;
+  queueTargetMin: number;
+  queueTargetMax: number;
+  generationTriggered: boolean;
+  generatedTopicsAdded: number;
+  activeScheduleId: string | null;
+  nextPublishAt: string | null;
+  contentTypes: string[];
+  notes: string[];
+};
+
+function configuredDailyCadence(): number {
+  const raw = Number(process.env.BLOG_AUTOPILOT_DAILY_POSTS ?? "2");
+  if (!Number.isFinite(raw)) return 2;
+  return Math.max(1, Math.min(3, Math.round(raw)));
+}
+
+function buildAutopilotTopic(index: number, exam: string): string {
+  const type = index % 4;
+  const symptom = AUTOPILOT_SYMPTOM_TOPICS[index % AUTOPILOT_SYMPTOM_TOPICS.length];
+  const clinical = AUTOPILOT_CLINICAL_TOPICS[index % AUTOPILOT_CLINICAL_TOPICS.length];
+  const comparison = AUTOPILOT_COMPARISON_TOPICS[index % AUTOPILOT_COMPARISON_TOPICS.length];
+  if (type === 0) return `${exam} guide: ${clinical}`;
+  if (type === 1) return `${exam} comparison: ${comparison}`;
+  if (type === 2) return `Symptom explanation for nursing exams: ${symptom}`;
+  return `Clinical breakdown for nursing exam prep: ${clinical}`;
+}
+
+export async function ensureDailyBlogQueue(now: Date = new Date()): Promise<DailyBlogAutopilotResult> {
+  const cadence = configuredDailyCadence();
+  const notes: string[] = [];
+  const contentTypes = ["NCLEX guides", "X vs Y comparisons", "symptom explanations", "clinical breakdowns"];
+
+  const [queueSize, existingActiveSchedule] = await Promise.all([
+    prisma.blogBatchScheduleItem.count({
+      where: {
+        status: BlogBatchScheduleItemStatus.PENDING,
+        schedule: { status: BlogBatchScheduleStatus.ACTIVE },
+      },
+    }),
+    prisma.blogBatchSchedule.findFirst({
+      where: { status: BlogBatchScheduleStatus.ACTIVE, publishMode: BlogBatchPublishMode.STAGGERED_PUBLISH },
+      orderBy: { createdAt: "desc" },
+      select: { id: true, cadencePerDay: true, exam: true, country: true },
+    }),
+  ]);
+
+  let activeScheduleId = existingActiveSchedule?.id ?? null;
+  if (queueSize >= AUTOPILOT_QUEUE_TARGET_MIN) {
+    return {
+      dailyCadence: cadence,
+      queueSize,
+      queueTargetMin: AUTOPILOT_QUEUE_TARGET_MIN,
+      queueTargetMax: AUTOPILOT_QUEUE_TARGET_MAX,
+      generationTriggered: false,
+      generatedTopicsAdded: 0,
+      activeScheduleId,
+      nextPublishAt: null,
+      contentTypes,
+      notes,
+    };
+  }
+
+  const needsGeneration = queueSize < AUTOPILOT_REFILL_TRIGGER;
+  if (needsGeneration) {
+    notes.push(`Queue below ${AUTOPILOT_REFILL_TRIGGER}; triggering queue generation.`);
+  } else {
+    notes.push(`Queue below target ${AUTOPILOT_QUEUE_TARGET_MIN}; topping up.`);
+  }
+
+  const targetQueueSize = AUTOPILOT_QUEUE_TARGET_MIN;
+  const desiredAdds = Math.max(0, Math.min(AUTOPILOT_QUEUE_TARGET_MAX - queueSize, targetQueueSize - queueSize));
+  if (desiredAdds === 0) {
+    return {
+      dailyCadence: cadence,
+      queueSize,
+      queueTargetMin: AUTOPILOT_QUEUE_TARGET_MIN,
+      queueTargetMax: AUTOPILOT_QUEUE_TARGET_MAX,
+      generationTriggered: needsGeneration,
+      generatedTopicsAdded: 0,
+      activeScheduleId,
+      nextPublishAt: null,
+      contentTypes,
+      notes,
+    };
+  }
+
+  const intervalMs = slotIntervalMs(cadence);
+  const [lastPending, existingKeysFromQueue, existingKeysFromPosts] = await Promise.all([
+    prisma.blogBatchScheduleItem.findFirst({
+      where: {
+        status: BlogBatchScheduleItemStatus.PENDING,
+        schedule: { status: BlogBatchScheduleStatus.ACTIVE },
+      },
+      orderBy: { plannedPublishAt: "desc" },
+      select: { plannedPublishAt: true },
+    }),
+    prisma.blogBatchScheduleItem.findMany({
+      where: {
+        status: { in: [BlogBatchScheduleItemStatus.PENDING, BlogBatchScheduleItemStatus.GENERATING] },
+        canonicalTopicKey: { not: null },
+        schedule: { status: BlogBatchScheduleStatus.ACTIVE },
+      },
+      select: { canonicalTopicKey: true },
+      take: 1000,
+    }),
+    prisma.blogPost.findMany({
+      where: {
+        OR: [{ targetKeyword: { not: null } }, { keywordCluster: { not: null } }],
+      },
+      select: { targetKeyword: true, keywordCluster: true },
+      take: 3000,
+      orderBy: { updatedAt: "desc" },
+    }),
+  ]);
+
+  const knownKeys = new Set<string>();
+  for (const row of existingKeysFromQueue) {
+    if (row.canonicalTopicKey) knownKeys.add(row.canonicalTopicKey);
+  }
+  for (const row of existingKeysFromPosts) {
+    if (row.targetKeyword) knownKeys.add(normalizeBlogTopicKey(row.targetKeyword));
+    if (row.keywordCluster) knownKeys.add(normalizeBlogTopicKey(row.keywordCluster));
+  }
+
+  const exam = existingActiveSchedule?.exam ?? "NCLEX-RN";
+  const country = existingActiveSchedule?.country ?? "US";
+  const baseAt = lastPending?.plannedPublishAt && lastPending.plannedPublishAt > now ? lastPending.plannedPublishAt : now;
+
+  const topics: Array<{ topic: string; key: string }> = [];
+  let cursor = queueSize;
+  while (topics.length < desiredAdds && cursor < queueSize + desiredAdds * 6) {
+    const candidate = buildAutopilotTopic(cursor, exam);
+    const key = normalizeBlogTopicKey(candidate);
+    cursor += 1;
+    if (!key || knownKeys.has(key)) continue;
+    knownKeys.add(key);
+    topics.push({ topic: candidate, key });
+  }
+
+  if (topics.length === 0) {
+    notes.push("No unique topics available for autopilot queue refill.");
+    return {
+      dailyCadence: cadence,
+      queueSize,
+      queueTargetMin: AUTOPILOT_QUEUE_TARGET_MIN,
+      queueTargetMax: AUTOPILOT_QUEUE_TARGET_MAX,
+      generationTriggered: needsGeneration,
+      generatedTopicsAdded: 0,
+      activeScheduleId,
+      nextPublishAt: null,
+      contentTypes,
+      notes,
+    };
+  }
+
+  if (!existingActiveSchedule) {
+    const created = await prisma.blogBatchSchedule.create({
+      data: {
+        status: BlogBatchScheduleStatus.ACTIVE,
+        publishMode: BlogBatchPublishMode.STAGGERED_PUBLISH,
+        cadencePerDay: cadence,
+        startAt: now,
+        totalItems: 0,
+        exam,
+        country,
+        defaultTemplate: BlogPostTemplate.TOPIC_EXPLAINED,
+        defaultIntent: BlogPostIntent.EXAM_PREP,
+        nextRunAt: now,
+      },
+      select: { id: true },
+    });
+    activeScheduleId = created.id;
+    notes.push("Created an autopilot batch schedule.");
+  }
+
+  if (!activeScheduleId) {
+    return {
+      dailyCadence: cadence,
+      queueSize,
+      queueTargetMin: AUTOPILOT_QUEUE_TARGET_MIN,
+      queueTargetMax: AUTOPILOT_QUEUE_TARGET_MAX,
+      generationTriggered: needsGeneration,
+      generatedTopicsAdded: 0,
+      activeScheduleId: null,
+      nextPublishAt: null,
+      contentTypes,
+      notes: [...notes, "No active schedule available for queue refill."],
+    };
+  }
+
+  const currentTotal = await prisma.blogBatchScheduleItem.count({ where: { scheduleId: activeScheduleId } });
+  const rows = topics.map((topic, index) => ({
+    scheduleId: activeScheduleId,
+    ordinal: currentTotal + index + 1,
+    topicRaw: topic.topic,
+    canonicalTopicKey: topic.key,
+    plannedPublishAt: new Date(baseAt.getTime() + (index + 1) * intervalMs),
+  }));
+  await prisma.blogBatchScheduleItem.createMany({ data: rows });
+  await prisma.blogBatchSchedule.update({
+    where: { id: activeScheduleId },
+    data: {
+      cadencePerDay: cadence,
+      totalItems: { increment: rows.length },
+      nextRunAt: rows[0]?.plannedPublishAt ?? now,
+    },
+  });
+  await refreshBlogBatchScheduleStats(activeScheduleId);
+
+  const nextPublishAt = rows[0]?.plannedPublishAt ?? null;
+  return {
+    dailyCadence: cadence,
+    queueSize: queueSize + rows.length,
+    queueTargetMin: AUTOPILOT_QUEUE_TARGET_MIN,
+    queueTargetMax: AUTOPILOT_QUEUE_TARGET_MAX,
+    generationTriggered: needsGeneration,
+    generatedTopicsAdded: rows.length,
+    activeScheduleId,
+    nextPublishAt: nextPublishAt ? nextPublishAt.toISOString() : null,
+    contentTypes,
+    notes,
+  };
+}
 
 /**
  * Picks due PENDING items (plannedPublishAt <= now), generates AI drafts, schedules publication.

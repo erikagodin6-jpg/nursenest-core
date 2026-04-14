@@ -1,7 +1,7 @@
 import "server-only";
 
-import { listBlogSitemapUrlsSafe } from "@/lib/seo/sitemap-blog-xml";
-import { listLocalizedBlogSitemapUrlsSafe } from "@/lib/seo/sitemap-localized-blog-xml";
+import { listBlogSitemapEntriesSafe } from "@/lib/seo/sitemap-blog-xml";
+import { listLocalizedBlogSitemapEntriesSafe } from "@/lib/seo/sitemap-localized-blog-xml";
 import {
   buildSitemapUrlsetFromAbsoluteUrls,
   collectCoreUrls,
@@ -10,6 +10,7 @@ import {
   collectToolsUrls,
   normalizeOrigin,
   resolveSitemapOrigin,
+  type SitemapUrlEntry,
 } from "@/lib/seo/sitemap-static-xml";
 import { getSitemapIncludedLocales } from "@/lib/i18n/language-readiness";
 
@@ -19,33 +20,43 @@ import { getSitemapIncludedLocales } from "@/lib/i18n/language-readiness";
  */
 export async function buildSingleSitemapXmlSafe(): Promise<string> {
   const origin = normalizeOrigin(resolveSitemapOrigin());
-  const all = new Set<string>();
+  const allStatic = new Set<string>();
+  const blogEntries = new Map<string, string | undefined>();
 
   for (const url of await collectCoreUrls(origin)) {
-    all.add(url);
+    allStatic.add(url);
   }
 
   for (const url of collectSeoPagesUrls(origin)) {
-    all.add(url);
+    allStatic.add(url);
   }
 
   for (const url of collectToolsUrls(origin)) {
-    all.add(url);
+    allStatic.add(url);
   }
 
   for (const locale of getSitemapIncludedLocales()) {
     for (const url of collectLocaleMarketingUrls(origin, locale)) {
-      all.add(url);
+      allStatic.add(url);
     }
   }
 
-  for (const url of await listBlogSitemapUrlsSafe()) {
-    all.add(url);
+  for (const entry of await listBlogSitemapEntriesSafe()) {
+    blogEntries.set(entry.loc, entry.lastmod);
   }
 
-  for (const url of await listLocalizedBlogSitemapUrlsSafe()) {
-    all.add(url);
+  for (const entry of await listLocalizedBlogSitemapEntriesSafe()) {
+    blogEntries.set(entry.loc, entry.lastmod);
   }
 
-  return buildSitemapUrlsetFromAbsoluteUrls(Array.from(all).sort());
+  const merged: SitemapUrlEntry[] = [];
+  for (const loc of Array.from(allStatic).sort()) {
+    const lastmod = blogEntries.get(loc);
+    merged.push(lastmod ? { loc, lastmod } : { loc });
+  }
+  for (const [loc, lastmod] of Array.from(blogEntries.entries()).sort((a, b) => a[0].localeCompare(b[0]))) {
+    if (allStatic.has(loc)) continue;
+    merged.push(lastmod ? { loc, lastmod } : { loc });
+  }
+  return buildSitemapUrlsetFromAbsoluteUrls(merged);
 }
