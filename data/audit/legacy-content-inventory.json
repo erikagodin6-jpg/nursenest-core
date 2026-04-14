@@ -1,0 +1,50 @@
+{
+  "generatedAt": "2026-04-14T17:36:13.521Z",
+  "dbConnected": false,
+  "legacySourcesScanned": [
+    "data/audit/legacy-lessons-inventory.json (summary)",
+    "data/audit/unimported-legacy-content.json",
+    "external/NurseNest (legacyRoot in inventories when present)"
+  ],
+  "currentSourcesScanned": [
+    "src/lib/exam-pathways/exam-product-registry.ts (EXAM_PATHWAYS)",
+    "src/lib/lessons/pathway-lesson-catalog-sync.ts (catalog + allied + new-grad + scoped gold)",
+    "prisma/schema.prisma (PathwayLesson, ExamQuestion, FlashcardDeck)",
+    "Prisma skipped (no DATABASE_URL or query failed)"
+  ],
+  "pointer": "data/audit/legacy-lessons-inventory.json (full file; large)",
+  "unimportedLegacySummary": {
+    "totalLegacyLessonRows": 4223,
+    "totalLegacyContentMapKeys": 4223,
+    "clientLessonTsFilesApprox": 450,
+    "lessonClassification": {
+      "A_alreadyImportedMaterialized": 29,
+      "B_partialMasterMapOnly": 107,
+      "B_partialMergeIntoExisting": 3,
+      "C_notOnCatalogOrMaster": 4084
+    },
+    "missingFromCurrentSnapshots": 4084,
+    "highQualityMissingLessonsApprox": 523,
+    "pathwayGuessOnMissing": {
+      "RN": 658,
+      "PN": 928,
+      "NP": 1190,
+      "Allied": 240,
+      "unknown": 1068
+    },
+    "careerQuestionJsonFiles": 165,
+    "careerQuestionItemsTotal": 22742,
+    "catalogNormalizedKeys": 87,
+    "masterMapNormalizedKeys": 216,
+    "masterNotInCatalogTopicsApprox": 209
+  },
+  "methodology": {
+    "importedSlugSources": [
+      "data/materialized/rn-pn-replit-batch-2026/catalog-lessons.json (normalized slug + topicSlug)",
+      "src/content/pathway-lessons/rn-nclex-master-map.json (normalized slug)"
+    ],
+    "dbQueried": false,
+    "note": "A = topic appears in materialized Replit catalog JSON. B = on RN master map and/or merge target only. C = no normalized match to either snapshot.",
+    "legacyMapSource": "data/audit/legacy-to-current-lesson-map.json"
+  }
+}

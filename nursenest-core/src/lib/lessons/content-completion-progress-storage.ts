@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { LessonCompletionBatchReport } from "@/lib/lessons/lesson-batch-completion";
+import type { LessonCompletionBatchReport } from "./lesson-batch-completion";
 
 export type ContentCompletionProgressRun = {
   at: string;

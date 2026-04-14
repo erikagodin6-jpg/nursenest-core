@@ -52,6 +52,7 @@
     "test:stripe-reconcile": "tsx --test src/lib/stripe/stripe-subscription-field-map.test.ts src/lib/stripe/stripe-reconcile-metadata.test.ts",
     "test:paywall-surface-policy": "tsx --test src/lib/security/paywall-surface-policy.test.ts src/lib/lessons/marketing-pathway-lesson-client-contract.test.ts",
     "test:lesson-high-yield": "tsx --test src/lib/lessons/lesson-high-yield-study-fields.test.ts",
+    "test:lesson-completion-incremental": "tsx --test src/lib/lessons/lesson-batch-completion.test.ts src/lib/lessons/content-completion-progress-storage.test.ts",
     "test:np-spine-alignment": "tsx --test src/lib/pathway-lessons/np-spine-db-alignment.test.ts",
     "test:structured-study-path": "tsx --test src/lib/learner/structured-study-path.test.ts",
     "validate:exam-guardrails": "node scripts/validate-exam-content-guardrails.mjs",

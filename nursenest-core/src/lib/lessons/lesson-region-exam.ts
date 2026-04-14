@@ -30,6 +30,7 @@ export function resolveLessonContextForPathway(pathway: Pick<ExamPathwayDefiniti
  */
 export function resolveLessonContextForPathwayId(pathwayId: string): LessonContext {
   const country: LessonCountryCode = pathwayId.startsWith("ca-") ? "CA" : pathwayId.startsWith("us-") ? "US" : "GLOBAL";
+  if (pathwayId.includes("new-grad-transition")) return { exam: "NCLEX_RN", country };
   if (pathwayId.includes("-rpn-rex-pn")) return { exam: "REX_PN", country };
   if (pathwayId.includes("-lpn-nclex-pn")) return { exam: "NCLEX_PN", country };
   if (pathwayId.includes("-rn-nclex-rn")) return { exam: "NCLEX_RN", country };

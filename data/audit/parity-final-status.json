@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-04-14T17:36:13.521Z",
+  "dbConnected": false,
+  "legacySourcesScanned": [
+    "data/audit/legacy-lessons-inventory.json (summary)",
+    "data/audit/unimported-legacy-content.json",
+    "external/NurseNest (legacyRoot in inventories when present)"
+  ],
+  "currentSourcesScanned": [
+    "src/lib/exam-pathways/exam-product-registry.ts (EXAM_PATHWAYS)",
+    "src/lib/lessons/pathway-lesson-catalog-sync.ts (catalog + allied + new-grad + scoped gold)",
+    "prisma/schema.prisma (PathwayLesson, ExamQuestion, FlashcardDeck)",
+    "Prisma skipped (no DATABASE_URL or query failed)"
+  ],
+  "countries": {
+    "US": 9,
+    "CA": 4
+  },
+  "routeOnlyPathways": [
+    "ca-np-cnple",
+    "us-np-agpcnp",
+    "us-np-pmhnp",
+    "us-np-whnp",
+    "us-np-pnp-pc"
+  ],
+  "structuralIncompleteLessonCount": 539,
+  "structuralIncompleteNonEmptyCount": 539,
+  "claims": {
+    "parityNotClaimedWithoutDb": true,
+    "note": "Re-run with DATABASE_URL for bank/deck/DB lesson counts."
+  }
+}

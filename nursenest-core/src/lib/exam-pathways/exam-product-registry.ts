@@ -105,6 +105,25 @@ export const EXAM_PATHWAYS: ExamPathwayDefinition[] = [
     status: "active",
     acquisitionMode: "subscribe",
   },
+  // —— US — New grad RN (transition-to-practice lessons; NEW_GRAD tier) ——
+  {
+    id: "us-rn-new-grad-transition",
+    countrySlug: "us",
+    countryCode: CountryCode.US,
+    roleTrack: "rn",
+    examCode: "new-grad-transition",
+    examFamily: ExamFamily.NCLEX_RN,
+    examKey: "NEW_GRAD_TRANSITION",
+    displayName: "New Grad RN: transition to practice",
+    shortName: "New Grad",
+    stripeTier: TierCode.NEW_GRAD,
+    contentExamKeys: ["NCLEX-RN", "NCLEX_RN"],
+    seoTitle: "New Grad RN Transition | First Year on the Floor | NurseNest",
+    seoDescription:
+      "Practical lessons for new graduate RNs: prioritization, delegation, communication, and time management for your first year of practice.",
+    status: "active",
+    acquisitionMode: "subscribe",
+  },
   // —— US — NP tracks (never collapse to one generic NP product) ——
   {
     id: "us-np-fnp",

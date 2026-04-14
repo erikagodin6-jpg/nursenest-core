@@ -4,6 +4,7 @@
  */
 import catalog from "@/content/pathway-lessons/catalog.json";
 import alliedBundledCatalog from "@/content/pathway-lessons/allied-bundled-catalog.json";
+import newGradTransitionCatalog from "@/content/pathway-lessons/new-grad-transition-catalog.json";
 import { inferExamAudienceFromPathwayId } from "@/lib/lessons/exam-complete-lesson-template";
 import { deriveLessonHighYieldStudyFields } from "@/lib/lessons/lesson-high-yield-study-fields";
 import { resolveLessonContextForPathwayId } from "@/lib/lessons/lesson-region-exam";
@@ -81,6 +82,15 @@ const alliedBundledPathways =
 
 function alliedBundledLessonsForPathway(pathwayId: string): LessonInput[] {
   const rows = alliedBundledPathways[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+const newGradTransitionPathways =
+  (newGradTransitionCatalog as { pathways?: Record<string, { lessons?: LessonInput[] }> }).pathways ?? {};
+
+function newGradTransitionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const bucket = newGradTransitionPathways[pathwayId];
+  const rows = bucket?.lessons;
   return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
 }
 
@@ -613,8 +623,14 @@ export function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
   const bucket = data.pathways[pathwayId];
   const fromJson = bucket?.lessons?.length ? bucket.lessons.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
   const allied = alliedBundledLessonsForPathway(pathwayId);
-  const seen = new Set(fromJson.map((l) => l.slug));
-  const merged = [...fromJson, ...allied.filter((l) => !seen.has(l.slug))];
+  const newGrad = newGradTransitionLessonsForPathway(pathwayId);
+  const seen = new Set<string>();
+  const merged: LessonInput[] = [];
+  for (const l of [...fromJson, ...allied, ...newGrad]) {
+    if (seen.has(l.slug)) continue;
+    seen.add(l.slug);
+    merged.push(l);
+  }
   return prependScopedGoldCatalogLessons(pathwayId, merged);
 }
 
@@ -623,7 +639,8 @@ export function getCatalogPathwayLessonsSync(pathwayId: string): PathwayLessonRe
 }
 
 /**
- * Audit / inventory tooling: bundled `catalog.json` + optional `allied-bundled-catalog.json` + scoped-gold,
+ * Audit / inventory tooling: bundled `catalog.json` + optional `allied-bundled-catalog.json` +
+ * `new-grad-transition-catalog.json` + scoped-gold,
  * normalized, then the same exam/country filter as catalog-backed hub paths. **Does not include Prisma-published
  * lessons.** DB-only pathways still list via `getPathwayLessonsPage` when published rows exist.
  */
@@ -638,7 +655,11 @@ export function pathwayHasBundledCatalogLessonsSync(pathwayId: string): boolean 
 
 /** Pathway ids that have at least one catalog (+ allied bundled slice + scoped-gold) lesson row. */
 export function listCatalogPathwayIdsWithLessonsSync(): string[] {
-  const ids = new Set<string>([...Object.keys(data.pathways ?? {}), ...Object.keys(alliedBundledPathways)]);
+  const ids = new Set<string>([
+    ...Object.keys(data.pathways ?? {}),
+    ...Object.keys(alliedBundledPathways),
+    ...Object.keys(newGradTransitionPathways),
+  ]);
   return [...ids].filter((id) => getCatalogPathwayLessonsSync(id).length > 0);
 }
 
