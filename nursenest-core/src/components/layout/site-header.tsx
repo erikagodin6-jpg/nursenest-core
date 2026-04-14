@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import { useTheme } from "next-themes";
@@ -371,7 +371,6 @@ function createMegaMenus(region: "US" | "CA"): MegaMenuConfig[] {
 export function SiteHeader() {
   const { t, locale } = useMarketingI18n();
   const pathname = usePathname() ?? "/";
-  const router = useRouter();
   const { theme } = useTheme();
   const navChromeStyle = getNavChromeStyle(theme);
   const navChromeVars = getNavChromeVars(theme);
@@ -410,19 +409,6 @@ export function SiteHeader() {
     if (mapped.startsWith("http://") || mapped.startsWith("https://")) return mapped;
     return withMarketingLocale(locale, mapped);
   };
-
-  const navigateToAdminDashboard = useCallback(
-    (source: "desktop_cta" | "mobile_drawer") => (event: MouseEvent<HTMLAnchorElement>) => {
-      event.preventDefault();
-      console.info("[admin_nav_debug] click", { source, href: ADMIN_DASHBOARD_ROUTE });
-      if (source === "mobile_drawer") {
-        setMobileOpen(false);
-      }
-      console.info("[admin_nav_debug] router.push", { source, to: ADMIN_DASHBOARD_ROUTE });
-      router.push(ADMIN_DASHBOARD_ROUTE);
-    },
-    [router],
-  );
 
   const clearMegaCloseTimer = () => {
     if (!closeMegaTimeoutRef.current) return;
@@ -712,6 +698,47 @@ export function SiteHeader() {
             </div>
           </div>
 
+          {/* Mobile/tablet: auth CTAs — the main header row below is `lg` only, so guests never saw Login/Sign up in the top bar */}
+          <div className="flex items-center justify-end gap-2 border-b border-[var(--header-border)] bg-[var(--nav-bg)] px-4 py-2.5 lg:hidden">
+            {!isAuthenticated ? (
+              <div className="flex w-full min-w-0 items-center justify-end gap-2">
+                <Link href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)} className={HEADER_SECONDARY_ACTION_CLASS}>
+                  {formatTitleCase("Login", locale)}
+                </Link>
+                <Link
+                  href={localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`)}
+                  className="nn-nav-cta inline-flex min-h-0 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold sm:flex-initial sm:px-4"
+                >
+                  {formatTitleCase(PRIMARY_CTA, locale)}
+                </Link>
+              </div>
+            ) : isLearnerAuthenticated ? (
+              <div className="flex w-full min-w-0 items-center justify-end gap-2">
+                <Link
+                  href={resumeStudyingCta?.href ?? "/app"}
+                  className="nn-nav-cta inline-flex min-h-0 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold sm:flex-initial sm:px-4"
+                >
+                  {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
+                </Link>
+                <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
+                  {formatTitleCase("Dashboard", locale)}
+                </Link>
+              </div>
+            ) : (
+              <div className="flex w-full min-w-0 items-center justify-end gap-2">
+                <Link
+                  href={ADMIN_DASHBOARD_ROUTE}
+                  className="nn-nav-cta inline-flex min-h-0 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold sm:flex-initial sm:px-4"
+                >
+                  {formatTitleCase(t("nav.admin"), locale)}
+                </Link>
+                <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
+                  {formatTitleCase("Dashboard", locale)}
+                </Link>
+              </div>
+            )}
+          </div>
+
           {/* ── Desktop main header row ── */}
           <div className="hidden min-h-[4.5rem] items-center gap-3 overflow-visible py-3 lg:flex">
             <Link
@@ -802,7 +829,6 @@ export function SiteHeader() {
                   <Link
                     href={ADMIN_DASHBOARD_ROUTE}
                     className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold"
-                    onClick={navigateToAdminDashboard("desktop_cta")}
                   >
                     {formatTitleCase(t("nav.admin"), locale)}
                   </Link>
@@ -1313,7 +1339,7 @@ export function SiteHeader() {
                     <Link
                       href={ADMIN_DASHBOARD_ROUTE}
                       className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold"
-                      onClick={navigateToAdminDashboard("mobile_drawer")}
+                      onClick={() => setMobileOpen(false)}
                     >
                       {formatTitleCase(t("nav.admin"), locale)}
                     </Link>

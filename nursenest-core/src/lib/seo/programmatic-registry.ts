@@ -63,7 +63,7 @@ export type SeoPageDefinition = {
    */
   linkPack?: "nclex-rn" | "nclex-pn" | "np" | "allied" | "general";
   /**
-   * Optional comparison table for “X vs Y” pages. Rendered after the first section
+   * Optional comparison table for “X vs Y” pages. Rendered after the first section body
    * (explanation first, then table, then remaining sections).
    */
   comparisonTable?: {
@@ -600,9 +600,9 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
   },
   {
     slug: "respiratory-nursing-practice-questions",
-    title: "Respiratory Nursing Practice Questions",
+    title: "Respiratory NCLEX Practice | COPD, Asthma & Oxygen First",
     description:
-      "Oxygen therapy, asthma and COPD exacerbations, pneumonia, and ventilation basics for nursing exams.",
+      "Respiratory nursing exam practice: oxygen delivery, asthma and COPD flares, pneumonia, and airway priorities—written for NCLEX-style stems where the trend beats a single number.",
     h1: "Respiratory nursing practice questions with oxygenation first",
     cluster: "category",
     keywords: ["respiratory", "nursing"],
@@ -611,8 +611,8 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         heading: "SpO₂ is a clue, not the whole story",
         level: 2,
         body: [
-          "Combine work of breathing, mental status, and perfusion with saturation trends. Exams love hidden fatigue despite acceptable numbers.",
-          "When escalation is an option, match oxygen delivery and monitoring intensity to the trend you would act on first in a real rapid response.",
+          "Start with work of breathing, level of consciousness, and perfusion—then let SpO₂ confirm or challenge your concern. Boards love patients who “look sick” before the monitor catches up.",
+          "If the answer choices include higher oxygen, BiPAP, calling the provider, or tighter monitoring, pick the move that matches the trajectory in the stem, not the one that sounds most “textbook” in isolation.",
         ],
       },
     ],
@@ -676,9 +676,9 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
   },
   {
     slug: "nursing-lab-values-study-guide",
-    title: "Nursing Lab Values Study Guide | Quick Clinical Reference",
+    title: "Nursing Lab Values Guide | Critical Results & Next Steps",
     description:
-      "A practical study guide for interpreting common nursing lab values, critical results, and next-step clinical reasoning.",
+      "Interpret common nursing labs faster: critical highs and lows, what to recheck, and what the NCLEX expects you to do next—without memorizing tables you cannot use on a stem.",
     h1: "Nursing lab values study guide for rapid bedside interpretation",
     cluster: "hub",
     keywords: ["lab values", "nursing", "study guide"],
@@ -687,8 +687,8 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         heading: "Build memory anchors, not isolated numbers",
         level: 2,
         body: [
-          "Group labs by organ system and by emergent pattern, renal failure panels versus hepatic panels versus sepsis screens.",
-          "Pair each abnormal value with an assessment action: recheck, hold dose, notify provider, or escalate monitoring.",
+          "Stop studying labs as a flat list. Group them into a few repeating stories—renal injury panels, liver congestion patterns, infection and sepsis screens—so each abnormal value reminds you what else to look for.",
+          "On exams, every “bad lab” wants a partner action: recheck versus hold versus notify versus watch closer. If your answer does not match the patient’s stability in the stem, it is probably a distractor.",
         ],
       },
       {

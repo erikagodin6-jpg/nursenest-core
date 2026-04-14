@@ -1,12 +1,13 @@
 /**
  * Batch of nursing + NCLEX authority programmatic pages (comparisons, condition guides, symptom patterns).
  * Merged into `PROGRAMMATIC_SEO_PAGES` — run `npm run validate:programmatic-seo` after edits.
+ *
+ * Add future batches here or in a new module; use `scripts/programmatic-seo-batch-dry-run.ts` to check slugs.
  */
 import type { SeoPageDefinition } from "@/lib/seo/programmatic-registry";
 
 const SITE = "NurseNest";
 
-/** Slugs in this batch (for dry-run / collision checks). */
 export const PROGRAMMATIC_SEO_AUTHORITY_BATCH_SLUGS: string[] = [
   "siadh-vs-diabetes-insipidus-nclex",
   "dka-vs-hhs-nclex-comparison",

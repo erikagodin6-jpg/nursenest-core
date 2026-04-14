@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ToolsToolShell } from "@/components/tools/tools-tool-shell";
+import { ToolSeoArticle } from "@/components/tools/tool-seo-article";
 import { isToolSlug } from "@/lib/tools/tool-registry";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
@@ -39,5 +40,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function LocalizedToolPage({ params }: Props) {
   const { slug } = await params;
   if (!isToolSlug(slug)) notFound();
-  return <ToolsToolShell slug={slug} />;
+  return (
+    <>
+      <ToolsToolShell slug={slug} />
+      <ToolSeoArticle slug={slug} />
+    </>
+  );
 }

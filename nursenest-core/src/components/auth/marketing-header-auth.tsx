@@ -2,9 +2,8 @@
 
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { ChevronDown, User } from "lucide-react";
-import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -41,7 +40,6 @@ function useLocalizeHref() {
 export function MarketingHeaderAuthDesktop() {
   const { t, locale } = useMarketingI18n();
   const localizeHref = useLocalizeHref();
-  const router = useRouter();
   const { data: session, status } = useSession();
   const { theme } = useTheme();
   const navChromeStyle = getNavChromeStyle(theme);
@@ -80,13 +78,6 @@ export function MarketingHeaderAuthDesktop() {
   const user = session.user;
   const label = user.email ?? user.name ?? (user.id ? `${user.id.slice(0, 8)}…` : t("nav.account"));
   const admin = isStaffRole(user.role);
-  const handleAdminDashboardClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    console.info("[admin_nav_debug] click", { source: "marketing_header_desktop", href: ADMIN_DASHBOARD_ROUTE });
-    setOpen(false);
-    console.info("[admin_nav_debug] router.push", { source: "marketing_header_desktop", to: ADMIN_DASHBOARD_ROUTE });
-    router.push(ADMIN_DASHBOARD_ROUTE);
-  }, [router]);
 
   return (
     <div style={navChromeStyle} className="relative inline-block max-w-full" ref={ref}>
@@ -129,7 +120,7 @@ export function MarketingHeaderAuthDesktop() {
               href={ADMIN_DASHBOARD_ROUTE}
               className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] [overflow-wrap:anywhere] hover:bg-[var(--nav-hover)]"
               role="menuitem"
-              onClick={handleAdminDashboardClick}
+              onClick={() => setOpen(false)}
             >
               {formatTitleCase(t("nav.admin"), locale)}
             </Link>
@@ -158,7 +149,6 @@ export function MarketingHeaderAuthDesktop() {
 export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => void }) {
   const { t, locale } = useMarketingI18n();
   const localizeHref = useLocalizeHref();
-  const router = useRouter();
   const { data: session, status } = useSession();
 
   if (status === "loading") {
@@ -183,13 +173,6 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
   const user = session.user;
   const label = user.email ?? user.name ?? `${t("account.idPrefix")} ${user.id?.slice(0, 8)}…`;
   const admin = isStaffRole(user.role);
-  const handleAdminDashboardClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    console.info("[admin_nav_debug] click", { source: "marketing_header_mobile", href: ADMIN_DASHBOARD_ROUTE });
-    onNavigate();
-    console.info("[admin_nav_debug] router.push", { source: "marketing_header_mobile", to: ADMIN_DASHBOARD_ROUTE });
-    router.push(ADMIN_DASHBOARD_ROUTE);
-  }, [onNavigate, router]);
 
   return (
     <div className="mt-4 space-y-2 border-t border-[var(--header-nav-border)] pt-4">
@@ -209,7 +192,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
         <Link
           href={ADMIN_DASHBOARD_ROUTE}
           className="block rounded-xl border border-primary/20 bg-primary/5 px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-primary hover:bg-primary/10"
-          onClick={handleAdminDashboardClick}
+          onClick={onNavigate}
         >
           {formatTitleCase(t("nav.admin"), locale)}
         </Link>

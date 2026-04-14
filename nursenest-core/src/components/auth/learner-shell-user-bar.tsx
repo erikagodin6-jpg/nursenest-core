@@ -2,7 +2,6 @@
 
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { ChevronDown, User } from "lucide-react";
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -58,7 +57,6 @@ function countryDisplayKey(country: string): string {
 
 export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShortLabel?: string | null }) {
   const { t } = useMarketingI18n();
-  const router = useRouter();
   const { data: session, status } = useSession();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -137,14 +135,6 @@ export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShort
     </div>
   );
 
-  const handleAdminDashboardClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    console.info("[admin_nav_debug] click", { source: "learner_shell_user_bar", href: ADMIN_DASHBOARD_ROUTE });
-    close();
-    console.info("[admin_nav_debug] router.push", { source: "learner_shell_user_bar", to: ADMIN_DASHBOARD_ROUTE });
-    router.push(ADMIN_DASHBOARD_ROUTE);
-  }, [close, router]);
-
   return (
     <div className="relative" ref={ref}>
       <button
@@ -206,7 +196,7 @@ export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShort
                 href={ADMIN_DASHBOARD_ROUTE}
                 className={`${linkClass} font-medium text-primary`}
                 role="menuitem"
-                onClick={handleAdminDashboardClick}
+                onClick={close}
               >
                 {t("nav.admin")}
               </Link>

@@ -105,17 +105,15 @@ const CONTENT: Record<ToolSlug, SeoBlock[]> = {
       children: (
         <>
           <p>
-            This{" "}
-            <strong>IV drip calculator and infusion helper</strong> supports nursing students and clinicians who need fast,
-            consistent math for <strong>IV pump rates</strong>, <strong>manual drip (gtt/min)</strong> estimates, and{" "}
-            <strong>infusion duration</strong> from volume and rate. It mirrors how you will see medication administration
-            problems on exams like the <strong>NCLEX</strong>: clear inputs, one primary unknown, and a result you can sanity-check
-            against the order and the patient.
+            Need <strong>mL/hr</strong>, <strong>gtt/min</strong>, or <strong>infusion time</strong> from the numbers in the
+            stem? This <strong>IV drip calculator</strong> is built for the same structure as medication administration items on
+            the <strong>NCLEX</strong>: one primary unknown, clean inputs, and an answer you can cross-check against the order
+            before you click.
           </p>
           <p>
-            The calculator is for <strong>education and exam practice</strong>. In clinical practice, always follow the active
-            order, institutional policy, smart-pump guardrails, and the rights of medication administration. If anything does
-            not match the order or looks unsafe, pause and escalate per protocol.
+            Use it for <strong>study and exam practice</strong>—not as a substitute for orders. In real practice, follow the
+            active order, pump guardrails, unit policy, and the rights of medication administration; if the math and the scenario
+            disagree, stop and escalate.
           </p>
           <p>
             Students searching for an <strong>IV drip calculator nursing</strong> resource usually need two things at once: fast arithmetic and a mental model for
@@ -223,6 +221,21 @@ const CONTENT: Record<ToolSlug, SeoBlock[]> = {
             assessment, stopping the infusion when indicated, calling for help, and preparing for escalation per protocol. The math supports care; it does not replace
             clinical urgency.
           </p>
+        </>
+      ),
+    },
+    {
+      id: "checklist",
+      title: "Before you leave: infusion study checklist",
+      panel: "positive",
+      children: (
+        <>
+          <ul>
+            <li>Convert time units once, write the conversion line on paper, then calculate rate or duration.</li>
+            <li>State the drop factor from equipment, not recall, when estimating gtt/min.</li>
+            <li>Cross-check: does your answer match the order&apos;s intent and the patient&apos;s clinical context?</li>
+            <li>Pair every calculation with one safety action you would take if the result were unexpectedly high or low.</li>
+          </ul>
         </>
       ),
     },
@@ -361,6 +374,21 @@ const CONTENT: Record<ToolSlug, SeoBlock[]> = {
       ),
     },
     {
+      id: "checklist",
+      title: "Medication math checklist (exam day)",
+      panel: "positive",
+      children: (
+        <>
+          <ul>
+            <li>Circle the unit of the desired dose and the unit of the supplied strength before algebra.</li>
+            <li>Recheck mg versus mcg and mL versus tablets on every step.</li>
+            <li>Ask: Does this route and frequency match the drug class and the patient population in the stem?</li>
+            <li>Verify with a second method when the problem allows (ratio-and-proportion vs dimensional analysis).</li>
+          </ul>
+        </>
+      ),
+    },
+    {
       id: "related",
       title: "Related lessons",
       panel: "muted",
@@ -387,6 +415,11 @@ const CONTENT: Record<ToolSlug, SeoBlock[]> = {
             Reference intervals can vary slightly by laboratory method and patient population. Treat this as a <strong>study scaffold</strong>, not a substitute for
             your institution&apos;s printed ranges or provider interpretation.
           </p>
+          <p>
+            When students search for <strong>nursing lab values</strong> or <strong>NCLEX lab interpretation</strong>, the real skill is not flashcard speed—it is
+            knowing which abnormality belongs in the first column of your nursing process (assessment vs analysis vs intervention) and which findings require immediate
+            escalation.
+          </p>
         </>
       ),
     },
@@ -405,6 +438,11 @@ const CONTENT: Record<ToolSlug, SeoBlock[]> = {
             On exams, labs often appear as part of a cluster (CBC, BMP, coags). Practice asking: <strong>what is the priority problem</strong>, and{" "}
             <strong>what intervention is safest first</strong>?
           </p>
+          <p>
+            For glucose, think about acute symptoms (altered mental status, diuresis, infection) and chronic control (adherence, steroids, steroids + infection).
+            For hemoglobin, pair with vitals and bleeding risk rather than treating a single number. For WBC, differentiate infection stress response from marrow
+            suppression contexts when the stem gives clues.
+          </p>
         </>
       ),
     },
@@ -417,6 +455,10 @@ const CONTENT: Record<ToolSlug, SeoBlock[]> = {
           <p>
             You see sodium 128 mEq/L in a patient with heart failure on diuretics who feels nauseated and lethargic. List three findings you would correlate on
             review, two interventions you would expect to be considered, and one red flag that would change priority to rapid escalation.
+          </p>
+          <p>
+            Add: what neurologic checks matter if sodium is corrected too quickly, and what intake/output pattern you would expect the charting to show if diuretics
+            are driving the shift.
           </p>
         </>
       ),
@@ -451,6 +493,25 @@ const CONTENT: Record<ToolSlug, SeoBlock[]> = {
             Post-op patient: Hgb trending down, HR rising, BP soft. Which additional assessments and labs complete the picture before you choose between
             fluid resuscitation, bleeding evaluation, and escalation?
           </p>
+          <p>
+            Name two nursing actions that protect the patient while diagnostics are pending, and one communication element you would include in handoff so the next
+            nurse can continue trend monitoring safely.
+          </p>
+        </>
+      ),
+    },
+    {
+      id: "checklist",
+      title: "Lab value study checklist",
+      panel: "positive",
+      children: (
+        <>
+          <ul>
+            <li>State the trend direction, not only whether a value is “high” or “low.”</li>
+            <li>Pair each abnormal lab with at least one assessment finding and one risk.</li>
+            <li>Identify the intervention that is safest first when the patient is unstable.</li>
+            <li>Know when to escalate versus when to continue monitoring on a stable trajectory.</li>
+          </ul>
         </>
       ),
     },
@@ -477,6 +538,11 @@ const CONTENT: Record<ToolSlug, SeoBlock[]> = {
             potassium, sodium, calcium, and magnesium. For <strong>NCLEX</strong> preparation, the payoff is pattern recognition: metabolic vs respiratory
             processes, compensation expectations, and the nursing actions that protect airway, perfusion, and correction safety.
           </p>
+          <p>
+            Search intent around <strong>ABG interpretation nursing</strong> usually maps to three exam skills: naming the primary acid-base disturbance, identifying
+            whether compensation is present, and choosing the safest nursing response when the patient is unstable. The numbers matter, but the airway and circulation
+            come first.
+          </p>
         </>
       ),
     },
@@ -496,6 +562,10 @@ const CONTENT: Record<ToolSlug, SeoBlock[]> = {
             Potassium shifts with acid-base disturbances, calcium changes with albumin and critical illness, and sodium problems often present with neurologic changes.
             Exam items frequently test whether you protect the airway and treat emergent causes before “chasing numbers.”
           </p>
+          <p>
+            Oxygenation questions often pair PaO₂/FiO₂ thinking with clinical cues: work of breathing, mental status, and whether noninvasive support is appropriate for
+            the scenario’s stability level. Always match the device and escalation pathway to the policy implied by the stem.
+          </p>
         </>
       ),
     },
@@ -508,6 +578,10 @@ const CONTENT: Record<ToolSlug, SeoBlock[]> = {
           <p>
             pH 7.25, PaCO₂ 55 mmHg, HCO₃⁻ 24 mEq/L: describe the primary process in plain language, identify the system you would support first in a deteriorating
             patient, and name two bedside priorities while diagnostics continue.
+          </p>
+          <p>
+            Add: if the patient is obtunded, what airway considerations take priority before detailed acid-base teaching, and what repeat blood gas timing is typically
+            used to evaluate response to initial interventions?
           </p>
         </>
       ),
@@ -546,6 +620,21 @@ const CONTENT: Record<ToolSlug, SeoBlock[]> = {
       ),
     },
     {
+      id: "checklist",
+      title: "Electrolyte & ABG checklist",
+      panel: "positive",
+      children: (
+        <>
+          <ul>
+            <li>Stabilize airway, breathing, and circulation before deep diving into compensation labels.</li>
+            <li>Name the primary process, then ask whether the patient’s story supports acute versus chronic patterns.</li>
+            <li>Link potassium, calcium, and magnesium abnormalities to rhythm risk when the stem provides cardiac data.</li>
+            <li>Choose the nursing action that matches policy-level escalation for the scenario’s severity.</li>
+          </ul>
+        </>
+      ),
+    },
+    {
       id: "related",
       title: "Related lessons",
       panel: "muted",
@@ -568,6 +657,11 @@ const CONTENT: Record<ToolSlug, SeoBlock[]> = {
             infusion monitoring, and reaction recognition. Nursing exams—including the <strong>NCLEX</strong>—reward the sequence: verify, monitor, recognize,
             intervene, and escalate.
           </p>
+          <p>
+            For <strong>blood transfusion nursing</strong> review, anchor your studying on systems: patient identification, product verification, vital sign
+            monitoring intervals, and the specific symptom clusters that differentiate mild allergic reactions from hemolytic or septic transfusion emergencies as the
+            stem presents them.
+          </p>
         </>
       ),
     },
@@ -581,6 +675,10 @@ const CONTENT: Record<ToolSlug, SeoBlock[]> = {
             Instead of a single formula, learn a <strong>time-based checklist</strong>: baseline vitals, rate initiation rules per policy, interval monitoring, and
             stop conditions for fever, pain, dyspnea, urticaria, or hypotension. Your program and facility policies are authoritative—use this page to practice the
             reasoning categories those policies encode.
+          </p>
+          <p>
+            Documentation is part of safety: what you assessed, what you notified, what you stopped or continued, and patient education about expected sensations versus
+            warning symptoms. Exam questions often test whether you communicate clearly during a reaction, not only whether you recognize it.
           </p>
         </>
       ),
@@ -628,6 +726,21 @@ const CONTENT: Record<ToolSlug, SeoBlock[]> = {
             A patient with a history of previous transfusion reaction needs blood. What history questions matter most, what premedication discussions belong to the
             provider, and what will you teach the patient about symptoms to report immediately?
           </p>
+        </>
+      ),
+    },
+    {
+      id: "checklist",
+      title: "Transfusion safety checklist",
+      panel: "positive",
+      children: (
+        <>
+          <ul>
+            <li>Verify patient identity and product match using your facility’s required process.</li>
+            <li>Establish baseline vitals; monitor per policy after start and after rate changes.</li>
+            <li>Stay at the bedside during the critical first minutes when the stem emphasizes high risk.</li>
+            <li>Stop, assess, notify, and support airway and circulation first when reaction symptoms appear.</li>
+          </ul>
         </>
       ),
     },
