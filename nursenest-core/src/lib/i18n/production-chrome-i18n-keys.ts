@@ -116,6 +116,7 @@ export const PRODUCTION_PAYWALL_KEYS = [
   "paywall.remainingLessons",
   "paywall.remainingQuestions",
   "paywall.cta.openStudyHub",
+  "paywall.ctaDecisionLine",
   "paywall.sampleExploreLead",
   "paywall.sampleLessons",
   "paywall.sampleQuestions",

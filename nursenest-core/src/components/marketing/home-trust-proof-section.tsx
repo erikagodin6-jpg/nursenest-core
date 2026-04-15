@@ -39,6 +39,40 @@ export function HomeTrustProofSection() {
           </p>
         </FadeUp>
 
+        <div
+          className="mx-auto mb-10 grid max-w-3xl gap-3 sm:grid-cols-2 sm:gap-4"
+          data-testid="section-home-differentiation-contrast"
+        >
+          <div
+            className="rounded-xl border p-4 text-left sm:p-5"
+            style={{
+              borderColor: "color-mix(in srgb, var(--semantic-border-soft) 1, var(--border-subtle))",
+              background: "color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--bg-card))",
+            }}
+          >
+            <p className="nn-marketing-caption font-bold uppercase tracking-wide text-[var(--palette-text-muted)]">
+              {formatTitleCase(t("pages.home.differentiation.contrastGenericLabel"), locale)}
+            </p>
+            <p className="nn-marketing-body-sm mt-2 leading-relaxed text-[var(--palette-text)]">
+              {formatSentenceCase(t("pages.home.differentiation.contrastGenericLine"), locale)}
+            </p>
+          </div>
+          <div
+            className="rounded-xl border p-4 text-left sm:p-5"
+            style={{
+              borderColor: "color-mix(in srgb, var(--semantic-success) 24%, var(--semantic-border-soft))",
+              background: "color-mix(in srgb, var(--semantic-panel-positive) 08%, var(--bg-card))",
+            }}
+          >
+            <p className="nn-marketing-caption font-bold uppercase tracking-wide text-[var(--semantic-success)]">
+              {formatTitleCase(t("pages.home.differentiation.contrastNnLabel"), locale)}
+            </p>
+            <p className="nn-marketing-body-sm mt-2 leading-relaxed text-[var(--palette-text)]">
+              {formatSentenceCase(t("pages.home.differentiation.contrastNnLine"), locale)}
+            </p>
+          </div>
+        </div>
+
         <StaggerGroup className="grid gap-5 md:grid-cols-2" whenInView once viewMargin="-40px">
           {POINT_KEYS.map((key, idx) => {
             const meta = POINT_META[key];

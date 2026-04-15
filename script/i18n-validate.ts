@@ -3,7 +3,8 @@
  * Validates merged runtime JSON after `npm run i18n:compile`.
  *
  * - All locales present under client/public/i18n and nursenest-core/public/i18n
- * - Client vs Next: identical key sets and values (Next uses `public/i18n/{lang}/*.json` shards)
+ * - Client vs Next: identical key sets and values (Next uses `public/i18n/{lang}/*.json` public shards + `i18n-admin-only/{lang}/admin.json` staff shards)
+ * - No `admin.json` under `public/i18n/{lang}/` (staff strings must not be web-static)
  * - Each locale: every key from tools/i18n/source/i18n-{lang}.ts exists in merged JSON
  * - Marketing locale overlays: same key set as tools/i18n/marketing/marketing-en.json (en has no overlay file)
  * - Placeholder parity: for every key, {{mustache}} placeholder names match English merged bundle
@@ -13,7 +14,7 @@
  */
 import { existsSync, readFileSync } from "fs";
 import path from "path";
-import { readMergedBundleFromNextPublicI18n } from "./lib/next-public-i18n-bundle";
+import { DEFAULT_ADMIN_ONLY_I18N_ROOT, readMergedBundleFromNextPublicI18n } from "./lib/next-public-i18n-bundle";
 import { I18N_LANGUAGES } from "./merge-marketing-i18n";
 import { REPO_ROOT } from "./repo-root";
 
@@ -128,6 +129,17 @@ function main(): void {
     if (!data) {
       errors.push(`Invalid JSON: ${path.relative(ROOT, cj)}`);
       continue;
+    }
+
+    const leakedPublicAdmin = path.join(NEXT_I18N, lang, "admin.json");
+    if (existsSync(leakedPublicAdmin)) {
+      errors.push(
+        `Staff i18n leak: remove ${path.relative(ROOT, leakedPublicAdmin)} (admin shard must not be under public/)`,
+      );
+    }
+    const staffAdminShard = path.join(DEFAULT_ADMIN_ONLY_I18N_ROOT, lang, "admin.json");
+    if (!existsSync(staffAdminShard)) {
+      errors.push(`Missing staff shard (run npm run i18n:compile): ${path.relative(ROOT, staffAdminShard)}`);
     }
 
     const nextData = readMergedBundleFromNextPublicI18n(NEXT_I18N, lang);

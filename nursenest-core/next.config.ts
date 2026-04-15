@@ -87,7 +87,7 @@ const nextConfig: NextConfig = {
   },
   // Explicitly include merged i18n bundles so server components can readFileSync them at runtime.
   outputFileTracingIncludes: {
-    "/**": ["./public/i18n/**/*.json"],
+    "/**": ["./public/i18n/**/*.json", "./i18n-admin-only/**/*.json"],
   },
   async redirects() {
     if (!runHeavyBuildTasks) {

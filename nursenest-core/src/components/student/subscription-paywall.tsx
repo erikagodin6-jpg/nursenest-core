@@ -362,6 +362,13 @@ export function SubscriptionPaywall({
         </dl>
       </div>
 
+      <p
+        className="text-pretty text-sm font-medium leading-relaxed text-[var(--semantic-text-primary)]"
+        data-testid="paywall-cta-decision-line"
+      >
+        {formatSentenceCase(t("paywall.ctaDecisionLine"), locale)}
+      </p>
+
       <div className="flex flex-wrap gap-3">
         <Link
           href="/pricing"

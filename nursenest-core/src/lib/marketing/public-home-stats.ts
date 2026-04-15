@@ -28,13 +28,22 @@ export type PublicHomeStatsPayload = {
   topicCategoryCount: number;
   degraded?: boolean;
   runtimeSafeMode?: boolean;
+  /**
+   * When `neutral`, UIs should show explanatory copy instead of numeric proof (avoids “empty/broken” zeros).
+   */
+  proofDisplay?: "full" | "neutral";
 };
 
 const HOME_STATS_SLOW_MS = 2500;
 
-/** Safe zeros when DB throws or route needs a 200 fallback — never crashes callers. */
-export function getDegradedPublicHomeStatsFallback(reason: string): PublicHomeStatsPayload {
-  safeServerLog("marketing", "public_home_stats_degraded", { reason: reason.slice(0, 120) });
+/** Safe structured fallback when DB throws or routes need a 200 — never crashes callers. */
+export function getDegradedPublicHomeStatsFallback(
+  reason: string,
+  opts?: { silent?: boolean },
+): PublicHomeStatsPayload {
+  if (!opts?.silent) {
+    safeServerLog("marketing", "public_home_stats_degraded", { reason: reason.slice(0, 120) });
+  }
   return {
     totalLessons: 0,
     pathwayLessonsPublished: 0,
@@ -48,6 +57,7 @@ export function getDegradedPublicHomeStatsFallback(reason: string): PublicHomeSt
     scenarioCount: 0,
     topicCategoryCount: 0,
     degraded: true,
+    proofDisplay: "neutral",
   };
 }
 

@@ -6,6 +6,7 @@
 
 /** Second segment of `pages.*` keys that are staff-only tools (not public marketing pages). */
 function isPagesAdminSecondSegment(seg: string): boolean {
+  if (seg === "administrator") return false;
   if (seg === "admin" || seg === "contentEditor") return true;
   if (seg.startsWith("admin")) return true;
   return false;

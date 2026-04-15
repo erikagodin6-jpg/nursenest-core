@@ -66,7 +66,10 @@ export function readMergedBundleFromNextPublicI18n(
           merged[k] = v;
         }
       } catch (e) {
-        if (e instanceof SyntaxError) return null;
+        if (e instanceof SyntaxError) {
+          console.error(`[i18n] Invalid JSON: ${adminFp}`);
+          return null;
+        }
         throw e;
       }
     }
