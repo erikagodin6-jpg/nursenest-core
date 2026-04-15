@@ -9,7 +9,7 @@
  *   1. Override cookie (`nn_global_region`)
  *   2. IP-country header → region → region's default locale
  *   3. Accept-Language negotiation (constrained to region's allowed locales)
- *   4. Global fallback: `{ region: "philippines", locale: "en" }`
+ *   4. Global fallback: `{ region: GLOBAL_DEFAULT_REGION, locale: "en" }` (see `global-regions.ts`)
  */
 
 import {
@@ -66,7 +66,7 @@ export function resolveGeo(
     }
   }
 
-  // 3. Fallback — global-first default (Philippines, not US)
+  // 3. Fallback — primary market default (`GLOBAL_DEFAULT_REGION`, typically US)
   return {
     region: GLOBAL_DEFAULT_REGION,
     locale: GLOBAL_DEFAULT_LOCALE,

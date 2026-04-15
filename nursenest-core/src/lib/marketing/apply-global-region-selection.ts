@@ -22,12 +22,14 @@ export async function applyGlobalRegionSelection(
   const nextLocale = localeAfterRegionSwitch(newRegion, marketingLocale);
 
   if (newRegion === "us" || newRegion === "canada") {
-    await saveContextPreferences({ region: newRegion, locale: nextLocale });
+    const saved = await saveContextPreferences({ region: newRegion, locale: nextLocale });
+    if (!saved.ok) return;
     setUsCaMarketingRegion(newRegion === "us" ? "US" : "CA");
     return;
   }
 
-  await saveContextPreferences({ region: newRegion, locale: nextLocale });
+  const saved = await saveContextPreferences({ region: newRegion, locale: nextLocale });
+  if (!saved.ok) return;
 
   const hub = getExamHubForGlobalRegion(newRegion);
   if (hub) {

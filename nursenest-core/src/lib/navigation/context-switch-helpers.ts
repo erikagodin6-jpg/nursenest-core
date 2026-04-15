@@ -350,14 +350,19 @@ export type RegionGroup = {
 export function getRegionGroups(): RegionGroup[] {
   return [
     {
-      label: "Popular",
+      label: "United States & Canada",
+      regions: [
+        { slug: "us", displayName: "United States", flag: REGION_FLAG.us },
+        { slug: "canada", displayName: "Canada", flag: REGION_FLAG.canada },
+      ],
+    },
+    {
+      label: "International",
       regions: [
         { slug: "philippines", displayName: "Philippines", flag: REGION_FLAG.philippines },
         { slug: "india", displayName: "India", flag: REGION_FLAG.india },
         { slug: "nigeria", displayName: "Nigeria", flag: REGION_FLAG.nigeria },
         { slug: "kenya", displayName: "Kenya", flag: REGION_FLAG.kenya },
-        { slug: "us", displayName: "United States", flag: REGION_FLAG.us },
-        { slug: "canada", displayName: "Canada", flag: REGION_FLAG.canada },
       ],
     },
     {

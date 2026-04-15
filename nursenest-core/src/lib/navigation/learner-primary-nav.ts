@@ -22,6 +22,20 @@ export type LearnerPrimaryNavItem = {
   labelKey: string;
 };
 
+/**
+ * Exactly one learner nav item is visually “primary” (subtle emphasis in header + shell).
+ * Use `"lessons"` for lesson-first IA; use `"practice"` for exam-question-first IA.
+ */
+export const LEARNER_PRIMARY_NAV_ITEM_KEY = "lessons" as const satisfies Extract<
+  LearnerPrimaryNavItem["key"],
+  "lessons" | "practice"
+>;
+
+/** Whether this nav row is the designated primary study entry (visual emphasis in header + shell). */
+export function isLearnerPrimaryNavKey(key: LearnerPrimaryNavItem["key"]): boolean {
+  return key === LEARNER_PRIMARY_NAV_ITEM_KEY;
+}
+
 function withPathwayQuery(base: string, pathwayId: string | null): string {
   if (!pathwayId) return base;
   const q = `pathwayId=${encodeURIComponent(pathwayId)}`;

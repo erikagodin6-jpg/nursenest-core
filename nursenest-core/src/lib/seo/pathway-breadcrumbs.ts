@@ -1,7 +1,7 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
-import { PUBLIC_MARKETING_EXAM_LESSONS_HUB_PATH } from "@/lib/lessons/lesson-routes";
+import { HUB } from "@/lib/navigation/canonical-destinations";
 import type { BreadcrumbCrumb, BreadcrumbSchemaItem } from "@/lib/seo/breadcrumb-types";
 import { toAbsoluteSiteUrl } from "@/lib/seo/breadcrumb-utils";
 import { getPathwayProgrammaticSeoLanding } from "@/lib/seo/pathway-programmatic-seo";
@@ -21,7 +21,7 @@ const HOME_ITEM: BreadcrumbSchemaItem = { name: "Home", item: "/", i18nKey: "bre
  * There is no standalone `/canada` (or other country) page — do not label a crumb “Canada” and link here.
  */
 export const EXAM_LESSONS_INDEX = {
-  path: PUBLIC_MARKETING_EXAM_LESSONS_HUB_PATH,
+  path: HUB.examLessons,
   label: "Lessons by exam pathway",
 };
 

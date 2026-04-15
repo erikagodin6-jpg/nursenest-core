@@ -1,6 +1,8 @@
 /**
- * Single regional strip for marketing header: pathname beats cookie beats locale hints.
- * Prevents multiple country strips from appearing at once.
+ * Regional shortcut strip — **legacy helper** (still used by hooks for path context).
+ *
+ * Country-specific shortcut rows are **not** rendered in `SiteHeader`; switching markets
+ * uses the CountrySelector dropdown. Path-only logic remains for pages that need regional hints.
  */
 
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
@@ -69,56 +71,14 @@ function pathStrip(strippedPath: string): RegionalMarketingStrip {
   return null;
 }
 
-function cookieStrip(globalRegion: GlobalRegionSlug | null | undefined): RegionalMarketingStrip {
-  if (!globalRegion) return null;
-  if (globalRegion === "philippines") return "philippines";
-  if (globalRegion === "uae" || globalRegion === "saudi-arabia") return "middle_east";
-  if (globalRegion === "aus") return "australia";
-  if (globalRegion === "china") return "china";
-  if (globalRegion === "south-korea") return "korea";
-  if (globalRegion === "japan") return "japan";
-  if (globalRegion === "germany") return "germany";
-  if (globalRegion === "france") return "france";
-  if (globalRegion === "italy") return "italy";
-  if (globalRegion === "hungary") return "hungary";
-  if (globalRegion === "portugal") return "portugal";
-  if (globalRegion === "mexico") return "mexico";
-  if (globalRegion === "india") return "india";
-  return null;
-}
-
-/** Locales that imply India exam nav when no path/cookie strip is set. */
-const INDIA_LOCALES = new Set(["hi", "ta", "te", "bn", "mr", "gu"]);
-
-/** Locales that imply Middle East nav when no path/cookie strip is set. */
-const MIDDLE_EAST_LOCALES = new Set(["ar", "ur"]);
-
-function localeStrip(locale: string): RegionalMarketingStrip {
-  if (locale === "tl") return "philippines";
-  if (locale === "zh" || locale === "zh-tw") return "china";
-  if (locale === "ko") return "korea";
-  if (locale === "ja") return "japan";
-  if (locale === "de") return "germany";
-  if (locale === "fr") return "france";
-  if (locale === "it") return "italy";
-  if (locale === "hu") return "hungary";
-  if (locale === "pt") return "portugal";
-  if (INDIA_LOCALES.has(locale)) return "india";
-  if (MIDDLE_EAST_LOCALES.has(locale)) return "middle_east";
-  return null;
-}
-
 /**
- * Which regional shortcut strip to show in the marketing header (desktop tier row + mobile block).
+ * Which regional shortcut strip to show in the marketing header (desktop second row + mobile drawer blocks).
+ * Cookie/locale intentionally ignored — use {@link resolveRegionalMarketingStrip}'s path-only behavior.
  */
 export function resolveRegionalMarketingStrip(
   strippedPath: string,
-  locale: string,
-  globalRegionCookie: GlobalRegionSlug | null | undefined,
+  _locale: string,
+  _globalRegionCookie: GlobalRegionSlug | null | undefined,
 ): RegionalMarketingStrip {
-  const fromPath = pathStrip(strippedPath);
-  if (fromPath) return fromPath;
-  const fromCookie = cookieStrip(globalRegionCookie);
-  if (fromCookie) return fromCookie;
-  return localeStrip(locale);
+  return pathStrip(strippedPath);
 }

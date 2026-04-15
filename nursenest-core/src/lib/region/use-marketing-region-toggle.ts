@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { stripMarketingLocalePrefix } from "@/lib/i18n/marketing-path";
-import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
+import { navigationAfterUsCaMarketingToggle } from "@/lib/marketing/marketing-us-ca-toggle-navigation";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import type { NursenestRegion } from "@/lib/region/use-nursenest-region";
@@ -38,9 +38,9 @@ export function useMarketingRegionToggleWithRefresh(
       }
       setRegion(next);
       const { pathname: bare } = stripMarketingLocalePrefix(pathname);
-      const eq = equivalentExamHubUrlAfterRegionToggle(bare, next);
-      if (eq) {
-        router.replace(eq);
+      const nav = navigationAfterUsCaMarketingToggle(bare, next);
+      if (nav.kind === "replace") {
+        router.replace(nav.href);
       } else {
         router.refresh();
       }
