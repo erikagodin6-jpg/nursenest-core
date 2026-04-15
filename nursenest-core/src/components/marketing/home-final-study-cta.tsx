@@ -3,7 +3,7 @@
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { HUB } from "@/lib/navigation/canonical-destinations";
 import { FadeUp } from "@/lib/motion";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
@@ -11,7 +11,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_SECONDARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { PRIMARY_CTA, SECONDARY_CTA } from "@/lib/copy/cta-copy";
-import { defaultNursingExamMarketingHub } from "@/lib/marketing/marketing-exam-navigation";
+import { defaultNursingExamMarketingHub } from "@/lib/navigation/canonical-destinations";
 
 const TRUST_POINTS = [
   "No credit card required",

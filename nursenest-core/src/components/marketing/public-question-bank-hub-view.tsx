@@ -11,7 +11,7 @@ import {
   loginWithCallback,
   type MarketingRegionToggle,
 } from "@/lib/marketing/marketing-entry-routes";
-import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
+import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
@@ -35,15 +35,18 @@ type PathwayCard = {
   region: MarketingRegionToggle;
 };
 
+const US_EXAM_HUBS = publicExamPrepHubDestinations("US");
+const CA_EXAM_HUBS = publicExamPrepHubDestinations("CA");
+
 const CARDS: PathwayCard[] = [
-  { cardKey: "cardRnUs", publicQuestionsHref: RN.usQuestions, hubHref: marketingExamHubPath("US", "rn"), region: "US" },
-  { cardKey: "cardRnCa", publicQuestionsHref: RN.caQuestions, hubHref: marketingExamHubPath("CA", "rn"), region: "CA" },
-  { cardKey: "cardPnUs", publicQuestionsHref: PN.usQuestions, hubHref: marketingExamHubPath("US", "pn"), region: "US" },
-  { cardKey: "cardPnCa", publicQuestionsHref: PN.caQuestions, hubHref: marketingExamHubPath("CA", "pn"), region: "CA" },
-  { cardKey: "cardNpUs", publicQuestionsHref: NP.fnpQuestions, hubHref: marketingExamHubPath("US", "np"), region: "US" },
-  { cardKey: "cardNpCa", publicQuestionsHref: NP.caNpQuestions, hubHref: marketingExamHubPath("CA", "np"), region: "CA" },
-  { cardKey: "cardAlliedUs", publicQuestionsHref: ALLIED.usQuestions, hubHref: marketingExamHubPath("US", "allied"), region: "US" },
-  { cardKey: "cardAlliedCa", publicQuestionsHref: ALLIED.caQuestions, hubHref: marketingExamHubPath("CA", "allied"), region: "CA" },
+  { cardKey: "cardRnUs", publicQuestionsHref: RN.usQuestions, hubHref: US_EXAM_HUBS.rn, region: "US" },
+  { cardKey: "cardRnCa", publicQuestionsHref: RN.caQuestions, hubHref: CA_EXAM_HUBS.rn, region: "CA" },
+  { cardKey: "cardPnUs", publicQuestionsHref: PN.usQuestions, hubHref: US_EXAM_HUBS.pn, region: "US" },
+  { cardKey: "cardPnCa", publicQuestionsHref: PN.caQuestions, hubHref: CA_EXAM_HUBS.pn, region: "CA" },
+  { cardKey: "cardNpUs", publicQuestionsHref: NP.fnpQuestions, hubHref: US_EXAM_HUBS.np, region: "US" },
+  { cardKey: "cardNpCa", publicQuestionsHref: NP.caNpQuestions, hubHref: CA_EXAM_HUBS.np, region: "CA" },
+  { cardKey: "cardAlliedUs", publicQuestionsHref: ALLIED.usQuestions, hubHref: US_EXAM_HUBS.allied, region: "US" },
+  { cardKey: "cardAlliedCa", publicQuestionsHref: ALLIED.caQuestions, hubHref: CA_EXAM_HUBS.allied, region: "CA" },
 ];
 
 /** Shared server component for both the default-locale and non-default-locale question-bank landing. */

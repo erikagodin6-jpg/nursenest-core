@@ -13,7 +13,7 @@ import {
   loginWithCallback,
   type MarketingRegionToggle,
 } from "@/lib/marketing/marketing-entry-routes";
-import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
+import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
@@ -48,53 +48,56 @@ type PathwayCard = {
   region: MarketingRegionToggle;
 };
 
+const US_EXAM_HUBS = publicExamPrepHubDestinations("US");
+const CA_EXAM_HUBS = publicExamPrepHubDestinations("CA");
+
 const CARDS: PathwayCard[] = [
   {
     cardKey: "cardRnUs",
     publicQuestionsHref: RN.usQuestions,
-    hubHref: marketingExamHubPath("US", "rn"),
+    hubHref: US_EXAM_HUBS.rn,
     region: "US",
   },
   {
     cardKey: "cardRnCa",
     publicQuestionsHref: RN.caQuestions,
-    hubHref: marketingExamHubPath("CA", "rn"),
+    hubHref: CA_EXAM_HUBS.rn,
     region: "CA",
   },
   {
     cardKey: "cardPnUs",
     publicQuestionsHref: PN.usQuestions,
-    hubHref: marketingExamHubPath("US", "pn"),
+    hubHref: US_EXAM_HUBS.pn,
     region: "US",
   },
   {
     cardKey: "cardPnCa",
     publicQuestionsHref: PN.caQuestions,
-    hubHref: marketingExamHubPath("CA", "pn"),
+    hubHref: CA_EXAM_HUBS.pn,
     region: "CA",
   },
   {
     cardKey: "cardNpUs",
     publicQuestionsHref: NP.fnpQuestions,
-    hubHref: marketingExamHubPath("US", "np"),
+    hubHref: US_EXAM_HUBS.np,
     region: "US",
   },
   {
     cardKey: "cardNpCa",
     publicQuestionsHref: NP.caNpQuestions,
-    hubHref: marketingExamHubPath("CA", "np"),
+    hubHref: CA_EXAM_HUBS.np,
     region: "CA",
   },
   {
     cardKey: "cardAlliedUs",
     publicQuestionsHref: ALLIED.usQuestions,
-    hubHref: marketingExamHubPath("US", "allied"),
+    hubHref: US_EXAM_HUBS.allied,
     region: "US",
   },
   {
     cardKey: "cardAlliedCa",
     publicQuestionsHref: ALLIED.caQuestions,
-    hubHref: marketingExamHubPath("CA", "allied"),
+    hubHref: CA_EXAM_HUBS.allied,
     region: "CA",
   },
 ];

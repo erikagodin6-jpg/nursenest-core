@@ -3,7 +3,7 @@
 import { ArrowRight, Stethoscope, HeartPulse, Award, Dna, GraduationCap } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
+import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
@@ -36,6 +36,7 @@ export function HomeExamSelectionSection() {
   const { t, locale } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const loc = (path: string) => withMarketingLocale(locale, path);
+  const hubs = publicExamPrepHubDestinations(region);
 
   const cards: ExamCard[] = [
     {
@@ -46,7 +47,7 @@ export function HomeExamSelectionSection() {
       titleKey: "home.conversion.examCard.rnTitle",
       descKey: "home.conversion.examCard.rnDesc",
       pathwayLabel: "RN",
-      href: loc(marketingExamHubPath(region, "rn")),
+      href: loc(hubs.rn),
       featured: true,
     },
     {
@@ -57,7 +58,7 @@ export function HomeExamSelectionSection() {
       titleKey: region === "US" ? "home.conversion.examCard.pnTitleUS" : "home.conversion.examCard.pnTitleCA",
       descKey: region === "US" ? "home.conversion.examCard.pnDescUS" : "home.conversion.examCard.pnDescCA",
       pathwayLabel: getNursingRoleLabel({ country: region, role: "PN" }),
-      href: loc(marketingExamHubPath(region, "pn")),
+      href: loc(hubs.pn),
     },
     {
       id: "np",
@@ -67,7 +68,7 @@ export function HomeExamSelectionSection() {
       titleKey: region === "US" ? "home.conversion.examCard.npTitleUS" : "home.conversion.examCard.npTitleCA",
       descKey: region === "US" ? "home.conversion.examCard.npDescUS" : "home.conversion.examCard.npDescCA",
       pathwayLabel: "NP",
-      href: loc(marketingExamHubPath(region, "np")),
+      href: loc(hubs.np),
     },
     {
       id: "newgrad",
@@ -87,7 +88,7 @@ export function HomeExamSelectionSection() {
       titleKey: "home.conversion.examCard.alliedTitle",
       descKey: "home.conversion.examCard.alliedDesc",
       pathwayLabel: "Allied Health",
-      href: loc(marketingExamHubPath(region, "allied")),
+      href: loc(hubs.allied),
     },
   ];
 

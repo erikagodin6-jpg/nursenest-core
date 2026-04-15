@@ -1782,6 +1782,162 @@ html[data-theme] .nn-marketing-surface {
   outline-offset: 2px;
 }
 
+/* Learner (app) header — study destinations: calmer than marketing pills, less motion */
+.nn-learner-nav-link {
+  display: inline-flex;
+  min-height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  padding: 0.35rem 0.55rem;
+  font-weight: 500;
+  color: var(--nav-link, var(--header-link, var(--nav-fg)));
+  line-height: 1.15;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition:
+    background-color var(--motion-base) var(--motion-ease),
+    color var(--motion-base) var(--motion-ease),
+    border-color var(--motion-base) var(--motion-ease);
+}
+
+.nn-learner-nav-link:hover {
+  color: var(--nav-link-hover, var(--header-link-hover, var(--nav-fg)));
+  border-color: color-mix(in srgb, var(--nav-border) 72%, var(--header-background));
+  background: var(--nav-hover);
+}
+
+.nn-learner-nav-link[aria-current="page"],
+.nn-learner-nav-link[data-active="true"] {
+  color: var(--nav-link-active, var(--header-link-active, var(--nav-fg)));
+  border-color: color-mix(in srgb, var(--semantic-brand, var(--nav-cta-bg, var(--nav-border))) 38%, var(--nav-border));
+  background: var(--nav-active);
+  box-shadow: none;
+}
+
+.nn-learner-nav-link:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Single primary study entry (Lessons or Practice) — subtle emphasis; not a CTA */
+.nn-learner-nav-link.nn-learner-nav-link--primary {
+  font-weight: 600;
+  border-color: color-mix(in srgb, var(--semantic-brand) 22%, var(--nav-border));
+  background: color-mix(in srgb, var(--semantic-brand) 6%, var(--header-background, transparent));
+}
+
+.nn-learner-nav-link.nn-learner-nav-link--primary:hover {
+  border-color: color-mix(in srgb, var(--semantic-brand) 30%, var(--nav-border));
+  background: color-mix(in srgb, var(--semantic-brand) 11%, var(--nav-hover));
+}
+
+.nn-learner-nav-link.nn-learner-nav-link--primary[aria-current="page"],
+.nn-learner-nav-link.nn-learner-nav-link--primary[data-active="true"] {
+  font-weight: 600;
+  border-color: color-mix(in srgb, var(--semantic-brand) 45%, var(--nav-border));
+  background: var(--nav-active);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--semantic-brand) 14%, transparent);
+}
+
+/* Mobile header drawer — learner list */
+.nn-learner-nav-drawer-link--primary {
+  font-weight: 600;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 18%, var(--nav-border));
+  background: color-mix(in srgb, var(--semantic-brand) 7%, var(--nav-bg));
+}
+
+.nn-learner-nav-drawer-link--primary[aria-current="page"] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 42%, var(--nav-border));
+  background: var(--nav-active);
+}
+
+/* /app learner shell — desktop row: primary item at rest */
+.nn-learner-shell-link--primary {
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 28%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-brand) 9%, var(--bg-card));
+  font-weight: 600;
+  color: var(--theme-body-text);
+}
+
+.nn-learner-shell-link--primary:hover {
+  background: color-mix(in srgb, var(--semantic-brand) 14%, var(--bg-card));
+}
+
+/* /app bottom nav: compact primary at rest */
+.nn-learner-shell-bottom-link--primary {
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 32%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-brand) 10%, var(--bg-card));
+  font-weight: 600;
+}
+
+/* Pathway / tier context — compact, premium, token-based (learner header only) */
+.nn-header-tier-pill {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  border-radius: 0.375rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand, var(--nav-cta-bg, var(--nav-border))) 32%, var(--nav-border));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 55%, var(--header-background, transparent));
+  padding: 0.28rem 0.55rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  color: var(--nav-fg);
+  line-height: 1.2;
+}
+
+.nn-header-tier-pill--compact {
+  padding: 0.22rem 0.45rem;
+  font-size: 0.625rem;
+  letter-spacing: 0.05em;
+}
+
+.nn-header-account-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--nav-fg) 12%, var(--nav-border));
+  background: color-mix(in srgb, var(--nav-fg) 4%, transparent);
+  padding-inline: 0.62rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--nav-fg);
+  transition: background-color var(--motion-base) var(--motion-ease);
+}
+
+.nn-header-account-trigger:hover {
+  background: var(--nav-hover);
+}
+
+.nn-header-account-trigger:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Desktop: logo + tier | study/marketing links | utilities + auth — balanced columns, no giant gap */
+.nn-header-desktop-grid {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .nn-header-desktop-grid {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 1rem;
+    row-gap: 0.5rem;
+    width: 100%;
+    min-height: 4.25rem;
+    padding-block: 0.65rem;
+  }
+}
+
 /* Header utility rail — preferences / region strip above the main nav */
 .nn-header-utility {
   background: color-mix(in srgb, var(--header-utility-surface) 86%, var(--header-background));

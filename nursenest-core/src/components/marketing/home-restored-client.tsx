@@ -12,7 +12,7 @@ import { HomeTrustProofSection } from "@/components/marketing/home-trust-proof-s
 import { HomeFinalStudyCta } from "@/components/marketing/home-final-study-cta";
 import { FunnelHomepageViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
+import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { PH } from "@/lib/observability/posthog-conversion-events";
@@ -55,13 +55,14 @@ export default function HomeRestoredClient() {
 
   const audienceBalanceCards = useMemo(() => {
     const l = (path: string) => withMarketingLocale(locale, path);
+    const hubs = publicExamPrepHubDestinations(region);
     return [
       {
         id: "rn",
         title: "RN (NCLEX-RN)",
         body: "Full-length NCLEX-style questions, deep rationales, and readiness tracking built for RN success.",
         cta: "Start RN Practice",
-        href: l(marketingExamHubPath(region, "rn")),
+        href: l(hubs.rn),
         accentColor: "var(--semantic-info)",
       },
       {
@@ -69,7 +70,7 @@ export default function HomeRestoredClient() {
         title: "PN / RPN (NCLEX-PN & REx-PN)",
         body: "Focused PN-level questions and exam-specific prep tailored for both U.S. and Canadian pathways.",
         cta: "Start PN Practice",
-        href: l(marketingExamHubPath(region, "pn")),
+        href: l(hubs.pn),
         accentColor: "var(--semantic-warning)",
       },
       {
@@ -77,7 +78,7 @@ export default function HomeRestoredClient() {
         title: "Nurse Practitioner (NP)",
         body: "Advanced clinical scenarios and higher-level reasoning designed for NP certification exams.",
         cta: "Start NP Prep",
-        href: l(marketingExamHubPath(region, "np")),
+        href: l(hubs.np),
         accentColor: "var(--semantic-brand)",
       },
       {
@@ -85,7 +86,7 @@ export default function HomeRestoredClient() {
         title: "Allied Health",
         body: "Targeted exam prep for MLA, paramedics, OT, social work, and more healthcare careers.",
         cta: "Explore Allied Exams",
-        href: l(marketingExamHubPath(region, "allied")),
+        href: l(hubs.allied),
         accentColor: "var(--semantic-success)",
       },
     ];
