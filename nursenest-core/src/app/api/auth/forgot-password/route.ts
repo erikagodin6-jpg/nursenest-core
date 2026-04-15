@@ -24,6 +24,11 @@ const bodySchema = z.object({
   email: z.string().min(3).max(320),
 });
 
+const successPayload = {
+  ok: true as const,
+  message: "If an account exists for that email, a reset link has been sent.",
+};
+
 function clientIp(req: Request): string {
   return (
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
@@ -45,8 +50,91 @@ export function passwordResetCleanupWhere(userId: string, now: Date) {
 }
 
 /**
+ * Full DB + email flow. Used synchronously in dev (no Resend) for `_devResetUrl`, or inside `after()`
+ * in production so the HTTP response returns before any Prisma/Resend work (avoids gateway 504).
+ */
+async function runForgotPasswordFlow(email: string, ip: string): Promise<{ devResetUrl?: string }> {
+  const dedup = normalizeEmailForDedup(email);
+
+  let user =
+    (await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: { equals: email, mode: "insensitive" } },
+          { normalizedEmail: dedup },
+        ],
+      },
+      select: { id: true, email: true, passwordHash: true, isDemoUser: true },
+    })) ?? null;
+
+  if (!user) {
+    try {
+      const idRows = await prisma.$queryRaw<{ id: string }[]>(
+        Prisma.sql`
+          SELECT id FROM "User"
+          WHERE lower(btrim(email)) = lower(btrim(${email}))
+          LIMIT 2
+        `,
+      );
+      if (idRows.length === 1) {
+        user = await prisma.user.findUnique({
+          where: { id: idRows[0].id },
+          select: { id: true, email: true, passwordHash: true, isDemoUser: true },
+        });
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (!user?.passwordHash || user.isDemoUser) {
+    return {};
+  }
+
+  await prisma.passwordResetToken.deleteMany({
+    where: passwordResetCleanupWhere(user.id, new Date()),
+  });
+
+  const rawToken = generatePasswordResetRawToken();
+  const tokenHash = hashPasswordResetToken(rawToken);
+  const expiresAt = new Date(Date.now() + PASSWORD_RESET_TOKEN_TTL_MS);
+
+  const created = await prisma.passwordResetToken.create({
+    data: {
+      tokenHash,
+      userId: user.id,
+      expiresAt,
+    },
+    select: { id: true },
+  });
+
+  safeServerLog("auth", "password_reset_token_issued", {
+    userIdPrefix: user.id.slice(0, 8),
+    tokenIdPrefix: created.id.slice(0, 8),
+    ttlMin: Math.round(PASSWORD_RESET_TOKEN_TTL_MS / 60_000),
+    ip: ip.slice(0, 64),
+  });
+
+  const resetUrl = buildPasswordResetUrl(rawToken);
+  const sendResult = await sendPasswordResetEmail({ toEmail: user.email, resetUrl });
+  captureServerEvent(analyticsDistinctId(user.id), "password_reset_requested", {}).catch(() => {});
+
+  if (!sendResult.delivered) {
+    safeServerLog("auth", "password_reset_email_not_delivered", {
+      userIdPrefix: user.id.slice(0, 8),
+      ip: ip.slice(0, 64),
+    });
+  }
+
+  return { devResetUrl: sendResult.devResetUrl };
+}
+
+/**
  * Generic JSON for any outcome (no account enumeration).
  * Development + no email provider: includes `_devResetUrl` for manual testing only.
+ *
+ * Responds immediately after cheap validation whenever possible so load balancers do not 504
+ * waiting on Postgres or Resend.
  */
 export async function POST(req: Request) {
   const ip = clientIp(req);
@@ -96,118 +184,33 @@ export async function POST(req: Request) {
   }
   const emailOk = z.string().email().safeParse(email);
   if (!emailOk.success) {
-    return NextResponse.json({
-      ok: true,
-      message: "If an account exists for that email, a reset link has been sent.",
-    });
+    return NextResponse.json(successPayload);
   }
 
-  try {
-    const dedup = normalizeEmailForDedup(email);
-
-    let user =
-      (await prisma.user.findFirst({
-        where: {
-          OR: [
-            { email: { equals: email, mode: "insensitive" } },
-            { normalizedEmail: dedup },
-          ],
-        },
-        select: { id: true, email: true, passwordHash: true, isDemoUser: true },
-      })) ?? null;
-
-    /** Match credentials `auth.ts` btrim fallback for legacy rows with spaces in `email`. */
-    if (!user) {
-      try {
-        const idRows = await prisma.$queryRaw<{ id: string }[]>(
-          Prisma.sql`
-            SELECT id FROM "User"
-            WHERE lower(btrim(email)) = lower(btrim(${email}))
-            LIMIT 2
-          `,
-        );
-        if (idRows.length === 1) {
-          user = await prisma.user.findUnique({
-            where: { id: idRows[0].id },
-            select: { id: true, email: true, passwordHash: true, isDemoUser: true },
-          });
-        }
-      } catch {
-        /* ignore */
-      }
-    }
-
-    if (!user?.passwordHash || user.isDemoUser) {
+  /** Local dev without Resend: must await flow to embed `_devResetUrl` in JSON. */
+  if (process.env.NODE_ENV === "development" && !isPasswordResetEmailConfigured()) {
+    try {
+      const { devResetUrl } = await runForgotPasswordFlow(email, ip);
       return NextResponse.json({
-        ok: true,
-        message: "If an account exists for that email, a reset link has been sent.",
+        ...successPayload,
+        ...(devResetUrl ? { _devResetUrl: devResetUrl } : {}),
       });
+    } catch (e) {
+      safeServerLogCritical("auth", "forgot_password_failed", { surface: "api" }, e);
+      return NextResponse.json(
+        { ok: false, error: "Unable to process request. Try again shortly." },
+        { status: 503 },
+      );
     }
-
-    await prisma.passwordResetToken.deleteMany({
-      where: passwordResetCleanupWhere(user.id, new Date()),
-    });
-
-    const rawToken = generatePasswordResetRawToken();
-    const tokenHash = hashPasswordResetToken(rawToken);
-    const expiresAt = new Date(Date.now() + PASSWORD_RESET_TOKEN_TTL_MS);
-
-    const created = await prisma.passwordResetToken.create({
-      data: {
-        tokenHash,
-        userId: user.id,
-        expiresAt,
-      },
-      select: { id: true },
-    });
-
-    safeServerLog("auth", "password_reset_token_issued", {
-      userIdPrefix: user.id.slice(0, 8),
-      tokenIdPrefix: created.id.slice(0, 8),
-      ttlMin: Math.round(PASSWORD_RESET_TOKEN_TTL_MS / 60_000),
-      ip: ip.slice(0, 64),
-    });
-
-    const resetUrl = buildPasswordResetUrl(rawToken);
-
-    const base = {
-      ok: true as const,
-      message: "If an account exists for that email, a reset link has been sent.",
-    };
-
-    /**
-     * Send email after the HTTP response so gateways (504) do not wait on Resend + DB latency.
-     * Dev without Resend: keep sync so `_devResetUrl` is in the JSON response.
-     */
-    if (process.env.NODE_ENV === "development" && !isPasswordResetEmailConfigured()) {
-      const sendResult = await sendPasswordResetEmail({ toEmail: user.email, resetUrl });
-      return NextResponse.json({
-        ...base,
-        ...(sendResult.devResetUrl ? { _devResetUrl: sendResult.devResetUrl } : {}),
-      });
-    }
-
-    after(async () => {
-      try {
-        const sendResult = await sendPasswordResetEmail({ toEmail: user.email, resetUrl });
-        if (!sendResult.delivered) {
-          safeServerLog("auth", "password_reset_email_not_delivered", {
-            userIdPrefix: user.id.slice(0, 8),
-            ip: ip.slice(0, 64),
-          });
-        }
-      } catch (err) {
-        safeServerLogCritical("auth", "password_reset_email_after_failed", { surface: "api" }, err);
-      }
-      captureServerEvent(analyticsDistinctId(user.id), "password_reset_requested", {}).catch(() => {});
-    });
-
-    return NextResponse.json(base);
-  } catch (e) {
-    safeServerLogCritical("auth", "forgot_password_failed", { surface: "api" }, e);
-    return NextResponse.json(
-      { ok: false, error: "Unable to process request. Try again shortly." },
-      { status: 503 },
-    );
   }
+
+  after(async () => {
+    try {
+      await runForgotPasswordFlow(email, ip);
+    } catch (e) {
+      safeServerLogCritical("auth", "forgot_password_background_failed", { surface: "api" }, e);
+    }
+  });
+
+  return NextResponse.json(successPayload);
 }
