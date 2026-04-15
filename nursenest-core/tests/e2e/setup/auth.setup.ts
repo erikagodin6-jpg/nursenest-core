@@ -33,7 +33,14 @@ setup("authenticate paid test account and save storage state", async ({ page }) 
     );
   }
 
-  // loginWithCredentials already rejects /app/onboarding (see learner-login.ts).
+  // loginWithCredentials can succeed on /app/lessons without ever hitting /app — but the dashboard
+  // redirects incomplete users from /app → /app/onboarding. Hit /app here so storage state is only
+  // saved when onboarding is complete (otherwise downstream specs fail after goto("/app")).
+  await page.goto("/app", { waitUntil: "domcontentloaded" });
+  await expect(page, "E2E user must complete onboarding (DB onboardingCompletedAt). Run scripts/qa-paid-test-account-reset.mts with production DATABASE_URL.").not.toHaveURL(
+    /\/app\/onboarding(\/|$)/,
+    { timeout: 30_000 },
+  );
 
   // Confirm premium path without going through Stripe (lessons hub must not be paywalled).
   await page.goto("/app/lessons", { waitUntil: "domcontentloaded" });

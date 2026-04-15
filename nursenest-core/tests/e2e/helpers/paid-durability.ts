@@ -3,7 +3,6 @@
  * and core learner shell health assertions.
  */
 import { expect, type Page, type Response } from "@playwright/test";
-import { isCriticalPaidSessionApiPath } from "./paid-session-network-monitor";
 
 export type DurabilityPageState = {
   shellReady: boolean;

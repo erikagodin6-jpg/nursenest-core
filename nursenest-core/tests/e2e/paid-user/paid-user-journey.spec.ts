@@ -12,6 +12,7 @@ import {
   paidLessonsHubUrl,
   paidQuestionsHubUrl,
 } from "../helpers/paid-content-discovery";
+import { assertCoreLearnerDurability } from "../helpers/paid-durability";
 import { expectPaidLearnerShellReady } from "../helpers/paid-learner-shell";
 import {
   assertNoMissingI18nDomTokens,
@@ -38,14 +39,17 @@ test.describe("Paid subscriber — full journey", () => {
         await assertNoMissingI18nDomTokens(page);
         const hub = await page.locator("main").innerText();
         expect(hub.length).toBeGreaterThan(80);
+        await assertCoreLearnerDurability(page, "journey dashboard");
       });
 
       await test.step("Lessons index (pathway-scoped)", async () => {
         await page.goto(paidLessonsHubUrl(), { waitUntil: "domcontentloaded" });
         expectNotLoginUrl(page);
+        await expectPaidLearnerShellReady(page, "journey /app/lessons");
         await expectNoSubscriberPaywallSurface(page, "/app/lessons");
         const lessonLinks = page.locator('a[href^="/app/lessons/"]');
         await expect(lessonLinks.first()).toBeVisible({ timeout: 120_000 });
+        await assertCoreLearnerDurability(page, "journey lessons hub");
       });
 
       await test.step("Premium lesson — full content (not preview-only)", async () => {
@@ -117,13 +121,16 @@ test.describe("Paid subscriber — full journey", () => {
         expect(main.length).toBeGreaterThan(40);
       });
 
-      await test.step("Console, network, and /api contract", async () => {
+      await test.step("Core durability + console, network, /api contract", async () => {
+        await assertCoreLearnerDurability(page, "journey pre-guards");
         assertPaidUserGuardsClean({
           tag: "[paid-user-journey]",
           routeLabel: "final",
           observers: guards.observers,
           apiViolations: guards.apiObserver.violations,
           pageUrl: page.url(),
+          page,
+          sessionNet: guards.sessionNet,
           i18nConsoleMode: "warn",
           attach: (name, body) => {
             void testInfo.attach(name, { body, contentType: "text/plain" });

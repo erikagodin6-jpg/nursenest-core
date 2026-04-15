@@ -331,6 +331,9 @@ model Subscription {
   /// * Checkout `metadata.region` when global regional pricing was used (e.g. `philippines`).
   billingRegionSlug    String?            @db.VarChar(32)
   user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// Entitlement hot path: `getUserAccess` loads recent subscription rows per user (`WHERE userId = ? ORDER BY createdAt DESC LIMIT …`).
+  @@index([userId, createdAt(sort: Desc)])
 }
 
 /// * Dedup Stripe webhook deliveries (evt_…) so retries are safe.

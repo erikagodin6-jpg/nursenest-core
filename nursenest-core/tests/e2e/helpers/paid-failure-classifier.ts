@@ -1,83 +1,97 @@
 /**
- * Classifies Playwright assertion errors and network/console signals for paid-user suite reporting.
+ * Classifies Playwright errors and durability signals for paid-user CI summaries.
+ * **Primary cause** = first matching rule below (order matters in {@link classifyPaidFailureMessage}).
  */
 export type PaidFailureCategory =
   | "authFailure"
-  | "onboardingRedirects"
-  | "entitlementFailures"
-  | "networkFailures"
-  | "slowEndpoints"
-  | "missingTranslations"
-  | "consoleRuntimeErrors"
+  | "onboardingBlockingFlow"
+  | "entitlementFailure"
+  | "contentDiscoveryFailure"
+  | "slowEndpointFailure"
+  | "networkFailure"
+  | "i18nCoreFailure"
   | "selectorOrRouteDrift"
-  | "nonBlockingAuthNoise"
-  | "failedRoutes"
-  | "contentDiscovery"
+  | "shellFailure"
+  /** Non-blocking: `Failed to fetch` + session/auth in console while HTTP OK */
+  | "authNoise"
   | "unknown";
 
 export type ClassifiedPaidFailure = {
   category: PaidFailureCategory;
+  /** Short primary reason (first line / headline). */
   reason: string;
   route?: string;
   endpoint?: string;
 };
 
-function extractUrlPath(hay: string): string | undefined {
-  const m = hay.match(/https?:\/\/[^\s)]+|\/app\/[^\s)'"]+/i);
-  return m ? m[0].slice(0, 240) : undefined;
-}
-
-/** Classify a thrown error message (and optional page URL) for summaries and CI. */
-export function classifyPaidFailureMessage(message: string, pageUrl?: string): ClassifiedPaidFailure {
-  const m = message.slice(0, 2_000);
-  const route = pageUrl ?? extractUrlPath(m);
-
-  if (/PaidContentDiscoveryError|noLessonContentAvailable|noQuestionBankItemsAvailable|noFlashcardDeckAvailable/i.test(m)) {
-    return { category: "contentDiscovery", reason: m.slice(0, 400), route };
+function extractRoute(hay: string, pageUrl?: string): string | undefined {
+  if (pageUrl && /^https?:\/\//.test(pageUrl)) {
+    try {
+      return new URL(pageUrl).pathname + new URL(pageUrl).search;
+    } catch {
+      /* ignore */
+    }
   }
-  if (/\/app\/onboarding|onboardingCompletedAt|unexpected \/app\/onboarding/i.test(m)) {
-    return { category: "onboardingRedirects", reason: m.slice(0, 400), route };
-  }
-  if (/\/login|Redirected to \/login|session missing|Unauthenticated|Invalid.*session|ClientFetchError.*session/i.test(m)) {
-    return { category: "authFailure", reason: m.slice(0, 400), route };
-  }
-  if (/Subscription required|paywall|Entitlement mismatch|Preview only/i.test(m)) {
-    return { category: "entitlementFailures", reason: m.slice(0, 400), route };
-  }
-  if (/missing i18n|translation missing|locale bundle|\[missing:/i.test(m)) {
-    return { category: "missingTranslations", reason: m.slice(0, 400), route };
-  }
-  if (/fetch\/XHR|status 4\d\d|status 5\d\d|network error|critical API|api\/questions.*40/i.test(m)) {
-    return { category: "networkFailures", reason: m.slice(0, 400), route };
-  }
-  if (/Slow same-origin|slow >\d+ms/i.test(m)) {
-    return { category: "slowEndpoints", reason: m.slice(0, 400), route };
-  }
-  if (/hydration|Hydration failed|did not match/i.test(m)) {
-    return { category: "consoleRuntimeErrors", reason: m.slice(0, 400), route };
-  }
-  if (/not visible|timeout|strict mode violation|locator.*not found/i.test(m)) {
-    return { category: "selectorOrRouteDrift", reason: m.slice(0, 400), route };
-  }
-  if (/getSession|\/api\/auth\/session|authjs/i.test(m) && !/200/.test(m)) {
-    return { category: "authFailure", reason: m.slice(0, 400), route };
-  }
-
-  return { category: "unknown", reason: m.slice(0, 400), route };
+  const m = hay.match(/url=([^\s)]+)/i) ?? hay.match(/(https?:\/\/[^\s)]+|\/app\/[^\s)'"]+)/i);
+  return m ? m[1]?.slice(0, 240) ?? m[0].slice(0, 240) : undefined;
 }
 
 /**
- * If `/api/auth/session` returns 4xx/5xx before shell is ready → authFailure.
- * If console mentions auth but message looks like noise → nonBlockingAuthNoise.
+ * Prefer the **first line** of multi-line Playwright errors as the human "primary cause" headline.
  */
-export function classifyAuthContext(input: {
-  errorMessage: string;
-  authHttpLast?: Array<{ url: string; status: number }>;
-}): PaidFailureCategory {
-  const authBad = input.authHttpLast?.some((x) => x.status >= 400 && /\/api\/auth\//i.test(x.url));
-  if (authBad) return "authFailure";
+export function primaryFailureHeadline(message: string): string {
+  const first = message.split(/\n/).find((l) => l.trim().length > 0) ?? message;
+  return first.trim().slice(0, 500);
+}
 
-  if (/nonBlockingAuthNoise|noise.*auth/i.test(input.errorMessage)) return "nonBlockingAuthNoise";
+/** Classify a thrown error message for summaries and bucket routing. */
+export function classifyPaidFailureMessage(message: string, pageUrl?: string): ClassifiedPaidFailure {
+  const m = message.slice(0, 4_000);
+  const route = extractRoute(m, pageUrl);
+  const reason = primaryFailureHeadline(m);
 
-  return classifyPaidFailureMessage(input.errorMessage).category;
+  if (/onboardingBlockingFlow|OnboardingBlockingFlowError/i.test(m)) {
+    return { category: "onboardingBlockingFlow", reason, route };
+  }
+  if (/PaidContentDiscoveryError|noLessonContentAvailable|noQuestionBankItemsAvailable|noFlashcardDeckAvailable/i.test(m)) {
+    return { category: "contentDiscoveryFailure", reason, route };
+  }
+  if (/slowEndpointFailure|exceeds 6000ms|core API \d+ms exceeds/i.test(m)) {
+    return { category: "slowEndpointFailure", reason, route };
+  }
+  if (/authFailure:.*\/api\/auth\/session|\/api\/auth\/session returned (401|403|[5-9]\d\d)/i.test(m)) {
+    return { category: "authFailure", reason, route };
+  }
+  if (/shellFailure|shellNotInteractive/i.test(m)) {
+    return { category: "shellFailure", reason, route };
+  }
+  if (/blankScreenDetected|stuckLoadingState/i.test(m)) {
+    return { category: "shellFailure", reason, route };
+  }
+  if (/\/login|Redirected to \/login|session missing|Unauthenticated/i.test(m)) {
+    return { category: "authFailure", reason, route };
+  }
+  if (/Subscription required|paywall|Entitlement mismatch|Preview only/i.test(m)) {
+    return { category: "entitlementFailure", reason, route };
+  }
+  if (/i18nCoreFailure|missing-key console/i.test(m)) {
+    return { category: "i18nCoreFailure", reason, route };
+  }
+  if (/missing i18n|translation missing|locale bundle|\[missing:/i.test(m)) {
+    return { category: "i18nCoreFailure", reason, route };
+  }
+  if (/fetch\/XHR|status 4\d\d|status 5\d\d|network error|failed request/i.test(m)) {
+    return { category: "networkFailure", reason, route };
+  }
+  if (/hydration|Hydration failed|did not match/i.test(m)) {
+    return { category: "shellFailure", reason, route };
+  }
+  if (/not visible|timeout|strict mode violation|locator.*not found|expect\(.*\).*failed/i.test(m)) {
+    return { category: "selectorOrRouteDrift", reason, route };
+  }
+  if (/auth-fetch-noise|authFetchNoise|Failed to fetch.*session/i.test(m)) {
+    return { category: "authNoise", reason, route };
+  }
+
+  return { category: "unknown", reason, route };
 }

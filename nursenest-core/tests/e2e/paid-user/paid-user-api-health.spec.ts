@@ -9,7 +9,8 @@
 import { expect, test, type Page } from "@playwright/test";
 import {
   attachPaidSessionNetworkMonitor,
-  PAID_SESSION_SLOW_MS,
+  PAID_CORE_SLOW_FAIL_MS,
+  PAID_CORE_SLOW_WARN_MS,
 } from "../helpers/paid-session-network-monitor";
 import {
   paidFlashcardsHubUrl,
@@ -18,9 +19,10 @@ import {
 } from "../helpers/paid-content-discovery";
 import { expectPaidLearnerShellReady } from "../helpers/paid-learner-shell";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
+import { expectNotLoginUrl } from "../helpers/paid-user-suite";
 
-function assertNotLogin(url: string) {
-  expect(url, "Unexpected redirect to /login").not.toMatch(/\/login/i);
+function assertNotLoginPage(page: import("@playwright/test").Page) {
+  expectNotLoginUrl(page, "api-health");
 }
 
 async function dismissFlashcardResumeIfPresent(page: Page) {
@@ -72,27 +74,27 @@ test.describe("Paid user — API / network health (focused)", () => {
     try {
       await test.step("/app — shell", async () => {
         await page.goto("/app", { waitUntil: "domcontentloaded" });
-        assertNotLogin(page.url());
+        assertNotLoginPage(page);
         await expectPaidLearnerShellReady(page, "api-health /app");
         await assertNoPaywallOrUpgradeCopy(page, "/app");
       });
 
       await test.step("Lessons hub + one lesson", async () => {
         await page.goto(paidLessonsHubUrl(), { waitUntil: "domcontentloaded" });
-        assertNotLogin(page.url());
+        assertNotLoginPage(page);
         await assertNoPaywallOrUpgradeCopy(page, "/app/lessons");
         const first = page.locator('a[href^="/app/lessons/"]').first();
         await expect(first).toBeVisible({ timeout: 120_000 });
         await first.click();
         await page.waitForLoadState("domcontentloaded");
-        assertNotLogin(page.url());
+        assertNotLoginPage(page);
         await assertNoPaywallOrUpgradeCopy(page, "lesson detail");
         expect(await page.locator("main").innerText().then((t) => t.length)).toBeGreaterThan(120);
       });
 
       await test.step("Questions — one answered (API + rationale)", async () => {
         await page.goto(paidQuestionsHubUrl(), { waitUntil: "domcontentloaded" });
-        assertNotLogin(page.url());
+        assertNotLoginPage(page);
         await assertNoPaywallOrUpgradeCopy(page, "/app/questions");
         await page.getByRole("heading", { name: /^Question bank$/i }).scrollIntoViewIfNeeded();
         await expect(page.getByRole("button", { name: /^Check answer$/i })).toBeVisible({ timeout: 120_000 });
@@ -101,7 +103,7 @@ test.describe("Paid user — API / network health (focused)", () => {
 
       await test.step("Flashcards — one reveal in learn mode", async () => {
         await page.goto(paidFlashcardsHubUrl(), { waitUntil: "domcontentloaded" });
-        assertNotLogin(page.url());
+        assertNotLoginPage(page);
         await assertNoPaywallOrUpgradeCopy(page, "/app/flashcards");
 
         const learnFirst = page.locator('a[href*="/app/flashcards/"][href*="mode=learn"]').first();
@@ -120,15 +122,21 @@ test.describe("Paid user — API / network health (focused)", () => {
       });
 
       await test.step("Network audit assertions", async () => {
-        if (net.slowRequests.length > 0) {
-          await testInfo.attach("slow-endpoints.txt", {
-            body: net.formatSlowLog(),
+        if (net.slowCriticalWarnings.length > 0) {
+          await testInfo.attach("slow-endpoint-warnings.txt", {
+            body: net.formatSlowCriticalWarningsLog(),
             contentType: "text/plain",
           });
           // eslint-disable-next-line no-console
           console.log(
-            `[paid-user-api-health] Slow same-origin fetch/XHR (>${PAID_SESSION_SLOW_MS}ms):\n${net.formatSlowLog()}`,
+            `[paid-user-api-health] slowEndpointWarning (core APIs ${PAID_CORE_SLOW_WARN_MS}–${PAID_CORE_SLOW_FAIL_MS}ms):\n${net.formatSlowCriticalWarningsLog()}`,
           );
+        }
+        if (net.slowRequests.length > 0) {
+          await testInfo.attach("slow-endpoints-all.txt", {
+            body: net.formatSlowLog(),
+            contentType: "text/plain",
+          });
         }
 
         if (net.criticalFailures.length > 0) {
@@ -141,7 +149,7 @@ test.describe("Paid user — API / network health (focused)", () => {
         const failures = net.buildFailureMessages();
         expect(
           failures,
-          `Same-origin fetch/XHR issues (status 4xx/5xx, slow >${PAID_SESSION_SLOW_MS}ms, or network error):\n${failures.join("\n")}`,
+          `Same-origin fetch/XHR issues (status 4xx/5xx, core API slow >${PAID_CORE_SLOW_FAIL_MS}ms, or network error):\n${failures.join("\n")}`,
         ).toEqual([]);
       });
     } finally {

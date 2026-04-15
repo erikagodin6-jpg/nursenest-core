@@ -1,13 +1,11 @@
 /**
- * Aggregates **failed** paid-user E2E tests into `test-results/paid-user-suite-summary.{json,md}`.
- * Uses {@link classifyPaidFailureMessage} for category buckets (auth, onboarding, entitlements, etc.).
- *
- * Registered in `playwright.config.ts` alongside the `list` reporter.
+ * Aggregates failed paid-user E2E tests into `test-results/paid-user-suite-summary.{json,md}`.
+ * **Primary cause** per test = short headline via {@link primaryFailureHeadline}.
  */
 import * as fs from "fs";
 import * as path from "path";
-import type { FullResult, Reporter, Suite, TestCase, TestResult } from "@playwright/test/reporter";
-import { classifyPaidFailureMessage } from "../helpers/paid-failure-classifier";
+import type { FullResult, Reporter, TestCase, TestResult } from "@playwright/test/reporter";
+import { classifyPaidFailureMessage, primaryFailureHeadline } from "../helpers/paid-failure-classifier";
 import {
   emptyPaidSuiteSummary,
   pushClassifiedEntry,
@@ -16,16 +14,6 @@ import {
 
 const PAID_USER_FILE_RE = /tests\/e2e\/paid-user\/paid-user-.*\.spec\.ts$/;
 
-function projectName(test: TestCase): string {
-  let s: Suite | undefined = test.parent;
-  while (s) {
-    const p = s.project();
-    if (p?.name) return p.name;
-    s = s.parent;
-  }
-  return "";
-}
-
 export default class PaidUserSummaryReporter implements Reporter {
   private summary: PaidSuiteSummaryArtifact = emptyPaidSuiteSummary();
 
@@ -33,7 +21,7 @@ export default class PaidUserSummaryReporter implements Reporter {
     if (result.status !== "failed" && result.status !== "timedOut") return;
     if (!PAID_USER_FILE_RE.test(test.location.file)) return;
     const err = result.error?.message ?? "(no message)";
-    const classified = classifyPaidFailureMessage(err, result.error?.stack?.split("\n")[0]);
+    const classified = classifyPaidFailureMessage(err);
 
     pushClassifiedEntry(this.summary, {
       specFile: test.location.file,
@@ -41,7 +29,7 @@ export default class PaidUserSummaryReporter implements Reporter {
       category: classified.category,
       route: classified.route,
       endpoint: classified.endpoint,
-      reason: classified.reason,
+      reason: primaryFailureHeadline(err),
     });
   }
 
@@ -53,17 +41,16 @@ export default class PaidUserSummaryReporter implements Reporter {
 
     const jsonPath = path.join(outDir, "paid-user-suite-summary.json");
     const bucketKeys: (keyof Omit<PaidSuiteSummaryArtifact, "generatedAt">)[] = [
-      "failedRoutes",
-      "onboardingRedirects",
       "authFailures",
+      "onboardingBlockingFlows",
       "entitlementFailures",
-      "slowEndpoints",
+      "contentDiscoveryFailures",
+      "slowEndpointFailures",
       "networkFailures",
-      "missingTranslations",
-      "consoleRuntimeErrors",
+      "i18nCoreFailures",
       "selectorOrRouteDrift",
-      "nonBlockingAuthNoise",
-      "contentDiscovery",
+      "shellFailures",
+      "authNoise",
       "unknown",
     ];
     const bucketsOnly: Omit<PaidSuiteSummaryArtifact, "generatedAt"> = {} as Omit<
@@ -84,6 +71,8 @@ export default class PaidUserSummaryReporter implements Reporter {
           runStatus: result.status,
           generatedAt: this.summary.generatedAt,
           failureCount: totalFailed,
+          primaryCauseNote:
+            "Each entry.reason is the first line / headline of the failure — use it as the primary deploy-blocker cause.",
           buckets: bucketsOnly,
         },
         null,
@@ -99,32 +88,32 @@ export default class PaidUserSummaryReporter implements Reporter {
       `Overall run status: **${result.status}**`,
       `Classified failure entries: **${totalFailed}**`,
       "",
-      "See buckets below. Fix auth/onboarding first, then entitlements, then selectors.",
+      "**Primary cause** for each item is the short `reason` line (first line of the error).",
       "",
     ];
 
-    const buckets: Array<[string, keyof typeof this.summary]> = [
-      ["Auth failures", "authFailures"],
-      ["Onboarding redirects", "onboardingRedirects"],
+    const sections: Array<[string, keyof PaidSuiteSummaryArtifact]> = [
+      ["Auth / session (blocking)", "authFailures"],
+      ["Onboarding blocking flow", "onboardingBlockingFlows"],
       ["Entitlement / paywall", "entitlementFailures"],
-      ["Content discovery (empty catalog)", "contentDiscovery"],
-      ["Network / API", "networkFailures"],
-      ["Slow endpoints", "slowEndpoints"],
-      ["Missing translations", "missingTranslations"],
-      ["Console / runtime", "consoleRuntimeErrors"],
+      ["Content discovery (catalog empty)", "contentDiscoveryFailures"],
+      ["Slow endpoint (core API >6s)", "slowEndpointFailures"],
+      ["Network / HTTP failures", "networkFailures"],
+      ["i18n (core)", "i18nCoreFailures"],
       ["Selector / route drift", "selectorOrRouteDrift"],
-      ["Non-blocking auth noise", "nonBlockingAuthNoise"],
+      ["Shell / blank / stuck UI", "shellFailures"],
+      ["Auth noise (non-blocking)", "authNoise"],
       ["Unknown", "unknown"],
     ];
 
-    for (const [title, key] of buckets) {
+    for (const [title, key] of sections) {
       const items = this.summary[key] as Array<{ specFile: string; testTitle: string; reason: string }>;
       if (!Array.isArray(items) || items.length === 0) continue;
       lines.push(`## ${title}`, "");
       for (const it of items) {
         lines.push(`- **${it.testTitle.replace(/\|/g, "\\|")}**`);
         lines.push(`  - File: \`${it.specFile}\``);
-        lines.push(`  - ${it.reason.replace(/\n/g, " ").slice(0, 500)}`);
+        lines.push(`  - **Primary cause:** ${it.reason.replace(/\n/g, " ").slice(0, 600)}`);
         lines.push("");
       }
     }

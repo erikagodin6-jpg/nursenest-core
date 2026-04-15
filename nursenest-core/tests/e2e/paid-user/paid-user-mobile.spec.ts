@@ -93,6 +93,8 @@ test.describe("Paid user — mobile smoke", () => {
           observers: guards.observers,
           apiViolations: guards.apiObserver.violations,
           pageUrl: page.url(),
+          page,
+          sessionNet: guards.sessionNet,
           i18nConsoleMode: "warn",
           attach: (name, body) => {
             void testInfo.attach(name, { body, contentType: "text/plain" });

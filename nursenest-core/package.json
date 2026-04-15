@@ -140,6 +140,7 @@
     "qa:freemium:browser": "node scripts/check-free-e2e-credentials.cjs && playwright test --project=chromium-free",
     "e2e:cache-paid-session": "node scripts/check-paid-e2e-credentials.cjs && playwright test --project=setup-paid-auth",
     "test:e2e:ci-master": "node scripts/check-paid-e2e-credentials.cjs && playwright test -c playwright.ci-master.config.ts --project=chromium-ci-master",
+    "test:e2e:paid-fast-sanity": "node scripts/check-paid-e2e-credentials.cjs && playwright test --project=chromium-paid tests/e2e/paid-user/paid-user-00-fast-sanity.spec.ts",
     "e2e:cache-free-session": "node scripts/check-free-e2e-credentials.cjs && playwright test --project=setup-free-auth",
     "qa:paid-free-smoke:browser": "node scripts/check-paid-free-e2e-credentials.cjs && playwright test --project=chromium-paid --project=chromium-free",
     "qa:lesson-flows:all": "npm run qa:lesson-flows && npm run qa:lesson-flows:browser",

@@ -1,12 +1,22 @@
 /**
- * **Fast paid sanity gate** — minimal path to validate session + learner shell + lessons hub + guardrails.
- * Intended to run first in CI (`paid-user-00-*` sorts before other specs) and finish in seconds.
+ * **Fast paid sanity — deploy gate** (~seconds on warm app; validates session + shell + lessons + durability guards).
  *
- * Does **not** replace `paid-user-journey` (full study flows) or entitlement tests.
+ * **Block deploy if this fails.** Run:
+ *
+ * ```
+ * npm run test:e2e:paid-fast-sanity
+ * ```
+ *
+ * Or:
+ *
+ * ```
+ * npx playwright test --project=chromium-paid tests/e2e/paid-user/paid-user-00-fast-sanity.spec.ts
+ * ```
  *
  * @see ../helpers/paid-user-suite.ts
  */
 import { expect, test } from "@playwright/test";
+import { assertCoreLearnerDurability } from "../helpers/paid-durability";
 import { paidLessonsHubUrl } from "../helpers/paid-content-discovery";
 import { expectPaidLearnerShellReady } from "../helpers/paid-learner-shell";
 import {
@@ -18,7 +28,7 @@ import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions"
 
 test.describe("Paid user — fast sanity (CI gate)", () => {
   test("shell + lessons hub + no paywall + API/console contract", async ({ page, baseURL }, testInfo) => {
-    test.setTimeout(90_000);
+    test.setTimeout(45_000);
     const appOrigin = new URL(baseURL ?? "http://127.0.0.1:3000").origin;
     const guards = attachPaidUserStandardGuards(page, appOrigin);
 
@@ -27,7 +37,8 @@ test.describe("Paid user — fast sanity (CI gate)", () => {
         await page.goto("/app", { waitUntil: "domcontentloaded" });
         expectNotLoginUrl(page);
         await expectPaidLearnerShellReady(page, "fast-sanity /app");
-        await expect(page.locator("main")).toBeVisible({ timeout: 15_000 });
+        await expectNoSubscriptionPaywall(page, "fast-sanity /app");
+        await assertCoreLearnerDurability(page, "fast-sanity dashboard");
       });
 
       await test.step("/app/lessons — hub loads, no subscription gate", async () => {
@@ -36,16 +47,19 @@ test.describe("Paid user — fast sanity (CI gate)", () => {
         await expectPaidLearnerShellReady(page, "fast-sanity /app/lessons");
         await expectNoSubscriptionPaywall(page, "fast-sanity lessons hub");
         const lessonLinks = page.locator('a[href^="/app/lessons/"]');
-        await expect(lessonLinks.first()).toBeVisible({ timeout: 60_000 });
+        await expect(lessonLinks.first()).toBeVisible({ timeout: 20_000 });
+        await assertCoreLearnerDurability(page, "fast-sanity lessons hub");
       });
 
-      await test.step("Guards — serious console, failed requests, /api HTTP", async () => {
+      await test.step("Guards — auth/session, core SLO, serious console, /api HTTP", async () => {
         assertPaidUserGuardsClean({
           tag: "[paid-user-00-fast-sanity]",
           routeLabel: "final",
           observers: guards.observers,
           apiViolations: guards.apiObserver.violations,
           pageUrl: page.url(),
+          page,
+          sessionNet: guards.sessionNet,
           i18nConsoleMode: "warn",
           attach: (name, body) => {
             void testInfo.attach(name, { body, contentType: "text/plain" });
