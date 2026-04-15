@@ -60,7 +60,7 @@ const paidProjects = paidAuthEnabled
       {
         name: "chromium-paid",
         testMatch:
-          /paid-user-(login-flow|smoke|journey|entitlements|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile)\.spec\.ts$|paid-subscriber-audit\.spec\.ts$|production-i18n-bundle\.spec\.ts$/,
+          /paid-user-(00-fast-sanity|login-flow|journey|entitlements|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke)\.spec\.ts$|paid-subscriber-audit\.spec\.ts$|production-i18n-bundle\.spec\.ts$/,
         dependencies: ["setup-paid-auth"],
         use: {
           ...devices["Desktop Chrome"],
@@ -102,7 +102,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : 2,
   timeout: 180_000,
   expect: { timeout: 30_000 },
-  reporter: [["list"]],
+  reporter: [["list"], ["./tests/e2e/reporters/paid-user-summary-reporter.ts"]],
   use: {
     baseURL,
     trace: "on-first-retry",
@@ -121,7 +121,7 @@ export default defineConfig({
       // Project-level testIgnore replaces the root list — keep `.next` + build dirs here too.
       testIgnore: [
         /lesson-flows\.mobile\.spec\.ts$/,
-        /paid-user-(login-flow|smoke|journey|entitlements|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile)\.spec\.ts$/,
+        /paid-user-(00-fast-sanity|login-flow|journey|entitlements|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke)\.spec\.ts$/,
         /paid-subscriber-audit\.spec\.ts$/,
         /stripe-subscriber-journey\.spec\.ts$/,
         /freemium-paywall\.spec\.ts$/,

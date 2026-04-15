@@ -24,6 +24,20 @@ export async function waitForAuthenticatedLearnerShell(
   await expect(primary.or(bottom).first()).toBeVisible({ timeout: Math.min(ms, 90_000) });
 }
 
+/**
+ * Single entry point for paid E2E: not on `/login`, not on `/app/onboarding`, learner chrome visible.
+ * Prefer this over ad-hoc waits in specs.
+ */
+export async function expectPaidLearnerShellReady(
+  page: Page,
+  context: string,
+  opts?: { timeoutMs?: number },
+): Promise<void> {
+  await expectOnLearnerApp(page);
+  await expectNotOnAppOnboarding(page, context);
+  await waitForAuthenticatedLearnerShell(page, opts);
+}
+
 /** Stable selector: nav labels come from i18n; href + aria-label on nav is stable. */
 export function learnerPrimaryNavLinkToHref(page: Page, hrefPart: string) {
   return page.locator(`nav[aria-label="Learner primary actions"] a[href*="${hrefPart}"]`).first();

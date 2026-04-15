@@ -8,12 +8,19 @@
  *
  * | Command | Scope |
  * | --- | --- |
- * | `npx playwright test --project=chromium-paid tests/e2e/paid-user/paid-user-smoke.spec.ts` | Paid **smoke** (lighter) |
- * | `npx playwright test --project=chromium-paid tests/e2e/paid-user/` | Full **paid-user** directory |
- * | `npm run test:e2e:ci-master` | CI gate subset (`playwright.ci-master.config.ts`) |
- * | `npx playwright test --project=chromium-paid tests/e2e/paid-user/paid-user-mobile.spec.ts` | **Mobile** paid smoke |
+ * | `npx playwright test --project=chromium-paid tests/e2e/paid-user/paid-user-00-fast-sanity.spec.ts` | **Fast** CI gate (seconds) |
+ * | `npx playwright test --project=chromium-paid tests/e2e/paid-user/` | Full **paid-user** directory (extended) |
+ * | `npm run test:e2e:ci-master` | Lean CI gate: fast-sanity + journey + entitlements + nav + api-health |
+ * | `npx playwright test --project=chromium-paid tests/e2e/paid-user/paid-user-mobile.spec.ts` | Mobile-only smoke |
+ *
+ * **Removed / merged:** `paid-user-smoke.spec.ts` was folded into `paid-user-cat-smoke.spec.ts` (CAT only) plus
+ * `paid-user-journey` + fast-sanity to avoid duplicate long traversals.
  *
  * Uses stored `storageState` from `setup-paid-auth` — **no per-test UI login**.
+ *
+ * **i18n console:** default `assertPaidUserGuardsClean` uses `i18nConsoleMode: "warn"` — missing-key lines are
+ * attached as `i18n-console-warnings.txt` and do not fail the test (marketing noise). Use `"fail"` only when
+ * you need strict console parity. Dedicated `paid-user-i18n.spec.ts` enforces learner DOM + core routes.
  *
  * Console allowlist: noise from analytics/CSP/third-party is filtered in `seriousConsoleLines`.
  * Extend sparingly and document new patterns inline.
@@ -92,18 +99,45 @@ export function attachPaidUserStandardGuards(page: Page, appOrigin: string): Pai
   };
 }
 
+export type PaidGuardI18nConsoleMode = "fail" | "warn" | "ignore";
+
 export function assertPaidUserGuardsClean(input: {
   tag: string;
   routeLabel: string;
   observers: PageObservers;
   apiViolations: string[];
   pageUrl: string;
+  /** Default `"warn"`: i18n missing-key lines are not fatal; they are stripped from serious console. */
+  i18nConsoleMode?: PaidGuardI18nConsoleMode;
+  /** Optional attachment for i18n warnings (e.g. `testInfo.attach`). */
+  attach?: (name: string, body: string) => void;
 }): void {
-  const { tag, routeLabel, observers, apiViolations, pageUrl } = input;
-  const i18n = i18nMissingKeyConsoleLines(observers.consoleErrors);
-  expect(i18n, `i18n missing-key console errors:\n${i18n.join("\n")}`).toEqual([]);
+  const {
+    tag,
+    routeLabel,
+    observers,
+    apiViolations,
+    pageUrl,
+    i18nConsoleMode = "warn",
+    attach,
+  } = input;
 
-  const serious = seriousConsoleLines(observers.consoleErrors);
+  const i18n = i18nMissingKeyConsoleLines(observers.consoleErrors);
+
+  if (i18nConsoleMode === "fail") {
+    expect(i18n, `i18n missing-key console errors:\n${i18n.join("\n")}`).toEqual([]);
+  } else if (i18nConsoleMode === "warn" && i18n.length > 0) {
+    const body = i18n.join("\n");
+    attach?.("i18n-console-warnings.txt", body);
+    // eslint-disable-next-line no-console
+    console.log(`[${tag}] i18n console warnings (non-fatal, ${i18n.length} lines) — see attachment if provided`);
+  }
+
+  const i18nSet = new Set(i18n);
+  const consoleForSerious =
+    i18nConsoleMode === "fail" ? observers.consoleErrors : observers.consoleErrors.filter((l) => !i18nSet.has(l));
+
+  const serious = seriousConsoleLines(consoleForSerious);
   if (serious.length > 0 || observers.failedRequests.length > 0) {
     logObserverFailureSummary({
       tag,

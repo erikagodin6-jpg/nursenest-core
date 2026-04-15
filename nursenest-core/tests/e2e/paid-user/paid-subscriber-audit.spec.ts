@@ -1,7 +1,7 @@
 /**
  * Paid-subscriber **audit** using a **seeded premium account** (no Stripe checkout).
  *
- * Prerequisites — same as `paid-user-smoke.spec.ts`:
+ * Prerequisites — same as other paid specs (`setup-paid-auth`, `E2E_PAID_*`):
  * - `E2E_PAID_EMAIL` + `E2E_PAID_PASSWORD` (or `PLAYWRIGHT_TEST_*`)
  * - `--project=chromium-paid`: `setup-paid-auth` logs in once and reuses `tests/e2e/.auth/paid-user.json` (see `auth-state-paths.ts`)
  *

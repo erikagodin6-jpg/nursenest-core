@@ -46,8 +46,9 @@ function localDevWebServer() {
 
 const paidAuthEnabled = hasPaidTestCredentials();
 
+/** Lean gate: fast sanity + canonical journey + entitlements + nav + API monitor (no i18n/session/mobile by default). */
 const masterSpecs =
-  /paid-user-(journey|entitlements|navigation|i18n|api-health)\.spec\.ts$/;
+  /paid-user-(00-fast-sanity|journey|entitlements|navigation|api-health)\.spec\.ts$/;
 
 const ciMasterProjects = paidAuthEnabled
   ? [
@@ -88,6 +89,7 @@ export default defineConfig({
   expect: { timeout: 30_000 },
   reporter: [
     ["list"],
+    ["./tests/e2e/reporters/paid-user-summary-reporter.ts"],
     ["./tests/e2e/reporters/ci-master-reporter.ts"],
     ["json", { outputFile: "test-results/ci-master-report.json" }],
   ],

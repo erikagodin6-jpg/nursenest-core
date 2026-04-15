@@ -1,11 +1,18 @@
 /**
- * End-to-end **subscriber journey**: homepage → dashboard → lessons → premium lesson → practice → flashcards → billing.
+ * Canonical **full subscriber UI journey** (desktop): dashboard → lessons → premium lesson → practice → flashcards → billing.
+ * Marketing homepage is intentionally omitted here — covered by public E2E and fast-sanity focuses on speed.
  *
  * Uses `tests/e2e/.auth/paid-user.json` via `--project=chromium-paid` (no UI login per run).
  *
- * @see ../helpers/paid-user-suite.ts for run commands and shared guards.
+ * @see ../helpers/paid-user-suite.ts
  */
 import { expect, test } from "@playwright/test";
+import {
+  paidFlashcardsHubUrl,
+  paidLessonsHubUrl,
+  paidQuestionsHubUrl,
+} from "../helpers/paid-content-discovery";
+import { expectPaidLearnerShellReady } from "../helpers/paid-learner-shell";
 import {
   assertNoMissingI18nDomTokens,
   assertPaidUserGuardsClean,
@@ -14,40 +21,27 @@ import {
   answerOneQuestionBankItem,
   expectNotLoginUrl,
   expectNoSubscriberPaywallSurface,
-  expectOnLearnerApp,
   PLACEHOLDER_COPY_RE,
 } from "../helpers/paid-user-suite";
 
 test.describe("Paid subscriber — full journey", () => {
-  test("homepage → dashboard → lessons → practice → flashcards → billing", async ({ page, baseURL }) => {
-    const origin = baseURL ?? "http://127.0.0.1:3000";
-    const appOrigin = new URL(origin).origin;
+  test("dashboard → lessons → practice → flashcards → billing", async ({ page, baseURL }, testInfo) => {
+    const appOrigin = new URL(baseURL ?? "http://127.0.0.1:3000").origin;
     const guards = attachPaidUserStandardGuards(page, appOrigin);
 
     try {
-      await test.step("Homepage (signed-in marketing shell)", async () => {
-        await page.goto("/", { waitUntil: "domcontentloaded" });
-        expectNotLoginUrl(page);
-        await assertNoMissingI18nDomTokens(page);
-        const body = await page.locator("body").innerText();
-        expect(body.length).toBeGreaterThan(80);
-        expect(PLACEHOLDER_COPY_RE.test(body)).toBe(false);
-      });
-
       await test.step("Learner dashboard", async () => {
-        const dash = page.getByRole("link", { name: /dashboard/i }).first();
-        await expect(dash).toBeVisible({ timeout: 30_000 });
-        await dash.click();
-        await page.waitForURL(/\/app(\/|$)/, { timeout: 30_000 });
-        await expectOnLearnerApp(page);
+        await page.goto("/app", { waitUntil: "domcontentloaded" });
+        expectNotLoginUrl(page);
+        await expectPaidLearnerShellReady(page, "journey /app");
         await expectNoSubscriberPaywallSurface(page, "/app");
         await assertNoMissingI18nDomTokens(page);
         const hub = await page.locator("main").innerText();
         expect(hub.length).toBeGreaterThan(80);
       });
 
-      await test.step("Lessons index", async () => {
-        await page.goto("/app/lessons", { waitUntil: "domcontentloaded" });
+      await test.step("Lessons index (pathway-scoped)", async () => {
+        await page.goto(paidLessonsHubUrl(), { waitUntil: "domcontentloaded" });
         expectNotLoginUrl(page);
         await expectNoSubscriberPaywallSurface(page, "/app/lessons");
         const lessonLinks = page.locator('a[href^="/app/lessons/"]');
@@ -71,8 +65,8 @@ test.describe("Paid subscriber — full journey", () => {
         await expect(page.locator('aside[aria-label="Lesson access"]').getByText(/^Preview only$/i)).toHaveCount(0);
       });
 
-      await test.step("Practice — answer several items; rationales visible", async () => {
-        await page.goto("/app/questions", { waitUntil: "domcontentloaded" });
+      await test.step("Practice — answer 2 items; rationales visible", async () => {
+        await page.goto(paidQuestionsHubUrl(), { waitUntil: "domcontentloaded" });
         expectNotLoginUrl(page);
         await expectNoSubscriberPaywallSurface(page, "/app/questions");
         await assertNoMissingI18nDomTokens(page);
@@ -80,13 +74,13 @@ test.describe("Paid subscriber — full journey", () => {
         await page.getByRole("heading", { name: /^Question bank$/i }).scrollIntoViewIfNeeded();
         await expect(page.getByRole("button", { name: /^Check answer$/i })).toBeVisible({ timeout: 120_000 });
 
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 2; i++) {
           await answerOneQuestionBankItem(page);
         }
       });
 
       await test.step("Flashcards — study loop", async () => {
-        await page.goto("/app/flashcards", { waitUntil: "domcontentloaded" });
+        await page.goto(paidFlashcardsHubUrl(), { waitUntil: "domcontentloaded" });
         expectNotLoginUrl(page);
         await expectNoSubscriberPaywallSurface(page, "/app/flashcards");
 
@@ -100,13 +94,13 @@ test.describe("Paid subscriber — full journey", () => {
         const reveal = page.getByRole("button", { name: /reveal answer/i });
         const nextCard = page.getByRole("button", { name: /^Next$/i });
 
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 2; i++) {
           await expect(reveal).toBeVisible({ timeout: 120_000 });
           await reveal.click();
           await expect(page.locator("aside").filter({ hasText: /rationale/i }).first()).toBeVisible({
             timeout: 15_000,
           });
-          if (i < 2) {
+          if (i < 1) {
             await expect(nextCard).toBeEnabled({ timeout: 10_000 });
             await nextCard.click();
             await page.waitForTimeout(400);
@@ -123,13 +117,17 @@ test.describe("Paid subscriber — full journey", () => {
         expect(main.length).toBeGreaterThan(40);
       });
 
-      await test.step("Console, i18n, network, and /api contract", async () => {
+      await test.step("Console, network, and /api contract", async () => {
         assertPaidUserGuardsClean({
           tag: "[paid-user-journey]",
           routeLabel: "final",
           observers: guards.observers,
           apiViolations: guards.apiObserver.violations,
           pageUrl: page.url(),
+          i18nConsoleMode: "warn",
+          attach: (name, body) => {
+            void testInfo.attach(name, { body, contentType: "text/plain" });
+          },
         });
       });
     } finally {

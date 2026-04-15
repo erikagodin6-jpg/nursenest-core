@@ -1,19 +1,19 @@
 /**
- * Session persistence: paid storage state must survive multi-page navigation, reload, and idle time.
+ * Session persistence: storage state survives reload, idle, and a **small** set of navigations.
+ * Not a full product tour — see `paid-user-journey` for that.
  *
- * Requires `--project=chromium-paid` + `setup-paid-auth` (see `paid-user-smoke.spec.ts`).
- *
- * Idle wait default: 2.5 minutes. Override for faster local runs:
+ * Idle wait default: 2.5 minutes. Override:
  *   E2E_SESSION_PERSISTENCE_IDLE_MS=5000 npx playwright test .../paid-user-session-persistence.spec.ts --project=chromium-paid
  */
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
+import { paidLessonsHubUrl, paidQuestionsHubUrl } from "../helpers/paid-content-discovery";
+import { expectPaidLearnerShellReady } from "../helpers/paid-learner-shell";
 import {
   assertPaidUserGuardsClean,
   attachPaidUserStandardGuards,
 } from "../helpers/paid-user-suite";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
 
-/** Default 150_000 ms (2.5 min); must stay within 2–3 min unless overridden. */
 function idleWaitMs(): number {
   const raw = process.env.E2E_SESSION_PERSISTENCE_IDLE_MS?.trim();
   if (raw) {
@@ -31,16 +31,15 @@ async function assertSessionActiveOnAppRoute(page: Page, context: string): Promi
   }
 }
 
-async function visitAndAssert(page: Page, path: string, label: string): Promise<void> {
+async function visitAndAssertShell(page: Page, path: string, label: string): Promise<void> {
   await page.goto(path, { waitUntil: "domcontentloaded" });
   await assertSessionActiveOnAppRoute(page, `${label} (${path})`);
-  await expect(page.locator("main")).toBeVisible({ timeout: 30_000 });
+  await expectPaidLearnerShellReady(page, `session-persistence ${label}`);
 }
 
 test.describe("Paid user — session persistence", () => {
-  test("navigation, reload, idle wait, and retry keep learner session", async ({ page, baseURL }, testInfo) => {
+  test("reload, idle, and retry keep learner session", async ({ page, baseURL }, testInfo) => {
     const idleMs = idleWaitMs();
-    // Idle + navigations + margin (global config default is 180s).
     test.setTimeout(Math.max(600_000, idleMs + 240_000));
 
     await testInfo.attach("session-persistence-config.txt", {
@@ -48,44 +47,35 @@ test.describe("Paid user — session persistence", () => {
       contentType: "text/plain",
     });
 
-    await test.step("Navigate 6 learner pages (session + premium access)", async () => {
-      await visitAndAssert(page, "/app", "dashboard");
-      await visitAndAssert(page, "/app/lessons", "lessons hub");
-      await visitAndAssert(page, "/app/questions", "question bank");
-      await visitAndAssert(page, "/app/flashcards", "flashcards hub");
-      await visitAndAssert(page, "/app/account/overview", "account overview");
-      await visitAndAssert(page, "/app/account/billing", "billing");
+    await test.step("Seed: dashboard + lessons + questions (pathway-scoped)", async () => {
+      await visitAndAssertShell(page, "/app", "dashboard");
+      await visitAndAssertShell(page, paidLessonsHubUrl(), "lessons hub");
+      await visitAndAssertShell(page, paidQuestionsHubUrl(), "question bank");
     });
 
     await test.step("Reload browser (full document reload)", async () => {
       await page.reload({ waitUntil: "domcontentloaded" });
       await assertSessionActiveOnAppRoute(page, "after reload");
-      await expect(page.locator("main")).toBeVisible({ timeout: 30_000 });
-    });
-
-    await test.step("Continue navigation after reload", async () => {
-      await visitAndAssert(page, "/app", "post-reload dashboard");
-      await visitAndAssert(page, "/app/lessons", "post-reload lessons");
+      await expectPaidLearnerShellReady(page, "after reload");
     });
 
     await test.step(`Idle wait (${idleMs}ms) — session must not expire`, async () => {
-      // Keep page alive; session cookies should persist across real time.
       await page.waitForTimeout(idleMs);
     });
 
-    await test.step("Retry navigation after idle (session still valid)", async () => {
-      await visitAndAssert(page, "/app", "retry dashboard");
-      await visitAndAssert(page, "/app/questions", "retry questions");
-      await visitAndAssert(page, "/app/account/overview", "retry account");
+    await test.step("Post-idle: dashboard + questions still premium", async () => {
+      await visitAndAssertShell(page, "/app", "retry dashboard");
+      await visitAndAssertShell(page, paidQuestionsHubUrl(), "retry questions");
     });
 
-    await test.step("Final reload + guards (session still valid; no console/API regressions)", async () => {
+    await test.step("Final reload + guards (session + API/console)", async () => {
       const appOrigin = new URL(baseURL ?? "http://127.0.0.1:3000").origin;
       const guards = attachPaidUserStandardGuards(page, appOrigin);
       try {
         await page.goto("/app", { waitUntil: "domcontentloaded" });
         await page.reload({ waitUntil: "domcontentloaded" });
         await assertSessionActiveOnAppRoute(page, "final after idle + reload");
+        await expectPaidLearnerShellReady(page, "final");
         await expect(page.getByRole("link", { name: /lessons/i }).first()).toBeVisible({ timeout: 30_000 });
         assertPaidUserGuardsClean({
           tag: "[paid-user-session-persistence]",
@@ -93,6 +83,10 @@ test.describe("Paid user — session persistence", () => {
           observers: guards.observers,
           apiViolations: guards.apiObserver.violations,
           pageUrl: page.url(),
+          i18nConsoleMode: "warn",
+          attach: (name, body) => {
+            void testInfo.attach(name, { body, contentType: "text/plain" });
+          },
         });
       } finally {
         guards.dispose();

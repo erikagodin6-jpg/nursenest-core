@@ -1,12 +1,16 @@
 /**
  * **Entitlements:** premium URLs with paid session vs anonymous (cleared storage).
- * Direct-route access for lesson, questions, and flashcards; downgrade parity when logged out.
  *
- * Uses `tests/e2e/.auth/paid-user.json` via `--project=chromium-paid`.
- *
- * @see ../helpers/paid-user-suite.ts for run commands.
+ * @see ../helpers/paid-user-suite.ts
  */
 import { expect, test, type Page } from "@playwright/test";
+import {
+  captureQuestionIdFromBankApi,
+  expectAtLeastOneFlashcardLearnLink,
+  expectAtLeastOneLessonLink,
+  paidFlashcardsHubUrl,
+  paidLessonsHubUrl,
+} from "../helpers/paid-content-discovery";
 import { dismissFlashcardResumeIfPresent } from "../helpers/paid-user-suite";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
 
@@ -14,7 +18,6 @@ async function expectLearnerSignInGate(page: Page) {
   await expect(page.getByRole("link", { name: /sign in/i }).first()).toBeVisible({ timeout: 30_000 });
 }
 
-/** No premium question UI (stem / bank shell) when session is missing. */
 async function expectNoPremiumQuestionSurface(page: Page) {
   await expect(page.locator(".nn-question-stem")).toHaveCount(0);
   await expect(page.getByRole("button", { name: /^Check answer$/i })).toHaveCount(0);
@@ -33,42 +36,6 @@ async function clearAuthSession(page: Page, baseURL: string) {
   });
 }
 
-async function captureQuestionIdFromBank(page: Page): Promise<string> {
-  let captured: string | null = null;
-  const handler = async (resp: import("@playwright/test").Response) => {
-    if (captured) return;
-    let pathname = "";
-    try {
-      pathname = new URL(resp.url()).pathname;
-    } catch {
-      return;
-    }
-    if (pathname !== "/api/questions") return;
-    if (resp.request().method() !== "GET") return;
-    if (resp.status() !== 200) return;
-    try {
-      const data = (await resp.json()) as { questions?: Array<{ id?: string }> };
-      const id = data.questions?.[0]?.id;
-      if (typeof id === "string" && id.length >= 8) captured = id;
-    } catch {
-      /* ignore parse errors */
-    }
-  };
-  page.on("response", handler);
-  try {
-    await page.goto("/app/questions", { waitUntil: "domcontentloaded" });
-    for (let i = 0; i < 90 && !captured; i++) {
-      await page.waitForTimeout(200);
-    }
-    if (!captured) {
-      throw new Error("Timed out waiting for GET /api/questions with at least one question id.");
-    }
-    return captured;
-  } finally {
-    page.off("response", handler);
-  }
-}
-
 test.describe("Paid entitlements vs anonymous downgrade", () => {
   test.describe.configure({ mode: "serial" });
 
@@ -76,21 +43,22 @@ test.describe("Paid entitlements vs anonymous downgrade", () => {
     const origin = baseURL ?? "http://127.0.0.1:3000";
 
     const lessonUrl: string = await test.step("Discover lesson URL (paid)", async () => {
-      await page.goto("/app/lessons", { waitUntil: "domcontentloaded" });
+      await page.goto(paidLessonsHubUrl(), { waitUntil: "domcontentloaded" });
       await expectNoSubscriptionPaywall(page, "/app/lessons");
+      await expectAtLeastOneLessonLink(page);
       const href = await page.locator('a[href^="/app/lessons/"]').first().getAttribute("href");
       expect(href, "Expected at least one lesson link").toBeTruthy();
       const u = new URL(href!, origin);
       return `${u.pathname}${u.search}`;
     });
 
-    const questionId: string = await test.step("Discover question id (paid)", async () => captureQuestionIdFromBank(page));
+    const questionId: string = await test.step("Discover question id (paid)", async () => captureQuestionIdFromBankApi(page));
 
     const flashcardDeckUrl: string = await test.step("Discover flashcard deck URL (paid)", async () => {
-      await page.goto("/app/flashcards", { waitUntil: "domcontentloaded" });
+      await page.goto(paidFlashcardsHubUrl(), { waitUntil: "domcontentloaded" });
       await expectNoSubscriptionPaywall(page, "/app/flashcards");
+      await expectAtLeastOneFlashcardLearnLink(page);
       const learn = page.locator('a[href*="/app/flashcards/"][href*="mode=learn"]').first();
-      await expect(learn).toBeVisible({ timeout: 120_000 });
       const href = await learn.getAttribute("href");
       expect(href).toBeTruthy();
       const u = new URL(href!, origin);

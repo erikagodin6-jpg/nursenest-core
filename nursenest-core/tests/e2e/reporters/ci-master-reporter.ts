@@ -133,7 +133,9 @@ export default class CiMasterReporter implements Reporter {
     lines.push(
       "---",
       "",
-      "Individual specs enforce: paid journey + entitlement + nav + API latency/status + i18n console audit.",
+      "CI master slice: fast-sanity → journey → entitlements → navigation → API health (see `playwright.ci-master.config.ts`).",
+      "Extended paid suite adds i18n, session persistence, mobile, CAT smoke, etc.",
+      "Classified failures: `test-results/paid-user-suite-summary.md` (from `paid-user-summary-reporter.ts`).",
       "Exit code non-zero if any test failed (fails deploy step when used with `set -e`).",
       "",
     );
