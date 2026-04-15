@@ -29,7 +29,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { GlobalContextBar } from "@/components/layout/global-context-bar";
 import { MobileContextDrawer } from "@/components/layout/mobile-context-drawer";
 import { REGION_CONFIG, type GlobalRegionSlug, type GlobalLocaleCode } from "@/lib/i18n/global-regions";
-import { marketingExamHubPath, type CountryExamOfferingId } from "@/lib/marketing/country-exam-offerings";
+import type { CountryExamOfferingId } from "@/lib/marketing/country-exam-offerings";
 import {
   HUB,
   NP,
@@ -45,7 +45,7 @@ import {
 import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
 import { ALLIED_PROFESSIONS, ALLIED_HUB_CATEGORY_ORDER, ALLIED_HUB_CATEGORY_META } from "@/lib/allied/allied-professions-registry";
 import { useActiveNavContext } from "@/lib/navigation/use-active-nav-context";
-import { learnerMarketingPathwayIdFromSession } from "@/lib/navigation/canonical-destinations";
+import { learnerMarketingPathwayIdFromSession, publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
 import {
   buildLearnerPrimaryNavItems,
   isLearnerPrimaryNavKey,
@@ -164,14 +164,17 @@ function examIndicatorLabel(country: LearnerCountry, tier: LearnerTier, alliedPr
 
 function createMegaMenus(region: "US" | "CA"): MegaMenuConfig[] {
   const pnRoleLabel = getNursingRoleLabel({ country: region, role: "PN" });
-  const rnHub = marketingExamHubPath(region, "rn");
-  const pnHub = marketingExamHubPath(region, "pn");
-  const npHub = marketingExamHubPath(region, "np");
+  const hubs = publicExamPrepHubDestinations(region);
+  const hubsUs = publicExamPrepHubDestinations("US");
+  const hubsCa = publicExamPrepHubDestinations("CA");
+  const rnHub = hubs.rn;
+  const pnHub = hubs.pn;
+  const npHub = hubs.np;
   const alliedHubHref = alliedHub(region);
-  const pnUsHub = marketingExamHubPath("US", "pn");
-  const pnCaHub = marketingExamHubPath("CA", "pn");
-  const npUsHub = marketingExamHubPath("US", "np");
-  const npCaHub = marketingExamHubPath("CA", "np");
+  const pnUsHub = hubsUs.pn;
+  const pnCaHub = hubsCa.pn;
+  const npUsHub = hubsUs.np;
+  const npCaHub = hubsCa.np;
   const npLessons = region === "US" ? NP.fnpLessons : NP.caNpLessons;
   const npQuestionHref = npNpQuestionsForRegion(region);
   const studyPlanSignupHref = `${HUB.signup}?callbackUrl=${encodeURIComponent("/app/study-plan")}`;
