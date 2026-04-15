@@ -14,6 +14,7 @@ import {
   getFailureCount,
   CAPTCHA_THRESHOLD,
 } from "@/lib/auth/login-lockout";
+import { isGmailLikeAddress, normalizeEmailForDedup } from "@/lib/auth/email-verification";
 import { isEmailLikeIdentifier, normalizeLoginIdentifier } from "@/lib/auth/normalize-login-identifier";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { UserRole } from "@prisma/client";
@@ -77,6 +78,18 @@ function reqWithEnvURL(req: NextRequest): NextRequest {
 }
 
 const isProd = process.env.NODE_ENV === "production";
+
+const CREDENTIALS_USER_SELECT = {
+  id: true,
+  email: true,
+  name: true,
+  passwordHash: true,
+  role: true,
+  country: true,
+  tier: true,
+  alliedProfessionKey: true,
+  credentialVersion: true,
+} as const;
 
 export const authConfig: NextAuthConfig = {
   /**
@@ -154,33 +167,25 @@ export const authConfig: NextAuthConfig = {
             // Case-insensitive: legacy or manual rows may not match normalized lowercase input.
             user = await prisma.user.findFirst({
               where: { email: { equals: identifier, mode: "insensitive" } },
-              select: {
-                id: true,
-                email: true,
-                name: true,
-                passwordHash: true,
-                role: true,
-                country: true,
-                tier: true,
-                alliedProfessionKey: true,
-                credentialVersion: true,
-              },
+              select: CREDENTIALS_USER_SELECT,
             });
+            /**
+             * Gmail / Googlemail: signup stores {@link normalizeEmailForDedup} on `User.normalizedEmail`
+             * (dots and +aliases normalized). A literal `email` match can fail when the user types an
+             * equivalent address (e.g. `janedoe@gmail.com` vs stored `jane.doe@gmail.com`).
+             */
+            if (!user && isGmailLikeAddress(identifier)) {
+              const dedup = normalizeEmailForDedup(identifier);
+              user = await prisma.user.findFirst({
+                where: { normalizedEmail: dedup },
+                select: CREDENTIALS_USER_SELECT,
+              });
+            }
           } else {
             // Case-insensitive usernames: legacy rows may differ in casing from normalized login input.
             user = await prisma.user.findFirst({
               where: { username: { equals: identifier, mode: "insensitive" } },
-              select: {
-                id: true,
-                email: true,
-                name: true,
-                passwordHash: true,
-                role: true,
-                country: true,
-                tier: true,
-                alliedProfessionKey: true,
-                credentialVersion: true,
-              },
+              select: CREDENTIALS_USER_SELECT,
             });
           }
         } catch (e) {
@@ -203,6 +208,8 @@ export const authConfig: NextAuthConfig = {
             idHash,
             ip: ip.slice(0, 64),
             failureCount: getFailureCount(lockKey),
+            gmailNormalizedLookupTried:
+              isEmailLikeIdentifier(identifier) && isGmailLikeAddress(identifier) ? "yes" : "no",
           });
           return null;
         }
@@ -215,12 +222,29 @@ export const authConfig: NextAuthConfig = {
             idHash,
             userIdPrefix: user.id.slice(0, 8),
             ip: ip.slice(0, 64),
+            hasPasswordHash: false,
           });
           return null;
         }
 
-        const ok = await compare(password, user.passwordHash);
-        if (!ok) {
+        let passwordOk = false;
+        try {
+          passwordOk = await compare(password, user.passwordHash);
+        } catch (e) {
+          recordLoginFailure(lockKey);
+          const detail = e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200);
+          safeServerLog("auth", "login_failed", {
+            reason: "password_compare_error",
+            authMode,
+            idHash,
+            userIdPrefix: user.id.slice(0, 8),
+            ip: ip.slice(0, 64),
+            detail,
+          });
+          return null;
+        }
+
+        if (!passwordOk) {
           recordLoginFailure(lockKey);
           safeServerLog("auth", "login_failed", {
             reason: "invalid_password",
@@ -228,6 +252,7 @@ export const authConfig: NextAuthConfig = {
             idHash,
             ip: ip.slice(0, 64),
             failureCount: getFailureCount(lockKey),
+            passwordCompareOk: false,
           });
           return null;
         }
