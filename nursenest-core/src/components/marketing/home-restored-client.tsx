@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { HomeConversionHero } from "@/components/marketing/home-conversion-hero";
 import { HomeSampleQuestionPreview } from "@/components/marketing/home-sample-question-preview";
+import { HomeTrustFearsSection } from "@/components/marketing/home-trust-fears-section";
 import { HomeTrustStripSection } from "@/components/marketing/home-trust-strip-section";
 import { HomeHowItWorksSection } from "@/components/marketing/home-how-it-works-section";
 import { HomePlatformPreviewSection } from "@/components/marketing/home-platform-preview-section";
@@ -99,6 +100,7 @@ export default function HomeRestoredClient() {
         {/* 1. HERO */}
         <HomeConversionHero />
         <HomeSampleQuestionPreview />
+        <HomeTrustFearsSection questionCount={questionCount} registeredLearners={registeredLearners} />
         {/* 1b. AUDIENCE BALANCE — RN / PN / NP / Allied */}
         <section
           className="nn-section-block scroll-mt-20 border-b border-[var(--border-subtle)] bg-[var(--page-bg)]"

@@ -42,5 +42,7 @@ declare module "next-auth/jwt" {
     alliedProfessionKey?: string | null;
     subscriptionStatus?: "active" | "grace" | "past_due_grace" | "past_due" | "none";
     credentialVersion?: number;
+    /** Node JWT: last DB credential check (throttle), internal — not exposed to clients. */
+    credentialCheckedAt?: number;
   }
 }

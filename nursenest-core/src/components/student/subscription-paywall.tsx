@@ -103,7 +103,7 @@ export function SubscriptionPaywall({
           {PREVIEW_CHOICE_KEYS.map((key, idx) => (
             <li
               key={key}
-              className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[color-mix(in_srgb,var(--semantic-surface)_1,var(--background))] px-3 py-2 text-sm text-[var(--semantic-text-primary)]"
+              className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_14%,var(--border))] bg-[color-mix(in_srgb,var(--semantic-surface)_88%,var(--background))] px-3 py-2 text-sm text-[var(--semantic-text-primary)]"
             >
               <span className="font-semibold text-[var(--semantic-info)]">{String.fromCharCode(65 + idx)}.</span>{" "}
               {t(key)}

@@ -8,6 +8,7 @@ import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { readStepUpHeader } from "@/lib/auth/reauth-step-up";
 
 export const runtime = "nodejs";
 
@@ -36,6 +37,8 @@ export async function POST(req: Request) {
   if (!userId) {
     return NextResponse.json({ ok: false, error: "Sign in to change your password." }, { status: 401 });
   }
+
+  void readStepUpHeader(req);
 
   const ip = clientIp(req);
   const rl = checkRateLimit(`change-password:${userId}:${ip}`, { windowMs: 60_000, max: 8 });

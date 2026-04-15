@@ -61,7 +61,8 @@ function recordStrikeAndTighten(ip: string): boolean {
   return b.count >= ABUSE_STRIKE_MAX;
 }
 
-function isAuthStrictPath(pathname: string): boolean {
+/** Exported for unit tests — auth-sensitive paths get stricter per-IP limits. */
+export function isAuthStrictPath(pathname: string): boolean {
   return AUTH_STRICT_SUBSTRINGS.some((s) => pathname.startsWith(s));
 }
 

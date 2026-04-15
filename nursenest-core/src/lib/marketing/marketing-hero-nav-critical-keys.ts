@@ -46,6 +46,13 @@ export const MARKETING_NAV_HEADER_CHROME_KEYS = [
   "home.region.usDesc",
   "home.region.caDesc",
   "nav.language",
+  "nav.marketingFlow.learn",
+  "nav.marketingFlow.practice",
+  "nav.marketingFlow.track",
+  "nav.marketingMore",
+  "nav.mega.startHere",
+  "nav.mega.openHub",
+  "nav.mega.examHubSuffix",
 ] as const;
 
 /** Signed-in / auth cluster in the header ({@link MarketingHeaderAuth}). */
