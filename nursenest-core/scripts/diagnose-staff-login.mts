@@ -58,19 +58,6 @@ async function main(): Promise<void> {
     },
   });
 
-  /** When `20260415180000_user_is_demo_user` is not applied, raw lookup avoids Prisma selecting a missing column. */
-  let isDemoUser: boolean | null = null;
-  try {
-    const demoRows = await prisma.$queryRaw<{ is_demo_user: boolean }[]>(
-      Prisma.sql`
-        SELECT "is_demo_user" AS is_demo_user FROM "User" WHERE id = ${row?.id ?? ""} LIMIT 1
-      `,
-    );
-    isDemoUser = demoRows[0]?.is_demo_user ?? null;
-  } catch {
-    isDemoUser = null;
-  }
-
   if (!row) {
     console.log("user_found: no");
     console.log("password_hash_present: n/a");
@@ -102,6 +89,17 @@ async function main(): Promise<void> {
   console.log(`authProvider: ${row.authProvider}`);
   console.log(`emailVerified: ${row.emailVerified}`);
 
+  /** When `20260415180000_user_is_demo_user` is not applied, this stays null (column missing). */
+  let isDemoUser: boolean | null = null;
+  try {
+    const demoRows = await prisma.$queryRaw<{ is_demo_user: boolean }[]>(
+      Prisma.sql`SELECT "is_demo_user" AS is_demo_user FROM "User" WHERE id = ${row.id} LIMIT 1`,
+    );
+    isDemoUser = demoRows[0]?.is_demo_user ?? null;
+  } catch {
+    isDemoUser = null;
+  }
+
   const hashPresent = Boolean(row.passwordHash && row.passwordHash.length > 0);
   console.log(`password_hash_present: ${hashPresent ? "yes" : "no"}`);
 
@@ -116,7 +114,12 @@ async function main(): Promise<void> {
     console.log("Fix: npx tsx scripts/admin-staff-users.mts promote <email>");
   }
 
-  const demoBlock = row.isDemoUser ? "isDemoUser=true (demo accounts blocked from some flows)" : "isDemoUser=false";
+  const demoBlock =
+    isDemoUser === null
+      ? "is_demo_user unavailable (column missing — run prisma migrate deploy for 20260415180000_user_is_demo_user)"
+      : isDemoUser
+        ? "isDemoUser=true (demo accounts blocked from some flows)"
+        : "isDemoUser=false";
   console.log(
     `disabled_or_locked_flags: ${demoBlock}; User model has no disabled/locked column; progressive login lockout is in-memory per server (not in DB)`,
   );

@@ -18,8 +18,60 @@ type Props = {
 };
 
 /**
- * Pathway lesson detail — title band, exam context, back link to hub (marketing).
+ * Shown while lesson document / entitlements resolve (Suspense fallback). Matches the real header’s
+ * `data-nn-pathway-id` / layout so route-level loading never swaps in a hub skeleton without this landmark.
  */
+export function PathwayLessonDetailHeaderSkeleton({ pathway }: { pathway: ExamPathwayDefinition }) {
+  const place = pathwayCountryLabel(pathway);
+  const examName = pathwayRegionAwareExamName(pathway);
+  const compactExamName = compactPathwayLabel(examName);
+  return (
+    <header
+      data-nn-pathway-id={pathway.id}
+      data-nn-exam-short={examName}
+      aria-busy="true"
+      aria-label={`${compactExamName}, ${place} — loading lesson`}
+      className="nn-gradient-safe relative overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-gradient-to-br from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-page-bg))] px-4 py-3 shadow-[var(--shadow-card)] sm:px-5 sm:py-4"
+    >
+      <div
+        className="pointer-events-none absolute -right-10 -top-12 h-36 w-36 rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_7%,transparent)] blur-3xl"
+        aria-hidden
+      />
+      <div className="relative">
+        <div
+          className="flex max-w-full flex-wrap items-center gap-x-2.5 gap-y-1.5 rounded-xl border border-[color-mix(in_srgb,var(--theme-primary)_12%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_4.5%,var(--bg-card))] px-3 py-2.5 text-sm shadow-[var(--shadow-card)]"
+          role="group"
+          aria-label={`${compactExamName}, ${place}`}
+        >
+          <span className="font-medium text-[var(--theme-heading-text)]">{compactExamName}</span>
+          <span aria-hidden className="text-[var(--theme-muted-text)]">
+            ·
+          </span>
+          <span className="text-[var(--theme-body-text)]">{place}</span>
+          <span aria-hidden className="text-[var(--theme-muted-text)]">
+            ·
+          </span>
+          <span className="inline-block h-3 w-24 rounded bg-[color-mix(in_srgb,var(--theme-muted-text)_35%,transparent)]" aria-hidden />
+        </div>
+        <div className="mt-3 grid grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,1fr)_minmax(11rem,13.75rem)] md:gap-x-6">
+          <div className="min-w-0 space-y-3">
+            <div className="nn-skeleton mt-1 h-8 w-[min(100%,28rem)] rounded-lg" />
+            <div className="nn-skeleton h-4 w-full max-w-prose rounded-md" />
+            <div className="nn-skeleton h-4 w-[88%] max-w-prose rounded-md" />
+          </div>
+          <div className="hidden min-h-[2.75rem] w-full md:block md:justify-self-end">
+            <div className="nn-skeleton h-10 w-full rounded-lg" />
+          </div>
+        </div>
+        <div className="mt-3 border-t border-[color-mix(in_srgb,var(--border-subtle)_88%,var(--theme-primary))] pt-3">
+          <div className="nn-skeleton inline-block h-10 min-w-[8rem] rounded-lg" aria-hidden />
+        </div>
+      </div>
+    </header>
+  );
+}
+
+/** Pathway lesson detail — title band, exam context, back link to hub (marketing). */
 export function PathwayLessonDetailHeader({
   pathway,
   lessonsBasePath,
