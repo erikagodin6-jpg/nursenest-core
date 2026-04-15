@@ -1,6 +1,7 @@
 import type { Prisma } from "@prisma/client";
 import { ContentStatus, type CountryCode, type TierCode } from "@prisma/client";
 import { prismaTierCodesForProfileTier } from "@/lib/entitlements/accessible-tiers";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
@@ -104,7 +105,7 @@ export function appPathwayLessonVisibleToSubscriber(
   if (!pathway) return false;
   if (!canViewFullPathwayLesson(scope, pathway, learnerPath)) return false;
 
-  if (scope.reason === "admin_override") {
+  if (accessScopeIsStaffLearnerEntitlementBypass(scope)) {
     const country = scope.country as CountryCode | null;
     const tier = scope.tier as TierCode | null;
     if (row.countryCode && country && row.countryCode !== country) return false;

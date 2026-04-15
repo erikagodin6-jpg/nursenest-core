@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 import type { CountryCode, TierCode } from "@prisma/client";
 import { DB_PUBLISHED, examQuestionTiersForUserTier } from "@/lib/entitlements/content-access-scope";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
 import type { GlobalExamContext } from "@/lib/exam-context/global-exam-context";
@@ -20,7 +21,7 @@ export const DISCOVERY_STATEMENT_TIMEOUT_MS = 5_500;
  */
 export function examQuestionsDiscoveryWhereSql(entitlement: AccessScope): Prisma.Sql {
   if (!entitlement.hasAccess) return Prisma.sql`FALSE`;
-  if (entitlement.reason === "admin_override") {
+  if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
     return Prisma.sql`status = ${DB_PUBLISHED}`;
   }
   const country = entitlement.country as CountryCode | null;

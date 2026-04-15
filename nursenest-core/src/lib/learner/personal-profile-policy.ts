@@ -1,5 +1,6 @@
 import { SubscriptionStatus, type CountryCode, type TierCode } from "@prisma/client";
 import { accessibleTiersForUserTier } from "@/lib/entitlements/content-access-scope";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
@@ -38,7 +39,7 @@ export function listPathwayPicksForProfile(
 ): PathwayPickOption[] {
   if (subscriberAccess && entitlement.hasAccess) {
     const scope: AccessScope =
-      entitlement.reason === "admin_override"
+      accessScopeIsStaffLearnerEntitlementBypass(entitlement)
         ? {
             hasAccess: true,
             reason: "admin_override",

@@ -1,5 +1,6 @@
 import { ExamFamily, type CountryCode, type TierCode } from "@prisma/client";
 import { accessibleTiersForUserTier } from "@/lib/entitlements/content-access-scope";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { EXAM_PATHWAYS, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
@@ -24,7 +25,7 @@ export function listPathwaysCompatibleWithSubscription(scope: AccessScope): Exam
   if (!scope.hasAccess || scope.reason === "no_access") return [];
   const tier = scope.tier as TierCode | null;
   const country = scope.country as CountryCode | null;
-  if (scope.reason === "admin_override") {
+  if (accessScopeIsStaffLearnerEntitlementBypass(scope)) {
     if (!country) return EXAM_PATHWAYS.filter((p) => p.status !== "hidden");
     return EXAM_PATHWAYS.filter((p) => p.status !== "hidden" && p.countryCode === country);
   }
@@ -48,7 +49,7 @@ export function subscriptionCoversPathwayBase(scope: AccessScope, pathway: ExamP
   if (pathway.status === "hidden") return false;
   const tier = scope.tier as TierCode | null;
   const country = scope.country as CountryCode | null;
-  if (scope.reason === "admin_override") {
+  if (accessScopeIsStaffLearnerEntitlementBypass(scope)) {
     if (!country) return true;
     return pathway.countryCode === country;
   }

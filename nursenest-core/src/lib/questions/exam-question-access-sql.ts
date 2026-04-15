@@ -7,12 +7,13 @@ import { Prisma } from "@prisma/client";
 import { DB_PUBLISHED, examQuestionTiersForUserTier } from "@/lib/entitlements/content-access-scope";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { examQuestionPoolWhereForContext } from "@/lib/exam-context/query-scope";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
 export function examQuestionAccessWhereSql(entitlement: AccessScope): Prisma.Sql {
   if (!entitlement.hasAccess) return Prisma.sql`FALSE`;
-  if (entitlement.reason === "admin_override") {
+  if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
     const country = entitlement.country as CountryCode | null;
     if (!country) return Prisma.sql`status = ${DB_PUBLISHED}`;
     const region =

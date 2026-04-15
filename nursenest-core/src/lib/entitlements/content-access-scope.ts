@@ -5,6 +5,7 @@ import {
   examQuestionTierStringsForProfileTier,
   prismaTierCodesForProfileTier,
 } from "@/lib/entitlements/accessible-tiers";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 
 /** Production DB uses lowercase status strings on `exam_questions` / `content_items`. */
@@ -45,7 +46,7 @@ function lessonPublishedWhere(): Prisma.ContentItemWhereInput {
 /** Prisma filter for `content_items` lessons the entitlement may load. */
 export function lessonAccessWhere(entitlement: AccessScope): Prisma.ContentItemWhereInput {
   if (!entitlement.hasAccess) return { id: { in: [] } };
-  if (entitlement.reason === "admin_override") {
+  if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
     const country = entitlement.country as CountryCode | null;
     if (!country) return lessonPublishedWhere();
     return {
@@ -152,7 +153,7 @@ export function publicMarketingFlashcardDeckWhere(): Prisma.FlashcardDeckWhereIn
 /** Prisma filter for `exam_questions` rows the entitlement may load. */
 export function questionAccessWhere(entitlement: AccessScope): Prisma.ExamQuestionWhereInput {
   if (!entitlement.hasAccess) return { id: { in: [] } };
-  if (entitlement.reason === "admin_override") {
+  if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
     const country = entitlement.country as CountryCode | null;
     if (!country) return { status: { in: [...DB_PUBLISHED_VARIANTS] } };
     return {
@@ -236,7 +237,7 @@ export function userCanAccessExam(
   if (exam.status !== ContentStatus.PUBLISHED || !entitlement.hasAccess) return false;
   const country = entitlement.country as CountryCode | null;
   const tier = entitlement.tier as TierCode | null;
-  if (entitlement.reason === "admin_override") {
+  if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
     if (!country) return true;
     return exam.country === country;
   }
