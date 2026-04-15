@@ -53,7 +53,6 @@ import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { CountrySelector } from "@/components/layout/global-context-switcher";
-import { getRegionFlag } from "@/lib/navigation/context-switch-helpers";
 import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 
 const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
@@ -65,8 +64,9 @@ const NAV_TIER_LINK_CLASS =
   "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-8 items-center justify-center whitespace-nowrap px-2.5 text-center font-semibold leading-none tracking-tight xl:px-3";
 const HEADER_SECONDARY_ACTION_CLASS =
   "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
-const HEADER_UTILITY_BUTTON_CLASS =
-  "inline-flex h-9 items-center gap-1.5 rounded-full border border-[var(--nav-border)] bg-transparent px-2.5 text-[11px] font-medium tracking-wide text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]";
+/** Country / language / theme triggers aligned with main nav height (sits in the primary header row, not a detached strip). */
+const HEADER_MAIN_NAV_MENU_TRIGGER_CLASS =
+  "nn-marketing-body-sm inline-flex h-9 max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--nav-fg)_14%,var(--nav-border))] bg-[color-mix(in_srgb,var(--nav-fg)_04%,transparent)] px-2.5 text-center font-semibold leading-none tracking-tight text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)] xl:max-w-[13rem] xl:px-3";
 type ExamMenuKey = "rn" | "pn" | "np" | "newgrad" | "allied";
 
 type MegaMenuLink = {
@@ -416,7 +416,7 @@ export function SiteHeader() {
   const { data: session, status: sessionStatus } = useSession();
   const { region, setRegion } = useNursenestRegion();
   const regionToggleAnalytics = useMemo(
-    () => ({ currentRegion: region, surface: "site_header_mobile_drawer" as const }),
+    () => ({ currentRegion: region, surface: "site_header" as const }),
     [region],
   );
   const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, regionToggleAnalytics);
@@ -598,31 +598,28 @@ export function SiteHeader() {
     { key: "pre-nursing", href: "/pre-nursing", label: formatTitleCase(t("nav.preNursing"), locale) },
   ];
   const marketingDesktopUtilityControls = (
-    <div className="hidden items-center gap-1.5 lg:flex">
+    <div className="flex min-w-0 items-center gap-1 xl:gap-1.5">
       <div className="relative" ref={desktopCountryRef}>
         <button
           type="button"
           onClick={() => setDesktopCountryOpen((open) => !open)}
-          className={HEADER_UTILITY_BUTTON_CLASS}
+          className={HEADER_MAIN_NAV_MENU_TRIGGER_CLASS}
           aria-expanded={desktopCountryOpen}
-          aria-label={`Region: ${REGION_CONFIG[effectiveGlobalRegion].displayName}. Click to change.`}
+          aria-haspopup="listbox"
+          aria-label={`${t("nav.regionLabel")}: ${REGION_CONFIG[effectiveGlobalRegion].displayName}. ${t("nav.openMenu")}`}
         >
-          <span className="flex max-w-[4rem] items-center gap-1 truncate sm:max-w-[6rem]">
-            {effectiveGlobalRegion === "canada" ? (
-              "CA"
-            ) : effectiveGlobalRegion === "us" ? (
-              "US"
-            ) : (
-              <>
-                <span aria-hidden>{getRegionFlag(effectiveGlobalRegion)}</span>
-                <span className="truncate">{REGION_CONFIG[effectiveGlobalRegion].displayName}</span>
-              </>
-            )}
+          <MapPin className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
+          <span className="min-w-0 truncate">
+            {effectiveGlobalRegion === "canada"
+              ? formatTitleCase(t("home.region.ca"), locale)
+              : effectiveGlobalRegion === "us"
+                ? formatTitleCase(t("home.region.us"), locale)
+                : REGION_CONFIG[effectiveGlobalRegion].displayName}
           </span>
           <ChevronDown className={`h-3 w-3 shrink-0 opacity-60 transition-transform ${desktopCountryOpen ? "rotate-180" : ""}`} aria-hidden />
         </button>
         {desktopCountryOpen ? (
-          <div className="absolute end-0 z-[120] mt-2">
+          <div className="absolute end-0 z-[120] mt-2 w-[min(100vw-2rem,18rem)] sm:w-72">
             <CountrySelector
               currentRegion={effectiveGlobalRegion}
               onSelect={handleDesktopRegionSelect}
@@ -636,11 +633,12 @@ export function SiteHeader() {
         <button
           type="button"
           onClick={() => setDesktopLangOpen((open) => !open)}
-          className={HEADER_UTILITY_BUTTON_CLASS}
+          className={HEADER_MAIN_NAV_MENU_TRIGGER_CLASS}
           aria-expanded={desktopLangOpen}
+          aria-haspopup="listbox"
           aria-label={`${t("nav.language")}: ${locale.toUpperCase()}. Click to change.`}
         >
-          <span>{locale.toUpperCase()}</span>
+          <span className="truncate">{locale.toUpperCase()}</span>
           <ChevronDown className={`h-3 w-3 shrink-0 opacity-60 transition-transform ${desktopLangOpen ? "rotate-180" : ""}`} aria-hidden />
         </button>
         {desktopLangOpen ? (
@@ -748,13 +746,6 @@ export function SiteHeader() {
         onMouseEnter={isMarketingNav ? clearMegaCloseTimer : undefined}
         onMouseLeave={isMarketingNav ? scheduleMegaClose : undefined}
       >
-        {isMarketingNav ? (
-          <div className="hidden w-full border-b border-[var(--nn-nav-border)] nn-header-utility-dark lg:block">
-            <div className="nn-section-shell flex h-9 items-center justify-end">
-              {marketingDesktopUtilityControls}
-            </div>
-          </div>
-        ) : null}
         <div className="nn-section-shell flex flex-col overflow-visible">
           {/* ── Mobile brand row ── */}
           <div className="flex min-h-[4.5rem] items-center gap-2 overflow-visible border-b border-[var(--header-border)] pt-[env(safe-area-inset-top,0px)] sm:gap-4 lg:hidden">
@@ -902,6 +893,12 @@ export function SiteHeader() {
                 ))}
               </nav>
             )}
+
+            {isMarketingNav ? (
+              <div className="flex min-w-0 shrink-0 items-center gap-1 xl:gap-1.5">
+                {marketingDesktopUtilityControls}
+              </div>
+            ) : null}
 
           <div className="relative z-[130] flex shrink-0 items-center justify-end gap-2">
               {!isAuthenticated ? (
