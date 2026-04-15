@@ -7,30 +7,2088 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id                            String                      @id @default(cuid())
+  email                         String                      @unique
+  /// * Lowercase login handle; optional. PostgreSQL allows multiple NULLs under UNIQUE.
+  username                      String?                     @unique
+  name                          String
+  passwordHash                  String?
+  role                          UserRole                    @default(LEARNER)
+  country                       CountryCode
+  tier                          TierCode
+  examFocus                     String?
+  studyGoal                     String?
+  dailyStudyMinutes             Int?
+  learnerPath                   String?
+  onboardingCompletedAt         DateTime?
+  freeQuestionViews             Int                         @default(0)
+  freeLessonOpens               Int                         @default(0)
+  createdAt                     DateTime                    @default(now())
+  updatedAt                     DateTime                    @updatedAt
+  /// * When tier is ALLIED, optional short profession key (e.g. paramedic, mlt) for scoped UX and recommendations.
+  alliedProfessionKey           String?                     @db.VarChar(64)
+  /// * Bumped on password change/reset so JWTs can be invalidated without per-device session rows.
+  credentialVersion             Int                         @default(0)
+  /// * Free Pre-Nursing: optional target readiness / school start date (UTC midnight).
+  preNursingTargetDate          DateTime?
+  preNursingDatePlanType        PreNursingDatePlanType?
+  preNursingGoalSetAt           DateTime?
+  /// * Soft hint for marketing CTAs: rn | rpn | pn | np | unsure
+  preNursingFuturePathwayHint   String?                     @db.VarChar(16)
+  /// * When the user last acknowledged legal policies at subscription checkout (server timestamp).
+  legalPoliciesAcceptedAt       DateTime?
+  /// * Bundle id from `LEGAL_POLICY_BUNDLE_VERSION` at acceptance time.
+  legalPoliciesVersion          String?                     @db.VarChar(32)
+  trialStatus                   TrialStatus                 @default(NONE)
+  trialUsedAt                   DateTime?
+  trialStartedAt                DateTime?
+  trialEndsAt                   DateTime?
+  /// * Target graded bank questions per UTC day; null uses product default (see load-daily-question-goal-progress).
+  dailyQuestionGoal             Int?
+  /// * UTC calendar day for which `bankQuestionsGradedCount` applies.
+  bankQuestionsGradedUtcDay     DateTime?                   @db.Date
+  /// * Graded bank questions counted on `bankQuestionsGradedUtcDay`.
+  bankQuestionsGradedCount      Int                         @default(0)
+  /// * Calendar date the learner is targeting (UTC midnight stored).
+  examDate                      DateTime?
+  examDatePlanType              ExamDatePlanType?
+  examGoalSetAt                 DateTime?
+  /// * Optional pathway id from exam registry when the goal is pathway-specific (NP tracks, etc.).
+  targetExamPathwayId           String?                     @db.VarChar(64)
+  /// * Optional learner preference: light | steady | intensive — used for copy only, not hours math.
+  studyCadencePreference        String?                     @db.VarChar(32)
+  /// * User dismissed the baseline assessment prompt (non-blocking).
+  baselineAssessmentSkippedAt   DateTime?
+  /// * User finished the short baseline question set.
+  baselineAssessmentCompletedAt DateTime?
+  /// * Summary: { correctCount, totalQuestions, weakTopics: string[], at: string }
+  baselineAssessmentSummary     Json?
+  /// * Lowercase, trimmed email for dedup (dot-stripping, alias-insensitive).
+  normalizedEmail               String?
+  emailVerified                 Boolean                     @default(false)
+  /// * How the account was created (credentials, google, etc.).
+  authProvider                  String                      @default("credentials") @db.VarChar(32)
+  signupIp                      String?                     @db.VarChar(64)
+  lastLoginIp                   String?                     @db.VarChar(64)
+  lastLoginAt                   DateTime?
+  firstName                     String?                     @db.VarChar(100)
+  lastName                      String?                     @db.VarChar(100)
+  displayName                   String?                     @db.VarChar(200)
+  /// * When false, dashboard and study-entry surfaces avoid adaptive next-step recommendations.
+  enableAdaptivePlan            Boolean?                    @map("enable_adaptive_plan")
+  /// * When false, spaced-repetition recommendations and due-review nudges are suppressed.
+  enableSpacedRepetition        Boolean?                    @map("enable_spaced_repetition")
+  /// * When false, confidence-driven grouping and review insights are hidden from learner-facing flows.
+  enableConfidenceTracking      Boolean?                    @map("enable_confidence_tracking")
+  /// * When false, lesson pre/post quiz prompts and modules stay hidden.
+  enablePrePostQuizzes          Boolean?                    @map("enable_pre_post_quizzes")
+  /// * When false, weakness heatmap surfaces are hidden.
+  showHeatmap                   Boolean?                    @map("show_heatmap")
+  /// * When false, advanced readiness and dashboard insight surfaces stay simplified.
+  showAdvancedInsights          Boolean?                    @map("show_advanced_insights")
+  /// * When false, weak-area nudges and prompt cards are suppressed.
+  enableWeaknessAlerts          Boolean?                    @map("enable_weakness_alerts")
+  /// * When false, forgetting-risk alerts and decay-oriented reminders are suppressed.
+  enableDecayAlerts             Boolean?                    @map("enable_decay_alerts")
+  /// * Default smart-session size for learner flows; null uses product default.
+  preferredSessionLength        Int?                        @map("preferred_session_length")
+  /// *
+  ///    * When false, guided lesson study loop (optional bank-backed pre/post quick check + review) stays off.
+  ///    * Null defaults to enabled in app normalization.
+  lessonStudyLoopEnabled        Boolean?                    @map("lesson_study_loop_enabled")
+  aiGenerationJobs              AiGenerationJob[]           @relation("AiJobCreatedBy")
+  baselineAssessmentAttempts    BaselineAssessmentAttempt[]
+  blogBatchSchedules            BlogBatchSchedule[]
+  blogDraftGenerationBatches    BlogDraftGenerationBatch[]
+  contentAutomationLogs         ContentAutomationLog[]
+  emailNotificationLogs         EmailNotificationLog[]
+  emailVerificationTokens       EmailVerificationToken[]
+  attempts                      ExamAttempt[]
+  examSessions                  ExamSession[]
+  flashcardDraftsCreated        GeneratedFlashcardDraft[]   @relation("FlashcardDraftCreatedBy")
+  flashcardDraftsReviewed       GeneratedFlashcardDraft[]   @relation("FlashcardDraftReviewedBy")
+  lessonDraftsCreated           GeneratedLessonDraft[]      @relation("LessonDraftCreatedBy")
+  lessonDraftsReviewed          GeneratedLessonDraft[]      @relation("LessonDraftReviewedBy")
+  questionDraftsCreated         GeneratedQuestionDraft[]    @relation("QuestionDraftCreatedBy")
+  questionDraftsReviewed        GeneratedQuestionDraft[]    @relation("QuestionDraftReviewedBy")
+  learnerNotes                  LearnerNote[]
+  passwordResetTokens           PasswordResetToken[]
+  progress                      Progress[]
+  subscriptions                 Subscription[]
+  trialDeviceBindings           TrialDeviceBinding[]
+  feedbackReports               UserFeedbackReport[]
+  topicStats                    UserTopicStat[]
+  flashcardProgress             FlashcardProgress[]
+  flashcardStudySessions        FlashcardStudySession[]
+  flashcardUserStats            FlashcardUserStats?
+  mediaAssetsUploaded           MediaAsset[]                @relation("MediaAssetUploadedBy")
+  practiceTests                 PracticeTest[]
+  premiumProtectionUserDays     PremiumProtectionUserDay[]
+  abuseReviewsDismissed         ProtectionAbuseReview[]     @relation("ProtectionAbuseReviewDismissedBy")
+  protectionAbuseReviews        ProtectionAbuseReview[]
+
+  @@index([alliedProfessionKey])
+  @@index([normalizedEmail])
+}
+
+/// * Admin-managed binary assets on Spaces (blogs, lessons, marketing).
+model MediaAsset {
+  id             String    @id @default(cuid())
+  publicUrl      String    @unique
+  storageKey     String    @unique
+  filename       String
+  mimeType       String
+  kind           String    @default("image") @db.VarChar(16)
+  fileSizeBytes  Int
+  width          Int?
+  height         Int?
+  altText        String?
+  tags           String[]  @default([])
+  uploadedById   String?
+  /// * Best-effort count from last usage scan (null = never scanned).
+  usageRefCount  Int?
+  usageRefs      Json?
+  usageScannedAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  uploadedBy     User?     @relation("MediaAssetUploadedBy", fields: [uploadedById], references: [id])
+
+  @@index([createdAt(sort: Desc)])
+  @@index([kind])
+  @@index([mimeType])
+  @@map("media_assets")
+}
+
+/// * Aggregated premium UX telemetry (UTC day; global counts, no user PII).
+model PremiumProtectionRollup {
+  id        String   @id @default(cuid())
+  day       DateTime @db.Date
+  metricKey String   @map("metric_key") @db.VarChar(96)
+  segment   String   @default("") @db.VarChar(96)
+  count     Int      @default(0)
+
+  @@unique([day, metricKey, segment])
+  @@index([day])
+  @@map("premium_protection_rollups")
+}
+
+/// * Per-user daily tallies for abuse heuristics (admin review; subscriber ids).
+model PremiumProtectionUserDay {
+  id        String   @id @default(cuid())
+  userId    String
+  day       DateTime @db.Date
+  metricKey String   @map("metric_key") @db.VarChar(96)
+  count     Int      @default(0)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, day, metricKey])
+  @@index([day])
+  @@index([userId, day])
+  @@map("premium_protection_user_days")
+}
+
+/// * Flagged accounts for manual review (rate limits, scraping signals).
+model ProtectionAbuseReview {
+  id                String                           @id @default(cuid())
+  userId            String
+  reason            String                           @db.VarChar(80)
+  score             Int
+  evidence          Json?
+  createdAt         DateTime                         @default(now())
+  /// * When an admin closed this item (dismiss or resolve).
+  dismissedAt       DateTime?
+  resolution        ProtectionAbuseReviewResolution?
+  /// * Short admin note (optional).
+  adminNote         String?                          @db.VarChar(500)
+  dismissedByUserId String?
+  dismissedBy       User?                            @relation("ProtectionAbuseReviewDismissedBy", fields: [dismissedByUserId], references: [id])
+  user              User                             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([dismissedAt, createdAt])
+  @@index([userId, createdAt])
+  @@index([dismissedAt])
+  @@map("protection_abuse_reviews")
+}
+
+model BaselineAssessmentAttempt {
+  id          String                          @id @default(cuid())
+  userId      String
+  questionIds Json
+  status      BaselineAssessmentAttemptStatus @default(OPEN)
+  createdAt   DateTime                        @default(now())
+  submittedAt DateTime?
+  user        User                            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@index([createdAt])
+}
+
+/// * Subscriber-authored notes; source references only (ids/titles), not lesson/question bodies.
+model LearnerNote {
+  id        String           @id @default(cuid())
+  userId    String
+  scope     LearnerNoteScope
+  contextId String           @db.VarChar(128)
+  pathwayId String?          @db.VarChar(64)
+  topic     String?          @db.VarChar(200)
+  title     String?          @db.VarChar(200)
+  body      String
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, scope, contextId])
+  @@index([userId, updatedAt])
+}
+
+/// * Per-user topic performance for weak-area recommendations (question bank, mocks, practice tests).
+model UserTopicStat {
+  id            String    @id @default(cuid())
+  userId        String
+  topic         String    @db.VarChar(80)
+  correctCount  Int       @default(0)
+  wrongCount    Int       @default(0)
+  /// * Consecutive wrong answers for this topic; resets on a correct attempt.
+  wrongStreak   Int       @default(0)
+  lastWrongAt   DateTime?
+  lastAttemptAt DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, topic])
+  @@index([userId, updatedAt])
+}
+
+model TrialDeviceBinding {
+  id              String   @id @default(cuid())
+  fingerprintHash String   @unique
+  userId          String
+  createdAt       DateTime @default(now())
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+/// * Idempotency and cooldown tracking for retention and transactional emails.
+model EmailNotificationLog {
+  id        String   @id @default(cuid())
+  userId    String
+  kind      String
+  meta      Json?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, kind, createdAt])
+  @@index([createdAt])
+}
+
+/// * One-time password reset tokens; raw token is never stored (only SHA-256 hex).
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+/// * Email verification tokens; raw token is never stored (only SHA-256 hex).
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+/// Persisted Stripe subscription row — logical **user subscription** (region, tier/profession, plan, status, renewal).
+model Subscription {
+  id                   String             @id @default(cuid())
+  userId               String
+  status               SubscriptionStatus @default(ACTIVE)
+  stripeCustomerId     String?
+  stripeSubscriptionId String             @unique
+  /// * Stripe checkout / price-derived plan; when set, entitlements prefer this over `User.tier` for access scope.
+  planTier             TierCode?
+  planCountry          CountryCode?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  planDuration         String?            @db.VarChar(20)
+  currentPeriodEnd     DateTime?
+  trialEnd             DateTime?
+  cancelAtPeriodEnd    Boolean            @default(false)
+  /// * When planTier is ALLIED, the specific career line purchased (e.g. paramedic, mlt).
+  alliedCareer         String?            @db.VarChar(64)
+  /// * Checkout `metadata.planCode` (e.g. `canada_nursing_monthly` or regional code).
+  planCode             String?            @db.VarChar(96)
+  /// * Checkout `metadata.region` when global regional pricing was used (e.g. `philippines`).
+  billingRegionSlug    String?            @db.VarChar(32)
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+/// * Dedup Stripe webhook deliveries (evt_…) so retries are safe.
+model StripeWebhookEvent {
+  id        String   @id
+  createdAt DateTime @default(now())
+}
+
+model Category {
+  id                       String                    @id @default(cuid())
+  name                     String
+  slug                     String                    @unique
+  topicCode                String?
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+  flashcards               Flashcard[]
+  generatedFlashcardDrafts GeneratedFlashcardDraft[]
+  generatedQuestionDrafts  GeneratedQuestionDraft[]
+  Lesson                   Lesson[]
+  Question                 Question[]
+}
+
+/// * Aggregated full-corpus lesson/question quality (refreshed via admin POST, not hot-path).
+model ContentQualityCorpusSnapshot {
+  id        String   @id
+  payload   Json
+  updatedAt DateTime @updatedAt
+
+  @@map("content_quality_corpus_snapshots")
+}
+
+/// * Public SEO blog posts (migrated from legacy content_items / static allied data). Not the same rows as `content_items.type = 'lesson'`.
+model BlogPost {
+  id                        String                         @id @default(cuid())
+  slug                      String                         @unique
+  title                     String
+  excerpt                   String
+  body                      String
+  coverImage                String?
+  tags                      String[]                       @default([])
+  category                  String?
+  createdAt                 DateTime                       @default(now())
+  updatedAt                 DateTime                       @updatedAt
+  /// * e.g. content_items, paramedic-static, legacy-json
+  legacySource              String?
+  /// * Visibility: DRAFT never public; SCHEDULED goes live when publishAt <= now; PUBLISHED always public (after publishAt if set).
+  postStatus                BlogPostStatus                 @default(DRAFT)
+  /// * When status is SCHEDULED, this is the go-live instant (UTC). Also used as canonical “publish” time for SEO when set.
+  publishAt                 DateTime?
+  /// * RN | PN | NP | Allied — drives cross-links and topic hubs (string for flexibility vs exam registry keys).
+  exam                      String?
+  /// * Optional: overrides <title> / OG when set.
+  seoTitle                  String?
+  seoDescription            String?
+  /// * Structured template for generators and footer CTAs.
+  postTemplate              BlogPostTemplate?
+  /// * Internal paths e.g. `/us/rn/nclex-rn/lessons/slug` — no full lesson HTML stored here.
+  relatedLessonPaths        String[]                       @default([])
+  /// * Exam question UUIDs for deep links (public pages never expose rationales).
+  relatedQuestionIds        String[]                       @default([])
+  /// * Tool route slugs e.g. `labs`, `med-math` resolved under /tools.
+  relatedTools              String[]                       @default([])
+  /// * Admin-only append-only JSON array: generation, saves, publish attempts, status transitions.
+  adminPublishLog           Json                           @default("[]")
+  campaignId                String?
+  targetKeyword             String?
+  keywordCluster            String?
+  countryTarget             CountryCode?
+  intent                    BlogPostIntent?
+  funnelStage               BlogFunnelStage?
+  workflowStatus            BlogWorkflowStatus             @default(GENERATED)
+  outlineJson               Json?
+  keyQuestions              String[]                       @default([])
+  keywordPlan               String[]                       @default([])
+  internalLinkPlan          Json?
+  ctaType                   String?
+  ctaText                   String?
+  ctaHref                   String?
+  titleAlternates           String[]                       @default([])
+  clickTitle                String?
+  metaTitleVariant          String?
+  metaDescriptionVariant    String?
+  featuredSnippet           String?
+  keyTakeaways              String[]                       @default([])
+  faqBlock                  Json?
+  definitionBox             String?
+  checklistBlock            Json?
+  quickReferenceBlock       Json?
+  sourceReliabilityScore    Int?
+  sourcesJson               Json?
+  apaReferences             String[]                       @default([])
+  requiresReferences        Boolean                        @default(false)
+  medicalRiskFlags          String[]                       @default([])
+  reviewDueAt               DateTime?
+  lastReviewedAt            DateTime?
+  coverImageAlt             String?
+  coverImageCaption         String?
+  coverImagePrompt          String?
+  imageStyleType            String?
+  imageStatus               BlogImageStatus                @default(NONE)
+  socialCaption             String?
+  emailTeaser               String?
+  shortSummary              String?
+  promoBlurb                String?
+  schemaSummary             String?
+  perfImpressions           Int?
+  perfClicks                Int?
+  perfCtr                   Float?
+  perfInternalClicks        Int?
+  perfConversionAssists     Int?
+  perfSubscriptionAssists   Int?
+  updateNeeded              Boolean                        @default(false)
+  rankingNote               String?
+  /// * Original legacy schedule timestamp (if imported from scheduled content).
+  scheduledAt               DateTime?
+  /// * Profession/career dimension for shared nursing+allied infrastructure (e.g., rn, paramedic, mlt).
+  careerSlug                String?
+  /// * Content locale used for language-aware blog delivery.
+  locale                    String                         @default("en")
+  /// * Shared identifier linking translations of the same post.
+  translationGroupId        String?
+  /// * Locale of the canonical/source article.
+  sourceLocale              String?
+  /// * Whether this row was auto-translated from a source post.
+  isAutoTranslated          Boolean                        @default(false)
+  /// * Translation provenance such as `ai`, `manual`, or `legacy`.
+  translationSource         String?
+  /// * Canonical/source BlogPost row for translation variants (self relation).
+  canonicalPostId           String?
+  batchScheduleItems        BlogBatchScheduleItem[]
+  campaignItems             BlogCampaignItem[]
+  draftGenerationBatchItems BlogDraftGenerationBatchItem[]
+  campaign                  BlogCampaign?                  @relation(fields: [campaignId], references: [id])
+  canonicalPost             BlogPost?                      @relation("BlogPostCanonicalRelation", fields: [canonicalPostId], references: [id])
+  translatedVariants        BlogPost[]                     @relation("BlogPostCanonicalRelation")
+  contentAutomationLogs     ContentAutomationLog[]
+  localizedVariants         LocalizedBlogArticle[]
+
+  @@index([postStatus, publishAt])
+  @@index([careerSlug, locale, postStatus, publishAt])
+  @@index([translationGroupId, locale])
+  @@index([canonicalPostId])
+  @@index([scheduledAt])
+  @@index([createdAt])
+  @@index([campaignId, postStatus, publishAt])
+  @@index([targetKeyword])
+  @@index([keywordCluster])
+  @@index([workflowStatus])
+}
+
+model BlogCampaign {
+  id                String             @id @default(cuid())
+  name              String
+  keywordCluster    String
+  targetExam        String?
+  targetProfession  String?
+  targetPathway     String?
+  countryTarget     CountryCode?
+  desiredPostCount  Int
+  postsPerWeek      Int?
+  preferredWeekdays Int[]              @default([])
+  startDate         DateTime?
+  templateMix       BlogPostTemplate[] @default([])
+  intentMix         BlogPostIntent[]   @default([])
+  funnelStage       BlogFunnelStage?
+  includeImages     Boolean            @default(false)
+  includeAiImages   Boolean            @default(false)
+  requireReferences Boolean            @default(false)
+  status            BlogCampaignStatus @default(DRAFT)
+  progressJson      Json?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  items             BlogCampaignItem[]
+  posts             BlogPost[]
+
+  @@index([status, startDate])
+  @@index([keywordCluster])
+}
+
+model BlogCampaignItem {
+  id                String                 @id @default(cuid())
+  campaignId        String
+  ordinal           Int
+  status            BlogCampaignItemStatus @default(QUEUED)
+  plannedKeyword    String?
+  plannedTitle      String?
+  plannedSlug       String?
+  plannedPublishAt  DateTime?
+  preferredTemplate BlogPostTemplate?
+  preferredIntent   BlogPostIntent?
+  preferredFunnel   BlogFunnelStage?
+  includeImage      Boolean                @default(false)
+  includeAiImage    Boolean                @default(false)
+  postId            String?
+  error             String?
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  campaign          BlogCampaign           @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  post              BlogPost?              @relation(fields: [postId], references: [id])
+
+  @@unique([campaignId, ordinal])
+  @@index([campaignId, status, ordinal])
+  @@index([plannedPublishAt])
+}
+
+/// *
+///  * Paste-many-topics batch schedule (admin). Items get staggered `plannedPublishAt`; a cron/admin runner
+///  * generates AI drafts and schedules publication (reuses `generateBlogAiDraft` + canonical intent dedupe).
+model BlogBatchSchedule {
+  id                  String                  @id @default(cuid())
+  status              BlogBatchScheduleStatus @default(ACTIVE)
+  /// * Posts per 24h window (1–12). Slot interval = 24h / cadencePerDay.
+  cadencePerDay       Int
+  startAt             DateTime
+  /// * Earliest pending item publish slot (denormalized for ops UI).
+  nextRunAt           DateTime?
+  lastRunAt           DateTime?
+  totalItems          Int
+  publishedCount      Int                     @default(0)
+  failedCount         Int                     @default(0)
+  skippedCount        Int                     @default(0)
+  exam                String
+  country             String                  @default("unspecified")
+  defaultTemplate     BlogPostTemplate        @default(TOPIC_EXPLAINED)
+  defaultIntent       BlogPostIntent?
+  createdById         String?
+  createdAt           DateTime                @default(now())
+  updatedAt           DateTime                @updatedAt
+  publishMode         BlogBatchPublishMode    @default(STAGGERED_PUBLISH)
+  /// * Optional JSON: `{ "locales": ["fr","es","tl","hi"] }` — server maps default region per locale after each canonical item succeeds.
+  localizationOptions Json?
+  createdBy           User?                   @relation(fields: [createdById], references: [id])
+  items               BlogBatchScheduleItem[]
+
+  @@index([status, nextRunAt])
+}
+
+model BlogBatchScheduleItem {
+  id                String                      @id @default(cuid())
+  scheduleId        String
+  ordinal           Int
+  topicRaw          String
+  canonicalTopicKey String?
+  plannedPublishAt  DateTime
+  status            BlogBatchScheduleItemStatus @default(PENDING)
+  blogPostId        String?
+  failureReason     String?
+  createdAt         DateTime                    @default(now())
+  updatedAt         DateTime                    @updatedAt
+  blogPost          BlogPost?                   @relation(fields: [blogPostId], references: [id])
+  schedule          BlogBatchSchedule           @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  @@unique([scheduleId, ordinal])
+  @@index([scheduleId, status, plannedPublishAt])
+  @@index([plannedPublishAt, status])
+}
+
+/// *
+///  * Admin paste-many-topics draft batch: one `BlogPost` draft per line when processed.
+///  * Progress is persisted; call process API in chunks to stay within request timeouts.
+model BlogDraftGenerationBatch {
+  id                           String                         @id @default(cuid())
+  status                       BlogDraftGenerationBatchStatus @default(ACTIVE)
+  exam                         String
+  country                      String                         @default("unspecified")
+  defaultTemplate              BlogPostTemplate               @default(TOPIC_EXPLAINED)
+  defaultIntent                BlogPostIntent?
+  funnelStage                  BlogFunnelStage?
+  tone                         String                         @default("professional") @db.VarChar(32)
+  keywords                     String?
+  keywordCluster               String?
+  countryTarget                CountryCode?
+  includeImage                 Boolean                        @default(true)
+  includeAiImage               Boolean                        @default(false)
+  allowDuplicateCanonicalTopic Boolean                        @default(false)
+  totalItems                   Int
+  completedCount               Int                            @default(0)
+  failedCount                  Int                            @default(0)
+  skippedCount                 Int                            @default(0)
+  createdById                  String?
+  createdAt                    DateTime                       @default(now())
+  updatedAt                    DateTime                       @updatedAt
+  createdBy                    User?                          @relation(fields: [createdById], references: [id])
+  items                        BlogDraftGenerationBatchItem[]
+
+  @@index([status, createdAt])
+}
+
+model BlogDraftGenerationBatchItem {
+  id                String                             @id @default(cuid())
+  batchId           String
+  ordinal           Int
+  topicRaw          String
+  canonicalTopicKey String?
+  status            BlogDraftGenerationBatchItemStatus @default(PENDING)
+  blogPostId        String?
+  error             String?
+  createdAt         DateTime                           @default(now())
+  updatedAt         DateTime                           @updatedAt
+  batch             BlogDraftGenerationBatch           @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  blogPost          BlogPost?                          @relation(fields: [blogPostId], references: [id])
+
+  @@unique([batchId, ordinal])
+  @@index([batchId, status, ordinal])
+}
+
+model ContentAutomationLog {
+  id            String                       @id @default(cuid())
+  category      ContentAutomationLogCategory
+  jobType       String                       @db.VarChar(96)
+  status        ContentAutomationLogStatus
+  topic         String?
+  summary       String?                      @db.VarChar(480)
+  error         String?
+  metadata      Json?
+  blogPostId    String?
+  correlationId String?                      @db.VarChar(64)
+  sourceItemId  String?                      @db.VarChar(64)
+  retryOfId     String?                      @db.VarChar(64)
+  completedAt   DateTime?
+  createdById   String?
+  createdAt     DateTime                     @default(now())
+  updatedAt     DateTime                     @updatedAt
+  blogPost      BlogPost?                    @relation(fields: [blogPostId], references: [id])
+  createdBy     User?                        @relation(fields: [createdById], references: [id])
+
+  @@index([category, status, createdAt])
+  @@index([createdAt])
+  @@index([blogPostId])
+  @@index([correlationId])
+}
+
+/// *
+///  * Localized variant of a canonical BlogPost for international SEO expansion.
+///  * References the canonical BlogPost via canonicalArticleId but stores its own
+///  * fully adapted content, SEO metadata, and editorial state.
+///  *
+///  * Each (canonicalArticleId, locale, region) tuple is unique — one variant per
+///  * locale/region combination per canonical article.
+model LocalizedBlogArticle {
+  id                       String              @id @default(cuid())
+  canonicalArticleId       String
+  locale                   String              @db.VarChar(10)
+  region                   String              @db.VarChar(32)
+  profession               String?             @db.VarChar(32)
+  exam                     String?             @db.VarChar(48)
+  sourceLanguage           String              @default("en") @db.VarChar(10)
+  adaptationType           BlogAdaptationType  @default(ADAPTED)
+  contentStatus            LocalizedBlogStatus @default(DRAFT)
+  aiModelVersion           String?             @db.VarChar(64)
+  aiPromptVersion          String?             @db.VarChar(32)
+  localizedTitle           String
+  localizedExcerpt         String
+  localizedBody            String
+  canonicalSlug            String              @db.VarChar(200)
+  localizedSlug            String              @db.VarChar(200)
+  localizedMetaTitle       String?
+  localizedMetaDescription String?
+  seoKeywordPrimary        String?
+  seoKeywordSecondary      String[]            @default([])
+  searchIntent             String?             @db.VarChar(48)
+  hreflangJson             Json?
+  canonicalUrl             String?
+  targetAudience           String?             @db.VarChar(64)
+  ctaVariant               String?             @db.VarChar(48)
+  ctaText                  String?
+  ctaHref                  String?
+  internalLinkTargets      Json?
+  complianceReviewRequired Boolean             @default(false)
+  medicalReviewRequired    Boolean             @default(false)
+  editorialReviewRequired  Boolean             @default(true)
+  reviewFlags              String[]            @default([])
+  editorialNotes           String?
+  publishedAt              DateTime?
+  scheduledAt              DateTime?
+  rejectedAt               DateTime?
+  rejectionReason          String?
+  generationLog            Json                @default("[]")
+  createdAt                DateTime            @default(now())
+  updatedAt                DateTime            @updatedAt
+  canonicalArticle         BlogPost            @relation(fields: [canonicalArticleId], references: [id], onDelete: Cascade)
+
+  @@unique([canonicalArticleId, locale, region])
+  @@index([contentStatus, scheduledAt])
+  @@index([region, locale, contentStatus])
+  @@index([canonicalArticleId])
+  @@index([localizedSlug])
+  @@index([createdAt])
+}
+
+/// * Production `content_items` — lessons are `type = "lesson"`.
+model ContentItem {
+  id                       String                    @id @default(uuid()) @db.VarChar
+  title                    String
+  slug                     String                    @unique
+  type                     String                    @default("lesson")
+  category                 String?
+  bodySystem               String?                   @map("body_system")
+  tier                     String?
+  status                   String?                   @default("draft")
+  tags                     String[]                  @default([])
+  summary                  String?
+  content                  Json                      @default("[]")
+  seoTitle                 String?                   @map("seo_title")
+  seoDescription           String?                   @map("seo_description")
+  seoKeywords              String[]                  @default([]) @map("seo_keywords")
+  primaryKeyword           String?                   @map("primary_keyword")
+  secondaryKeywords        String[]                  @default([]) @map("secondary_keywords")
+  scheduledAt              DateTime?                 @map("scheduled_at")
+  clinicalSafetyReview     Boolean                   @default(false) @map("clinical_safety_review")
+  autoPublish              Boolean                   @default(false) @map("auto_publish")
+  createdAt                DateTime                  @default(now()) @map("created_at")
+  updatedAt                DateTime                  @updatedAt @map("updated_at")
+  publishedAt              DateTime?                 @map("published_at")
+  authorId                 String?                   @map("author_id")
+  authorName               String?                   @map("author_name")
+  regionScope              String?                   @default("BOTH") @map("region_scope")
+  versionKey               String?                   @map("version_key")
+  updatedByAi              Boolean                   @default(false) @map("updated_by_ai")
+  protectedFields          String[]                  @default([]) @map("protected_fields")
+  sourceVersion            Int                       @default(1) @map("source_version")
+  generatedFlashcardDrafts GeneratedFlashcardDraft[]
+  lessonEnhancementTargets GeneratedLessonDraft[]    @relation("LessonEnhancementTarget")
+  generatedQuestionDrafts  GeneratedQuestionDraft[]
+
+  @@index([type, status])
+  @@index([type, status, updatedAt])
+  @@map("content_items")
+}
+
+/// *
+///  * Marketing exam-pathway lessons (`/[locale]/[slug]/[exam]/lessons/...`).
+///  * The loader prefers published rows for each `pathwayId` and falls back to `catalog.json` when that pathway has no DB rows.
+model PathwayLesson {
+  id                  String        @id @default(cuid())
+  pathwayId           String        @map("pathway_id")
+  slug                String
+  title               String
+  topic               String
+  topicSlug           String        @map("topic_slug")
+  bodySystem          String        @map("body_system")
+  previewSectionCount Int           @default(1) @map("preview_section_count")
+  seoTitle            String        @map("seo_title")
+  seoDescription      String        @map("seo_description")
+  /// * Array of { id, heading, kind, body } — normalized to five canonical sections at read time.
+  sections            Json
+  /// * Optional row-level filter; null means “follow pathway registry” (country implied by pathway).
+  countryCode         CountryCode?  @map("country_code")
+  tierCode            TierCode?     @map("tier_code")
+  status              ContentStatus @default(PUBLISHED)
+  sortOrder           Int           @default(0) @map("sort_order")
+  /// * BCP 47-style language tag (`en`, `fr`, …). Default `en` for catalog imports.
+  locale              String        @default("en")
+  createdAt           DateTime      @default(now()) @map("created_at")
+  updatedAt           DateTime      @updatedAt @map("updated_at")
+  countries           String[]      @default([])
+  /// * Runtime region-aware lesson filtering metadata (single global lesson dataset).
+  exams               String[]      @default([])
+  priority            String        @default("medium")
+  /// * Exam-specific yield metadata: [{ exam, yieldLevel, clinicalPriority? }].
+  examMeta            Json          @default("[]") @map("exam_meta")
+
+  @@unique([pathwayId, slug, locale])
+  @@unique([pathwayId, slug])
+  @@index([pathwayId, status, sortOrder])
+  @@index([pathwayId, locale, status, sortOrder])
+  @@index([pathwayId, topicSlug, locale, status])
+  @@index([pathwayId, locale, status, sortOrder], map: "pathway_lessons_pathway_locale_status_sort_idx")
+  @@index([pathwayId, topicSlug, locale, status], map: "pathway_lessons_pathway_topic_locale_status_idx")
+  @@map("pathway_lessons")
+}
+
+/// * Production `exam_questions` question bank.
+model ExamQuestion {
+  id                          String    @id @default(uuid()) @db.VarChar
+  tier                        String
+  exam                        String
+  questionType                String    @map("question_type")
+  status                      String?   @default("draft")
+  publishAt                   DateTime? @map("publish_at")
+  stem                        String
+  options                     Json?     @default("[]")
+  correctAnswer               Json?     @map("correct_answer")
+  rationale                   String?
+  difficulty                  Int?      @default(3)
+  tags                        String[]  @default([])
+  bodySystem                  String?   @map("body_system")
+  topic                       String?
+  subtopic                    String?
+  caseId                      String?   @map("case_id")
+  exhibitData                 Json?     @map("exhibit_data")
+  regionScope                 String?   @default("BOTH") @map("region_scope")
+  stemHash                    String?   @map("stem_hash")
+  careerType                  String?   @default("nursing") @map("career_type")
+  scenario                    String?
+  clinicalPearl               String?   @map("clinical_pearl")
+  examStrategy                String?   @map("exam_strategy")
+  memoryHook                  String?   @map("memory_hook")
+  frameworkUsed               String?   @map("framework_used")
+  clinicalTrap                String?   @map("clinical_trap")
+  distractorRationales        Json?     @map("distractor_rationales")
+  qualityScores               Json?     @map("quality_scores")
+  qualityFeedback             Json?     @map("quality_feedback")
+  qualityScore                Int?      @map("quality_score")
+  countryCode                 String?   @map("country_code")
+  regionCode                  String?   @map("region_code")
+  licensingBody               String?   @map("licensing_body")
+  languageCode                String?   @default("en") @map("language_code")
+  cognitiveLevel              String?   @map("cognitive_level")
+  questionFormat              String?   @map("question_format")
+  isScenario                  Boolean   @default(false) @map("is_scenario")
+  isMockExamEligible          Boolean   @default(true) @map("is_mock_exam_eligible")
+  isAdaptiveEligible          Boolean   @default(true) @map("is_adaptive_eligible")
+  isFlashcardSource           Boolean   @default(false) @map("is_flashcard_source")
+  isStudyGuideLinked          Boolean   @default(false) @map("is_study_guide_linked")
+  isTutorReady                Boolean   @default(false) @map("is_tutor_ready")
+  correctAnswerExplanation    String?   @map("correct_answer_explanation")
+  incorrectAnswerRationale    Json?     @map("incorrect_answer_rationale")
+  clinicalReasoning           String?   @map("clinical_reasoning")
+  keyTakeaway                 String?   @map("key_takeaway")
+  mnemonic                    String?
+  referenceSource             String?   @map("reference_source")
+  labUnitVariant              String?   @map("lab_unit_variant")
+  medicationNamingVariant     String?   @map("medication_naming_variant")
+  caseContext                 String?   @map("case_context")
+  vitals                      Json?
+  labs                        Json?
+  images                      Json?
+  scenarioId                  String?   @map("scenario_id")
+  blueprintWeight             Float?    @map("blueprint_weight")
+  createdAt                   DateTime  @default(now()) @map("created_at")
+  updatedAt                   DateTime  @updatedAt @map("updated_at")
+  publishedAt                 DateTime? @map("published_at")
+  sourceVersion               Int       @default(1) @map("source_version")
+  /// Blueprint major id: NCLEX client-needs (e.g. safe-effective) or AANP-style NP (e.g. aanp-clinical-management). See `exam-config`.
+  nclexClientNeedsCategory    String?   @map("nclex_client_needs_category") @db.VarChar(64)
+  /// Optional subcategory / content area label for audits (not required for CAT balancing).
+  nclexClientNeedsSubcategory String?   @map("nclex_client_needs_subcategory") @db.VarChar(128)
+
+  @@index([status, tier])
+  @@index([exam])
+  @@index([stemHash])
+  @@index([status, updatedAt])
+  @@index([status, exam, tier, countryCode])
+  @@index([status, exam, topic])
+  @@index([status, exam, tier, countryCode], map: "exam_questions_status_exam_tier_country_idx")
+  @@map("exam_questions")
+}
+
+/// *
+///  * Allied exam blueprint definitions (legacy monolith `allied_blueprints` / Replit export).
+///  * Referenced by import pipelines; no FK from `exam_questions` required.
+model AlliedBlueprint {
+  id                     String   @id @default(uuid()) @db.VarChar
+  careerType             String   @map("career_type")
+  version                Int      @default(1)
+  domains                Json
+  difficultyDistribution Json     @map("difficulty_distribution")
+  cognitiveDistribution  Json     @map("cognitive_distribution")
+  allowedQuestionTypes   Json     @map("allowed_question_types")
+  isActive               Boolean? @default(true) @map("is_active")
+  createdAt              DateTime @default(now()) @map("created_at")
+
+  @@index([careerType, isActive])
+  @@index([careerType, version])
+  @@map("allied_blueprints")
+}
+
+model FlashcardDeck {
+  id            String                  @id @default(cuid())
+  slug          String                  @unique
+  title         String
+  description   String?
+  country       CountryCode
+  tier          TierCode
+  examFamily    ExamFamily              @default(GENERIC)
+  pathwayId     String?                 @map("pathway_id")
+  visibility    FlashcardDeckVisibility @default(SUBSCRIBER)
+  status        ContentStatus           @default(DRAFT)
+  sortOrder     Int                     @default(0) @map("sort_order")
+  cardCount     Int                     @default(0) @map("card_count")
+  createdAt     DateTime                @default(now()) @map("created_at")
+  updatedAt     DateTime                @updatedAt @map("updated_at")
+  cards         Flashcard[]
+  tags          FlashcardDeckOnTag[]
+  studySessions FlashcardStudySession[]
+
+  @@index([status, visibility, country])
+  @@index([status, examFamily])
+  @@map("flashcard_decks")
+}
+
+model FlashcardTag {
+  id        String               @id @default(cuid())
+  slug      String               @unique
+  name      String
+  createdAt DateTime             @default(now()) @map("created_at")
+  decks     FlashcardDeckOnTag[]
+
+  @@map("flashcard_tags")
+}
+
+model FlashcardDeckOnTag {
+  deckId String        @map("deck_id")
+  tagId  String        @map("tag_id")
+  deck   FlashcardDeck @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  tag    FlashcardTag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([deckId, tagId])
+  @@map("flashcard_deck_tags")
+}
+
+model Flashcard {
+  id              String              @id @default(cuid())
+  front           String
+  back            String
+  country         CountryCode
+  tier            TierCode
+  status          ContentStatus       @default(DRAFT)
+  examFamily      ExamFamily          @default(GENERIC)
+  categoryId      String
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  lessonId        String?
+  deckId          String?             @map("deck_id")
+  positionInDeck  Int                 @default(0) @map("position_in_deck")
+  /// *
+  ///    * Stable deduplication key for pipeline-generated cards.
+  ///    * Format: "{sourceType}:{sourceId}" — e.g. "exam_q:abc123", "lesson:cardio-basics:intro:0"
+  ///    * Null for manually authored cards. Unique so sync scripts can upsert without duplicating.
+  sourceKey       String?             @unique(map: "flashcards_source_key_key") @map("source_key")
+  category        Category            @relation(fields: [categoryId], references: [id])
+  deck            FlashcardDeck?      @relation(fields: [deckId], references: [id])
+  progressRecords FlashcardProgress[]
+
+  @@index([status, country, tier])
+  @@index([deckId, positionInDeck])
+  @@index([deckId, status])
+  @@index([lessonId])
+}
+
+model FlashcardProgress {
+  id             String    @id @default(cuid())
+  userId         String    @map("user_id")
+  flashcardId    String    @map("flashcard_id")
+  easeFactor     Float     @default(2.5) @map("ease_factor")
+  intervalDays   Int       @default(0) @map("interval_days")
+  repetitions    Int       @default(0)
+  nextReviewAt   DateTime? @map("next_review_at")
+  lastQuality    Int?      @map("last_quality")
+  lastReviewedAt DateTime? @map("last_reviewed_at")
+  flashcard      Flashcard @relation(fields: [flashcardId], references: [id], onDelete: Cascade)
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, flashcardId])
+  @@index([userId, nextReviewAt])
+  @@index([flashcardId])
+  @@map("flashcard_progress")
+}
+
+model FlashcardStudySession {
+  id        String        @id @default(cuid())
+  userId    String        @map("user_id")
+  deckId    String        @map("deck_id")
+  queueIds  Json          @map("queue_ids")
+  cursor    Int           @default(0)
+  updatedAt DateTime      @updatedAt @map("updated_at")
+  deck      FlashcardDeck @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, deckId])
+  @@index([userId])
+  @@map("flashcard_study_sessions")
+}
+
+model FlashcardUserStats {
+  userId             String    @id @map("user_id")
+  currentStreak      Int       @default(0) @map("current_streak")
+  longestStreak      Int       @default(0) @map("longest_streak")
+  lastStudyDate      DateTime? @map("last_study_date")
+  cardsReviewedTotal Int       @default(0) @map("cards_reviewed_total")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("flashcard_user_stats")
+}
+
+model Exam {
+  id         String        @id @default(cuid())
+  title      String
+  country    CountryCode
+  tier       TierCode
+  status     ContentStatus @default(DRAFT)
+  examFamily ExamFamily    @default(GENERIC)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  attempts   ExamAttempt[]
+  sessions   ExamSession[]
+
+  @@index([status, country, tier])
+}
+
+model ExamAttempt {
+  id          String       @id @default(cuid())
+  userId      String
+  examId      String
+  score       Int
+  total       Int
+  createdAt   DateTime     @default(now())
+  /// * Topic breakdown, per-item flags, timing — set on graded submits.
+  results     Json?
+  exam        Exam         @relation(fields: [examId], references: [id], onDelete: Cascade)
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  examSession ExamSession? @relation("ExamSessionAttempt")
+
+  @@index([examId])
+  @@index([userId, createdAt])
+}
+
+model ExamSession {
+  id            String            @id @default(cuid())
+  userId        String
+  examId        String?
+  questionIds   Json
+  answers       Json              @default("{}")
+  currentIndex  Int               @default(0)
+  status        ExamSessionStatus @default(IN_PROGRESS)
+  attemptId     String?           @unique
+  /// * Linear vs CAT; CAT uses `adaptiveState` for theta, difficulty history, incidents.
+  examMode      String            @default("linear") @map("exam_mode")
+  adaptiveState Json?             @map("adaptive_state")
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  timedMode     Boolean           @default(false)
+  timeLimitSec  Int?
+  elapsedMs     Int?
+  attempt       ExamAttempt?      @relation("ExamSessionAttempt", fields: [attemptId], references: [id])
+  exam          Exam?             @relation(fields: [examId], references: [id])
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@index([examId])
+}
+
+/// * Learner-built timed/untimed practice tests with saved progress and results.
+model PracticeTest {
+  id            String             @id @default(cuid())
+  userId        String
+  title         String?
+  /// * Build params: topics, selectionMode, difficulty bounds, pathwayId, etc.
+  config        Json
+  questionIds   Json
+  answers       Json               @default("{}")
+  cursorIndex   Int                @default(0)
+  status        PracticeTestStatus @default(IN_PROGRESS)
+  timedMode     Boolean            @default(false)
+  timeLimitSec  Int?
+  elapsedMs     Int?
+  startedAt     DateTime           @default(now())
+  completedAt   DateTime?
+  /// * Score, topic breakdown, weak areas — set when status = COMPLETED.
+  results       Json?
+  /// * CAT: theta, SE, item history, stop reason — updated each adaptive step.
+  adaptiveState Json?
+  updatedAt     DateTime           @updatedAt
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status, updatedAt])
+  @@map("practice_tests")
+}
+
+model Progress {
+  id        String    @id @default(cuid())
+  userId    String
+  lessonId  String
+  completed Boolean   @default(false)
+  updatedAt DateTime  @updatedAt
+  /// * First insert time (lesson opened / progress row created).
+  createdAt DateTime  @default(now())
+  /// * Set when learner crosses read-depth threshold (scroll) — optional; not started = no row.
+  engagedAt DateTime?
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([userId, updatedAt])
+}
+
+model BackgroundJob {
+  id           String    @id @default(cuid())
+  type         String
+  payload      Json
+  status       JobStatus @default(PENDING)
+  attempts     Int       @default(0)
+  maxAttempts  Int       @default(3)
+  lastError    String?
+  scheduledFor DateTime  @default(now())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([status, scheduledFor])
+  @@index([type])
+}
+
+/// * One admin AI generation run (batch).
+model AiGenerationJob {
+  id                    String                    @id @default(cuid())
+  tool                  String
+  status                JobStatus                 @default(COMPLETED)
+  model                 String?
+  sourcePrompt          String
+  inputPayload          Json
+  resultSummary         Json?
+  error                 String?
+  tokensUsed            Int?
+  createdById           String
+  createdAt             DateTime                  @default(now())
+  updatedAt             DateTime                  @updatedAt
+  /// * Set when a lesson batch job is canceled via admin API (tool = ADMIN_LESSON_BATCH).
+  lessonBatchCanceledAt DateTime?                 @map("lesson_batch_canceled_at")
+  createdBy             User                      @relation("AiJobCreatedBy", fields: [createdById], references: [id])
+  logs                  AiGenerationLog[]
+  flashcardDrafts       GeneratedFlashcardDraft[]
+  lessonDrafts          GeneratedLessonDraft[]
+  questionDrafts        GeneratedQuestionDraft[]
+  lessonBatchQueueItems LessonBatchQueueItem[]
+
+  @@index([tool, createdAt])
+  @@index([createdById])
+}
+
+/// * DB-backed queue for `/api/admin/lessons/ai-generate-batch` — enables atomic claim and item-level metrics.
+model LessonBatchQueueItem {
+  id                  String                     @id @default(cuid())
+  jobId               String
+  /// * Stable ordering within the batch (0-based).
+  position            Int
+  /// * Client-visible id (matches legacy JSON `itemId` / payload `batchItemId`).
+  publicItemId        String                     @unique
+  topic               String
+  normalizedTopic     String
+  batchTopicKey       String                     @db.VarChar(40)
+  status              LessonBatchQueueItemStatus @default(PENDING)
+  attemptCount        Int                        @default(0)
+  lastError           String?
+  lastAttemptAt       DateTime?
+  completedAt         DateTime?
+  skippedAt           DateTime?
+  startedAt           DateTime?
+  claimedByRequestId  String?                    @db.VarChar(128)
+  revivedAt           DateTime?
+  revivalCount        Int                        @default(0)
+  generatedDraftId    String?
+  /// * When status is SKIPPED_DUPLICATE — link to an existing draft with the same fingerprint.
+  existingDraftId     String?
+  generatedDraftTitle String?
+  /// * When the row was moved to CANCELLED (batch canceled or stale revive on a canceled job).
+  canceledAt          DateTime?
+  generatedDraft      GeneratedLessonDraft?      @relation("LessonBatchGeneratedDraft", fields: [generatedDraftId], references: [id])
+  job                 AiGenerationJob            @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId, status, position])
+  @@index([jobId, position])
+  @@index([batchTopicKey])
+  @@map("lesson_batch_queue_item")
+}
+
+/// * Audit trail for AI steps (granular events under a job).
+model AiGenerationLog {
+  id        String          @id @default(cuid())
+  jobId     String
+  step      String
+  detail    Json?
+  createdAt DateTime        @default(now())
+  job       AiGenerationJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+}
+
+model GeneratedQuestionDraft {
+  id               String            @id @default(cuid())
+  jobId            String?
+  tool             String
+  batchId          String?
+  payloadJson      Json
+  normalizedJson   Json?
+  validationJson   Json
+  reviewStatus     DraftReviewStatus @default(PENDING_REVIEW)
+  reviewNotes      String?
+  reviewedById     String?
+  reviewedAt       DateTime?
+  promotedEntityId String?
+  promotedAt       DateTime?
+  stemHash         String?
+  stemPreview      String?
+  lessonId         String?
+  categoryId       String?
+  examFamily       ExamFamily        @default(GENERIC)
+  tier             TierCode
+  country          CountryCode
+  sourcePrompt     String
+  model            String
+  createdById      String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  category         Category?         @relation(fields: [categoryId], references: [id])
+  createdBy        User              @relation("QuestionDraftCreatedBy", fields: [createdById], references: [id])
+  job              AiGenerationJob?  @relation(fields: [jobId], references: [id])
+  linkedContent    ContentItem?      @relation(fields: [lessonId], references: [id])
+  reviewedBy       User?             @relation("QuestionDraftReviewedBy", fields: [reviewedById], references: [id])
+
+  @@index([reviewStatus, createdAt])
+  @@index([stemHash])
+  @@index([jobId])
+  @@index([lessonId])
+}
+
+model GeneratedFlashcardDraft {
+  id               String            @id @default(cuid())
+  jobId            String?
+  tool             String
+  batchId          String?
+  payloadJson      Json
+  normalizedJson   Json?
+  validationJson   Json
+  reviewStatus     DraftReviewStatus @default(PENDING_REVIEW)
+  reviewNotes      String?
+  reviewedById     String?
+  reviewedAt       DateTime?
+  promotedEntityId String?
+  promotedAt       DateTime?
+  frontPreview     String?
+  lessonId         String?
+  categoryId       String?
+  examFamily       ExamFamily        @default(GENERIC)
+  tier             TierCode
+  country          CountryCode
+  sourcePrompt     String
+  model            String
+  createdById      String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  category         Category?         @relation(fields: [categoryId], references: [id])
+  createdBy        User              @relation("FlashcardDraftCreatedBy", fields: [createdById], references: [id])
+  job              AiGenerationJob?  @relation(fields: [jobId], references: [id])
+  linkedContent    ContentItem?      @relation(fields: [lessonId], references: [id])
+  reviewedBy       User?             @relation("FlashcardDraftReviewedBy", fields: [reviewedById], references: [id])
+
+  @@index([reviewStatus, createdAt])
+  @@index([jobId])
+  @@index([lessonId])
+}
+
+/// * Optional: lesson enhancement / repair drafts — not promoted until review.
+model GeneratedLessonDraft {
+  id                    String                 @id @default(cuid())
+  jobId                 String?
+  tool                  String
+  payloadJson           Json
+  normalizedJson        Json?
+  validationJson        Json
+  reviewStatus          DraftReviewStatus      @default(PENDING_REVIEW)
+  reviewNotes           String?
+  reviewedById          String?
+  reviewedAt            DateTime?
+  promotedEntityId      String?
+  promotedAt            DateTime?
+  titlePreview          String?
+  targetLessonId        String?
+  sourcePrompt          String
+  model                 String
+  createdById           String
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  /// * Fingerprint for duplicate detection (same as payload `batchTopicKey`); indexed for exact lookups.
+  lessonBatchTopicKey   String?                @db.VarChar(40)
+  createdBy             User                   @relation("LessonDraftCreatedBy", fields: [createdById], references: [id])
+  job                   AiGenerationJob?       @relation(fields: [jobId], references: [id])
+  reviewedBy            User?                  @relation("LessonDraftReviewedBy", fields: [reviewedById], references: [id])
+  targetContent         ContentItem?           @relation("LessonEnhancementTarget", fields: [targetLessonId], references: [id])
+  lessonBatchQueueItems LessonBatchQueueItem[] @relation("LessonBatchGeneratedDraft")
+
+  @@index([reviewStatus, createdAt])
+  @@index([jobId])
+  @@index([lessonBatchTopicKey])
+}
+
+model EducationalTranslationOverlay {
+  id          String                           @id @default(cuid())
+  sourceKind  EducationalTranslationSourceKind @map("source_kind")
+  /// *
+  ///    * Stable key: `ExamQuestion.id`, `pathwayId:slug` for pathway lessons, `FlashcardDeck.id`, `Flashcard.id`, `FlashcardTag.id`.
+  sourceId    String                           @map("source_id") @db.VarChar(512)
+  locale      String                           @db.VarChar(32)
+  status      EducationalTranslationStatus     @default(DRAFT)
+  /// * JSON payload — shape matches file-based overlays per kind (never replaces grading keys).
+  payload     Json
+  reviewedAt  DateTime?                        @map("reviewed_at")
+  publishedAt DateTime?                        @map("published_at")
+  createdAt   DateTime                         @default(now()) @map("created_at")
+  updatedAt   DateTime                         @updatedAt @map("updated_at")
+
+  @@unique([sourceKind, sourceId, locale], map: "educational_translation_overlays_source_kind_source_id_locale_k")
+  @@index([locale, status, sourceKind])
+  @@index([sourceKind, status])
+  @@map("educational_translation_overlays")
+}
+
+/// *
+///  * Structured product feedback and bug reports (learner + marketing).
+///  * Optional screenshot stored as data URL when small enough — prefer object storage for heavy media later.
+model UserFeedbackReport {
+  id                String               @id @default(cuid())
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  status            UserFeedbackStatus   @default(NEW)
+  category          UserFeedbackCategory
+  severity          UserFeedbackSeverity @default(MEDIUM)
+  summary           String               @db.VarChar(500)
+  details           String?
+  pageUrl           String               @db.VarChar(2048)
+  routeKey          String?              @db.VarChar(512)
+  userId            String?
+  pathwayId         String?              @db.VarChar(64)
+  examContextJson   Json?
+  userAgent         String?              @db.VarChar(512)
+  deviceHint        String?              @db.VarChar(120)
+  screenshotDataUrl String?
+  clientMetaJson    Json?
+  /// * Admin-only triage notes (not shown to reporters).
+  internalNotes     String?
+  /// * When set, this row is treated as a duplicate of the canonical report (triage / analytics).
+  duplicateOfId     String?
+  duplicateOf       UserFeedbackReport?  @relation("UserFeedbackDupParent", fields: [duplicateOfId], references: [id])
+  childDuplicates   UserFeedbackReport[] @relation("UserFeedbackDupParent")
+  user              User?                @relation(fields: [userId], references: [id])
+
+  @@index([status, createdAt])
+  @@index([category, createdAt])
+  @@index([severity, createdAt])
+  @@index([userId, createdAt])
+  @@index([routeKey])
+  @@index([duplicateOfId])
+}
+
+model Lesson {
+  id          String          @id
+  title       String
+  slug        String          @unique
+  summary     String
+  body        String
+  country     CountryCode
+  tier        TierCode
+  status      ContentStatus   @default(DRAFT)
+  examFamily  ExamFamily      @default(GENERIC)
+  difficulty  DifficultyBand?
+  topicTag    String?
+  systemTag   String?
+  tags        String[]        @default([])
+  sourceNotes String?
+  categoryId  String
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime
+  Category    Category        @relation(fields: [categoryId], references: [id])
+  Question    Question[]
+
+  @@index([categoryId])
+  @@index([status, country, tier])
+}
+
+model Question {
+  id                String          @id
+  stem              String
+  rationale         String
+  options           Json
+  answerKey         Json
+  questionType      QuestionType
+  country           CountryCode
+  tier              TierCode
+  status            ContentStatus   @default(DRAFT)
+  examFamily        ExamFamily      @default(GENERIC)
+  difficulty        DifficultyBand?
+  topicTag          String?
+  systemTag         String?
+  tags              String[]        @default([])
+  sourceNotes       String?
+  generationBatchId String?
+  needsReview       Boolean         @default(false)
+  duplicateOfId     String?
+  stemHash          String?
+  categoryId        String
+  lessonId          String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime
+  Category          Category        @relation(fields: [categoryId], references: [id])
+  Question          Question?       @relation("QuestionToQuestion", fields: [duplicateOfId], references: [id])
+  other_Question    Question[]      @relation("QuestionToQuestion")
+  Lesson            Lesson?         @relation(fields: [lessonId], references: [id])
+
+  @@index([categoryId])
+  @@index([examFamily])
+  @@index([lessonId])
+  @@index([status, country, tier])
+  @@index([stemHash])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model prisma_migrations_backup_20260413 {
+  id                  String?   @db.VarChar(36)
+  checksum            String?   @db.VarChar(64)
+  finished_at         DateTime? @db.Timestamptz(6)
+  migration_name      String?   @db.VarChar(255)
+  logs                String?
+  rolled_back_at      DateTime? @db.Timestamptz(6)
+  started_at          DateTime? @db.Timestamptz(6)
+  applied_steps_count Int?
+
+  @@map("_prisma_migrations_backup_20260413")
+  @@ignore
+}
+
+model accuracy_trends {
+  id                 String @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id            String @db.VarChar
+  date               String
+  questions_answered Int?   @default(0)
+  correct_count      Int?   @default(0)
+  accuracy           Float? @default(0)
+  study_minutes      Int?   @default(0)
+}
+
+model analytics_events {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id     String   @db.VarChar
+  event_type  String
+  event_data  Json?    @default("{}")
+  session_id  String?  @db.VarChar
+  platform    String?  @default("web")
+  device_info Json?    @default("{}")
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([created_at], map: "analytics_events_created_idx")
+  @@index([event_type], map: "analytics_events_type_idx")
+  @@index([user_id], map: "analytics_events_user_idx")
+}
+
+model benchmark_profiles {
+  id                     String   @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  exam_type              String   @unique
+  total_users            Int      @default(0)
+  avg_readiness_score    Float    @default(0)
+  avg_pass_probability   Float    @default(0)
+  avg_accuracy           Float    @default(0)
+  avg_questions_answered Float    @default(0)
+  avg_topic_coverage     Float    @default(0)
+  passing_threshold      Int      @default(65)
+  score_distribution     Json?    @default("{}")
+  percentile_breakpoints Json?    @default("[]")
+  updated_at             DateTime @default(now()) @db.Timestamp(6)
+
+  @@index([exam_type], map: "idx_benchmark_profiles_exam")
+}
+
+model cat_emergency_fallback_banks {
+  tier           String   @id
+  version        BigInt
+  generated_at   DateTime @default(now()) @db.Timestamptz(6)
+  checksum       String
+  questions      Json
+  question_count Int
+}
+
+model content_translations {
+  id                            String    @id @default(dbgenerated("(gen_random_uuid())::text")) @db.VarChar
+  content_type                  String
+  content_id                    String
+  language_code                 String
+  field_name                    String
+  translated_text               String
+  translation_status            String?   @default("auto")
+  source_hash                   String?
+  source_last_updated_reference DateTime?
+  last_updated                  DateTime  @default(now())
+
+  @@unique([content_type, content_id, field_name, language_code], map: "content_translations_natural_key_idx")
+}
+
+model content_versions {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  content_type   String
+  content_id     String    @db.VarChar
+  version_number Int       @default(1)
+  snapshot       Json
+  verified_good  Boolean?  @default(false)
+  verified_by    String?   @db.VarChar
+  verified_at    DateTime? @db.Timestamptz(6)
+  created_at     DateTime  @default(now()) @db.Timestamptz(6)
+
+  @@index([content_type, content_id], map: "idx_content_versions_lookup")
+  @@index([content_type, content_id, verified_good], map: "idx_content_versions_verified")
+}
+
+model critical_route_errors {
+  id                      String   @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  route                   String
+  method                  String   @default("GET")
+  user_id                 String?  @db.VarChar
+  content_id              String?  @db.VarChar
+  exam_id                 String?  @db.VarChar
+  product_id              String?  @db.VarChar
+  locale                  String?
+  entitlement_result      String?
+  error_message           String
+  stack_trace             String?
+  fallback_mode_triggered Boolean? @default(false)
+  request_params          Json?    @default("{}")
+  created_at              DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([created_at], map: "idx_critical_route_errors_created")
+  @@index([route], map: "idx_critical_route_errors_route")
+  @@index([user_id], map: "idx_critical_route_errors_user")
+}
+
+model cross_section_events {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  session_id          String
+  user_id             String?  @db.VarChar
+  source_section      String
+  destination_section String
+  source_page         String
+  destination_page    String
+  utm_source          String?
+  utm_medium          String?
+  utm_campaign        String?
+  created_at          DateTime @default(now()) @db.Timestamptz(6)
+}
+
+model custom_practice_sessions {
+  id                   String    @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id              String    @db.VarChar
+  status               String?   @default("pending")
+  total_questions      Int?      @default(20)
+  weak_topic_count     Int?      @default(0)
+  moderate_topic_count Int?      @default(0)
+  strong_topic_count   Int?      @default(0)
+  includes_images      Boolean?  @default(false)
+  questions            Json?     @default("[]")
+  score                Int?
+  completed_at         DateTime? @db.Timestamp(6)
+  created_at           DateTime  @default(now()) @db.Timestamp(6)
+}
+
+model digital_products {
+  id                 String    @id @db.VarChar
+  slug               String    @unique(map: "digital_products_slug_unique")
+  title              String
+  description        String
+  short_description  String?
+  price              Int
+  compare_at_price   Int?
+  file_url           String?
+  cover_image_url    String?
+  preview_url        String?
+  preview_page_count Int?      @default(3)
+  category           String
+  tier_target        String?   @default("all")
+  exam_target        String?
+  featured           Boolean?  @default(false)
+  is_active          Boolean?  @default(true)
+  question_count     Int?      @default(0)
+  seo_title          String?
+  seo_description    String?
+  seo_keywords       String?
+  theme_id           String?
+  career_type        String?   @default("nursing")
+  sale_price         Int?
+  sale_starts_at     DateTime?
+  sale_ends_at       DateTime?
+  created_at         DateTime  @default(now())
+  updated_at         DateTime  @default(now())
+}
+
+model exam_attempts {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id           String   @db.VarChar
+  template_id       String
+  exam_code         String
+  questions_payload Json     @default("[]")
+  question_count    Int
+  page_size         Int
+  answers           Json     @default("{}")
+  status            String?  @default("in_progress")
+  score             Int?
+  created_at        DateTime @default(now()) @db.Timestamp(6)
+}
+
+model exam_followup_responses {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id            String    @unique @db.VarChar
+  exam_result_status String
+  exam_weak_areas    Json?     @default("[]")
+  exam_result_date   DateTime  @default(now()) @db.Timestamp(6)
+  coupon_code        String?
+  coupon_expires_at  DateTime? @db.Timestamp(6)
+  new_exam_date      DateTime? @db.Timestamp(6)
+  created_at         DateTime  @default(now()) @db.Timestamp(6)
+}
+
+model exam_load_incidents {
+  id                String   @id @default(dbgenerated("(gen_random_uuid())::text")) @db.VarChar
+  incident_ref      String
+  user_id           String?  @db.VarChar
+  exam_id           String?  @db.VarChar
+  attempt_id        String?  @db.VarChar
+  session_id        String?  @db.VarChar
+  route             String?
+  failure_code      String
+  failure_message   String?
+  http_status       Int?
+  request_summary   Json?    @default("{}")
+  recovery_attempts Int?     @default(0)
+  recovery_stages   String[] @default([])
+  final_disposition String?
+  browser_info      String?
+  payload_size      Int?
+  elapsed_ms        Int?
+  created_at        DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([attempt_id], map: "idx_exam_load_incidents_attempt")
+  @@index([failure_code], map: "idx_exam_load_incidents_code")
+  @@index([created_at], map: "idx_exam_load_incidents_created")
+  @@index([incident_ref], map: "idx_exam_load_incidents_ref")
+  @@index([user_id], map: "idx_exam_load_incidents_user")
+}
+
+model exam_planner_settings {
+  id                      String    @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id                 String    @unique @db.VarChar
+  exam_date               DateTime? @db.Timestamp(6)
+  exam_date_type          String?   @default("target")
+  exam_countdown_hidden   Boolean?  @default(false)
+  study_planner_hidden    Boolean?  @default(false)
+  study_plan_intensity    String?   @default("balanced")
+  plan_without_date       Boolean?  @default(false)
+  plan_without_date_weeks Int?
+  tier                    String?   @default("rn")
+  career_type             String?   @default("nursing")
+  generated_plan          Json?
+  planner_last_updated    DateTime? @db.Timestamp(6)
+  created_at              DateTime  @default(now()) @db.Timestamp(6)
+  updated_at              DateTime  @default(now()) @db.Timestamp(6)
+}
+
+model fallback_delivery_events {
+  id                      String   @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  content_type            String
+  content_id              String?  @db.VarChar
+  user_id                 String?  @db.VarChar
+  requested_mode          String
+  resolved_mode           String
+  reason                  String
+  fallback_chain_position Int      @default(0)
+  route                   String?
+  created_at              DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([created_at], map: "idx_fallback_events_created")
+  @@index([content_type], map: "idx_fallback_events_type")
+}
+
+model flashcard_bank {
+  id                    String    @id @db.VarChar
+  tier                  String
+  topic_tag             String?
+  career_type           String?   @default("nursing")
+  front                 String
+  back                  String
+  tags_json             Json?     @default("[]")
+  references_json       Json?     @default("[]")
+  status                String    @default("draft")
+  content_hash          String?   @unique(map: "flashcard_bank_content_hash_unique")
+  created_at            DateTime  @default(now())
+  source_type           String?   @default("manual")
+  source_question_id    String?   @db.VarChar
+  question_type         String?
+  options               Json?     @default("[]")
+  correct_answer        Json?
+  rationale_correct     String?
+  distractor_rationales Json?
+  clinical_takeaway     String?
+  exam_pearl            String?
+  rationale_media       Json?     @default("[]")
+  lesson_links          Json?     @default("[]")
+  difficulty            Int?
+  body_system           String?
+  topic                 String?
+  subtopic              String?
+  region_scope          String?   @default("BOTH")
+  flashcard_enabled     Boolean?  @default(false)
+  category              String?
+  blueprint_category    String?
+  updated_at            DateTime? @default(now())
+  high_yield            Boolean?  @default(false)
+  is_foundational       Boolean?  @default(false)
+  quality_scores        Json?
+  quality_feedback      Json?
+  quality_score         Int?
+  source_version        Int       @default(1)
+}
+
+model flashcard_preview_config {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  content_type     String   @unique @default("flashcards")
+  session_limit    Int      @default(5)
+  daily_limit      Int      @default(10)
+  allowed_topics   String[] @default([])
+  allowed_tiers    String[] @default([])
+  upgrade_headline String?  @default("Unlock the Full Flashcard Library")
+  upgrade_body     String?  @default("Get unlimited flashcards, adaptive review, weak areas mode, and saved progress with a premium plan.")
+  updated_at       DateTime @default(now()) @db.Timestamp(6)
+}
+
+model flashcard_preview_usage {
+  id      String @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id String @db.VarChar
+  date    String
+  count   Int    @default(0)
+
+  @@unique([user_id, date])
+}
+
+model generated_courses {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  blueprint_id     String?  @db.VarChar
+  exam_code        String
+  title            String
+  description      String?
+  status           String?  @default("draft")
+  structure        Json?    @default("[]")
+  total_lessons    Int?     @default(0)
+  total_flashcards Int?     @default(0)
+  total_questions  Int?     @default(0)
+  seo_pages        Json?    @default("[]")
+  created_at       DateTime @default(now()) @db.Timestamp(6)
+  updated_at       DateTime @default(now()) @db.Timestamp(6)
+}
+
+model generated_questions {
+  id              String   @id @db.VarChar
+  generation_id   String   @db.VarChar
+  idx             Int
+  type            String
+  difficulty      String?
+  system          String?
+  category        String?
+  stem            String
+  scenario        String?
+  choices         Json
+  correct_answers Json
+  rationale       Json?
+  exam_pearl      String?
+  hash            String?
+  created_at      DateTime @default(now())
+}
+
+model kill_switches {
+  id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  feature_key           String    @unique
+  enabled               Boolean?  @default(false)
+  scope                 String    @default("global")
+  affected_ids          String[]  @default([])
+  affected_locales      String[]  @default([])
+  reason                String?
+  activated_by          String?   @db.VarChar
+  activated_by_username String?
+  activated_at          DateTime? @db.Timestamptz(6)
+  deactivated_at        DateTime? @db.Timestamptz(6)
+  created_at            DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime  @default(now()) @db.Timestamptz(6)
+
+  @@index([enabled], map: "idx_kill_switches_enabled")
+  @@index([feature_key], map: "idx_kill_switches_key")
+}
+
+model language_enforcement_events {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  event_type        String
+  content_type      String?
+  content_id        String?
+  expected_language String
+  detected_language String?
+  detail            String?
+  source            String?   @default("server")
+  created_at        DateTime? @default(now()) @db.Timestamptz(6)
+
+  @@index([created_at(sort: Desc)], map: "idx_lang_enforce_created")
+  @@index([event_type], map: "idx_lang_enforce_type")
+}
+
+model lesson_bookmarks {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id    String   @db.VarChar
+  lesson_id  String   @db.VarChar
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+
+  @@unique([user_id, lesson_id])
+}
+
+model manual_fulfillment_queue {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  content_type String
+  content_id   String    @db.VarChar
+  user_id      String    @db.VarChar
+  status       String    @default("pending")
+  reason       String?
+  resolved_at  DateTime? @db.Timestamptz(6)
+  resolved_by  String?   @db.VarChar
+  created_at   DateTime  @default(now()) @db.Timestamptz(6)
+
+  @@index([status], map: "idx_manual_fulfillment_status")
+  @@index([user_id], map: "idx_manual_fulfillment_user")
+}
+
+model practice_recommendations {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id         String    @unique @db.VarChar
+  recommendations Json      @default("[]")
+  generated_at    DateTime  @default(now()) @db.Timestamp(6)
+  expires_at      DateTime? @db.Timestamp(6)
+
+  @@index([user_id], map: "idx_practice_recommendations_user")
+}
+
+model pricing_plans {
+  id                  String   @id @db.VarChar
+  tier                String
+  duration            String
+  plan_name           String?
+  description         String?
+  is_lifetime         Boolean? @default(false)
+  price_cad           Int
+  price_usd           Int
+  stripe_price_id_usd String?
+  stripe_price_id_cad String?
+  is_enabled          Boolean? @default(true)
+  is_popular          Boolean? @default(false)
+  is_featured         Boolean? @default(false)
+  is_founding_price   Boolean? @default(false)
+  feature_list        Json?    @default("[]")
+  display_order       Int?     @default(0)
+  created_at          DateTime @default(now())
+  updated_at          DateTime @default(now())
+}
+
+model provisional_access_log {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id         String    @db.VarChar
+  reason          String
+  stripe_evidence Json?     @default("{}")
+  granted_at      DateTime  @default(now()) @db.Timestamptz(6)
+  expires_at      DateTime  @db.Timestamptz(6)
+  revoked_at      DateTime? @db.Timestamptz(6)
+
+  @@index([user_id, expires_at], map: "idx_provisional_access_active")
+  @@index([user_id], map: "idx_provisional_access_user")
+}
+
+model quarantine_log {
+  id                      String    @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  content_type            String
+  content_id              String    @db.VarChar
+  reason                  String
+  quarantined_by          String?   @db.VarChar
+  quarantined_by_username String?
+  fallback_version_id     String?   @db.VarChar
+  quarantined_at          DateTime  @default(now()) @db.Timestamptz(6)
+  released_at             DateTime? @db.Timestamptz(6)
+  released_by             String?   @db.VarChar
+
+  @@index([content_type, content_id, released_at], map: "idx_quarantine_log_active")
+  @@index([content_type, content_id], map: "idx_quarantine_log_content")
+}
+
+model readiness_history {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id          String   @db.VarChar
+  readiness_score  Int      @default(0)
+  pass_probability Int      @default(0)
+  readiness_tier   String   @default("early_preparation")
+  exam_type        String   @default("RN")
+  factors          Json?    @default("{}")
+  snapshot_week    String
+  created_at       DateTime @default(now()) @db.Timestamp(6)
+
+  @@unique([user_id, snapshot_week])
+  @@index([user_id], map: "idx_readiness_history_user")
+  @@index([snapshot_week], map: "idx_readiness_history_week")
+}
+
+model spaced_repetition_cards {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id          String    @db.VarChar
+  card_id          String    @db.VarChar
+  deck_id          String?   @db.VarChar
+  ease_factor      Float?    @default(2.5)
+  interval         Int?      @default(1)
+  repetitions      Int?      @default(0)
+  next_review_at   DateTime  @default(now()) @db.Timestamp(6)
+  last_reviewed_at DateTime? @db.Timestamp(6)
+  status           String?   @default("new")
+  updated_at       DateTime  @default(now()) @db.Timestamp(6)
+}
+
+model student_study_profiles {
+  id                       String    @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id                  String    @unique @db.VarChar
+  total_questions_answered Int?      @default(0)
+  total_correct            Int?      @default(0)
+  total_incorrect          Int?      @default(0)
+  avg_time_per_question    Int?      @default(0)
+  flashcards_studied       Int?      @default(0)
+  lessons_viewed           Int?      @default(0)
+  practice_exams_completed Int?      @default(0)
+  adaptive_exams_completed Int?      @default(0)
+  current_streak           Int?      @default(0)
+  longest_streak           Int?      @default(0)
+  last_study_date          String?
+  weekly_goal_hours        Int?      @default(10)
+  weekly_hours_logged      Float?    @default(0)
+  weekly_goal_reset_date   String?
+  total_study_minutes      Int?      @default(0)
+  exam_date                DateTime? @db.Timestamp(6)
+  hours_per_week           Int?      @default(10)
+  readiness_score          Int?      @default(0)
+  readiness_level          String?   @default("not_ready")
+  pass_probability         Int?      @default(0)
+  exam_prep_mode_active    Boolean?  @default(false)
+  created_at               DateTime  @default(now()) @db.Timestamp(6)
+  updated_at               DateTime  @default(now()) @db.Timestamp(6)
+}
+
+model study_milestones {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id        String   @db.VarChar
+  milestone_type String
+  title          String
+  description    String?
+  earned_at      DateTime @default(now()) @db.Timestamp(6)
+  seen           Boolean? @default(false)
+}
+
+model study_plan_schedule {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id         String   @db.VarChar
+  date            String
+  phase           String?
+  tasks           Json?    @default("[]")
+  completed       Boolean? @default(false)
+  completion_rate Int?     @default(0)
+  created_at      DateTime @default(now()) @db.Timestamp(6)
+}
+
+model test_bank_collections {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  name           String
+  slug           String   @unique
+  description    String?
+  role           String
+  country        String
+  exam_type      String
+  tier           String?  @default("free")
+  question_count Int?     @default(0)
+  categories     Json?    @default("[]")
+  metadata       Json?    @default("{}")
+  status         String?  @default("active")
+  sort_order     Int?     @default(0)
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([role, country])
+}
+
+model test_bank_progress {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id             String   @db.VarChar
+  collection_id       String   @db.VarChar
+  questions_attempted Int?     @default(0)
+  questions_correct   Int?     @default(0)
+  last_question_id    String?  @db.VarChar
+  last_accessed_at    DateTime @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime @default(now()) @db.Timestamptz(6)
+
+  @@unique([user_id, collection_id])
+}
+
+model topic_mastery_scores {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id          String    @db.VarChar
+  topic            String
+  subtopic         String?
+  total_attempts   Int?      @default(0)
+  correct_count    Int?      @default(0)
+  mastery_percent  Float?    @default(0)
+  mastery_label    String?   @default("weak")
+  recent_accuracy  Float?    @default(0)
+  avg_time_seconds Int?      @default(0)
+  last_attempt_at  DateTime? @db.Timestamp(6)
+  updated_at       DateTime  @default(now()) @db.Timestamp(6)
+}
+
+model unified_question_history {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id         String   @db.VarChar
+  question_id     String   @db.VarChar
+  selected_answer Int?
+  was_correct     Boolean
+  session_id      String?  @db.VarChar
+  source_type     String
+  source_id       String?  @db.VarChar
+  time_spent      Int?
+  answered_at     DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([session_id], map: "unified_question_history_session_idx")
+  @@index([user_id, source_type], map: "unified_question_history_source_idx")
+  @@index([user_id], map: "unified_question_history_user_idx")
+}
+
+model weak_area_alerts {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar
+  user_id             String   @db.VarChar
+  topic               String
+  alert_type          String   @default("repeated_struggle")
+  message             String
+  dismissed           Boolean? @default(false)
+  recommended_actions Json?    @default("[]")
+  created_at          DateTime @default(now()) @db.Timestamp(6)
+}
+
 enum CountryCode {
   CA
   US
 }
 
 enum TierCode {
-  PRE_NURSING
-  NEW_GRAD
   RPN
   LVN_LPN
   RN
   NP
   ALLIED
+  PRE_NURSING
+  NEW_GRAD
 }
 
 enum UserRole {
   LEARNER
-  /** @deprecated Prefer SUPER_ADMIN — retained for existing rows and JWT compatibility. */
+  /// * @deprecated Prefer SUPER_ADMIN — retained for existing rows and JWT compatibility.
   ADMIN
-  /** Full admin: billing, support tools, publishing, dangerous ops. */
+  /// * Full admin: billing, support tools, publishing, dangerous ops.
   SUPER_ADMIN
-  /** Content & publishing: lessons, blog, SEO, generation — not user PII/support or raw billing lists. */
+  /// * Content & publishing: lessons, blog, SEO, generation — not user PII/support or raw billing lists.
   CONTENT_ADMIN
-  /** Support: user lookup, subscription/analytics read, ops health — not publishing or AI generation. */
+  /// * Support: user lookup, subscription/analytics read, ops health — not publishing or AI generation.
   SUPPORT_ADMIN
 }
 
@@ -86,7 +2144,7 @@ enum JobStatus {
   CANCELLED
 }
 
-/** Admin lesson batch queue — one row per topic; statuses drive atomic claim + recovery. */
+/// * Admin lesson batch queue — one row per topic; statuses drive atomic claim + recovery.
 enum LessonBatchQueueItemStatus {
   PENDING
   GENERATING
@@ -107,14 +2165,14 @@ enum PracticeTestStatus {
   ABANDONED
 }
 
-/** Who can browse/study a flashcard deck from marketing vs subscriber surfaces. */
+/// * Who can browse/study a flashcard deck from marketing vs subscriber surfaces.
 enum FlashcardDeckVisibility {
   PUBLIC_PREVIEW
   SUBSCRIBER
   HIDDEN
 }
 
-/** Learner / visitor product feedback and bug intake (admin triage). */
+/// * Learner / visitor product feedback and bug intake (admin triage).
 enum UserFeedbackCategory {
   BUG
   BROKEN_CONTENT
@@ -140,7 +2198,7 @@ enum UserFeedbackStatus {
   DISMISSED
 }
 
-/** AI-generated content review workflow — never auto-published to learner pools. */
+/// * AI-generated content review workflow — never auto-published to learner pools.
 enum DraftReviewStatus {
   PENDING_REVIEW
   APPROVED
@@ -148,211 +2206,17 @@ enum DraftReviewStatus {
   PROMOTED
 }
 
-/** Learner-declared exam timing for pacing and countdown (not a booking record). */
+/// * Learner-declared exam timing for pacing and countdown (not a booking record).
 enum ExamDatePlanType {
   UNSURE
   PROPOSED
   CONFIRMED
 }
 
-/** Target readiness / program start for free Pre-Nursing pacing (not a licensure exam date). */
+/// * Target readiness / program start for free Pre-Nursing pacing (not a licensure exam date).
 enum PreNursingDatePlanType {
   UNSURE
   PROPOSED
-}
-
-model User {
-  id                      String         @id @default(cuid())
-  email                   String         @unique
-  /** Lowercase, trimmed email for dedup (dot-stripping, alias-insensitive). */
-  normalizedEmail         String?
-  /** Lowercase login handle; optional. PostgreSQL allows multiple NULLs under UNIQUE. */
-  username                String?        @unique
-  name                    String
-  firstName               String?        @db.VarChar(100)
-  lastName                String?        @db.VarChar(100)
-  displayName             String?        @db.VarChar(200)
-  passwordHash            String?
-  /** Bumped on password change/reset so JWTs can be invalidated without per-device session rows. */
-  credentialVersion       Int            @default(0)
-  emailVerified           Boolean        @default(false)
-  /**
-   * QA / screenshot accounts created via /admin/demo-users only.
-   * Blocks Stripe checkout and trials; uses reserved @nursenest.demo.invalid emails.
-   */
-  isDemoUser              Boolean        @default(false) @map("is_demo_user")
-  /** How the account was created (credentials, google, etc.). */
-  authProvider            String         @default("credentials") @db.VarChar(32)
-  role                    UserRole       @default(LEARNER)
-  country                 CountryCode
-  tier                    TierCode
-  signupIp                String?        @db.VarChar(64)
-  lastLoginIp             String?        @db.VarChar(64)
-  lastLoginAt             DateTime?
-  examFocus               String?
-  studyGoal               String?
-  dailyStudyMinutes       Int?
-  /** Target graded bank questions per UTC day; null uses product default (see load-daily-question-goal-progress). */
-  dailyQuestionGoal       Int?
-  /** UTC calendar day for which `bankQuestionsGradedCount` applies. */
-  bankQuestionsGradedUtcDay DateTime? @db.Date
-  /** Graded bank questions counted on `bankQuestionsGradedUtcDay`. */
-  bankQuestionsGradedCount  Int         @default(0)
-  learnerPath             String?
-  /** Calendar date the learner is targeting (UTC midnight stored). */
-  examDate                DateTime?
-  examDatePlanType        ExamDatePlanType?
-  examGoalSetAt           DateTime?
-  /** Optional pathway id from exam registry when the goal is pathway-specific (NP tracks, etc.). */
-  targetExamPathwayId     String?        @db.VarChar(64)
-  /** When tier is ALLIED, optional short profession key (e.g. paramedic, mlt) for scoped UX and recommendations. */
-  alliedProfessionKey     String?        @db.VarChar(64)
-  /** Free Pre-Nursing: optional target readiness / school start date (UTC midnight). */
-  preNursingTargetDate      DateTime?
-  preNursingDatePlanType    PreNursingDatePlanType?
-  preNursingGoalSetAt       DateTime?
-  /** Soft hint for marketing CTAs: rn | rpn | pn | np | unsure */
-  preNursingFuturePathwayHint String?    @db.VarChar(16)
-  /** Optional learner preference: light | steady | intensive — used for copy only, not hours math. */
-  studyCadencePreference  String?        @db.VarChar(32)
-  /** When false, dashboard and study-entry surfaces avoid adaptive next-step recommendations. */
-  enableAdaptivePlan      Boolean?       @map("enable_adaptive_plan")
-  /** When false, spaced-repetition recommendations and due-review nudges are suppressed. */
-  enableSpacedRepetition  Boolean?       @map("enable_spaced_repetition")
-  /** When false, confidence-driven grouping and review insights are hidden from learner-facing flows. */
-  enableConfidenceTracking Boolean?      @map("enable_confidence_tracking")
-  /** When false, lesson pre/post quiz prompts and modules stay hidden. */
-  enablePrePostQuizzes    Boolean?       @map("enable_pre_post_quizzes")
-  /**
-   * When false, guided lesson study loop (optional bank-backed pre/post quick check + review) stays off.
-   * Null defaults to enabled in app normalization.
-   */
-  lessonStudyLoopEnabled  Boolean?  @map("lesson_study_loop_enabled")
-  /** When false, weakness heatmap surfaces are hidden. */
-  showHeatmap             Boolean?       @map("show_heatmap")
-  /** When false, advanced readiness and dashboard insight surfaces stay simplified. */
-  showAdvancedInsights    Boolean?       @map("show_advanced_insights")
-  /** When false, weak-area nudges and prompt cards are suppressed. */
-  enableWeaknessAlerts    Boolean?       @map("enable_weakness_alerts")
-  /** When false, forgetting-risk alerts and decay-oriented reminders are suppressed. */
-  enableDecayAlerts       Boolean?       @map("enable_decay_alerts")
-  /** Default smart-session size for learner flows; null uses product default. */
-  preferredSessionLength  Int?           @map("preferred_session_length")
-  onboardingCompletedAt   DateTime?
-  /** User dismissed the baseline assessment prompt (non-blocking). */
-  baselineAssessmentSkippedAt    DateTime?
-  /** User finished the short baseline question set. */
-  baselineAssessmentCompletedAt  DateTime?
-  /** Summary: { correctCount, totalQuestions, weakTopics: string[], at: string } */
-  baselineAssessmentSummary      Json?
-  baselineAssessmentAttempts     BaselineAssessmentAttempt[]
-
-  freeQuestionViews       Int            @default(0)
-  freeLessonOpens         Int            @default(0)
-  trialStatus             TrialStatus    @default(NONE)
-  trialUsedAt             DateTime?
-  trialStartedAt          DateTime?
-  trialEndsAt             DateTime?
-  /** When the user last acknowledged legal policies at subscription checkout (server timestamp). */
-  legalPoliciesAcceptedAt DateTime?
-  /** Bundle id from `LEGAL_POLICY_BUNDLE_VERSION` at acceptance time. */
-  legalPoliciesVersion    String?        @db.VarChar(32)
-  createdAt               DateTime       @default(now())
-  updatedAt               DateTime       @updatedAt
-  subscriptions           Subscription[]
-  attempts                ExamAttempt[]
-  examSessions            ExamSession[]
-  progress                Progress[]
-  aiGenerationJobs        AiGenerationJob[]           @relation("AiJobCreatedBy")
-  questionDraftsCreated   GeneratedQuestionDraft[]    @relation("QuestionDraftCreatedBy")
-  questionDraftsReviewed  GeneratedQuestionDraft[]    @relation("QuestionDraftReviewedBy")
-  flashcardDraftsCreated  GeneratedFlashcardDraft[]   @relation("FlashcardDraftCreatedBy")
-  flashcardDraftsReviewed GeneratedFlashcardDraft[]   @relation("FlashcardDraftReviewedBy")
-  lessonDraftsCreated     GeneratedLessonDraft[]      @relation("LessonDraftCreatedBy")
-  lessonDraftsReviewed    GeneratedLessonDraft[]      @relation("LessonDraftReviewedBy")
-  passwordResetTokens     PasswordResetToken[]
-  emailVerificationTokens EmailVerificationToken[]
-  emailNotificationLogs   EmailNotificationLog[]
-  flashcardProgress       FlashcardProgress[]
-  flashcardStudySessions  FlashcardStudySession[]
-  flashcardUserStats      FlashcardUserStats?
-  practiceTests           PracticeTest[]
-  trialDeviceBindings     TrialDeviceBinding[]
-  /** Aggregated per-topic accuracy / streaks from graded bank, mocks, and practice tests. */
-  topicStats              UserTopicStat[]
-  /** User-authored study notes (never stores premium HTML bodies). */
-  learnerNotes            LearnerNote[]
-  /** Daily per-user protection / API abuse tallies (admin-only; no note bodies). */
-  premiumProtectionUserDays PremiumProtectionUserDay[]
-  protectionAbuseReviews    ProtectionAbuseReview[]
-  /** Abuse review rows this admin closed (dismiss / resolve). */
-  abuseReviewsDismissed     ProtectionAbuseReview[] @relation("ProtectionAbuseReviewDismissedBy")
-  blogBatchSchedules           BlogBatchSchedule[]
-  blogDraftGenerationBatches   BlogDraftGenerationBatch[]
-  contentAutomationLogs        ContentAutomationLog[]
-  mediaAssetsUploaded          MediaAsset[]                 @relation("MediaAssetUploadedBy")
-  /** Bug reports / product feedback filed from learner or marketing surfaces (optional user link). */
-  feedbackReports              UserFeedbackReport[]
-
-  @@index([alliedProfessionKey])
-  @@index([normalizedEmail])
-  @@index([isDemoUser])
-}
-
-/** Admin-managed binary assets on Spaces (blogs, lessons, marketing). */
-model MediaAsset {
-  id              String    @id @default(cuid())
-  publicUrl       String    @unique
-  storageKey      String    @unique
-  filename        String
-  mimeType        String
-  kind            String    @default("image") @db.VarChar(16)
-  fileSizeBytes   Int
-  width           Int?
-  height          Int?
-  altText         String?   @db.Text
-  tags            String[]  @default([])
-  uploadedById    String?
-  uploadedBy      User?     @relation("MediaAssetUploadedBy", fields: [uploadedById], references: [id], onDelete: SetNull)
-  /** Best-effort count from last usage scan (null = never scanned). */
-  usageRefCount   Int?
-  usageRefs       Json?
-  usageScannedAt  DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-
-  @@index([createdAt(sort: Desc)])
-  @@index([kind])
-  @@index([mimeType])
-  @@map("media_assets")
-}
-
-/** Aggregated premium UX telemetry (UTC day; global counts, no user PII). */
-model PremiumProtectionRollup {
-  id        String   @id @default(cuid())
-  day       DateTime @db.Date
-  metricKey String   @map("metric_key") @db.VarChar(96)
-  segment   String   @default("") @db.VarChar(96)
-  count     Int      @default(0)
-
-  @@unique([day, metricKey, segment])
-  @@index([day])
-  @@map("premium_protection_rollups")
-}
-
-/** Per-user daily tallies for abuse heuristics (admin review; subscriber ids). */
-model PremiumProtectionUserDay {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  day       DateTime @db.Date
-  metricKey String   @map("metric_key") @db.VarChar(96)
-  count     Int      @default(0)
-
-  @@unique([userId, day, metricKey])
-  @@index([day])
-  @@index([userId, day])
-  @@map("premium_protection_user_days")
 }
 
 enum ProtectionAbuseReviewResolution {
@@ -360,45 +2224,9 @@ enum ProtectionAbuseReviewResolution {
   RESOLVED
 }
 
-/** Flagged accounts for manual review (rate limits, scraping signals). */
-model ProtectionAbuseReview {
-  id          String    @id @default(cuid())
-  userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  reason      String    @db.VarChar(80)
-  score       Int
-  evidence    Json?
-  createdAt   DateTime  @default(now())
-  /** When an admin closed this item (dismiss or resolve). */
-  dismissedAt DateTime?
-  resolution  ProtectionAbuseReviewResolution?
-  dismissedByUserId String?
-  dismissedBy       User?   @relation("ProtectionAbuseReviewDismissedBy", fields: [dismissedByUserId], references: [id], onDelete: SetNull)
-  /** Short admin note (optional). */
-  adminNote   String?   @db.VarChar(500)
-
-  @@index([dismissedAt, createdAt])
-  @@index([userId, createdAt])
-  @@index([dismissedAt])
-  @@map("protection_abuse_reviews")
-}
-
 enum BaselineAssessmentAttemptStatus {
   OPEN
   SUBMITTED
-}
-
-model BaselineAssessmentAttempt {
-  id          String                        @id @default(cuid())
-  userId      String
-  user        User                          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  questionIds Json
-  status      BaselineAssessmentAttemptStatus @default(OPEN)
-  createdAt   DateTime                      @default(now())
-  submittedAt DateTime?
-
-  @@index([userId, status])
-  @@index([createdAt])
 }
 
 enum LearnerNoteScope {
@@ -409,143 +2237,16 @@ enum LearnerNoteScope {
   FLASHCARD_DECK
 }
 
-/** Subscriber-authored notes; source references only (ids/titles), not lesson/question bodies. */
-model LearnerNote {
-  id         String           @id @default(cuid())
-  userId     String
-  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  scope      LearnerNoteScope
-  contextId  String           @db.VarChar(128)
-  pathwayId  String?          @db.VarChar(64)
-  topic      String?          @db.VarChar(200)
-  title      String?          @db.VarChar(200)
-  body       String           @db.Text
-  createdAt  DateTime         @default(now())
-  updatedAt  DateTime         @updatedAt
-
-  @@unique([userId, scope, contextId])
-  @@index([userId, updatedAt])
-}
-
-/** Per-user topic performance for weak-area recommendations (question bank, mocks, practice tests). */
-model UserTopicStat {
-  id             String    @id @default(cuid())
-  userId         String
-  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  topic          String    @db.VarChar(80)
-  correctCount   Int       @default(0)
-  wrongCount     Int       @default(0)
-  /** Consecutive wrong answers for this topic; resets on a correct attempt. */
-  wrongStreak    Int       @default(0)
-  lastWrongAt    DateTime?
-  lastAttemptAt  DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-
-  @@unique([userId, topic])
-  @@index([userId, updatedAt])
-}
-
-model TrialDeviceBinding {
-  id              String   @id @default(cuid())
-  fingerprintHash String   @unique
-  userId          String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt       DateTime @default(now())
-}
-
-/** Idempotency and cooldown tracking for retention and transactional emails. */
-model EmailNotificationLog {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  kind      String
-  meta      Json?
-  createdAt DateTime @default(now())
-
-  @@index([userId, kind, createdAt])
-  @@index([createdAt])
-}
-
-/** One-time password reset tokens; raw token is never stored (only SHA-256 hex). */
-model PasswordResetToken {
-  id        String   @id @default(cuid())
-  tokenHash String   @unique
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-
-  @@index([userId])
-}
-
-/** Email verification tokens; raw token is never stored (only SHA-256 hex). */
-model EmailVerificationToken {
-  id        String   @id @default(cuid())
-  tokenHash String   @unique
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-
-  @@index([userId])
-}
-
-/// Persisted Stripe subscription row — logical **user subscription** (region, tier/profession, plan, status, renewal).
-model Subscription {
-  id                   String             @id @default(cuid())
-  userId               String
-  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  status               SubscriptionStatus @default(ACTIVE)
-  stripeCustomerId     String?
-  stripeSubscriptionId String             @unique
-  /** Stripe checkout / price-derived plan; when set, entitlements prefer this over `User.tier` for access scope. */
-  planTier             TierCode?
-  planCountry          CountryCode?
-  planDuration         String?            @db.VarChar(20)
-  /** Checkout `metadata.planCode` (e.g. `canada_nursing_monthly` or regional code). */
-  planCode             String?            @db.VarChar(96)
-  /** Checkout `metadata.region` when global regional pricing was used (e.g. `philippines`). */
-  billingRegionSlug    String?            @db.VarChar(32)
-  /** When planTier is ALLIED, the specific career line purchased (e.g. paramedic, mlt). */
-  alliedCareer         String?            @db.VarChar(64)
-  currentPeriodEnd     DateTime?
-  trialEnd             DateTime?
-  cancelAtPeriodEnd    Boolean            @default(false)
-  /** First time this row entered PAST_DUE (entitlement grace anchor). Cleared when status leaves PAST_DUE. */
-  pastDueSince         DateTime?
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt
-}
-
-/** Dedup Stripe webhook deliveries (evt_…) so retries are safe. */
-model StripeWebhookEvent {
-  id        String   @id
-  createdAt DateTime @default(now())
-}
-
-model Category {
-  id        String     @id @default(cuid())
-  name      String
-  slug      String     @unique
-  topicCode String?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  flashcards Flashcard[]
-  generatedQuestionDrafts  GeneratedQuestionDraft[]
-  generatedFlashcardDrafts GeneratedFlashcardDraft[]
-}
-
 enum BlogPostStatus {
   DRAFT
-  NEEDS_REVIEW
-  APPROVED
   SCHEDULED
   PUBLISHED
+  NEEDS_REVIEW
+  APPROVED
   FAILED
 }
 
-/** Editorial templates for generation + internal linking (not shown as raw enum in UI). */
+/// * Editorial templates for generation + internal linking (not shown as raw enum in UI).
 enum BlogPostTemplate {
   HOW_TO_PASS
   TOPIC_EXPLAINED
@@ -615,7 +2316,7 @@ enum BlogCampaignItemStatus {
   PUBLISHED
 }
 
-/** Admin topic-paste batch: automatic AI generation + publish/slot cadence. */
+/// * Admin topic-paste batch: automatic AI generation + publish/slot cadence.
 enum BlogBatchScheduleStatus {
   ACTIVE
   PAUSED
@@ -631,7 +2332,7 @@ enum BlogBatchScheduleItemStatus {
   SKIPPED
 }
 
-/** How batch items map generation slots to canonical publish intent. */
+/// * How batch items map generation slots to canonical publish intent.
 enum BlogBatchPublishMode {
   STAGGERED_PUBLISH
   DRAFT_ONLY
@@ -639,7 +2340,7 @@ enum BlogBatchPublishMode {
   CUSTOM_DATES
 }
 
-/** Ad-hoc admin batch: generate drafts from a topic list (no publish cadence). */
+/// * Ad-hoc admin batch: generate drafts from a topic list (no publish cadence).
 enum BlogDraftGenerationBatchStatus {
   ACTIVE
   COMPLETED
@@ -661,302 +2362,7 @@ enum BlogImageStatus {
   FAILED
 }
 
-/** Aggregated full-corpus lesson/question quality (refreshed via admin POST, not hot-path). */
-model ContentQualityCorpusSnapshot {
-  id        String   @id @default("default")
-  payload   Json
-  updatedAt DateTime @updatedAt
-
-  @@map("content_quality_corpus_snapshots")
-}
-
-/** Public SEO blog posts (migrated from legacy content_items / static allied data). Not the same rows as `content_items.type = 'lesson'`. */
-model BlogPost {
-  id           String   @id @default(cuid())
-  slug         String   @unique
-  title        String
-  excerpt      String
-  body         String   @db.Text
-  coverImage   String?
-  tags         String[] @default([])
-  category     String?
-  /** Visibility: DRAFT never public; SCHEDULED goes live when publishAt <= now; PUBLISHED always public (after publishAt if set). */
-  postStatus   BlogPostStatus @default(DRAFT)
-  /** When status is SCHEDULED, this is the go-live instant (UTC). Also used as canonical “publish” time for SEO when set. */
-  publishAt    DateTime?
-  /** Original legacy schedule timestamp (if imported from scheduled content). */
-  scheduledAt  DateTime?
-  /** Profession/career dimension for shared nursing+allied infrastructure (e.g., rn, paramedic, mlt). */
-  careerSlug   String?
-  /** Content locale used for language-aware blog delivery. */
-  locale       String   @default("en")
-  /** Shared identifier linking translations of the same post. */
-  translationGroupId String?
-  /** Locale of the canonical/source article. */
-  sourceLocale String?
-  /** Whether this row was auto-translated from a source post. */
-  isAutoTranslated Boolean @default(false)
-  /** Translation provenance such as `ai`, `manual`, or `legacy`. */
-  translationSource String?
-  /** Canonical/source BlogPost row for translation variants (self relation). */
-  canonicalPostId String?
-  canonicalPost   BlogPost? @relation("BlogPostCanonicalRelation", fields: [canonicalPostId], references: [id], onDelete: SetNull)
-  translatedVariants BlogPost[] @relation("BlogPostCanonicalRelation")
-  /** RN | PN | NP | Allied — drives cross-links and topic hubs (string for flexibility vs exam registry keys). */
-  exam         String?
-  /** Optional: overrides <title> / OG when set. */
-  seoTitle     String?
-  seoDescription String? @db.Text
-  /** Structured template for generators and footer CTAs. */
-  postTemplate BlogPostTemplate?
-  /** Internal paths e.g. `/us/rn/nclex-rn/lessons/slug` — no full lesson HTML stored here. */
-  relatedLessonPaths String[] @default([])
-  /** Exam question UUIDs for deep links (public pages never expose rationales). */
-  relatedQuestionIds String[] @default([])
-  /** Tool route slugs e.g. `labs`, `med-math` resolved under /tools. */
-  relatedTools       String[] @default([])
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  /** e.g. content_items, paramedic-static, legacy-json */
-  legacySource String?
-  campaignId   String?
-  campaign     BlogCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
-  campaignItems BlogCampaignItem[]
-  batchScheduleItems           BlogBatchScheduleItem[]
-  draftGenerationBatchItems    BlogDraftGenerationBatchItem[]
-  contentAutomationLogs        ContentAutomationLog[]
-  localizedVariants            LocalizedBlogArticle[]
-  targetKeyword String?
-  keywordCluster String?
-  countryTarget CountryCode?
-  intent       BlogPostIntent?
-  funnelStage  BlogFunnelStage?
-  workflowStatus BlogWorkflowStatus @default(GENERATED)
-  outlineJson  Json?
-  keyQuestions String[] @default([])
-  keywordPlan  String[] @default([])
-  internalLinkPlan Json?
-  ctaType      String?
-  ctaText      String?
-  ctaHref      String?
-  titleAlternates String[] @default([])
-  clickTitle   String?
-  metaTitleVariant String?
-  metaDescriptionVariant String?
-  featuredSnippet String? @db.Text
-  keyTakeaways String[] @default([])
-  faqBlock     Json?
-  definitionBox String? @db.Text
-  checklistBlock Json?
-  quickReferenceBlock Json?
-  sourceReliabilityScore Int?
-  sourcesJson  Json?
-  apaReferences String[] @default([])
-  requiresReferences Boolean @default(false)
-  medicalRiskFlags String[] @default([])
-  reviewDueAt  DateTime?
-  lastReviewedAt DateTime?
-  coverImageAlt String?
-  coverImageCaption String?
-  coverImagePrompt String? @db.Text
-  imageStyleType String?
-  imageStatus  BlogImageStatus @default(NONE)
-  socialCaption String? @db.Text
-  emailTeaser  String? @db.Text
-  shortSummary String? @db.Text
-  promoBlurb   String? @db.Text
-  schemaSummary String? @db.Text
-  perfImpressions Int?
-  perfClicks   Int?
-  perfCtr      Float?
-  perfInternalClicks Int?
-  perfConversionAssists Int?
-  perfSubscriptionAssists Int?
-  updateNeeded Boolean @default(false)
-  rankingNote  String? @db.Text
-  /** Admin-only append-only JSON array: generation, saves, publish attempts, status transitions. */
-  adminPublishLog Json @default("[]")
-  /** E-E-A-T public byline (display name). */
-  authorDisplayName            String?
-  /** E-E-A-T credential line (e.g. RN, BSN). */
-  authorCredentials          String?
-  /** E-E-A-T short bio for trust UI and schema. */
-  authorBio                    String? @db.Text
-  /** Optional clinical reviewer byline (YMYL). */
-  medicalReviewerName          String?
-  medicalReviewerCredentials   String?
-
-  @@index([postStatus, publishAt])
-  @@index([careerSlug, locale, postStatus, publishAt])
-  @@index([translationGroupId, locale])
-  @@index([canonicalPostId])
-  @@index([scheduledAt])
-  @@index([createdAt])
-  @@index([campaignId, postStatus, publishAt])
-  @@index([targetKeyword])
-  @@index([keywordCluster])
-  @@index([workflowStatus])
-}
-
-model BlogCampaign {
-  id                 String              @id @default(cuid())
-  name               String
-  keywordCluster     String
-  targetExam         String?
-  targetProfession   String?
-  targetPathway      String?
-  countryTarget      CountryCode?
-  desiredPostCount   Int
-  postsPerWeek       Int?
-  preferredWeekdays  Int[]               @default([])
-  startDate          DateTime?
-  templateMix        BlogPostTemplate[]  @default([])
-  intentMix          BlogPostIntent[]    @default([])
-  funnelStage        BlogFunnelStage?
-  includeImages      Boolean             @default(false)
-  includeAiImages    Boolean             @default(false)
-  requireReferences  Boolean             @default(false)
-  status             BlogCampaignStatus  @default(DRAFT)
-  progressJson       Json?
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  posts              BlogPost[]
-  items              BlogCampaignItem[]
-
-  @@index([status, startDate])
-  @@index([keywordCluster])
-}
-
-model BlogCampaignItem {
-  id                 String                 @id @default(cuid())
-  campaignId         String
-  campaign           BlogCampaign           @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  ordinal            Int
-  status             BlogCampaignItemStatus @default(QUEUED)
-  plannedKeyword     String?
-  plannedTitle       String?
-  plannedSlug        String?
-  plannedPublishAt   DateTime?
-  preferredTemplate  BlogPostTemplate?
-  preferredIntent    BlogPostIntent?
-  preferredFunnel    BlogFunnelStage?
-  includeImage       Boolean                @default(false)
-  includeAiImage     Boolean                @default(false)
-  postId             String?
-  post               BlogPost?              @relation(fields: [postId], references: [id], onDelete: SetNull)
-  error              String?
-  createdAt          DateTime               @default(now())
-  updatedAt          DateTime               @updatedAt
-
-  @@unique([campaignId, ordinal])
-  @@index([campaignId, status, ordinal])
-  @@index([plannedPublishAt])
-}
-
-/**
- * Paste-many-topics batch schedule (admin). Items get staggered `plannedPublishAt`; a cron/admin runner
- * generates AI drafts and schedules publication (reuses `generateBlogAiDraft` + canonical intent dedupe).
- */
-model BlogBatchSchedule {
-  id              String                  @id @default(cuid())
-  status          BlogBatchScheduleStatus @default(ACTIVE)
-  publishMode     BlogBatchPublishMode    @default(STAGGERED_PUBLISH)
-  /** Optional JSON: `{ "locales": ["fr","es","tl","hi"] }` — server maps default region per locale after each canonical item succeeds. */
-  localizationOptions Json?
-  /** Posts per 24h window (1–12). Slot interval = 24h / cadencePerDay. */
-  cadencePerDay   Int
-  startAt         DateTime
-  /** Earliest pending item publish slot (denormalized for ops UI). */
-  nextRunAt       DateTime?
-  lastRunAt       DateTime?
-  totalItems      Int
-  publishedCount  Int                     @default(0)
-  failedCount     Int                     @default(0)
-  skippedCount    Int                     @default(0)
-  exam            String
-  country         String                  @default("unspecified")
-  defaultTemplate BlogPostTemplate        @default(TOPIC_EXPLAINED)
-  defaultIntent   BlogPostIntent?
-  createdById     String?
-  createdBy       User?                   @relation(fields: [createdById], references: [id], onDelete: SetNull)
-  items           BlogBatchScheduleItem[]
-  createdAt       DateTime                @default(now())
-  updatedAt       DateTime                @updatedAt
-
-  @@index([status, nextRunAt])
-}
-
-model BlogBatchScheduleItem {
-  id                String                      @id @default(cuid())
-  scheduleId        String
-  schedule          BlogBatchSchedule           @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
-  ordinal           Int
-  topicRaw          String
-  canonicalTopicKey String?
-  plannedPublishAt  DateTime
-  status            BlogBatchScheduleItemStatus @default(PENDING)
-  blogPostId        String?
-  blogPost          BlogPost?                   @relation(fields: [blogPostId], references: [id], onDelete: SetNull)
-  failureReason     String?                   @db.Text
-  createdAt         DateTime                    @default(now())
-  updatedAt         DateTime                    @updatedAt
-
-  @@unique([scheduleId, ordinal])
-  @@index([scheduleId, status, plannedPublishAt])
-  @@index([plannedPublishAt, status])
-}
-
-/**
- * Admin paste-many-topics draft batch: one `BlogPost` draft per line when processed.
- * Progress is persisted; call process API in chunks to stay within request timeouts.
- */
-model BlogDraftGenerationBatch {
-  id                           String                         @id @default(cuid())
-  status                       BlogDraftGenerationBatchStatus @default(ACTIVE)
-  exam                         String
-  country                      String                         @default("unspecified")
-  defaultTemplate              BlogPostTemplate               @default(TOPIC_EXPLAINED)
-  defaultIntent                BlogPostIntent?
-  funnelStage                  BlogFunnelStage?
-  tone                         String                         @default("professional") @db.VarChar(32)
-  keywords                     String?                        @db.Text
-  keywordCluster               String?
-  countryTarget                CountryCode?
-  includeImage                 Boolean                        @default(true)
-  includeAiImage               Boolean                        @default(false)
-  allowDuplicateCanonicalTopic Boolean                        @default(false)
-  totalItems                   Int
-  completedCount               Int                            @default(0)
-  failedCount                  Int                            @default(0)
-  skippedCount                 Int                            @default(0)
-  createdById                  String?
-  createdBy                    User?                          @relation(fields: [createdById], references: [id], onDelete: SetNull)
-  items                        BlogDraftGenerationBatchItem[]
-  createdAt                    DateTime                       @default(now())
-  updatedAt                    DateTime                       @updatedAt
-
-  @@index([status, createdAt])
-}
-
-model BlogDraftGenerationBatchItem {
-  id                String                             @id @default(cuid())
-  batchId           String
-  batch             BlogDraftGenerationBatch           @relation(fields: [batchId], references: [id], onDelete: Cascade)
-  ordinal           Int
-  topicRaw          String
-  canonicalTopicKey String?
-  status            BlogDraftGenerationBatchItemStatus @default(PENDING)
-  blogPostId        String?
-  blogPost          BlogPost?                          @relation(fields: [blogPostId], references: [id], onDelete: SetNull)
-  error             String?                            @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([batchId, ordinal])
-  @@index([batchId, status, ordinal])
-}
-
-/** Admin-only audit trail for blog/content automation (generation, publish gates, validation). */
+/// * Admin-only audit trail for blog/content automation (generation, publish gates, validation).
 enum ContentAutomationLogCategory {
   BLOG_AI_SIMPLE
   BLOG_AI_BATCH_ITEM
@@ -976,35 +2382,7 @@ enum ContentAutomationLogStatus {
   WARNING
 }
 
-model ContentAutomationLog {
-  id            String                       @id @default(cuid())
-  category      ContentAutomationLogCategory
-  jobType       String                       @db.VarChar(96)
-  status        ContentAutomationLogStatus
-  topic         String?                      @db.Text
-  summary       String?                      @db.VarChar(480)
-  error         String?                      @db.Text
-  metadata      Json?
-  blogPostId    String?
-  blogPost      BlogPost?                    @relation(fields: [blogPostId], references: [id], onDelete: SetNull)
-  correlationId String?                      @db.VarChar(64)
-  sourceItemId  String?                      @db.VarChar(64)
-  retryOfId     String?                      @db.VarChar(64)
-  completedAt   DateTime?
-  createdById   String?
-  createdBy     User?                        @relation(fields: [createdById], references: [id], onDelete: SetNull)
-  createdAt     DateTime                     @default(now())
-  updatedAt     DateTime                     @updatedAt
-
-  @@index([category, status, createdAt])
-  @@index([createdAt])
-  @@index([blogPostId])
-  @@index([correlationId])
-}
-
-// ── Localized blog content (international SEO expansion) ─────────────────────
-
-/** Lifecycle of a localized blog article from AI generation through editorial approval to publication. */
+/// * Lifecycle of a localized blog article from AI generation through editorial approval to publication.
 enum LocalizedBlogStatus {
   DRAFT
   AI_GENERATED
@@ -1016,7 +2394,7 @@ enum LocalizedBlogStatus {
   REJECTED
 }
 
-/** How a localized variant was produced from the canonical article. */
+/// * How a localized variant was produced from the canonical article.
 enum BlogAdaptationType {
   ORIGINAL
   TRANSLATED
@@ -1025,699 +2403,10 @@ enum BlogAdaptationType {
   MARKET_EXPANSION
 }
 
-/**
- * Localized variant of a canonical BlogPost for international SEO expansion.
- * References the canonical BlogPost via canonicalArticleId but stores its own
- * fully adapted content, SEO metadata, and editorial state.
- *
- * Each (canonicalArticleId, locale, region) tuple is unique — one variant per
- * locale/region combination per canonical article.
- */
-model LocalizedBlogArticle {
-  id                    String               @id @default(cuid())
-  canonicalArticleId    String
-  canonicalArticle      BlogPost             @relation(fields: [canonicalArticleId], references: [id], onDelete: Cascade)
-
-  // ── Localization coordinates ──────────────────────────────────────────────
-  locale                String               @db.VarChar(10)
-  region                String               @db.VarChar(32)
-  profession            String?              @db.VarChar(32)
-  exam                  String?              @db.VarChar(48)
-
-  // ── Adaptation metadata ───────────────────────────────────────────────────
-  sourceLanguage        String               @default("en") @db.VarChar(10)
-  adaptationType        BlogAdaptationType   @default(ADAPTED)
-  contentStatus         LocalizedBlogStatus  @default(DRAFT)
-  aiModelVersion        String?              @db.VarChar(64)
-  aiPromptVersion       String?              @db.VarChar(32)
-
-  // ── Content ───────────────────────────────────────────────────────────────
-  localizedTitle        String
-  localizedExcerpt      String               @db.Text
-  localizedBody         String               @db.Text
-  canonicalSlug         String               @db.VarChar(200)
-  localizedSlug         String               @db.VarChar(200)
-
-  // ── SEO ───────────────────────────────────────────────────────────────────
-  localizedMetaTitle    String?
-  localizedMetaDescription String?           @db.Text
-  seoKeywordPrimary     String?
-  seoKeywordSecondary   String[]             @default([])
-  searchIntent          String?              @db.VarChar(48)
-  hreflangJson          Json?
-  canonicalUrl          String?
-
-  // ── Conversion ────────────────────────────────────────────────────────────
-  targetAudience        String?              @db.VarChar(64)
-  ctaVariant            String?              @db.VarChar(48)
-  ctaText               String?
-  ctaHref               String?
-  internalLinkTargets   Json?
-
-  // ── Review / safety ───────────────────────────────────────────────────────
-  complianceReviewRequired Boolean           @default(false)
-  medicalReviewRequired    Boolean           @default(false)
-  editorialReviewRequired  Boolean           @default(true)
-  reviewFlags            String[]            @default([])
-  editorialNotes         String?             @db.Text
-
-  // ── Publishing ────────────────────────────────────────────────────────────
-  publishedAt           DateTime?
-  scheduledAt           DateTime?
-  rejectedAt            DateTime?
-  rejectionReason       String?              @db.Text
-
-  // ── Diagnostics ───────────────────────────────────────────────────────────
-  generationLog         Json                 @default("[]")
-
-  createdAt             DateTime             @default(now())
-  updatedAt             DateTime             @updatedAt
-
-  @@unique([canonicalArticleId, locale, region])
-  @@index([contentStatus, scheduledAt])
-  @@index([region, locale, contentStatus])
-  @@index([canonicalArticleId])
-  @@index([localizedSlug])
-  @@index([createdAt])
-}
-
-/** Production `content_items` — lessons are `type = "lesson"`. */
-model ContentItem {
-  id                   String    @id @default(uuid()) @db.VarChar
-  title                String
-  slug                 String    @unique
-  type                 String    @default("lesson")
-  category             String?
-  bodySystem           String?   @map("body_system")
-  tier                 String?
-  status               String?   @default("draft")
-  tags                 String[]  @default([])
-  summary              String?
-  content              Json      @default("[]")
-  seoTitle             String?   @map("seo_title")
-  seoDescription       String?   @map("seo_description")
-  seoKeywords          String[]  @default([]) @map("seo_keywords")
-  primaryKeyword       String?   @map("primary_keyword")
-  secondaryKeywords    String[]  @default([]) @map("secondary_keywords")
-  scheduledAt          DateTime? @map("scheduled_at")
-  clinicalSafetyReview Boolean   @default(false) @map("clinical_safety_review")
-  autoPublish          Boolean   @default(false) @map("auto_publish")
-  createdAt            DateTime  @default(now()) @map("created_at")
-  updatedAt            DateTime  @updatedAt @map("updated_at")
-  publishedAt          DateTime? @map("published_at")
-  authorId             String?   @map("author_id")
-  authorName           String?   @map("author_name")
-  regionScope          String?   @default("BOTH") @map("region_scope")
-  versionKey           String?   @map("version_key")
-  updatedByAi          Boolean   @default(false) @map("updated_by_ai")
-  protectedFields      String[]  @default([]) @map("protected_fields")
-  sourceVersion        Int       @default(1) @map("source_version")
-
-  generatedQuestionDrafts  GeneratedQuestionDraft[]
-  generatedFlashcardDrafts GeneratedFlashcardDraft[]
-  lessonEnhancementTargets GeneratedLessonDraft[] @relation("LessonEnhancementTarget")
-
-  @@map("content_items")
-  @@index([type, status])
-  @@index([type, status, updatedAt])
-}
-
-/**
- * Marketing exam-pathway lessons (`/[locale]/[slug]/[exam]/lessons/...`).
- * The loader prefers published rows for each `pathwayId` and falls back to `catalog.json` when that pathway has no DB rows.
- */
-model PathwayLesson {
-  id                  String        @id @default(cuid())
-  pathwayId           String        @map("pathway_id")
-  slug                String
-  title               String
-  topic               String
-  topicSlug           String        @map("topic_slug")
-  bodySystem          String        @map("body_system")
-  previewSectionCount Int           @default(1) @map("preview_section_count")
-  seoTitle            String        @map("seo_title") @db.Text
-  seoDescription      String        @map("seo_description") @db.Text
-  /** Array of { id, heading, kind, body } — normalized to five canonical sections at read time. */
-  sections            Json
-  /** Optional row-level filter; null means “follow pathway registry” (country implied by pathway). */
-  countryCode         CountryCode?  @map("country_code")
-  tierCode            TierCode?     @map("tier_code")
-  /** Runtime region-aware lesson filtering metadata (single global lesson dataset). */
-  exams               String[]      @default([])
-  countries           String[]      @default([])
-  priority            String        @default("medium")
-  /** Exam-specific yield metadata: [{ exam, yieldLevel, clinicalPriority? }]. */
-  examMeta            Json          @default("[]") @map("exam_meta")
-  status              ContentStatus @default(PUBLISHED)
-  sortOrder           Int           @default(0) @map("sort_order")
-  /** BCP 47-style language tag (`en`, `fr`, …). Default `en` for catalog imports. */
-  locale              String        @default("en")
-  createdAt           DateTime      @default(now()) @map("created_at")
-  updatedAt           DateTime      @updatedAt @map("updated_at")
-
-  @@unique([pathwayId, slug, locale])
-  @@index([pathwayId, status, sortOrder])
-  @@index([pathwayId, locale, status, sortOrder])
-  @@index([pathwayId, locale, status, priority, bodySystem, sortOrder])
-  @@index([pathwayId, topicSlug, locale, status])
-  /** Student app lesson list sorted by updatedAt (recently changed lessons appear first). */
-  @@index([pathwayId, status, locale, updatedAt(sort: Desc)])
-  /** Batch topic-coverage groupBy: group by pathwayId for all-pathway progress summaries. */
-  @@index([status, locale, pathwayId, topicSlug])
-  @@map("pathway_lessons")
-}
-
-/** Production `exam_questions` question bank. */
-model ExamQuestion {
-  id                         String    @id @default(uuid()) @db.VarChar
-  tier                       String
-  exam                       String
-  questionType               String    @map("question_type")
-  status                     String?   @default("draft")
-  publishAt                  DateTime? @map("publish_at")
-  stem                       String
-  options                    Json?     @default("[]")
-  correctAnswer              Json?     @map("correct_answer")
-  rationale                  String?
-  difficulty                 Int?      @default(3)
-  /** Lightweight IRT-style discrimination for CAT (default 1.0 in engine when null). */
-  discrimination             Float?    @map("discrimination")
-  tags                       String[]  @default([])
-  bodySystem                 String?   @map("body_system")
-  topic                      String?
-  subtopic                   String?
-  caseId                     String?   @map("case_id")
-  exhibitData                Json?     @map("exhibit_data")
-  regionScope                String?   @default("BOTH") @map("region_scope")
-  stemHash                   String?   @map("stem_hash")
-  careerType                 String?   @default("nursing") @map("career_type")
-  scenario                   String?
-  clinicalPearl              String?   @map("clinical_pearl")
-  examStrategy               String?   @map("exam_strategy")
-  memoryHook                 String?   @map("memory_hook")
-  frameworkUsed              String?   @map("framework_used")
-  clinicalTrap               String?   @map("clinical_trap")
-  distractorRationales       Json?     @map("distractor_rationales")
-  qualityScores              Json?     @map("quality_scores")
-  qualityFeedback            Json?     @map("quality_feedback")
-  qualityScore               Int?      @map("quality_score")
-  countryCode                String?   @map("country_code")
-  regionCode                 String?   @map("region_code")
-  licensingBody              String?   @map("licensing_body")
-  languageCode               String?   @default("en") @map("language_code")
-  cognitiveLevel             String?   @map("cognitive_level")
-  questionFormat             String?   @map("question_format")
-  isScenario                 Boolean   @default(false) @map("is_scenario")
-  isMockExamEligible         Boolean   @default(true) @map("is_mock_exam_eligible")
-  isAdaptiveEligible         Boolean   @default(true) @map("is_adaptive_eligible")
-  isFlashcardSource          Boolean   @default(false) @map("is_flashcard_source")
-  isStudyGuideLinked         Boolean   @default(false) @map("is_study_guide_linked")
-  isTutorReady               Boolean   @default(false) @map("is_tutor_ready")
-  correctAnswerExplanation   String?   @map("correct_answer_explanation")
-  incorrectAnswerRationale   Json?     @map("incorrect_answer_rationale")
-  clinicalReasoning          String?   @map("clinical_reasoning")
-  keyTakeaway                String?   @map("key_takeaway")
-  mnemonic                   String?
-  referenceSource            String?   @map("reference_source")
-  labUnitVariant             String?   @map("lab_unit_variant")
-  medicationNamingVariant    String?   @map("medication_naming_variant")
-  caseContext                String?   @map("case_context")
-  vitals                     Json?
-  labs                       Json?
-  images                     Json?
-  scenarioId                 String?   @map("scenario_id")
-  blueprintWeight            Float?    @map("blueprint_weight")
-  /// Blueprint major id: NCLEX client-needs (e.g. safe-effective) or AANP-style NP (e.g. aanp-clinical-management). See `exam-config`.
-  nclexClientNeedsCategory    String?   @map("nclex_client_needs_category") @db.VarChar(64)
-  /// Optional subcategory / content area label for audits (not required for CAT balancing).
-  nclexClientNeedsSubcategory String?   @map("nclex_client_needs_subcategory") @db.VarChar(128)
-  createdAt                  DateTime  @default(now()) @map("created_at")
-  updatedAt                  DateTime  @updatedAt @map("updated_at")
-  publishedAt                DateTime? @map("published_at")
-  sourceVersion              Int       @default(1) @map("source_version")
-
-  @@map("exam_questions")
-  @@index([status, tier])
-  @@index([exam])
-  @@index([stemHash])
-  @@index([status, updatedAt])
-  @@index([status, exam, tier, countryCode])
-  /** Topic / category-scoped bank queries (e.g. filters, analytics) alongside exam + status. */
-  @@index([status, exam, topic])
-  /** Marketing adaptive count queries: status + isAdaptiveEligible + tier (for pathway snapshots). */
-  @@index([status, isAdaptiveEligible, tier])
-}
-
-/**
- * Allied exam blueprint definitions (legacy monolith `allied_blueprints` / Replit export).
- * Referenced by import pipelines; no FK from `exam_questions` required.
- */
-model AlliedBlueprint {
-  id                       String   @id @default(uuid()) @db.VarChar
-  careerType               String   @map("career_type")
-  version                  Int      @default(1)
-  domains                  Json
-  difficultyDistribution   Json     @map("difficulty_distribution")
-  cognitiveDistribution    Json     @map("cognitive_distribution")
-  allowedQuestionTypes     Json     @map("allowed_question_types")
-  isActive                 Boolean? @default(true) @map("is_active")
-  createdAt                DateTime @default(now()) @map("created_at")
-
-  @@index([careerType, isActive])
-  @@index([careerType, version])
-  @@map("allied_blueprints")
-}
-
-model FlashcardDeck {
-  id          String                   @id @default(cuid())
-  slug        String                   @unique
-  title       String
-  description String?                  @db.Text
-  country     CountryCode
-  tier        TierCode
-  examFamily  ExamFamily               @default(GENERIC)
-  pathwayId   String?                  @map("pathway_id")
-  visibility  FlashcardDeckVisibility  @default(SUBSCRIBER)
-  status      ContentStatus            @default(DRAFT)
-  sortOrder   Int                      @default(0) @map("sort_order")
-  cardCount   Int                      @default(0) @map("card_count")
-  createdAt   DateTime                 @default(now()) @map("created_at")
-  updatedAt   DateTime                 @updatedAt @map("updated_at")
-
-  cards         Flashcard[]
-  tags          FlashcardDeckOnTag[]
-  studySessions FlashcardStudySession[]
-
-  @@index([status, visibility, country])
-  @@index([status, examFamily])
-  @@map("flashcard_decks")
-}
-
-model FlashcardTag {
-  id        String   @id @default(cuid())
-  slug      String   @unique
-  name      String
-  createdAt DateTime @default(now()) @map("created_at")
-
-  decks FlashcardDeckOnTag[]
-
-  @@map("flashcard_tags")
-}
-
-model FlashcardDeckOnTag {
-  deckId String @map("deck_id")
-  tagId  String @map("tag_id")
-  deck   FlashcardDeck @relation(fields: [deckId], references: [id], onDelete: Cascade)
-  tag    FlashcardTag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
-
-  @@id([deckId, tagId])
-  @@map("flashcard_deck_tags")
-}
-
-model Flashcard {
-  id             String         @id @default(cuid())
-  front          String
-  back           String
-  country        CountryCode
-  tier           TierCode
-  status         ContentStatus  @default(DRAFT)
-  examFamily     ExamFamily     @default(GENERIC)
-  categoryId     String
-  category       Category       @relation(fields: [categoryId], references: [id])
-  deckId         String?        @map("deck_id")
-  deck           FlashcardDeck? @relation(fields: [deckId], references: [id], onDelete: SetNull)
-  positionInDeck Int            @default(0) @map("position_in_deck")
-  /**
-   * Stable deduplication key for pipeline-generated cards.
-   * Format: "{sourceType}:{sourceId}" — e.g. "exam_q:abc123", "lesson:cardio-basics:intro:0"
-   * Null for manually authored cards. Unique so sync scripts can upsert without duplicating.
-   */
-  sourceKey      String?        @unique @map("source_key")
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-
-  progressRecords FlashcardProgress[]
-
-  @@index([status, country, tier])
-  @@index([deckId, positionInDeck])
-  @@index([deckId, status])
-}
-
-model FlashcardProgress {
-  id             String    @id @default(cuid())
-  userId         String    @map("user_id")
-  flashcardId    String    @map("flashcard_id")
-  easeFactor     Float     @default(2.5) @map("ease_factor")
-  intervalDays   Int       @default(0) @map("interval_days")
-  repetitions    Int       @default(0)
-  nextReviewAt   DateTime? @map("next_review_at")
-  lastQuality    Int?      @map("last_quality")
-  lastReviewedAt DateTime? @map("last_reviewed_at")
-
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  flashcard Flashcard @relation(fields: [flashcardId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, flashcardId])
-  @@index([userId, nextReviewAt])
-  @@index([flashcardId])
-  @@map("flashcard_progress")
-}
-
-model FlashcardStudySession {
-  id        String   @id @default(cuid())
-  userId    String   @map("user_id")
-  deckId    String   @map("deck_id")
-  queueIds  Json     @map("queue_ids")
-  cursor    Int      @default(0)
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  user User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  deck FlashcardDeck @relation(fields: [deckId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, deckId])
-  @@index([userId])
-  @@map("flashcard_study_sessions")
-}
-
-model FlashcardUserStats {
-  userId             String    @id @map("user_id")
-  currentStreak      Int       @default(0) @map("current_streak")
-  longestStreak      Int       @default(0) @map("longest_streak")
-  lastStudyDate      DateTime? @map("last_study_date")
-  cardsReviewedTotal Int       @default(0) @map("cards_reviewed_total")
-  updatedAt          DateTime  @updatedAt @map("updated_at")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("flashcard_user_stats")
-}
-
-model Exam {
-  id          String         @id @default(cuid())
-  title       String
-  country     CountryCode
-  tier        TierCode
-  status      ContentStatus  @default(DRAFT)
-  examFamily  ExamFamily     @default(GENERIC)
-  attempts    ExamAttempt[]
-  sessions    ExamSession[]
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-
-  @@index([status, country, tier])
-}
-
-model ExamAttempt {
-  id          String        @id @default(cuid())
-  userId      String
-  examId      String
-  score       Int
-  total       Int
-  /** Topic breakdown, per-item flags, timing — set on graded submits. */
-  results     Json?
-  createdAt   DateTime      @default(now())
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  exam        Exam          @relation(fields: [examId], references: [id], onDelete: Cascade)
-  examSession ExamSession?  @relation("ExamSessionAttempt")
-
-  @@index([examId])
-  @@index([userId, createdAt])
-}
-
-model ExamSession {
-  id           String            @id @default(cuid())
-  userId       String
-  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  examId       String?
-  exam         Exam?             @relation(fields: [examId], references: [id], onDelete: SetNull)
-  questionIds  Json
-  answers      Json              @default("{}")
-  currentIndex Int               @default(0)
-  status       ExamSessionStatus @default(IN_PROGRESS)
-  attemptId    String?           @unique
-  attempt      ExamAttempt?      @relation("ExamSessionAttempt", fields: [attemptId], references: [id], onDelete: SetNull)
-  /** Linear vs CAT; CAT uses `adaptiveState` for theta, difficulty history, incidents. */
-  examMode     String            @default("linear") @map("exam_mode")
-  adaptiveState Json?            @map("adaptive_state")
-  timedMode    Boolean           @default(false)
-  timeLimitSec Int?
-  elapsedMs    Int?
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
-
-  @@index([userId, status])
-  @@index([examId])
-}
-
-/** Learner-built timed/untimed practice tests with saved progress and results. */
-model PracticeTest {
-  id           String             @id @default(cuid())
-  userId       String
-  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  title        String?
-  /** Build params: topics, selectionMode, difficulty bounds, pathwayId, etc. */
-  config       Json
-  questionIds  Json
-  answers      Json               @default("{}")
-  cursorIndex  Int                @default(0)
-  status       PracticeTestStatus @default(IN_PROGRESS)
-  timedMode    Boolean            @default(false)
-  timeLimitSec Int?
-  elapsedMs    Int?
-  startedAt    DateTime           @default(now())
-  completedAt  DateTime?
-  /** Score, topic breakdown, weak areas — set when status = COMPLETED. */
-  results      Json?
-  /** CAT: theta, SE, item history, stop reason — updated each adaptive step. */
-  adaptiveState Json?
-  updatedAt    DateTime           @updatedAt
-
-  @@index([userId, status, updatedAt])
-  @@map("practice_tests")
-}
-
-model Progress {
-  id        String   @id @default(cuid())
-  userId    String
-  lessonId  String
-  completed Boolean  @default(false)
-  /** First insert time (lesson opened / progress row created). */
-  createdAt DateTime @default(now())
-  /** Set when learner crosses read-depth threshold (scroll) — optional; not started = no row. */
-  engagedAt DateTime?
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, lessonId])
-  @@index([userId, updatedAt])
-  /** Pathway progress summaries: prefix scan on lessonId after userId equality filter. */
-  @@index([userId, lessonId, completed])
-}
-
-model BackgroundJob {
-  id           String    @id @default(cuid())
-  type         String
-  payload      Json
-  status       JobStatus @default(PENDING)
-  attempts     Int       @default(0)
-  maxAttempts  Int       @default(3)
-  lastError    String?
-  scheduledFor DateTime  @default(now())
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-
-  @@index([status, scheduledFor])
-  @@index([type])
-}
-
-/** One admin AI generation run (batch). */
-model AiGenerationJob {
-  id             String    @id @default(cuid())
-  tool           String
-  status         JobStatus @default(COMPLETED)
-  model          String?
-  sourcePrompt   String    @db.Text
-  inputPayload   Json
-  resultSummary  Json?
-  error          String?   @db.Text
-  tokensUsed     Int?
-  /** Set when a lesson batch job is canceled via admin API (tool = ADMIN_LESSON_BATCH). */
-  lessonBatchCanceledAt DateTime? @map("lesson_batch_canceled_at")
-  createdById    String
-  createdBy      User      @relation("AiJobCreatedBy", fields: [createdById], references: [id])
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  logs           AiGenerationLog[]
-  questionDrafts GeneratedQuestionDraft[]
-  flashcardDrafts GeneratedFlashcardDraft[]
-  lessonDrafts   GeneratedLessonDraft[]
-  lessonBatchQueueItems LessonBatchQueueItem[]
-
-  @@index([tool, createdAt])
-  @@index([createdById])
-}
-
-/** DB-backed queue for `/api/admin/lessons/ai-generate-batch` — enables atomic claim and item-level metrics. */
-model LessonBatchQueueItem {
-  id                  String                    @id @default(cuid())
-  jobId               String
-  job                 AiGenerationJob           @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  /** Stable ordering within the batch (0-based). */
-  position            Int
-  /** Client-visible id (matches legacy JSON `itemId` / payload `batchItemId`). */
-  publicItemId        String                    @unique
-  topic               String                    @db.Text
-  normalizedTopic     String                    @db.Text
-  batchTopicKey       String                    @db.VarChar(40)
-  status              LessonBatchQueueItemStatus @default(PENDING)
-  attemptCount        Int                       @default(0)
-  lastError           String?                   @db.Text
-  lastAttemptAt       DateTime?
-  completedAt         DateTime?
-  skippedAt           DateTime?
-  /** When the row was moved to CANCELLED (batch canceled or stale revive on a canceled job). */
-  canceledAt          DateTime?
-  startedAt           DateTime?
-  claimedByRequestId  String?                   @db.VarChar(128)
-  revivedAt           DateTime?
-  revivalCount        Int                       @default(0)
-  generatedDraftId    String?
-  generatedDraft      GeneratedLessonDraft?     @relation("LessonBatchGeneratedDraft", fields: [generatedDraftId], references: [id], onDelete: SetNull)
-  /** When status is SKIPPED_DUPLICATE — link to an existing draft with the same fingerprint. */
-  existingDraftId     String?
-  generatedDraftTitle String?                   @db.Text
-
-  @@index([jobId, status, position])
-  @@index([jobId, position])
-  @@index([batchTopicKey])
-  @@map("lesson_batch_queue_item")
-}
-
-/** Audit trail for AI steps (granular events under a job). */
-model AiGenerationLog {
-  id        String          @id @default(cuid())
-  jobId     String
-  job       AiGenerationJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  step      String
-  detail    Json?
-  createdAt DateTime        @default(now())
-
-  @@index([jobId])
-}
-
-model GeneratedQuestionDraft {
-  id               String   @id @default(cuid())
-  jobId            String?
-  job              AiGenerationJob? @relation(fields: [jobId], references: [id], onDelete: SetNull)
-  tool             String
-  batchId          String?
-  payloadJson      Json
-  normalizedJson   Json?
-  validationJson   Json
-  reviewStatus     DraftReviewStatus @default(PENDING_REVIEW)
-  reviewNotes      String?  @db.Text
-  reviewedById     String?
-  reviewedBy       User?    @relation("QuestionDraftReviewedBy", fields: [reviewedById], references: [id])
-  reviewedAt       DateTime?
-  promotedEntityId String?
-  promotedAt       DateTime?
-  stemHash         String?
-  stemPreview      String?
-  lessonId         String?
-  linkedContent    ContentItem? @relation(fields: [lessonId], references: [id], onDelete: SetNull)
-  categoryId       String?
-  category         Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  examFamily       ExamFamily @default(GENERIC)
-  tier             TierCode
-  country          CountryCode
-  sourcePrompt     String   @db.Text
-  model            String
-  createdById      String
-  createdBy        User     @relation("QuestionDraftCreatedBy", fields: [createdById], references: [id])
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-
-  @@index([reviewStatus, createdAt])
-  @@index([stemHash])
-  @@index([jobId])
-  @@index([lessonId])
-}
-
-model GeneratedFlashcardDraft {
-  id               String   @id @default(cuid())
-  jobId            String?
-  job              AiGenerationJob? @relation(fields: [jobId], references: [id], onDelete: SetNull)
-  tool             String
-  batchId          String?
-  payloadJson      Json
-  normalizedJson   Json?
-  validationJson   Json
-  reviewStatus     DraftReviewStatus @default(PENDING_REVIEW)
-  reviewNotes      String?  @db.Text
-  reviewedById     String?
-  reviewedBy       User?    @relation("FlashcardDraftReviewedBy", fields: [reviewedById], references: [id])
-  reviewedAt       DateTime?
-  promotedEntityId String?
-  promotedAt       DateTime?
-  frontPreview     String?
-  lessonId         String?
-  linkedContent    ContentItem? @relation(fields: [lessonId], references: [id], onDelete: SetNull)
-  categoryId       String?
-  category         Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  examFamily       ExamFamily @default(GENERIC)
-  tier             TierCode
-  country          CountryCode
-  sourcePrompt     String   @db.Text
-  model            String
-  createdById      String
-  createdBy        User     @relation("FlashcardDraftCreatedBy", fields: [createdById], references: [id])
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-
-  @@index([reviewStatus, createdAt])
-  @@index([jobId])
-  @@index([lessonId])
-}
-
-/** Optional: lesson enhancement / repair drafts — not promoted until review. */
-model GeneratedLessonDraft {
-  id               String   @id @default(cuid())
-  jobId            String?
-  job              AiGenerationJob? @relation(fields: [jobId], references: [id], onDelete: SetNull)
-  tool             String
-  /** Fingerprint for duplicate detection (same as payload `batchTopicKey`); indexed for exact lookups. */
-  lessonBatchTopicKey String? @db.VarChar(40)
-  payloadJson      Json
-  normalizedJson   Json?
-  validationJson   Json
-  reviewStatus     DraftReviewStatus @default(PENDING_REVIEW)
-  reviewNotes      String?  @db.Text
-  reviewedById     String?
-  reviewedBy       User?    @relation("LessonDraftReviewedBy", fields: [reviewedById], references: [id])
-  reviewedAt       DateTime?
-  promotedEntityId String?
-  promotedAt       DateTime?
-  titlePreview     String?
-  targetLessonId   String?
-  targetContent      ContentItem? @relation("LessonEnhancementTarget", fields: [targetLessonId], references: [id], onDelete: SetNull)
-  sourcePrompt     String   @db.Text
-  model            String
-  createdById      String
-  createdBy        User     @relation("LessonDraftCreatedBy", fields: [createdById], references: [id])
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  lessonBatchQueueItems LessonBatchQueueItem[] @relation("LessonBatchGeneratedDraft")
-
-  @@index([reviewStatus, createdAt])
-  @@index([jobId])
-  @@index([lessonBatchTopicKey])
-}
-
-/**
- * Localized display overlays for canonical English educational content (questions, pathway lessons, flashcards).
- * English remains on core rows / catalog JSON; overlays attach by stable `sourceId` + `locale`.
- * Only `PUBLISHED` rows are merged at read time (see `educational-translation-db.ts`).
- */
+/// *
+///  * Localized display overlays for canonical English educational content (questions, pathway lessons, flashcards).
+///  * English remains on core rows / catalog JSON; overlays attach by stable `sourceId` + `locale`.
+///  * Only `PUBLISHED` rows are merged at read time (see `educational-translation-db.ts`).
 enum EducationalTranslationSourceKind {
   EXAM_QUESTION
   PATHWAY_LESSON
@@ -1730,64 +2419,4 @@ enum EducationalTranslationStatus {
   DRAFT
   REVIEWED
   PUBLISHED
-}
-
-model EducationalTranslationOverlay {
-  id         String                         @id @default(cuid())
-  sourceKind EducationalTranslationSourceKind @map("source_kind")
-  /**
-   * Stable key: `ExamQuestion.id`, `pathwayId:slug` for pathway lessons, `FlashcardDeck.id`, `Flashcard.id`, `FlashcardTag.id`.
-   */
-  sourceId   String                         @map("source_id") @db.VarChar(512)
-  locale     String                         @db.VarChar(32)
-  status     EducationalTranslationStatus   @default(DRAFT)
-  /** JSON payload — shape matches file-based overlays per kind (never replaces grading keys). */
-  payload    Json
-  reviewedAt DateTime?                      @map("reviewed_at")
-  publishedAt DateTime?                     @map("published_at")
-  createdAt  DateTime                       @default(now()) @map("created_at")
-  updatedAt  DateTime                       @updatedAt @map("updated_at")
-
-  @@unique([sourceKind, sourceId, locale])
-  @@index([locale, status, sourceKind])
-  @@index([sourceKind, status])
-  @@map("educational_translation_overlays")
-}
-
-/**
- * Structured product feedback and bug reports (learner + marketing).
- * Optional screenshot stored as data URL when small enough — prefer object storage for heavy media later.
- */
-model UserFeedbackReport {
-  id                String               @id @default(cuid())
-  createdAt         DateTime             @default(now())
-  updatedAt         DateTime             @updatedAt
-  status            UserFeedbackStatus   @default(NEW)
-  category          UserFeedbackCategory
-  severity          UserFeedbackSeverity @default(MEDIUM)
-  summary           String               @db.VarChar(500)
-  details           String?              @db.Text
-  pageUrl           String               @db.VarChar(2048)
-  routeKey          String?              @db.VarChar(512)
-  userId            String?
-  user              User?                @relation(fields: [userId], references: [id], onDelete: SetNull)
-  pathwayId         String?              @db.VarChar(64)
-  examContextJson   Json?
-  userAgent         String?              @db.VarChar(512)
-  deviceHint        String?              @db.VarChar(120)
-  screenshotDataUrl String?              @db.Text
-  clientMetaJson    Json?
-  /** Admin-only triage notes (not shown to reporters). */
-  internalNotes     String?              @db.Text
-  /** When set, this row is treated as a duplicate of the canonical report (triage / analytics). */
-  duplicateOfId     String?
-  duplicateOf       UserFeedbackReport?  @relation("UserFeedbackDupParent", fields: [duplicateOfId], references: [id], onDelete: SetNull)
-  childDuplicates   UserFeedbackReport[] @relation("UserFeedbackDupParent")
-
-  @@index([status, createdAt])
-  @@index([category, createdAt])
-  @@index([severity, createdAt])
-  @@index([userId, createdAt])
-  @@index([routeKey])
-  @@index([duplicateOfId])
 }
