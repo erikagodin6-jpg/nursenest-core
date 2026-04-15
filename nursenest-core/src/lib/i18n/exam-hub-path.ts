@@ -24,6 +24,16 @@ export function isExamHubMarketingPath(pathname: string): boolean {
   return country ? isExamPathwayCountrySlug(country) : false;
 }
 
+/**
+ * Global expansion SEO hubs (`/exams/philippines`, `/exams/india`, …) are implemented under
+ * `(marketing)/(default)/exams/...` only for several countries — not under `/{lang}/exams/...`.
+ * Prefixing these with a marketing locale (e.g. `/tl/exams/philippines`) 404s and looks like a dead click.
+ */
+export function isExpansionExamMarketingPath(pathname: string): boolean {
+  const p = pathname.startsWith("/") ? pathname : `/${pathname}`;
+  return p === "/exams" || p.startsWith("/exams/");
+}
+
 export function canonicalExamHubPathFromPossiblyLocalizedPath(
   pathname: string,
 ): { locale: string; canonicalPath: string } | null {

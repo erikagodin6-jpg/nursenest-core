@@ -45,3 +45,25 @@ test("cookie set to philippines is honored (explicit dropdown choice)", () => {
     "philippines",
   );
 });
+
+test("invalid or empty cookie is ignored — session US wins over marketing CA", () => {
+  assert.equal(
+    effectiveMarketingHeaderGlobalRegion({
+      globalRegionCookie: null,
+      marketingExamRegion: "CA",
+      sessionCountryUsCa: "US",
+    }),
+    "us",
+  );
+});
+
+test("invalid or empty cookie is ignored — marketing CA when no session", () => {
+  assert.equal(
+    effectiveMarketingHeaderGlobalRegion({
+      globalRegionCookie: null,
+      marketingExamRegion: "CA",
+      sessionCountryUsCa: undefined,
+    }),
+    "canada",
+  );
+});

@@ -34,5 +34,9 @@ export async function applyGlobalRegionSelection(
   const hub = getExamHubForGlobalRegion(newRegion);
   if (hub) {
     await router.push(buildLocalizedPath(nextLocale, hub.hubPath));
+    return;
   }
+
+  // Region has no mapped exam hub (e.g. nigeria) — still navigate so the click never no-ops.
+  await router.push(buildLocalizedPath(nextLocale, "/"));
 }

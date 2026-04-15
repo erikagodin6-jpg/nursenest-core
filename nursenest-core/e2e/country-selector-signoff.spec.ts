@@ -114,8 +114,15 @@ test.describe("Country selector sign-off — mobile viewport", () => {
     await page.getByRole("option", { name: /United States/i }).first().click();
     await page.waitForURL(/\/us(\/|$|\?)/, { timeout: 30_000 });
     expect(page.url(), `from ${before}`).toMatch(/\/us(\/|$|\?)/);
+    const cookiesUs = await page.context().cookies(baseURL);
+    expect(cookiesUs.find((c) => c.name === GLOBAL_REGION_COOKIE)?.value).toBe("us");
+    // Drawer summary (public pages have no header country chip on small screens).
+    await page.getByRole("button", { name: /Region and language settings/i }).click();
     await expect(
-      page.locator('[data-nn-nav-mode="public"]').getByRole("button", { name: /United States/i }).first(),
+      page
+        .locator("div.rounded-xl.border")
+        .filter({ hasText: "United States" })
+        .first(),
     ).toBeVisible();
   });
 
@@ -125,8 +132,14 @@ test.describe("Country selector sign-off — mobile viewport", () => {
     await page.getByRole("option", { name: /^Canada$/ }).first().click();
     await page.waitForURL(/\/canada(\/|$|\?)/, { timeout: 30_000 });
     expect(page.url(), `from ${before}`).toMatch(/\/canada(\/|$|\?)/);
+    const cookiesCa = await page.context().cookies(baseURL);
+    expect(cookiesCa.find((c) => c.name === GLOBAL_REGION_COOKIE)?.value).toBe("canada");
+    await page.getByRole("button", { name: /Region and language settings/i }).click();
     await expect(
-      page.locator('[data-nn-nav-mode="public"]').getByRole("button", { name: /Canada/i }).first(),
+      page
+        .locator("div.rounded-xl.border")
+        .filter({ hasText: /^Canada$/ })
+        .first(),
     ).toBeVisible();
   });
 });

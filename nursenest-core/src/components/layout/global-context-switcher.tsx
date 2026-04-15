@@ -107,9 +107,11 @@ export function CountrySelector({
                   type="button"
                   role="option"
                   aria-selected={isActive}
-                  onClick={() => {
+                  onClick={(e) => {
+                    // Avoid bubbling to document "click outside" handlers; defer close so the event path stays valid.
+                    e.stopPropagation();
                     onSelect(r.slug);
-                    onClose?.();
+                    queueMicrotask(() => onClose?.());
                   }}
                   className={`flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-xs transition-colors ${
                     isActive
