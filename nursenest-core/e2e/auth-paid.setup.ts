@@ -6,7 +6,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { test as setup } from "@playwright/test";
-import { loginPaidUser } from "./helpers/paid-user-login";
+import { loginWithCredentials } from "./helpers/learner-login";
 import { PAID_USER_AUTH_FILE } from "./paid-auth-state-path";
 
 setup("save paid-user storage state", async ({ page }) => {
@@ -16,7 +16,7 @@ setup("save paid-user storage state", async ({ page }) => {
     throw new Error("E2E_PAID_EMAIL / E2E_PAID_PASSWORD missing (playwright.config should gate paid projects).");
   }
 
-  await loginPaidUser(page, email, password);
+  await loginWithCredentials(page, email, password);
 
   fs.mkdirSync(path.dirname(PAID_USER_AUTH_FILE), { recursive: true });
   await page.context().storageState({ path: PAID_USER_AUTH_FILE });
