@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-15T03:17:06.087Z",
+  "generatedAt": "2026-04-15T03:30:01.648Z",
   "pathways": [
     {
       "pathwayId": "ca-rn-nclex-rn",
@@ -17,7 +17,7 @@
       "duplicateOrUnclear": 51,
       "productionReadyEn": 29,
       "goodEnglishNotLocalizationComplete": 29,
-      "averageOverallScore": 68.8,
+      "averageOverallScore": 70.2,
       "topReasons": [
         {
           "reason": "no_educational_overlay_in_scanned_locales",
@@ -80,7 +80,7 @@
       "duplicateOrUnclear": 51,
       "productionReadyEn": 30,
       "goodEnglishNotLocalizationComplete": 30,
-      "averageOverallScore": 46.4,
+      "averageOverallScore": 47.8,
       "topReasons": [
         {
           "reason": "low_total_word_count",
@@ -134,60 +134,59 @@
       "roleTrack": "np",
       "nursingPriority": true,
       "totalLessons": 161,
-      "productionReady": 0,
-      "usableButThin": 1,
-      "structurallyIncomplete": 26,
+      "productionReady": 1,
+      "usableButThin": 0,
+      "structurallyIncomplete": 0,
       "contentIncomplete": 0,
-      "localizationIncomplete": 83,
+      "localizationIncomplete": 109,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
-      "productionReadyEn": 4,
-      "goodEnglishNotLocalizationComplete": 4,
-      "averageOverallScore": 69.4,
+      "productionReadyEn": 104,
+      "goodEnglishNotLocalizationComplete": 103,
+      "averageOverallScore": 87.4,
       "topReasons": [
         {
           "reason": "no_educational_overlay_in_scanned_locales",
-          "count": 149
-        },
-        {
-          "reason": "missing_educational:core_concept_depth",
-          "count": 85
-        },
-        {
-          "reason": "thin_total_word_count",
-          "count": 79
-        },
-        {
-          "reason": "missing_educational:summary_takeaways",
-          "count": 78
-        },
-        {
-          "reason": "not_in_exam_filtered_hub_list",
-          "count": 28
+          "count": 157
         },
         {
           "reason": "missing_educational:overview_intro",
-          "count": 17
+          "count": 6
+        },
+        {
+          "reason": "thin_total_word_count",
+          "count": 5
+        },
+        {
+          "reason": "missing_educational:summary_takeaways",
+          "count": 4
+        },
+        {
+          "reason": "links:internal_links_high_count(9)",
+          "count": 4
         },
         {
           "reason": "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-          "count": 13
+          "count": 3
         },
         {
-          "reason": "low_total_word_count",
-          "count": 10
+          "reason": "missing_educational:clinical_application",
+          "count": 3
+        },
+        {
+          "reason": "missing_educational:core_concept_depth",
+          "count": 3
         }
       ],
       "contentReadinessBreakdown": {
         "duplicate_or_unclear_source": 51,
-        "structurally_incomplete": 26,
-        "production_ready_en": 4,
-        "usable_but_thin_en": 80
+        "production_ready_en": 104,
+        "usable_but_thin_en": 6
       },
       "localizationReadinessBreakdown": {
-        "english_only": 75,
+        "english_only": 50,
         "localized_ready": 2,
-        "localization_incomplete": 84
+        "localization_incomplete": 109
       }
     },
     {
@@ -206,7 +205,7 @@
       "duplicateOrUnclear": 51,
       "productionReadyEn": 0,
       "goodEnglishNotLocalizationComplete": 0,
-      "averageOverallScore": 49.1,
+      "averageOverallScore": 50.9,
       "topReasons": [
         {
           "reason": "missing_educational:core_concept_depth",
@@ -268,7 +267,7 @@
       "duplicateOrUnclear": 51,
       "productionReadyEn": 0,
       "goodEnglishNotLocalizationComplete": 0,
-      "averageOverallScore": 49,
+      "averageOverallScore": 50.8,
       "topReasons": [
         {
           "reason": "missing_educational:core_concept_depth",

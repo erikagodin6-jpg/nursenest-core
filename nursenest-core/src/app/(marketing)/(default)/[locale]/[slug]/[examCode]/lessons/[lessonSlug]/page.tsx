@@ -177,7 +177,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
     loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, lessonContentLocale),
     auth(),
   ]);
-  const lesson =
+  const loadedLesson =
     lessonResult.status === "fulfilled" ? lessonResult.value : undefined;
   const lessonLoadFailed = lessonResult.status === "rejected";
 
@@ -203,7 +203,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
 
   const routeResolution = resolveMarketingPathwayLessonRouteResolution({
     pathway,
-    lesson,
+    lesson: loadedLesson,
     lessonLoadFailed,
     userId,
     entitlement,

@@ -3209,6 +3209,11 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   }
 }
 
+/* Same FAQ workspace width as split; one column when there is no rationale panel (e.g. in-progress exam navigation). */
+.nn-question-session--split.nn-question-session--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .nn-question-session-primary {
   min-width: 0;
 }
@@ -3584,6 +3589,22 @@ html[data-theme="deep-twilight"] .nn-question-rationale-card__verdict--miss {
   }
 }
 
+/* Mobile: keep prev/next + primary actions in thumb reach (exam shell) */
+@media (max-width: 1023px) {
+  .nn-exam-session .nn-question-nav-actions {
+    position: sticky;
+    bottom: env(safe-area-inset-bottom, 0);
+    z-index: 15;
+    padding-bottom: 0.75rem;
+    margin-top: 1rem;
+    background: linear-gradient(
+      to top,
+      var(--semantic-surface) 72%,
+      color-mix(in srgb, var(--semantic-surface) 8%, transparent) 100%
+    );
+  }
+}
+
 .nn-question-nav-actions__next {
   min-height: 3rem;
   flex: 1 1 12rem;
@@ -3813,6 +3834,27 @@ html[data-theme] .nn-exam-session.nn-exam-session--neutral {
   box-shadow:
     0 1px 0 color-mix(in srgb, var(--semantic-text-primary) 4%, transparent),
     inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 45%, transparent);
+}
+
+/* Immersive learner shell — reference-style full-width study card */
+.nn-exam-session.nn-exam-session--immersive {
+  border-radius: 1.35rem;
+  box-shadow: var(--shadow-card);
+}
+
+.nn-question-type-chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+  padding: 0.28rem 0.75rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--semantic-text-secondary);
 }
 
 .dark .nn-exam-session.nn-exam-session--neutral {

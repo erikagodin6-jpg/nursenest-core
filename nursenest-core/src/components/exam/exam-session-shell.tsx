@@ -1,23 +1,34 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { useExamStudyThemeOptional } from "@/components/exam/exam-study-theme-context";
 
 /**
  * Focused, low-chrome container for timed tests, CAT, and exam-style practice.
  * Theme primary is used only for thin accents (progress fill, selection rings)—surfaces stay neutral.
+ *
+ * When `ExamStudyThemeProvider` is present, optional session `data-theme` overrides apply to this shell only.
  */
 export function ExamSessionShell({
   children,
   className = "",
   /** When true, applies slightly cooler neutrals (see `.nn-exam-session--neutral`). */
   neutralPalette = false,
+  /** Larger radius, stronger shadow — reference “full-screen study” chrome. */
+  immersive = false,
 }: {
   children: ReactNode;
   className?: string;
   neutralPalette?: boolean;
+  immersive?: boolean;
 }) {
+  const examTheme = useExamStudyThemeOptional();
+  const scoped = examTheme?.sessionTheme ?? undefined;
   return (
-    <div className={`nn-exam-session rounded-2xl border ${neutralPalette ? "nn-exam-session--neutral" : ""} ${className}`}>
+    <div
+      className={`nn-exam-session rounded-2xl border ${neutralPalette ? "nn-exam-session--neutral" : ""} ${immersive ? "nn-exam-session--immersive" : ""} ${className}`.trim()}
+      data-theme={scoped}
+    >
       {children}
     </div>
   );

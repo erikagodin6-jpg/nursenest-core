@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-15T03:17:06.087Z",
+  "generatedAt": "2026-04-15T03:30:01.648Z",
   "queue": [
     {
       "lessonId": "ca-rn-nclex-rn:diabetes-self-management-teaching",
@@ -1037,204 +1037,6 @@
       "recommendedActions": [
         "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
         "Address structural gate issues and section depth per pathway-lesson-premium targets."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:pulmonary-embolism-recognition-gold",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "pulmonary-embolism-recognition-gold",
-      "title": "Pulmonary embolism: recognition (NCLEX-RN, Canada)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (69 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:atrial-fibrillation-stroke-prevention-gold",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "atrial-fibrillation-stroke-prevention-gold",
-      "title": "Atrial fibrillation: stroke prevention (NCLEX-RN, Canada)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (65 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:pneumonia-cap-nursing-gold",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "pneumonia-cap-nursing-gold",
-      "title": "Pneumonia (CAP): nursing priorities (NCLEX-RN, Canada)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (40 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:upper-gi-bleed-prioritization-gold",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "upper-gi-bleed-prioritization-gold",
-      "title": "Upper GI bleed: priorities (NCLEX-RN, Canada)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (40 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:meningitis-emergency-recognition-gold",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "meningitis-emergency-recognition-gold",
-      "title": "Meningitis: emergency recognition (NCLEX-RN, Canada)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (28 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:opioid-toxicity-naloxone-gold",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "opioid-toxicity-naloxone-gold",
-      "title": "Opioid toxicity & naloxone safety (NCLEX-RN, Canada)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (27 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:falls-injury-prevention-gold",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "falls-injury-prevention-gold",
-      "title": "Falls & injury prevention (NCLEX-RN, Canada)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (17 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:adrenal-crisis-addisonian-gold",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "adrenal-crisis-addisonian-gold",
-      "title": "Adrenal crisis (Addisonian) (NCLEX-RN, Canada)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (16 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:ards-acute-respiratory-failure-gold",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "ards-acute-respiratory-failure-gold",
-      "title": "ARDS & acute respiratory failure (NCLEX-RN, Canada)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (21 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:thyroid-storm-emergency-gold",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "thyroid-storm-emergency-gold",
-      "title": "Thyroid storm: emergency recognition (NCLEX-RN, Canada)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (17 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:delirium-acute-confusion-gold",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "delirium-acute-confusion-gold",
-      "title": "Delirium: acute confusion & safety (NCLEX-RN, Canada)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (16 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
       ]
     },
     {
@@ -3275,6 +3077,70 @@
       ]
     },
     {
+      "lessonId": "ca-rn-nclex-rn:pulmonary-embolism-recognition-gold",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pulmonary-embolism-recognition-gold",
+      "title": "Pulmonary embolism: recognition (NCLEX-RN, Canada)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:atrial-fibrillation-stroke-prevention-gold",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "atrial-fibrillation-stroke-prevention-gold",
+      "title": "Atrial fibrillation: stroke prevention (NCLEX-RN, Canada)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:pneumonia-cap-nursing-gold",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pneumonia-cap-nursing-gold",
+      "title": "Pneumonia (CAP): nursing priorities (NCLEX-RN, Canada)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:upper-gi-bleed-prioritization-gold",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "upper-gi-bleed-prioritization-gold",
+      "title": "Upper GI bleed: priorities (NCLEX-RN, Canada)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
       "lessonId": "ca-rn-nclex-rn:acute-kidney-injury-nursing-gold",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "acute-kidney-injury-nursing-gold",
@@ -3291,10 +3157,122 @@
       ]
     },
     {
+      "lessonId": "ca-rn-nclex-rn:meningitis-emergency-recognition-gold",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "meningitis-emergency-recognition-gold",
+      "title": "Meningitis: emergency recognition (NCLEX-RN, Canada)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:opioid-toxicity-naloxone-gold",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "opioid-toxicity-naloxone-gold",
+      "title": "Opioid toxicity & naloxone safety (NCLEX-RN, Canada)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:falls-injury-prevention-gold",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "falls-injury-prevention-gold",
+      "title": "Falls & injury prevention (NCLEX-RN, Canada)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
       "lessonId": "ca-rn-nclex-rn:nurse-patient-assignment-acuity-gold",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "nurse-patient-assignment-acuity-gold",
       "title": "Patient assignment & acuity (NCLEX-RN, Canada)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:adrenal-crisis-addisonian-gold",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "adrenal-crisis-addisonian-gold",
+      "title": "Adrenal crisis (Addisonian) (NCLEX-RN, Canada)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:ards-acute-respiratory-failure-gold",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ards-acute-respiratory-failure-gold",
+      "title": "ARDS & acute respiratory failure (NCLEX-RN, Canada)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:thyroid-storm-emergency-gold",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "thyroid-storm-emergency-gold",
+      "title": "Thyroid storm: emergency recognition (NCLEX-RN, Canada)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:delirium-acute-confusion-gold",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "delirium-acute-confusion-gold",
+      "title": "Delirium: acute confusion & safety (NCLEX-RN, Canada)",
       "status": "duplicate_or_unclear_source",
       "contentReadinessStatus": "duplicate_or_unclear_source",
       "localizationReadinessStatus": "english_only",
@@ -6386,204 +6364,6 @@
       ]
     },
     {
-      "lessonId": "us-rn-nclex-rn:pulmonary-embolism-recognition-gold",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "pulmonary-embolism-recognition-gold",
-      "title": "Pulmonary embolism: recognition (NCLEX-RN, US)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (69 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:atrial-fibrillation-stroke-prevention-gold",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "atrial-fibrillation-stroke-prevention-gold",
-      "title": "Atrial fibrillation: stroke prevention (NCLEX-RN, US)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (65 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:pneumonia-cap-nursing-gold",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "pneumonia-cap-nursing-gold",
-      "title": "Pneumonia (CAP): nursing priorities (NCLEX-RN, US)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (40 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:upper-gi-bleed-prioritization-gold",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "upper-gi-bleed-prioritization-gold",
-      "title": "Upper GI bleed: priorities (NCLEX-RN, US)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (40 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:meningitis-emergency-recognition-gold",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "meningitis-emergency-recognition-gold",
-      "title": "Meningitis: emergency recognition (NCLEX-RN, US)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (28 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:opioid-toxicity-naloxone-gold",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "opioid-toxicity-naloxone-gold",
-      "title": "Opioid toxicity & naloxone safety (NCLEX-RN, US)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (27 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:falls-injury-prevention-gold",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "falls-injury-prevention-gold",
-      "title": "Falls & injury prevention (NCLEX-RN, US)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (17 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:adrenal-crisis-addisonian-gold",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "adrenal-crisis-addisonian-gold",
-      "title": "Adrenal crisis (Addisonian) (NCLEX-RN, US)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (16 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:ards-acute-respiratory-failure-gold",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "ards-acute-respiratory-failure-gold",
-      "title": "ARDS & acute respiratory failure (NCLEX-RN, US)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (21 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:thyroid-storm-emergency-gold",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "thyroid-storm-emergency-gold",
-      "title": "Thyroid storm: emergency recognition (NCLEX-RN, US)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (17 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:delirium-acute-confusion-gold",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "delirium-acute-confusion-gold",
-      "title": "Delirium: acute confusion & safety (NCLEX-RN, US)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (16 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
       "lessonId": "us-rn-nclex-rn:us-rn-wound-care",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "us-rn-wound-care",
@@ -7298,6 +7078,70 @@
       ]
     },
     {
+      "lessonId": "us-rn-nclex-rn:pulmonary-embolism-recognition-gold",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pulmonary-embolism-recognition-gold",
+      "title": "Pulmonary embolism: recognition (NCLEX-RN, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:atrial-fibrillation-stroke-prevention-gold",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "atrial-fibrillation-stroke-prevention-gold",
+      "title": "Atrial fibrillation: stroke prevention (NCLEX-RN, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:pneumonia-cap-nursing-gold",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pneumonia-cap-nursing-gold",
+      "title": "Pneumonia (CAP): nursing priorities (NCLEX-RN, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:upper-gi-bleed-prioritization-gold",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "upper-gi-bleed-prioritization-gold",
+      "title": "Upper GI bleed: priorities (NCLEX-RN, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
       "lessonId": "us-rn-nclex-rn:acute-kidney-injury-nursing-gold",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "acute-kidney-injury-nursing-gold",
@@ -7314,10 +7158,122 @@
       ]
     },
     {
+      "lessonId": "us-rn-nclex-rn:meningitis-emergency-recognition-gold",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "meningitis-emergency-recognition-gold",
+      "title": "Meningitis: emergency recognition (NCLEX-RN, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:opioid-toxicity-naloxone-gold",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "opioid-toxicity-naloxone-gold",
+      "title": "Opioid toxicity & naloxone safety (NCLEX-RN, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:falls-injury-prevention-gold",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "falls-injury-prevention-gold",
+      "title": "Falls & injury prevention (NCLEX-RN, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
       "lessonId": "us-rn-nclex-rn:nurse-patient-assignment-acuity-gold",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "nurse-patient-assignment-acuity-gold",
       "title": "Patient assignment & acuity (NCLEX-RN, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:adrenal-crisis-addisonian-gold",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "adrenal-crisis-addisonian-gold",
+      "title": "Adrenal crisis (Addisonian) (NCLEX-RN, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:ards-acute-respiratory-failure-gold",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "ards-acute-respiratory-failure-gold",
+      "title": "ARDS & acute respiratory failure (NCLEX-RN, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:thyroid-storm-emergency-gold",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "thyroid-storm-emergency-gold",
+      "title": "Thyroid storm: emergency recognition (NCLEX-RN, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:delirium-acute-confusion-gold",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "delirium-acute-confusion-gold",
+      "title": "Delirium: acute confusion & safety (NCLEX-RN, US)",
       "status": "duplicate_or_unclear_source",
       "contentReadinessStatus": "duplicate_or_unclear_source",
       "localizationReadinessStatus": "english_only",
@@ -7769,231 +7725,6 @@
       ]
     },
     {
-      "lessonId": "us-np-fnp:fnp-adolescent-mental-health-screening",
-      "pathwayId": "us-np-fnp",
-      "slug": "fnp-adolescent-mental-health-screening",
-      "title": "Adolescent depression and safety: screening within scope (FNP)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 16.1,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (21 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (20 < 40 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (25 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "us-np-fnp:fnp-overlay-heart-failure",
-      "pathwayId": "us-np-fnp",
-      "slug": "fnp-overlay-heart-failure",
-      "title": "Heart failure — NP diagnosis & management (FNP)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 16.1,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (38 < 50 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "us-np-fnp:fnp-overlay-myocardial-infarction",
-      "pathwayId": "us-np-fnp",
-      "slug": "fnp-overlay-myocardial-infarction",
-      "title": "MI / ACS — NP overlay (FNP)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 16.1,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (39 < 50 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "us-np-fnp:fnp-overlay-shock",
-      "pathwayId": "us-np-fnp",
-      "slug": "fnp-overlay-shock",
-      "title": "Shock — NP resuscitation reasoning (FNP)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 16.1,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (37 < 50 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "us-np-fnp:fnp-overlay-abg-acid-base",
-      "pathwayId": "us-np-fnp",
-      "slug": "fnp-overlay-abg-acid-base",
-      "title": "ABG & acid–base — NP interpretation (FNP)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 16.1,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (39 < 50 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "us-np-fnp:fnp-overlay-sepsis-infection",
-      "pathwayId": "us-np-fnp",
-      "slug": "fnp-overlay-sepsis-infection",
-      "title": "Sepsis & infection control — NP overlay (FNP)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 16.1,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "us-np-fnp:fnp-overlay-electrolytes-volume",
-      "pathwayId": "us-np-fnp",
-      "slug": "fnp-overlay-electrolytes-volume",
-      "title": "Electrolytes & volume — NP overlay (FNP)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 16.1,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (39 < 50 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "us-np-fnp:fnp-overlay-np-differential-prescribing-chronic",
-      "pathwayId": "us-np-fnp",
-      "slug": "fnp-overlay-np-differential-prescribing-chronic",
-      "title": "Differential, prescribing & chronic care — NP core (FNP)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 16.1,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
-      "lessonId": "us-np-fnp:fnp-overlay-respiratory-acute",
-      "pathwayId": "us-np-fnp",
-      "slug": "fnp-overlay-respiratory-acute",
-      "title": "COPD, asthma, ARDS, pneumonia, PE — NP respiratory overlay (FNP)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "localized_ready",
-      "overallScore": 20.7,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways."
-      ]
-    },
-    {
       "lessonId": "us-np-fnp:pediatric-triage-emergencies-gold-standard",
       "pathwayId": "us-np-fnp",
       "slug": "pediatric-triage-emergencies-gold-standard",
@@ -8044,248 +7775,392 @@
       ]
     },
     {
+      "lessonId": "us-np-fnp:bp26-usnp-x030-chronic-disease-self-management-coaching",
+      "pathwayId": "us-np-fnp",
+      "slug": "bp26-usnp-x030-chronic-disease-self-management-coaching",
+      "title": "Chronic disease self-management coaching — FNP certification preparation (United States)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "usable_but_thin_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 68.8,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "missing_educational:summary_takeaways",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth, summary_takeaways.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-x031-health-literacy-teach-back",
+      "pathwayId": "us-np-fnp",
+      "slug": "bp26-usnp-x031-health-literacy-teach-back",
+      "title": "Health literacy & teach-back — FNP certification preparation (United States)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "usable_but_thin_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 68.8,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "missing_educational:summary_takeaways",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth, summary_takeaways.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-x032-social-determinants-screening",
+      "pathwayId": "us-np-fnp",
+      "slug": "bp26-usnp-x032-social-determinants-screening",
+      "title": "Social determinants screening — FNP certification preparation (United States)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "usable_but_thin_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 68.8,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "missing_educational:summary_takeaways",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth, summary_takeaways.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-np-fnp:fnp-womens-prenatal-anemia-workup",
+      "pathwayId": "us-np-fnp",
+      "slug": "fnp-womens-prenatal-anemia-workup",
+      "title": "Prenatal anemia: interpretation and escalation (FNP)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "usable_but_thin_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 76.7,
+      "reasons": [
+        "missing_educational:overview_intro",
+        "links:internal_links_high_count(9)",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: overview_intro.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-np-fnp:fnp-pediatric-fever-urgency",
+      "pathwayId": "us-np-fnp",
+      "slug": "fnp-pediatric-fever-urgency",
+      "title": "Pediatric fever: risk stratification without over-testing (FNP)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "usable_but_thin_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 76.7,
+      "reasons": [
+        "missing_educational:overview_intro",
+        "links:internal_links_high_count(9)",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: overview_intro.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-np-fnp:fnp-adult-hypertension-intensification",
+      "pathwayId": "us-np-fnp",
+      "slug": "fnp-adult-hypertension-intensification",
+      "title": "Adult hypertension: intensification and follow-up (FNP)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "usable_but_thin_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 76.7,
+      "reasons": [
+        "missing_educational:overview_intro",
+        "links:internal_links_high_count(9)",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: overview_intro.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-np-fnp:fnp-differential-primary-care",
+      "pathwayId": "us-np-fnp",
+      "slug": "fnp-differential-primary-care",
+      "title": "Differential reasoning in primary care (FNP track)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 84.5,
+      "reasons": [
+        "links:internal_links_high_count(9)",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
       "lessonId": "us-np-fnp:fnp-overlay-diabetes-metabolic",
       "pathwayId": "us-np-fnp",
       "slug": "fnp-overlay-diabetes-metabolic",
       "title": "Diabetes & metabolic complications — NP overlay (FNP)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 37.6,
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 85.7,
       "reasons": [
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "thin_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:summary_takeaways",
-        "missing_educational:exam_or_reasoning_cues",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, summary_takeaways, exam_or_reasoning_cues."
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ]
     },
     {
-      "lessonId": "us-np-fnp:np-thyroid-primary-care-gold",
+      "lessonId": "us-np-fnp:fnp-geriatric-falls-syncope",
       "pathwayId": "us-np-fnp",
-      "slug": "np-thyroid-primary-care-gold",
-      "title": "Thyroid disorders: primary care (FNP, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 58.3,
+      "slug": "fnp-geriatric-falls-syncope",
+      "title": "Geriatric falls and syncope: medication and rhythm (FNP)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 86.6,
       "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (70 < 100).",
-        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
-        "links:internal_links_below_minimum(2)",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets."
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ]
     },
     {
-      "lessonId": "us-np-fnp:np-obesity-metabolic-management-gold",
+      "lessonId": "us-np-fnp:fnp-overlay-myocardial-infarction",
       "pathwayId": "us-np-fnp",
-      "slug": "np-obesity-metabolic-management-gold",
-      "title": "Obesity & metabolic risk: primary care (FNP, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 58.3,
+      "slug": "fnp-overlay-myocardial-infarction",
+      "title": "MI / ACS — NP overlay (FNP)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 87.5,
       "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (51 < 100).",
-        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
-        "links:internal_links_below_minimum(2)",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets."
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ]
     },
     {
-      "lessonId": "us-np-fnp:np-contraception-counseling-selection-gold",
+      "lessonId": "us-np-fnp:fnp-overlay-abg-acid-base",
       "pathwayId": "us-np-fnp",
-      "slug": "np-contraception-counseling-selection-gold",
-      "title": "Contraception: counseling & selection (FNP, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 58.3,
+      "slug": "fnp-overlay-abg-acid-base",
+      "title": "ABG & acid–base — NP interpretation (FNP)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 87.5,
       "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (74 < 100).",
-        "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
-        "links:internal_links_below_minimum(2)",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets."
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ]
     },
     {
-      "lessonId": "us-np-fnp:np-primary-care-foundations-gold",
+      "lessonId": "us-np-fnp:fnp-overlay-sepsis-infection",
       "pathwayId": "us-np-fnp",
-      "slug": "np-primary-care-foundations-gold",
-      "title": "NP foundations: clinical reasoning, prevention, and primary-care judgment (US boards)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
+      "slug": "fnp-overlay-sepsis-infection",
+      "title": "Sepsis & infection control — NP overlay (FNP)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 87.5,
       "reasons": [
-        "Introduction is long for scanability (379 words); target about 180–250 words while keeping 2–3 paragraphs.",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets."
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ]
     },
     {
-      "lessonId": "us-np-fnp:np-heart-failure-primary-care-gold",
+      "lessonId": "us-np-fnp:fnp-overlay-electrolytes-volume",
       "pathwayId": "us-np-fnp",
-      "slug": "np-heart-failure-primary-care-gold",
-      "title": "Heart failure: outpatient management (FNP, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
+      "slug": "fnp-overlay-electrolytes-volume",
+      "title": "Electrolytes & volume — NP overlay (FNP)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 87.5,
       "reasons": [
-        "Introduction is long for scanability (258 words); target about 180–250 words while keeping 2–3 paragraphs.",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets."
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ]
     },
     {
-      "lessonId": "us-np-fnp:np-asthma-outpatient-gold",
+      "lessonId": "us-np-fnp:fnp-overlay-np-differential-prescribing-chronic",
       "pathwayId": "us-np-fnp",
-      "slug": "np-asthma-outpatient-gold",
-      "title": "Asthma: outpatient management (FNP, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
+      "slug": "fnp-overlay-np-differential-prescribing-chronic",
+      "title": "Differential, prescribing & chronic care — NP core (FNP)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 87.5,
       "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (90 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets."
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ]
     },
     {
-      "lessonId": "us-np-fnp:np-pneumonia-cap-outpatient-gold",
+      "lessonId": "us-np-fnp:fnp-overlay-shock",
       "pathwayId": "us-np-fnp",
-      "slug": "np-pneumonia-cap-outpatient-gold",
-      "title": "Community-acquired pneumonia: outpatient judgment (FNP, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
+      "slug": "fnp-overlay-shock",
+      "title": "Shock — NP resuscitation reasoning (FNP)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 88.4,
       "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (97 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets."
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ]
     },
     {
-      "lessonId": "us-np-fnp:np-neurology-outpatient-primary-care-gold",
+      "lessonId": "us-np-fnp:clinical-judgment-prioritization-gold",
       "pathwayId": "us-np-fnp",
-      "slug": "np-neurology-outpatient-primary-care-gold",
-      "title": "Outpatient neurology triage (FNP, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
+      "slug": "clinical-judgment-prioritization-gold",
+      "title": "Clinical judgment in ambulatory care (FNP, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
       "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
+      "overallScore": 89.3,
       "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (69 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets."
+        "Resolve duplicate slug across pathways or document canonical pathway."
       ]
     },
     {
-      "lessonId": "us-np-fnp:np-mental-health-anxiety-depression-ptsd-gold",
+      "lessonId": "us-np-fnp:sepsis-early-recognition-gold",
       "pathwayId": "us-np-fnp",
-      "slug": "np-mental-health-anxiety-depression-ptsd-gold",
-      "title": "Anxiety, depression & PTSD (FNP, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
+      "slug": "sepsis-early-recognition-gold",
+      "title": "Sepsis risk & escalation (FNP, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
       "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
+      "overallScore": 89.3,
       "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (76 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets."
+        "Resolve duplicate slug across pathways or document canonical pathway."
       ]
     },
     {
-      "lessonId": "us-np-fnp:np-sleep-insomnia-osa-primary-care-gold",
+      "lessonId": "us-np-fnp:fluids-electrolytes-emergencies-gold",
       "pathwayId": "us-np-fnp",
-      "slug": "np-sleep-insomnia-osa-primary-care-gold",
-      "title": "Sleep: insomnia, OSA & RLS (FNP, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
+      "slug": "fluids-electrolytes-emergencies-gold",
+      "title": "Electrolyte crises: outpatient triage (FNP, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
       "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
+      "overallScore": 89.3,
       "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (58 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets."
+        "Resolve duplicate slug across pathways or document canonical pathway."
       ]
     },
     {
-      "lessonId": "us-np-fnp:np-reproductive-screening-prevention-gold",
+      "lessonId": "us-np-fnp:acute-coronary-syndrome-gold",
       "pathwayId": "us-np-fnp",
-      "slug": "np-reproductive-screening-prevention-gold",
-      "title": "Reproductive screening & prevention (FNP, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
+      "slug": "acute-coronary-syndrome-gold",
+      "title": "Chest pain triage in primary care (FNP, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
       "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
+      "overallScore": 89.3,
       "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (72 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets."
+        "Resolve duplicate slug across pathways or document canonical pathway."
       ]
     },
     {
-      "lessonId": "us-np-fnp:np-ambulatory-gynec-common-presentations-gold",
+      "lessonId": "us-np-fnp:high-alert-medications-safety-gold",
       "pathwayId": "us-np-fnp",
-      "slug": "np-ambulatory-gynec-common-presentations-gold",
-      "title": "Ambulatory gynec: common presentations (FNP, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
+      "slug": "high-alert-medications-safety-gold",
+      "title": "High-alert meds: prescribing & monitoring (FNP, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
       "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
+      "overallScore": 89.3,
       "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (62 < 100).",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets."
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "us-np-fnp:stroke-increased-icp-gold",
+      "pathwayId": "us-np-fnp",
+      "slug": "stroke-increased-icp-gold",
+      "title": "TIA & stroke red flags in ambulatory care (FNP, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "us-np-fnp:shock-emergencies-gold",
+      "pathwayId": "us-np-fnp",
+      "slug": "shock-emergencies-gold",
+      "title": "Shock risk & escalation in ambulatory settings (FNP, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
       ]
     }
   ]

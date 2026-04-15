@@ -28,6 +28,9 @@ type Props = {
   params: Promise<RawBlogPostParams>;
 };
 
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+
 export const revalidate = 120;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

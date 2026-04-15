@@ -50,7 +50,9 @@ export async function register() {
     validateStripeAppEnv();
     logStripeCheckoutEnvStartupStatus();
     logStripeProductionPricingMisconfiguration();
-    await import("./sentry.server.config");
+    if (process.env.SENTRY_ENABLED === "true") {
+      await import("./sentry.server.config");
+    }
     process.on("unhandledRejection", (reason) => {
       const msg = reason instanceof Error ? reason.message : String(reason);
       console.error(`[nursenest-core] process_unhandledRejection ${msg}`);
@@ -77,8 +79,13 @@ export async function register() {
     }
   }
   if (process.env.NEXT_RUNTIME === "edge") {
-    await import("./sentry.edge.config");
+    if (process.env.SENTRY_ENABLED === "true") {
+      await import("./sentry.edge.config");
+    }
   }
 }
 
-export const onRequestError = Sentry.captureRequestError;
+export const onRequestError: typeof Sentry.captureRequestError = (...args) => {
+  if (process.env.SENTRY_ENABLED !== "true") return;
+  return Sentry.captureRequestError(...args);
+};

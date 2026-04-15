@@ -12,6 +12,7 @@ import {
   ExamSessionTopBar,
   ExamTimerReadout,
 } from "@/components/exam/exam-session-shell";
+import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
 import type { EmptyCopyI18n } from "@/lib/student/gated-state-messages-i18n";
 import { examPoolEmptyKeys, examStartFailureKey } from "@/lib/student/gated-state-messages-i18n";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -618,11 +619,16 @@ export function ExamPracticeClient({
 
   if (phase === "ready" && sessionPhase === "review") {
     return (
-      <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette>
+      <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette immersive>
         <ExamSessionTopBar
           left={<span className="font-medium text-foreground">Review before scoring</span>}
           center={<span>Pre-submit checklist</span>}
-          right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
+          right={
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              <ExamSessionThemeTrigger />
+              <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
+            </div>
+          }
         />
         <ExamProgressBar current={total} total={total} />
         <div className="space-y-4 p-5 md:p-6">
@@ -700,11 +706,16 @@ export function ExamPracticeClient({
 
   if (!q && (qLoading || !qid)) {
     return (
-      <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette>
+      <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette immersive>
         <ExamSessionTopBar
           left={examTitle ? <span className="font-medium text-foreground">{examTitle}</span> : null}
           center={<span>Loading</span>}
-          right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
+          right={
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              <ExamSessionThemeTrigger />
+              <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
+            </div>
+          }
         />
         {total > 0 ? <ExamProgressBar current={Math.min(currentIndex + 1, total)} total={total} /> : null}
         <div className="p-6">
@@ -726,7 +737,7 @@ export function ExamPracticeClient({
   const raw = answers[q.id];
 
   return (
-      <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette>
+      <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette immersive>
         <ExamSessionTopBar
           left={
             <div>
@@ -741,14 +752,27 @@ export function ExamPracticeClient({
             </div>
           }
           center={examTitle ? <span className="line-clamp-2 normal-case nn-marketing-body-sm">{examTitle}</span> : null}
-          right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
+          right={
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              <ExamSessionThemeTrigger />
+              <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
+            </div>
+          }
         />
         <ExamProgressBar current={currentIndex + 1} total={total} />
-        <div className="nn-question-session space-y-6">
-          <div className="nn-question-stem-wrap min-h-[3rem]">
-            <p className="nn-question-stem">{q.stem}</p>
-          </div>
+        <div className="nn-question-session nn-question-session--split nn-question-session--single">
+          <div className="nn-question-session-primary space-y-6">
+            <div className="nn-question-stem-card">
+              <div className="mb-2 flex flex-wrap items-center gap-2">
+                <span className="nn-question-type-chip">{q.questionType}</span>
+              </div>
+              <div className="nn-question-stem-wrap !mb-0 min-h-[3rem] !border-b-0 !pb-0">
+                <p className="nn-question-stem">{q.stem}</p>
+              </div>
+            </div>
 
+            <div>
+              <p className="nn-question-options-label">{t("learner.qbank.examUi.answersHeading")}</p>
           {q.questionType === "SATA" ? (
             <ul className="nn-qopt-list" role="group" aria-label={t("learner.qbank.examUi.answersHeading")}>
               {optsCanonical.map((canonical, i) => {
@@ -800,6 +824,7 @@ export function ExamPracticeClient({
               })}
             </ul>
           )}
+            </div>
 
           <div className="nn-question-nav-actions border-t-0 pt-0">
             <button
@@ -846,6 +871,7 @@ export function ExamPracticeClient({
           <p className="nn-marketing-caption text-[var(--theme-muted-text)]">
             Progress saves automatically. You can refresh and resume.
           </p>
+          </div>
         </div>
       </ExamSessionShell>
   );

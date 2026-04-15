@@ -97,24 +97,18 @@ const VARIANTS: Record<"us_np" | "ca_np", ReturnType<typeof t>> = {
       seoDescription:
         "US NP board preparation: structured diagnostic reasoning, differential discipline, screening and prevention logic, follow-up and referral thresholds, documentation, shared decision-making, and high-yield lab interpretation for outpatient primary care.",
       clinical_meaning: `**Why this layer exists**  
-US NP items reward **outpatient judgment**: you must **frame the problem**, **justify a differential**, choose **tests that change management**, and **close loops** with follow-up and safety-netting. This is the scaffolding beneath organ-system lessons—without it, “facts” do not assemble into **defensible decisions** under time pressure.
+US NP items reward **outpatient judgment**: **frame** the problem, **justify** a differential, choose **tests that change management**, and **close loops** with follow-up and safety-netting—otherwise “facts” never become **defensible decisions**.
 
-**Preventive care as decision science**  
-Screening is not memorizing ages—it is knowing **what changes the next step** when results are **borderline**, **false-positive-prone**, or **incidental**. Promotion work succeeds when you tie advice to **measurable outcomes** the patient agrees to track (BP diary, glucose checks, weight trend, tobacco quit date) and when you **stage** counseling to readiness rather than lecturing.
+**Prevention & documentation**  
+Screening is **risk-stratified** (who benefits, harms, when to stop). Tie counseling to **measurable** home tracking when appropriate. Strong answers document **what you ruled out**, **why the working diagnosis fits**, and **return precautions** when risk exists.`,
+      exam_relevance: `**How stems test foundations**  
+Expect **next-best-step** items where **risk** is the discriminator (instability, pregnancy, anticoagulation, extremes of age). Match **referral urgency** to the story.
 
-**Documentation that wins points**  
-Exam writers embed traps where the “nice” answer **skips risk discussion** or **does not specify monitoring**. A strong NP answer names **what you ruled out**, **why the working diagnosis fits**, **what would change your mind**, and **what the patient should do if things worsen**.`,
-      exam_relevance: `**How US NP items test foundations**  
-Expect **next-best-step** questions where the discriminator is **risk**, not trivia: unstable features, pregnancy status, anticoagulation, immunosuppression, or age extremes. **Referral** answers should match **urgency**—same-week specialty versus ED versus routine outpatient.
+**Prevention & shared decisions**  
+USPSTF-style trade-offs appear as scenarios—avoid **over-screening** low-risk patients and **under-reacting** to high-risk features. When trade-offs are close, document **values**, **alternatives**, and **follow-up**.
 
-**Screening and prevention stems**  
-You will see **USPSTF-style** trade-offs framed as patient scenarios: **who benefits**, **harms**, **frequency**, and **when to stop**. The wrong option often **over-screens** low-risk patients or **under-reacts** to high-risk features.
-
-**Shared decision-making**  
-When harms and benefits are close, the best option frequently documents **patient values**, **clear alternatives**, and **follow-up**—not paternalistic certainty. Watch for distractors that **rush procedures** or **withhold** indicated care because the patient is “noncompliant” without addressing barriers.
-
-**Labs**  
-Items reward **pattern recognition** and **clinical context**: a mild anemia with a story of **GI blood loss** is not “iron deficiency until proven otherwise” if **acute** instability is present—**stabilization and risk framing** may precede outpatient workup.`,
+**Labs in context**  
+Pattern + trajectory beats isolated numbers; **acute instability** can precede leisurely outpatient workup.`,
       clinical_scenario: `**Vignette — 58-year-old with fatigue (outpatient)**  
 They report **months** of progressive fatigue, occasional **shortness of breath** on hills, and **cold intolerance**. Vitals are borderline **hypertensive**; exam shows **pallor** and **mild tachycardia**. You order a **CBC** showing **Hgb 9.8 g/dL**, **MCV 68 fL**, **platelets 480k**.
 

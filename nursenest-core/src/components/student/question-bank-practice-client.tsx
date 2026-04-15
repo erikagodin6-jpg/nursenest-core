@@ -32,6 +32,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { QuestionChoiceLetter } from "@/components/student/question-choice-letter";
 import { QuestionSessionStudyLoopPanel } from "@/components/student/question-session-study-loop-panel";
 import { ExamProgressBar, ExamSessionShell, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
+import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
 import type {
   QuestionBankDifficultyBand,
   QuestionBankDiscoveryResponse,
@@ -1272,7 +1273,7 @@ export function QuestionBankPracticeClient({
       </details>
 
       <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} telemetrySurface="question_bank">
-        <ExamSessionShell neutralPalette className="overflow-hidden shadow-md">
+        <ExamSessionShell neutralPalette immersive className="overflow-hidden shadow-md">
           <ExamSessionTopBar
             left={
               <div className="space-y-1">
@@ -1308,10 +1309,8 @@ export function QuestionBankPracticeClient({
               )
             }
             right={
-              <div className="flex flex-col items-end gap-1">
-                <span className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                  {current.questionType}
-                </span>
+              <div className="flex flex-wrap items-center justify-end gap-2">
+                <ExamSessionThemeTrigger />
                 {markedForReview[current.id] ? (
                   <span className="nn-marketing-caption font-semibold text-[var(--semantic-warning-contrast)] uppercase tracking-wide">
                     Flagged
@@ -1325,6 +1324,11 @@ export function QuestionBankPracticeClient({
           <div className="nn-question-session nn-question-session--split">
             <div className="nn-question-session-primary space-y-6">
               <div className="nn-question-stem-card">
+                <div className="mb-2 flex flex-wrap items-center gap-2">
+                  {current.questionType ? (
+                    <span className="nn-question-type-chip">{current.questionType}</span>
+                  ) : null}
+                </div>
                 {current.subtopic ? (
                   <p className="mb-2 nn-marketing-caption font-medium text-[var(--semantic-text-muted)]">{current.subtopic}</p>
                 ) : null}

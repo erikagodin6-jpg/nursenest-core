@@ -12,6 +12,9 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { RegionalBlogDiscoveryHint } from "@/components/marketing/regional-blog-discovery-hint";
 
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+
 export async function generateMetadata({
   searchParams,
 }: {

@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 import {
   getStudyItemState,
   setStudyItemState,
   type StudyItemState,
 } from "@/lib/flashcards/study-session-persistence";
 import { resolveFlashcardRelatedLessonLink } from "@/lib/flashcards/flashcard-study-links";
+import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
 
 export type ActiveStudyCard = {
   id: string;
@@ -43,7 +45,7 @@ type Props = {
   };
   /**
    * `split` = prompt + rationale sidebar (custom/weak sessions).
-   * `card` = legacy monolith–style single flashcard surface (tap/space to reveal, stacked reveals, large rating keys).
+   * `card` = FAQ-aligned two-column flashcard study: stem/controls left, answer + rationale + takeaway right (same product layout as practice questions).
    */
   layout?: "split" | "card";
   /** `test` shows an elapsed timer (legacy DeckStudyTest). */
@@ -101,6 +103,7 @@ export function ActiveStudySession({
   onSessionComplete,
   onSessionRestart,
 }: Props) {
+  const { t } = useMarketingI18n();
   const dedupedCards = useMemo(() => dedupeCardsById(cards), [cards]);
   const [sessionCards, setSessionCards] = useState<ActiveStudyCard[]>(dedupedCards);
   const [index, setIndex] = useState(0);
@@ -455,6 +458,7 @@ export function ActiveStudySession({
             ) : null}
           </div>
           <div className="flex flex-wrap items-center gap-2">
+            <ExamSessionThemeTrigger />
             <span className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">
               Progress: {progressLabel}
             </span>
@@ -492,165 +496,178 @@ export function ActiveStudySession({
             />
           </div>
 
-          <section className="space-y-4">
-            <div
-              role="button"
-              tabIndex={0}
-              onClick={() => !revealed && setRevealed(true)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  if (!revealed) setRevealed(true);
-                }
-              }}
-              className={`min-h-[min(360px,70vh)] cursor-pointer rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft),var(--semantic-panel-cool))] p-6 text-center shadow-sm transition-colors md:p-10 ${
-                revealed
-                  ? "bg-[color-mix(in_srgb,var(--semantic-info)_12%,var(--semantic-surface))]"
-                  : "bg-[color-mix(in_srgb,var(--semantic-panel-cool),var(--semantic-surface))] hover:bg-[color-mix(in_srgb,var(--semantic-panel-warm),var(--semantic-surface))]"
-              }`}
-            >
-              {!revealed ? (
-                <div className="flex h-full min-h-[280px] flex-col items-center justify-center gap-6">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--semantic-text-secondary)]">
-                    {sessionMode === "test" ? "Test mode" : "Question"}
-                  </span>
-                  <h2 className="max-w-xl text-xl font-bold leading-relaxed text-[var(--semantic-text-primary)] md:text-2xl">
-                    {current.prompt}
-                  </h2>
-                  {current.topic || current.subtopic ? (
-                    <p className="text-xs text-[var(--semantic-text-secondary)]">
-                      {current.topic ?? "General"}
-                      {current.subtopic ? ` · ${current.subtopic}` : ""}
+          <div className="nn-question-session--split px-0 pb-0 pt-1">
+            <div className="nn-question-session-primary space-y-4">
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => !revealed && setRevealed(true)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    if (!revealed) setRevealed(true);
+                  }
+                }}
+                className={`nn-question-stem-card text-left ${
+                  !revealed
+                    ? "cursor-pointer transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-panel-warm)_45%,var(--semantic-surface))]"
+                    : ""
+                }`}
+              >
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--semantic-text-muted)]">
+                  {sessionMode === "test" ? "Test mode · Front" : "Card front"}
+                </p>
+                <div className="nn-question-stem-wrap !mb-0 !border-b-0 !pb-0">
+                  <p className="nn-question-stem">{current.prompt}</p>
+                </div>
+                {current.topic || current.subtopic ? (
+                  <p className="mt-3 text-xs text-[var(--semantic-text-secondary)]">
+                    {current.topic ?? "General"}
+                    {current.subtopic ? ` · ${current.subtopic}` : ""}
+                  </p>
+                ) : null}
+                {!revealed ? (
+                  <p className="mt-5 text-center text-[10px] font-semibold uppercase tracking-widest text-[var(--semantic-text-secondary)]">
+                    Tap or press Space to reveal — answer & rationale on the right
+                  </p>
+                ) : null}
+              </div>
+
+              {revealed ? (
+                <>
+                  <div className="space-y-3 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+                    <p className="text-center text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--semantic-text-secondary)]">
+                      How well did you know this?
                     </p>
-                  ) : null}
-                  <p className="flex animate-pulse items-center gap-2 text-[10px] uppercase tracking-widest text-[var(--semantic-text-secondary)]">
-                    Tap card or press Space to reveal
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      <button
+                        type="button"
+                        disabled={saving}
+                        onClick={() => void submitRating("incorrect")}
+                        className="min-h-[88px] rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-danger)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
+                      >
+                        <span className="block text-[10px] text-[var(--semantic-danger)]">1 · Incorrect</span>
+                        <span className="mt-1 block">Need more review</span>
+                      </button>
+                      <button
+                        type="button"
+                        disabled={saving}
+                        onClick={() => void submitRating("unsure")}
+                        className="min-h-[88px] rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-warning)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
+                      >
+                        <span className="block text-[10px] text-[var(--semantic-warning)]">2 · Unsure</span>
+                        <span className="mt-1 block">Almost there</span>
+                      </button>
+                      <button
+                        type="button"
+                        disabled={saving}
+                        onClick={() => void submitRating("known")}
+                        className="min-h-[88px] rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-success)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
+                      >
+                        <span className="block text-[10px] text-[var(--semantic-success)]">3 · Known</span>
+                        <span className="mt-1 block">Got it</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] p-4">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Card tools</p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => applyItemState({ starred: !itemState.starred })}
+                        className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold"
+                      >
+                        {itemState.starred ? "Starred" : "Star"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => applyItemState({ confusing: !itemState.confusing })}
+                        className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold"
+                      >
+                        {itemState.confusing ? "Revisit" : "Mark confusing"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={goPrevious}
+                        disabled={index <= 0}
+                        className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
+                      >
+                        Previous
+                      </button>
+                      <button
+                        type="button"
+                        onClick={goNext}
+                        disabled={!revealed || index + 1 >= sessionCards.length}
+                        className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
+                      >
+                        Next
+                      </button>
+                    </div>
+                    <label className="mt-3 block text-xs font-semibold text-[var(--theme-muted-text)]">
+                      Note
+                      <textarea
+                        value={currentNote}
+                        onChange={(event) => {
+                          const value = event.target.value;
+                          setLocalNotes((prev) => ({ ...prev, [current.id]: value }));
+                          applyItemState({ note: value });
+                        }}
+                        rows={2}
+                        className="mt-1 w-full rounded-lg border border-border bg-[var(--theme-card-bg)] px-3 py-2 text-sm"
+                      />
+                    </label>
+                  </div>
+
+                  <p className="text-center text-[10px] text-[var(--theme-muted-text)]">
+                    <Link href={relatedLessonLink.href} className="font-semibold text-[var(--semantic-brand)] underline">
+                      {relatedLessonLink.label}
+                    </Link>
+                  </p>
+                </>
+              ) : null}
+            </div>
+
+            <aside className="nn-question-session-rationale space-y-4">
+              {!revealed ? (
+                <div className="nn-question-rationale-placeholder">
+                  <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+                    {t("learner.qbank.split.rationaleHeading")}
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+                    {t("learner.flashcards.split.rationalePlaceholder")}
                   </p>
                 </div>
               ) : (
-                <div className="space-y-3 text-left">
-                  <p className="text-center text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--semantic-text-secondary)]">
-                    Reveal each section
-                  </p>
-                  <details defaultOpen className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3">
-                    <summary className="cursor-pointer text-xs font-semibold text-[var(--semantic-text-primary)]">
+                <>
+                  <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-sm">
+                    <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
                       Correct answer
-                    </summary>
-                    <p className="mt-2 text-sm font-medium text-[var(--semantic-text-primary)]">{current.answer}</p>
-                  </details>
-                  <details
-                    defaultOpen={Boolean(current.explanation?.trim())}
-                    className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3"
-                  >
-                    <summary className="cursor-pointer text-xs font-semibold text-[var(--semantic-text-primary)]">
-                      Rationale
-                    </summary>
-                    <p className="mt-2 text-sm text-[var(--semantic-text-primary)]">
-                      {current.explanation ?? "Detailed explanation is not available for this item yet."}
                     </p>
-                  </details>
-                  <details className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3">
-                    <summary className="cursor-pointer text-xs font-semibold text-[var(--semantic-text-primary)]">
-                      Clinical pearl / exam tip
-                    </summary>
-                    <p className="mt-2 text-sm text-[var(--semantic-text-primary)]">{buildClinicalPearl(current)}</p>
-                  </details>
-                </div>
+                    <p className="mt-2 text-sm font-semibold leading-relaxed text-[var(--semantic-text-primary)]">
+                      {current.answer}
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-sm">
+                    <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
+                      Rationale
+                    </p>
+                    <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-primary)]">
+                      {current.explanation?.trim()
+                        ? current.explanation
+                        : "Detailed explanation is not available for this item yet."}
+                    </p>
+                  </div>
+                  <div className="nn-rationale-key-point">
+                    <p className="nn-rationale-key-point__label">
+                      <span>Key takeaway</span>
+                    </p>
+                    <p className="nn-rationale-key-point__body">{buildClinicalPearl(current)}</p>
+                  </div>
+                </>
               )}
-            </div>
-
-            {revealed ? (
-              <div className="space-y-3 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
-                <p className="text-center text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--semantic-text-secondary)]">
-                  How well did you know this?
-                </p>
-                <div className="grid gap-3 sm:grid-cols-3">
-                  <button
-                    type="button"
-                    disabled={saving}
-                    onClick={() => void submitRating("incorrect")}
-                    className="min-h-[88px] rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-danger)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
-                  >
-                    <span className="block text-[10px] text-[var(--semantic-danger)]">1 · Incorrect</span>
-                    <span className="mt-1 block">Need more review</span>
-                  </button>
-                  <button
-                    type="button"
-                    disabled={saving}
-                    onClick={() => void submitRating("unsure")}
-                    className="min-h-[88px] rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-warning)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
-                  >
-                    <span className="block text-[10px] text-[var(--semantic-warning)]">2 · Unsure</span>
-                    <span className="mt-1 block">Almost there</span>
-                  </button>
-                  <button
-                    type="button"
-                    disabled={saving}
-                    onClick={() => void submitRating("known")}
-                    className="min-h-[88px] rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-success)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
-                  >
-                    <span className="block text-[10px] text-[var(--semantic-success)]">3 · Known</span>
-                    <span className="mt-1 block">Got it</span>
-                  </button>
-                </div>
-              </div>
-            ) : null}
-
-            <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] p-4">
-              <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Card tools</p>
-              <div className="mt-2 flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={() => applyItemState({ starred: !itemState.starred })}
-                  className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold"
-                >
-                  {itemState.starred ? "Starred" : "Star"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => applyItemState({ confusing: !itemState.confusing })}
-                  className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold"
-                >
-                  {itemState.confusing ? "Revisit" : "Mark confusing"}
-                </button>
-                <button
-                  type="button"
-                  onClick={goPrevious}
-                  disabled={index <= 0}
-                  className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
-                >
-                  Previous
-                </button>
-                <button
-                  type="button"
-                  onClick={goNext}
-                  disabled={!revealed || index + 1 >= sessionCards.length}
-                  className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
-                >
-                  Next
-                </button>
-              </div>
-              <label className="mt-3 block text-xs font-semibold text-[var(--theme-muted-text)]">
-                Note
-                <textarea
-                  value={currentNote}
-                  onChange={(event) => {
-                    const value = event.target.value;
-                    setLocalNotes((prev) => ({ ...prev, [current.id]: value }));
-                    applyItemState({ note: value });
-                  }}
-                  rows={2}
-                  className="mt-1 w-full rounded-lg border border-border bg-[var(--theme-card-bg)] px-3 py-2 text-sm"
-                />
-              </label>
-            </div>
-
-            <p className="text-center text-[10px] text-[var(--theme-muted-text)]">
-              <Link href={relatedLessonLink.href} className="font-semibold text-[var(--semantic-brand)] underline">
-                {relatedLessonLink.label}
-              </Link>
-            </p>
-          </section>
+            </aside>
+          </div>
         </>
       ) : (
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(300px,1fr)]">

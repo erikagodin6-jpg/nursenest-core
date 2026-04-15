@@ -25,6 +25,9 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+
 /** ISR: slug pages are public; revalidate balances freshness vs load. */
 export const revalidate = 120;
 

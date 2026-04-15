@@ -1,6 +1,6 @@
 # Lesson completeness audit
 
-Generated: 2026-04-15T03:17:06.087Z
+Generated: 2026-04-15T03:30:01.648Z
 
 ## What was scanned
 - Bundled pathway lesson catalog (merged JSON: main catalog, allied-bundled, new-grad transition, scoped-gold prepend).
@@ -19,51 +19,50 @@ Generated: 2026-04-15T03:17:06.087Z
 ## Totals (from lesson-completeness-summary.json)
 - Lessons scanned: **906**
 - **Legacy combined `status`** (unchanged thresholds):
-- production_ready: **0**
-- usable_but_thin: **1**
-- structurally_incomplete: **331**
+- production_ready: **1**
+- usable_but_thin: **0**
+- structurally_incomplete: **305**
 - content_incomplete: **0**
-- localization_incomplete: **319**
+- localization_incomplete: **345**
 - not_routable: **0**
 - duplicate_or_unclear_source: **255**
-- **Content readiness (English spine)** — production_ready_en: **63**, usable_but_thin_en: **257**, structurally_incomplete: **331**, content_incomplete: **0**, not_routable: **0**, duplicate_or_unclear_source: **255**.
-- **Localization readiness (overlays)** — localized_ready: **16**, partially_localized: **0**, localization_incomplete: **320**, english_only: **570**, localized_shell_only: **0**.
-- **Good English lessons not yet localization-complete** (`production_ready_en` and not `localized_ready`): **63**
-- **Blocked mainly by localization** (legacy `status === localization_incomplete`): **319**
+- **Content readiness (English spine)** — production_ready_en: **163**, usable_but_thin_en: **183**, structurally_incomplete: **305**, content_incomplete: **0**, not_routable: **0**, duplicate_or_unclear_source: **255**.
+- **Localization readiness (overlays)** — localized_ready: **16**, partially_localized: **0**, localization_incomplete: **345**, english_only: **545**, localized_shell_only: **0**.
+- **Good English lessons not yet localization-complete** (`production_ready_en` and not `localized_ready`): **162**
+- **Blocked mainly by localization** (legacy `status === localization_incomplete`): **345**
 
 ## Good English lessons that are not yet localization-complete
 Lessons with **`contentReadinessStatus === production_ready_en`** but **`localizationReadinessStatus !== localized_ready`** (overlays missing or only one scanned locale). These have a strong English teaching spine under the same depth gates as before; remaining work is primarily **educational overlay expansion** (or documenting English-primary intent), not fixing a broken lesson shell.
-- **Count**: **63**
+- **Count**: **162**
 
 ## Top failing pathways (nursing-first, by volume)
-- **ca-rn-nclex-rn** (canada/rn/nclex-rn): 188 lessons · avg score 68.8 · legacy ready 0 · **production_ready_en 29** · thin 0 · structural gaps 39
-- **us-rn-nclex-rn** (us/rn/nclex-rn): 187 lessons · avg score 46.4 · legacy ready 0 · **production_ready_en 30** · thin 0 · structural gaps 104
-- **us-np-fnp** (us/np/fnp): 161 lessons · avg score 69.4 · legacy ready 0 · **production_ready_en 4** · thin 1 · structural gaps 26
-- **ca-rpn-rex-pn** (canada/rpn/rex-pn): 150 lessons · avg score 49.1 · legacy ready 0 · **production_ready_en 0** · thin 0 · structural gaps 61
-- **us-lpn-nclex-pn** (us/lpn/nclex-pn): 150 lessons · avg score 49 · legacy ready 0 · **production_ready_en 0** · thin 0 · structural gaps 61
+- **ca-rn-nclex-rn** (canada/rn/nclex-rn): 188 lessons · avg score 70.2 · legacy ready 0 · **production_ready_en 29** · thin 0 · structural gaps 39
+- **us-rn-nclex-rn** (us/rn/nclex-rn): 187 lessons · avg score 47.8 · legacy ready 0 · **production_ready_en 30** · thin 0 · structural gaps 104
+- **us-np-fnp** (us/np/fnp): 161 lessons · avg score 87.4 · legacy ready 1 · **production_ready_en 104** · thin 0 · structural gaps 0
+- **ca-rpn-rex-pn** (canada/rpn/rex-pn): 150 lessons · avg score 50.9 · legacy ready 0 · **production_ready_en 0** · thin 0 · structural gaps 61
+- **us-lpn-nclex-pn** (us/lpn/nclex-pn): 150 lessons · avg score 50.8 · legacy ready 0 · **production_ready_en 0** · thin 0 · structural gaps 61
 - **us-rn-new-grad-transition** (us/rn/new-grad-transition): 40 lessons · avg score 27.7 · legacy ready 0 · **production_ready_en 0** · thin 0 · structural gaps 40
 
 ## Top systemic issues (reason histogram)
-- no_educational_overlay_in_scanned_locales: **610**
-- missing_educational:core_concept_depth: **443**
-- missing_educational:summary_takeaways: **299**
-- thin_total_word_count: **293**
-- missing_educational:overview_intro: **285**
-- low_total_word_count: **242**
-- Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).: **150**
-- missing_educational:clinical_application: **127**
+- no_educational_overlay_in_scanned_locales: **618**
+- missing_educational:core_concept_depth: **361**
+- missing_educational:overview_intro: **274**
+- low_total_word_count: **233**
+- missing_educational:summary_takeaways: **225**
+- thin_total_word_count: **219**
+- Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).: **140**
+- missing_educational:clinical_application: **126**
 - links:no_internal_study_links: **124**
-- not_in_exam_filtered_hub_list: **94**
-- Legacy section "clinical_scenario" is below the minimum depth (29 < 40 words).: **78**
-- Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).: **54**
+- Legacy section "clinical_scenario" is below the minimum depth (29 < 40 words).: **70**
 - Legacy section "core_concept" is below the minimum depth (24 < 40 words).: **52**
 - Missing required premium section: tier_specific_relevance: **51**
 - Section "country_specific_notes" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.: **51**
+- Missing required premium section: related_next_steps: **51**
+- Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).: **51**
 
 ## Batch-fix patterns (systemic)
 - ca-rn-nclex-rn: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only.
 - us-rn-nclex-rn: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only.
-- us-np-fnp: ≥45% of lessons missing core_concept_depth bucket — likely systematic spine depth gap.
 - us-np-fnp: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only.
 - ca-rpn-rex-pn: ≥45% of lessons missing core_concept_depth bucket — likely systematic spine depth gap.
 - ca-rpn-rex-pn: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only.
@@ -79,9 +78,9 @@ Lessons with **`contentReadinessStatus === production_ready_en`** but **`localiz
 5. Resolve duplicate slugs across pathways with documented canonical routing.
 
 ## Lessons that exist but are not actually complete
-- **Catalog rows scanned**: 906 — **not production_ready**: **906**.
-- **By status** (non–production_ready): usable_but_thin **1**, structurally_incomplete **331**, content_incomplete **0**, localization_incomplete **319**, not_routable **0**, duplicate_or_unclear_source **255**.
-- **Isolated lessons** (no internal study links and no relatedLessonRefs): **342**.
+- **Catalog rows scanned**: 906 — **not production_ready**: **905**.
+- **By status** (non–production_ready): usable_but_thin **0**, structurally_incomplete **305**, content_incomplete **0**, localization_incomplete **345**, not_routable **0**, duplicate_or_unclear_source **255**.
+- **Isolated lessons** (no internal study links and no relatedLessonRefs): **333**.
 - **Present in catalog**: Row exists in merged bundled JSON for a pathway.
 - **Routable**: Pathway registry status is `active` (marketing hub can exist).
 - **Structurally non-empty**: Sections array exists with bodies; may still fail premium/legacy gates.

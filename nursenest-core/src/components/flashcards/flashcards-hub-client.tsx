@@ -522,131 +522,71 @@ export function FlashcardsHubClient({
         ) : null}
       </section>
 
-      {/* Stats hero — due summary + study streak */}
+      {/* Mastery / retention KPI row — same learner product family as exam shells */}
       {(dueSummary || stats) ? (
-        <div className="mb-8 grid gap-4 sm:grid-cols-2">
-          {dueSummary ? (
-            <div
-              className="rounded-2xl p-5"
-              style={{
-                background:
-                  "color-mix(in srgb, var(--surface-emphasis, var(--theme-primary)) 8%, var(--bg-card, var(--theme-card-bg)))",
-                border:
-                  "1px solid color-mix(in srgb, var(--surface-emphasis, var(--theme-primary)) 18%, transparent)",
-              }}
-            >
-              <p
-                className="mb-3 text-xs font-semibold uppercase tracking-wide"
-                style={{ color: "var(--theme-muted-text)" }}
-              >
-                Due for review
+        <section className="mb-8 space-y-4" aria-label={t("learner.flashcards.hub.masteryOverview")}>
+          <p className="text-xs font-semibold uppercase tracking-widest text-[var(--theme-muted-text)]">
+            {t("learner.flashcards.hub.masteryOverview")}
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
+                {t("learner.flashcards.hub.kpiDueToday")}
               </p>
-              <div className="grid grid-cols-3 gap-2 text-center">
-                <div>
-                  <p
-                    className="text-2xl font-bold tabular-nums"
-                    style={{ color: "var(--semantic-info, #0284c7)" }}
-                  >
-                    {dueSummary.dueToday}
-                  </p>
-                  <p className="mt-0.5 text-[10px] font-medium" style={{ color: "var(--theme-muted-text)" }}>
-                    {t("learner.flashcards.hub.dueToday")}
-                  </p>
-                </div>
-                <div>
-                  <p
-                    className="text-2xl font-bold tabular-nums"
-                    style={{ color: dueSummary.overdue > 0 ? "var(--semantic-danger, #ef4444)" : "var(--theme-heading-text)" }}
-                  >
-                    {dueSummary.overdue}
-                  </p>
-                  <p className="mt-0.5 text-[10px] font-medium" style={{ color: "var(--theme-muted-text)" }}>
-                    {t("learner.flashcards.hub.overdue")}
-                  </p>
-                </div>
-                <div>
-                  <p
-                    className="text-2xl font-bold tabular-nums"
-                    style={{ color: "var(--semantic-success, #22c55e)" }}
-                  >
-                    {dueSummary.learning}
-                  </p>
-                  <p className="mt-0.5 text-[10px] font-medium" style={{ color: "var(--theme-muted-text)" }}>
-                    {t("learner.flashcards.hub.learning")}
-                  </p>
-                </div>
-              </div>
-              {totalDue > 0 ? (
-                <Link
-                  href="/app/flashcards/weak-areas"
-                  className="mt-4 block w-full rounded-xl py-2 text-center text-xs font-semibold transition"
-                  style={{
-                    background:
-                      "color-mix(in srgb, var(--surface-emphasis, var(--theme-primary)) 16%, transparent)",
-                    color: "var(--theme-heading-text)",
-                    border:
-                      "1px solid color-mix(in srgb, var(--surface-emphasis, var(--theme-primary)) 25%, transparent)",
-                  }}
-                >
-                  Review {totalDue} due now →
-                </Link>
+              <p className="mt-2 text-3xl font-bold tabular-nums text-[var(--semantic-info)]">
+                {dueSummary != null ? dueSummary.dueToday : "—"}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
+                {t("learner.flashcards.hub.kpiOverdue")}
+              </p>
+              <p
+                className={`mt-2 text-3xl font-bold tabular-nums ${
+                  dueSummary != null && dueSummary.overdue > 0 ? "text-[var(--semantic-danger)]" : "text-[var(--semantic-text-primary)]"
+                }`}
+              >
+                {dueSummary != null ? dueSummary.overdue : "—"}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
+                {t("learner.flashcards.hub.kpiStreak")}
+              </p>
+              <p className="mt-2 text-3xl font-bold tabular-nums text-[var(--semantic-chart-3)]">
+                {stats != null ? stats.currentStreak : "—"}
+              </p>
+              {stats != null ? (
+                <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">
+                  {t("learner.flashcards.hub.kpiBest")}:{" "}
+                  <span className="font-semibold tabular-nums text-[var(--semantic-text-secondary)]">{stats.longestStreak}</span>
+                </p>
               ) : null}
             </div>
-          ) : null}
-
-          {stats && (stats.currentStreak > 0 || stats.cardsReviewedTotal > 0) ? (
-            <div
-              className="rounded-2xl p-5"
-              style={{
-                background:
-                  "color-mix(in srgb, var(--surface-soft-b, var(--theme-primary)) 6%, var(--bg-card, var(--theme-card-bg)))",
-                border: "1px solid var(--border-subtle, var(--theme-card-border))",
-              }}
-            >
-              <p
-                className="mb-3 text-xs font-semibold uppercase tracking-wide"
-                style={{ color: "var(--theme-muted-text)" }}
-              >
-                Study progress
+            <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
+                {t("learner.flashcards.hub.kpiReviewed")}
               </p>
-              <div className="grid grid-cols-3 gap-2 text-center">
-                <div>
-                  <p
-                    className="text-2xl font-bold tabular-nums"
-                    style={{ color: "var(--semantic-chart-3, #a78bfa)" }}
-                  >
-                    {stats.currentStreak}
-                  </p>
-                  <p className="mt-0.5 text-[10px] font-medium" style={{ color: "var(--theme-muted-text)" }}>
-                    {t("learner.flashcards.hub.dayStreak")}
-                  </p>
-                </div>
-                <div>
-                  <p
-                    className="text-2xl font-bold tabular-nums"
-                    style={{ color: "var(--theme-heading-text)" }}
-                  >
-                    {stats.longestStreak}
-                  </p>
-                  <p className="mt-0.5 text-[10px] font-medium" style={{ color: "var(--theme-muted-text)" }}>
-                    {t("learner.flashcards.hub.bestStreak")}
-                  </p>
-                </div>
-                <div>
-                  <p
-                    className="text-2xl font-bold tabular-nums"
-                    style={{ color: "var(--theme-heading-text)" }}
-                  >
-                    {stats.cardsReviewedTotal}
-                  </p>
-                  <p className="mt-0.5 text-[10px] font-medium" style={{ color: "var(--theme-muted-text)" }}>
-                    {t("learner.flashcards.hub.reviews")}
-                  </p>
-                </div>
-              </div>
+              <p className="mt-2 text-3xl font-bold tabular-nums text-[var(--semantic-text-primary)]">
+                {stats != null ? stats.cardsReviewedTotal : "—"}
+              </p>
+              {dueSummary != null ? (
+                <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">
+                  {t("learner.flashcards.hub.kpiLearning")}:{" "}
+                  <span className="font-semibold tabular-nums text-[var(--semantic-success)]">{dueSummary.learning}</span>
+                </p>
+              ) : null}
             </div>
+          </div>
+          {totalDue > 0 ? (
+            <Link
+              href="/app/flashcards/weak-areas"
+              className="block w-full rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] py-3 text-center text-sm font-semibold text-[var(--theme-heading-text)] shadow-sm transition hover:opacity-95"
+            >
+              Review {totalDue} due now →
+            </Link>
           ) : null}
-        </div>
+        </section>
       ) : null}
 
       {/* Ready-made decks (secondary) */}

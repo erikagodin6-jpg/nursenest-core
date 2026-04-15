@@ -10,6 +10,7 @@ import {
   ExamSessionTopBar,
   ExamTimerReadout,
 } from "@/components/exam/exam-session-shell";
+import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
 import { difficultyBandLabel } from "@/lib/questions/difficulty-label";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import type {
@@ -1164,7 +1165,7 @@ export function PracticeTestRunnerClient({
     }
     return (
       <div className="space-y-4" aria-busy="true">
-        <ExamSessionShell neutralPalette>
+        <ExamSessionShell neutralPalette immersive>
           <ExamSessionTopBar
             left={
               <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
@@ -1176,7 +1177,12 @@ export function PracticeTestRunnerClient({
                 {tx("learner.practiceTests.run.loading", "Loading")}
               </span>
             }
-            right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
+            right={
+              <div className="flex flex-wrap items-center justify-end gap-2">
+                <ExamSessionThemeTrigger />
+                <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
+              </div>
+            }
           />
           {total > 0 ? <ExamProgressBar current={idx + 1} total={total} /> : null}
           <div className="nn-question-session space-y-4">
@@ -1715,6 +1721,7 @@ export function PracticeTestRunnerClient({
           examName={examName}
           current={idx + 1}
           total={total}
+          trailingSlot={<ExamSessionThemeTrigger variant="pill" />}
           rightLabel={topBarRightLabel}
           progressPct={sessionPct}
           saving={saving}

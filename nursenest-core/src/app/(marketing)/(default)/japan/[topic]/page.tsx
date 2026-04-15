@@ -1,21 +1,18 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  JAPAN_TOPIC_SLUGS,
-  JapanTopicView,
-  parseJapanTopicParam,
-} from "@/components/marketing/exams-japan/japan-topic-view";
+import { JapanTopicView, parseJapanTopicParam } from "@/components/marketing/exams-japan/japan-topic-view";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
-export const revalidate = 86400;
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
 
 type Props = { params: Promise<{ topic: string }> };
 
 export function generateStaticParams() {
-  return JAPAN_TOPIC_SLUGS.map((topic) => ({ topic }));
+  return [];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

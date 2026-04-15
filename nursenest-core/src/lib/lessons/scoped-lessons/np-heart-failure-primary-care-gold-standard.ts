@@ -80,16 +80,14 @@ const VARIANTS: Record<"us_np" | "ca_np", ReturnType<typeof t>> = {
       seoDescription:
         "NP board-style HF: HFrEF vs HFpEF patterns, GDMT principles, diuretic safety, device/referral thresholds, and cannot-miss escalation—aligned to FNP, AGPCNP, WHNP, and PNP-PC outpatient stems.",
       clinical_meaning: `**Primary-care NP role**  
-You **synthesize** history, vitals, weight trends, exam, and available diagnostics into a **working phenotype** and **symptom trajectory**. Boards reward **parsimonious testing** that changes management, **documentation** of reasoning, and **shared decision-making** when trade-offs are real (renal function vs RAAS therapy, hypotension vs congestion).
+Synthesize history, vitals, **weight trends**, exam, and diagnostics into a **working HF phenotype** and **trajectory**. Reward goes to **parsimonious testing**, **clear documentation**, and **shared decisions** when trade-offs are real (renal function vs RAAS therapy, hypotension vs congestion).
 
 **Population overlays**  
-**AGPCNP** stems may foreground **older adults with multimorbidity**; **WHNP** items may embed **pregnancy** or **hormonal contexts** that change drug safety; **PNP-PC** items may test **cyanotic heart disease history** or **ACHD transition** awareness at a principles level—read the stem’s age and comorbidity cues before selecting GDMT options.`,
-      exam_relevance: `Expect **next-best-step** questions: **when to order echo**, **when to obtain natriuretic peptides**, **how to interpret volume status**, **when ED referral beats clinic titration**, and **which medication class** matches the phenotype and monitoring plan.
+Read age/comorbidity cues: **older multimorbidity**, **pregnancy/hormonal** contexts, or **congenital heart** history may change drug safety before you pick GDMT options.`,
+      exam_relevance: `Expect **next-best-step** items: **echo/BNP timing**, **volume assessment**, **ED vs clinic titration**, and **class selection** with monitoring.
 
 **Traps**  
-• Treating **COPD or obesity alone** as the explanation for **exertional dyspnea** when **HF features** are present.  
-• **Raising diuretics** without **renal/electrolyte** follow-up when the stem gives **CKD** or **baseline hyperkalemia**.  
-• **Confusing** **acute MI** with **chronic HF**—chest pain + dynamic ECG changes → **ACS pathway**, not “increase metoprolol in clinic.”`,
+Do not blame **COPD/obesity alone** when **HF** features exist; do not **raise diuretics** without **renal/K⁺** follow-up when CKD is present; **ACS** (dynamic ECG) beats “routine HF titration.”`,
       clinical_scenario: `**Vignette — 72-year-old with “fluid on my legs”**  
 Weight is **+6 lb in 4 days**, **orthopnea** is new, BP **168/92**, HR ** irregularly irregular** at **102**, **SpO₂ 93%** on RA, **JVP elevated** in the stem, **bilateral crackles**, **2+ pitting edema**. Creatinine **1.45** (baseline **1.1**).
 

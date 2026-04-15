@@ -171,13 +171,15 @@ When a US item feels “unfair,” it is often testing whether you **respect sco
 function relatedNextStepsBody(input: GoldPremiumSynthesisInput): string {
   const lines: string[] = [
     "Use this lesson as a hub: connect the pathophysiology and traps below to **timed question practice** and **topic-scoped review** so the pattern sticks under pressure.",
+    `- Browse the full **[FNP lesson hub](/us/np/fnp/lessons)** for adjacent topics and integrated review cards.`,
+    `- Cross-train prioritization with **[Differential reasoning in primary care](LESSON:fnp-differential-primary-care)**—it pairs with almost every ambulatory vignette.`,
   ];
   for (const slug of input.relatedSlugs.slice(0, 6)) {
     const title = input.relatedTitlesBySlug?.[slug] ?? slug.replace(/-/g, " ");
     lines.push(`- Deepen with **[${title}](LESSON:${slug})** when that topic appears in the same stem family.`);
   }
   lines.push(
-    `- Return to your **pathway lessons hub** and run a **question bank** session on the same topic tag to consolidate elimination habits for **${input.examLabel}**.`,
+    `- Return to your **[FNP lessons index](/us/np/fnp/lessons)** and run a **question bank** session on the same topic tag to consolidate elimination habits for **${input.examLabel}**.`,
     `- Pair with **flashcards** on the matching concept cluster so vocabulary (labs, medications, escalation phrases) is automatic on exam day.`,
   );
   return lines.join("\n\n");
@@ -315,13 +317,47 @@ export function synthesizeGoldPremiumSections(
   premiumOmittedSections: PathwayLessonOmittedPremiumSection[];
   relatedLessonRefs: PathwayLessonRelatedRef[];
 } {
-  const intro = ensureIntroductionWordCount(
+  let intro = ensureIntroductionWordCount(
     [
       collapseInlineParagraphs(input.clinical_meaning),
       collapseInlineParagraphs(input.exam_relevance),
       `For **${input.examLabel}**, questions rarely announce the topic in the first sentence. They hide it inside **vitals, labs, and a short story**. Your job is to name the **clinical problem**, justify **why it matters now**, and select the **safest next step** for the **role** you are given—before you let distractors pull you toward busywork or out-of-scope heroics. When two answers feel partly right, pick the one that **closes risk first** and **matches your license** in the stem.`,
     ].join("\n\n"),
   );
+  intro = capPremiumIntroParagraphs(intro, 3);
+  let introWc = countWords(stripToPlainText(intro));
+  let introPad = 0;
+  while (introWc > 250 && intro.length > 80) {
+    const trimmed = intro.replace(/\s+[^\s.?!]+[.?!]\s*$/, "").trim();
+    if (trimmed === intro) break;
+    intro = trimmed;
+    introWc = countWords(stripToPlainText(intro));
+  }
+  while (introWc < PREMIUM_MIN_WORDS.introduction && introPad < 60) {
+    const paras = intro.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+    if (paras.length === 0) break;
+    paras[paras.length - 1] = `${paras[paras.length - 1]} ${INTRO_TOP_UP_SENTENCES[introPad % INTRO_TOP_UP_SENTENCES.length]}`;
+    intro = paras.join("\n\n");
+    introWc = countWords(stripToPlainText(intro));
+    introPad += 1;
+  }
+  let guard = 0;
+  while (countWords(stripToPlainText(intro)) > 250 && intro.length > 120 && guard < 120) {
+    const trimmed = intro.replace(/\s+[^\s.?!]+[.?!]\s*$/, "").trim();
+    if (trimmed === intro) break;
+    intro = trimmed;
+    guard += 1;
+  }
+  introWc = countWords(stripToPlainText(intro));
+  introPad = 0;
+  while (introWc < PREMIUM_MIN_WORDS.introduction && introPad < 40) {
+    const paras = intro.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+    if (paras.length === 0) break;
+    paras[paras.length - 1] = `${paras[paras.length - 1]} ${INTRO_TOP_UP_SENTENCES[introPad % INTRO_TOP_UP_SENTENCES.length]}`;
+    intro = paras.join("\n\n");
+    introWc = countWords(stripToPlainText(intro));
+    introPad += 1;
+  }
 
   const pearls = ensureClinicalPearlsWordCount(
     [
@@ -334,7 +370,12 @@ Name the **primary risk**, the **first assessment** that protects the client, an
   );
 
   const omitted: PathwayLessonOmittedPremiumSection[] = [];
-  const labBody = input.labsDiagnostics?.trim();
+  const labRaw = input.labsDiagnostics?.trim();
+  const labPad = `**NP-level lab reasoning (when the stem gives data)**  
+Pair **pre-test probability** with **test characteristics**: know when a result **confirms**, **rules in**, or **needs serial testing**. Watch **pre-analytic** issues (hemolysis, timing, fasting vs random), **dynamic** patterns (troponin curves, cortisol timing), and **post-result** actions (repeat to confirm chronicity, trend rather than single point). Items often punish **ordering without indication**, **ignoring contraindications to contrast**, or **treating a lab line without the client’s trajectory**.`;
+  const labBody = labRaw
+    ? ensureMinimumWords(labRaw, PREMIUM_MIN_WORDS.labs_diagnostics, labPad)
+    : undefined;
   if (!labBody) {
     omitted.push({
       kind: "labs_diagnostics",

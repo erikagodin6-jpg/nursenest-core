@@ -1,0 +1,2795 @@
+{
+  "generatedAt": "2026-04-15T03:31:51.926Z",
+  "auditGeneratedAt": "2026-04-15T03:30:01.648Z",
+  "planGeneratedAt": "2026-04-15T03:15:09.694Z",
+  "batchPathway": "us-np-fnp",
+  "metrics": {
+    "planLessonRows": 100,
+    "improvedOverallScoreCount": 100,
+    "averageOverallScoreLiftAmongImproved": 26.2,
+    "movedOutOfStructurallyIncompleteApprox": 26,
+    "movedToProductionReadyEnFromContentGapsApprox": 0,
+    "productionReadyEnCount": 100,
+    "usableButThinEnCount": 0,
+    "productionReadyEnButLocalizationIncomplete": 99,
+    "publicCompleteCount": 100
+  },
+  "notes": "Catalog: legacy five-block NP depth for FNP batch slugs + PAD integrated reviews; scoped-gold: gold-premium-synthesis intro/labs/links + trimmed np-primary-care-foundations / np-heart-failure gold variants. Canada NP (ca-np-cnple) has no bundled lessons in catalog yet—batch is US FNP production content.",
+  "lessons": [
+    {
+      "lessonId": "us-np-fnp:fnp-adolescent-mental-health-screening",
+      "slug": "fnp-adolescent-mental-health-screening",
+      "pathwayId": "us-np-fnp",
+      "title": "Adolescent depression and safety: screening within scope (FNP)",
+      "beforeOverallScore": 16.1,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 73.2,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 736,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_meeting_minimum",
+        "catalog_or_gold_spine_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_links_threshold_met"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:fnp-overlay-abg-acid-base",
+      "slug": "fnp-overlay-abg-acid-base",
+      "pathwayId": "us-np-fnp",
+      "title": "ABG & acid–base — NP interpretation (FNP)",
+      "beforeOverallScore": 16.1,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 87.5,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 71.4,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 654,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_meeting_minimum",
+        "catalog_or_gold_spine_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_links_threshold_met"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:fnp-overlay-electrolytes-volume",
+      "slug": "fnp-overlay-electrolytes-volume",
+      "pathwayId": "us-np-fnp",
+      "title": "Electrolytes & volume — NP overlay (FNP)",
+      "beforeOverallScore": 16.1,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 87.5,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 71.4,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 646,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_meeting_minimum",
+        "catalog_or_gold_spine_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_links_threshold_met"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:fnp-overlay-heart-failure",
+      "slug": "fnp-overlay-heart-failure",
+      "pathwayId": "us-np-fnp",
+      "title": "Heart failure — NP diagnosis & management (FNP)",
+      "beforeOverallScore": 16.1,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 73.2,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 873,
+      "internalStudyLinksAfter": 7,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_meeting_minimum",
+        "catalog_or_gold_spine_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_links_threshold_met"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:fnp-overlay-myocardial-infarction",
+      "slug": "fnp-overlay-myocardial-infarction",
+      "pathwayId": "us-np-fnp",
+      "title": "MI / ACS — NP overlay (FNP)",
+      "beforeOverallScore": 16.1,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 87.5,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 71.4,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 667,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_meeting_minimum",
+        "catalog_or_gold_spine_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_links_threshold_met"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:fnp-overlay-np-differential-prescribing-chronic",
+      "slug": "fnp-overlay-np-differential-prescribing-chronic",
+      "pathwayId": "us-np-fnp",
+      "title": "Differential, prescribing & chronic care — NP core (FNP)",
+      "beforeOverallScore": 16.1,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 87.5,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 71.4,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 662,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_meeting_minimum",
+        "catalog_or_gold_spine_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_links_threshold_met"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:fnp-overlay-sepsis-infection",
+      "slug": "fnp-overlay-sepsis-infection",
+      "pathwayId": "us-np-fnp",
+      "title": "Sepsis & infection control — NP overlay (FNP)",
+      "beforeOverallScore": 16.1,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 87.5,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 71.4,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 652,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_meeting_minimum",
+        "catalog_or_gold_spine_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_links_threshold_met"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:fnp-overlay-shock",
+      "slug": "fnp-overlay-shock",
+      "pathwayId": "us-np-fnp",
+      "title": "Shock — NP resuscitation reasoning (FNP)",
+      "beforeOverallScore": 16.1,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 88.4,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 72.3,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 663,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_meeting_minimum",
+        "catalog_or_gold_spine_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_links_threshold_met"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:fnp-overlay-respiratory-acute",
+      "slug": "fnp-overlay-respiratory-acute",
+      "pathwayId": "us-np-fnp",
+      "title": "COPD, asthma, ARDS, pneumonia, PE — NP respiratory overlay (FNP)",
+      "beforeOverallScore": 20.7,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 92.2,
+      "afterStatus": "production_ready",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localized_ready",
+      "overallScoreLift": 71.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 669,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_meeting_minimum",
+        "catalog_or_gold_spine_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_links_threshold_met"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:fnp-overlay-diabetes-metabolic",
+      "slug": "fnp-overlay-diabetes-metabolic",
+      "pathwayId": "us-np-fnp",
+      "title": "Diabetes & metabolic complications — NP overlay (FNP)",
+      "beforeOverallScore": 37.6,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 85.7,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 48.1,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 570,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:np-contraception-counseling-selection-gold",
+      "slug": "np-contraception-counseling-selection-gold",
+      "pathwayId": "us-np-fnp",
+      "title": "Contraception: counseling & selection (FNP, US)",
+      "beforeOverallScore": 58.3,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 31,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 1706,
+      "internalStudyLinksAfter": 5,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [
+        "internal_links_threshold_met"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:np-obesity-metabolic-management-gold",
+      "slug": "np-obesity-metabolic-management-gold",
+      "pathwayId": "us-np-fnp",
+      "title": "Obesity & metabolic risk: primary care (FNP, US)",
+      "beforeOverallScore": 58.3,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 31,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 1744,
+      "internalStudyLinksAfter": 5,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [
+        "internal_links_threshold_met"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:np-thyroid-primary-care-gold",
+      "slug": "np-thyroid-primary-care-gold",
+      "pathwayId": "us-np-fnp",
+      "title": "Thyroid disorders: primary care (FNP, US)",
+      "beforeOverallScore": 58.3,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 31,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 1759,
+      "internalStudyLinksAfter": 5,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [
+        "internal_links_threshold_met"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:np-ambulatory-gynec-common-presentations-gold",
+      "slug": "np-ambulatory-gynec-common-presentations-gold",
+      "pathwayId": "us-np-fnp",
+      "title": "Ambulatory gynec: common presentations (FNP, US)",
+      "beforeOverallScore": 65,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 24.3,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 1726,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:np-antiinfectives-stewardship-outpatient-gold",
+      "slug": "np-antiinfectives-stewardship-outpatient-gold",
+      "pathwayId": "us-np-fnp",
+      "title": "Anti-infectives & stewardship (FNP, US)",
+      "beforeOverallScore": 65,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 24.3,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 1902,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:np-asthma-outpatient-gold",
+      "slug": "np-asthma-outpatient-gold",
+      "pathwayId": "us-np-fnp",
+      "title": "Asthma: outpatient management (FNP, US)",
+      "beforeOverallScore": 65,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 24.3,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 1861,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:np-heart-failure-primary-care-gold",
+      "slug": "np-heart-failure-primary-care-gold",
+      "pathwayId": "us-np-fnp",
+      "title": "Heart failure: outpatient management (FNP, US)",
+      "beforeOverallScore": 65,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 24.3,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 1894,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:np-mental-health-anxiety-depression-ptsd-gold",
+      "slug": "np-mental-health-anxiety-depression-ptsd-gold",
+      "pathwayId": "us-np-fnp",
+      "title": "Anxiety, depression & PTSD (FNP, US)",
+      "beforeOverallScore": 65,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 24.3,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 1796,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:np-msk-rheumatology-outpatient-gold",
+      "slug": "np-msk-rheumatology-outpatient-gold",
+      "pathwayId": "us-np-fnp",
+      "title": "MSK & rheumatology: outpatient care (FNP, US)",
+      "beforeOverallScore": 65,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 24.3,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 1895,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:np-neurology-outpatient-primary-care-gold",
+      "slug": "np-neurology-outpatient-primary-care-gold",
+      "pathwayId": "us-np-fnp",
+      "title": "Outpatient neurology triage (FNP, US)",
+      "beforeOverallScore": 65,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 24.3,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 1832,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:np-pediatric-well-child-prevention-gold",
+      "slug": "np-pediatric-well-child-prevention-gold",
+      "pathwayId": "us-np-fnp",
+      "title": "Pediatric well-child & prevention (FNP, US)",
+      "beforeOverallScore": 65,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 24.3,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 1831,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:np-pneumonia-cap-outpatient-gold",
+      "slug": "np-pneumonia-cap-outpatient-gold",
+      "pathwayId": "us-np-fnp",
+      "title": "Community-acquired pneumonia: outpatient judgment (FNP, US)",
+      "beforeOverallScore": 65,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 24.3,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 1871,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:np-primary-care-foundations-gold",
+      "slug": "np-primary-care-foundations-gold",
+      "pathwayId": "us-np-fnp",
+      "title": "NP foundations: clinical reasoning, prevention, and primary-care judgment (US boards)",
+      "beforeOverallScore": 65,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 24.3,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 2313,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:np-reproductive-screening-prevention-gold",
+      "slug": "np-reproductive-screening-prevention-gold",
+      "pathwayId": "us-np-fnp",
+      "title": "Reproductive screening & prevention (FNP, US)",
+      "beforeOverallScore": 65,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 24.3,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 1700,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:np-sleep-insomnia-osa-primary-care-gold",
+      "slug": "np-sleep-insomnia-osa-primary-care-gold",
+      "pathwayId": "us-np-fnp",
+      "title": "Sleep: insomnia, OSA & RLS (FNP, US)",
+      "beforeOverallScore": 65,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 24.3,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 1786,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:np-travel-medicine-pretravel-gold",
+      "slug": "np-travel-medicine-pretravel-gold",
+      "pathwayId": "us-np-fnp",
+      "title": "Travel medicine: pre-travel consult (FNP, US)",
+      "beforeOverallScore": 65,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 24.3,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 1854,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_or_premium_structural_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:fnp-geriatric-falls-syncope",
+      "slug": "fnp-geriatric-falls-syncope",
+      "pathwayId": "us-np-fnp",
+      "title": "Geriatric falls and syncope: medication and rhythm (FNP)",
+      "beforeOverallScore": 65.2,
+      "beforeStatus": "usable_but_thin",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 86.6,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 21.4,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 638,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [],
+      "educationalImprovements": [],
+      "linkImprovements": [
+        "internal_links_threshold_met"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-000-safety_and_infection-cardiovascular",
+      "slug": "bp26-usnp-pad-000-safety_and_infection-cardiovascular",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Cardiovascular (disease) #1 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-001-management_of_care-respiratory",
+      "slug": "bp26-usnp-pad-001-management_of_care-respiratory",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Respiratory (labs) #2 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-003-physiological_adaptation-renal-gu",
+      "slug": "bp26-usnp-pad-003-physiological_adaptation-renal-gu",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Renal (safety) #4 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-004-psychosocial_integrity-endocrine",
+      "slug": "bp26-usnp-pad-004-psychosocial_integrity-endocrine",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Endocrine (prioritization) #5 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 926,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-005-risk_reduction-gastrointestinal",
+      "slug": "bp26-usnp-pad-005-risk_reduction-gastrointestinal",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: GI (mental health) #6 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 930,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-006-health_promotion_maintenance-fluids-electrolytes",
+      "slug": "bp26-usnp-pad-006-health_promotion_maintenance-fluids-electrolytes",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Fluids & electrolytes (maternity) #7 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 936,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-007-basic_care_comfort-infection-control",
+      "slug": "bp26-usnp-pad-007-basic_care_comfort-infection-control",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Infection (pediatrics) #8 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 926,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-008-safety_and_infection-medication-safety",
+      "slug": "bp26-usnp-pad-008-safety_and_infection-medication-safety",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Medication safety (procedures) #9 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 932,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-009-management_of_care-prioritization-delegation",
+      "slug": "bp26-usnp-pad-009-management_of_care-prioritization-delegation",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Clinical judgment (case study) #10 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 936,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-010-pharmacological_therapies-cardiovascular",
+      "slug": "bp26-usnp-pad-010-pharmacological_therapies-cardiovascular",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Cardiovascular (disease) #11 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 926,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-011-physiological_adaptation-respiratory",
+      "slug": "bp26-usnp-pad-011-physiological_adaptation-respiratory",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Respiratory (labs) #12 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 926,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-013-risk_reduction-renal-gu",
+      "slug": "bp26-usnp-pad-013-risk_reduction-renal-gu",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Renal (safety) #14 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-014-health_promotion_maintenance-endocrine",
+      "slug": "bp26-usnp-pad-014-health_promotion_maintenance-endocrine",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Endocrine (prioritization) #15 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 926,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-015-basic_care_comfort-gastrointestinal",
+      "slug": "bp26-usnp-pad-015-basic_care_comfort-gastrointestinal",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: GI (mental health) #16 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 930,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-016-safety_and_infection-fluids-electrolytes",
+      "slug": "bp26-usnp-pad-016-safety_and_infection-fluids-electrolytes",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Fluids & electrolytes (maternity) #17 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 936,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-017-management_of_care-infection-control",
+      "slug": "bp26-usnp-pad-017-management_of_care-infection-control",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Infection (pediatrics) #18 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-018-pharmacological_therapies-medication-safety",
+      "slug": "bp26-usnp-pad-018-pharmacological_therapies-medication-safety",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Medication safety (procedures) #19 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 930,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-019-physiological_adaptation-prioritization-delegation",
+      "slug": "bp26-usnp-pad-019-physiological_adaptation-prioritization-delegation",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Clinical judgment (case study) #20 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 934,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-020-psychosocial_integrity-cardiovascular",
+      "slug": "bp26-usnp-pad-020-psychosocial_integrity-cardiovascular",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Cardiovascular (disease) #21 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-021-risk_reduction-respiratory",
+      "slug": "bp26-usnp-pad-021-risk_reduction-respiratory",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Respiratory (labs) #22 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 926,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-023-basic_care_comfort-renal-gu",
+      "slug": "bp26-usnp-pad-023-basic_care_comfort-renal-gu",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Renal (safety) #24 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 926,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-024-safety_and_infection-endocrine",
+      "slug": "bp26-usnp-pad-024-safety_and_infection-endocrine",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Endocrine (prioritization) #25 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-025-management_of_care-gastrointestinal",
+      "slug": "bp26-usnp-pad-025-management_of_care-gastrointestinal",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: GI (mental health) #26 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-026-pharmacological_therapies-fluids-electrolytes",
+      "slug": "bp26-usnp-pad-026-pharmacological_therapies-fluids-electrolytes",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Fluids & electrolytes (maternity) #27 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 934,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-027-physiological_adaptation-infection-control",
+      "slug": "bp26-usnp-pad-027-physiological_adaptation-infection-control",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Infection (pediatrics) #28 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 926,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-028-psychosocial_integrity-medication-safety",
+      "slug": "bp26-usnp-pad-028-psychosocial_integrity-medication-safety",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Medication safety (procedures) #29 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 930,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-029-risk_reduction-prioritization-delegation",
+      "slug": "bp26-usnp-pad-029-risk_reduction-prioritization-delegation",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Clinical judgment (case study) #30 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 932,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-030-health_promotion_maintenance-cardiovascular",
+      "slug": "bp26-usnp-pad-030-health_promotion_maintenance-cardiovascular",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Cardiovascular (disease) #31 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-031-basic_care_comfort-respiratory",
+      "slug": "bp26-usnp-pad-031-basic_care_comfort-respiratory",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Respiratory (labs) #32 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-033-management_of_care-renal-gu",
+      "slug": "bp26-usnp-pad-033-management_of_care-renal-gu",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Renal (safety) #34 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-034-pharmacological_therapies-endocrine",
+      "slug": "bp26-usnp-pad-034-pharmacological_therapies-endocrine",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Endocrine (prioritization) #35 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 926,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-035-physiological_adaptation-gastrointestinal",
+      "slug": "bp26-usnp-pad-035-physiological_adaptation-gastrointestinal",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: GI (mental health) #36 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-036-psychosocial_integrity-fluids-electrolytes",
+      "slug": "bp26-usnp-pad-036-psychosocial_integrity-fluids-electrolytes",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Fluids & electrolytes (maternity) #37 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 938,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-037-risk_reduction-infection-control",
+      "slug": "bp26-usnp-pad-037-risk_reduction-infection-control",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Infection (pediatrics) #38 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 930,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-038-health_promotion_maintenance-medication-safety",
+      "slug": "bp26-usnp-pad-038-health_promotion_maintenance-medication-safety",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Medication safety (procedures) #39 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 932,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-039-basic_care_comfort-prioritization-delegation",
+      "slug": "bp26-usnp-pad-039-basic_care_comfort-prioritization-delegation",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Clinical judgment (case study) #40 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 936,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-040-safety_and_infection-cardiovascular",
+      "slug": "bp26-usnp-pad-040-safety_and_infection-cardiovascular",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Cardiovascular (disease) #41 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 930,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-041-management_of_care-respiratory",
+      "slug": "bp26-usnp-pad-041-management_of_care-respiratory",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Respiratory (labs) #42 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 926,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-043-physiological_adaptation-renal-gu",
+      "slug": "bp26-usnp-pad-043-physiological_adaptation-renal-gu",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Renal (safety) #44 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 926,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-044-psychosocial_integrity-endocrine",
+      "slug": "bp26-usnp-pad-044-psychosocial_integrity-endocrine",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Endocrine (prioritization) #45 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-045-risk_reduction-gastrointestinal",
+      "slug": "bp26-usnp-pad-045-risk_reduction-gastrointestinal",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: GI (mental health) #46 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 932,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-046-health_promotion_maintenance-fluids-electrolytes",
+      "slug": "bp26-usnp-pad-046-health_promotion_maintenance-fluids-electrolytes",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Fluids & electrolytes (maternity) #47 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 934,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-047-basic_care_comfort-infection-control",
+      "slug": "bp26-usnp-pad-047-basic_care_comfort-infection-control",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Infection (pediatrics) #48 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-048-safety_and_infection-medication-safety",
+      "slug": "bp26-usnp-pad-048-safety_and_infection-medication-safety",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Medication safety (procedures) #49 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 934,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-049-management_of_care-prioritization-delegation",
+      "slug": "bp26-usnp-pad-049-management_of_care-prioritization-delegation",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Clinical judgment (case study) #50 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 932,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-050-pharmacological_therapies-cardiovascular",
+      "slug": "bp26-usnp-pad-050-pharmacological_therapies-cardiovascular",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Cardiovascular (disease) #51 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-051-physiological_adaptation-respiratory",
+      "slug": "bp26-usnp-pad-051-physiological_adaptation-respiratory",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Respiratory (labs) #52 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-053-risk_reduction-renal-gu",
+      "slug": "bp26-usnp-pad-053-risk_reduction-renal-gu",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Renal (safety) #54 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 930,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-054-health_promotion_maintenance-endocrine",
+      "slug": "bp26-usnp-pad-054-health_promotion_maintenance-endocrine",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Endocrine (prioritization) #55 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-055-basic_care_comfort-gastrointestinal",
+      "slug": "bp26-usnp-pad-055-basic_care_comfort-gastrointestinal",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: GI (mental health) #56 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-056-safety_and_infection-fluids-electrolytes",
+      "slug": "bp26-usnp-pad-056-safety_and_infection-fluids-electrolytes",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Fluids & electrolytes (maternity) #57 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 938,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-057-management_of_care-infection-control",
+      "slug": "bp26-usnp-pad-057-management_of_care-infection-control",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Infection (pediatrics) #58 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 926,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-058-pharmacological_therapies-medication-safety",
+      "slug": "bp26-usnp-pad-058-pharmacological_therapies-medication-safety",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Medication safety (procedures) #59 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 932,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-059-physiological_adaptation-prioritization-delegation",
+      "slug": "bp26-usnp-pad-059-physiological_adaptation-prioritization-delegation",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Clinical judgment (case study) #60 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 936,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-060-psychosocial_integrity-cardiovascular",
+      "slug": "bp26-usnp-pad-060-psychosocial_integrity-cardiovascular",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Cardiovascular (disease) #61 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 930,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-061-risk_reduction-respiratory",
+      "slug": "bp26-usnp-pad-061-risk_reduction-respiratory",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Respiratory (labs) #62 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-063-basic_care_comfort-renal-gu",
+      "slug": "bp26-usnp-pad-063-basic_care_comfort-renal-gu",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Renal (safety) #64 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-064-safety_and_infection-endocrine",
+      "slug": "bp26-usnp-pad-064-safety_and_infection-endocrine",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Endocrine (prioritization) #65 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 930,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-065-management_of_care-gastrointestinal",
+      "slug": "bp26-usnp-pad-065-management_of_care-gastrointestinal",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: GI (mental health) #66 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 930,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-066-pharmacological_therapies-fluids-electrolytes",
+      "slug": "bp26-usnp-pad-066-pharmacological_therapies-fluids-electrolytes",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Fluids & electrolytes (maternity) #67 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 936,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-067-physiological_adaptation-infection-control",
+      "slug": "bp26-usnp-pad-067-physiological_adaptation-infection-control",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Infection (pediatrics) #68 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-068-psychosocial_integrity-medication-safety",
+      "slug": "bp26-usnp-pad-068-psychosocial_integrity-medication-safety",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Medication safety (procedures) #69 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 932,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-069-risk_reduction-prioritization-delegation",
+      "slug": "bp26-usnp-pad-069-risk_reduction-prioritization-delegation",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Clinical judgment (case study) #70 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 934,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-070-health_promotion_maintenance-cardiovascular",
+      "slug": "bp26-usnp-pad-070-health_promotion_maintenance-cardiovascular",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Cardiovascular (disease) #71 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 930,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-071-basic_care_comfort-respiratory",
+      "slug": "bp26-usnp-pad-071-basic_care_comfort-respiratory",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Respiratory (labs) #72 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 926,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-073-management_of_care-renal-gu",
+      "slug": "bp26-usnp-pad-073-management_of_care-renal-gu",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Renal (safety) #74 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 930,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-074-pharmacological_therapies-endocrine",
+      "slug": "bp26-usnp-pad-074-pharmacological_therapies-endocrine",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Endocrine (prioritization) #75 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 928,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-075-physiological_adaptation-gastrointestinal",
+      "slug": "bp26-usnp-pad-075-physiological_adaptation-gastrointestinal",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: GI (mental health) #76 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 930,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-076-psychosocial_integrity-fluids-electrolytes",
+      "slug": "bp26-usnp-pad-076-psychosocial_integrity-fluids-electrolytes",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Fluids & electrolytes (maternity) #77 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 934,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-pad-077-risk_reduction-infection-control",
+      "slug": "bp26-usnp-pad-077-risk_reduction-infection-control",
+      "pathwayId": "us-np-fnp",
+      "title": "Integrated review: Infection (pediatrics) #78 — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 926,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-x027-first-day-admissions-data-collection-ord",
+      "slug": "bp26-usnp-x027-first-day-admissions-data-collection-ord",
+      "pathwayId": "us-np-fnp",
+      "title": "First-day admissions: data collection order — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 929,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-x028-rapid-response-activation-criteria",
+      "slug": "bp26-usnp-x028-rapid-response-activation-criteria",
+      "pathwayId": "us-np-fnp",
+      "title": "Rapid response activation criteria — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 926,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-np-fnp:bp26-usnp-x029-overflow-unit-prioritization",
+      "slug": "bp26-usnp-x029-overflow-unit-prioritization",
+      "pathwayId": "us-np-fnp",
+      "title": "Overflow unit prioritization — FNP certification preparation (United States)",
+      "beforeOverallScore": 68.8,
+      "beforeStatus": "localization_incomplete",
+      "beforeContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 89.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 20.5,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 925,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [],
+      "linkImprovements": [],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    }
+  ]
+}

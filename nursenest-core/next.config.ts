@@ -7,48 +7,24 @@
  * `turbopack.root` / `outputFileTracingRoot` point at the **repo root** (parent of this package), not at
  * `nursenest-core` alone — the latter breaks `@shared/*` resolution; the parent matches the primary lockfile
  * and silences “multiple lockfiles” warnings without changing import paths.
+ *
+ * **RUN_HEAVY_BUILD_TASKS:** set to `false` to skip loading large redirect/rewrite graphs during `next build`
+ * (lower memory — production deploys should set this in CI/build env).
  */
 import { fileURLToPath } from "url";
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
-import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "./src/lib/exam-pathways/programmatic-slug-redirects";
-import { buildPathwayLessonSlugRedirectsForNextConfig } from "./src/lib/lessons/pathway-lesson-slug-redirects";
-import { CORE_HOSTED_MARKETING_LOCALES } from "./src/lib/i18n/marketing-locale-policy";
-import {
-  buildLegacyProgrammaticSeoRedirectsToPathwayHubs,
-  LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT,
-} from "./src/lib/marketing/canonical-pathway-hubs";
-import { getAllProgrammaticSlugs } from "./src/lib/seo/programmatic-registry";
 
 /** Parent of `nursenest-core/` (repo root); avoids `path` in config bundle (fixes ESM load). */
 const monorepoRoot = fileURLToPath(new URL("..", import.meta.url));
-const programmaticSeoRewrites = getAllProgrammaticSlugs()
-  .filter((slug) => !LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT.has(slug))
-  .map((slug) => ({
-    source: `/${slug}`,
-    destination: `/seo/${slug}`,
-  }));
+
+const runHeavyBuildTasks = process.env.RUN_HEAVY_BUILD_TASKS !== "false";
 
 const legacyMedMathRedirect = {
   source: "/med-math",
   destination: "/tools/med-math",
   permanent: true,
 } as const;
-
-/** Consolidate on public programmatic URLs (`/{slug}`); `/seo/{slug}` is internal rewrite target only. */
-const seoCanonicalRedirects = getAllProgrammaticSlugs()
-  .filter((slug) => !LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT.has(slug))
-  .map((slug) => ({
-    source: `/seo/${slug}`,
-    destination: `/${slug}`,
-    permanent: true,
-  }));
-
-const examPathwayFromProgrammaticRedirects = Object.entries(PROGRAMMATIC_SLUG_TO_PATHWAY_PATH).map(([slug, dest]) => ({
-  source: `/${slug}`,
-  destination: dest,
-  permanent: true,
-}));
 
 /** Matches `/api/marketing-assets/*` success responses and recommended DO Spaces CDN object metadata (see marketing-cdn.catalog.json). */
 const STATIC_ASSET_CACHE_CONTROL = "public, max-age=31536000, immutable" as const;
@@ -57,6 +33,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  output: "standalone",
   turbopack: {
     root: monorepoRoot,
   },
@@ -87,12 +64,12 @@ const nextConfig: NextConfig = {
   env: {
     // Use || so empty string (often set by hosts with no value) defaults to trusted.
     AUTH_TRUST_HOST: process.env.AUTH_TRUST_HOST || "true",
+    NEXT_PUBLIC_SENTRY_ENABLED: process.env.SENTRY_ENABLED === "true" ? "true" : "",
   },
   // Allow importing shared monolith modules (`../shared/*`) without publishing a package.
   experimental: {
     externalDir: true,
     optimizePackageImports: ["@prisma/client"],
-    workerThreads: false,
   },
   // next.config.ts is evaluated at build time only; exclude it from server-component NFT so
   // dynamic process.cwd() usage in load-marketing-messages.ts does not trigger the
@@ -105,6 +82,37 @@ const nextConfig: NextConfig = {
     "/**": ["./public/i18n/**/*.json"],
   },
   async redirects() {
+    if (!runHeavyBuildTasks) {
+      return [legacyMedMathRedirect];
+    }
+    const [
+      { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH },
+      { buildPathwayLessonSlugRedirectsForNextConfig },
+      { CORE_HOSTED_MARKETING_LOCALES },
+      { buildLegacyProgrammaticSeoRedirectsToPathwayHubs, LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT },
+      { getAllProgrammaticSlugs },
+    ] = await Promise.all([
+      import("./src/lib/exam-pathways/programmatic-slug-redirects"),
+      import("./src/lib/lessons/pathway-lesson-slug-redirects"),
+      import("./src/lib/i18n/marketing-locale-policy"),
+      import("./src/lib/marketing/canonical-pathway-hubs"),
+      import("./src/lib/seo/programmatic-registry"),
+    ]);
+
+    const seoCanonicalRedirects = getAllProgrammaticSlugs()
+      .filter((slug) => !LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT.has(slug))
+      .map((slug) => ({
+        source: `/seo/${slug}`,
+        destination: `/${slug}`,
+        permanent: true,
+      }));
+
+    const examPathwayFromProgrammaticRedirects = Object.entries(PROGRAMMATIC_SLUG_TO_PATHWAY_PATH).map(([slug, dest]) => ({
+      source: `/${slug}`,
+      destination: dest,
+      permanent: true,
+    }));
+
     return [
       legacyMedMathRedirect,
       /**
@@ -133,6 +141,23 @@ const nextConfig: NextConfig = {
     ];
   },
   async rewrites() {
+    if (!runHeavyBuildTasks) {
+      return { beforeFiles: [] };
+    }
+    const [{ getAllProgrammaticSlugs }, { LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT }, { CORE_HOSTED_MARKETING_LOCALES }] =
+      await Promise.all([
+        import("./src/lib/seo/programmatic-registry"),
+        import("./src/lib/marketing/canonical-pathway-hubs"),
+        import("./src/lib/i18n/marketing-locale-policy"),
+      ]);
+
+    const programmaticSeoRewrites = getAllProgrammaticSlugs()
+      .filter((slug) => !LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT.has(slug))
+      .map((slug) => ({
+        source: `/${slug}`,
+        destination: `/seo/${slug}`,
+      }));
+
     const localeSitemapRewrites = CORE_HOSTED_MARKETING_LOCALES.map((locale) => ({
       source: `/sitemaps/locale-${locale}.xml`,
       destination: `/sitemaps/locales/${locale}`,
@@ -196,17 +221,21 @@ const nextConfig: NextConfig = {
   },
 };
 
+const sentryEnabled = process.env.SENTRY_ENABLED === "true";
+
 const sentryWebpackPluginEnabled = Boolean(process.env.SENTRY_AUTH_TOKEN?.trim());
 
-export default withSentryConfig(nextConfig, {
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
-  silent: true,
-  ...(sentryWebpackPluginEnabled
-    ? {}
-    : {
-        sourcemaps: {
-          disable: true,
-        },
-      }),
-});
+export default sentryEnabled
+  ? withSentryConfig(nextConfig, {
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      silent: true,
+      ...(sentryWebpackPluginEnabled
+        ? {}
+        : {
+            sourcemaps: {
+              disable: true,
+            },
+          }),
+    })
+  : nextConfig;

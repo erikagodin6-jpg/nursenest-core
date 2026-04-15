@@ -29,6 +29,8 @@ export function PracticeTopBar({
   current,
   total,
   rightLabel,
+  /** e.g. session theme control — renders right of the title row */
+  trailingSlot,
   progressPct,
   saving,
   labels,
@@ -37,6 +39,7 @@ export function PracticeTopBar({
   current: number;
   total: number;
   rightLabel?: string | null;
+  trailingSlot?: React.ReactNode;
   progressPct: number;
   saving?: boolean;
   labels?: {
@@ -67,9 +70,10 @@ export function PracticeTopBar({
             ) : null}
           </p>
         </div>
-        {rightLabel ? (
-          <p className="nn-practice-top-bar__right">{rightLabel}</p>
-        ) : null}
+        <div className="flex min-w-0 shrink-0 flex-wrap items-center justify-end gap-2">
+          {trailingSlot}
+          {rightLabel ? <p className="nn-practice-top-bar__right">{rightLabel}</p> : null}
+        </div>
       </div>
       <div
         className="nn-practice-top-bar__progress"
