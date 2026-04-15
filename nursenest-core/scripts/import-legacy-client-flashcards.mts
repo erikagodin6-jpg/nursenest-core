@@ -5,7 +5,7 @@
  * Run: cd nursenest-core && npx tsx scripts/import-legacy-client-flashcards.mts [--dry-run] [--limit=500] [--file=flashcards-community.ts]
  */
 import { readFileSync, readdirSync, existsSync, writeFileSync, mkdirSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
@@ -19,6 +19,8 @@ import {
 
 import { extractLegacyFlashcardExports, legacyFrontBack } from "./legacy/legacy-flashcard-ts-extract.mts";
 
+import { requireDatabaseUrlForLiveImport } from "./lib/require-database-for-live-import.mts";
+
 import "../src/lib/db/env-bootstrap";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -26,7 +28,14 @@ const PKG_ROOT = join(__dirname, "..");
 const REPO_ROOT = join(PKG_ROOT, "..");
 const CLIENT_DATA = join(REPO_ROOT, "client", "src", "data");
 
-const prisma = new PrismaClient();
+export type LegacyFlashcardImportArgs = {
+  prisma: PrismaClient;
+  dryRun: boolean;
+  limit?: number;
+  file?: string;
+  skipDisconnect?: boolean;
+  writeReport?: boolean;
+};
 
 function parseArgs() {
   const out: { dryRun: boolean; limit?: number; file?: string } = { dryRun: false };
@@ -55,7 +64,7 @@ function tierExamFromFile(base: string): { tier: TierCode; examFamily: ExamFamil
   return { tier: TierCode.RN, examFamily: ExamFamily.NCLEX_RN };
 }
 
-async function ensureLegacyCategory(): Promise<string> {
+async function ensureLegacyCategory(prisma: PrismaClient): Promise<string> {
   const row = await prisma.category.upsert({
     where: { slug: "legacy-client-flashcards" },
     create: { name: "Legacy client flashcards", slug: "legacy-client-flashcards" },
@@ -64,11 +73,11 @@ async function ensureLegacyCategory(): Promise<string> {
   return row.id;
 }
 
-async function main() {
-  const { dryRun, limit, file: oneFile } = parseArgs();
+export async function runLegacyClientFlashcardImport(opts: LegacyFlashcardImportArgs): Promise<Record<string, unknown>> {
+  const { prisma, dryRun, limit, file: oneFile, skipDisconnect, writeReport = true } = opts;
+
   if (!existsSync(CLIENT_DATA)) {
-    console.error("Missing client data dir:", CLIENT_DATA);
-    process.exit(1);
+    throw new Error(`Missing client data dir: ${CLIENT_DATA}`);
   }
 
   const files = readdirSync(CLIENT_DATA)
@@ -79,11 +88,12 @@ async function main() {
   let totalCards = 0;
   const report: Record<string, unknown> = {
     generatedAt: new Date().toISOString(),
+    phase: "legacy_client_flashcard_ts",
     dryRun,
     files: [] as object[],
   };
 
-  const categoryId = dryRun ? "" : await ensureLegacyCategory();
+  const categoryId = dryRun ? "" : await ensureLegacyCategory(prisma);
 
   for (const fname of files) {
     const fp = join(CLIENT_DATA, fname);
@@ -93,7 +103,6 @@ async function main() {
     const { tier, examFamily } = tierExamFromFile(base);
     const blocks = extractLegacyFlashcardExports(text, fname);
     const allCards = blocks.flatMap((b) => b.cards);
-    let processed = 0;
 
     const fileReport: {
       file: string;
@@ -112,7 +121,12 @@ async function main() {
           where: { slug: deckSlug },
           create: {
             slug: deckSlug,
-            title: base.replace(/^flashcards-/, "").split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ") + " (legacy)",
+            title:
+              base
+                .replace(/^flashcards-/, "")
+                .split("-")
+                .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(" ") + " (legacy)",
             description: `Imported from client/src/data/${fname}`,
             country: CountryCode.US,
             tier,
@@ -124,7 +138,11 @@ async function main() {
           },
           update: {
             title:
-              base.replace(/^flashcards-/, "").split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ") + " (legacy)",
+              base
+                .replace(/^flashcards-/, "")
+                .split("-")
+                .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(" ") + " (legacy)",
             tier,
             examFamily,
             status: ContentStatus.PUBLISHED,
@@ -183,15 +201,48 @@ async function main() {
     report.postImportCounts = { flashcardDecks: deckC, flashcards: cardC };
   }
 
-  const outPath = join(REPO_ROOT, "data", "audit", "legacy-flashcard-import-validation.json");
-  mkdirSync(dirname(outPath), { recursive: true });
-  writeFileSync(outPath, JSON.stringify(report, null, 2));
-  console.log(`Report: ${outPath}`);
-  await prisma.$disconnect();
+  if (writeReport) {
+    const outPath = join(REPO_ROOT, "data", "audit", "legacy-flashcard-import-validation.json");
+    mkdirSync(dirname(outPath), { recursive: true });
+    writeFileSync(outPath, JSON.stringify(report, null, 2));
+    console.log(`Report: ${outPath}`);
+  }
+
+  if (!skipDisconnect) await prisma.$disconnect();
+
+  return report;
 }
 
-main().catch(async (e) => {
-  console.error(e);
-  await prisma.$disconnect();
-  process.exit(1);
-});
+async function main() {
+  const args = parseArgs();
+  if (!args.dryRun) {
+    requireDatabaseUrlForLiveImport("import:legacy-client-flashcards");
+  }
+  if (!existsSync(CLIENT_DATA)) {
+    console.error("Missing client data dir:", CLIENT_DATA);
+    process.exit(1);
+  }
+  const prisma = new PrismaClient();
+  try {
+    await runLegacyClientFlashcardImport({
+      prisma,
+      dryRun: args.dryRun,
+      limit: args.limit,
+      file: args.file,
+      skipDisconnect: false,
+      writeReport: true,
+    });
+  } catch (e) {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  }
+}
+
+const isDirectRun = typeof process.argv[1] === "string" && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isDirectRun) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}

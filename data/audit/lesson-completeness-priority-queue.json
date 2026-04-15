@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-15T02:54:44.866Z",
+  "generatedAt": "2026-04-15T03:17:06.087Z",
   "queue": [
     {
       "lessonId": "ca-rn-nclex-rn:diabetes-self-management-teaching",
@@ -1561,26 +1561,6 @@
       ]
     },
     {
-      "lessonId": "ca-rn-nclex-rn:calcium-tetany",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "calcium-tetany",
-      "title": "Calcium & Tetany (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 75.3,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
       "lessonId": "ca-rn-nclex-rn:phosphate-shifts-in-renal",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "phosphate-shifts-in-renal",
@@ -1625,46 +1605,6 @@
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "liver-failure-hepatic-encephalopathy",
       "title": "Liver Failure & Hepatic Encephalopathy (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 75.3,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:acute-pancreatitis-nursing-care",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "acute-pancreatitis-nursing-care",
-      "title": "Acute Pancreatitis Nursing Care (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 75.3,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:bowel-obstruction-vs-paralytic-ileus",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "bowel-obstruction-vs-paralytic-ileus",
-      "title": "Bowel Obstruction vs Paralytic Ileus (NCLEX-RN, Canada)",
       "status": "localization_incomplete",
       "contentReadinessStatus": "usable_but_thin_en",
       "localizationReadinessStatus": "localization_incomplete",
@@ -1901,26 +1841,6 @@
       ]
     },
     {
-      "lessonId": "ca-rn-nclex-rn:dka-vs-hhs-priorities-hy",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "dka-vs-hhs-priorities-hy",
-      "title": "DKA vs HHS Priorities (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 75.3,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
       "lessonId": "ca-rn-nclex-rn:thyroid-storm-myxedema-clues",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "thyroid-storm-myxedema-clues",
@@ -1941,70 +1861,10 @@
       ]
     },
     {
-      "lessonId": "ca-rn-nclex-rn:addisonian-crisis",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "addisonian-crisis",
-      "title": "Addisonian Crisis (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 75.3,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:cushing-syndrome-assessment",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "cushing-syndrome-assessment",
-      "title": "Cushing Syndrome Assessment (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 75.3,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
       "lessonId": "ca-rn-nclex-rn:siadh-vs-di-basics",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "siadh-vs-di-basics",
       "title": "SIADH vs DI Basics (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 75.3,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:aki-prerenal-vs-intrarenal",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "aki-prerenal-vs-intrarenal",
-      "title": "AKI: Prerenal vs Intrarenal (NCLEX-RN, Canada)",
       "status": "localization_incomplete",
       "contentReadinessStatus": "usable_but_thin_en",
       "localizationReadinessStatus": "localization_incomplete",
@@ -2105,26 +1965,6 @@
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "indwelling-catheter-risks",
       "title": "Indwelling Catheter Risks (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 75.3,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:anemia-types-transfusion-thresholds",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "anemia-types-transfusion-thresholds",
-      "title": "Anemia Types & Transfusion Thresholds (NCLEX-RN, Canada)",
       "status": "localization_incomplete",
       "contentReadinessStatus": "usable_but_thin_en",
       "localizationReadinessStatus": "localization_incomplete",
@@ -2321,26 +2161,6 @@
       ]
     },
     {
-      "lessonId": "ca-rn-nclex-rn:burn-depth-fluid-resuscitation-basics",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "burn-depth-fluid-resuscitation-basics",
-      "title": "Burn Depth & Fluid Resuscitation Basics (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 75.3,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
       "lessonId": "ca-rn-nclex-rn:pressure-injury-staging",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "pressure-injury-staging",
@@ -2405,26 +2225,6 @@
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "psychotropic-side-effects",
       "title": "Psychotropic Side Effects (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 75.3,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:alcohol-withdrawal-ciwa",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "alcohol-withdrawal-ciwa",
-      "title": "Alcohol Withdrawal CIWA (NCLEX-RN, Canada)",
       "status": "localization_incomplete",
       "contentReadinessStatus": "usable_but_thin_en",
       "localizationReadinessStatus": "localization_incomplete",
@@ -2641,26 +2441,6 @@
       ]
     },
     {
-      "lessonId": "ca-rn-nclex-rn:assignment-vs-delegation",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "assignment-vs-delegation",
-      "title": "Assignment vs Delegation (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 75.3,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
       "lessonId": "ca-rn-nclex-rn:ethical-distress-advocacy",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "ethical-distress-advocacy",
@@ -2801,26 +2581,6 @@
       ]
     },
     {
-      "lessonId": "ca-rn-nclex-rn:enteral-feeding-tube-safety",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "enteral-feeding-tube-safety",
-      "title": "Enteral Feeding Tube Safety (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 75.3,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
       "lessonId": "ca-rn-nclex-rn:tpn-line-care-basics",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "tpn-line-care-basics",
@@ -2865,6 +2625,96 @@
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "hypertensive-crisis-vs-urgency",
       "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 80.3,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:calcium-tetany",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "calcium-tetany",
+      "title": "Calcium & Tetany (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 80.3,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:bowel-obstruction-vs-paralytic-ileus",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "bowel-obstruction-vs-paralytic-ileus",
+      "title": "Bowel Obstruction vs Paralytic Ileus (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 80.3,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:dka-vs-hhs-priorities-hy",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "dka-vs-hhs-priorities-hy",
+      "title": "DKA vs HHS Priorities (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 80.3,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:burn-depth-fluid-resuscitation-basics",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "burn-depth-fluid-resuscitation-basics",
+      "title": "Burn Depth & Fluid Resuscitation Basics (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 80.3,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:enteral-feeding-tube-safety",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "enteral-feeding-tube-safety",
+      "title": "Enteral Feeding Tube Safety (NCLEX-RN, Canada)",
       "status": "localization_incomplete",
       "contentReadinessStatus": "production_ready_en",
       "localizationReadinessStatus": "localization_incomplete",
@@ -2955,6 +2805,60 @@
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "pulmonary-embolism-clues",
       "title": "Pulmonary Embolism Clues (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 81.2,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:addisonian-crisis",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "addisonian-crisis",
+      "title": "Addisonian Crisis (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 81.2,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:cushing-syndrome-assessment",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cushing-syndrome-assessment",
+      "title": "Cushing Syndrome Assessment (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 81.2,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:assignment-vs-delegation",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "assignment-vs-delegation",
+      "title": "Assignment vs Delegation (NCLEX-RN, Canada)",
       "status": "localization_incomplete",
       "contentReadinessStatus": "production_ready_en",
       "localizationReadinessStatus": "localization_incomplete",
@@ -3095,6 +2999,74 @@
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "ards-ventilation-basics",
       "title": "ARDS & Ventilation Basics (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 86.6,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:acute-pancreatitis-nursing-care",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-pancreatitis-nursing-care",
+      "title": "Acute Pancreatitis Nursing Care (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 86.6,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:aki-prerenal-vs-intrarenal",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "aki-prerenal-vs-intrarenal",
+      "title": "AKI: Prerenal vs Intrarenal (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 86.6,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:anemia-types-transfusion-thresholds",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "anemia-types-transfusion-thresholds",
+      "title": "Anemia Types & Transfusion Thresholds (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 86.6,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:alcohol-withdrawal-ciwa",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "alcohol-withdrawal-ciwa",
+      "title": "Alcohol Withdrawal CIWA (NCLEX-RN, Canada)",
       "status": "localization_incomplete",
       "contentReadinessStatus": "production_ready_en",
       "localizationReadinessStatus": "localization_incomplete",
@@ -3924,31 +3896,6 @@
       ]
     },
     {
-      "lessonId": "us-rn-nclex-rn:calcium-tetany",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "calcium-tetany",
-      "title": "Calcium & Tetany (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
       "lessonId": "us-rn-nclex-rn:phosphate-shifts-in-renal",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "phosphate-shifts-in-renal",
@@ -4003,56 +3950,6 @@
       "pathwayId": "us-rn-nclex-rn",
       "slug": "liver-failure-hepatic-encephalopathy",
       "title": "Liver Failure & Hepatic Encephalopathy (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:acute-pancreatitis-nursing-care",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "acute-pancreatitis-nursing-care",
-      "title": "Acute Pancreatitis Nursing Care (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:bowel-obstruction-vs-paralytic-ileus",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "bowel-obstruction-vs-paralytic-ileus",
-      "title": "Bowel Obstruction vs Paralytic Ileus (NCLEX-RN, US)",
       "status": "structurally_incomplete",
       "contentReadinessStatus": "structurally_incomplete",
       "localizationReadinessStatus": "english_only",
@@ -4324,31 +4221,6 @@
       ]
     },
     {
-      "lessonId": "us-rn-nclex-rn:dka-vs-hhs-priorities-hy",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "dka-vs-hhs-priorities-hy",
-      "title": "DKA vs HHS Priorities (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
       "lessonId": "us-rn-nclex-rn:thyroid-storm-myxedema-clues",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "thyroid-storm-myxedema-clues",
@@ -4374,56 +4246,6 @@
       ]
     },
     {
-      "lessonId": "us-rn-nclex-rn:addisonian-crisis",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "addisonian-crisis",
-      "title": "Addisonian Crisis (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (39 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (28 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:cushing-syndrome-assessment",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "cushing-syndrome-assessment",
-      "title": "Cushing Syndrome Assessment (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
       "lessonId": "us-rn-nclex-rn:siadh-vs-di-basics",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "siadh-vs-di-basics",
@@ -4436,31 +4258,6 @@
         "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
         "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
         "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:aki-prerenal-vs-intrarenal",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "aki-prerenal-vs-intrarenal",
-      "title": "AKI: Prerenal vs Intrarenal (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
         "low_total_word_count",
         "missing_educational:overview_intro",
         "missing_educational:core_concept_depth",
@@ -4586,31 +4383,6 @@
         "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
         "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
         "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:anemia-types-transfusion-thresholds",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "anemia-types-transfusion-thresholds",
-      "title": "Anemia Types & Transfusion Thresholds (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words).",
         "low_total_word_count",
         "missing_educational:overview_intro",
         "missing_educational:core_concept_depth",
@@ -4824,31 +4596,6 @@
       ]
     },
     {
-      "lessonId": "us-rn-nclex-rn:burn-depth-fluid-resuscitation-basics",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "burn-depth-fluid-resuscitation-basics",
-      "title": "Burn Depth & Fluid Resuscitation Basics (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways",
-        "missing_educational:safety_or_priority_mentioned"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
       "lessonId": "us-rn-nclex-rn:pressure-injury-staging",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "pressure-injury-staging",
@@ -4928,31 +4675,6 @@
       "pathwayId": "us-rn-nclex-rn",
       "slug": "psychotropic-side-effects",
       "title": "Psychotropic Side Effects (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:alcohol-withdrawal-ciwa",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "alcohol-withdrawal-ciwa",
-      "title": "Alcohol Withdrawal CIWA (NCLEX-RN, US)",
       "status": "structurally_incomplete",
       "contentReadinessStatus": "structurally_incomplete",
       "localizationReadinessStatus": "english_only",
@@ -5224,31 +4946,6 @@
       ]
     },
     {
-      "lessonId": "us-rn-nclex-rn:assignment-vs-delegation",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "assignment-vs-delegation",
-      "title": "Assignment vs Delegation (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
       "lessonId": "us-rn-nclex-rn:ethical-distress-advocacy",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "ethical-distress-advocacy",
@@ -5303,31 +5000,6 @@
       "pathwayId": "us-rn-nclex-rn",
       "slug": "qi-incident-reporting",
       "title": "QI & Incident Reporting (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:enteral-feeding-tube-safety",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "enteral-feeding-tube-safety",
-      "title": "Enteral Feeding Tube Safety (NCLEX-RN, US)",
       "status": "structurally_incomplete",
       "contentReadinessStatus": "structurally_incomplete",
       "localizationReadinessStatus": "english_only",
@@ -6972,6 +6644,96 @@
       ]
     },
     {
+      "lessonId": "us-rn-nclex-rn:calcium-tetany",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "calcium-tetany",
+      "title": "Calcium & Tetany (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 80.3,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:bowel-obstruction-vs-paralytic-ileus",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "bowel-obstruction-vs-paralytic-ileus",
+      "title": "Bowel Obstruction vs Paralytic Ileus (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 80.3,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:dka-vs-hhs-priorities-hy",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "dka-vs-hhs-priorities-hy",
+      "title": "DKA vs HHS Priorities (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 80.3,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:burn-depth-fluid-resuscitation-basics",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "burn-depth-fluid-resuscitation-basics",
+      "title": "Burn Depth & Fluid Resuscitation Basics (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 80.3,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:enteral-feeding-tube-safety",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "enteral-feeding-tube-safety",
+      "title": "Enteral Feeding Tube Safety (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 80.3,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
       "lessonId": "us-rn-nclex-rn:acute-myocardial-infarction-troponin",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "acute-myocardial-infarction-troponin",
@@ -7048,6 +6810,60 @@
       "pathwayId": "us-rn-nclex-rn",
       "slug": "pulmonary-embolism-clues",
       "title": "Pulmonary Embolism Clues (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 81.2,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:addisonian-crisis",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "addisonian-crisis",
+      "title": "Addisonian Crisis (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 81.2,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:cushing-syndrome-assessment",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "cushing-syndrome-assessment",
+      "title": "Cushing Syndrome Assessment (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 81.2,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:assignment-vs-delegation",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "assignment-vs-delegation",
+      "title": "Assignment vs Delegation (NCLEX-RN, US)",
       "status": "localization_incomplete",
       "contentReadinessStatus": "production_ready_en",
       "localizationReadinessStatus": "localization_incomplete",
@@ -7206,6 +7022,74 @@
       "pathwayId": "us-rn-nclex-rn",
       "slug": "ards-ventilation-basics",
       "title": "ARDS & Ventilation Basics (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 86.6,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:acute-pancreatitis-nursing-care",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "acute-pancreatitis-nursing-care",
+      "title": "Acute Pancreatitis Nursing Care (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 86.6,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:aki-prerenal-vs-intrarenal",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "aki-prerenal-vs-intrarenal",
+      "title": "AKI: Prerenal vs Intrarenal (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 86.6,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:anemia-types-transfusion-thresholds",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "anemia-types-transfusion-thresholds",
+      "title": "Anemia Types & Transfusion Thresholds (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 86.6,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:alcohol-withdrawal-ciwa",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "alcohol-withdrawal-ciwa",
+      "title": "Alcohol Withdrawal CIWA (NCLEX-RN, US)",
       "status": "localization_incomplete",
       "contentReadinessStatus": "production_ready_en",
       "localizationReadinessStatus": "localization_incomplete",

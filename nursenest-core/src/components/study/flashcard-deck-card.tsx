@@ -217,17 +217,31 @@ export function FlashcardDeckCard({ deck }: { deck: DeckCardRow }) {
             Use Question Bank
           </Link>
         ) : (
-          <Link
-            href={`/app/flashcards/${deck.slug}`}
-            className="inline-flex items-center rounded-full px-4 py-1.5 text-xs font-semibold transition"
-            style={{
-              background: `color-mix(in srgb, ${accentVar} 18%, var(--bg-card, #fff))`,
-              color: accentVar,
-              border: `1px solid color-mix(in srgb, ${accentVar} 30%, transparent)`,
-            }}
-          >
-            Study deck →
-          </Link>
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <Link
+              href={`/app/flashcards/${deck.slug}?mode=learn`}
+              className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold transition"
+              style={{
+                background: `color-mix(in srgb, ${accentVar} 18%, var(--bg-card, #fff))`,
+                color: accentVar,
+                border: `1px solid color-mix(in srgb, ${accentVar} 30%, transparent)`,
+              }}
+            >
+              Learn
+            </Link>
+            <Link
+              href={`/app/flashcards/${deck.slug}?mode=test`}
+              className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold transition"
+              style={{
+                background:
+                  "color-mix(in srgb, var(--semantic-chart-2, var(--semantic-info)) 16%, var(--bg-card, #fff))",
+                color: "var(--semantic-info-text, var(--semantic-info))",
+                border: "1px solid color-mix(in srgb, var(--semantic-info) 28%, transparent)",
+              }}
+            >
+              Test
+            </Link>
+          </div>
         )}
       </div>
     </article>

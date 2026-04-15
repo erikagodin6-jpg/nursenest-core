@@ -3183,6 +3183,62 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   }
 }
 
+/* FAQ-aligned two-column practice layout: stem/options left, rationale right (see nursenest.ca/faq). */
+.nn-question-session--split {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: min(112rem, 100%);
+  display: grid;
+  gap: 1.25rem;
+  align-items: start;
+  padding: 1rem 0.75rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .nn-question-session--split {
+    gap: 1.5rem;
+    padding: 1.35rem 1.25rem 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nn-question-session--split {
+    grid-template-columns: minmax(0, 1.12fr) minmax(300px, 0.88fr);
+    gap: 1.75rem;
+    padding: 1.5rem 1.5rem 2.25rem;
+  }
+}
+
+.nn-question-session-primary {
+  min-width: 0;
+}
+
+.nn-question-session-rationale {
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .nn-question-session-rationale {
+    position: sticky;
+    top: 0.75rem;
+    max-height: min(88vh, calc(100dvh - 5.5rem));
+    overflow-y: auto;
+    padding-right: 0.2rem;
+    scrollbar-gutter: stable;
+  }
+}
+
+.nn-question-rationale-placeholder {
+  border-radius: 1rem;
+  border: 1px dashed color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 55%, var(--semantic-surface));
+  padding: 1.25rem 1.25rem 1.35rem;
+  min-height: 12rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .nn-question-stem {
   font-size: 1.0625rem;
   line-height: 1.65;

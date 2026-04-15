@@ -154,6 +154,11 @@ export function PremiumRationalePanel({
   variant = "default",
   /** When `variant` is `exam`, start with rationale expanded (e.g. after incorrect). */
   defaultOpenExplanation = false,
+  /**
+   * `accordion` = collapsible details (legacy stacked layout).
+   * `expanded` = verdict + full rationale body always visible (FAQ two-column reference).
+   */
+  examRationaleOpenMode = "accordion",
   reviewActionStrip,
   recommendationsSlot,
 }: {
@@ -168,6 +173,7 @@ export function PremiumRationalePanel({
   rationaleLessonLinks?: RationaleLessonLinkClient[] | null;
   variant?: "default" | "exam";
   defaultOpenExplanation?: boolean;
+  examRationaleOpenMode?: "accordion" | "expanded";
   /** Bookmark / mistake notebook / notes — rendered after rationale body. */
   reviewActionStrip?: ReactNode;
   /** Drill, flashcards, topic links — after lesson links when present. */
@@ -323,27 +329,42 @@ export function PremiumRationalePanel({
   );
 
   if (variant === "exam") {
+    const verdictBlock = (
+      <div
+        className={`nn-question-rationale-card__verdict sm:px-6 sm:py-5 ${
+          correct ? "nn-question-rationale-card__verdict--ok" : "nn-question-rationale-card__verdict--miss"
+        }`}
+      >
+        <p
+          className={`text-base font-semibold tracking-tight sm:text-lg ${
+            correct ? "text-[var(--role-success-text)]" : "text-[var(--theme-heading-text)]"
+          }`}
+          role="status"
+        >
+          {correct ? t("learner.qbank.ui.correct") : t("learner.qbank.ui.incorrect")}
+        </p>
+        <p
+          className={`mt-1.5 text-sm leading-snug ${correct ? "text-[color-mix(in_srgb,var(--role-success-text)_82%,var(--theme-body-text))]" : "text-[var(--theme-muted-text)]"}`}
+        >
+          {correct ? t("learner.qbank.rationale.verdictCorrectSubtitle") : t("learner.qbank.rationale.verdictIncorrectSubtitle")}
+        </p>
+      </div>
+    );
+
+    if (examRationaleOpenMode === "expanded") {
+      return (
+        <div className="nn-question-rationale-card nn-question-rationale-card--expanded text-sm">
+          {verdictBlock}
+          <div className="nn-question-rationale-card__body nn-rationale-prose border-t border-[var(--semantic-border-soft)] px-4 py-4 text-[var(--theme-body-text)] sm:px-6 sm:py-5">
+            {body}
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="nn-question-rationale-card text-sm">
-        <div
-          className={`nn-question-rationale-card__verdict sm:px-6 sm:py-5 ${
-            correct ? "nn-question-rationale-card__verdict--ok" : "nn-question-rationale-card__verdict--miss"
-          }`}
-        >
-          <p
-            className={`text-base font-semibold tracking-tight sm:text-lg ${
-              correct ? "text-[var(--role-success-text)]" : "text-[var(--theme-heading-text)]"
-            }`}
-            role="status"
-          >
-            {correct ? t("learner.qbank.ui.correct") : t("learner.qbank.ui.incorrect")}
-          </p>
-          <p
-            className={`mt-1.5 text-sm leading-snug ${correct ? "text-[color-mix(in_srgb,var(--role-success-text)_82%,var(--theme-body-text))]" : "text-[var(--theme-muted-text)]"}`}
-          >
-            {correct ? t("learner.qbank.rationale.verdictCorrectSubtitle") : t("learner.qbank.rationale.verdictIncorrectSubtitle")}
-          </p>
-        </div>
+        {verdictBlock}
         <details className="nn-rationale-details group" open={defaultOpenExplanation}>
           <summary className="cursor-pointer list-none px-4 py-3.5 text-sm font-semibold text-[var(--theme-heading-text)] outline-none ring-inset marker:hidden transition-colors hover:bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-card-bg))] sm:px-6 [&::-webkit-details-marker]:hidden">
             <span className="flex items-center justify-between gap-3">

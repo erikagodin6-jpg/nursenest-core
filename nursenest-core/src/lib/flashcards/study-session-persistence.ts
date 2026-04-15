@@ -101,3 +101,58 @@ export function getStudyItemIdsMatchingFilters(filters: StudyQuickFilters, max =
     .sort();
   return ids.slice(0, Math.max(0, max));
 }
+
+/** Per-deck study session continuity (legacy-style resume). */
+export type DeckSessionCheckpoint = {
+  deckRef: string;
+  index: number;
+  revealed: boolean;
+  updatedAt: string;
+};
+
+const DECK_CK = "flashcard-deck-checkpoint:v1";
+
+function readDeckCk(): Record<string, DeckSessionCheckpoint> {
+  if (!canUseStorage()) return {};
+  try {
+    const raw = window.localStorage.getItem(DECK_CK);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as Record<string, DeckSessionCheckpoint>;
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeDeckCk(all: Record<string, DeckSessionCheckpoint>) {
+  if (!canUseStorage()) return;
+  try {
+    window.localStorage.setItem(DECK_CK, JSON.stringify(all));
+  } catch {
+    /* ignore */
+  }
+}
+
+export function saveDeckSessionCheckpoint(deckRef: string, index: number, revealed: boolean) {
+  if (!deckRef) return;
+  const all = readDeckCk();
+  all[deckRef] = {
+    deckRef,
+    index: Math.max(0, index),
+    revealed,
+    updatedAt: new Date().toISOString(),
+  };
+  writeDeckCk(all);
+}
+
+export function getDeckSessionCheckpoint(deckRef: string): DeckSessionCheckpoint | null {
+  if (!deckRef) return null;
+  return readDeckCk()[deckRef] ?? null;
+}
+
+export function clearDeckSessionCheckpoint(deckRef: string) {
+  if (!deckRef) return;
+  const all = readDeckCk();
+  delete all[deckRef];
+  writeDeckCk(all);
+}

@@ -1,0 +1,481 @@
+{
+  "generatedAt": "2026-04-15T03:09:25.996Z",
+  "auditGeneratedAt": "2026-04-15T03:08:59.909Z",
+  "planGeneratedAt": "2026-04-15T02:56:25.921Z",
+  "rnCatalogPatchSlugs": [
+    "cardiac-tamponade-nclex-rn",
+    "phlebostatic-axis-nclex-rn",
+    "pulmonary-embolism-nclex-rn",
+    "respiratory-assessment-ngn",
+    "heart-failure-nursing-priorities-hy",
+    "acute-myocardial-infarction-troponin",
+    "shock-recognition-fluids",
+    "hypertensive-crisis-vs-urgency",
+    "atrial-fibrillation-rate-control",
+    "endocarditis-blood-cultures",
+    "pericarditis-ecg-clues",
+    "dvt-pe-nursing-priorities",
+    "abg-interpretation-basics-hy",
+    "copd-exacerbation-oxygen",
+    "asthma-status-asthmaticus",
+    "ards-ventilation-basics",
+    "pneumonia-oxygenation",
+    "pulmonary-embolism-clues",
+    "acute-pancreatitis-nursing-care",
+    "addisonian-crisis",
+    "aki-prerenal-vs-intrarenal",
+    "alcohol-withdrawal-ciwa",
+    "anemia-types-transfusion-thresholds",
+    "assignment-vs-delegation",
+    "bowel-obstruction-vs-paralytic-ileus",
+    "burn-depth-fluid-resuscitation-basics",
+    "calcium-tetany",
+    "cushing-syndrome-assessment",
+    "dka-vs-hhs-priorities-hy",
+    "enteral-feeding-tube-safety"
+  ],
+  "metricsForPlanRowsWithPatchedSlugs": {
+    "planRowsMatchingPatchedSlugs": 12,
+    "improvedOverallScoreCount": 12,
+    "averageOverallScoreLiftAmongImproved": 72.1,
+    "movedOutOfStructurallyIncompleteApprox": 12,
+    "movedToProductionReadyEnFromContentGapsApprox": 0,
+    "productionReadyEnCountAmongPatchedRows": 12,
+    "productionReadyEnButLocalizationIncomplete": 12
+  },
+  "notes": "Merged RN batch 1 patches include prior batch-2 slugs plus RN_BATCH1_EXTRA. Plan has 100 rows; 30 unique slugs in merged patch map.",
+  "perLesson": [
+    {
+      "lessonId": "us-rn-nclex-rn:acute-pancreatitis-nursing-care",
+      "slug": "acute-pancreatitis-nursing-care",
+      "pathwayId": "us-rn-nclex-rn",
+      "title": "Acute Pancreatitis Nursing Care (NCLEX-RN, US)",
+      "inRnBatch1CatalogPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 86.6,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 76.1,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 642,
+      "internalStudyLinksAfter": 8,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_legacy_section_depth_and_vignette_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_added_meeting_minimum",
+        "legacy_five_block_depth_and_educational_buckets_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_LESSON_or_path_links_added_where_missing"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:addisonian-crisis",
+      "slug": "addisonian-crisis",
+      "pathwayId": "us-rn-nclex-rn",
+      "title": "Addisonian Crisis (NCLEX-RN, US)",
+      "inRnBatch1CatalogPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 81.2,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 70.7,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 533,
+      "internalStudyLinksAfter": 7,
+      "topReasonsAfter": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_legacy_section_depth_and_vignette_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_added_meeting_minimum",
+        "legacy_five_block_depth_and_educational_buckets_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_LESSON_or_path_links_added_where_missing"
+      ],
+      "remainingIssues": [
+        "thin_total_word_count"
+      ],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:aki-prerenal-vs-intrarenal",
+      "slug": "aki-prerenal-vs-intrarenal",
+      "pathwayId": "us-rn-nclex-rn",
+      "title": "AKI: Prerenal vs Intrarenal (NCLEX-RN, US)",
+      "inRnBatch1CatalogPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 86.6,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 76.1,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 562,
+      "internalStudyLinksAfter": 7,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_legacy_section_depth_and_vignette_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_added_meeting_minimum",
+        "legacy_five_block_depth_and_educational_buckets_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_LESSON_or_path_links_added_where_missing"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:alcohol-withdrawal-ciwa",
+      "slug": "alcohol-withdrawal-ciwa",
+      "pathwayId": "us-rn-nclex-rn",
+      "title": "Alcohol Withdrawal CIWA (NCLEX-RN, US)",
+      "inRnBatch1CatalogPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 86.6,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 76.1,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 641,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_legacy_section_depth_and_vignette_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_added_meeting_minimum",
+        "legacy_five_block_depth_and_educational_buckets_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_LESSON_or_path_links_added_where_missing"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:anemia-types-transfusion-thresholds",
+      "slug": "anemia-types-transfusion-thresholds",
+      "pathwayId": "us-rn-nclex-rn",
+      "title": "Anemia Types & Transfusion Thresholds (NCLEX-RN, US)",
+      "inRnBatch1CatalogPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 86.6,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 76.1,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 562,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_legacy_section_depth_and_vignette_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_added_meeting_minimum",
+        "legacy_five_block_depth_and_educational_buckets_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_LESSON_or_path_links_added_where_missing"
+      ],
+      "remainingIssues": [],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:assignment-vs-delegation",
+      "slug": "assignment-vs-delegation",
+      "pathwayId": "us-rn-nclex-rn",
+      "title": "Assignment vs Delegation (NCLEX-RN, US)",
+      "inRnBatch1CatalogPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 81.2,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 70.7,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 535,
+      "internalStudyLinksAfter": 5,
+      "topReasonsAfter": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_legacy_section_depth_and_vignette_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_added_meeting_minimum",
+        "legacy_five_block_depth_and_educational_buckets_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_LESSON_or_path_links_added_where_missing"
+      ],
+      "remainingIssues": [
+        "thin_total_word_count"
+      ],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:bowel-obstruction-vs-paralytic-ileus",
+      "slug": "bowel-obstruction-vs-paralytic-ileus",
+      "pathwayId": "us-rn-nclex-rn",
+      "title": "Bowel Obstruction vs Paralytic Ileus (NCLEX-RN, US)",
+      "inRnBatch1CatalogPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 80.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 69.8,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 509,
+      "internalStudyLinksAfter": 5,
+      "topReasonsAfter": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_legacy_section_depth_and_vignette_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_added_meeting_minimum",
+        "legacy_five_block_depth_and_educational_buckets_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_LESSON_or_path_links_added_where_missing"
+      ],
+      "remainingIssues": [
+        "thin_total_word_count"
+      ],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:burn-depth-fluid-resuscitation-basics",
+      "slug": "burn-depth-fluid-resuscitation-basics",
+      "pathwayId": "us-rn-nclex-rn",
+      "title": "Burn Depth & Fluid Resuscitation Basics (NCLEX-RN, US)",
+      "inRnBatch1CatalogPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 80.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 69.8,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 508,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_legacy_section_depth_and_vignette_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_added_meeting_minimum",
+        "legacy_five_block_depth_and_educational_buckets_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_LESSON_or_path_links_added_where_missing"
+      ],
+      "remainingIssues": [
+        "thin_total_word_count"
+      ],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:calcium-tetany",
+      "slug": "calcium-tetany",
+      "pathwayId": "us-rn-nclex-rn",
+      "title": "Calcium & Tetany (NCLEX-RN, US)",
+      "inRnBatch1CatalogPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 80.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 69.8,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 503,
+      "internalStudyLinksAfter": 5,
+      "topReasonsAfter": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_legacy_section_depth_and_vignette_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_added_meeting_minimum",
+        "legacy_five_block_depth_and_educational_buckets_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_LESSON_or_path_links_added_where_missing"
+      ],
+      "remainingIssues": [
+        "thin_total_word_count"
+      ],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:cushing-syndrome-assessment",
+      "slug": "cushing-syndrome-assessment",
+      "pathwayId": "us-rn-nclex-rn",
+      "title": "Cushing Syndrome Assessment (NCLEX-RN, US)",
+      "inRnBatch1CatalogPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 81.2,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 70.7,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 521,
+      "internalStudyLinksAfter": 4,
+      "topReasonsAfter": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_legacy_section_depth_and_vignette_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_added_meeting_minimum",
+        "legacy_five_block_depth_and_educational_buckets_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_LESSON_or_path_links_added_where_missing"
+      ],
+      "remainingIssues": [
+        "thin_total_word_count"
+      ],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:dka-vs-hhs-priorities-hy",
+      "slug": "dka-vs-hhs-priorities-hy",
+      "pathwayId": "us-rn-nclex-rn",
+      "title": "DKA vs HHS Priorities (NCLEX-RN, US)",
+      "inRnBatch1CatalogPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 80.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 69.8,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 512,
+      "internalStudyLinksAfter": 6,
+      "topReasonsAfter": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_legacy_section_depth_and_vignette_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_added_meeting_minimum",
+        "legacy_five_block_depth_and_educational_buckets_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_LESSON_or_path_links_added_where_missing"
+      ],
+      "remainingIssues": [
+        "thin_total_word_count"
+      ],
+      "gatePublicCompleteAfter": true
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:enteral-feeding-tube-safety",
+      "slug": "enteral-feeding-tube-safety",
+      "pathwayId": "us-rn-nclex-rn",
+      "title": "Enteral Feeding Tube Safety (NCLEX-RN, US)",
+      "inRnBatch1CatalogPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "beforeContentReadinessStatus": "structurally_incomplete",
+      "afterOverallScore": 80.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 69.8,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 501,
+      "internalStudyLinksAfter": 5,
+      "topReasonsAfter": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "structuralIssuesResolved": [
+        "subscriber_legacy_section_depth_and_vignette_gate_cleared",
+        "english_content_spine_production_ready_en"
+      ],
+      "educationalImprovements": [
+        "internal_study_links_added_meeting_minimum",
+        "legacy_five_block_depth_and_educational_buckets_strengthened"
+      ],
+      "linkImprovements": [
+        "internal_LESSON_or_path_links_added_where_missing"
+      ],
+      "remainingIssues": [
+        "thin_total_word_count"
+      ],
+      "gatePublicCompleteAfter": true
+    }
+  ]
+}

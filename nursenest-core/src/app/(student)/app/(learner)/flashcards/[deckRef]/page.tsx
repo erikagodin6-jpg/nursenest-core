@@ -8,12 +8,13 @@ import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-serve
 
 type Props = {
   params: Promise<{ deckRef: string }>;
-  searchParams: Promise<{ shuffle?: string }>;
+  searchParams: Promise<{ shuffle?: string; mode?: string }>;
 };
 
 export default async function FlashcardDeckStudyPage({ params, searchParams }: Props) {
   const { deckRef } = await params;
   const sp = await searchParams;
+  const studyMode = sp.mode === "test" ? "test" : "learn";
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
@@ -41,6 +42,7 @@ export default async function FlashcardDeckStudyPage({ params, searchParams }: P
       userLabel={userLabel}
       protectionFlags={protectionFlags}
       shuffleInitially={sp.shuffle === "1"}
+      studyMode={studyMode}
     />
   );
 }

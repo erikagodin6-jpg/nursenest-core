@@ -1,0 +1,20 @@
+{
+  "generatedAt": "2026-04-15T03:15:14.660Z",
+  "sourceAuditGeneratedAt": "2026-04-15T03:08:59.909Z",
+  "npPathwayIds": [
+    "ca-np-cnple",
+    "us-np-fnp",
+    "us-np-agpcnp",
+    "us-np-pmhnp",
+    "us-np-whnp",
+    "us-np-pnp-pc"
+  ],
+  "duplicateSlugAcrossNpPathways": [],
+  "countryOrExamMismatchesVsRegistry": [],
+  "titleTierReviewHints": [],
+  "catalogRowsMissingFromAudit": [],
+  "notes": [
+    "Canada NP (ca-np-cnple) may be upcoming in registry while lessons are absent from bundled catalog.",
+    "US NP tracks are intentionally separate products—duplicate slugs across NP pathways should be rare; investigate if present."
+  ]
+}

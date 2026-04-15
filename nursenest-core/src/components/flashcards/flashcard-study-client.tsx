@@ -1,10 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
 import { formatTitleCase } from "@/lib/format/text-case";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
+import {
+  clearDeckSessionCheckpoint,
+  getDeckSessionCheckpoint,
+  saveDeckSessionCheckpoint,
+} from "@/lib/flashcards/study-session-persistence";
+import { ExamSessionShell } from "@/components/exam/exam-session-shell";
 
 type CardPayload = {
   id: string;
@@ -38,6 +44,7 @@ type ReviewRating = "incorrect" | "unsure" | "known";
 export function FlashcardStudyClient({
   deckRef,
   shuffleInitially = false,
+  studyMode = "learn",
 }: {
   deckRef: string;
   userId: string;
@@ -45,6 +52,8 @@ export function FlashcardStudyClient({
   protectionFlags: PremiumProtectionFlags;
   /** From `?shuffle=1` — new sessions shuffle the queue. */
   shuffleInitially?: boolean;
+  /** From `?mode=test` — legacy-style timed study shell (elapsed timer). */
+  studyMode?: "learn" | "test";
 }) {
   const DECK_SESSION_REQUEST_COUNT = 40;
   const [title, setTitle] = useState<string>("");
@@ -55,6 +64,12 @@ export function FlashcardStudyClient({
   const [error, setError] = useState<string | null>(null);
   const [resetToken, setResetToken] = useState(0);
   const [shuffleOn, setShuffleOn] = useState(shuffleInitially);
+  /** When true, a local checkpoint exists and the learner must pick Resume vs Start fresh before the session mounts. */
+  const [resumeGateOpen, setResumeGateOpen] = useState(false);
+  const [resumeInitial, setResumeInitial] = useState<{ index: number; revealed: boolean }>({ index: 0, revealed: false });
+  const [sessionMountKey, setSessionMountKey] = useState(0);
+  /** Avoid mounting the study surface before localStorage resume checkpoint is evaluated (subscriber only). */
+  const [resumeCheckpointReady, setResumeCheckpointReady] = useState(false);
 
   const fetchBatch = useCallback(
     async (reset: boolean) => {
@@ -88,6 +103,37 @@ export function FlashcardStudyClient({
     void fetchBatch(resetToken > 0);
   }, [deckRef, resetToken, fetchBatch]);
 
+  useLayoutEffect(() => {
+    if (loading || queue.length === 0) {
+      setResumeCheckpointReady(false);
+      return;
+    }
+    if (mode !== "subscriber") {
+      setResumeGateOpen(false);
+      setResumeInitial({ index: 0, revealed: false });
+      setResumeCheckpointReady(true);
+      return;
+    }
+    const ck = getDeckSessionCheckpoint(deckRef);
+    if (!ck || ck.deckRef !== deckRef) {
+      setResumeGateOpen(false);
+      setResumeInitial({ index: 0, revealed: false });
+      setResumeCheckpointReady(true);
+      return;
+    }
+    const maxIdx = queue.length - 1;
+    const idx = Math.min(Math.max(0, ck.index), maxIdx);
+    const canResume = idx > 0 || ck.revealed;
+    if (canResume) {
+      setResumeGateOpen(true);
+      setResumeInitial({ index: idx, revealed: ck.revealed });
+    } else {
+      setResumeGateOpen(false);
+      setResumeInitial({ index: 0, revealed: false });
+    }
+    setResumeCheckpointReady(true);
+  }, [loading, queue.length, deckRef, resetToken, mode]);
+
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -99,6 +145,22 @@ export function FlashcardStudyClient({
     return () => {
       cancelled = true;
     };
+  }, [deckRef]);
+
+  const onStudyProgress = useCallback(
+    (state: { index: number; revealed: boolean }) => {
+      if (mode !== "subscriber" || resumeGateOpen) return;
+      saveDeckSessionCheckpoint(deckRef, state.index, state.revealed);
+    },
+    [deckRef, mode, resumeGateOpen],
+  );
+
+  const onSessionComplete = useCallback(() => {
+    clearDeckSessionCheckpoint(deckRef);
+  }, [deckRef]);
+
+  const onSessionRestart = useCallback(() => {
+    clearDeckSessionCheckpoint(deckRef);
   }, [deckRef]);
 
   const onRate = async (cardId: string, rating: ReviewRating) => {
@@ -120,6 +182,22 @@ export function FlashcardStudyClient({
     }
   };
 
+  const activeCards: ActiveStudyCard[] = useMemo(
+    () =>
+      queue.map((card) => ({
+        id: card.id,
+        prompt: card.front,
+        answer: card.back,
+        explanation: card.explanation,
+        topic: card.topic ?? null,
+        subtopic: card.subtopic ?? null,
+        sourceKey: card.sourceKey ?? null,
+        pathwayId: card.pathwayId ?? null,
+        topicSlug: card.subtopic ?? null,
+      })),
+    [queue],
+  );
+
   if (loading && queue.length === 0) {
     return (
       <div className="mx-auto max-w-lg px-4 py-16 text-center text-sm text-[var(--theme-muted-text)]">Loading deck…</div>
@@ -137,6 +215,9 @@ export function FlashcardStudyClient({
     );
   }
 
+  const pendingResume = mode === "subscriber" && resumeGateOpen;
+  const subscriberSessionBlocked = mode === "subscriber" && !resumeCheckpointReady && queue.length > 0;
+
   if (queue.length === 0) {
     return (
       <div className="mx-auto max-w-lg px-4 py-16 text-center text-sm text-[var(--theme-muted-text)]">
@@ -150,20 +231,8 @@ export function FlashcardStudyClient({
     );
   }
 
-  const activeCards: ActiveStudyCard[] = queue.map((card) => ({
-    id: card.id,
-    prompt: card.front,
-    answer: card.back,
-    explanation: card.explanation,
-    topic: card.topic ?? null,
-    subtopic: card.subtopic ?? null,
-    sourceKey: card.sourceKey ?? null,
-    pathwayId: card.pathwayId ?? null,
-    topicSlug: card.subtopic ?? null,
-  }));
-
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6">
+    <div className="mx-auto max-w-[min(112rem,100%)] px-4 py-6">
       <div className="mb-3 flex items-center justify-between gap-2">
         <Link href="/app/flashcards" className="text-sm font-medium text-primary">
           ← Back to Flashcards
@@ -175,6 +244,7 @@ export function FlashcardStudyClient({
                 type="checkbox"
                 checked={shuffleOn}
                 onChange={(e) => {
+                  clearDeckSessionCheckpoint(deckRef);
                   setShuffleOn(e.target.checked);
                   setResetToken((t) => t + 1);
                 }}
@@ -182,7 +252,16 @@ export function FlashcardStudyClient({
               />
               Shuffle
             </label>
-            <button type="button" className="text-xs font-medium text-[var(--theme-muted-text)] underline" onClick={() => setResetToken((t) => t + 1)}>
+            <button
+              type="button"
+              className="text-xs font-medium text-[var(--theme-muted-text)] underline"
+              onClick={() => {
+                clearDeckSessionCheckpoint(deckRef);
+                setResumeGateOpen(false);
+                setSessionMountKey((k) => k + 1);
+                setResetToken((t) => t + 1);
+              }}
+            >
               Reset Session
             </button>
           </div>
@@ -197,23 +276,80 @@ export function FlashcardStudyClient({
 
       {error ? <p className="mb-3 text-sm text-red-600">{error}</p> : null}
 
-      <ActiveStudySession
-        cards={activeCards}
-        loading={loading}
-        sessionMeta={{
-          requestedCount: studyMeta?.requestedCount ?? DECK_SESSION_REQUEST_COUNT,
-          returnedCount: studyMeta?.returnedCount ?? activeCards.length,
-          totalAvailable: studyMeta?.totalAvailable ?? activeCards.length,
-          hasMore: studyMeta?.hasMore ?? false,
-        }}
-        header={{
-          sessionTitle: title || "Flashcard Study Session",
-          modeLabel: "Active Recall",
-          categoriesLabel: "Deck Session",
-          exitHref: "/app/flashcards",
-        }}
-        onRate={mode === "subscriber" ? onRate : undefined}
-      />
+      {subscriberSessionBlocked ? (
+        <div className="mb-4 rounded-xl border border-border bg-[var(--theme-card-bg)] px-4 py-10 text-center text-sm text-[var(--theme-muted-text)]">
+          Preparing study session…
+        </div>
+      ) : null}
+
+      {!subscriberSessionBlocked && pendingResume ? (
+        <div className="mb-4 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] p-4 text-sm text-[var(--semantic-text-primary)] shadow-sm">
+          <p className="font-semibold text-[var(--semantic-text-primary)]">Resume this deck?</p>
+          <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">
+            You have a saved position in this session (card {resumeInitial.index + 1}
+            {resumeInitial.revealed ? ", answer revealed" : ""}). Continue from there or start over.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              className="rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-primary)]"
+              onClick={() => {
+                setResumeGateOpen(false);
+                setSessionMountKey((k) => k + 1);
+              }}
+            >
+              Resume
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-border px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)]"
+              onClick={() => {
+                clearDeckSessionCheckpoint(deckRef);
+                setResumeInitial({ index: 0, revealed: false });
+                setResumeGateOpen(false);
+                setSessionMountKey((k) => k + 1);
+              }}
+            >
+              Start fresh
+            </button>
+          </div>
+        </div>
+      ) : null}
+
+      {!subscriberSessionBlocked && !pendingResume ? (
+        <ExamSessionShell neutralPalette className="overflow-hidden shadow-md">
+          <ActiveStudySession
+            key={`${deckRef}-${sessionMountKey}-${resetToken}`}
+            cards={activeCards}
+            loading={loading}
+            layout="card"
+            sessionMode={studyMode === "test" ? "test" : "learn"}
+            initialCardIndex={resumeInitial.index}
+            initialRevealed={resumeInitial.revealed}
+            sessionMeta={{
+              requestedCount: studyMeta?.requestedCount ?? DECK_SESSION_REQUEST_COUNT,
+              returnedCount: studyMeta?.returnedCount ?? activeCards.length,
+              totalAvailable: studyMeta?.totalAvailable ?? activeCards.length,
+              hasMore: studyMeta?.hasMore ?? false,
+            }}
+            header={{
+              sessionTitle: title || "Flashcard Study Session",
+              modeLabel: studyMode === "test" ? "Test-style recall" : "Learn mode",
+              categoriesLabel: "Deck Session",
+              exitHref: "/app/flashcards",
+            }}
+            onRate={mode === "subscriber" ? onRate : undefined}
+            onStudyProgress={mode === "subscriber" ? onStudyProgress : undefined}
+            onSessionComplete={mode === "subscriber" ? onSessionComplete : undefined}
+            onSessionRestart={mode === "subscriber" ? onSessionRestart : undefined}
+          />
+        </ExamSessionShell>
+      ) : !subscriberSessionBlocked ? (
+        <div className="rounded-xl border border-border bg-[var(--theme-card-bg)] p-8 text-center text-sm text-[var(--theme-muted-text)]">
+          Choose <span className="font-semibold text-[var(--semantic-text-primary)]">Resume</span> or{" "}
+          <span className="font-semibold text-[var(--semantic-text-primary)]">Start fresh</span> above to begin.
+        </div>
+      ) : null}
     </div>
   );
 }

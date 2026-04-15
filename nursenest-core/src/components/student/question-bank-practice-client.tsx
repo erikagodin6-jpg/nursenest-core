@@ -706,6 +706,9 @@ export function QuestionBankPracticeClient({
     [g?.rationaleLessonLinks, current?.topic, pathwayIdFilter],
   );
 
+  /** FAQ-style practice: full rationale column only after submit (exam mode may defer until “show explanation”). */
+  const rationaleVisible = Boolean(g && (!examShell || examShowExplanation));
+
   const scrollToQuestionNotes = useCallback(() => {
     document.getElementById("qbank-question-notes")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, []);
@@ -1319,23 +1322,24 @@ export function QuestionBankPracticeClient({
           />
           <ExamProgressBar current={idx + 1} total={total} answeredCount={sessionTotal} />
 
-          <div className="nn-question-session space-y-8">
-            <div className="nn-question-stem-card">
-              {current.subtopic ? (
-                <p className="mb-2 nn-marketing-caption font-medium text-[var(--semantic-text-muted)]">{current.subtopic}</p>
-              ) : null}
-              <div className="nn-question-stem-wrap">
-                <p className="nn-question-stem">{stemDisplay}</p>
+          <div className="nn-question-session nn-question-session--split">
+            <div className="nn-question-session-primary space-y-6">
+              <div className="nn-question-stem-card">
+                {current.subtopic ? (
+                  <p className="mb-2 nn-marketing-caption font-medium text-[var(--semantic-text-muted)]">{current.subtopic}</p>
+                ) : null}
+                <div className="nn-question-stem-wrap">
+                  <p className="nn-question-stem">{stemDisplay}</p>
+                </div>
               </div>
-            </div>
 
-            <div>
-              <p className="nn-question-options-label">{t("learner.qbank.examUi.answersHeading")}</p>
-              {!g ? (
-                <p className="mb-3 text-xs text-muted-foreground">{t("learner.qbank.examUi.toolsHint")}</p>
-              ) : null}
+              <div>
+                <p className="nn-question-options-label">{t("learner.qbank.examUi.answersHeading")}</p>
+                {!g ? (
+                  <p className="mb-3 text-xs text-muted-foreground">{t("learner.qbank.examUi.toolsHint")}</p>
+                ) : null}
 
-              {isSata ? (
+                {isSata ? (
                 <ul className="nn-qopt-list" role="group" aria-label={t("learner.qbank.examUi.answersHeading")}>
                   {optsCanonical.map((canonical, i) => {
                     const label = optsDisplayClinical[i] ?? optsDisplay[i] ?? canonical;
@@ -1530,129 +1534,8 @@ export function QuestionBankPracticeClient({
                 </div>
               </div>
             ) : (
-              <div ref={feedbackAnchorRef} className="flex flex-col gap-4">
-                {examShell && !examShowExplanation ? (
-                  <div className="nn-question-rationale-card">
-                    <div
-                      className={`nn-question-rationale-card__verdict ${
-                        g.correct ? "nn-question-rationale-card__verdict--ok" : "nn-question-rationale-card__verdict--miss"
-                      }`}
-                    >
-                      <p
-                        className={`text-base font-semibold sm:text-lg ${
-                          g.correct ? "text-[var(--role-success-text)]" : "text-[var(--theme-heading-text)]"
-                        }`}
-                        role="status"
-                      >
-                        {g.correct ? t("learner.qbank.ui.correct") : t("learner.qbank.ui.incorrect")}
-                      </p>
-                    </div>
-                    <div className="space-y-3 px-4 py-4 sm:px-6 sm:py-5">
-                      <p className="nn-marketing-body-sm text-[var(--theme-muted-text)]">{t("learner.qbank.ui.examShellHint")}</p>
-                      <button
-                        type="button"
-                        className="nn-btn-secondary inline-flex min-h-[3rem] w-full items-center justify-center rounded-full px-6 text-sm font-semibold sm:w-auto"
-                        onClick={() => setExamShowExplanation(true)}
-                      >
-                        {t("learner.qbank.ui.showExplanation")}
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <PremiumRationalePanel
-                    correct={g.correct}
-                    rationale={gradedRationaleForPanel?.rationale ?? g.rationale}
-                    rationaleQuality={g.rationaleQuality}
-                    rationaleSections={gradedRationaleForPanel?.rationaleSections ?? g.rationaleSections}
-                    referenceMedia={g.referenceMedia}
-                    teaching={g.teaching}
-                    teachingMedia={g.teachingMedia}
-                    rationaleLessonLinks={rationaleLessonLinksMerged}
-                    variant="exam"
-                    defaultOpenExplanation={!g.correct}
-                    reviewActionStrip={
-                      <QuestionReviewActionStrip
-                        bookmarked={Boolean(markedForReview[current.id])}
-                        onToggleBookmark={() =>
-                          setMarkedForReview((f) => ({ ...f, [current.id]: !f[current.id] }))
-                        }
-                        showMistakeCta={!g.correct}
-                        onAddToMistakeNotebook={addCurrentToMistakeNotebook}
-                        mistakeAdded={Boolean(mistakeNotebookByQuestion[current.id])}
-                        mistakeBusy={mistakeNotebookSaving}
-                        onJumpToNotes={scrollToQuestionNotes}
-                      />
-                    }
-                    recommendationsSlot={learningLoopRecommendations}
-                  />
-                )}
-                {g.clinicalPearl ? (
-                  <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] px-4 py-3 sm:px-5">
-                    <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-info)]">
-                      Clinical Pearl
-                    </p>
-                    <p className="mt-1 text-sm leading-relaxed text-[var(--theme-body-text)]">{g.clinicalPearl}</p>
-                  </div>
-                ) : null}
-                {!g.correct && reviewLessonHref ? (
-                  <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-4 py-3 sm:px-5">
-                    <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
-                      You may need to review:{" "}
-                      <Link href={reviewLessonHref} className="underline underline-offset-2 hover:no-underline">
-                        {current.topic?.trim() || "this topic"}
-                      </Link>
-                    </p>
-                  </div>
-                ) : null}
-                <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 sm:px-5">
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
-                    Reinforce this question
-                  </p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {reviewLessonHref ? (
-                      <Link
-                        href={reviewLessonHref}
-                        className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
-                      >
-                        Review Lesson
-                      </Link>
-                    ) : null}
-                    {flashcardsHref ? (
-                      <Link
-                        href={flashcardsHref}
-                        className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
-                      >
-                        Practice Flashcards
-                      </Link>
-                    ) : null}
-                    {!g.correct && topicDrillHref ? (
-                      <Link
-                        href={topicDrillHref}
-                        className="inline-flex min-h-11 items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] px-4 text-xs font-semibold text-[var(--semantic-info)] shadow-sm hover:opacity-90"
-                      >
-                        Try more questions like this
-                      </Link>
-                    ) : null}
-                    {idx < total - 1 ? (
-                      <button
-                        type="button"
-                        className="nn-btn-primary inline-flex min-h-11 items-center justify-center rounded-full px-5 text-xs font-semibold shadow-none"
-                        onClick={next}
-                      >
-                        Next Question
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        className="nn-btn-secondary inline-flex min-h-11 items-center justify-center rounded-full px-5 text-xs font-semibold"
-                        onClick={() => void loadBatch(true)}
-                      >
-                        Load More
-                      </button>
-                    )}
-                  </div>
-                </div>
-                <div className="nn-question-nav-actions">
+              <div className="flex flex-col gap-4 pb-1 lg:pb-2">
+                <div className="nn-question-nav-actions border-t border-[var(--semantic-border-soft)] pt-4">
                   {examShell ? (
                     <button
                       type="button"
@@ -1678,7 +1561,7 @@ export function QuestionBankPracticeClient({
                   {idx < total - 1 ? (
                     <button
                       type="button"
-                      className="nn-btn-primary nn-question-nav-actions__next inline-flex items-center justify-center rounded-full px-8 text-base font-semibold shadow-none"
+                      className="nn-btn-primary nn-question-nav-actions__next inline-flex min-h-[3rem] items-center justify-center rounded-full px-8 text-base font-semibold shadow-none"
                       onClick={next}
                     >
                       {t("learner.qbank.ui.nextQuestion")}
@@ -1686,22 +1569,151 @@ export function QuestionBankPracticeClient({
                   ) : (
                     <button
                       type="button"
-                      className="nn-btn-secondary nn-question-nav-actions__next inline-flex items-center justify-center rounded-full px-6 text-base font-semibold"
+                      className="nn-btn-secondary nn-question-nav-actions__next inline-flex min-h-[3rem] items-center justify-center rounded-full px-6 text-base font-semibold"
                       onClick={() => void loadBatch(true)}
                     >
                       {t("learner.qbank.ui.loadMore")}
                     </button>
                   )}
                 </div>
-                <QuestionSessionStudyLoopPanel
-                  questions={questions}
-                  graded={graded}
-                  pathwayId={pathwayIdFilter}
-                  visible={idx === total - 1 && !!g}
-                />
               </div>
             )}
+            </div>
+
+            <aside className="nn-question-session-rationale space-y-4">
+              {!g ? (
+                <div className="nn-question-rationale-placeholder">
+                  <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+                    {t("learner.qbank.split.rationaleHeading")}
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+                    {t("learner.qbank.split.rationalePlaceholder")}
+                  </p>
+                </div>
+              ) : (
+                <div ref={feedbackAnchorRef} className="space-y-4">
+                  {examShell && !examShowExplanation ? (
+                    <div className="nn-question-rationale-card">
+                      <div
+                        className={`nn-question-rationale-card__verdict ${
+                          g.correct ? "nn-question-rationale-card__verdict--ok" : "nn-question-rationale-card__verdict--miss"
+                        }`}
+                      >
+                        <p
+                          className={`text-base font-semibold sm:text-lg ${
+                            g.correct ? "text-[var(--role-success-text)]" : "text-[var(--theme-heading-text)]"
+                          }`}
+                          role="status"
+                        >
+                          {g.correct ? t("learner.qbank.ui.correct") : t("learner.qbank.ui.incorrect")}
+                        </p>
+                      </div>
+                      <div className="space-y-3 px-4 py-4 sm:px-6 sm:py-5">
+                        <p className="nn-marketing-body-sm text-[var(--theme-muted-text)]">{t("learner.qbank.ui.examShellHint")}</p>
+                        <button
+                          type="button"
+                          className="nn-btn-secondary inline-flex min-h-[3rem] w-full items-center justify-center rounded-full px-6 text-sm font-semibold sm:w-auto"
+                          onClick={() => setExamShowExplanation(true)}
+                        >
+                          {t("learner.qbank.ui.showExplanation")}
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <PremiumRationalePanel
+                      correct={g.correct}
+                      rationale={gradedRationaleForPanel?.rationale ?? g.rationale}
+                      rationaleQuality={g.rationaleQuality}
+                      rationaleSections={gradedRationaleForPanel?.rationaleSections ?? g.rationaleSections}
+                      referenceMedia={g.referenceMedia}
+                      teaching={g.teaching}
+                      teachingMedia={g.teachingMedia}
+                      rationaleLessonLinks={rationaleLessonLinksMerged}
+                      variant="exam"
+                      examRationaleOpenMode="expanded"
+                      defaultOpenExplanation={!g.correct}
+                      reviewActionStrip={
+                        <QuestionReviewActionStrip
+                          bookmarked={Boolean(markedForReview[current.id])}
+                          onToggleBookmark={() =>
+                            setMarkedForReview((f) => ({ ...f, [current.id]: !f[current.id] }))
+                          }
+                          showMistakeCta={!g.correct}
+                          onAddToMistakeNotebook={addCurrentToMistakeNotebook}
+                          mistakeAdded={Boolean(mistakeNotebookByQuestion[current.id])}
+                          mistakeBusy={mistakeNotebookSaving}
+                          onJumpToNotes={scrollToQuestionNotes}
+                        />
+                      }
+                      recommendationsSlot={learningLoopRecommendations}
+                    />
+                  )}
+                  {rationaleVisible && g.clinicalPearl ? (
+                    <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] px-4 py-3 sm:px-5">
+                      <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-info)]">
+                        Clinical Pearl
+                      </p>
+                      <p className="mt-1 text-sm leading-relaxed text-[var(--theme-body-text)]">{g.clinicalPearl}</p>
+                    </div>
+                  ) : null}
+                  {rationaleVisible && !g.correct && reviewLessonHref ? (
+                    <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-4 py-3 sm:px-5">
+                      <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
+                        You may need to review:{" "}
+                        <Link href={reviewLessonHref} className="underline underline-offset-2 hover:no-underline">
+                          {current.topic?.trim() || "this topic"}
+                        </Link>
+                      </p>
+                    </div>
+                  ) : null}
+                  {rationaleVisible ? (
+                    <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 sm:px-5">
+                      <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
+                        Reinforce this question
+                      </p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {reviewLessonHref ? (
+                          <Link
+                            href={reviewLessonHref}
+                            className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
+                          >
+                            Review Lesson
+                          </Link>
+                        ) : null}
+                        {flashcardsHref ? (
+                          <Link
+                            href={flashcardsHref}
+                            className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
+                          >
+                            Practice Flashcards
+                          </Link>
+                        ) : null}
+                        {!g.correct && topicDrillHref ? (
+                          <Link
+                            href={topicDrillHref}
+                            className="inline-flex min-h-11 items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] px-4 text-xs font-semibold text-[var(--semantic-info)] shadow-sm hover:opacity-90"
+                          >
+                            Try more questions like this
+                          </Link>
+                        ) : null}
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              )}
+            </aside>
           </div>
+
+          {g && idx === total - 1 ? (
+            <div className="mx-auto mt-4 max-w-[min(112rem,100%)] px-2 sm:px-4">
+              <QuestionSessionStudyLoopPanel
+                questions={questions}
+                graded={graded}
+                pathwayId={pathwayIdFilter}
+                visible={idx === total - 1 && !!g}
+              />
+            </div>
+          ) : null}
         </ExamSessionShell>
       </ProtectedPremiumContent>
       <div id="qbank-question-notes" className="scroll-mt-24">

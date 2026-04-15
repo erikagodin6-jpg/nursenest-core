@@ -5,7 +5,7 @@
  * Run: cd nursenest-core && npx tsx scripts/import-legacy-client-advanced-questions.mts [--dry-run] [--limit=1000] [--file=rn-advanced-mcq-01.ts]
  */
 import { readFileSync, readdirSync, existsSync, writeFileSync, mkdirSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { PrismaClient } from "@prisma/client";
@@ -16,6 +16,8 @@ import { normalizeRawQuestionRecord, toPrismaCreateInput } from "../src/lib/repl
 import type { ProductTrack } from "../src/lib/replit-import/replit-question-types";
 import type { ImportCountry } from "../src/lib/replit-import/replit-question-types";
 import { withRetry } from "../src/lib/resilience/with-retry";
+
+import { requireDatabaseUrlForLiveImport } from "./lib/require-database-for-live-import.mts";
 
 import "../src/lib/db/env-bootstrap";
 
@@ -308,13 +310,15 @@ export async function runLegacyClientAdvancedImport(opts: LegacyAdvancedImportAr
   return report;
 }
 
-const prismaSingleton = new PrismaClient();
-
 async function main() {
   const args = parseArgs();
+  if (!args.dryRun) {
+    requireDatabaseUrlForLiveImport("import:legacy-client-advanced-questions");
+  }
+  const prisma = new PrismaClient();
   try {
     await runLegacyClientAdvancedImport({
-      prisma: prismaSingleton,
+      prisma,
       dryRun: args.dryRun,
       limit: args.limit,
       file: args.file,
@@ -323,13 +327,16 @@ async function main() {
     });
   } catch (e) {
     console.error(e);
-    await prismaSingleton.$disconnect();
+    await prisma.$disconnect();
     process.exit(1);
   }
 }
 
-main().catch(async (e) => {
-  console.error(e);
-  await prismaSingleton.$disconnect();
-  process.exit(1);
-});
+const isDirectRun =
+  typeof process.argv[1] === "string" && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isDirectRun) {
+  main().catch(async (e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}

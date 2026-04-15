@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   getStudyItemState,
   setStudyItemState,
@@ -41,6 +41,21 @@ type Props = {
     totalAvailable?: number;
     hasMore?: boolean;
   };
+  /**
+   * `split` = prompt + rationale sidebar (custom/weak sessions).
+   * `card` = legacy monolith–style single flashcard surface (tap/space to reveal, stacked reveals, large rating keys).
+   */
+  layout?: "split" | "card";
+  /** `test` shows an elapsed timer (legacy DeckStudyTest). */
+  sessionMode?: "learn" | "test";
+  /** When cards load, start here (legacy resume). Clamped to deck length. */
+  initialCardIndex?: number;
+  initialRevealed?: boolean;
+  /** Fire when position changes (for local resume checkpoints). */
+  onStudyProgress?: (state: { index: number; revealed: boolean }) => void;
+  onSessionComplete?: () => void;
+  /** User restarted from completion or sub-session (clear local resume checkpoints). */
+  onSessionRestart?: () => void;
 };
 
 const RATINGS: Array<{ id: "incorrect" | "unsure" | "known"; label: string }> = [
@@ -78,6 +93,13 @@ export function ActiveStudySession({
   onRate,
   onExit,
   sessionMeta,
+  layout = "split",
+  sessionMode = "learn",
+  initialCardIndex = 0,
+  initialRevealed = false,
+  onStudyProgress,
+  onSessionComplete,
+  onSessionRestart,
 }: Props) {
   const dedupedCards = useMemo(() => dedupeCardsById(cards), [cards]);
   const [sessionCards, setSessionCards] = useState<ActiveStudyCard[]>(dedupedCards);
@@ -89,51 +111,34 @@ export function ActiveStudySession({
   const [localState, setLocalState] = useState<Record<string, StudyItemState>>({});
   const [localNotes, setLocalNotes] = useState<Record<string, string>>({});
   const [reviewedIds, setReviewedIds] = useState<Record<string, true>>({});
+  const [ratingStats, setRatingStats] = useState({ known: 0, unsure: 0, incorrect: 0 });
+  const [elapsedSec, setElapsedSec] = useState(0);
 
   useEffect(() => {
     setSessionCards(dedupedCards);
-    setIndex(0);
-    setRevealed(false);
+    const maxIdx = Math.max(0, dedupedCards.length - 1);
+    const start = Math.min(Math.max(0, initialCardIndex), maxIdx);
+    setIndex(dedupedCards.length ? start : 0);
+    setRevealed(dedupedCards.length ? initialRevealed : false);
     setCompleted(false);
     setCompletedCount(0);
     setReviewedIds({});
-  }, [dedupedCards]);
+    setRatingStats({ known: 0, unsure: 0, incorrect: 0 });
+    setElapsedSec(0);
+  }, [dedupedCards, initialCardIndex, initialRevealed]);
 
-  /** Classic study-flow shortcuts (legacy monolith parity): do not hijack typing in notes. */
   useEffect(() => {
-    if (sessionCards.length === 0) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (completed || loading) return;
-      const t = e.target;
-      if (t instanceof HTMLTextAreaElement || t instanceof HTMLInputElement || t instanceof HTMLSelectElement) {
-        return;
-      }
-      if (e.key === " " || e.key === "Enter") {
-        if (!revealed) {
-          e.preventDefault();
-          setRevealed(true);
-        }
-        return;
-      }
-      if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        setIndex((prev) => Math.max(0, prev - 1));
-        setRevealed(false);
-        return;
-      }
-      if (e.key === "ArrowRight") {
-        e.preventDefault();
-        if (!revealed) {
-          setRevealed(true);
-          return;
-        }
-        setIndex((prev) => Math.min(Math.max(0, sessionCards.length - 1), prev + 1));
-        setRevealed(false);
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [completed, loading, revealed, sessionCards.length]);
+    onStudyProgress?.({ index, revealed });
+  }, [index, revealed, onStudyProgress]);
+
+  useEffect(() => {
+    if (sessionMode !== "test" || completed || loading) return;
+    const t = window.setInterval(() => setElapsedSec((s) => s + 1), 1000);
+    return () => window.clearInterval(t);
+  }, [sessionMode, completed, loading]);
+
+  const formatElapsed = (s: number) =>
+    `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
   const current = sessionCards[index] ?? null;
   const sessionCount = Math.max(
@@ -181,12 +186,15 @@ export function ActiveStudySession({
   };
 
   const restartWith = (nextCards: ActiveStudyCard[]) => {
+    onSessionRestart?.();
     setSessionCards(nextCards);
     setIndex(0);
     setRevealed(false);
     setCompleted(false);
     setCompletedCount(0);
     setReviewedIds({});
+    setRatingStats({ known: 0, unsure: 0, incorrect: 0 });
+    setElapsedSec(0);
   };
 
   const restartCurrentSession = () => {
@@ -199,9 +207,15 @@ export function ActiveStudySession({
     try {
       await onRate?.(current.id, rating);
       setReviewedIds((prev) => ({ ...prev, [current.id]: true }));
+      setRatingStats((prev) => ({
+        known: prev.known + (rating === "known" ? 1 : 0),
+        unsure: prev.unsure + (rating === "unsure" ? 1 : 0),
+        incorrect: prev.incorrect + (rating === "incorrect" ? 1 : 0),
+      }));
       if (index >= sessionCards.length - 1) {
         setCompleted(true);
         setCompletedCount(sessionCards.length);
+        onSessionComplete?.();
         return;
       }
       goNext();
@@ -209,6 +223,62 @@ export function ActiveStudySession({
       setSaving(false);
     }
   };
+
+  const submitRatingRef = useRef(submitRating);
+  submitRatingRef.current = submitRating;
+
+  /** Classic study-flow shortcuts (legacy monolith parity): do not hijack typing in notes. */
+  useEffect(() => {
+    if (sessionCards.length === 0) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (completed || loading) return;
+      const t = e.target;
+      if (t instanceof HTMLTextAreaElement || t instanceof HTMLInputElement || t instanceof HTMLSelectElement) {
+        return;
+      }
+      if (e.key === " " || e.key === "Enter") {
+        if (!revealed) {
+          e.preventDefault();
+          setRevealed(true);
+        }
+        return;
+      }
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setIndex((prev) => Math.max(0, prev - 1));
+        setRevealed(false);
+        return;
+      }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        if (!revealed) {
+          setRevealed(true);
+          return;
+        }
+        setIndex((prev) => Math.min(Math.max(0, sessionCards.length - 1), prev + 1));
+        setRevealed(false);
+        return;
+      }
+      if (revealed && !saving) {
+        if (e.key === "1" || e.key === "Digit1") {
+          e.preventDefault();
+          void submitRatingRef.current("incorrect");
+          return;
+        }
+        if (e.key === "2" || e.key === "Digit2") {
+          e.preventDefault();
+          void submitRatingRef.current("unsure");
+          return;
+        }
+        if (e.key === "3" || e.key === "Digit3") {
+          e.preventDefault();
+          void submitRatingRef.current("known");
+        }
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [completed, loading, revealed, saving, sessionCards.length]);
 
   const completionSummary = useMemo(() => {
     const aggregate = {
@@ -270,6 +340,14 @@ export function ActiveStudySession({
           <h2 className="mt-1 text-lg font-bold text-[var(--theme-heading-text)]">{header.sessionTitle}</h2>
           <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
             You completed {completedCount} item{completedCount === 1 ? "" : "s"} in {header.modeLabel}.
+          </p>
+          <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
+            This session:{" "}
+            <span className="font-semibold text-[var(--semantic-success)]">{ratingStats.known} knew</span>
+            {" · "}
+            <span className="font-semibold text-[var(--semantic-warning)]">{ratingStats.unsure} unsure</span>
+            {" · "}
+            <span className="font-semibold text-[var(--semantic-danger)]">{ratingStats.incorrect} missed</span>
           </p>
           <p className="mt-1 text-xs text-[var(--theme-muted-text)]">Categories: {header.categoriesLabel}</p>
         </section>
@@ -362,7 +440,7 @@ export function ActiveStudySession({
               {progressLabel} · {header.modeLabel} · {header.categoriesLabel}
             </p>
             <p className="mt-1 text-[10px] text-[var(--theme-muted-text)]">
-              Keyboard: Space or Enter to reveal · Arrow keys to move (← before reveal also goes back)
+              Keyboard: Space/Enter to reveal · ←/→ to navigate · After reveal: 1 Incorrect · 2 Unsure · 3 Known
             </p>
             {(typeof sessionMeta?.requestedCount === "number" ||
               typeof sessionMeta?.returnedCount === "number") ? (
@@ -380,6 +458,20 @@ export function ActiveStudySession({
             <span className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">
               Progress: {progressLabel}
             </span>
+            <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-2.5 py-1 text-[11px] font-semibold text-[var(--semantic-text-primary)]">
+              {ratingStats.known} knew
+            </span>
+            <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] px-2.5 py-1 text-[11px] font-semibold text-[var(--semantic-text-primary)]">
+              {ratingStats.unsure} unsure
+            </span>
+            <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] px-2.5 py-1 text-[11px] font-semibold text-[var(--semantic-text-primary)]">
+              {ratingStats.incorrect} missed
+            </span>
+            {sessionMode === "test" ? (
+              <span className="rounded-full border border-border px-2.5 py-1 font-mono text-xs text-[var(--theme-muted-text)]">
+                {formatElapsed(elapsedSec)}
+              </span>
+            ) : null}
             <Link
               href={header.exitHref}
               onClick={onExit}
@@ -391,6 +483,176 @@ export function ActiveStudySession({
         </div>
       </section>
 
+      {layout === "card" ? (
+        <>
+          <div className="nn-progress-track-semantic nn-progress-track-semantic--md">
+            <div
+              className="h-full rounded-full nn-progress-fill-semantic-brand transition-[width] duration-500"
+              style={{ width: `${Math.min(100, ((index + 1) / sessionCount) * 100)}%` }}
+            />
+          </div>
+
+          <section className="space-y-4">
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={() => !revealed && setRevealed(true)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  if (!revealed) setRevealed(true);
+                }
+              }}
+              className={`min-h-[min(360px,70vh)] cursor-pointer rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft),var(--semantic-panel-cool))] p-6 text-center shadow-sm transition-colors md:p-10 ${
+                revealed
+                  ? "bg-[color-mix(in_srgb,var(--semantic-info)_12%,var(--semantic-surface))]"
+                  : "bg-[color-mix(in_srgb,var(--semantic-panel-cool),var(--semantic-surface))] hover:bg-[color-mix(in_srgb,var(--semantic-panel-warm),var(--semantic-surface))]"
+              }`}
+            >
+              {!revealed ? (
+                <div className="flex h-full min-h-[280px] flex-col items-center justify-center gap-6">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--semantic-text-secondary)]">
+                    {sessionMode === "test" ? "Test mode" : "Question"}
+                  </span>
+                  <h2 className="max-w-xl text-xl font-bold leading-relaxed text-[var(--semantic-text-primary)] md:text-2xl">
+                    {current.prompt}
+                  </h2>
+                  {current.topic || current.subtopic ? (
+                    <p className="text-xs text-[var(--semantic-text-secondary)]">
+                      {current.topic ?? "General"}
+                      {current.subtopic ? ` · ${current.subtopic}` : ""}
+                    </p>
+                  ) : null}
+                  <p className="flex animate-pulse items-center gap-2 text-[10px] uppercase tracking-widest text-[var(--semantic-text-secondary)]">
+                    Tap card or press Space to reveal
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-3 text-left">
+                  <p className="text-center text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--semantic-text-secondary)]">
+                    Reveal each section
+                  </p>
+                  <details defaultOpen className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3">
+                    <summary className="cursor-pointer text-xs font-semibold text-[var(--semantic-text-primary)]">
+                      Correct answer
+                    </summary>
+                    <p className="mt-2 text-sm font-medium text-[var(--semantic-text-primary)]">{current.answer}</p>
+                  </details>
+                  <details
+                    defaultOpen={Boolean(current.explanation?.trim())}
+                    className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3"
+                  >
+                    <summary className="cursor-pointer text-xs font-semibold text-[var(--semantic-text-primary)]">
+                      Rationale
+                    </summary>
+                    <p className="mt-2 text-sm text-[var(--semantic-text-primary)]">
+                      {current.explanation ?? "Detailed explanation is not available for this item yet."}
+                    </p>
+                  </details>
+                  <details className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3">
+                    <summary className="cursor-pointer text-xs font-semibold text-[var(--semantic-text-primary)]">
+                      Clinical pearl / exam tip
+                    </summary>
+                    <p className="mt-2 text-sm text-[var(--semantic-text-primary)]">{buildClinicalPearl(current)}</p>
+                  </details>
+                </div>
+              )}
+            </div>
+
+            {revealed ? (
+              <div className="space-y-3 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+                <p className="text-center text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--semantic-text-secondary)]">
+                  How well did you know this?
+                </p>
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <button
+                    type="button"
+                    disabled={saving}
+                    onClick={() => void submitRating("incorrect")}
+                    className="min-h-[88px] rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-danger)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
+                  >
+                    <span className="block text-[10px] text-[var(--semantic-danger)]">1 · Incorrect</span>
+                    <span className="mt-1 block">Need more review</span>
+                  </button>
+                  <button
+                    type="button"
+                    disabled={saving}
+                    onClick={() => void submitRating("unsure")}
+                    className="min-h-[88px] rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-warning)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
+                  >
+                    <span className="block text-[10px] text-[var(--semantic-warning)]">2 · Unsure</span>
+                    <span className="mt-1 block">Almost there</span>
+                  </button>
+                  <button
+                    type="button"
+                    disabled={saving}
+                    onClick={() => void submitRating("known")}
+                    className="min-h-[88px] rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-success)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
+                  >
+                    <span className="block text-[10px] text-[var(--semantic-success)]">3 · Known</span>
+                    <span className="mt-1 block">Got it</span>
+                  </button>
+                </div>
+              </div>
+            ) : null}
+
+            <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Card tools</p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => applyItemState({ starred: !itemState.starred })}
+                  className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold"
+                >
+                  {itemState.starred ? "Starred" : "Star"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applyItemState({ confusing: !itemState.confusing })}
+                  className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold"
+                >
+                  {itemState.confusing ? "Revisit" : "Mark confusing"}
+                </button>
+                <button
+                  type="button"
+                  onClick={goPrevious}
+                  disabled={index <= 0}
+                  className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
+                >
+                  Previous
+                </button>
+                <button
+                  type="button"
+                  onClick={goNext}
+                  disabled={!revealed || index + 1 >= sessionCards.length}
+                  className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
+                >
+                  Next
+                </button>
+              </div>
+              <label className="mt-3 block text-xs font-semibold text-[var(--theme-muted-text)]">
+                Note
+                <textarea
+                  value={currentNote}
+                  onChange={(event) => {
+                    const value = event.target.value;
+                    setLocalNotes((prev) => ({ ...prev, [current.id]: value }));
+                    applyItemState({ note: value });
+                  }}
+                  rows={2}
+                  className="mt-1 w-full rounded-lg border border-border bg-[var(--theme-card-bg)] px-3 py-2 text-sm"
+                />
+              </label>
+            </div>
+
+            <p className="text-center text-[10px] text-[var(--theme-muted-text)]">
+              <Link href={relatedLessonLink.href} className="font-semibold text-[var(--semantic-brand)] underline">
+                {relatedLessonLink.label}
+              </Link>
+            </p>
+          </section>
+        </>
+      ) : (
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(300px,1fr)]">
         <div className="rounded-2xl border border-border bg-[var(--theme-card-bg)] p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Prompt</p>
@@ -574,6 +836,7 @@ export function ActiveStudySession({
           </div>
         </aside>
       </section>
+      )}
     </div>
   );
 }

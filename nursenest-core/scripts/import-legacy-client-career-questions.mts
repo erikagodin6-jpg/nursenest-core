@@ -5,7 +5,7 @@
  * Run: cd nursenest-core && npx tsx scripts/import-legacy-client-career-questions.mts [--dry-run] [--limit=1000] [--file=ota-questions.ts]
  */
 import { readFileSync, readdirSync, existsSync, writeFileSync, mkdirSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { PrismaClient } from "@prisma/client";
@@ -16,6 +16,8 @@ import type { ProductTrack } from "../src/lib/replit-import/replit-question-type
 import type { ImportCountry } from "../src/lib/replit-import/replit-question-types";
 import { withRetry } from "../src/lib/resilience/with-retry";
 
+import { requireDatabaseUrlForLiveImport } from "./lib/require-database-for-live-import.mts";
+
 import "../src/lib/db/env-bootstrap";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -23,10 +25,17 @@ const PKG_ROOT = join(__dirname, "..");
 const REPO_ROOT = join(PKG_ROOT, "..");
 const CAREER_DIR = join(REPO_ROOT, "client", "src", "data", "career-questions");
 
-const prisma = new PrismaClient();
-
 const STEM_HASH_CHUNK = 400;
 const INSERT_BATCH = 250;
+
+export type LegacyCareerImportArgs = {
+  prisma: PrismaClient;
+  dryRun: boolean;
+  limit?: number;
+  file?: string;
+  skipDisconnect?: boolean;
+  writeReport?: boolean;
+};
 
 function parseArgs() {
   const out: { dryRun: boolean; limit?: number; file?: string } = { dryRun: false };
@@ -54,7 +63,7 @@ function padRationale(raw: string): string {
   return "Legacy client career question; rationale pending editorial review.";
 }
 
-async function existingStemHashes(hashes: string[]): Promise<Set<string>> {
+async function existingStemHashes(prisma: PrismaClient, hashes: string[]): Promise<Set<string>> {
   const set = new Set<string>();
   for (let i = 0; i < hashes.length; i += STEM_HASH_CHUNK) {
     const chunk = hashes.slice(i, i + STEM_HASH_CHUNK);
@@ -69,12 +78,11 @@ async function existingStemHashes(hashes: string[]): Promise<Set<string>> {
   return set;
 }
 
-async function main() {
-  const { dryRun, limit, file: oneFile } = parseArgs();
+export async function runLegacyClientCareerImport(opts: LegacyCareerImportArgs): Promise<Record<string, unknown>> {
+  const { prisma, dryRun, limit, file: oneFile, skipDisconnect, writeReport = true } = opts;
 
   if (!existsSync(CAREER_DIR)) {
-    console.error("Missing career-questions dir:", CAREER_DIR);
-    process.exit(1);
+    throw new Error(`Missing career-questions dir: ${CAREER_DIR}`);
   }
 
   const files = readdirSync(CAREER_DIR)
@@ -86,6 +94,7 @@ async function main() {
   const defaultCountry: ImportCountry = "US";
   const report: Record<string, unknown> = {
     generatedAt: new Date().toISOString(),
+    phase: "legacy_career_ts",
     dryRun,
     filesScanned: files.length,
     rawQuestions: 0,
@@ -108,7 +117,7 @@ async function main() {
     let batch = pending;
     pending = [];
     const hashes = batch.map((r) => r.stemHash).filter((h): h is string => typeof h === "string" && h.length > 0);
-    const existing = await existingStemHashes(hashes);
+    const existing = await existingStemHashes(prisma, hashes);
     let skippedDb = 0;
     batch = batch.filter((r) => {
       const h = r.stemHash;
@@ -227,17 +236,20 @@ async function main() {
   report.inserted = inserted;
 
   if (!dryRun) {
-    const total = await prisma.examQuestion.count();
-    report.postImportExamQuestionCount = total;
+    report.postPhaseExamQuestionCount = await prisma.examQuestion.count();
   }
 
-  const outPath = join(REPO_ROOT, "data", "audit", "legacy-career-questions-import-validation.json");
-  mkdirSync(dirname(outPath), { recursive: true });
-  writeFileSync(outPath, JSON.stringify(report, null, 2));
-  console.log(`Report: ${outPath}`);
+  if (writeReport) {
+    const outPath = join(REPO_ROOT, "data", "audit", "legacy-career-questions-import-validation.json");
+    mkdirSync(dirname(outPath), { recursive: true });
+    writeFileSync(outPath, JSON.stringify(report, null, 2));
+    console.log(`Report: ${outPath}`);
+  }
+
   console.log(
     JSON.stringify(
       {
+        phase: "legacy_career_ts",
         dryRun,
         rawQuestions: report.rawQuestions,
         normalizedOk: report.normalizedOk,
@@ -251,11 +263,38 @@ async function main() {
     ),
   );
 
-  await prisma.$disconnect();
+  if (!skipDisconnect) await prisma.$disconnect();
+
+  return report;
 }
 
-main().catch(async (e) => {
-  console.error(e);
-  await prisma.$disconnect();
-  process.exit(1);
-});
+async function main() {
+  const args = parseArgs();
+  if (!args.dryRun) {
+    requireDatabaseUrlForLiveImport("import:legacy-client-career-questions");
+  }
+  const prisma = new PrismaClient();
+  try {
+    await runLegacyClientCareerImport({
+      prisma,
+      dryRun: args.dryRun,
+      limit: args.limit,
+      file: args.file,
+      skipDisconnect: false,
+      writeReport: true,
+    });
+  } catch (e) {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  }
+}
+
+const isDirectRun =
+  typeof process.argv[1] === "string" && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isDirectRun) {
+  main().catch(async (e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}

@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-04-15T03:04:52.132Z",
-  "phase": "legacy_career_ts",
+  "generatedAt": "2026-04-15T03:04:52.060Z",
+  "phase": "legacy_advanced_ts",
   "dryRun": true,
-  "filesScanned": 199,
+  "filesScanned": 40,
   "rawQuestions": 3,
   "normalizedOk": 3,
   "normalizeErrors": 0,
