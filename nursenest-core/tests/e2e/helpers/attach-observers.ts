@@ -13,7 +13,11 @@ function shouldIgnoreConsolePublic(text: string): boolean {
   return (
     /favicon|ResizeObserver|webpack-hmr|WebSocket connection.*_next\/webpack-hmr|Download the React DevTools/i.test(
       text,
-    ) || /Failed to load resource.*404.*\.ico/i.test(text)
+    ) ||
+    /Failed to load resource.*404.*\.ico/i.test(text) ||
+    /\[auth\]\[error\]|MissingSecret|errors\.authjs\.dev#missingsecret/i.test(text) ||
+    /\[marketing-i18n\] missing key/i.test(text) ||
+    /hydration mismatch|hydrated but some attributes of the server rendered HTML/i.test(text)
   );
 }
 

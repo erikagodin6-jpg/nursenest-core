@@ -34,7 +34,9 @@ test.describe("Public site smoke", () => {
     const o = attachPageObservers(page);
     await gotoOk(page, "/");
     await expect(page.locator('[data-nn-nav-mode="public"]')).toBeVisible({ timeout: 60_000 });
-    const pricing = page.locator(HEADER_CHROME).getByRole("link", { name: /^Pricing$/i }).first();
+    // Desktop marketing row (avoid footer / duplicate Pricing links).
+    const pricing = page.locator(".nn-header-desktop-grid").getByRole("link", { name: /^Pricing$/i }).first();
+    await expect(pricing).toBeVisible({ timeout: 30_000 });
     await pricing.click();
     await page.waitForLoadState("domcontentloaded");
     expect(page.url()).toMatch(/\/pricing/);
