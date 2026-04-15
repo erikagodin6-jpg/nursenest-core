@@ -150,16 +150,10 @@ function examIndicatorLabel(country: LearnerCountry, tier: LearnerTier, alliedPr
 function createMegaMenus(region: "US" | "CA"): MegaMenuConfig[] {
   const pnRoleLabel = getNursingRoleLabel({ country: region, role: "PN" });
   const hubs = publicExamPrepHubDestinations(region);
-  const hubsUs = publicExamPrepHubDestinations("US");
-  const hubsCa = publicExamPrepHubDestinations("CA");
   const rnHub = hubs.rn;
   const pnHub = hubs.pn;
   const npHub = hubs.np;
   const alliedHubHref = alliedHub(region);
-  const pnUsHub = hubsUs.pn;
-  const pnCaHub = hubsCa.pn;
-  const npUsHub = hubsUs.np;
-  const npCaHub = hubsCa.np;
   const npLessons = region === "US" ? NP.fnpLessons : NP.caNpLessons;
   const npQuestionHref = npNpQuestionsForRegion(region);
   const studyPlanSignupHref = `${HUB.signup}?callbackUrl=${encodeURIComponent("/app/study-plan")}`;
@@ -682,7 +676,7 @@ export function SiteHeader() {
       >
         <div className="nn-section-shell flex flex-col overflow-visible">
           {/* ── Mobile brand row ── */}
-          <div className="flex min-h-[4.5rem] items-center gap-2 overflow-visible border-b border-[var(--header-border)] pt-[env(safe-area-inset-top,0px)] sm:gap-4 lg:hidden">
+          <div className="flex min-h-[4.5rem] items-center gap-2 overflow-visible border-b border-[var(--header-border)] pt-[env(safe-area-inset-top,0px)] sm:gap-4 md:hidden">
             <div className="flex min-w-0 shrink items-center gap-2 overflow-hidden">
               <Link
                 href={localizeHref("/")}
@@ -723,7 +717,7 @@ export function SiteHeader() {
               </div>
             ) : null}
             {/* Mobile controls — only visible below lg */}
-            <div className={`flex shrink-0 items-center gap-2 lg:hidden ${isAuthenticated ? "ml-auto" : ""}`}>
+            <div className={`flex shrink-0 items-center gap-2 md:hidden ${isAuthenticated ? "ml-auto" : ""}`}>
               <button
                 type="button"
                 onClick={() => setMobileContextOpen(true)}
@@ -748,7 +742,7 @@ export function SiteHeader() {
 
           {/* Mobile/tablet: signed-in CTAs (learners/staff) — guests use the top row above */}
           {isAuthenticated ? (
-            <div className="relative z-[130] flex items-center justify-end gap-2 border-b border-[var(--header-border)] bg-[var(--nav-bg)] px-4 py-2.5 lg:hidden">
+            <div className="relative z-[130] flex items-center justify-end gap-2 border-b border-[var(--header-border)] bg-[var(--nav-bg)] px-4 py-2.5 md:hidden">
               {isLearnerNavMode ? (
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
@@ -922,7 +916,7 @@ export function SiteHeader() {
           </div>{/* /nav-row */}
         </div>{/* /shell */}
         {isPublicNavMode ? (
-          <div className="hidden w-full border-t border-[var(--nn-nav-border)] nn-header-nav-row lg:block">
+          <div className="hidden w-full border-t border-[var(--nn-nav-border)] nn-header-nav-row md:block">
             <div className="nn-section-shell flex min-h-11 flex-wrap items-center gap-x-1 gap-y-0.5 lg:gap-x-0.5">
               <nav
                 aria-label={t("nav.marketingExplore")}
@@ -960,7 +954,7 @@ export function SiteHeader() {
             id={`mega-menu-${openMega.key}`}
             role="dialog"
             aria-label={`${openMega.label} menu`}
-            className="absolute inset-x-0 top-full z-[120] hidden lg:block animate-[nn-mega-panel-enter_var(--brand-motion-normal)_var(--brand-motion-ease-luxury)_both]"
+            className="absolute inset-x-0 top-full z-[120] hidden md:block animate-[nn-mega-panel-enter_var(--brand-motion-normal)_var(--brand-motion-ease-luxury)_both]"
           >
             <div className="nn-section-shell pb-5 pt-1.5">
               <div className="overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-strong)] shadow-[var(--shadow-elevated)] ring-1 ring-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border-subtle))]">
@@ -1035,60 +1029,6 @@ export function SiteHeader() {
                         </div>
                       ))}
                     </div>
-
-                    {openMega.regionLinks && openMega.regionLinks.length > 0 ? (
-                      <div className="mt-5 space-y-4 border-t border-[var(--border-subtle)] pt-4">
-                        {/* For Your Region — primary hub, recommended */}
-                        {openMega.regionLinks.filter((rl) => rl.isPrimary).map((rl) => (
-                          <div key={rl.key}>
-                            <p className="mb-1.5 text-[9px] font-bold uppercase tracking-widest text-[var(--semantic-success)]">
-                              For Your Region
-                            </p>
-                            <Link
-                              href={localizeHref(rl.href)}
-                              className="inline-flex items-center gap-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-success)_25%,transparent)] bg-[color-mix(in_srgb,var(--semantic-success)_8%,transparent)] px-3 py-1.5 text-xs font-medium text-[var(--theme-heading-text)] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-success)_14%,transparent)] focus-visible:outline-2 focus-visible:outline-[var(--ring)]"
-                              onClick={() => {
-                                setOpenMegaMenu(null);
-                                trackClientEvent(PH.marketingNavClick, {
-                                  actor: navActor,
-                                  nav_id: `${openMega.key}_${rl.key}`,
-                                  surface: "site_header_mega_region",
-                                  marketing_region: region,
-                                });
-                              }}
-                            >
-                              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--semantic-success)]" aria-hidden />
-                              {formatTitleCase(rl.label, locale)}
-                              <span className="text-[10px] font-medium text-[var(--semantic-success)]">Recommended</span>
-                            </Link>
-                          </div>
-                        ))}
-                        {/* Other Region — muted plain link */}
-                        {openMega.regionLinks.filter((rl) => !rl.isPrimary).map((rl) => (
-                          <div key={rl.key}>
-                            <p className="mb-1.5 text-[9px] font-bold uppercase tracking-widest text-[var(--theme-muted-text)]">
-                              Other Region
-                            </p>
-                            <Link
-                              href={localizeHref(rl.href)}
-                              className="inline-flex items-center gap-1 text-xs font-medium text-[var(--theme-muted-text)] transition-[color,transform] duration-100 ease-[var(--motion-ease)] hover:translate-x-0.5 hover:text-[var(--theme-heading-text)] focus-visible:outline-2 focus-visible:outline-[var(--ring)]"
-                              onClick={() => {
-                                setOpenMegaMenu(null);
-                                trackClientEvent(PH.marketingNavClick, {
-                                  actor: navActor,
-                                  nav_id: `${openMega.key}_${rl.key}`,
-                                  surface: "site_header_mega_region",
-                                  marketing_region: region,
-                                });
-                              }}
-                            >
-                              {formatTitleCase(rl.label, locale)}
-                              <ChevronRight className="h-3 w-3 shrink-0" aria-hidden />
-                            </Link>
-                          </div>
-                        ))}
-                      </div>
-                    ) : null}
                   </div>
 
                 </div>
@@ -1272,61 +1212,6 @@ export function SiteHeader() {
                                   </ul>
                                 </div>
                               ))}
-
-                              {/* Regional alternatives — lower visual weight */}
-                              {menu.regionLinks && menu.regionLinks.length > 0 ? (
-                                <div className="border-t border-[var(--nav-border)] pt-3 space-y-3">
-                                  {/* For Your Region — primary */}
-                                  {menu.regionLinks.filter((rl) => rl.isPrimary).map((rl) => (
-                                    <div key={rl.key}>
-                                      <p className="mb-1 text-[9px] font-bold uppercase tracking-widest text-[var(--semantic-success)]">
-                                        For Your Region
-                                      </p>
-                                      <Link
-                                        href={localizeHref(rl.href)}
-                                        className="flex items-center gap-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-success)_25%,transparent)] bg-[color-mix(in_srgb,var(--semantic-success)_8%,transparent)] px-2.5 py-2 text-[13px] font-medium text-[var(--nav-fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-success)_14%,transparent)]"
-                                        onClick={() => {
-                                          trackClientEvent(PH.marketingNavClick, {
-                                            actor: navActor,
-                                            nav_id: `${menu.key}_${rl.key}`,
-                                            surface: "site_header_mobile_mega_region",
-                                            marketing_region: region,
-                                          });
-                                          setMobileOpen(false);
-                                        }}
-                                      >
-                                        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--semantic-success)]" aria-hidden />
-                                        <span className="flex-1">{formatTitleCase(rl.label, locale)}</span>
-                                        <span className="text-[11px] font-medium text-[var(--semantic-success)]">Recommended</span>
-                                      </Link>
-                                    </div>
-                                  ))}
-                                  {/* Other Region — muted */}
-                                  {menu.regionLinks.filter((rl) => !rl.isPrimary).map((rl) => (
-                                    <div key={rl.key}>
-                                      <p className="mb-1 text-[9px] font-bold uppercase tracking-widest text-[var(--nav-muted)]">
-                                        Other Region
-                                      </p>
-                                      <Link
-                                        href={localizeHref(rl.href)}
-                                        className="flex items-center gap-1 px-1 py-1 text-[13px] font-medium text-[var(--nav-muted)] transition-colors hover:text-[var(--nav-fg)]"
-                                        onClick={() => {
-                                          trackClientEvent(PH.marketingNavClick, {
-                                            actor: navActor,
-                                            nav_id: `${menu.key}_${rl.key}`,
-                                            surface: "site_header_mobile_mega_region",
-                                            marketing_region: region,
-                                          });
-                                          setMobileOpen(false);
-                                        }}
-                                      >
-                                        {formatTitleCase(rl.label, locale)}
-                                        <ChevronRight className="h-3 w-3 shrink-0" aria-hidden />
-                                      </Link>
-                                    </div>
-                                  ))}
-                                </div>
-                              ) : null}
                             </div>
                           ) : null}
                         </div>

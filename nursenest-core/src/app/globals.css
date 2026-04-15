@@ -1920,12 +1920,12 @@ html[data-theme] .nn-marketing-surface {
   outline-offset: 2px;
 }
 
-/* Desktop: logo + tier | study/marketing links | utilities + auth — balanced columns, no giant gap */
+/* Tablet/desktop: logo + tier | study/marketing links | utilities + auth — balanced columns, no giant gap */
 .nn-header-desktop-grid {
   display: none;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .nn-header-desktop-grid {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;

@@ -348,51 +348,29 @@ export type RegionGroup = {
 };
 
 export function getRegionGroups(): RegionGroup[] {
-  return [
-    {
-      label: "United States & Canada",
-      regions: [
-        { slug: "us", displayName: "United States", flag: REGION_FLAG.us },
-        { slug: "canada", displayName: "Canada", flag: REGION_FLAG.canada },
-      ],
-    },
-    {
-      label: "International",
-      regions: [
-        { slug: "philippines", displayName: "Philippines", flag: REGION_FLAG.philippines },
-        { slug: "india", displayName: "India", flag: REGION_FLAG.india },
-        { slug: "nigeria", displayName: "Nigeria", flag: REGION_FLAG.nigeria },
-        { slug: "kenya", displayName: "Kenya", flag: REGION_FLAG.kenya },
-      ],
-    },
-    {
-      label: "Africa & Middle East",
-      regions: [
-        { slug: "south-africa", displayName: "South Africa", flag: REGION_FLAG["south-africa"] },
-        { slug: "uae", displayName: "UAE", flag: REGION_FLAG.uae },
-        { slug: "saudi-arabia", displayName: "Saudi Arabia", flag: REGION_FLAG["saudi-arabia"] },
-      ],
-    },
-    {
-      label: "Asia Pacific",
-      regions: [
-        { slug: "pakistan", displayName: "Pakistan", flag: REGION_FLAG.pakistan },
-        { slug: "bangladesh", displayName: "Bangladesh", flag: REGION_FLAG.bangladesh },
-        { slug: "china", displayName: "China", flag: REGION_FLAG.china },
-        { slug: "singapore", displayName: "Singapore", flag: REGION_FLAG.singapore },
-        { slug: "south-korea", displayName: "South Korea", flag: REGION_FLAG["south-korea"] },
-        { slug: "aus", displayName: "Australia", flag: REGION_FLAG.aus },
-        { slug: "new-zealand", displayName: "New Zealand", flag: REGION_FLAG["new-zealand"] },
-      ],
-    },
-    {
-      label: "Europe & Caribbean",
-      regions: [
-        { slug: "uk", displayName: "United Kingdom", flag: REGION_FLAG.uk },
-        { slug: "ireland", displayName: "Ireland", flag: REGION_FLAG.ireland },
-        { slug: "jamaica", displayName: "Jamaica", flag: REGION_FLAG.jamaica },
-        { slug: "trinidad", displayName: "Trinidad & Tobago", flag: REGION_FLAG.trinidad },
-      ],
-    },
-  ];
+  const usCanada: RegionGroup = {
+    label: "United States & Canada",
+    regions: [
+      { slug: "us", displayName: "United States", flag: REGION_FLAG.us },
+      { slug: "canada", displayName: "Canada", flag: REGION_FLAG.canada },
+    ],
+  };
+
+  const internationalSlugs = (Object.keys(REGION_CONFIG) as GlobalRegionSlug[]).filter(
+    (slug) => slug !== "us" && slug !== "canada",
+  );
+  internationalSlugs.sort((a, b) =>
+    REGION_CONFIG[a].displayName.localeCompare(REGION_CONFIG[b].displayName, "en", { sensitivity: "base" }),
+  );
+
+  const international: RegionGroup = {
+    label: "International",
+    regions: internationalSlugs.map((slug) => ({
+      slug,
+      displayName: REGION_CONFIG[slug].displayName,
+      flag: REGION_FLAG[slug],
+    })),
+  };
+
+  return [usCanada, international];
 }
