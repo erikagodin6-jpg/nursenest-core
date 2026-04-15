@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-15T02:30:52.743Z",
+  "generatedAt": "2026-04-15T02:36:28.096Z",
   "queue": [
     {
       "lessonId": "ca-rn-nclex-rn:diabetes-self-management-teaching",
@@ -1040,27 +1040,6 @@
       ]
     },
     {
-      "lessonId": "ca-rn-nclex-rn:phlebostatic-axis-nclex-rn",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "phlebostatic-axis-nclex-rn",
-      "title": "Phlebostatic Axis (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 51,
-      "reasons": [
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "thin_total_word_count",
-        "missing_educational:summary_takeaways",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: summary_takeaways."
-      ]
-    },
-    {
       "lessonId": "ca-rn-nclex-rn:shock-recognition-fluids",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "shock-recognition-fluids",
@@ -1102,28 +1081,6 @@
       ],
       "recommendedActions": [
         "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways.",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
-        "Expand prose depth; distinguish from shell-only completeness."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:pulmonary-embolism-nclex-rn",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "pulmonary-embolism-nclex-rn",
-      "title": "Pulmonary Embolism (NCLEX-RN, Canada)",
-      "status": "usable_but_thin",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 62.8,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: overview_intro, clinical_application, summary_takeaways.",
         "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
         "Expand prose depth; distinguish from shell-only completeness."
       ]
@@ -3171,6 +3128,24 @@
       ]
     },
     {
+      "lessonId": "ca-rn-nclex-rn:pulmonary-embolism-nclex-rn",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pulmonary-embolism-nclex-rn",
+      "title": "Pulmonary Embolism (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 81.2,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
       "lessonId": "ca-rn-nclex-rn:heart-failure-nursing-priorities-hy",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "heart-failure-nursing-priorities-hy",
@@ -3192,6 +3167,23 @@
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "cardiac-tamponade-nclex-rn",
       "title": "Cardiac Tamponade (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 86.6,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:phlebostatic-axis-nclex-rn",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "phlebostatic-axis-nclex-rn",
+      "title": "Phlebostatic Axis (NCLEX-RN, Canada)",
       "status": "localization_incomplete",
       "contentReadinessStatus": "production_ready_en",
       "localizationReadinessStatus": "localization_incomplete",
@@ -7010,27 +7002,6 @@
       ]
     },
     {
-      "lessonId": "us-rn-nclex-rn:phlebostatic-axis-nclex-rn",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "phlebostatic-axis-nclex-rn",
-      "title": "Phlebostatic Axis (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 51,
-      "reasons": [
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "thin_total_word_count",
-        "missing_educational:summary_takeaways",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: summary_takeaways."
-      ]
-    },
-    {
       "lessonId": "us-rn-nclex-rn:shock-recognition-fluids",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "shock-recognition-fluids",
@@ -7072,28 +7043,6 @@
       ],
       "recommendedActions": [
         "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways.",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
-        "Expand prose depth; distinguish from shell-only completeness."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:pulmonary-embolism-nclex-rn",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "pulmonary-embolism-nclex-rn",
-      "title": "Pulmonary Embolism (NCLEX-RN, US)",
-      "status": "usable_but_thin",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 62.8,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: overview_intro, clinical_application, summary_takeaways.",
         "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
         "Expand prose depth; distinguish from shell-only completeness."
       ]
@@ -7340,26 +7289,6 @@
       ]
     },
     {
-      "lessonId": "us-rn-nclex-rn:respiratory-assessment-ngn",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "respiratory-assessment-ngn",
-      "title": "Respiratory assessment & oxygenation (NCLEX-RN, US)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 74.4,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:summary_takeaways",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: summary_takeaways.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
       "lessonId": "us-rn-nclex-rn:cabg-and-postoperative-cabg-complications-nclex-rn",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
@@ -7375,6 +7304,42 @@
       ],
       "recommendedActions": [
         "Strengthen educational buckets: overview_intro.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:pulmonary-embolism-nclex-rn",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pulmonary-embolism-nclex-rn",
+      "title": "Pulmonary Embolism (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 81.2,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:respiratory-assessment-ngn",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "respiratory-assessment-ngn",
+      "title": "Respiratory assessment & oxygenation (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 82.1,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
         "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
         "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ]
@@ -7401,6 +7366,23 @@
       "pathwayId": "us-rn-nclex-rn",
       "slug": "cardiac-tamponade-nclex-rn",
       "title": "Cardiac Tamponade (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 86.6,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:phlebostatic-axis-nclex-rn",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "phlebostatic-axis-nclex-rn",
+      "title": "Phlebostatic Axis (NCLEX-RN, US)",
       "status": "localization_incomplete",
       "contentReadinessStatus": "production_ready_en",
       "localizationReadinessStatus": "localization_incomplete",

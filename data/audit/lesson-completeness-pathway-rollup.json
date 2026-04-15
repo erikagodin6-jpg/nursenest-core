@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-15T02:30:52.743Z",
+  "generatedAt": "2026-04-15T02:36:28.096Z",
   "pathways": [
     {
       "pathwayId": "ca-rn-nclex-rn",
@@ -9,15 +9,15 @@
       "nursingPriority": true,
       "totalLessons": 188,
       "productionReady": 0,
-      "usableButThin": 3,
-      "structurallyIncomplete": 40,
+      "usableButThin": 2,
+      "structurallyIncomplete": 39,
       "contentIncomplete": 0,
-      "localizationIncomplete": 94,
+      "localizationIncomplete": 96,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
-      "productionReadyEn": 2,
-      "goodEnglishNotLocalizationComplete": 2,
-      "averageOverallScore": 67.2,
+      "productionReadyEn": 4,
+      "goodEnglishNotLocalizationComplete": 4,
+      "averageOverallScore": 67.5,
       "topReasons": [
         {
           "reason": "no_educational_overlay_in_scanned_locales",
@@ -29,7 +29,7 @@
         },
         {
           "reason": "thin_total_word_count",
-          "count": 96
+          "count": 95
         },
         {
           "reason": "Missing required premium section: tier_specific_relevance",
@@ -54,14 +54,14 @@
       ],
       "contentReadinessBreakdown": {
         "duplicate_or_unclear_source": 51,
-        "structurally_incomplete": 40,
-        "usable_but_thin_en": 95,
-        "production_ready_en": 2
+        "structurally_incomplete": 39,
+        "usable_but_thin_en": 94,
+        "production_ready_en": 4
       },
       "localizationReadinessBreakdown": {
-        "english_only": 85,
+        "english_only": 84,
         "localized_ready": 6,
-        "localization_incomplete": 97
+        "localization_incomplete": 98
       }
     },
     {
@@ -72,19 +72,19 @@
       "nursingPriority": true,
       "totalLessons": 187,
       "productionReady": 0,
-      "usableButThin": 3,
-      "structurallyIncomplete": 127,
+      "usableButThin": 2,
+      "structurallyIncomplete": 126,
       "contentIncomplete": 0,
-      "localizationIncomplete": 6,
+      "localizationIncomplete": 8,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
-      "productionReadyEn": 2,
-      "goodEnglishNotLocalizationComplete": 2,
-      "averageOverallScore": 37.1,
+      "productionReadyEn": 5,
+      "goodEnglishNotLocalizationComplete": 5,
+      "averageOverallScore": 37.5,
       "topReasons": [
         {
           "reason": "missing_educational:overview_intro",
-          "count": 108
+          "count": 107
         },
         {
           "reason": "low_total_word_count",
@@ -92,7 +92,7 @@
         },
         {
           "reason": "missing_educational:clinical_application",
-          "count": 105
+          "count": 104
         },
         {
           "reason": "missing_educational:core_concept_depth",
@@ -100,7 +100,7 @@
         },
         {
           "reason": "missing_educational:summary_takeaways",
-          "count": 100
+          "count": 97
         },
         {
           "reason": "no_educational_overlay_in_scanned_locales",
@@ -117,14 +117,14 @@
       ],
       "contentReadinessBreakdown": {
         "duplicate_or_unclear_source": 51,
-        "usable_but_thin_en": 7,
-        "structurally_incomplete": 127,
-        "production_ready_en": 2
+        "production_ready_en": 5,
+        "structurally_incomplete": 126,
+        "usable_but_thin_en": 5
       },
       "localizationReadinessBreakdown": {
-        "english_only": 172,
+        "english_only": 171,
         "localized_ready": 6,
-        "localization_incomplete": 9
+        "localization_incomplete": 10
       }
     },
     {

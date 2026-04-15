@@ -59,7 +59,9 @@ Boards also test **postoperative bleeding** pathways: a sudden **cessation of ch
 
 For NCLEX-RN, expect questions on **where to place the transducer**, **when to re-zero after repositioning**, and how **false highs/lows** change management decisions (fluids, vasopressors, diuretics). You must protect **consistency**: the same landmark for leveling across serial readings, especially after **HOB changes**, **proning**, or **transport**.
 
-Connect hemodynamic monitoring to [shock recognition](LESSON:shock-recognition-fluids), [heart failure priorities](LESSON:heart-failure-nursing-priorities-hy), and [pulmonary embolism](LESSON:pulmonary-embolism-nclex-rn) when mixed shock pictures appear.`,
+Connect hemodynamic monitoring to [shock recognition](LESSON:shock-recognition-fluids), [heart failure priorities](LESSON:heart-failure-nursing-priorities-hy), and [pulmonary embolism](LESSON:pulmonary-embolism-nclex-rn) when mixed shock pictures appear.
+
+**Exam habit:** When a number “does not fit the patient,” assume **measurement error first**—especially after **turning, proning, transport, or line changes**—then reassess perfusion and correlate with bedside findings.`,
       },
       {
         id: "core",
@@ -76,7 +78,7 @@ Connect hemodynamic monitoring to [shock recognition](LESSON:shock-recognition-f
         id: "clinical_application",
         heading: "Clinical application",
         kind: "clinical_application",
-        body: `**Patient vignette.** A 70-year-old client with a **PA catheter** has the head of bed raised from **flat to 45°** for breathing comfort. Their **PAOP** suddenly looks “better,” but urine output falls and blood pressure drifts down.
+        body: `**Patient vignette.** A 70-year-old **client reports** lightheadedness after the head of bed was raised from **flat to 45°** for breathing comfort; they have a **PA catheter** for hemodynamic monitoring. Their **PAOP** suddenly looks “better,” but urine output falls and blood pressure drifts down.
 
 **Fork:** Before charting “improved filling pressures,” **re-level the transducer** to the phlebostatic reference at the new torso position and confirm the waveform. A falsely low wedge from **height error** can prompt **inappropriate diuresis** or **fluid restriction** when the client actually needs different therapy. Pair numbers with **exam** (lung sounds, perfusion, lactate trends if available) and **notify** the provider with the **measurement method** included.`,
       },
@@ -86,7 +88,9 @@ Connect hemodynamic monitoring to [shock recognition](LESSON:shock-recognition-f
         kind: "exam_tips",
         body: `Classic items ask: “readings are inconsistent after repositioning—what should the nurse do first?” The defensible answer is **re-level/re-zero** per protocol, not bolus fluids blindly or silence alarms. Another trap is choosing **routine bathing** while **damped waveforms** suggest **line failure**—fix **measurement integrity** first.
 
-**Takeaways:** memorize the **landmark** as a safety anchor; narrate **position + transducer height** whenever you call a provider about invasive numbers; avoid treating a **single snapshot** without trend context. **Related lessons:** [ABG basics](LESSON:abg-interpretation-basics-hy) · [ARDS ventilation basics](LESSON:ards-ventilation-basics) · [fluid balance acute care](LESSON:fluid-balance-acute-care) · [US RN hub](/us/rn/nclex-rn/lessons).`,
+**Takeaways:** memorize the **landmark** as a safety anchor; narrate **position + transducer height** whenever you call a provider about invasive numbers; avoid treating a **single snapshot** without trend context. Add one more safety habit: whenever you chart a wedge or CVP, **document the bed angle** and whether the transducer was re-leveled—boards love “data looks inconsistent” stems that reward **measurement discipline** over guessing.
+
+Finish with a **summary rule** you can reuse: invasive numbers are only as trustworthy as the **reference height** and **waveform quality** behind them—if either is suspect, **pause interpretation**, **fix the setup**, then **reassess the patient** before chasing orders that rest on bad data. **Related lessons:** [ABG basics](LESSON:abg-interpretation-basics-hy) · [ARDS ventilation basics](LESSON:ards-ventilation-basics) · [fluid balance acute care](LESSON:fluid-balance-acute-care) · [US RN hub](/us/rn/nclex-rn/lessons).`,
       },
     ],
   },
@@ -99,7 +103,9 @@ Connect hemodynamic monitoring to [shock recognition](LESSON:shock-recognition-f
         kind: "intro",
         body: `**Pulmonary embolism (PE)** is obstruction of pulmonary arterial flow—most often by **thrombus** from **deep vein thrombosis**—producing **V/Q mismatch**, **hypoxemia**, **tachycardia**, and sometimes **right ventricular strain** or **hemodynamic collapse**. NCLEX-RN tests whether you connect **risk** (immobility, surgery, estrogen, cancer, prior VTE) with **priority actions**: **oxygen**, **monitoring**, **timely diagnostics**, **anticoagulation safety**, and **bleeding precautions**.
 
-This lesson complements the deeper **US RN pulmonary embolism** article where present; here the focus is **exam-style forks** and **nursing surveillance** without independent prescriber decisions. Use [DVT/PE priorities](LESSON:dvt-pe-nursing-priorities) and [fluid resuscitation judgment](LESSON:shock-recognition-fluids) when instability appears.`,
+This lesson complements the deeper **US RN pulmonary embolism** article where present; here the focus is **exam-style forks** and **nursing surveillance** without independent prescriber decisions. Use [DVT/PE priorities](LESSON:dvt-pe-nursing-priorities) and [fluid resuscitation judgment](LESSON:shock-recognition-fluids) when instability appears.
+
+**Clinical frame:** Think **risk + sudden change**. PE can mimic **ACS**, **anxiety**, **pneumonia**, or **pneumothorax**—your stability assessment (work of breathing, perfusion, oxygenation) decides whether you are in **monitoring + diagnostics** versus **emergency escalation** pathways.`,
       },
       {
         id: "core",
@@ -108,7 +114,9 @@ This lesson complements the deeper **US RN pulmonary embolism** article where pr
         body: `- **Presentation spectrum**: sudden **dyspnea**, **pleuritic chest pain**, **tachycardia**, **hypoxia**; massive PE may add **hypotension**, **syncope**, or **RV failure** signs.
 - **Labs/imaging (stem-dependent)**: **D-dimer** in low-risk workups; **CT pulmonary angiography** when suspicion is high; **V/Q scan** in select contraindications; **troponin/BNP** may rise with RV strain—integrate, do not fixate on one value.
 - **Therapy themes**: **anticoagulation** when not contraindicated; **thrombolysis** in selected **unstable** massive PE per protocol; **IVC filter** themes when anticoagulation cannot be used—**provider decisions**.
-- **Nursing care**: **SpO₂** and **work of breathing**, **bleeding checks** on anticoagulants, **fall/head injury precautions**, **early ambulation** when safe, **TED/SCD** per orders, and **teaching** on warning signs after discharge when applicable.`,
+- **Nursing care**: **SpO₂** and **work of breathing**, **bleeding checks** on anticoagulants, **fall/head injury precautions**, **early ambulation** when safe, **TED/SCD** per orders, and **teaching** on warning signs after discharge when applicable.
+
+**Integration:** NCLEX wants you to connect **prevention** (SCDs, early mobility) with **recognition** (sudden dyspnea) and **safe handoff** (clear report of vitals, risk factors, and pending tests).`,
       },
       {
         id: "clinical_application",
@@ -116,7 +124,9 @@ This lesson complements the deeper **US RN pulmonary embolism** article where pr
         kind: "clinical_application",
         body: `**Patient vignette.** A 38-year-old postpartum client on estrogen therapy reports **sudden pleuritic pain** and **dyspnea** after a long car ride. They are **tachycardic** to 120s with **SpO₂ 90%** on room air and unilateral **calf swelling**.
 
-**Fork:** Treat as **high-acuity** until evaluated—**oxygen per order**, **continuous monitoring**, **notify provider**, **anticipate imaging**, and **avoid ambulating** them alone. Do not offer **massage** to the painful calf. Document **risk factors** objectively and reassess frequently for **hypotension** or **altered mentation** suggesting massive PE.`,
+**Fork:** Treat as **high-acuity** until evaluated—**oxygen per order**, **continuous monitoring**, **notify provider**, **anticipate imaging**, and **avoid ambulating** them alone. Do not offer **massage** to the painful calf. Document **risk factors** objectively and reassess frequently for **hypotension** or **altered mentation** suggesting massive PE.
+
+The client should understand why **sudden breathlessness** plus **unilateral leg findings** is treated as an emergency—not “anxiety”—and why **anticoagulation safety** teaching follows only after life threats are addressed.`,
       },
       {
         id: "exam_tips",
@@ -124,7 +134,9 @@ This lesson complements the deeper **US RN pulmonary embolism** article where pr
         kind: "exam_tips",
         body: `Traps include **minimizing new dyspnea** after immobility, **choosing education** before **stabilizing oxygenation**, or **delegating** the unstable assessment away from the RN. Boards also test **bleeding + anticoagulation**: gum bleeding, **hematuria**, or **head strike** after starting therapy—know escalation pathways.
 
-**Takeaways:** pair **risk + acute cardiopulmonary change** with **urgent evaluation**; teach **leg swelling + breathlessness** as a **single story**; link out to [atrial fibrillation stroke prevention](LESSON:atrial-fibrillation-nclex-rn) when overlapping arrhythmia items appear. **Related:** [ACS](LESSON:acute-coronary-syndrome-nclex-rn) · [COPD oxygen](LESSON:copd-exacerbation-oxygen) · [pathway hub](/canada/rn/nclex-rn/lessons).`,
+**Takeaways:** pair **risk + acute cardiopulmonary change** with **urgent evaluation**; teach **leg swelling + breathlessness** as a **single story**; link out to [atrial fibrillation stroke prevention](LESSON:atrial-fibrillation-nclex-rn) when overlapping arrhythmia items appear. Add a **closing rule**: when VTE risk is present and symptoms are acute, choose **assessment + activation** over reassurance; when stable on therapy, choose **education + bleeding precautions** over ignoring minor symptoms.
+
+Finish with a **documentation habit**: record **onset time**, **associated symptoms**, **risk factors**, and **oxygen response** in objective language—this mirrors how exam vignettes present data and protects you from “pretty charting” distractors. **Related:** [ACS](LESSON:acute-coronary-syndrome-nclex-rn) · [COPD oxygen](LESSON:copd-exacerbation-oxygen) · [pathway hub](/canada/rn/nclex-rn/lessons).`,
       },
     ],
   },
@@ -137,7 +149,9 @@ This lesson complements the deeper **US RN pulmonary embolism** article where pr
         kind: "intro",
         body: `**Respiratory assessment and oxygenation** questions on NCLEX-RN Clinical Judgment (including NGN item types) usually embed risk in **routine data**: subtle **SpO₂** drift, new **accessory muscle** use, **inability to speak in full sentences**, **delayed capillary refill** with tachypnea, or **altered mentation** with a normal “comfort” appearance.
 
-Your job is to **sequence safely**: confirm **airway patency**, **adequate breathing effort and rate**, then **circulatory adequacy** before teaching or discharge tasks. Use **objective trends** (work of breathing, SpO₂, mental status, skin color) rather than a single number. Connect oxygen decisions to [COPD CO₂ retention themes](LESSON:copd-exacerbation-oxygen) and [ARDS basics](LESSON:ards-ventilation-basics) when the stem hints at complexity.`,
+Your job is to **sequence safely**: confirm **airway patency**, **adequate breathing effort and rate**, then **circulatory adequacy** before teaching or discharge tasks. Use **objective trends** (work of breathing, SpO₂, mental status, skin color) rather than a single number. Connect oxygen decisions to [COPD CO₂ retention themes](LESSON:copd-exacerbation-oxygen) and [ARDS basics](LESSON:ards-ventilation-basics) when the stem hints at complexity.
+
+**Practice frame:** Many stems hide respiratory failure inside **“routine post-op checks”** or **“client wants to sleep.”** If work of breathing is rising or mentation drifts, treat that as **potential respiratory failure** until assessment proves otherwise.`,
       },
       {
         id: "core",
@@ -148,7 +162,9 @@ Your job is to **sequence safely**: confirm **airway patency**, **adequate breat
 - **Auscultation**: diminished breath sounds (foreign body, effusion, pneumothorax), crackles (fluid/edema), wheezes (bronchospasm), **silent chest** in severe asthma—**escalate**.
 - **Oxygen delivery**: nasal cannula vs simple mask vs non-rebreather—match device to **severity** and **repeat SpO₂** after changes; follow **SpO₂ targets** in the stem.
 - **ABG/VBG context** when provided: **hypoxemia**, **hypercapnia**, **acidosis**—integrate with clinical picture; avoid memorizing one “perfect” threshold outside the vignette.
-- **Safety**: verify **orders** for high-flow/modalities you are not trained to titrate independently; **call RT** per protocol when ventilator or advanced airway issues arise.`,
+- **Safety**: verify **orders** for high-flow/modalities you are not trained to titrate independently; **call RT** per protocol when ventilator or advanced airway issues arise.
+
+**Escalation cues:** PaO₂/FiO₂ themes, **silent chest** in asthma, **new confusion** with rising CO₂ on ABG, or **inability to maintain SpO₂** despite escalating oxygen—all are exam signals to move beyond “routine monitoring” toward **provider activation** and **preparedness for advanced support** per policy.`,
       },
       {
         id: "clinical",
@@ -164,7 +180,11 @@ Your job is to **sequence safely**: confirm **airway patency**, **adequate breat
         kind: "exam_tips",
         body: `NGN traps reward **to-next-step** thinking: pick **assessment** that **closes the data gap** before **intervention** when instability is evolving; pick **intervention** when assessment is already complete and the threat is immediate (e.g., **severe hypoxia**). Avoid **delegating unstable assessments** to UAP.
 
-**Takeaways:** pair **SpO₂ + work of breathing + mentation**; document **position**, **oxygen device**, and **response to therapy**; use [respiratory infection hubs](LESSON:pneumonia-oxygenation) and [PE clues](LESSON:pulmonary-embolism-clues) when differential diagnosis matters. **Related:** [ABG basics](LESSON:abg-interpretation-basics-hy) · [asthma status](LESSON:asthma-status-asthmaticus) · [US RN lesson hub](/us/rn/nclex-rn/lessons).`,
+**Takeaways:** pair **SpO₂ + work of breathing + mentation**; document **position**, **oxygen device**, and **response to therapy**; use [respiratory infection hubs](LESSON:pneumonia-oxygenation) and [PE clues](LESSON:pulmonary-embolism-clues) when differential diagnosis matters.
+
+**Summary drill:** Before you lock an answer, say aloud the **primary threat** (airway, breathing pattern, oxygenation, perfusion) and the **next objective data** you need—if you cannot name both, you are guessing.
+
+**Closing synthesis:** Respiratory items reward **trend thinking**—a stable SpO₂ can still be dangerous if **respiratory rate**, **accessory muscle use**, and **mental status** are worsening; pair devices and liter flow with **repeat assessments** after every change. **Related:** [ABG basics](LESSON:abg-interpretation-basics-hy) · [asthma status](LESSON:asthma-status-asthmaticus) · [US RN lesson hub](/us/rn/nclex-rn/lessons).`,
       },
     ],
   },

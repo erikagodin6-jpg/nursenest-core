@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-15T02:30:52.743Z",
+  "generatedAt": "2026-04-15T02:36:28.096Z",
   "lessons": [
     {
       "lessonId": "ca-rn-nclex-rn:clinical-judgment-prioritization-gold",
@@ -12234,55 +12234,47 @@
       "country": "canada",
       "sourceType": "bundled_catalog",
       "routable": true,
-      "inEffectiveHub": false,
+      "inEffectiveHub": true,
       "isolatedLesson": false,
-      "structuralScore": 16,
-      "educationalScore": 83,
+      "structuralScore": 82,
+      "educationalScore": 100,
       "linkScore": 100,
       "localizationScore": 34,
-      "overallScore": 51,
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
+      "overallScore": 86.6,
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
       "reasons": [
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "thin_total_word_count",
-        "missing_educational:summary_takeaways",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: summary_takeaways."
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ],
       "evidence": {
         "structureMode": "legacy",
-        "publicComplete": false,
-        "gateIssues": [
-          "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context)."
-        ],
+        "publicComplete": true,
+        "gateIssues": [],
         "gateWarnings": [
-          "Legacy section \"clinical_meaning\" below premium-migration target (105 < 180 words).",
+          "Legacy section \"clinical_meaning\" below premium-migration target (133 < 180 words).",
           "Legacy section \"exam_relevance\" below premium-migration target (42 < 80 words).",
-          "Legacy section \"clinical_scenario\" below premium-migration target (99 < 120 words).",
-          "Legacy section \"takeaways\" below premium-migration target (46 < 100 words)."
+          "Legacy section \"clinical_scenario\" below premium-migration target (106 < 120 words)."
         ],
         "internalStudyLinkCount": 7,
         "relatedLessonRefCount": 4,
         "isolatedLesson": false,
         "sectionCount": 5,
-        "totalWords": 465,
+        "totalWords": 576,
         "placeholderSignals": [],
         "educationalBucketsSatisfied": [
           "overview_intro",
           "core_concept_depth",
           "clinical_application",
+          "summary_takeaways",
           "exam_or_reasoning_cues",
           "safety_or_priority_mentioned"
         ],
-        "educationalBucketsMissing": [
-          "summary_takeaways"
-        ],
+        "educationalBucketsMissing": [],
         "overlayLocalesWithDepth": [],
         "englishOnlyEducationalLikely": true,
         "scoringWeights": {
@@ -12304,53 +12296,47 @@
       "routable": true,
       "inEffectiveHub": true,
       "isolatedLesson": false,
-      "structuralScore": 68,
-      "educationalScore": 50,
+      "structuralScore": 70,
+      "educationalScore": 100,
       "linkScore": 100,
       "localizationScore": 34,
-      "overallScore": 62.8,
-      "status": "usable_but_thin",
-      "contentReadinessStatus": "usable_but_thin_en",
+      "overallScore": 81.2,
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
       "localizationReadinessStatus": "localization_incomplete",
       "reasons": [
         "thin_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways",
         "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Strengthen educational buckets: overview_intro, clinical_application, summary_takeaways.",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
-        "Expand prose depth; distinguish from shell-only completeness."
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ],
       "evidence": {
         "structureMode": "legacy",
         "publicComplete": true,
         "gateIssues": [],
         "gateWarnings": [
-          "Legacy section \"clinical_meaning\" below premium-migration target (87 < 180 words).",
+          "Legacy section \"clinical_meaning\" below premium-migration target (121 < 180 words).",
           "Legacy section \"exam_relevance\" below premium-migration target (38 < 80 words).",
-          "Legacy section \"core_concept\" below premium-migration target (106 < 140 words).",
-          "Legacy section \"clinical_scenario\" below premium-migration target (77 < 120 words).",
-          "Legacy section \"takeaways\" below premium-migration target (39 < 100 words)."
+          "Legacy section \"core_concept\" below premium-migration target (132 < 140 words).",
+          "Legacy section \"clinical_scenario\" below premium-migration target (105 < 120 words)."
         ],
         "internalStudyLinkCount": 6,
         "relatedLessonRefCount": 4,
         "isolatedLesson": false,
         "sectionCount": 5,
-        "totalWords": 374,
+        "totalWords": 525,
         "placeholderSignals": [],
         "educationalBucketsSatisfied": [
+          "overview_intro",
           "core_concept_depth",
+          "clinical_application",
+          "summary_takeaways",
           "exam_or_reasoning_cues",
           "safety_or_priority_mentioned"
         ],
-        "educationalBucketsMissing": [
-          "overview_intro",
-          "clinical_application",
-          "summary_takeaways"
-        ],
+        "educationalBucketsMissing": [],
         "overlayLocalesWithDepth": [],
         "englishOnlyEducationalLikely": true,
         "scoringWeights": {
@@ -15307,21 +15293,19 @@
       "routable": true,
       "inEffectiveHub": true,
       "isolatedLesson": false,
-      "structuralScore": 68,
-      "educationalScore": 83,
+      "structuralScore": 72,
+      "educationalScore": 100,
       "linkScore": 100,
       "localizationScore": 34,
-      "overallScore": 74.4,
+      "overallScore": 82.1,
       "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
+      "contentReadinessStatus": "production_ready_en",
       "localizationReadinessStatus": "localization_incomplete",
       "reasons": [
         "thin_total_word_count",
-        "missing_educational:summary_takeaways",
         "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Strengthen educational buckets: summary_takeaways.",
         "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
         "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ],
@@ -15330,28 +15314,25 @@
         "publicComplete": true,
         "gateIssues": [],
         "gateWarnings": [
-          "Legacy section \"clinical_meaning\" below premium-migration target (100 < 180 words).",
+          "Legacy section \"clinical_meaning\" below premium-migration target (135 < 180 words).",
           "Legacy section \"exam_relevance\" below premium-migration target (39 < 80 words).",
-          "Legacy section \"core_concept\" below premium-migration target (112 < 140 words).",
-          "Legacy section \"clinical_scenario\" below premium-migration target (83 < 120 words).",
-          "Legacy section \"takeaways\" below premium-migration target (39 < 100 words)."
+          "Legacy section \"clinical_scenario\" below premium-migration target (83 < 120 words)."
         ],
         "internalStudyLinkCount": 7,
         "relatedLessonRefCount": 0,
         "isolatedLesson": false,
         "sectionCount": 5,
-        "totalWords": 396,
+        "totalWords": 538,
         "placeholderSignals": [],
         "educationalBucketsSatisfied": [
           "overview_intro",
           "core_concept_depth",
           "clinical_application",
+          "summary_takeaways",
           "exam_or_reasoning_cues",
           "safety_or_priority_mentioned"
         ],
-        "educationalBucketsMissing": [
-          "summary_takeaways"
-        ],
+        "educationalBucketsMissing": [],
         "overlayLocalesWithDepth": [],
         "englishOnlyEducationalLikely": true,
         "scoringWeights": {
@@ -26005,55 +25986,47 @@
       "country": "us",
       "sourceType": "bundled_catalog",
       "routable": true,
-      "inEffectiveHub": false,
+      "inEffectiveHub": true,
       "isolatedLesson": false,
-      "structuralScore": 16,
-      "educationalScore": 83,
+      "structuralScore": 82,
+      "educationalScore": 100,
       "linkScore": 100,
       "localizationScore": 34,
-      "overallScore": 51,
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
+      "overallScore": 86.6,
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
       "reasons": [
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "thin_total_word_count",
-        "missing_educational:summary_takeaways",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: summary_takeaways."
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ],
       "evidence": {
         "structureMode": "legacy",
-        "publicComplete": false,
-        "gateIssues": [
-          "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context)."
-        ],
+        "publicComplete": true,
+        "gateIssues": [],
         "gateWarnings": [
-          "Legacy section \"clinical_meaning\" below premium-migration target (105 < 180 words).",
+          "Legacy section \"clinical_meaning\" below premium-migration target (133 < 180 words).",
           "Legacy section \"exam_relevance\" below premium-migration target (42 < 80 words).",
-          "Legacy section \"clinical_scenario\" below premium-migration target (99 < 120 words).",
-          "Legacy section \"takeaways\" below premium-migration target (46 < 100 words)."
+          "Legacy section \"clinical_scenario\" below premium-migration target (106 < 120 words)."
         ],
         "internalStudyLinkCount": 7,
         "relatedLessonRefCount": 4,
         "isolatedLesson": false,
         "sectionCount": 5,
-        "totalWords": 465,
+        "totalWords": 576,
         "placeholderSignals": [],
         "educationalBucketsSatisfied": [
           "overview_intro",
           "core_concept_depth",
           "clinical_application",
+          "summary_takeaways",
           "exam_or_reasoning_cues",
           "safety_or_priority_mentioned"
         ],
-        "educationalBucketsMissing": [
-          "summary_takeaways"
-        ],
+        "educationalBucketsMissing": [],
         "overlayLocalesWithDepth": [],
         "englishOnlyEducationalLikely": true,
         "scoringWeights": {
@@ -26075,53 +26048,47 @@
       "routable": true,
       "inEffectiveHub": true,
       "isolatedLesson": false,
-      "structuralScore": 68,
-      "educationalScore": 50,
+      "structuralScore": 70,
+      "educationalScore": 100,
       "linkScore": 100,
       "localizationScore": 34,
-      "overallScore": 62.8,
-      "status": "usable_but_thin",
-      "contentReadinessStatus": "usable_but_thin_en",
+      "overallScore": 81.2,
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
       "localizationReadinessStatus": "localization_incomplete",
       "reasons": [
         "thin_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways",
         "no_educational_overlay_in_scanned_locales"
       ],
       "recommendedActions": [
-        "Strengthen educational buckets: overview_intro, clinical_application, summary_takeaways.",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
-        "Expand prose depth; distinguish from shell-only completeness."
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ],
       "evidence": {
         "structureMode": "legacy",
         "publicComplete": true,
         "gateIssues": [],
         "gateWarnings": [
-          "Legacy section \"clinical_meaning\" below premium-migration target (87 < 180 words).",
+          "Legacy section \"clinical_meaning\" below premium-migration target (121 < 180 words).",
           "Legacy section \"exam_relevance\" below premium-migration target (38 < 80 words).",
-          "Legacy section \"core_concept\" below premium-migration target (106 < 140 words).",
-          "Legacy section \"clinical_scenario\" below premium-migration target (77 < 120 words).",
-          "Legacy section \"takeaways\" below premium-migration target (39 < 100 words)."
+          "Legacy section \"core_concept\" below premium-migration target (132 < 140 words).",
+          "Legacy section \"clinical_scenario\" below premium-migration target (105 < 120 words)."
         ],
         "internalStudyLinkCount": 6,
         "relatedLessonRefCount": 4,
         "isolatedLesson": false,
         "sectionCount": 5,
-        "totalWords": 374,
+        "totalWords": 525,
         "placeholderSignals": [],
         "educationalBucketsSatisfied": [
+          "overview_intro",
           "core_concept_depth",
+          "clinical_application",
+          "summary_takeaways",
           "exam_or_reasoning_cues",
           "safety_or_priority_mentioned"
         ],
-        "educationalBucketsMissing": [
-          "overview_intro",
-          "clinical_application",
-          "summary_takeaways"
-        ],
+        "educationalBucketsMissing": [],
         "overlayLocalesWithDepth": [],
         "englishOnlyEducationalLikely": true,
         "scoringWeights": {

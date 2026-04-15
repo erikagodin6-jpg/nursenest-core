@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-04-15T02:31:05.909Z",
-  "auditGeneratedAt": "2026-04-15T02:30:52.743Z",
+  "generatedAt": "2026-04-15T02:36:46.323Z",
+  "auditGeneratedAt": "2026-04-15T02:36:28.096Z",
   "planGeneratedAt": "2026-04-15T02:23:16.994Z",
   "batchContentSlugsCompleted": [
     "cardiac-tamponade-nclex-rn",
@@ -15,10 +15,10 @@
   "metricsForBatchSlugRowsInPlan": {
     "planRowsMatchingBatchSlugs": 11,
     "improvedOverallScoreCount": 11,
-    "averageOverallScoreLiftAmongImproved": 57.2,
-    "movedOutOfStructurallyIncompleteGateApprox": 9,
-    "movedToProductionReadyEn": 3,
-    "productionReadyEnButLocalizationIncomplete": 3
+    "averageOverallScoreLiftAmongImproved": 67.7,
+    "movedOutOfStructurallyIncompleteGateApprox": 11,
+    "movedToProductionReadyEn": 8,
+    "productionReadyEnButLocalizationIncomplete": 8
   },
   "notes": "Before scores taken from lesson-fix-batch-2-plan.json (queue snapshot). Full batch has 100 plan rows; 8 unique slugs received catalog patches in this pass.",
   "lessons": [
@@ -47,19 +47,15 @@
       "inBatch2ContentPass": true,
       "beforeOverallScore": 10.5,
       "beforeStatus": "structurally_incomplete",
-      "afterOverallScore": 51,
-      "afterStatus": "structurally_incomplete",
-      "afterContentReadinessStatus": "structurally_incomplete",
-      "afterLocalizationReadinessStatus": "english_only",
-      "overallScoreLift": 40.5,
-      "publicCompleteAfter": false,
-      "totalWordsAfter": 465,
+      "afterOverallScore": 86.6,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 76.1,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 576,
       "topReasonsAfter": [
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "thin_total_word_count",
-        "missing_educational:summary_takeaways",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ]
     },
     {
@@ -69,18 +65,15 @@
       "inBatch2ContentPass": true,
       "beforeOverallScore": 10.5,
       "beforeStatus": "structurally_incomplete",
-      "afterOverallScore": 62.8,
-      "afterStatus": "usable_but_thin",
-      "afterContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 81.2,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
       "afterLocalizationReadinessStatus": "localization_incomplete",
-      "overallScoreLift": 52.3,
+      "overallScoreLift": 70.7,
       "publicCompleteAfter": true,
-      "totalWordsAfter": 374,
+      "totalWordsAfter": 525,
       "topReasonsAfter": [
         "thin_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways",
         "no_educational_overlay_in_scanned_locales"
       ]
     },
@@ -91,16 +84,15 @@
       "inBatch2ContentPass": true,
       "beforeOverallScore": 10.5,
       "beforeStatus": "structurally_incomplete",
-      "afterOverallScore": 74.4,
+      "afterOverallScore": 82.1,
       "afterStatus": "localization_incomplete",
-      "afterContentReadinessStatus": "usable_but_thin_en",
+      "afterContentReadinessStatus": "production_ready_en",
       "afterLocalizationReadinessStatus": "localization_incomplete",
-      "overallScoreLift": 63.9,
+      "overallScoreLift": 71.6,
       "publicCompleteAfter": true,
-      "totalWordsAfter": 396,
+      "totalWordsAfter": 538,
       "topReasonsAfter": [
         "thin_total_word_count",
-        "missing_educational:summary_takeaways",
         "no_educational_overlay_in_scanned_locales"
       ]
     },
@@ -1939,19 +1931,15 @@
       "inBatch2ContentPass": true,
       "beforeOverallScore": 10.5,
       "beforeStatus": "structurally_incomplete",
-      "afterOverallScore": 51,
-      "afterStatus": "structurally_incomplete",
-      "afterContentReadinessStatus": "structurally_incomplete",
-      "afterLocalizationReadinessStatus": "english_only",
-      "overallScoreLift": 40.5,
-      "publicCompleteAfter": false,
-      "totalWordsAfter": 465,
+      "afterOverallScore": 86.6,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 76.1,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 576,
       "topReasonsAfter": [
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "thin_total_word_count",
-        "missing_educational:summary_takeaways",
-        "no_educational_overlay_in_scanned_locales",
-        "not_in_exam_filtered_hub_list"
+        "no_educational_overlay_in_scanned_locales"
       ]
     },
     {
@@ -1961,18 +1949,15 @@
       "inBatch2ContentPass": true,
       "beforeOverallScore": 10.5,
       "beforeStatus": "structurally_incomplete",
-      "afterOverallScore": 62.8,
-      "afterStatus": "usable_but_thin",
-      "afterContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 81.2,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
       "afterLocalizationReadinessStatus": "localization_incomplete",
-      "overallScoreLift": 52.3,
+      "overallScoreLift": 70.7,
       "publicCompleteAfter": true,
-      "totalWordsAfter": 374,
+      "totalWordsAfter": 525,
       "topReasonsAfter": [
         "thin_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways",
         "no_educational_overlay_in_scanned_locales"
       ]
     },

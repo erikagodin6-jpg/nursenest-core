@@ -99,6 +99,42 @@ export function ActiveStudySession({
     setReviewedIds({});
   }, [dedupedCards]);
 
+  /** Classic study-flow shortcuts (legacy monolith parity): do not hijack typing in notes. */
+  useEffect(() => {
+    if (sessionCards.length === 0) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (completed || loading) return;
+      const t = e.target;
+      if (t instanceof HTMLTextAreaElement || t instanceof HTMLInputElement || t instanceof HTMLSelectElement) {
+        return;
+      }
+      if (e.key === " " || e.key === "Enter") {
+        if (!revealed) {
+          e.preventDefault();
+          setRevealed(true);
+        }
+        return;
+      }
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setIndex((prev) => Math.max(0, prev - 1));
+        setRevealed(false);
+        return;
+      }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        if (!revealed) {
+          setRevealed(true);
+          return;
+        }
+        setIndex((prev) => Math.min(Math.max(0, sessionCards.length - 1), prev + 1));
+        setRevealed(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [completed, loading, revealed, sessionCards.length]);
+
   const current = sessionCards[index] ?? null;
   const sessionCount = Math.max(
     1,
@@ -324,6 +360,9 @@ export function ActiveStudySession({
             <h1 className="text-lg font-bold text-[var(--theme-heading-text)]">{header.sessionTitle}</h1>
             <p className="text-xs text-[var(--theme-muted-text)]">
               {progressLabel} · {header.modeLabel} · {header.categoriesLabel}
+            </p>
+            <p className="mt-1 text-[10px] text-[var(--theme-muted-text)]">
+              Keyboard: Space or Enter to reveal · Arrow keys to move (← before reveal also goes back)
             </p>
             {(typeof sessionMeta?.requestedCount === "number" ||
               typeof sessionMeta?.returnedCount === "number") ? (

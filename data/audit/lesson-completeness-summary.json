@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-15T02:30:52.743Z",
+  "generatedAt": "2026-04-15T02:36:28.096Z",
   "batchFixHints": [
     "ca-rn-nclex-rn: ≥45% of lessons missing core_concept_depth bucket — likely systematic spine depth gap.",
     "ca-rn-nclex-rn: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only.",
@@ -19,10 +19,10 @@
   },
   "statusDimensions": {
     "contentReadinessTotals": {
-      "production_ready_en": 8,
-      "usable_but_thin_en": 288,
+      "production_ready_en": 13,
+      "usable_but_thin_en": 285,
       "content_incomplete": 0,
-      "structurally_incomplete": 355,
+      "structurally_incomplete": 353,
       "not_routable": 0,
       "duplicate_or_unclear_source": 255
     },
@@ -30,21 +30,21 @@
       "localized_ready": 16,
       "partially_localized": 0,
       "localized_shell_only": 0,
-      "english_only": 594,
-      "localization_incomplete": 296
+      "english_only": 592,
+      "localization_incomplete": 298
     },
-    "goodEnglishLessonsNotLocalizationComplete": 8,
-    "blockedMainlyByLocalizationLegacyStatus": 289
+    "goodEnglishLessonsNotLocalizationComplete": 13,
+    "blockedMainlyByLocalizationLegacyStatus": 293
   },
   "lessonsThatExistButNotComplete": {
     "description": "Catalog-present lessons (bundled JSON) that are not classified production_ready — includes thin, structurally gated, localization-limited, non-routable pathway, or duplicate slug issues.",
     "catalogLessonRows": 906,
     "notProductionReady": 906,
     "notProductionReadyByStatus": {
-      "usable_but_thin": 7,
-      "structurally_incomplete": 355,
+      "usable_but_thin": 5,
+      "structurally_incomplete": 353,
       "content_incomplete": 0,
-      "localization_incomplete": 289,
+      "localization_incomplete": 293,
       "not_routable": 0,
       "duplicate_or_unclear_source": 255
     },
@@ -74,17 +74,17 @@
     "lessonsScanned": 906,
     "pathwaysWithLessons": 8,
     "production_ready": 0,
-    "usable_but_thin": 7,
-    "structurally_incomplete": 355,
+    "usable_but_thin": 5,
+    "structurally_incomplete": 353,
     "content_incomplete": 0,
-    "localization_incomplete": 289,
+    "localization_incomplete": 293,
     "not_routable": 0,
     "duplicate_or_unclear_source": 255,
     "contentReadinessByStatus": {
-      "production_ready_en": 8,
-      "usable_but_thin_en": 288,
+      "production_ready_en": 13,
+      "usable_but_thin_en": 285,
       "content_incomplete": 0,
-      "structurally_incomplete": 355,
+      "structurally_incomplete": 353,
       "not_routable": 0,
       "duplicate_or_unclear_source": 255
     },
@@ -92,8 +92,8 @@
       "localized_ready": 16,
       "partially_localized": 0,
       "localized_shell_only": 0,
-      "english_only": 594,
-      "localization_incomplete": 296
+      "english_only": 592,
+      "localization_incomplete": 298
     },
     "byPathway": {
       "ca-rn-nclex-rn": 188,
@@ -132,15 +132,15 @@
     },
     {
       "reason": "missing_educational:summary_takeaways",
-      "count": 330
+      "count": 325
     },
     {
       "reason": "missing_educational:overview_intro",
-      "count": 313
+      "count": 311
     },
     {
       "reason": "thin_total_word_count",
-      "count": 293
+      "count": 291
     },
     {
       "reason": "low_total_word_count",
@@ -148,11 +148,11 @@
     },
     {
       "reason": "missing_educational:clinical_application",
-      "count": 157
+      "count": 155
     },
     {
       "reason": "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-      "count": 152
+      "count": 150
     },
     {
       "reason": "links:no_internal_study_links",
@@ -160,7 +160,7 @@
     },
     {
       "reason": "not_in_exam_filtered_hub_list",
-      "count": 96
+      "count": 94
     },
     {
       "reason": "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",

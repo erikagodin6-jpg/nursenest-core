@@ -1,0 +1,1408 @@
+{
+  "generatedAt": "2026-04-15T02:36:07.069Z",
+  "dryRun": true,
+  "filesScanned": 199,
+  "rawQuestions": 27439,
+  "normalizedOk": 27439,
+  "normalizeErrors": 0,
+  "skippedDuplicateStemInDb": 0,
+  "skippedDuplicateInRun": 551,
+  "inserted": 0,
+  "insertErrors": [],
+  "fileSummaries": [
+    {
+      "file": "addictions-counsellor-questions-batch2.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "addictions-counsellor-questions-batch3.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "addictions-counsellor-questions-batch4.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "addictions-counsellor-questions-batch5.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "addictions-counsellor-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 500,
+      "normalized": 500,
+      "errors": 0
+    },
+    {
+      "file": "cardiac-sonographer-questions-batch2.ts",
+      "exportBlocks": 1,
+      "questionCount": 44,
+      "normalized": 44,
+      "errors": 0
+    },
+    {
+      "file": "cardiac-sonographer-questions-batch3.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "cardiac-sonographer-questions-batch4.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "cardiac-sonographer-questions-batch5.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "cardiac-sonographer-questions-batch6.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "cardiac-sonographer-questions-batch7.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "cardiac-sonographer-questions-batch8.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "cardiac-sonographer-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 311,
+      "normalized": 311,
+      "errors": 0
+    },
+    {
+      "file": "critical-care-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 500,
+      "normalized": 500,
+      "errors": 0
+    },
+    {
+      "file": "emergency-nursing-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 500,
+      "normalized": 500,
+      "errors": 0
+    },
+    {
+      "file": "him-questions-batch11.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "him-questions-batch2.ts",
+      "exportBlocks": 1,
+      "questionCount": 127,
+      "normalized": 127,
+      "errors": 0
+    },
+    {
+      "file": "him-questions-batch3.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "him-questions-batch4.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "him-questions-batch5.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "him-questions-batch6.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "him-questions-batch7.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "him-questions-batch8.ts",
+      "exportBlocks": 1,
+      "questionCount": 148,
+      "normalized": 148,
+      "errors": 0
+    },
+    {
+      "file": "him-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 310,
+      "normalized": 310,
+      "errors": 0
+    },
+    {
+      "file": "imaging-questions-batch2.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "imaging-questions-batch3.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "imaging-questions-batch4.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "imaging-questions-batch5.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "imaging-questions-batch6.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "imaging-questions-expansion-2.ts",
+      "exportBlocks": 1,
+      "questionCount": 310,
+      "normalized": 310,
+      "errors": 0
+    },
+    {
+      "file": "imaging-questions-expansion.ts",
+      "exportBlocks": 1,
+      "questionCount": 68,
+      "normalized": 68,
+      "errors": 0
+    },
+    {
+      "file": "imaging-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 500,
+      "normalized": 500,
+      "errors": 0
+    },
+    {
+      "file": "index.ts",
+      "exportBlocks": 0,
+      "questionCount": 0,
+      "normalized": 0,
+      "errors": 0
+    },
+    {
+      "file": "mlt-questions-batch10.ts",
+      "exportBlocks": 1,
+      "questionCount": 70,
+      "normalized": 70,
+      "errors": 0
+    },
+    {
+      "file": "mlt-questions-batch11.ts",
+      "exportBlocks": 1,
+      "questionCount": 65,
+      "normalized": 65,
+      "errors": 0
+    },
+    {
+      "file": "mlt-questions-batch12.ts",
+      "exportBlocks": 1,
+      "questionCount": 160,
+      "normalized": 160,
+      "errors": 0
+    },
+    {
+      "file": "mlt-questions-batch2.ts",
+      "exportBlocks": 1,
+      "questionCount": 500,
+      "normalized": 500,
+      "errors": 0
+    },
+    {
+      "file": "mlt-questions-batch3.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "mlt-questions-batch4.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "mlt-questions-batch5.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "mlt-questions-batch6.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "mlt-questions-batch7.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "mlt-questions-batch8.ts",
+      "exportBlocks": 1,
+      "questionCount": 130,
+      "normalized": 130,
+      "errors": 0
+    },
+    {
+      "file": "mlt-questions-batch9.ts",
+      "exportBlocks": 1,
+      "questionCount": 75,
+      "normalized": 75,
+      "errors": 0
+    },
+    {
+      "file": "mlt-questions-expansion.ts",
+      "exportBlocks": 1,
+      "questionCount": 64,
+      "normalized": 64,
+      "errors": 0
+    },
+    {
+      "file": "mlt-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 500,
+      "normalized": 500,
+      "errors": 0
+    },
+    {
+      "file": "oncology-nursing-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 500,
+      "normalized": 500,
+      "errors": 0
+    },
+    {
+      "file": "ota-questions-batch10.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "ota-questions-batch11.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "ota-questions-batch12.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "ota-questions-batch13.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "ota-questions-batch14.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "ota-questions-batch15.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "ota-questions-batch2.ts",
+      "exportBlocks": 1,
+      "questionCount": 215,
+      "normalized": 215,
+      "errors": 0
+    },
+    {
+      "file": "ota-questions-batch3.ts",
+      "exportBlocks": 1,
+      "questionCount": 115,
+      "normalized": 115,
+      "errors": 0
+    },
+    {
+      "file": "ota-questions-batch4.ts",
+      "exportBlocks": 1,
+      "questionCount": 90,
+      "normalized": 90,
+      "errors": 0
+    },
+    {
+      "file": "ota-questions-batch5.ts",
+      "exportBlocks": 1,
+      "questionCount": 95,
+      "normalized": 95,
+      "errors": 0
+    },
+    {
+      "file": "ota-questions-batch6.ts",
+      "exportBlocks": 1,
+      "questionCount": 185,
+      "normalized": 185,
+      "errors": 0
+    },
+    {
+      "file": "ota-questions-batch7.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "ota-questions-batch8.ts",
+      "exportBlocks": 1,
+      "questionCount": 101,
+      "normalized": 101,
+      "errors": 0
+    },
+    {
+      "file": "ota-questions-batch9.ts",
+      "exportBlocks": 1,
+      "questionCount": 101,
+      "normalized": 101,
+      "errors": 0
+    },
+    {
+      "file": "ota-questions-expansion.ts",
+      "exportBlocks": 1,
+      "questionCount": 82,
+      "normalized": 82,
+      "errors": 0
+    },
+    {
+      "file": "ota-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 900,
+      "normalized": 900,
+      "errors": 0
+    },
+    {
+      "file": "paramedic-questions-batch10.ts",
+      "exportBlocks": 1,
+      "questionCount": 46,
+      "normalized": 46,
+      "errors": 0
+    },
+    {
+      "file": "paramedic-questions-batch11.ts",
+      "exportBlocks": 1,
+      "questionCount": 47,
+      "normalized": 47,
+      "errors": 0
+    },
+    {
+      "file": "paramedic-questions-batch12.ts",
+      "exportBlocks": 1,
+      "questionCount": 46,
+      "normalized": 46,
+      "errors": 0
+    },
+    {
+      "file": "paramedic-questions-batch2.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "paramedic-questions-batch3.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "paramedic-questions-batch4.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "paramedic-questions-batch5.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "paramedic-questions-batch6.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "paramedic-questions-batch7.ts",
+      "exportBlocks": 1,
+      "questionCount": 70,
+      "normalized": 70,
+      "errors": 0
+    },
+    {
+      "file": "paramedic-questions-batch8.ts",
+      "exportBlocks": 1,
+      "questionCount": 43,
+      "normalized": 43,
+      "errors": 0
+    },
+    {
+      "file": "paramedic-questions-batch9.ts",
+      "exportBlocks": 1,
+      "questionCount": 48,
+      "normalized": 48,
+      "errors": 0
+    },
+    {
+      "file": "paramedic-questions-expansion.ts",
+      "exportBlocks": 1,
+      "questionCount": 72,
+      "normalized": 72,
+      "errors": 0
+    },
+    {
+      "file": "paramedic-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 500,
+      "normalized": 500,
+      "errors": 0
+    },
+    {
+      "file": "pediatric-cert-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 500,
+      "normalized": 500,
+      "errors": 0
+    },
+    {
+      "file": "perioperative-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 500,
+      "normalized": 500,
+      "errors": 0
+    },
+    {
+      "file": "pharmacy-tech-questions-batch2.ts",
+      "exportBlocks": 1,
+      "questionCount": 200,
+      "normalized": 200,
+      "errors": 0
+    },
+    {
+      "file": "pharmacy-tech-questions-batch3.ts",
+      "exportBlocks": 1,
+      "questionCount": 200,
+      "normalized": 200,
+      "errors": 0
+    },
+    {
+      "file": "pharmacy-tech-questions-batch4.ts",
+      "exportBlocks": 1,
+      "questionCount": 130,
+      "normalized": 130,
+      "errors": 0
+    },
+    {
+      "file": "pharmacy-tech-questions-batch5.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "pharmacy-tech-questions-batch6.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "pharmacy-tech-questions-batch7.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "pharmacy-tech-questions-batch8.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "pharmacy-tech-questions-batch9.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "pharmacy-tech-questions-expansion.ts",
+      "exportBlocks": 1,
+      "questionCount": 60,
+      "normalized": 60,
+      "errors": 0
+    },
+    {
+      "file": "pharmacy-tech-questions-extended.ts",
+      "exportBlocks": 1,
+      "questionCount": 355,
+      "normalized": 355,
+      "errors": 0
+    },
+    {
+      "file": "pharmacy-tech-questions-pebc.ts",
+      "exportBlocks": 1,
+      "questionCount": 130,
+      "normalized": 130,
+      "errors": 0
+    },
+    {
+      "file": "pharmacy-tech-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 500,
+      "normalized": 500,
+      "errors": 0
+    },
+    {
+      "file": "psychotherapist-questions-batch2.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "psychotherapist-questions-batch3.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "psychotherapist-questions-batch4.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "psychotherapist-questions-batch5.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "psychotherapist-questions-batch6.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "psychotherapist-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 500,
+      "normalized": 500,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch1.ts",
+      "exportBlocks": 1,
+      "questionCount": 97,
+      "normalized": 97,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch10.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch11.ts",
+      "exportBlocks": 1,
+      "questionCount": 101,
+      "normalized": 101,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch12.ts",
+      "exportBlocks": 1,
+      "questionCount": 101,
+      "normalized": 101,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch13.ts",
+      "exportBlocks": 1,
+      "questionCount": 99,
+      "normalized": 99,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch14.ts",
+      "exportBlocks": 1,
+      "questionCount": 43,
+      "normalized": 43,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch15.ts",
+      "exportBlocks": 1,
+      "questionCount": 35,
+      "normalized": 35,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch16.ts",
+      "exportBlocks": 1,
+      "questionCount": 32,
+      "normalized": 32,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch17.ts",
+      "exportBlocks": 1,
+      "questionCount": 28,
+      "normalized": 28,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch18.ts",
+      "exportBlocks": 1,
+      "questionCount": 13,
+      "normalized": 13,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch19.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch2.ts",
+      "exportBlocks": 1,
+      "questionCount": 135,
+      "normalized": 135,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch20.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch21.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch22.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch23.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch24.ts",
+      "exportBlocks": 1,
+      "questionCount": 55,
+      "normalized": 55,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch25.ts",
+      "exportBlocks": 1,
+      "questionCount": 55,
+      "normalized": 55,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch26.ts",
+      "exportBlocks": 1,
+      "questionCount": 55,
+      "normalized": 55,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch27.ts",
+      "exportBlocks": 1,
+      "questionCount": 40,
+      "normalized": 40,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch28.ts",
+      "exportBlocks": 1,
+      "questionCount": 30,
+      "normalized": 30,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch29.ts",
+      "exportBlocks": 1,
+      "questionCount": 30,
+      "normalized": 30,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch3.ts",
+      "exportBlocks": 1,
+      "questionCount": 110,
+      "normalized": 110,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch30.ts",
+      "exportBlocks": 1,
+      "questionCount": 20,
+      "normalized": 20,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch31.ts",
+      "exportBlocks": 1,
+      "questionCount": 20,
+      "normalized": 20,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch32.ts",
+      "exportBlocks": 1,
+      "questionCount": 20,
+      "normalized": 20,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch33.ts",
+      "exportBlocks": 1,
+      "questionCount": 20,
+      "normalized": 20,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch34.ts",
+      "exportBlocks": 1,
+      "questionCount": 80,
+      "normalized": 80,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch35.ts",
+      "exportBlocks": 1,
+      "questionCount": 80,
+      "normalized": 80,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch4.ts",
+      "exportBlocks": 1,
+      "questionCount": 105,
+      "normalized": 105,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch5.ts",
+      "exportBlocks": 1,
+      "questionCount": 70,
+      "normalized": 70,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch6.ts",
+      "exportBlocks": 1,
+      "questionCount": 80,
+      "normalized": 80,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch7.ts",
+      "exportBlocks": 1,
+      "questionCount": 80,
+      "normalized": 80,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch8.ts",
+      "exportBlocks": 1,
+      "questionCount": 80,
+      "normalized": 80,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-batch9.ts",
+      "exportBlocks": 1,
+      "questionCount": 40,
+      "normalized": 40,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions-expansion.ts",
+      "exportBlocks": 1,
+      "questionCount": 76,
+      "normalized": 76,
+      "errors": 0
+    },
+    {
+      "file": "pta-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 900,
+      "normalized": 900,
+      "errors": 0
+    },
+    {
+      "file": "rrt-domain-questions-batch2.ts",
+      "exportBlocks": 1,
+      "questionCount": 56,
+      "normalized": 56,
+      "errors": 0
+    },
+    {
+      "file": "rrt-domain-questions-batch3.ts",
+      "exportBlocks": 1,
+      "questionCount": 45,
+      "normalized": 45,
+      "errors": 0
+    },
+    {
+      "file": "rrt-domain-questions-batch4.ts",
+      "exportBlocks": 1,
+      "questionCount": 110,
+      "normalized": 110,
+      "errors": 0
+    },
+    {
+      "file": "rrt-domain-questions-batch5.ts",
+      "exportBlocks": 1,
+      "questionCount": 45,
+      "normalized": 45,
+      "errors": 0
+    },
+    {
+      "file": "rrt-domain-questions-batch6.ts",
+      "exportBlocks": 1,
+      "questionCount": 52,
+      "normalized": 52,
+      "errors": 0
+    },
+    {
+      "file": "rrt-domain-questions-batch7.ts",
+      "exportBlocks": 1,
+      "questionCount": 37,
+      "normalized": 37,
+      "errors": 0
+    },
+    {
+      "file": "rrt-domain-questions-batch8.ts",
+      "exportBlocks": 1,
+      "questionCount": 35,
+      "normalized": 35,
+      "errors": 0
+    },
+    {
+      "file": "rrt-domain-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 120,
+      "normalized": 120,
+      "errors": 0
+    },
+    {
+      "file": "rrt-pharmacology-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 155,
+      "normalized": 155,
+      "errors": 0
+    },
+    {
+      "file": "rrt-questions-batch1.ts",
+      "exportBlocks": 1,
+      "questionCount": 500,
+      "normalized": 500,
+      "errors": 0
+    },
+    {
+      "file": "rrt-questions-batch2.ts",
+      "exportBlocks": 1,
+      "questionCount": 500,
+      "normalized": 500,
+      "errors": 0
+    },
+    {
+      "file": "rrt-questions-batch3.ts",
+      "exportBlocks": 1,
+      "questionCount": 839,
+      "normalized": 839,
+      "errors": 0
+    },
+    {
+      "file": "rrt-questions-batch4.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "rrt-questions-batch5.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "rrt-questions-batch6.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "rrt-questions-batch7.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "rrt-questions-batch8.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "rrt-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 510,
+      "normalized": 510,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch10.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch11.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch12.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch13.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch14.ts",
+      "exportBlocks": 1,
+      "questionCount": 25,
+      "normalized": 25,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch15.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch16.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch17.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch18.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch19.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch2.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch20.ts",
+      "exportBlocks": 1,
+      "questionCount": 25,
+      "normalized": 25,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch21.ts",
+      "exportBlocks": 1,
+      "questionCount": 25,
+      "normalized": 25,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch22.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch23.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch24.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch25.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch26.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch27.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch3.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch4.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch5.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch6.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch7.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch8.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions-batch9.ts",
+      "exportBlocks": 1,
+      "questionCount": 50,
+      "normalized": 50,
+      "errors": 0
+    },
+    {
+      "file": "social-worker-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 25,
+      "normalized": 25,
+      "errors": 0
+    },
+    {
+      "file": "sonography-questions-batch11.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "sonography-questions-batch2.ts",
+      "exportBlocks": 1,
+      "questionCount": 80,
+      "normalized": 80,
+      "errors": 0
+    },
+    {
+      "file": "sonography-questions-batch3.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "sonography-questions-batch4.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "sonography-questions-batch5.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "sonography-questions-batch6.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "sonography-questions-batch7.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "sonography-questions-batch8.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "sonography-questions-batch9.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "sonography-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 310,
+      "normalized": 310,
+      "errors": 0
+    },
+    {
+      "file": "surgical-technologist-questions-10.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "surgical-technologist-questions-11.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "surgical-technologist-questions-2.ts",
+      "exportBlocks": 1,
+      "questionCount": 300,
+      "normalized": 300,
+      "errors": 0
+    },
+    {
+      "file": "surgical-technologist-questions-3.ts",
+      "exportBlocks": 1,
+      "questionCount": 300,
+      "normalized": 300,
+      "errors": 0
+    },
+    {
+      "file": "surgical-technologist-questions-4.ts",
+      "exportBlocks": 1,
+      "questionCount": 300,
+      "normalized": 300,
+      "errors": 0
+    },
+    {
+      "file": "surgical-technologist-questions-5.ts",
+      "exportBlocks": 1,
+      "questionCount": 300,
+      "normalized": 300,
+      "errors": 0
+    },
+    {
+      "file": "surgical-technologist-questions-6.ts",
+      "exportBlocks": 1,
+      "questionCount": 2,
+      "normalized": 2,
+      "errors": 0
+    },
+    {
+      "file": "surgical-technologist-questions-7.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "surgical-technologist-questions-8.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "surgical-technologist-questions-9.ts",
+      "exportBlocks": 1,
+      "questionCount": 100,
+      "normalized": 100,
+      "errors": 0
+    },
+    {
+      "file": "surgical-technologist-questions.ts",
+      "exportBlocks": 1,
+      "questionCount": 300,
+      "normalized": 300,
+      "errors": 0
+    }
+  ],
+  "errorSamples": []
+}

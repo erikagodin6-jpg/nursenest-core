@@ -60,7 +60,6 @@ function main() {
   let sumLift = 0;
   let countLift = 0;
   let movedStruct = 0;
-  let movedContent = 0;
   let prodEn = 0;
   let locOnly = 0;
 
@@ -79,12 +78,6 @@ function main() {
       }
       if (p.currentStatus === "structurally_incomplete" && after.contentReadinessStatus !== "structurally_incomplete") {
         movedStruct += 1;
-      }
-      if (
-        p.currentStatus !== "production_ready" &&
-        after.contentReadinessStatus === "production_ready_en"
-      ) {
-        movedContent += 1;
       }
       if (after.contentReadinessStatus === "production_ready_en") prodEn += 1;
       if (

@@ -1,7 +1,16 @@
 {
   "schemaVersion": 1,
   "description": "Append-only log for incremental lesson + quiz completion batches (see nursenest-core/scripts/content-completion-incremental.ts). completenessApproxPct is a rough hub metric (premium section spine + word count), not full bank-linked validation.",
-  "lastUpdated": "2026-04-14T00:00:00.000Z",
+  "lastUpdated": "2026-04-15T00:00:00.000Z",
   "latestSnapshotByPathway": {},
-  "runs": []
+  "runs": [
+    {
+      "kind": "legacy_flashcard_source_audit",
+      "at": "2026-04-15T00:00:00.000Z",
+      "artifact": "data/audit/legacy-flashcard-questionbank-source-audit.json",
+      "legacyFlashcardCardsExact": 4380,
+      "legacyFlashcardSourceFiles": 27,
+      "note": "AST parse of client/src/data/flashcards*.ts; DB counts optional when DATABASE_URL set."
+    }
+  ]
 }

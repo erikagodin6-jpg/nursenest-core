@@ -1,0 +1,168 @@
+{
+  "generatedAt": "2026-04-15T02:31:20.513Z",
+  "dryRun": true,
+  "files": [
+    {
+      "file": "flashcards-community.ts",
+      "deckSlug": "legacy-flashcards-community",
+      "cardCount": 55,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-icu-critical-care.ts",
+      "deckSlug": "legacy-flashcards-icu-critical-care",
+      "cardCount": 70,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-labor-delivery.ts",
+      "deckSlug": "legacy-flashcards-labor-delivery",
+      "cardCount": 60,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-np-enrichment-1.ts",
+      "deckSlug": "legacy-flashcards-np-enrichment-1",
+      "cardCount": 70,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-np-enrichment-2.ts",
+      "deckSlug": "legacy-flashcards-np-enrichment-2",
+      "cardCount": 49,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-np-enrichment-3.ts",
+      "deckSlug": "legacy-flashcards-np-enrichment-3",
+      "cardCount": 35,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-np-enrichment-4.ts",
+      "deckSlug": "legacy-flashcards-np-enrichment-4",
+      "cardCount": 35,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-np-enrichment-5.ts",
+      "deckSlug": "legacy-flashcards-np-enrichment-5",
+      "cardCount": 35,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-np-enrichment-6.ts",
+      "deckSlug": "legacy-flashcards-np-enrichment-6",
+      "cardCount": 28,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-np-patho.ts",
+      "deckSlug": "legacy-flashcards-np-patho",
+      "cardCount": 215,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-np-subspecialties.ts",
+      "deckSlug": "legacy-flashcards-np-subspecialties",
+      "cardCount": 46,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-np.ts",
+      "deckSlug": "legacy-flashcards-np",
+      "cardCount": 526,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-postpartum.ts",
+      "deckSlug": "legacy-flashcards-postpartum",
+      "cardCount": 55,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-public-health.ts",
+      "deckSlug": "legacy-flashcards-public-health",
+      "cardCount": 55,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-rn-arrhythmias-chd-anticoag.ts",
+      "deckSlug": "legacy-flashcards-rn-arrhythmias-chd-anticoag",
+      "cardCount": 350,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-rn-expansion-2.ts",
+      "deckSlug": "legacy-flashcards-rn-expansion-2",
+      "cardCount": 12,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-rn-expansion.ts",
+      "deckSlug": "legacy-flashcards-rn-expansion",
+      "cardCount": 32,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-rn-gi-cancer-peds-integ.ts",
+      "deckSlug": "legacy-flashcards-rn-gi-cancer-peds-integ",
+      "cardCount": 400,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-rn-infectious-disease.ts",
+      "deckSlug": "legacy-flashcards-rn-infectious-disease",
+      "cardCount": 75,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-rn-patho-cardio-neuro.ts",
+      "deckSlug": "legacy-flashcards-rn-patho-cardio-neuro",
+      "cardCount": 275,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-rn-patho-expansion.ts",
+      "deckSlug": "legacy-flashcards-rn-patho-expansion",
+      "cardCount": 300,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-rn-resp-renal-batch2.ts",
+      "deckSlug": "legacy-flashcards-rn-resp-renal-batch2",
+      "cardCount": 120,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-rn-resp-renal.ts",
+      "deckSlug": "legacy-flashcards-rn-resp-renal",
+      "cardCount": 105,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-rn-shock-critical.ts",
+      "deckSlug": "legacy-flashcards-rn-shock-critical",
+      "cardCount": 268,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-rn.ts",
+      "deckSlug": "legacy-flashcards-rn",
+      "cardCount": 442,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-rpn-expansion.ts",
+      "deckSlug": "legacy-flashcards-rpn-expansion",
+      "cardCount": 16,
+      "upserted": 0
+    },
+    {
+      "file": "flashcards-rpn.ts",
+      "deckSlug": "legacy-flashcards-rpn",
+      "cardCount": 651,
+      "upserted": 0
+    }
+  ]
+}
