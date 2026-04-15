@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { accessScopeFromUserAccess, getUserAccess, type AccessScope, type UserAccess } from "@/lib/entitlements/get-user-access";
+import { correlationIdFromHeaders } from "@/lib/observability/request-correlation";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
@@ -17,10 +18,15 @@ export function notSubscribedResponse() {
  * Avoid duplicating auth/403 logic across route handlers.
  */
 export async function requireSubscriberSession(): Promise<SubscriberSessionResult> {
+  const correlation = (await correlationIdFromHeaders()) ?? "";
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) {
-    safeServerLog("access", "unauthorized_no_session", { surface: "subscriber_gate" });
+    safeServerLog("access", "unauthorized_no_session", {
+      surface: "subscriber_gate",
+      correlation,
+      severity: "expected_denial",
+    });
     return {
       ok: false,
       response: NextResponse.json({ error: "Unauthorized", code: "unauthorized" }, { status: 401 }),
@@ -33,7 +39,12 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
   try {
     userAccess = await getUserAccess(userId);
   } catch (e) {
-    safeServerLogCritical("entitlement", "resolve_failed", { api: "subscriber_gate" }, e);
+    safeServerLogCritical(
+      "entitlement",
+      "resolve_failed",
+      { api: "subscriber_gate", correlation, severity: "error" },
+      e,
+    );
     return {
       ok: false,
       response: NextResponse.json(
@@ -52,6 +63,8 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
       userIdPrefix: userId.slice(0, 8),
       tier: String(entitlement.tier ?? ""),
       country: String(entitlement.country ?? ""),
+      correlation,
+      severity: "expected_denial",
     });
     return {
       ok: false,

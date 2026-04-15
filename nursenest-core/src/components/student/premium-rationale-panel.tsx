@@ -285,6 +285,21 @@ export function PremiumRationalePanel({
             </div>
           ) : null}
 
+          {!correct &&
+          !useTeaching &&
+          !useStructuredRationale &&
+          wrongSections.length === 0 &&
+          !missing ? (
+            <div
+              className={`nn-rationale-segment nn-rationale-segment--distractors border-[color-mix(in_srgb,var(--semantic-chart-4)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-4)_08%,var(--semantic-surface))] ${showExplanationSegment || key ? "mt-4" : "mt-3"} rounded-xl border px-3 py-3`}
+            >
+              <p className="nn-rationale-segment__title">{t("learner.qbank.rationale.whyWrongFallbackTitle")}</p>
+              <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+                {t("learner.qbank.rationale.whyWrongFallbackBody")}
+              </p>
+            </div>
+          ) : null}
+
           {!useTeaching && missing && !key ? (
             <p className="mt-2 text-xs italic text-[var(--semantic-text-muted)]">{t("learner.qbank.examUi.noRationale")}</p>
           ) : null}

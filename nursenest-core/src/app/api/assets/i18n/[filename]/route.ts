@@ -1,6 +1,6 @@
-import { readFileSync, existsSync } from "fs";
 import path from "path";
 import { NextResponse } from "next/server";
+import { loadMergedMarketingMessagesFromNextPublicDir } from "@/lib/i18n/merge-next-public-i18n-shards";
 
 /** Must match `script/compile-i18n.ts` / `script/merge-marketing-i18n.ts`. */
 const ALLOWED = new Set<string>([
@@ -11,10 +11,9 @@ const ALLOWED = new Set<string>([
 /** Scoped to `public/i18n` under the app root (matches `source_dir` / `process.cwd()` on DO App Platform). */
 const I18N_DIR = path.join(/* turbopackIgnore: true */ process.cwd(), "public", "i18n");
 
-function resolvePath(lang: string): string | null {
+function resolveMergedBundle(lang: string): Record<string, string> | null {
   if (!ALLOWED.has(lang)) return null;
-  const fp = path.join(I18N_DIR, `${lang}.json`);
-  return existsSync(fp) ? fp : null;
+  return loadMergedMarketingMessagesFromNextPublicDir(I18N_DIR, lang);
 }
 
 /**
@@ -37,12 +36,12 @@ export async function GET(
     return NextResponse.redirect(target, 307);
   }
 
-  const fp = resolvePath(lang);
-  if (!fp) {
+  const merged = resolveMergedBundle(lang);
+  if (!merged || Object.keys(merged).length === 0) {
     return new NextResponse("Not found", { status: 404 });
   }
   try {
-    const body = readFileSync(/* turbopackIgnore: true */ fp, "utf8");
+    const body = JSON.stringify(merged);
     return new NextResponse(body, {
       status: 200,
       headers: {

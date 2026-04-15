@@ -8,7 +8,8 @@ const PROFESSION = "respiratory-therapy";
 const BASE_URL = `http://localhost:${process.env.PORT || 5000}`;
 const BATCH_SIZE = 200;
 const ADMIN_USERNAME = "NurseNest";
-const ADMIN_PASSWORD = "system-no-login";
+/** Dev/local seed only — override with LEGACY_SEED_ADMIN_PASSWORD; not for production. */
+const ADMIN_PASSWORD = process.env.LEGACY_SEED_ADMIN_PASSWORD?.trim() || "dev-seed-not-for-production";
 
 async function seed() {
   const allRaw = [

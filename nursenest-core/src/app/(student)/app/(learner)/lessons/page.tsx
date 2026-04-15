@@ -157,6 +157,11 @@ export default async function LessonsPage({ searchParams }: Props) {
           </Link>{" "}
           {t("learner.lessons.list.freemiumTail")}
         </p>
+        {userId && snap && !freemiumLessonsExhausted(snap) ? (
+          <div className="mt-6">
+            <FreemiumLessonPeek />
+          </div>
+        ) : null}
         <div className="mt-6">
           <SubscriptionPaywall
             context="lessons"
@@ -167,7 +172,6 @@ export default async function LessonsPage({ searchParams }: Props) {
         {userId && snap && freemiumQuestionsExhausted(snap) && !freemiumLessonsExhausted(snap) ? (
           <FreemiumCrossTrackNudge variant="questions_exhausted" />
         ) : null}
-        {userId && snap && !freemiumLessonsExhausted(snap) ? <FreemiumLessonPeek /> : null}
         {userId && snap && freemiumLessonsExhausted(snap) ? <FreemiumPreviewExhaustedSurface kind="lessons" /> : null}
       </main>
     );

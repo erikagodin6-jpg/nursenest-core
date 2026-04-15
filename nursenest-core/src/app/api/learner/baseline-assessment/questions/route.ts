@@ -77,7 +77,9 @@ export async function GET() {
   const educationalLocale = await getMarketingLocaleForDefaultRoute();
   const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
   const localized = questions.map((q) =>
-    mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle),
+    mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle, {
+      teachingExposure: "none",
+    }),
   );
 
   return NextResponse.json({

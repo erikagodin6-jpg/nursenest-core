@@ -1,6 +1,6 @@
 "use client";
 
-import { GraduationCap, Gem, Wallet } from "lucide-react";
+import { Clock, Gem, GraduationCap } from "lucide-react";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { FadeUp, StaggerGroup, StaggerItem } from "@/lib/motion";
@@ -29,8 +29,8 @@ const BLOCKS = [
     borderAccent: "var(--semantic-info)",
   },
   {
-    id: "value",
-    icon: Wallet,
+    id: "current",
+    icon: Clock,
     iconColor: "var(--semantic-brand)",
     borderAccent: "var(--semantic-brand)",
   },
@@ -47,14 +47,14 @@ export function HomeTrustFearsSection({ questionCount, registeredLearners }: Pro
   const passBody = q
     ? formatSentenceCase(t("pages.home.trustFears.pass.bodyWithStats", { count: q }), locale)
     : formatSentenceCase(t("pages.home.trustFears.pass.bodyNoStats"), locale);
-  const valueBody = learners
-    ? formatSentenceCase(t("pages.home.trustFears.value.bodyWithStats", { count: learners }), locale)
-    : formatSentenceCase(t("pages.home.trustFears.value.bodyNoStats"), locale);
+  const currentBody = learners
+    ? formatSentenceCase(t("pages.home.trustFears.current.bodyWithLearners", { count: learners }), locale)
+    : formatSentenceCase(t("pages.home.trustFears.current.bodyNoLearners"), locale);
 
   const bodies: Record<(typeof BLOCKS)[number]["id"], string> = {
     pass: passBody,
     quality: formatSentenceCase(t("pages.home.trustFears.quality.body"), locale),
-    value: valueBody,
+    current: currentBody,
   };
 
   return (

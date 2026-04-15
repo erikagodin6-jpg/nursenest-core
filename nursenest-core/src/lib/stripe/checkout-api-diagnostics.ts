@@ -9,6 +9,8 @@ export const CHECKOUT_INVALID_PAYLOAD_CODE = "checkout_invalid_payload";
 export const CHECKOUT_POLICY_VERSION_MISMATCH_CODE = "checkout_policy_version_mismatch";
 export const CHECKOUT_STRIPE_UNAVAILABLE_CODE = "checkout_stripe_unavailable";
 export const CHECKOUT_SESSION_FAILED_CODE = "checkout_session_failed";
+/** NEXT_PUBLIC_APP_URL missing in production — unsafe to default to localhost for Stripe return URLs. */
+export const CHECKOUT_APP_ORIGIN_MISCONFIGURED_CODE = "checkout_app_origin_misconfigured";
 
 /**
  * Include `envKey` in checkout 400 JSON only when not on Vercel production.

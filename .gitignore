@@ -97,3 +97,34 @@ attached_assets/
 external/
 *.zip
 *.tgz
+
+# Local DB files and dumps (never commit — use managed backups)
+*.sqlite
+*.sqlite3
+*.dump
+pg_dump*.sql
+*.backup
+
+# Direnv / local shell env (may contain secrets)
+.envrc
+
+# Extra export / scratch output names
+export-output/
+exports/
+backups/
+*-export.jsonl
+local-backup/
+
+# Next app package — export/backup scratch (commits often run from repo root)
+nursenest-core/admin-export/
+nursenest-core/downloads/
+nursenest-core/local-export/
+nursenest-core/.replit-export-staging/
+nursenest-core/nursing-import-quarantine.jsonl
+
+# OS junk
+Thumbs.db
+Desktop.ini
+
+# JetBrains (optional)
+*.iml

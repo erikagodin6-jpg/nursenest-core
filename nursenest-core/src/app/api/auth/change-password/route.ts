@@ -4,9 +4,11 @@ import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { normalizeStoredPasswordHash } from "@/lib/auth/normalize-stored-password-hash";
 import { strongPasswordSchema } from "@/lib/auth/password-policy";
+import { JSON_BODY_AUTH_FORM, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { readStepUpHeader } from "@/lib/auth/reauth-step-up";
 
@@ -32,6 +34,7 @@ function clientIp(req: Request): string {
 }
 
 export async function POST(req: Request) {
+  const correlation = correlationIdFromRequest(req) ?? "";
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) {
@@ -48,14 +51,10 @@ export async function POST(req: Request) {
 
   setSentryServerContext({ route: "/api/auth/change-password", feature: SERVER_FEATURE.auth, userId });
 
-  let json: unknown;
-  try {
-    json = await req.json();
-  } catch {
-    return NextResponse.json({ ok: false, error: "Invalid JSON" }, { status: 400 });
-  }
+  const bodyRead = await parseJsonBodyWithLimit(req, JSON_BODY_AUTH_FORM);
+  if (!bodyRead.ok) return bodyRead.response;
 
-  const parsed = bodySchema.safeParse(json);
+  const parsed = bodySchema.safeParse(bodyRead.value);
   if (!parsed.success) {
     const first = parsed.error.issues[0];
     const hint =
@@ -86,7 +85,12 @@ export async function POST(req: Request) {
 
     const ok = await compare(currentPassword, storedHash);
     if (!ok) {
-      safeServerLog("auth", "change_password_failed", { reason: "bad_current", userIdPrefix: userId.slice(0, 8) });
+      safeServerLog("auth", "change_password_failed", {
+        reason: "bad_current",
+        userIdPrefix: userId.slice(0, 8),
+        correlation,
+        severity: "expected_denial",
+      });
       return NextResponse.json({ ok: false, error: "Current password is incorrect." }, { status: 400 });
     }
 
@@ -102,7 +106,11 @@ export async function POST(req: Request) {
 
     await prisma.passwordResetToken.deleteMany({ where: { userId } }).catch(() => {});
 
-    safeServerLog("auth", "password_changed", { userIdPrefix: userId.slice(0, 8) });
+    safeServerLog("auth", "password_changed", {
+      userIdPrefix: userId.slice(0, 8),
+      correlation,
+      severity: "info",
+    });
 
     return NextResponse.json({
       ok: true,
@@ -110,7 +118,7 @@ export async function POST(req: Request) {
       signOutRecommended: true,
     });
   } catch (e) {
-    safeServerLogCritical("auth", "change_password_failed", { surface: "api" }, e);
+    safeServerLogCritical("auth", "change_password_failed", { surface: "api", correlation, severity: "error" }, e);
     return NextResponse.json({ ok: false, error: "Unable to change password. Try again shortly." }, { status: 503 });
   }
 }

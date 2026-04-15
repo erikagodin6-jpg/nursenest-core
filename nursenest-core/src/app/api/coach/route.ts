@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
+import { JSON_BODY_COACH, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import {
   buildCoachSystemPrompt,
@@ -25,6 +26,7 @@ import {
   rankInterventions,
 } from "@/lib/coach/study-coach-intelligence";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 
 const INTENTS: [CoachIntent, ...CoachIntent[]] = [
   "explain_simply",
@@ -91,20 +93,17 @@ export async function POST(req: Request) {
     );
   }
 
-  let parsed: z.infer<typeof bodySchema>;
-  try {
-    const json = await req.json();
-    const r = bodySchema.safeParse(json);
-    if (!r.success) {
-      return NextResponse.json(
-        { error: "Invalid request", details: r.error.flatten() },
-        { status: 400 },
-      );
-    }
-    parsed = r.data;
-  } catch {
-    return NextResponse.json({ error: "Expected JSON body" }, { status: 400 });
+  const bodyRead = await parseJsonBodyWithLimit(req, JSON_BODY_COACH);
+  if (!bodyRead.ok) return bodyRead.response;
+
+  const r = bodySchema.safeParse(bodyRead.value);
+  if (!r.success) {
+    return NextResponse.json(
+      { error: "Invalid request", details: r.error.flatten() },
+      { status: 400 },
+    );
   }
+  const parsed = r.data;
 
   const intent = parsed.intent;
   const context: CoachContext = parsed.context;
@@ -162,6 +161,9 @@ export async function POST(req: Request) {
   if (!isGenerativeCoachIntent(intent)) {
     return NextResponse.json({ error: "Unsupported intent" }, { status: 400 });
   }
+
+  const subGate = await requireSubscriberSession();
+  if (!subGate.ok) return subGate.response;
 
   const keyCheck = assertOpenAiKeyConfigured();
   if (!keyCheck.ok) {

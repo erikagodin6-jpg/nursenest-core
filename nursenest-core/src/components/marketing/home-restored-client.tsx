@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { HomeConversionHero } from "@/components/marketing/home-conversion-hero";
 import { HomeSampleQuestionPreview } from "@/components/marketing/home-sample-question-preview";
@@ -10,6 +10,7 @@ import { HomeTrustStripSection } from "@/components/marketing/home-trust-strip-s
 import { HomeHowItWorksSection } from "@/components/marketing/home-how-it-works-section";
 import { HomePlatformPreviewSection } from "@/components/marketing/home-platform-preview-section";
 import { HomeTrustProofSection } from "@/components/marketing/home-trust-proof-section";
+import { HomeObjectionFaqSection } from "@/components/marketing/home-objection-faq-section";
 import { HomeFinalStudyCta } from "@/components/marketing/home-final-study-cta";
 import { FunnelHomepageViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -17,42 +18,25 @@ import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destin
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-
-type HomeStatsPayload = {
-  questionCount: number;
-  registeredLearners: number;
-};
+import type { HomeMarketingStats } from "@/components/marketing/home-marketing-stats";
 
 /**
- * Conversion-focused homepage: hero with primary CTAs, pathway cards, product pillars, platform preview,
- * competitor comparison, how it works, trust, reviews, final CTA.
+ * Homepage: hero → sample proof → trust strip → trust Q&A → pathways → how it works → platform proof → differentiation → objection FAQ → final CTA.
+ *
+ * Stats are resolved on the server (`getCachedPublicHomeStats`) and passed in so the hero/trust sections paint real numbers on first paint—no client waterfall or 0→value jumps.
  */
-export default function HomeRestoredClient() {
+export default function HomeRestoredClient({ homeMarketingStats }: { homeMarketingStats: HomeMarketingStats }) {
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const marketingRegion = region === "US" ? "US" : "CA";
-  const [homeStats, setHomeStats] = useState<HomeStatsPayload | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/api/public/home-stats")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d: HomeStatsPayload | null) => {
-        if (cancelled || !d) return;
-        setHomeStats(d);
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const questionCount = homeStats?.questionCount ?? 0;
-  const registeredLearners = homeStats?.registeredLearners ?? 0;
+  const questionCount = homeMarketingStats.questionCount;
+  const registeredLearners = homeMarketingStats.registeredLearners;
+  const lessonCount = homeMarketingStats.totalLessons;
 
   const audienceBalanceCards = useMemo(() => {
     const l = (path: string) => withMarketingLocale(locale, path);
@@ -97,11 +81,19 @@ export default function HomeRestoredClient() {
     <div className="font-sans md:animate-page-enter flex min-h-screen flex-col overflow-x-hidden bg-[var(--page-bg)]">
       <FunnelHomepageViewBeacon marketingRegion={marketingRegion} marketingLocale={locale} />
       <div className="flex-grow overflow-x-hidden">
-        {/* 1. HERO */}
-        <HomeConversionHero />
+        {/* 1. HERO + platform preview */}
+        <HomeConversionHero questionCount={questionCount} lessonCount={lessonCount} />
+        {/* 2. PROOF — sample item + rationale */}
         <HomeSampleQuestionPreview />
+        {/* 3. TRUST — credibility + freshness (stats shown in hero; strip avoids repeating counts) */}
+        <HomeTrustStripSection
+          lessonCount={lessonCount}
+          questionCount={questionCount}
+          registeredLearners={registeredLearners}
+        />
+        {/* 4. OBJECTIONS — short reassurance before pathway split */}
         <HomeTrustFearsSection questionCount={questionCount} registeredLearners={registeredLearners} />
-        {/* 1b. AUDIENCE BALANCE — RN / PN / NP / Allied */}
+        {/* 5. PATHWAYS — RN / PN / NP / Allied (below proof + trust) */}
         <section
           className="nn-section-block scroll-mt-20 border-b border-[var(--border-subtle)] bg-[var(--page-bg)]"
           aria-label={t("pages.home.audienceBalance.ariaLabel")}
@@ -134,19 +126,16 @@ export default function HomeRestoredClient() {
             </div>
           </div>
         </section>
-        {/* 2. TRUST STRIP */}
-        <HomeTrustStripSection
-          questionCount={questionCount}
-          registeredLearners={registeredLearners}
-        />
         {/* Pathway hub grid hidden to reduce above-the-fold choice overload; audience cards + nav cover entry points. */}
-        {/* 4. HOW IT WORKS */}
+        {/* 6. HOW IT WORKS */}
         <HomeHowItWorksSection />
-        {/* 5. PRODUCT PROOF */}
+        {/* 7. PRODUCT PROOF (interactive demo) */}
         <HomePlatformPreviewSection />
-        {/* 6. DIFFERENTIATION */}
+        {/* 8. DIFFERENTIATION */}
         <HomeTrustProofSection />
-        {/* 7. FINAL CTA */}
+        {/* 9. OBJECTION FAQ — worth paying, region, rationales, platform trust */}
+        <HomeObjectionFaqSection />
+        {/* 10. FINAL CTA */}
         <HomeFinalStudyCta />
       </div>
     </div>

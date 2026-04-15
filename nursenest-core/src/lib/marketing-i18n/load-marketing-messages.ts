@@ -1,13 +1,17 @@
 import "server-only";
-import { existsSync, readFileSync, statSync } from "fs";
+import { existsSync, statSync } from "fs";
 import path from "path";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-marketing-messages";
+import { loadMergedMarketingMessagesFromNextPublicDir } from "@/lib/i18n/merge-next-public-i18n-shards";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { I18N_SHARD_FILENAMES } from "@shared/i18n-shard-policy";
 
 /**
- * Canonical merged bundles live at `public/i18n/{locale}.json` (built by
- * `script/compile-i18n.ts` + `script/merge-marketing-i18n.ts`).
+ * Canonical Next.js bundles live under `public/i18n/{locale}/{domain}.json` (built by
+ * `script/compile-i18n.ts` + `script/merge-marketing-i18n.ts`). Legacy `public/i18n/{locale}.json`
+ * is still read when present.
  *
  * Resolution: two `process.cwd()`-relative candidates (app root on DO; monorepo root in dev).
  * Note: `process.cwd()` is dynamic so Turbopack cannot statically trace the exact files.
@@ -26,22 +30,21 @@ const isEmptyValue = (v: string | undefined): boolean =>
 
 /** Fill holes in `primary` using `fallback` (same contract as client `formatMarketingMessage`). */
 function mergeMissingMessageKeys(primary: MarketingMessages, fallback: MarketingMessages): MarketingMessages {
-  if (!fallback || Object.keys(fallback).length === 0) return primary;
-  const out: MarketingMessages = { ...primary };
-  for (const [k, v] of Object.entries(fallback)) {
+  const p = normalizeMarketingMessagesRecord(primary);
+  const f = normalizeMarketingMessagesRecord(fallback);
+  if (!f || Object.keys(f).length === 0) return p;
+  const out: MarketingMessages = { ...p };
+  for (const [k, v] of Object.entries(f)) {
     if (isEmptyValue(out[k]) && !isEmptyValue(v)) out[k] = v;
   }
   return out;
 }
 
-function resolveMergedI18nPath(locale: string): string | null {
-  const file = `${locale}.json`;
-  // Two scoped candidates only — no `..` so paths never escape the package root.
-  // NFT control is handled in next.config.ts (outputFileTracingExcludes/Includes),
-  // not via turbopackIgnore (which only affects dynamic import()/require(), not fs calls).
+/** Two scoped candidates only — no `..` so paths never escape the package root. */
+function resolveNextI18nPublicDir(): string | null {
   const candidates = [
-    path.join(process.cwd(), "public", "i18n", file),
-    path.join(process.cwd(), "nursenest-core", "public", "i18n", file),
+    path.join(process.cwd(), "public", "i18n"),
+    path.join(process.cwd(), "nursenest-core", "public", "i18n"),
   ];
   for (const p of candidates) {
     if (existsSync(p)) return p;
@@ -66,25 +69,37 @@ function tryLoadEnglishDiskBundle(): MarketingMessages | null {
   if (englishDiskBundleCache) return englishDiskBundleCache;
   if (englishDiskBundleLoadAttempted) return null;
   englishDiskBundleLoadAttempted = true;
-  const fp = resolveMergedI18nPath(DEFAULT_MARKETING_LOCALE);
-  if (!fp) {
+  const dir = resolveNextI18nPublicDir();
+  if (!dir) {
     safeServerLog("i18n", "merged_bundle_missing", { locale: DEFAULT_MARKETING_LOCALE });
     return null;
   }
   try {
-    const st = statSync(/* turbopackIgnore: true */ fp);
-    if (st.size > MAX_MERGED_BUNDLE_BYTES) {
+    const legacy = path.join(dir, `${DEFAULT_MARKETING_LOCALE}.json`);
+    let bytes = 0;
+    if (existsSync(legacy)) {
+      bytes = statSync(/* turbopackIgnore: true */ legacy).size;
+    } else {
+      for (const name of I18N_SHARD_FILENAMES) {
+        const fp = path.join(dir, DEFAULT_MARKETING_LOCALE, `${name}.json`);
+        if (existsSync(fp)) bytes += statSync(/* turbopackIgnore: true */ fp).size;
+      }
+    }
+    if (bytes > MAX_MERGED_BUNDLE_BYTES) {
       safeServerLog("i18n", "merged_bundle_unusually_large", {
         locale: DEFAULT_MARKETING_LOCALE,
-        bytes: st.size,
+        bytes,
       });
     }
   } catch {
     /* best-effort stat */
   }
   try {
-    const raw = readFileSync(/* turbopackIgnore: true */ fp, "utf8");
-    const parsed = JSON.parse(raw) as MarketingMessages;
+    const parsed = loadMergedMarketingMessagesFromNextPublicDir(dir, DEFAULT_MARKETING_LOCALE);
+    if (!parsed || Object.keys(parsed).length === 0) {
+      safeServerLog("i18n", "merged_bundle_read_failed", { locale: DEFAULT_MARKETING_LOCALE });
+      return null;
+    }
     englishDiskBundleCache = parsed;
     return parsed;
   } catch {
@@ -98,11 +113,12 @@ function loadEnglishBundleFromDisk(): MarketingMessages {
 }
 
 function loadFromDiskSync(locale: string): MarketingMessages | null {
-  const fp = resolveMergedI18nPath(locale);
-  if (!fp) return null;
+  const dir = resolveNextI18nPublicDir();
+  if (!dir) return null;
   try {
-    const raw = readFileSync(/* turbopackIgnore: true */ fp, "utf8");
-    return JSON.parse(raw) as MarketingMessages;
+    const parsed = loadMergedMarketingMessagesFromNextPublicDir(dir, locale);
+    if (!parsed || Object.keys(parsed).length === 0) return null;
+    return parsed;
   } catch {
     safeServerLog("i18n", "merged_bundle_read_failed", { locale });
     return null;
@@ -119,15 +135,40 @@ async function loadFromCdn(locale: string): Promise<MarketingMessages | null> {
   const pending = cdnInflight.get(locale);
   if (pending) return pending;
 
-  const url = `${base}/${encodeURIComponent(locale)}.json`;
+  const legacyUrl = `${base}/${encodeURIComponent(locale)}.json`;
   const work = (async () => {
     try {
-      const res = await fetch(url, { cache: "force-cache" });
-      if (!res.ok) {
-        safeServerLog("i18n", "cdn_bundle_fetch_failed", { locale, status: res.status });
+      let data: MarketingMessages | null = null;
+      const legacyRes = await fetch(legacyUrl, { cache: "force-cache" });
+      if (legacyRes.ok) {
+        data = normalizeMarketingMessagesRecord(await legacyRes.json());
+      } else {
+        const merged: MarketingMessages = {};
+        for (const name of I18N_SHARD_FILENAMES) {
+          const shardUrl = `${base}/${encodeURIComponent(locale)}/${encodeURIComponent(name)}.json`;
+          const res = await fetch(shardUrl, { cache: "force-cache" });
+          if (!res.ok) {
+            safeServerLog("i18n", "cdn_shard_fetch_failed", { locale, shard: name, status: res.status });
+            return null;
+          }
+          const part = normalizeMarketingMessagesRecord(await res.json());
+          for (const [k, v] of Object.entries(part)) {
+            if (k in merged) {
+              safeServerLog("i18n", "cdn_shard_duplicate_key_last_wins", {
+                locale,
+                shard: name,
+                key: k.slice(0, 120),
+              });
+            }
+            merged[k] = v;
+          }
+        }
+        data = merged;
+      }
+      if (!data || Object.keys(data).length === 0) {
+        safeServerLog("i18n", "cdn_bundle_fetch_failed", { locale, status: legacyRes.status });
         return null;
       }
-      let data = (await res.json()) as MarketingMessages;
       const enDisk = tryLoadEnglishDiskBundle();
       if (enDisk && Object.keys(enDisk).length > 0) {
         data = mergeMissingMessageKeys(data, enDisk);

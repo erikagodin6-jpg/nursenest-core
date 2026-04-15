@@ -33,8 +33,8 @@ export function HomeLandingSections({ questionCount }: Props) {
 
   const whyKeys = ["why1", "why2", "why3"] as const;
 
-  /** Five highest-conversion questions; keep in sync with `MARKETING_HOME_FAQ_JSONLD`. */
-  const faqKeys = ["1", "2", "3", "4", "5"] as const;
+  /** Keep in sync with `MARKETING_HOME_FAQ_JSONLD` (first five + emotional objections). */
+  const faqKeys = ["1", "2", "3", "4", "5", "6", "7"] as const;
 
   return (
     <>

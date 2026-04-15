@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { JSON_BODY_TINY, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 
 const bodySchema = z.object({
   email: z.string().email(),
@@ -11,14 +12,10 @@ const bodySchema = z.object({
  * can be added without changing the client contract (legacy `/api/subscribe`).
  */
 export async function POST(req: Request) {
-  let json: unknown;
-  try {
-    json = await req.json();
-  } catch {
-    return NextResponse.json({ message: "Invalid JSON" }, { status: 400 });
-  }
+  const bodyRead = await parseJsonBodyWithLimit(req, JSON_BODY_TINY);
+  if (!bodyRead.ok) return bodyRead.response;
 
-  const parsed = bodySchema.safeParse(json);
+  const parsed = bodySchema.safeParse(bodyRead.value);
   if (!parsed.success) {
     return NextResponse.json({ message: "Please enter a valid email address." }, { status: 400 });
   }

@@ -1,5 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
+import { enforceCronSecretOrResponse } from "@/lib/cron/enforce-cron-secret";
 import { ensureDailyBlogQueue, processDueBlogBatchScheduleItems } from "@/lib/blog/blog-batch-schedule";
 import { promoteScheduledBlogPosts } from "@/lib/blog/blog-publish-scheduler";
 import { CronAdvisoryLock, releaseCronAdvisoryLock, tryAcquireCronAdvisoryLock } from "@/lib/cron/cron-advisory-lock";
@@ -15,13 +16,8 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
  * runs up to 12 items per invocation via existing `generateBlogAiDraft` + canonical intent dedupe.
  */
 export async function POST(req: Request) {
-  const secret = process.env.CRON_SECRET?.trim();
-  if (secret) {
-    const auth = req.headers.get("authorization");
-    if (auth !== `Bearer ${secret}`) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-  }
+  const denied = enforceCronSecretOrResponse(req);
+  if (denied) return denied;
 
   const lockId = CronAdvisoryLock.blogBatchSchedule;
   const acquired = await tryAcquireCronAdvisoryLock(lockId);

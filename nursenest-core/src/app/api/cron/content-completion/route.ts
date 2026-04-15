@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { enforceCronSecretOrResponse } from "@/lib/cron/enforce-cron-secret";
 import {
   estimatePathwayContentCompleteness,
   runLessonCompletionBatch,
@@ -24,13 +25,8 @@ function parsePathwayIds(): string[] {
  * Writes: controlled by `CONTENT_COMPLETION_CRON_WRITE=true` (default dry-run metrics only).
  */
 export async function POST(req: Request) {
-  const secret = process.env.CRON_SECRET?.trim();
-  if (secret) {
-    const auth = req.headers.get("authorization");
-    if (auth !== `Bearer ${secret}`) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-  }
+  const denied = enforceCronSecretOrResponse(req);
+  if (denied) return denied;
 
   if (process.env.CONTENT_COMPLETION_CRON_ENABLED?.trim() !== "true") {
     return NextResponse.json({ ok: true, skipped: true, reason: "CONTENT_COMPLETION_CRON_ENABLED not true" });

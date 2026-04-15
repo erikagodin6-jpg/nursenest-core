@@ -31,6 +31,18 @@ const LEARNER_PREFIXES = [
   "/api/auth/sync-session",
 ] as const;
 
+/** Billing / newsletter — expensive or spam-prone; separate bucket from generic public API. */
+const BILLING_RATE_PATH_PREFIXES = ["/api/subscriptions/checkout", "/api/subscribe"] as const;
+
+/** LLM / heavy AI routes — per-IP cap in addition to per-route user limits. */
+const AI_EXPENSIVE_PREFIXES = ["/api/coach", "/api/ai"] as const;
+
+const BILLING_WINDOW_MS = 60_000;
+const BILLING_MAX = 28;
+
+const AI_EXPENSIVE_WINDOW_MS = 60_000;
+const AI_EXPENSIVE_MAX = 42;
+
 /** Webhooks, health, and admin APIs (own RBAC / tooling) skip global buckets. */
 const EXEMPT_PREFIXES = ["/api/subscriptions/webhook", "/api/health", "/api/admin"] as const;
 
@@ -39,6 +51,10 @@ const AUTH_STRICT_MAX = 5;
 
 const PUBLIC_WINDOW_MS = 60_000;
 const PUBLIC_MAX = 60;
+
+/** Marketing / public JSON under `/api/public/*` (cached counts, etc.) — tighter than generic `/api/*` to blunt scanners. */
+const PUBLIC_JSON_WINDOW_MS = 60_000;
+const PUBLIC_JSON_MAX = 45;
 
 const LEARNER_WINDOW_MS = 60_000;
 const LEARNER_MAX = 120;
@@ -68,6 +84,21 @@ export function isAuthStrictPath(pathname: string): boolean {
 
 function isLearnerPath(pathname: string): boolean {
   return LEARNER_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+}
+
+/** Exported for policy tests — checkout + public subscribe. */
+export function isBillingRateLimitPath(pathname: string): boolean {
+  return BILLING_RATE_PATH_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+}
+
+/** Exported for policy tests — Study Coach + `/api/ai/*`. */
+export function isAiExpensiveRateLimitPath(pathname: string): boolean {
+  return AI_EXPENSIVE_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+}
+
+/** Public marketing JSON routes — separate bucket from generic anonymous `/api/*`. */
+export function isPublicJsonRateLimitPath(pathname: string): boolean {
+  return pathname.startsWith("/api/public/");
 }
 
 function isExemptPath(pathname: string): boolean {
@@ -108,6 +139,26 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     return null;
   }
 
+  if (isBillingRateLimitPath(pathname)) {
+    const key = `ratelimit:billing:ip:${ip}`;
+    const { ok } = checkRateLimit(key, { windowMs: BILLING_WINDOW_MS, max: BILLING_MAX });
+    if (!ok) {
+      safeServerLog("security", "rate_limit_exceeded", { kind: "billing", path: pathname.slice(0, 96) });
+      return json429(60);
+    }
+    return null;
+  }
+
+  if (isAiExpensiveRateLimitPath(pathname)) {
+    const key = `ratelimit:ai_expensive:ip:${ip}`;
+    const { ok } = checkRateLimit(key, { windowMs: AI_EXPENSIVE_WINDOW_MS, max: AI_EXPENSIVE_MAX });
+    if (!ok) {
+      safeServerLog("security", "rate_limit_exceeded", { kind: "ai_expensive", path: pathname.slice(0, 96) });
+      return json429(60);
+    }
+    return null;
+  }
+
   if (isAuthStrictPath(pathname)) {
     const key = `ratelimit:auth_strict:ip:${ip}`;
     const { ok } = checkRateLimit(key, { windowMs: AUTH_STRICT_WINDOW_MS, max: AUTH_STRICT_MAX });
@@ -140,6 +191,21 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "learner", path: pathname.slice(0, 96) });
       return json429(60);
+    }
+    return null;
+  }
+
+  if (isPublicJsonRateLimitPath(pathname)) {
+    const cap = publicCapForIp(ip, PUBLIC_JSON_MAX);
+    const key = `ratelimit:public_json:ip:${ip}`;
+    const { ok } = checkRateLimit(key, { windowMs: PUBLIC_JSON_WINDOW_MS, max: cap });
+    if (!ok) {
+      safeServerLog("security", "rate_limit_exceeded", { kind: "public_json", path: pathname.slice(0, 96) });
+      const res = json429(60);
+      if (recordStrikeAndTighten(ip)) {
+        safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ip) });
+      }
+      return res;
     }
     return null;
   }

@@ -33,6 +33,8 @@ export async function putBufferToSpaces(params: {
   const Bucket = getSpacesBucket();
   const Key = params.objectKey.replace(/^\/+/, "");
 
+  // Public-read: OK for marketing/admin uploads served via CDN. For subscriber-only blobs use
+  // private objects + presigned GET or an allowlisted proxy — see docs/OBJECT_STORAGE_STRATEGY.md.
   await client.send(
     new PutObjectCommand({
       Bucket,

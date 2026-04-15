@@ -82,4 +82,10 @@ describe("subscriptionCoversPathwayBase", () => {
     const s = scope({ hasAccess: true, reason: "active_subscription", tier: "RPN", country: "US" });
     assert.equal(subscriptionCoversPathwayBase(s, usLpn), false);
   });
+
+  it("RN cannot access NP specialty pathway (tier ladder excludes NP)", () => {
+    const usNp = getExamPathwayById("us-np-fnp")!;
+    const s = scope({ hasAccess: true, reason: "active_subscription", tier: "RN", country: "US" });
+    assert.equal(subscriptionCoversPathwayBase(s, usNp), false);
+  });
 });

@@ -1,0 +1,72 @@
+# Operator guide: data, imports, builds, and deploys
+
+Use this runbook to avoid **OOM builds**, **accidental giant Git commits**, and **production fragility** from content pipelines. **Policy:** `docs/ENGINEERING_POLICY.md`. It complements `docs/REPO_COMMIT_POLICY.md`, `docs/CONTENT_IMPORT_PIPELINE.md`, and `docs/CONTENT_STORAGE_ARCHITECTURE.md`.
+
+---
+
+## 1) Responsibility split
+
+| Phase | What runs | Where | Notes |
+|-------|-----------|-------|--------|
+| **Install** | `npm ci` | CI / laptop | Lockfile only. |
+| **Generate** | `npm run db:generate` (`prisma generate`) | CI + deploy | Before `build` if schema changed. |
+| **Migrate** | `npm run db:deploy` (`prisma migrate deploy`) | Deploy job / operator | **Never** inside `next build`. |
+| **Build** | `npm run build` | CI / DO / Vercel | Default **`RUN_HEAVY_BUILD_TASKS=false`** in `package.json` — skips huge redirect graph generation (see `next.config.ts`). |
+| **Start** | `npm run start` | Runtime | No bulk imports. |
+| **Import / seed** | `tsx scripts/...`, `npm run import:*`, `db:seed*` | Operator / batch VM | Use **`IMPORT_*` chunk limits** in `src/lib/content-pipeline/import-safeguards.ts`. Never pipe multi‑GB files into a single Node buffer. |
+| **Audit / export** | `npm run audit:*`, `ops:*` | CI optional / operator | Read-only or scoped writes; outputs often **gitignored**. |
+
+---
+
+## 2) Build-time guardrails (already enforced)
+
+- **`RUN_HEAVY_BUILD_TASKS`**: Production builds default to **`false`** so `next build` does not eagerly load full SEO redirect graphs. Set to `true` only when you intentionally regenerate redirects and accept higher memory (release tooling).
+- **`prebuild`**: Runs **`i18n:validate-chrome`** — fails fast on i18n contract breaks; does not import question banks.
+- **Node heap**: `package.json` sets `NODE_OPTIONS=--max-old-space-size=8192` for `build` / `typecheck` to reduce OOM on large TS projects.
+- **Prisma**: `optimizePackageImports: ["@prisma/client"]` in `next.config.ts`.
+
+---
+
+## 3) What must not land in Git or client bundles
+
+- **No** Replit export trees, DB dumps, `pg_dump*.sql`, local `*.sqlite`, bulk ZIP staging — see `.gitignore` and `scripts/ci/check-forbidden-tracked-paths.mjs`.
+- **No** new imports from `@/content/pathway-lessons/*.json` except the **allowlisted** catalog/map files — see `scripts/ci/check-content-json-import-allowlist.mjs`. Large lesson bodies belong in **Postgres** / **Spaces**, not new JSON in `src/content/`.
+- **No** `'use client'` modules importing `@/content/pathway-lessons/*` — see `scripts/ci/check-no-client-pathway-json.mjs`.
+- **Tracked file size**: default **15 MiB** max per file (`scripts/ci/check-tracked-large-files.mjs`); i18n bundles exempt with warning path for known debt (`scripts/english-content.json`).
+
+---
+
+## 4) Memory-safe content tasks
+
+- Use **streaming / line-based** JSONL for imports; respect **`IMPORT_VALIDATE_CHUNK`**, **`IMPORT_DB_UPSERT_CHUNK`**, **`IMPORT_BATCH_MAX_LINES`** (`import-safeguards.ts`).
+- **Confirm writes** on production-shaped targets (`--confirm-write` / env flags) per import scripts — do not rely on accidental defaults.
+- **Checkpoints** for long jobs live under gitignored dirs — see `CONTENT_IMPORT_PIPELINE.md`.
+
+---
+
+## 5) CI jobs (repo hygiene)
+
+Workflow: `.github/workflows/repo-hygiene.yml`
+
+- Gitleaks, large-file check, secret-pattern scan (**existing**).
+- **`check-forbidden-tracked-paths.mjs`** — blocked paths/suffixes.
+- **`check-content-json-import-allowlist.mjs`** — pathway + topic-map JSON allowlist.
+- **`check-no-client-pathway-json.mjs`** — client bundle guard.
+
+Local: `cd nursenest-core && npm run ci:data-guardrails` (from app package).
+
+---
+
+## 6) Deploy ordering (typical)
+
+1. Build container / run CI (**no** DB migration inside `next build`).
+2. Run **`prisma migrate deploy`** against the target DB.
+3. Start app (`next start` or platform equivalent).
+4. Run **imports / backfills** as separate jobs with resource limits — not on the web process.
+
+---
+
+## 7) Known debt / risks
+
+- **`scripts/english-content.json`** (~39 MiB): tracked with **CI warning** only — plan removal or generation from storage (`docs/REPO_COMMIT_POLICY.md`).
+- **Pathway `catalog.json`**: bundled for catalog sync — keep **small**; DB is the scale path for full lesson bodies (`CONTENT_STORAGE_ARCHITECTURE.md`).

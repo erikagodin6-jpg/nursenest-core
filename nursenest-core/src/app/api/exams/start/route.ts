@@ -119,7 +119,10 @@ export async function POST(req: NextRequest) {
     options: unknown;
     questionType: unknown;
     difficulty: unknown;
-  }) => mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle);
+  }) =>
+    mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle, {
+      teachingExposure: "none",
+    });
 
   let examId: string | null = null;
   let hydrate: "full" | "window" = "window";

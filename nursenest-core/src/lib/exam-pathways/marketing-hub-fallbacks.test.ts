@@ -41,7 +41,7 @@ describe("formatMarketingMessage missing keys", () => {
   });
 
   it("falls back to English for required marketing nav labels", () => {
-    const i18nDir = path.join(process.cwd(), "public", "i18n");
+    const i18nDir = path.join(process.cwd(), "..", "client", "public", "i18n");
     const english = JSON.parse(readFileSync(path.join(i18nDir, "en.json"), "utf8")) as Record<string, string>;
     const french = JSON.parse(readFileSync(path.join(i18nDir, "fr.json"), "utf8")) as Record<string, string>;
 
@@ -51,7 +51,7 @@ describe("formatMarketingMessage missing keys", () => {
     );
     assert.equal(
       formatMarketingMessage(french, "nav.pathwayHubsAria", undefined, english),
-      "Pathway hub navigation",
+      "Pathway exam hubs",
     );
   });
 });

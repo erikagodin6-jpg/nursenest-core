@@ -9,7 +9,7 @@
  * and silences “multiple lockfiles” warnings without changing import paths.
  *
  * **RUN_HEAVY_BUILD_TASKS:** set to `false` to skip loading large redirect/rewrite graphs during `next build`
- * (lower memory — production deploys should set this in CI/build env).
+ * (lower memory — production deploys should set this in CI/build env). See `docs/OPERATOR_DATA_IMPORT_AND_BUILD.md`.
  */
 import { fileURLToPath } from "url";
 import { withSentryConfig } from "@sentry/nextjs";
@@ -170,7 +170,17 @@ const nextConfig: NextConfig = {
       source: `/sitemaps/locale-${locale}.xml`,
       destination: `/sitemaps/locales/${locale}`,
     }));
-    return { beforeFiles: [...programmaticSeoRewrites, ...localeSitemapRewrites] };
+    return {
+      beforeFiles: [
+        /**
+         * Serve merged locale JSON from the same handler as `/api/assets/i18n/*` so we can ship
+         * `public/i18n/{locale}/*.json` shards without a monolithic `public/i18n/{locale}.json` on disk.
+         */
+        { source: "/i18n/:file", destination: "/api/assets/i18n/:file" },
+        ...programmaticSeoRewrites,
+        ...localeSitemapRewrites,
+      ],
+    };
   },
   async headers() {
     if (process.env.NODE_ENV !== "production") {

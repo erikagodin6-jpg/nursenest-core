@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { enforceCronSecretOrResponse } from "@/lib/cron/enforce-cron-secret";
 import { verifyBlogPublishSchemaColumns } from "@/lib/blog/blog-publish-db-guard";
 import { promoteScheduledBlogPosts } from "@/lib/blog/blog-publish-scheduler";
 import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-publishing";
@@ -9,13 +10,8 @@ import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-pub
  * Public pages already show SCHEDULED posts when publishAt <= now; this keeps status aligned for ops.
  */
 export async function POST(req: Request) {
-  const secret = process.env.CRON_SECRET?.trim();
-  if (secret) {
-    const auth = req.headers.get("authorization");
-    if (auth !== `Bearer ${secret}`) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-  }
+  const denied = enforceCronSecretOrResponse(req);
+  if (denied) return denied;
 
   const schema = await verifyBlogPublishSchemaColumns();
   if (!schema.ok) {

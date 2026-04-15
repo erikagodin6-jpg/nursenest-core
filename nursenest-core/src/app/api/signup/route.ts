@@ -9,6 +9,7 @@ import { validateUsernameForSignup } from "@/lib/auth/username-rules";
 import { isTurnstileEnforced, verifyTurnstileToken } from "@/lib/captcha/verify-turnstile";
 import { DEMO_USER_EMAIL_DOMAIN } from "@/lib/demo-users/create-demo-user";
 import { prisma } from "@/lib/db";
+import { JSON_BODY_SIGNUP, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { productEvent } from "@/lib/observability/product-events";
@@ -57,15 +58,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Too many requests. Try again shortly." }, { status: 429 });
   }
 
-  let body: unknown;
-  try {
-    body = await req.json();
-  } catch {
+  const bodyRead = await parseJsonBodyWithLimit(req, JSON_BODY_SIGNUP);
+  if (!bodyRead.ok) {
     safeServerLog("signup", "invalid_json_body", {});
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    return bodyRead.response;
   }
 
-  const parsed = schema.safeParse(body);
+  const parsed = schema.safeParse(bodyRead.value);
   if (!parsed.success) {
     safeServerLog("signup", "validation_failed", {
       issueCount: parsed.error.issues.length,

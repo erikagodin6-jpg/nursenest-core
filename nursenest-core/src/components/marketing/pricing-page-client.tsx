@@ -39,6 +39,10 @@ import {
 } from "@/lib/theme/marketing-hero-pattern";
 import { getExamLabel, getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 import { BrandTrustInline } from "@/components/brand/brand-trust-inline";
+import { PricingConversionClarity } from "@/components/marketing/pricing-conversion-clarity";
+import { PricingRegionFaq } from "@/components/marketing/pricing-region-faq";
+import { PricingReliabilityFaq } from "@/components/marketing/pricing-reliability-faq";
+import { PricingLearnerFaq } from "@/components/marketing/pricing-learner-faq";
 import { PricingHero } from "@/components/marketing/pricing-hero";
 import {
   ValuePropsStrip,
@@ -485,6 +489,18 @@ export function PricingPageClient({
         <BrandTrustInline variant="pricing" className="justify-center" />
         <ValuePropsStrip />
       </div>
+
+      {/* ── Section 2b: Value breakdown, included vs not, payment safety, objections ── */}
+      <PricingConversionClarity />
+
+      {/* ── Section 2c: US / Canada & exam scope FAQ ── */}
+      <PricingRegionFaq />
+
+      {/* ── Section 2d: Stability, performance, study continuity ── */}
+      <PricingReliabilityFaq />
+
+      {/* ── Section 2e: Pass anxiety, try-before-pay, refund honesty ── */}
+      <PricingLearnerFaq />
 
       {/* ── Section 3: Plan Selector + Section 4: Pricing Cards ── */}
       <section aria-labelledby="pricing-plans-heading" className="space-y-12">

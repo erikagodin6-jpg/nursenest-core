@@ -104,7 +104,9 @@ export async function GET(req: NextRequest, ctx: { params: Promise<unknown> }) {
 
     const educationalLocale = getMarketingLocaleFromRequestCookie(req);
     const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
-    const merged = mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle);
+    const merged = mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle, {
+      teachingExposure: "none",
+    });
     const stem = String(merged.stem ?? "");
     const question = {
       ...merged,

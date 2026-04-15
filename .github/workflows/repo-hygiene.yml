@@ -1,0 +1,39 @@
+# Secret scanning + accidental large-file detection. Required check for branch protection (see docs/BRANCH_PROTECTION.md).
+name: repo-hygiene
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  # Single job so branch protection can require one check: "repo-hygiene / hygiene"
+  hygiene:
+    name: hygiene
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Engineering policy document
+        run: node scripts/ci/verify-engineering-policy-doc.mjs
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Tracked file sizes
+        run: node scripts/ci/check-tracked-large-files.mjs
+      - name: Tracked high-confidence secret patterns
+        run: node scripts/ci/scan-tracked-secret-patterns.mjs
+      - name: Forbidden paths and content bundle guardrails
+        run: |
+          node scripts/ci/check-forbidden-tracked-paths.mjs
+          node scripts/ci/check-content-json-import-allowlist.mjs
+          node scripts/ci/check-no-client-pathway-json.mjs
+      - name: Catalog JSON soft size budget (warn only)
+        run: node scripts/ci/check-catalog-json-size-budget.mjs

@@ -6,11 +6,13 @@ import {
   normalizeLoginIdentifier,
   sanitizeRawLoginIdentifier,
 } from "@/lib/auth/normalize-login-identifier";
+import { JSON_BODY_AUTH_FORM, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { prisma } from "@/lib/db";
 import { generatePasswordResetRawToken, hashPasswordResetToken } from "@/lib/password-reset-crypto";
 import { PASSWORD_RESET_TOKEN_TTL_MS } from "@/lib/auth/password-reset-constants";
 import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
+import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import {
   buildPasswordResetUrl,
@@ -55,7 +57,11 @@ export function passwordResetCleanupWhere(userId: string, now: Date) {
  * Full DB + email flow. Used synchronously in dev (no Resend) for `_devResetUrl`, or inside `after()`
  * in production so the HTTP response returns before any Prisma/Resend work (avoids gateway 504).
  */
-async function runForgotPasswordFlow(email: string, ip: string): Promise<{ devResetUrl?: string }> {
+async function runForgotPasswordFlow(
+  email: string,
+  ip: string,
+  correlation: string,
+): Promise<{ devResetUrl?: string }> {
   const dedup = normalizeEmailForDedup(email);
 
   let user =
@@ -115,6 +121,8 @@ async function runForgotPasswordFlow(email: string, ip: string): Promise<{ devRe
     tokenIdPrefix: created.id.slice(0, 8),
     ttlMin: Math.round(PASSWORD_RESET_TOKEN_TTL_MS / 60_000),
     ip: ip.slice(0, 64),
+    correlation,
+    severity: "info",
   });
 
   const resetUrl = buildPasswordResetUrl(rawToken);
@@ -125,6 +133,8 @@ async function runForgotPasswordFlow(email: string, ip: string): Promise<{ devRe
     safeServerLog("auth", "password_reset_email_not_delivered", {
       userIdPrefix: user.id.slice(0, 8),
       ip: ip.slice(0, 64),
+      correlation,
+      severity: "warning",
     });
   }
 
@@ -140,6 +150,7 @@ async function runForgotPasswordFlow(email: string, ip: string): Promise<{ devRe
  */
 export async function POST(req: Request) {
   const ip = clientIp(req);
+  const correlation = correlationIdFromRequest(req) ?? "";
   const rl = checkRateLimit(`forgot-password:${ip}`, { windowMs: 60_000, max: 8 });
   if (!rl.ok) {
     return NextResponse.json(
@@ -153,7 +164,7 @@ export async function POST(req: Request) {
     safeServerLogCritical(
       "auth",
       "password_reset_email_unavailable",
-      { reason: "missing_resend_key", surface: "api" },
+      { reason: "missing_resend_key", surface: "api", correlation, severity: "error" },
       new Error("RESEND_API_KEY is required for password reset emails in production"),
     );
     return NextResponse.json(
@@ -162,14 +173,10 @@ export async function POST(req: Request) {
     );
   }
 
-  let json: unknown;
-  try {
-    json = await req.json();
-  } catch {
-    return NextResponse.json({ ok: false, error: "Invalid JSON" }, { status: 400 });
-  }
+  const bodyRead = await parseJsonBodyWithLimit(req, JSON_BODY_AUTH_FORM);
+  if (!bodyRead.ok) return bodyRead.response;
 
-  const parsed = bodySchema.safeParse(json);
+  const parsed = bodySchema.safeParse(bodyRead.value);
   if (!parsed.success) {
     return NextResponse.json({ ok: false, error: "Invalid request" }, { status: 400 });
   }
@@ -192,13 +199,13 @@ export async function POST(req: Request) {
   /** Local dev without Resend: must await flow to embed `_devResetUrl` in JSON. */
   if (process.env.NODE_ENV === "development" && !isPasswordResetEmailConfigured()) {
     try {
-      const { devResetUrl } = await runForgotPasswordFlow(email, ip);
+      const { devResetUrl } = await runForgotPasswordFlow(email, ip, correlation);
       return NextResponse.json({
         ...successPayload,
         ...(devResetUrl ? { _devResetUrl: devResetUrl } : {}),
       });
     } catch (e) {
-      safeServerLogCritical("auth", "forgot_password_failed", { surface: "api" }, e);
+      safeServerLogCritical("auth", "forgot_password_failed", { surface: "api", correlation, severity: "error" }, e);
       return NextResponse.json(
         { ok: false, error: "Unable to process request. Try again shortly." },
         { status: 503 },
@@ -212,9 +219,9 @@ export async function POST(req: Request) {
    * attempt finished, which looked like “no email arrived” when delivery was still in flight or failed.
    */
   try {
-    await runForgotPasswordFlow(email, ip);
+    await runForgotPasswordFlow(email, ip, correlation);
   } catch (e) {
-    safeServerLogCritical("auth", "forgot_password_failed", { surface: "api" }, e);
+    safeServerLogCritical("auth", "forgot_password_failed", { surface: "api", correlation, severity: "error" }, e);
     return NextResponse.json(
       { ok: false, error: "Unable to process request. Try again shortly." },
       { status: 503 },

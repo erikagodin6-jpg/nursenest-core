@@ -1,15 +1,21 @@
 /**
  * Structured server logs without secrets, tokens, or raw user identifiers.
  * Use for production diagnosis (platform log drains pick up stderr).
+ * Meta values are lightly redacted when keys look sensitive (see {@link redactMetaForLog}).
  */
 import * as Sentry from "@sentry/nextjs";
+import { redactMetaForLog } from "@/lib/env/redact-secrets";
 
 const PREFIX = "[nursenest-core]";
 
 export type SafeLogMeta = Record<string, string | number | boolean | undefined>;
 
 export function safeServerLog(scope: string, event: string, meta?: SafeLogMeta): void {
-  const payload = meta && Object.keys(meta).length > 0 ? ` ${JSON.stringify(meta)}` : "";
+  const safe =
+    meta && Object.keys(meta).length > 0
+      ? redactMetaForLog(meta as Record<string, unknown>)
+      : undefined;
+  const payload = safe && Object.keys(safe).length > 0 ? ` ${JSON.stringify(safe)}` : "";
   console.error(`${PREFIX} ${scope} ${event}${payload}`);
 }
 
@@ -26,9 +32,13 @@ export function safeServerLogCritical(
 ): void {
   safeServerLog(scope, event, meta);
   const err = error instanceof Error ? error : error ? new Error(String(error)) : new Error(`${scope}:${event}`);
+  const extra =
+    meta && Object.keys(meta).length > 0
+      ? (redactMetaForLog(meta as Record<string, unknown>) as Record<string, unknown>)
+      : {};
   Sentry.captureException(err, {
     tags: { scope, event, critical: "true", ...flowTags },
-    extra: (meta ?? {}) as Record<string, unknown>,
+    extra,
     level: "error",
   });
 }

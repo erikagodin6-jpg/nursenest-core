@@ -99,7 +99,9 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       }
 
       const body = {
-        question: mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle),
+        question: mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle, {
+          teachingExposure: wantsRationale ? "full" : "none",
+        }),
         mode: "subscriber" as const,
         fields: wantsRationale ? ("full" as const) : ("preview" as const),
       };
@@ -177,7 +179,9 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     }
 
     const freemiumBody = {
-      question: mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle),
+      question: mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle, {
+        teachingExposure: "none",
+      }),
       mode: "freemium" as const,
       fields: "preview" as const,
       rationaleLocked: true as const,

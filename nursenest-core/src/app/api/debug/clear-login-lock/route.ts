@@ -6,6 +6,7 @@ import {
   normalizeLoginIdentifier,
   sanitizeRawLoginIdentifier,
 } from "@/lib/auth/normalize-login-identifier";
+import { JSON_BODY_AUTH_FORM, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { clearLoginFailures } from "@/lib/auth/login-lockout";
 
 export const dynamic = "force-dynamic";
@@ -22,13 +23,10 @@ export async function POST(req: Request) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
-  let json: unknown;
-  try {
-    json = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
-  const parsed = bodySchema.safeParse(json);
+  const bodyRead = await parseJsonBodyWithLimit(req, JSON_BODY_AUTH_FORM);
+  if (!bodyRead.ok) return bodyRead.response;
+
+  const parsed = bodySchema.safeParse(bodyRead.value);
   if (!parsed.success) {
     return NextResponse.json({ error: "Missing or invalid identifier" }, { status: 400 });
   }

@@ -5,13 +5,13 @@ on:
   push:
     paths:
       - "nursenest-core/public/**"
-      - "nursenest-core/scripts/storage-guardrails.mjs"
+      - "scripts/storage-guardrails.mjs"
       - "nursenest-core/package.json"
       - ".github/workflows/storage-guardrails.yml"
   pull_request:
     paths:
       - "nursenest-core/public/**"
-      - "nursenest-core/scripts/storage-guardrails.mjs"
+      - "scripts/storage-guardrails.mjs"
       - "nursenest-core/package.json"
       - ".github/workflows/storage-guardrails.yml"
 

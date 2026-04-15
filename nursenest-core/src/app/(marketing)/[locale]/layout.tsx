@@ -4,8 +4,10 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld";
+import { MarketingMainI18nShards } from "@/components/i18n/marketing-main-i18n-shards";
 import { DEFAULT_MARKETING_LOCALE, isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { MARKETING_CHROME_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { MarketingMainErrorBoundary } from "@/components/marketing/marketing-main-error-boundary";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
@@ -32,10 +34,12 @@ export default async function MarketingLocaleLayout({
   try {
     /** Cookie sync: `cookies().set` is not allowed in RSC; {@link MarketingLocaleUrlSync} calls the server action. */
     serverRegion = (await getMarketingRegionFromCookies()) as MarketingRegionToggle;
-    const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-    messages = locale === DEFAULT_MARKETING_LOCALE ? en : await loadMarketingMessages(locale);
+    messages = await loadMarketingMessageShards(locale, MARKETING_CHROME_MESSAGE_SHARDS);
     /** Always supply English so missing overlay keys resolve to canonical copy in production. */
-    fallbackMessages = en;
+    fallbackMessages =
+      locale === DEFAULT_MARKETING_LOCALE
+        ? undefined
+        : await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS);
   } catch (e) {
     console.error("[marketing-locale-layout] failed to load locale/region data", {
       error: e instanceof Error ? e.message : String(e),
@@ -54,9 +58,11 @@ export default async function MarketingLocaleLayout({
           <div className="nn-marketing-surface flex min-h-screen flex-col">
             <SiteHeader />
             <main className="flex-1">
-              <MarketingMainErrorBoundary name="marketing_locale_main">
-                <PageTransitionShell>{children}</PageTransitionShell>
-              </MarketingMainErrorBoundary>
+              <MarketingMainI18nShards locale={locale}>
+                <MarketingMainErrorBoundary name="marketing_locale_main">
+                  <PageTransitionShell>{children}</PageTransitionShell>
+                </MarketingMainErrorBoundary>
+              </MarketingMainI18nShards>
             </main>
             <SiteFooter />
           </div>

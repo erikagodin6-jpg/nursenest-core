@@ -7,7 +7,7 @@
       "required": true,
       "type": "string",
       "description": "PostgreSQL connection string for the primary database",
-      "example": "postgresql://user:password@localhost:5432/nursenest",
+      "example": "postgresql://USER:PASSWORD@localhost:5432/nursenest",
       "category": "database"
     },
     "PROD_DATABASE_URL": {
@@ -27,28 +27,28 @@
       "required": true,
       "type": "string",
       "description": "Stripe secret API key for server-side payment operations",
-      "example": "sk_test_...",
+      "example": "sk_test_REPLACE_ME",
       "category": "payments"
     },
     "STRIPE_PUBLISHABLE_KEY": {
       "required": true,
       "type": "string",
       "description": "Stripe publishable key for client-side payment forms",
-      "example": "pk_test_...",
+      "example": "pk_test_REPLACE_ME",
       "category": "payments"
     },
     "STRIPE_WEBHOOK_SECRET": {
       "required": false,
       "type": "string",
       "description": "Stripe webhook signing secret for verifying webhook events",
-      "example": "whsec_...",
+      "example": "whsec_REPLACE_ME",
       "category": "payments"
     },
     "OPENAI_API_KEY": {
       "required": false,
       "type": "string",
       "description": "OpenAI API key for AI-powered features (tutor, content generation)",
-      "example": "sk-...",
+      "example": "sk-REPLACE_ME",
       "category": "ai"
     },
     "PUBLIC_OBJECT_SEARCH_PATHS": {

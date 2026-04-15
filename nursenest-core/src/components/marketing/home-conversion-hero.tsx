@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
-import { ArrowRight, BookOpen, ShieldCheck, Target } from "lucide-react";
+import { useMemo, type ReactNode } from "react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
@@ -15,15 +15,26 @@ import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
-import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
+import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { ScaleIn, StaggerGroup, StaggerItem } from "@/lib/motion";
 
 const HERO_SLIDE_ORDER: readonly number[] = [9, 0, 6, 2, 8];
 
+function formatStat(n: number, locale: string): string {
+  if (n <= 0) return "";
+  return n.toLocaleString(locale.replace(/_/g, "-"));
+}
+
 /**
- * Premium split hero: concise message + conversion CTAs + real product preview carousel.
+ * Premium split hero: one outcome headline + conversion CTAs + live stats + product preview carousel.
  */
-export function HomeConversionHero() {
+export function HomeConversionHero({
+  questionCount = 0,
+  lessonCount = 0,
+}: {
+  questionCount?: number;
+  lessonCount?: number;
+}) {
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const loc = (path: string) => withMarketingLocale(locale, path);
@@ -32,13 +43,29 @@ export function HomeConversionHero() {
     [t],
   );
 
-  const trustChips = [
-    {
-      icon: BookOpen,
-      text: region === "US" ? t("pages.home.hero.trustChip.usScopes") : t("pages.home.hero.trustChip.caScopes"),
-    },
-    { icon: Target, text: t("pages.home.hero.trustChip.cat") },
-  ] as const;
+  const q = formatStat(questionCount, locale);
+  const lessons = formatStat(lessonCount, locale);
+
+  const statsSegments: ReactNode[] = [];
+  if (q) {
+    statsSegments.push(
+      <span key="q" className="font-semibold text-[var(--semantic-success)]">
+        {t("pages.home.hero.statQuestions", { count: q })}
+      </span>,
+    );
+  }
+  if (lessons) {
+    statsSegments.push(
+      <span key="l" className="font-medium text-[var(--palette-text-muted)]">
+        {t("pages.home.hero.statLessons", { count: lessons })}
+      </span>,
+    );
+  }
+  statsSegments.push(
+    <span key="u" className="text-[var(--palette-text-muted)]">
+      {formatSentenceCase(t("pages.home.hero.statUpdates"), locale)}
+    </span>,
+  );
 
   return (
     <section
@@ -49,7 +76,7 @@ export function HomeConversionHero() {
       <div className="relative pt-10 pb-20 md:pt-12 md:pb-24">
         <div className="nn-section-shell">
           <div className="grid min-w-0 gap-12 lg:grid-cols-[1.06fr_0.94fr] lg:items-center lg:gap-14">
-            <StaggerGroup className="min-w-0 space-y-7" whenInView once viewMargin="-12px">
+            <StaggerGroup className="min-w-0 space-y-6" whenInView once viewMargin="-12px">
               <StaggerItem variant="softReveal" timing="hero">
                 <p className="nn-marketing-caption inline-block max-w-full text-balance break-words rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] px-3.5 py-1.5 font-semibold tracking-wide text-[var(--pill-fg)]">
                   {formatTitleCase(t("pages.home.hero.eyebrowBrand"), locale)}
@@ -58,7 +85,7 @@ export function HomeConversionHero() {
               <StaggerItem timing="hero">
                 <h1
                   id="home-conversion-hero-heading"
-                  className="nn-marketing-h1 max-w-[22rem] text-balance break-words text-[var(--palette-heading)] sm:max-w-2xl sm:leading-[1.08]"
+                  className="nn-marketing-h1 max-w-[22rem] text-balance break-words text-[var(--palette-heading)] sm:max-w-2xl sm:leading-[1.06]"
                   data-testid="text-hero-heading"
                 >
                   {formatTitleCase(t("pages.home.hero.headline"), locale)}
@@ -66,10 +93,23 @@ export function HomeConversionHero() {
               </StaggerItem>
               <StaggerItem variant="softReveal" timing="hero">
                 <p
-                  className="nn-marketing-body max-w-xl text-pretty break-words leading-relaxed text-[var(--palette-text-muted)]"
+                  className="nn-marketing-body max-w-lg text-pretty break-words leading-relaxed text-[var(--palette-text-muted)]"
                   data-testid="text-hero-subheading"
                 >
                   {formatSentenceCase(t("pages.home.hero.subheading"), locale)}
+                </p>
+              </StaggerItem>
+              <StaggerItem variant="softReveal" timing="hero">
+                <p
+                  className="nn-marketing-body-sm max-w-lg text-pretty leading-relaxed text-[var(--palette-text)]"
+                  data-testid="text-hero-confidence-line"
+                >
+                  {formatSentenceCase(t("pages.home.hero.confidenceLine"), locale)}
+                </p>
+              </StaggerItem>
+              <StaggerItem variant="softReveal" timing="hero">
+                <p className="nn-marketing-caption max-w-lg font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">
+                  {formatEyebrow(t("pages.home.hero.nextStepEyebrow"), locale)}
                 </p>
               </StaggerItem>
               <StaggerItem timing="hero">
@@ -108,27 +148,31 @@ export function HomeConversionHero() {
                     {formatTitleCase(t("pages.home.hero.secondaryCta"), locale)}
                   </MarketingTrackedLink>
                 </div>
+                <p className="nn-marketing-caption mt-3 max-w-md text-pretty text-[var(--palette-text-muted)]">
+                  {formatSentenceCase(t("pages.home.hero.ctaSupportingLine"), locale)}
+                </p>
               </StaggerItem>
               <StaggerItem variant="softReveal" timing="hero">
-                <ul className="grid gap-2.5 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-2">
-                  {trustChips.map((row) => {
-                    const RowIcon = row.icon;
-                    return (
-                      <li
-                        key={row.text}
-                        className="flex min-w-0 items-start gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border-subtle))] bg-[color-mix(in_srgb,var(--bg-card)_55%,transparent)] px-3 py-2.5"
-                      >
-                        <RowIcon
-                          className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-brand)]"
-                          aria-hidden
-                        />
-                        <span className="nn-marketing-caption text-balance leading-snug text-[var(--palette-text-muted)]">
-                          {formatSentenceCase(row.text, locale)}
+                <p
+                  className="nn-marketing-caption flex max-w-xl flex-wrap items-baseline gap-x-1.5 gap-y-1 text-balance text-[var(--palette-text-muted)]"
+                  data-testid="text-hero-live-stats"
+                >
+                  {statsSegments.map((node, i) => (
+                    <span key={i} className="inline-flex items-baseline gap-1.5">
+                      {i > 0 ? (
+                        <span className="text-[var(--semantic-border-soft)]" aria-hidden>
+                          ·
                         </span>
-                      </li>
-                    );
-                  })}
-                </ul>
+                      ) : null}
+                      {node}
+                    </span>
+                  ))}
+                </p>
+                {!q && !lessons ? (
+                  <p className="nn-marketing-caption mt-2 max-w-xl text-pretty text-[var(--palette-text-muted)]">
+                    {formatSentenceCase(t("pages.home.hero.statsFallback"), locale)}
+                  </p>
+                ) : null}
               </StaggerItem>
               <StaggerItem variant="softReveal" timing="hero">
                 <p className="nn-marketing-caption flex min-w-0 items-start gap-2 text-balance break-words text-[var(--palette-text-muted)]">

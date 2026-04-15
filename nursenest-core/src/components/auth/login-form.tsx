@@ -12,16 +12,21 @@ export function LoginForm({
   forgotPasswordHref = "/forgot-password",
   termsHref = "/terms",
   privacyHref = "/privacy",
+  contactHref = "/contact",
 }: {
   forgotPasswordHref?: string;
   termsHref?: string;
   privacyHref?: string;
+  /** Help link when sign-in fails for non-credential reasons (e.g. outage). */
+  contactHref?: string;
 } = {}) {
   const { t } = useMarketingI18n();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { status } = useSession();
   const [error, setError] = useState<string | null>(null);
+  const [errorHelp, setErrorHelp] = useState<string | null>(null);
+  const [showContactLink, setShowContactLink] = useState(false);
   const [pending, setPending] = useState(false);
   const redirectTarget = useMemo(() => {
     const fromQuery = safeCallbackPath(searchParams.get("callbackUrl"));
@@ -36,10 +41,14 @@ export function LoginForm({
 
   async function onSubmit(formData: FormData) {
     setError(null);
+    setErrorHelp(null);
+    setShowContactLink(false);
     const email = String(formData.get("email") ?? "").trim();
     const password = String(formData.get("password") ?? "");
     if (!email || !password) {
       setError(t("pages.login.errorInvalid"));
+      setErrorHelp(t("pages.login.errorInvalidGuidance"));
+      setShowContactLink(false);
       return;
     }
     if (status === "authenticated") {
@@ -64,6 +73,8 @@ export function LoginForm({
       } catch (e) {
         console.error("[login] signIn threw", e);
         setError(t("pages.login.errorGeneric"));
+        setErrorHelp(t("pages.login.errorGenericGuidance"));
+        setShowContactLink(true);
         return;
       }
 
@@ -76,8 +87,12 @@ export function LoginForm({
       if (outcome !== "success") {
         if (outcome === "invalid_credentials") {
           setError(t("pages.login.errorInvalid"));
+          setErrorHelp(t("pages.login.errorInvalidGuidance"));
+          setShowContactLink(false);
         } else {
           setError(t("pages.login.errorGeneric"));
+          setErrorHelp(t("pages.login.errorGenericGuidance"));
+          setShowContactLink(true);
         }
         return;
       }
@@ -154,7 +169,24 @@ export function LoginForm({
           </p>
         </div>
       </div>
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+      {error || errorHelp ? (
+        <div
+          role="alert"
+          aria-live="polite"
+          className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] px-3 py-2.5 text-[var(--semantic-text-primary)]"
+        >
+          {error ? <p className="text-sm font-medium">{error}</p> : null}
+          {errorHelp ? <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{errorHelp}</p> : null}
+          {showContactLink ? (
+            <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">
+              <Link href={contactHref} className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline">
+                {t("pages.login.errorContactLink")}
+              </Link>
+              {t("pages.login.errorContactSuffix")}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
       <p className="text-xs leading-relaxed text-muted-foreground">
         {t("pages.login.legalBefore")}
         <Link href={termsHref} className="font-semibold text-primary underline-offset-4 hover:underline">

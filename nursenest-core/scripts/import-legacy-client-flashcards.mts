@@ -2,7 +2,7 @@
  * Import legacy `client/src/data/flashcards*.ts` decks into Prisma (FlashcardDeck + Flashcard).
  * Idempotent: sourceKey = legacy_ts:{fileBase}:{cardId}
  *
- * Run: cd nursenest-core && npx tsx scripts/import-legacy-client-flashcards.mts [--dry-run] [--limit=500] [--file=flashcards-community.ts]
+ * Run: cd nursenest-core && npx tsx scripts/import-legacy-client-flashcards.mts [--dry-run] [--confirm-write] [--limit=500] [--file=flashcards-community.ts]
  */
 import { readFileSync, readdirSync, existsSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -17,9 +17,12 @@ import {
   FlashcardDeckVisibility,
 } from "@prisma/client";
 
+import { IMPORT_FLASHCARD_TX_BATCH } from "../src/lib/content-pipeline/import-safeguards";
 import { extractLegacyFlashcardExports, legacyFrontBack } from "./legacy/legacy-flashcard-ts-extract.mts";
 
-import { requireDatabaseUrlForLiveImport } from "./lib/require-database-for-live-import.mts";
+import { assertLiveImportPreconditions } from "./lib/import-live-guards.mts";
+import { assertSourceFileBounded } from "./lib/import-fs-guards.mts";
+import { logImportProgressLine, truncateImportMessage } from "./lib/import-safe-log.mts";
 
 import "../src/lib/db/env-bootstrap";
 
@@ -27,6 +30,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = join(__dirname, "..");
 const REPO_ROOT = join(PKG_ROOT, "..");
 const CLIENT_DATA = join(REPO_ROOT, "client", "src", "data");
+
+const TX_BATCH = IMPORT_FLASHCARD_TX_BATCH;
 
 export type LegacyFlashcardImportArgs = {
   prisma: PrismaClient;
@@ -39,12 +44,22 @@ export type LegacyFlashcardImportArgs = {
 
 function parseArgs() {
   const out: { dryRun: boolean; limit?: number; file?: string } = { dryRun: false };
-  for (const a of process.argv.slice(2)) {
+  const argv = process.argv.slice(2);
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
     if (a === "--dry-run") out.dryRun = true;
-    const lim = /^--limit=(\d+)$/.exec(a);
-    if (lim) out.limit = parseInt(lim[1], 10);
+    const limEq = /^--limit=(\d+)$/.exec(a);
+    if (limEq) out.limit = parseInt(limEq[1], 10);
+    if (a === "--limit" && argv[i + 1] && /^\d+$/.test(argv[i + 1]!)) {
+      out.limit = parseInt(argv[i + 1]!, 10);
+      i += 1;
+    }
     const f = /^--file=(.+)$/.exec(a);
     if (f) out.file = f[1].trim();
+    if (a === "--file" && argv[i + 1]) {
+      out.file = argv[i + 1]!.trim();
+      i += 1;
+    }
   }
   return out;
 }
@@ -97,6 +112,7 @@ export async function runLegacyClientFlashcardImport(opts: LegacyFlashcardImport
 
   for (const fname of files) {
     const fp = join(CLIENT_DATA, fname);
+    assertSourceFileBounded(fp);
     const text = readFileSync(fp, "utf8");
     const base = fname.replace(/\.ts$/, "");
     const deckSlug = `legacy-${slugify(base)}`;
@@ -151,34 +167,51 @@ export async function runLegacyClientFlashcardImport(opts: LegacyFlashcardImport
 
         let pos = 0;
         let upserted = 0;
-        for (const row of allCards) {
+        let i = 0;
+        while (i < allCards.length) {
           if (limit !== undefined && totalCards >= limit) break;
-          const { front, back } = legacyFrontBack(row);
-          const sourceKey = `legacy_ts:${base}:${row.id}`.slice(0, 200);
-          await prisma.flashcard.upsert({
-            where: { sourceKey },
-            create: {
-              front: front.slice(0, 20000),
-              back: back.slice(0, 20000),
-              country: CountryCode.US,
-              tier,
-              examFamily,
-              status: ContentStatus.PUBLISHED,
-              categoryId,
-              deckId: deck.id,
-              positionInDeck: pos,
-              sourceKey,
-            },
-            update: {
-              front: front.slice(0, 20000),
-              back: back.slice(0, 20000),
-              positionInDeck: pos,
-              deckId: deck.id,
-            },
-          });
-          pos += 1;
-          upserted += 1;
-          totalCards += 1;
+          const roomLeft = limit === undefined ? TX_BATCH : Math.max(0, limit - totalCards);
+          const take = Math.min(TX_BATCH, allCards.length - i, roomLeft);
+          if (take <= 0) break;
+          const slice = allCards.slice(i, i + take);
+
+          await prisma.$transaction(
+            slice.map((row, idx) => {
+              const { front, back } = legacyFrontBack(row);
+              const sourceKey = `legacy_ts:${base}:${row.id}`.slice(0, 200);
+              const positionInDeck = pos + idx;
+              return prisma.flashcard.upsert({
+                where: { sourceKey },
+                create: {
+                  front: front.slice(0, 20000),
+                  back: back.slice(0, 20000),
+                  country: CountryCode.US,
+                  tier,
+                  examFamily,
+                  status: ContentStatus.PUBLISHED,
+                  categoryId,
+                  deckId: deck.id,
+                  positionInDeck,
+                  sourceKey,
+                },
+                update: {
+                  front: front.slice(0, 20000),
+                  back: back.slice(0, 20000),
+                  positionInDeck,
+                  deckId: deck.id,
+                },
+              });
+            }),
+          );
+
+          pos += take;
+          upserted += take;
+          totalCards += take;
+          i += take;
+
+          if (totalCards % 200 === 0 && totalCards > 0) {
+            logImportProgressLine("legacy_flashcards", { file: fname, processed: totalCards, inserted: upserted });
+          }
         }
 
         await prisma.flashcardDeck.update({
@@ -188,11 +221,18 @@ export async function runLegacyClientFlashcardImport(opts: LegacyFlashcardImport
         fileReport.upserted = upserted;
       }
     } catch (e) {
-      fileReport.error = e instanceof Error ? e.message : String(e);
+      fileReport.error = truncateImportMessage(e instanceof Error ? e.message : String(e));
     }
 
     (report.files as object[]).push(fileReport);
-    console.log(`${fname}: ${allCards.length} cards${fileReport.error ? ` ERROR ${fileReport.error}` : ""}`);
+    logImportProgressLine("legacy_flashcards", {
+      file: fname,
+      processed: allCards.length,
+      inserted: fileReport.upserted ?? 0,
+    });
+    if (fileReport.error) {
+      console.error(`[legacy_flashcards] ${fname} ERROR ${fileReport.error}`);
+    }
     if (limit !== undefined && totalCards >= limit) break;
   }
 
@@ -216,7 +256,11 @@ export async function runLegacyClientFlashcardImport(opts: LegacyFlashcardImport
 async function main() {
   const args = parseArgs();
   if (!args.dryRun) {
-    requireDatabaseUrlForLiveImport("import:legacy-client-flashcards");
+    assertLiveImportPreconditions({
+      dryRun: false,
+      argv: process.argv,
+      scriptLabel: "import:legacy-client-flashcards",
+    });
   }
   if (!existsSync(CLIENT_DATA)) {
     console.error("Missing client data dir:", CLIENT_DATA);

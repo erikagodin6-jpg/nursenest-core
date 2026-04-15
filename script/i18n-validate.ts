@@ -3,13 +3,17 @@
  * Validates merged runtime JSON after `npm run i18n:compile`.
  *
  * - All locales present under client/public/i18n and nursenest-core/public/i18n
- * - Client vs Next: byte-identical files (no drift)
+ * - Client vs Next: identical key sets and values (Next uses `public/i18n/{lang}/*.json` shards)
  * - Each locale: every key from tools/i18n/source/i18n-{lang}.ts exists in merged JSON
  * - Marketing locale overlays: same key set as tools/i18n/marketing/marketing-en.json (en has no overlay file)
  * - Placeholder parity: for every key, {{mustache}} placeholder names match English merged bundle
+ *
+ * Flags:
+ * - `--strict` or `I18N_VALIDATE_STRICT=1` — empty string values are **errors** (not warnings).
  */
 import { existsSync, readFileSync } from "fs";
 import path from "path";
+import { readMergedBundleFromNextPublicI18n } from "./lib/next-public-i18n-bundle";
 import { I18N_LANGUAGES } from "./merge-marketing-i18n";
 import { REPO_ROOT } from "./repo-root";
 
@@ -59,9 +63,15 @@ function placeholderNames(s: string): string[] {
   return [...new Set(names)].sort();
 }
 
+/** When true, empty string values fail the build (recommended for production / CI). */
+function strictEmptyMode(): boolean {
+  return process.argv.includes("--strict") || process.env.I18N_VALIDATE_STRICT === "1";
+}
+
 function main(): void {
   const errors: string[] = [];
   const warnings: string[] = [];
+  const strictEmpty = strictEmptyMode();
 
   if (!existsSync(MARKETING_EN)) {
     errors.push(`Missing ${path.relative(ROOT, MARKETING_EN)}`);
@@ -109,24 +119,20 @@ function main(): void {
   for (const lang of I18N_LANGUAGES) {
     const rel = `${lang}.json`;
     const cj = path.join(CLIENT_I18N, rel);
-    const nj = path.join(NEXT_I18N, rel);
     if (!existsSync(cj)) {
       errors.push(`Missing or unreadable: ${path.relative(ROOT, cj)}`);
       continue;
-    }
-    if (!existsSync(nj)) {
-      errors.push(`Missing or unreadable Next mirror: ${path.relative(ROOT, nj)}`);
-      continue;
-    }
-    const cBuf = readFileSync(cj);
-    const nBuf = readFileSync(nj);
-    if (!cBuf.equals(nBuf)) {
-      errors.push(`Client vs Next drift (bytes differ): ${rel}`);
     }
 
     const data = loadJson(cj);
     if (!data) {
       errors.push(`Invalid JSON: ${path.relative(ROOT, cj)}`);
+      continue;
+    }
+
+    const nextData = readMergedBundleFromNextPublicI18n(NEXT_I18N, lang);
+    if (!nextData) {
+      errors.push(`Missing or unreadable Next shard tree: ${path.relative(ROOT, path.join(NEXT_I18N, lang))}`);
       continue;
     }
     if (Object.keys(data).length < 50) {
@@ -154,6 +160,7 @@ function main(): void {
     }
 
     const dataKeys = new Set(Object.keys(data));
+    const nextKeys = new Set(Object.keys(nextData));
     if (canonicalMergedKeys.size !== dataKeys.size) {
       errors.push(`[${lang}] key count differs from en: ${dataKeys.size} vs ${canonicalMergedKeys.size}`);
     }
@@ -162,6 +169,15 @@ function main(): void {
     }
     for (const k of dataKeys) {
       if (!canonicalMergedKeys.has(k)) errors.push(`[${lang}] extra key vs en merged: "${k}"`);
+    }
+
+    if (nextKeys.size !== dataKeys.size) {
+      errors.push(`[${lang}] Next shard merged key count differs from client: ${nextKeys.size} vs ${dataKeys.size}`);
+    }
+    for (const k of dataKeys) {
+      if (data[k] !== nextData[k]) {
+        errors.push(`[${lang}] client vs Next shard value mismatch for "${k}"`);
+      }
     }
 
     for (const k of canonicalMergedKeys) {
@@ -178,21 +194,28 @@ function main(): void {
 
     const empty = Object.keys(data).filter((k) => (data[k] ?? "").trim() === "");
     if (empty.length) {
-      warnings.push(`[${lang}] ${empty.length} empty string values (e.g. ${empty.slice(0, 6).join(", ")})`);
+      const msg = `[${lang}] ${empty.length} empty string values (e.g. ${empty.slice(0, 12).join(", ")})`;
+      if (strictEmpty) {
+        errors.push(msg);
+      } else {
+        warnings.push(msg);
+      }
     }
   }
 
-  mainEnd(errors, warnings);
+  mainEnd(errors, warnings, strictEmpty);
 }
 
-function mainEnd(errors: string[], warnings: string[]): void {
+function mainEnd(errors: string[], warnings: string[], strictEmpty: boolean): void {
   for (const w of warnings) console.warn("[warn]", w);
   if (errors.length) {
-    console.error("[i18n:validate] FAILED");
+    console.error(strictEmpty ? "[i18n:validate] FAILED (strict)" : "[i18n:validate] FAILED");
     for (const e of errors) console.error(" ", e);
     process.exit(1);
   }
-  console.log(`[i18n:validate] OK — ${I18N_LANGUAGES.length} locales; ${warnings.length} warnings`);
+  console.log(
+    `[i18n:validate] OK — ${I18N_LANGUAGES.length} locales; ${warnings.length} warnings${strictEmpty ? "; strict empty=on" : ""}`,
+  );
 }
 
 main();

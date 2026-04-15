@@ -6,6 +6,7 @@ import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { MARKETING_HOME_FAQ_JSONLD } from "@/lib/seo/marketing-home-faq-schema";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
+import { getCachedPublicHomeStats } from "@/lib/marketing/public-home-stats";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
@@ -52,7 +53,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const m = await loadMarketingMessages(STATIC_LOCALE);
+  const [homeStatsRaw, m] = await Promise.all([
+    getCachedPublicHomeStats(),
+    loadMarketingMessages(STATIC_LOCALE),
+  ]);
+  const homeMarketingStats = {
+    questionCount: homeStatsRaw.questionCount,
+    registeredLearners: homeStatsRaw.registeredLearners,
+    totalLessons: homeStatsRaw.totalLessons,
+  };
   const title = resolveMarketingCopy(m, "pages.home.metaTitleUS", m, defaultHomeMetaTitle(STATIC_REGION));
   const description = resolveMarketingCopy(
     m,
@@ -78,24 +87,20 @@ export default async function HomePage() {
           <BreadcrumbTrail items={crumbs} />
         </div>
       ) : null}
-      <HomeRestoredClient />
+      <HomeRestoredClient homeMarketingStats={homeMarketingStats} />
       <section className="mx-auto mt-6 w-full max-w-7xl px-4 pb-2 sm:px-6 lg:px-8">
         <div className="nn-card border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-5">
-          <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">
-            {resolveMarketingCopy(m, "pages.home.blogTeaser.title", undefined, "")}
-          </h2>
-          <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
-            {resolveMarketingCopy(m, "pages.home.blogTeaser.subtitle", undefined, "")}
-          </p>
-          <div className="mt-3 flex flex-wrap gap-3 text-sm">
-            <Link href="/blog" className="font-semibold text-primary hover:underline">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">
+                {resolveMarketingCopy(m, "pages.home.blogTeaser.title", undefined, "")}
+              </h2>
+              <p className="mt-1 max-w-prose text-sm text-[var(--theme-muted-text)]">
+                {resolveMarketingCopy(m, "pages.home.blogTeaser.subtitle", undefined, "")}
+              </p>
+            </div>
+            <Link href="/blog" className="shrink-0 text-sm font-semibold text-primary hover:underline">
               {resolveMarketingCopy(m, "pages.home.blogTeaser.viewAll", undefined, "")}
-            </Link>
-            <Link href="/blog/tag/nclex" className="font-medium text-primary hover:underline">
-              {resolveMarketingCopy(m, "pages.home.blogTeaser.tagNclex", undefined, "")}
-            </Link>
-            <Link href="/blog/tag/clinical-reasoning" className="font-medium text-primary hover:underline">
-              {resolveMarketingCopy(m, "pages.home.blogTeaser.tagClinical", undefined, "")}
             </Link>
           </div>
           <MarketingBlogLatestLinks

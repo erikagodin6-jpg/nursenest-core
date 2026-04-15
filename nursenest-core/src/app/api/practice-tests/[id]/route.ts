@@ -134,7 +134,9 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     const order = new Map(ids.map((qid, i) => [qid, i]));
     const sorted = [...qs].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
     questions = sorted.map((q) => {
-      const merged = mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle);
+      const merged = mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle, {
+        teachingExposure: "none",
+      });
       const stem = String(merged.stem ?? "");
       return {
         ...merged,

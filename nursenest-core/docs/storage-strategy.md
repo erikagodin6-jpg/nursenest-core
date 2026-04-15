@@ -1,5 +1,11 @@
 # Scalable storage strategy (DigitalOcean Spaces + Postgres)
 
+**Large assets (screenshots, exports, PDFs, imports, reports):** see `docs/OBJECT_STORAGE_STRATEGY.md` for the full **decision matrix**, **access model**, and **migration** steps.
+
+**Secrets and env files:** see `docs/SECRETS_AND_ENV.md` — never commit credentials or filled `.env*` files.
+
+**Lessons + question banks (SoT, imports, versioning):** see `docs/CONTENT_STORAGE_ARCHITECTURE.md` and `docs/CONTENT_IMPORT_PIPELINE.md`.
+
 ## Principles
 
 1. **Blob storage (Spaces)** holds bytes: images, future PDFs, video/audio, generated exports.
@@ -17,6 +23,10 @@
 | `replit-export/` | Legacy bulk imports (from existing pipelines) |
 | `exam-assets/` | Future per-question media at scale (100k+ rows point here, not at JSON blobs) |
 | `blog/` | Future blog imagery if offloaded from `BlogPost.coverImage` URLs |
+| `exports/` | Large generated exports (prefer TTL / job-driven delete) |
+| `imports/staging/` | Short-lived content-import archives (aggressive TTL) |
+| `reports/admin/` | Admin-generated reports (restrict access; optional TTL) |
+| `downloads/`, `premium/` | Paywalled PDFs / subscriber files — **private ACL** + signed URL or auth route (do not use `public-read`) |
 
 ## Scale (100k+ questions, blog, flashcards)
 

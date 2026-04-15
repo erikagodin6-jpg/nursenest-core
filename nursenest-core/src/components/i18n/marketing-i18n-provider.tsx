@@ -5,17 +5,34 @@ import { formatMarketingMessage, type MarketingMessages } from "@/lib/marketing-
 import { isRtlMarketingLocale, localePrimarySubtag } from "@/lib/i18n/marketing-locale-policy";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { validateMarketingHeroNavCriticalKeys } from "@/lib/marketing/marketing-hero-nav-critical-keys";
+import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-marketing-messages";
 
 type Params = Record<string, string | number | undefined>;
 
 type MarketingI18nContextValue = {
   locale: string;
+  /** Active merged bundle for this layer (shell, shell+pages, etc.). */
+  messages: MarketingMessages;
   /** Optional English (or default-locale) bundle for keys missing in the active locale. */
   fallbackMessages?: MarketingMessages;
+  /** Flat message key (see `MarketingMessageKey` in `marketing-message-keys.generated.ts` for static keys). */
   t: (key: string, params?: Params) => string;
 };
 
 const MarketingI18nContext = createContext<MarketingI18nContextValue | null>(null);
+
+let warnedUseMarketingI18nOutsideProvider = false;
+
+const degradedT = (key: string, params?: Params) =>
+  formatMarketingMessage({}, key, params, undefined, { locale: DEFAULT_MARKETING_LOCALE });
+
+/** Safe default when a component calls `useMarketingI18n()` without a provider (never throws). */
+const DEGRADED_MARKETING_I18N: MarketingI18nContextValue = {
+  locale: DEFAULT_MARKETING_LOCALE,
+  messages: {},
+  fallbackMessages: undefined,
+  t: degradedT,
+};
 
 /** Keeps `<html lang>` and `dir` aligned with the active marketing locale (accessibility + SEO + RTL). */
 function HtmlLangSync({ locale }: { locale: string }) {
@@ -39,19 +56,27 @@ export function MarketingI18nProvider({
   fallbackMessages?: MarketingMessages;
   children: ReactNode;
 }) {
+  const safeMessages = useMemo(() => normalizeMarketingMessagesRecord(messages), [messages]);
+  const safeFallback = useMemo(
+    () => (fallbackMessages ? normalizeMarketingMessagesRecord(fallbackMessages) : undefined),
+    [fallbackMessages],
+  );
+
   const value = useMemo<MarketingI18nContextValue>(
     () => ({
       locale,
-      fallbackMessages,
-      t: (key: string, params?: Params) => formatMarketingMessage(messages, key, params, fallbackMessages),
+      messages: safeMessages,
+      fallbackMessages: safeFallback,
+      t: (key: string, params?: Params) =>
+        formatMarketingMessage(safeMessages, key, params, safeFallback, { locale }),
     }),
-    [locale, messages, fallbackMessages],
+    [locale, safeMessages, safeFallback],
   );
 
   useEffect(() => {
     if (process.env.NODE_ENV !== "development") return;
     const canonicalEn =
-      fallbackMessages ?? (locale === DEFAULT_MARKETING_LOCALE ? messages : undefined);
+      safeFallback ?? (locale === DEFAULT_MARKETING_LOCALE ? safeMessages : undefined);
     if (!canonicalEn) return;
     const { ok, missing } = validateMarketingHeroNavCriticalKeys(canonicalEn);
     if (!ok) {
@@ -60,7 +85,7 @@ export function MarketingI18nProvider({
         missing.join("\n"),
       );
     }
-  }, [locale, messages, fallbackMessages]);
+  }, [locale, safeMessages, safeFallback]);
 
   return (
     <MarketingI18nContext.Provider value={value}>
@@ -70,14 +95,59 @@ export function MarketingI18nProvider({
   );
 }
 
-export function useMarketingI18n() {
+export function useMarketingI18n(): MarketingI18nContextValue {
   const ctx = useContext(MarketingI18nContext);
-  if (!ctx) {
-    throw new Error("useMarketingI18n must be used within MarketingI18nProvider");
+  if (ctx) return ctx;
+  if (process.env.NODE_ENV === "development" && !warnedUseMarketingI18nOutsideProvider) {
+    warnedUseMarketingI18nOutsideProvider = true;
+    console.warn(
+      "[MarketingI18n] useMarketingI18n() outside MarketingI18nProvider — using degraded empty bundle (app continues).",
+    );
   }
-  return ctx;
+  return DEGRADED_MARKETING_I18N;
 }
 
 export function useMarketingLocale() {
   return useMarketingI18n().locale;
+}
+
+/**
+ * Merges additional shard maps into the parent {@link MarketingI18nProvider} for a subtree
+ * (e.g. `pages.*` under `<main>` while chrome stays on a smaller shell bundle).
+ */
+export function MarketingI18nShardLayer({
+  messages: extraMessages,
+  fallbackMessages: extraFallback,
+  children,
+}: {
+  messages: MarketingMessages;
+  fallbackMessages?: MarketingMessages;
+  children: ReactNode;
+}) {
+  const parent = useMarketingI18n();
+  const mergedMessages = useMemo(
+    () =>
+      normalizeMarketingMessagesRecord({
+        ...parent.messages,
+        ...normalizeMarketingMessagesRecord(extraMessages),
+      }),
+    [parent.messages, extraMessages],
+  );
+  const mergedFallback = useMemo(() => {
+    if (!extraFallback && !parent.fallbackMessages) return undefined;
+    return normalizeMarketingMessagesRecord({
+      ...(parent.fallbackMessages ?? {}),
+      ...(extraFallback ?? {}),
+    });
+  }, [parent.fallbackMessages, extraFallback]);
+
+  return (
+    <MarketingI18nProvider
+      locale={parent.locale}
+      messages={mergedMessages}
+      fallbackMessages={mergedFallback}
+    >
+      {children}
+    </MarketingI18nProvider>
+  );
 }

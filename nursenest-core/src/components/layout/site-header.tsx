@@ -26,22 +26,11 @@ import { GlobalContextBar } from "@/components/layout/global-context-bar";
 import { MobileContextDrawer } from "@/components/layout/mobile-context-drawer";
 import { REGION_CONFIG, type GlobalRegionSlug, type GlobalLocaleCode } from "@/lib/i18n/global-regions";
 import type { CountryExamOfferingId } from "@/lib/marketing/country-exam-offerings";
-import {
-  HUB,
-  NP,
-  alliedCareersMarketingUrl,
-  alliedHub,
-  alliedQuestions,
-  pnLessons,
-  pnQuestions,
-  rnLessons,
-  rnQuestions,
-  npNpQuestionsForRegion,
-} from "@/lib/marketing/marketing-entry-routes";
-import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
-import { ALLIED_PROFESSIONS, ALLIED_HUB_CATEGORY_ORDER, ALLIED_HUB_CATEGORY_META } from "@/lib/allied/allied-professions-registry";
+import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import { useActiveNavContext } from "@/lib/navigation/use-active-nav-context";
-import { learnerMarketingPathwayIdFromSession, publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
+import { learnerMarketingPathwayIdFromSession } from "@/lib/navigation/canonical-destinations";
+import { buildMarketingMegaMenus, type ExamMenuKey } from "@/lib/navigation/marketing-mega-menu";
 import {
   buildLearnerPrimaryNavItems,
   isLearnerPrimaryNavKey,
@@ -51,13 +40,16 @@ import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { CountrySelector } from "@/components/layout/global-context-switcher";
-import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
-
 const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
 
 /** Keep desktop nav pills single-line and compact so the full global IA fits cleanly. */
 const NAV_LINK_CLASS =
   "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-9 items-center justify-center whitespace-nowrap px-2 text-center font-medium leading-none tracking-tight xl:px-2.5";
+/** Muted Learn / Track in the public “Learn → Practice → Track” row. */
+const NAV_FLOW_SECONDARY_CLASS = `${NAV_LINK_CLASS} text-[var(--nav-muted)] font-normal`;
+/** Single primary action in that row — Practice (question bank). */
+const NAV_FLOW_PRACTICE_CLASS =
+  "nn-nav-cta nn-marketing-body-sm inline-flex h-9 min-h-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-1.5 font-semibold leading-none tracking-tight xl:px-3.5";
 /** Learner study nav — product-style links (see `.nn-learner-nav-link` in globals.css). */
 const LEARNER_NAV_LINK_CLASS =
   "nn-marketing-body-sm nn-learner-nav-link inline-flex h-9 items-center justify-center whitespace-nowrap px-2 text-center font-medium leading-none tracking-tight xl:px-2.5";
@@ -68,34 +60,6 @@ const HEADER_SECONDARY_ACTION_CLASS =
 /** Country / language / theme triggers aligned with main nav height (sits in the primary header row, not a detached strip). */
 const HEADER_MAIN_NAV_MENU_TRIGGER_CLASS =
   "nn-marketing-body-sm inline-flex h-9 max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--nav-fg)_14%,var(--nav-border))] bg-[color-mix(in_srgb,var(--nav-fg)_04%,transparent)] px-2 text-center font-medium leading-none tracking-tight text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)] xl:max-w-[13rem] xl:px-2.5";
-type ExamMenuKey = "rn" | "pn" | "np" | "newgrad" | "allied";
-
-type MegaMenuLink = {
-  key: string;
-  label: string;
-  href: string;
-};
-
-type MegaMenuGroup = {
-  key: string;
-  heading: string;
-  links: MegaMenuLink[];
-};
-
-type MegaMenuConfig = {
-  key: ExamMenuKey;
-  label: string;
-  hubHref: string;
-  /** Short subtitle shown in the primary hub card (one sentence). */
-  hubDescription: string;
-  groups: MegaMenuGroup[];
-  /**
-   * Badge text shown in the hub card eyebrow for menus where region matters.
-   * Omit for single-path menus (RN, Allied) — they default to "Start Here".
-   */
-  hubBadge?: string;
-};
-
 type LearnerTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
 type LearnerCountry = "CA" | "US";
 type HeaderResumeCta = { href: string; label: string } | null;
@@ -129,185 +93,28 @@ function isMegaMenuKeyActive(key: ExamMenuKey, strippedPath: string): boolean {
   return (prefixes[key] ?? []).some((p) => strippedPath.startsWith(p));
 }
 
-function examIndicatorLabel(country: LearnerCountry, tier: LearnerTier, alliedProfessionKey?: string | null): string {
-  const regionLabel = country === "CA" ? "Canada" : "US";
-  if (tier === "LVN_LPN") return `${regionLabel} ${getNursingRoleLabel({ country, role: "PN" })}`;
-  if (tier === "RPN") return `${regionLabel} RPN`;
+function examIndicatorLabel(
+  t: (key: string) => string,
+  country: LearnerCountry,
+  tier: LearnerTier,
+  alliedProfessionKey?: string | null,
+): string {
+  const regionShort = country === "CA" ? t("nav.badge.regionCA") : t("nav.badge.regionUS");
+  if (tier === "LVN_LPN") return `${regionShort} ${t("nav.badge.roleLvnLpn")}`;
+  if (tier === "RPN") return `${regionShort} ${t("nav.badge.roleRpn")}`;
   if (tier === "ALLIED") {
     if (alliedProfessionKey) {
       const prof = ALLIED_PROFESSIONS.find((p) => p.professionKey === alliedProfessionKey);
       if (prof) {
-        // Extract short acronym or abbreviated label from h1 (e.g. "PTA", "MLT", "RRT")
         const match = prof.h1.match(/\(([A-Z/]+)\)/);
         return match ? match[1] : prof.professionKey.toUpperCase();
       }
     }
-    return "Allied Health";
+    return t("nav.badge.alliedHealth");
   }
-  return `${regionLabel} ${tier}`;
-}
-
-function createMegaMenus(region: "US" | "CA"): MegaMenuConfig[] {
-  const pnRoleLabel = getNursingRoleLabel({ country: region, role: "PN" });
-  const hubs = publicExamPrepHubDestinations(region);
-  const rnHub = hubs.rn;
-  const pnHub = hubs.pn;
-  const npHub = hubs.np;
-  const alliedHubHref = alliedHub(region);
-  const npLessons = region === "US" ? NP.fnpLessons : NP.caNpLessons;
-  const npQuestionHref = npNpQuestionsForRegion(region);
-  const studyPlanSignupHref = `${HUB.signup}?callbackUrl=${encodeURIComponent("/app/study-plan")}`;
-  const alliedCareerPathwaysHref = alliedCareersMarketingUrl();
-  const newGradHub = "/pre-nursing";
-  const newGradLessons = HUB.examLessons;
-  const newGradPractice = HUB.questionBank;
-  const newGradExams = HUB.practiceExams;
-  const newGradFlashcards = HUB.flashcards;
-  const newGradHowItWorks = "/how-it-works";
-
-  return [
-    {
-      key: "rn",
-      label: "RN",
-      hubHref: rnHub,
-      hubDescription: "Start in the RN hub to begin practice, lessons, and readiness tracking.",
-      groups: [
-        {
-          key: "learn",
-          heading: "Learn",
-          links: [
-            { key: "rn-lessons", label: "Lessons", href: rnLessons(region) },
-            { key: "rn-flashcards", label: "Flashcards", href: HUB.flashcards },
-          ],
-        },
-        {
-          key: "practice",
-          heading: "Practice",
-          links: [
-            { key: "rn-questions", label: "Practice Questions", href: rnQuestions(region) },
-            { key: "rn-readiness", label: "CAT Readiness Exam", href: publicMarketingCatHrefForOffering(region, "rn") },
-          ],
-        },
-        {
-          key: "tools",
-          heading: "Study Tools",
-          links: [{ key: "rn-study-plan", label: "Build A Study Plan", href: studyPlanSignupHref }],
-        },
-      ],
-    },
-    {
-      key: "pn",
-      label: pnRoleLabel,
-      hubHref: pnHub,
-      hubDescription: "Choose the hub for your region to start pathway-specific prep.",
-      hubBadge: region === "CA" ? "Recommended for Canada" : "Recommended for US",
-      groups: [
-        {
-          key: "learn",
-          heading: "Learn",
-          links: [
-            { key: "pn-lessons", label: "Lessons", href: pnLessons(region) },
-            { key: "pn-flashcards", label: "Flashcards", href: HUB.flashcards },
-          ],
-        },
-        {
-          key: "practice",
-          heading: "Practice",
-          links: [
-            { key: "pn-questions", label: "Practice Questions", href: pnQuestions(region) },
-            { key: "pn-readiness", label: "CAT Readiness Exam", href: publicMarketingCatHrefForOffering(region, "pn") },
-          ],
-        },
-        {
-          key: "tools",
-          heading: "Study Tools",
-          links: [{ key: "pn-study-plan", label: "Build A Study Plan", href: studyPlanSignupHref }],
-        },
-      ],
-    },
-    {
-      key: "np",
-      label: "NP",
-      hubHref: npHub,
-      hubDescription: "Open the NP hub to choose your exam branch and start studying.",
-      hubBadge: region === "CA" ? "Recommended for Canada" : "Recommended for US",
-      groups: [
-        {
-          key: "learn",
-          heading: "Learn",
-          links: [
-            { key: "np-lessons", label: "Lessons", href: npLessons },
-            { key: "np-flashcards", label: "Flashcards", href: HUB.flashcards },
-          ],
-        },
-        {
-          key: "practice",
-          heading: "Practice",
-          links: [
-            { key: "np-questions", label: "Practice Questions", href: npQuestionHref },
-            { key: "np-readiness", label: "CAT Readiness Exam", href: publicMarketingCatHrefForOffering(region, "np") },
-          ],
-        },
-        {
-          key: "tools",
-          heading: "Study Tools",
-          links: [{ key: "np-study-plan", label: "Build A Study Plan", href: studyPlanSignupHref }],
-        },
-      ],
-    },
-    {
-      key: "newgrad",
-      label: "New Grad",
-      hubHref: newGradHub,
-      hubDescription: "Start with the core new-grad pathway and ramp with practical study activities.",
-      groups: [
-        {
-          key: "learn",
-          heading: "Learn",
-          links: [
-            { key: "ng-lessons", label: "Lessons", href: newGradLessons },
-            { key: "ng-flashcards", label: "Flashcards", href: newGradFlashcards },
-          ],
-        },
-        {
-          key: "practice",
-          heading: "Practice",
-          links: [
-            { key: "ng-questions", label: "Practice Questions", href: newGradPractice },
-            { key: "ng-exams", label: "Practice Exams", href: newGradExams },
-            { key: "ng-readiness", label: "CAT Readiness Exam", href: publicMarketingCatHrefForOffering(region, "rn") },
-          ],
-        },
-        {
-          key: "tools",
-          heading: "Study Tools",
-          links: [
-            { key: "ng-study-plan", label: "Build A Study Plan", href: studyPlanSignupHref },
-            { key: "ng-how", label: "How It Works", href: newGradHowItWorks },
-          ],
-        },
-      ],
-    },
-    {
-      key: "allied",
-      label: "Allied",
-      hubHref: alliedHubHref,
-      hubDescription: "Select your career to access lessons, practice questions, and exam prep scoped to your profession.",
-      groups: ALLIED_HUB_CATEGORY_ORDER.map((catId) => {
-        const cat = ALLIED_HUB_CATEGORY_META[catId];
-        const profs = ALLIED_PROFESSIONS.filter((p) => p.hubCategory === catId);
-        return {
-          key: `allied-cat-${catId}`,
-          heading: cat.label,
-          links: profs.map((p) => ({
-            key: `allied-${p.professionKey}`,
-            label: p.h1.replace(/ exam prep$/i, "").replace(/ \(.*\)$/i, "").trim(),
-            href: `/allied/${p.professionKey}`,
-          })),
-        };
-      }),
-    },
-  ];
+  if (tier === "RN") return `${regionShort} ${t("nav.badge.roleRn")}`;
+  if (tier === "NP") return `${regionShort} ${t("nav.badge.roleNp")}`;
+  return `${regionShort} ${tier}`;
 }
 
 export function SiteHeader() {
@@ -332,10 +139,11 @@ export function SiteHeader() {
   const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, regionToggleAnalytics);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileContextOpen, setMobileContextOpen] = useState(false);
-  const [mobileExpandedMega, setMobileExpandedMega] = useState<ExamMenuKey | null>(null);
+  const [mobileExpandedMega, setMobileExpandedMega] = useState<ExamMenuKey | "moreTracks" | null>(null);
   const [desktopCountryOpen, setDesktopCountryOpen] = useState(false);
   const [desktopLangOpen, setDesktopLangOpen] = useState(false);
   const [desktopMoreOpen, setDesktopMoreOpen] = useState(false);
+  const [desktopMoreTracksOpen, setDesktopMoreTracksOpen] = useState(false);
   const [mobileLangOpen, setMobileLangOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [openMegaMenu, setOpenMegaMenu] = useState<ExamMenuKey | null>(null);
@@ -344,6 +152,7 @@ export function SiteHeader() {
   const desktopCountryRef = useRef<HTMLDivElement>(null);
   const desktopLangRef = useRef<HTMLDivElement>(null);
   const desktopMoreRef = useRef<HTMLDivElement>(null);
+  const desktopMoreTracksRef = useRef<HTMLDivElement>(null);
   const mobileLangRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -408,6 +217,7 @@ export function SiteHeader() {
       if (!desktopCountryRef.current?.contains(e.target as Node)) setDesktopCountryOpen(false);
       if (!desktopLangRef.current?.contains(e.target as Node)) setDesktopLangOpen(false);
       if (!desktopMoreRef.current?.contains(e.target as Node)) setDesktopMoreOpen(false);
+      if (!desktopMoreTracksRef.current?.contains(e.target as Node)) setDesktopMoreTracksOpen(false);
       if (!mobileLangRef.current?.contains(e.target as Node)) setMobileLangOpen(false);
       if (!headerRef.current?.contains(e.target as Node)) setOpenMegaMenu(null);
     };
@@ -417,6 +227,7 @@ export function SiteHeader() {
         setDesktopCountryOpen(false);
         setDesktopLangOpen(false);
         setDesktopMoreOpen(false);
+        setDesktopMoreTracksOpen(false);
         setMobileLangOpen(false);
       }
     };
@@ -443,6 +254,7 @@ export function SiteHeader() {
     setDesktopCountryOpen(false);
     setDesktopLangOpen(false);
     setDesktopMoreOpen(false);
+    setDesktopMoreTracksOpen(false);
     setMobileLangOpen(false);
   }, [pathname, locale, region]);
 
@@ -456,7 +268,7 @@ export function SiteHeader() {
   );
 
   const activeNav = useActiveNavContext();
-  const megaMenus = useMemo(() => createMegaMenus(region), [region]);
+  const megaMenus = useMemo(() => buildMarketingMegaMenus(region, t), [region, t]);
   const isAuthenticated = Boolean(sessionStatus === "authenticated" && user);
   const isAdminAuthenticated = Boolean(isAuthenticated && user?.role && isStaffRole(user.role));
   const isLearnerRole = Boolean(isAuthenticated && user?.role && !isStaffRole(user.role));
@@ -486,7 +298,7 @@ export function SiteHeader() {
   );
   const learnerExamBadge =
     isLearnerNavMode && user
-      ? examIndicatorLabel(user.country as LearnerCountry, user.tier as LearnerTier, (user as { alliedProfessionKey?: string | null }).alliedProfessionKey)
+      ? examIndicatorLabel(t, user.country as LearnerCountry, user.tier as LearnerTier, (user as { alliedProfessionKey?: string | null }).alliedProfessionKey)
       : null;
   const activeProfession: string = isLearnerRole && user?.tier
     ? (user.tier === "RPN" || user.tier === "LVN_LPN" ? "pn" : user.tier === "NP" ? "np" : user.tier === "ALLIED" ? "allied" : "rn")
@@ -515,17 +327,14 @@ export function SiteHeader() {
     ],
     [t, locale],
   );
-  const marketingPricingLink: HeaderNavLink = useMemo(
-    () => ({
-      key: "pricing",
-      href: HUB.pricing,
-      matchBase: HUB.pricing,
-      label: formatTitleCase(t("nav.pricing"), locale),
-    }),
-    [t, locale],
-  );
   const marketingMoreLinks: HeaderNavLink[] = useMemo(
     () => [
+      {
+        key: "pricing",
+        href: HUB.pricing,
+        matchBase: "/pricing",
+        label: formatTitleCase(t("nav.pricing"), locale),
+      },
       {
         key: "blog",
         href: "/blog",
@@ -542,6 +351,11 @@ export function SiteHeader() {
       { key: "tools", href: HUB.tools, matchBase: HUB.tools, label: formatTitleCase(t("nav.tools"), locale) },
     ],
     [t, locale],
+  );
+  const primaryMegaMenus = useMemo(() => megaMenus.filter((m) => m.key === "rn" || m.key === "pn" || m.key === "np"), [megaMenus]);
+  const secondaryMegaMenus = useMemo(
+    () => megaMenus.filter((m) => m.key === "newgrad" || m.key === "allied"),
+    [megaMenus],
   );
   const openMega = megaMenus.find((menu) => menu.key === openMegaMenu) ?? null;
 
@@ -840,7 +654,7 @@ export function SiteHeader() {
                     key={item.key}
                     href={localizeHref(item.href)}
                     aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                    className={NAV_LINK_CLASS}
+                    className={item.key === "flow-practice" ? NAV_FLOW_PRACTICE_CLASS : NAV_FLOW_SECONDARY_CLASS}
                     onClick={() =>
                       trackClientEvent(PH.marketingNavClick, {
                         actor: navActor,
@@ -853,21 +667,6 @@ export function SiteHeader() {
                     {item.label}
                   </Link>
                 ))}
-                <Link
-                  href={localizeHref(marketingPricingLink.href)}
-                  aria-current={isActivePath(strippedPath, marketingPricingLink.matchBase) ? "page" : undefined}
-                  className={NAV_LINK_CLASS}
-                  onClick={() =>
-                    trackClientEvent(PH.marketingNavClick, {
-                      actor: navActor,
-                      nav_id: marketingPricingLink.key,
-                      surface: "site_header_desktop",
-                      marketing_region: region,
-                    })
-                  }
-                >
-                  {marketingPricingLink.label}
-                </Link>
                 <div className="relative" ref={desktopMoreRef}>
                   <button
                     type="button"
@@ -910,7 +709,7 @@ export function SiteHeader() {
               </nav>
             ) : (
               <nav
-                aria-label="Learner navigation"
+                aria-label={t("nav.learnerMain.aria")}
                 className="flex min-w-0 items-center justify-center gap-0.5 overflow-x-auto [scrollbar-width:none] xl:gap-1 [&::-webkit-scrollbar]:hidden"
               >
                 {learnerLinks.map((item) => (
@@ -1004,13 +803,16 @@ export function SiteHeader() {
                 aria-label={t("nav.marketingExplore")}
                 className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-0 xl:gap-0.5"
               >
-                {megaMenus.map((menu) => {
+                {primaryMegaMenus.map((menu) => {
                   const expanded = openMegaMenu === menu.key;
                   return (
                     <div
                       key={menu.key}
                       className="relative"
-                      onMouseEnter={() => setOpenMegaMenu(menu.key)}
+                      onMouseEnter={() => {
+                        setDesktopMoreTracksOpen(false);
+                        setOpenMegaMenu(menu.key);
+                      }}
                     >
                       <button
                         type="button"
@@ -1027,6 +829,46 @@ export function SiteHeader() {
                     </div>
                   );
                 })}
+                {secondaryMegaMenus.length > 0 ? (
+                  <div className="relative" ref={desktopMoreTracksRef}>
+                    <button
+                      type="button"
+                      aria-expanded={desktopMoreTracksOpen}
+                      className={`${NAV_TIER_LINK_CLASS} inline-flex items-center gap-1 text-center text-[var(--nav-muted)]`}
+                      onClick={() => setDesktopMoreTracksOpen((o) => !o)}
+                    >
+                      {formatTitleCase(t("nav.examTracks.more"), locale)}
+                      <ChevronDown className={`h-3.5 w-3.5 transition-transform ${desktopMoreTracksOpen ? "rotate-180" : ""}`} aria-hidden />
+                    </button>
+                    {desktopMoreTracksOpen ? (
+                      <div
+                        role="menu"
+                        className="absolute start-0 z-[130] mt-2 min-w-[14rem] rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] py-1 shadow-[var(--shadow-card-hover)]"
+                      >
+                        {secondaryMegaMenus.map((menu) => (
+                          <button
+                            key={menu.key}
+                            type="button"
+                            role="menuitem"
+                            className="flex w-full items-center px-3 py-2.5 text-left text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                            onClick={() => {
+                              setOpenMegaMenu(menu.key);
+                              setDesktopMoreTracksOpen(false);
+                              trackClientEvent(PH.marketingNavClick, {
+                                actor: navActor,
+                                nav_id: `exam_tracks_more_${menu.key}`,
+                                surface: "site_header_desktop",
+                                marketing_region: region,
+                              });
+                            }}
+                          >
+                            {menu.label}
+                          </button>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
               </nav>
             </div>
           </div>
@@ -1207,50 +1049,55 @@ export function SiteHeader() {
                   ))
                 ) : (
                   <>
-                    {marketingFlowLinks.map((item) => (
-                      <Link
-                        key={item.key}
-                        href={localizeHref(item.href)}
-                        aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                        className={`flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-medium transition-colors ${isActivePath(strippedPath, item.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
-                        onClick={() => {
-                          trackClientEvent(PH.marketingNavClick, {
-                            actor: navActor,
-                            nav_id: item.key,
-                            surface: "site_header_mobile_drawer",
-                            marketing_region: region,
-                          });
-                          setMobileOpen(false);
-                        }}
-                      >
-                        <span
-                          className={`h-1.5 w-1.5 shrink-0 rounded-full transition-opacity duration-100 ${isActivePath(strippedPath, item.matchBase) ? "bg-[var(--text-accent)] opacity-100" : "opacity-0"}`}
-                          aria-hidden
-                        />
-                        {item.label}
-                      </Link>
-                    ))}
-                    <Link
-                      href={localizeHref(marketingPricingLink.href)}
-                      aria-current={isActivePath(strippedPath, marketingPricingLink.matchBase) ? "page" : undefined}
-                      className={`flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-medium transition-colors ${isActivePath(strippedPath, marketingPricingLink.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
-                      onClick={() => {
-                        trackClientEvent(PH.marketingNavClick, {
-                          actor: navActor,
-                          nav_id: marketingPricingLink.key,
-                          surface: "site_header_mobile_drawer",
-                          marketing_region: region,
-                        });
-                        setMobileOpen(false);
-                      }}
-                    >
-                      <span
-                        className={`h-1.5 w-1.5 shrink-0 rounded-full transition-opacity duration-100 ${isActivePath(strippedPath, marketingPricingLink.matchBase) ? "bg-[var(--text-accent)] opacity-100" : "opacity-0"}`}
-                        aria-hidden
-                      />
-                      {marketingPricingLink.label}
-                    </Link>
-                    {megaMenus.map((menu) => {
+                    {(() => {
+                      const flowPractice = marketingFlowLinks.find((l) => l.key === "flow-practice");
+                      const flowRest = marketingFlowLinks.filter((l) => l.key !== "flow-practice");
+                      return (
+                        <>
+                          {flowPractice ? (
+                            <Link
+                              key={flowPractice.key}
+                              href={localizeHref(flowPractice.href)}
+                              aria-current={isActivePath(strippedPath, flowPractice.matchBase) ? "page" : undefined}
+                              className="nn-nav-cta mb-2 flex min-h-[48px] w-full items-center justify-center rounded-xl px-4 py-3 text-[15px] font-semibold"
+                              onClick={() => {
+                                trackClientEvent(PH.marketingNavClick, {
+                                  actor: navActor,
+                                  nav_id: flowPractice.key,
+                                  surface: "site_header_mobile_drawer",
+                                  marketing_region: region,
+                                });
+                                setMobileOpen(false);
+                              }}
+                            >
+                              {flowPractice.label}
+                            </Link>
+                          ) : null}
+                          <div className="mb-3 grid grid-cols-2 gap-2">
+                            {flowRest.map((item) => (
+                              <Link
+                                key={item.key}
+                                href={localizeHref(item.href)}
+                                aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
+                                className={`flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-2 py-2.5 text-center text-[13px] font-medium leading-snug text-[var(--nav-muted)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)] ${isActivePath(strippedPath, item.matchBase) ? "border-[var(--text-accent)] text-[var(--nav-link-active)]" : ""}`}
+                                onClick={() => {
+                                  trackClientEvent(PH.marketingNavClick, {
+                                    actor: navActor,
+                                    nav_id: item.key,
+                                    surface: "site_header_mobile_drawer",
+                                    marketing_region: region,
+                                  });
+                                  setMobileOpen(false);
+                                }}
+                              >
+                                {item.label}
+                              </Link>
+                            ))}
+                          </div>
+                        </>
+                      );
+                    })()}
+                    {primaryMegaMenus.map((menu) => {
                       const expanded = mobileExpandedMega === menu.key;
                       return (
                         <div key={menu.key} className="rounded-xl border border-[var(--nav-border)] bg-[var(--surface)]">
@@ -1342,6 +1189,49 @@ export function SiteHeader() {
                         </div>
                       );
                     })}
+                    {secondaryMegaMenus.length > 0 ? (
+                      <div className="rounded-xl border border-[var(--nav-border)] bg-[var(--surface)]">
+                        <button
+                          type="button"
+                          aria-expanded={mobileExpandedMega === "moreTracks"}
+                          aria-controls="mobile-mega-more-tracks"
+                          className="flex w-full items-center justify-between px-3 py-3 text-left text-[15px] font-medium text-[var(--nav-muted)] transition-colors"
+                          onClick={() => setMobileExpandedMega(mobileExpandedMega === "moreTracks" ? null : "moreTracks")}
+                        >
+                          <span>{formatTitleCase(t("nav.examTracks.more"), locale)}</span>
+                          <ChevronDown
+                            className={`h-4 w-4 shrink-0 transition-transform ${mobileExpandedMega === "moreTracks" ? "rotate-180" : ""}`}
+                            aria-hidden
+                          />
+                        </button>
+                        {mobileExpandedMega === "moreTracks" ? (
+                          <div
+                            id="mobile-mega-more-tracks"
+                            className="space-y-2 border-t border-[var(--nav-border)] px-3 pb-4 pt-3"
+                          >
+                            {secondaryMegaMenus.map((menu) => (
+                              <Link
+                                key={menu.key}
+                                href={localizeHref(menu.hubHref)}
+                                className="flex flex-col gap-1 rounded-xl border border-[var(--accent-surface-a-border)] bg-[var(--accent-surface-a)] px-3 py-3 text-left ring-1 ring-inset ring-[var(--accent-surface-a-border)] transition-colors hover:bg-[var(--accent-surface-a-border)]"
+                                onClick={() => {
+                                  trackClientEvent(PH.marketingNavClick, {
+                                    actor: navActor,
+                                    nav_id: `${menu.key}_hub`,
+                                    surface: "site_header_mobile_mega",
+                                    marketing_region: region,
+                                  });
+                                  setMobileOpen(false);
+                                }}
+                              >
+                                <span className="text-[14px] font-semibold text-[var(--nav-fg)]">{menu.label}</span>
+                                <span className="text-[12px] leading-snug text-[var(--nav-muted)]">{menu.hubDescription}</span>
+                              </Link>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    ) : null}
                     <div className="space-y-1 border-t border-[var(--header-border)] pt-3">
                       <p className="px-2 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                         {formatTitleCase(t("nav.marketingMore"), locale)}

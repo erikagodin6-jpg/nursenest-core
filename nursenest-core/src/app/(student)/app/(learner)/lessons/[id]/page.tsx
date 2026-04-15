@@ -37,6 +37,7 @@ import { getLearnerExamFraming } from "@/lib/learner/learner-exam-framing";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
 import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
+import { PathwayLessonPracticeBridge } from "@/components/lessons/pathway-lesson-practice-bridge";
 import { buildAppQuestionBankTopicDrillHref } from "@/components/lessons/pathway-lesson-link-practice";
 import { buildAppPracticeTestsHubHref } from "@/lib/learner/study-loop-recommendations";
 import {
@@ -700,6 +701,10 @@ export default async function LessonDetailPage({ params }: Props) {
           progress={initialProgress}
         />
 
+        {pathway ? (
+          <PathwayLessonPracticeBridge pathway={pathway} topic={record.topic} topicSlug={record.topicSlug} t={t} />
+        ) : null}
+
         {pathway && lessonHasExamTakeaways(record.studyTakeaways) ? (
           <div className="mt-5 max-w-5xl">
             <ExamTakeawaysBlock
@@ -764,6 +769,18 @@ export default async function LessonDetailPage({ params }: Props) {
     }
   }
 
+  const topicLabelForDrill = bs || displayTitle;
+  const pathwayForContentDrill = learnerPath ? getExamPathwayById(learnerPath) : null;
+  const contentPracticeHref = pathwayForContentDrill
+    ? buildAppQuestionBankTopicDrillHref(pathwayForContentDrill, topicLabelForDrill, topicCode ?? undefined)
+    : (() => {
+        const qs = new URLSearchParams();
+        qs.set("preset", "topic_drill");
+        if (anchorNorm.trim()) qs.set("topic", anchorNorm);
+        if (topicCode) qs.set("topicCode", topicCode);
+        return `/app/questions?${qs.toString()}`;
+      })();
+
   return (
     <main className="nn-lesson-page">
       <header className="nn-lesson-page-header">
@@ -807,7 +824,7 @@ export default async function LessonDetailPage({ params }: Props) {
         <LessonContinueStudyNextBlock bundle={contentContinue} />
         <div className="mt-10 flex flex-wrap gap-3 border-t pt-6" style={{ borderColor: "var(--border-subtle)" }}>
           <Link
-            href="/app/questions"
+            href={contentPracticeHref}
             className="inline-flex items-center rounded-xl px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90"
             style={{ background: "var(--semantic-brand)", color: "#fff" }}
           >

@@ -39,6 +39,10 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 .env.playwright.local
+# Safe templates (placeholders only) — must never contain real secrets
+!.env.example
+!.env.playwright.example
+!.env*.example
 
 # vercel
 .vercel
@@ -49,6 +53,7 @@ next-env.d.ts
 
 # local import pipeline output (do not commit)
 nursing-import-quarantine.jsonl
+/data/import-checkpoints/
 /data/import-checkpoints/nurse-nest-legacy.json
 /data/import-quarantine/nurse-nest/
 
@@ -59,3 +64,20 @@ nursing-import-quarantine.jsonl
 .replit-export-staging/
 .replit-spaces-upload-manifest.json
 .replit-spaces-pipeline-report.json
+
+# Local exports / downloads / DB scratch
+admin-export/
+downloads/
+local-export/
+*.sqlite
+*.sqlite3
+
+# Cursor local state (keep rules in repo; ignore machine-specific if present)
+.cursor/*.log
+
+# Storybook / Vite caches (if used locally)
+storybook-static/
+dist/
+
+# Sentry / build telemetry dumps
+.sentry-native/

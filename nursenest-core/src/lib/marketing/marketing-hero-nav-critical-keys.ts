@@ -49,6 +49,7 @@ export const MARKETING_NAV_HEADER_CHROME_KEYS = [
   "nav.marketingFlow.learn",
   "nav.marketingFlow.practice",
   "nav.marketingFlow.track",
+  "nav.examTracks.more",
   "nav.marketingMore",
   "nav.mega.startHere",
   "nav.mega.openHub",

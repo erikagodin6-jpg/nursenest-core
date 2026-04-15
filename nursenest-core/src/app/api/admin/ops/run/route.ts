@@ -55,8 +55,11 @@ function loadMaterializedMetadata() {
 }
 
 export async function POST(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
+  if (gate.admin.tier !== "super") {
+    return NextResponse.json({ error: "Forbidden", code: "admin_super_only" }, { status: 403 });
+  }
 
   const parsed = schema.safeParse(await req.json());
   if (!parsed.success) return NextResponse.json({ error: "Invalid action" }, { status: 400 });

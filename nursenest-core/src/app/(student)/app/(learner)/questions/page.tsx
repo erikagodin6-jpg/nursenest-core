@@ -63,7 +63,12 @@ export default async function QuestionBankPage() {
           <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.questions.title")}</h1>
           <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.questions.subtitle.locked")}</p>
         </div>
-        <div>
+        {userId && snap && !freemiumQuestionsExhausted(snap) ? (
+          <div className="mt-6">
+            <FreemiumQuestionPeek />
+          </div>
+        ) : null}
+        <div className="mt-6">
           <SubscriptionPaywall
             context="questions"
             freemiumRemainingQuestions={snap?.questionRemaining ?? 0}
@@ -73,7 +78,6 @@ export default async function QuestionBankPage() {
         {userId && snap && freemiumLessonsExhausted(snap) && !freemiumQuestionsExhausted(snap) ? (
           <FreemiumCrossTrackNudge variant="lessons_exhausted" />
         ) : null}
-        {userId && snap && !freemiumQuestionsExhausted(snap) ? <FreemiumQuestionPeek /> : null}
         {userId && snap && freemiumQuestionsExhausted(snap) ? <FreemiumPreviewExhaustedSurface kind="questions" /> : null}
       </main>
     );

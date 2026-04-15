@@ -68,6 +68,25 @@ test("adminRouteGateDecision: content staff allowed on eeat-editorial", () => {
   assert.deepEqual(adminRouteGateDecision({ tier: "content" }, "/admin/eeat-editorial"), { allow: true });
 });
 
-test("adminRouteGateDecision: empty x-nn-admin-path allows staff (tier check only)", () => {
-  assert.deepEqual(adminRouteGateDecision({ tier: "support" }, ""), { allow: true });
+test("adminRouteGateDecision: empty admin path fails closed for non-super", () => {
+  assert.deepEqual(adminRouteGateDecision({ tier: "support" }, ""), {
+    allow: false,
+    redirectTo: "/admin",
+  });
+  assert.deepEqual(adminRouteGateDecision({ tier: "content" }, ""), {
+    allow: false,
+    redirectTo: "/admin",
+  });
+  assert.deepEqual(adminRouteGateDecision({ tier: "super" }, ""), { allow: true });
+});
+
+test("content cannot access super-only ops or export APIs", () => {
+  assert.equal(isPathAllowedForStaffTier("content", "/api/admin/ops/run"), false);
+  assert.equal(isPathAllowedForStaffTier("content", "/api/admin/export/content"), false);
+  assert.equal(isPathAllowedForStaffTier("super", "/api/admin/ops/run"), true);
+});
+
+test("non-super denied for ambiguous root path /", () => {
+  assert.equal(isPathAllowedForStaffTier("content", "/"), false);
+  assert.equal(isPathAllowedForStaffTier("support", "/"), false);
 });

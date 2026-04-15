@@ -24,9 +24,9 @@ export type LearnerPrimaryNavItem = {
 
 /**
  * Exactly one learner nav item is visually “primary” (subtle emphasis in header + shell).
- * Use `"lessons"` for lesson-first IA; use `"practice"` for exam-question-first IA.
+ * Aligned with public marketing flow: Learn → **Practice** → Track.
  */
-export const LEARNER_PRIMARY_NAV_ITEM_KEY = "lessons" as const satisfies Extract<
+export const LEARNER_PRIMARY_NAV_ITEM_KEY = "practice" as const satisfies Extract<
   LearnerPrimaryNavItem["key"],
   "lessons" | "practice"
 >;

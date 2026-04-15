@@ -11,8 +11,15 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-const pkgRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-const publicRoot = path.join(pkgRoot, "public");
+/** Monorepo git root (parent of `scripts/`). */
+const repoRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+/** Next app package lives at `nursenest-core/public/` (DigitalOcean `source_dir`). */
+const publicRootCandidates = [
+  path.join(repoRoot, "nursenest-core", "public"),
+  path.join(repoRoot, "public"),
+];
+const publicRoot = publicRootCandidates.find((p) => fs.existsSync(p)) ?? publicRootCandidates[0];
+const displayRoot = path.join(repoRoot, "nursenest-core");
 
 const PUBLIC_NON_I18N_MAX_BYTES = 512 * 1024;
 const I18N_WARN_PER_FILE_BYTES = 2 * 1024 * 1024;
@@ -30,7 +37,7 @@ function walk(dir, acc) {
 }
 
 function rel(p) {
-  return path.relative(pkgRoot, p);
+  return path.relative(displayRoot, p);
 }
 
 const files = [];
@@ -43,7 +50,8 @@ let i18nTotal = 0;
 for (const fp of files) {
   const st = fs.statSync(fp);
   const r = rel(fp).replace(/\\/g, "/");
-  const inI18n = r.startsWith("public/i18n/");
+  const relFromPublic = path.relative(publicRoot, fp).replace(/\\/g, "/");
+  const inI18n = relFromPublic === "i18n" || relFromPublic.startsWith("i18n/");
 
   if (inI18n) {
     i18nTotal += st.size;

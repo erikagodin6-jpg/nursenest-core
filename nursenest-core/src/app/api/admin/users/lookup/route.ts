@@ -6,7 +6,7 @@ import { loadAdminUserSearch } from "@/lib/admin/load-admin-user-search";
  * GET ?q= — search learners by email, name, username, or id (cuid).
  */
 export async function GET(req: NextRequest) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const q = req.nextUrl.searchParams.get("q")?.trim() ?? "";

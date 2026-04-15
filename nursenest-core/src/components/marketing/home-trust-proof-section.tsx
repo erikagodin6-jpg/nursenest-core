@@ -5,39 +5,23 @@ import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { FadeUp, StaggerGroup, StaggerItem } from "@/lib/motion";
 
-const POINTS = [
-  {
-    icon: Brain,
-    iconColor: "var(--semantic-info)",
-    title: "Question sets scoped to nursing exams",
-    body: "Content is written for nursing exam decisions, not mixed-discipline trivia.",
-  },
-  {
-    icon: ShieldCheck,
-    iconColor: "var(--semantic-success)",
-    title: "Matched to your license",
-    body: "RN, PN or RPN, NP, and allied tracks stay scoped so content matches the correct exam context.",
-  },
-  {
-    icon: Scale,
-    iconColor: "var(--semantic-warning)",
-    title: "Readiness tracked over time",
-    body: "Session trends and weak-topic signals show what changed and what needs review next.",
-  },
-  {
-    icon: Crosshair,
-    iconColor: "var(--semantic-brand)",
-    title: "Review follows weak areas",
-    body: "Lessons, questions, and CAT sessions stay linked so follow-up review is targeted.",
-  },
-] as const;
+const POINT_KEYS = ["card0", "card1", "card2", "card3"] as const;
+const POINT_META: Record<
+  (typeof POINT_KEYS)[number],
+  { icon: typeof Brain; iconColor: string }
+> = {
+  card0: { icon: Brain, iconColor: "var(--semantic-info)" },
+  card1: { icon: ShieldCheck, iconColor: "var(--semantic-success)" },
+  card2: { icon: Scale, iconColor: "var(--semantic-warning)" },
+  card3: { icon: Crosshair, iconColor: "var(--semantic-brand)" },
+};
 
 /**
  * Differentiation section: four colorful feature cards, each with a unique semantic icon color.
  * Tinted surface separates this visually from adjacent white card sections.
  */
 export function HomeTrustProofSection() {
-  const { locale } = useMarketingI18n();
+  const { locale, t } = useMarketingI18n();
 
   return (
     <section
@@ -48,44 +32,43 @@ export function HomeTrustProofSection() {
       <div className="nn-section-shell">
         <FadeUp whenInView once viewMargin="-32px" className="mx-auto mb-12 max-w-2xl text-center">
           <h2 id="home-differentiation-heading" className="nn-marketing-h2 text-balance">
-            {formatTitleCase("Why learners use NurseNest", locale)}
+            {formatTitleCase(t("pages.home.differentiation.title"), locale)}
           </h2>
           <p className="nn-marketing-body mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-[var(--palette-text-muted)]">
-            {formatSentenceCase(
-              "A readiness system matched to your license, with lessons and practice connected in one workflow.",
-              locale,
-            )}
+            {formatSentenceCase(t("pages.home.differentiation.subtitle"), locale)}
           </p>
         </FadeUp>
 
         <StaggerGroup className="grid gap-5 md:grid-cols-2" whenInView once viewMargin="-40px">
-          {POINTS.map((point, idx) => {
-            const Icon = point.icon;
+          {POINT_KEYS.map((key, idx) => {
+            const meta = POINT_META[key];
+            const Icon = meta.icon;
+            const title = t(`pages.home.differentiation.${key}.title`);
             return (
-              <StaggerItem key={point.title} variant={idx % 2 === 0 ? "fadeUp" : "softReveal"} className="min-w-0">
+              <StaggerItem key={key} variant={idx % 2 === 0 ? "fadeUp" : "softReveal"} className="min-w-0">
               <article
                 className="flex h-full gap-4 rounded-2xl border bg-[var(--bg-card)] p-6 shadow-[var(--shadow-elevated)] transition-[box-shadow,border-color] duration-200 ease-[var(--motion-ease)] hover:border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border-subtle))]"
                 style={{
-                  borderColor: `color-mix(in srgb, ${point.iconColor} 18%, var(--border-subtle))`,
-                  borderTop: `3px solid ${point.iconColor}`,
+                  borderColor: `color-mix(in srgb, ${meta.iconColor} 18%, var(--border-subtle))`,
+                  borderTop: `3px solid ${meta.iconColor}`,
                 }}
               >
                 <span
                   className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border"
                   style={{
-                    background: `color-mix(in srgb, ${point.iconColor} 10%, var(--bg-card))`,
-                    borderColor: `color-mix(in srgb, ${point.iconColor} 24%, var(--border-subtle))`,
+                    background: `color-mix(in srgb, ${meta.iconColor} 10%, var(--bg-card))`,
+                    borderColor: `color-mix(in srgb, ${meta.iconColor} 24%, var(--border-subtle))`,
                   }}
                   aria-hidden
                 >
-                  <Icon className="h-5 w-5" style={{ color: point.iconColor }} />
+                  <Icon className="h-5 w-5" style={{ color: meta.iconColor }} />
                 </span>
                 <div className="min-w-0">
                   <h3 className="nn-marketing-h3 mb-1.5" style={{ color: "var(--palette-heading)" }}>
-                    {formatTitleCase(point.title, locale)}
+                    {formatTitleCase(title, locale)}
                   </h3>
                   <p className="nn-marketing-body-sm text-[var(--theme-muted-text)]">
-                    {formatSentenceCase(point.body, locale)}
+                    {formatSentenceCase(t(`pages.home.differentiation.${key}.body`), locale)}
                   </p>
                 </div>
               </article>

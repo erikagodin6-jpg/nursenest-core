@@ -2,7 +2,7 @@
  * Orchestrates legacy question bank imports: advanced (MCQ/SATA) then career MCQ.
  * Writes machine-readable audit under `data/audit/legacy-question-bank-import-report.json`.
  *
- * Run: cd nursenest-core && npx tsx scripts/run-legacy-question-bank-import.mts [--dry-run] [--limit=5000]
+ * Run: cd nursenest-core && npx tsx scripts/run-legacy-question-bank-import.mts [--dry-run] [--confirm-write] [--limit=5000]
  */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -13,7 +13,7 @@ import { PrismaClient } from "@prisma/client";
 import { runLegacyClientAdvancedImport } from "./import-legacy-client-advanced-questions.mts";
 import { runLegacyClientCareerImport } from "./import-legacy-client-career-questions.mts";
 import { isDatabaseUrlConfigured } from "../src/lib/db/safe-database";
-import { requireDatabaseUrlForLiveImport } from "./lib/require-database-for-live-import.mts";
+import { assertLiveImportPreconditions } from "./lib/import-live-guards.mts";
 
 import "../src/lib/db/env-bootstrap";
 
@@ -24,10 +24,16 @@ const AUDIT_PATH = join(REPO_ROOT, "data", "audit", "legacy-question-bank-import
 
 function parseArgs() {
   const out: { dryRun: boolean; limit?: number } = { dryRun: false };
-  for (const a of process.argv.slice(2)) {
+  const argv = process.argv.slice(2);
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
     if (a === "--dry-run") out.dryRun = true;
-    const lim = /^--limit=(\d+)$/.exec(a);
-    if (lim) out.limit = parseInt(lim[1], 10);
+    const limEq = /^--limit=(\d+)$/.exec(a);
+    if (limEq) out.limit = parseInt(limEq[1], 10);
+    if (a === "--limit" && argv[i + 1] && /^\d+$/.test(argv[i + 1]!)) {
+      out.limit = parseInt(argv[i + 1]!, 10);
+      i += 1;
+    }
   }
   return out;
 }
@@ -50,7 +56,11 @@ async function snapshotCounts(prisma: PrismaClient) {
 async function main() {
   const { dryRun, limit } = parseArgs();
   if (!dryRun) {
-    requireDatabaseUrlForLiveImport("import:legacy-question-bank");
+    assertLiveImportPreconditions({
+      dryRun: false,
+      argv: process.argv,
+      scriptLabel: "import:legacy-question-bank",
+    });
   }
   const prisma = new PrismaClient();
   const generatedAt = new Date().toISOString();

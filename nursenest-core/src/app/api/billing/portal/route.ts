@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
+import { publicAppOriginForBilling } from "@/lib/env/public-app-origin";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
 
 export const runtime = "nodejs";
@@ -46,7 +47,14 @@ export async function POST() {
     );
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
+  const appUrl = publicAppOriginForBilling();
+  if (!appUrl) {
+    safeServerLog("billing_portal", "app_origin_missing", {});
+    return NextResponse.json(
+      { error: "Billing URL is not configured.", code: "APP_ORIGIN_MISCONFIGURED" },
+      { status: 503 },
+    );
+  }
 
   try {
     const portal = await stripe.billingPortal.sessions.create({

@@ -33,19 +33,24 @@ export async function GET(req: Request) {
   const lower = normalizeLoginIdentifier(trimmed);
   const normalized = normalizeEmailForDedup(lower);
 
+  const DIAG_CAP = 25;
+
   const [exactCaseInsensitiveMatches, normalizedMatches, trimmedIds] = await Promise.all([
     prisma.user.findMany({
       where: { email: { equals: lower, mode: "insensitive" } },
       select: userDiagSelect,
+      take: DIAG_CAP,
     }),
     prisma.user.findMany({
       where: { normalizedEmail: normalized },
       select: userDiagSelect,
+      take: DIAG_CAP,
     }),
     prisma.$queryRaw<{ id: string }[]>(
       Prisma.sql`
         SELECT id FROM "User"
         WHERE lower(btrim(email)) = lower(btrim(${lower}))
+        LIMIT ${DIAG_CAP}
       `,
     ),
   ]);

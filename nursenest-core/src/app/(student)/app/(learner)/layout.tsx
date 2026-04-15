@@ -25,6 +25,7 @@ import {
   LearnerShellMobileBottomNav,
   LearnerShellPathwayPill,
 } from "@/components/layout/learner-shell-primary-nav";
+import { LearnerStudyPathStrip } from "@/components/student/learner-study-path-strip";
 import { LearnerShellBrandHomeLink } from "@/components/student/learner-shell-brand-home-link";
 import { LearnerUnauthenticatedGate } from "@/components/student/learner-unauthenticated-gate";
 import {
@@ -156,6 +157,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                   <div className="nn-learner-shell-nav-row rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-2 shadow-[0_1px_0_0_color-mix(in_srgb,var(--semantic-text-primary)_06%,transparent)] sm:px-3">
                     <LearnerShellDesktopStudyLinks pathwayId={pathwayId} examsLabel={examsLabel} />
                   </div>
+                  <LearnerStudyPathStrip pathwayId={pathwayId} />
                 </div>
                 <LearnerShellMobileBottomNav
                   pathwayPillLabel={pathwayShortLabel}

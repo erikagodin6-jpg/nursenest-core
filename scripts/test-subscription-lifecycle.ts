@@ -6,7 +6,8 @@ const ADMIN_API_KEY = process.env.ADMIN_API_KEY || "";
 
 const TEST_USER = {
   username: `testuser_sub_${Date.now()}`,
-  password: "TestPass123!",
+  /** Local/staging only — set SUBSCRIPTION_TEST_USER_PASSWORD in env for CI or shared runs. */
+  password: process.env.SUBSCRIPTION_TEST_USER_PASSWORD?.trim() || "LocalDev-SubLifecycle-ChangeMe9!",
 };
 
 interface TestResult {

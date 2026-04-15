@@ -20,6 +20,10 @@ const SUPER_ONLY_PREFIXES = [
   "/api/admin/i18n-diagnostics",
   "/admin/demo-users",
   "/api/admin/demo-users",
+  /** Server-side ops worker + FS-adjacent actions — super only. */
+  "/api/admin/ops",
+  /** Bulk content export — super only (PII / corpus risk). */
+  "/api/admin/export",
   /** Temporary auth diagnostics — PII-adjacent user lookup (super admin only). */
   "/api/debug/auth-user",
   /** In-memory login lockout clear for the running instance (super admin only). */
@@ -94,6 +98,11 @@ export function isPathAllowedForStaffTier(tier: StaffTier, pathname: string): bo
     return true;
   }
 
+  // Ambiguous "/" (e.g. missing path headers) must not widen content-tier access.
+  if (path === "/") {
+    return false;
+  }
+
   if (isSuperOnlyPath(path)) {
     return false;
   }
@@ -121,8 +130,9 @@ export function adminRouteGateDecision(
   adminPathHeader: string,
 ): { allow: true } | { allow: false; redirectTo: "/app" | "/admin" } {
   if (!staff) return { allow: false, redirectTo: "/app" };
-  const path = adminPathHeader ?? "";
-  if (path && !isPathAllowedForStaffTier(staff.tier, path)) {
+  const raw = (adminPathHeader ?? "").trim();
+  const pathForRbac = raw.length > 0 ? raw : "/";
+  if (!isPathAllowedForStaffTier(staff.tier, pathForRbac)) {
     return { allow: false, redirectTo: "/admin" };
   }
   return { allow: true };

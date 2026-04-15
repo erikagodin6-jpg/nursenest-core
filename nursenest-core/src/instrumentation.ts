@@ -1,6 +1,12 @@
 import * as Sentry from "@sentry/nextjs";
 import "@/lib/db/env-bootstrap";
 import { logDatabaseEnvOnce } from "@/lib/db/database-env";
+import { validateProductionDatabaseEnv } from "@/lib/db/validate-production-db-env";
+import {
+  assertNextPublicSurfaceHasNoSecrets,
+  warnIfStripeLiveKeyOutsideProduction,
+} from "@/lib/env/central-env-validation";
+import { runProductionEnvGuard } from "@/lib/env/production-env-guard";
 import { logStartupContext } from "@/lib/env/server-env";
 import { logHighMemory } from "@/lib/observability/perf-log";
 import {
@@ -9,58 +15,18 @@ import {
 } from "@/lib/stripe/pricing-map";
 import { assertPinnedAuthBasePath } from "@/lib/auth/auth-base-path";
 
-function validateAuthEnv(): void {
-  if (process.env.NODE_ENV !== "production") return;
-  const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
-  if (!secret?.trim()) {
-    console.error(
-      "[nursenest-core] auth env: AUTH_SECRET (or NEXTAUTH_SECRET) is missing — login will fail in production.",
-    );
-  }
-  const url = process.env.AUTH_URL ?? process.env.NEXTAUTH_URL;
-  if (!url?.trim()) {
-    console.warn(
-      "[nursenest-core] auth env: AUTH_URL is unset — relying on trustHost + forwarded headers. Set AUTH_URL to your public origin (e.g. https://app.example.com) if cookies or redirects misbehave.",
-    );
-  } else {
-    try {
-      const { pathname } = new URL(url.trim());
-      if (pathname !== "/" && pathname !== "") {
-        console.warn(
-          `[nursenest-core] auth env: AUTH_URL/NEXTAUTH_URL should be origin-only (no path). Got pathname "${pathname}". NextAuth used to infer a wrong basePath from this and break /api/auth — basePath is now pinned to /api/auth; still fix the env to avoid redirect/cookie confusion.`,
-        );
-      }
-    } catch {
-      /* invalid URL — other code paths will surface */
-    }
-  }
-}
-
-function validateStripeAppEnv(): void {
-  if (process.env.NODE_ENV !== "production") return;
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
-  if (!appUrl) {
-    console.error(
-      "[nursenest-core] stripe env: NEXT_PUBLIC_APP_URL is not set — Stripe checkout success_url and cancel_url will point to http://localhost:3000 in production. Set this to your public app origin (e.g. https://app.nursenest.ca).",
-    );
-  }
-  if (!process.env.STRIPE_WEBHOOK_SECRET?.trim()) {
-    console.error(
-      "[nursenest-core] stripe env: STRIPE_WEBHOOK_SECRET is not set — webhook signature verification will reject all Stripe events. Subscription activation will not work.",
-    );
-  }
-}
-
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     logStartupContext();
+    assertNextPublicSurfaceHasNoSecrets();
+    warnIfStripeLiveKeyOutsideProduction();
     logDatabaseEnvOnce();
+    validateProductionDatabaseEnv();
+    runProductionEnvGuard();
     console.error(
       `[nursenest-core] instrumentation: nodejs runtime registered PORT=${process.env.PORT ?? "(unset)"}`,
     );
     assertPinnedAuthBasePath();
-    validateAuthEnv();
-    validateStripeAppEnv();
     logStripeCheckoutEnvStartupStatus();
     logStripeProductionPricingMisconfiguration();
     if (process.env.SENTRY_ENABLED === "true") {

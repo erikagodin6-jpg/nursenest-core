@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
+import { getCachedPublicHomeStats } from "@/lib/marketing/public-home-stats";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
@@ -61,8 +62,16 @@ export default async function LocalizedHomePage({ params }: Props) {
   const { locale } = await params;
   const raw = marketingHomeSurfaceBreadcrumbs();
   const marketingRegion = await getMarketingRegionFromCookies();
-  const primary = await loadMarketingMessages(locale);
-  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const [homeStatsRaw, primary, en] = await Promise.all([
+    getCachedPublicHomeStats(),
+    loadMarketingMessages(locale),
+    loadMarketingMessages(DEFAULT_MARKETING_LOCALE),
+  ]);
+  const homeMarketingStats = {
+    questionCount: homeStatsRaw.questionCount,
+    registeredLearners: homeStatsRaw.registeredLearners,
+    totalLessons: homeStatsRaw.totalLessons,
+  };
   const metaSfx = marketingRegion === "US" ? "US" : "CA";
   const title = resolveMarketingCopy(primary, `pages.home.metaTitle${metaSfx}`, en, defaultHomeMetaTitle(marketingRegion));
   const description = resolveMarketingCopy(
@@ -89,7 +98,7 @@ export default async function LocalizedHomePage({ params }: Props) {
           <BreadcrumbTrail items={crumbs} />
         </div>
       ) : null}
-      <HomeRestoredClient />
+      <HomeRestoredClient homeMarketingStats={homeMarketingStats} />
     </>
   );
 }

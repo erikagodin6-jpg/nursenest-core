@@ -129,6 +129,11 @@ model User {
   premiumProtectionUserDays     PremiumProtectionUserDay[]
   abuseReviewsDismissed         ProtectionAbuseReview[]     @relation("ProtectionAbuseReviewDismissedBy")
   protectionAbuseReviews        ProtectionAbuseReview[]
+  examQuestionsPublished        ExamQuestion[]              @relation("ExamQuestionPublishedBy")
+  pathwayLessonsPublished       PathwayLesson[]             @relation("PathwayLessonPublishedBy")
+  contentItemsPublished         ContentItem[]               @relation("ContentItemPublishedBy")
+  contentImportRunsTriggered    ContentImportRun[]          @relation("ContentImportRunTriggeredBy")
+  contentEntityRevisionsCreated ContentEntityRevision[]     @relation("ContentRevisionCreatedBy")
 
   @@index([alliedProfessionKey])
   @@index([normalizedEmail])
@@ -338,9 +343,12 @@ model Subscription {
   @@index([userId, createdAt(sort: Desc)])
   @@index([userId, status])
   @@index([status, currentPeriodEnd])
+  /// Stripe portal / reconciliation lookups by customer id (nullable; index still helps non-null rows).
+  @@index([stripeCustomerId])
 }
 
-/// * Dedup Stripe webhook deliveries (evt_…) so retries are safe.
+/// * Records Stripe webhook `evt_…` ids **after** handlers succeed (`/api/subscriptions/webhook`).
+/// * Retries remain safe: handlers are idempotent-ish (upserts); duplicate insert = concurrent/replay delivery.
 model StripeWebhookEvent {
   id        String   @id
   createdAt DateTime @default(now())
@@ -759,6 +767,8 @@ model ContentItem {
   updatedByAi              Boolean                   @default(false) @map("updated_by_ai")
   protectedFields          String[]                  @default([]) @map("protected_fields")
   sourceVersion            Int                       @default(1) @map("source_version")
+  publishedByUserId        String?                   @map("published_by_user_id")
+  publishedBy              User?                     @relation("ContentItemPublishedBy", fields: [publishedByUserId], references: [id], onDelete: SetNull)
   generatedFlashcardDrafts GeneratedFlashcardDraft[]
   lessonEnhancementTargets GeneratedLessonDraft[]    @relation("LessonEnhancementTarget")
   generatedQuestionDrafts  GeneratedQuestionDraft[]
@@ -800,6 +810,11 @@ model PathwayLesson {
   priority            String        @default("medium")
   /// * Exam-specific yield metadata: [{ exam, yieldLevel, clinicalPriority? }].
   examMeta            Json          @default("[]") @map("exam_meta")
+  /// * Monotonic version for this row (publish / import / rollback); learner queries unchanged.
+  contentVersion      Int           @default(1) @map("content_version")
+  publishedAt         DateTime?     @map("published_at")
+  publishedByUserId   String?       @map("published_by_user_id")
+  publishedBy         User?         @relation("PathwayLessonPublishedBy", fields: [publishedByUserId], references: [id], onDelete: SetNull)
 
   @@unique([pathwayId, slug, locale])
   @@unique([pathwayId, slug])
@@ -873,6 +888,8 @@ model ExamQuestion {
   updatedAt                   DateTime  @updatedAt @map("updated_at")
   publishedAt                 DateTime? @map("published_at")
   sourceVersion               Int       @default(1) @map("source_version")
+  publishedByUserId           String?   @map("published_by_user_id")
+  publishedBy                 User?     @relation("ExamQuestionPublishedBy", fields: [publishedByUserId], references: [id], onDelete: SetNull)
   /// Blueprint major id: NCLEX client-needs (e.g. safe-effective) or AANP-style NP (e.g. aanp-clinical-management). See `exam-config`.
   nclexClientNeedsCategory    String?   @map("nclex_client_needs_category") @db.VarChar(64)
   /// Optional subcategory / content area label for audits (not required for CAT balancing).
@@ -890,6 +907,59 @@ model ExamQuestion {
   @@index([exam, topic])
   @@index([exam, difficulty])
   @@map("exam_questions")
+}
+
+/// * One import / batch job: manifest + report for traceability (every ingestion run should finish one row).
+model ContentImportRun {
+  id                  String                @id @default(cuid())
+  label               String?               @db.VarChar(200)
+  /// * e.g. jsonl | legacy-client | pathway-catalog | admin
+  sourceKind          String                @map("source_kind") @db.VarChar(64)
+  status              ContentImportRunStatus @default(STARTED)
+  startedAt           DateTime              @default(now()) @map("started_at")
+  finishedAt          DateTime?             @map("finished_at")
+  /// * Inputs: paths, env flags, slice keys (no secrets).
+  manifest            Json                  @default("{}")
+  /// * Outcomes: errors sample, dedup stats, row counts.
+  report              Json                  @default("{}")
+  /// * Aggregates: { upserted, skipped, failed, durationMs }.
+  stats               Json                  @default("{}")
+  /// * Optional fingerprint of input blob(s) for repeatability checks.
+  inputSha256         String?               @map("input_sha256") @db.VarChar(64)
+  gitCommitSha        String?               @map("git_commit_sha") @db.VarChar(64)
+  environment         String?               @db.VarChar(32)
+  errorMessage        String?               @map("error_message") @db.VarChar(2000)
+  triggeredByUserId   String?               @map("triggered_by_user_id")
+  triggeredBy         User?                 @relation("ContentImportRunTriggeredBy", fields: [triggeredByUserId], references: [id], onDelete: SetNull)
+  revisions           ContentEntityRevision[]
+
+  @@index([status, startedAt(sort: Desc)])
+  @@index([sourceKind, startedAt(sort: Desc)])
+  @@map("content_import_runs")
+}
+
+/// * Point-in-time snapshot for rollback; keep bounded via retention policy / pruning jobs for old rows.
+model ContentEntityRevision {
+  id                String            @id @default(cuid())
+  entityKind        ContentEntityKind @map("entity_kind")
+  entityId          String            @map("entity_id") @db.VarChar(128)
+  /// * Matches `sourceVersion` / `contentVersion` / `sourceVersion` on the live row at archive time.
+  version           Int
+  /// * Canonical JSON payload for restore (subset of Prisma fields — see content-integrity helpers).
+  snapshot          Json
+  snapshotSha256    String            @map("snapshot_sha256") @db.VarChar(64)
+  reason            String?           @db.VarChar(64)
+  previousVersion   Int?              @map("previous_version")
+  importRunId       String?           @map("import_run_id")
+  importRun         ContentImportRun? @relation(fields: [importRunId], references: [id], onDelete: SetNull)
+  createdAt         DateTime          @default(now()) @map("created_at")
+  createdByUserId   String?           @map("created_by_user_id")
+  createdBy         User?             @relation("ContentRevisionCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
+
+  @@index([entityKind, entityId, version(sort: Desc)])
+  @@index([importRunId])
+  @@index([createdAt(sort: Desc)])
+  @@map("content_entity_revisions")
 }
 
 /// *
@@ -2142,6 +2212,20 @@ enum QuestionType {
   NGN_CASE
   ORDERING
   FIB_NUMERIC
+}
+
+/// * Versioning / rollback discriminator for `content_entity_revisions`.
+enum ContentEntityKind {
+  EXAM_QUESTION
+  PATHWAY_LESSON
+  CONTENT_ITEM
+}
+
+enum ContentImportRunStatus {
+  STARTED
+  COMPLETED
+  FAILED
+  CANCELLED
 }
 
 enum SubscriptionStatus {

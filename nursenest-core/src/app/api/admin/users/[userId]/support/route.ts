@@ -1,3 +1,4 @@
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { loadAdminUserSupportDetail } from "@/lib/admin/load-admin-user-support-detail";
@@ -7,8 +8,8 @@ type RouteContext = { params: Promise<{ userId: string }> };
 /**
  * Read-only support snapshot for a single user (admin).
  */
-export async function GET(_req: Request, ctx: RouteContext) {
-  const gate = await requireAdmin();
+export async function GET(req: NextRequest, ctx: RouteContext) {
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { userId } = await ctx.params;

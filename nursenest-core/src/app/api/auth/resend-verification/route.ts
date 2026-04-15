@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { createAndSendVerificationEmail } from "@/lib/auth/email-verification";
+import { JSON_BODY_AUTH_FORM, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -29,14 +30,10 @@ export async function POST(req: Request) {
     );
   }
 
-  let json: unknown;
-  try {
-    json = await req.json();
-  } catch {
-    return NextResponse.json({ ok: false, error: "Invalid request." }, { status: 400 });
-  }
+  const bodyRead = await parseJsonBodyWithLimit(req, JSON_BODY_AUTH_FORM);
+  if (!bodyRead.ok) return bodyRead.response;
 
-  const parsed = bodySchema.safeParse(json);
+  const parsed = bodySchema.safeParse(bodyRead.value);
   if (!parsed.success) {
     return NextResponse.json({ ok: false, error: "Enter a valid email." }, { status: 400 });
   }

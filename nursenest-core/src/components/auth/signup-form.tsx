@@ -18,9 +18,13 @@ import { safeCallbackPath } from "@/lib/auth/safe-callback-path";
 export function SignupForm({
   termsHref = "/terms",
   privacyHref = "/privacy",
+  contactHref = "/contact",
+  forgotPasswordHref = "/forgot-password",
 }: {
   termsHref?: string;
   privacyHref?: string;
+  contactHref?: string;
+  forgotPasswordHref?: string;
 } = {}) {
   const { t, locale } = useMarketingI18n();
   const router = useRouter();
@@ -30,6 +34,7 @@ export function SignupForm({
     return `${withMarketingLocale(locale, "/login")}?callbackUrl=${encodeURIComponent(target)}`;
   }, [searchParams, locale]);
   const [error, setError] = useState<string | null>(null);
+  const [errorHelp, setErrorHelp] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [country, setCountry] = useState<"CA" | "US">("CA");
@@ -42,24 +47,47 @@ export function SignupForm({
     if (typeof data.error === "string" && data.error.length > 0) return data.error;
     switch (data.code) {
       case "duplicate_email":
-        return "That email is already registered.";
+        return t("pages.signup.errorDuplicateEmail");
       case "duplicate_username":
-        return "That username is taken.";
+        return t("pages.signup.errorDuplicateUsername");
       case "captcha":
-        return "Captcha verification failed. Refresh the page and try again.";
+        return t("pages.signup.errorCaptcha");
       case "validation":
       case "invalid_username":
-        return "Check your details and try again.";
+        return t("pages.signup.errorValidation");
       case "db":
       case "missing_table":
-        return "We could not complete signup. Try again shortly.";
+        return t("pages.signup.errorServer");
       default:
         return t("pages.signup.errorGeneric");
     }
   }
 
+  function signupErrorHelp(data: { error?: string; code?: string }): string | null {
+    if (typeof data.error === "string" && data.error.length > 0) {
+      return t("pages.signup.errorServerMessageHelp");
+    }
+    switch (data.code) {
+      case "duplicate_email":
+        return t("pages.signup.errorDuplicateEmailHelp");
+      case "duplicate_username":
+        return t("pages.signup.errorDuplicateUsernameHelp");
+      case "captcha":
+        return t("pages.signup.errorCaptchaHelp");
+      case "validation":
+      case "invalid_username":
+        return t("pages.signup.errorValidationHelp");
+      case "db":
+      case "missing_table":
+        return t("pages.signup.errorServerHelp");
+      default:
+        return t("pages.signup.errorGenericHelp");
+    }
+  }
+
   async function onSubmit(formData: FormData) {
     setError(null);
+    setErrorHelp(null);
     trackProductEvent(PH.signupSubmitAttempt, {
       actor: "anonymous",
       funnel_step: "signup_submit",
@@ -99,6 +127,7 @@ export function SignupForm({
 
       if (!res.ok) {
         setError(signupErrorMessage(data));
+        setErrorHelp(signupErrorHelp(data));
         return;
       }
       trackProductEvent(PH.signupSuccessClient, {
@@ -234,6 +263,27 @@ export function SignupForm({
         </div>
       </div>
       <TurnstileSignup onToken={onCaptcha} />
+      {error || errorHelp ? (
+        <div
+          role="alert"
+          aria-live="polite"
+          className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] px-3 py-2.5 text-[var(--semantic-text-primary)]"
+        >
+          {error ? <p className="text-sm font-medium">{error}</p> : null}
+          {errorHelp ? <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{errorHelp}</p> : null}
+          <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs font-medium">
+            <Link href={loginAfterSignupHref} className="text-[var(--semantic-brand)] underline-offset-2 hover:underline">
+              {t("pages.signup.errorLinkSignIn")}
+            </Link>
+            <Link href={forgotPasswordHref} className="text-[var(--semantic-brand)] underline-offset-2 hover:underline">
+              {t("pages.signup.errorLinkForgot")}
+            </Link>
+            <Link href={contactHref} className="text-[var(--semantic-brand)] underline-offset-2 hover:underline">
+              {t("pages.signup.errorLinkContact")}
+            </Link>
+          </div>
+        </div>
+      ) : null}
       <p className="text-xs leading-relaxed text-muted-foreground">
         {t("pages.signup.legalBefore")}
         <Link href={termsHref} className="nn-link-quiet font-semibold">
@@ -245,7 +295,6 @@ export function SignupForm({
         </Link>
         {t("pages.signup.legalAfter")}
       </p>
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
       <button
         className="nn-btn-primary w-full px-4 py-3 text-base font-semibold disabled:pointer-events-none disabled:opacity-60"
         type="submit"

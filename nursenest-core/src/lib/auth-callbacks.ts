@@ -3,6 +3,7 @@ import {
   JWT_SESSION_BRIEF_MAX_AGE_SEC,
   JWT_SESSION_REMEMBER_MAX_AGE_SEC,
 } from "@/lib/auth/auth-session-constants";
+import type { SessionUserRole } from "@/types/next-auth";
 
 /**
  * Shared JWT + session callbacks for the Node auth handler and the Edge middleware

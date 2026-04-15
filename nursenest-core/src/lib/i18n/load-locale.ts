@@ -1,7 +1,8 @@
 /**
  * **Single-locale loading** — never preload all languages in one request.
  *
- * Marketing copy uses merged bundles per locale (`public/i18n/{locale}.json` or CDN) via
+ * Marketing copy uses merged bundles per locale (`public/i18n/{locale}/*.json` shards, legacy
+ * `{locale}.json`, or CDN) via
  * {@link loadMarketingMessages}. Callers must pass **one** active locale; do not `Promise.all`
  * over every supported language.
  *

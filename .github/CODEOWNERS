@@ -1,0 +1,7 @@
+# Optional: auto-request reviewers for sensitive areas. Uncomment and set @org/team
+# or usernames when ready; see docs/CODEOWNERS.template and docs/BRANCH_PROTECTION.md.
+#
+# Example (disabled):
+# * @your-org/maintainers
+# /.github/ @your-org/platform
+# /nursenest-core/src/app/api/ @your-org/backend

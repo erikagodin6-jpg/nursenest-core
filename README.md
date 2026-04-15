@@ -14,6 +14,8 @@ Do **not** add a second remote for “backup” or “old monolith” without re
 
 See `nursenest-core/README.md` for app documentation.
 
+**Repository hygiene** (what to commit, CI checks, branch protection): `docs/REPO_COMMIT_POLICY.md` and `docs/BRANCH_PROTECTION.md`.
+
 **Git:** set `git config remote.pushDefault origin` in each clone so `git push` targets `origin` only. Never commit `.git/config` — it is local. Run `git remote -v` before pushing from unfamiliar machines.
 
 **DigitalOcean:** production Next.js deploy uses repo `erikagodin6-jpg/nursenest-core`, branch `main`, `source_dir: nursenest-core` (see `.do/app-nursenest-core-next.yaml`). The GHCR workflow in `.github/workflows/` builds a **container image from this same repo** — it is not a separate deploy repository.

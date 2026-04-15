@@ -1,12 +1,13 @@
 "use client";
 
-import { BadgeCheck, Brain, ClipboardCheck, Globe2, Layers3, Sparkles } from "lucide-react";
+import { BadgeCheck, BarChart3, BookOpen, ClipboardCheck, Globe2, Layers3, Sparkles } from "lucide-react";
 import { BrandTrustInline } from "@/components/brand/brand-trust-inline";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { FadeUp } from "@/lib/motion";
 
 type Props = {
+  lessonCount: number;
   questionCount: number;
   registeredLearners: number;
 };
@@ -17,23 +18,26 @@ function formatCount(n: number, locale: string): string {
 }
 
 /**
- * Compact credibility band immediately after hero.
- * Uses `surfaceStrong` to clearly separate from page background.
+ * Credibility + product-trait pills after the sample question (hero already shows live counts).
  */
-export function HomeTrustStripSection({ questionCount, registeredLearners }: Props) {
+export function HomeTrustStripSection({ lessonCount, questionCount, registeredLearners }: Props) {
   const { locale, t } = useMarketingI18n();
-  const q = formatCount(questionCount, locale);
+  const lessons = formatCount(lessonCount, locale);
+  const questions = formatCount(questionCount, locale);
   const learners = formatCount(registeredLearners, locale);
 
   const pills = [
     { icon: BadgeCheck, label: t("pages.home.trustStrip.pill.examScoped"), iconClass: "text-[var(--semantic-success)]" },
+    ...(questions
+      ? [{ icon: BarChart3, label: t("pages.home.trustStrip.pill.questionsCount", { count: questions }), iconClass: "text-[var(--semantic-chart-1)]" }]
+      : [{ icon: BarChart3, label: t("pages.home.trustStrip.pill.questionsLarge"), iconClass: "text-[var(--semantic-chart-1)]" }]),
     { icon: Layers3, label: t("pages.home.trustStrip.pill.adaptiveCat"), iconClass: "text-[var(--semantic-info)]" },
     { icon: ClipboardCheck, label: t("pages.home.trustStrip.pill.rationaleEveryItem"), iconClass: "text-[var(--semantic-brand)]" },
     {
-      icon: Brain,
-      label: q
-        ? t("pages.home.trustStrip.pill.questionsCount", { count: q })
-        : t("pages.home.trustStrip.pill.questionsLarge"),
+      icon: BookOpen,
+      label: lessons
+        ? t("pages.home.trustStrip.pill.lessonsCount", { count: lessons })
+        : t("pages.home.trustStrip.pill.lessonsLarge"),
       iconClass: "text-[var(--semantic-warning)]",
     },
     { icon: Sparkles, label: t("pages.home.trustStrip.updatedNclex"), iconClass: "text-[var(--semantic-chart-3)]" },
@@ -52,12 +56,18 @@ export function HomeTrustStripSection({ questionCount, registeredLearners }: Pro
           className="rounded-2xl border bg-[var(--bg-card)] px-5 py-6 shadow-[var(--shadow-elevated)] sm:px-7 sm:py-7"
           style={{ borderColor: "color-mix(in srgb, var(--theme-primary) 14%, var(--border-subtle))" }}
         >
-          <div className="mb-5 flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:gap-3">
+          <div className="mb-4 flex flex-col items-center justify-center gap-3 text-center sm:flex-row sm:gap-4">
             <Globe2 className="nn-icon-md shrink-0 text-[var(--semantic-info)]" aria-hidden />
-            <p id="home-trust-strip-heading" className="nn-marketing-body max-w-prose font-semibold leading-snug text-[var(--palette-heading)]">
+            <h2
+              id="home-trust-strip-heading"
+              className="nn-marketing-h2 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)]"
+            >
               {formatTitleCase(t("pages.home.trustStrip.heading"), locale)}
-            </p>
+            </h2>
           </div>
+          <p className="nn-marketing-body mx-auto mb-6 max-w-2xl text-center text-pretty leading-relaxed text-[var(--palette-text-muted)]">
+            {formatSentenceCase(t("pages.home.trustStrip.subheading"), locale)}
+          </p>
           <BrandTrustInline variant="prep" className="mb-5 justify-center text-center" />
           {learners ? (
             <p className="nn-marketing-caption mb-5 text-center text-[var(--palette-text-muted)]">

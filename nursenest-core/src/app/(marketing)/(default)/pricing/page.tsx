@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MarketingPricingPage } from "@/components/marketing/marketing-pricing-page";
+import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
@@ -36,6 +37,53 @@ export default async function PricingPage() {
   const { crumbs, schemaItems } = marketingPricingBreadcrumbs();
   const locale = await getMarketingLocaleForDefaultRoute();
   const m = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const mLocale = await loadMarketingMessages(locale);
+  const pricingFaqJsonLd = [
+    {
+      question: mLocale["pages.pricing.regionFaq.usCanadaQuestion"],
+      answer: mLocale["pages.pricing.regionFaq.usCanadaAnswer"],
+    },
+    {
+      question: mLocale["pages.pricing.regionFaq.correctExamQuestion"],
+      answer: mLocale["pages.pricing.regionFaq.correctExamAnswer"],
+    },
+    {
+      question: mLocale["pages.pricing.regionFaq.switchCountryQuestion"],
+      answer: mLocale["pages.pricing.regionFaq.switchCountryAnswer"],
+    },
+    {
+      question: mLocale["pages.pricing.reliabilityFaq.siteCrashQuestion"],
+      answer: mLocale["pages.pricing.reliabilityFaq.siteCrashAnswer"],
+    },
+    {
+      question: mLocale["pages.pricing.reliabilityFaq.slowExperienceQuestion"],
+      answer: mLocale["pages.pricing.reliabilityFaq.slowExperienceAnswer"],
+    },
+    {
+      question: mLocale["pages.pricing.reliabilityFaq.studyReliabilityQuestion"],
+      answer: mLocale["pages.pricing.reliabilityFaq.studyReliabilityAnswer"],
+    },
+    {
+      question: mLocale["pages.pricing.learnerFaq.passGuaranteeQuestion"],
+      answer: mLocale["pages.pricing.learnerFaq.passGuaranteeAnswer"],
+    },
+    {
+      question: mLocale["pages.pricing.learnerFaq.startingBehindQuestion"],
+      answer: mLocale["pages.pricing.learnerFaq.startingBehindAnswer"],
+    },
+    {
+      question: mLocale["pages.pricing.learnerFaq.tryBeforePayQuestion"],
+      answer: mLocale["pages.pricing.learnerFaq.tryBeforePayAnswer"],
+    },
+    {
+      question: mLocale["pages.pricing.learnerFaq.examRealismQuestion"],
+      answer: mLocale["pages.pricing.learnerFaq.examRealismAnswer"],
+    },
+    {
+      question: mLocale["pages.pricing.learnerFaq.refundRemorseQuestion"],
+      answer: mLocale["pages.pricing.learnerFaq.refundRemorseAnswer"],
+    },
+  ];
   return (
     <>
       <WebPageJsonLd
@@ -47,6 +95,7 @@ export default async function PricingPage() {
         })}
       />
       <BreadcrumbJsonLd items={schemaItems} />
+      <FaqJsonLd items={pricingFaqJsonLd} />
       <div className="mx-auto max-w-6xl nn-marketing-x pb-[var(--nn-rhythm-tight-y)] pt-[var(--nn-rhythm-page-y)]">
         <BreadcrumbTrail items={crumbs} />
       </div>

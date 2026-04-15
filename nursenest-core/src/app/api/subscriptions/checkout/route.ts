@@ -6,6 +6,7 @@ import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { publicAppOriginForBilling } from "@/lib/env/public-app-origin";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
 import {
   stripePriceEnvKey,
@@ -15,6 +16,7 @@ import {
   type AlliedCareerKey,
 } from "@/lib/pricing/display-catalog";
 import {
+  CHECKOUT_APP_ORIGIN_MISCONFIGURED_CODE,
   CHECKOUT_DEMO_USER_FORBIDDEN_CODE,
   CHECKOUT_INVALID_PAYLOAD_CODE,
   CHECKOUT_POLICY_VERSION_MISMATCH_CODE,
@@ -25,6 +27,7 @@ import {
   STRIPE_PRICE_NOT_CONFIGURED_CODE,
 } from "@/lib/stripe/checkout-api-diagnostics";
 import { findPriceEntry, findAlliedPriceEntry, type BillingDuration } from "@/lib/stripe/pricing-map";
+import { JSON_BODY_CHECKOUT, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { getRegionalPricing } from "@/lib/pricing/regional-pricing-map";
 import { isGlobalRegionSlug, type GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import type { TierCode } from "@prisma/client";
@@ -80,11 +83,17 @@ export async function POST(req: Request) {
 
     setSentryServerContext({ route: "/api/subscriptions/checkout", feature: SERVER_FEATURE.payment, userId });
 
-    let requestBody: unknown;
-    try {
-      requestBody = await req.json();
-    } catch (error) {
-      console.error("[stripe_checkout] invalid_json_payload", error);
+    const bodyRead = await parseJsonBodyWithLimit(req, JSON_BODY_CHECKOUT);
+    if (!bodyRead.ok) {
+      const status = bodyRead.response.status;
+      if (status === 413) {
+        const msg = "Request too large. Refresh the page and try again.";
+        return NextResponse.json(
+          { code: CHECKOUT_INVALID_PAYLOAD_CODE, message: msg, error: msg },
+          { status: 413 },
+        );
+      }
+      console.error("[stripe_checkout] invalid_json_payload", { status });
       safeServerLog("stripe_checkout", "checkout_invalid_json_payload", { route: "/api/subscriptions/checkout" });
       const msg = "Invalid checkout request. Refresh the page and try again.";
       return NextResponse.json(
@@ -93,7 +102,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const parsed = bodySchema.safeParse(requestBody);
+    const parsed = bodySchema.safeParse(bodyRead.value);
     if (!parsed.success) {
       safeServerLog("stripe_checkout", "checkout_payload_validation_failed", {
         route: "/api/subscriptions/checkout",
@@ -221,7 +230,15 @@ export async function POST(req: Request) {
       );
     }
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
+    const appUrl = publicAppOriginForBilling();
+    if (!appUrl) {
+      const msg = "Billing URL is not configured. Set NEXT_PUBLIC_APP_URL to your public https origin.";
+      safeServerLog("stripe_checkout", "checkout_app_origin_missing", {});
+      return NextResponse.json(
+        { code: CHECKOUT_APP_ORIGIN_MISCONFIGURED_CODE, message: msg, error: msg },
+        { status: 503 },
+      );
+    }
 
     const acceptedAt = new Date();
     const userForCheckout = await prisma.user.update({

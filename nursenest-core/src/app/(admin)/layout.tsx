@@ -3,7 +3,8 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { MarketingI18nProvider } from "@/components/i18n/marketing-i18n-provider";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { ADMIN_UI_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
 
 export const dynamic = "force-dynamic";
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminGroupLayout({ children }: { children: React.ReactNode }) {
-  const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const messages = await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, ADMIN_UI_MESSAGE_SHARDS);
   return (
     <MarketingI18nProvider key={DEFAULT_MARKETING_LOCALE} locale={DEFAULT_MARKETING_LOCALE} messages={messages}>
       <MarketingFeedbackShell>

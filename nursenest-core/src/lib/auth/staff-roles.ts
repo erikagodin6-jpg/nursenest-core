@@ -26,8 +26,9 @@ export function staffTierFromRole(role: UserRole): StaffTier {
       return "content";
     case UserRole.SUPPORT_ADMIN:
       return "support";
-    default:
-      return "super";
+    case UserRole.LEARNER:
+      // Should never be used for staff session — narrowest tier if mis-invoked.
+      return "support";
   }
 }
 

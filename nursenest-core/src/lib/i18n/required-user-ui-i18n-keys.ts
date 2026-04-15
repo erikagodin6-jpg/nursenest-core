@@ -5,7 +5,7 @@
  * Used by CI tests and `scripts/audit/run-i18n-completeness-audit.mts` — keep in sync.
  */
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
-import { MARKETING_HERO_NAV_CRITICAL_KEYS } from "@/lib/marketing/marketing-hero-nav-critical-keys";
+import { PRODUCTION_CHROME_I18N_KEYS } from "@/lib/i18n/production-chrome-i18n-keys";
 
 /** Auth / signup / password flows — minimal strings so routes are not half-English. */
 export const REQUIRED_AUTH_AND_ACCOUNT_FLOW_KEYS = [
@@ -39,7 +39,6 @@ export const REQUIRED_AUTH_AND_ACCOUNT_FLOW_KEYS = [
   "learner.shell.nav.cat",
   "learner.shell.nav.flashcards",
   "learner.shell.nav.progress",
-  "learner.shell.nav.reports",
   "learner.shell.nav.examsSurface",
   "nav.pricing",
   "footer.blog",
@@ -49,10 +48,11 @@ export const REQUIRED_AUTH_AND_ACCOUNT_FLOW_KEYS = [
   "nav.account",
 ] as const;
 
+/** Homepage, paywall, marketing nav, CTAs, hero carousel, and auth/account chrome — `nav.admin` excluded. */
 export const REQUIRED_USER_UI_I18N_KEYS: readonly string[] = Array.from(
   new Set<string>([
-    ...MARKETING_HERO_NAV_CRITICAL_KEYS.filter((k) => k !== "nav.admin"),
     ...REQUIRED_AUTH_AND_ACCOUNT_FLOW_KEYS,
+    ...PRODUCTION_CHROME_I18N_KEYS.filter((k) => k !== "nav.admin"),
   ]),
 );
 

@@ -6,11 +6,22 @@ export const dynamic = "force-dynamic";
 /**
  * Temporary authenticated session diagnostic for incident response.
  * Does not expose secrets, tokens, or raw cookies.
+ *
+ * In production, returns a minimal payload unless `DEBUG_SESSION_ROUTE_ENABLED=1`
+ * (same pattern as `/api/debug/sentry-test`).
  */
 export async function GET() {
   const session = await auth();
   if (!session?.user) {
     return NextResponse.json({ authenticated: false });
+  }
+
+  const enabledInProd =
+    process.env.NODE_ENV !== "production" ||
+    process.env.DEBUG_SESSION_ROUTE_ENABLED === "1" ||
+    process.env.SENTRY_DEBUG_ROUTE === "1";
+  if (!enabledInProd) {
+    return NextResponse.json({ authenticated: true });
   }
 
   const u = session.user as {

@@ -3,11 +3,11 @@
  * (nav/hero/auth/account learner shell). Admin-only keys excluded.
  */
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
 import { MARKETING_LOCALE_CODES } from "@/lib/i18n/marketing-locale-policy";
+import { loadMergedMarketingMessagesFromNextPublicDir } from "@/lib/i18n/merge-next-public-i18n-shards";
 import {
   REQUIRED_USER_UI_I18N_KEYS,
   validateRequiredUserUiI18nKeys,
@@ -18,11 +18,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const I18N_DIR = path.join(__dirname, "..", "..", "..", "public", "i18n");
 
 function readLocale(code: string): MarketingMessages {
-  const p = path.join(I18N_DIR, `${code}.json`);
-  if (!fs.existsSync(p)) {
-    throw new Error(`Missing locale file: ${p}`);
+  const m = loadMergedMarketingMessagesFromNextPublicDir(I18N_DIR, code);
+  if (!m || Object.keys(m).length === 0) {
+    throw new Error(`Missing locale bundle (shards or legacy json): ${code}`);
   }
-  return JSON.parse(fs.readFileSync(p, "utf8")) as MarketingMessages;
+  return m;
 }
 
 describe("required user UI i18n keys (non-admin)", () => {

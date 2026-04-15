@@ -13,31 +13,12 @@ export const PRODUCTION_I18N_ACCOUNT_NAV_KEYS = [
   "learner.account.nav.notesHighlights",
 ] as const;
 
-/** Expanded production bundle checks — homepage, paywall, pricing, learner shell (see marketing-en.json). */
-export const PRODUCTION_I18N_CRITICAL_EXTRA_KEYS = [
-  "learner.shell.nav.lessons",
-  "learner.shell.nav.practice",
-  "learner.primaryNav.lessons",
-  "learner.primaryNav.practice",
-  "paywall.preview.heading",
-  "paywall.preview.bankSizeLine",
-  "paywall.preview.sampleStem",
-  "paywall.questions.title",
-  "pages.home.blogTeaser.title",
-  "pages.home.hero.headline",
-  "pages.home.hero.primaryCta",
-  "pages.home.hero.secondaryCta",
-  "pages.pricing.conversion.h1",
-  "pages.pricing.description",
-  "learner.dashboard.title",
-  "learner.studyHome.sectionPriorityEyebrow",
-  "learner.studyHome.sectionPriorityEyebrowNew",
-] as const;
+import { PRODUCTION_CHROME_I18N_KEYS } from "../../../src/lib/i18n/production-chrome-i18n-keys";
 
-export const PRODUCTION_I18N_CRITICAL_BUNDLE_KEYS = [
-  ...PRODUCTION_I18N_ACCOUNT_NAV_KEYS,
-  ...PRODUCTION_I18N_CRITICAL_EXTRA_KEYS,
-] as const;
+/** Deduped probe list for static `/i18n/en.json` (homepage, paywall, nav, CTAs, learner account nav). */
+export const PRODUCTION_I18N_CRITICAL_BUNDLE_KEYS: readonly string[] = Array.from(
+  new Set<string>([...PRODUCTION_I18N_ACCOUNT_NAV_KEYS, ...PRODUCTION_CHROME_I18N_KEYS]),
+);
 
 const I18N_MISSING_RE = /marketing_message_key_missing/;
 const AUTH_ERR_RE =

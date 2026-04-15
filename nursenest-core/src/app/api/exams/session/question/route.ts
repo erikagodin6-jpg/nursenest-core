@@ -90,6 +90,7 @@ export async function GET(req: NextRequest) {
       { ...question } as Record<string, unknown>,
       educationalLocale,
       questionOverlayBundle,
+      { teachingExposure: "none" },
     );
 
     const jsonBody = {

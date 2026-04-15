@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
+import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { isStudyPlanAiEnabled } from "@/lib/ai/learner-ai-policy";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
+import { JSON_BODY_STANDARD, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 
 const bodySchema = z.object({
@@ -30,6 +32,9 @@ export async function POST(req: Request) {
     );
   }
 
+  const sub = await requireSubscriberSession();
+  if (!sub.ok) return sub.response;
+
   const keyCheck = assertOpenAiKeyConfigured();
   if (!keyCheck.ok) {
     return NextResponse.json({ error: keyCheck.message }, { status: 503 });
@@ -43,17 +48,14 @@ export async function POST(req: Request) {
     );
   }
 
-  let parsed: z.infer<typeof bodySchema>;
-  try {
-    const json = await req.json();
-    const r = bodySchema.safeParse(json);
-    if (!r.success) {
-      return NextResponse.json({ error: "Invalid request", details: r.error.flatten() }, { status: 400 });
-    }
-    parsed = r.data;
-  } catch {
-    return NextResponse.json({ error: "Expected JSON body" }, { status: 400 });
+  const bodyRead = await parseJsonBodyWithLimit(req, JSON_BODY_STANDARD);
+  if (!bodyRead.ok) return bodyRead.response;
+
+  const r = bodySchema.safeParse(bodyRead.value);
+  if (!r.success) {
+    return NextResponse.json({ error: "Invalid request", details: r.error.flatten() }, { status: 400 });
   }
+  const parsed = r.data;
 
   const { examTarget, weeksUntilExam, hoursPerWeek, weakAreas } = parsed;
 

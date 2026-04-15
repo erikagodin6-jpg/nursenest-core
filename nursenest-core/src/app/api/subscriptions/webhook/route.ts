@@ -1,29 +1,14 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
-import type Stripe from "stripe";
-import { Prisma, SubscriptionStatus } from "@prisma/client";
-import { prisma } from "@/lib/db";
+import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
-import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
-import { PH } from "@/lib/observability/posthog-conversion-events";
 import { productEvent } from "@/lib/observability/product-events";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
-import { findTierCountryByPriceId } from "@/lib/stripe/pricing-map";
-import {
-  billingLifecycleFields,
-  firstSubscriptionPriceId,
-  mapStripeSubscriptionStatus,
-} from "@/lib/stripe/stripe-subscription-field-map";
-import {
-  planFromCheckoutMetadata,
-  syncUserFromCheckoutSessionMetadata,
-  syncUserFromStripePriceId,
-} from "@/lib/stripe/sync-user-from-stripe-subscription";
-import { pastDueSinceForStatusTransition } from "@/lib/stripe/subscription-past-due-since";
-
-type LifecycleData = ReturnType<typeof billingLifecycleFields>;
+import { applyStripeWebhookEvent } from "@/lib/stripe/apply-stripe-webhook-event";
+import { recordStripeWebhookEventProcessed } from "@/lib/stripe/stripe-webhook-idempotency";
+import { constructStripeWebhookEvent } from "@/lib/stripe/stripe-webhook-verify";
 
 function warnIfStripeKeyModeMismatch(): void {
   const key = process.env.STRIPE_SECRET_KEY?.trim() ?? "";
@@ -41,11 +26,24 @@ function warnIfStripeKeyModeMismatch(): void {
   }
 }
 
+/**
+ * Stripe webhooks: signature verification → apply billing side effects → **then** persist `evt_` id for deduplication.
+ * Entitlements are read from DB elsewhere (`getUserAccess`); checkout success UI only calls `sync-session` to refresh JWT.
+ */
 export async function POST(req: Request) {
   warnIfStripeKeyModeMismatch();
 
+  const correlation = correlationIdFromRequest(req) ?? "";
+
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
   const signature = (await headers()).get("stripe-signature");
-  if (!signature || !process.env.STRIPE_WEBHOOK_SECRET) {
+  if (!signature || !webhookSecret) {
+    safeServerLog("stripe_webhook", "configuration_or_signature_missing", {
+      hasSignature: Boolean(signature),
+      hasWebhookSecret: Boolean(webhookSecret),
+      correlation,
+      severity: "warning",
+    });
     return NextResponse.json({ error: "Webhook not configured" }, { status: 400 });
   }
 
@@ -55,10 +53,14 @@ export async function POST(req: Request) {
   }
 
   const body = await req.text();
-  let event: Stripe.Event;
+  let event: import("stripe").Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET);
+    event = constructStripeWebhookEvent(stripe, body, signature, webhookSecret);
   } catch {
+    safeServerLog("stripe_webhook", "signature_verification_failed", {
+      correlation,
+      severity: "warning",
+    });
     Sentry.captureMessage("stripe_webhook_invalid_signature", {
       level: "warning",
       tags: { flow: "stripe_webhook", kind: "signature" },
@@ -68,219 +70,59 @@ export async function POST(req: Request) {
 
   setSentryServerContext({ route: "/api/subscriptions/webhook", feature: SERVER_FEATURE.payment });
 
-  let claimedEventId = false;
+  const keyMode = process.env.STRIPE_SECRET_KEY?.trim().startsWith("sk_live") ? "live" : "test";
+  safeServerLog("stripe_webhook", "event_received", {
+    type: event.type,
+    eventIdPrefix: event.id.slice(0, 12),
+    keyMode,
+    correlation,
+    severity: "info",
+  });
+
   try {
-    await prisma.stripeWebhookEvent.create({ data: { id: event.id } });
-    claimedEventId = true;
+    await applyStripeWebhookEvent(stripe, event, { correlation });
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") {
-      return NextResponse.json({ ok: true, duplicate: true });
-    }
-    throw e;
+    productEvent("stripe_webhook_failed", { eventType: event.type });
+    safeServerLogCritical(
+      "stripe_webhook",
+      "handler_failed",
+      { type: event.type, correlation, severity: "error" },
+      e,
+    );
+    Sentry.captureException(e, {
+      level: "error",
+      tags: {
+        flow: "stripe_webhook",
+        stripe_event_type: event.type,
+        stripe_key_mode: keyMode,
+      },
+      fingerprint: ["stripe_webhook", event.type, event.id],
+    });
+    return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
   }
 
   try {
-    if (event.type === "checkout.session.completed") {
-      const session = event.data.object as Stripe.Checkout.Session;
-      const userId = session.metadata?.userId ?? session.client_reference_id ?? undefined;
-      const subId = typeof session.subscription === "string" ? session.subscription : session.subscription?.id;
-      if (userId && subId) {
-        const plan = planFromCheckoutMetadata(session.metadata ?? undefined);
-        const durationMeta = session.metadata?.duration ?? undefined;
-        const alliedCareerMeta = plan?.alliedCareer ?? session.metadata?.alliedCareer ?? undefined;
-        if (!plan) {
-          safeServerLog("stripe_webhook", "checkout_missing_plan_metadata", {
-            hasMetadata: session.metadata && Object.keys(session.metadata).length > 0 ? 1 : 0,
-          });
-        }
-
-        let lifecycle: LifecycleData = { cancelAtPeriodEnd: false };
-        try {
-          const stripeSub = await stripe.subscriptions.retrieve(subId);
-          lifecycle = billingLifecycleFields(stripeSub);
-        } catch {
-          safeServerLog("stripe_webhook", "lifecycle_fetch_failed_checkout", {});
-        }
-
-        const activeBefore = await prisma.subscription.count({
-          where: { userId, status: SubscriptionStatus.ACTIVE },
-        });
-        const customerId = typeof session.customer === "string" ? session.customer : session.customer?.id ?? "";
-        const planCodeMeta = session.metadata?.planCode?.trim() || undefined;
-        const billingRegionMeta = session.metadata?.region?.trim() || undefined;
-        await prisma.$transaction(async (tx) => {
-          await tx.subscription.upsert({
-            where: { stripeSubscriptionId: subId },
-            update: {
-              status: SubscriptionStatus.ACTIVE,
-              pastDueSince: null,
-              ...(plan ? { planTier: plan.tier, planCountry: plan.country } : {}),
-              ...(durationMeta ? { planDuration: durationMeta } : {}),
-              ...(alliedCareerMeta ? { alliedCareer: alliedCareerMeta } : {}),
-              ...(planCodeMeta ? { planCode: planCodeMeta } : {}),
-              ...(billingRegionMeta ? { billingRegionSlug: billingRegionMeta } : {}),
-              currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
-              trialEnd: lifecycle.trialEnd ?? null,
-              cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
-            },
-            create: {
-              userId,
-              status: SubscriptionStatus.ACTIVE,
-              pastDueSince: null,
-              stripeSubscriptionId: subId,
-              stripeCustomerId: customerId,
-              planTier: plan?.tier,
-              planCountry: plan?.country,
-              planDuration: durationMeta,
-              planCode: planCodeMeta,
-              billingRegionSlug: billingRegionMeta,
-              alliedCareer: alliedCareerMeta,
-              currentPeriodEnd: lifecycle.currentPeriodEnd,
-              trialEnd: lifecycle.trialEnd,
-              cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
-            },
-          });
-        });
-        if (activeBefore === 0) {
-          void captureServerEvent(analyticsDistinctId(userId), PH.learnerConversionSubscribed, {
-            actor: "authenticated",
-            funnel_step: "paid_subscription_active",
-            country: plan?.country,
-            tier: plan?.tier ? String(plan.tier) : undefined,
-            source: "stripe_checkout_session_completed",
-          });
-        }
-        await syncUserFromCheckoutSessionMetadata(userId, session.metadata ?? undefined);
-      }
-    }
-
-    if (event.type === "customer.subscription.updated") {
-      const sub = event.data.object as Stripe.Subscription;
-      const mappedStatus = mapStripeSubscriptionStatus(sub.status);
-      const row = await prisma.subscription.findUnique({
-        where: { stripeSubscriptionId: sub.id },
-        select: { id: true, userId: true, status: true },
+    const dedupe = await recordStripeWebhookEventProcessed(event.id);
+    if (dedupe === "duplicate") {
+      safeServerLog("stripe_webhook", "dedupe_after_success", {
+        eventIdPrefix: event.id.slice(0, 12),
+        correlation,
+        severity: "info",
       });
-      const priceId = firstSubscriptionPriceId(sub);
-      const mapped = priceId ? findTierCountryByPriceId(priceId) : undefined;
-      if (priceId && !mapped) {
-        safeServerLog("stripe_webhook", "unknown_subscription_price_id", {
-          priceIdPrefix: priceId.slice(0, 28),
-        });
-      }
-      if (row?.userId && priceId) {
-        await syncUserFromStripePriceId(row.userId, priceId);
-      }
-      if (row) {
-        const lifecycle = billingLifecycleFields(sub);
-        const data: Prisma.SubscriptionUpdateInput = {
-          currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
-          trialEnd: lifecycle.trialEnd ?? null,
-          cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
-        };
-        if (mappedStatus !== null) {
-          data.status = mappedStatus;
-          const pastPatch = pastDueSinceForStatusTransition(mappedStatus, row.status);
-          if (pastPatch) Object.assign(data, pastPatch);
-        }
-        if (mapped) {
-          data.planTier = mapped.tier;
-          data.planCountry = mapped.country;
-          if (mapped.alliedCareer) data.alliedCareer = mapped.alliedCareer;
-        }
-        await prisma.subscription.update({
-          where: { id: row.id },
-          data,
-        });
-      }
+      return NextResponse.json({ ok: true, duplicate: true });
     }
-
-    if (event.type === "customer.subscription.deleted") {
-      const sub = event.data.object as Stripe.Subscription;
-      const lifecycle = billingLifecycleFields(sub);
-      const existing = await prisma.subscription.findUnique({
-        where: { stripeSubscriptionId: sub.id },
-        select: { id: true, status: true },
-      });
-      if (existing) {
-        const pastPatch = pastDueSinceForStatusTransition(SubscriptionStatus.CANCELLED, existing.status);
-        await prisma.subscription.update({
-          where: { id: existing.id },
-          data: {
-            status: SubscriptionStatus.CANCELLED,
-            cancelAtPeriodEnd: true,
-            currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
-            trialEnd: lifecycle.trialEnd ?? null,
-            ...(pastPatch ?? {}),
-          },
-        });
-      }
-    }
-
-    if (event.type === "invoice.payment_succeeded") {
-      const invoice = event.data.object as Stripe.Invoice;
-      const billingReason = (invoice as Stripe.Invoice & { billing_reason?: string | null }).billing_reason;
-      const subRaw = (invoice as unknown as { subscription?: string | { id: string } | null }).subscription;
-      const subId = typeof subRaw === "string" ? subRaw : subRaw?.id;
-      if (subId) {
-        const row = await prisma.subscription.findUnique({
-          where: { stripeSubscriptionId: subId },
-          select: { id: true, status: true },
-        });
-        if (row) {
-          const pastPatch = pastDueSinceForStatusTransition(SubscriptionStatus.ACTIVE, row.status);
-          await prisma.subscription.update({
-            where: { id: row.id },
-            data: {
-              status: SubscriptionStatus.ACTIVE,
-              ...(pastPatch ?? {}),
-            },
-          });
-        }
-        if (billingReason === "subscription_cycle") {
-          const row = await prisma.subscription.findUnique({
-            where: { stripeSubscriptionId: subId },
-            select: { userId: true },
-          });
-          if (row?.userId) {
-            void captureServerEvent(analyticsDistinctId(row.userId), PH.funnelSubscriptionRenewed, {
-              source: "stripe_invoice_payment_succeeded",
-              billing_reason: billingReason,
-            });
-          }
-        }
-      }
-    }
-
-    if (event.type === "invoice.payment_failed") {
-      const invoice = event.data.object as Stripe.Invoice;
-      const subRaw = (invoice as unknown as { subscription?: string | { id: string } | null }).subscription;
-      const subId = typeof subRaw === "string" ? subRaw : subRaw?.id;
-      if (subId) {
-        const row = await prisma.subscription.findUnique({
-          where: { stripeSubscriptionId: subId },
-          select: { id: true, status: true },
-        });
-        if (row) {
-          const pastPatch = pastDueSinceForStatusTransition(SubscriptionStatus.PAST_DUE, row.status);
-          await prisma.subscription.update({
-            where: { id: row.id },
-            data: {
-              status: SubscriptionStatus.PAST_DUE,
-              ...(pastPatch ?? {}),
-            },
-          });
-        }
-      }
-    }
-
-    productEvent("stripe_webhook_ok", { eventType: event.type });
   } catch (e) {
-    productEvent("stripe_webhook_failed", { eventType: event.type });
-    safeServerLogCritical("stripe_webhook", "handler_failed", { type: event.type }, e);
-    if (claimedEventId) {
-      await prisma.stripeWebhookEvent.delete({ where: { id: event.id } }).catch(() => {});
-    }
+    safeServerLogCritical(
+      "stripe_webhook",
+      "dedupe_record_failed",
+      { type: event.type, correlation, severity: "error" },
+      e,
+    );
+    Sentry.captureException(e, {
+      level: "error",
+      tags: { flow: "stripe_webhook_dedupe", stripe_event_type: event.type },
+      fingerprint: ["stripe_webhook_dedupe", event.id],
+    });
     return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
   }
 

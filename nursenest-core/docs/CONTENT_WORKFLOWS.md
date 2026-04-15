@@ -2,6 +2,8 @@
 
 Practical **long-term** flows so content scale does not land in the **app container**. UI is unchanged; this defines **where** work happens.
 
+**Architecture + import pipelines:** `docs/CONTENT_STORAGE_ARCHITECTURE.md`, `docs/CONTENT_IMPORT_PIPELINE.md`.
+
 ## 1. Blog posts
 
 | Stage | Where |

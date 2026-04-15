@@ -8,7 +8,6 @@ import { HUB, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
-import { PRIMARY_CTA, SECONDARY_CTA, TERTIARY_CTA } from "@/lib/copy/cta-copy";
 import { FadeUp, StaggerGroup, StaggerItem } from "@/lib/motion";
 
 const STEP_COLORS = [
@@ -23,7 +22,7 @@ const STEP_COLORS = [
  * Step numbers are large colored circles for clear scanability.
  */
 export function HomeHowItWorksSection() {
-  const { locale } = useMarketingI18n();
+  const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const loc = (path: string) => withMarketingLocale(locale, path);
 
@@ -32,26 +31,26 @@ export function HomeHowItWorksSection() {
   const steps = [
     {
       icon: BookOpen,
-      title: "Learn",
-      body: "Study focused lessons mapped to your exact nursing pathway.",
+      title: t("pages.home.howItWorks.step1.title"),
+      body: t("pages.home.howItWorks.step1.body"),
       href: loc(HUB.examLessons),
-      label: TERTIARY_CTA,
+      label: t("pages.home.howItWorks.step1.cta"),
       testId: "how-step-learn",
     },
     {
       icon: ClipboardList,
-      title: "Practice",
-      body: "Train with exam-style questions and full rationales on every item.",
+      title: t("pages.home.howItWorks.step2.title"),
+      body: t("pages.home.howItWorks.step2.body"),
       href: questionsHref,
-      label: SECONDARY_CTA,
+      label: t("pages.home.howItWorks.step2.cta"),
       testId: "how-step-practice",
     },
     {
       icon: Flag,
-      title: "Pass",
-      body: "Use CAT and readiness tracking to close weak areas before exam day.",
+      title: t("pages.home.howItWorks.step3.title"),
+      body: t("pages.home.howItWorks.step3.body"),
       href: loc(HUB.practiceExams),
-      label: PRIMARY_CTA,
+      label: t("pages.home.howItWorks.step3.cta"),
       testId: "how-step-pass",
     },
   ] as const;
@@ -67,10 +66,10 @@ export function HomeHowItWorksSection() {
       <div className="nn-section-shell">
         <FadeUp whenInView once viewMargin="-32px" className="mx-auto mb-12 max-w-2xl text-center">
           <h2 id="home-how-heading" className="nn-marketing-h2 text-balance">
-            {formatTitleCase("How It Works", locale)}
+            {formatTitleCase(t("pages.home.howItWorks.title"), locale)}
           </h2>
           <p className="nn-marketing-body mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-[var(--theme-muted-text)]">
-            {formatSentenceCase("A simple three-step loop to build confidence and readiness faster.", locale)}
+            {formatSentenceCase(t("pages.home.howItWorks.subtitle"), locale)}
           </p>
         </FadeUp>
 

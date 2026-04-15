@@ -8,7 +8,7 @@ import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-l
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
-import { MARKETING_PRIMARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
+import { MARKETING_TERTIARY_LINK_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 const CHOICE_KEYS = [
   "pages.home.sampleQuestion.choiceA",
@@ -34,16 +34,25 @@ export function HomeSampleQuestionPreview() {
     >
       <div className="nn-section-shell py-10 sm:py-12">
         <div className="mx-auto max-w-3xl">
-          <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">
-            {formatTitleCase(t("pages.home.sampleQuestion.label"), locale)}
+          <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--semantic-info)]">
+            {formatTitleCase(t("pages.home.sampleQuestion.sectionKicker"), locale)}
           </p>
-          <h2
+          <h2 className="nn-marketing-h2 mt-2 max-w-2xl text-balance text-[var(--palette-heading)]">
+            {formatTitleCase(t("pages.home.sampleQuestion.sectionTitle"), locale)}
+          </h2>
+          <p className="nn-marketing-body mt-3 max-w-2xl text-pretty leading-relaxed text-[var(--palette-text-muted)]">
+            {formatSentenceCase(t("pages.home.sampleQuestion.sectionLead"), locale)}
+          </p>
+          <h3
             id="home-sample-question-heading"
-            className="nn-marketing-body mt-3 text-pretty text-lg font-semibold leading-snug text-[var(--palette-heading)] sm:text-xl"
+            className="nn-marketing-body mt-6 text-pretty text-lg font-semibold leading-snug text-[var(--palette-heading)] sm:text-xl"
           >
             {formatSentenceCase(t("pages.home.sampleQuestion.stem"), locale)}
-          </h2>
-          <ul className="mt-6 space-y-3" role="list">
+          </h3>
+          <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-[var(--palette-text-muted)]">
+            {formatTitleCase(t("pages.home.sampleQuestion.choicesHeading"), locale)}
+          </p>
+          <ul className="mt-3 space-y-3" role="list">
             {choices.map((text, i) => (
               <li
                 key={CHOICE_KEYS[i]}
@@ -99,11 +108,11 @@ export function HomeSampleQuestionPreview() {
                 marketing_locale: locale,
                 surface: "home_sample_question_preview",
               }}
-              className={`${MARKETING_PRIMARY_CTA_CLASS} nn-motion-standard inline-flex items-center gap-2 rounded-xl`}
+              className={`${MARKETING_TERTIARY_LINK_CLASS} nn-motion-standard inline-flex items-center gap-1.5 font-semibold text-[var(--semantic-brand)]`}
               data-testid="button-home-sample-question-cta"
             >
-              {formatTitleCase(t("pages.home.sampleQuestion.cta"), locale)}
-              <ArrowRight className="h-5 w-5 shrink-0" aria-hidden />
+              {formatTitleCase(t("pages.home.sampleQuestion.continueCta"), locale)}
+              <ArrowRight className="h-4 w-4 shrink-0" aria-hidden />
             </MarketingTrackedLink>
           </div>
         </div>

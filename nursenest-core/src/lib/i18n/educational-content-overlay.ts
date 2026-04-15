@@ -12,6 +12,10 @@ import type {
 } from "@/lib/lessons/pathway-lesson-types";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { evaluateEducationalTranslation } from "@/lib/i18n/educational-translation-quality";
+import {
+  finalizeQuestionApiTeachingExposure,
+  stripTeachingFieldsFromQuestionApiPayload,
+} from "@/lib/questions/question-api-payload-strip";
 
 /** Per-question overlay keyed by `ExamQuestion.id` (stable). */
 export type QuestionEducationalOverlay = {
@@ -743,11 +747,23 @@ export function applyQuestionEducationalOverlayForDisplay(
   };
 }
 
+export type MergeQuestionApiPayloadOptions = {
+  /**
+   * `full` — include merged rationale/teaching strings (subscriber review / rationale requests).
+   * `none` — strip teaching keys after merge so overlays cannot inject rationales when the DB omitted them.
+   */
+  teachingExposure?: "full" | "none";
+};
+
+/** Re-export for API routes that build payloads without calling `mergeQuestionApiPayload`. */
+export { stripTeachingFieldsFromQuestionApiPayload, QUESTION_API_TEACHING_FIELD_KEYS } from "@/lib/questions/question-api-payload-strip";
+
 /** Merge localized display fields onto an API question object (list/detail). Preserves extra keys (topic, exam, …). */
 export function mergeQuestionApiPayload(
   q: Record<string, unknown>,
   locale: string,
   overlayBundle?: Record<string, QuestionEducationalOverlay>,
+  opts?: MergeQuestionApiPayloadOptions,
 ): Record<string, unknown> {
   const m = applyQuestionEducationalOverlayForDisplay(q as QuestionRowForDisplay, locale, overlayBundle);
   const out: Record<string, unknown> = { ...q, stem: m.stem, options: m.options };
@@ -764,7 +780,8 @@ export function mergeQuestionApiPayload(
   out.incorrectAnswerRationale = m.incorrectAnswerRationale;
   out.overlayApplied = m.overlayApplied;
   if (m.overlayTranslationFallback) out.overlayTranslationFallback = true;
-  return out;
+  const exposure = opts?.teachingExposure ?? "full";
+  return finalizeQuestionApiTeachingExposure(out, exposure);
 }
 
 /** Preview mode truncates stem after overlay merge (same 280-char cap as legacy). */
@@ -776,7 +793,7 @@ export function localizeQuestionListForApi(
 ): Array<Record<string, unknown>> {
   if (mode === "preview") {
     return items.map((q) => {
-      const merged = mergeQuestionApiPayload(q, locale, overlayBundle);
+      const merged = mergeQuestionApiPayload(q, locale, overlayBundle, { teachingExposure: "none" });
       const stem = String(merged.stem ?? "");
       return {
         ...merged,
@@ -784,7 +801,7 @@ export function localizeQuestionListForApi(
       };
     });
   }
-  return items.map((q) => mergeQuestionApiPayload(q, locale, overlayBundle));
+  return items.map((q) => mergeQuestionApiPayload(q, locale, overlayBundle, { teachingExposure: "full" }));
 }
 
 /** Row shape for grade-response teaching/rationale builders — overlay merged for subscriber-facing text only. */

@@ -79,3 +79,31 @@ We collect information needed to provide the service, such as account, billing, 
 ## Do you send marketing emails?
 
 We may send marketing messages where permitted and, where required, where we have the necessary consent. You can unsubscribe from marketing emails at any time.
+
+## Will NurseNest actually help me pass my exam?
+
+You earn a pass on exam day—no prep platform can grant a license. NurseNest is built to train what those exams measure: clinical prioritization, safety, and scope under time, with full teaching rationales and readiness signals so you see weak areas while you can still fix them.
+
+## How do I know NurseNest is for my specific exam and country?
+
+Select United States or Canada in the product, choose your pathway (for example RN, PN, NP, or allied), and your questions, lessons, and labels stay scoped to that registration context. Checkout and pricing follow the same region and tier you selected.
+
+## Are NurseNest practice questions realistic compared with the real exam?
+
+Items are original—they are not leaked test questions. They are written to match the decision style and content scope of major nursing licensure exams (including NCLEX-style prioritization and safety framing for the tracks we support). Formats include standard multiple choice plus pathway-appropriate modes where your tier includes them.
+
+## How detailed are the rationales—and are they useful on test day?
+
+Every scored item includes a teaching rationale: why the best option is safest under the clinical framework, and why each distractor fails. The goal is transferable judgment you can apply to the next item, not memorizing a single letter pattern.
+
+## Is the NurseNest platform reliable while I study?
+
+Your progress is stored with your account; access to premium content is checked on the server so your tier and pathway stay enforced. Paid checkout runs through Stripe. If you hit a technical issue, contact support—we treat study-time stability as core to the product.
+
+## What do I get for free before I pay for a subscription?
+
+Free access includes lesson and question previews with limits (exact limits depend on your account and tier). Use previews to judge interface, rationale depth, and pacing before you upgrade. Paid plans unlock the full pathway-scoped bank, complete lesson bodies, exam modes, and persistent analytics—see current tiers on the Pricing page.
+
+## Why choose NurseNest over other nursing prep tools?
+
+NurseNest combines pathway-scoped lessons, a large item bank, practice exams, and readiness analytics in one workspace—aligned to the license you select instead of a generic mixed-topic quiz feed. Preview the same item quality before you subscribe; paid access adds volume, depth, and history, not a separate “mystery” product.
