@@ -1,8 +1,7 @@
 /**
- * One-time login; saves storage state for reuse by chromium-paid (see playwright.config.ts).
+ * One-time login; saves storage state for reuse by `chromium-paid` (see playwright.config.ts).
  *
- * Requires: E2E_PAID_EMAIL, E2E_PAID_PASSWORD
- * Skips (and skips dependent tests) when creds are missing.
+ * Projects `setup-paid-auth` + `chromium-paid` register only when E2E_PAID_EMAIL and E2E_PAID_PASSWORD are set.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -13,8 +12,9 @@ import { PAID_USER_AUTH_FILE } from "./paid-auth-state-path";
 setup("save paid-user storage state", async ({ page }) => {
   const email = process.env.E2E_PAID_EMAIL?.trim();
   const password = process.env.E2E_PAID_PASSWORD;
-  // Must use conditional skip (not `if` + skip) so dependent `chromium-paid` tests skip too.
-  setup.skip(!email || !password, "Set E2E_PAID_EMAIL and E2E_PAID_PASSWORD to generate auth state.");
+  if (!email || !password) {
+    throw new Error("E2E_PAID_EMAIL / E2E_PAID_PASSWORD missing (playwright.config should gate paid projects).");
+  }
 
   await loginPaidUser(page, email, password);
 
