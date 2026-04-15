@@ -1,5 +1,8 @@
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
+/** Keep under typical reverse-proxy limits (e.g. 60s) so the route returns JSON instead of 504. */
+const RESEND_FETCH_TIMEOUT_MS = 12_000;
+
 function escapeHtmlAttr(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 }
@@ -22,7 +25,8 @@ export function buildPasswordResetUrl(rawToken: string): string {
 }
 
 export type SendPasswordResetResult = {
-  emailAttempted: boolean;
+  /** True when Resend returned 2xx within the deadline, or dev fallback link is available. */
+  delivered: boolean;
   /** Only in development when email is not configured. Never set in production. */
   devResetUrl?: string;
 };
@@ -33,7 +37,7 @@ export function isPasswordResetEmailConfigured(): boolean {
 
 /**
  * Sends reset email via Resend when `RESEND_API_KEY` is set.
- * Production: never returns `devResetUrl`. Does not log raw tokens.
+ * Uses a bounded fetch timeout so the forgot-password route does not hang until a gateway 504.
  */
 export async function sendPasswordResetEmail(params: {
   toEmail: string;
@@ -64,6 +68,7 @@ export async function sendPasswordResetEmail(params: {
           subject,
           html,
         }),
+        signal: AbortSignal.timeout(RESEND_FETCH_TIMEOUT_MS),
       });
       if (!res.ok) {
         const text = await res.text().catch(() => "");
@@ -71,12 +76,20 @@ export async function sendPasswordResetEmail(params: {
           status: res.status,
           snippet: text.slice(0, 120),
         });
-        return { emailAttempted: true };
+        return { delivered: false };
       }
-      return { emailAttempted: true };
+      return { delivered: true };
     } catch (e) {
-      safeServerLog("auth", "password_reset_email_error", { message: String(e).slice(0, 200) });
-      return { emailAttempted: true };
+      const name = e instanceof Error ? e.name : "";
+      const msg = e instanceof Error ? e.message : String(e);
+      const timedOut =
+        name === "TimeoutError" || name === "AbortError" || /aborted|timeout/i.test(msg);
+      safeServerLog("auth", "password_reset_email_error", {
+        name,
+        timedOut,
+        message: msg.slice(0, 200),
+      });
+      return { delivered: false };
     }
   }
 
@@ -86,8 +99,8 @@ export async function sendPasswordResetEmail(params: {
   });
 
   if (process.env.NODE_ENV === "development") {
-    return { emailAttempted: false, devResetUrl: resetUrl };
+    return { delivered: true, devResetUrl: resetUrl };
   }
 
-  return { emailAttempted: false };
+  return { delivered: false };
 }

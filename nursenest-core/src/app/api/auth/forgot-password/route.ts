@@ -173,6 +173,21 @@ export async function POST(req: Request) {
     const sendResult = await sendPasswordResetEmail({ toEmail: user.email, resetUrl });
     captureServerEvent(analyticsDistinctId(user.id), "password_reset_requested", {}).catch(() => {});
 
+    if (!sendResult.delivered) {
+      safeServerLog("auth", "password_reset_email_not_delivered", {
+        userIdPrefix: user.id.slice(0, 8),
+        ip: ip.slice(0, 64),
+      });
+      return NextResponse.json(
+        {
+          ok: false,
+          error:
+            "We could not send the reset email (service timeout or error). Try again in a minute, or contact support if this persists.",
+        },
+        { status: 503 },
+      );
+    }
+
     const base = {
       ok: true as const,
       message: "If an account exists for that email, a reset link has been sent.",
