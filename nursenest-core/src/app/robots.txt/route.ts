@@ -1,6 +1,6 @@
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
 import { MARKETING_LANGUAGES } from "@/lib/i18n/marketing-languages";
-import { isLocaleSeoIndexable } from "@/lib/i18n/language-readiness";
+import { getLanguageStatus } from "@/lib/i18n/language-readiness";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 
 /**
@@ -9,9 +9,10 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
  * SEO indexing policy per language status:
  * - active (full tier): allowed — Google indexes the locale pages normally.
  * - partial (partial tier): pages are served with `noindex` meta (injected by
- *   safeGenerateMetadata), but crawling is allowed so bots can see the noindex directive.
- * - disabled (incomplete tier): Disallowed here to prevent unnecessary crawl budget
- *   consumption on mostly-English pages. Routes still serve 200 for human visitors.
+ *   safeGenerateMetadata); crawling is **allowed** (no `Disallow` for `/{code}/`) so bots
+ *   can fetch pages and honor hreflang + noindex consistently.
+ * - disabled (incomplete tier): `Disallow: /{code}/` to save crawl budget on mostly-English
+ *   URLs that are also excluded from hreflang and locale sitemaps. Routes still serve 200 for humans.
  *
  * Internal `/seo/*` rewrite targets are disallowed to avoid duplicate indexing
  * with the public `/{slug}` URLs they back.
@@ -28,8 +29,9 @@ function buildDisallowedLocaleLines(): string {
   const lines: string[] = [];
   for (const lang of MARKETING_LANGUAGES) {
     if (lang.code === DEFAULT_MARKETING_LOCALE) continue;
-    if (!isLocaleSeoIndexable(lang.code)) {
-      // Disallow crawlers from consuming budget on pages with noindex.
+    // Only incomplete (disabled) locales: partial-tier URLs stay crawlable so hreflang
+    // alternates and noindex directives remain discoverable (see language-readiness.ts).
+    if (getLanguageStatus(lang.code) === "disabled") {
       lines.push(`Disallow: /${lang.code}/`);
     }
   }

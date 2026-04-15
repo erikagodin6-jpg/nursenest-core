@@ -14,13 +14,14 @@ export function LearnerDegradedModeBanner({
   serverCoreEmergency: boolean;
 }) {
   const { t } = useMarketingI18n();
-  const clientFlag =
-    typeof process !== "undefined" &&
-    (process.env.NEXT_PUBLIC_NN_DEGRADED_MODE === "1" || process.env.NEXT_PUBLIC_NN_CORE_ONLY_EMERGENCY === "1");
-  const show = serverDegraded || serverCoreEmergency || clientFlag;
+  const clientDegraded =
+    typeof process !== "undefined" && process.env.NEXT_PUBLIC_NN_DEGRADED_MODE === "1";
+  const clientEmergency =
+    typeof process !== "undefined" && process.env.NEXT_PUBLIC_NN_CORE_ONLY_EMERGENCY === "1";
+  const show = serverDegraded || serverCoreEmergency || clientDegraded || clientEmergency;
   if (!show) return null;
 
-  const emergency = serverCoreEmergency || process.env.NEXT_PUBLIC_NN_CORE_ONLY_EMERGENCY === "1";
+  const emergency = serverCoreEmergency || clientEmergency;
 
   return (
     <div

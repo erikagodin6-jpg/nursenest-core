@@ -202,6 +202,11 @@ export const PRODUCTION_LEARNER_SHELL_KEYS = [
   "learner.primaryNav.lessons",
   "learner.primaryNav.practice",
   "learner.dashboard.title",
+  "learner.degraded.bannerBody",
+  "learner.degraded.bannerTitle",
+  "learner.degraded.dataLoadingHint",
+  "learner.degraded.emergencyBannerBody",
+  "learner.degraded.sectionFallbackBody",
   "learner.studyHome.sectionPriorityEyebrow",
   "learner.studyHome.sectionPriorityEyebrowNew",
 ] as const;

@@ -15,19 +15,19 @@ export async function GET() {
     "GET /api/public/flashcard-tags",
     async () =>
       withDatabaseFallbackTimeout(
-      async () => {
-        const deckWhere = publicMarketingFlashcardDeckWhere();
-        const tags = await prisma.flashcardTag.findMany({
-          where: { decks: { some: { deck: deckWhere } } },
-          orderBy: { name: "asc" },
-          take: 80,
-          select: { slug: true, name: true },
-        });
-        return NextResponse.json({ tags });
-      },
-      NextResponse.json({ tags: [] }),
-      TAG_QUERY_TIMEOUT_MS,
-      { scope: "api_public", label: "flashcard_tags" },
+        async () => {
+          const deckWhere = publicMarketingFlashcardDeckWhere();
+          const tags = await prisma.flashcardTag.findMany({
+            where: { decks: { some: { deck: deckWhere } } },
+            orderBy: { name: "asc" },
+            take: 80,
+            select: { slug: true, name: true },
+          });
+          return NextResponse.json({ tags });
+        },
+        NextResponse.json({ tags: [] }),
+        TAG_QUERY_TIMEOUT_MS,
+        { scope: "api_public", label: "flashcard_tags" },
       ),
     { tags: [] },
   );
