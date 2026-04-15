@@ -25,7 +25,7 @@ async function main() {
       fields: {
         tier: "TierCode — profile / default; subscription may override via Subscription.planTier",
         country: "CountryCode — CA/US for pathway gating",
-        role: "UserRole — admin override for entitlements (isLearnerEntitlementAdminOverrideRole)",
+        role: "UserRole — staff learner bypass for entitlements (isLearnerEntitlementStaffBypassRole / isStaffRole)",
         learnerPath: "optional target pathway id",
         alliedProfessionKey: "when tier ALLIED",
         trialStatus: "TrialStatus + trialEndsAt for active_trial access",

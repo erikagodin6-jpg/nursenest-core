@@ -7,6 +7,7 @@ import {
   type TierCode,
 } from "@prisma/client";
 import { prismaTierCodesForProfileTier } from "@/lib/entitlements/accessible-tiers";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 
 const PUBLISHED = ContentStatus.PUBLISHED;
@@ -28,17 +29,17 @@ export function userCanAccessDeckForStudy(
   entitlement: AccessScope,
 ): boolean {
   if (deck.status !== PUBLISHED) {
-    if (entitlement.reason === "admin_override" && entitlement.hasAccess) return deck.visibility !== FlashcardDeckVisibility.HIDDEN;
+    if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) return deck.visibility !== FlashcardDeckVisibility.HIDDEN;
     return false;
   }
   if (deck.visibility === FlashcardDeckVisibility.HIDDEN) {
-    return entitlement.reason === "admin_override" && entitlement.hasAccess;
+    return accessScopeIsStaffLearnerEntitlementBypass(entitlement);
   }
   if (deck.visibility === FlashcardDeckVisibility.PUBLIC_PREVIEW) {
     return true;
   }
   if (!entitlement.hasAccess) return false;
-  if (entitlement.reason === "admin_override") {
+  if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
     const c = entitlement.country as CountryCode | null;
     if (!c) return true;
     return deck.country === c;
@@ -72,7 +73,7 @@ export function prismaDeckListWhere(args: {
     return { status: PUBLISHED, visibility: FlashcardDeckVisibility.PUBLIC_PREVIEW };
   }
 
-  if (entitlement.reason === "admin_override") {
+  if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
     const country = entitlement.country as CountryCode | null;
     const or: Prisma.FlashcardDeckWhereInput[] = [
       { status: PUBLISHED, visibility: FlashcardDeckVisibility.PUBLIC_PREVIEW },
@@ -117,7 +118,7 @@ export function cardInDeckWhere(
   return { AND: [{ deckId }, cardWhere] };
 }
 
-/** Admin bypass for hidden decks in admin APIs only. */
+/** Staff learner bypass (hidden decks, etc.) — prefer {@link accessScopeIsStaffLearnerEntitlementBypass}. */
 export function isAdminEntitlement(entitlement: AccessScope | null): boolean {
-  return Boolean(entitlement?.hasAccess && entitlement.reason === "admin_override");
+  return accessScopeIsStaffLearnerEntitlementBypass(entitlement);
 }

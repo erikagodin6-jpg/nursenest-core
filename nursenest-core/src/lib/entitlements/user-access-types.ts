@@ -6,6 +6,7 @@ export type AccessScope = {
   hasAccess: boolean;
   reason:
     | "active_subscription"
+    /** Staff/student-ops bypass — not a paid plan; see {@link isLearnerEntitlementStaffBypassRole}. */
     | "admin_override"
     | "grace_period"
     | "past_due_grace"

@@ -32,9 +32,18 @@ export function staffTierFromRole(role: UserRole): StaffTier {
 }
 
 /**
- * Learner-app entitlement bypass (full preview / subscriber surfaces) — same as legacy ADMIN.
- * Support staff do not get automatic premium; they use normal subscription for learner routes.
+ * Staff roles bypass learner subscription/paywall checks for QA, support, and internal preview.
+ * This is **not** a paid subscription — {@link getUserAccess} sets `reason: "admin_override"` (legacy name).
+ *
+ * Use {@link isStaffRole} for route RBAC; use this only where learner **entitlement** must mirror subscribers.
  */
-export function isLearnerEntitlementAdminOverrideRole(role: UserRole): boolean {
-  return role === UserRole.ADMIN || role === UserRole.SUPER_ADMIN || role === UserRole.CONTENT_ADMIN;
+export function isLearnerEntitlementStaffBypassRole(role: UserRole | string | null | undefined): boolean {
+  return isStaffRole(role);
+}
+
+/**
+ * @deprecated Prefer {@link isLearnerEntitlementStaffBypassRole} — behavior is identical (all staff roles).
+ */
+export function isLearnerEntitlementAdminOverrideRole(role: UserRole | string | null | undefined): boolean {
+  return isLearnerEntitlementStaffBypassRole(role);
 }

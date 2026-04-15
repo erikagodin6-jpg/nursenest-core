@@ -1,5 +1,5 @@
 import { SubscriptionStatus, TrialStatus, type CountryCode, type TierCode } from "@prisma/client";
-import { isLearnerEntitlementAdminOverrideRole } from "@/lib/auth/staff-roles";
+import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
 import { normalizeCountryCodeForEntitlement } from "@/lib/entitlements/country-code";
 import {
   pastDueSubscriptionGrantsPremium,
@@ -156,7 +156,7 @@ export async function getUserAccess(userId: string): Promise<UserAccess> {
 
   const baseCountry = normalizeCountryCodeForEntitlement(user.country);
 
-  if (isLearnerEntitlementAdminOverrideRole(user.role)) {
+  if (isLearnerEntitlementStaffBypassRole(user.role)) {
     return {
       userId,
       hasPremium: true,

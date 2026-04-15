@@ -17,7 +17,7 @@ import {
 import { isEmailLikeIdentifier, normalizeLoginIdentifier } from "@/lib/auth/normalize-login-identifier";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { UserRole } from "@prisma/client";
-import { isLearnerEntitlementAdminOverrideRole } from "@/lib/auth/staff-roles";
+import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
 import {
   getUserAccess,
   subscriptionStatusForSession,
@@ -203,7 +203,7 @@ export const authConfig: NextAuthConfig = {
         });
 
         let subscriptionStatus: SessionSubscriptionStatus = "none";
-        if (isLearnerEntitlementAdminOverrideRole(user.role)) {
+        if (isLearnerEntitlementStaffBypassRole(user.role)) {
           subscriptionStatus = "active";
         } else {
           try {
