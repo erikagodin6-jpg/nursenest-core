@@ -1,6 +1,11 @@
 import { expect, type Page } from "@playwright/test";
 import type { PageObservers } from "./attach-observers";
-import { expectNotOnAppOnboarding } from "./paid-surface-assertions";
+import {
+  assertNoAuthSessionBlockingBeforeShell,
+  assertSyncNotOnboardingBlocking,
+  markLearnerShellReady,
+} from "./paid-durability";
+import { expectOnLearnerApp } from "./paid-surface-assertions";
 
 /**
  * Default pathway for US RN paid E2E — align with `scripts/qa-paid-test-account-reset.mts`
@@ -17,11 +22,13 @@ export async function waitForAuthenticatedLearnerShell(
   opts?: { timeoutMs?: number },
 ): Promise<void> {
   const ms = opts?.timeoutMs ?? 120_000;
-  await expectNotOnAppOnboarding(page, "waitForAuthenticatedLearnerShell");
+  assertSyncNotOnboardingBlocking(page, "waitForAuthenticatedLearnerShell");
   await expect(page.locator("main")).toBeVisible({ timeout: ms });
   const primary = page.locator('nav[aria-label="Learner primary actions"]');
   const bottom = page.locator('nav[aria-label="Learner bottom navigation"]');
   await expect(primary.or(bottom).first()).toBeVisible({ timeout: Math.min(ms, 90_000) });
+  assertNoAuthSessionBlockingBeforeShell(page);
+  markLearnerShellReady(page);
 }
 
 /**
@@ -33,8 +40,9 @@ export async function expectPaidLearnerShellReady(
   context: string,
   opts?: { timeoutMs?: number },
 ): Promise<void> {
+  assertSyncNotOnboardingBlocking(page, context);
   await expectOnLearnerApp(page);
-  await expectNotOnAppOnboarding(page, context);
+  assertSyncNotOnboardingBlocking(page, context);
   await waitForAuthenticatedLearnerShell(page, opts);
 }
 

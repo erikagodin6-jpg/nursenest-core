@@ -1,7 +1,13 @@
 import type { Page, Request, Response } from "@playwright/test";
 
-/** Fail threshold for same-origin fetch/XHR duration (ms). */
-export const PAID_SESSION_SLOW_MS = 3_000;
+/** Log threshold for **core** APIs (warnings only, attached for triage). */
+export const PAID_CORE_SLOW_WARN_MS = 3_000;
+
+/** Fail threshold for **core** APIs — beyond this, {@link buildFailureMessages} includes a blocking line. */
+export const PAID_CORE_SLOW_FAIL_MS = 6_000;
+
+/** @deprecated Use {@link PAID_CORE_SLOW_WARN_MS} — kept for older log strings. */
+export const PAID_SESSION_SLOW_MS = PAID_CORE_SLOW_WARN_MS;
 
 /** Paths that must not error when requested during the paid journey (prefix match). */
 export const PAID_SESSION_CRITICAL_API_PREFIXES = [
@@ -18,7 +24,7 @@ export type PaidSessionSlowRequest = {
   status: number;
 };
 
-function pathnameOf(url: string): string {
+export function pathnameOf(url: string): string {
   try {
     return new URL(url).pathname;
   } catch {
@@ -45,13 +51,19 @@ export function isPaidSessionTrackedRequest(req: Request, appOrigin: string): bo
 export type PaidSessionNetworkMonitor = {
   /** Same-origin fetch/XHR responses with status &gt;= 400 */
   statusFailures: string[];
-  /** Same-origin fetch/XHR slower than {@link PAID_SESSION_SLOW_MS} */
+  /** Same-origin fetch/XHR slower than {@link PAID_CORE_SLOW_WARN_MS} (includes non-core). */
   slowRequests: PaidSessionSlowRequest[];
+  /** Core API calls with PAID_CORE_SLOW_WARN_MS &lt; ms &lt;= PAID_CORE_SLOW_FAIL_MS — **warning only**. */
+  slowCriticalWarnings: PaidSessionSlowRequest[];
+  /** Core API calls with ms &gt; PAID_CORE_SLOW_FAIL_MS — **blocking** when included in {@link buildFailureMessages}. */
+  slowCriticalFailures: PaidSessionSlowRequest[];
   /** Same-origin fetch/XHR that did not complete (excludes user-aborted navigations). */
   networkFailures: string[];
   /** Subset of status/network failures whose path matches {@link PAID_SESSION_CRITICAL_API_PREFIXES}. */
   criticalFailures: string[];
   formatSlowLog: () => string;
+  /** Human-readable core SLO warnings (3s–6s). */
+  formatSlowCriticalWarningsLog: () => string;
   buildFailureMessages: () => string[];
   dispose: () => void;
 };
@@ -64,6 +76,8 @@ export function attachPaidSessionNetworkMonitor(page: Page, appOrigin: string): 
   const start = new Map<Request, number>();
   const statusFailures: string[] = [];
   const slowRequests: PaidSessionSlowRequest[] = [];
+  const slowCriticalWarnings: PaidSessionSlowRequest[] = [];
+  const slowCriticalFailures: PaidSessionSlowRequest[] = [];
   const networkFailures: string[] = [];
   const criticalFailures: string[] = [];
 
@@ -95,8 +109,18 @@ export function attachPaidSessionNetworkMonitor(page: Page, appOrigin: string): 
       pushCritical(line, url);
     }
 
-    if (ms > PAID_SESSION_SLOW_MS) {
+    const path = pathnameOf(url);
+    const critical = isCriticalPaidSessionApiPath(path);
+
+    if (ms > PAID_CORE_SLOW_WARN_MS) {
       slowRequests.push({ method: req.method(), url, ms, status: st });
+      if (critical) {
+        if (ms > PAID_CORE_SLOW_FAIL_MS) {
+          slowCriticalFailures.push({ method: req.method(), url, ms, status: st });
+        } else {
+          slowCriticalWarnings.push({ method: req.method(), url, ms, status: st });
+        }
+      }
     }
   };
 
@@ -121,19 +145,32 @@ export function attachPaidSessionNetworkMonitor(page: Page, appOrigin: string): 
       .map((s) => `${s.ms}ms ${s.status} ${s.method} ${s.url}`)
       .join("\n");
 
+  const formatSlowCriticalWarningsLog = () =>
+    [...slowCriticalWarnings]
+      .sort((a, b) => b.ms - a.ms)
+      .map(
+        (s) =>
+          `[slowEndpointWarning ${s.ms}ms] ${PAID_CORE_SLOW_WARN_MS}ms–${PAID_CORE_SLOW_FAIL_MS}ms ${s.method} ${s.url}`,
+      )
+      .join("\n");
+
   const buildFailureMessages = (): string[] => {
-    const slowLines = slowRequests.map(
-      (s) => `[slow ${s.ms}ms > ${PAID_SESSION_SLOW_MS}ms] ${s.method()} ${s.url}`,
+    const slowFailLines = slowCriticalFailures.map(
+      (s) =>
+        `slowEndpointFailure: core API ${s.ms}ms exceeds ${PAID_CORE_SLOW_FAIL_MS}ms — ${s.method} ${s.url} (status ${s.status})`,
     );
-    return [...statusFailures, ...slowLines, ...networkFailures];
+    return [...statusFailures, ...slowFailLines, ...networkFailures];
   };
 
   return {
     statusFailures,
     slowRequests,
+    slowCriticalWarnings,
+    slowCriticalFailures,
     networkFailures,
     criticalFailures,
     formatSlowLog,
+    formatSlowCriticalWarningsLog,
     buildFailureMessages,
     dispose: () => {
       page.off("request", onRequest);

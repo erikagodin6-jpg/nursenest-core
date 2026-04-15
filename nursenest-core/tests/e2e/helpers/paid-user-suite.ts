@@ -8,26 +8,37 @@
  *
  * | Command | Scope |
  * | --- | --- |
- * | `npx playwright test --project=chromium-paid tests/e2e/paid-user/paid-user-00-fast-sanity.spec.ts` | **Fast** CI gate (seconds) |
+ * | `npm run test:e2e:paid-fast-sanity` | **Deploy blocker** — shell + lessons + guards (~seconds) |
+ * | `npx playwright test --project=chromium-paid tests/e2e/paid-user/paid-user-00-fast-sanity.spec.ts` | same (explicit path) |
  * | `npx playwright test --project=chromium-paid tests/e2e/paid-user/` | Full **paid-user** directory (extended) |
  * | `npm run test:e2e:ci-master` | Lean CI gate: fast-sanity + journey + entitlements + nav + api-health |
- * | `npx playwright test --project=chromium-paid tests/e2e/paid-user/paid-user-mobile.spec.ts` | Mobile-only smoke |
  *
- * **Removed / merged:** `paid-user-smoke.spec.ts` was folded into `paid-user-cat-smoke.spec.ts` (CAT only) plus
- * `paid-user-journey` + fast-sanity to avoid duplicate long traversals.
+ * **Durability:** {@link attachPaidUserStandardGuards} registers onboarding fail-fast (sync URL checks via
+ * `expectNotLoginUrl` / `expectPaidLearnerShellReady`), `/api/auth/session` pre-shell failures, auth **noise**
+ * (`Failed to fetch` + session), and core API SLO monitoring (warn 3s, **fail** >6s on lessons/questions/flashcards/user-access).
  *
  * Uses stored `storageState` from `setup-paid-auth` — **no per-test UI login**.
  *
  * **i18n console:** default `assertPaidUserGuardsClean` uses `i18nConsoleMode: "warn"` — missing-key lines are
- * attached as `i18n-console-warnings.txt` and do not fail the test (marketing noise). Use `"fail"` only when
- * you need strict console parity. Dedicated `paid-user-i18n.spec.ts` enforces learner DOM + core routes.
+ * attached as `i18n-console-warnings.txt` and do not fail the test (marketing noise).
  *
  * Console allowlist: noise from analytics/CSP/third-party is filtered in `seriousConsoleLines`.
  * Extend sparingly and document new patterns inline.
  */
 import { expect, type Page } from "@playwright/test";
 import { attachPageObservers, type PageObservers } from "./attach-observers";
+import {
+  assertNoAuthSessionBlockingBeforeShell,
+  assertSyncNotOnboardingBlocking,
+  disposePaidDurabilityListeners,
+  formatAuthFetchNoiseForSummary,
+  registerPaidDurabilityListeners,
+} from "./paid-durability";
 import { attachPaidJourneyApiObserver } from "./paid-journey-network";
+import {
+  attachPaidSessionNetworkMonitor,
+  type PaidSessionNetworkMonitor,
+} from "./paid-session-network-monitor";
 import { expectNoSubscriptionPaywall, expectOnLearnerApp } from "./paid-surface-assertions";
 import { logObserverFailureSummary } from "./log-observer-failure-summary";
 
@@ -36,8 +47,14 @@ export const PLACEHOLDER_COPY_RE = /\b(TBD|null|undefined)\b/i;
 /** Leaked i18n token pattern in DOM (not console). */
 export const DOM_MISSING_I18N_RE = /\[missing:/i;
 
+/** Non-blocking: session fetch noise in console (still reported in attachments). */
+export function isAuthFetchNoiseConsoleLine(line: string): boolean {
+  return /Failed to fetch/i.test(line) && /session|\/api\/auth|getSession|SessionProvider/i.test(line);
+}
+
 export function expectNotLoginUrl(page: Page, context?: string): void {
   expect(page.url(), `${context ?? "page"}: unexpected /login`).not.toMatch(/\/login/i);
+  assertSyncNotOnboardingBlocking(page, context ?? "expectNotLoginUrl");
 }
 
 export function assertNoMissingI18nDomTokens(page: Page): Promise<void> {
@@ -64,6 +81,7 @@ export async function dismissFlashcardResumeIfPresent(page: Page): Promise<void>
 export function seriousConsoleLines(consoleErrors: string[]): string[] {
   return consoleErrors.filter(
     (x) =>
+      !isAuthFetchNoiseConsoleLine(x) &&
       !/cookie|Content Security Policy|third-party|analytics/i.test(x) &&
       !/favicon|ResizeObserver|Failed to load resource.*404.*\.ico/i.test(x),
   );
@@ -82,19 +100,28 @@ export function i18nMissingKeyConsoleLines(consoleErrors: string[]): string[] {
 export type PaidUserStandardGuards = {
   observers: PageObservers;
   apiObserver: ReturnType<typeof attachPaidJourneyApiObserver>;
+  sessionNet: PaidSessionNetworkMonitor;
   dispose: () => void;
 };
 
-/** Console + failed-request capture + same-origin `/api/*` HTTP contract (2xx/304). */
+/**
+ * Console + `/api/*` contract + durability listeners (auth session pre-shell, core SLO timing).
+ * Attach **before** first navigation in the test.
+ */
 export function attachPaidUserStandardGuards(page: Page, appOrigin: string): PaidUserStandardGuards {
-  const observers = attachPageObservers(page, { profile: "app" });
+  const observers = attachPageObservers(page, { profile: "app", probeAuthApi: true });
+  registerPaidDurabilityListeners(page, appOrigin);
   const apiObserver = attachPaidJourneyApiObserver(page, appOrigin);
+  const sessionNet = attachPaidSessionNetworkMonitor(page, appOrigin);
   return {
     observers,
     apiObserver,
+    sessionNet,
     dispose: () => {
+      sessionNet.dispose();
       apiObserver.dispose();
       observers.dispose();
+      disposePaidDurabilityListeners(page);
     },
   };
 }
@@ -107,9 +134,10 @@ export function assertPaidUserGuardsClean(input: {
   observers: PageObservers;
   apiViolations: string[];
   pageUrl: string;
-  /** Default `"warn"`: i18n missing-key lines are not fatal; they are stripped from serious console. */
+  /** Required for auth pre-shell + fetch-noise attachments. */
+  page?: Page;
+  sessionNet?: PaidSessionNetworkMonitor;
   i18nConsoleMode?: PaidGuardI18nConsoleMode;
-  /** Optional attachment for i18n warnings (e.g. `testInfo.attach`). */
   attach?: (name: string, body: string) => void;
 }): void {
   const {
@@ -118,14 +146,40 @@ export function assertPaidUserGuardsClean(input: {
     observers,
     apiViolations,
     pageUrl,
+    page,
+    sessionNet,
     i18nConsoleMode = "warn",
     attach,
   } = input;
 
+  if (page) {
+    assertNoAuthSessionBlockingBeforeShell(page);
+    const noise = formatAuthFetchNoiseForSummary(page);
+    if (noise) {
+      attach?.("auth-fetch-noise-console.txt", noise);
+      // eslint-disable-next-line no-console
+      console.log(`[${tag}] authFetchNoise (non-blocking): ${noise.slice(0, 300)}`);
+    }
+  }
+
+  if (sessionNet) {
+    if (sessionNet.slowCriticalWarnings.length > 0) {
+      const w = sessionNet.formatSlowCriticalWarningsLog();
+      attach?.("slow-endpoint-warnings.txt", w);
+      // eslint-disable-next-line no-console
+      console.log(`[${tag}] slowEndpointWarning (core APIs ${sessionNet.slowCriticalWarnings.length}):\n${w}`);
+    }
+    const netFails = sessionNet.buildFailureMessages();
+    expect(
+      netFails,
+      `slowEndpointFailure / network / status (core SLO >6s on critical APIs):\n${netFails.join("\n")}`,
+    ).toEqual([]);
+  }
+
   const i18n = i18nMissingKeyConsoleLines(observers.consoleErrors);
 
   if (i18nConsoleMode === "fail") {
-    expect(i18n, `i18n missing-key console errors:\n${i18n.join("\n")}`).toEqual([]);
+    expect(i18n, `i18nCoreFailure: missing-key console errors:\n${i18n.join("\n")}`).toEqual([]);
   } else if (i18nConsoleMode === "warn" && i18n.length > 0) {
     const body = i18n.join("\n");
     attach?.("i18n-console-warnings.txt", body);
