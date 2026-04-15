@@ -1,5 +1,6 @@
 node_modules
 dist
+build
 .DS_Store
 server/public
 vite.config.ts.*
@@ -34,6 +35,10 @@ temp/
 coverage/
 .nyc_output/
 
+# TypeScript / bundler caches (anywhere in repo)
+*.tsbuildinfo
+vite_stderr.txt
+
 # Local tooling / IDE
 .local/
 .idea/
@@ -52,6 +57,7 @@ reports/i18n-status.json
 
 # Large local DB dumps / Replit exports (use data/imports/ + REPLIT_IMPORT_DIR for checked-in samples)
 data/replit-exports/
+nursenest-core/data/replit-exports/
 
 # Local Replit Object Storage extract (upload source; never commit)
 /replit-export/
@@ -64,7 +70,9 @@ scripts/replit-export-audit-report.md
 scripts/replit-import/*-local.json
 scripts/replit-import/nursing-preview-output.json
 
-# Next.js build output (also cleaned by npm run clean:generated)
+# Next.js / Vite build output (also cleaned by npm run clean:generated)
+.next/
+out/
 nursenest-core/.next/
 
 # Optional local exports / scans (keep out of git)
@@ -72,9 +80,17 @@ artifacts/
 scan.txt
 hardcoded-strings-report.json
 attached_assets/
-attached_assets/
 *.mp4
+*.psd
+
+# Local scratch / accidental binaries (repo root)
+/a.out
+/XX0GPFNg
+/sedBZsw0b
+/free
+/maingit
 
 # Legacy extract + backup archives (never commit)
+.legacy-extract/
 external/
 *.tgz
