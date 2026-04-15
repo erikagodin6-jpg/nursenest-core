@@ -12,7 +12,7 @@ Production-oriented browser tests under `tests/e2e/`. The Playwright config live
 
 | Folder | Purpose |
 |--------|---------|
-| `setup/` | Auth setup projects (`auth-paid.setup.ts`, `auth-free.setup.ts`) — writes `tests/e2e/.auth/*.json` |
+| `setup/` | Auth setup (`auth.setup.ts` = paid seeded account, `auth-free.setup.ts` = free tier) — writes `tests/e2e/.auth/*.json` |
 | `helpers/` | Login, console/network observers, country selector, mobile drawer, env helpers |
 | `fixtures/` | Optional extended `test` (e.g. `observers.fixture.ts`) |
 | `public/` | Marketing / unauthenticated smoke |
@@ -29,7 +29,7 @@ Production-oriented browser tests under `tests/e2e/`. The Playwright config live
 
 - **`chromium`** — Default desktop Chrome; runs all `*.spec.ts` except files ignored per project (see config).
 - **`mobile`** — iPhone 12 viewport; runs `lesson-flows.mobile.spec.ts` only.
-- **`setup-paid-auth` + `chromium-paid`** — Registered only when `E2E_PAID_EMAIL` and `E2E_PAID_PASSWORD` are set. Setup logs in once; tests reuse `tests/e2e/.auth/paid-user.json` (override with `PLAYWRIGHT_PAID_AUTH_STATE`).
+- **`setup-paid-auth` + `chromium-paid`** — Registered when paid credentials exist: `E2E_PAID_EMAIL` + `E2E_PAID_PASSWORD`, or `PLAYWRIGHT_TEST_EMAIL` + `PLAYWRIGHT_TEST_PASSWORD` (see `helpers/paid-test-credentials.ts`). `auth.setup.ts` logs in once, asserts premium on `/app/lessons`, then saves `tests/e2e/.auth/paid-user.json` (override path with `PLAYWRIGHT_PAID_AUTH_STATE`).
 - **`setup-free-auth` + `chromium-free`** — Same pattern for free tier with `E2E_FREE_EMAIL` / `E2E_FREE_PASSWORD` and `tests/e2e/.auth/free-user.json` (`PLAYWRIGHT_FREE_AUTH_STATE`).
 
 Screenshots on failure and traces on first retry are enabled globally in config.
@@ -43,8 +43,9 @@ npx playwright test
 # Public smoke only
 npx playwright test tests/e2e/public
 
-# Paid user journey (needs env creds)
+# Paid user journey (seeded premium account; needs env creds)
 E2E_PAID_EMAIL=... E2E_PAID_PASSWORD=... npx playwright test --project=chromium-paid
+# or: PLAYWRIGHT_TEST_EMAIL=... PLAYWRIGHT_TEST_PASSWORD=... npx playwright test --project=chromium-paid
 
 # Freemium / free tier (needs env creds)
 E2E_FREE_EMAIL=... E2E_FREE_PASSWORD=... npx playwright test --project=chromium-free

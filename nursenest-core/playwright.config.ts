@@ -1,12 +1,11 @@
 import { defineConfig, devices } from "@playwright/test";
 import { FREE_USER_AUTH_FILE, PAID_USER_AUTH_FILE } from "./tests/e2e/helpers/auth-state-paths";
+import { hasPaidTestCredentials } from "./tests/e2e/helpers/paid-test-credentials";
 
 const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
 
 /** Paid E2E projects only when creds are present — avoids loading missing `storageState` when setup would skip. */
-const paidAuthEnabled = Boolean(
-  process.env.E2E_PAID_EMAIL?.trim() && process.env.E2E_PAID_PASSWORD,
-);
+const paidAuthEnabled = hasPaidTestCredentials();
 
 const freeAuthEnabled = Boolean(
   process.env.E2E_FREE_EMAIL?.trim() && process.env.E2E_FREE_PASSWORD,
@@ -16,7 +15,7 @@ const paidProjects = paidAuthEnabled
   ? ([
       {
         name: "setup-paid-auth",
-        testMatch: /tests\/e2e\/setup\/auth-paid\.setup\.ts$/,
+        testMatch: /tests\/e2e\/setup\/auth\.setup\.ts$/,
       },
       {
         name: "chromium-paid",

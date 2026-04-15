@@ -2,10 +2,10 @@
  * Paid-user end-to-end smoke: session check, lessons, flashcards, CAT, nav, account.
  *
  * Auth: run with project `chromium-paid` (depends on `setup-paid-auth`). Login runs once in
- * `tests/e2e/setup/auth-paid.setup.ts`; cookies/localStorage are saved to `tests/e2e/.auth/paid-user.json` and reused.
+ * `tests/e2e/setup/auth.setup.ts`; cookies/localStorage are saved to `tests/e2e/.auth/paid-user.json` and reused.
  *
- * Setup env (for `setup-paid-auth` only):
- *   E2E_PAID_EMAIL, E2E_PAID_PASSWORD
+ * Setup env (for `setup-paid-auth` only) — see `helpers/paid-test-credentials.ts`:
+ *   E2E_PAID_EMAIL + E2E_PAID_PASSWORD, or PLAYWRIGHT_TEST_EMAIL + PLAYWRIGHT_TEST_PASSWORD
  *
  * Optional:
  *   BASE_URL (default http://127.0.0.1:3000)
@@ -88,7 +88,7 @@ test.describe("Paid user smoke (serial)", () => {
         const url = page.url();
         if (/\/login/i.test(url)) {
           throw new Error(
-            "Unauthenticated — run with --project=chromium-paid so setup-paid-auth saves storage (needs E2E_PAID_EMAIL / E2E_PAID_PASSWORD).",
+            "Unauthenticated — run with --project=chromium-paid so setup-paid-auth saves storage (needs paid credentials: E2E_PAID_* or PLAYWRIGHT_TEST_*).",
           );
         }
         await expect(page).toHaveURL(/\/app(\/|$)/);

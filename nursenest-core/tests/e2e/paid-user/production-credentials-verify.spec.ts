@@ -1,6 +1,6 @@
 /**
  * On-demand production invalid-credentials copy check (not part of default CI).
- * For valid-account login + paid smoke, use `tests/e2e/setup/auth-paid.setup.ts` + `paid-user-smoke.spec.ts` with E2E_PAID_*.
+ * For valid-account login + paid smoke, use `tests/e2e/setup/auth.setup.ts` + `paid-user-smoke.spec.ts` with paid test credentials (see `helpers/paid-test-credentials.ts`).
  *
  *   BASE_URL=https://www.nursenest.ca npx playwright test tests/e2e/paid-user/production-credentials-verify.spec.ts --project=chromium
  */

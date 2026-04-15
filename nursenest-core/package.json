@@ -131,7 +131,7 @@
     "qa:lesson-flows": "tsx scripts/qa-lesson-flows.mts",
     "qa:lesson-flows:browser": "playwright test tests/e2e/lessons/lesson-flows.spec.ts tests/e2e/lessons/lesson-flows.mobile.spec.ts",
     "qa:cat-entrypoints:browser": "playwright test tests/e2e/cat/cat-entrypoints.spec.ts",
-    "qa:paid-smoke:browser": "node -e \"if(!process.env.E2E_PAID_EMAIL?.trim()||!process.env.E2E_PAID_PASSWORD){console.error('qa:paid-smoke:browser requires E2E_PAID_EMAIL and E2E_PAID_PASSWORD');process.exit(1)}\" && playwright test --project=chromium-paid",
+    "qa:paid-smoke:browser": "node -e \"const a=process.env.E2E_PAID_EMAIL?.trim(),b=process.env.E2E_PAID_PASSWORD,c=process.env.PLAYWRIGHT_TEST_EMAIL?.trim(),d=process.env.PLAYWRIGHT_TEST_PASSWORD;if(!(a&&b||c&&d)){console.error('qa:paid-smoke:browser requires E2E_PAID_EMAIL+E2E_PAID_PASSWORD or PLAYWRIGHT_TEST_EMAIL+PLAYWRIGHT_TEST_PASSWORD');process.exit(1)}\" && playwright test --project=chromium-paid",
     "qa:freemium:browser": "node -e \"if(!process.env.E2E_FREE_EMAIL?.trim()||!process.env.E2E_FREE_PASSWORD){console.error('qa:freemium:browser requires E2E_FREE_EMAIL and E2E_FREE_PASSWORD');process.exit(1)}\" && playwright test --project=chromium-free",
     "qa:lesson-flows:all": "npm run qa:lesson-flows && npm run qa:lesson-flows:browser",
     "test:internal-links-audit": "tsx --test scripts/audit-internal-links.test.ts",
