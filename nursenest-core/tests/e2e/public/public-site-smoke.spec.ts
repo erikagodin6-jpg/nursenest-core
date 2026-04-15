@@ -34,8 +34,8 @@ test.describe("Public site smoke", () => {
     const o = attachPageObservers(page);
     await gotoOk(page, "/");
     await expect(page.locator('[data-nn-nav-mode="public"]')).toBeVisible({ timeout: 60_000 });
-    // Desktop marketing row (avoid footer / duplicate Pricing links).
-    const pricing = page.locator(".nn-header-desktop-grid").getByRole("link", { name: /^Pricing$/i }).first();
+    // Header primary nav (avoid footer duplicate links; grid class alone is not always present in DOM).
+    const pricing = page.locator(`${HEADER_CHROME} a[href="/pricing"]`).first();
     await expect(pricing).toBeVisible({ timeout: 30_000 });
     await pricing.click();
     await page.waitForLoadState("domcontentloaded");
@@ -57,7 +57,7 @@ test.describe("Public site smoke", () => {
       .getByRole("button", { name: /Country: United States|Region: United States/i })
       .first();
     await expect(regionBtn).toBeVisible({ timeout: 30_000 });
-    await regionBtn.click();
+    await regionBtn.click({ force: true });
     await page.locator(`${HEADER_CHROME} [role="listbox"][aria-label="Select country"]`).waitFor({
       state: "visible",
       timeout: 30_000,

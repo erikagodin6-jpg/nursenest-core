@@ -40,8 +40,9 @@ Screenshots on failure and traces on first retry are enabled globally in config.
 # All default specs (chromium project), local dev
 npx playwright test
 
-# Public smoke only
-npx playwright test tests/e2e/public
+# Public smoke only (fast core routes + observer attachments: `tests/e2e/public/smoke.spec.ts`)
+npx playwright test tests/e2e/public/smoke.spec.ts
+# or: npx playwright test tests/e2e/public
 
 # Paid user journey (seeded premium account; needs env creds)
 E2E_PAID_EMAIL=... E2E_PAID_PASSWORD=... npx playwright test --project=chromium-paid

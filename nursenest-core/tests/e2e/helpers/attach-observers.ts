@@ -16,6 +16,8 @@ function shouldIgnoreConsolePublic(text: string): boolean {
     ) ||
     /Failed to load resource.*404.*\.ico/i.test(text) ||
     /\[auth\]\[error\]|MissingSecret|errors\.authjs\.dev#missingsecret/i.test(text) ||
+    /** Auth.js / Next dev: stack lines are separate console "error" messages without the header line. */
+    /@auth_core|@01rp_@auth_core|at assertConfig \(.*auth|at Auth \(.*auth/i.test(text) ||
     /\[marketing-i18n\] missing key/i.test(text) ||
     /hydration mismatch|hydrated but some attributes of the server rendered HTML/i.test(text)
   );

@@ -4,6 +4,7 @@
  *
  * Run: `npx playwright test tests/e2e/public/smoke.spec.ts`
  * Needs app: `BASE_URL=http://127.0.0.1:3000 npm run dev`
+ * Optional: `AUTH_SECRET` / `NEXTAUTH_SECRET` so Auth.js does not spam the console in local dev.
  */
 import { expect, test, type Page, type TestInfo } from "@playwright/test";
 import { attachPageObservers, logObserverDiagnostics, type PageObservers } from "../helpers/attach-observers";
@@ -78,17 +79,29 @@ function slugify(s: string) {
 
 /**
  * Dev/local runs often emit Auth.js + Next dev "Server" styled logs when `AUTH_SECRET` (or full auth config)
- * is missing — not a public-page regression. We still attach **raw** console lines to the test report;
- * assertions use this filter so smoke stays useful without tuning every dev machine.
+ * is missing — not a public-page regression. Set `AUTH_SECRET` / `NEXTAUTH_SECRET` for a clean console.
+ *
+ * We still attach **raw** console lines to the test report; assertions use this filter.
+ * Generic "500" resource lines are dropped only when the same capture already shows Auth/session noise
+ * (so unrelated asset 500s in a healthy auth env still fail the test).
  */
 function seriousPublicSmokeConsoleErrors(errors: string[]): string[] {
+  const hasAuthMisconfigNoise = errors.some(
+    (t) =>
+      /assertConfig|@auth_core|authjs\.dev#autherror/i.test(t) ||
+      /ClientFetchError:.*server configuration|There was a problem with the server configuration/i.test(t),
+  );
   return errors.filter((t) => {
     if (/assertConfig|@auth_core|authjs\.dev#autherror/i.test(t)) return false;
     if (/ClientFetchError:.*server configuration|There was a problem with the server configuration/i.test(t)) {
       return false;
     }
-    // Session fetch 500s often log without the URL in the same string as Auth.js misconfiguration.
-    if (/Failed to load resource: the server responded with a status of 500/i.test(t)) return false;
+    if (
+      hasAuthMisconfigNoise &&
+      /Failed to load resource: the server responded with a status of 500/i.test(t)
+    ) {
+      return false;
+    }
     if (/background:.*light-dark.*Server\s*$/i.test(t) || /at Auth \(.*@auth_core/i.test(t)) return false;
     return true;
   });
