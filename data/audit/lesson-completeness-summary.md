@@ -1,6 +1,6 @@
 # Lesson completeness audit
 
-Generated: 2026-04-14T22:38:54.184Z
+Generated: 2026-04-14T22:53:12.970Z
 
 ## What was scanned
 - Bundled pathway lesson catalog (merged JSON: main catalog, allied-bundled, new-grad transition, scoped-gold prepend).
@@ -14,9 +14,11 @@ Generated: 2026-04-14T22:38:54.184Z
 - **Overall** = 0.45×structural + 0.35×educational + 0.12×links + 0.08×localization.
 - **Strictness**: A lesson is not “complete” merely because sections exist or SEO fields pass padding.
 - **Nursing-first reporting**: Pathways sorted with nursing tiers before allied in rollups and priority queue.
+- **Split status model**: `contentReadinessStatus` (English spine) and `localizationReadinessStatus` (overlay depth) are reported alongside legacy `status` — scores are unchanged; overallScore still weights localization at 0.08.
 
 ## Totals (from lesson-completeness-summary.json)
 - Lessons scanned: **906**
+- **Legacy combined `status`** (unchanged thresholds):
 - production_ready: **0**
 - usable_but_thin: **1**
 - structurally_incomplete: **364**
@@ -24,14 +26,22 @@ Generated: 2026-04-14T22:38:54.184Z
 - localization_incomplete: **286**
 - not_routable: **0**
 - duplicate_or_unclear_source: **255**
+- **Content readiness (English spine)** — production_ready_en: **4**, usable_but_thin_en: **283**, structurally_incomplete: **364**, content_incomplete: **0**, not_routable: **0**, duplicate_or_unclear_source: **255**.
+- **Localization readiness (overlays)** — localized_ready: **16**, partially_localized: **0**, localization_incomplete: **287**, english_only: **603**, localized_shell_only: **0**.
+- **Good English lessons not yet localization-complete** (`production_ready_en` and not `localized_ready`): **4**
+- **Blocked mainly by localization** (legacy `status === localization_incomplete`): **286**
+
+## Good English lessons that are not yet localization-complete
+Lessons with **`contentReadinessStatus === production_ready_en`** but **`localizationReadinessStatus !== localized_ready`** (overlays missing or only one scanned locale). These have a strong English teaching spine under the same depth gates as before; remaining work is primarily **educational overlay expansion** (or documenting English-primary intent), not fixing a broken lesson shell.
+- **Count**: **4**
 
 ## Top failing pathways (nursing-first, by volume)
-- **ca-rn-nclex-rn** (canada/rn/nclex-rn): 188 lessons · avg score 66.4 · ready 0 · thin 0 · structural gaps 42
-- **us-rn-nclex-rn** (us/rn/nclex-rn): 187 lessons · avg score 34.5 · ready 0 · thin 0 · structural gaps 134
-- **us-np-fnp** (us/np/fnp): 161 lessons · avg score 69.3 · ready 0 · thin 1 · structural gaps 26
-- **ca-rpn-rex-pn** (canada/rpn/rex-pn): 150 lessons · avg score 48.9 · ready 0 · thin 0 · structural gaps 61
-- **us-lpn-nclex-pn** (us/lpn/nclex-pn): 150 lessons · avg score 48.9 · ready 0 · thin 0 · structural gaps 61
-- **us-rn-new-grad-transition** (us/rn/new-grad-transition): 40 lessons · avg score 27.7 · ready 0 · thin 0 · structural gaps 40
+- **ca-rn-nclex-rn** (canada/rn/nclex-rn): 188 lessons · avg score 66.4 · legacy ready 0 · **production_ready_en 0** · thin 0 · structural gaps 42
+- **us-rn-nclex-rn** (us/rn/nclex-rn): 187 lessons · avg score 34.5 · legacy ready 0 · **production_ready_en 0** · thin 0 · structural gaps 134
+- **us-np-fnp** (us/np/fnp): 161 lessons · avg score 69.3 · legacy ready 0 · **production_ready_en 4** · thin 1 · structural gaps 26
+- **ca-rpn-rex-pn** (canada/rpn/rex-pn): 150 lessons · avg score 48.9 · legacy ready 0 · **production_ready_en 0** · thin 0 · structural gaps 61
+- **us-lpn-nclex-pn** (us/lpn/nclex-pn): 150 lessons · avg score 48.9 · legacy ready 0 · **production_ready_en 0** · thin 0 · structural gaps 61
+- **us-rn-new-grad-transition** (us/rn/new-grad-transition): 40 lessons · avg score 27.7 · legacy ready 0 · **production_ready_en 0** · thin 0 · structural gaps 40
 
 ## Top systemic issues (reason histogram)
 - no_educational_overlay_in_scanned_locales: **577**

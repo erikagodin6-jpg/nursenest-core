@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T22:38:54.184Z",
+  "generatedAt": "2026-04-14T22:53:12.970Z",
   "batchFixHints": [
     "ca-rn-nclex-rn: ≥45% of lessons missing core_concept_depth bucket — likely systematic spine depth gap.",
     "ca-rn-nclex-rn: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only.",
@@ -12,6 +12,30 @@
     "us-lpn-nclex-pn: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only.",
     "us-rn-new-grad-transition: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only."
   ],
+  "statusModel": {
+    "legacyCombinedStatusField": "status = deriveStatus({ overallScore, structuralScore, educationalScore, localizationScore, linkScore, publicComplete, routable, duplicateCandidate, placeholderFlags, totalWords, sectionCount }) unchanged; overallScore still uses SCORE_WEIGHTS including localization.",
+    "contentReadinessStatus": "English/structural/educational spine. production_ready_en uses contentOnlyWeightedOverall (structural/educational/link only, renormalized) plus the same educational/link/word gates as before — overlay does not decide this label.",
+    "localizationReadinessStatus": "Overlay key depth in scanned non-EN educational-overlays/*/lessons.json. Strong EN spine + 0 overlays → localization_incomplete; weaker spine + 0 overlays → english_only."
+  },
+  "statusDimensions": {
+    "contentReadinessTotals": {
+      "production_ready_en": 4,
+      "usable_but_thin_en": 283,
+      "content_incomplete": 0,
+      "structurally_incomplete": 364,
+      "not_routable": 0,
+      "duplicate_or_unclear_source": 255
+    },
+    "localizationReadinessTotals": {
+      "localized_ready": 16,
+      "partially_localized": 0,
+      "localized_shell_only": 0,
+      "english_only": 603,
+      "localization_incomplete": 287
+    },
+    "goodEnglishLessonsNotLocalizationComplete": 4,
+    "blockedMainlyByLocalizationLegacyStatus": 286
+  },
   "lessonsThatExistButNotComplete": {
     "description": "Catalog-present lessons (bundled JSON) that are not classified production_ready — includes thin, structurally gated, localization-limited, non-routable pathway, or duplicate slug issues.",
     "catalogLessonRows": 906,
@@ -28,6 +52,7 @@
   },
   "methodology": {
     "dataSource": "Bundled pathway catalog (catalog.json + allied-bundled + new-grad + scoped-gold merge via getCatalogPathwayLessonsSync). Does not enumerate Prisma-only lessons.",
+    "legacyStatus": "status = deriveStatus({ overallScore, structuralScore, educationalScore, localizationScore, linkScore, publicComplete, routable, duplicateCandidate, placeholderFlags, totalWords, sectionCount }) unchanged; overallScore still uses SCORE_WEIGHTS including localization.",
     "scoringWeights": {
       "structural": 0.45,
       "educational": 0.35,
@@ -55,6 +80,21 @@
     "localization_incomplete": 286,
     "not_routable": 0,
     "duplicate_or_unclear_source": 255,
+    "contentReadinessByStatus": {
+      "production_ready_en": 4,
+      "usable_but_thin_en": 283,
+      "content_incomplete": 0,
+      "structurally_incomplete": 364,
+      "not_routable": 0,
+      "duplicate_or_unclear_source": 255
+    },
+    "localizationReadinessByStatus": {
+      "localized_ready": 16,
+      "partially_localized": 0,
+      "localized_shell_only": 0,
+      "english_only": 603,
+      "localization_incomplete": 287
+    },
     "byPathway": {
       "ca-rn-nclex-rn": 188,
       "us-rn-nclex-rn": 187,

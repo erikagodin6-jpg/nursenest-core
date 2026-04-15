@@ -297,12 +297,23 @@ function main() {
     .slice(0, 20)
     .map(([reason, count]) => ({ reason, count }));
 
+  const zeroScoreDelta =
+    improvedOverall === 0 &&
+    regressedOverall === 0 &&
+    comparisons.length > 0 &&
+    unchangedOverall === comparisons.length;
+
   const summaryJson = {
     generatedAt: new Date().toISOString(),
     baseline: {
       ref: BASELINE_REF,
       auditGeneratedAt: baseline.generatedAt,
       source: `git show ${BASELINE_REF}:data/audit/lesson-completeness-audit.json`,
+      ...(zeroScoreDelta
+        ? {
+            note: "All overallScore deltas are 0 — baseline commit likely reflects the same catalog/audit generation as “after”. Use LESSON_AUDIT_BASELINE_REF to point at an older commit (pre–batch-1 enrichment) to measure lift, or rely on contentReadinessStatus columns when baseline JSON lacks them.",
+          }
+        : {}),
     },
     after: {
       auditGeneratedAt: after.generatedAt,
@@ -365,6 +376,8 @@ function main() {
           title: r.title,
           routable: r.routable,
           status: r.status,
+          contentReadinessStatus: r.contentReadinessStatus,
+          localizationReadinessStatus: r.localizationReadinessStatus,
           overallScore: r.overallScore,
           reasons: r.reasons.slice(0, 8),
         })),
@@ -380,6 +393,10 @@ function main() {
   md.push(`Generated: ${summaryJson.generatedAt}`);
   md.push(``);
   md.push(`## Baseline vs after`);
+  const baselineNote = (summaryJson.baseline as { note?: string }).note;
+  if (baselineNote) {
+    md.push(`> ${baselineNote}`);
+  }
   md.push(
     `- **Baseline audit**: \`${summaryJson.baseline.source}\` (generated ${summaryJson.baseline.auditGeneratedAt})`,
   );

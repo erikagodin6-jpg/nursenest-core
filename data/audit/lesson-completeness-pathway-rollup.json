@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T22:38:54.184Z",
+  "generatedAt": "2026-04-14T22:53:12.970Z",
   "pathways": [
     {
       "pathwayId": "ca-rn-nclex-rn",
@@ -15,6 +15,8 @@
       "localizationIncomplete": 95,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
+      "productionReadyEn": 0,
+      "goodEnglishNotLocalizationComplete": 0,
       "averageOverallScore": 66.4,
       "topReasons": [
         {
@@ -49,7 +51,17 @@
           "reason": "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
           "count": 25
         }
-      ]
+      ],
+      "contentReadinessBreakdown": {
+        "duplicate_or_unclear_source": 51,
+        "structurally_incomplete": 42,
+        "usable_but_thin_en": 95
+      },
+      "localizationReadinessBreakdown": {
+        "english_only": 87,
+        "localized_ready": 6,
+        "localization_incomplete": 95
+      }
     },
     {
       "pathwayId": "us-rn-nclex-rn",
@@ -65,6 +77,8 @@
       "localizationIncomplete": 2,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
+      "productionReadyEn": 0,
+      "goodEnglishNotLocalizationComplete": 0,
       "averageOverallScore": 34.5,
       "topReasons": [
         {
@@ -99,7 +113,17 @@
           "reason": "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
           "count": 35
         }
-      ]
+      ],
+      "contentReadinessBreakdown": {
+        "duplicate_or_unclear_source": 51,
+        "structurally_incomplete": 134,
+        "usable_but_thin_en": 2
+      },
+      "localizationReadinessBreakdown": {
+        "english_only": 179,
+        "localized_ready": 6,
+        "localization_incomplete": 2
+      }
     },
     {
       "pathwayId": "us-np-fnp",
@@ -115,6 +139,8 @@
       "localizationIncomplete": 83,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
+      "productionReadyEn": 4,
+      "goodEnglishNotLocalizationComplete": 4,
       "averageOverallScore": 69.3,
       "topReasons": [
         {
@@ -149,7 +175,18 @@
           "reason": "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
           "count": 9
         }
-      ]
+      ],
+      "contentReadinessBreakdown": {
+        "duplicate_or_unclear_source": 51,
+        "structurally_incomplete": 26,
+        "production_ready_en": 4,
+        "usable_but_thin_en": 80
+      },
+      "localizationReadinessBreakdown": {
+        "english_only": 75,
+        "localized_ready": 2,
+        "localization_incomplete": 84
+      }
     },
     {
       "pathwayId": "ca-rpn-rex-pn",
@@ -165,6 +202,8 @@
       "localizationIncomplete": 38,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
+      "productionReadyEn": 0,
+      "goodEnglishNotLocalizationComplete": 0,
       "averageOverallScore": 48.9,
       "topReasons": [
         {
@@ -199,7 +238,17 @@
           "reason": "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
           "count": 34
         }
-      ]
+      ],
+      "contentReadinessBreakdown": {
+        "duplicate_or_unclear_source": 51,
+        "structurally_incomplete": 61,
+        "usable_but_thin_en": 38
+      },
+      "localizationReadinessBreakdown": {
+        "english_only": 111,
+        "localized_ready": 1,
+        "localization_incomplete": 38
+      }
     },
     {
       "pathwayId": "us-lpn-nclex-pn",
@@ -215,6 +264,8 @@
       "localizationIncomplete": 38,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
+      "productionReadyEn": 0,
+      "goodEnglishNotLocalizationComplete": 0,
       "averageOverallScore": 48.9,
       "topReasons": [
         {
@@ -249,7 +300,17 @@
           "reason": "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
           "count": 36
         }
-      ]
+      ],
+      "contentReadinessBreakdown": {
+        "duplicate_or_unclear_source": 51,
+        "structurally_incomplete": 61,
+        "usable_but_thin_en": 38
+      },
+      "localizationReadinessBreakdown": {
+        "english_only": 111,
+        "localized_ready": 1,
+        "localization_incomplete": 38
+      }
     },
     {
       "pathwayId": "us-rn-new-grad-transition",
@@ -265,6 +326,8 @@
       "localizationIncomplete": 0,
       "notRoutable": 0,
       "duplicateOrUnclear": 0,
+      "productionReadyEn": 0,
+      "goodEnglishNotLocalizationComplete": 0,
       "averageOverallScore": 27.7,
       "topReasons": [
         {
@@ -299,7 +362,13 @@
           "reason": "missing_educational:safety_or_priority_mentioned",
           "count": 18
         }
-      ]
+      ],
+      "contentReadinessBreakdown": {
+        "structurally_incomplete": 40
+      },
+      "localizationReadinessBreakdown": {
+        "english_only": 40
+      }
     },
     {
       "pathwayId": "us-allied-core",
@@ -315,6 +384,8 @@
       "localizationIncomplete": 15,
       "notRoutable": 0,
       "duplicateOrUnclear": 0,
+      "productionReadyEn": 0,
+      "goodEnglishNotLocalizationComplete": 0,
       "averageOverallScore": 77.3,
       "topReasons": [
         {
@@ -329,7 +400,13 @@
           "reason": "isolated_no_internal_links_or_related_refs",
           "count": 15
         }
-      ]
+      ],
+      "contentReadinessBreakdown": {
+        "usable_but_thin_en": 15
+      },
+      "localizationReadinessBreakdown": {
+        "localization_incomplete": 15
+      }
     },
     {
       "pathwayId": "ca-allied-core",
@@ -345,6 +422,8 @@
       "localizationIncomplete": 15,
       "notRoutable": 0,
       "duplicateOrUnclear": 0,
+      "productionReadyEn": 0,
+      "goodEnglishNotLocalizationComplete": 0,
       "averageOverallScore": 77.3,
       "topReasons": [
         {
@@ -359,7 +438,13 @@
           "reason": "isolated_no_internal_links_or_related_refs",
           "count": 15
         }
-      ]
+      ],
+      "contentReadinessBreakdown": {
+        "usable_but_thin_en": 15
+      },
+      "localizationReadinessBreakdown": {
+        "localization_incomplete": 15
+      }
     }
   ]
 }

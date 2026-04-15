@@ -1,32 +1,37 @@
 # Lesson fix batch 1 — impact summary
 
-Generated: 2026-04-14T22:39:06.777Z
+Generated: 2026-04-15T02:02:38.716Z
 
 ## Baseline vs after
-- **Baseline audit**: `git show HEAD~1:data/audit/lesson-completeness-audit.json` (generated 2026-04-14T22:09:20.173Z)
-- **After audit**: `data/audit/lesson-completeness-audit.json` (generated 2026-04-14T22:38:54.184Z)
+> All overallScore deltas are 0 — baseline commit likely reflects the same catalog/audit generation as “after”. Use LESSON_AUDIT_BASELINE_REF to point at an older commit (pre–batch-1 enrichment) to measure lift, or rely on contentReadinessStatus columns when baseline JSON lacks them.
+- **Baseline audit**: `git show HEAD~1:data/audit/lesson-completeness-audit.json` (generated 2026-04-14T22:38:54.184Z)
+- **After audit**: `data/audit/lesson-completeness-audit.json` (generated 2026-04-14T22:53:12.970Z)
 - **Batch 1 lessons compared**: 101
 - **Batch-1 report note**: Batch-1 report row count / unique IDs differ from lessonsFixed; comparisons use all unique lessonIds in results.
 - **Report rows / lessonsFixed field**: 101 rows · lessonsFixed=100 · unique IDs=101
 
 ## Score movement (overall)
-- Improved: **101**
+- Improved: **0**
 - Regressed: **0**
-- Unchanged: **0**
-- Average overall score lift: **63.71** points
+- Unchanged: **101**
+- Average overall score lift: **0** points
 
 ## Status
-- Status class changed: **100** lessons
-- Now `production_ready`: **0**
-- Still thin/incomplete (usable_but_thin, structurally_incomplete, content_incomplete, localization_incomplete): **100**
+- Status class changed: **0** lessons
+- Now `production_ready` (legacy combined): **0**
+- Now `production_ready_en` (content spine): **1**
+- **Strong EN, localization backlog** (`production_ready_en` and not `localized_ready`): **1**
+- Still thin/content-incomplete on EN spine (`usable_but_thin_en`, `content_incomplete`, `structurally_incomplete`): **99**
+- `duplicate_or_unclear_source` on content dimension: **1**
+- Still thin/incomplete (legacy: usable_but_thin, structurally_incomplete, content_incomplete, localization_incomplete): **100**
 - Non–production-ready (any status except `production_ready`): **101**
 
-## Status breakdown after audit (batch-1 set)
+## Status breakdown after audit (batch-1 set, legacy `status`)
 - `localization_incomplete`: **99**
 - `usable_but_thin`: **1**
 - `duplicate_or_unclear_source`: **1**
 
-> production_ready requires overall≥84, publicComplete, educational≥72, links≥55, words≥500 (see deriveStatus). Overlay absence caps localization and often blocks production_ready.
+> Legacy `status` still uses deriveStatus (overallScore includes localization weight). `production_ready_en` uses content-only weighting — see lesson-completeness-summary.json statusModel.
 
 ## Top reasons remaining after batch 1 (among the batch-1 lesson set)
 - no_educational_overlay_in_scanned_locales: **101**

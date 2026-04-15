@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T22:39:06.786Z",
+  "generatedAt": "2026-04-15T02:02:38.734Z",
   "selection": "Post-batch-1 audit rows; same ordering as lesson-completeness-priority-queue (nursing before allied, larger pathways, routable preferred, lowest overallScore); excludes batch-1 lessonIds and production_ready lessons.",
   "batch1LessonIdsExcluded": 101,
   "candidates": [
@@ -10,6 +10,8 @@
       "title": "Cardiac Tamponade (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (24 < 50 words).",
@@ -29,6 +31,8 @@
       "title": "Phlebostatic Axis (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (34 < 50 words).",
@@ -48,6 +52,8 @@
       "title": "Pulmonary Embolism (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (29 < 50 words).",
@@ -67,6 +73,8 @@
       "title": "Diabetes Self-Management Teaching (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "localized_ready",
       "overallScore": 15.1,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
@@ -86,6 +94,8 @@
       "title": "Sepsis Early Recognition (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "localized_ready",
       "overallScore": 15.1,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
@@ -105,6 +115,8 @@
       "title": "Acute Coronary Syndrome (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 16.1,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (23 < 50 words).",
@@ -124,6 +136,8 @@
       "title": "Atrial Fibrillation (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 16.1,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
@@ -143,6 +157,8 @@
       "title": "Deep Vein Thrombosis (DVT): Prevention and Nursing Management (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 16.1,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
@@ -162,6 +178,8 @@
       "title": "Defibrillation vs Synchronized Cardioversion (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 16.1,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (23 < 50 words).",
@@ -181,6 +199,8 @@
       "title": "Heart Failure (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 16.1,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (32 < 50 words).",
@@ -200,6 +220,8 @@
       "title": "Hypertensive Encephalopathy (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 16.1,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (28 < 50 words).",
@@ -219,6 +241,8 @@
       "title": "Infective Endocarditis (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 16.1,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (32 < 50 words).",
@@ -238,6 +262,8 @@
       "title": "Myocardial Infarction (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 16.1,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (24 < 50 words).",
@@ -257,6 +283,8 @@
       "title": "Peripheral Artery Disease (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 16.1,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
@@ -276,6 +304,8 @@
       "title": "Diuretics & Electrolyte Shifts (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "localized_ready",
       "overallScore": 20.7,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
@@ -295,6 +325,8 @@
       "title": "OB emergencies (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 22,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (33 < 50 words).",
@@ -314,6 +346,8 @@
       "title": "Pediatric triage & dehydration (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 22,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (33 < 50 words).",
@@ -333,6 +367,8 @@
       "title": "Cardiovascular prioritization for Canadian NCLEX-RN",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 33.6,
       "reasons": [
         "Section \"introduction\" below minimum word count (101 < 180).",
@@ -352,6 +388,8 @@
       "title": "Dysrhythmias (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 33.6,
       "reasons": [
         "Section \"introduction\" below minimum word count (114 < 180).",
@@ -371,6 +409,8 @@
       "title": "Insulin & hypoglycemia (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 33.6,
       "reasons": [
         "Section \"introduction\" below minimum word count (116 < 180).",
@@ -390,6 +430,8 @@
       "title": "Antibiotics (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 34.3,
       "reasons": [
         "Section \"introduction\" below minimum word count (119 < 180).",
@@ -409,6 +451,8 @@
       "title": "Asthma (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 37.2,
       "reasons": [
         "Section \"introduction\" below minimum word count (134 < 180).",
@@ -428,6 +472,8 @@
       "title": "Potassium imbalance (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 37.2,
       "reasons": [
         "Section \"introduction\" below minimum word count (111 < 180).",
@@ -447,6 +493,8 @@
       "title": "Pulmonary embolism (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (146 < 180).",
@@ -466,6 +514,8 @@
       "title": "Angina (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (138 < 180).",
@@ -485,6 +535,8 @@
       "title": "Hypertension (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (112 < 180).",
@@ -504,6 +556,8 @@
       "title": "Pneumonia (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (136 < 180).",
@@ -523,6 +577,8 @@
       "title": "COPD & respiratory basics (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (136 < 180).",
@@ -542,6 +598,8 @@
       "title": "Acid–base disorders (advanced) (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (87 < 180).",
@@ -561,6 +619,8 @@
       "title": "Sodium imbalance (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (123 < 180).",
@@ -580,6 +640,8 @@
       "title": "Pain management (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (173 < 180).",
@@ -599,6 +661,8 @@
       "title": "Delegation & assignment (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 38.1,
       "reasons": [
         "Section \"introduction\" below minimum word count (135 < 180).",
@@ -618,6 +682,8 @@
       "title": "Myocardial infarction (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 39.9,
       "reasons": [
         "Section \"introduction\" below minimum word count (119 < 180).",
@@ -637,6 +703,8 @@
       "title": "Shock (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 39.9,
       "reasons": [
         "Section \"introduction\" below minimum word count (129 < 180).",
@@ -656,6 +724,8 @@
       "title": "ARDS (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 39.9,
       "reasons": [
         "Section \"introduction\" below minimum word count (121 < 180).",
@@ -675,6 +745,8 @@
       "title": "ABG interpretation (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 39.9,
       "reasons": [
         "Section \"introduction\" below minimum word count (123 < 180).",
@@ -694,6 +766,8 @@
       "title": "Infection control (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 39.9,
       "reasons": [
         "Section \"introduction\" below minimum word count (165 < 180).",
@@ -713,6 +787,8 @@
       "title": "Anticoagulants (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 39.9,
       "reasons": [
         "Section \"introduction\" below minimum word count (139 < 180).",
@@ -732,6 +808,8 @@
       "title": "Fluid deficit vs excess (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 39.9,
       "reasons": [
         "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
@@ -751,6 +829,8 @@
       "title": "Prioritization, ABCs & safety (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 39.9,
       "reasons": [
         "Section \"introduction\" below minimum word count (150 < 180).",
@@ -770,6 +850,8 @@
       "title": "General nursing clinical judgment (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 39.9,
       "reasons": [
         "Section \"introduction\" below minimum word count (115 < 180).",
@@ -789,6 +871,8 @@
       "title": "Sepsis (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "localized_ready",
       "overallScore": 42.7,
       "reasons": [
         "Section \"introduction\" below minimum word count (149 < 180).",
@@ -808,6 +892,8 @@
       "title": "Heart failure (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "localized_ready",
       "overallScore": 44.5,
       "reasons": [
         "Section \"introduction\" below minimum word count (130 < 180).",
@@ -827,6 +913,8 @@
       "title": "Fluid balance & IV therapy judgment (NCLEX-RN, Canada)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 49.4,
       "reasons": [
         "Legacy section \"exam_relevance\" is below the minimum depth (24 < 30 words).",
@@ -843,6 +931,8 @@
       "title": "Pulmonary embolism: recognition (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (69 < 100).",
@@ -856,6 +946,8 @@
       "title": "Atrial fibrillation: stroke prevention (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (65 < 100).",
@@ -869,6 +961,8 @@
       "title": "Pneumonia (CAP): nursing priorities (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (40 < 100).",
@@ -882,6 +976,8 @@
       "title": "Upper GI bleed: priorities (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (40 < 100).",
@@ -895,6 +991,8 @@
       "title": "Acute kidney injury: nursing surveillance (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (26 < 100).",
@@ -908,6 +1006,8 @@
       "title": "Meningitis: emergency recognition (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (28 < 100).",
@@ -921,6 +1021,8 @@
       "title": "Opioid toxicity & naloxone safety (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (27 < 100).",
@@ -934,6 +1036,8 @@
       "title": "Falls & injury prevention (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (17 < 100).",
@@ -947,6 +1051,8 @@
       "title": "Adrenal crisis (Addisonian) (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (16 < 100).",
@@ -960,6 +1066,8 @@
       "title": "ARDS & acute respiratory failure (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (21 < 100).",
@@ -973,6 +1081,8 @@
       "title": "Thyroid storm: emergency recognition (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (17 < 100).",
@@ -986,6 +1096,8 @@
       "title": "Delirium: acute confusion & safety (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (16 < 100).",
@@ -999,6 +1111,8 @@
       "title": "Wound care (NCLEX-RN, Canada)",
       "routable": true,
       "status": "localization_incomplete",
+      "contentReadinessStatus": "usable_but_thin_en",
+      "localizationReadinessStatus": "localization_incomplete",
       "overallScore": 70.5,
       "reasons": [
         "missing_educational:safety_or_priority_mentioned",
@@ -1014,6 +1128,8 @@
       "title": "Clinical judgment: prioritization (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1026,6 +1142,8 @@
       "title": "Sepsis: recognition & nursing response (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1038,6 +1156,8 @@
       "title": "Electrolyte & fluid crises (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1050,6 +1170,8 @@
       "title": "ACS & chest pain (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1062,6 +1184,8 @@
       "title": "High-alert meds: nursing management (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1074,6 +1198,8 @@
       "title": "Stroke & elevated ICP (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1086,6 +1212,8 @@
       "title": "Shock resuscitation (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1098,6 +1226,8 @@
       "title": "Collaborating with RPNs: assignment & accountability (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1110,6 +1240,8 @@
       "title": "DKA & HHS: clinical judgment (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1122,6 +1254,8 @@
       "title": "Patient assignment & acuity (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1134,6 +1268,8 @@
       "title": "Sepsis case study: rapid response (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1146,6 +1282,8 @@
       "title": "ACS case study: chest pain triage (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1158,6 +1296,8 @@
       "title": "Respiratory distress case study (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1170,6 +1310,8 @@
       "title": "Glucose emergency case study (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1182,6 +1324,8 @@
       "title": "Electrolyte crisis case study (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1194,6 +1338,8 @@
       "title": "Maternal emergency case study (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1206,6 +1352,8 @@
       "title": "Pediatric fever / dehydration case study (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1218,6 +1366,8 @@
       "title": "Mental health & safety case study (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1230,6 +1380,8 @@
       "title": "Antibiotics — nursing implications (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1242,6 +1394,8 @@
       "title": "Anticoagulants — monitoring & safety (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1254,6 +1408,8 @@
       "title": "Insulin & diabetes medications (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1266,6 +1422,8 @@
       "title": "Cardiac medications (ischemia & rhythm) (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1278,6 +1436,8 @@
       "title": "Antihypertensives (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1290,6 +1450,8 @@
       "title": "Respiratory medications (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1302,6 +1464,8 @@
       "title": "Psychotropic medications (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1314,6 +1478,8 @@
       "title": "Pain & sedation medications (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1326,6 +1492,8 @@
       "title": "Emergency response medications (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1338,6 +1506,8 @@
       "title": "Infection control & standard precautions (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1350,6 +1520,8 @@
       "title": "Isolation & transmission precautions (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1362,6 +1534,8 @@
       "title": "Falls prevention & safety (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1374,6 +1548,8 @@
       "title": "Restraints & least-restrictive alternatives (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1386,6 +1562,8 @@
       "title": "Medication administration & error prevention (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1398,6 +1576,8 @@
       "title": "Delegation & supervision (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1410,6 +1590,8 @@
       "title": "Escalation & when to notify (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1422,6 +1604,8 @@
       "title": "Prioritization under uncertainty (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 89.3,
       "reasons": [
         "no_educational_overlay_in_scanned_locales"
@@ -1434,6 +1618,8 @@
       "title": "COPD: clinical judgment (NCLEX-RN, Canada)",
       "routable": true,
       "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "localized_ready",
       "overallScore": 94,
       "reasons": []
     },
@@ -1444,6 +1630,8 @@
       "title": "Respiratory assessment & oxygenation (NCLEX-RN, US)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (23 < 50 words).",
@@ -1463,6 +1651,8 @@
       "title": "Heart Failure Nursing Priorities (NCLEX-RN, US)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
@@ -1482,6 +1672,8 @@
       "title": "Acute Myocardial Infarction & Troponin (NCLEX-RN, US)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
@@ -1501,6 +1693,8 @@
       "title": "Shock Recognition & Fluids (NCLEX-RN, US)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
@@ -1520,6 +1714,8 @@
       "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, US)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
@@ -1539,6 +1735,8 @@
       "title": "Atrial Fibrillation & Rate Control (NCLEX-RN, US)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
@@ -1558,6 +1756,8 @@
       "title": "Endocarditis & Blood Cultures (NCLEX-RN, US)",
       "routable": true,
       "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
       "overallScore": 10.5,
       "reasons": [
         "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
