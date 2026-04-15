@@ -1,13 +1,13 @@
 # Lesson fix batch 2 — impact summary
 
-- **Audit generated:** 2026-04-15T02:36:28.096Z
+- **Audit generated:** 2026-04-15T02:39:27.441Z
 - **Plan baseline:** 2026-04-15T02:23:16.994Z
 - **Catalog slugs patched this pass:** 8 (cardiac-tamponade-nclex-rn, phlebostatic-axis-nclex-rn, pulmonary-embolism-nclex-rn, respiratory-assessment-ngn, heart-failure-nursing-priorities-hy, acute-myocardial-infarction-troponin, shock-recognition-fluids, hypertensive-crisis-vs-urgency)
 - **Plan rows touching those slugs:** 11
 - **Rows with improved overallScore (batch slugs):** 11
-- **Average overallScore lift (among improved batch rows):** 67.7
-- **Rows reaching production_ready_en (batch slugs):** 8
-- **Of those, blocked only by localization overlay backlog:** 8 (English spine complete per contentReadinessStatus)
+- **Average overallScore lift (among improved batch rows):** 73.2
+- **Rows reaching production_ready_en (batch slugs):** 11
+- **Of those, blocked only by localization overlay backlog:** 11 (English spine complete per contentReadinessStatus)
 
 ## Recurring fix pattern
 

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-15T02:36:28.096Z",
+  "generatedAt": "2026-04-15T02:39:27.441Z",
   "pathways": [
     {
       "pathwayId": "ca-rn-nclex-rn",
@@ -9,15 +9,15 @@
       "nursingPriority": true,
       "totalLessons": 188,
       "productionReady": 0,
-      "usableButThin": 2,
+      "usableButThin": 0,
       "structurallyIncomplete": 39,
       "contentIncomplete": 0,
-      "localizationIncomplete": 96,
+      "localizationIncomplete": 98,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
-      "productionReadyEn": 4,
-      "goodEnglishNotLocalizationComplete": 4,
-      "averageOverallScore": 67.5,
+      "productionReadyEn": 7,
+      "goodEnglishNotLocalizationComplete": 7,
+      "averageOverallScore": 67.8,
       "topReasons": [
         {
           "reason": "no_educational_overlay_in_scanned_locales",
@@ -25,7 +25,7 @@
         },
         {
           "reason": "missing_educational:core_concept_depth",
-          "count": 104
+          "count": 101
         },
         {
           "reason": "thin_total_word_count",
@@ -55,8 +55,8 @@
       "contentReadinessBreakdown": {
         "duplicate_or_unclear_source": 51,
         "structurally_incomplete": 39,
-        "usable_but_thin_en": 94,
-        "production_ready_en": 4
+        "usable_but_thin_en": 91,
+        "production_ready_en": 7
       },
       "localizationReadinessBreakdown": {
         "english_only": 84,
@@ -72,35 +72,35 @@
       "nursingPriority": true,
       "totalLessons": 187,
       "productionReady": 0,
-      "usableButThin": 2,
+      "usableButThin": 0,
       "structurallyIncomplete": 126,
       "contentIncomplete": 0,
-      "localizationIncomplete": 8,
+      "localizationIncomplete": 10,
       "notRoutable": 0,
       "duplicateOrUnclear": 51,
-      "productionReadyEn": 5,
-      "goodEnglishNotLocalizationComplete": 5,
-      "averageOverallScore": 37.5,
+      "productionReadyEn": 8,
+      "goodEnglishNotLocalizationComplete": 8,
+      "averageOverallScore": 37.8,
       "topReasons": [
-        {
-          "reason": "missing_educational:overview_intro",
-          "count": 107
-        },
         {
           "reason": "low_total_word_count",
           "count": 105
         },
         {
+          "reason": "missing_educational:overview_intro",
+          "count": 105
+        },
+        {
           "reason": "missing_educational:clinical_application",
-          "count": 104
+          "count": 101
         },
         {
           "reason": "missing_educational:core_concept_depth",
-          "count": 104
+          "count": 101
         },
         {
           "reason": "missing_educational:summary_takeaways",
-          "count": 97
+          "count": 95
         },
         {
           "reason": "no_educational_overlay_in_scanned_locales",
@@ -117,9 +117,9 @@
       ],
       "contentReadinessBreakdown": {
         "duplicate_or_unclear_source": 51,
-        "production_ready_en": 5,
+        "production_ready_en": 8,
         "structurally_incomplete": 126,
-        "usable_but_thin_en": 5
+        "usable_but_thin_en": 2
       },
       "localizationReadinessBreakdown": {
         "english_only": 171,

@@ -263,7 +263,9 @@ Link to [acute coronary syndrome lesson](LESSON:acute-coronary-syndrome-nclex-rn
         kind: "exam_relevance",
         body: `Boards test **MONA-era thinking updated to modern ACS care**: oxygen **when hypoxemic**, **aspirin** per protocol, **nitroglycerin** when appropriate and not contraindicated, **morphine alternatives** for pain when ordered, and **rapid cath lab activation** for STEMI patterns. Troponin timing questions reward knowing **serial testing**—a single negative early value **does not** clear ACS if suspicion remains high.
 
-Traps include **delaying the ECG** for “comfort first,” **routine NSAIDs** that worsen cardiac risk, or **ambulating** a client with unstable vitals to the bathroom.`,
+Traps include **delaying the ECG** for “comfort first,” **routine NSAIDs** that worsen cardiac risk, or **ambulating** a client with unstable vitals to the bathroom.
+
+If the client describes **pressure-like pain** with diaphoresis, treat the pathway as **time-sensitive** even before troponin returns.`,
       },
       {
         id: "core_concept",
@@ -272,7 +274,9 @@ Traps include **delaying the ECG** for “comfort first,” **routine NSAIDs** t
         body: `- **STEMI vs NSTEMI framing**: ST elevation → emergent reperfusion pathway when shown; NSTEMI/unstable angina → risk stratification and timed management—follow the stem’s clues.
 - **Troponin**: rises over hours; **serial draws** may be ordered—pair with **symptoms** and **ECG**.
 - **Complications to monitor**: **VF/VT**, **brady blocks**, **acute MR** murmur, **pericarditis** pain, **reinfarction**, **cardiogenic shock** (hypotension, cool clammy skin, oliguria).
-- **Nursing actions**: continuous **telemetry**, **pain reassessment**, **bleeding checks** post-PCI, **groin/radial site** monitoring, **renal protection** themes around contrast, and **patient education** on new antiplatelet regimens when applicable.`,
+- **Nursing actions**: continuous **telemetry**, **pain reassessment**, **bleeding checks** post-PCI, **groin/radial site** monitoring, **renal protection** themes around contrast, and **patient education** on new antiplatelet regimens when applicable.
+
+**Depth check:** When the stem adds **diabetes, older age, or female sex**, remember **atypical presentations** are common—still pursue ACS evaluation when the overall story fits.`,
       },
       {
         id: "clinical_scenario",
@@ -280,7 +284,9 @@ Traps include **delaying the ECG** for “comfort first,” **routine NSAIDs** t
         kind: "clinical_scenario",
         body: `**Patient vignette.** A 59-year-old client reports **crushing substernal pressure** radiating to the **left arm**, diaphoretic, **HR 104**, BP **160/92**. First troponin is **borderline** but **ST depressions** appear in lateral leads.
 
-**Fork:** Treat as **ACS** until cleared—**continuous monitoring**, **notify provider**, **prepare for serial troponins and repeat ECG**, **avoid solo ambulation**, and follow **oxygen** orders for SpO₂. Choose **assessment + activation** over discharge instructions or routine meals.`,
+**Fork:** Treat as **ACS** until cleared—**continuous monitoring**, **notify provider**, **prepare for serial troponins and repeat ECG**, **avoid solo ambulation**, and follow **oxygen** orders for SpO₂. Choose **assessment + activation** over discharge instructions or routine meals.
+
+The nurse should also **recheck pain** after interventions and **compare serial ECGs** when available—small dynamic changes can be the clue in NSTEMI vignettes.`,
       },
       {
         id: "takeaways",
@@ -315,7 +321,9 @@ Pair with [heart failure](LESSON:heart-failure-nursing-priorities-hy) (fluid cau
         kind: "exam_relevance",
         body: `Items reward **identifying shock category clues** and **first-line stabilization**: airway, **oxygen**, **IV access**, **monitoring**, **labs/blood cultures** in sepsis themes, **epinephrine** in anaphylaxis per orders, and **avoiding fluid overload** when lungs fill or JVD rises with fluids.
 
-“Large volume bolus” is only correct when **hemorrhage** or **septic hypovolemia** is supported—not for every hypotensive client.`,
+“Large volume bolus” is only correct when **hemorrhage** or **septic hypovolemia** is supported—not for every hypotensive client.
+
+If the stem shows **warm skin and bounding pulses** with infection signs, think **distributive** shock pathways; if **cool, mottled skin** with poor urine output, think **hypovolemic or cardiogenic** patterns until proven otherwise.`,
       },
       {
         id: "core_concept",
@@ -325,7 +333,9 @@ Pair with [heart failure](LESSON:heart-failure-nursing-priorities-hy) (fluid cau
 - **Anaphylaxis**: airway swelling, urticaria, bronchospasm—**epinephrine IM** is first-line in teaching; position supine with legs elevated unless breathing dictates otherwise.
 - **Neurogenic shock**: bradycardia + warm skin after spinal injury themes—distinct from spinal shock management nuances in specialty items.
 - **Monitoring**: **MAP goals** when ordered, **urine output**, **repeat lactate** themes, **antibiotic timing** in sepsis.
-- **Fluids**: isotonic crystalloids common in sepsis; **reassess lung sounds and perfusion** after boluses.`,
+- **Fluids**: isotonic crystalloids common in sepsis; **reassess lung sounds and perfusion** after boluses.
+
+**Exam memory hook:** If the stem pairs **infection + hypotension**, your first nursing moves cluster around **oxygen, access, labs, cultures, antibiotics timing themes**, and **frequent reassessment**—not “finish routine tasks first.”`,
       },
       {
         id: "clinical_scenario",
@@ -333,7 +343,9 @@ Pair with [heart failure](LESSON:heart-failure-nursing-priorities-hy) (fluid cau
         kind: "clinical_scenario",
         body: `**Patient vignette.** After a motor vehicle collision, a 41-year-old client is **tachycardic**, **cool and mottled**, with **MAP 58** despite **two crystalloid boluses**. Lungs are clear, but **neck veins are flat** and **FAST** imaging is pending.
 
-**Fork:** This suggests **ongoing hemorrhagic shock**—escalate to **massive transfusion protocol themes**, **prepare blood products per order**, **keep warming measures**, and **avoid** “just one more liter” without surgical consultation when bleeding is uncontrolled. Communication and **repeat assessments** beat isolated tasks.`,
+**Fork:** This suggests **ongoing hemorrhagic shock**—escalate to **massive transfusion protocol themes**, **prepare blood products per order**, **keep warming measures**, and **avoid** “just one more liter” without surgical consultation when bleeding is uncontrolled. Communication and **repeat assessments** beat isolated tasks.
+
+The nurse should **reassess perfusion** after each intervention and **report trends**, not single values, because boards test whether you recognize **failure to respond** to fluids as escalation criteria.`,
       },
       {
         id: "takeaways",
@@ -342,6 +354,8 @@ Pair with [heart failure](LESSON:heart-failure-nursing-priorities-hy) (fluid cau
         body: `- **Shock type** changes fluid safety—**obstructive** and **cardiogenic** patterns punish blind boluses.
 - **Reassess after every intervention**: lungs, perfusion, mentation, urine.
 - **Exam synthesis:** When the stem offers **fluids vs pressors vs procedures**, match the **dominant mechanism** (loss vs maldistribution vs pump failure vs obstruction) before you pick an option that “sounds resuscitative” but widens an existing injury (for example, fluids in **tamponade** or **acute severe HF** without orders).
+
+**Closing:** Rehearse one sentence: “What shock pattern fits, what is the next **reassessment** target, and what **escalation** is implied by instability?” If you cannot answer, you are not ready to pick the “best” intervention yet.
 
 **Related:** [hypertensive crisis](LESSON:hypertensive-crisis-vs-urgency) · [DVT/PE](LESSON:dvt-pe-nursing-priorities) · [fluid balance](LESSON:fluid-balance-acute-care).`,
       },
@@ -366,7 +380,9 @@ Link to [ACS](LESSON:acute-coronary-syndrome-nclex-rn) and [HF](LESSON:heart-fai
         kind: "exam_relevance",
         body: `Examiners punish **dropping BP too fast** in ischemic stroke contexts without a protocol window and **normalizing BP instantly** in every urgency vignette. They reward **assessment first**: neuro checks, chest pain evaluation, **vision changes**, **creatinine trends**, **fetal status** in pregnancy when shown.
 
-Medication items may include **nitroprusside/nicardipine/labetalol** themes as **provider-managed** infusions—your role is **monitoring**, **line safety**, and **reporting adverse trends**.`,
+Medication items may include **nitroprusside/nicardipine/labetalol** themes as **provider-managed** infusions—your role is **monitoring**, **line safety**, and **reporting adverse trends**.
+
+If the stem centers **pregnancy**, add **fetal assessment** and **magnesium seizure prophylaxis** themes when eclampsia is suggested—follow the vignette’s priorities.`,
       },
       {
         id: "core_concept",
@@ -375,7 +391,11 @@ Medication items may include **nitroprusside/nicardipine/labetalol** themes as *
         body: `- **Emergency signs**: acute pulmonary edema with hypoxia, neurologic deficits, tearing chest pain radiating to the back (dissection suspicion), acute kidney injury with hypertensive retinopathy themes.
 - **Urgency**: very high BP with **mild headache** but **no** end-organ findings—oral meds + follow-up.
 - **Nursing monitoring**: **q5–15 min** vitals during titration when ordered, **continuous telemetry**, **strict I&O**, **neuro checks**, **fetal monitoring** in pregnancy when applicable.
-- **Patient education**: medication adherence, home BP logs, sodium intake—after stabilization.`,
+- **Patient education**: medication adherence, home BP logs, sodium intake—after stabilization.
+
+**Boards check discrimination:** **Urgency** clients may feel “fine” aside from elevated BP; **emergency** clients have **new organ dysfunction**—always anchor to symptoms, not the number alone.
+
+**Deeper core:** Nursing care during IV antihypertensive therapy focuses on **frequent vitals**, **continuous cardiac monitoring** when ordered, **strict I&O**, **neurologic checks** for overshoot hypotension, and **clear communication** if symptoms worsen—especially **chest pain**, **acute vision loss**, **seizure**, or **focal deficits**.`,
       },
       {
         id: "clinical_scenario",
@@ -383,7 +403,9 @@ Medication items may include **nitroprusside/nicardipine/labetalol** themes as *
         kind: "clinical_scenario",
         body: `**Patient vignette.** A 48-year-old client presents with **BP 220/130**, **thunderclap headache**, **neck stiffness**, and **new left-sided weakness**.
 
-**Fork:** This is **neurovascular emergency** until proven otherwise—**activate stroke protocol themes**, **notify provider immediately**, **prepare for imaging**, and **avoid** unsupervised ambulation or **eating** before airway assessment. BP management follows **stroke pathway rules** in the stem—do not apply generic “lower fast always.”`,
+**Fork:** This is **neurovascular emergency** until proven otherwise—**activate stroke protocol themes**, **notify provider immediately**, **prepare for imaging**, and **avoid** unsupervised ambulation or **eating** before airway assessment. BP management follows **stroke pathway rules** in the stem—do not apply generic “lower fast always.”
+
+If chest pain dominates instead, pivot to **ACS evaluation** while still managing BP per orders—examiners test whether you can keep **two serious diagnoses** in play without locking in too early.`,
       },
       {
         id: "takeaways",
@@ -392,6 +414,8 @@ Medication items may include **nitroprusside/nicardipine/labetalol** themes as *
         body: `- **Organ injury** defines emergency—not the number alone.
 - **Gradual vs rapid** lowering is diagnosis-dependent—follow the vignette.
 - **Synthesis:** Build a quick **organ scan** from the stem—**neuro** (focal deficits, headache), **pulmonary** (crackles, hypoxia), **renal** (oliguria, creatinine), **pregnancy** (fetal status), **vascular** (tearing pain)—because each changes the acceptable pace of BP reduction and the monitoring bundle you prioritize.
+
+**Closing rule:** If you can name **which organ is threatened**, you can usually eliminate answers that treat hypertension as a **generic number** without addressing the **underlying emergency**.
 
 **Related:** [AFib](LESSON:atrial-fibrillation-rate-control) · [endocarditis](LESSON:endocarditis-blood-cultures) · [renal case studies in hub](/canada/rn/nclex-rn/lessons).`,
       },

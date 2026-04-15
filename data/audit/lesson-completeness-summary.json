@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-15T02:36:28.096Z",
+  "generatedAt": "2026-04-15T02:39:27.441Z",
   "batchFixHints": [
     "ca-rn-nclex-rn: ≥45% of lessons missing core_concept_depth bucket — likely systematic spine depth gap.",
     "ca-rn-nclex-rn: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only.",
@@ -19,8 +19,8 @@
   },
   "statusDimensions": {
     "contentReadinessTotals": {
-      "production_ready_en": 13,
-      "usable_but_thin_en": 285,
+      "production_ready_en": 19,
+      "usable_but_thin_en": 279,
       "content_incomplete": 0,
       "structurally_incomplete": 353,
       "not_routable": 0,
@@ -33,18 +33,18 @@
       "english_only": 592,
       "localization_incomplete": 298
     },
-    "goodEnglishLessonsNotLocalizationComplete": 13,
-    "blockedMainlyByLocalizationLegacyStatus": 293
+    "goodEnglishLessonsNotLocalizationComplete": 19,
+    "blockedMainlyByLocalizationLegacyStatus": 297
   },
   "lessonsThatExistButNotComplete": {
     "description": "Catalog-present lessons (bundled JSON) that are not classified production_ready — includes thin, structurally gated, localization-limited, non-routable pathway, or duplicate slug issues.",
     "catalogLessonRows": 906,
     "notProductionReady": 906,
     "notProductionReadyByStatus": {
-      "usable_but_thin": 5,
+      "usable_but_thin": 1,
       "structurally_incomplete": 353,
       "content_incomplete": 0,
-      "localization_incomplete": 293,
+      "localization_incomplete": 297,
       "not_routable": 0,
       "duplicate_or_unclear_source": 255
     },
@@ -74,15 +74,15 @@
     "lessonsScanned": 906,
     "pathwaysWithLessons": 8,
     "production_ready": 0,
-    "usable_but_thin": 5,
+    "usable_but_thin": 1,
     "structurally_incomplete": 353,
     "content_incomplete": 0,
-    "localization_incomplete": 293,
+    "localization_incomplete": 297,
     "not_routable": 0,
     "duplicate_or_unclear_source": 255,
     "contentReadinessByStatus": {
-      "production_ready_en": 13,
-      "usable_but_thin_en": 285,
+      "production_ready_en": 19,
+      "usable_but_thin_en": 279,
       "content_incomplete": 0,
       "structurally_incomplete": 353,
       "not_routable": 0,
@@ -128,15 +128,15 @@
     },
     {
       "reason": "missing_educational:core_concept_depth",
-      "count": 493
+      "count": 487
     },
     {
       "reason": "missing_educational:summary_takeaways",
-      "count": 325
+      "count": 321
     },
     {
       "reason": "missing_educational:overview_intro",
-      "count": 311
+      "count": 307
     },
     {
       "reason": "thin_total_word_count",
@@ -147,12 +147,12 @@
       "count": 264
     },
     {
-      "reason": "missing_educational:clinical_application",
-      "count": 155
-    },
-    {
       "reason": "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
       "count": 150
+    },
+    {
+      "reason": "missing_educational:clinical_application",
+      "count": 149
     },
     {
       "reason": "links:no_internal_study_links",

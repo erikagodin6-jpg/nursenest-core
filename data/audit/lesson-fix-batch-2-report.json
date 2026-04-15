@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-04-15T02:36:46.323Z",
-  "auditGeneratedAt": "2026-04-15T02:36:28.096Z",
+  "generatedAt": "2026-04-15T02:39:41.433Z",
+  "auditGeneratedAt": "2026-04-15T02:39:27.441Z",
   "planGeneratedAt": "2026-04-15T02:23:16.994Z",
   "batchContentSlugsCompleted": [
     "cardiac-tamponade-nclex-rn",
@@ -15,10 +15,10 @@
   "metricsForBatchSlugRowsInPlan": {
     "planRowsMatchingBatchSlugs": 11,
     "improvedOverallScoreCount": 11,
-    "averageOverallScoreLiftAmongImproved": 67.7,
+    "averageOverallScoreLiftAmongImproved": 73.2,
     "movedOutOfStructurallyIncompleteGateApprox": 11,
-    "movedToProductionReadyEn": 8,
-    "productionReadyEnButLocalizationIncomplete": 8
+    "movedToProductionReadyEn": 11,
+    "productionReadyEnButLocalizationIncomplete": 11
   },
   "notes": "Before scores taken from lesson-fix-batch-2-plan.json (queue snapshot). Full batch has 100 plan rows; 8 unique slugs received catalog patches in this pass.",
   "perLesson": [
@@ -121,17 +121,15 @@
       "inBatch2ContentPass": true,
       "beforeOverallScore": 10.5,
       "beforeStatus": "structurally_incomplete",
-      "afterOverallScore": 68.8,
+      "afterOverallScore": 81.2,
       "afterStatus": "localization_incomplete",
-      "afterContentReadinessStatus": "usable_but_thin_en",
+      "afterContentReadinessStatus": "production_ready_en",
       "afterLocalizationReadinessStatus": "localization_incomplete",
-      "overallScoreLift": 58.3,
+      "overallScoreLift": 70.7,
       "publicCompleteAfter": true,
-      "totalWordsAfter": 435,
+      "totalWordsAfter": 500,
       "topReasonsAfter": [
         "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
         "no_educational_overlay_in_scanned_locales"
       ]
     },
@@ -142,19 +140,15 @@
       "inBatch2ContentPass": true,
       "beforeOverallScore": 10.5,
       "beforeStatus": "structurally_incomplete",
-      "afterOverallScore": 56.9,
-      "afterStatus": "usable_but_thin",
-      "afterContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 82.1,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
       "afterLocalizationReadinessStatus": "localization_incomplete",
-      "overallScoreLift": 46.4,
+      "overallScoreLift": 71.6,
       "publicCompleteAfter": true,
-      "totalWordsAfter": 394,
+      "totalWordsAfter": 519,
       "topReasonsAfter": [
         "thin_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways",
         "no_educational_overlay_in_scanned_locales"
       ]
     },
@@ -165,19 +159,15 @@
       "inBatch2ContentPass": true,
       "beforeOverallScore": 10.5,
       "beforeStatus": "structurally_incomplete",
-      "afterOverallScore": 56.9,
-      "afterStatus": "usable_but_thin",
-      "afterContentReadinessStatus": "usable_but_thin_en",
+      "afterOverallScore": 80.3,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
       "afterLocalizationReadinessStatus": "localization_incomplete",
-      "overallScoreLift": 46.4,
+      "overallScoreLift": 69.8,
       "publicCompleteAfter": true,
-      "totalWordsAfter": 372,
+      "totalWordsAfter": 513,
       "topReasonsAfter": [
         "thin_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways",
         "no_educational_overlay_in_scanned_locales"
       ]
     },

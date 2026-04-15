@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-15T02:36:28.096Z",
+  "generatedAt": "2026-04-15T02:39:27.441Z",
   "queue": [
     {
       "lessonId": "ca-rn-nclex-rn:diabetes-self-management-teaching",
@@ -1040,52 +1040,6 @@
       ]
     },
     {
-      "lessonId": "ca-rn-nclex-rn:shock-recognition-fluids",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "shock-recognition-fluids",
-      "title": "Shock Recognition & Fluids (NCLEX-RN, Canada)",
-      "status": "usable_but_thin",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 56.9,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways.",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
-        "Expand prose depth; distinguish from shell-only completeness."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:hypertensive-crisis-vs-urgency",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "hypertensive-crisis-vs-urgency",
-      "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, Canada)",
-      "status": "usable_but_thin",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 56.9,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways.",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
-        "Expand prose depth; distinguish from shell-only completeness."
-      ]
-    },
-    {
       "lessonId": "ca-rn-nclex-rn:pulmonary-embolism-recognition-gold",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "pulmonary-embolism-recognition-gold",
@@ -1281,27 +1235,6 @@
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:acute-myocardial-infarction-troponin",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "acute-myocardial-infarction-troponin",
-      "title": "Acute Myocardial Infarction & Troponin (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 68.8,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth, clinical_application.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ]
     },
     {
@@ -3128,6 +3061,42 @@
       ]
     },
     {
+      "lessonId": "ca-rn-nclex-rn:hypertensive-crisis-vs-urgency",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypertensive-crisis-vs-urgency",
+      "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 80.3,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:acute-myocardial-infarction-troponin",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-myocardial-infarction-troponin",
+      "title": "Acute Myocardial Infarction & Troponin (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 81.2,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
       "lessonId": "ca-rn-nclex-rn:pulmonary-embolism-nclex-rn",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "pulmonary-embolism-nclex-rn",
@@ -3136,6 +3105,24 @@
       "contentReadinessStatus": "production_ready_en",
       "localizationReadinessStatus": "localization_incomplete",
       "overallScore": 81.2,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:shock-recognition-fluids",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "shock-recognition-fluids",
+      "title": "Shock Recognition & Fluids (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 82.1,
       "reasons": [
         "thin_total_word_count",
         "no_educational_overlay_in_scanned_locales"
@@ -7002,52 +6989,6 @@
       ]
     },
     {
-      "lessonId": "us-rn-nclex-rn:shock-recognition-fluids",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "shock-recognition-fluids",
-      "title": "Shock Recognition & Fluids (NCLEX-RN, US)",
-      "status": "usable_but_thin",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 56.9,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways.",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
-        "Expand prose depth; distinguish from shell-only completeness."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:hypertensive-crisis-vs-urgency",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "hypertensive-crisis-vs-urgency",
-      "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, US)",
-      "status": "usable_but_thin",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 56.9,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways.",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
-        "Expand prose depth; distinguish from shell-only completeness."
-      ]
-    },
-    {
       "lessonId": "us-rn-nclex-rn:pulmonary-embolism-recognition-gold",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "pulmonary-embolism-recognition-gold",
@@ -7246,27 +7187,6 @@
       ]
     },
     {
-      "lessonId": "us-rn-nclex-rn:acute-myocardial-infarction-troponin",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "acute-myocardial-infarction-troponin",
-      "title": "Acute Myocardial Infarction & Troponin (NCLEX-RN, US)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 68.8,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth, clinical_application.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
       "lessonId": "us-rn-nclex-rn:us-rn-wound-care",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "us-rn-wound-care",
@@ -7309,6 +7229,42 @@
       ]
     },
     {
+      "lessonId": "us-rn-nclex-rn:hypertensive-crisis-vs-urgency",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "hypertensive-crisis-vs-urgency",
+      "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 80.3,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:acute-myocardial-infarction-troponin",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "acute-myocardial-infarction-troponin",
+      "title": "Acute Myocardial Infarction & Troponin (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 81.2,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
       "lessonId": "us-rn-nclex-rn:pulmonary-embolism-nclex-rn",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "pulmonary-embolism-nclex-rn",
@@ -7331,6 +7287,24 @@
       "pathwayId": "us-rn-nclex-rn",
       "slug": "respiratory-assessment-ngn",
       "title": "Respiratory assessment & oxygenation (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 82.1,
+      "reasons": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:shock-recognition-fluids",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "shock-recognition-fluids",
+      "title": "Shock Recognition & Fluids (NCLEX-RN, US)",
       "status": "localization_incomplete",
       "contentReadinessStatus": "production_ready_en",
       "localizationReadinessStatus": "localization_incomplete",

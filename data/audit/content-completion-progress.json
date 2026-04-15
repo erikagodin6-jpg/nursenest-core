@@ -11,6 +11,16 @@
       "legacyFlashcardCardsExact": 4380,
       "legacyFlashcardSourceFiles": 27,
       "note": "AST parse of client/src/data/flashcards*.ts; DB counts optional when DATABASE_URL set."
+    },
+    {
+      "kind": "legacy_career_questions_import_audit",
+      "at": "2026-04-14T12:00:00.000Z",
+      "artifact": "data/audit/legacy-career-questions-import-validation.json",
+      "legacyCareerQuestionRowsParsed": 27439,
+      "legacyCareerSourceFiles": 199,
+      "normalizedOk": 27439,
+      "duplicateStemsSkippedInRun": 551,
+      "note": "Dry-run normalize pass; run npm run import:legacy-client-career-questions with DATABASE_URL to insert into exam_questions."
     }
   ]
 }
