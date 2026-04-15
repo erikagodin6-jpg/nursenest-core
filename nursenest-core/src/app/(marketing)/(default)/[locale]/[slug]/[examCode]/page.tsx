@@ -7,6 +7,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry"
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { buildNursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
+import { examPathwayRegionalHreflang } from "@/lib/seo/exam-pathway-hub-alternates";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
@@ -24,11 +25,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const seo = getNpPracticeTestLandingCopy(locale, slug, examCode);
     const requestPath = `/${locale}/${slug}/${examCode}`;
     const requestUrl = absoluteUrl(requestPath);
+    const hreflang = examPathwayRegionalHreflang(pathway);
     if (seo) {
       return {
         title: seo.title,
         description: seo.description,
-        alternates: { canonical: requestUrl },
+        robots: { index: true, follow: true },
+        alternates: { canonical: requestUrl, languages: hreflang },
         openGraph: { title: seo.title, description: seo.description, url: requestUrl, type: "website" },
       };
     }
@@ -37,7 +40,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: pathway.seoTitle,
       description: pathway.seoDescription,
-      alternates: { canonical: coreUrl },
+      robots: { index: true, follow: true },
+      alternates: { canonical: coreUrl, languages: hreflang },
       openGraph: {
         title: pathway.seoTitle,
         description: pathway.seoDescription,

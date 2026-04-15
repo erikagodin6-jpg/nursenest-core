@@ -30,6 +30,9 @@ export type SafeMetadataContext = {
  * not yet fully indexed (tier=partial or tier=incomplete). This prevents thin-content
  * or mostly-English pages from being indexed before a language is fully translated.
  * Full-tier (active) locales are unaffected.
+ *
+ * **Exam pathway routes** (`routeGroup` `marketing.exam_hub*`) pass the **country URL segment**
+ * (`us` | `canada`), not a marketing i18n locale — those must **not** use this override or every hub would be noindexed.
  */
 export async function safeGenerateMetadata(
   run: () => Promise<Metadata>,
@@ -45,8 +48,9 @@ export async function safeGenerateMetadata(
       return m;
     }
     const normalized = { ...m, title: stripDuplicateBrandSuffix(m.title) };
-    // Enforce noindex for non-indexable locales regardless of what the page sets.
-    if (ctx.locale) {
+    const isExamPathwayRoute = ctx.routeGroup?.startsWith("marketing.exam_hub") ?? false;
+    // Enforce noindex for non-indexable **marketing i18n** locales only — not pathway country segments.
+    if (ctx.locale && !isExamPathwayRoute) {
       const robotsOverride = localeRobotsOverride(ctx.locale);
       if (robotsOverride) {
         return { ...normalized, robots: robotsOverride };

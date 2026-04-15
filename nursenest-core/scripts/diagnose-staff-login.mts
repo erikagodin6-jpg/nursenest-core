@@ -11,7 +11,7 @@
  *   STAFF_DIAGNOSE_EMAIL=admin@example.com STAFF_DIAGNOSE_PASSWORD='...' npx tsx scripts/diagnose-staff-login.mts
  */
 import bcrypt from "bcryptjs";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 import { databaseUrlSource } from "../src/lib/db/env-bootstrap";
 import { maskDatabaseUrl } from "../src/lib/db/database-env";
@@ -55,9 +55,21 @@ async function main(): Promise<void> {
       credentialVersion: true,
       authProvider: true,
       emailVerified: true,
-      isDemoUser: true,
     },
   });
+
+  /** When `20260415180000_user_is_demo_user` is not applied, raw lookup avoids Prisma selecting a missing column. */
+  let isDemoUser: boolean | null = null;
+  try {
+    const demoRows = await prisma.$queryRaw<{ is_demo_user: boolean }[]>(
+      Prisma.sql`
+        SELECT "is_demo_user" AS is_demo_user FROM "User" WHERE id = ${row?.id ?? ""} LIMIT 1
+      `,
+    );
+    isDemoUser = demoRows[0]?.is_demo_user ?? null;
+  } catch {
+    isDemoUser = null;
+  }
 
   if (!row) {
     console.log("user_found: no");

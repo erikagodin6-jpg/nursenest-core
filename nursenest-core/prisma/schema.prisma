@@ -67,6 +67,8 @@ model User {
   /// * Lowercase, trimmed email for dedup (dot-stripping, alias-insensitive).
   normalizedEmail               String?
   emailVerified                 Boolean                     @default(false)
+  /// * Demo QA accounts: admin-only creation, no real billing (guards checkout/trial).
+  isDemoUser                    Boolean                     @default(false) @map("is_demo_user")
   /// * How the account was created (credentials, google, etc.).
   authProvider                  String                      @default("credentials") @db.VarChar(32)
   signupIp                      String?                     @db.VarChar(64)

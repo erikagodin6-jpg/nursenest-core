@@ -47,6 +47,8 @@ vite_stderr.txt
 .worktrees/
 
 # Keys and local auth artifacts (never commit secrets)
+# Playwright E2E cached sessions (see nursenest-core/playwright.config.ts)
+nursenest-core/tests/e2e/.auth/
 *.pem
 *.p12
 .id_rsa
