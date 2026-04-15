@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+import { PAID_USER_AUTH_FILE } from "./e2e/paid-auth-state-path";
 
 const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
 
@@ -15,12 +16,26 @@ export default defineConfig({
   use: {
     baseURL,
     trace: "on-first-retry",
+    screenshot: "only-on-failure",
   },
   projects: [
     {
+      name: "setup-paid-auth",
+      testMatch: /e2e\/auth-paid\.setup\.ts$/,
+    },
+    {
       name: "chromium",
-      testIgnore: /lesson-flows\.mobile\.spec\.ts$/,
+      testIgnore: [/lesson-flows\.mobile\.spec\.ts$/, /paid-user-smoke\.spec\.ts$/],
       use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "chromium-paid",
+      testMatch: /paid-user-smoke\.spec\.ts$/,
+      dependencies: ["setup-paid-auth"],
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: PAID_USER_AUTH_FILE,
+      },
     },
     {
       name: "mobile",

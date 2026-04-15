@@ -1,33 +1,29 @@
 /**
- * Paid-user end-to-end smoke: login, lessons, flashcards, CAT, nav, account.
+ * Paid-user end-to-end smoke: session check, lessons, flashcards, CAT, nav, account.
  *
- * Required env:
- *   E2E_PAID_EMAIL
- *   E2E_PAID_PASSWORD
+ * Auth: run with project `chromium-paid` (depends on `setup-paid-auth`). Login runs once in
+ * `e2e/auth-paid.setup.ts`; cookies/localStorage are saved to `e2e/.auth/paid-user.json` and reused.
+ *
+ * Setup env (for `setup-paid-auth` only):
+ *   E2E_PAID_EMAIL, E2E_PAID_PASSWORD
  *
  * Optional:
- *   BASE_URL (default http://127.0.0.1:3000) — use https://www.nursenest.ca for production checks.
+ *   BASE_URL (default http://127.0.0.1:3000)
+ *   PLAYWRIGHT_PAID_AUTH_STATE — override path for saved auth JSON
  *
  * Run:
- *   cd nursenest-core && E2E_PAID_EMAIL=... E2E_PAID_PASSWORD=... BASE_URL=https://www.nursenest.ca npx playwright test e2e/paid-user-smoke.spec.ts
+ *   cd nursenest-core && E2E_PAID_EMAIL=... E2E_PAID_PASSWORD=... BASE_URL=https://www.nursenest.ca npx playwright test --project=chromium-paid
  */
 import { expect, test, type Page } from "@playwright/test";
 
 const PLACEHOLDER_RE = /\b(TBD|null|undefined)\b/i;
 
-type SectionResult = "pass" | "fail";
+type SectionResult = "pass" | "fail" | "skipped";
 type Observers = {
   consoleErrors: string[];
   failedRequests: string[];
   dispose: () => void;
 };
-
-function paidCreds(): { email: string; password: string } | null {
-  const email = process.env.E2E_PAID_EMAIL?.trim();
-  const password = process.env.E2E_PAID_PASSWORD;
-  if (!email || !password) return null;
-  return { email, password };
-}
 
 function attachObservers(page: Page): Observers {
   const consoleErrors: string[] = [];
@@ -102,18 +98,15 @@ test.describe("Paid user smoke (serial)", () => {
 
   const sections: Record<string, SectionResult> = {
     login: "fail",
-    lessons: "fail",
-    flashcards: "fail",
-    catExams: "fail",
-    navigation: "fail",
-    accountUi: "fail",
-    globalChecks: "fail",
+    lessons: "skipped",
+    flashcards: "skipped",
+    catExams: "skipped",
+    navigation: "skipped",
+    accountUi: "skipped",
+    globalChecks: "skipped",
   };
 
   test("full paid journey with section reporting", async ({ page }, testInfo) => {
-    const creds = paidCreds();
-    test.skip(!creds, "Set E2E_PAID_EMAIL and E2E_PAID_PASSWORD to run this spec.");
-
     const obs = attachObservers(page);
     const broken: string[] = [];
     const screenshots: string[] = [];
@@ -125,22 +118,32 @@ test.describe("Paid user smoke (serial)", () => {
     }
 
     try {
-      // —— Login ——
+      // —— Session (storage state from setup-paid-auth) ——
       try {
-        await page.goto("/login", { waitUntil: "domcontentloaded" });
-        await page.locator("#login-identifier").fill(creds!.email);
-        await page.locator("#login-password").fill(creds!.password);
-        await page.locator('form button[type="submit"]').click();
-        await page.waitForURL(/\/app(\/|$)/, { timeout: 60_000 });
-        await expect(page).not.toHaveURL(/\/login/);
+        await page.goto("/app", { waitUntil: "domcontentloaded" });
+        const url = page.url();
+        if (/\/login/i.test(url)) {
+          throw new Error(
+            "Unauthenticated — run with --project=chromium-paid so setup-paid-auth saves storage (needs E2E_PAID_EMAIL / E2E_PAID_PASSWORD).",
+          );
+        }
+        await expect(page).toHaveURL(/\/app(\/|$)/);
         sections.login = "pass";
       } catch (e) {
         sections.login = "fail";
         broken.push(`login: ${e instanceof Error ? e.message : String(e)}`);
         await failShot("login");
-        throw e;
       }
 
+      if (sections.login !== "pass") {
+        broken.push("Skipped: downstream sections require an authenticated session.");
+      } else {
+        sections.lessons = "fail";
+        sections.flashcards = "fail";
+        sections.catExams = "fail";
+        sections.navigation = "fail";
+        sections.accountUi = "fail";
+        sections.globalChecks = "fail";
       // —— Lessons ——
       try {
         await page.goto("/app/lessons", { waitUntil: "domcontentloaded" });
@@ -275,6 +278,7 @@ test.describe("Paid user smoke (serial)", () => {
         sections.globalChecks = "fail";
         broken.push(`globalChecks: ${e instanceof Error ? e.message : String(e)}`);
         await failShot("global");
+      }
       }
     } finally {
       obs.dispose();

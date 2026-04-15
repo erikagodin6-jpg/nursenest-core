@@ -131,7 +131,7 @@
     "qa:lesson-flows": "tsx scripts/qa-lesson-flows.mts",
     "qa:lesson-flows:browser": "playwright test e2e/lesson-flows.spec.ts e2e/lesson-flows.mobile.spec.ts",
     "qa:cat-entrypoints:browser": "playwright test e2e/cat-entrypoints.spec.ts",
-    "qa:paid-smoke:browser": "playwright test e2e/paid-user-smoke.spec.ts",
+    "qa:paid-smoke:browser": "playwright test --project=chromium-paid",
     "qa:lesson-flows:all": "npm run qa:lesson-flows && npm run qa:lesson-flows:browser",
     "test:internal-links-audit": "tsx --test scripts/audit-internal-links.test.ts",
     "test:marketing-exam-hub-smoke": "tsx --test scripts/marketing-exam-hub-smoke.test.ts scripts/marketing-exam-hub-degraded-smoke.test.ts",
