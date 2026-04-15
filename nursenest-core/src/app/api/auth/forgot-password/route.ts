@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
 import { normalizeEmailForDedup } from "@/lib/auth/email-address-normalization";
@@ -169,33 +169,38 @@ export async function POST(req: Request) {
     });
 
     const resetUrl = buildPasswordResetUrl(rawToken);
-    /** Send to canonical address on file (fixes case/alias mismatch with typed email). */
-    const sendResult = await sendPasswordResetEmail({ toEmail: user.email, resetUrl });
-    captureServerEvent(analyticsDistinctId(user.id), "password_reset_requested", {}).catch(() => {});
-
-    if (!sendResult.delivered) {
-      safeServerLog("auth", "password_reset_email_not_delivered", {
-        userIdPrefix: user.id.slice(0, 8),
-        ip: ip.slice(0, 64),
-      });
-      return NextResponse.json(
-        {
-          ok: false,
-          error:
-            "We could not send the reset email (service timeout or error). Try again in a minute, or contact support if this persists.",
-        },
-        { status: 503 },
-      );
-    }
 
     const base = {
       ok: true as const,
       message: "If an account exists for that email, a reset link has been sent.",
     };
 
-    if (process.env.NODE_ENV === "development" && sendResult.devResetUrl) {
-      return NextResponse.json({ ...base, _devResetUrl: sendResult.devResetUrl });
+    /**
+     * Send email after the HTTP response so gateways (504) do not wait on Resend + DB latency.
+     * Dev without Resend: keep sync so `_devResetUrl` is in the JSON response.
+     */
+    if (process.env.NODE_ENV === "development" && !isPasswordResetEmailConfigured()) {
+      const sendResult = await sendPasswordResetEmail({ toEmail: user.email, resetUrl });
+      return NextResponse.json({
+        ...base,
+        ...(sendResult.devResetUrl ? { _devResetUrl: sendResult.devResetUrl } : {}),
+      });
     }
+
+    after(async () => {
+      try {
+        const sendResult = await sendPasswordResetEmail({ toEmail: user.email, resetUrl });
+        if (!sendResult.delivered) {
+          safeServerLog("auth", "password_reset_email_not_delivered", {
+            userIdPrefix: user.id.slice(0, 8),
+            ip: ip.slice(0, 64),
+          });
+        }
+      } catch (err) {
+        safeServerLogCritical("auth", "password_reset_email_after_failed", { surface: "api" }, err);
+      }
+      captureServerEvent(analyticsDistinctId(user.id), "password_reset_requested", {}).catch(() => {});
+    });
 
     return NextResponse.json(base);
   } catch (e) {
