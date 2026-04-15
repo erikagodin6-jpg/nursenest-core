@@ -2,10 +2,11 @@ import { test, expect, type Page } from "@playwright/test";
 import {
   LESSON_FLOW_PATHWAY_QA,
   throwIfUrlNotAllowedForPathway,
-} from "../src/lib/qa/lesson-flow-pathways";
-import { MARKETING_REGION_COOKIE } from "../src/lib/region/marketing-region-cookie";
+} from "../../../src/lib/qa/lesson-flow-pathways";
+import { MARKETING_REGION_COOKIE } from "../../../src/lib/region/marketing-region-cookie";
+import { getE2eBaseURL } from "../helpers/e2e-env";
 
-const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
+const baseURL = getE2eBaseURL();
 
 function assertPathwayNav(url: string, cfg: (typeof LESSON_FLOW_PATHWAY_QA)[number]) {
   throwIfUrlNotAllowedForPathway(url, cfg);

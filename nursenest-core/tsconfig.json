@@ -60,6 +60,6 @@
     "scripts",
     "src/**/*.test.ts",
     "src/**/*.test.tsx",
-    "e2e/**/*.ts"
+    "tests/e2e/**/*.ts"
   ]
 }

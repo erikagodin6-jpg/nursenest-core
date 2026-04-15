@@ -2,17 +2,18 @@
  * Minimal RN happy-path smoke: marketing home → US RN hub → lessons → one lesson →
  * study loop visible → "Practice this topic" hits /app (auth gate for anonymous users).
  *
- * Run from nursenest-core: `npx playwright test tests/e2e/rn-smoke.spec.ts`
+ * Run from nursenest-core: `npx playwright test tests/e2e/regression/rn-smoke.spec.ts`
  * Requires dev server: `BASE_URL=http://127.0.0.1:3000 npm run dev`
  */
 import { test, expect } from "@playwright/test";
 import {
   LESSON_FLOW_PATHWAY_QA,
   throwIfUrlNotAllowedForPathway,
-} from "../../src/lib/qa/lesson-flow-pathways";
-import { MARKETING_REGION_COOKIE } from "../../src/lib/region/marketing-region-cookie";
+} from "../../../src/lib/qa/lesson-flow-pathways";
+import { MARKETING_REGION_COOKIE } from "../../../src/lib/region/marketing-region-cookie";
+import { getE2eBaseURL } from "../helpers/e2e-env";
 
-const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
+const baseURL = getE2eBaseURL();
 
 const rnUs = LESSON_FLOW_PATHWAY_QA.find((c) => c.pathwayId === "us-rn-nclex-rn");
 if (!rnUs) {

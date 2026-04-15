@@ -1,7 +1,8 @@
 import { test, expect } from "@playwright/test";
-import { MARKETING_REGION_COOKIE } from "../src/lib/region/marketing-region-cookie";
+import { MARKETING_REGION_COOKIE } from "../../../src/lib/region/marketing-region-cookie";
+import { getE2eBaseURL } from "../helpers/e2e-env";
 
-const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
+const baseURL = getE2eBaseURL();
 
 test.describe("CAT pathway pre-click clarity (marketing)", () => {
   test("US NCLEX-RN hub exposes exam-scoped CAT card", async ({ page, context }) => {

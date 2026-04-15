@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
+import { getE2eBaseURL } from "../helpers/e2e-env";
 
-const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
+const baseURL = getE2eBaseURL();
 
 /** Runtime typography smoke: verifies lesson shell classes resolve to expected weights/line-heights in Chromium. */
 test.describe("lesson typography (computed styles)", () => {

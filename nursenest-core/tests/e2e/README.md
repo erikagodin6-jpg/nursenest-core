@@ -1,0 +1,69 @@
+# NurseNest Playwright E2E
+
+Production-oriented browser tests under `tests/e2e/`. The Playwright config lives at `playwright.config.ts` (package root).
+
+## Prerequisites
+
+- Install browsers once: `npx playwright install` (from `nursenest-core/`).
+- For local runs, start the app: `npm run dev` (default `BASE_URL=http://127.0.0.1:3000`).
+- For production or staging, set `BASE_URL` (e.g. `https://www.nursenest.ca`).
+
+## Layout
+
+| Folder | Purpose |
+|--------|---------|
+| `setup/` | Auth setup projects (`auth-paid.setup.ts`, `auth-free.setup.ts`) — writes `tests/e2e/.auth/*.json` |
+| `helpers/` | Login, console/network observers, country selector, mobile drawer, env helpers |
+| `fixtures/` | Optional extended `test` (e.g. `observers.fixture.ts`) |
+| `public/` | Marketing / unauthenticated smoke |
+| `auth/` | Freemium / free-tier signed-in paywall tests |
+| `paid-user/` | Paid subscription smoke + credential copy checks |
+| `navigation/` | Header, country selector, cross-route nav |
+| `lessons/` | Lesson marketing flows + typography |
+| `flashcards/` | Light marketing / discovery checks |
+| `cat/` | CAT marketing entrypoints and pathway clarity |
+| `pricing/` | Pricing route smoke |
+| `regression/` | Cross-cutting happy paths (e.g. RN smoke) |
+
+## Projects (desktop / mobile / auth)
+
+- **`chromium`** — Default desktop Chrome; runs all `*.spec.ts` except files ignored per project (see config).
+- **`mobile`** — iPhone 12 viewport; runs `lesson-flows.mobile.spec.ts` only.
+- **`setup-paid-auth` + `chromium-paid`** — Registered only when `E2E_PAID_EMAIL` and `E2E_PAID_PASSWORD` are set. Setup logs in once; tests reuse `tests/e2e/.auth/paid-user.json` (override with `PLAYWRIGHT_PAID_AUTH_STATE`).
+- **`setup-free-auth` + `chromium-free`** — Same pattern for free tier with `E2E_FREE_EMAIL` / `E2E_FREE_PASSWORD` and `tests/e2e/.auth/free-user.json` (`PLAYWRIGHT_FREE_AUTH_STATE`).
+
+Screenshots on failure and traces on first retry are enabled globally in config.
+
+## Commands
+
+```bash
+# All default specs (chromium project), local dev
+npx playwright test
+
+# Public smoke only
+npx playwright test tests/e2e/public
+
+# Paid user journey (needs env creds)
+E2E_PAID_EMAIL=... E2E_PAID_PASSWORD=... npx playwright test --project=chromium-paid
+
+# Freemium / free tier (needs env creds)
+E2E_FREE_EMAIL=... E2E_FREE_PASSWORD=... npx playwright test --project=chromium-free
+
+# Mobile lesson flow
+npx playwright test --project=mobile
+
+# npm scripts (from package.json)
+npm run qa:lesson-flows:browser
+npm run qa:cat-entrypoints:browser
+npm run qa:paid-smoke:browser
+npm run qa:freemium:browser
+```
+
+## Helpers
+
+- **`helpers/attach-observers.ts`** — Console errors + failed requests (`profile: 'public' | 'app'`).
+- **`helpers/learner-login.ts`** — Email/password login used by auth setup.
+- **`helpers/country-selector.ts`** — Desktop listbox helpers + `HEADER_CHROME`.
+- **`helpers/mobile-drawer.ts`** — Region & language drawer on small viewports.
+
+Session JSON files under `tests/e2e/.auth/` are gitignored; do not commit real sessions.

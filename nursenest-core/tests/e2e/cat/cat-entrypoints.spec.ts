@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
-import { publicMarketingCatHrefForOffering } from "../src/lib/exam-pathways/practice-exams-cat-start";
-import { MARKETING_REGION_COOKIE } from "../src/lib/region/marketing-region-cookie";
+import { publicMarketingCatHrefForOffering } from "../../../src/lib/exam-pathways/practice-exams-cat-start";
+import { MARKETING_REGION_COOKIE } from "../../../src/lib/region/marketing-region-cookie";
+import { getE2eBaseURL } from "../helpers/e2e-env";
 
-const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
+const baseURL = getE2eBaseURL();
 
 test.describe("CAT entrypoint routing", () => {
   for (const region of ["US", "CA"] as const) {

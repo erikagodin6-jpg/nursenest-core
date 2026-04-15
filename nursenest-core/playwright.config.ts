@@ -1,6 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
-import { FREE_USER_AUTH_FILE } from "./e2e/free-auth-state-path";
-import { PAID_USER_AUTH_FILE } from "./e2e/paid-auth-state-path";
+import { FREE_USER_AUTH_FILE, PAID_USER_AUTH_FILE } from "./tests/e2e/helpers/auth-state-paths";
 
 const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
 
@@ -17,7 +16,7 @@ const paidProjects = paidAuthEnabled
   ? ([
       {
         name: "setup-paid-auth",
-        testMatch: /e2e\/auth-paid\.setup\.ts$/,
+        testMatch: /tests\/e2e\/setup\/auth-paid\.setup\.ts$/,
       },
       {
         name: "chromium-paid",
@@ -35,7 +34,7 @@ const freeProjects = freeAuthEnabled
   ? ([
       {
         name: "setup-free-auth",
-        testMatch: /e2e\/auth-free\.setup\.ts$/,
+        testMatch: /tests\/e2e\/setup\/auth-free\.setup\.ts$/,
       },
       {
         name: "chromium-free",
@@ -51,8 +50,8 @@ const freeProjects = freeAuthEnabled
 
 export default defineConfig({
   testDir: ".",
-  testMatch: ["e2e/**/*.spec.ts", "tests/e2e/**/*.spec.ts"],
-  // Exclude Next build output (would duplicate every spec under `.next/standalone/.../e2e/`).
+  testMatch: ["tests/e2e/**/*.spec.ts"],
+  // Exclude Next build output (would duplicate every spec under `.next/standalone/.../tests/e2e/`).
   testIgnore: [/^\.next[\\/]/, /[\\/]\.next[\\/]/, /[\\/]node_modules[\\/]/, /[\\/]dist[\\/]/],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
