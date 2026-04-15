@@ -2,7 +2,7 @@
  * Browser sign-off: country selector (Philippines hub → US/CA, mobile drawer, keyboard).
  * Requires: `npm run dev` on BASE_URL (default http://127.0.0.1:3000).
  */
-import { expect, test, devices, type Page } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { GLOBAL_REGION_COOKIE } from "../src/lib/region/global-region-cookie";
 
 const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
@@ -99,9 +99,8 @@ test.describe("Country selector sign-off — desktop (chromium)", () => {
 });
 
 test.describe("Country selector sign-off — mobile viewport", () => {
-  test.use({ ...devices["iPhone 12"] });
-
   test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
     await setPhilippinesCookie(page);
     await page.goto(`${baseURL}/exams/philippines`, { waitUntil: "domcontentloaded" });
     await expect(page.locator('[data-nn-nav-mode="public"]')).toBeVisible({ timeout: 60_000 });
