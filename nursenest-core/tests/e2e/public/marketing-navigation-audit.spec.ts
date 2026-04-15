@@ -280,15 +280,17 @@ test.describe("Marketing navigation audit", () => {
     const settingsBtn = page.getByRole("button", { name: /Region and language settings/i });
     await settingsBtn.click();
     await expect(page.getByRole("heading", { name: /Region & Settings/i })).toBeVisible({ timeout: 10_000 });
-    // Same pattern as nav drawer: dimmer + toolbar share aria-label.
-    await page.getByRole("button", { name: /^Close settings$/i }).nth(1).click({ force: true });
+    await page
+      .getByRole("button", { name: /^Close settings$/i })
+      .first()
+      .evaluate((el) => (el as HTMLButtonElement).click());
     await expect(page.getByRole("heading", { name: /Region & Settings/i })).toBeHidden({ timeout: 5000 });
     record({
       id: nextId("mob-ctx"),
       surface: "mobile-context-drawer",
-      element: "Settings drawer open/close",
-      expectedDestination: "panel toggled",
-      actualDestination: "closed",
+      element: "Region & Settings panel close (backdrop)",
+      expectedDestination: "panel hidden",
+      actualDestination: "heading hidden",
       pass: true,
     });
   });

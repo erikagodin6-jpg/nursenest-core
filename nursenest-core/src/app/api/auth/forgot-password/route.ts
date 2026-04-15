@@ -207,15 +207,19 @@ export async function POST(req: Request) {
   }
 
   /**
-   * Defer DB + Resend to the next event-loop turn so the HTTP response is committed before any
-   * Prisma work. `after()` from Next can still align with request lifecycle on some hosts; plain
-   * `setImmediate` is more predictable on Node (e.g. DigitalOcean App Platform + `next start`).
+   * Await the flow so Resend + Prisma finish before we return 200. Same generic message either way
+   * (no account enumeration). Previously `setImmediate` let the UI show success before the email
+   * attempt finished, which looked like “no email arrived” when delivery was still in flight or failed.
    */
-  setImmediate(() => {
-    void runForgotPasswordFlow(email, ip).catch((e) => {
-      safeServerLogCritical("auth", "forgot_password_background_failed", { surface: "api" }, e);
-    });
-  });
+  try {
+    await runForgotPasswordFlow(email, ip);
+  } catch (e) {
+    safeServerLogCritical("auth", "forgot_password_failed", { surface: "api" }, e);
+    return NextResponse.json(
+      { ok: false, error: "Unable to process request. Try again shortly." },
+      { status: 503 },
+    );
+  }
 
   return NextResponse.json(successPayload);
 }

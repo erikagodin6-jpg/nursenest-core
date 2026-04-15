@@ -9,6 +9,8 @@ type Props = {
   submitLabel: string;
   sendingLabel?: string;
   successMessage: string;
+  /** Shown under the main success line — e.g. check spam, contact support (no account-existence hints). */
+  successDetail?: string;
   errorMessage: string;
   notEmailMessage?: string;
   emailPlaceholder: string;
@@ -20,6 +22,7 @@ export function ForgotPasswordForm({
   submitLabel,
   sendingLabel = "Sending\u2026",
   successMessage,
+  successDetail,
   errorMessage,
   notEmailMessage = "Password reset uses the email on your account. Please enter your email address, not your username.",
   emailPlaceholder,
@@ -90,6 +93,7 @@ export function ForgotPasswordForm({
     return (
       <div className="mt-6 space-y-4">
         <p className="text-sm text-muted">{successMessage}</p>
+        {successDetail ? <p className="text-sm text-muted">{successDetail}</p> : null}
         {devUrl ? (
           <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs break-all text-amber-950">
             <span className="font-semibold">Development only:</span> reset link{" "}

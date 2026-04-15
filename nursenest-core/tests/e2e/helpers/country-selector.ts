@@ -13,13 +13,11 @@ export async function setGlobalRegionCookie(page: Page, value: string, baseURL =
 }
 
 /**
- * Desktop: match the real a11y names so we don’t click unrelated “Philippines” UI in page content.
+ * Desktop: open the global country listbox from the sticky header (utility strip or primary row).
+ * Uses `Country:` / `Region:` so it works after switching away from Philippines.
  */
 export async function openDesktopCountryMenu(page: Page, headerSelector = HEADER_CHROME) {
-  const regionBtn = page
-    .locator(headerSelector)
-    .getByRole("button", { name: /Country: Philippines|Region: Philippines/i })
-    .first();
+  const regionBtn = page.locator(headerSelector).getByRole("button", { name: /Country:|Region:/i }).first();
   await expect(regionBtn).toBeVisible({ timeout: 60_000 });
   await regionBtn.click();
   await page.locator(`${headerSelector} [role="listbox"][aria-label="Select country"]`).waitFor({
@@ -30,5 +28,7 @@ export async function openDesktopCountryMenu(page: Page, headerSelector = HEADER
 
 export async function selectCountryFromListbox(page: Page, label: RegExp, headerSelector = HEADER_CHROME) {
   const list = page.locator(`${headerSelector} [role="listbox"][aria-label="Select country"]`);
-  await list.getByRole("option", { name: label }).first().click();
+  const opt = list.getByRole("option", { name: label }).first();
+  await opt.scrollIntoViewIfNeeded();
+  await opt.click();
 }

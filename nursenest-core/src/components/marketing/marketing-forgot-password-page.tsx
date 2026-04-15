@@ -30,7 +30,11 @@ export async function MarketingForgotPasswordPage({ locale }: { locale: string }
             sendingLabel={m["pages.forgotPassword.sendingLabel"] ?? "Sending\u2026"}
             successMessage={
               m["pages.forgotPassword.successMessage"] ??
-              "If an account exists for that email, a password reset link has been sent."
+              "If an account exists for that email and it can receive a password reset, we will send a link."
+            }
+            successDetail={
+              m["pages.forgotPassword.successDetail"] ??
+              "Delivery can take a few minutes. Check your spam or promotions folder. If nothing arrives, use Contact support above so we can help you restore access."
             }
             errorMessage={m["pages.forgotPassword.errorMessage"] ?? "Something went wrong. Please try again."}
             notEmailMessage={

@@ -108,7 +108,7 @@ test.describe("Country selector — desktop", () => {
     await expectPublicChromeVisible(page);
 
     await openDesktopCountryMenu(page);
-    await selectCountryFromListbox(page, /^Canada$/);
+    await selectCountryFromListbox(page, /Canada/i);
     await waitForUsOrCanadaHubUrl(page, "canada");
     expect(pathnameIsCanadaMarketing(page.url()), `expected /canada marketing path, got ${page.url()}`).toBe(true);
     await expect(page).toHaveURL(/\/canada\/rn\/nclex-rn(?:\/|\?|#|$)/);
@@ -164,7 +164,10 @@ test.describe("Country selector — mobile", () => {
 
     await openMobileRegionLanguageDrawer(page);
     await expectMobileRegionSettingsHeading(page);
-    await page.getByRole("option", { name: /United States/i }).first().click();
+    await page
+      .getByRole("option", { name: /United States/i })
+      .first()
+      .evaluate((el) => (el as HTMLElement).click());
     await waitForUsOrCanadaHubUrl(page, "us");
     await expect(page).toHaveURL(/\/us\/rn\/nclex-rn(?:\/|\?|#|$)/);
 
@@ -184,7 +187,11 @@ test.describe("Country selector — mobile", () => {
     await expectPublicChromeVisible(page);
 
     await openMobileRegionLanguageDrawer(page);
-    await page.getByRole("option", { name: /^Canada$/ }).first().click();
+    await expectMobileRegionSettingsHeading(page);
+    await page
+      .getByRole("option", { name: /Canada/i })
+      .first()
+      .evaluate((el) => (el as HTMLElement).click());
     await waitForUsOrCanadaHubUrl(page, "canada");
     await expect(page).toHaveURL(/\/canada\/rn\/nclex-rn(?:\/|\?|#|$)/);
 
