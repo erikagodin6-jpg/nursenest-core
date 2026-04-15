@@ -15,6 +15,7 @@ import bcrypt from "bcryptjs";
 import { PrismaClient, UserRole, CountryCode, TierCode } from "@prisma/client";
 
 import "../src/lib/db/env-bootstrap";
+import { normalizeEmailForDedup } from "../src/lib/auth/email-address-normalization";
 import { strongPasswordSchema } from "../src/lib/auth/password-policy";
 import { createInterface } from "node:readline";
 
@@ -102,6 +103,7 @@ async function main(): Promise<void> {
   const created = await prisma.user.create({
     data: {
       email,
+      normalizedEmail: normalizeEmailForDedup(email),
       name,
       passwordHash,
       role: UserRole.SUPER_ADMIN,

@@ -14,9 +14,13 @@ import {
   getFailureCount,
 } from "@/lib/auth/login-lockout";
 import { isGmailLikeAddress, normalizeEmailForDedup } from "@/lib/auth/email-address-normalization";
-import { isEmailLikeIdentifier, normalizeLoginIdentifier } from "@/lib/auth/normalize-login-identifier";
+import {
+  isEmailLikeIdentifier,
+  normalizeLoginIdentifier,
+  sanitizeRawLoginIdentifier,
+} from "@/lib/auth/normalize-login-identifier";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
 import {
   getUserAccess,
@@ -170,7 +174,7 @@ export const authConfig: NextAuthConfig = {
           return null;
         }
 
-        const identifier = normalizeLoginIdentifier(enteredEmailRaw);
+        const identifier = normalizeLoginIdentifier(sanitizeRawLoginIdentifier(enteredEmailRaw));
         const password = String(credentials.password ?? "");
         const idHash = identifier ? hashLoginIdentifierForLog(identifier) : "";
         const authMode = isEmailLikeIdentifier(identifier) ? "email" : "username";
@@ -272,6 +276,31 @@ export const authConfig: NextAuthConfig = {
               });
               if (user) {
                 lookupStrategy = gmailLike ? "normalized_gmail" : "normalized_email";
+              }
+            }
+            /**
+             * Legacy/imported rows may have leading/trailing spaces in `email`. Prisma's
+             * `equals` + `insensitive` does not apply `btrim` on the column, so a clean
+             * typed address can fail to match — resolve with an explicit SQL equality on trimmed values.
+             */
+            if (!user) {
+              try {
+                const idRows = await prisma.$queryRaw<{ id: string }[]>(
+                  Prisma.sql`
+                    SELECT id FROM "User"
+                    WHERE lower(btrim(email)) = lower(btrim(${identifier}))
+                    LIMIT 2
+                  `,
+                );
+                if (idRows.length === 1) {
+                  user = await prisma.user.findUnique({
+                    where: { id: idRows[0].id },
+                    select: CREDENTIALS_USER_SELECT,
+                  });
+                  if (user) lookupStrategy = "exact_email";
+                }
+              } catch {
+                /* non-fatal — continue to user_not_found */
               }
             }
           } else {
