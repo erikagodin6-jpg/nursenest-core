@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
-import { getCachedPublicHomeStats } from "@/lib/marketing/public-home-stats";
+import {
+  getCachedPublicHomeStats,
+  PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC,
+} from "@/lib/marketing/public-home-stats";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
@@ -19,7 +22,7 @@ import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketin
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 
-export const revalidate = 600;
+export const revalidate = PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC;
 
 type Props = { params: Promise<{ locale: string }> };
 

@@ -48,6 +48,9 @@ import {
   topicEqualsSql,
 } from "@/lib/questions/exam-question-access-sql";
 import { getWeakTopicTargetsForPractice } from "@/lib/learner/topic-performance";
+import { API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC } from "@/lib/server/api-route-constants";
+
+export const maxDuration = API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC;
 
 /** Deep offset pagination is expensive on large tables; reject before issuing heavy skip scans. */
 const MAX_QUESTION_LIST_SKIP_ROWS = MAX_LIST_SKIP_ROWS_DEFAULT;

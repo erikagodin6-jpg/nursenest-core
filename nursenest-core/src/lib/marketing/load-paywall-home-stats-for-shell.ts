@@ -8,7 +8,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /**
  * Server-only stats for the learner shell paywall — **no client fetch**.
- * Uses the same cache as `/api/public/home-stats` and the marketing homepage.
+ * Uses the same `unstable_cache` as `/api/public/home-stats` and the marketing homepage (`PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC`).
  */
 export async function loadPaywallHomeStatsForShell(): Promise<PublicHomeStatsPayload> {
   try {

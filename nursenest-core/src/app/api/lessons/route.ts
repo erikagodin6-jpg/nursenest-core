@@ -29,6 +29,9 @@ import {
 } from "@/lib/api/api-pagination-limits";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { jsonResponseGuarded } from "@/lib/server/response-guard";
+import { API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC } from "@/lib/server/api-route-constants";
+
+export const maxDuration = API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC;
 
 function wantsCursorMode(req: NextRequest): boolean {
   const mode = req.nextUrl.searchParams.get("paginationMode");

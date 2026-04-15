@@ -17,6 +17,11 @@ import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const I18N_DIR = path.join(__dirname, "..", "..", "..", "public", "i18n");
 
+/** Must match `script/compile-i18n.ts` / `script/merge-marketing-i18n.ts` — marketing may list extra routable codes before TS sources exist. */
+const COMPILED_I18N_LOCALES = new Set<string>([
+  "en", "fr", "tl", "hi", "es", "zh", "zh-tw", "ar", "ko", "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id", "it", "ru",
+]);
+
 function readLocale(code: string): MarketingMessages {
   const m = loadMergedMarketingMessagesFromNextPublicDir(I18N_DIR, code);
   if (!m || Object.keys(m).length === 0) {
@@ -29,6 +34,7 @@ describe("required user UI i18n keys (non-admin)", () => {
   it("every supported locale includes all required keys with non-empty values", () => {
     const failures: string[] = [];
     for (const locale of MARKETING_LOCALE_CODES) {
+      if (!COMPILED_I18N_LOCALES.has(locale)) continue;
       const messages = readLocale(locale);
       const r = validateRequiredUserUiI18nKeys(messages, locale);
       if (!r.ok) {

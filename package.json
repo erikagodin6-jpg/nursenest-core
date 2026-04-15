@@ -37,6 +37,7 @@
     "i18n:normalize-marketing": "npx tsx script/normalize-marketing-locale-overlays.ts",
     "i18n:validate": "npx tsx script/i18n-validate.ts",
     "i18n:validate:production": "npx tsx script/i18n-validate.ts --strict",
+    "i18n:audit-payload": "npx tsx script/i18n-payload-audit.ts",
     "i18n:check-drift": "npx tsx script/i18n-check-drift.ts",
     "i18n:report-placeholder-fallbacks": "npx tsx script/i18n-report-placeholder-fallbacks.ts",
     "i18n:ci": "npm run i18n:compile && npm run i18n:validate:production && npm run i18n:check-drift && npm run i18n:report-placeholder-fallbacks",

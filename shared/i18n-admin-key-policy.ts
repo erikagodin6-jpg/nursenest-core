@@ -17,7 +17,11 @@ function isPagesAdminSecondSegment(seg: string): boolean {
  */
 export function isAdminOnlyFlatI18nKey(key: string): boolean {
   if (key === "nav.admin") return true;
-  if (key.startsWith("allied.alliedAdmin.")) return true;
+  if (key.startsWith("allied.")) {
+    const second = key.split(".")[1] ?? "";
+    /** e.g. alliedAdmin, articleAdmin, encyclopediaAdmin — staff tooling, not public marketing body copy. */
+    if (second.includes("Admin")) return true;
+  }
   if (key.startsWith("pages.")) {
     const parts = key.split(".");
     const second = parts[1] ?? "";

@@ -90,6 +90,9 @@ export function SubscriptionPaywall({
       ? formatStat(homeStats.registeredLearners, locale)
       : null;
 
+  const hasNumericProofLine =
+    bankQuestionCount != null || lessonCount != null || Boolean(learnersCount);
+
   const sent = useRef(false);
   useEffect(() => {
     if (sent.current) return;
@@ -123,7 +126,12 @@ export function SubscriptionPaywall({
         </p>
       </div>
 
-      {/* Real library stats (proof) — from SSR; neutral copy when counts unavailable (no “broken zeros”). */}
+      {/*
+        Proof strip — always present (server-injected stats; no client fetch).
+        - Neutral: DB/safe-mode/degraded — strong copy, not empty zeros.
+        - Numeric: live counts when available — stable first paint (no 0→N flash from client).
+        - Qualitative: counts legitimately zero/partial — intentional trust copy, never a blank card.
+      */}
       {neutralProof ? (
         <div
           className="flex flex-col gap-2 rounded-xl border px-4 py-3"
@@ -136,7 +144,7 @@ export function SubscriptionPaywall({
             {t("paywall.preview.neutralProofBody")}
           </p>
         </div>
-      ) : bankQuestionCount != null || lessonCount != null || learnersCount ? (
+      ) : hasNumericProofLine ? (
         <div
           className="flex flex-col gap-3 rounded-xl border px-4 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
           style={{ borderColor: "color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft))" }}
@@ -173,7 +181,19 @@ export function SubscriptionPaywall({
             ) : null}
           </ul>
         </div>
-      ) : null}
+      ) : (
+        <div
+          className="flex flex-col gap-2 rounded-xl border px-4 py-3"
+          style={{ borderColor: "color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft))" }}
+        >
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-info)]">
+            {t("paywall.preview.qualitativeProofIntro")}
+          </p>
+          <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            {t("paywall.preview.qualitativeProofBody")}
+          </p>
+        </div>
+      )}
 
       {/* Content preview — difficulty + rationale depth before CTA */}
       <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_06%,var(--semantic-surface))] p-4">

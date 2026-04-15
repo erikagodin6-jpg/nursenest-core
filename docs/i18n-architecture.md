@@ -79,6 +79,7 @@ This runs `script/compile-i18n.ts`, which:
 | `npm run i18n:repair-marketing` | Full marketing pipeline: compile → sync audited keys to `marketing-en.json` → fill nav/footer overlays → compile → validate + drift + nav checks |
 | `npm run i18n:status` | Writes `reports/i18n-status.json` (diagnostics snapshot) |
 | `npm run i18n:scan` / `i18n:scan:ci` | Hardcoded-string scan (see `i18n-scan.config.json`) |
+| `npm run i18n:audit-payload` | Size / duplicate / long-value report → `tools/i18n/reports/i18n-payload-audit.json` (run after compile) |
 
 ## Adding a new language
 

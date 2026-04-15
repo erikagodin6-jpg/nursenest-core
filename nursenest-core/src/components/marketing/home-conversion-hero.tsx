@@ -101,6 +101,14 @@ export function HomeConversionHero({
               </StaggerItem>
               <StaggerItem variant="softReveal" timing="hero">
                 <p
+                  className="nn-marketing-body-sm max-w-lg text-pretty leading-relaxed text-[var(--palette-text-muted)]"
+                  data-testid="text-hero-emotional-anchor"
+                >
+                  {formatSentenceCase(t("pages.home.hero.emotionalAnchorLine"), locale)}
+                </p>
+              </StaggerItem>
+              <StaggerItem variant="softReveal" timing="hero">
+                <p
                   className="nn-marketing-body-sm max-w-lg text-pretty leading-relaxed text-[var(--palette-text)]"
                   data-testid="text-hero-confidence-line"
                 >

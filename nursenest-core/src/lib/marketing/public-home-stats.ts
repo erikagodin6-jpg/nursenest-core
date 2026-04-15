@@ -63,7 +63,7 @@ export function getDegradedPublicHomeStatsFallback(
 
 /**
  * Public marketing stats — same scope as `/api/public/home-stats`.
- * Use `getCachedPublicHomeStats` on the homepage to avoid a client round-trip and “0 → value” flashes.
+ * Use `getCachedPublicHomeStats` on the homepage / paywall to avoid duplicate DB work and “0 → value” flashes.
  */
 export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
   if (!isDatabaseUrlConfigured() || isRuntimeSafeMode()) {
@@ -231,9 +231,15 @@ async function computePublicHomeStats(t0: number): Promise<PublicHomeStatsPayloa
   };
 }
 
-/** Cached to match homepage `revalidate` (600s) — reduces duplicate DB work from API + page in one deploy window. */
+/**
+ * Short shared TTL for homepage SSR, `/api/public/home-stats`, and learner paywall (same `unstable_cache` key).
+ * Bumps the cache key when this value changes so deploys don’t reuse stale windows unexpectedly.
+ */
+export const PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC = 300;
+
+/** Cached — single source for marketing homepage + public API + paywall layout (no duplicate DB fanout). */
 export const getCachedPublicHomeStats = unstable_cache(
   async () => getPublicHomeStats(),
-  ["public-home-stats-v1"],
-  { revalidate: 600 },
+  ["public-home-stats-v2", String(PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC)],
+  { revalidate: PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC },
 );

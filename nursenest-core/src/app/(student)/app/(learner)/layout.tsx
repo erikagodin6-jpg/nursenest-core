@@ -42,6 +42,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { LearnerSilentSectionBoundary } from "@/components/learner/learner-silent-section-boundary";
 import { PaywallHomeStatsProvider } from "@/components/student/paywall-home-stats-context";
 import { loadPaywallHomeStatsForShell } from "@/lib/marketing/load-paywall-home-stats-for-shell";
+import { LearnerDegradedModeBanner } from "@/components/student/learner-degraded-mode-banner";
 
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
@@ -92,13 +93,8 @@ export default async function LearnerShellLayout({ children }: { children: React
     },
   );
 
-  let {
-    showBaselinePrompt,
-    pathwayId,
-    pathwayShortLabel,
-    pathwayHubHref,
-    examsLabel,
-  } = pathwayNav;
+  const { showBaselinePrompt, pathwayId, pathwayShortLabel } = pathwayNav;
+  let { pathwayHubHref, examsLabel } = pathwayNav;
 
   if (!pathwayHubHref) {
     const tier = ((session?.user as { tier?: string | null })?.tier ?? "").toUpperCase();
@@ -143,6 +139,10 @@ export default async function LearnerShellLayout({ children }: { children: React
             <LearnerFeedbackShell pathwayId={pathwayId}>
             <div className="nn-learner-app mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+5rem+env(safe-area-inset-bottom,0px))] sm:px-6 md:pb-[var(--nn-rhythm-shell-y)]">
               <PathwayLessonProgressRefreshListener />
+              <LearnerDegradedModeBanner
+                serverDegraded={isDegradedMode()}
+                serverCoreEmergency={isCoreOnlyEmergencyMode()}
+              />
               {!skipNonCritical ? <LearnerAppSectionAnalytics /> : null}
               <div className="nn-learner-exam-chrome-target nn-learner-shell-sticky sticky top-0 z-50 mb-[var(--nn-rhythm-tight-y)] bg-[var(--semantic-bg-base)] pt-1">
                 <div className="flex flex-col gap-2">

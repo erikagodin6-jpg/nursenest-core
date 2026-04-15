@@ -6,7 +6,10 @@ import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { MARKETING_HOME_FAQ_JSONLD } from "@/lib/seo/marketing-home-faq-schema";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
-import { getCachedPublicHomeStats } from "@/lib/marketing/public-home-stats";
+import {
+  getCachedPublicHomeStats,
+  PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC,
+} from "@/lib/marketing/public-home-stats";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
@@ -18,8 +21,8 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { ExamSelectorGate } from "@/components/onboarding/exam-selector-gate";
 import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
 
-/** ISR: homepage shell — static with 10-min revalidation. No cookies; locale/region defaults to en/US. */
-export const revalidate = 600;
+/** ISR: homepage shell — aligned with `getCachedPublicHomeStats` TTL (shared with paywall + public API). */
+export const revalidate = PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC;
 
 const STATIC_LOCALE = DEFAULT_MARKETING_LOCALE;
 const STATIC_REGION = "US" as const;

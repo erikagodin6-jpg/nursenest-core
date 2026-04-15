@@ -21,6 +21,9 @@ import {
   parseListPage,
 } from "@/lib/api/api-pagination-limits";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC } from "@/lib/server/api-route-constants";
+
+export const maxDuration = API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC;
 
 /**
  * Subscriber-only flashcard list (backend-enforced; no freemium bypass of full backs).
