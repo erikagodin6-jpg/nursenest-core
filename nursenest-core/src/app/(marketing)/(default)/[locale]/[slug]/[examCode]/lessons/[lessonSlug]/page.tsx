@@ -419,6 +419,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           postTest={fullAccess ? bankAssessments.postTest : undefined}
           fullAccess={fullAccess}
           assessmentsEnabled={studySettings.enablePrePostQuizzes}
+          sectionAnchors={displaySections.map((s) => ({ id: s.id, label: s.heading }))}
         >
           <LessonRecallProvider>
             <main className="mt-5 sm:mt-6">

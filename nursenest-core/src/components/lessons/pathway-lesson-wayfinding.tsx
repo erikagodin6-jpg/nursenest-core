@@ -106,7 +106,7 @@ export function PathwayLessonWayfinding({
       className="nn-lesson-wayfinding mx-auto mt-8 max-w-5xl rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_96%,var(--semantic-brand)_4%)] bg-[color-mix(in_srgb,var(--bg-card)_97%,var(--semantic-panel-muted)_3%)] px-4 py-4 sm:px-5 sm:py-5"
       aria-labelledby="lesson-wayfinding-heading"
     >
-      <h2 id="lesson-wayfinding-heading" className="text-base font-semibold tracking-tight text-[var(--theme-heading-text)]">
+      <h2 id="lesson-wayfinding-heading" className="text-base font-medium tracking-tight text-[var(--theme-heading-text)]">
         Continue studying on NurseNest
       </h2>
       <p className="mt-1 max-w-prose text-xs leading-relaxed text-[var(--theme-muted-text)] sm:text-sm">
@@ -126,7 +126,7 @@ export function PathwayLessonWayfinding({
                   <Icon className="h-4 w-4" strokeWidth={1.75} />
                 </span>
                 <span className="min-w-0">
-                  <span className="block text-sm font-semibold text-[var(--theme-heading-text)]">{item.label}</span>
+                  <span className="block text-sm font-medium text-[var(--theme-heading-text)]">{item.label}</span>
                   <span className="mt-0.5 block text-xs leading-snug text-[var(--theme-muted-text)]">{item.description}</span>
                 </span>
               </Link>

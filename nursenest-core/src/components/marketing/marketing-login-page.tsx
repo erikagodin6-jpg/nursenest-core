@@ -20,8 +20,12 @@ export async function MarketingLoginPage({ locale }: { locale: string }) {
           <Suspense>
             <VerifyStatusBanner />
           </Suspense>
-          <h1 className="nn-marketing-h1">{m["pages.login.welcome"]}</h1>
-          <p className="nn-marketing-body-sm mt-2 text-muted">{m["pages.login.subtitle"]}</p>
+          <header className="mb-8 text-center">
+            <h1 className="text-2xl font-semibold tracking-tight text-[var(--palette-heading)] sm:text-3xl">
+              {m["pages.login.welcome"]}
+            </h1>
+            <p className="mt-2 text-center text-sm text-muted-foreground sm:text-base">{m["pages.login.subtitle"]}</p>
+          </header>
           <Suspense fallback={<div className="mt-6 h-32 animate-pulse rounded-xl bg-border/40" aria-hidden />}>
             <LoginForm
               forgotPasswordHref={forgotHref}

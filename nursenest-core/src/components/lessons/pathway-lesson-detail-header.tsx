@@ -55,7 +55,7 @@ export function PathwayLessonDetailHeader({
           role="group"
           aria-label={`${compactExamName}, ${place}, ${bodySystem}`}
         >
-          <span className="font-semibold text-[var(--theme-heading-text)]">{compactExamName}</span>
+          <span className="font-medium text-[var(--theme-heading-text)]">{compactExamName}</span>
           <span aria-hidden className="text-[var(--theme-muted-text)]">
             ·
           </span>
@@ -86,7 +86,7 @@ export function PathwayLessonDetailHeader({
         <div className="mt-3 border-t border-[color-mix(in_srgb,var(--border-subtle)_88%,var(--theme-primary))] pt-3">
           <Link
             href={lessonsBasePath}
-            className="nn-study-pill-secondary inline-flex min-h-10 items-center justify-center px-4 py-2 text-sm font-semibold text-primary"
+            className="nn-study-pill-secondary inline-flex min-h-10 items-center justify-center px-4 py-2 text-sm font-medium text-primary"
           >
             ← All lessons
           </Link>

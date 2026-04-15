@@ -16,7 +16,7 @@ export function PathwayLessonQuickReview({ quickReviewLines }: MarketingPathwayL
     <div className="nn-card rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--bg-card)_92%,var(--semantic-warning-soft)_8%)] p-3.5 dark:border-amber-900/35 dark:bg-amber-950/15">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Quick review (condensed)</p>
+          <p className="text-sm font-medium text-[var(--theme-heading-text)]">Quick review (condensed)</p>
           <p className="mt-0.5 text-xs leading-relaxed text-[var(--theme-muted-text)]">
             Short revision bullets only, not a replacement for the full lesson sections below.
           </p>

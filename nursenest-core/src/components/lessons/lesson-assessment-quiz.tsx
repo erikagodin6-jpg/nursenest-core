@@ -225,17 +225,20 @@ function QuestionCard({
           </div>
           {item.rationale ? (
             <div
-              className="rounded-xl border-l-4 px-4 py-3 text-sm leading-6"
+              className="rounded-xl border-l-4 px-4 py-3"
               style={{
                 borderLeftColor: "var(--semantic-info)",
                 background: "color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface))",
                 color: "var(--theme-body-text)",
               }}
             >
-              <span className="font-semibold" style={{ color: "var(--semantic-info)" }}>
-                Rationale:{" "}
-              </span>
-              {item.rationale}
+              <p
+                className="text-[0.65rem] font-semibold uppercase tracking-[0.06em]"
+                style={{ color: "var(--semantic-info)" }}
+              >
+                Rationale
+              </p>
+              <p className="mt-2 text-sm font-normal leading-[1.72] text-[var(--theme-body-text)]">{item.rationale}</p>
             </div>
           ) : null}
         </div>

@@ -92,7 +92,7 @@ export function PathwayLessonQuizSet({
     <section className={`border-b border-[var(--semantic-border-soft)] pb-8 last:border-b-0 last:pb-0 ${className}`.trim()}>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h2 className="text-base font-semibold text-[var(--theme-heading-text)] sm:text-lg">{title}</h2>
+          <h2 className="text-base font-medium text-[var(--theme-heading-text)] sm:text-lg">{title}</h2>
           {subtitle ? (
             <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-[var(--semantic-text-secondary)]">
               {subtitle}
@@ -100,7 +100,7 @@ export function PathwayLessonQuizSet({
           ) : null}
         </div>
         <div
-          className="inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold tabular-nums"
+          className="inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium tabular-nums"
           style={{
             borderColor: "var(--semantic-border-soft)",
             background: "color-mix(in srgb, var(--semantic-chart-2) 10%, var(--semantic-surface))",
@@ -133,7 +133,7 @@ export function PathwayLessonQuizSet({
             role="tab"
             aria-selected={postMode === "practice"}
             onClick={() => onPostModeChange?.("practice")}
-            className="min-h-9 rounded-full px-4 py-2 text-xs font-semibold transition"
+            className="min-h-9 rounded-full px-4 py-2 text-xs font-medium transition"
             style={{
               background: postMode === "practice" ? "var(--semantic-surface)" : "transparent",
               color: postMode === "practice" ? "var(--theme-heading-text)" : "var(--semantic-text-secondary)",
@@ -147,7 +147,7 @@ export function PathwayLessonQuizSet({
             role="tab"
             aria-selected={postMode === "exam"}
             onClick={() => onPostModeChange?.("exam")}
-            className="min-h-9 rounded-full px-4 py-2 text-xs font-semibold transition"
+            className="min-h-9 rounded-full px-4 py-2 text-xs font-medium transition"
             style={{
               background: postMode === "exam" ? "var(--semantic-surface)" : "transparent",
               color: postMode === "exam" ? "var(--theme-heading-text)" : "var(--semantic-text-secondary)",
@@ -167,7 +167,7 @@ export function PathwayLessonQuizSet({
           return (
             <li key={i}>
               <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 sm:p-5">
-                <p className="text-[0.9375rem] font-semibold leading-snug text-[var(--theme-heading-text)]">
+                <p className="text-[0.9375rem] font-normal leading-relaxed text-[var(--theme-heading-text)]">
                   <span className="mr-2 text-[var(--semantic-text-secondary)]">{i + 1}.</span>
                   {q.question}
                 </p>
@@ -200,7 +200,7 @@ export function PathwayLessonQuizSet({
                           className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--semantic-brand)]"
                         />
                         <span
-                          className={`shrink-0 rounded-md px-1.5 py-0.5 text-[0.7rem] font-bold uppercase tracking-wider ${
+                          className={`shrink-0 rounded-md px-1.5 py-0.5 text-[0.7rem] font-semibold uppercase tracking-wider ${
                             showGrading && j === q.correct
                               ? "bg-[var(--semantic-success)] text-[var(--text-on-dark)]"
                               : "bg-[color-mix(in_srgb,var(--theme-primary)_12%,var(--bg-card))] text-[var(--semantic-text-secondary)]"
@@ -231,12 +231,8 @@ export function PathwayLessonQuizSet({
                       : "color-mix(in srgb, var(--semantic-panel-warm) 28%, var(--semantic-surface))",
                   }}
                 >
-                  <p className="text-[0.675rem] font-bold uppercase tracking-widest text-[var(--semantic-text-secondary)]">
-                    Rationale
-                  </p>
-                  <p className="mt-1 text-[0.875rem] leading-relaxed text-[var(--theme-body-text)] whitespace-pre-wrap">
-                    {q.rationale}
-                  </p>
+                  <p className="nn-lesson-rationale__label">Rationale</p>
+                  <p className="nn-lesson-rationale__body">{q.rationale}</p>
                 </div>
               ) : null}
             </li>
@@ -249,7 +245,7 @@ export function PathwayLessonQuizSet({
           <button
             type="button"
             onClick={() => setExamRevealed(true)}
-            className="rounded-xl border px-5 py-2.5 text-sm font-semibold text-[var(--theme-heading-text)]"
+            className="rounded-xl border px-5 py-2.5 text-sm font-medium text-[var(--theme-heading-text)]"
             style={{
               borderColor: "var(--semantic-border-soft)",
               background: "color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-surface))",
@@ -266,7 +262,7 @@ export function PathwayLessonQuizSet({
             {answeredCount}/{total} answered · full access unlocks answer highlights and rationales.
           </p>
         ) : allAnswered && score !== null && (variant === "pre" || postMode === "practice" || examRevealed) ? (
-          <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
+          <p className="text-sm font-medium text-[var(--theme-heading-text)]">
             Score: {score}/{total}
           </p>
         ) : (

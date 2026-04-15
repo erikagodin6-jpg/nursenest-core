@@ -15,7 +15,7 @@ export function HeaderBrandLockup() {
   const showLeafAsset = Boolean(leafUrl) && !leafLoadFailed;
 
   return (
-    <span className="relative inline-flex items-center gap-2.5 overflow-visible align-middle leading-none">
+    <span className="relative inline-flex items-center gap-1.5 overflow-visible align-middle leading-none">
       <span className="relative z-[20] -my-4 inline-flex h-[52px] w-[52px] shrink-0 items-center justify-center sm:h-[58px] sm:w-[58px] lg:h-[64px] lg:w-[64px]">
         {showLeafAsset ? (
           <img

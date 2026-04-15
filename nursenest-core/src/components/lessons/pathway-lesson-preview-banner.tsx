@@ -59,11 +59,11 @@ export function PathwayLessonPreviewBanner({ kind, pathwayShortName, pathwayCoun
     >
       {/* Badge + title */}
       <div className="flex flex-wrap items-center gap-2">
-        <span className="rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))] px-2.5 py-0.5 text-xs font-semibold text-[var(--semantic-brand)]">
+        <span className="rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))] px-2.5 py-0.5 text-xs font-medium text-[var(--semantic-brand)]">
           {badge}
         </span>
       </div>
-      <p className="mt-1.5 text-base font-semibold leading-snug text-[var(--theme-heading-text)]">{title}</p>
+      <p className="mt-1.5 text-base font-medium leading-relaxed text-[var(--theme-heading-text)]">{title}</p>
       <p className="mt-1 text-sm leading-relaxed text-[var(--theme-body-text)]">{body}</p>
 
       {/* Feature bullets */}

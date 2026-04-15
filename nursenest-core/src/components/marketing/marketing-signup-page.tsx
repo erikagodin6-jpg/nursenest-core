@@ -15,8 +15,12 @@ export async function MarketingSignupPage({ locale }: { locale: string }) {
           <div className="mb-6 flex justify-center bg-transparent">
             <SiteBrandLogoMark variant="auth" logoVariant="leaf" className="!h-11 !max-h-11 sm:!h-12 sm:!max-h-12" />
           </div>
-          <h1 className="nn-marketing-h1">{m["pages.signup.h1"]}</h1>
-          <p className="nn-marketing-body-sm mt-2 text-muted">{m["pages.signup.subtitle"]}</p>
+          <header className="mb-8 text-center">
+            <h1 className="text-2xl font-semibold tracking-tight text-[var(--palette-heading)] sm:text-3xl">
+              {m["pages.signup.h1"]}
+            </h1>
+            <p className="mt-2 text-center text-sm text-muted-foreground sm:text-base">{m["pages.signup.subtitle"]}</p>
+          </header>
           <Suspense fallback={<div className="mt-6 h-64 animate-pulse rounded-xl bg-muted/40" aria-hidden />}>
             <SignupForm
               termsHref={withMarketingLocale(locale, "/terms")}

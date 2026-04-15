@@ -72,7 +72,7 @@ export function LessonSectionCard({
       <h2 className="nn-lesson-section-heading mt-2.5 text-[var(--theme-heading-text)]">
         {heading?.trim() || "Section"}
       </h2>
-      <div className="mt-4">{children}</div>
+      <div className="mt-5">{children}</div>
     </section>
   );
 }

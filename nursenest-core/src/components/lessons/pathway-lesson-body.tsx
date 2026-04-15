@@ -36,7 +36,7 @@ function renderParagraphWithLinks(
         const base = lessonWikiBasePath?.replace(/\/$/, "");
         if (!base) {
           return (
-            <span key={`${keyPrefix}-l-${i}`} className="font-medium">
+            <span key={`${keyPrefix}-l-${i}`} className="font-normal">
               {inlineBold(label)}
             </span>
           );
@@ -46,14 +46,18 @@ function renderParagraphWithLinks(
           <Link
             key={`${keyPrefix}-l-${i}`}
             href={href}
-            className="font-medium text-primary hover:underline"
+            className="font-normal text-primary underline decoration-primary/35 underline-offset-[3px] hover:decoration-primary"
           >
             {inlineBold(label)}
           </Link>
         );
       }
       return (
-        <Link key={`${keyPrefix}-l-${i}`} href={target} className="font-medium text-primary hover:underline">
+        <Link
+          key={`${keyPrefix}-l-${i}`}
+          href={target}
+          className="font-normal text-primary underline decoration-primary/35 underline-offset-[3px] hover:decoration-primary"
+        >
           {inlineBold(label)}
         </Link>
       );
@@ -128,7 +132,7 @@ function PathwayLessonExamFocusInlineBlocks({
     <div className="space-y-4 rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-brand)_10%)] bg-[color-mix(in_srgb,var(--bg-card)_94%,var(--semantic-brand-soft)_6%)] p-3.5">
       {blocks.map((b) => (
         <div key={b.title}>
-          <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-[var(--theme-muted-text)]">
+          <h3 className="text-[0.7rem] font-medium uppercase tracking-[0.12em] text-[var(--theme-muted-text)]">
             {b.title}
           </h3>
           <div className="mt-1.5">
@@ -220,7 +224,7 @@ export function PathwayLessonBody({
     return null;
   }
   return (
-    <div className="nn-lesson-prose space-y-4">
+    <div className="nn-lesson-content nn-lesson-prose space-y-5">
       {paragraphs.map((p, idx) => {
         const block = parseParagraphBlock(p);
 

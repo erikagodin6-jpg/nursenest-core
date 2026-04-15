@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { PathwayLessonQuizzes } from "@/components/lessons/pathway-lesson-quizzes";
+import { PathwayLessonLegacyStudyShell } from "@/components/lessons/pathway-lesson-legacy-study-shell";
 import {
   readLearnerStudyDefaults,
   writeLearnerStudyDefaults,
@@ -31,6 +31,7 @@ export function PathwayLessonAssessmentExperience({
   postTest,
   fullAccess,
   assessmentsEnabled = true,
+  sectionAnchors,
   children,
 }: MarketingPathwayLessonAssessmentShellProps) {
   const hasPre = Boolean(preTest?.length);
@@ -153,22 +154,22 @@ export function PathwayLessonAssessmentExperience({
         </div>
       </section>
 
-      {enabled && hasPre ? <PathwayLessonQuizzes preTest={preTest} fullAccess={fullAccess} /> : null}
-
-      {children}
-
-      {enabled && hasPost ? (
-        postTestReady ? (
-          <PathwayLessonQuizzes postTest={postTest} fullAccess={fullAccess} />
-        ) : (
-          <section className="nn-study-card mx-auto max-w-5xl border border-[var(--semantic-border-soft)] p-5 text-sm text-[var(--theme-muted-text)]">
-            <p className="font-semibold text-[var(--theme-heading-text)]">Post-test waiting</p>
-            <p className="mt-2 leading-6">
-              Mark this lesson complete or finish the full reading flow to activate the post-test here.
-            </p>
-          </section>
-        )
-      ) : null}
+      {enabled && hasAnyAssessments ? (
+        <PathwayLessonLegacyStudyShell
+          pathwayId={pathwayId}
+          lessonSlug={lessonSlug}
+          initialProgress={progress}
+          preTest={hasPre ? preTest : undefined}
+          postTest={hasPost ? postTest : undefined}
+          fullAccess={fullAccess}
+          postTestReady={postTestReady}
+          sectionAnchors={sectionAnchors}
+        >
+          {children}
+        </PathwayLessonLegacyStudyShell>
+      ) : (
+        children
+      )}
     </div>
   );
 }

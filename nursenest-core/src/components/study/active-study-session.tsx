@@ -1,11 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   BookOpen,
   CheckCircle2,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Home,
@@ -23,6 +22,8 @@ import { resolveFlashcardRelatedLessonLink } from "@/lib/flashcards/flashcard-st
 import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
 import { ExamSessionProgressStrip } from "@/components/exam/exam-session-shell";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
+import { FlashcardStudyQuestionStack } from "@/components/flashcards/flashcard-study-question-stack";
 
 export type ActiveStudyCard = {
   id: string;
@@ -81,6 +82,13 @@ function buildClinicalPearl(card: ActiveStudyCard, emptyPearlMessage: string): s
       .find(Boolean);
     if (firstSentence) return firstSentence.endsWith(".") ? firstSentence : `${firstSentence}.`;
   }
+  if (card.answer?.trim()) {
+    const first = card.answer
+      .split(".")
+      .map((part) => part.trim())
+      .find(Boolean);
+    if (first) return first.endsWith(".") ? first : `${first}.`;
+  }
   return emptyPearlMessage;
 }
 
@@ -100,48 +108,6 @@ type InternalStudyCard = ActiveStudyCard & { _queueKey: string; _retry?: boolean
 
 function toInternalQueue(cards: ActiveStudyCard[]): InternalStudyCard[] {
   return cards.map((c) => ({ ...c, _queueKey: c.id }));
-}
-
-function FlashcardRevealAccordion({
-  label,
-  icon,
-  content,
-  variant,
-}: {
-  label: string;
-  icon: ReactNode;
-  content: string;
-  variant: "front" | "back";
-}) {
-  const [open, setOpen] = useState(false);
-  const surface =
-    variant === "back"
-      ? "border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
-      : "border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--semantic-text-primary)]";
-  return (
-    <button
-      type="button"
-      onClick={(e) => {
-        e.stopPropagation();
-        setOpen((o) => !o);
-      }}
-      className={`w-full rounded-xl border text-left transition ${surface}`}
-    >
-      <div className="flex items-center gap-2 px-4 py-3">
-        {icon}
-        <span className="text-xs font-semibold uppercase tracking-wider text-[var(--semantic-text-muted)]">{label}</span>
-        <ChevronDown
-          className={`ml-auto h-3.5 w-3.5 shrink-0 text-[var(--semantic-text-muted)] transition-transform ${open ? "rotate-180" : ""}`}
-          aria-hidden
-        />
-      </div>
-      <div
-        className={`px-4 transition-all duration-300 ease-in-out ${open ? "max-h-[min(28rem,70vh)] overflow-y-auto pb-3 opacity-100" : "max-h-0 overflow-hidden opacity-0"}`}
-      >
-        <p className="text-sm leading-relaxed text-[var(--semantic-text-primary)]">{content}</p>
-      </div>
-    </button>
-  );
 }
 
 export function ActiveStudySession({
@@ -697,69 +663,33 @@ export function ActiveStudySession({
               </div>
             ) : null}
 
-            <div
-              className="min-h-[320px] cursor-pointer perspective-1000 sm:min-h-[360px]"
-              onClick={() => !revealed && setRevealed(true)}
-            >
-              <div
-                className={`flex min-h-[320px] flex-col rounded-3xl border-none p-6 text-center shadow-xl transition-all duration-300 sm:min-h-[360px] sm:p-8 md:p-10 ${
-                  revealed
-                    ? "items-start justify-start bg-[color-mix(in_srgb,var(--semantic-brand)_92%,var(--semantic-surface))] pt-8 text-[var(--semantic-text-primary)] shadow-[color-mix(in_srgb,var(--semantic-brand)_25%,transparent)]"
-                    : "items-center justify-center bg-[var(--theme-card-bg)] shadow-[color-mix(in_srgb,var(--semantic-border-soft)_80%,transparent)]"
-                }`}
-              >
-                {!revealed ? (
-                  <>
-                    <span className="mb-5 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--semantic-brand)]">
-                      {sessionMode === "test"
-                        ? t("learner.flashcards.session.cardFrontTest")
-                        : t("learner.flashcards.session.cardFrontLearn")}
-                    </span>
-                    <h2 className="max-w-lg text-xl font-bold leading-relaxed text-[var(--theme-heading-text)] sm:text-2xl">
-                      {current.prompt}
-                    </h2>
-                    {current.topic || current.subtopic ? (
-                      <p className="mt-4 text-xs text-[var(--semantic-text-secondary)]">
-                        {current.topic ?? t("learner.flashcards.session.topicGeneral")}
-                        {current.subtopic ? ` · ${current.subtopic}` : ""}
-                      </p>
-                    ) : null}
-                    <div className="mt-8 flex animate-pulse items-center gap-2 text-xs uppercase tracking-widest text-[var(--semantic-text-muted)]">
-                      <RefreshCw className="h-3 w-3" aria-hidden />
-                      {t("learner.flashcards.session.revealHint")}
-                    </div>
-                  </>
-                ) : (
-                  <div className="w-full max-w-lg space-y-3 text-left">
-                    <span className="mb-1 block text-center text-[10px] font-bold uppercase tracking-[0.2em] text-[color-mix(in_srgb,var(--semantic-text-primary)_65%,transparent)]">
-                      {t("learner.flashcards.session.tapSectionsHint")}
-                    </span>
-                    <FlashcardRevealAccordion
-                      variant="back"
-                      label={t("learner.flashcards.session.correctAnswerHeading")}
-                      icon={<CheckCircle2 className="h-4 w-4 text-[color-mix(in_srgb,var(--semantic-text-primary)_70%,transparent)]" />}
-                      content={current.answer}
-                    />
-                    {current.explanation?.trim() ? (
-                      <FlashcardRevealAccordion
-                        variant="back"
-                        label={t("learner.flashcards.session.rationaleBlockHeading")}
-                        icon={<BookOpen className="h-4 w-4 text-[color-mix(in_srgb,var(--semantic-text-primary)_70%,transparent)]" />}
-                        content={current.explanation}
-                      />
-                    ) : null}
-                    <FlashcardRevealAccordion
-                      variant="back"
-                      label={t("learner.flashcards.session.keyTakeawayHeading")}
-                      icon={<Lightbulb className="h-4 w-4 text-[color-mix(in_srgb,var(--semantic-text-primary)_70%,transparent)]" />}
-                      content={buildClinicalPearl(
-                        current,
-                        t("learner.flashcards.session.clinicalPearlMissing"),
-                      )}
-                    />
-                  </div>
-                )}
-              </div>
+            <div className="flex justify-center">
+              <FlashcardStudyQuestionStack
+                sessionModeLabel={
+                  sessionMode === "test"
+                    ? t("learner.flashcards.session.cardFrontTest")
+                    : t("learner.flashcards.session.cardFrontLearn")
+                }
+                topicLine={
+                  current.topic || current.subtopic
+                    ? `${current.topic ?? t("learner.flashcards.session.topicGeneral")}${current.subtopic ? ` · ${current.subtopic}` : ""}`
+                    : null
+                }
+                prompt={current.prompt}
+                answer={current.answer}
+                explanation={current.explanation}
+                pearl={buildClinicalPearl(current, t("learner.flashcards.session.clinicalPearlMissing"))}
+                revealed={revealed}
+                onReveal={() => setRevealed(true)}
+                labels={{
+                  revealCta: t("learner.flashcards.session.revealAnswerCta"),
+                  revealHint: t("learner.flashcards.session.revealHint"),
+                  answerHeading: t("learner.flashcards.session.correctAnswerHeading"),
+                  rationaleHeading: t("learner.flashcards.session.rationaleBlockHeading"),
+                  takeawayHeading: t("learner.flashcards.session.keyTakeawayHeading"),
+                  emptyPearlMessage: t("learner.flashcards.session.clinicalPearlMissing"),
+                }}
+              />
             </div>
 
             {revealed ? (

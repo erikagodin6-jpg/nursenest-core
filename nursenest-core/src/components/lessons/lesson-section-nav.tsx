@@ -91,7 +91,7 @@ export function LessonSectionNav({ sections }: { sections: SectionEntry[] }) {
       aria-label="Lesson sections"
     >
       <p
-        className="mb-3 text-xs font-bold uppercase tracking-wider"
+        className="mb-3 text-xs font-semibold uppercase tracking-wider"
         style={{ color: "var(--semantic-text-muted)" }}
       >
         Contents

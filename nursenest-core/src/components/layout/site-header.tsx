@@ -751,7 +751,7 @@ export function SiteHeader() {
           <div className="flex min-h-[4.5rem] items-center gap-2 overflow-visible border-b border-[var(--header-border)] pt-[env(safe-area-inset-top,0px)] sm:gap-4 lg:hidden">
             <Link
               href={localizeHref("/")}
-              className="nn-header-logo-link group flex min-w-0 shrink-0 items-center gap-2.5 overflow-visible bg-transparent"
+              className="nn-header-logo-link group flex min-w-0 shrink-0 items-center overflow-visible bg-transparent"
               aria-label={t("brand.homeAriaLabel")}
             >
               <HeaderBrandLockup />
@@ -838,7 +838,7 @@ export function SiteHeader() {
           <div className="hidden min-h-[4.5rem] items-center gap-3 overflow-visible py-3 lg:flex">
             <Link
               href={localizeHref("/")}
-              className="nn-header-logo-link group flex min-w-0 flex-none items-center gap-2.5 overflow-visible bg-transparent lg:min-w-[11rem] xl:min-w-[12rem]"
+              className="nn-header-logo-link group flex min-w-0 flex-none items-center overflow-visible bg-transparent lg:min-w-[11rem] xl:min-w-[12rem]"
               aria-label={t("brand.homeAriaLabel")}
             >
               <HeaderBrandLockup />

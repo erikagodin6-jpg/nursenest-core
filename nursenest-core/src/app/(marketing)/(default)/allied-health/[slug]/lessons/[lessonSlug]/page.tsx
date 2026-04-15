@@ -380,6 +380,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         postTest={fullAccess ? bankAssessments.postTest : undefined}
         fullAccess={fullAccess}
         assessmentsEnabled={studySettings.enablePrePostQuizzes}
+        sectionAnchors={displaySections.map((s) => ({ id: s.id, label: s.heading }))}
       >
         <LessonRecallProvider>
           <div className="mb-2 flex justify-end">

@@ -53,7 +53,7 @@ export function PathwayLessonRelatedQuestions({
       </div>
       <h2
         id="lesson-related-questions-heading"
-        className="mt-1.5 text-lg font-semibold tracking-tight text-[var(--theme-heading-text)]"
+        className="mt-1.5 text-lg font-medium tracking-tight text-[var(--theme-heading-text)]"
       >
         Practice questions for this topic
       </h2>
