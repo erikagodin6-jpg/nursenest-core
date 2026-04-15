@@ -21,7 +21,7 @@ import { expectPaidLearnerShellReady } from "../helpers/paid-learner-shell";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
 import { expectNotLoginUrl } from "../helpers/paid-user-suite";
 
-function assertNotLoginPage(page: import("@playwright/test").Page) {
+function assertNotLoginPage(page: Page) {
   expectNotLoginUrl(page, "api-health");
 }
 

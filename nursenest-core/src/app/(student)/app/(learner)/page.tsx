@@ -44,6 +44,8 @@ import { resolveDashboardIdentity } from "@/lib/learner/resolve-dashboard-identi
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
+import { LearnerStudyHomeDurabilityMinimal } from "@/components/student/learner-study-home-durability-minimal";
 
 /** Match learner shell: CAT entry for nursing exam tracks; generic exams hub otherwise. */
 function examsNavLabelFromLearnerContext(
@@ -151,6 +153,26 @@ export default async function LearnerDashboardPage() {
           ctaLayout="stack"
         />
       </main>
+    );
+  }
+
+  if (entitlement.hasAccess && shouldSkipNonCriticalLearnerWork()) {
+    const identity = resolveDashboardIdentity({
+      tier: session?.user?.tier,
+      learnerPathId: userLearnerPath,
+      alliedProfessionKey: userAlliedProfessionKey,
+    });
+    return (
+      <LearnerStudyHomeDurabilityMinimal
+        crumbs={crumbs}
+        t={t}
+        locale={locale}
+        examsNavLabel={examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier)}
+        identity={identity}
+        heroHeading={userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
+        pathwayId={userLearnerPath}
+        banner="degraded"
+      />
     );
   }
 
@@ -326,18 +348,21 @@ export default async function LearnerDashboardPage() {
     snapshot = null;
   }
 
+  const identityFallback = resolveDashboardIdentity({
+    tier: session?.user?.tier,
+    learnerPathId: userLearnerPath,
+    alliedProfessionKey: userAlliedProfessionKey,
+  });
   return (
-    <main className="space-y-6">
-      <BreadcrumbTrail items={crumbs} />
-      <PremiumEmptyState
-        headline={t("learner.dashboard.title")}
-        body={t("learner.dashboard.loadFailed")}
-        tone="default"
-        primaryCta={{ label: t("learner.dashboard.openAccountHub"), href: "/app/account/overview", variant: "primary" }}
-        secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
-        visualLayout="stack"
-        ctaLayout="stack"
-      />
-    </main>
+    <LearnerStudyHomeDurabilityMinimal
+      crumbs={crumbs}
+      t={t}
+      locale={locale}
+      examsNavLabel={examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier)}
+      identity={identityFallback}
+      heroHeading={userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
+      pathwayId={userLearnerPath}
+      banner="error_fallback"
+    />
   );
 }

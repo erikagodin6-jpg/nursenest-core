@@ -5,8 +5,9 @@
  * Idle wait default: 2.5 minutes. Override:
  *   E2E_SESSION_PERSISTENCE_IDLE_MS=5000 npx playwright test .../paid-user-session-persistence.spec.ts --project=chromium-paid
  */
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { paidLessonsHubUrl, paidQuestionsHubUrl } from "../helpers/paid-content-discovery";
+import { isLearnerShell } from "../helpers/learner-login";
 import { expectPaidLearnerShellReady } from "../helpers/paid-learner-shell";
 import {
   assertPaidUserGuardsClean,
@@ -25,8 +26,8 @@ function idleWaitMs(): number {
 
 async function assertSessionActiveOnAppRoute(page: Page, context: string): Promise<void> {
   expect(page.url(), `${context}: redirected to login`).not.toMatch(/\/login/i);
-  const url = page.url();
-  if (/\/app(\/|$)/i.test(url)) {
+  const pathname = new URL(page.url()).pathname;
+  if (isLearnerShell(pathname)) {
     await expectNoSubscriptionPaywall(page, context);
   }
 }

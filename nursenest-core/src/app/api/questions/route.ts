@@ -33,6 +33,9 @@ import { localizeQuestionListForApi } from "@/lib/i18n/educational-content-overl
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 import { enforceQuestionsListProtection } from "@/lib/http/api-protection";
+import { logDurabilityEvent } from "@/lib/durability/durability-log";
+import { getPaidContentStaleCache } from "@/lib/durability/paid-content-stale-cache";
+import { subscriberQuestionsListStaleKey } from "@/lib/durability/questions-list-stale-key";
 import {
   difficultyBoundsSql,
   examEqualsFilterSql,
@@ -482,8 +485,25 @@ export async function GET(req: NextRequest) {
           : {}),
       };
       logLargeApiResponse("/api/questions", estimateJsonUtf8Bytes(subscriberBody));
+      getPaidContentStaleCache().set(
+        subscriberQuestionsListStaleKey(gate.userId, req.nextUrl.searchParams),
+        subscriberBody,
+      );
       return NextResponse.json(subscriberBody);
     } catch (e) {
+      const staleKey = subscriberQuestionsListStaleKey(gate.userId, req.nextUrl.searchParams);
+      const stale = getPaidContentStaleCache().get<Record<string, unknown>>(staleKey);
+      if (stale) {
+        logDurabilityEvent({
+          event: "content_fallback_served",
+          route: "/api/questions",
+          subsystem: "question",
+          durationMs: 0,
+          fallbackUsed: true,
+          reason: "subscriber_list_stale",
+        });
+        return NextResponse.json(stale, { headers: { "X-NurseNest-Content-Fallback": "1" } });
+      }
       safeServerLogCritical("api_questions", "prisma_find_failed", { page }, e, { flow: "questions_load" });
       return NextResponse.json(
         { error: "Unable to load questions. Try again shortly.", code: "service_unavailable" },

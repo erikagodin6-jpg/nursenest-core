@@ -10,10 +10,15 @@ import { LearnerAppSectionAnalytics } from "@/components/observability/learner-a
 import { SentryLearnerShell } from "@/components/observability/sentry-learner-shell";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadLearnerStudyNextBlock } from "@/lib/learner/load-learner-study-next-block";
-import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { userShouldSeeBaselinePrompt } from "@/lib/baseline/baseline-assessment";
+import {
+  DEFAULT_LEARNER_PATHWAY_NAV_METADATA,
+  isLearnerPathwayNavMetadata,
+  loadLearnerPathwayNavMetadata,
+  type LearnerPathwayNavMetadata,
+} from "@/lib/learner/load-learner-shell-pathway-metadata";
+import { safeOptional } from "@/lib/server/safe-optional";
+import { getLearnerFallback, setLearnerFallback } from "@/lib/server/fallback-cache";
+import { isDegradedMode } from "@/lib/config/degraded-mode";
 import { BaselineAssessmentPrompt } from "@/components/student/baseline-assessment-prompt";
 import { PathwayLessonProgressRefreshListener } from "@/components/lessons/pathway-lesson-progress-refresh-listener";
 import {
@@ -32,68 +37,67 @@ import { LearnerTutorShell } from "@/components/learner-tutor";
 import { LearnerFeedbackShell } from "@/components/feedback/learner-feedback-shell";
 import { UserFeedbackNavPill } from "@/components/feedback/user-feedback-nav-pill";
 import { LearnerExamStudyProviders } from "@/components/exam/learner-exam-study-providers";
+import { isCoreOnlyEmergencyMode, shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { LearnerSilentSectionBoundary } from "@/components/learner/learner-silent-section-boundary";
 
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
 
-function pillLabelForRoleTrack(roleTrack: string): string {
-  if (roleTrack === "rn") return "RN";
-  if (roleTrack === "lpn" || roleTrack === "rpn") return "PN";
-  if (roleTrack === "np") return "NP";
-  if (roleTrack === "allied") return "Allied";
-  return "Pathway";
-}
-
 export default async function LearnerShellLayout({ children }: { children: React.ReactNode }) {
+  /** Tier 0 — session + entitlement (no safeOptional; resolveEntitlementForPage is internally fail-closed). */
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
 
-  let studyNextBlock = null;
-  let showBaselinePrompt = false;
-  let pathwayShortLabel: string | null = null;
-  let pathwayId: string | null = null;
-  let pathwayHubHref: string | null = null;
-  let examsLabel: "CAT Exams" | "Exams" = "Exams";
-  let entitlement: Awaited<ReturnType<typeof resolveEntitlementForPage>> = "error";
+  if (isDegradedMode()) {
+    safeServerLog("learner_shell", "degraded_mode_active", { active: true });
+  }
+
+  let entitlement = await resolveEntitlementForPage(userId);
+
+  const skipNonCritical = shouldSkipNonCriticalLearnerWork();
+  const coreOnlyEmergency = isCoreOnlyEmergencyMode();
+
+  let pathwayNav: LearnerPathwayNavMetadata = { ...DEFAULT_LEARNER_PATHWAY_NAV_METADATA };
 
   if (userId) {
-    entitlement = await resolveEntitlementForPage(userId);
-    if (entitlement !== "error" && entitlement.hasAccess) {
-      studyNextBlock = await loadLearnerStudyNextBlock(userId, entitlement);
-    }
-    if (isDatabaseUrlConfigured()) {
-      try {
-        const u = await prisma.user.findUnique({
-          where: { id: userId },
-          select: {
-            baselineAssessmentSkippedAt: true,
-            baselineAssessmentCompletedAt: true,
-            learnerPath: true,
-            alliedProfessionKey: true,
-          },
-        });
-        showBaselinePrompt = u != null && userShouldSeeBaselinePrompt(u);
-        const lp = u?.learnerPath?.trim();
-        pathwayId = lp && lp.length > 0 ? lp : null;
-        if (lp) {
-          const p = getExamPathwayById(lp);
-          pathwayShortLabel = p ? pillLabelForRoleTrack(p.roleTrack) : lp.slice(0, 48);
-          if (p) {
-            pathwayHubHref = buildExamPathwayPath(p);
-            if (p.roleTrack === "rn" || p.roleTrack === "rpn" || p.roleTrack === "lpn" || p.roleTrack === "np") {
-              examsLabel = "CAT Exams";
-            }
-          }
-        } else if (u?.alliedProfessionKey) {
-          // Allied users don't always have a learnerPath.
-          pathwayShortLabel = "Allied";
-          pathwayHubHref = "/us/allied/allied-health";
+    const cachedNav =
+      entitlement !== "error" ? getLearnerFallback(userId, entitlement, isLearnerPathwayNavMetadata) : null;
+
+    pathwayNav = await safeOptional(
+      async () => {
+        const fresh = await loadLearnerPathwayNavMetadata(userId);
+        if (entitlement !== "error") {
+          setLearnerFallback(userId, entitlement, fresh);
         }
-      } catch {
-        showBaselinePrompt = false;
-      }
+        return fresh;
+      },
+      cachedNav ?? DEFAULT_LEARNER_PATHWAY_NAV_METADATA,
+      {
+        label: "learner_pathway_nav_metadata",
+        onUsedFallback: (reason) => {
+          if (cachedNav != null) {
+            safeServerLog("learner_shell", "fallback_used", {
+              surface: "pathway_nav",
+              reason,
+            });
+          }
+        },
+      },
+    );
+
+    if (pathwayNav === DEFAULT_LEARNER_PATHWAY_NAV_METADATA && cachedNav != null) {
+      pathwayNav = cachedNav;
     }
   }
+
+  let {
+    showBaselinePrompt,
+    pathwayId,
+    pathwayShortLabel,
+    pathwayHubHref,
+    examsLabel,
+  } = pathwayNav;
 
   if (!pathwayHubHref) {
     const tier = ((session?.user as { tier?: string | null })?.tier ?? "").toUpperCase();
@@ -116,8 +120,21 @@ export default async function LearnerShellLayout({ children }: { children: React
     return <LearnerUnauthenticatedGate />;
   }
 
+  /** Tier 2 — study next (optional): skip entirely in degraded / emergency, else safeOptional. */
+  let studyNextBlock: Awaited<ReturnType<typeof loadLearnerStudyNextBlock>> = null;
+  if (!skipNonCritical && entitlement !== "error" && entitlement.hasAccess) {
+    studyNextBlock = await safeOptional(
+      () => loadLearnerStudyNextBlock(userId, entitlement),
+      null,
+      { label: "learner_study_next_block" },
+    );
+  }
+
   const tutorContext =
-    entitlement !== "error" && entitlement.hasAccess && isLearnerTutorShellEnabled()
+    !coreOnlyEmergency &&
+    entitlement !== "error" &&
+    entitlement.hasAccess &&
+    isLearnerTutorShellEnabled()
       ? { pathwayId, pathwayLabel: pathwayShortLabel }
       : null;
 
@@ -127,57 +144,59 @@ export default async function LearnerShellLayout({ children }: { children: React
         <LearnerExamChromeGate>
           <LearnerFeedbackShell pathwayId={pathwayId}>
             <div className="nn-learner-app mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+5rem+env(safe-area-inset-bottom,0px))] sm:px-6 md:pb-[var(--nn-rhythm-shell-y)]">
-            <PathwayLessonProgressRefreshListener />
-            <LearnerAppSectionAnalytics />
-            <div className="nn-learner-exam-chrome-target nn-learner-shell-sticky sticky top-0 z-50 mb-[var(--nn-rhythm-tight-y)] bg-[var(--semantic-bg-base)] pt-1">
-              <div className="flex flex-col gap-2">
-                <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 shadow-sm sm:px-4 sm:py-2.5">
-                  <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
-                    <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-                      <LearnerShellBrandHomeLink />
-                      <LearnerShellPathwayPill pathwayPillLabel={pathwayShortLabel} pathwayHubHref={pathwayHubHref} />
-                    </div>
-                    <div className="flex flex-shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-2.5">
-                      <LearnerShellUserBar pathwayShortLabel={pathwayShortLabel} />
-                      <UserFeedbackNavPill />
-                      <LearnerShellLanguageControl />
-                      <LearnerThemeControl />
+              <PathwayLessonProgressRefreshListener />
+              {!skipNonCritical ? <LearnerAppSectionAnalytics /> : null}
+              <div className="nn-learner-exam-chrome-target nn-learner-shell-sticky sticky top-0 z-50 mb-[var(--nn-rhythm-tight-y)] bg-[var(--semantic-bg-base)] pt-1">
+                <div className="flex flex-col gap-2">
+                  <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 shadow-sm sm:px-4 sm:py-2.5">
+                    <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+                      <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+                        <LearnerShellBrandHomeLink />
+                        <LearnerShellPathwayPill pathwayPillLabel={pathwayShortLabel} pathwayHubHref={pathwayHubHref} />
+                      </div>
+                      <div className="flex flex-shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-2.5">
+                        <LearnerShellUserBar pathwayShortLabel={pathwayShortLabel} />
+                        {!coreOnlyEmergency ? <UserFeedbackNavPill /> : null}
+                        <LearnerShellLanguageControl />
+                        <LearnerThemeControl />
+                      </div>
                     </div>
                   </div>
+                  <div className="nn-learner-shell-nav-row rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-2 shadow-[0_1px_0_0_color-mix(in_srgb,var(--semantic-text-primary)_06%,transparent)] sm:px-3">
+                    <LearnerShellDesktopStudyLinks pathwayId={pathwayId} examsLabel={examsLabel} />
+                  </div>
                 </div>
-                <div className="nn-learner-shell-nav-row rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-2 shadow-[0_1px_0_0_color-mix(in_srgb,var(--semantic-text-primary)_06%,transparent)] sm:px-3">
-                  <LearnerShellDesktopStudyLinks pathwayId={pathwayId} examsLabel={examsLabel} />
-                </div>
+                <LearnerShellMobileBottomNav
+                  pathwayPillLabel={pathwayShortLabel}
+                  pathwayId={pathwayId}
+                  pathwayHubHref={pathwayHubHref}
+                  examsLabel={examsLabel}
+                />
               </div>
-              <LearnerShellMobileBottomNav
-                pathwayPillLabel={pathwayShortLabel}
-                pathwayId={pathwayId}
-                pathwayHubHref={pathwayHubHref}
-                examsLabel={examsLabel}
-              />
-            </div>
-            {studyNextBlock ? (
-              <div className="nn-learner-exam-chrome-dim mb-[var(--nn-rhythm-tight-y)]">
-                <Suspense
-                  fallback={
-                    <div
-                      className="min-h-[10rem] rounded-xl border border-[var(--nn-presentation-divider)] bg-[var(--nn-presentation-wash)]"
-                      aria-hidden
-                    />
-                  }
-                >
-                  <LearnerStudyNextBlock model={studyNextBlock} />
-                </Suspense>
+              {studyNextBlock ? (
+                <LearnerSilentSectionBoundary name="study_next">
+                  <div className="nn-learner-exam-chrome-dim mb-[var(--nn-rhythm-tight-y)]">
+                    <Suspense
+                      fallback={
+                        <div
+                          className="min-h-[10rem] rounded-xl border border-[var(--nn-presentation-divider)] bg-[var(--nn-presentation-wash)]"
+                          aria-hidden
+                        />
+                      }
+                    >
+                      <LearnerStudyNextBlock model={studyNextBlock} />
+                    </Suspense>
+                  </div>
+                </LearnerSilentSectionBoundary>
+              ) : null}
+              <div className="nn-learner-exam-chrome-dim">
+                <CheckoutSuccessBanner />
               </div>
-            ) : null}
-            <div className="nn-learner-exam-chrome-dim">
-              <CheckoutSuccessBanner />
-            </div>
-            <BaselineAssessmentPrompt show={showBaselinePrompt} />
-            <PageTransitionShell shouldDisableTransition={learnerShellShouldDisablePageTransition}>
-              {children}
-            </PageTransitionShell>
-            {tutorContext ? <LearnerTutorShell context={tutorContext} /> : null}
+              <BaselineAssessmentPrompt show={showBaselinePrompt} />
+              <PageTransitionShell shouldDisableTransition={learnerShellShouldDisablePageTransition}>
+                <LearnerSilentSectionBoundary name="route_body">{children}</LearnerSilentSectionBoundary>
+              </PageTransitionShell>
+              {tutorContext ? <LearnerTutorShell context={tutorContext} /> : null}
             </div>
           </LearnerFeedbackShell>
         </LearnerExamChromeGate>

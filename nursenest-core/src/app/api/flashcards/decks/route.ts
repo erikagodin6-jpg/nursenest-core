@@ -19,8 +19,15 @@ import {
   parseListPage,
 } from "@/lib/api/api-pagination-limits";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { logDurabilityEvent } from "@/lib/durability/durability-log";
+import { getPaidContentStaleCache } from "@/lib/durability/paid-content-stale-cache";
+import { runWithCoreReadTelemetry } from "@/lib/durability/with-core-read-timeout";
 
 export const dynamic = "force-dynamic";
+
+function flashcardDeckListStaleKey(userId: string, req: NextRequest): string {
+  return `fdecks:${userId}:${req.nextUrl.pathname}?${req.nextUrl.searchParams.toString()}`;
+}
 
 export async function GET(req: NextRequest) {
   const session = await auth();
@@ -120,31 +127,38 @@ export async function GET(req: NextRequest) {
   const where: Prisma.FlashcardDeckWhereInput =
     andExtra.length > 0 ? { AND: [baseWhere, ...andExtra] } : baseWhere;
 
+  const cacheUserKey = userId ?? "anon";
+
   try {
-    const [decks, total] = await Promise.all([
-      withRetry(() =>
-        prisma.flashcardDeck.findMany({
-          where,
-          select: {
-            id: true,
-            slug: true,
-            title: true,
-            description: true,
-            country: true,
-            tier: true,
-            examFamily: true,
-            pathwayId: true,
-            visibility: true,
-            cardCount: true,
-            tags: { select: { tag: { select: { slug: true, name: true } } } },
-          },
-          orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
-          skip: skipRows,
-          take: pageSize,
-        }),
-      ),
-      withRetry(() => prisma.flashcardDeck.count({ where })),
-    ]);
+    const [decks, total] = await runWithCoreReadTelemetry(
+      "/api/flashcards/decks",
+      "flashcard",
+      () =>
+        Promise.all([
+          withRetry(() =>
+            prisma.flashcardDeck.findMany({
+              where,
+              select: {
+                id: true,
+                slug: true,
+                title: true,
+                description: true,
+                country: true,
+                tier: true,
+                examFamily: true,
+                pathwayId: true,
+                visibility: true,
+                cardCount: true,
+                tags: { select: { tag: { select: { slug: true, name: true } } } },
+              },
+              orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
+              skip: skipRows,
+              take: pageSize,
+            }),
+          ),
+          withRetry(() => prisma.flashcardDeck.count({ where })),
+        ]),
+    );
 
     const body = {
       page,
@@ -158,6 +172,8 @@ export async function GET(req: NextRequest) {
       })),
     };
 
+    getPaidContentStaleCache().set(flashcardDeckListStaleKey(cacheUserKey, req), body);
+
     const approx = estimateJsonUtf8Bytes(body);
     logLargeApiResponse("/api/flashcards/decks", approx);
     if (approx > 400_000) {
@@ -166,6 +182,20 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(body);
   } catch (e) {
+    const stale = getPaidContentStaleCache().get<Record<string, unknown>>(
+      flashcardDeckListStaleKey(cacheUserKey, req),
+    );
+    if (stale) {
+      logDurabilityEvent({
+        event: "content_fallback_served",
+        route: "/api/flashcards/decks",
+        subsystem: "flashcard",
+        durationMs: 0,
+        fallbackUsed: true,
+        reason: "stale_after_error",
+      });
+      return NextResponse.json(stale, { headers: { "X-NurseNest-Content-Fallback": "1" } });
+    }
     safeServerLogCritical("api_flashcards_decks", "query_failed", { page }, e);
     return NextResponse.json({ error: "Unable to load decks" }, { status: 503 });
   }

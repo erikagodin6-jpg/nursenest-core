@@ -53,8 +53,8 @@ export function isAuthFetchNoiseConsoleLine(line: string): boolean {
 }
 
 export function expectNotLoginUrl(page: Page, context?: string): void {
-  expect(page.url(), `${context ?? "page"}: unexpected /login`).not.toMatch(/\/login/i);
   assertSyncNotOnboardingBlocking(page, context ?? "expectNotLoginUrl");
+  expect(page.url(), `${context ?? "page"}: unexpected /login`).not.toMatch(/\/login/i);
 }
 
 export function assertNoMissingI18nDomTokens(page: Page): Promise<void> {
@@ -134,9 +134,10 @@ export function assertPaidUserGuardsClean(input: {
   observers: PageObservers;
   apiViolations: string[];
   pageUrl: string;
-  /** Required for auth pre-shell + fetch-noise attachments. */
-  page?: Page;
-  sessionNet?: PaidSessionNetworkMonitor;
+  /** Required: auth pre-shell failures + console authNoise attachment. */
+  page: Page;
+  /** Required: core API latency + HTTP failures from {@link attachPaidSessionNetworkMonitor}. */
+  sessionNet: PaidSessionNetworkMonitor;
   i18nConsoleMode?: PaidGuardI18nConsoleMode;
   attach?: (name: string, body: string) => void;
 }): void {
@@ -152,29 +153,25 @@ export function assertPaidUserGuardsClean(input: {
     attach,
   } = input;
 
-  if (page) {
-    assertNoAuthSessionBlockingBeforeShell(page);
-    const noise = formatAuthFetchNoiseForSummary(page);
-    if (noise) {
-      attach?.("auth-fetch-noise-console.txt", noise);
-      // eslint-disable-next-line no-console
-      console.log(`[${tag}] authFetchNoise (non-blocking): ${noise.slice(0, 300)}`);
-    }
+  assertNoAuthSessionBlockingBeforeShell(page);
+  const noise = formatAuthFetchNoiseForSummary(page);
+  if (noise) {
+    attach?.("auth-noise-non-blocking.txt", noise);
+    // eslint-disable-next-line no-console
+    console.log(`[${tag}] authNoise (non-blocking): ${noise.slice(0, 300)}`);
   }
 
-  if (sessionNet) {
-    if (sessionNet.slowCriticalWarnings.length > 0) {
-      const w = sessionNet.formatSlowCriticalWarningsLog();
-      attach?.("slow-endpoint-warnings.txt", w);
-      // eslint-disable-next-line no-console
-      console.log(`[${tag}] slowEndpointWarning (core APIs ${sessionNet.slowCriticalWarnings.length}):\n${w}`);
-    }
-    const netFails = sessionNet.buildFailureMessages();
-    expect(
-      netFails,
-      `slowEndpointFailure / network / status (core SLO >6s on critical APIs):\n${netFails.join("\n")}`,
-    ).toEqual([]);
+  if (sessionNet.slowCriticalWarnings.length > 0) {
+    const w = sessionNet.formatSlowCriticalWarningsLog();
+    attach?.("slow-endpoint-warnings.txt", w);
+    // eslint-disable-next-line no-console
+    console.log(`[${tag}] slowEndpointWarning (core APIs ${sessionNet.slowCriticalWarnings.length}):\n${w}`);
   }
+  const netFails = sessionNet.buildFailureMessages();
+  expect(
+    netFails,
+    `slowEndpointFailure / network / status (core SLO >6s on critical APIs):\n${netFails.join("\n")}`,
+  ).toEqual([]);
 
   const i18n = i18nMissingKeyConsoleLines(observers.consoleErrors);
 
@@ -244,5 +241,5 @@ export async function answerOneQuestionBankItem(page: Page): Promise<void> {
   }
 }
 
-export { expectOnLearnerApp, expectNoSubscriptionPaywall };
+export { expectOnLearnerApp, expectNoSubscriptionPaywall, expectNoSubscriberPaywallSurface };
 export type { PageObservers };

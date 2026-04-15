@@ -45,6 +45,8 @@ import { ContentStatus, type Prisma } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { logDurabilityEvent } from "@/lib/durability/durability-log";
+import { getPaidContentStaleCache } from "@/lib/durability/paid-content-stale-cache";
 import { sortPathwayLessonsForPublicPreview } from "@/lib/lessons/pathway-lesson-public-preview-priority";
 import type { LaunchBundleEntry, PathwayLaunchBundleSpec } from "@/lib/lessons/pathway-launch-bundle";
 import { getLaunchBundleSpec } from "@/lib/lessons/pathway-launch-bundle";
@@ -1081,8 +1083,23 @@ export async function getPublishedPathwayLessonRecordById(
   id: string,
   marketingLocale?: string,
 ): Promise<PathwayLessonRecord | undefined> {
+  const staleKey = `lesson:${id}:${normalizePathwayLessonLocale(marketingLocale)}`;
   const row = await dbCall(() => prisma.pathwayLesson.findUnique({ where: { id } }), null);
-  if (!row || row.status !== ContentStatus.PUBLISHED) return undefined;
+  if (!row || row.status !== ContentStatus.PUBLISHED) {
+    const stale = getPaidContentStaleCache().get<PathwayLessonRecord>(staleKey);
+    if (stale) {
+      logDurabilityEvent({
+        event: "content_fallback_served",
+        route: "getPublishedPathwayLessonRecordById",
+        subsystem: "lesson",
+        durationMs: 0,
+        fallbackUsed: true,
+        reason: "primary_unavailable",
+      });
+      return stale;
+    }
+    return undefined;
+  }
   const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(
     normalizePathwayLessonLocale(marketingLocale),
   );
@@ -1092,6 +1109,7 @@ export async function getPublishedPathwayLessonRecordById(
     row.pathwayId,
     lessonDbOverlays,
   );
+  getPaidContentStaleCache().set(staleKey, lesson);
   return lesson;
 }
 

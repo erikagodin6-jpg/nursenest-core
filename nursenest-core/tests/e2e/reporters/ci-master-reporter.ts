@@ -37,6 +37,7 @@ export default class CiMasterReporter implements Reporter {
   }> = [];
 
   private slowBlocks: string[] = [];
+  private authNoiseBlocks: string[] = [];
   private i18nBlocks: string[] = [];
   private consoleHints: string[] = [];
 
@@ -61,8 +62,11 @@ export default class CiMasterReporter implements Reporter {
       const name = a.name ?? "";
       const body = readAttachmentBody(a);
       if (!body) continue;
-      if (/slow-endpoints/i.test(name)) {
-        this.slowBlocks.push(`### ${title}\n${body.trim()}`);
+      if (/slow-endpoint|slow-endpoints/i.test(name)) {
+        this.slowBlocks.push(`### ${title} (${name})\n${body.trim()}`);
+      }
+      if (/auth-noise|authNoise/i.test(name)) {
+        this.authNoiseBlocks.push(`### ${title} (${name})\n${body.trim()}`);
       }
       if (name === "ci-i18n-status.txt") {
         this.i18nBlocks.push(`### ${title}\n${body.trim()}`);
@@ -111,6 +115,13 @@ export default class CiMasterReporter implements Reporter {
       lines.push(...this.slowBlocks.flatMap((b) => ["", b, ""]));
     }
 
+    lines.push("## Auth noise — non-blocking (from guard attachments)", "");
+    if (this.authNoiseBlocks.length === 0) {
+      lines.push("_No auth-noise attachments._", "");
+    } else {
+      lines.push(...this.authNoiseBlocks.flatMap((b) => ["", b, ""]));
+    }
+
     lines.push("## Missing translations (i18n audit attachment / failures)", "");
     if (this.i18nBlocks.length > 0) {
       lines.push(...this.i18nBlocks.flatMap((b) => ["", b, ""]));
@@ -151,6 +162,7 @@ export default class CiMasterReporter implements Reporter {
           status: result.status,
           tests: this.cases,
           slowEndpointSections: this.slowBlocks.length,
+          authNoiseSections: this.authNoiseBlocks.length,
           i18nSections: this.i18nBlocks.length,
         },
         null,

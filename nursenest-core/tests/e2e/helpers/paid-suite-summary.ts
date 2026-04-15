@@ -1,77 +1,64 @@
 import type { PaidFailureCategory } from "./paid-failure-classifier";
 
-/** One row for `paid-user-suite-summary.json`. */
-export type PaidSuiteSummaryEntry = {
+/** One row for `paid-user-suite-summary.json` (Tier 1 durability gate). */
+export type PaidTier1SummaryEntry = {
   specFile: string;
   testTitle: string;
-  category: PaidFailureCategory;
-  /** Primary cause (short headline). */
+  /** First line of the failure — primary deploy-blocker headline. */
   reason: string;
+  /** Granular classifier (triage); roll-up bucket is {@link tier1BucketForCategory}. */
+  detailCategory: PaidFailureCategory;
   route?: string;
   endpoint?: string;
 };
 
-export type PaidSuiteSummaryArtifact = {
+/** Tier 1 rollup: every failure maps to exactly one primary cause bucket. */
+export type Tier1PrimaryBucket =
+  | "onboardingBlockingFlow"
+  | "authFailure"
+  | "slowEndpointFailure"
+  | "unknownFailure";
+
+export type PaidTier1SuiteSummaryArtifact = {
   generatedAt: string;
-  authFailures: PaidSuiteSummaryEntry[];
-  onboardingBlockingFlows: PaidSuiteSummaryEntry[];
-  entitlementFailures: PaidSuiteSummaryEntry[];
-  contentDiscoveryFailures: PaidSuiteSummaryEntry[];
-  slowEndpointFailures: PaidSuiteSummaryEntry[];
-  networkFailures: PaidSuiteSummaryEntry[];
-  i18nCoreFailures: PaidSuiteSummaryEntry[];
-  selectorOrRouteDrift: PaidSuiteSummaryEntry[];
-  shellFailures: PaidSuiteSummaryEntry[];
-  authNoise: PaidSuiteSummaryEntry[];
-  unknown: PaidSuiteSummaryEntry[];
+  onboardingBlockingFlow: PaidTier1SummaryEntry[];
+  authFailure: PaidTier1SummaryEntry[];
+  slowEndpointFailure: PaidTier1SummaryEntry[];
+  unknownFailure: PaidTier1SummaryEntry[];
 };
 
-const BUCKET_KEYS: (keyof Omit<PaidSuiteSummaryArtifact, "generatedAt">)[] = [
-  "authFailures",
-  "onboardingBlockingFlows",
-  "entitlementFailures",
-  "contentDiscoveryFailures",
-  "slowEndpointFailures",
-  "networkFailures",
-  "i18nCoreFailures",
-  "selectorOrRouteDrift",
-  "shellFailures",
-  "authNoise",
-  "unknown",
+const TIER1_KEYS: (keyof Omit<PaidTier1SuiteSummaryArtifact, "generatedAt">)[] = [
+  "onboardingBlockingFlow",
+  "authFailure",
+  "slowEndpointFailure",
+  "unknownFailure",
 ];
 
-function bucketForCategory(c: PaidFailureCategory): keyof Omit<PaidSuiteSummaryArtifact, "generatedAt"> {
-  const map: Record<PaidFailureCategory, keyof Omit<PaidSuiteSummaryArtifact, "generatedAt">> = {
-    authFailure: "authFailures",
-    onboardingBlockingFlow: "onboardingBlockingFlows",
-    entitlementFailure: "entitlementFailures",
-    contentDiscoveryFailure: "contentDiscoveryFailures",
-    slowEndpointFailure: "slowEndpointFailures",
-    networkFailure: "networkFailures",
-    i18nCoreFailure: "i18nCoreFailures",
-    selectorOrRouteDrift: "selectorOrRouteDrift",
-    shellFailure: "shellFailures",
-    authNoise: "authNoise",
-    unknown: "unknown",
-  };
-  return map[c] ?? "unknown";
+/**
+ * Maps detailed classifier output to Tier 1 CI buckets.
+ * Only `onboardingBlockingFlow`, `authFailure`, and `slowEndpointFailure` are blocking tiers;
+ * all other categories (shell, network, entitlement, i18n, drift, etc.) roll up to `unknownFailure`
+ * while preserving `detailCategory` on the entry.
+ */
+export function tier1BucketForCategory(c: PaidFailureCategory): Tier1PrimaryBucket {
+  if (c === "onboardingBlockingFlow") return "onboardingBlockingFlow";
+  if (c === "authFailure") return "authFailure";
+  if (c === "slowEndpointFailure") return "slowEndpointFailure";
+  return "unknownFailure";
 }
 
-export function emptyPaidSuiteSummary(): PaidSuiteSummaryArtifact {
-  const base: Record<string, PaidSuiteSummaryEntry[]> = {};
-  for (const k of BUCKET_KEYS) {
+export function emptyPaidTier1Summary(): PaidTier1SuiteSummaryArtifact {
+  const base: Record<string, PaidTier1SummaryEntry[]> = {};
+  for (const k of TIER1_KEYS) {
     base[k] = [];
   }
   return {
     generatedAt: new Date().toISOString(),
-    ...(base as Omit<PaidSuiteSummaryArtifact, "generatedAt">),
+    ...(base as Omit<PaidTier1SuiteSummaryArtifact, "generatedAt">),
   };
 }
 
-export function pushClassifiedEntry(
-  summary: PaidSuiteSummaryArtifact,
-  entry: PaidSuiteSummaryEntry,
-): void {
-  const bucket = bucketForCategory(entry.category);
+export function pushTier1ClassifiedEntry(summary: PaidTier1SuiteSummaryArtifact, entry: PaidTier1SummaryEntry): void {
+  const bucket = tier1BucketForCategory(entry.detailCategory);
   summary[bucket].push(entry);
 }
