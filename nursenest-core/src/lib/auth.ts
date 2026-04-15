@@ -223,7 +223,7 @@ export const authConfig: NextAuthConfig = {
 
         let user: CredentialsUserRow | null = null;
 
-        let lookupStrategy: "exact_email" | "normalized_gmail" | "username" | null = null;
+        let lookupStrategy: "exact_email" | "normalized_gmail" | "normalized_email" | "username" | null = null;
 
         try {
           if (isEmailLikeIdentifier(identifier)) {
@@ -260,16 +260,19 @@ export const authConfig: NextAuthConfig = {
               lookupStrategy = "exact_email";
             }
             /**
-             * Gmail / Googlemail: signup stores {@link normalizeEmailForDedup} on `User.normalizedEmail`
-             * (dots and +aliases normalized). A literal `email` match can fail when the user types an
-             * equivalent address (e.g. `janedoe@gmail.com` vs stored `jane.doe@gmail.com`).
+             * Signup stores {@link normalizeEmailForDedup} on `User.normalizedEmail` for every domain.
+             * Case-insensitive `email` match can fail when the typed local part differs only by +tags,
+             * dots (Gmail), or equivalent forms — fall back to `normalizedEmail` for all email logins,
+             * not only @gmail.com (custom domains and +aliases were previously impossible to log in with).
              */
-            if (!user && gmailLike) {
+            if (!user) {
               user = await prisma.user.findFirst({
                 where: { normalizedEmail: dedup },
                 select: CREDENTIALS_USER_SELECT,
               });
-              if (user) lookupStrategy = "normalized_gmail";
+              if (user) {
+                lookupStrategy = gmailLike ? "normalized_gmail" : "normalized_email";
+              }
             }
           } else {
             usernameMatchCount = await prisma.user.count({
@@ -345,10 +348,8 @@ export const authConfig: NextAuthConfig = {
           recordLoginFailure(lockKey);
           let notFoundReason: string;
           if (authMode === "email") {
-            if (!gmailLike) {
-              notFoundReason = "no_matching_user_exact";
-            } else if (exactEmailUserCount === 0 && normalizedEmailUserCount === 0) {
-              notFoundReason = "no_matching_user_normalized";
+            if (exactEmailUserCount === 0 && normalizedEmailUserCount === 0) {
+              notFoundReason = gmailLike ? "no_matching_user_normalized" : "no_matching_user_exact";
             } else {
               notFoundReason = "auth_config_callback_issue";
             }
@@ -458,7 +459,9 @@ export const authConfig: NextAuthConfig = {
               ? "username"
               : lookupStrategy === "normalized_gmail"
                 ? "normalized_gmail"
-                : "exact_email",
+                : lookupStrategy === "normalized_email"
+                  ? "normalized_email"
+                  : "exact_email",
         });
 
         let subscriptionStatus: SessionSubscriptionStatus = "none";
