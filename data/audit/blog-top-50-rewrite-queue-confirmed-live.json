@@ -1,0 +1,157 @@
+{
+  "generatedAt": "2026-04-15T02:12:35.443Z",
+  "note": "Only includes rows with DB evidence (BlogPost or LocalizedBlogArticle export). No repo-only posts marked confirmed live.",
+  "queue": [],
+  "backlogRepoOnlyNotInDb": [
+    {
+      "slug": "clinical-judgment-on-exam-day",
+      "title": "Clinical judgment on exam day: turning cues into safe decisions",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "pharmacology-without-memorization-chaos",
+      "title": "Pharmacology study that sticks (without memorization chaos)",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "how-to-pass-nclex-rn-from-the-philippines",
+      "title": "how-to-pass-nclex-rn-from-the-philippines",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "how-to-pass-nclex-rn-as-nigerian-nurse",
+      "title": "how-to-pass-nclex-rn-as-nigerian-nurse",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "nclex-rn-preparation-guide-for-indian-nurses",
+      "title": "nclex-rn-preparation-guide-for-indian-nurses",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "how-to-pass-nclex-rn-as-kenyan-nurse",
+      "title": "how-to-pass-nclex-rn-as-kenyan-nurse",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "nclex-rn-for-uk-nurses-complete-preparation-guide",
+      "title": "nclex-rn-for-uk-nurses-complete-preparation-guide",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "nclex-practice-questions-for-filipino-nurses",
+      "title": "nclex-practice-questions-for-filipino-nurses",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "best-nclex-study-plan-for-indian-nurses-budget",
+      "title": "best-nclex-study-plan-for-indian-nurses-budget",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "best-nclex-study-plan-nigerian-nurses",
+      "title": "best-nclex-study-plan-nigerian-nurses",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "nclex-study-plan-for-filipino-nurses-working-full-time",
+      "title": "Top 10 NCLEX-RN Mistakes Filipino Test-Takers Make (and How to Avoid Them)",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "top-nclex-mistakes-filipino-nurses-make",
+      "title": "NCLEX-RN Pharmacology Review: What Filipino Nurses Need to Know",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "nclex-pharmacology-review-for-filipino-nurses",
+      "title": "NCLEX-RN Practice Questions: Free Sample Questions for Filipino Nurses",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "how-nclex-cat-format-works-philippine-nurses",
+      "title": "Fluid and Electrolyte NCLEX Questions: A Filipino Nurse",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "fluid-electrolyte-nclex-questions-filipino-nurses",
+      "title": "NCLEX-RN Readiness: How to Know If You",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "nclex-readiness-how-to-know-you-are-ready",
+      "title": "Cardiac NCLEX Questions Every Filipino Nurse Should Master",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "cardiac-nclex-questions-for-filipino-nurses",
+      "title": "Affordable NCLEX Review Options for Filipino Nurses (2025)",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "affordable-nclex-review-options-for-filipino-nurses",
+      "title": "NCLEX-RN Maternal and Newborn Nursing Review for Filipino Nurses",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "nclex-maternal-newborn-nursing-review-philippines",
+      "title": "How to Study for the NCLEX-RN in 30 Days: Philippines Edition",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "study-nclex-in-30-days-philippines",
+      "title": "NCLEX-RN Sepsis and Infection Control: What Filipino Nurses Must Know",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "nclex-sepsis-infection-control-filipino-nurses",
+      "title": "Pediatric Nursing NCLEX Questions: Study Guide for Filipino Nurses",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "pediatric-nursing-nclex-questions-filipino-nurses",
+      "title": "Clinical Judgment on the NCLEX: Why It Matters for Filipino Nurses",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "clinical-judgment-nclex-why-it-matters-filipino-nurses",
+      "title": "NCLEX-RN Results: How to Interpret the Quick Results and What to Do Next",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "nclex-results-quick-results-what-to-do-next",
+      "title": "NCLEX-RN Application Process for Philippine-Educated Nurses",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    },
+    {
+      "slug": "nclex-application-process-philippine-nurses",
+      "title": "Shock Nursing NCLEX Review: Types, Assessment, and Interventions",
+      "confirmedLive": false,
+      "note": "Repo generator or static only — not in DB export; not confirmed live"
+    }
+  ]
+}

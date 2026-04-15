@@ -37,6 +37,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-types";
 import { countWords, stripToPlainText } from "@/lib/content-quality/plain-text";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
+import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
 import { prependScopedGoldCatalogLessons } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
 
 type CatalogShape = {
@@ -510,6 +511,7 @@ export function sortAndFilterLessonsForPathwayContext(
 ): PathwayLessonRecord[] {
   const context = resolveLessonContextForPathwayId(pathwayId);
   return lessons
+    .filter((lesson) => pathwayLessonEligibleForPublicMarketingSurface(lesson))
     .filter((lesson) => matchesLessonContext(lesson, context))
     .map((lesson) => ({ ...lesson, activeExamMeta: examMetaForContext(lesson, context) }))
     .sort((a, b) => {

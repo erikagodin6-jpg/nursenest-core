@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { BrandLeafMark } from "@/components/brand/brand-leaf-mark";
-import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { BRAND_NAME } from "@/lib/branding/logo-config";
 import {
   BROWSE_LESSONS_HREF,
@@ -69,10 +68,8 @@ export function NotFoundClient({
           className="mb-8 inline-flex rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--semantic-page-bg)]"
           aria-label={`${BRAND_NAME} home`}
         >
-          <SiteBrandLogoMark variant="hero" logoVariant="leaf" />
+          <BrandLeafMark size={72} />
         </Link>
-
-        <BrandLeafMark size={64} className="mb-2" />
 
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-secondary)]">404</p>
 

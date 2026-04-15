@@ -46,4 +46,4 @@ export function canViewFullPathwayLesson(
   return lp === pathway.id;
 }
 
-export { visibleSectionsForLesson } from "@/lib/lessons/pathway-lesson-visible-sections";
+export { sanitizePaywallPreviewSection, visibleSectionsForLesson } from "@/lib/lessons/pathway-lesson-visible-sections";

@@ -19,6 +19,7 @@ import {
   PATHWAY_LESSON_SITEMAP_LOCALE,
 } from "@/lib/lessons/pathway-lesson-locale";
 import { evaluatePathwayLessonStructuralGate } from "@/lib/lessons/pathway-lesson-premium";
+import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
 import {
   type PathwayLessonClinicalPriority,
   type PathwayLessonExamMeta,
@@ -1117,6 +1118,7 @@ async function getRelatedPathwayLessonsImpl(
           ),
         )
         .map((full) => stripPathwayLessonToHubListShape(full))
+        .filter(pathwayLessonEligibleForPublicMarketingSurface)
         .filter(pathwayLessonHasRenderableHubSlug);
 
     let merged = mapDbRows(rows);
@@ -1176,6 +1178,7 @@ async function getRelatedPathwayLessonsImpl(
       ),
     )
     .map((full) => stripPathwayLessonToHubListShape(full))
+    .filter(pathwayLessonEligibleForPublicMarketingSurface)
     .filter(pathwayLessonHasRenderableHubSlug)
     .slice(0, cap);
 }

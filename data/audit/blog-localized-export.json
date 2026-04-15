@@ -1,0 +1,13 @@
+{
+  "generatedAt": "2026-04-15T02:11:52.076Z",
+  "readOnly": true,
+  "databaseAvailable": false,
+  "databaseUrlConfigured": false,
+  "queryFailed": true,
+  "queryError": "DATABASE_URL (or PROD_DATABASE_URL in production) not set.",
+  "note": "SELECT-only prisma.blogPost.findMany / prisma.localizedBlogArticle.findMany; no mutations.",
+  "articles": [],
+  "counts": {
+    "localizedBlogArticle": 0
+  }
+}

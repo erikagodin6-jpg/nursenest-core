@@ -496,8 +496,8 @@ AKI worsens **fluid balance**, **electrolytes** (especially **K⁺**), and **med
 
 **Nursing spine**  
 Measure **I/O**, assess **edema versus hypovolemia**, monitor **vitals**, **lung sounds**, and **electrolyte results**, protect **Foley** indications when present, and **teach** patients to report **decreased urine**, **chest pain**, or **neurologic changes** from hyperkalemia.`,
-    labsDiagnostics: `**Labs**  
-**Creatinine/BUN** trend; **potassium** may rise dangerously. **Urinalysis** may support intrinsic causes when shown. **Imaging** may evaluate obstruction. Nursing integrates **timely sampling** and **critical value reporting**.`,
+    labsDiagnostics: `**Labs / diagnostics (AKI surveillance)**  
+Follow **creatinine and BUN as trends**, not one-off values—boards love a **rising creatinine with falling urine output** as an AKI signal. **Potassium** can climb quickly; treat unexpected hyperkalemia as urgent and repeat levels after therapy when ordered, using your facility’s **critical value** process. **Urinalysis** may hint at **casts**, **protein**, or **infection** patterns that support intrinsic injury when the stem includes results. **Imaging** (often ultrasound) may assess **postrenal obstruction**; nursing contributes **prep**, **safety**, and clear communication about **contrast** or **hydration** orders. After **iodinated contrast** or other **nephrotoxin** exposure, expect **tighter creatinine surveillance** and report **new oliguria** early. Pair labs with **strict intake/output**, **daily weights**, and **vitals** so trends tell one coherent story.`,
     pn: `**NCLEX-PN**  
 Focus on **I/O**, **reporting abnormal findings**, **administering fluids/meds per order**, and **patient safety** with mobility if confused.`,
     caRpn: `**REx-PN**  

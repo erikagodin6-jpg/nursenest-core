@@ -1,4 +1,4 @@
-import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import type { PathwayLessonRecord, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
 
 const PREVIEW_WORD_LIMIT = 180;
 
@@ -29,4 +29,20 @@ export function visibleSectionsForLesson(
       body: clampPreviewWords(first.body, PREVIEW_WORD_LIMIT),
     },
   ];
+}
+
+/**
+ * Strip subscriber-only section payloads for paywall preview — server HTML must not include
+ * full figures, rationales, checkpoints, or recall blocks for unpaid/anonymous users.
+ */
+export function sanitizePaywallPreviewSection(section: PathwayLessonSection): PathwayLessonSection {
+  return {
+    ...section,
+    figures: undefined,
+    examFocus: undefined,
+    checkpointQuestions: undefined,
+    recallPrompts: undefined,
+    keyRecallFacts: undefined,
+    audioUrl: undefined,
+  };
 }

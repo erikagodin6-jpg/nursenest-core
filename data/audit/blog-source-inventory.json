@@ -1,0 +1,142 @@
+{
+  "generatedAt": "2026-04-15T02:06:23.915Z",
+  "sourceCount": 17,
+  "sources": [
+    {
+      "path": "nursenest-core/src/content/blog-static-posts.ts",
+      "sourceType": "static_ts_array",
+      "usedByProductionRoutes": "Dev-only when DB empty: `listStaticBlogPostsForIndex` + `getBlogPostMetaBySlug` via `canUseStaticBlogFallback()`. `/blog/[slug]` body uses `getPublishedBlogPostBySlug` → Prisma only — static HTML is NOT merged into the page component.",
+      "slugResolution": "STATIC_BLOG_POSTS[].slug literals",
+      "fullBodiesInRepo": "yes",
+      "notes": "Three curated posts with full bodyHtml; production visibility still requires matching BlogPost rows if DB is populated."
+    },
+    {
+      "path": "nursenest-core/src/lib/blog/static-blog-posts.ts",
+      "sourceType": "static_wrapper",
+      "usedByProductionRoutes": "Same as blog-static-posts.ts (helper for static array).",
+      "slugResolution": "Re-exports STATIC_BLOG_POSTS",
+      "fullBodiesInRepo": "yes",
+      "notes": "staticRecordToBlogDisplay maps to display shape; not wired to published page without DB."
+    },
+    {
+      "path": "nursenest-core/src/lib/blog/safe-blog-queries.ts",
+      "sourceType": "prisma_loader",
+      "usedByProductionRoutes": "Yes — `/blog`, `/blog/[slug]`, `/blog/tag/*`, sitemap blog URLs (Prisma).",
+      "slugResolution": "BlogPost.slug unique; optional locale/career/exam scoping in resolveScopedBlogPostBySlug",
+      "fullBodiesInRepo": "no",
+      "notes": "Authoritative published content for `/blog/[slug]` when `getPublishedBlogPostBySlug` returns a row. Static fallback does not supply body to page."
+    },
+    {
+      "path": "nursenest-core/src/lib/blog/safe-localized-blog-queries.ts",
+      "sourceType": "prisma_localized",
+      "usedByProductionRoutes": "Yes — `/[locale]/[slug]/[examCode]/[exam]/blog/[postSlug]`",
+      "slugResolution": "LocalizedBlogArticle.localizedSlug + region/profession/exam",
+      "fullBodiesInRepo": "no",
+      "notes": "Separate model from BlogPost; full body in DB localizedBody."
+    },
+    {
+      "path": "nursenest-core/prisma/schema.prisma (BlogPost, LocalizedBlogArticle)",
+      "sourceType": "prisma_schema",
+      "usedByProductionRoutes": "Yes — canonical blog storage.",
+      "slugResolution": "ORM models",
+      "fullBodiesInRepo": "no",
+      "notes": "BlogPost.body Text; campaign/batch/import pipelines write here."
+    },
+    {
+      "path": "nursenest-core/src/lib/seo/long-form-seo-blog-posts.ts (+ chunk2)",
+      "sourceType": "generated_regional_longform",
+      "usedByProductionRoutes": "Not imported by `src/app/**/blog/*` directly — used for regional SEO hubs / materialization scripts, not the default `/blog/[slug]` route unless posts are imported to Prisma.",
+      "slugResolution": "LONG_FORM_BLOG_TOPICS / LONG_FORM_BLOG_POSTS slug fields",
+      "fullBodiesInRepo": "mixed",
+      "notes": "Full sections for LONG_FORM_BLOG_POSTS entries; topics-only rows are metadata."
+    },
+    {
+      "path": "nursenest-core/src/lib/seo/blog-topic-clusters.ts",
+      "sourceType": "topic_cluster_metadata",
+      "usedByProductionRoutes": "Indirect — planning/topics for generators; not a live route without DB/import.",
+      "slugResolution": "BlogTopicCluster.slug per market cluster",
+      "fullBodiesInRepo": "metadata_only",
+      "notes": "High-intent cluster definitions with linkedLessonSlugs — content must be generated or imported."
+    },
+    {
+      "path": "nursenest-core/src/lib/seo/long-tail-niche-blog-posts.ts",
+      "sourceType": "long_tail_topics",
+      "usedByProductionRoutes": "Indirect — seed/generation unless imported.",
+      "slugResolution": "slug fields in exported arrays",
+      "fullBodiesInRepo": "mixed",
+      "notes": "50 niche topics; verify import status in production DB separately."
+    },
+    {
+      "path": "nursenest-core/src/lib/seo/* (french, hindi, spanish, tagalog, market, conversion, np-advanced, global-expansion, etc.)",
+      "sourceType": "localized_seo_chunks",
+      "usedByProductionRoutes": "Indirect — regional blog pipelines / hubs.",
+      "slugResolution": "Per-file slug literals",
+      "fullBodiesInRepo": "mixed",
+      "notes": "Multiple language/market chunks; not all wired to main /blog router."
+    },
+    {
+      "path": "nursenest-core/scripts/import-blog.ts",
+      "sourceType": "legacy_import_cli",
+      "usedByProductionRoutes": "Writes Prisma BlogPost — affects production when run against prod DB.",
+      "slugResolution": "Input JSON / manifests",
+      "fullBodiesInRepo": "imported_from_files",
+      "notes": "Batch importer for published posts."
+    },
+    {
+      "path": "nursenest-core/scripts/blog/import-legacy-manifest.ts",
+      "sourceType": "legacy_manifest_import",
+      "usedByProductionRoutes": "Writes Prisma",
+      "slugResolution": "Manifest slug column",
+      "fullBodiesInRepo": "mixed",
+      "notes": "Maps manifest rows to BlogPost create/update."
+    },
+    {
+      "path": "data/blog-content/**/sample-posts.json",
+      "sourceType": "sample_manifest_json",
+      "usedByProductionRoutes": "Import / pilot — not necessarily live.",
+      "slugResolution": "entries[].slug",
+      "fullBodiesInRepo": "no",
+      "notes": "Sample metadata for country pipelines; bodies often elsewhere or generated."
+    },
+    {
+      "path": "data/blog-content/newgrad-prod-batch-*/index.json",
+      "sourceType": "import_batch_index",
+      "usedByProductionRoutes": "When imported via publish scripts → Prisma.",
+      "slugResolution": "slug per row",
+      "fullBodiesInRepo": "partial",
+      "notes": "Companion body-NN.html files hold HTML bodies in repo for batch imports."
+    },
+    {
+      "path": "nursenest-core/data/blog-manifest/*.manifest.json",
+      "sourceType": "regional_manifest",
+      "usedByProductionRoutes": "Materialization / validation scripts; may be empty placeholders.",
+      "slugResolution": "entries in manifest",
+      "fullBodiesInRepo": "metadata_only",
+      "notes": "Some manifests are placeholders (count: 0) — verify per file."
+    },
+    {
+      "path": "nursenest-core/src/lib/seo/sitemap-blog-xml.ts",
+      "sourceType": "sitemap_generator",
+      "usedByProductionRoutes": "Yes — SEO sitemap for blog URLs.",
+      "slugResolution": "getSitemapPublishedBlogSlugs → Prisma only",
+      "fullBodiesInRepo": "no",
+      "notes": "Static slugs not added here — DB-backed URLs only."
+    },
+    {
+      "path": "nursenest-core/src/app/(marketing)/(default)/blog/[slug]/page.tsx",
+      "sourceType": "next_route",
+      "usedByProductionRoutes": "Yes — public blog article page.",
+      "slugResolution": "Dynamic [slug]; loads body via getPublishedBlogPostBySlug(slug) → Prisma BlogPost",
+      "fullBodiesInRepo": "no",
+      "notes": "Calls notFound() if no published Prisma row; does not render STATIC_BLOG_POSTS body directly."
+    },
+    {
+      "path": "nursenest-core/src/app/(marketing)/[locale]/[slug]/[examCode]/[exam]/blog/[postSlug]/page.tsx",
+      "sourceType": "next_route_localized",
+      "usedByProductionRoutes": "Yes — regional localized blog",
+      "slugResolution": "getPublishedLocalizedBlogBySlug → LocalizedBlogArticle",
+      "fullBodiesInRepo": "no",
+      "notes": "Separate URL scheme from /blog/[slug]."
+    }
+  ]
+}

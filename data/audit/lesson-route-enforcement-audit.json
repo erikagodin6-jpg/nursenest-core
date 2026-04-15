@@ -1,0 +1,3418 @@
+{
+  "generatedAt": "2026-04-15T02:20:40.927Z",
+  "pathways": [
+    "us-rn-nclex-rn",
+    "ca-rn-nclex-rn",
+    "us-lpn-nclex-pn",
+    "ca-rpn-rex-pn"
+  ],
+  "totals": {
+    "rows": 675,
+    "publicComplete": 321,
+    "notPublicComplete": 354
+  },
+  "notPublicCompleteSlugs": [
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "ob-emergencies-gold-standard",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (33 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pediatric-triage-emergencies-gold-standard",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (24 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "renal-dialysis-acute-complications-gold-standard",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (31 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (31 < 35 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pulmonary-embolism-recognition-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (69 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "atrial-fibrillation-stroke-prevention-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (65 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pneumonia-cap-nursing-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (40 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "upper-gi-bleed-prioritization-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (40 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "meningitis-emergency-recognition-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (28 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "opioid-toxicity-naloxone-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (27 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "falls-injury-prevention-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (17 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "adrenal-crisis-addisonian-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (16 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "ards-acute-respiratory-failure-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (21 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "thyroid-storm-emergency-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (17 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "delirium-acute-confusion-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (16 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "respiratory-assessment-ngn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (23 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (20 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-pulmonary-embolism",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (146 < 180).",
+        "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-heart-failure",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (130 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-myocardial-infarction",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (119 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-angina",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (138 < 180).",
+        "Section \"signs_symptoms\" below minimum word count (109 < 120).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-dysrhythmias",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (114 < 180).",
+        "Section \"red_flags\" below minimum word count (66 < 80).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-hypertension",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (112 < 180).",
+        "Section \"nursing_assessment_interventions\" below minimum word count (166 < 180).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-shock",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (129 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-asthma",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (134 < 180).",
+        "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
+        "Section \"red_flags\" below minimum word count (70 < 80)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-ards",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (121 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-pneumonia",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (136 < 180).",
+        "Section \"red_flags\" below minimum word count (64 < 80).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-copd-respiratory",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (136 < 180).",
+        "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-abg-interpretation",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (123 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-acid-base-advanced",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (87 < 180).",
+        "Section \"red_flags\" below minimum word count (64 < 80).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-sodium-imbalance",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (123 < 180).",
+        "Section \"signs_symptoms\" below minimum word count (112 < 120).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-potassium-imbalance",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (111 < 180).",
+        "Section \"signs_symptoms\" below minimum word count (83 < 120).",
+        "Section \"red_flags\" below minimum word count (52 < 80)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-insulin-hypoglycemia",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (126 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-sepsis",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (149 < 180).",
+        "Section \"signs_symptoms\" below minimum word count (117 < 120).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-infection-control",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (165 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-anticoagulants",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (139 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-antibiotics",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (119 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-pain-management",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (173 < 180).",
+        "Section \"labs_diagnostics\" below minimum word count (39 < 100).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-delegation",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (135 < 180).",
+        "Section \"labs_diagnostics\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-fluid-balance",
+      "structureMode": "premium",
+      "issueSample": [
+        "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-prioritization-abcs",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (150 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-general-nursing-clinical",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (115 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "heart-failure-nursing-priorities-hy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "acute-myocardial-infarction-troponin",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "shock-recognition-fluids",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "hypertensive-crisis-vs-urgency",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "atrial-fibrillation-rate-control",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "endocarditis-blood-cultures",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pericarditis-ecg-clues",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "dvt-pe-nursing-priorities",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "abg-interpretation-basics-hy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "copd-exacerbation-oxygen",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "asthma-status-asthmaticus",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "ards-ventilation-basics",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pneumonia-oxygenation",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pulmonary-embolism-clues",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "tb-isolation-compliance",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pleural-effusion-chest-tubes",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "insulin-hypoglycemia-hy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "anticoagulants-bleeding-risk",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "antibiotic-classes-allergies-hy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "opioids-respiratory-depression",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "cardiac-glycosides-toxicity",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "diuretics-electrolyte-shifts",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "antihypertensive-combos",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (39 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (28 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "chemo-safe-handling-extravasation",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "hyponatremia-vs-hypernatremia-hy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "hypo-vs-hyperkalemia-hy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "fluid-volume-deficit",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "fluid-volume-excess",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "magnesium-arrhythmia-risk",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "calcium-tetany",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "phosphate-shifts-in-renal",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "mixed-acid-base-patterns",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "liver-failure-hepatic-encephalopathy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "acute-pancreatitis-nursing-care",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "bowel-obstruction-vs-paralytic-ileus",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "gerd-pud-bleeding-clues",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "gi-bleed-assessment",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "c-diff-infection-control",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "ostomy-skin-protection",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "stroke-assessment-tpa-window",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "seizure-precautions-rescue-meds",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "increased-icp-positioning",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "spinal-cord-injury-autonomic-dysreflexia",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "meningitis-isolation-assessment",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "migraine-vs-red-flag-headache",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "parkinson-disease-med-timing",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "dka-vs-hhs-priorities-hy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "thyroid-storm-myxedema-clues",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "addisonian-crisis",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (39 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (28 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "cushing-syndrome-assessment",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "diabetes-self-management-teaching",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "siadh-vs-di-basics",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "aki-prerenal-vs-intrarenal",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "hemodialysis-access-care",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "peritoneal-dialysis-complications",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "kidney-stones-strain-management",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "uti-vs-pyelonephritis",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "indwelling-catheter-risks",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "anemia-types-transfusion-thresholds",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "transfusion-reaction-recognition",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "neutropenic-precautions",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "sickle-cell-pain-acs",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "hip-fracture-fall-risk",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "ra-flare-immune-modulators",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "immobility-dvt-prophylaxis",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "sepsis-early-recognition-hy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "hiv-confidentiality-pep-basics",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "isolation-precautions-in-practice",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "wound-infection-vs-colonization",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "burn-depth-fluid-resuscitation-basics",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pressure-injury-staging",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "severe-dermatitis-skin-care",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "suicide-risk-assessment-hy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "psychotropic-side-effects",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "alcohol-withdrawal-ciwa",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "preeclampsia-vs-eclampsia",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "postpartum-hemorrhage",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (39 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (28 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "late-decelerations-fhr",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "newborn-thermoregulation-feeding",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "rh-incompatibility-basics",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pediatric-fever-dehydration",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "rsv-pediatric-resp-distress",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "immunization-schedule-essentials",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "growth-failure-red-flags",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "non-accidental-trauma-suspicion",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "assignment-vs-delegation",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "ethical-distress-advocacy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "legal-nurse-practice-act",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "qi-incident-reporting",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "falls-hourly-rounding",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "restraint-alternatives-policy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "medication-error-disclosure",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "sharp-safety-exposure",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "enteral-feeding-tube-safety",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "tpn-line-care-basics",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "abdominal-aortic-aneurysm-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (36 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (17 < 30 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (22 < 35 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "acute-coronary-syndrome-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (23 < 50 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (38 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (18 < 35 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "atrial-fibrillation-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (36 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (15 < 35 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "cardiac-tamponade-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (24 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (39 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (38 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "defibrillation-vs-synchronized-cardioversion-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (23 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (37 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "heart-failure-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (32 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (23 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (35 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "hypertensive-encephalopathy-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (28 < 50 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (31 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (10 < 35 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "infective-endocarditis-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (32 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (24 < 30 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (13 < 35 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "myocardial-infarction-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (24 < 50 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (14 < 35 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "peripheral-artery-disease-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (20 < 30 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (26 < 35 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "phlebostatic-axis-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (34 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (36 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pulmonary-embolism-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (29 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (18 < 30 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (24 < 35 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ob-emergencies-gold-standard",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (33 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (17 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pediatric-triage-emergencies-gold-standard",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (33 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (16 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (27 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "renal-dialysis-acute-complications-gold-standard",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (37 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (9 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (18 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pulmonary-embolism-recognition-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (69 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "atrial-fibrillation-stroke-prevention-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (65 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pneumonia-cap-nursing-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (40 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "upper-gi-bleed-prioritization-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (40 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "meningitis-emergency-recognition-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (28 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "opioid-toxicity-naloxone-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (27 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "falls-injury-prevention-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (17 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "adrenal-crisis-addisonian-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (16 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ards-acute-respiratory-failure-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (21 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "thyroid-storm-emergency-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (17 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "delirium-acute-confusion-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (16 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-balance-acute-care",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"exam_relevance\" is below the minimum depth (24 < 30 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cardiovascular-prioritization",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (101 < 180).",
+        "Section \"labs_diagnostics\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pulmonary-embolism",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (146 < 180).",
+        "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-heart-failure",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (130 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-myocardial-infarction",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (119 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-angina",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (138 < 180).",
+        "Section \"signs_symptoms\" below minimum word count (109 < 120).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-dysrhythmias",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (114 < 180).",
+        "Section \"red_flags\" below minimum word count (66 < 80).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-hypertension",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (112 < 180).",
+        "Section \"nursing_assessment_interventions\" below minimum word count (166 < 180).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-shock",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (129 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-asthma",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (134 < 180).",
+        "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
+        "Section \"red_flags\" below minimum word count (70 < 80)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-ards",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (121 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pneumonia",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (136 < 180).",
+        "Section \"red_flags\" below minimum word count (62 < 80).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-copd-respiratory",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (136 < 180).",
+        "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-abg-interpretation",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (123 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-acid-base-advanced",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (87 < 180).",
+        "Section \"red_flags\" below minimum word count (62 < 80).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-sodium-imbalance",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (123 < 180).",
+        "Section \"signs_symptoms\" below minimum word count (112 < 120).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-potassium-imbalance",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (111 < 180).",
+        "Section \"signs_symptoms\" below minimum word count (83 < 120).",
+        "Section \"red_flags\" below minimum word count (52 < 80)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-insulin-hypoglycemia",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (116 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-sepsis",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (149 < 180).",
+        "Section \"signs_symptoms\" below minimum word count (113 < 120).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-infection-control",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (165 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-anticoagulants",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (139 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-antibiotics",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (119 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pain-management",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (173 < 180).",
+        "Section \"labs_diagnostics\" below minimum word count (39 < 100).",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-delegation",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (135 < 180).",
+        "Section \"labs_diagnostics\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections.",
+        "Missing required premium section: tier_specific_relevance"
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-fluid-balance",
+      "structureMode": "premium",
+      "issueSample": [
+        "Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-prioritization-abcs",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (150 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-general-nursing-clinical",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"introduction\" below minimum word count (115 < 180).",
+        "Missing required premium section: tier_specific_relevance",
+        "Section \"country_specific_notes\" is missing: add content, mark [not applicable] in body, or document omission in premiumOmittedSections."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "diuretics-electrolyte-shifts",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "diabetes-self-management-teaching",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sepsis-early-recognition-hy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-coronary-syndrome-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (23 < 50 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (38 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (18 < 35 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "atrial-fibrillation-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (36 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (15 < 35 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cardiac-tamponade-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (24 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (39 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (38 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "defibrillation-vs-synchronized-cardioversion-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (23 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (37 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "heart-failure-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (32 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (23 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (35 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypertensive-encephalopathy-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (28 < 50 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (31 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (10 < 35 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "infective-endocarditis-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (32 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (24 < 30 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (13 < 35 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "myocardial-infarction-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (24 < 50 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (14 < 35 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "peripheral-artery-disease-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (20 < 30 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (26 < 35 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "phlebostatic-axis-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (34 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (36 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pulmonary-embolism-nclex-rn",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (29 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (18 < 30 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (24 < 35 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "ob-emergencies-gold-standard",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_scenario\" is below the minimum depth (31 < 40 words).",
+        "Legacy section \"takeaways\" is below the minimum depth (34 < 35 words).",
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "pediatric-triage-emergencies-gold-standard",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (46 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (24 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (26 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "renal-dialysis-acute-complications-gold-standard",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (49 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (18 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "pulmonary-embolism-recognition-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (69 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "atrial-fibrillation-stroke-prevention-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (65 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "pneumonia-cap-nursing-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (40 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "upper-gi-bleed-prioritization-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (40 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "meningitis-emergency-recognition-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (28 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "opioid-toxicity-naloxone-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (27 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "falls-injury-prevention-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (17 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "adrenal-crisis-addisonian-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (16 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "ards-acute-respiratory-failure-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (21 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "thyroid-storm-emergency-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (17 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "delirium-acute-confusion-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (16 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "lpn-scope-delegation-priority",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (40 < 50 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (28 < 40 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-pulmonary-embolism",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-heart-failure",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-myocardial-infarction",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-angina",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (25 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-dysrhythmias",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (25 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-hypertension",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (25 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-shock",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (25 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-asthma",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (25 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-ards",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (25 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-pneumonia",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (25 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-copd-respiratory",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (28 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-abg-interpretation",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-acid-base-advanced",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (27 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-sodium-imbalance",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-potassium-imbalance",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-insulin-hypoglycemia",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (27 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-sepsis",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (25 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-infection-control",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-anticoagulants",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (25 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-antibiotics",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (25 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-pain-management",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-wound-care",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (26 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-delegation",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (27 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-fluid-balance",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (28 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-prioritization-abcs",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (28 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-general-nursing-clinical",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (28 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (15 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "pn-scope-boundaries-delegation-rules-hy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (48 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (34 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "therapeutic-communication",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (25 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "vital-signs-escalation",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (46 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "documentation-do-nots",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (25 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "heart-failure-monitoring",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "hypertension-teaching",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (25 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "edema-daily-weights",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "oxygen-devices-for-pn-care",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (46 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "inhaler-technique-teaching",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "copd-home-care",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "insulin-administration-checks",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "oral-hypoglycemics",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (25 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "antibiotic-side-effect-reporting",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "i-o-fluid-restriction-teaching",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (48 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (34 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "hypokalemia-symptoms",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (25 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "daily-weights-pattern",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (46 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "npo-post-op-diet-progression",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (46 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "stool-assessment-report",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "stroke-sequela-mobility-assist",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (46 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "seizure-observation",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (25 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "fingerstick-hypoglycemia-response",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "foot-inspection-teaching",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "catheter-care-cauti-prevention",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (48 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (34 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "dialysis-diet-teaching",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (46 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "postpartum-fundus-lochia",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "newborn-safety-bath",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "growth-chart-basics",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "immunization-consent",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (25 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "ppe-transmission-basics",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (46 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "c-diff-contact-precautions",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (46 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "suicide-precautions-observation",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "behavioral-escalation-reporting",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "falls-risk-side-rails-policy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (47 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "restraint-monitoring-requirements",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ob-emergencies-gold-standard",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (21 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "pediatric-triage-emergencies-gold-standard",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (39 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (21 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (20 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "renal-dialysis-acute-complications-gold-standard",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (36 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (17 < 30 words).",
+        "Legacy section \"clinical_scenario\" is below the minimum depth (27 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "pulmonary-embolism-recognition-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (69 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "atrial-fibrillation-stroke-prevention-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (65 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "pneumonia-cap-nursing-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (40 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "upper-gi-bleed-prioritization-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (40 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "meningitis-emergency-recognition-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (28 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "opioid-toxicity-naloxone-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (27 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "falls-injury-prevention-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (17 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "adrenal-crisis-addisonian-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (16 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ards-acute-respiratory-failure-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (21 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "thyroid-storm-emergency-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (17 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "delirium-acute-confusion-gold",
+      "structureMode": "premium",
+      "issueSample": [
+        "Section \"labs_diagnostics\" below minimum word count (16 < 100)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "pn-scope-safety-basics",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (32 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (23 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-pulmonary-embolism",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-heart-failure",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-myocardial-infarction",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-angina",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-dysrhythmias",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-hypertension",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-shock",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-asthma",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-ards",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-pneumonia",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-copd-respiratory",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-abg-interpretation",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-acid-base-advanced",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-sodium-imbalance",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-potassium-imbalance",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-insulin-hypoglycemia",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-sepsis",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-infection-control",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-anticoagulants",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-antibiotics",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-pain-management",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-wound-care",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-delegation",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-fluid-balance",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-prioritization-abcs",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-general-nursing-clinical",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"core_concept\" is below the minimum depth (24 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "pn-scope-boundaries-delegation-rules-hy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (46 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (34 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "therapeutic-communication",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (25 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "vital-signs-escalation",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "documentation-do-nots",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (25 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "heart-failure-monitoring",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "hypertension-teaching",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (25 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "edema-daily-weights",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "oxygen-devices-for-pn-care",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "inhaler-technique-teaching",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "copd-home-care",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "insulin-administration-checks",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "oral-hypoglycemics",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (25 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "antibiotic-side-effect-reporting",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "i-o-fluid-restriction-teaching",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (46 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (34 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "hypokalemia-symptoms",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (25 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "daily-weights-pattern",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "npo-post-op-diet-progression",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "stool-assessment-report",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "stroke-sequela-mobility-assist",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "seizure-observation",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (25 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "fingerstick-hypoglycemia-response",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "foot-inspection-teaching",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "catheter-care-cauti-prevention",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (46 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (34 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "dialysis-diet-teaching",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "postpartum-fundus-lochia",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "newborn-safety-bath",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "growth-chart-basics",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "immunization-consent",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (25 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (29 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ppe-transmission-basics",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "c-diff-contact-precautions",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (44 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (27 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (32 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "suicide-precautions-observation",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "behavioral-escalation-reporting",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (43 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "falls-risk-side-rails-policy",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (45 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (33 < 40 words)."
+      ]
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "restraint-monitoring-requirements",
+      "structureMode": "legacy",
+      "issueSample": [
+        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
+        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
+        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words)."
+      ]
+    }
+  ],
+  "notes": {
+    "hubListing": "Hub/topic lists use sortAndFilterLessonsForPathwayContext which filters !publicComplete.",
+    "detailRoute": "Marketing lesson detail uses resolveMarketingPathwayLessonRouteResolution (notFound when !publicComplete).",
+    "paywall": "Unauthorized users: visibleSectionsForLesson + sanitizePaywallPreviewSection; JSON-LD description truncated; no full audio/editorial notices.",
+    "sitemap": "listPathwayLessonSlugBatch may still list slugs that 404 on detail until batching filters public-complete rows."
+  }
+}

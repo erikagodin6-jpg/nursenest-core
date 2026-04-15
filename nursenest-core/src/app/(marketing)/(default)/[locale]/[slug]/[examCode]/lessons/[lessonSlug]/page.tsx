@@ -19,10 +19,14 @@ import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
 import {
-  canViewFullPathwayLesson,
   getPathwayLessonPreviewKind,
+  sanitizePaywallPreviewSection,
   visibleSectionsForLesson,
 } from "@/lib/lessons/pathway-lesson-access";
+import {
+  pathwayLessonEligibleForPublicMarketingSurface,
+  resolveMarketingPathwayLessonRouteResolution,
+} from "@/lib/lessons/pathway-lesson-route-access";
 import { normalizePathwayLessonLocale } from "@/lib/lessons/pathway-lesson-locale";
 import { loadPathwayLessonWithLegacySlugRedirect } from "@/lib/lessons/pathway-lesson-detail-redirect";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -113,7 +117,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         ? await loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, viewerLessonLocale)
         : undefined;
       if (!pathway || !lesson) return {};
-      if (!lesson.structuralQuality?.publicComplete) {
+      if (!pathwayLessonEligibleForPublicMarketingSurface(lesson)) {
         return { title: "Lesson", robots: { index: false, follow: false } };
       }
       const path = pathwayLessonPublicDetailPath(pathway, lesson.slug);
@@ -132,7 +136,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         .join(", ");
       const strictPublic = process.env.PATHWAY_LESSON_STRICT_PUBLIC_QUALITY === "1";
       const gate = lesson.structuralQuality;
-      const incomplete = Boolean(gate && !gate.publicComplete);
+      const incomplete = !pathwayLessonEligibleForPublicMarketingSurface(lesson);
       const robots =
         incomplete && (strictPublic || gate?.structureMode === "premium")
           ? ({ index: false, follow: true } as const)
@@ -175,9 +179,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   ]);
   const lesson =
     lessonResult.status === "fulfilled" ? lessonResult.value : undefined;
-  if (!lesson) notFound();
-  if (!lesson.structuralQuality?.publicComplete) notFound();
-  const examName = pathwayRegionAwareExamName(pathway);
+  const lessonLoadFailed = lessonResult.status === "rejected";
 
   const session = sessionResult.status === "fulfilled" ? sessionResult.value : null;
 
@@ -199,22 +201,29 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const entitlement = entRes.status === "fulfilled" ? entRes.value : "error";
   const learnerPathResolved = lpRes.status === "fulfilled" ? lpRes.value : null;
 
-  const scope =
-    entitlement === "error"
-      ? { hasAccess: false, reason: "no_access" as const, tier: null, country: null, alliedCareer: null }
-      : entitlement;
+  const routeResolution = resolveMarketingPathwayLessonRouteResolution({
+    pathway,
+    lesson,
+    lessonLoadFailed,
+    userId,
+    entitlement,
+    learnerPathResolved,
+  });
+  if (routeResolution.kind === "not_found") notFound();
 
-  const fullAccess = canViewFullPathwayLesson(scope, pathway, learnerPathResolved);
+  const { lesson, fullAccess, scope, entitlementError } = routeResolution;
+  const examName = pathwayRegionAwareExamName(pathway);
   const bankAssessments = await resolvePathwayLessonBankAssessments(pathway, lesson);
   const visible = visibleSectionsForLesson(lesson, fullAccess);
+  const visibleForRender = fullAccess ? visible : visible.map(sanitizePaywallPreviewSection);
   const previewLesson =
     fullAccess
       ? lesson
-      : { ...lesson, sections: visible, preTest: undefined, postTest: undefined };
+      : { ...lesson, sections: visibleForRender, preTest: undefined, postTest: undefined };
 
   const lessonContentTier = contentTierForPathwayLessonRender(
     pathway,
-    entitlement === "error" ? null : (entitlement.tier as TierCode | null),
+    entitlementError ? null : (entitlement.tier as TierCode | null),
   );
   const lessonMeasurementSystem = getMeasurementSystemForCountry(pathway.countryCode);
 
@@ -256,7 +265,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   );
 
   const omitHighYieldIds = new Set(lesson.omitHighYieldSectionIds ?? []);
-  const displaySections = visible
+  const displaySections = visibleForRender
     .filter((s) => shouldRenderPathwayLessonSection(s.kind))
     .filter((s) => !omitHighYieldIds.has(s.id));
 
@@ -275,7 +284,11 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         <PathwayLessonMedicalEducationJsonLd
           path={jsonLdLessonPath}
           headline={lesson.seoTitle}
-          description={lesson.seoDescription.slice(0, 320)}
+          description={
+            fullAccess
+              ? lesson.seoDescription.slice(0, 320)
+              : `${lesson.seoDescription.slice(0, 200)}${lesson.seoDescription.length > 200 ? "…" : ""}`
+          }
           datePublished={contentDates?.datePublished ?? null}
           dateModified={contentDates?.dateModified ?? null}
         />
@@ -315,8 +328,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           </div>
         ) : null}
         <div className="mt-4 space-y-2">
-          <PremiumLessonPublishNotice validation={lesson.premiumValidation} />
-          <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
+          {fullAccess ? <PremiumLessonPublishNotice validation={lesson.premiumValidation} /> : null}
+          {fullAccess ? <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} /> : null}
           <PathwayLessonQuickReview quickReviewLines={quickReviewBullets} />
           <EeatContentAttribution variant="lesson" />
         </div>
@@ -348,7 +361,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         ) : null}
 
         {!fullAccess ? (
-          entitlement === "error" ? (
+          entitlementError ? (
             <>
               <aside className="nn-card mt-6 border-amber-200 bg-amber-50 p-4 text-sm text-[var(--theme-body-text)] dark:border-amber-900/40 dark:bg-amber-950/30">
                 <p className="font-semibold">Access check didn’t complete</p>
@@ -382,7 +395,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           />
         ) : null}
 
-        {lesson.audioUrl ? (
+        {fullAccess && lesson.audioUrl ? (
           <LessonAudioCard audioUrl={lesson.audioUrl} lessonTitle={displayLessonTitle} />
         ) : null}
 

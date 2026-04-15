@@ -1,0 +1,104 @@
+{
+  "generatedAt": "2026-04-15T12:00:00.000Z",
+  "schemaPath": "nursenest-core/prisma/schema.prisma",
+  "visibilityHelpers": {
+    "BlogPost": {
+      "liveCheck": "blogPostIsLive + blogLiveWhere in src/lib/blog/blog-visibility.ts",
+      "meaning": "PUBLISHED always live; SCHEDULED live when publishAt or scheduledAt <= now"
+    },
+    "LocalizedBlogArticle": {
+      "liveCheck": "localizedBlogIsLive + localizedBlogLiveWhere in src/lib/blog/safe-localized-blog-queries.ts",
+      "meaning": "contentStatus PUBLISHED, or SCHEDULED with scheduledAt <= now"
+    }
+  },
+  "models": [
+    {
+      "modelName": "BlogPost",
+      "slugField": "slug",
+      "uniqueConstraint": "slug @unique",
+      "titleField": "title",
+      "excerptField": "excerpt",
+      "publishStatusField": "postStatus",
+      "publishStatusEnum": "BlogPostStatus",
+      "localeField": "locale",
+      "bodyField": "body",
+      "createdAtField": "createdAt",
+      "updatedAtField": "updatedAt",
+      "schedulingFields": ["publishAt", "scheduledAt"],
+      "seoFields": [
+        "seoTitle",
+        "seoDescription",
+        "targetKeyword",
+        "keywordCluster",
+        "internalLinkPlan",
+        "metaTitleVariant",
+        "metaDescriptionVariant"
+      ],
+      "translationLinkage": [
+        "translationGroupId — string linking translation variants",
+        "canonicalPostId — optional self-FK to canonical BlogPost row",
+        "sourceLocale",
+        "isAutoTranslated",
+        "translationSource"
+      ],
+      "scopeFields": ["exam", "careerSlug", "countryTarget"],
+      "localizedRelation": "localizedVariants LocalizedBlogArticle[]",
+      "sourceFilesUsingModel": [
+        "nursenest-core/src/lib/blog/safe-blog-queries.ts",
+        "nursenest-core/src/lib/blog/blog-visibility.ts",
+        "nursenest-core/src/app/(marketing)/(default)/blog/[slug]/page.tsx",
+        "nursenest-core/src/app/(marketing)/(default)/blog/page.tsx",
+        "nursenest-core/src/lib/seo/sitemap-blog-xml.ts",
+        "nursenest-core/scripts/import-blog.ts",
+        "nursenest-core/scripts/blog/emit-blog-final-report.ts"
+      ]
+    },
+    {
+      "modelName": "LocalizedBlogArticle",
+      "slugField": "localizedSlug",
+      "canonicalSlugField": "canonicalSlug",
+      "titleField": "localizedTitle",
+      "excerptField": "localizedExcerpt",
+      "publishStatusField": "contentStatus",
+      "publishStatusEnum": "LocalizedBlogStatus",
+      "localeField": "locale",
+      "regionField": "region",
+      "professionField": "profession",
+      "examField": "exam",
+      "bodyField": "localizedBody",
+      "createdAtField": "createdAt",
+      "updatedAtField": "updatedAt",
+      "schedulingFields": ["publishedAt", "scheduledAt"],
+      "seoFields": [
+        "localizedMetaTitle",
+        "localizedMetaDescription",
+        "seoKeywordPrimary",
+        "seoKeywordSecondary",
+        "searchIntent",
+        "canonicalUrl",
+        "hreflangJson"
+      ],
+      "translationLinkage": [
+        "canonicalArticleId — required FK to BlogPost.id"
+      ],
+      "uniqueConstraint": "@@unique([canonicalArticleId, locale, region])",
+      "sourceFilesUsingModel": [
+        "nursenest-core/src/lib/blog/safe-localized-blog-queries.ts",
+        "nursenest-core/src/app/(marketing)/[locale]/[slug]/[examCode]/[exam]/blog/[postSlug]/page.tsx",
+        "nursenest-core/src/lib/seo/sitemap-localized-blog-xml.ts"
+      ]
+    }
+  ],
+  "routes": {
+    "defaultMarketingBlog": {
+      "pattern": "/blog/[slug]",
+      "page": "nursenest-core/src/app/(marketing)/(default)/blog/[slug]/page.tsx",
+      "dataLoader": "getPublishedBlogPostBySlug(slug) → prisma BlogPost"
+    },
+    "localizedBlog": {
+      "pattern": "/[locale]/[slug]/[examCode]/[exam]/blog/[postSlug]",
+      "page": "nursenest-core/src/app/(marketing)/[locale]/[slug]/[examCode]/[exam]/blog/[postSlug]/page.tsx",
+      "dataLoader": "getPublishedLocalizedBlogBySlug({ locale, region, profession, exam, slug: postSlug })"
+    }
+  }
+}

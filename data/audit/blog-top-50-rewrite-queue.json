@@ -1,0 +1,697 @@
+{
+  "generatedAt": "2026-04-15T02:06:23.915Z",
+  "queue": [
+    {
+      "rank": 1,
+      "slug": "clinical-judgment-on-exam-day",
+      "title": "Clinical judgment on exam day: turning cues into safe decisions",
+      "sourceType": "static_blog_static_posts",
+      "cluster": "clinical_concept",
+      "whyItMatters": "Curated in-repo body; ensure DB parity and internal links for main /blog indexability.",
+      "likelyLongTailKeywords": [
+        "Clinical judgment on exam day: turning cues into safe decisions",
+        "clinical judgment on exam day"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": false
+    },
+    {
+      "rank": 2,
+      "slug": "pharmacology-without-memorization-chaos",
+      "title": "Pharmacology study that sticks (without memorization chaos)",
+      "sourceType": "static_blog_static_posts",
+      "cluster": "clinical_concept",
+      "whyItMatters": "Curated in-repo body; ensure DB parity and internal links for main /blog indexability.",
+      "likelyLongTailKeywords": [
+        "Pharmacology study that sticks (without memorization chaos)",
+        "pharmacology without memorization chaos"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": false
+    },
+    {
+      "rank": 3,
+      "slug": "how-to-pass-nclex-rn-from-the-philippines",
+      "title": null,
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "how to pass nclex rn from the philippines"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 4,
+      "slug": "how-to-pass-nclex-rn-as-nigerian-nurse",
+      "title": null,
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "how to pass nclex rn as nigerian nurse"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 5,
+      "slug": "nclex-rn-preparation-guide-for-indian-nurses",
+      "title": null,
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "nclex rn preparation guide for indian nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 6,
+      "slug": "how-to-pass-nclex-rn-as-kenyan-nurse",
+      "title": null,
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "how to pass nclex rn as kenyan nurse"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 7,
+      "slug": "nclex-rn-for-uk-nurses-complete-preparation-guide",
+      "title": null,
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "nclex rn for uk nurses complete preparation guide"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 8,
+      "slug": "nclex-practice-questions-for-filipino-nurses",
+      "title": null,
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "nclex practice questions for filipino nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 9,
+      "slug": "best-nclex-study-plan-for-indian-nurses-budget",
+      "title": null,
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "best nclex study plan for indian nurses budget"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 10,
+      "slug": "best-nclex-study-plan-nigerian-nurses",
+      "title": null,
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "best nclex study plan nigerian nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 11,
+      "slug": "nclex-study-plan-for-filipino-nurses-working-full-time",
+      "title": "Top 10 NCLEX-RN Mistakes Filipino Test-Takers Make (and How to Avoid Them)",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "Top 10 NCLEX-RN Mistakes Filipino Test-Takers Make (and How to Avoid Them)",
+        "nclex study plan for filipino nurses working full time"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 12,
+      "slug": "top-nclex-mistakes-filipino-nurses-make",
+      "title": "NCLEX-RN Pharmacology Review: What Filipino Nurses Need to Know",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Pharmacology Review: What Filipino Nurses Need to Know",
+        "top nclex mistakes filipino nurses make"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 13,
+      "slug": "nclex-pharmacology-review-for-filipino-nurses",
+      "title": "NCLEX-RN Practice Questions: Free Sample Questions for Filipino Nurses",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Practice Questions: Free Sample Questions for Filipino Nurses",
+        "nclex pharmacology review for filipino nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 14,
+      "slug": "how-nclex-cat-format-works-philippine-nurses",
+      "title": "Fluid and Electrolyte NCLEX Questions: A Filipino Nurse",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "Fluid and Electrolyte NCLEX Questions: A Filipino Nurse",
+        "how nclex cat format works philippine nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 15,
+      "slug": "fluid-electrolyte-nclex-questions-filipino-nurses",
+      "title": "NCLEX-RN Readiness: How to Know If You",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Readiness: How to Know If You",
+        "fluid electrolyte nclex questions filipino nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 16,
+      "slug": "nclex-readiness-how-to-know-you-are-ready",
+      "title": "Cardiac NCLEX Questions Every Filipino Nurse Should Master",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "Cardiac NCLEX Questions Every Filipino Nurse Should Master",
+        "nclex readiness how to know you are ready"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 17,
+      "slug": "cardiac-nclex-questions-for-filipino-nurses",
+      "title": "Affordable NCLEX Review Options for Filipino Nurses (2025)",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "Affordable NCLEX Review Options for Filipino Nurses (2025)",
+        "cardiac nclex questions for filipino nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 18,
+      "slug": "affordable-nclex-review-options-for-filipino-nurses",
+      "title": "NCLEX-RN Maternal and Newborn Nursing Review for Filipino Nurses",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Maternal and Newborn Nursing Review for Filipino Nurses",
+        "affordable nclex review options for filipino nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 19,
+      "slug": "nclex-maternal-newborn-nursing-review-philippines",
+      "title": "How to Study for the NCLEX-RN in 30 Days: Philippines Edition",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "How to Study for the NCLEX-RN in 30 Days: Philippines Edition",
+        "nclex maternal newborn nursing review philippines"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 20,
+      "slug": "study-nclex-in-30-days-philippines",
+      "title": "NCLEX-RN Sepsis and Infection Control: What Filipino Nurses Must Know",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Sepsis and Infection Control: What Filipino Nurses Must Know",
+        "study nclex in 30 days philippines"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 21,
+      "slug": "nclex-sepsis-infection-control-filipino-nurses",
+      "title": "Pediatric Nursing NCLEX Questions: Study Guide for Filipino Nurses",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "Pediatric Nursing NCLEX Questions: Study Guide for Filipino Nurses",
+        "nclex sepsis infection control filipino nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 22,
+      "slug": "pediatric-nursing-nclex-questions-filipino-nurses",
+      "title": "Clinical Judgment on the NCLEX: Why It Matters for Filipino Nurses",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "Clinical Judgment on the NCLEX: Why It Matters for Filipino Nurses",
+        "pediatric nursing nclex questions filipino nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 23,
+      "slug": "clinical-judgment-nclex-why-it-matters-filipino-nurses",
+      "title": "NCLEX-RN Results: How to Interpret the Quick Results and What to Do Next",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Results: How to Interpret the Quick Results and What to Do Next",
+        "clinical judgment nclex why it matters filipino nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 24,
+      "slug": "nclex-results-quick-results-what-to-do-next",
+      "title": "NCLEX-RN Application Process for Philippine-Educated Nurses",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Application Process for Philippine-Educated Nurses",
+        "nclex results quick results what to do next"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 25,
+      "slug": "nclex-application-process-philippine-nurses",
+      "title": "Shock Nursing NCLEX Review: Types, Assessment, and Interventions",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "Shock Nursing NCLEX Review: Types, Assessment, and Interventions",
+        "nclex application process philippine nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 26,
+      "slug": "shock-nursing-nclex-review-types-assessment",
+      "title": "NCLEX-RN Prioritization and Delegation Questions Explained",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Prioritization and Delegation Questions Explained",
+        "shock nursing nclex review types assessment"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 27,
+      "slug": "nclex-prioritization-delegation-questions-explained",
+      "title": "NCLEX Renal and Dialysis Questions: Essential Review for Filipino Nurses",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX Renal and Dialysis Questions: Essential Review for Filipino Nurses",
+        "nclex prioritization delegation questions explained"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 28,
+      "slug": "nclex-renal-dialysis-questions-filipino-nurses",
+      "title": "NCLEX-RN Preparation Guide for Indian Nurses: Everything You Need to Know",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Preparation Guide for Indian Nurses: Everything You Need to Know",
+        "nclex renal dialysis questions filipino nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 29,
+      "slug": "top-nclex-mistakes-indian-nurses-make",
+      "title": "NCLEX-RN Pharmacology Tips for Indian Nursing Graduates",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Pharmacology Tips for Indian Nursing Graduates",
+        "top nclex mistakes indian nurses make"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 30,
+      "slug": "nclex-pharmacology-tips-for-indian-nursing-graduates",
+      "title": "NCLEX-RN Practice Questions for Indian Nurses: Try Free Samples",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Practice Questions for Indian Nurses: Try Free Samples",
+        "nclex pharmacology tips for indian nursing graduates"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 31,
+      "slug": "nclex-practice-questions-for-indian-nurses-free",
+      "title": "How Indian Nurses Can Apply for the NCLEX-RN: Step-by-Step",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "How Indian Nurses Can Apply for the NCLEX-RN: Step-by-Step",
+        "nclex practice questions for indian nurses free"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 32,
+      "slug": "how-indian-nurses-apply-nclex-rn-step-by-step",
+      "title": "NCLEX-RN Clinical Judgment Questions: What Indian Nurses Need to Know",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Clinical Judgment Questions: What Indian Nurses Need to Know",
+        "how indian nurses apply nclex rn step by step"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 33,
+      "slug": "nclex-clinical-judgment-questions-indian-nurses",
+      "title": "NCLEX-RN vs Indian Nursing Exams: Key Differences You Must Know",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN vs Indian Nursing Exams: Key Differences You Must Know",
+        "nclex clinical judgment questions indian nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 34,
+      "slug": "nclex-vs-indian-nursing-exams-key-differences",
+      "title": "Cardiac and Cardiovascular NCLEX Review for Indian Nurses",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "Cardiac and Cardiovascular NCLEX Review for Indian Nurses",
+        "nclex vs indian nursing exams key differences"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 35,
+      "slug": "cardiac-cardiovascular-nclex-review-indian-nurses",
+      "title": "How to Study for the NCLEX-RN in 60 Days: Indian Nurse Edition",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "How to Study for the NCLEX-RN in 60 Days: Indian Nurse Edition",
+        "cardiac cardiovascular nclex review indian nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 36,
+      "slug": "study-nclex-in-60-days-indian-nurse-edition",
+      "title": "NCLEX-RN Infection Control and Sepsis Review for Indian Nurses",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Infection Control and Sepsis Review for Indian Nurses",
+        "study nclex in 60 days indian nurse edition"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 37,
+      "slug": "nclex-infection-control-sepsis-review-indian-nurses",
+      "title": "NCLEX-RN Maternal Child Nursing Questions for Indian Nurses",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Maternal Child Nursing Questions for Indian Nurses",
+        "nclex infection control sepsis review indian nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 38,
+      "slug": "nclex-maternal-child-nursing-indian-nurses",
+      "title": "NCLEX-RN Fluid and Electrolyte Imbalances Made Simple",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Fluid and Electrolyte Imbalances Made Simple",
+        "nclex maternal child nursing indian nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 39,
+      "slug": "nclex-fluid-electrolyte-imbalances-made-simple-india",
+      "title": "NCLEX-RN Prioritization Strategies Indian Nurses Struggle With",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Prioritization Strategies Indian Nurses Struggle With",
+        "nclex fluid electrolyte imbalances made simple india"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 40,
+      "slug": "nclex-prioritization-strategies-indian-nurses",
+      "title": "NCLEX-RN Renal and Dialysis Nursing Review",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Renal and Dialysis Nursing Review",
+        "nclex prioritization strategies indian nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 41,
+      "slug": "nclex-renal-dialysis-nursing-review-india",
+      "title": "Shock Types and NCLEX Questions: Complete Nursing Review",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "Shock Types and NCLEX Questions: Complete Nursing Review",
+        "nclex renal dialysis nursing review india"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 42,
+      "slug": "shock-types-nclex-questions-nursing-review-india",
+      "title": "NCLEX-RN Stroke and Neuro Questions: What Indian Nurses Must Know",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Stroke and Neuro Questions: What Indian Nurses Must Know",
+        "shock types nclex questions nursing review india"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 43,
+      "slug": "nclex-stroke-neuro-questions-indian-nurses",
+      "title": "NCLEX-RN COPD and Respiratory Nursing Review for Indian Nurses",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN COPD and Respiratory Nursing Review for Indian Nurses",
+        "nclex stroke neuro questions indian nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 44,
+      "slug": "nclex-copd-respiratory-nursing-review-india",
+      "title": "Is NCLEX-RN Worth It for Indian Nurses? Career and Salary Outlook",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "Is NCLEX-RN Worth It for Indian Nurses? Career and Salary Outlook",
+        "nclex copd respiratory nursing review india"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 45,
+      "slug": "is-nclex-worth-it-for-indian-nurses-career-salary",
+      "title": "NCLEX-RN High-Alert Medications Every Indian Nurse Must Know",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN High-Alert Medications Every Indian Nurse Must Know",
+        "is nclex worth it for indian nurses career salary"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 46,
+      "slug": "nclex-high-alert-medications-indian-nurses",
+      "title": "How to Pass the NCLEX-RN as a Nigerian Nurse: Study Guide",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "How to Pass the NCLEX-RN as a Nigerian Nurse: Study Guide",
+        "nclex high alert medications indian nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 47,
+      "slug": "best-nclex-study-plan-for-nigerian-nurses",
+      "title": "NCLEX-RN Practice Questions for Nigerian Nurses: Free Samples",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Practice Questions for Nigerian Nurses: Free Samples",
+        "best nclex study plan for nigerian nurses"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 48,
+      "slug": "nclex-practice-questions-nigerian-nurses-free",
+      "title": "Common NCLEX-RN Mistakes Nigerian Nurses Make",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "Common NCLEX-RN Mistakes Nigerian Nurses Make",
+        "nclex practice questions nigerian nurses free"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 49,
+      "slug": "common-nclex-mistakes-nigerian-nurses-make",
+      "title": "NCLEX-RN Pharmacology Review for Nigerian Nursing Graduates",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Pharmacology Review for Nigerian Nursing Graduates",
+        "common nclex mistakes nigerian nurses make"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    },
+    {
+      "rank": 50,
+      "slug": "nclex-pharmacology-review-nigerian-nursing-graduates",
+      "title": "NCLEX-RN Clinical Judgment for Nigerian Nurses Explained",
+      "sourceType": "seo_lib_ts",
+      "cluster": "exam_strategy",
+      "whyItMatters": "Repo-defined SEO asset; confirm Prisma publish + sitemap inclusion.",
+      "likelyLongTailKeywords": [
+        "NCLEX-RN Clinical Judgment for Nigerian Nurses Explained",
+        "nclex pharmacology review nigerian nursing graduates"
+      ],
+      "rewritePriority": "critical",
+      "dbExportNeededFirst": true
+    }
+  ]
+}
