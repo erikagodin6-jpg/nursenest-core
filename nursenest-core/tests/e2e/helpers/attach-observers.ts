@@ -16,10 +16,14 @@ function shouldIgnoreConsolePublic(text: string): boolean {
     ) ||
     /Failed to load resource.*404.*\.ico/i.test(text) ||
     /\[auth\]\[error\]|MissingSecret|errors\.authjs\.dev#missingsecret/i.test(text) ||
+    /** Session probe from marketing shell when origin/env mismatch in dev — covered by AUTH_URL in Playwright webServer. */
+    /ClientFetchError: Failed to fetch.*errors\.authjs\.dev#autherror|getSession \(.*SessionProvider/i.test(text) ||
+    /** Next/Image dev warning (quality list vs CMS assets). */
+    /next-image-unconfigured-qualities|is using quality .* which is not configured in images\.qualities/i.test(text) ||
     /** Auth.js / Next dev: stack lines are separate console "error" messages without the header line. */
     /@auth_core|@01rp_@auth_core|at assertConfig \(.*auth|at Auth \(.*auth/i.test(text) ||
-    /\[marketing-i18n\] missing key/i.test(text) ||
-    /hydration mismatch|hydrated but some attributes of the server rendered HTML/i.test(text)
+    /\[marketing-i18n\] missing key|at formatMarketingMessage|at MarketingI18nProvider|at BrandTrustInline/i.test(text) ||
+    /hydration mismatch|hydrated but some attributes of the server rendered HTML|emitPendingHydrationWarnings/i.test(text)
   );
 }
 

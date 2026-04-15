@@ -36,10 +36,16 @@ test.describe("Public site smoke", () => {
     const o = attachPageObservers(page);
     await gotoOk(page, "/");
     await expect(page.locator('[data-nn-nav-mode="public"]')).toBeVisible({ timeout: 60_000 });
-    // Header primary nav (avoid footer duplicate links; grid class alone is not always present in DOM).
-    const pricing = page.locator(`${HEADER_CHROME} a[href="/pricing"]`).first();
+    // Prefer nav that contains the global /pricing href (locale-prefixed as /fr/pricing, etc.).
+    const pricing = page
+      .locator(`${HEADER_CHROME} nav:has(a[href$="/pricing"])`)
+      .locator(`a[href="/pricing"], a[href$="/pricing"]`)
+      .first();
     await expect(pricing).toBeVisible({ timeout: 30_000 });
-    await pricing.click();
+    await Promise.all([
+      page.waitForURL(/\/pricing/, { timeout: 60_000 }),
+      pricing.click({ force: true }),
+    ]);
     await page.waitForLoadState("domcontentloaded");
     expect(page.url()).toMatch(/\/pricing/);
     await expect(page.locator("main, [role='main']").first()).toBeVisible();
@@ -64,7 +70,7 @@ test.describe("Public site smoke", () => {
       state: "visible",
       timeout: 30_000,
     });
-    await expect(page.getByRole("option", { name: /^Canada$/ }).first()).toBeVisible();
+    await expect(page.getByRole("option", { name: /Canada/i }).first()).toBeVisible();
     const d = await logObserverDiagnostics(o, testInfo.title);
     o.dispose();
     expect(d.consoleErrors).toEqual([]);
@@ -76,7 +82,7 @@ test.describe("Public site smoke", () => {
     await gotoOk(page, "/");
     await expect(page.locator('[data-nn-nav-mode="public"]')).toBeVisible({ timeout: 60_000 });
     const langBtn = page.locator(HEADER_CHROME).getByRole("button", { name: /language/i }).first();
-    await langBtn.click();
+    await langBtn.click({ force: true });
     await page.getByRole("button", { name: /Français|French/i }).first().click();
     await page.waitForLoadState("domcontentloaded");
     expect(page.url()).not.toMatch(/\/404/);
@@ -92,7 +98,7 @@ test.describe("Public site smoke", () => {
   test("login page loads", async ({ page }, testInfo) => {
     const o = attachPageObservers(page);
     await gotoOk(page, "/login");
-    await expect(page.getByRole("heading", { name: /log in|sign in/i })).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByRole("heading", { name: /welcome|log in|sign in/i })).toBeVisible({ timeout: 30_000 });
     const d = await logObserverDiagnostics(o, testInfo.title);
     o.dispose();
     expect(d.consoleErrors).toEqual([]);

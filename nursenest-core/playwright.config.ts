@@ -24,6 +24,9 @@ function localDevWebServer() {
     env: {
       RUN_HEAVY_BUILD_TASKS: "false",
       NEXTAUTH_SECRET: secret,
+      /** Client session fetch uses absolute origin; unset values cause ClientFetchError in Playwright. */
+      AUTH_URL: origin.origin,
+      NEXTAUTH_URL: origin.origin,
     },
   } as const;
 }
