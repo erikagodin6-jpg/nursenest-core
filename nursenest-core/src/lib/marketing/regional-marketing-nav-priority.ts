@@ -1,8 +1,7 @@
 /**
- * Regional shortcut strip — **legacy helper** (still used by hooks for path context).
+ * Path-only regional hints for hooks and content (not for header shortcut rows).
  *
- * Country-specific shortcut rows are **not** rendered in `SiteHeader`; switching markets
- * uses the CountrySelector dropdown. Path-only logic remains for pages that need regional hints.
+ * Country switching in the marketing chrome uses the `CountrySelector` dropdown only.
  */
 
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
@@ -72,7 +71,7 @@ function pathStrip(strippedPath: string): RegionalMarketingStrip {
 }
 
 /**
- * Which regional shortcut strip to show in the marketing header (desktop second row + mobile drawer blocks).
+ * Path-only strip id for legacy consumers (header does not render regional shortcut strips).
  * Cookie/locale intentionally ignored — use {@link resolveRegionalMarketingStrip}'s path-only behavior.
  */
 export function resolveRegionalMarketingStrip(

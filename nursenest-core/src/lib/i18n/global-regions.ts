@@ -47,7 +47,8 @@ export function isGlobalLocaleCode(v: string): v is GlobalLocaleCode {
   return (GLOBAL_LOCALE_CODES as readonly string[]).includes(v);
 }
 
-// ── Region slugs (priority order: underserved first) ─────────────────────────
+// ── Region slugs (registry / geo priority: underserved first) ────────────────
+// The marketing header country dropdown orders options via `getRegionGroups()` (US/CA, then International).
 
 export const GLOBAL_REGION_SLUGS = [
   // High priority — underserved, high volume

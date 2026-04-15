@@ -716,7 +716,7 @@ export function SiteHeader() {
                 </Link>
               </div>
             ) : null}
-            {/* Mobile controls — only visible below lg */}
+            {/* Mobile controls — only below `md` (tablet+ uses desktop chrome) */}
             <div className={`flex shrink-0 items-center gap-2 md:hidden ${isAuthenticated ? "ml-auto" : ""}`}>
               <button
                 type="button"
@@ -958,7 +958,7 @@ export function SiteHeader() {
           >
             <div className="nn-section-shell pb-5 pt-1.5">
               <div className="overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-strong)] shadow-[var(--shadow-elevated)] ring-1 ring-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border-subtle))]">
-                <div className="grid lg:grid-cols-[5fr_7fr]">
+                <div className="grid md:grid-cols-[5fr_7fr]">
 
                   {/* ── Primary hub card (left) ── */}
                   <Link
@@ -992,7 +992,7 @@ export function SiteHeader() {
                     </span>
                   </Link>
 
-                  {/* ── Secondary groups + region links (right) ── */}
+                  {/* ── Secondary groups (right) ── */}
                   <div className="p-8 text-left">
                     <div className="grid w-full grid-cols-3 justify-items-start gap-x-8 gap-y-7">
                       {openMega.groups.map((group) => (
@@ -1086,7 +1086,7 @@ export function SiteHeader() {
       />
 
       {mobileOpen ? (
-        <div className="fixed inset-0 z-[200] lg:hidden animate-[nn-overlay-enter_0.24s_ease_both]">
+        <div className="fixed inset-0 z-[200] md:hidden animate-[nn-overlay-enter_0.24s_ease_both]">
           <button type="button" className="absolute inset-0 bg-black/56" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)} />
           <div className="absolute inset-x-0 top-0 flex h-[100dvh] max-h-[100dvh] flex-col border-b border-[var(--nav-border)] bg-[var(--nav-bg)] text-[var(--nav-fg)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-in_0.28s_cubic-bezier(0.25,0.1,0.25,1)_both]">
             <div className="flex h-16 shrink-0 items-center justify-between border-b border-[var(--header-border)] px-4 pt-[max(0.5rem,env(safe-area-inset-top))]">

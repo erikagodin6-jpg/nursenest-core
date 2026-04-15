@@ -13,12 +13,12 @@ async function setPhilippinesCookie(page: import("@playwright/test").Page) {
   ]);
 }
 
-/** Desktop / tablet: country trigger in marketing header (MapPin row or utility strip). */
+/**
+ * Desktop: country trigger lives in the light-theme utility strip OR the dark-theme header row —
+ * both are **outside** `<header data-nn-nav-mode>` (sibling), so scope from `page`, not the header.
+ */
 async function openDesktopCountryMenu(page: Page) {
-  const regionBtn = page
-    .locator('[data-nn-nav-mode="public"]')
-    .getByRole("button", { name: /Philippines/i })
-    .first();
+  const regionBtn = page.getByRole("button", { name: /Philippines/i }).first();
   await expect(regionBtn).toBeVisible({ timeout: 60_000 });
   await regionBtn.click();
   await expect(page.getByRole("listbox", { name: /Select country/i })).toBeVisible();
@@ -44,9 +44,7 @@ test.describe("Country selector sign-off — desktop (chromium)", () => {
     await page.waitForURL(/\/us(\/|$|\?)/, { timeout: 30_000 });
     const after = page.url();
     expect(after, `expected navigation from ${before}`).toMatch(/\/us(\/|$|\?)/);
-    await expect(
-      page.locator('[data-nn-nav-mode="public"]').getByRole("button", { name: /United States/i }).first(),
-    ).toBeVisible();
+    await expect(page.getByRole("button", { name: /United States/i }).first()).toBeVisible();
   });
 
   test("Philippines → Canada: URL /canada, header shows Canada", async ({ page }) => {
@@ -56,9 +54,7 @@ test.describe("Country selector sign-off — desktop (chromium)", () => {
     await page.waitForURL(/\/canada(\/|$|\?)/, { timeout: 30_000 });
     const after = page.url();
     expect(after, `expected navigation from ${before}`).toMatch(/\/canada(\/|$|\?)/);
-    await expect(
-      page.locator('[data-nn-nav-mode="public"]').getByRole("button", { name: /Canada/i }).first(),
-    ).toBeVisible();
+    await expect(page.getByRole("button", { name: /Canada/i }).first()).toBeVisible();
   });
 
   test("US marketing pathway: US ↔ Canada keeps valid hub URL (no dead click)", async ({ page }) => {
@@ -66,19 +62,14 @@ test.describe("Country selector sign-off — desktop (chromium)", () => {
     await page.goto(`${baseURL}/us/rn/nclex-rn`, { waitUntil: "domcontentloaded" });
     await expect(page.locator('[data-nn-nav-mode="public"]')).toBeVisible({ timeout: 60_000 });
     const before = page.url();
-    const regionBtn = page
-      .locator('[data-nn-nav-mode="public"]')
-      .getByRole("button", { name: /United States/i })
-      .first();
+    const regionBtn = page.getByRole("button", { name: /United States/i }).first();
     await regionBtn.click();
     await expect(page.getByRole("listbox", { name: /Select country/i })).toBeVisible();
     await page.getByRole("option", { name: /^Canada$/ }).first().click();
     await page.waitForURL(/\/canada\//, { timeout: 30_000 });
     const after = page.url();
     expect(after, `toggle CA from ${before}`).toMatch(/\/canada\/r[nn]\//);
-    await expect(
-      page.locator('[data-nn-nav-mode="public"]').getByRole("button", { name: /Canada/i }).first(),
-    ).toBeVisible();
+    await expect(page.getByRole("button", { name: /Canada/i }).first()).toBeVisible();
   });
 
   test("Keyboard: focus option + Enter selects country", async ({ page }) => {
@@ -87,9 +78,7 @@ test.describe("Country selector sign-off — desktop (chromium)", () => {
     await usOption.focus();
     await page.keyboard.press("Enter");
     await page.waitForURL(/\/us(\/|$|\?)/, { timeout: 30_000 });
-    await expect(
-      page.locator('[data-nn-nav-mode="public"]').getByRole("button", { name: /United States/i }).first(),
-    ).toBeVisible();
+    await expect(page.getByRole("button", { name: /United States/i }).first()).toBeVisible();
   });
 
   test("Public marketing: no learner primary-nav emphasis on exam hub", async ({ page }) => {

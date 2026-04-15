@@ -9,7 +9,9 @@
  *   1. Override cookie (`nn_global_region`)
  *   2. IP-country header → region → region's default locale
  *   3. Accept-Language negotiation (constrained to region's allowed locales)
- *   4. Global fallback: `{ region: GLOBAL_DEFAULT_REGION, locale: "en" }` (see `global-regions.ts`)
+ *   4. Global fallback: `{ region: GLOBAL_DEFAULT_REGION, locale: "en" }` (see `global-regions.ts`).
+ *      The public marketing **header** resolves defaults separately via
+ *      `effectiveDefaultPublicGlobalRegion` (route + US/CA context; does not treat stale expansion cookies as default).
  */
 
 import {
