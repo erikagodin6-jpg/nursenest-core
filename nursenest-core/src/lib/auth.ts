@@ -215,7 +215,7 @@ export const authConfig: NextAuthConfig = {
         const enteredEmailNormalized = isEmailLikeIdentifier(identifier)
           ? normalizeEmailForDedup(identifier)
           : "";
-        const gmailLike = isEmailLikeAddress(identifier);
+        const gmailLike = isGmailLikeAddress(identifier);
 
         let exactEmailUserCount = 0;
         let normalizedEmailUserCount = 0;
