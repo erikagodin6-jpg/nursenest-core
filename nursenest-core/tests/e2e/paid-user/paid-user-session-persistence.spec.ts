@@ -7,6 +7,10 @@
  *   E2E_SESSION_PERSISTENCE_IDLE_MS=5000 npx playwright test .../paid-user-session-persistence.spec.ts --project=chromium-paid
  */
 import { expect, test, type Page } from "@playwright/test";
+import {
+  assertPaidUserGuardsClean,
+  attachPaidUserStandardGuards,
+} from "../helpers/paid-user-suite";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
 
 /** Default 150_000 ms (2.5 min); must stay within 2–3 min unless overridden. */
@@ -34,7 +38,7 @@ async function visitAndAssert(page: Page, path: string, label: string): Promise<
 }
 
 test.describe("Paid user — session persistence", () => {
-  test("navigation, reload, idle wait, and retry keep learner session", async ({ page }, testInfo) => {
+  test("navigation, reload, idle wait, and retry keep learner session", async ({ page, baseURL }, testInfo) => {
     const idleMs = idleWaitMs();
     // Idle + navigations + margin (global config default is 180s).
     test.setTimeout(Math.max(600_000, idleMs + 240_000));
@@ -75,11 +79,24 @@ test.describe("Paid user — session persistence", () => {
       await visitAndAssert(page, "/app/account/overview", "retry account");
     });
 
-    await test.step("Final reload + quick check", async () => {
-      await page.goto("/app", { waitUntil: "domcontentloaded" });
-      await page.reload({ waitUntil: "domcontentloaded" });
-      await assertSessionActiveOnAppRoute(page, "final after idle + reload");
-      await expect(page.getByRole("link", { name: /lessons/i }).first()).toBeVisible({ timeout: 30_000 });
+    await test.step("Final reload + guards (session still valid; no console/API regressions)", async () => {
+      const appOrigin = new URL(baseURL ?? "http://127.0.0.1:3000").origin;
+      const guards = attachPaidUserStandardGuards(page, appOrigin);
+      try {
+        await page.goto("/app", { waitUntil: "domcontentloaded" });
+        await page.reload({ waitUntil: "domcontentloaded" });
+        await assertSessionActiveOnAppRoute(page, "final after idle + reload");
+        await expect(page.getByRole("link", { name: /lessons/i }).first()).toBeVisible({ timeout: 30_000 });
+        assertPaidUserGuardsClean({
+          tag: "[paid-user-session-persistence]",
+          routeLabel: "final",
+          observers: guards.observers,
+          apiViolations: guards.apiObserver.violations,
+          pageUrl: page.url(),
+        });
+      } finally {
+        guards.dispose();
+      }
     });
   });
 });

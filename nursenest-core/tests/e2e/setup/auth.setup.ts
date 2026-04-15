@@ -33,7 +33,7 @@ setup("authenticate paid test account and save storage state", async ({ page }) 
     );
   }
 
-  await expect(page).toHaveURL(/\/app(\/|$)/, { timeout: 10_000 });
+  // loginWithCredentials already rejects /app/onboarding (see learner-login.ts).
 
   // Confirm premium path without going through Stripe (lessons hub must not be paywalled).
   await page.goto("/app/lessons", { waitUntil: "domcontentloaded" });

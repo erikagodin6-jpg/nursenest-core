@@ -60,7 +60,7 @@ const paidProjects = paidAuthEnabled
       {
         name: "chromium-paid",
         testMatch:
-          /paid-user-(login-flow|smoke|full-journey|entitlement-downgrade|primary-nav-audit|learner-i18n-missing-keys|session-network-audit|session-persistence)\.spec\.ts$|paid-subscriber-audit\.spec\.ts$/,
+          /paid-user-(login-flow|smoke|journey|entitlements|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile)\.spec\.ts$|paid-subscriber-audit\.spec\.ts$|production-i18n-bundle\.spec\.ts$/,
         dependencies: ["setup-paid-auth"],
         use: {
           ...devices["Desktop Chrome"],
@@ -121,7 +121,7 @@ export default defineConfig({
       // Project-level testIgnore replaces the root list — keep `.next` + build dirs here too.
       testIgnore: [
         /lesson-flows\.mobile\.spec\.ts$/,
-        /paid-user-(login-flow|smoke|full-journey|entitlement-downgrade|primary-nav-audit|learner-i18n-missing-keys|session-network-audit|session-persistence)\.spec\.ts$/,
+        /paid-user-(login-flow|smoke|journey|entitlements|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile)\.spec\.ts$/,
         /paid-subscriber-audit\.spec\.ts$/,
         /stripe-subscriber-journey\.spec\.ts$/,
         /freemium-paywall\.spec\.ts$/,

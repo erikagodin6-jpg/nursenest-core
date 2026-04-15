@@ -29,6 +29,11 @@
  *     `sub_nn_qa_e2e_` (real Stripe data), unless `QA_ALLOW_CLEAR_REAL_STRIPE_SUBSCRIPTIONS=1`.
  *   - Refuses to convert staff accounts unless `QA_ALLOW_STAFF_TO_LEARNER_RESET=1`.
  *
+ * Also sets `onboardingCompletedAt`, `learnerPath`, and onboarding-aligned fields (`examFocus`,
+ * `targetExamPathwayId`, `examGoalSetAt`) so `/app` does not redirect to `/app/onboarding`
+ * and pathway-scoped hubs (`/app/lessons`, flashcards, CAT) resolve content like real subscribers
+ * (mirrors `POST /api/onboarding/complete` enough for automation).
+ *
  * After reset — refresh Playwright storage (path: `tests/e2e/.auth/paid-user.json` or `PLAYWRIGHT_PAID_AUTH_STATE`):
  *
  *   rm -f tests/e2e/.auth/paid-user.json
@@ -52,8 +57,16 @@ import "../src/lib/db/env-bootstrap";
 import { normalizeEmailForDedup } from "../src/lib/auth/email-address-normalization";
 import { isStaffRole } from "../src/lib/auth/staff-roles";
 import { strongPasswordSchema } from "../src/lib/auth/password-policy";
+import { resolveDefaultPathwayIdForOnboarding } from "../src/lib/onboarding/resolve-default-pathway-for-onboarding";
 
 const SYNTHETIC_STRIPE_SUB_PREFIX = "sub_nn_qa_e2e_";
+
+function examGoalSlugForTier(tier: TierCode): "rn" | "rpn" | "np" | "allied" {
+  if (tier === TierCode.NP) return "np";
+  if (tier === TierCode.ALLIED) return "allied";
+  if (tier === TierCode.RPN || tier === TierCode.LVN_LPN) return "rpn";
+  return "rn";
+}
 
 if (!process.env.DATABASE_URL?.trim()) {
   console.error("DATABASE_URL is not set.");
@@ -173,6 +186,10 @@ async function main(): Promise<void> {
   const periodEnd = new Date();
   periodEnd.setUTCFullYear(periodEnd.getUTCFullYear() + 1);
 
+  const examGoalSlug = examGoalSlugForTier(tier);
+  const learnerPathDefault =
+    resolveDefaultPathwayIdForOnboarding(examGoalSlug, country) ?? "us-rn-nclex-rn";
+
   if (dryRun) {
     console.log("[dry-run] Would upsert learner user:", {
       email,
@@ -184,6 +201,11 @@ async function main(): Promise<void> {
       authProvider: "credentials",
       emailVerified: true,
       trialStatus: TrialStatus.NONE,
+      onboardingCompletedAt: "(now)",
+      learnerPath: learnerPathDefault,
+      examFocus: examGoalSlug,
+      targetExamPathwayId: learnerPathDefault,
+      examGoalSetAt: "(now)",
     });
     if (existing) {
       console.log("[dry-run] Would replace subscriptions with one synthetic ACTIVE row:", {
@@ -225,6 +247,11 @@ async function main(): Promise<void> {
           trialStartedAt: null,
           trialUsedAt: null,
           alliedProfessionKey: alliedCareer,
+          onboardingCompletedAt: new Date(),
+          learnerPath: learnerPathDefault,
+          examFocus: examGoalSlug,
+          targetExamPathwayId: learnerPathDefault,
+          examGoalSetAt: new Date(),
         },
         select: { id: true },
       });
@@ -244,6 +271,11 @@ async function main(): Promise<void> {
           credentialVersion: 0,
           trialStatus: TrialStatus.NONE,
           alliedProfessionKey: alliedCareer,
+          onboardingCompletedAt: new Date(),
+          learnerPath: learnerPathDefault,
+          examFocus: examGoalSlug,
+          targetExamPathwayId: learnerPathDefault,
+          examGoalSetAt: new Date(),
         },
         select: { id: true },
       });
@@ -274,6 +306,7 @@ async function main(): Promise<void> {
 
   console.log(`OK — QA paid test account ready for ${email} (user id ${userId.slice(0, 8)}…).`);
   console.log("Premium: ACTIVE subscription row (synthetic Stripe id), planTier/planCountry set.");
+  console.log(`Onboarding: completed; learnerPath=${learnerPathDefault} (matches /app dashboard + pathway hubs).`);
   console.log("Sign in at /login with email + password; Playwright: E2E_PAID_EMAIL / E2E_PAID_PASSWORD.");
 }
 

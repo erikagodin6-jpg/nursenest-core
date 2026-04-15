@@ -12,8 +12,22 @@
  */
 import { expect, test, type Page } from "@playwright/test";
 import { attachPageObservers } from "../helpers/attach-observers";
+import type { CategorizedObserverDiagnostics } from "../helpers/log-observer-failure-summary";
+import { logCategorizedObserverFailureSummary } from "../helpers/log-observer-failure-summary";
 import { expectNoSubscriptionPaywall, expectOnLearnerApp } from "../helpers/paid-surface-assertions";
-import { logObserverFailureSummary } from "../helpers/log-observer-failure-summary";
+import {
+  fetchApiAssetsI18nEn,
+  fetchStaticI18nEn,
+} from "../helpers/production-i18n-assets";
+import {
+  PAID_E2E_DEFAULT_PATHWAY_ID,
+  buildPaidFailureSnapshot,
+  collectPaidSurfaceDebug,
+  learnerBottomNavLinkToHref,
+  learnerPrimaryNavLinkToHref,
+  logPaidSurfaceDebug,
+  waitForAuthenticatedLearnerShell,
+} from "../helpers/paid-learner-shell";
 
 const PLACEHOLDER_RE = /\b(TBD|null|undefined)\b/i;
 
@@ -91,7 +105,7 @@ test.describe("Paid subscriber audit (seeded session)", () => {
   test.describe.configure({ mode: "serial" });
   test.setTimeout(600_000);
 
-  test("audit all premium areas with structured report", async ({ page }, testInfo) => {
+  test("audit all premium areas with structured report", async ({ page, request }, testInfo) => {
     const areas: Record<AreaId, AreaResult> = {
       session: "fail",
       dashboard: "fail",
@@ -106,8 +120,17 @@ test.describe("Paid subscriber audit (seeded session)", () => {
     const brokenButtons: string[] = [];
     const entitlementIssues: string[] = [];
     const screenshots: string[] = [];
+    const observerDiagnostics: {
+      categorized?: CategorizedObserverDiagnostics;
+      i18nLiveStatic?: Awaited<ReturnType<typeof fetchStaticI18nEn>>;
+      i18nLiveApi?: Awaited<ReturnType<typeof fetchApiAssetsI18nEn>>;
+    } = {};
 
-    const obs = attachPageObservers(page, { profile: "app" });
+    const obs = attachPageObservers(page, {
+      profile: "app",
+      captureConsoleContext: true,
+      probeAuthApi: true,
+    });
 
     async function failShot(slug: string) {
       const p = testInfo.outputPath(`audit-failure-${slug}.png`);
@@ -120,9 +143,13 @@ test.describe("Paid subscriber audit (seeded session)", () => {
       try {
         await page.goto("/app", { waitUntil: "domcontentloaded" });
         await expectOnLearnerApp(page);
+        await waitForAuthenticatedLearnerShell(page);
         areas.session = "pass";
       } catch (e) {
         areas.session = "fail";
+        logPaidSurfaceDebug(
+          buildPaidFailureSnapshot(await collectPaidSurfaceDebug(page, "session"), obs),
+        );
         entitlementIssues.push(`session: ${e instanceof Error ? e.message : String(e)}`);
         await failShot("session");
       }
@@ -134,6 +161,7 @@ test.describe("Paid subscriber audit (seeded session)", () => {
         try {
           await page.goto("/app", { waitUntil: "domcontentloaded" });
           await expectOnLearnerApp(page);
+          await waitForAuthenticatedLearnerShell(page);
           await expectNoSubscriptionPaywall(page, "/app dashboard");
           await expect(page.locator("main")).toBeVisible({ timeout: 60_000 });
           const mainText = await page.locator("main").innerText();
@@ -141,13 +169,19 @@ test.describe("Paid subscriber audit (seeded session)", () => {
           areas.dashboard = "pass";
         } catch (e) {
           areas.dashboard = "fail";
+          logPaidSurfaceDebug(
+            buildPaidFailureSnapshot(await collectPaidSurfaceDebug(page, "dashboard"), obs),
+          );
           entitlementIssues.push(`dashboard: ${e instanceof Error ? e.message : String(e)}`);
           await failShot("dashboard");
         }
 
         // —— Premium lessons ——
         try {
-          await page.goto("/app/lessons", { waitUntil: "domcontentloaded" });
+          await page.goto(`/app/lessons?pathwayId=${encodeURIComponent(PAID_E2E_DEFAULT_PATHWAY_ID)}`, {
+            waitUntil: "domcontentloaded",
+          });
+          await waitForAuthenticatedLearnerShell(page);
           await expectNoSubscriptionPaywall(page, "/app/lessons");
           const lessonLinks = page.locator('a[href^="/app/lessons/"]');
           await expect(lessonLinks.first()).toBeVisible({ timeout: 120_000 });
@@ -168,13 +202,19 @@ test.describe("Paid subscriber audit (seeded session)", () => {
           areas.premiumLessons = "pass";
         } catch (e) {
           areas.premiumLessons = "fail";
+          logPaidSurfaceDebug(
+            buildPaidFailureSnapshot(await collectPaidSurfaceDebug(page, "premiumLessons"), obs),
+          );
           entitlementIssues.push(`premiumLessons: ${e instanceof Error ? e.message : String(e)}`);
           await failShot("lessons");
         }
 
         // —— Flashcards ——
         try {
-          await page.goto("/app/flashcards", { waitUntil: "domcontentloaded" });
+          await page.goto(`/app/flashcards?pathwayId=${encodeURIComponent(PAID_E2E_DEFAULT_PATHWAY_ID)}`, {
+            waitUntil: "domcontentloaded",
+          });
+          await waitForAuthenticatedLearnerShell(page);
           await expectNoSubscriptionPaywall(page, "/app/flashcards");
           const learnFirst = page.locator('a[href*="/app/flashcards/"][href*="mode=learn"]').first();
           await expect(learnFirst).toBeVisible({ timeout: 120_000 });
@@ -192,13 +232,20 @@ test.describe("Paid subscriber audit (seeded session)", () => {
           areas.flashcards = "pass";
         } catch (e) {
           areas.flashcards = "fail";
+          logPaidSurfaceDebug(
+            buildPaidFailureSnapshot(await collectPaidSurfaceDebug(page, "flashcards"), obs),
+          );
           entitlementIssues.push(`flashcards: ${e instanceof Error ? e.message : String(e)}`);
           await failShot("flashcards");
         }
 
         // —— CAT exams ——
         try {
-          await page.goto("/app/practice-tests?cat=1", { waitUntil: "domcontentloaded" });
+          await page.goto(
+            `/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(PAID_E2E_DEFAULT_PATHWAY_ID)}`,
+            { waitUntil: "domcontentloaded" },
+          );
+          await waitForAuthenticatedLearnerShell(page);
           await expectNoSubscriptionPaywall(page, "/app/practice-tests (CAT hub)");
           await expect(page.locator("[data-nn-qa-practice-hub-start-test]")).toBeVisible({ timeout: 60_000 });
           await page.locator("[data-nn-qa-practice-hub-start-test]").click();
@@ -214,6 +261,9 @@ test.describe("Paid subscriber audit (seeded session)", () => {
           areas.catExams = "pass";
         } catch (e) {
           areas.catExams = "fail";
+          logPaidSurfaceDebug(
+            buildPaidFailureSnapshot(await collectPaidSurfaceDebug(page, "catExams"), obs),
+          );
           entitlementIssues.push(`catExams: ${e instanceof Error ? e.message : String(e)}`);
           await failShot("cat-exams");
         }
@@ -221,9 +271,10 @@ test.describe("Paid subscriber audit (seeded session)", () => {
         // —— Navigation (desktop + mobile bottom + history) ——
         try {
           await page.goto("/app", { waitUntil: "domcontentloaded" });
-          const nav = page.locator('nav[aria-label="Learner primary actions"]');
-          await expect(nav.getByRole("link", { name: /Lessons/i }).first()).toBeVisible({ timeout: 30_000 });
-          await nav.getByRole("link", { name: /Lessons/i }).first().click();
+          await waitForAuthenticatedLearnerShell(page);
+          const lessonsDesktop = learnerPrimaryNavLinkToHref(page, "/app/lessons");
+          await expect(lessonsDesktop).toBeVisible({ timeout: 30_000 });
+          await lessonsDesktop.click();
           await page.waitForURL(/\/app\/lessons/, { timeout: 30_000 });
           await page.goBack();
           await page.waitForTimeout(400);
@@ -231,15 +282,24 @@ test.describe("Paid subscriber audit (seeded session)", () => {
           await page.waitForTimeout(400);
 
           await page.setViewportSize({ width: 390, height: 844 });
-          await page.goto("/app/flashcards", { waitUntil: "domcontentloaded" });
+          await page.goto(
+            `/app/flashcards?pathwayId=${encodeURIComponent(PAID_E2E_DEFAULT_PATHWAY_ID)}`,
+            { waitUntil: "domcontentloaded" },
+          );
+          await waitForAuthenticatedLearnerShell(page);
           const bottom = page.locator('nav[aria-label="Learner bottom navigation"]');
           await expect(bottom).toBeVisible({ timeout: 15_000 });
-          await bottom.getByRole("link").nth(1).click();
+          const lessonsMobile = learnerBottomNavLinkToHref(page, "/app/lessons");
+          await expect(lessonsMobile).toBeVisible({ timeout: 15_000 });
+          await lessonsMobile.click();
           await page.waitForTimeout(500);
           await page.setViewportSize({ width: 1280, height: 800 });
           areas.navigation = "pass";
         } catch (e) {
           areas.navigation = "fail";
+          logPaidSurfaceDebug(
+            buildPaidFailureSnapshot(await collectPaidSurfaceDebug(page, "navigation"), obs),
+          );
           brokenButtons.push(`navigation: ${e instanceof Error ? e.message : String(e)}`);
           await failShot("navigation");
         }
@@ -260,6 +320,9 @@ test.describe("Paid subscriber audit (seeded session)", () => {
           areas.accountSubscription = "pass";
         } catch (e) {
           areas.accountSubscription = "fail";
+          logPaidSurfaceDebug(
+            buildPaidFailureSnapshot(await collectPaidSurfaceDebug(page, "accountSubscription"), obs),
+          );
           entitlementIssues.push(`accountSubscription: ${e instanceof Error ? e.message : String(e)}`);
           await failShot("account");
         }
@@ -269,6 +332,7 @@ test.describe("Paid subscriber audit (seeded session)", () => {
         const studyEntitlementFails: string[] = [];
         try {
           await page.goto("/app", { waitUntil: "domcontentloaded" });
+          await waitForAuthenticatedLearnerShell(page);
           const nav = page.locator('nav[aria-label="Learner primary actions"]');
           const links = nav.getByRole("link");
           const n = await links.count();
@@ -309,6 +373,9 @@ test.describe("Paid subscriber audit (seeded session)", () => {
             studyBroken.length === 0 && studyEntitlementFails.length === 0 ? "pass" : "fail";
         } catch (e) {
           areas.studyButtons = "fail";
+          logPaidSurfaceDebug(
+            buildPaidFailureSnapshot(await collectPaidSurfaceDebug(page, "studyButtons"), obs),
+          );
           brokenButtons.push(`studyButtons: ${e instanceof Error ? e.message : String(e)}`);
           brokenButtons.push(...studyBroken);
           entitlementIssues.push(...studyEntitlementFails);
@@ -321,18 +388,48 @@ test.describe("Paid subscriber audit (seeded session)", () => {
         const seriousConsole = obs.consoleErrors.filter(
           (x) => !/cookie|Content Security Policy|third-party|analytics|ResizeObserver/i.test(x),
         );
+        const baseUrl = process.env.BASE_URL ?? "http://127.0.0.1:3000";
         if (seriousConsole.length > 0 || obs.failedRequests.length > 0) {
-          logObserverFailureSummary({
+          let i18nLiveStatic: Awaited<ReturnType<typeof fetchStaticI18nEn>> | undefined;
+          let i18nLiveApi: Awaited<ReturnType<typeof fetchApiAssetsI18nEn>> | undefined;
+          try {
+            i18nLiveStatic = await fetchStaticI18nEn(request, baseUrl);
+            i18nLiveApi = await fetchApiAssetsI18nEn(request, baseUrl);
+            observerDiagnostics.i18nLiveStatic = i18nLiveStatic;
+            observerDiagnostics.i18nLiveApi = i18nLiveApi;
+          } catch {
+            /* probe is best-effort */
+          }
+          const categorized = logCategorizedObserverFailureSummary({
             tag: "[paid-audit]",
             routeLabel: "observers",
             seriousConsole,
             failedRequests: obs.failedRequests,
+            consoleErrorContext: obs.consoleErrorContext,
+            authHttp: obs.authHttp,
             pageUrl: page.url(),
+            i18nRuntimeBundle: observerDiagnostics,
             artifactHint: "(see audit-results.json)",
           });
+          observerDiagnostics.categorized = categorized;
         }
         if (seriousConsole.length > 0) {
-          entitlementIssues.push(`console: ${seriousConsole.slice(0, 6).join(" | ")}`);
+          const i18nLines = seriousConsole.filter((x) => /marketing_message_key_missing/i.test(x));
+          const authLines = seriousConsole.filter((x) =>
+            /errors\.authjs\.dev|#autherror|getSession|ClientFetchError|Failed to fetch/i.test(x),
+          );
+          const rest = seriousConsole.filter(
+            (x) => !i18nLines.includes(x) && !authLines.includes(x),
+          );
+          if (i18nLines.length > 0) {
+            entitlementIssues.push(`i18n-console: ${i18nLines.slice(0, 6).join(" | ")}`);
+          }
+          if (authLines.length > 0) {
+            entitlementIssues.push(`auth-console: ${authLines.slice(0, 6).join(" | ")}`);
+          }
+          if (rest.length > 0) {
+            entitlementIssues.push(`console-other: ${rest.slice(0, 6).join(" | ")}`);
+          }
         }
         if (obs.failedRequests.length > 0) {
           entitlementIssues.push(`network: ${obs.failedRequests.slice(0, 10).join(" | ")}`);
@@ -340,6 +437,9 @@ test.describe("Paid subscriber audit (seeded session)", () => {
         areas.observers = seriousConsole.length === 0 && obs.failedRequests.length === 0 ? "pass" : "fail";
       } catch (e) {
         areas.observers = "fail";
+        logPaidSurfaceDebug(
+          buildPaidFailureSnapshot(await collectPaidSurfaceDebug(page, "observers"), obs),
+        );
         entitlementIssues.push(`observers: ${e instanceof Error ? e.message : String(e)}`);
       }
     } finally {
@@ -354,6 +454,7 @@ test.describe("Paid subscriber audit (seeded session)", () => {
             brokenButtons,
             entitlementIssues,
             screenshots,
+            observerDiagnostics,
             summary: {
               failedAreas: (Object.entries(areas) as [AreaId, AreaResult][])
                 .filter(([, v]) => v === "fail")

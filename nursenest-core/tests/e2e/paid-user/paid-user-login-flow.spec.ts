@@ -10,6 +10,7 @@
 import { expect, test } from "@playwright/test";
 import { loginWithCredentials } from "../helpers/learner-login";
 import { getPaidTestCredentials } from "../helpers/paid-test-credentials";
+import { expectOnLearnerApp } from "../helpers/paid-surface-assertions";
 
 test.use({ storageState: { cookies: [], origins: [] } });
 
@@ -19,7 +20,7 @@ test.describe("Paid user — explicit login flow", () => {
     test.skip(!creds, "Set E2E_PAID_EMAIL and E2E_PAID_PASSWORD");
 
     await loginWithCredentials(page, creds!.email, creds!.password);
-    await expect(page).toHaveURL(/\/app(\/|$)/, { timeout: 15_000 });
+    await expectOnLearnerApp(page);
 
     await page.goto("/app/lessons", { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: "Subscription required" })).toHaveCount(0, {

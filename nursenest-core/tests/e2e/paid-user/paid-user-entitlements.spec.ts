@@ -1,21 +1,14 @@
 /**
- * Entitlement enforcement: premium URLs with paid session vs anonymous (cleared storage).
+ * **Entitlements:** premium URLs with paid session vs anonymous (cleared storage).
+ * Direct-route access for lesson, questions, and flashcards; downgrade parity when logged out.
  *
- * Requires `chromium-paid` + `E2E_PAID_EMAIL` / `E2E_PAID_PASSWORD` (or `PLAYWRIGHT_TEST_*`).
+ * Uses `tests/e2e/.auth/paid-user.json` via `--project=chromium-paid`.
  *
- * Run:
- *   cd nursenest-core && E2E_PAID_EMAIL=... E2E_PAID_PASSWORD=... npx playwright test tests/e2e/paid-user/paid-user-entitlement-downgrade.spec.ts --project=chromium-paid
+ * @see ../helpers/paid-user-suite.ts for run commands.
  */
 import { expect, test, type Page } from "@playwright/test";
+import { dismissFlashcardResumeIfPresent } from "../helpers/paid-user-suite";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
-
-async function dismissFlashcardResumeIfPresent(page: Page) {
-  const startFresh = page.getByRole("button", { name: /^Start fresh$/i });
-  if (await startFresh.isVisible().catch(() => false)) {
-    await startFresh.click();
-    await page.waitForTimeout(300);
-  }
-}
 
 async function expectLearnerSignInGate(page: Page) {
   await expect(page.getByRole("link", { name: /sign in/i }).first()).toBeVisible({ timeout: 30_000 });
@@ -76,7 +69,7 @@ async function captureQuestionIdFromBank(page: Page): Promise<string> {
   }
 }
 
-test.describe("Paid entitlement vs anonymous downgrade", () => {
+test.describe("Paid entitlements vs anonymous downgrade", () => {
   test.describe.configure({ mode: "serial" });
 
   test("premium URLs: full access when subscribed; blocked when session cleared", async ({ page, baseURL }) => {
@@ -116,6 +109,7 @@ test.describe("Paid entitlement vs anonymous downgrade", () => {
       const mainText = await page.locator("main").innerText();
       expect(mainText.length, "Lesson main should have substantial content").toBeGreaterThan(120);
       await expect(page.locator('aside[aria-label="Lesson access"]').getByText(/^Preview only$/i)).toHaveCount(0);
+      await expect(page.locator("main").getByRole("link", { name: /^Upgrade to unlock/i })).toHaveCount(0);
     });
 
     await test.step("Paid: premium question via direct URL — rationale after check", async () => {

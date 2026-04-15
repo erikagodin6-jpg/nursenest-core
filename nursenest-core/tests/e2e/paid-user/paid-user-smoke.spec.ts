@@ -19,6 +19,16 @@
 import { expect, test, type Page } from "@playwright/test";
 import { attachPageObservers } from "../helpers/attach-observers";
 import { logObserverFailureSummary } from "../helpers/log-observer-failure-summary";
+import {
+  PAID_E2E_DEFAULT_PATHWAY_ID,
+  buildPaidFailureSnapshot,
+  collectPaidSurfaceDebug,
+  learnerBottomNavLinkToHref,
+  learnerPrimaryNavLinkToHref,
+  logPaidSurfaceDebug,
+  waitForAuthenticatedLearnerShell,
+} from "../helpers/paid-learner-shell";
+import { expectOnLearnerApp } from "../helpers/paid-surface-assertions";
 
 const PLACEHOLDER_RE = /\b(TBD|null|undefined)\b/i;
 
@@ -94,10 +104,14 @@ test.describe("Paid user smoke (serial)", () => {
             "Unauthenticated — run with --project=chromium-paid so setup-paid-auth saves storage (needs paid credentials: E2E_PAID_* or PLAYWRIGHT_TEST_*).",
           );
         }
-        await expect(page).toHaveURL(/\/app(\/|$)/);
+        await expectOnLearnerApp(page);
+        await waitForAuthenticatedLearnerShell(page);
         sections.login = "pass";
       } catch (e) {
         sections.login = "fail";
+        logPaidSurfaceDebug(
+          buildPaidFailureSnapshot(await collectPaidSurfaceDebug(page, "login"), obs),
+        );
         broken.push(`login: ${e instanceof Error ? e.message : String(e)}`);
         await failShot("login");
       }
@@ -113,7 +127,10 @@ test.describe("Paid user smoke (serial)", () => {
         sections.globalChecks = "fail";
         // —— Lessons ——
         try {
-          await page.goto("/app/lessons", { waitUntil: "domcontentloaded" });
+          await page.goto(`/app/lessons?pathwayId=${encodeURIComponent(PAID_E2E_DEFAULT_PATHWAY_ID)}`, {
+            waitUntil: "domcontentloaded",
+          });
+          await waitForAuthenticatedLearnerShell(page);
           await expect(page.getByRole("heading", { name: "Subscription required" })).toHaveCount(0);
           const lessonLinks = page.locator('a[href^="/app/lessons/"]');
           await expect(lessonLinks.first()).toBeVisible({ timeout: 120_000 });
@@ -134,13 +151,19 @@ test.describe("Paid user smoke (serial)", () => {
           sections.lessons = "pass";
         } catch (e) {
           sections.lessons = "fail";
+          logPaidSurfaceDebug(
+            buildPaidFailureSnapshot(await collectPaidSurfaceDebug(page, "lessons"), obs),
+          );
           broken.push(`lessons: ${e instanceof Error ? e.message : String(e)}`);
           await failShot("lessons");
         }
 
         // —— Flashcards ——
         try {
-          await page.goto("/app/flashcards", { waitUntil: "domcontentloaded" });
+          await page.goto(`/app/flashcards?pathwayId=${encodeURIComponent(PAID_E2E_DEFAULT_PATHWAY_ID)}`, {
+            waitUntil: "domcontentloaded",
+          });
+          await waitForAuthenticatedLearnerShell(page);
           await expect(page.getByRole("heading", { name: "Subscription required" })).toHaveCount(0);
           const learnFirst = page.locator('a[href*="/app/flashcards/"][href*="mode=learn"]').first();
           await expect(learnFirst).toBeVisible({ timeout: 120_000 });
@@ -158,13 +181,20 @@ test.describe("Paid user smoke (serial)", () => {
           sections.flashcards = "pass";
         } catch (e) {
           sections.flashcards = "fail";
+          logPaidSurfaceDebug(
+            buildPaidFailureSnapshot(await collectPaidSurfaceDebug(page, "flashcards"), obs),
+          );
           broken.push(`flashcards: ${e instanceof Error ? e.message : String(e)}`);
           await failShot("flashcards");
         }
 
         // —— CAT exams ——
         try {
-          await page.goto("/app/practice-tests?cat=1", { waitUntil: "domcontentloaded" });
+          await page.goto(
+            `/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(PAID_E2E_DEFAULT_PATHWAY_ID)}`,
+            { waitUntil: "domcontentloaded" },
+          );
+          await waitForAuthenticatedLearnerShell(page);
           await expect(page.getByRole("heading", { name: "Subscription required" })).toHaveCount(0);
           await expect(page.locator("[data-nn-qa-practice-hub-start-test]")).toBeVisible({ timeout: 60_000 });
           await page.locator("[data-nn-qa-practice-hub-start-test]").click();
@@ -180,6 +210,9 @@ test.describe("Paid user smoke (serial)", () => {
           sections.catExams = "pass";
         } catch (e) {
           sections.catExams = "fail";
+          logPaidSurfaceDebug(
+            buildPaidFailureSnapshot(await collectPaidSurfaceDebug(page, "catExams"), obs),
+          );
           broken.push(`catExams: ${e instanceof Error ? e.message : String(e)}`);
           await failShot("cat-exams");
         }
@@ -187,9 +220,10 @@ test.describe("Paid user smoke (serial)", () => {
         // —— Navigation ——
         try {
           await page.goto("/app", { waitUntil: "domcontentloaded" });
-          const nav = page.locator('nav[aria-label="Learner primary actions"]');
-          await expect(nav.getByRole("link", { name: /Lessons/i }).first()).toBeVisible({ timeout: 30_000 });
-          await nav.getByRole("link", { name: /Lessons/i }).first().click();
+          await waitForAuthenticatedLearnerShell(page);
+          const lessonsDesktop = learnerPrimaryNavLinkToHref(page, "/app/lessons");
+          await expect(lessonsDesktop).toBeVisible({ timeout: 30_000 });
+          await lessonsDesktop.click();
           await page.waitForURL(/\/app\/lessons/, { timeout: 30_000 });
           await page.goBack();
           await page.waitForTimeout(400);
@@ -197,15 +231,24 @@ test.describe("Paid user smoke (serial)", () => {
           await page.waitForTimeout(400);
 
           await page.setViewportSize({ width: 390, height: 844 });
-          await page.goto("/app/flashcards", { waitUntil: "domcontentloaded" });
+          await page.goto(
+            `/app/flashcards?pathwayId=${encodeURIComponent(PAID_E2E_DEFAULT_PATHWAY_ID)}`,
+            { waitUntil: "domcontentloaded" },
+          );
+          await waitForAuthenticatedLearnerShell(page);
           const bottom = page.locator('nav[aria-label="Learner bottom navigation"]');
           await expect(bottom).toBeVisible({ timeout: 15_000 });
-          await bottom.getByRole("link").nth(1).click();
+          const lessonsMobile = learnerBottomNavLinkToHref(page, "/app/lessons");
+          await expect(lessonsMobile).toBeVisible({ timeout: 15_000 });
+          await lessonsMobile.click();
           await page.waitForTimeout(500);
           await page.setViewportSize({ width: 1280, height: 800 });
           sections.navigation = "pass";
         } catch (e) {
           sections.navigation = "fail";
+          logPaidSurfaceDebug(
+            buildPaidFailureSnapshot(await collectPaidSurfaceDebug(page, "navigation"), obs),
+          );
           broken.push(`navigation: ${e instanceof Error ? e.message : String(e)}`);
           await failShot("navigation");
         }
@@ -222,6 +265,9 @@ test.describe("Paid user smoke (serial)", () => {
           sections.accountUi = "pass";
         } catch (e) {
           sections.accountUi = "fail";
+          logPaidSurfaceDebug(
+            buildPaidFailureSnapshot(await collectPaidSurfaceDebug(page, "accountUi"), obs),
+          );
           broken.push(`accountUi: ${e instanceof Error ? e.message : String(e)}`);
           await failShot("account");
         }
@@ -229,6 +275,7 @@ test.describe("Paid user smoke (serial)", () => {
         // —— Global checks ——
         try {
           await page.goto("/app", { waitUntil: "domcontentloaded" });
+          await waitForAuthenticatedLearnerShell(page);
           const leaks = await globalContentScan(page);
           if (leaks.length > 0) {
             console.log(`[paid-smoke] globalChecks — content/placeholder issues:\n  ${leaks.join("\n  ")}`);
@@ -256,6 +303,9 @@ test.describe("Paid user smoke (serial)", () => {
           sections.globalChecks = seriousConsole.length === 0 && obs.failedRequests.length === 0 ? "pass" : "fail";
         } catch (e) {
           sections.globalChecks = "fail";
+          logPaidSurfaceDebug(
+            buildPaidFailureSnapshot(await collectPaidSurfaceDebug(page, "globalChecks"), obs),
+          );
           broken.push(`globalChecks: ${e instanceof Error ? e.message : String(e)}`);
           await failShot("global");
         }

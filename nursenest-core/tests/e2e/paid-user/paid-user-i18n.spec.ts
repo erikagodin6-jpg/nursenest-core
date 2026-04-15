@@ -1,18 +1,15 @@
 /**
- * Fails if the browser console reports missing i18n / translation while visiting core learner routes.
+ * **i18n:** fails on missing translation / locale bundle signals in console while visiting core learner routes.
+ * Also checks DOM for `[missing:` tokens after each navigation.
  *
- * Intercepts **all** `console` events and matches (case-sensitive substrings via regex):
- * - `missing i18n key`, `translation missing`, `undefined translation`
- * - `[marketing-i18n] missing key`, `marketing_message_key_missing`, `missing key … locale bundle`
+ * Flow: English → switch to Français via shell → revisit routes → restore English.
  *
- * Flow: English (default) → switch locale via learner shell Language control → re-run same pages.
+ * Requires `--project=chromium-paid` + `setup-paid-auth`.
  *
- * Requires `chromium-paid` + paid credentials (`setup-paid-auth`).
- *
- * Run:
- *   cd nursenest-core && E2E_PAID_EMAIL=... E2E_PAID_PASSWORD=... npx playwright test tests/e2e/paid-user/paid-user-learner-i18n-missing-keys.spec.ts --project=chromium-paid
+ * @see ../helpers/paid-user-suite.ts for run commands.
  */
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+import { assertNoMissingI18nDomTokens } from "../helpers/paid-user-suite";
 import { attachI18nMissingKeyAudit } from "../helpers/i18n-missing-key-audit";
 
 const LEARNER_I18N_PATHS = ["/app", "/app/lessons", "/app/questions", "/app/account/overview"] as const;
@@ -27,6 +24,7 @@ async function visitLearnerPaths(
     await page.goto(path, { waitUntil: "domcontentloaded" });
     await page.waitForLoadState("networkidle", { timeout: 45_000 }).catch(() => {});
     await page.waitForTimeout(600);
+    await assertNoMissingI18nDomTokens(page);
   }
 }
 
@@ -42,8 +40,8 @@ async function switchLocaleViaShell(page: Page, options: { name: RegExp }): Prom
   await page.waitForTimeout(1200);
 }
 
-test.describe("Learner shell — i18n missing keys (console)", () => {
-  test("no missing-key logs on dashboard, lessons, practice, account (+ locale switch)", async ({ page }) => {
+test.describe("Paid learner — i18n (console + DOM)", () => {
+  test("no missing-key logs on dashboard, lessons, practice, account (+ locale switch)", async ({ page }, testInfo) => {
     let currentPath = "";
     const getPath = () => currentPath;
     const audit = attachI18nMissingKeyAudit(page, getPath);
@@ -76,6 +74,13 @@ test.describe("Learner shell — i18n missing keys (console)", () => {
         `Missing i18n console signals:\n${audit.violations.join("\n---\n")}`,
       ).toEqual([]);
     } finally {
+      await testInfo.attach("ci-i18n-status.txt", {
+        body:
+          audit.violations.length > 0
+            ? `MISSING:\n${audit.violations.join("\n")}`
+            : "OK: no missing translation / i18n key console signals detected.",
+        contentType: "text/plain",
+      });
       audit.dispose();
     }
   });

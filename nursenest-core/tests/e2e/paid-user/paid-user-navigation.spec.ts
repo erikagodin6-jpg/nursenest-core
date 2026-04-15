@@ -1,18 +1,16 @@
 /**
- * Audits primary navigation for an **entitled paid learner** (storage from `setup-paid-auth`).
+ * **Navigation audit** for an entitled paid learner (stored auth).
  *
- * Covers:
- * - Desktop: header `Learner navigation` (on `/`) + `/app` learner shell `Learner primary actions`
- * - Mobile: hamburger drawer (Study Navigation links) + learner bottom bar
+ * Covers desktop header `Learner navigation`, `/app` shell `Learner primary actions`,
+ * mobile drawer (Study Navigation) + learner bottom bar.
  *
- * Mega-menu dropdowns (RN/PN/…) appear only in **public** marketing mode; entitled learners use the
- * study link strip instead — this spec skips empty mega selectors and documents that gap.
+ * Mega-menu tier rows are absent in learner mode — documented in the last test.
  *
- * Run:
- *   cd nursenest-core && E2E_PAID_EMAIL=... E2E_PAID_PASSWORD=... npx playwright test tests/e2e/paid-user/paid-user-primary-nav-audit.spec.ts --project=chromium-paid
+ * @see ../helpers/paid-user-suite.ts for run commands.
  */
 import { expect, test } from "@playwright/test";
 import { attachPageObservers } from "../helpers/attach-observers";
+import { i18nMissingKeyConsoleLines, seriousConsoleLines } from "../helpers/paid-user-suite";
 import { requireOrigin } from "../helpers/navigation-e2e";
 import {
   attachHydrationAudit,
@@ -24,7 +22,7 @@ import {
   openMobileNavMenu,
 } from "../helpers/nav-primary-audit";
 
-test.describe("Paid user — primary nav audit", () => {
+test.describe("Paid user — navigation audit", () => {
   test("desktop — header + learner shell links load with headings (no 404 / hydration)", async ({
     page,
     baseURL,
@@ -64,9 +62,8 @@ test.describe("Paid user — primary nav audit", () => {
       });
 
       expect(hyd.lines, `Hydration errors:\n${hyd.lines.join("\n")}`).toEqual([]);
-      const serious = obs.consoleErrors.filter(
-        (x) => !/cookie|Content Security Policy|third-party|analytics/i.test(x),
-      );
+      expect(i18nMissingKeyConsoleLines(obs.consoleErrors), "i18n missing-key console").toEqual([]);
+      const serious = seriousConsoleLines(obs.consoleErrors);
       expect(serious, serious.slice(0, 5).join("\n")).toEqual([]);
     } finally {
       hyd.dispose();
@@ -112,9 +109,8 @@ test.describe("Paid user — primary nav audit", () => {
       });
 
       expect(hyd.lines, `Hydration errors:\n${hyd.lines.join("\n")}`).toEqual([]);
-      const serious = obs.consoleErrors.filter(
-        (x) => !/cookie|Content Security Policy|third-party|analytics/i.test(x),
-      );
+      expect(i18nMissingKeyConsoleLines(obs.consoleErrors), "i18n missing-key console").toEqual([]);
+      const serious = seriousConsoleLines(obs.consoleErrors);
       expect(serious, serious.slice(0, 5).join("\n")).toEqual([]);
     } finally {
       hyd.dispose();

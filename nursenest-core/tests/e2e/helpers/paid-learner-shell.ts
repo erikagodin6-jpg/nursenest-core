@@ -1,0 +1,86 @@
+import { expect, type Page } from "@playwright/test";
+import type { PageObservers } from "./attach-observers";
+import { expectNotOnAppOnboarding } from "./paid-surface-assertions";
+
+/**
+ * Default pathway for US RN paid E2E — align with `scripts/qa-paid-test-account-reset.mts`
+ * (`resolveDefaultPathwayIdForOnboarding("rn", US)` → `us-rn-nclex-rn`).
+ */
+export const PAID_E2E_DEFAULT_PATHWAY_ID = "us-rn-nclex-rn";
+
+/**
+ * Wait until the learner app chrome is interactive: `main` plus at least one of the
+ * desktop primary nav or mobile bottom nav (viewport-dependent).
+ */
+export async function waitForAuthenticatedLearnerShell(
+  page: Page,
+  opts?: { timeoutMs?: number },
+): Promise<void> {
+  const ms = opts?.timeoutMs ?? 120_000;
+  await expectNotOnAppOnboarding(page, "waitForAuthenticatedLearnerShell");
+  await expect(page.locator("main")).toBeVisible({ timeout: ms });
+  const primary = page.locator('nav[aria-label="Learner primary actions"]');
+  const bottom = page.locator('nav[aria-label="Learner bottom navigation"]');
+  await expect(primary.or(bottom).first()).toBeVisible({ timeout: Math.min(ms, 90_000) });
+}
+
+/** Stable selector: nav labels come from i18n; href + aria-label on nav is stable. */
+export function learnerPrimaryNavLinkToHref(page: Page, hrefPart: string) {
+  return page.locator(`nav[aria-label="Learner primary actions"] a[href*="${hrefPart}"]`).first();
+}
+
+export function learnerBottomNavLinkToHref(page: Page, hrefPart: string) {
+  return page.locator(`nav[aria-label="Learner bottom navigation"] a[href*="${hrefPart}"]`).first();
+}
+
+export type PaidSurfaceDebug = {
+  step: string;
+  url: string;
+  title: string;
+  onboardingRoute: boolean;
+  subscriptionRequiredHeadingCount: number;
+  mainH1: string | null;
+};
+
+export async function collectPaidSurfaceDebug(page: Page, step: string): Promise<PaidSurfaceDebug> {
+  const url = page.url();
+  const title = await page.title().catch(() => "");
+  const onboardingRoute = /\/app\/onboarding/i.test(url);
+  const subscriptionRequiredHeadingCount = await page
+    .getByRole("heading", { name: "Subscription required" })
+    .count()
+    .catch(() => 0);
+  const mainH1 =
+    (await page.locator("main h1").first().innerText().catch(() => null)) ??
+    (await page.getByRole("heading", { level: 1 }).first().innerText().catch(() => null));
+  return {
+    step,
+    url,
+    title: title.slice(0, 200),
+    onboardingRoute,
+    subscriptionRequiredHeadingCount,
+    mainH1: mainH1?.trim() ? mainH1.trim().slice(0, 240) : null,
+  };
+}
+
+export function logPaidSurfaceDebug(d: PaidSurfaceDebug | PaidFailureSnapshot): void {
+  console.log(`[paid-e2e] ${d.step}`, JSON.stringify(d));
+}
+
+export type PaidFailureSnapshot = PaidSurfaceDebug & {
+  authHttpLast?: { url: string; status: number; pageUrl: string }[];
+  seriousConsoleLast?: string[];
+  failedRequestsLast?: string[];
+};
+
+export function buildPaidFailureSnapshot(
+  d: PaidSurfaceDebug,
+  obs?: Pick<PageObservers, "authHttp" | "consoleErrors" | "failedRequests">,
+): PaidFailureSnapshot {
+  return {
+    ...d,
+    authHttpLast: obs?.authHttp?.slice(-5),
+    seriousConsoleLast: obs?.consoleErrors?.slice(-5),
+    failedRequestsLast: obs?.failedRequests?.slice(-5),
+  };
+}

@@ -3,9 +3,18 @@ import type { Page } from "@playwright/test";
 /** `public`: marketing/dev noise (HMR, analytics). `app`: learner surfaces (looser console filter). */
 export type ObserverProfile = "public" | "app";
 
+export type ConsoleErrorContext = { text: string; pageUrl: string };
+
+/** Auth.js / NextAuth JSON session probe (same-origin `/api/auth/*`). */
+export type AuthHttpProbe = { url: string; status: number; pageUrl: string };
+
 export type PageObservers = {
   consoleErrors: string[];
+  /** When `captureConsoleContext` is true, one entry per console error with `page.url()` at fire time. */
+  consoleErrorContext?: ConsoleErrorContext[];
   failedRequests: string[];
+  /** Populated when `probeAuthApi` is true: responses to `/api/auth/*` (status + page URL). */
+  authHttp?: AuthHttpProbe[];
   dispose: () => void;
 };
 
@@ -45,7 +54,11 @@ function shouldIgnoreConsolePublic(text: string): boolean {
 }
 
 function shouldIgnoreConsoleApp(text: string): boolean {
-  return /favicon|ResizeObserver|Failed to load resource.*404.*\.ico/i.test(text);
+  return (
+    /favicon|ResizeObserver|Failed to load resource.*404.*\.ico/i.test(text) ||
+    /** Production logs missing learner-shell keys — tracked separately; not a navigation failure. */
+    /\[nursenest-core\].*marketing_message_key_missing/i.test(text)
+  );
 }
 
 function shouldIgnoreFailedRequestPublic(url: string): boolean {
@@ -65,10 +78,17 @@ function shouldIgnoreFailedRequestApp(url: string): boolean {
  * Collects console errors and failed network requests for diagnostics.
  * Call `dispose()` in a `finally` block or after assertions.
  */
-export function attachPageObservers(page: Page, opts?: { profile?: ObserverProfile }): PageObservers {
+export function attachPageObservers(
+  page: Page,
+  opts?: { profile?: ObserverProfile; captureConsoleContext?: boolean; probeAuthApi?: boolean },
+): PageObservers {
   const profile: ObserverProfile = opts?.profile ?? "public";
+  const captureConsoleContext = Boolean(opts?.captureConsoleContext);
+  const probeAuthApi = Boolean(opts?.probeAuthApi);
   const consoleErrors: string[] = [];
+  const consoleErrorContext: ConsoleErrorContext[] | undefined = captureConsoleContext ? [] : undefined;
   const failedRequests: string[] = [];
+  const authHttp: AuthHttpProbe[] | undefined = probeAuthApi ? [] : undefined;
 
   const onConsole = (msg: { type: () => string; text: () => string }) => {
     if (msg.type() !== "error") return;
@@ -76,6 +96,9 @@ export function attachPageObservers(page: Page, opts?: { profile?: ObserverProfi
     const ignore = profile === "app" ? shouldIgnoreConsoleApp(t) : shouldIgnoreConsolePublic(t);
     if (ignore) return;
     consoleErrors.push(t);
+    if (consoleErrorContext) {
+      consoleErrorContext.push({ text: t, pageUrl: page.url() });
+    }
   };
 
   const onRequestFailed = (req: import("@playwright/test").Request) => {
@@ -89,15 +112,35 @@ export function attachPageObservers(page: Page, opts?: { profile?: ObserverProfi
     failedRequests.push(`${fail?.errorText ?? "failed"} ${url}`);
   };
 
+  const onResponse = (response: import("@playwright/test").Response) => {
+    if (!authHttp) return;
+    const url = response.url();
+    try {
+      const u = new URL(url);
+      if (!u.pathname.startsWith("/api/auth")) return;
+    } catch {
+      return;
+    }
+    authHttp.push({ url, status: response.status(), pageUrl: page.url() });
+  };
+
   page.on("console", onConsole);
   page.on("requestfailed", onRequestFailed);
+  if (probeAuthApi) {
+    page.on("response", onResponse);
+  }
 
   return {
     consoleErrors,
+    consoleErrorContext,
     failedRequests,
+    authHttp,
     dispose: () => {
       page.off("console", onConsole);
       page.off("requestfailed", onRequestFailed);
+      if (probeAuthApi) {
+        page.off("response", onResponse);
+      }
     },
   };
 }

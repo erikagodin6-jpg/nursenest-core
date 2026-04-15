@@ -1,10 +1,14 @@
 /**
- * Paid session: track every same-origin `fetch` / XHR for status, latency, and transport failures.
+ * **API / network health:** same-origin `fetch` / XHR monitored for status, latency, transport failures.
  *
- * Fails if any response is 4xx/5xx, any tracked request exceeds 3s, or a critical API path errors.
+ * Fails on 4xx/5xx, requests exceeding the slow threshold, or critical API path errors.
  * Slow endpoints are attached as `slow-endpoints.txt` for triage.
  *
- * Requires stored auth + `--project=chromium-paid` (see `paid-user-full-journey.spec.ts`).
+ * This is the **heavy** network pass over the subscriber journey (distinct from per-spec guards in `paid-user-journey`).
+ *
+ * Requires stored auth + `--project=chromium-paid`.
+ *
+ * @see ../helpers/paid-user-suite.ts for run commands.
  */
 import { expect, test, type Page } from "@playwright/test";
 import {
@@ -71,8 +75,8 @@ async function answerOneBankQuestion(page: Page) {
   }
 }
 
-test.describe("Paid user session — network audit", () => {
-  test("full learner journey with fetch/XHR monitoring (no 4xx/5xx, no >3s, critical APIs OK)", async ({
+test.describe("Paid user — API / network health (heavy)", () => {
+  test("full learner journey with fetch/XHR monitoring (no 4xx/5xx, no slow breach, critical APIs OK)", async ({
     page,
     baseURL,
   }, testInfo) => {
@@ -174,7 +178,7 @@ test.describe("Paid user session — network audit", () => {
           });
           // eslint-disable-next-line no-console
           console.log(
-            `[paid-session-network-audit] Slow same-origin fetch/XHR (>${PAID_SESSION_SLOW_MS}ms):\n${net.formatSlowLog()}`,
+            `[paid-user-api-health] Slow same-origin fetch/XHR (>${PAID_SESSION_SLOW_MS}ms):\n${net.formatSlowLog()}`,
           );
         }
 
