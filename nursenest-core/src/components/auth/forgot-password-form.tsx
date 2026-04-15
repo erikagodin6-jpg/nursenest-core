@@ -40,10 +40,15 @@ export function ForgotPasswordForm({
         setLoading(false);
         return;
       }
-      const res = await fetch("/api/auth/forgot-password", {
+      const url =
+        typeof window !== "undefined"
+          ? `${window.location.origin}/api/auth/forgot-password`
+          : "/api/auth/forgot-password";
+      const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
+        signal: AbortSignal.timeout(25_000),
       });
       const raw = await res.text();
       let data = {} as {
@@ -71,8 +76,11 @@ export function ForgotPasswordForm({
       if (typeof data._devResetUrl === "string" && data._devResetUrl.length > 0) {
         setDevUrl(data._devResetUrl);
       }
-    } catch {
-      setError(errorMessage);
+    } catch (e) {
+      const aborted =
+        (e instanceof DOMException && e.name === "AbortError") ||
+        (e instanceof Error && (e.name === "AbortError" || /aborted/i.test(e.message)));
+      setError(aborted ? "Request timed out. Your network or the server may be slow — try again in a moment." : errorMessage);
     } finally {
       setLoading(false);
     }

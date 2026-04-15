@@ -1,4 +1,4 @@
-import { after, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
 import { normalizeEmailForDedup } from "@/lib/auth/email-address-normalization";
@@ -19,6 +19,8 @@ import {
 } from "@/lib/send-password-reset-email";
 
 export const runtime = "nodejs";
+/** Never cache POST bodies or vary auth flows. */
+export const dynamic = "force-dynamic";
 
 const bodySchema = z.object({
   email: z.string().min(3).max(320),
@@ -204,12 +206,15 @@ export async function POST(req: Request) {
     }
   }
 
-  after(async () => {
-    try {
-      await runForgotPasswordFlow(email, ip);
-    } catch (e) {
+  /**
+   * Defer DB + Resend to the next event-loop turn so the HTTP response is committed before any
+   * Prisma work. `after()` from Next can still align with request lifecycle on some hosts; plain
+   * `setImmediate` is more predictable on Node (e.g. DigitalOcean App Platform + `next start`).
+   */
+  setImmediate(() => {
+    void runForgotPasswordFlow(email, ip).catch((e) => {
       safeServerLogCritical("auth", "forgot_password_background_failed", { surface: "api" }, e);
-    }
+    });
   });
 
   return NextResponse.json(successPayload);
