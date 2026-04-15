@@ -40,8 +40,47 @@ export function HomeSampleQuestionPreview() {
           <h2 className="nn-marketing-h2 mt-2 max-w-2xl text-balance text-[var(--palette-heading)]">
             {formatTitleCase(t("pages.home.sampleQuestion.sectionTitle"), locale)}
           </h2>
-          <p className="nn-marketing-body mt-3 max-w-2xl text-pretty leading-relaxed text-[var(--palette-text-muted)]">
+          <div
+            className="mt-4 grid max-w-3xl gap-2.5 sm:grid-cols-2 sm:gap-3"
+            data-testid="section-home-sample-prep-contrast"
+          >
+            <div
+              className="rounded-lg border px-3 py-3 text-left sm:px-4 sm:py-3.5"
+              style={{
+                borderColor: "color-mix(in srgb, var(--semantic-border-soft) 1, var(--border-subtle))",
+                background: "color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--bg-card))",
+              }}
+            >
+              <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--palette-text-muted)]">
+                {formatTitleCase(t("pages.home.differentiation.contrastGenericLabel"), locale)}
+              </p>
+              <p className="nn-marketing-body-sm mt-1.5 leading-snug text-[var(--palette-text)]">
+                {formatSentenceCase(t("pages.home.differentiation.contrastGenericLine"), locale)}
+              </p>
+            </div>
+            <div
+              className="rounded-lg border px-3 py-3 text-left sm:px-4 sm:py-3.5"
+              style={{
+                borderColor: "color-mix(in srgb, var(--semantic-success) 24%, var(--semantic-border-soft))",
+                background: "color-mix(in srgb, var(--semantic-panel-positive) 08%, var(--bg-card))",
+              }}
+            >
+              <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--semantic-success)]">
+                {formatTitleCase(t("pages.home.differentiation.contrastNnLabel"), locale)}
+              </p>
+              <p className="nn-marketing-body-sm mt-1.5 leading-snug text-[var(--palette-text)]">
+                {formatSentenceCase(t("pages.home.differentiation.contrastNnLine"), locale)}
+              </p>
+            </div>
+          </div>
+          <p className="nn-marketing-body mt-4 max-w-2xl text-pretty leading-relaxed text-[var(--palette-text-muted)]">
             {formatSentenceCase(t("pages.home.sampleQuestion.sectionLead"), locale)}
+          </p>
+          <p
+            className="nn-marketing-body-sm mt-3 max-w-2xl text-pretty leading-relaxed text-[var(--semantic-success)]"
+            data-testid="text-sample-safe-to-try"
+          >
+            {formatSentenceCase(t("pages.home.sampleQuestion.safeToTryLine"), locale)}
           </p>
           <h3
             id="home-sample-question-heading"

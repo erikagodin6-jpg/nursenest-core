@@ -81,6 +81,7 @@ export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
       topicCategoryCount: 0,
       degraded: true,
       runtimeSafeMode: isRuntimeSafeMode(),
+      proofDisplay: "neutral",
     };
   }
 
@@ -93,6 +94,7 @@ export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
     return getDegradedPublicHomeStatsFallback("exception");
   }
 }
+
 
 async function computePublicHomeStats(t0: number): Promise<PublicHomeStatsPayload> {
   const lessonsR = await safePrismaCount("home_stats.content_items", () =>
@@ -208,6 +210,10 @@ async function computePublicHomeStats(t0: number): Promise<PublicHomeStatsPayloa
     safeServerLog("performance", "home_stats_slow", { ms: elapsed });
   }
 
+  const hasNumericProof =
+    questionsR.value > 0 || totalLessons > 0 || learnersR.value > 0;
+  const proofDisplay: "neutral" | undefined = degraded && !hasNumericProof ? "neutral" : undefined;
+
   return {
     totalLessons,
     pathwayLessonsPublished,
@@ -221,6 +227,7 @@ async function computePublicHomeStats(t0: number): Promise<PublicHomeStatsPayloa
     scenarioCount: scenariosR.value,
     topicCategoryCount,
     ...(degraded ? { degraded: true } : {}),
+    ...(proofDisplay ? { proofDisplay } : {}),
   };
 }
 

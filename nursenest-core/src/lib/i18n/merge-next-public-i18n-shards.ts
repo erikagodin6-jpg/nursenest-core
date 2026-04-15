@@ -18,13 +18,14 @@ function resolveAdminOnlyI18nDir(): string | null {
 }
 
 function mergeShardJsonFiles(
-  i18nDir: string,
-  locale: string,
+  /** `public/i18n/{locale}` (not the parent `i18n` dir). */
+  localeDir: string,
   shardNames: readonly string[],
   merged: MarketingMessages,
+  locale: string,
 ): void {
   for (const name of shardNames) {
-    const fp = path.join(i18nDir, locale, `${name}.json`);
+    const fp = path.join(localeDir, `${name}.json`);
     if (!existsSync(fp)) continue;
     let parsed: unknown;
     try {
@@ -81,15 +82,16 @@ export function loadMergedMarketingMessagesFromNextPublicDir(
       return null;
     }
   }
-  const dir = path.join(i18nDir, locale);
-  if (!existsSync(dir)) return null;
+  const localeDir = path.join(i18nDir, locale);
+  if (!existsSync(localeDir)) return null;
   const merged: MarketingMessages = {};
-  mergeShardJsonFiles(dir, locale, PUBLIC_I18N_SHARD_FILENAMES, merged);
+  mergeShardJsonFiles(localeDir, PUBLIC_I18N_SHARD_FILENAMES, merged, locale);
 
   if (includeStaffShards) {
     const adminRoot = resolveAdminOnlyI18nDir();
     if (adminRoot) {
-      mergeShardJsonFiles(adminRoot, locale, ["admin"], merged);
+      const adminLocaleDir = path.join(adminRoot, locale);
+      mergeShardJsonFiles(adminLocaleDir, ["admin"], merged, locale);
     }
   }
 

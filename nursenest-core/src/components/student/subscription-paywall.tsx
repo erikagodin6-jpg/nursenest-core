@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { CheckCircle2, BookOpen, HelpCircle, Users } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { BrandTrustInline } from "@/components/brand/brand-trust-inline";
+import { usePaywallHomeStats } from "@/components/student/paywall-home-stats-context";
 import {
   paywallTierLineI18nKey,
   sampleLessonHref,
@@ -40,33 +41,9 @@ const PREVIEW_CHOICE_KEYS = [
 /** Same as homepage sample: option A is the keyed correct answer for this static preview. */
 const PREVIEW_CORRECT_CHOICE_INDEX = 0;
 
-type HomeStatsPayload = {
-  questionCount?: number;
-  totalLessons?: number;
-  registeredLearners?: number;
-};
-
 function formatStat(n: number, locale: string): string {
   if (n <= 0) return "";
   return n.toLocaleString(locale.replace(/_/g, "-"));
-}
-
-/** Avoids an empty proof row then a pop-in — shows stable pulse placeholders until `/api/public/home-stats` resolves. */
-function PaywallProofStatsSkeleton() {
-  return (
-    <div
-      className="flex flex-col gap-3 rounded-xl border px-4 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
-      style={{ borderColor: "color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft))" }}
-      aria-busy
-      aria-label="Loading library stats"
-    >
-      <div className="h-3 w-36 animate-pulse rounded bg-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))]" />
-      <div className="flex flex-wrap gap-x-4 gap-y-2">
-        <div className="h-4 w-52 max-w-full animate-pulse rounded bg-[color-mix(in_srgb,var(--semantic-success)_16%,var(--semantic-border-soft))]" />
-        <div className="h-4 w-44 max-w-full animate-pulse rounded bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-border-soft))]" />
-      </div>
-    </div>
-  );
 }
 
 export function SubscriptionPaywall({
@@ -80,8 +57,9 @@ export function SubscriptionPaywall({
 }) {
   const { t, locale } = useMarketingI18n();
   const { data: session } = useSession();
-  const [homeStats, setHomeStats] = useState<HomeStatsPayload | null>(null);
-  const [statsReady, setStatsReady] = useState(false);
+  /** SSR + layout cache — never a client fetch (stability + trust). */
+  const homeStats = usePaywallHomeStats();
+  const neutralProof = homeStats.proofDisplay === "neutral";
   const tier = session?.user?.tier;
   const region = session?.user?.country === "CA" ? "CA" : "US";
   const tierLineKey = paywallTierLineI18nKey(tier);
@@ -100,31 +78,17 @@ export function SubscriptionPaywall({
     progressBits.length > 0 ? `${progressBits.join(" · ")}. ${progressTemplate}` : progressTemplate;
 
   const bankQuestionCount =
-    homeStats?.questionCount != null && homeStats.questionCount > 0 ? homeStats.questionCount : null;
-  const lessonCount = homeStats?.totalLessons != null && homeStats.totalLessons > 0 ? homeStats.totalLessons : null;
+    !neutralProof && homeStats.questionCount != null && homeStats.questionCount > 0
+      ? homeStats.questionCount
+      : null;
+  const lessonCount =
+    !neutralProof && homeStats.totalLessons != null && homeStats.totalLessons > 0 ? homeStats.totalLessons : null;
   const learnersCount =
-    homeStats?.registeredLearners != null && homeStats.registeredLearners > 0
+    !neutralProof &&
+    homeStats.registeredLearners != null &&
+    homeStats.registeredLearners > 0
       ? formatStat(homeStats.registeredLearners, locale)
       : null;
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/api/public/home-stats")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d: HomeStatsPayload | null) => {
-        if (cancelled) return;
-        setHomeStats(d ?? {});
-      })
-      .catch(() => {
-        if (!cancelled) setHomeStats({});
-      })
-      .finally(() => {
-        if (!cancelled) setStatsReady(true);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   const sent = useRef(false);
   useEffect(() => {
@@ -154,11 +118,24 @@ export function SubscriptionPaywall({
         <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
           {t("paywall.passPromise.lead")}
         </p>
+        <p className="mt-3 text-sm font-medium leading-relaxed text-[var(--semantic-success)]" data-testid="paywall-safe-to-try-line">
+          {formatSentenceCase(t("paywall.safeToTryLine"), locale)}
+        </p>
       </div>
 
-      {/* Real library stats (proof) — skeleton first so counts never flash 0 then real values */}
-      {!statsReady ? (
-        <PaywallProofStatsSkeleton />
+      {/* Real library stats (proof) — from SSR; neutral copy when counts unavailable (no “broken zeros”). */}
+      {neutralProof ? (
+        <div
+          className="flex flex-col gap-2 rounded-xl border px-4 py-3"
+          style={{ borderColor: "color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft))" }}
+        >
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-info)]">
+            {t("paywall.preview.neutralProofIntro")}
+          </p>
+          <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            {t("paywall.preview.neutralProofBody")}
+          </p>
+        </div>
       ) : bankQuestionCount != null || lessonCount != null || learnersCount ? (
         <div
           className="flex flex-col gap-3 rounded-xl border px-4 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
@@ -338,17 +315,13 @@ export function SubscriptionPaywall({
             {t("paywall.objections.title")}
           </p>
           <p className="mt-2 text-sm font-medium leading-snug text-[var(--semantic-text-primary)]">
-            {statsReady ? (
-              bankQuestionCount != null ? (
-                t("paywall.objections.proofWithCount", {
-                  count: bankQuestionCount.toLocaleString(locale.replace(/_/g, "-")),
-                })
-              ) : (
-                t("paywall.objections.proofNoCount")
-              )
-            ) : (
-              <span className="inline-block min-h-[1.25rem] w-[min(100%,22rem)] animate-pulse rounded bg-[color-mix(in_srgb,var(--semantic-text-muted)_14%,transparent)]" aria-hidden />
-            )}
+            {neutralProof
+              ? t("paywall.objections.proofNeutral")
+              : bankQuestionCount != null
+                ? t("paywall.objections.proofWithCount", {
+                    count: bankQuestionCount.toLocaleString(locale.replace(/_/g, "-")),
+                  })
+                : t("paywall.objections.proofNoCount")}
           </p>
         </div>
 

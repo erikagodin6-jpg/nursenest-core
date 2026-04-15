@@ -112,6 +112,14 @@ export function HomeConversionHero({
                   {formatEyebrow(t("pages.home.hero.nextStepEyebrow"), locale)}
                 </p>
               </StaggerItem>
+              <StaggerItem variant="softReveal" timing="hero">
+                <p
+                  className="nn-marketing-body-sm max-w-lg text-pretty leading-relaxed text-[var(--semantic-success)]"
+                  data-testid="text-hero-safe-to-try"
+                >
+                  {formatSentenceCase(t("pages.home.hero.safeToTryLine"), locale)}
+                </p>
+              </StaggerItem>
               <StaggerItem timing="hero">
                 <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-stretch sm:justify-start sm:gap-4">
                   <MarketingTrackedLink

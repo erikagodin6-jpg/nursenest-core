@@ -40,6 +40,8 @@ import { LearnerExamStudyProviders } from "@/components/exam/learner-exam-study-
 import { isCoreOnlyEmergencyMode, shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { LearnerSilentSectionBoundary } from "@/components/learner/learner-silent-section-boundary";
+import { PaywallHomeStatsProvider } from "@/components/student/paywall-home-stats-context";
+import { loadPaywallHomeStatsForShell } from "@/lib/marketing/load-paywall-home-stats-for-shell";
 
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
@@ -57,7 +59,10 @@ export default async function LearnerShellLayout({ children }: { children: React
     return <LearnerUnauthenticatedGate />;
   }
 
-  const entitlement = await resolveEntitlementForPage(userId);
+  const [entitlement, paywallHomeStats] = await Promise.all([
+    resolveEntitlementForPage(userId),
+    loadPaywallHomeStatsForShell(),
+  ]);
 
   const skipNonCritical = shouldSkipNonCriticalLearnerWork();
   const coreOnlyEmergency = isCoreOnlyEmergencyMode();
@@ -132,9 +137,10 @@ export default async function LearnerShellLayout({ children }: { children: React
 
   return (
     <SentryLearnerShell userId={userId}>
-      <LearnerExamStudyProviders>
-        <LearnerExamChromeGate>
-          <LearnerFeedbackShell pathwayId={pathwayId}>
+      <PaywallHomeStatsProvider value={paywallHomeStats}>
+        <LearnerExamStudyProviders>
+          <LearnerExamChromeGate>
+            <LearnerFeedbackShell pathwayId={pathwayId}>
             <div className="nn-learner-app mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+5rem+env(safe-area-inset-bottom,0px))] sm:px-6 md:pb-[var(--nn-rhythm-shell-y)]">
               <PathwayLessonProgressRefreshListener />
               {!skipNonCritical ? <LearnerAppSectionAnalytics /> : null}
@@ -198,6 +204,7 @@ export default async function LearnerShellLayout({ children }: { children: React
           </LearnerFeedbackShell>
         </LearnerExamChromeGate>
       </LearnerExamStudyProviders>
+      </PaywallHomeStatsProvider>
     </SentryLearnerShell>
   );
 }
