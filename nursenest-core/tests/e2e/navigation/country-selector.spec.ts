@@ -3,6 +3,9 @@
  *
  * Uses sticky chrome `.nn-header-animate-in` (utility strip + header are siblings inside it).
  *
+ * Leaving `/exams/*` for US/CA lands on canonical RN hubs (`/us/rn/nclex-rn`, `/canada/rn/nclex-rn`) so the
+ * marketing shell always has a real route (bare `/us` / `/canada` are not guaranteed to resolve).
+ *
  * Run: `npx playwright test tests/e2e/navigation/country-selector.spec.ts`
  * Screenshots: `screenshot: 'only-on-failure'` in `playwright.config.ts` (global).
  */
@@ -11,14 +14,16 @@ import { MARKETING_REGION_COOKIE } from "../../../src/lib/region/marketing-regio
 import {
   GLOBAL_REGION_COOKIE,
   HEADER_CHROME,
-  getE2eBaseURL,
   openDesktopCountryMenu,
   selectCountryFromListbox,
   setGlobalRegionCookie,
 } from "../helpers/country-selector";
 import { expectMobileRegionSettingsHeading, openMobileRegionLanguageDrawer } from "../helpers/mobile-drawer";
 
-const baseURL = getE2eBaseURL();
+function requireOrigin(baseURL: string | undefined): string {
+  expect(baseURL, "Playwright `baseURL` must be set (see playwright.config.ts `use.baseURL` or env BASE_URL)").toBeTruthy();
+  return baseURL!;
+}
 
 /** Avoid substring false positives (e.g. `/enus` or unrelated `/…/us/…` segments). */
 function pathnameIsUsMarketing(url: string): boolean {
@@ -75,15 +80,18 @@ test.describe("Country selector — desktop", () => {
 
   test("from /exams/philippines → US: URL under /us/… (canonical hub) and header shows United States", async ({
     page,
+    baseURL,
   }) => {
-    await setGlobalRegionCookie(page, "philippines", baseURL);
-    await page.goto(`${baseURL}/exams/philippines`, { waitUntil: "domcontentloaded" });
+    const origin = requireOrigin(baseURL);
+    await setGlobalRegionCookie(page, "philippines", origin);
+    await page.goto("/exams/philippines", { waitUntil: "domcontentloaded" });
     await expectPublicChromeVisible(page);
 
     await openDesktopCountryMenu(page);
     await selectCountryFromListbox(page, /United States/i);
     await waitForUsOrCanadaHubUrl(page, "us");
     expect(pathnameIsUsMarketing(page.url()), `expected /us marketing path, got ${page.url()}`).toBe(true);
+    await expect(page).toHaveURL(/\/us\/rn\/nclex-rn(?:\/|\?|#|$)/);
 
     await expect(page.locator(`${HEADER_CHROME} button[aria-label*="United States"]`).first()).toBeVisible({
       timeout: 30_000,
@@ -92,27 +100,31 @@ test.describe("Country selector — desktop", () => {
 
   test("from /exams/philippines → Canada: URL under /canada/… (canonical hub) and header shows Canada", async ({
     page,
+    baseURL,
   }) => {
-    await setGlobalRegionCookie(page, "philippines", baseURL);
-    await page.goto(`${baseURL}/exams/philippines`, { waitUntil: "domcontentloaded" });
+    const origin = requireOrigin(baseURL);
+    await setGlobalRegionCookie(page, "philippines", origin);
+    await page.goto("/exams/philippines", { waitUntil: "domcontentloaded" });
     await expectPublicChromeVisible(page);
 
     await openDesktopCountryMenu(page);
     await selectCountryFromListbox(page, /^Canada$/);
     await waitForUsOrCanadaHubUrl(page, "canada");
     expect(pathnameIsCanadaMarketing(page.url()), `expected /canada marketing path, got ${page.url()}`).toBe(true);
+    await expect(page).toHaveURL(/\/canada\/rn\/nclex-rn(?:\/|\?|#|$)/);
 
     await expect(page.locator(`${HEADER_CHROME} button[aria-label*="Canada"]`).first()).toBeVisible({
       timeout: 30_000,
     });
   });
 
-  test("stale expansion cookie on neutral route does not show Philippines in header", async ({ page }) => {
+  test("stale expansion cookie on neutral route does not show Philippines in header", async ({ page, baseURL }) => {
+    const origin = requireOrigin(baseURL);
     await page.context().addCookies([
-      { name: GLOBAL_REGION_COOKIE, value: "philippines", url: baseURL },
-      { name: MARKETING_REGION_COOKIE, value: "US", url: baseURL },
+      { name: GLOBAL_REGION_COOKIE, value: "philippines", url: origin },
+      { name: MARKETING_REGION_COOKIE, value: "US", url: origin },
     ]);
-    await page.goto(`${baseURL}/pricing`, { waitUntil: "domcontentloaded" });
+    await page.goto("/pricing", { waitUntil: "domcontentloaded" });
     await expectPublicChromeVisible(page);
 
     await expect(
@@ -124,15 +136,16 @@ test.describe("Country selector — desktop", () => {
   });
 
   test("no duplicate in-content US/CA region radiogroup on neutral marketing page", async ({ page }) => {
-    await page.goto(`${baseURL}/pricing`, { waitUntil: "domcontentloaded" });
+    await page.goto("/pricing", { waitUntil: "domcontentloaded" });
     await expectPublicChromeVisible(page);
     await expect(page.locator("main [role='radiogroup']")).toHaveCount(0);
     await expect(page.locator("main [aria-label='Select country']")).toHaveCount(0);
   });
 
-  test("header utility and primary row agree on displayed country (US hub)", async ({ page }) => {
-    await page.context().addCookies([{ name: GLOBAL_REGION_COOKIE, value: "us", url: baseURL }]);
-    await page.goto(`${baseURL}/us/rn/nclex-rn`, { waitUntil: "domcontentloaded" });
+  test("header utility and primary row agree on displayed country (US hub)", async ({ page, baseURL }) => {
+    const origin = requireOrigin(baseURL);
+    await page.context().addCookies([{ name: GLOBAL_REGION_COOKIE, value: "us", url: origin }]);
+    await page.goto("/us/rn/nclex-rn", { waitUntil: "domcontentloaded" });
     await expectPublicChromeVisible(page);
     await expectHeaderCountryControlsAgree(page);
   });
@@ -143,17 +156,19 @@ test.describe("Country selector — mobile", () => {
     await page.setViewportSize({ width: 390, height: 844 });
   });
 
-  test("from /exams/philippines → US: URL under /us/… and drawer shows United States", async ({ page }) => {
-    await setGlobalRegionCookie(page, "philippines", baseURL);
-    await page.goto(`${baseURL}/exams/philippines`, { waitUntil: "domcontentloaded" });
+  test("from /exams/philippines → US: URL under /us/… and drawer shows United States", async ({ page, baseURL }) => {
+    const origin = requireOrigin(baseURL);
+    await setGlobalRegionCookie(page, "philippines", origin);
+    await page.goto("/exams/philippines", { waitUntil: "domcontentloaded" });
     await expectPublicChromeVisible(page);
 
     await openMobileRegionLanguageDrawer(page);
     await expectMobileRegionSettingsHeading(page);
     await page.getByRole("option", { name: /United States/i }).first().click();
     await waitForUsOrCanadaHubUrl(page, "us");
+    await expect(page).toHaveURL(/\/us\/rn\/nclex-rn(?:\/|\?|#|$)/);
 
-    const cookies = await page.context().cookies(baseURL);
+    const cookies = await page.context().cookies(origin);
     expect(cookies.find((c) => c.name === GLOBAL_REGION_COOKIE)?.value).toBe("us");
 
     await openMobileRegionLanguageDrawer(page);
@@ -162,28 +177,31 @@ test.describe("Country selector — mobile", () => {
     ).toBeVisible();
   });
 
-  test("from /exams/philippines → Canada: URL under /canada/… and drawer shows Canada", async ({ page }) => {
-    await setGlobalRegionCookie(page, "philippines", baseURL);
-    await page.goto(`${baseURL}/exams/philippines`, { waitUntil: "domcontentloaded" });
+  test("from /exams/philippines → Canada: URL under /canada/… and drawer shows Canada", async ({ page, baseURL }) => {
+    const origin = requireOrigin(baseURL);
+    await setGlobalRegionCookie(page, "philippines", origin);
+    await page.goto("/exams/philippines", { waitUntil: "domcontentloaded" });
     await expectPublicChromeVisible(page);
 
     await openMobileRegionLanguageDrawer(page);
     await page.getByRole("option", { name: /^Canada$/ }).first().click();
     await waitForUsOrCanadaHubUrl(page, "canada");
+    await expect(page).toHaveURL(/\/canada\/rn\/nclex-rn(?:\/|\?|#|$)/);
 
-    const cookies = await page.context().cookies(baseURL);
+    const cookies = await page.context().cookies(origin);
     expect(cookies.find((c) => c.name === GLOBAL_REGION_COOKIE)?.value).toBe("canada");
 
     await openMobileRegionLanguageDrawer(page);
     await expect(page.locator("div.rounded-xl.border").filter({ hasText: /^Canada$/ }).first()).toBeVisible();
   });
 
-  test("stale expansion cookie on neutral route: drawer does not imply Philippines", async ({ page }) => {
+  test("stale expansion cookie on neutral route: drawer does not imply Philippines", async ({ page, baseURL }) => {
+    const origin = requireOrigin(baseURL);
     await page.context().addCookies([
-      { name: GLOBAL_REGION_COOKIE, value: "philippines", url: baseURL },
-      { name: MARKETING_REGION_COOKIE, value: "US", url: baseURL },
+      { name: GLOBAL_REGION_COOKIE, value: "philippines", url: origin },
+      { name: MARKETING_REGION_COOKIE, value: "US", url: origin },
     ]);
-    await page.goto(`${baseURL}/pricing`, { waitUntil: "domcontentloaded" });
+    await page.goto("/pricing", { waitUntil: "domcontentloaded" });
     await expectPublicChromeVisible(page);
 
     await openMobileRegionLanguageDrawer(page);
@@ -197,20 +215,32 @@ test.describe("Country selector — mobile", () => {
   });
 
   test("no duplicate in-content US/CA radiogroup on neutral marketing page", async ({ page }) => {
-    await page.goto(`${baseURL}/pricing`, { waitUntil: "domcontentloaded" });
+    await page.goto("/pricing", { waitUntil: "domcontentloaded" });
     await expectPublicChromeVisible(page);
     await expect(page.locator("main [role='radiogroup']")).toHaveCount(0);
     await expect(page.locator("main [aria-label='Select country']")).toHaveCount(0);
   });
 
-  test("drawer summary matches cookie after US hub navigation", async ({ page }) => {
-    await page.context().addCookies([{ name: GLOBAL_REGION_COOKIE, value: "us", url: baseURL }]);
-    await page.goto(`${baseURL}/us/rn/nclex-rn`, { waitUntil: "domcontentloaded" });
+  test("drawer summary matches cookie after US hub navigation", async ({ page, baseURL }) => {
+    const origin = requireOrigin(baseURL);
+    await page.context().addCookies([{ name: GLOBAL_REGION_COOKIE, value: "us", url: origin }]);
+    await page.goto("/us/rn/nclex-rn", { waitUntil: "domcontentloaded" });
     await expectPublicChromeVisible(page);
 
     await openMobileRegionLanguageDrawer(page);
     await expect(
       page.locator("div.rounded-xl.border").filter({ hasText: /United States/i }).first(),
     ).toBeVisible();
+  });
+
+  test("header utility and primary row agree on displayed country (US hub, mobile viewport)", async ({
+    page,
+    baseURL,
+  }) => {
+    const origin = requireOrigin(baseURL);
+    await page.context().addCookies([{ name: GLOBAL_REGION_COOKIE, value: "us", url: origin }]);
+    await page.goto("/us/rn/nclex-rn", { waitUntil: "domcontentloaded" });
+    await expectPublicChromeVisible(page);
+    await expectHeaderCountryControlsAgree(page);
   });
 });

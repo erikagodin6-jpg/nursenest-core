@@ -6,6 +6,13 @@ import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
+const userDiagSelect = {
+  id: true,
+  email: true,
+  passwordHash: true,
+  normalizedEmail: true,
+} as const;
+
 /**
  * Temporary admin-only auth diagnostics: counts and ids for an email without exposing hashes.
  * Super-admin only (see `admin-path-policy` for `/api/debug/auth-user`).
@@ -24,45 +31,27 @@ export async function GET(req: Request) {
   const lower = normalizeLoginIdentifier(trimmed);
   const normalized = normalizeEmailForDedup(lower);
 
-  const [exactInsensitive, normalizedMatches, exactCaseRows] = await Promise.all([
-    prisma.user.count({
-      where: { email: { equals: lower, mode: "insensitive" } },
-    }),
-    prisma.user.count({
-      where: { normalizedEmail: normalized },
-    }),
+  const [exactLowercaseMatches, exactCaseInsensitiveMatches, normalizedMatches] = await Promise.all([
     prisma.user.findMany({
       where: { email: lower },
-      select: {
-        id: true,
-        email: true,
-        passwordHash: true,
-        normalizedEmail: true,
-      },
+      select: userDiagSelect,
+    }),
+    prisma.user.findMany({
+      where: { email: { equals: lower, mode: "insensitive" } },
+      select: userDiagSelect,
+    }),
+    prisma.user.findMany({
+      where: { normalizedEmail: normalized },
+      select: userDiagSelect,
     }),
   ]);
 
-  const insRows = await prisma.user.findMany({
-    where: { email: { equals: lower, mode: "insensitive" } },
-    select: {
-      id: true,
-      email: true,
-      passwordHash: true,
-      normalizedEmail: true,
-    },
-  });
-
-  const normRows = await prisma.user.findMany({
-    where: { normalizedEmail: normalized },
-    select: {
-      id: true,
-      email: true,
-      passwordHash: true,
-      normalizedEmail: true,
-    },
-  });
-
-  const mapRow = (u: { id: string; email: string; passwordHash: string | null; normalizedEmail: string | null }) => ({
+  const mapRow = (u: {
+    id: string;
+    email: string;
+    passwordHash: string | null;
+    normalizedEmail: string | null;
+  }) => ({
     id: u.id,
     email: u.email,
     normalizedEmail: u.normalizedEmail,
@@ -71,11 +60,11 @@ export async function GET(req: Request) {
 
   return NextResponse.json({
     query: { raw: trimmed, lower, normalized },
-    exactLowercaseMatchCount: exactCaseRows.length,
-    exactCaseInsensitiveMatchCount: exactInsensitive,
-    normalizedMatchCount: normalizedMatches,
-    exactLowercaseMatches: exactCaseRows.map(mapRow),
-    exactCaseInsensitiveMatches: insRows.map(mapRow),
-    normalizedMatches: normRows.map(mapRow),
+    exactLowercaseMatchCount: exactLowercaseMatches.length,
+    exactCaseInsensitiveMatchCount: exactCaseInsensitiveMatches.length,
+    normalizedMatchCount: normalizedMatches.length,
+    exactLowercaseMatches: exactLowercaseMatches.map(mapRow),
+    exactCaseInsensitiveMatches: exactCaseInsensitiveMatches.map(mapRow),
+    normalizedMatches: normalizedMatches.map(mapRow),
   });
 }
