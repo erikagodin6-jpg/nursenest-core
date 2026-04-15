@@ -53,6 +53,28 @@ type SubscriptionSelect = {
   pastDueSince: Date | null;
 };
 
+/** Single Prisma select for both subscription entitlement queries — avoids drift between parallel reads. */
+const SUBSCRIPTION_ENTITLEMENT_SELECT = {
+  status: true,
+  planTier: true,
+  planCountry: true,
+  alliedCareer: true,
+  planDuration: true,
+  planCode: true,
+  billingRegionSlug: true,
+  currentPeriodEnd: true,
+  trialEnd: true,
+  cancelAtPeriodEnd: true,
+  updatedAt: true,
+  pastDueSince: true,
+} as const;
+
+/**
+ * Max rows read in one round-trip (newest first). If no ACTIVE_LIKE row appears in this window,
+ * a narrow fallback query loads the newest ACTIVE_LIKE row (rare accounts with long cancellation history).
+ */
+const SUBSCRIPTION_HISTORY_WINDOW = 80;
+
 function emptyAccess(userId: string): UserAccess {
   return {
     userId,
@@ -76,6 +98,40 @@ function emptyAccess(userId: string): UserAccess {
  * Server-only; never trust client-sent tier/country over this for protected content.
  */
 export async function getUserAccess(userId: string): Promise<UserAccess> {
+  const t0 = performance.now();
+  const telemetry = {
+    userFound: false,
+    subscriptionRowsRead: 0,
+    subscriptionQueries: 0,
+  };
+  try {
+    const ua = await getUserAccessCore(userId, telemetry);
+    safeServerLog("entitlement", "get_user_access_timing", {
+      durationMs: Math.round(performance.now() - t0),
+      userFound: telemetry.userFound,
+      subscriptionRowsRead: telemetry.subscriptionRowsRead,
+      subscriptionQueries: telemetry.subscriptionQueries,
+      outcome: ua.reason,
+    });
+    return ua;
+  } catch (e) {
+    safeServerLog("entitlement", "get_user_access_error", {
+      durationMs: Math.round(performance.now() - t0),
+    });
+    throw e;
+  }
+}
+
+type EntitlementReadTelemetry = {
+  userFound: boolean;
+  subscriptionRowsRead: number;
+  subscriptionQueries: number;
+};
+
+async function getUserAccessCore(
+  userId: string,
+  telemetry: EntitlementReadTelemetry,
+): Promise<UserAccess> {
   const base = emptyAccess(userId);
   if (!isDatabaseUrlConfigured()) return base;
 
@@ -95,6 +151,7 @@ export async function getUserAccess(userId: string): Promise<UserAccess> {
   );
 
   if (!user) return base;
+  telemetry.userFound = true;
 
   const pathwayId = user.targetExamPathwayId?.trim() || null;
   const baseCountry = normalizeCountryCodeForEntitlement(user.country);
@@ -121,48 +178,34 @@ export async function getUserAccess(userId: string): Promise<UserAccess> {
     };
   }
 
-  const [activeSubscription, latestSubscription] = await Promise.all([
-    withRetry(() =>
+  telemetry.subscriptionQueries = 1;
+  const subscriptionRows = await withRetry(() =>
+    prisma.subscription.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      take: SUBSCRIPTION_HISTORY_WINDOW,
+      select: SUBSCRIPTION_ENTITLEMENT_SELECT,
+    }),
+  );
+  telemetry.subscriptionRowsRead = subscriptionRows.length;
+
+  let activeSubscription =
+    subscriptionRows.find((s) => ACTIVE_LIKE.includes(s.status)) ?? null;
+  const latestSubscription: SubscriptionSelect | null = subscriptionRows[0] ?? null;
+
+  if (subscriptionRows.length === SUBSCRIPTION_HISTORY_WINDOW && activeSubscription === null) {
+    telemetry.subscriptionQueries = 2;
+    const fallbackActive = await withRetry(() =>
       prisma.subscription.findFirst({
         where: { userId, status: { in: ACTIVE_LIKE } },
         orderBy: { createdAt: "desc" },
-        select: {
-          status: true,
-          planTier: true,
-          planCountry: true,
-          alliedCareer: true,
-          planDuration: true,
-          planCode: true,
-          billingRegionSlug: true,
-          currentPeriodEnd: true,
-          trialEnd: true,
-          cancelAtPeriodEnd: true,
-          updatedAt: true,
-          pastDueSince: true,
-        },
+        select: SUBSCRIPTION_ENTITLEMENT_SELECT,
       }),
-    ),
-    withRetry(() =>
-      prisma.subscription.findFirst({
-        where: { userId },
-        orderBy: { createdAt: "desc" },
-        select: {
-          status: true,
-          planTier: true,
-          planCountry: true,
-          alliedCareer: true,
-          planDuration: true,
-          planCode: true,
-          billingRegionSlug: true,
-          currentPeriodEnd: true,
-          trialEnd: true,
-          cancelAtPeriodEnd: true,
-          updatedAt: true,
-          pastDueSince: true,
-        },
-      }),
-    ),
-  ]);
+    );
+    if (fallbackActive) {
+      activeSubscription = fallbackActive;
+    }
+  }
 
   const planRow: SubscriptionSelect | null = activeSubscription ?? latestSubscription;
   const billingRegionSlug = planRow?.billingRegionSlug?.trim() || null;
