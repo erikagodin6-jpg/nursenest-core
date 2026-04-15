@@ -14,7 +14,9 @@ export async function loginPaidUser(page: Page, email: string, password: string)
       const path = window.location.pathname;
       if (path.startsWith("/app")) return true;
       const body = document.body?.innerText ?? "";
-      return /Unable to sign in|Invalid credentials|incorrect password/i.test(body);
+      return /Unable to sign in|Invalid email, username, or password|Invalid credentials|incorrect password/i.test(
+        body,
+      );
     },
     null,
     { timeout: 60_000 },

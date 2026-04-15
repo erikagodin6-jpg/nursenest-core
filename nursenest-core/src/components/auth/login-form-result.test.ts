@@ -25,6 +25,16 @@ describe("resolveLoginSubmitOutcome", () => {
     assert.equal(outcome, "invalid_credentials");
   });
 
+  it("matches next-auth/react + @auth/core: failed credential POST uses error=CredentialsSignin&code=credentials with HTTP 200", () => {
+    const result: LoginSubmitResultLike = {
+      error: "CredentialsSignin",
+      code: "credentials",
+      status: 200,
+      ok: true,
+    };
+    assert.equal(resolveLoginSubmitOutcome(result, false), "invalid_credentials");
+  });
+
   it("treats ok: true without error as success (Auth.js happy path)", () => {
     const result: LoginSubmitResultLike = {
       error: undefined,
