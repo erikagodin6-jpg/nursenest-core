@@ -18,10 +18,15 @@ export async function loginWithCredentials(page: Page, email: string, password: 
   await page.locator("#login-identifier").fill(email);
   await page.locator("#login-password").fill(password);
   await page.getByRole("button", { name: /^Sign In$/i }).click();
+  /** Browser-only: do not reference Node helpers here — `waitForFunction` runs in the page context. */
   await page.waitForFunction(
     () => {
       const path = window.location.pathname;
-      if (isLearnerAppShellPath(path)) return true;
+      const onLearnerShell =
+        path.startsWith("/app") &&
+        path !== "/app/onboarding" &&
+        !path.startsWith("/app/onboarding/");
+      if (onLearnerShell) return true;
       const body = document.body?.innerText ?? "";
       return /Unable to sign in|Invalid email, username, or password|Invalid credentials|incorrect password/i.test(
         body,
@@ -30,22 +35,23 @@ export async function loginWithCredentials(page: Page, email: string, password: 
     null,
     { timeout: 60_000 },
   );
-  const pathname = new URL(page.url()).pathname;
+  const atUrl = page.url();
+  const pathname = new URL(atUrl).pathname;
   if (/Unable to sign in|Invalid email, username, or password|Invalid credentials|incorrect password/i.test(
     await page.locator("body").innerText().catch(() => ""),
   )) {
     throw new Error(
-      "Login rejected — check email/password and that the account exists for BASE_URL.",
+      `Login rejected — check email/password and that the account exists for BASE_URL. Current URL: ${atUrl}`,
     );
   }
   if (pathname === "/app/onboarding" || pathname.startsWith("/app/onboarding/")) {
     throw new Error(
-      "Signed in but still on /app/onboarding — complete onboarding in the product or run scripts/qa-paid-test-account-reset.mts (sets onboardingCompletedAt + learnerPath) for this E2E user.",
+      `Signed in but still on /app/onboarding — complete onboarding in the product or run scripts/qa-paid-test-account-reset.mts (sets onboardingCompletedAt + learnerPath) for this E2E user. Current URL: ${atUrl}`,
     );
   }
   if (!isLearnerAppShellPath(pathname)) {
     throw new Error(
-      "Login rejected — check email/password and that the account exists for BASE_URL.",
+      `Login rejected — check email/password and that the account exists for BASE_URL. Current URL: ${atUrl}`,
     );
   }
 }
