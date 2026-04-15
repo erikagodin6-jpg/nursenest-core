@@ -1,0 +1,215 @@
+{
+  "generatedAt": "2026-04-15T02:30:49.765Z",
+  "methodology": "Legacy: TypeScript AST parse of `client/src/data/flashcards*.ts` exported arrays. DB: Prisma counts when DATABASE_URL is available.",
+  "paths": {
+    "clientData": "/root/nursenest-core/client/src/data",
+    "repoRoot": "/root/nursenest-core"
+  },
+  "totals": {
+    "legacyFlashcardSourceFiles": 27,
+    "legacyFlashcardExportsParsed": 27,
+    "legacyFlashcardCardsExact": 4380,
+    "note": "One export file ≈ one logical deck group in legacy monolith; multiple `export const` arrays in a file are merged for counting."
+  },
+  "database": {
+    "flashcardDecks": null,
+    "flashcards": 0,
+    "examQuestionsPublished": null,
+    "dbError": "DATABASE_URL not set"
+  },
+  "perFile": [
+    {
+      "file": "flashcards-community.ts",
+      "exportBlocks": 1,
+      "cardCount": 55,
+      "tierGuess": "RN",
+      "examFamilyHint": "NCLEX_RN"
+    },
+    {
+      "file": "flashcards-icu-critical-care.ts",
+      "exportBlocks": 1,
+      "cardCount": 70,
+      "tierGuess": "RN",
+      "examFamilyHint": "NCLEX_RN"
+    },
+    {
+      "file": "flashcards-labor-delivery.ts",
+      "exportBlocks": 1,
+      "cardCount": 60,
+      "tierGuess": "RN",
+      "examFamilyHint": "NCLEX_RN"
+    },
+    {
+      "file": "flashcards-np-enrichment-1.ts",
+      "exportBlocks": 1,
+      "cardCount": 70,
+      "tierGuess": "NP",
+      "examFamilyHint": "NP"
+    },
+    {
+      "file": "flashcards-np-enrichment-2.ts",
+      "exportBlocks": 1,
+      "cardCount": 49,
+      "tierGuess": "NP",
+      "examFamilyHint": "NP"
+    },
+    {
+      "file": "flashcards-np-enrichment-3.ts",
+      "exportBlocks": 1,
+      "cardCount": 35,
+      "tierGuess": "NP",
+      "examFamilyHint": "NP"
+    },
+    {
+      "file": "flashcards-np-enrichment-4.ts",
+      "exportBlocks": 1,
+      "cardCount": 35,
+      "tierGuess": "NP",
+      "examFamilyHint": "NP"
+    },
+    {
+      "file": "flashcards-np-enrichment-5.ts",
+      "exportBlocks": 1,
+      "cardCount": 35,
+      "tierGuess": "NP",
+      "examFamilyHint": "NP"
+    },
+    {
+      "file": "flashcards-np-enrichment-6.ts",
+      "exportBlocks": 1,
+      "cardCount": 28,
+      "tierGuess": "NP",
+      "examFamilyHint": "NP"
+    },
+    {
+      "file": "flashcards-np-patho.ts",
+      "exportBlocks": 1,
+      "cardCount": 215,
+      "tierGuess": "NP",
+      "examFamilyHint": "NP"
+    },
+    {
+      "file": "flashcards-np-subspecialties.ts",
+      "exportBlocks": 1,
+      "cardCount": 46,
+      "tierGuess": "NP",
+      "examFamilyHint": "NP"
+    },
+    {
+      "file": "flashcards-np.ts",
+      "exportBlocks": 1,
+      "cardCount": 526,
+      "tierGuess": "NP",
+      "examFamilyHint": "NP"
+    },
+    {
+      "file": "flashcards-postpartum.ts",
+      "exportBlocks": 1,
+      "cardCount": 55,
+      "tierGuess": "RN",
+      "examFamilyHint": "NCLEX_RN"
+    },
+    {
+      "file": "flashcards-public-health.ts",
+      "exportBlocks": 1,
+      "cardCount": 55,
+      "tierGuess": "RN",
+      "examFamilyHint": "NCLEX_RN"
+    },
+    {
+      "file": "flashcards-rn-arrhythmias-chd-anticoag.ts",
+      "exportBlocks": 1,
+      "cardCount": 350,
+      "tierGuess": "RN",
+      "examFamilyHint": "NCLEX_RN"
+    },
+    {
+      "file": "flashcards-rn-expansion-2.ts",
+      "exportBlocks": 1,
+      "cardCount": 12,
+      "tierGuess": "RN",
+      "examFamilyHint": "NCLEX_RN"
+    },
+    {
+      "file": "flashcards-rn-expansion.ts",
+      "exportBlocks": 1,
+      "cardCount": 32,
+      "tierGuess": "RN",
+      "examFamilyHint": "NCLEX_RN"
+    },
+    {
+      "file": "flashcards-rn-gi-cancer-peds-integ.ts",
+      "exportBlocks": 1,
+      "cardCount": 400,
+      "tierGuess": "RN",
+      "examFamilyHint": "NCLEX_RN"
+    },
+    {
+      "file": "flashcards-rn-infectious-disease.ts",
+      "exportBlocks": 1,
+      "cardCount": 75,
+      "tierGuess": "RN",
+      "examFamilyHint": "NCLEX_RN"
+    },
+    {
+      "file": "flashcards-rn-patho-cardio-neuro.ts",
+      "exportBlocks": 1,
+      "cardCount": 275,
+      "tierGuess": "RN",
+      "examFamilyHint": "NCLEX_RN"
+    },
+    {
+      "file": "flashcards-rn-patho-expansion.ts",
+      "exportBlocks": 1,
+      "cardCount": 300,
+      "tierGuess": "RN",
+      "examFamilyHint": "NCLEX_RN"
+    },
+    {
+      "file": "flashcards-rn-resp-renal-batch2.ts",
+      "exportBlocks": 1,
+      "cardCount": 120,
+      "tierGuess": "RN",
+      "examFamilyHint": "NCLEX_RN"
+    },
+    {
+      "file": "flashcards-rn-resp-renal.ts",
+      "exportBlocks": 1,
+      "cardCount": 105,
+      "tierGuess": "RN",
+      "examFamilyHint": "NCLEX_RN"
+    },
+    {
+      "file": "flashcards-rn-shock-critical.ts",
+      "exportBlocks": 1,
+      "cardCount": 268,
+      "tierGuess": "RN",
+      "examFamilyHint": "NCLEX_RN"
+    },
+    {
+      "file": "flashcards-rn.ts",
+      "exportBlocks": 1,
+      "cardCount": 442,
+      "tierGuess": "RN",
+      "examFamilyHint": "NCLEX_RN"
+    },
+    {
+      "file": "flashcards-rpn-expansion.ts",
+      "exportBlocks": 1,
+      "cardCount": 16,
+      "tierGuess": "PN/RPN/LVN_LPN",
+      "examFamilyHint": "NCLEX_PN / REX_PN"
+    },
+    {
+      "file": "flashcards-rpn.ts",
+      "exportBlocks": 1,
+      "cardCount": 651,
+      "tierGuess": "PN/RPN/LVN_LPN",
+      "examFamilyHint": "NCLEX_PN / REX_PN"
+    }
+  ],
+  "gapAnalysis": {
+    "legacyCardsInTs": 4380,
+    "importedToDbDependOnRun": "Run import-legacy-client-flashcards.mts with DATABASE_URL, then re-run this audit or validation report."
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T22:53:12.970Z",
+  "generatedAt": "2026-04-15T02:30:52.743Z",
   "batchFixHints": [
     "ca-rn-nclex-rn: ≥45% of lessons missing core_concept_depth bucket — likely systematic spine depth gap.",
     "ca-rn-nclex-rn: most lessons lack ES/FR/TL educational overlay keys — English-primary teaching with localized chrome only.",
@@ -19,10 +19,10 @@
   },
   "statusDimensions": {
     "contentReadinessTotals": {
-      "production_ready_en": 4,
-      "usable_but_thin_en": 283,
+      "production_ready_en": 8,
+      "usable_but_thin_en": 288,
       "content_incomplete": 0,
-      "structurally_incomplete": 364,
+      "structurally_incomplete": 355,
       "not_routable": 0,
       "duplicate_or_unclear_source": 255
     },
@@ -30,25 +30,25 @@
       "localized_ready": 16,
       "partially_localized": 0,
       "localized_shell_only": 0,
-      "english_only": 603,
-      "localization_incomplete": 287
+      "english_only": 594,
+      "localization_incomplete": 296
     },
-    "goodEnglishLessonsNotLocalizationComplete": 4,
-    "blockedMainlyByLocalizationLegacyStatus": 286
+    "goodEnglishLessonsNotLocalizationComplete": 8,
+    "blockedMainlyByLocalizationLegacyStatus": 289
   },
   "lessonsThatExistButNotComplete": {
     "description": "Catalog-present lessons (bundled JSON) that are not classified production_ready — includes thin, structurally gated, localization-limited, non-routable pathway, or duplicate slug issues.",
     "catalogLessonRows": 906,
     "notProductionReady": 906,
     "notProductionReadyByStatus": {
-      "usable_but_thin": 1,
-      "structurally_incomplete": 364,
+      "usable_but_thin": 7,
+      "structurally_incomplete": 355,
       "content_incomplete": 0,
-      "localization_incomplete": 286,
+      "localization_incomplete": 289,
       "not_routable": 0,
       "duplicate_or_unclear_source": 255
     },
-    "isolatedLessonsNoLinksOrRelatedRefs": 369
+    "isolatedLessonsNoLinksOrRelatedRefs": 364
   },
   "methodology": {
     "dataSource": "Bundled pathway catalog (catalog.json + allied-bundled + new-grad + scoped-gold merge via getCatalogPathwayLessonsSync). Does not enumerate Prisma-only lessons.",
@@ -74,17 +74,17 @@
     "lessonsScanned": 906,
     "pathwaysWithLessons": 8,
     "production_ready": 0,
-    "usable_but_thin": 1,
-    "structurally_incomplete": 364,
+    "usable_but_thin": 7,
+    "structurally_incomplete": 355,
     "content_incomplete": 0,
-    "localization_incomplete": 286,
+    "localization_incomplete": 289,
     "not_routable": 0,
     "duplicate_or_unclear_source": 255,
     "contentReadinessByStatus": {
-      "production_ready_en": 4,
-      "usable_but_thin_en": 283,
+      "production_ready_en": 8,
+      "usable_but_thin_en": 288,
       "content_incomplete": 0,
-      "structurally_incomplete": 364,
+      "structurally_incomplete": 355,
       "not_routable": 0,
       "duplicate_or_unclear_source": 255
     },
@@ -92,8 +92,8 @@
       "localized_ready": 16,
       "partially_localized": 0,
       "localized_shell_only": 0,
-      "english_only": 603,
-      "localization_incomplete": 287
+      "english_only": 594,
+      "localization_incomplete": 296
     },
     "byPathway": {
       "ca-rn-nclex-rn": 188,
@@ -124,27 +124,27 @@
   "globalTopFailureReasons": [
     {
       "reason": "no_educational_overlay_in_scanned_locales",
-      "count": 577
+      "count": 588
     },
     {
       "reason": "missing_educational:core_concept_depth",
-      "count": 501
+      "count": 493
     },
     {
       "reason": "missing_educational:summary_takeaways",
-      "count": 327
+      "count": 330
     },
     {
       "reason": "missing_educational:overview_intro",
-      "count": 318
+      "count": 313
     },
     {
       "reason": "thin_total_word_count",
-      "count": 286
+      "count": 293
     },
     {
       "reason": "low_total_word_count",
-      "count": 275
+      "count": 264
     },
     {
       "reason": "missing_educational:clinical_application",
@@ -152,11 +152,15 @@
     },
     {
       "reason": "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-      "count": 153
+      "count": 152
     },
     {
       "reason": "links:no_internal_study_links",
       "count": 124
+    },
+    {
+      "reason": "not_in_exam_filtered_hub_list",
+      "count": 96
     },
     {
       "reason": "Legacy section \"clinical_scenario\" is below the minimum depth (29 < 40 words).",
@@ -164,15 +168,7 @@
     },
     {
       "reason": "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-      "count": 62
-    },
-    {
-      "reason": "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-      "count": 56
-    },
-    {
-      "reason": "isolated_no_internal_links_or_related_refs",
-      "count": 54
+      "count": 59
     },
     {
       "reason": "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
@@ -199,15 +195,19 @@
       "count": 51
     },
     {
+      "reason": "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
+      "count": 50
+    },
+    {
       "reason": "Metadata: provide at least 2 relatedLessonRefs for hub/SEO related mapping.",
       "count": 49
     },
     {
-      "reason": "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-      "count": 47
+      "reason": "missing_educational:safety_or_priority_mentioned",
+      "count": 46
     },
     {
-      "reason": "missing_educational:safety_or_priority_mentioned",
+      "reason": "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
       "count": 46
     },
     {
@@ -215,12 +215,12 @@
       "count": 44
     },
     {
-      "reason": "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-      "count": 42
+      "reason": "isolated_no_internal_links_or_related_refs",
+      "count": 41
     },
     {
       "reason": "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-      "count": 40
+      "count": 39
     }
   ],
   "limitations": [

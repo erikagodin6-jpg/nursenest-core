@@ -1,78 +1,6 @@
 {
-  "generatedAt": "2026-04-14T22:53:12.970Z",
+  "generatedAt": "2026-04-15T02:30:52.743Z",
   "queue": [
-    {
-      "lessonId": "ca-rn-nclex-rn:cardiac-tamponade-nclex-rn",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "cardiac-tamponade-nclex-rn",
-      "title": "Cardiac Tamponade (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (24 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (39 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (9 < 35 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:phlebostatic-axis-nclex-rn",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "phlebostatic-axis-nclex-rn",
-      "title": "Phlebostatic Axis (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (34 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (36 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (17 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:pulmonary-embolism-nclex-rn",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "pulmonary-embolism-nclex-rn",
-      "title": "Pulmonary Embolism (NCLEX-RN, Canada)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (29 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (18 < 30 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (24 < 35 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
     {
       "lessonId": "ca-rn-nclex-rn:diabetes-self-management-teaching",
       "pathwayId": "ca-rn-nclex-rn",
@@ -1103,11 +1031,101 @@
         "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
         "links:no_internal_study_links",
         "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list",
         "isolated_no_internal_links_or_related_refs"
       ],
       "recommendedActions": [
         "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
         "Address structural gate issues and section depth per pathway-lesson-premium targets."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:phlebostatic-axis-nclex-rn",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "phlebostatic-axis-nclex-rn",
+      "title": "Phlebostatic Axis (NCLEX-RN, Canada)",
+      "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 51,
+      "reasons": [
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+        "thin_total_word_count",
+        "missing_educational:summary_takeaways",
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
+      ],
+      "recommendedActions": [
+        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
+        "Strengthen educational buckets: summary_takeaways."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:shock-recognition-fluids",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "shock-recognition-fluids",
+      "title": "Shock Recognition & Fluids (NCLEX-RN, Canada)",
+      "status": "usable_but_thin",
+      "contentReadinessStatus": "usable_but_thin_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 56.9,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways.",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
+        "Expand prose depth; distinguish from shell-only completeness."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:hypertensive-crisis-vs-urgency",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypertensive-crisis-vs-urgency",
+      "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, Canada)",
+      "status": "usable_but_thin",
+      "contentReadinessStatus": "usable_but_thin_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 56.9,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways.",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
+        "Expand prose depth; distinguish from shell-only completeness."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:pulmonary-embolism-nclex-rn",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pulmonary-embolism-nclex-rn",
+      "title": "Pulmonary Embolism (NCLEX-RN, Canada)",
+      "status": "usable_but_thin",
+      "contentReadinessStatus": "usable_but_thin_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 62.8,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: overview_intro, clinical_application, summary_takeaways.",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
+        "Expand prose depth; distinguish from shell-only completeness."
       ]
     },
     {
@@ -1121,7 +1139,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (69 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -1138,7 +1157,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (65 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -1155,7 +1175,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (40 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -1172,24 +1193,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (40 < 100).",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:acute-kidney-injury-nursing-gold",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "acute-kidney-injury-nursing-gold",
-      "title": "Acute kidney injury: nursing surveillance (NCLEX-RN, Canada)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (26 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -1206,7 +1211,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (28 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -1223,7 +1229,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (27 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -1240,7 +1247,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (17 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -1257,7 +1265,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (16 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -1274,7 +1283,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (21 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -1291,7 +1301,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (17 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -1308,10 +1319,32 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (16 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:acute-myocardial-infarction-troponin",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-myocardial-infarction-troponin",
+      "title": "Acute Myocardial Infarction & Troponin (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "usable_but_thin_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 68.8,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth, clinical_application.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ]
     },
     {
@@ -1353,86 +1386,6 @@
       "recommendedActions": [
         "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
         "Strengthen educational buckets: safety_or_priority_mentioned.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:heart-failure-nursing-priorities-hy",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "heart-failure-nursing-priorities-hy",
-      "title": "Heart Failure Nursing Priorities (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 75.3,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:acute-myocardial-infarction-troponin",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "acute-myocardial-infarction-troponin",
-      "title": "Acute Myocardial Infarction & Troponin (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 75.3,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:shock-recognition-fluids",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "shock-recognition-fluids",
-      "title": "Shock Recognition & Fluids (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 75.3,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth.",
-        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
-        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
-      ]
-    },
-    {
-      "lessonId": "ca-rn-nclex-rn:hypertensive-crisis-vs-urgency",
-      "pathwayId": "ca-rn-nclex-rn",
-      "slug": "hypertensive-crisis-vs-urgency",
-      "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, Canada)",
-      "status": "localization_incomplete",
-      "contentReadinessStatus": "usable_but_thin_en",
-      "localizationReadinessStatus": "localization_incomplete",
-      "overallScore": 75.3,
-      "reasons": [
-        "thin_total_word_count",
-        "missing_educational:core_concept_depth",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Strengthen educational buckets: core_concept_depth.",
         "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
         "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ]
@@ -3218,6 +3171,40 @@
       ]
     },
     {
+      "lessonId": "ca-rn-nclex-rn:heart-failure-nursing-priorities-hy",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "heart-failure-nursing-priorities-hy",
+      "title": "Heart Failure Nursing Priorities (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 86.6,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:cardiac-tamponade-nclex-rn",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cardiac-tamponade-nclex-rn",
+      "title": "Cardiac Tamponade (NCLEX-RN, Canada)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 86.6,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
       "lessonId": "ca-rn-nclex-rn:clinical-judgment-prioritization-gold",
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "clinical-judgment-prioritization-gold",
@@ -3350,6 +3337,22 @@
       "pathwayId": "ca-rn-nclex-rn",
       "slug": "dka-hhs-hyperglycemic-emergencies-gold",
       "title": "DKA & HHS: clinical judgment (NCLEX-RN, Canada)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "ca-rn-nclex-rn:acute-kidney-injury-nursing-gold",
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-kidney-injury-nursing-gold",
+      "title": "Acute kidney injury: nursing surveillance (NCLEX-RN, Canada)",
       "status": "duplicate_or_unclear_source",
       "contentReadinessStatus": "duplicate_or_unclear_source",
       "localizationReadinessStatus": "english_only",
@@ -3789,131 +3792,6 @@
       "reasons": [],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:respiratory-assessment-ngn",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "respiratory-assessment-ngn",
-      "title": "Respiratory assessment & oxygenation (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (23 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (20 < 40 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (18 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (16 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:heart-failure-nursing-priorities-hy",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "heart-failure-nursing-priorities-hy",
-      "title": "Heart Failure Nursing Priorities (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:acute-myocardial-infarction-troponin",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "acute-myocardial-infarction-troponin",
-      "title": "Acute Myocardial Infarction & Troponin (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (42 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (29 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (31 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:shock-recognition-fluids",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "shock-recognition-fluids",
-      "title": "Shock Recognition & Fluids (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:hypertensive-crisis-vs-urgency",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "hypertensive-crisis-vs-urgency",
-      "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (41 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"core_concept\" is below the minimum depth (30 < 40 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Add internal study links (LESSON:slug) and/or relatedLessonRefs so the lesson is not an island.",
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
       ]
     },
     {
@@ -5792,78 +5670,6 @@
       ]
     },
     {
-      "lessonId": "us-rn-nclex-rn:cardiac-tamponade-nclex-rn",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "cardiac-tamponade-nclex-rn",
-      "title": "Cardiac Tamponade (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (24 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (26 < 30 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (39 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (9 < 35 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:phlebostatic-axis-nclex-rn",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "phlebostatic-axis-nclex-rn",
-      "title": "Phlebostatic Axis (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (34 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (28 < 30 words).",
-        "Legacy section \"clinical_scenario\" is below the minimum depth (36 < 40 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (17 < 35 words).",
-        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:pulmonary-embolism-nclex-rn",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "pulmonary-embolism-nclex-rn",
-      "title": "Pulmonary Embolism (NCLEX-RN, US)",
-      "status": "structurally_incomplete",
-      "contentReadinessStatus": "structurally_incomplete",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 10.5,
-      "reasons": [
-        "Legacy section \"clinical_meaning\" is below the minimum depth (29 < 50 words).",
-        "Legacy section \"exam_relevance\" is below the minimum depth (18 < 30 words).",
-        "Legacy section \"takeaways\" is below the minimum depth (24 < 35 words).",
-        "low_total_word_count",
-        "missing_educational:overview_intro",
-        "missing_educational:core_concept_depth",
-        "missing_educational:clinical_application",
-        "missing_educational:summary_takeaways"
-      ],
-      "recommendedActions": [
-        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
-        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways, safety_or_priority_mentioned."
-      ]
-    },
-    {
       "lessonId": "us-rn-nclex-rn:diabetes-self-management-teaching",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "diabetes-self-management-teaching",
@@ -7204,6 +7010,95 @@
       ]
     },
     {
+      "lessonId": "us-rn-nclex-rn:phlebostatic-axis-nclex-rn",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "phlebostatic-axis-nclex-rn",
+      "title": "Phlebostatic Axis (NCLEX-RN, US)",
+      "status": "structurally_incomplete",
+      "contentReadinessStatus": "structurally_incomplete",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 51,
+      "reasons": [
+        "Clinical scenario section must include a structured patient vignette (patient/client frame plus clinical context).",
+        "thin_total_word_count",
+        "missing_educational:summary_takeaways",
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
+      ],
+      "recommendedActions": [
+        "Address structural gate issues and section depth per pathway-lesson-premium targets.",
+        "Strengthen educational buckets: summary_takeaways."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:shock-recognition-fluids",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "shock-recognition-fluids",
+      "title": "Shock Recognition & Fluids (NCLEX-RN, US)",
+      "status": "usable_but_thin",
+      "contentReadinessStatus": "usable_but_thin_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 56.9,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways.",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
+        "Expand prose depth; distinguish from shell-only completeness."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:hypertensive-crisis-vs-urgency",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "hypertensive-crisis-vs-urgency",
+      "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, US)",
+      "status": "usable_but_thin",
+      "contentReadinessStatus": "usable_but_thin_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 56.9,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: overview_intro, core_concept_depth, clinical_application, summary_takeaways.",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
+        "Expand prose depth; distinguish from shell-only completeness."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:pulmonary-embolism-nclex-rn",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pulmonary-embolism-nclex-rn",
+      "title": "Pulmonary Embolism (NCLEX-RN, US)",
+      "status": "usable_but_thin",
+      "contentReadinessStatus": "usable_but_thin_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 62.8,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:overview_intro",
+        "missing_educational:clinical_application",
+        "missing_educational:summary_takeaways",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: overview_intro, clinical_application, summary_takeaways.",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong.",
+        "Expand prose depth; distinguish from shell-only completeness."
+      ]
+    },
+    {
       "lessonId": "us-rn-nclex-rn:pulmonary-embolism-recognition-gold",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "pulmonary-embolism-recognition-gold",
@@ -7214,7 +7109,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (69 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -7231,7 +7127,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (65 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -7248,7 +7145,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (40 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -7265,24 +7163,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (40 < 100).",
-        "no_educational_overlay_in_scanned_locales"
-      ],
-      "recommendedActions": [
-        "Resolve duplicate slug across pathways or document canonical pathway."
-      ]
-    },
-    {
-      "lessonId": "us-rn-nclex-rn:acute-kidney-injury-nursing-gold",
-      "pathwayId": "us-rn-nclex-rn",
-      "slug": "acute-kidney-injury-nursing-gold",
-      "title": "Acute kidney injury: nursing surveillance (NCLEX-RN, US)",
-      "status": "duplicate_or_unclear_source",
-      "contentReadinessStatus": "duplicate_or_unclear_source",
-      "localizationReadinessStatus": "english_only",
-      "overallScore": 65,
-      "reasons": [
-        "Section \"labs_diagnostics\" below minimum word count (26 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -7299,7 +7181,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (28 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -7316,7 +7199,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (27 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -7333,7 +7217,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (17 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -7350,7 +7235,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (16 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -7367,7 +7253,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (21 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -7384,7 +7271,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (17 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
@@ -7401,10 +7289,32 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (16 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:acute-myocardial-infarction-troponin",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "acute-myocardial-infarction-troponin",
+      "title": "Acute Myocardial Infarction & Troponin (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "usable_but_thin_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 68.8,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:core_concept_depth",
+        "missing_educational:clinical_application",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: core_concept_depth, clinical_application.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ]
     },
     {
@@ -7430,6 +7340,26 @@
       ]
     },
     {
+      "lessonId": "us-rn-nclex-rn:respiratory-assessment-ngn",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "respiratory-assessment-ngn",
+      "title": "Respiratory assessment & oxygenation (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "usable_but_thin_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 74.4,
+      "reasons": [
+        "thin_total_word_count",
+        "missing_educational:summary_takeaways",
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Strengthen educational buckets: summary_takeaways.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
       "lessonId": "us-rn-nclex-rn:cabg-and-postoperative-cabg-complications-nclex-rn",
       "pathwayId": "us-rn-nclex-rn",
       "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
@@ -7445,6 +7375,40 @@
       ],
       "recommendedActions": [
         "Strengthen educational buckets: overview_intro.",
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:heart-failure-nursing-priorities-hy",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "heart-failure-nursing-priorities-hy",
+      "title": "Heart Failure Nursing Priorities (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 86.6,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
+        "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:cardiac-tamponade-nclex-rn",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "cardiac-tamponade-nclex-rn",
+      "title": "Cardiac Tamponade (NCLEX-RN, US)",
+      "status": "localization_incomplete",
+      "contentReadinessStatus": "production_ready_en",
+      "localizationReadinessStatus": "localization_incomplete",
+      "overallScore": 86.6,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
         "Add or expand educational overlays for target locales (public/i18n/educational-overlays).",
         "Expand educational overlays to ≥2 scanned locales (or document English-primary intent) — EN spine may already be strong."
       ]
@@ -7582,6 +7546,22 @@
       "pathwayId": "us-rn-nclex-rn",
       "slug": "dka-hhs-hyperglycemic-emergencies-gold",
       "title": "DKA & HHS: clinical judgment (NCLEX-RN, US)",
+      "status": "duplicate_or_unclear_source",
+      "contentReadinessStatus": "duplicate_or_unclear_source",
+      "localizationReadinessStatus": "english_only",
+      "overallScore": 89.3,
+      "reasons": [
+        "no_educational_overlay_in_scanned_locales"
+      ],
+      "recommendedActions": [
+        "Resolve duplicate slug across pathways or document canonical pathway."
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:acute-kidney-injury-nursing-gold",
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "acute-kidney-injury-nursing-gold",
+      "title": "Acute kidney injury: nursing surveillance (NCLEX-RN, US)",
       "status": "duplicate_or_unclear_source",
       "contentReadinessStatus": "duplicate_or_unclear_source",
       "localizationReadinessStatus": "english_only",
@@ -8338,7 +8318,8 @@
         "missing_educational:overview_intro",
         "missing_educational:summary_takeaways",
         "missing_educational:exam_or_reasoning_cues",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Address structural gate issues and section depth per pathway-lesson-premium targets.",
@@ -8358,7 +8339,8 @@
         "Section \"labs_diagnostics\" below minimum word count (70 < 100).",
         "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
         "links:internal_links_below_minimum(2)",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Address structural gate issues and section depth per pathway-lesson-premium targets."
@@ -8377,7 +8359,8 @@
         "Section \"labs_diagnostics\" below minimum word count (51 < 100).",
         "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
         "links:internal_links_below_minimum(2)",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Address structural gate issues and section depth per pathway-lesson-premium targets."
@@ -8396,7 +8379,8 @@
         "Section \"labs_diagnostics\" below minimum word count (74 < 100).",
         "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
         "links:internal_links_below_minimum(2)",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Address structural gate issues and section depth per pathway-lesson-premium targets."
@@ -8413,7 +8397,8 @@
       "overallScore": 65,
       "reasons": [
         "Introduction is long for scanability (379 words); target about 180–250 words while keeping 2–3 paragraphs.",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Address structural gate issues and section depth per pathway-lesson-premium targets."
@@ -8430,7 +8415,8 @@
       "overallScore": 65,
       "reasons": [
         "Introduction is long for scanability (258 words); target about 180–250 words while keeping 2–3 paragraphs.",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Address structural gate issues and section depth per pathway-lesson-premium targets."
@@ -8447,7 +8433,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (90 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Address structural gate issues and section depth per pathway-lesson-premium targets."
@@ -8464,7 +8451,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (97 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Address structural gate issues and section depth per pathway-lesson-premium targets."
@@ -8481,7 +8469,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (69 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Address structural gate issues and section depth per pathway-lesson-premium targets."
@@ -8498,7 +8487,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (76 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Address structural gate issues and section depth per pathway-lesson-premium targets."
@@ -8515,7 +8505,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (58 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Address structural gate issues and section depth per pathway-lesson-premium targets."
@@ -8532,7 +8523,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (72 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Address structural gate issues and section depth per pathway-lesson-premium targets."
@@ -8549,7 +8541,8 @@
       "overallScore": 65,
       "reasons": [
         "Section \"labs_diagnostics\" below minimum word count (62 < 100).",
-        "no_educational_overlay_in_scanned_locales"
+        "no_educational_overlay_in_scanned_locales",
+        "not_in_exam_filtered_hub_list"
       ],
       "recommendedActions": [
         "Address structural gate issues and section depth per pathway-lesson-premium targets."

@@ -4009,31 +4009,31 @@
               "id": "clinical_meaning",
               "heading": "Clinical meaning",
               "kind": "clinical_meaning",
-              "body": "**Heart Failure Nursing Priorities** (Cardiovascular) is a clinical judgment topic: connect **assessment data** to **risk**, choose the **first safe nursing action**, and know when to **delegate** versus **retain** responsibility. Canadian items may use **metric** units and provincial wording; prioritization logic matches NCLEX-RN.\n\n**Pathway context (RN, Canada).** This lesson supports **Heart Failure Nursing Priorities** within your exam preparation. Canadian practice contexts (SI labs where shown, interprofessional norms). Continue with related lessons from the [pathway lesson hub](/canada/rn/nclex-rn/lessons)."
+              "body": "**Heart failure (HF)** is a syndrome of impaired **cardiac output** and/or **elevated filling pressures**—often framed as **reduced ejection fraction (HFrEF)** or **preserved EF (HFpEF)** on exams. For NCLEX-RN, “HF priorities” means linking **congestion** (lungs, periphery, JVD), **perfusion** (mentation, urine output, cool skin), and **medication effects** (afterload reduction, diuresis, neurohormonal blockade) to **what you assess first** and **what you escalate**.\n\nCanadian stems may show **metric weights** (kg) and **mmol/L labs**; the judgment pattern matches US items—**objective congestion + instability** outranks routine tasks. Use daily weights, strict **I&O**, lung sounds, and orthopnea patterns as **trend tools**, not single snapshots.\n\nConnect HF care to [acute coronary syndrome](LESSON:acute-coronary-syndrome-nclex-rn) and [hypertensive crisis](LESSON:hypertensive-crisis-vs-urgency) when the stem mixes ischemia or BP extremes with congestion.\n\n**NCLEX angle:** Items often stack **comorbidities** (AFib, CKD, COPD) to see whether you still identify **acute congestion** versus chronic baseline findings—compare **new change** against known baselines when the stem provides both."
             },
             {
               "id": "exam_relevance",
               "heading": "Exam relevance",
               "kind": "exam_relevance",
-              "body": "Examiners use **Heart Failure Nursing Priorities** to probe **prioritization**, **monitoring**, and **escalation**. Expect **distractors** that look reasonable but delay assessment, skip unstable clients, or delegate RN-level judgment inappropriately.\n\nNCLEX items on **Heart Failure Nursing Priorities** reward linking **assessment → risk → first action**, not isolated facts. Boards often use **“first”**, **“priority”**, or **“most important”** language—eliminate options that skip assessment, delay escalation, or exceed scope."
+              "body": "Examiners test whether you can **prioritize congestion vs perfusion** problems, recognize **medication toxicity** (digoxin, hypotension from ACE/ARB), and avoid **harm** (IV fluids in obvious fluid overload, NSAIDs that worsen retention). “First action” items often hinge on **assessment completeness**—recheck vitals, **SpO₂**, **lung fields**, **JVD**, and **mental status** before teaching or discharge paperwork.\n\nThey also probe **patient education**: sodium restriction, daily weights, when to call for **rapid weight gain**, **worsening orthopnea**, or **new edema**—but education is **never** the priority when the client is **hypoxic**, **hypotensive**, or **confused** from poor perfusion."
             },
             {
               "id": "core_concept",
               "heading": "Core concept",
               "kind": "core_concept",
-              "body": "Frame **Heart Failure Nursing Priorities** within **Cardiovascular**: link expected **assessment** findings to **interventions** and the **monitoring** that proves the plan is working. Difficulty default for this lesson: **4**; priority: **high_yield**.\n\n**Reasoning layer.** Tie abnormal assessment data to the most likely complication, then choose nursing actions that **buy time safely** while orders are clarified. Prioritize **airway, perfusion, bleeding, infection, and potassium** as reversible threats when stems feel noisy."
+              "body": "- **Congestion signals**: crackles, orthopnea/PND, peripheral edema, JVD, S₃ gallop (when auscultated), hepatojugular reflux themes.\n- **Low-output / perfusion signals**: fatigue, oliguria, cool extremities, narrow pulse pressure, restlessness → decreased mentation.\n- **Core medication classes (high-yield)**: loop diuretics (furosemide), ACE inhibitors/ARBs/ARNI, beta blockers (when stable), aldosterone antagonists, SGLT2 inhibitors in select HF—**administer on time**, monitor **K⁺/Cr**, **BP**, and **renal function** per orders.\n- **Oxygen**: titrate to ordered SpO₂ targets; escalate for respiratory distress.\n- **Nutrition/fluid**: sodium restriction teaching; fluid restriction when ordered—avoid extra IV fluids unless the stem supports hypovolemia.\n- **Devices**: ICD/CRT themes appear as **education and safety**, not nurse programming."
             },
             {
               "id": "clinical_scenario",
               "heading": "Clinical scenario",
               "kind": "clinical_scenario",
-              "body": "Picture multiple clients or tasks: pick the option that **reduces harm fastest** for the client whose status is **deteriorating** or **high risk** if unattended. When the stem is stable, still choose the action that **closes the data gap** before routines.\n\n**Patient vignette.** A hospitalized adult client with heart failure exacerbation shows a change in symptoms during your shift. **Your first nursing moves** are: reassess vitals and focused findings, review relevant labs and orders, protect airway and perfusion, and **notify the provider** when criteria for urgent escalation are met. NCLEX rewards **safe sequencing**—choose assessment and escalation before comfort-only measures when risk is rising."
+              "body": "**Patient vignette.** A 72-year-old client with HFrEF gains **2.5 kg overnight**, develops **bilateral crackles** halfway up, and **SpO₂** falls to **88%** on their usual cannula. BP is **102/68**, HR **110**, and they are **anxious** and unable to lie flat.\n\n**Fork:** This is **acute decompensated HF with hypoxemia**—priority is **oxygen + monitoring + provider notification** with objective data (vitals, weight, lung findings, recent I&O). Do **not** choose “finish breakfast tray” or “ambulate now.” Anticipate **diuretic therapy** and possible **additional diagnostics** (BNP trends if used, CXR themes) per orders. Document **escalation triggers** clearly."
             },
             {
               "id": "takeaways",
               "heading": "Takeaways",
               "kind": "takeaways",
-              "body": "- Tie **vitals + labs + story** before comfort measures or discharge teaching.\n- Eliminate answers that **skip assessment** or **delay escalation** when data show risk.\n- Pair this page with **topic slug `cardiovascular`** in the hub and timed question blocks.\n\n**Related topics:** `heart-failure-nursing-priorities`, `acute-myocardial-infarction-troponin`, `shock-recognition-fluids`, `hypertensive-crisis-vs-urgency`, `atrial-fibrillation-rate-control` — use the question bank and lesson hub filters to cluster practice.\n\n**Takeaway drill for Heart Failure Nursing Priorities:** Before you pick an answer, name the **life threat** in the stem, the **two objective findings** you would recheck first, and the **single escalation** that matches policy. That mirrors **clinical judgment** scoring on the exam.\n\n**Related study links:** [related lesson](LESSON:fluid-balance-acute-care) · [related lesson](LESSON:cardiovascular-prioritization) · [related lesson](LESSON:ca-rn-pulmonary-embolism) · [pathway lesson hub](/canada/rn/nclex-rn/lessons)"
+              "body": "- **Weight + lungs + SpO₂** together beat any single “stable BP” reassurance.\n- **Teach-back** is for stable clients—**rescue** is for escalating congestion/hypoxia.\n- Pair this lesson with [AFib rate control](LESSON:atrial-fibrillation-rate-control) and [DVT/PE priorities](LESSON:dvt-pe-nursing-priorities) when comorbidities drive the stem.\n\n**Synthesis:** Before you select an answer, run a **three-question loop**: Is **perfusion** threatened (mentation, urine, skin)? Is **congestion** worsening (orthopnea, crackles, JVD)? Did a **new drug, IV fluid, or missed dose** plausibly trigger the change? If any “yes,” prioritize **assessment + notification** over mobility, meals, or teaching.\n\n**Related study links:** [shock recognition](LESSON:shock-recognition-fluids) · [pulmonary embolism](LESSON:pulmonary-embolism-nclex-rn) · [pathway hub](/canada/rn/nclex-rn/lessons) · [US hub](/us/rn/nclex-rn/lessons)."
             }
           ]
         },
@@ -4051,31 +4051,31 @@
               "id": "clinical_meaning",
               "heading": "Clinical meaning",
               "kind": "clinical_meaning",
-              "body": "**Acute Myocardial Infarction & Troponin** (Cardiovascular) is a clinical judgment topic: connect **assessment data** to **risk**, choose the **first safe nursing action**, and know when to **delegate** versus **retain** responsibility. Canadian items may use **metric** units and provincial wording; prioritization logic matches NCLEX-RN.\n\n**Pathway context (RN, Canada).** This lesson supports **Acute Myocardial Infarction & Troponin** within your exam preparation. Canadian practice contexts (SI labs where shown, interprofessional norms). Continue with related lessons from the [pathway lesson hub](/canada/rn/nclex-rn/lessons)."
+              "body": "**Acute myocardial infarction (AMI)** is myocardial necrosis from **acute coronary occlusion** (usually thrombus) or supply–demand mismatch in vulnerable patients. **High-sensitivity troponin** is the biochemical marker of **myocardial injury**—it rises after cellular death and is central to NCLEX-RN “rule in / rule out ACS” reasoning alongside **symptoms** and **ECG**.\n\nNursing responsibility is **time-sensitive assessment**, **12-lead acquisition when ordered**, **monitoring for arrhythmias**, **preparing for reperfusion** (PCI vs thrombolysis per protocol), and **clear communication**—not independent diagnosis, but **never** ignoring evolving **ST changes** or **hemodynamic collapse**.\n\nLink to [acute coronary syndrome lesson](LESSON:acute-coronary-syndrome-nclex-rn), [AFib](LESSON:atrial-fibrillation-nclex-rn), and [heart failure](LESSON:heart-failure-nursing-priorities-hy) when post-MI complications appear in the stem."
             },
             {
               "id": "exam_relevance",
               "heading": "Exam relevance",
               "kind": "exam_relevance",
-              "body": "Examiners use **Acute Myocardial Infarction & Troponin** to probe **prioritization**, **monitoring**, and **escalation**. Expect **distractors** that look reasonable but delay assessment, skip unstable clients, or delegate RN-level judgment inappropriately.\n\nNCLEX items on **Acute Myocardial Infarction & Troponin** reward linking **assessment → risk → first action**, not isolated facts. Boards often use **“first”**, **“priority”**, or **“most important”** language—eliminate options that skip assessment, delay escalation, or exceed scope."
+              "body": "Boards test **MONA-era thinking updated to modern ACS care**: oxygen **when hypoxemic**, **aspirin** per protocol, **nitroglycerin** when appropriate and not contraindicated, **morphine alternatives** for pain when ordered, and **rapid cath lab activation** for STEMI patterns. Troponin timing questions reward knowing **serial testing**—a single negative early value **does not** clear ACS if suspicion remains high.\n\nTraps include **delaying the ECG** for “comfort first,” **routine NSAIDs** that worsen cardiac risk, or **ambulating** a client with unstable vitals to the bathroom."
             },
             {
               "id": "core_concept",
               "heading": "Core concept",
               "kind": "core_concept",
-              "body": "Frame **Acute Myocardial Infarction & Troponin** within **Cardiovascular**: link expected **assessment** findings to **interventions** and the **monitoring** that proves the plan is working. Difficulty default for this lesson: **3**; priority: **high_yield**.\n\n**Reasoning layer.** Tie abnormal assessment data to the most likely complication, then choose nursing actions that **buy time safely** while orders are clarified. Prioritize **airway, perfusion, bleeding, infection, and potassium** as reversible threats when stems feel noisy."
+              "body": "- **STEMI vs NSTEMI framing**: ST elevation → emergent reperfusion pathway when shown; NSTEMI/unstable angina → risk stratification and timed management—follow the stem’s clues.\n- **Troponin**: rises over hours; **serial draws** may be ordered—pair with **symptoms** and **ECG**.\n- **Complications to monitor**: **VF/VT**, **brady blocks**, **acute MR** murmur, **pericarditis** pain, **reinfarction**, **cardiogenic shock** (hypotension, cool clammy skin, oliguria).\n- **Nursing actions**: continuous **telemetry**, **pain reassessment**, **bleeding checks** post-PCI, **groin/radial site** monitoring, **renal protection** themes around contrast, and **patient education** on new antiplatelet regimens when applicable."
             },
             {
               "id": "clinical_scenario",
               "heading": "Clinical scenario",
               "kind": "clinical_scenario",
-              "body": "Picture multiple clients or tasks: pick the option that **reduces harm fastest** for the client whose status is **deteriorating** or **high risk** if unattended. When the stem is stable, still choose the action that **closes the data gap** before routines.\n\n**Patient vignette.** A hospitalized adult client with acute coronary syndrome shows a change in symptoms during your shift. **Your first nursing moves** are: reassess vitals and focused findings, review relevant labs and orders, protect airway and perfusion, and **notify the provider** when criteria for urgent escalation are met. NCLEX rewards **safe sequencing**—choose assessment and escalation before comfort-only measures when risk is rising."
+              "body": "**Patient vignette.** A 59-year-old client reports **crushing substernal pressure** radiating to the **left arm**, diaphoretic, **HR 104**, BP **160/92**. First troponin is **borderline** but **ST depressions** appear in lateral leads.\n\n**Fork:** Treat as **ACS** until cleared—**continuous monitoring**, **notify provider**, **prepare for serial troponins and repeat ECG**, **avoid solo ambulation**, and follow **oxygen** orders for SpO₂. Choose **assessment + activation** over discharge instructions or routine meals."
             },
             {
               "id": "takeaways",
               "heading": "Takeaways",
               "kind": "takeaways",
-              "body": "- Tie **vitals + labs + story** before comfort measures or discharge teaching.\n- Eliminate answers that **skip assessment** or **delay escalation** when data show risk.\n- Pair this page with **topic slug `cardiovascular`** in the hub and timed question blocks.\n\n**Related topics:** `heart-failure-nursing-priorities`, `shock-recognition-fluids`, `hypertensive-crisis-vs-urgency`, `atrial-fibrillation-rate-control`, `endocarditis-blood-cultures` — use the question bank and lesson hub filters to cluster practice.\n\n**Takeaway drill for Acute Myocardial Infarction & Troponin:** Before you pick an answer, name the **life threat** in the stem, the **two objective findings** you would recheck first, and the **single escalation** that matches policy. That mirrors **clinical judgment** scoring on the exam.\n\n**Related study links:** [related lesson](LESSON:fluid-balance-acute-care) · [related lesson](LESSON:cardiovascular-prioritization) · [related lesson](LESSON:ca-rn-pulmonary-embolism) · [pathway lesson hub](/canada/rn/nclex-rn/lessons)"
+              "body": "- **ECG + troponin + symptoms** are interpreted together—never one lab line in isolation.\n- **Reperfusion delays** are a safety event—communicate clearly with concise times and findings.\n- **Synthesis:** When two answers both sound “cardiac,” choose the one that **secures monitoring**, **obtains/communicates ECG changes**, and **activates the correct pathway** (PCI vs lysis vs medical management per stem) rather than the one that prioritizes paperwork or routine comfort.\n\n**Related:** [endocarditis cultures](LESSON:endocarditis-blood-cultures) · [pericarditis clues](LESSON:pericarditis-ecg-clues) · [CABG complications](LESSON:cabg-and-postoperative-cabg-complications-nclex-rn).\n\n**Hubs:** [Canada RN](/canada/rn/nclex-rn/lessons) · [US RN](/us/rn/nclex-rn/lessons)."
             }
           ]
         },
@@ -4093,31 +4093,31 @@
               "id": "clinical_meaning",
               "heading": "Clinical meaning",
               "kind": "clinical_meaning",
-              "body": "**Shock Recognition & Fluids** (Cardiovascular) is a clinical judgment topic: connect **assessment data** to **risk**, choose the **first safe nursing action**, and know when to **delegate** versus **retain** responsibility. Canadian items may use **metric** units and provincial wording; prioritization logic matches NCLEX-RN.\n\n**Pathway context (RN, Canada).** This lesson supports **Shock Recognition & Fluids** within your exam preparation. Canadian practice contexts (SI labs where shown, interprofessional norms). Continue with related lessons from the [pathway lesson hub](/canada/rn/nclex-rn/lessons)."
+              "body": "**Shock** is **inadequate tissue perfusion**—not always hypotension early. NCLEX-RN groups **hypovolemic**, **distributive** (septic, anaphylactic, neurogenic), **cardiogenic**, and **obstructive** (PE, tamponade, tension pneumothorax) patterns. **Fluids** help **select hypovolemic** and some **septic** presentations but can **harm** cardiogenic/obstructive shock if given blindly.\n\nYour role is **trend recognition**: **mental status**, **skin**, **urine output**, **lactate themes** when shown, **BP/HR patterns**, and **oxygenation**—then **follow orders** for fluid type/rate and **escalate** when responses are inadequate.\n\nPair with [heart failure](LESSON:heart-failure-nursing-priorities-hy) (fluid caution), [PE](LESSON:pulmonary-embolism-nclex-rn), and [tamponade](LESSON:cardiac-tamponade-nclex-rn) when obstructive shock is in the differential."
             },
             {
               "id": "exam_relevance",
               "heading": "Exam relevance",
               "kind": "exam_relevance",
-              "body": "Examiners use **Shock Recognition & Fluids** to probe **prioritization**, **monitoring**, and **escalation**. Expect **distractors** that look reasonable but delay assessment, skip unstable clients, or delegate RN-level judgment inappropriately.\n\nNCLEX items on **Shock Recognition & Fluids** reward linking **assessment → risk → first action**, not isolated facts. Boards often use **“first”**, **“priority”**, or **“most important”** language—eliminate options that skip assessment, delay escalation, or exceed scope."
+              "body": "Items reward **identifying shock category clues** and **first-line stabilization**: airway, **oxygen**, **IV access**, **monitoring**, **labs/blood cultures** in sepsis themes, **epinephrine** in anaphylaxis per orders, and **avoiding fluid overload** when lungs fill or JVD rises with fluids.\n\n“Large volume bolus” is only correct when **hemorrhage** or **septic hypovolemia** is supported—not for every hypotensive client."
             },
             {
               "id": "core_concept",
               "heading": "Core concept",
               "kind": "core_concept",
-              "body": "Frame **Shock Recognition & Fluids** within **Cardiovascular**: link expected **assessment** findings to **interventions** and the **monitoring** that proves the plan is working. Difficulty default for this lesson: **3**; priority: **high_yield**.\n\n**Reasoning layer.** Tie abnormal assessment data to the most likely complication, then choose nursing actions that **buy time safely** while orders are clarified. Prioritize **airway, perfusion, bleeding, infection, and potassium** as reversible threats when stems feel noisy."
+              "body": "- **Early sepsis**: fever/hypothermia, tachycardia, tachypnea, glucose elevation, altered mentation—activate sepsis bundles per facility.\n- **Anaphylaxis**: airway swelling, urticaria, bronchospasm—**epinephrine IM** is first-line in teaching; position supine with legs elevated unless breathing dictates otherwise.\n- **Neurogenic shock**: bradycardia + warm skin after spinal injury themes—distinct from spinal shock management nuances in specialty items.\n- **Monitoring**: **MAP goals** when ordered, **urine output**, **repeat lactate** themes, **antibiotic timing** in sepsis.\n- **Fluids**: isotonic crystalloids common in sepsis; **reassess lung sounds and perfusion** after boluses."
             },
             {
               "id": "clinical_scenario",
               "heading": "Clinical scenario",
               "kind": "clinical_scenario",
-              "body": "Picture multiple clients or tasks: pick the option that **reduces harm fastest** for the client whose status is **deteriorating** or **high risk** if unattended. When the stem is stable, still choose the action that **closes the data gap** before routines.\n\n**Patient vignette.** A hospitalized adult client with hypoperfusion and shock shows a change in symptoms during your shift. **Your first nursing moves** are: reassess vitals and focused findings, review relevant labs and orders, protect airway and perfusion, and **notify the provider** when criteria for urgent escalation are met. NCLEX rewards **safe sequencing**—choose assessment and escalation before comfort-only measures when risk is rising."
+              "body": "**Patient vignette.** After a motor vehicle collision, a 41-year-old client is **tachycardic**, **cool and mottled**, with **MAP 58** despite **two crystalloid boluses**. Lungs are clear, but **neck veins are flat** and **FAST** imaging is pending.\n\n**Fork:** This suggests **ongoing hemorrhagic shock**—escalate to **massive transfusion protocol themes**, **prepare blood products per order**, **keep warming measures**, and **avoid** “just one more liter” without surgical consultation when bleeding is uncontrolled. Communication and **repeat assessments** beat isolated tasks."
             },
             {
               "id": "takeaways",
               "heading": "Takeaways",
               "kind": "takeaways",
-              "body": "- Tie **vitals + labs + story** before comfort measures or discharge teaching.\n- Eliminate answers that **skip assessment** or **delay escalation** when data show risk.\n- Pair this page with **topic slug `cardiovascular`** in the hub and timed question blocks.\n\n**Related topics:** `heart-failure-nursing-priorities`, `acute-myocardial-infarction-troponin`, `hypertensive-crisis-vs-urgency`, `atrial-fibrillation-rate-control`, `endocarditis-blood-cultures` — use the question bank and lesson hub filters to cluster practice.\n\n**Takeaway drill for Shock Recognition & Fluids:** Before you pick an answer, name the **life threat** in the stem, the **two objective findings** you would recheck first, and the **single escalation** that matches policy. That mirrors **clinical judgment** scoring on the exam.\n\n**Related study links:** [related lesson](LESSON:fluid-balance-acute-care) · [related lesson](LESSON:cardiovascular-prioritization) · [related lesson](LESSON:ca-rn-pulmonary-embolism) · [pathway lesson hub](/canada/rn/nclex-rn/lessons)"
+              "body": "- **Shock type** changes fluid safety—**obstructive** and **cardiogenic** patterns punish blind boluses.\n- **Reassess after every intervention**: lungs, perfusion, mentation, urine.\n- **Exam synthesis:** When the stem offers **fluids vs pressors vs procedures**, match the **dominant mechanism** (loss vs maldistribution vs pump failure vs obstruction) before you pick an option that “sounds resuscitative” but widens an existing injury (for example, fluids in **tamponade** or **acute severe HF** without orders).\n\n**Related:** [hypertensive crisis](LESSON:hypertensive-crisis-vs-urgency) · [DVT/PE](LESSON:dvt-pe-nursing-priorities) · [fluid balance](LESSON:fluid-balance-acute-care)."
             }
           ]
         },
@@ -4135,31 +4135,31 @@
               "id": "clinical_meaning",
               "heading": "Clinical meaning",
               "kind": "clinical_meaning",
-              "body": "**Hypertensive Crisis vs Urgency** (Cardiovascular) is a clinical judgment topic: connect **assessment data** to **risk**, choose the **first safe nursing action**, and know when to **delegate** versus **retain** responsibility. Canadian items may use **metric** units and provincial wording; prioritization logic matches NCLEX-RN.\n\n**Pathway context (RN, Canada).** This lesson supports **Hypertensive Crisis vs Urgency** within your exam preparation. Canadian practice contexts (SI labs where shown, interprofessional norms). Continue with related lessons from the [pathway lesson hub](/canada/rn/nclex-rn/lessons)."
+              "body": "**Hypertensive emergency (crisis)** implies **acute end-organ damage** from severe hypertension—examples include **acute pulmonary edema**, **aortic dissection**, **acute kidney injury**, **eclampsia**, **ICH**, or **ACS** with BP extremes. **Hypertensive urgency** is severely elevated BP **without** acute target-organ injury—management is **oral titration** and monitoring, not necessarily ICU drips.\n\nNCLEX-RN tests whether you recognize **red-flag symptoms** that demand **controlled rapid lowering** under orders versus **gradual reduction** over hours–days for urgency.\n\nLink to [ACS](LESSON:acute-coronary-syndrome-nclex-rn) and [HF](LESSON:heart-failure-nursing-priorities-hy) when the stem mixes organ injury; neuro deficits may also pair with [acute MI & troponin](LESSON:acute-myocardial-infarction-troponin) when chest pain coexists."
             },
             {
               "id": "exam_relevance",
               "heading": "Exam relevance",
               "kind": "exam_relevance",
-              "body": "Examiners use **Hypertensive Crisis vs Urgency** to probe **prioritization**, **monitoring**, and **escalation**. Expect **distractors** that look reasonable but delay assessment, skip unstable clients, or delegate RN-level judgment inappropriately.\n\nNCLEX items on **Hypertensive Crisis vs Urgency** reward linking **assessment → risk → first action**, not isolated facts. Boards often use **“first”**, **“priority”**, or **“most important”** language—eliminate options that skip assessment, delay escalation, or exceed scope."
+              "body": "Examiners punish **dropping BP too fast** in ischemic stroke contexts without a protocol window and **normalizing BP instantly** in every urgency vignette. They reward **assessment first**: neuro checks, chest pain evaluation, **vision changes**, **creatinine trends**, **fetal status** in pregnancy when shown.\n\nMedication items may include **nitroprusside/nicardipine/labetalol** themes as **provider-managed** infusions—your role is **monitoring**, **line safety**, and **reporting adverse trends**."
             },
             {
               "id": "core_concept",
               "heading": "Core concept",
               "kind": "core_concept",
-              "body": "Frame **Hypertensive Crisis vs Urgency** within **Cardiovascular**: link expected **assessment** findings to **interventions** and the **monitoring** that proves the plan is working. Difficulty default for this lesson: **3**; priority: **high_yield**.\n\n**Reasoning layer.** Tie abnormal assessment data to the most likely complication, then choose nursing actions that **buy time safely** while orders are clarified. Prioritize **airway, perfusion, bleeding, infection, and potassium** as reversible threats when stems feel noisy."
+              "body": "- **Emergency signs**: acute pulmonary edema with hypoxia, neurologic deficits, tearing chest pain radiating to the back (dissection suspicion), acute kidney injury with hypertensive retinopathy themes.\n- **Urgency**: very high BP with **mild headache** but **no** end-organ findings—oral meds + follow-up.\n- **Nursing monitoring**: **q5–15 min** vitals during titration when ordered, **continuous telemetry**, **strict I&O**, **neuro checks**, **fetal monitoring** in pregnancy when applicable.\n- **Patient education**: medication adherence, home BP logs, sodium intake—after stabilization."
             },
             {
               "id": "clinical_scenario",
               "heading": "Clinical scenario",
               "kind": "clinical_scenario",
-              "body": "Picture multiple clients or tasks: pick the option that **reduces harm fastest** for the client whose status is **deteriorating** or **high risk** if unattended. When the stem is stable, still choose the action that **closes the data gap** before routines.\n\n**Patient vignette.** A hospitalized adult client with the primary problem in the stem shows a change in symptoms during your shift. **Your first nursing moves** are: reassess vitals and focused findings, review relevant labs and orders, protect airway and perfusion, and **notify the provider** when criteria for urgent escalation are met. NCLEX rewards **safe sequencing**—choose assessment and escalation before comfort-only measures when risk is rising."
+              "body": "**Patient vignette.** A 48-year-old client presents with **BP 220/130**, **thunderclap headache**, **neck stiffness**, and **new left-sided weakness**.\n\n**Fork:** This is **neurovascular emergency** until proven otherwise—**activate stroke protocol themes**, **notify provider immediately**, **prepare for imaging**, and **avoid** unsupervised ambulation or **eating** before airway assessment. BP management follows **stroke pathway rules** in the stem—do not apply generic “lower fast always.”"
             },
             {
               "id": "takeaways",
               "heading": "Takeaways",
               "kind": "takeaways",
-              "body": "- Tie **vitals + labs + story** before comfort measures or discharge teaching.\n- Eliminate answers that **skip assessment** or **delay escalation** when data show risk.\n- Pair this page with **topic slug `cardiovascular`** in the hub and timed question blocks.\n\n**Related topics:** `heart-failure-nursing-priorities`, `acute-myocardial-infarction-troponin`, `shock-recognition-fluids`, `atrial-fibrillation-rate-control`, `endocarditis-blood-cultures` — use the question bank and lesson hub filters to cluster practice.\n\n**Takeaway drill for Hypertensive Crisis vs Urgency:** Before you pick an answer, name the **life threat** in the stem, the **two objective findings** you would recheck first, and the **single escalation** that matches policy. That mirrors **clinical judgment** scoring on the exam.\n\n**Related study links:** [related lesson](LESSON:fluid-balance-acute-care) · [related lesson](LESSON:cardiovascular-prioritization) · [related lesson](LESSON:ca-rn-pulmonary-embolism) · [pathway lesson hub](/canada/rn/nclex-rn/lessons)"
+              "body": "- **Organ injury** defines emergency—not the number alone.\n- **Gradual vs rapid** lowering is diagnosis-dependent—follow the vignette.\n- **Synthesis:** Build a quick **organ scan** from the stem—**neuro** (focal deficits, headache), **pulmonary** (crackles, hypoxia), **renal** (oliguria, creatinine), **pregnancy** (fetal status), **vascular** (tearing pain)—because each changes the acceptable pace of BP reduction and the monitoring bundle you prioritize.\n\n**Related:** [AFib](LESSON:atrial-fibrillation-rate-control) · [endocarditis](LESSON:endocarditis-blood-cultures) · [renal case studies in hub](/canada/rn/nclex-rn/lessons)."
             }
           ]
         },
@@ -8235,25 +8235,25 @@
               "id": "intro",
               "heading": "Introduction",
               "kind": "intro",
-              "body": "**Cardiac tamponade** is a life-threatening compression of the heart from pericardial fluid accumulation. NCLEX-RN tests **early recognition**, escalation timing, and positioning while awaiting pericardiocentesis."
+              "body": "**Cardiac tamponade** is impaired ventricular filling because fluid (blood, serous fluid, pus, or clots) accumulates in the pericardial space faster than the pericardium can stretch. Pressure rises around the heart, **equalizes with atrial pressures**, and stroke volume falls—often abruptly after trauma, post–cardiac surgery bleeding, malignancy, uremia, or procedural complications.\n\nNCLEX-RN rewards **recognizing hemodynamic patterns**, **prioritizing escalation over routines**, and **protecting perfusion** while preparing for provider-ordered rescue (often **pericardiocentesis** or return to the OR). You are not expected to interpret every ultrasound frame, but you must connect **hypotension + distended neck veins + muffled heart sounds** (when present) with **time-sensitive notification** and **continuous monitoring**.\n\nPair this lesson with [acute coronary syndrome](LESSON:acute-coronary-syndrome-nclex-rn) for chest-pain overlap, [CABG complications](LESSON:cabg-and-postoperative-cabg-complications-nclex-rn) for mediastinal bleeding context, and [pulmonary embolism](LESSON:pulmonary-embolism-nclex-rn) when dyspnea could mislead."
             },
             {
               "id": "core",
               "heading": "Core concepts",
               "kind": "core",
-              "body": "- **Beck's triad**: hypotension + JVD + muffled heart sounds.\n- **Pulsus paradoxus**: SBP drops > 10 mmHg during inspiration (measured with sphygmomanometer).\n- **ECG**: electrical alternans (QRS height alternates with each beat).\n- **Intervention**: pericardiocentesis (aspiration of pericardial fluid); prepare at bedside.\n- **Position**: upright and leaning forward improves venous return."
+              "body": "- **Pathophysiology**: rising intrapericardial pressure collapses thin-walled chambers first; **diastolic filling** drops, then cardiac output falls—classic teaching links **obstructive shock** physiology.\n- **Beck triad** (hypotension, JVD, muffled heart sounds) is **supportive** but not always complete—especially if assessments are rushed or sounds are hard to hear in noisy units.\n- **Pulsus paradoxus** (exaggerated inspiratory drop in systolic BP) reflects ventricular interdependence; measure carefully when ordered and report abnormal swings.\n- **Electrical alternans** on ECG (beat-to-beat QRS amplitude change) suggests a large effusion with swinging heart—helpful when shown, but **do not delay escalation** for a missing ECG finding.\n- **Mediastinal/chest tube trends** matter after sternotomy: sudden **drop in drainage** with new hypotension can signal clot obstruction rather than “less bleeding.”\n- **Nursing priorities**: frequent **vitals**, **SpO₂**, **EKG/rhythm**, **paired neuro perfusion checks**, **IV access readiness**, **typed-and-crossed blood availability per protocol**, calm **positioning** (often **high Fowler’s** if tolerated), and **clear SBAR** to the provider and rapid-response team when indicated."
             },
             {
               "id": "clinical_application",
               "heading": "Clinical application",
               "kind": "clinical_application",
-              "body": "After cardiac surgery or trauma, a client becomes hypotensive with muffled heart sounds and neck vein distension. **First action**: notify provider and prepare emergency pericardiocentesis kit. Position client upright. Do not delay for ECG if Beck's triad is present."
+              "body": "**Patient vignette.** A 64-year-old client is post–CABG day 1 with a mediastinal tube. Over 30 minutes they become **anxious**, **tachycardic**, **hypotensive**, and **cool and clammy**. You notice **rising JVD** at 30° and **muffled** heart tones compared with earlier rounds. SpO₂ is borderline despite oxygen.\n\n**Fork:** This pattern is **obstructive shock until proven otherwise**—not “anxiety,” not a routine fluid bolus without assessment, and not charting alone. Your sequence is **assess ABC + perfusion**, **call for help**, **notify the surgeon/cardiologist per policy**, **prepare for emergent bedside echo or pericardiocentesis**, and **document objective trends** (vitals, drainage, mentation). Avoid meds that collapse preload when tamponade is suspected unless ordered after evaluation."
             },
             {
               "id": "exam_tips",
               "heading": "Exam tips",
               "kind": "exam_tips",
-              "body": "- **Three triad signs together** = tamponade; if only two are present, reassess.\n- **Do not** select diuresis — it worsens hypotension by reducing preload further.\n- **Post-procedure**: reassess vitals and JVD; fluid can re-accumulate."
+              "body": "Examiners love tamponade questions that hide behind **routine tasks**: finishing paperwork, delaying provider contact, or giving **diuretics** for “fluid overload” when the problem is **pericardial constraint** and **preload dependence**. Another trap is choosing **aggressive fluid** without ruling out **tension physiology** or following orders—follow the stem’s hemodynamic story.\n\nBoards also test **postoperative bleeding** pathways: a sudden **cessation of chest tube output** with instability can be **clot obstruction**, not improvement—communicate early. **Takeaways:** tie **neck veins + BP + heart sounds + procedure context** into one working diagnosis; pick **escalation + monitoring** over isolated comfort measures; rehearse **SBAR** with objective numbers. Before you answer a tamponade-style item, name whether the client is **preload dependent**, whether **mediastinal drainage** changed, and what **one escalation** you would request first—boards reward that discipline over single tricks like memorizing Beck triad alone. **Related lessons:** [pericarditis ECG clues](LESSON:pericarditis-ecg-clues) · [shock recognition](LESSON:shock-recognition-fluids) · [heart failure priorities](LESSON:heart-failure-nursing-priorities-hy) · [pathway hub](/canada/rn/nclex-rn/lessons)."
             }
           ],
           "audienceTiers": [
@@ -8707,25 +8707,25 @@
               "id": "intro",
               "heading": "Introduction",
               "kind": "intro",
-              "body": "The **phlebostatic axis** is the anatomical landmark used to zero and level invasive hemodynamic monitoring lines (arterial lines, CVP, PA catheter). NCLEX-RN tests **correct positioning of the transducer**, interpreting CVP/PAWP, and troubleshooting damped waveforms."
+              "body": "The **phlebostatic axis** is the reference plane used to **level and zero** invasive hemodynamic transducers (arterial lines, central venous pressure, pulmonary artery catheters) so numeric readings reflect **intravascular pressure** rather than a measurement artifact from a transducer that is too high or too low.\n\nFor NCLEX-RN, expect questions on **where to place the transducer**, **when to re-zero after repositioning**, and how **false highs/lows** change management decisions (fluids, vasopressors, diuretics). You must protect **consistency**: the same landmark for leveling across serial readings, especially after **HOB changes**, **proning**, or **transport**.\n\nConnect hemodynamic monitoring to [shock recognition](LESSON:shock-recognition-fluids), [heart failure priorities](LESSON:heart-failure-nursing-priorities-hy), and [pulmonary embolism](LESSON:pulmonary-embolism-nclex-rn) when mixed shock pictures appear."
             },
             {
               "id": "core",
               "heading": "Core concepts",
               "kind": "core",
-              "body": "- **Phlebostatic axis**: intersection of the 4th intercostal space and midaxillary line — level of the right atrium.\n- **Zeroing**: opening transducer to air at the phlebostatic axis level; eliminates atmospheric pressure reading.\n- **CVP normal**: 2–8 mmHg; elevated = fluid overload or right HF; low = hypovolemia.\n- **PAWP (wedge)**: 8–12 mmHg; elevated = left HF; low = hypovolemia.\n- **Damped waveform**: clot, kink, air — irrigate per protocol; check connections.\n- **Position changes**: re-level transducer every time the HOB angle changes."
+              "body": "- **Landmark (classic teaching)**: the phlebostatic axis is commonly defined at the **fourth intercostal space, mid-axillary line**—approximating **right atrial level** in supine adults; follow unit policy when a different reference is specified.\n- **Zeroing** opens the transducer to atmospheric pressure at the reference height so the monitor reads **relative to the chosen axis**, not the floor or the mattress.\n- **Transducer too low** versus the heart → falsely **high** pressures; **too high** → falsely **low** pressures—both can mislead fluid and drug decisions.\n- **Re-level and re-zero** after meaningful **position changes** (HOB, reverse Trendelenburg, turning) before treating small CVP/PAOP swings as “real” changes.\n- **Waveform quality**: **underdamped** (overshoot) vs **overdamped** (rounded, low amplitude) signals—check for **air**, **clots**, **loose connections**, **kinks**, and **fast-flush** tests per policy and with qualified colleagues.\n- **Nursing integration**: label lines, maintain **sterile connections**, time-stamp interventions, and **report trends** with the client position documented."
             },
             {
               "id": "clinical_application",
               "heading": "Clinical application",
               "kind": "clinical_application",
-              "body": "Client's CVP reads 2 mmHg after repositioning from flat to 30° HOB. Before treating for hypovolemia: **re-level and re-zero the transducer at the new position**. Documenting waveform findings without correcting for position is a common error."
+              "body": "**Patient vignette.** A 70-year-old client with a **PA catheter** has the head of bed raised from **flat to 45°** for breathing comfort. Their **PAOP** suddenly looks “better,” but urine output falls and blood pressure drifts down.\n\n**Fork:** Before charting “improved filling pressures,” **re-level the transducer** to the phlebostatic reference at the new torso position and confirm the waveform. A falsely low wedge from **height error** can prompt **inappropriate diuresis** or **fluid restriction** when the client actually needs different therapy. Pair numbers with **exam** (lung sounds, perfusion, lactate trends if available) and **notify** the provider with the **measurement method** included."
             },
             {
               "id": "exam_tips",
               "heading": "Exam tips",
               "kind": "exam_tips",
-              "body": "- **Transducer too low** → falsely HIGH reading; **too high** → falsely LOW reading.\n- **Re-zero at every position change** is the correct answer when readings seem inconsistent.\n- NCLEX may ask about the anatomical landmark by description — know it is 4th ICS midaxillary."
+              "body": "Classic items ask: “readings are inconsistent after repositioning—what should the nurse do first?” The defensible answer is **re-level/re-zero** per protocol, not bolus fluids blindly or silence alarms. Another trap is choosing **routine bathing** while **damped waveforms** suggest **line failure**—fix **measurement integrity** first.\n\n**Takeaways:** memorize the **landmark** as a safety anchor; narrate **position + transducer height** whenever you call a provider about invasive numbers; avoid treating a **single snapshot** without trend context. **Related lessons:** [ABG basics](LESSON:abg-interpretation-basics-hy) · [ARDS ventilation basics](LESSON:ards-ventilation-basics) · [fluid balance acute care](LESSON:fluid-balance-acute-care) · [US RN hub](/us/rn/nclex-rn/lessons)."
             }
           ],
           "audienceTiers": [
@@ -8766,25 +8766,25 @@
               "id": "intro",
               "heading": "Introduction",
               "kind": "intro",
-              "body": "**Pulmonary embolism (PE)** blocks pulmonary arterial flow, causing ventilation-perfusion mismatch. This extended lesson covers **hemodynamically unstable PE** escalation, thrombolytic criteria, IVC filter indications, and chronic anticoagulation management for NCLEX-RN."
+              "body": "**Pulmonary embolism (PE)** is obstruction of pulmonary arterial flow—most often by **thrombus** from **deep vein thrombosis**—producing **V/Q mismatch**, **hypoxemia**, **tachycardia**, and sometimes **right ventricular strain** or **hemodynamic collapse**. NCLEX-RN tests whether you connect **risk** (immobility, surgery, estrogen, cancer, prior VTE) with **priority actions**: **oxygen**, **monitoring**, **timely diagnostics**, **anticoagulation safety**, and **bleeding precautions**.\n\nThis lesson complements the deeper **US RN pulmonary embolism** article where present; here the focus is **exam-style forks** and **nursing surveillance** without independent prescriber decisions. Use [DVT/PE priorities](LESSON:dvt-pe-nursing-priorities) and [fluid resuscitation judgment](LESSON:shock-recognition-fluids) when instability appears."
             },
             {
               "id": "core",
               "heading": "Core concepts",
               "kind": "core",
-              "body": "- **Unstable PE**: hypotension, syncope, RV failure → IV heparin + consider thrombolytics (alteplase).\n- **Thrombolytics**: indicated for massive PE with hemodynamic compromise; CI = recent surgery, stroke.\n- **IVC filter**: for recurrent PE despite anticoagulation or when anticoagulation is contraindicated.\n- **Heparin drip**: aPTT goal 60–100 s; transition to warfarin (INR 2–3) or NOAC for 3–6 months.\n- **D-dimer**: sensitive but not specific; useful to rule out PE (negative = low probability).\n- **Positioning**: HOB 30–45°; oxygen to maintain SpO₂ > 94%."
+              "body": "- **Presentation spectrum**: sudden **dyspnea**, **pleuritic chest pain**, **tachycardia**, **hypoxia**; massive PE may add **hypotension**, **syncope**, or **RV failure** signs.\n- **Labs/imaging (stem-dependent)**: **D-dimer** in low-risk workups; **CT pulmonary angiography** when suspicion is high; **V/Q scan** in select contraindications; **troponin/BNP** may rise with RV strain—integrate, do not fixate on one value.\n- **Therapy themes**: **anticoagulation** when not contraindicated; **thrombolysis** in selected **unstable** massive PE per protocol; **IVC filter** themes when anticoagulation cannot be used—**provider decisions**.\n- **Nursing care**: **SpO₂** and **work of breathing**, **bleeding checks** on anticoagulants, **fall/head injury precautions**, **early ambulation** when safe, **TED/SCD** per orders, and **teaching** on warning signs after discharge when applicable."
             },
             {
               "id": "clinical_application",
               "heading": "Clinical application",
               "kind": "clinical_application",
-              "body": "Post-surgical client develops sudden pleuritic chest pain, SpO₂ 88%, HR 125, BP 88/60. **Priority actions**: call rapid response, apply high-flow oxygen, position upright, anticipate IV heparin bolus, CT pulmonary angiography. Do not leave the bedside; document time of symptom onset."
+              "body": "**Patient vignette.** A 38-year-old postpartum client on estrogen therapy reports **sudden pleuritic pain** and **dyspnea** after a long car ride. They are **tachycardic** to 120s with **SpO₂ 90%** on room air and unilateral **calf swelling**.\n\n**Fork:** Treat as **high-acuity** until evaluated—**oxygen per order**, **continuous monitoring**, **notify provider**, **anticipate imaging**, and **avoid ambulating** them alone. Do not offer **massage** to the painful calf. Document **risk factors** objectively and reassess frequently for **hypotension** or **altered mentation** suggesting massive PE."
             },
             {
               "id": "exam_tips",
               "heading": "Exam tips",
               "kind": "exam_tips",
-              "body": "- **PE vs. MI**: PE has pleuritic chest pain + respiratory symptoms; MI has crushing pain + diaphoresis.\n- **Do not massage** the suspected source leg (DVT embolization risk).\n- **Thrombolytics for PE** = only massive/submassive with hemodynamic compromise; otherwise anticoagulation alone."
+              "body": "Traps include **minimizing new dyspnea** after immobility, **choosing education** before **stabilizing oxygenation**, or **delegating** the unstable assessment away from the RN. Boards also test **bleeding + anticoagulation**: gum bleeding, **hematuria**, or **head strike** after starting therapy—know escalation pathways.\n\n**Takeaways:** pair **risk + acute cardiopulmonary change** with **urgent evaluation**; teach **leg swelling + breathlessness** as a **single story**; link out to [atrial fibrillation stroke prevention](LESSON:atrial-fibrillation-nclex-rn) when overlapping arrhythmia items appear. **Related:** [ACS](LESSON:acute-coronary-syndrome-nclex-rn) · [COPD oxygen](LESSON:copd-exacerbation-oxygen) · [pathway hub](/canada/rn/nclex-rn/lessons)."
             }
           ],
           "audienceTiers": [
@@ -16816,25 +16816,25 @@
               "id": "intro",
               "heading": "Introduction",
               "kind": "intro",
-              "body": "US NCLEX-RN stems often embed **oxygenation risk** in routine data: subtle SpO₂ changes, accessory muscle use, or altered mental status with lung findings."
+              "body": "**Respiratory assessment and oxygenation** questions on NCLEX-RN Clinical Judgment (including NGN item types) usually embed risk in **routine data**: subtle **SpO₂** drift, new **accessory muscle** use, **inability to speak in full sentences**, **delayed capillary refill** with tachypnea, or **altered mentation** with a normal “comfort” appearance.\n\nYour job is to **sequence safely**: confirm **airway patency**, **adequate breathing effort and rate**, then **circulatory adequacy** before teaching or discharge tasks. Use **objective trends** (work of breathing, SpO₂, mental status, skin color) rather than a single number. Connect oxygen decisions to [COPD CO₂ retention themes](LESSON:copd-exacerbation-oxygen) and [ARDS basics](LESSON:ards-ventilation-basics) when the stem hints at complexity."
             },
             {
               "id": "core",
               "heading": "Core concepts",
               "kind": "core",
-              "body": "Link **airway**, **breathing**, and **circulation** decisions: choose interventions that match the primary threat and the monitoring you will perform next."
+              "body": "- **Inspection**: nasal flaring, retractions, tripod positioning, asymmetric chest rise (pneumothorax/ETT issues when intubated).\n- **Palpation/percussion themes** when tested: tracheal deviation, subcutaneous emphysema clues—pair with provider evaluation.\n- **Auscultation**: diminished breath sounds (foreign body, effusion, pneumothorax), crackles (fluid/edema), wheezes (bronchospasm), **silent chest** in severe asthma—**escalate**.\n- **Oxygen delivery**: nasal cannula vs simple mask vs non-rebreather—match device to **severity** and **repeat SpO₂** after changes; follow **SpO₂ targets** in the stem.\n- **ABG/VBG context** when provided: **hypoxemia**, **hypercapnia**, **acidosis**—integrate with clinical picture; avoid memorizing one “perfect” threshold outside the vignette.\n- **Safety**: verify **orders** for high-flow/modalities you are not trained to titrate independently; **call RT** per protocol when ventilator or advanced airway issues arise."
             },
             {
               "id": "clinical",
               "heading": "Clinical application",
               "kind": "clinical_application",
-              "body": "When answers include teaching or discharge, confirm **stability** and **understanding** first—do not select education if assessment is incomplete."
+              "body": "**Patient vignette.** A 56-year-old client with pneumonia is on **2 L NC** with SpO₂ **94%**. Two hours later they are **tachypneic** to 32, using **accessory muscles**, and only speaking **two-word sentences**. BP is stable but they look exhausted.\n\n**Fork:** This is **impending respiratory failure** risk—**not** the time for lengthy teaching. **Raise acuity**: reassess full set of vitals, **increase oxygen per protocol/order**, **notify provider**, prepare for **labs/ABG** and possible **escalation** (HFNC/BiPAP themes when ordered). Choose **assessment + escalation** over “reassure” or “complete discharge paperwork.”"
             },
             {
               "id": "examtips",
               "heading": "Exam tips",
               "kind": "exam_tips",
-              "body": "Use **topic filters** in the question bank for respiratory items, then schedule a **timed mock** to consolidate pacing."
+              "body": "NGN traps reward **to-next-step** thinking: pick **assessment** that **closes the data gap** before **intervention** when instability is evolving; pick **intervention** when assessment is already complete and the threat is immediate (e.g., **severe hypoxia**). Avoid **delegating unstable assessments** to UAP.\n\n**Takeaways:** pair **SpO₂ + work of breathing + mentation**; document **position**, **oxygen device**, and **response to therapy**; use [respiratory infection hubs](LESSON:pneumonia-oxygenation) and [PE clues](LESSON:pulmonary-embolism-clues) when differential diagnosis matters. **Related:** [ABG basics](LESSON:abg-interpretation-basics-hy) · [asthma status](LESSON:asthma-status-asthmaticus) · [US RN lesson hub](/us/rn/nclex-rn/lessons)."
             }
           ]
         },
@@ -20628,31 +20628,31 @@
               "id": "clinical_meaning",
               "heading": "Clinical meaning",
               "kind": "clinical_meaning",
-              "body": "**Heart Failure Nursing Priorities** (Cardiovascular) is a clinical judgment topic: connect **assessment data** to **risk**, choose the **first safe nursing action**, and know when to **delegate** versus **retain** responsibility. US NCLEX-RN items often test **unstable vs stable**, **delegation**, and **first action**."
+              "body": "**Heart failure (HF)** is a syndrome of impaired **cardiac output** and/or **elevated filling pressures**—often framed as **reduced ejection fraction (HFrEF)** or **preserved EF (HFpEF)** on exams. For NCLEX-RN, “HF priorities” means linking **congestion** (lungs, periphery, JVD), **perfusion** (mentation, urine output, cool skin), and **medication effects** (afterload reduction, diuresis, neurohormonal blockade) to **what you assess first** and **what you escalate**.\n\nCanadian stems may show **metric weights** (kg) and **mmol/L labs**; the judgment pattern matches US items—**objective congestion + instability** outranks routine tasks. Use daily weights, strict **I&O**, lung sounds, and orthopnea patterns as **trend tools**, not single snapshots.\n\nConnect HF care to [acute coronary syndrome](LESSON:acute-coronary-syndrome-nclex-rn) and [hypertensive crisis](LESSON:hypertensive-crisis-vs-urgency) when the stem mixes ischemia or BP extremes with congestion.\n\n**NCLEX angle:** Items often stack **comorbidities** (AFib, CKD, COPD) to see whether you still identify **acute congestion** versus chronic baseline findings—compare **new change** against known baselines when the stem provides both."
             },
             {
               "id": "exam_relevance",
               "heading": "Exam relevance",
               "kind": "exam_relevance",
-              "body": "Examiners use **Heart Failure Nursing Priorities** to probe **prioritization**, **monitoring**, and **escalation**. Expect **distractors** that look reasonable but delay assessment, skip unstable clients, or delegate RN-level judgment inappropriately."
+              "body": "Examiners test whether you can **prioritize congestion vs perfusion** problems, recognize **medication toxicity** (digoxin, hypotension from ACE/ARB), and avoid **harm** (IV fluids in obvious fluid overload, NSAIDs that worsen retention). “First action” items often hinge on **assessment completeness**—recheck vitals, **SpO₂**, **lung fields**, **JVD**, and **mental status** before teaching or discharge paperwork.\n\nThey also probe **patient education**: sodium restriction, daily weights, when to call for **rapid weight gain**, **worsening orthopnea**, or **new edema**—but education is **never** the priority when the client is **hypoxic**, **hypotensive**, or **confused** from poor perfusion."
             },
             {
               "id": "core_concept",
               "heading": "Core concept",
               "kind": "core_concept",
-              "body": "Frame **Heart Failure Nursing Priorities** within **Cardiovascular**: link expected **assessment** findings to **interventions** and the **monitoring** that proves the plan is working. Difficulty default for this lesson: **4**; priority: **high_yield**."
+              "body": "- **Congestion signals**: crackles, orthopnea/PND, peripheral edema, JVD, S₃ gallop (when auscultated), hepatojugular reflux themes.\n- **Low-output / perfusion signals**: fatigue, oliguria, cool extremities, narrow pulse pressure, restlessness → decreased mentation.\n- **Core medication classes (high-yield)**: loop diuretics (furosemide), ACE inhibitors/ARBs/ARNI, beta blockers (when stable), aldosterone antagonists, SGLT2 inhibitors in select HF—**administer on time**, monitor **K⁺/Cr**, **BP**, and **renal function** per orders.\n- **Oxygen**: titrate to ordered SpO₂ targets; escalate for respiratory distress.\n- **Nutrition/fluid**: sodium restriction teaching; fluid restriction when ordered—avoid extra IV fluids unless the stem supports hypovolemia.\n- **Devices**: ICD/CRT themes appear as **education and safety**, not nurse programming."
             },
             {
               "id": "clinical_scenario",
               "heading": "Clinical scenario",
               "kind": "clinical_scenario",
-              "body": "Picture multiple clients or tasks: pick the option that **reduces harm fastest** for the client whose status is **deteriorating** or **high risk** if unattended. When the stem is stable, still choose the action that **closes the data gap** before routines."
+              "body": "**Patient vignette.** A 72-year-old client with HFrEF gains **2.5 kg overnight**, develops **bilateral crackles** halfway up, and **SpO₂** falls to **88%** on their usual cannula. BP is **102/68**, HR **110**, and they are **anxious** and unable to lie flat.\n\n**Fork:** This is **acute decompensated HF with hypoxemia**—priority is **oxygen + monitoring + provider notification** with objective data (vitals, weight, lung findings, recent I&O). Do **not** choose “finish breakfast tray” or “ambulate now.” Anticipate **diuretic therapy** and possible **additional diagnostics** (BNP trends if used, CXR themes) per orders. Document **escalation triggers** clearly."
             },
             {
               "id": "takeaways",
               "heading": "Takeaways",
               "kind": "takeaways",
-              "body": "- Tie **vitals + labs + story** before comfort measures or discharge teaching.\n- Eliminate answers that **skip assessment** or **delay escalation** when data show risk.\n- Pair this page with **topic slug `cardiovascular`** in the hub and timed question blocks.\n\n**Related topics:** `heart-failure-nursing-priorities`, `acute-myocardial-infarction-troponin`, `shock-recognition-fluids`, `hypertensive-crisis-vs-urgency`, `atrial-fibrillation-rate-control` — use the question bank and lesson hub filters to cluster practice."
+              "body": "- **Weight + lungs + SpO₂** together beat any single “stable BP” reassurance.\n- **Teach-back** is for stable clients—**rescue** is for escalating congestion/hypoxia.\n- Pair this lesson with [AFib rate control](LESSON:atrial-fibrillation-rate-control) and [DVT/PE priorities](LESSON:dvt-pe-nursing-priorities) when comorbidities drive the stem.\n\n**Synthesis:** Before you select an answer, run a **three-question loop**: Is **perfusion** threatened (mentation, urine, skin)? Is **congestion** worsening (orthopnea, crackles, JVD)? Did a **new drug, IV fluid, or missed dose** plausibly trigger the change? If any “yes,” prioritize **assessment + notification** over mobility, meals, or teaching.\n\n**Related study links:** [shock recognition](LESSON:shock-recognition-fluids) · [pulmonary embolism](LESSON:pulmonary-embolism-nclex-rn) · [pathway hub](/canada/rn/nclex-rn/lessons) · [US hub](/us/rn/nclex-rn/lessons)."
             }
           ]
         },
@@ -20670,31 +20670,31 @@
               "id": "clinical_meaning",
               "heading": "Clinical meaning",
               "kind": "clinical_meaning",
-              "body": "**Acute Myocardial Infarction & Troponin** (Cardiovascular) is a clinical judgment topic: connect **assessment data** to **risk**, choose the **first safe nursing action**, and know when to **delegate** versus **retain** responsibility. US NCLEX-RN items often test **unstable vs stable**, **delegation**, and **first action**."
+              "body": "**Acute myocardial infarction (AMI)** is myocardial necrosis from **acute coronary occlusion** (usually thrombus) or supply–demand mismatch in vulnerable patients. **High-sensitivity troponin** is the biochemical marker of **myocardial injury**—it rises after cellular death and is central to NCLEX-RN “rule in / rule out ACS” reasoning alongside **symptoms** and **ECG**.\n\nNursing responsibility is **time-sensitive assessment**, **12-lead acquisition when ordered**, **monitoring for arrhythmias**, **preparing for reperfusion** (PCI vs thrombolysis per protocol), and **clear communication**—not independent diagnosis, but **never** ignoring evolving **ST changes** or **hemodynamic collapse**.\n\nLink to [acute coronary syndrome lesson](LESSON:acute-coronary-syndrome-nclex-rn), [AFib](LESSON:atrial-fibrillation-nclex-rn), and [heart failure](LESSON:heart-failure-nursing-priorities-hy) when post-MI complications appear in the stem."
             },
             {
               "id": "exam_relevance",
               "heading": "Exam relevance",
               "kind": "exam_relevance",
-              "body": "Examiners use **Acute Myocardial Infarction & Troponin** to probe **prioritization**, **monitoring**, and **escalation**. Expect **distractors** that look reasonable but delay assessment, skip unstable clients, or delegate RN-level judgment inappropriately."
+              "body": "Boards test **MONA-era thinking updated to modern ACS care**: oxygen **when hypoxemic**, **aspirin** per protocol, **nitroglycerin** when appropriate and not contraindicated, **morphine alternatives** for pain when ordered, and **rapid cath lab activation** for STEMI patterns. Troponin timing questions reward knowing **serial testing**—a single negative early value **does not** clear ACS if suspicion remains high.\n\nTraps include **delaying the ECG** for “comfort first,” **routine NSAIDs** that worsen cardiac risk, or **ambulating** a client with unstable vitals to the bathroom."
             },
             {
               "id": "core_concept",
               "heading": "Core concept",
               "kind": "core_concept",
-              "body": "Frame **Acute Myocardial Infarction & Troponin** within **Cardiovascular**: link expected **assessment** findings to **interventions** and the **monitoring** that proves the plan is working. Difficulty default for this lesson: **3**; priority: **high_yield**."
+              "body": "- **STEMI vs NSTEMI framing**: ST elevation → emergent reperfusion pathway when shown; NSTEMI/unstable angina → risk stratification and timed management—follow the stem’s clues.\n- **Troponin**: rises over hours; **serial draws** may be ordered—pair with **symptoms** and **ECG**.\n- **Complications to monitor**: **VF/VT**, **brady blocks**, **acute MR** murmur, **pericarditis** pain, **reinfarction**, **cardiogenic shock** (hypotension, cool clammy skin, oliguria).\n- **Nursing actions**: continuous **telemetry**, **pain reassessment**, **bleeding checks** post-PCI, **groin/radial site** monitoring, **renal protection** themes around contrast, and **patient education** on new antiplatelet regimens when applicable."
             },
             {
               "id": "clinical_scenario",
               "heading": "Clinical scenario",
               "kind": "clinical_scenario",
-              "body": "Picture multiple clients or tasks: pick the option that **reduces harm fastest** for the client whose status is **deteriorating** or **high risk** if unattended. When the stem is stable, still choose the action that **closes the data gap** before routines."
+              "body": "**Patient vignette.** A 59-year-old client reports **crushing substernal pressure** radiating to the **left arm**, diaphoretic, **HR 104**, BP **160/92**. First troponin is **borderline** but **ST depressions** appear in lateral leads.\n\n**Fork:** Treat as **ACS** until cleared—**continuous monitoring**, **notify provider**, **prepare for serial troponins and repeat ECG**, **avoid solo ambulation**, and follow **oxygen** orders for SpO₂. Choose **assessment + activation** over discharge instructions or routine meals."
             },
             {
               "id": "takeaways",
               "heading": "Takeaways",
               "kind": "takeaways",
-              "body": "- Tie **vitals + labs + story** before comfort measures or discharge teaching.\n- Eliminate answers that **skip assessment** or **delay escalation** when data show risk.\n- Pair this page with **topic slug `cardiovascular`** in the hub and timed question blocks.\n\n**Related topics:** `heart-failure-nursing-priorities`, `shock-recognition-fluids`, `hypertensive-crisis-vs-urgency`, `atrial-fibrillation-rate-control`, `endocarditis-blood-cultures` — use the question bank and lesson hub filters to cluster practice."
+              "body": "- **ECG + troponin + symptoms** are interpreted together—never one lab line in isolation.\n- **Reperfusion delays** are a safety event—communicate clearly with concise times and findings.\n- **Synthesis:** When two answers both sound “cardiac,” choose the one that **secures monitoring**, **obtains/communicates ECG changes**, and **activates the correct pathway** (PCI vs lysis vs medical management per stem) rather than the one that prioritizes paperwork or routine comfort.\n\n**Related:** [endocarditis cultures](LESSON:endocarditis-blood-cultures) · [pericarditis clues](LESSON:pericarditis-ecg-clues) · [CABG complications](LESSON:cabg-and-postoperative-cabg-complications-nclex-rn).\n\n**Hubs:** [Canada RN](/canada/rn/nclex-rn/lessons) · [US RN](/us/rn/nclex-rn/lessons)."
             }
           ]
         },
@@ -20712,31 +20712,31 @@
               "id": "clinical_meaning",
               "heading": "Clinical meaning",
               "kind": "clinical_meaning",
-              "body": "**Shock Recognition & Fluids** (Cardiovascular) is a clinical judgment topic: connect **assessment data** to **risk**, choose the **first safe nursing action**, and know when to **delegate** versus **retain** responsibility. US NCLEX-RN items often test **unstable vs stable**, **delegation**, and **first action**."
+              "body": "**Shock** is **inadequate tissue perfusion**—not always hypotension early. NCLEX-RN groups **hypovolemic**, **distributive** (septic, anaphylactic, neurogenic), **cardiogenic**, and **obstructive** (PE, tamponade, tension pneumothorax) patterns. **Fluids** help **select hypovolemic** and some **septic** presentations but can **harm** cardiogenic/obstructive shock if given blindly.\n\nYour role is **trend recognition**: **mental status**, **skin**, **urine output**, **lactate themes** when shown, **BP/HR patterns**, and **oxygenation**—then **follow orders** for fluid type/rate and **escalate** when responses are inadequate.\n\nPair with [heart failure](LESSON:heart-failure-nursing-priorities-hy) (fluid caution), [PE](LESSON:pulmonary-embolism-nclex-rn), and [tamponade](LESSON:cardiac-tamponade-nclex-rn) when obstructive shock is in the differential."
             },
             {
               "id": "exam_relevance",
               "heading": "Exam relevance",
               "kind": "exam_relevance",
-              "body": "Examiners use **Shock Recognition & Fluids** to probe **prioritization**, **monitoring**, and **escalation**. Expect **distractors** that look reasonable but delay assessment, skip unstable clients, or delegate RN-level judgment inappropriately."
+              "body": "Items reward **identifying shock category clues** and **first-line stabilization**: airway, **oxygen**, **IV access**, **monitoring**, **labs/blood cultures** in sepsis themes, **epinephrine** in anaphylaxis per orders, and **avoiding fluid overload** when lungs fill or JVD rises with fluids.\n\n“Large volume bolus” is only correct when **hemorrhage** or **septic hypovolemia** is supported—not for every hypotensive client."
             },
             {
               "id": "core_concept",
               "heading": "Core concept",
               "kind": "core_concept",
-              "body": "Frame **Shock Recognition & Fluids** within **Cardiovascular**: link expected **assessment** findings to **interventions** and the **monitoring** that proves the plan is working. Difficulty default for this lesson: **3**; priority: **high_yield**."
+              "body": "- **Early sepsis**: fever/hypothermia, tachycardia, tachypnea, glucose elevation, altered mentation—activate sepsis bundles per facility.\n- **Anaphylaxis**: airway swelling, urticaria, bronchospasm—**epinephrine IM** is first-line in teaching; position supine with legs elevated unless breathing dictates otherwise.\n- **Neurogenic shock**: bradycardia + warm skin after spinal injury themes—distinct from spinal shock management nuances in specialty items.\n- **Monitoring**: **MAP goals** when ordered, **urine output**, **repeat lactate** themes, **antibiotic timing** in sepsis.\n- **Fluids**: isotonic crystalloids common in sepsis; **reassess lung sounds and perfusion** after boluses."
             },
             {
               "id": "clinical_scenario",
               "heading": "Clinical scenario",
               "kind": "clinical_scenario",
-              "body": "Picture multiple clients or tasks: pick the option that **reduces harm fastest** for the client whose status is **deteriorating** or **high risk** if unattended. When the stem is stable, still choose the action that **closes the data gap** before routines."
+              "body": "**Patient vignette.** After a motor vehicle collision, a 41-year-old client is **tachycardic**, **cool and mottled**, with **MAP 58** despite **two crystalloid boluses**. Lungs are clear, but **neck veins are flat** and **FAST** imaging is pending.\n\n**Fork:** This suggests **ongoing hemorrhagic shock**—escalate to **massive transfusion protocol themes**, **prepare blood products per order**, **keep warming measures**, and **avoid** “just one more liter” without surgical consultation when bleeding is uncontrolled. Communication and **repeat assessments** beat isolated tasks."
             },
             {
               "id": "takeaways",
               "heading": "Takeaways",
               "kind": "takeaways",
-              "body": "- Tie **vitals + labs + story** before comfort measures or discharge teaching.\n- Eliminate answers that **skip assessment** or **delay escalation** when data show risk.\n- Pair this page with **topic slug `cardiovascular`** in the hub and timed question blocks.\n\n**Related topics:** `heart-failure-nursing-priorities`, `acute-myocardial-infarction-troponin`, `hypertensive-crisis-vs-urgency`, `atrial-fibrillation-rate-control`, `endocarditis-blood-cultures` — use the question bank and lesson hub filters to cluster practice."
+              "body": "- **Shock type** changes fluid safety—**obstructive** and **cardiogenic** patterns punish blind boluses.\n- **Reassess after every intervention**: lungs, perfusion, mentation, urine.\n- **Exam synthesis:** When the stem offers **fluids vs pressors vs procedures**, match the **dominant mechanism** (loss vs maldistribution vs pump failure vs obstruction) before you pick an option that “sounds resuscitative” but widens an existing injury (for example, fluids in **tamponade** or **acute severe HF** without orders).\n\n**Related:** [hypertensive crisis](LESSON:hypertensive-crisis-vs-urgency) · [DVT/PE](LESSON:dvt-pe-nursing-priorities) · [fluid balance](LESSON:fluid-balance-acute-care)."
             }
           ]
         },
@@ -20754,31 +20754,31 @@
               "id": "clinical_meaning",
               "heading": "Clinical meaning",
               "kind": "clinical_meaning",
-              "body": "**Hypertensive Crisis vs Urgency** (Cardiovascular) is a clinical judgment topic: connect **assessment data** to **risk**, choose the **first safe nursing action**, and know when to **delegate** versus **retain** responsibility. US NCLEX-RN items often test **unstable vs stable**, **delegation**, and **first action**."
+              "body": "**Hypertensive emergency (crisis)** implies **acute end-organ damage** from severe hypertension—examples include **acute pulmonary edema**, **aortic dissection**, **acute kidney injury**, **eclampsia**, **ICH**, or **ACS** with BP extremes. **Hypertensive urgency** is severely elevated BP **without** acute target-organ injury—management is **oral titration** and monitoring, not necessarily ICU drips.\n\nNCLEX-RN tests whether you recognize **red-flag symptoms** that demand **controlled rapid lowering** under orders versus **gradual reduction** over hours–days for urgency.\n\nLink to [ACS](LESSON:acute-coronary-syndrome-nclex-rn) and [HF](LESSON:heart-failure-nursing-priorities-hy) when the stem mixes organ injury; neuro deficits may also pair with [acute MI & troponin](LESSON:acute-myocardial-infarction-troponin) when chest pain coexists."
             },
             {
               "id": "exam_relevance",
               "heading": "Exam relevance",
               "kind": "exam_relevance",
-              "body": "Examiners use **Hypertensive Crisis vs Urgency** to probe **prioritization**, **monitoring**, and **escalation**. Expect **distractors** that look reasonable but delay assessment, skip unstable clients, or delegate RN-level judgment inappropriately."
+              "body": "Examiners punish **dropping BP too fast** in ischemic stroke contexts without a protocol window and **normalizing BP instantly** in every urgency vignette. They reward **assessment first**: neuro checks, chest pain evaluation, **vision changes**, **creatinine trends**, **fetal status** in pregnancy when shown.\n\nMedication items may include **nitroprusside/nicardipine/labetalol** themes as **provider-managed** infusions—your role is **monitoring**, **line safety**, and **reporting adverse trends**."
             },
             {
               "id": "core_concept",
               "heading": "Core concept",
               "kind": "core_concept",
-              "body": "Frame **Hypertensive Crisis vs Urgency** within **Cardiovascular**: link expected **assessment** findings to **interventions** and the **monitoring** that proves the plan is working. Difficulty default for this lesson: **3**; priority: **high_yield**."
+              "body": "- **Emergency signs**: acute pulmonary edema with hypoxia, neurologic deficits, tearing chest pain radiating to the back (dissection suspicion), acute kidney injury with hypertensive retinopathy themes.\n- **Urgency**: very high BP with **mild headache** but **no** end-organ findings—oral meds + follow-up.\n- **Nursing monitoring**: **q5–15 min** vitals during titration when ordered, **continuous telemetry**, **strict I&O**, **neuro checks**, **fetal monitoring** in pregnancy when applicable.\n- **Patient education**: medication adherence, home BP logs, sodium intake—after stabilization."
             },
             {
               "id": "clinical_scenario",
               "heading": "Clinical scenario",
               "kind": "clinical_scenario",
-              "body": "Picture multiple clients or tasks: pick the option that **reduces harm fastest** for the client whose status is **deteriorating** or **high risk** if unattended. When the stem is stable, still choose the action that **closes the data gap** before routines."
+              "body": "**Patient vignette.** A 48-year-old client presents with **BP 220/130**, **thunderclap headache**, **neck stiffness**, and **new left-sided weakness**.\n\n**Fork:** This is **neurovascular emergency** until proven otherwise—**activate stroke protocol themes**, **notify provider immediately**, **prepare for imaging**, and **avoid** unsupervised ambulation or **eating** before airway assessment. BP management follows **stroke pathway rules** in the stem—do not apply generic “lower fast always.”"
             },
             {
               "id": "takeaways",
               "heading": "Takeaways",
               "kind": "takeaways",
-              "body": "- Tie **vitals + labs + story** before comfort measures or discharge teaching.\n- Eliminate answers that **skip assessment** or **delay escalation** when data show risk.\n- Pair this page with **topic slug `cardiovascular`** in the hub and timed question blocks.\n\n**Related topics:** `heart-failure-nursing-priorities`, `acute-myocardial-infarction-troponin`, `shock-recognition-fluids`, `atrial-fibrillation-rate-control`, `endocarditis-blood-cultures` — use the question bank and lesson hub filters to cluster practice."
+              "body": "- **Organ injury** defines emergency—not the number alone.\n- **Gradual vs rapid** lowering is diagnosis-dependent—follow the vignette.\n- **Synthesis:** Build a quick **organ scan** from the stem—**neuro** (focal deficits, headache), **pulmonary** (crackles, hypoxia), **renal** (oliguria, creatinine), **pregnancy** (fetal status), **vascular** (tearing pain)—because each changes the acceptable pace of BP reduction and the monitoring bundle you prioritize.\n\n**Related:** [AFib](LESSON:atrial-fibrillation-rate-control) · [endocarditis](LESSON:endocarditis-blood-cultures) · [renal case studies in hub](/canada/rn/nclex-rn/lessons)."
             }
           ]
         },
@@ -24854,25 +24854,25 @@
               "id": "intro",
               "heading": "Introduction",
               "kind": "intro",
-              "body": "**Cardiac tamponade** is a life-threatening compression of the heart from pericardial fluid accumulation. NCLEX-RN tests **early recognition**, escalation timing, and positioning while awaiting pericardiocentesis."
+              "body": "**Cardiac tamponade** is impaired ventricular filling because fluid (blood, serous fluid, pus, or clots) accumulates in the pericardial space faster than the pericardium can stretch. Pressure rises around the heart, **equalizes with atrial pressures**, and stroke volume falls—often abruptly after trauma, post–cardiac surgery bleeding, malignancy, uremia, or procedural complications.\n\nNCLEX-RN rewards **recognizing hemodynamic patterns**, **prioritizing escalation over routines**, and **protecting perfusion** while preparing for provider-ordered rescue (often **pericardiocentesis** or return to the OR). You are not expected to interpret every ultrasound frame, but you must connect **hypotension + distended neck veins + muffled heart sounds** (when present) with **time-sensitive notification** and **continuous monitoring**.\n\nPair this lesson with [acute coronary syndrome](LESSON:acute-coronary-syndrome-nclex-rn) for chest-pain overlap, [CABG complications](LESSON:cabg-and-postoperative-cabg-complications-nclex-rn) for mediastinal bleeding context, and [pulmonary embolism](LESSON:pulmonary-embolism-nclex-rn) when dyspnea could mislead."
             },
             {
               "id": "core",
               "heading": "Core concepts",
               "kind": "core",
-              "body": "- **Beck's triad**: hypotension + JVD + muffled heart sounds.\n- **Pulsus paradoxus**: SBP drops > 10 mmHg during inspiration (measured with sphygmomanometer).\n- **ECG**: electrical alternans (QRS height alternates with each beat).\n- **Intervention**: pericardiocentesis (aspiration of pericardial fluid); prepare at bedside.\n- **Position**: upright and leaning forward improves venous return."
+              "body": "- **Pathophysiology**: rising intrapericardial pressure collapses thin-walled chambers first; **diastolic filling** drops, then cardiac output falls—classic teaching links **obstructive shock** physiology.\n- **Beck triad** (hypotension, JVD, muffled heart sounds) is **supportive** but not always complete—especially if assessments are rushed or sounds are hard to hear in noisy units.\n- **Pulsus paradoxus** (exaggerated inspiratory drop in systolic BP) reflects ventricular interdependence; measure carefully when ordered and report abnormal swings.\n- **Electrical alternans** on ECG (beat-to-beat QRS amplitude change) suggests a large effusion with swinging heart—helpful when shown, but **do not delay escalation** for a missing ECG finding.\n- **Mediastinal/chest tube trends** matter after sternotomy: sudden **drop in drainage** with new hypotension can signal clot obstruction rather than “less bleeding.”\n- **Nursing priorities**: frequent **vitals**, **SpO₂**, **EKG/rhythm**, **paired neuro perfusion checks**, **IV access readiness**, **typed-and-crossed blood availability per protocol**, calm **positioning** (often **high Fowler’s** if tolerated), and **clear SBAR** to the provider and rapid-response team when indicated."
             },
             {
               "id": "clinical_application",
               "heading": "Clinical application",
               "kind": "clinical_application",
-              "body": "After cardiac surgery or trauma, a client becomes hypotensive with muffled heart sounds and neck vein distension. **First action**: notify provider and prepare emergency pericardiocentesis kit. Position client upright. Do not delay for ECG if Beck's triad is present."
+              "body": "**Patient vignette.** A 64-year-old client is post–CABG day 1 with a mediastinal tube. Over 30 minutes they become **anxious**, **tachycardic**, **hypotensive**, and **cool and clammy**. You notice **rising JVD** at 30° and **muffled** heart tones compared with earlier rounds. SpO₂ is borderline despite oxygen.\n\n**Fork:** This pattern is **obstructive shock until proven otherwise**—not “anxiety,” not a routine fluid bolus without assessment, and not charting alone. Your sequence is **assess ABC + perfusion**, **call for help**, **notify the surgeon/cardiologist per policy**, **prepare for emergent bedside echo or pericardiocentesis**, and **document objective trends** (vitals, drainage, mentation). Avoid meds that collapse preload when tamponade is suspected unless ordered after evaluation."
             },
             {
               "id": "exam_tips",
               "heading": "Exam tips",
               "kind": "exam_tips",
-              "body": "- **Three triad signs together** = tamponade; if only two are present, reassess.\n- **Do not** select diuresis — it worsens hypotension by reducing preload further.\n- **Post-procedure**: reassess vitals and JVD; fluid can re-accumulate."
+              "body": "Examiners love tamponade questions that hide behind **routine tasks**: finishing paperwork, delaying provider contact, or giving **diuretics** for “fluid overload” when the problem is **pericardial constraint** and **preload dependence**. Another trap is choosing **aggressive fluid** without ruling out **tension physiology** or following orders—follow the stem’s hemodynamic story.\n\nBoards also test **postoperative bleeding** pathways: a sudden **cessation of chest tube output** with instability can be **clot obstruction**, not improvement—communicate early. **Takeaways:** tie **neck veins + BP + heart sounds + procedure context** into one working diagnosis; pick **escalation + monitoring** over isolated comfort measures; rehearse **SBAR** with objective numbers. Before you answer a tamponade-style item, name whether the client is **preload dependent**, whether **mediastinal drainage** changed, and what **one escalation** you would request first—boards reward that discipline over single tricks like memorizing Beck triad alone. **Related lessons:** [pericarditis ECG clues](LESSON:pericarditis-ecg-clues) · [shock recognition](LESSON:shock-recognition-fluids) · [heart failure priorities](LESSON:heart-failure-nursing-priorities-hy) · [pathway hub](/canada/rn/nclex-rn/lessons)."
             }
           ],
           "audienceTiers": [
@@ -25326,25 +25326,25 @@
               "id": "intro",
               "heading": "Introduction",
               "kind": "intro",
-              "body": "The **phlebostatic axis** is the anatomical landmark used to zero and level invasive hemodynamic monitoring lines (arterial lines, CVP, PA catheter). NCLEX-RN tests **correct positioning of the transducer**, interpreting CVP/PAWP, and troubleshooting damped waveforms."
+              "body": "The **phlebostatic axis** is the reference plane used to **level and zero** invasive hemodynamic transducers (arterial lines, central venous pressure, pulmonary artery catheters) so numeric readings reflect **intravascular pressure** rather than a measurement artifact from a transducer that is too high or too low.\n\nFor NCLEX-RN, expect questions on **where to place the transducer**, **when to re-zero after repositioning**, and how **false highs/lows** change management decisions (fluids, vasopressors, diuretics). You must protect **consistency**: the same landmark for leveling across serial readings, especially after **HOB changes**, **proning**, or **transport**.\n\nConnect hemodynamic monitoring to [shock recognition](LESSON:shock-recognition-fluids), [heart failure priorities](LESSON:heart-failure-nursing-priorities-hy), and [pulmonary embolism](LESSON:pulmonary-embolism-nclex-rn) when mixed shock pictures appear."
             },
             {
               "id": "core",
               "heading": "Core concepts",
               "kind": "core",
-              "body": "- **Phlebostatic axis**: intersection of the 4th intercostal space and midaxillary line — level of the right atrium.\n- **Zeroing**: opening transducer to air at the phlebostatic axis level; eliminates atmospheric pressure reading.\n- **CVP normal**: 2–8 mmHg; elevated = fluid overload or right HF; low = hypovolemia.\n- **PAWP (wedge)**: 8–12 mmHg; elevated = left HF; low = hypovolemia.\n- **Damped waveform**: clot, kink, air — irrigate per protocol; check connections.\n- **Position changes**: re-level transducer every time the HOB angle changes."
+              "body": "- **Landmark (classic teaching)**: the phlebostatic axis is commonly defined at the **fourth intercostal space, mid-axillary line**—approximating **right atrial level** in supine adults; follow unit policy when a different reference is specified.\n- **Zeroing** opens the transducer to atmospheric pressure at the reference height so the monitor reads **relative to the chosen axis**, not the floor or the mattress.\n- **Transducer too low** versus the heart → falsely **high** pressures; **too high** → falsely **low** pressures—both can mislead fluid and drug decisions.\n- **Re-level and re-zero** after meaningful **position changes** (HOB, reverse Trendelenburg, turning) before treating small CVP/PAOP swings as “real” changes.\n- **Waveform quality**: **underdamped** (overshoot) vs **overdamped** (rounded, low amplitude) signals—check for **air**, **clots**, **loose connections**, **kinks**, and **fast-flush** tests per policy and with qualified colleagues.\n- **Nursing integration**: label lines, maintain **sterile connections**, time-stamp interventions, and **report trends** with the client position documented."
             },
             {
               "id": "clinical_application",
               "heading": "Clinical application",
               "kind": "clinical_application",
-              "body": "Client's CVP reads 2 mmHg after repositioning from flat to 30° HOB. Before treating for hypovolemia: **re-level and re-zero the transducer at the new position**. Documenting waveform findings without correcting for position is a common error."
+              "body": "**Patient vignette.** A 70-year-old client with a **PA catheter** has the head of bed raised from **flat to 45°** for breathing comfort. Their **PAOP** suddenly looks “better,” but urine output falls and blood pressure drifts down.\n\n**Fork:** Before charting “improved filling pressures,” **re-level the transducer** to the phlebostatic reference at the new torso position and confirm the waveform. A falsely low wedge from **height error** can prompt **inappropriate diuresis** or **fluid restriction** when the client actually needs different therapy. Pair numbers with **exam** (lung sounds, perfusion, lactate trends if available) and **notify** the provider with the **measurement method** included."
             },
             {
               "id": "exam_tips",
               "heading": "Exam tips",
               "kind": "exam_tips",
-              "body": "- **Transducer too low** → falsely HIGH reading; **too high** → falsely LOW reading.\n- **Re-zero at every position change** is the correct answer when readings seem inconsistent.\n- NCLEX may ask about the anatomical landmark by description — know it is 4th ICS midaxillary."
+              "body": "Classic items ask: “readings are inconsistent after repositioning—what should the nurse do first?” The defensible answer is **re-level/re-zero** per protocol, not bolus fluids blindly or silence alarms. Another trap is choosing **routine bathing** while **damped waveforms** suggest **line failure**—fix **measurement integrity** first.\n\n**Takeaways:** memorize the **landmark** as a safety anchor; narrate **position + transducer height** whenever you call a provider about invasive numbers; avoid treating a **single snapshot** without trend context. **Related lessons:** [ABG basics](LESSON:abg-interpretation-basics-hy) · [ARDS ventilation basics](LESSON:ards-ventilation-basics) · [fluid balance acute care](LESSON:fluid-balance-acute-care) · [US RN hub](/us/rn/nclex-rn/lessons)."
             }
           ],
           "audienceTiers": [
@@ -25385,25 +25385,25 @@
               "id": "intro",
               "heading": "Introduction",
               "kind": "intro",
-              "body": "**Pulmonary embolism (PE)** blocks pulmonary arterial flow, causing ventilation-perfusion mismatch. This extended lesson covers **hemodynamically unstable PE** escalation, thrombolytic criteria, IVC filter indications, and chronic anticoagulation management for NCLEX-RN."
+              "body": "**Pulmonary embolism (PE)** is obstruction of pulmonary arterial flow—most often by **thrombus** from **deep vein thrombosis**—producing **V/Q mismatch**, **hypoxemia**, **tachycardia**, and sometimes **right ventricular strain** or **hemodynamic collapse**. NCLEX-RN tests whether you connect **risk** (immobility, surgery, estrogen, cancer, prior VTE) with **priority actions**: **oxygen**, **monitoring**, **timely diagnostics**, **anticoagulation safety**, and **bleeding precautions**.\n\nThis lesson complements the deeper **US RN pulmonary embolism** article where present; here the focus is **exam-style forks** and **nursing surveillance** without independent prescriber decisions. Use [DVT/PE priorities](LESSON:dvt-pe-nursing-priorities) and [fluid resuscitation judgment](LESSON:shock-recognition-fluids) when instability appears."
             },
             {
               "id": "core",
               "heading": "Core concepts",
               "kind": "core",
-              "body": "- **Unstable PE**: hypotension, syncope, RV failure → IV heparin + consider thrombolytics (alteplase).\n- **Thrombolytics**: indicated for massive PE with hemodynamic compromise; CI = recent surgery, stroke.\n- **IVC filter**: for recurrent PE despite anticoagulation or when anticoagulation is contraindicated.\n- **Heparin drip**: aPTT goal 60–100 s; transition to warfarin (INR 2–3) or NOAC for 3–6 months.\n- **D-dimer**: sensitive but not specific; useful to rule out PE (negative = low probability).\n- **Positioning**: HOB 30–45°; oxygen to maintain SpO₂ > 94%."
+              "body": "- **Presentation spectrum**: sudden **dyspnea**, **pleuritic chest pain**, **tachycardia**, **hypoxia**; massive PE may add **hypotension**, **syncope**, or **RV failure** signs.\n- **Labs/imaging (stem-dependent)**: **D-dimer** in low-risk workups; **CT pulmonary angiography** when suspicion is high; **V/Q scan** in select contraindications; **troponin/BNP** may rise with RV strain—integrate, do not fixate on one value.\n- **Therapy themes**: **anticoagulation** when not contraindicated; **thrombolysis** in selected **unstable** massive PE per protocol; **IVC filter** themes when anticoagulation cannot be used—**provider decisions**.\n- **Nursing care**: **SpO₂** and **work of breathing**, **bleeding checks** on anticoagulants, **fall/head injury precautions**, **early ambulation** when safe, **TED/SCD** per orders, and **teaching** on warning signs after discharge when applicable."
             },
             {
               "id": "clinical_application",
               "heading": "Clinical application",
               "kind": "clinical_application",
-              "body": "Post-surgical client develops sudden pleuritic chest pain, SpO₂ 88%, HR 125, BP 88/60. **Priority actions**: call rapid response, apply high-flow oxygen, position upright, anticipate IV heparin bolus, CT pulmonary angiography. Do not leave the bedside; document time of symptom onset."
+              "body": "**Patient vignette.** A 38-year-old postpartum client on estrogen therapy reports **sudden pleuritic pain** and **dyspnea** after a long car ride. They are **tachycardic** to 120s with **SpO₂ 90%** on room air and unilateral **calf swelling**.\n\n**Fork:** Treat as **high-acuity** until evaluated—**oxygen per order**, **continuous monitoring**, **notify provider**, **anticipate imaging**, and **avoid ambulating** them alone. Do not offer **massage** to the painful calf. Document **risk factors** objectively and reassess frequently for **hypotension** or **altered mentation** suggesting massive PE."
             },
             {
               "id": "exam_tips",
               "heading": "Exam tips",
               "kind": "exam_tips",
-              "body": "- **PE vs. MI**: PE has pleuritic chest pain + respiratory symptoms; MI has crushing pain + diaphoresis.\n- **Do not massage** the suspected source leg (DVT embolization risk).\n- **Thrombolytics for PE** = only massive/submassive with hemodynamic compromise; otherwise anticoagulation alone."
+              "body": "Traps include **minimizing new dyspnea** after immobility, **choosing education** before **stabilizing oxygenation**, or **delegating** the unstable assessment away from the RN. Boards also test **bleeding + anticoagulation**: gum bleeding, **hematuria**, or **head strike** after starting therapy—know escalation pathways.\n\n**Takeaways:** pair **risk + acute cardiopulmonary change** with **urgent evaluation**; teach **leg swelling + breathlessness** as a **single story**; link out to [atrial fibrillation stroke prevention](LESSON:atrial-fibrillation-nclex-rn) when overlapping arrhythmia items appear. **Related:** [ACS](LESSON:acute-coronary-syndrome-nclex-rn) · [COPD oxygen](LESSON:copd-exacerbation-oxygen) · [pathway hub](/canada/rn/nclex-rn/lessons)."
             }
           ],
           "audienceTiers": [
