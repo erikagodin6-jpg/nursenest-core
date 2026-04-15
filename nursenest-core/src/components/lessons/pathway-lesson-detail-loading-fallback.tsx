@@ -7,7 +7,7 @@ import { PathwayLessonDetailHeaderSkeleton } from "@/components/lessons/pathway-
  * `header[data-nn-pathway-id]` as the loaded page (unlike the lessons-hub skeleton used by the old
  * route `loading.tsx`).
  */
-export function PathwayLessonDetailLessonLoadingFallback({ pathway }: { pathway: ExamPathwayDefinition }) {
+export function PathwayLessonDetailPageLoadingFallback({ pathway }: { pathway: ExamPathwayDefinition }) {
   const shellNp = pathway.examFamily === ExamFamily.NP;
   return (
     <div className="mx-auto max-w-6xl px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">

@@ -43,6 +43,22 @@ import { resolveDisplayName } from "@/lib/user/resolve-display-name";
 import { resolveDashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+
+/** Match learner shell: CAT entry for nursing exam tracks; generic exams hub otherwise. */
+function examsNavLabelFromLearnerContext(
+  learnerPath: string | null | undefined,
+  tier: string | null | undefined,
+): "CAT Exams" | "Exams" {
+  const pathway = learnerPath ? getExamPathwayById(learnerPath) : null;
+  if (pathway) {
+    const rt = pathway.roleTrack;
+    if (rt === "rn" || rt === "rpn" || rt === "lpn" || rt === "np") return "CAT Exams";
+  }
+  const u = (tier ?? "").toUpperCase();
+  if (u === "RN" || u === "RPN" || u === "LVN_LPN" || u === "NP") return "CAT Exams";
+  return "Exams";
+}
 
 function retentionPersonalNote(t: LearnerMarketingT, prefs: Awaited<ReturnType<typeof loadLearnerRetentionPreferences>>): string | null {
   if (!prefs) return null;
@@ -69,7 +85,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function LearnerDashboardPage() {
-  const { t } = await getLearnerMarketingBundle();
+  const { t, locale } = await getLearnerMarketingBundle();
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
@@ -277,6 +293,8 @@ export default async function LearnerDashboardPage() {
         <LearnerStudyHome
           crumbs={crumbs}
           t={t}
+          locale={locale}
+          examsNavLabel={examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier)}
           identity={identity}
           heroHeading={userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
           snapshot={premiumSnapshot}

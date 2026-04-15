@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { PathwayLessonDetailLessonLoadingFallback } from "@/components/lessons/pathway-lesson-detail-loading-fallback";
+import { PathwayLessonDetailPageLoadingFallback } from "@/components/lessons/pathway-lesson-detail-loading-fallback";
 import { pathwayLessonPublicDetailPath } from "@/lib/lessons/pathway-lesson-types";
 import { loadPathwayLessonWithLegacySlugRedirect } from "@/lib/lessons/pathway-lesson-detail-redirect";
 import {
@@ -107,7 +107,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   if (!pathway) notFound();
 
   return (
-    <Suspense fallback={<PathwayLessonDetailLessonLoadingFallback pathway={pathway} />}>
+    <Suspense fallback={<PathwayLessonDetailPageLoadingFallback pathway={pathway} />}>
       <PathwayLessonDetailPageBody pathway={pathway} pathname={pathname} lessonSlug={lessonSlug} />
     </Suspense>
   );

@@ -8750,6 +8750,12 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   box-decoration-break: clone;
 }
 
+/* Second chrome row: keeps study links visually anchored like legacy top nav */
+.nn-learner-shell-nav-row {
+  position: relative;
+  z-index: 1;
+}
+
 .nn-dash-hero-shell {
   position: relative;
   overflow: hidden;
@@ -8901,6 +8907,37 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 
 .nn-dash-band {
   scroll-margin-top: 6rem;
+}
+
+/* Hub: Lessons / Practice / Flashcards / CAT — auto-fit grid so chips never collapse to hairline columns */
+.nn-dash-core-shortcuts__list {
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nn-dash-core-shortcuts__link {
+  display: inline-flex;
+  min-height: 2.75rem;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid var(--semantic-border-soft);
+  background: color-mix(in srgb, var(--semantic-panel-cool) 12%, var(--semantic-surface));
+  font-size: 0.8125rem;
+  font-weight: 650;
+  color: var(--semantic-text-primary);
+  text-decoration: none;
+  text-align: center;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.nn-dash-core-shortcuts__link:hover {
+  border-color: color-mix(in srgb, var(--semantic-brand) 32%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
 }
 
 .nn-dash-priority-grid,

@@ -1652,6 +1652,7 @@
   "learner.dashboard.student.quick.cat": "Take CAT exam",
   "learner.dashboard.student.quick.catSub": "Computer-adaptive practice",
   "learner.dashboard.student.quick.resumeHint": "Resume: {{title}}",
+  "learner.studyHome.shortcutsNavLabel": "Study destinations",
   "learner.account.reportCard.metaTitle": "Report card | NurseNest",
   "learner.account.reportCard.title": "Report card",
   "learner.account.reportCard.intro": "A single view of graded practice, practice exams, pathway lesson progress, and topic signals. Sections show “not enough data” when we do not have graded items yet.",

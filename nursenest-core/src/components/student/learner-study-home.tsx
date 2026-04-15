@@ -11,11 +11,10 @@ import { LearnerDashboardCommandCenter } from "@/components/student/learner-dash
 import { LearnerDashboardInsightPanels } from "@/components/student/learner-dashboard-insight-panels";
 import { BenchmarkCard } from "@/components/student/dashboard/benchmark-card";
 import { WeaknessHeatmap, type HeatmapTopic } from "@/components/student/dashboard/weakness-heatmap";
-import { SmartActionsBar } from "@/components/student/dashboard/smart-actions-bar";
+import { LearnerCoreStudyShortcuts } from "@/components/student/learner-core-study-shortcuts";
 import { LearnerAdaptiveFocusCard } from "@/components/student/learner-adaptive-focus-card";
 import { LearnerContinueLearningCard } from "@/components/student/learner-continue-learning-card";
 import { PremiumLearnerHub, type RecentLearnerNoteSummary } from "@/components/student/premium-learner-hub";
-import { LearnerDashboardAdvantageStrip } from "@/components/student/learner-dashboard-advantage-strip";
 import { DashboardCoachCard } from "@/components/student/dashboard/coach-card";
 import { CoachWeakSummary } from "@/components/study/coach-weak-summary";
 import { CoachReadinessCard } from "@/components/study/coach-readiness-card";
@@ -97,6 +96,10 @@ function RecentGainsBlock({
 export type LearnerStudyHomeProps = {
   crumbs: BreadcrumbCrumb[];
   t: LearnerMarketingT;
+  /** Marketing locale — matches shell nav label casing. */
+  locale: string;
+  /** Same CAT vs Exams rule as `app/(learner)/layout.tsx` for canonical study links. */
+  examsNavLabel: "CAT Exams" | "Exams";
   identity: DashboardIdentity;
   heroHeading: string;
   snapshot: PremiumDashboardSnapshot;
@@ -126,6 +129,8 @@ export type LearnerStudyHomeProps = {
 export function LearnerStudyHome({
   crumbs,
   t,
+  locale,
+  examsNavLabel,
   identity,
   heroHeading,
   snapshot,
@@ -196,12 +201,12 @@ export function LearnerStudyHome({
         </div>
       </header>
 
-      {/* Continue + exam pacing */}
+      {/* Continue + exam pacing (legacy: `continue_where_left_off` + exam context) */}
       <LearnerStudySurfaceSection
         id="study-priority"
         eyebrow={t("learner.studyHome.sectionPriorityEyebrow")}
         title={t("learner.studyHome.sectionPriorityTitle")}
-        intro={t("learner.studyHome.sectionPriorityIntro")}
+        intro={null}
         tone="primary"
         surfacePadding="md"
         className="nn-dash-band nn-dash-band--priority"
@@ -216,7 +221,32 @@ export function LearnerStudyHome({
         </div>
       </LearnerStudySurfaceSection>
 
-      {/* D — Today / streak / reviews */}
+      {/* Core study surfaces — legacy dashboard `quick_links` + shell primary row */}
+      <LearnerStudySurfaceSection
+        id="study-core-surfaces"
+        eyebrow={null}
+        title={t("learner.studyHome.shortcutsNavLabel")}
+        intro={null}
+        tone="secondary"
+        surfacePadding="md"
+        className="nn-dash-band nn-dash-band--core-shortcuts"
+      >
+        <LearnerCoreStudyShortcuts
+          pathwayId={preferredPathwayId}
+          examsLabel={examsNavLabel}
+          t={t}
+          locale={locale}
+        />
+      </LearnerStudySurfaceSection>
+
+      {/* Resume list — legacy `recent_lessons` widget */}
+      {continueLinks.length > 0 ? (
+        <section className="nn-dash-band nn-dash-band--resume" aria-label={t("learner.retention.continueHeading")}>
+          <LearnerContinueLearningCard t={t} links={continueLinks} />
+        </section>
+      ) : null}
+
+      {/* Today — streak / daily goal (legacy `progress` + streak widgets) */}
       <LearnerStudySurfaceSection
         id="study-today"
         eyebrow={t("learner.studyHome.sectionTodayEyebrow")}
@@ -269,26 +299,6 @@ export function LearnerStudyHome({
               />
             </div>
           </div>
-        </div>
-      </LearnerStudySurfaceSection>
-
-      {/* Quick access — resume + launchers (before readiness snapshot) */}
-      <LearnerStudySurfaceSection
-        id="study-quick"
-        eyebrow={t("learner.studyHome.sectionQuickEyebrow")}
-        title={t("learner.studyHome.sectionQuickTitle")}
-        intro={t("learner.studyHome.sectionQuickIntro")}
-        tone="primary"
-        surfacePadding="md"
-        className="nn-dash-band nn-dash-band--quick"
-      >
-        <div className="flex flex-col gap-4">
-          <LearnerContinueLearningCard t={t} links={continueLinks} />
-          <SmartActionsBar
-            showAdaptiveAction={showAdaptivePlan}
-            showWeaknessAction={showWeaknessAlerts}
-            pathwayId={preferredPathwayId}
-          />
         </div>
       </LearnerStudySurfaceSection>
 
@@ -407,7 +417,6 @@ export function LearnerStudyHome({
             omitRecentMocks
             readinessDeferHint={readinessDeferHint}
           />
-          <LearnerDashboardAdvantageStrip t={t} />
           <LearnerSurface tone="secondary" padding="md" radius="lg" shadow={false} className="nn-dash-account-cta">
             <p className="text-sm text-muted-foreground">{t("learner.dashboard.accountTeaser")}</p>
             <Link
