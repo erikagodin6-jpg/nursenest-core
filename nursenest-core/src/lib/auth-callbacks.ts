@@ -1,5 +1,9 @@
 import type { NextAuthConfig } from "next-auth";
 import type { SessionUserRole } from "@/types/next-auth";
+import {
+  JWT_SESSION_BRIEF_MAX_AGE_SEC,
+  JWT_SESSION_REMEMBER_MAX_AGE_SEC,
+} from "@/lib/auth/auth-session-constants";
 
 /** Validate client-supplied role on `update()` so JWT cannot be escalated with arbitrary strings. */
 function sessionRoleFromUpdate(value: unknown): SessionUserRole | undefined {
@@ -34,6 +38,7 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
         alliedProfessionKey?: unknown;
         subscriptionStatus?: unknown;
         credentialVersion?: unknown;
+        rememberMe?: boolean;
       };
       if (u.id) token.sub = u.id;
       if (u.email !== undefined) token.email = u.email;
@@ -46,6 +51,11 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
       token.subscriptionStatus = u.subscriptionStatus as typeof token.subscriptionStatus;
       token.credentialVersion =
         typeof u.credentialVersion === "number" ? u.credentialVersion : 0;
+
+      const rememberMe = u.rememberMe !== false;
+      const ttlSec = rememberMe ? JWT_SESSION_REMEMBER_MAX_AGE_SEC : JWT_SESSION_BRIEF_MAX_AGE_SEC;
+      const nowSec = Math.floor(Date.now() / 1000);
+      token.exp = nowSec + ttlSec;
     }
     if (trigger === "update" && session && typeof session === "object") {
       const s = session as Partial<{

@@ -27,10 +27,12 @@ test.describe("Mobile header navigation (public marketing)", () => {
 
     const openBtn = page.getByRole("button", { name: /^Open menu$/ });
     await openBtn.click();
-    await expect(page.getByRole("button", { name: /^Close menu$/ })).toBeVisible({ timeout: 15_000 });
+    // Backdrop + header both use `aria-label="Close menu"` — use `.first()` to satisfy strict mode.
+    const closeMenu = page.getByRole("button", { name: /^Close menu$/ });
+    await expect(closeMenu.first()).toBeVisible({ timeout: 15_000 });
 
-    await page.getByRole("button", { name: /^Close menu$/ }).click();
-    await expect(page.getByRole("button", { name: /^Close menu$/ })).toHaveCount(0);
+    await closeMenu.first().click();
+    await expect(closeMenu).toHaveCount(0);
   });
 
   test("mobile drawer: expand RN and follow hub link", async ({ page, baseURL }) => {
@@ -41,7 +43,9 @@ test.describe("Mobile header navigation (public marketing)", () => {
 
     await page.getByRole("button", { name: /^Open menu$/ }).click();
     await page.getByRole("button", { name: /^RN$/ }).click();
-    await page.getByRole("link", { name: /Open Hub/i }).click();
+    const mobileRnPanel = page.locator("#mobile-mega-rn");
+    await expect(mobileRnPanel).toBeVisible({ timeout: 20_000 });
+    await mobileRnPanel.getByRole("link", { name: /Open Hub/i }).click();
     await page.waitForLoadState("domcontentloaded");
     await expect(page).toHaveURL(new RegExp(`${CANONICAL_PATHWAY_HUB.usRn.replace(/\//g, "\\/")}(?:\\/|\\?|#|$)`));
     await expectNotPageNotFound(page);

@@ -49,11 +49,15 @@ export function LoginForm({
 
     setPending(true);
     try {
+      const rememberMe =
+        formData.get("rememberMe") === "on" ||
+        String(formData.get("rememberMe") ?? "") === "true";
       let result: Awaited<ReturnType<typeof signIn>>;
       try {
         result = await signIn("credentials", {
           email,
           password,
+          rememberMe: rememberMe ? "true" : "false",
           redirect: false,
           redirectTo: redirectTarget,
         });
@@ -131,6 +135,24 @@ export function LoginForm({
           required
           autoComplete="current-password"
         />
+      </div>
+      <div className="flex items-start gap-2.5">
+        <input
+          id="login-remember"
+          className="mt-1 h-4 w-4 shrink-0 rounded border border-border text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_30%,transparent)]"
+          type="checkbox"
+          name="rememberMe"
+          defaultChecked
+          aria-describedby="login-remember-hint"
+        />
+        <div className="min-w-0 space-y-0.5">
+          <label htmlFor="login-remember" className="text-sm font-medium text-foreground">
+            {t("pages.login.rememberMe")}
+          </label>
+          <p id="login-remember-hint" className="text-xs text-muted-foreground">
+            {t("pages.login.rememberMeHint")}
+          </p>
+        </div>
       </div>
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
       <p className="text-xs leading-relaxed text-muted-foreground">

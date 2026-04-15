@@ -34,7 +34,6 @@ test.describe("Desktop header navigation (public marketing)", () => {
       { name: /^Pricing$/, pathRe: /\/pricing(?:\/|$)/ },
       { name: /^Blog$/, pathRe: /\/blog(?:\/|$)/ },
       { name: /^FAQ$/, pathRe: /\/faq(?:\/|$)/ },
-      { name: /^Pre-Nursing$/, pathRe: /\/pre-nursing(?:\/|$)/ },
       { name: /^Tools$/, pathRe: /\/tools(?:\/|$)/ },
     ];
 
@@ -46,6 +45,20 @@ test.describe("Desktop header navigation (public marketing)", () => {
       await expect(page).toHaveURL(c.pathRe);
       await expectNotPageNotFound(page);
     }
+  });
+
+  /** Split out: `/pre-nursing` is heavier in dev (RSC); keeps the core strip loop fast and stable. */
+  test("primary strip — Pre-Nursing link navigates", async ({ page, baseURL }) => {
+    const origin = requireOrigin(baseURL);
+    await seedUsMarketingCookie(page, origin);
+    await gotoExpectOk(page, "/");
+    await expectMarketingPublicShell(page);
+
+    const strip = page.locator(DESKTOP_PRIMARY_STRIP_NAV).first();
+    await strip.getByRole("link", { name: /^Pre-Nursing$/ }).click();
+    await page.waitForURL(/\/pre-nursing(?:\/|$)/, { timeout: 120_000 });
+    expect(page.url(), "avoid crashed-tab interstitial").not.toMatch(/chrome-error/);
+    await expectNotPageNotFound(page);
   });
 
   test("mega menu RN → hub link navigates to US RN pathway hub", async ({ page, baseURL }) => {

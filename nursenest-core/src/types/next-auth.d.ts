@@ -9,6 +9,10 @@ export type SessionUserRole =
   | "SUPPORT_ADMIN";
 
 declare module "next-auth" {
+  interface User {
+    /** Set at credentials sign-in — drives JWT `exp` (brief vs remember session). */
+    rememberMe?: boolean;
+  }
   interface Session {
     user: {
       id: string;

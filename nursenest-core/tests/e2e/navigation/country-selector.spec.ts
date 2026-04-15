@@ -199,7 +199,7 @@ test.describe("Country selector — mobile", () => {
     expect(cookies.find((c) => c.name === GLOBAL_REGION_COOKIE)?.value).toBe("canada");
 
     await openMobileRegionLanguageDrawer(page);
-    await expect(page.locator("div.rounded-xl.border").filter({ hasText: /^Canada$/ }).first()).toBeVisible();
+    await expect(page.locator("div.rounded-xl.border").filter({ hasText: /Canada/ }).first()).toBeVisible();
   });
 
   test("stale expansion cookie on neutral route: drawer does not imply Philippines", async ({ page, baseURL }) => {

@@ -155,6 +155,7 @@ export const authConfig: NextAuthConfig = {
       credentials: {
         email: { label: "Email or username", type: "text" },
         password: { label: "Password", type: "password" },
+        rememberMe: { label: "Stay signed in", type: "text" },
       },
       async authorize(credentials, request) {
         const enteredEmailRaw = String(credentials.email ?? "");
@@ -614,6 +615,11 @@ export const authConfig: NextAuthConfig = {
                   ? "trimmed_email"
                   : "exact_email";
 
+        const rememberRaw = String(credentials.rememberMe ?? "").trim().toLowerCase();
+        const rememberMe =
+          rememberRaw === "" ||
+          !["false", "0", "off", "no"].includes(rememberRaw);
+
         logAuthIncidentLine({
           event: "credentials_login",
           outcome: "success",
@@ -663,6 +669,7 @@ export const authConfig: NextAuthConfig = {
           alliedProfessionKey: user.alliedProfessionKey ?? null,
           subscriptionStatus,
           credentialVersion: user.credentialVersion ?? 0,
+          rememberMe,
         };
       },
     }),

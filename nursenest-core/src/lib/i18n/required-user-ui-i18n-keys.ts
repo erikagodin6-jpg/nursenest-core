@@ -13,6 +13,8 @@ export const REQUIRED_AUTH_AND_ACCOUNT_FLOW_KEYS = [
   "pages.login.submit",
   "pages.login.fieldIdentifierLabel",
   "pages.login.fieldPasswordLabel",
+  "pages.login.rememberMe",
+  "pages.login.rememberMeHint",
   "pages.login.forgotPasswordLink",
   "pages.signup.title",
   "pages.signup.createAccount",
