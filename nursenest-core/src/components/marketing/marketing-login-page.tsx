@@ -3,6 +3,7 @@ import { LoginForm } from "@/components/auth/login-form";
 import { VerifyStatusBanner } from "@/components/auth/verify-status-banner";
 import { AuthLeafWatermark } from "@/components/brand/auth-leaf-watermark";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { AuthIncidentNotice } from "@/components/marketing/auth-incident-notice";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 
@@ -20,6 +21,7 @@ export async function MarketingLoginPage({ locale }: { locale: string }) {
           <Suspense>
             <VerifyStatusBanner />
           </Suspense>
+          <AuthIncidentNotice contactHref={withMarketingLocale(locale, "/contact")} />
           <header className="mb-8 text-center">
             <h1 className="text-2xl font-semibold tracking-tight text-[var(--palette-heading)] sm:text-3xl">
               {m["pages.login.welcome"]}

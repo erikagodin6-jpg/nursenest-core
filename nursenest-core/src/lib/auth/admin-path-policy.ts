@@ -22,6 +22,8 @@ const SUPER_ONLY_PREFIXES = [
   "/api/admin/demo-users",
   /** Temporary auth diagnostics — PII-adjacent user lookup (super admin only). */
   "/api/debug/auth-user",
+  /** In-memory login lockout clear for the running instance (super admin only). */
+  "/api/debug/clear-login-lock",
 ];
 
 /** User PII + billing list/analytics — not for content editors. */

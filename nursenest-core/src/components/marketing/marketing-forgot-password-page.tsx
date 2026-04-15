@@ -1,6 +1,7 @@
 import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
 import { AuthLeafWatermark } from "@/components/brand/auth-leaf-watermark";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { AuthIncidentNotice } from "@/components/marketing/auth-incident-notice";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 
@@ -21,6 +22,7 @@ export async function MarketingForgotPasswordPage({ locale }: { locale: string }
             {m["pages.forgotPassword.intro"] ??
               "Enter your email address. If an account exists with a password, we will send a reset link."}
           </p>
+          <AuthIncidentNotice contactHref={withMarketingLocale(locale, "/contact")} />
           <ForgotPasswordForm
             backToLoginHref={loginHref}
             backToLoginLabel={m["pages.forgotPassword.backToLoginLabel"] ?? "Back to sign in"}

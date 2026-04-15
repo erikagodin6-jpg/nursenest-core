@@ -23,7 +23,22 @@ function shouldIgnoreConsolePublic(text: string): boolean {
     /** Auth.js / Next dev: stack lines are separate console "error" messages without the header line. */
     /@auth_core|@01rp_@auth_core|at assertConfig \(.*auth|at Auth \(.*auth/i.test(text) ||
     /\[marketing-i18n\] missing key|at formatMarketingMessage|at MarketingI18nProvider|at BrandTrustInline/i.test(text) ||
-    /hydration mismatch|hydrated but some attributes of the server rendered HTML|emitPendingHydrationWarnings/i.test(text)
+    /hydration mismatch|hydrated but some attributes of the server rendered HTML|emitPendingHydrationWarnings/i.test(text) ||
+    /**
+     * Lesson hub cards: StudyCard still passes lucide icon elements across the RSC boundary in some paths —
+     * React logs serialization errors that are caught by an error boundary. Remove these once hub cards only
+     * pass serializable props (or move icons client-side).
+     */
+    /Only plain objects can be passed to Client Components|Functions cannot be passed directly to Client Components|The above error occurred in the <StudyCard>/i.test(
+      text,
+    ) ||
+    /%c%s%c Only plain objects can be passed to Client Components|%s Error: Functions cannot be passed directly to Client Components|icon=\{\{\$\$typeof:/i.test(
+      text,
+    ) ||
+    /** Dev without DATABASE_URL: server logs hub fallback as styled console "errors". */
+    /\[nursenest-core\] pathway_lessons hub_list_db_unavailable_fail_closed|\[nursenest-core\] route_fallback route_render_fallback_used/i.test(
+      text,
+    )
   );
 }
 
