@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-04-15T02:39:41.433Z",
-  "auditGeneratedAt": "2026-04-15T02:39:27.441Z",
+  "generatedAt": "2026-04-15T02:55:05.528Z",
+  "auditGeneratedAt": "2026-04-15T02:54:44.866Z",
   "planGeneratedAt": "2026-04-15T02:23:16.994Z",
   "batchContentSlugsCompleted": [
     "cardiac-tamponade-nclex-rn",
@@ -10,17 +10,27 @@
     "heart-failure-nursing-priorities-hy",
     "acute-myocardial-infarction-troponin",
     "shock-recognition-fluids",
-    "hypertensive-crisis-vs-urgency"
+    "hypertensive-crisis-vs-urgency",
+    "atrial-fibrillation-rate-control",
+    "endocarditis-blood-cultures",
+    "pericarditis-ecg-clues",
+    "dvt-pe-nursing-priorities",
+    "abg-interpretation-basics-hy",
+    "copd-exacerbation-oxygen",
+    "asthma-status-asthmaticus",
+    "ards-ventilation-basics",
+    "pneumonia-oxygenation",
+    "pulmonary-embolism-clues"
   ],
   "metricsForBatchSlugRowsInPlan": {
-    "planRowsMatchingBatchSlugs": 11,
-    "improvedOverallScoreCount": 11,
-    "averageOverallScoreLiftAmongImproved": 73.2,
-    "movedOutOfStructurallyIncompleteGateApprox": 11,
-    "movedToProductionReadyEn": 11,
-    "productionReadyEnButLocalizationIncomplete": 11
+    "planRowsMatchingBatchSlugs": 21,
+    "improvedOverallScoreCount": 21,
+    "averageOverallScoreLiftAmongImproved": 73.4,
+    "movedOutOfStructurallyIncompleteGateApprox": 21,
+    "movedToProductionReadyEn": 21,
+    "productionReadyEnButLocalizationIncomplete": 21
   },
-  "notes": "Before scores taken from lesson-fix-batch-2-plan.json (queue snapshot). Full batch has 100 plan rows; 8 unique slugs received catalog patches in this pass.",
+  "notes": "Before scores taken from lesson-fix-batch-2-plan.json (queue snapshot). Full batch has 100 plan rows; 18 unique slugs have catalog patches in batch2-catalog-patches.ts.",
   "perLesson": [
     {
       "lessonId": "ca-rn-nclex-rn:cardiac-tamponade-nclex-rn",
@@ -166,6 +176,191 @@
       "overallScoreLift": 69.8,
       "publicCompleteAfter": true,
       "totalWordsAfter": 513,
+      "topReasonsAfter": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:atrial-fibrillation-rate-control",
+      "slug": "atrial-fibrillation-rate-control",
+      "pathwayId": "us-rn-nclex-rn",
+      "inBatch2ContentPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "afterOverallScore": 85.7,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 75.2,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 561,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:endocarditis-blood-cultures",
+      "slug": "endocarditis-blood-cultures",
+      "pathwayId": "us-rn-nclex-rn",
+      "inBatch2ContentPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "afterOverallScore": 83.6,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 73.1,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 618,
+      "topReasonsAfter": [
+        "links:internal_links_high_count(9)",
+        "no_educational_overlay_in_scanned_locales"
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:pericarditis-ecg-clues",
+      "slug": "pericarditis-ecg-clues",
+      "pathwayId": "us-rn-nclex-rn",
+      "inBatch2ContentPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "afterOverallScore": 85.7,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 75.2,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 552,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:dvt-pe-nursing-priorities",
+      "slug": "dvt-pe-nursing-priorities",
+      "pathwayId": "us-rn-nclex-rn",
+      "inBatch2ContentPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "afterOverallScore": 81.2,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 70.7,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 532,
+      "topReasonsAfter": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:abg-interpretation-basics-hy",
+      "slug": "abg-interpretation-basics-hy",
+      "pathwayId": "us-rn-nclex-rn",
+      "inBatch2ContentPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "afterOverallScore": 87.5,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 77,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 619,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:copd-exacerbation-oxygen",
+      "slug": "copd-exacerbation-oxygen",
+      "pathwayId": "us-rn-nclex-rn",
+      "inBatch2ContentPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "afterOverallScore": 81.2,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 70.7,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 517,
+      "topReasonsAfter": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:asthma-status-asthmaticus",
+      "slug": "asthma-status-asthmaticus",
+      "pathwayId": "us-rn-nclex-rn",
+      "inBatch2ContentPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "afterOverallScore": 86.6,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 76.1,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 582,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:ards-ventilation-basics",
+      "slug": "ards-ventilation-basics",
+      "pathwayId": "us-rn-nclex-rn",
+      "inBatch2ContentPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "afterOverallScore": 86.6,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 76.1,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 575,
+      "topReasonsAfter": [
+        "no_educational_overlay_in_scanned_locales"
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:pneumonia-oxygenation",
+      "slug": "pneumonia-oxygenation",
+      "pathwayId": "us-rn-nclex-rn",
+      "inBatch2ContentPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "afterOverallScore": 81.2,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 70.7,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 509,
+      "topReasonsAfter": [
+        "thin_total_word_count",
+        "no_educational_overlay_in_scanned_locales"
+      ]
+    },
+    {
+      "lessonId": "us-rn-nclex-rn:pulmonary-embolism-clues",
+      "slug": "pulmonary-embolism-clues",
+      "pathwayId": "us-rn-nclex-rn",
+      "inBatch2ContentPass": true,
+      "beforeOverallScore": 10.5,
+      "beforeStatus": "structurally_incomplete",
+      "afterOverallScore": 81.2,
+      "afterStatus": "localization_incomplete",
+      "afterContentReadinessStatus": "production_ready_en",
+      "afterLocalizationReadinessStatus": "localization_incomplete",
+      "overallScoreLift": 70.7,
+      "publicCompleteAfter": true,
+      "totalWordsAfter": 531,
       "topReasonsAfter": [
         "thin_total_word_count",
         "no_educational_overlay_in_scanned_locales"

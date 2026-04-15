@@ -9,7 +9,14 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   await requireAdmin();
-  const [data, staff] = await Promise.all([loadAdminCommandCenter(), getStaffSession()]);
+  let data: Awaited<ReturnType<typeof loadAdminCommandCenter>> = null;
+  try {
+    data = await loadAdminCommandCenter();
+  } catch (e) {
+    console.error("[AdminPage] loadAdminCommandCenter", e);
+    data = null;
+  }
+  const staff = await getStaffSession();
   const staffTier: StaffTier = staff?.tier ?? "super";
 
   if (!data) {

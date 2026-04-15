@@ -421,4 +421,605 @@ If chest pain dominates instead, pivot to **ACS evaluation** while still managin
       },
     ],
   },
+
+  "atrial-fibrillation-rate-control": {
+    sections: [
+      {
+        id: "clinical_meaning",
+        heading: "Clinical meaning",
+        kind: "clinical_meaning",
+        body: `**Atrial fibrillation (AFib)** is a **supraventricular tachyarrhythmia** with **disorganized atrial activity** and an **irregularly irregular** ventricular response when conduction through the AV node is variable. **Rate control** aims to keep the ventricular response in a range that preserves **diastolic filling**, **coronary perfusion**, and **symptom tolerance** while you address triggers (pain, infection, alcohol, hyperthyroidism, HF decompensation, PE).
+
+**Stroke risk** is separate from rate control: many clients need **anticoagulation** per CHA₂DS₂-VASc-style reasoning on boards—follow the stem’s risk story. Nursing focus is **continuous assessment** (rhythm, rate, BP, perfusion, bleeding), **safe medication administration** (beta blockers, nondihydropyridine calcium channel blockers, digoxin themes), and **recognizing unstable tachycardia** that needs **electrical cardioversion** pathways rather than “wait and see.”
+
+Pair with [heart failure priorities](LESSON:heart-failure-nursing-priorities-hy), [ACS](LESSON:acute-coronary-syndrome-nclex-rn), and [thyroid emergencies](LESSON:thyroid-storm-myxedema-clues) when rapid AFib is a secondary clue.`,
+      },
+      {
+        id: "exam_relevance",
+        heading: "Exam relevance",
+        kind: "exam_relevance",
+        body: `NCLEX-RN items test whether you **prioritize instability**: hypotension, **acute altered perfusion**, **ischemic chest pain with rapid AFib**, or **pre-excitation** patterns when shown—those scenarios push toward **synchronized cardioversion** themes and **urgent provider activation**, not oral rate control alone.
+
+They also test **medication safety**: avoid **verapamil/diltiazem** when **decompensated HF with reduced EF** is suggested unless the stem supports it; watch **bradycardia**, **heart block**, and **hypotension** after AV-nodal blockers; monitor **potassium and renal function** with **digoxin**. Boards love **bleeding + anticoagulation** stories—gum bleeding, hematuria, or head injury after starting DOACs—know escalation and hold parameters per orders.`,
+      },
+      {
+        id: "core_concept",
+        heading: "Core concept",
+        kind: "core_concept",
+        body: `- **Assessment**: apical–radial deficit themes, irregular rhythm, symptoms (palpitations, dyspnea, fatigue, syncope), **BP trends**, **lung congestion**, **JVD** when HF coexists.
+- **Rate control options (exam themes)**: beta blockers, diltiazem/verapamil, digoxin—**titrate per orders**; IV options appear in acute care stems.
+- **Rhythm control** may appear as **cardiology-managed**—your role is monitoring and **pre-procedure** teaching when ablation/cardioversion is planned.
+- **Anticoagulation**: align with **stroke risk** and **bleeding risk** in the vignette; reinforce **adherence**, **lab monitoring** when warfarin is used, and **avoid NSAIDs** that increase bleed risk without orders.
+- **Nursing actions**: telemetry documentation, **orthostatic vitals** when symptoms suggest, **fall precautions**, **teach warning signs** (worsening dyspnea, syncope, neurologic changes).
+
+**Unstable AFib snapshot:** If the client is **hypotensive** with **altered mentation** or **ischemic pain** and the rhythm is **rapid AFib**, think **emergent cardioversion pathway**—not “finish breakfast” or “med pass later.”`,
+      },
+      {
+        id: "clinical_scenario",
+        heading: "Clinical scenario",
+        kind: "clinical_scenario",
+        body: `**Patient vignette.** A 76-year-old client with a history of HF **reports sudden palpitations** and **severe dizziness**. Telemetry shows **AFib with RVR** around **150s**; BP is **82/50**, and they are **cool and confused**.
+
+**Fork:** This is **unstable tachycardia** until proven otherwise—**call for help**, **continuous monitoring**, **notify provider immediately**, and **prepare for synchronized cardioversion** per ACLS/policy themes. Do **not** prioritize oral metoprolol alone or routine hygiene tasks.
+
+If instead BP is **128/78** with mild symptoms and stable perfusion, **rate control + monitoring + treating triggers** (pain, fever, volume overload) matches many board pathways—still document **neuro and perfusion checks** after each intervention.`,
+      },
+      {
+        id: "takeaways",
+        heading: "Takeaways",
+        kind: "takeaways",
+        body: `- **Rate control ≠ stroke prevention**—boards split those decisions; watch anticoagulation cues.
+- **Instability** (hypotension, ischemia, shock) changes the answer set toward **urgent rhythm management**, not routine tasks.
+- **Reassess after every AV-nodal blocker**: new bradycardia or hypotension can signal **too much rate control** or evolving **heart block**—communicate early.
+
+**Synthesis:** Name **perfusion** first, then **rate**, then **bleeding risk**—that order eliminates many distractors.
+
+**Related:** [acute MI & troponin](LESSON:acute-myocardial-infarction-troponin) · [DVT/PE priorities](LESSON:dvt-pe-nursing-priorities) · [elective cardioversion vs shock](LESSON:defibrillation-vs-synchronized-cardioversion-nclex-rn) · [Canada hub](/canada/rn/nclex-rn/lessons) · [US hub](/us/rn/nclex-rn/lessons).`,
+      },
+    ],
+  },
+
+  "endocarditis-blood-cultures": {
+    sections: [
+      {
+        id: "clinical_meaning",
+        heading: "Clinical meaning",
+        kind: "clinical_meaning",
+        body: `**Infective endocarditis (IE)** is infection of the **endocardial surface**, most often **valve leaflets**—commonly involving **Staphylococcus aureus** (IV drug use, devices) or **viridans streptococci** (oral procedures/oral sources) among other organisms. It produces **fever**, **systemic embolic phenomena**, **new murmurs**, and sometimes **destructive valvular lesions** with **heart failure** or **abscess** formation.
+
+**Blood cultures** are the cornerstone of microbiologic diagnosis—typically **multiple sets from separate venipunctures** before antibiotics when safe, so organisms can be identified and sensitivities guide long-term therapy. Nursing responsibilities include **strict aseptic technique**, **correct labeling and timing**, **avoiding culture contamination**, **monitoring for sepsis**, and **protecting vascular access** while coordinating with pharmacy for **timed antibiotic starts** per orders.
+
+Link IE workup to [endocarditis NCLEX hub lesson](LESSON:infective-endocarditis-nclex-rn), [HF](LESSON:heart-failure-nursing-priorities-hy), and [stroke assessment](LESSON:stroke-assessment-tpa-window) when embolic strokes appear in the stem.`,
+      },
+      {
+        id: "exam_relevance",
+        heading: "Exam relevance",
+        kind: "exam_relevance",
+        body: `Boards reward **culture-before-antibiotics discipline** when the client is **not crashing**—starting broad antibiotics immediately without cultures can be wrong in classic teaching unless **septic shock** forces earlier administration per protocol. Another pattern tests **IE complications**: **Janeway lesions**, **Osler nodes**, **splinter hemorrhages**, **Roth spots**—know these as **supporting clues**, not replacements for cultures and echocardiography themes.
+
+Examiners also test **prophylaxis misconceptions**: routine dental prophylaxis for everyone is not the teaching focus—follow guideline-style stems. Medication items may include **long IV antibiotic courses**, **gentamicin monitoring**, or **warfarin interactions**—watch **renal function** and **ototoxicity** themes.`,
+      },
+      {
+        id: "core_concept",
+        heading: "Core concept",
+        kind: "core_concept",
+        body: `- **Classic presentation**: fever + **new murmur** + **embolic events** (stroke, limb ischemia, pulmonary infiltrates from septic emboli when tricuspid involvement in IVDU).
+- **Labs**: **positive blood cultures** (often multiple bottles), **elevated inflammatory markers**, **anemia**, **renal dysfunction**; **echo** may show vegetations—**provider interpretation**.
+- **Nursing priorities**: hemodynamic monitoring, **strict aseptic line care**, **neuro checks** for embolic stroke, **lung assessment** for HF, **temperature curve**, **pain control** without masking sepsis, **education** on hygiene and follow-up for long-term therapy.
+- **Infection control**: follow **MRSA precautions** when indicated; protect **central lines** used for long-term antibiotics.
+- **Medication safety**: long courses of **nephrotoxic** or **ototoxic** agents require **renal monitoring** and **symptom surveillance**; teach clients to **report** tinnitus, hearing changes, or decreased urine output when those themes appear.
+
+**Exam trap:** Choosing **discharge teaching** before **stabilizing fever**, **hypotension**, or **new neurologic deficit**—always match priority to acute risk.`,
+      },
+      {
+        id: "clinical_scenario",
+        heading: "Clinical scenario",
+        kind: "clinical_scenario",
+        body: `**Patient vignette.** A 34-year-old client who injects drugs **reports fevers and chills** for a week. Temperature is **39.2°C**, HR **118**, BP **108/64**. You hear a **new harsh murmur** and notice **tender red nodules** on finger pads. Two peripheral IV sites are inflamed.
+
+**Fork:** Suspect **IE with sepsis risk**—**obtain blood cultures per protocol** (often 2–3 sets from separate sites), **notify provider**, **avoid contaminating cultures**, and **prepare for echocardiography** themes. Do **not** delay assessment with routine paperwork or ambulation.
+
+If neuro deficits appear, add **stroke precautions** and **urgent escalation**—embolic phenomena change the urgency timeline.`,
+      },
+      {
+        id: "takeaways",
+        heading: "Takeaways",
+        kind: "takeaways",
+        body: `- **Cultures first** when feasible—starting broad antibiotics before cultures can obscure the microbiologic diagnosis unless **unstable sepsis** forces earlier therapy per protocol and provider orders.
+- **New murmur + fever + risk factors** (IVDU, recent dental work, prosthetic valve, central lines) should trigger **objective escalation**: cultures, **hemodynamic monitoring**, and **clear communication**—not reassurance alone.
+- **Embolic complications** (stroke, limb ischemia, pulmonary septic emboli) change **priority**—protect **airway and perfusion**, complete **neuro checks**, and **notify** the team early.
+- **Long-term IV antibiotics** require **line stewardship** (dressing integrity, hub scrubbing, **infection signs**), scheduled **labs**, and **patient education** on when to seek emergency care for **fever** or **bleeding**.
+
+**NCLEX drill:** If two answers both sound “infectious,” pick the one that **secures diagnosis/communication** (cultures, monitoring, escalation) before the one that focuses on **routine comfort** or **education** during instability.
+
+**Related:** [pericarditis ECG](LESSON:pericarditis-ecg-clues) · [infective endocarditis NCLEX](LESSON:infective-endocarditis-nclex-rn) · [cardiac tamponade](LESSON:cardiac-tamponade-nclex-rn) · [isolation precautions](LESSON:isolation-precautions-in-practice) · [Canada hub](/canada/rn/nclex-rn/lessons) · [US hub](/us/rn/nclex-rn/lessons).`,
+      },
+    ],
+  },
+
+  "pericarditis-ecg-clues": {
+    sections: [
+      {
+        id: "clinical_meaning",
+        heading: "Clinical meaning",
+        kind: "clinical_meaning",
+        body: `**Acute pericarditis** is **inflammation of the pericardium**, classically producing **sharp pleuritic chest pain** that **improves leaning forward** and may accompany a **pericardial friction rub**. On ECG, **diffuse ST elevation** with **PR depression** (often best seen in lead II) is a high-yield pattern—distinct from **STEMI**, which usually shows **regional ST changes** corresponding to a coronary territory.
+
+Nursing integration includes **serial ECG monitoring**, **pain assessment**, **differentiating pericarditis from ACS**, **watching for pericardial effusion** (new hypotension, rising JVD, pulsus paradoxus themes → possible **tamponade**), and **medication teaching** (NSAIDs, colchicine, gastric protection) **per orders**.
+
+Connect to [cardiac tamponade](LESSON:cardiac-tamponade-nclex-rn), [ACS](LESSON:acute-coronary-syndrome-nclex-rn), and [MI troponin](LESSON:acute-myocardial-infarction-troponin) when boards blur chest-pain differentials.`,
+      },
+      {
+        id: "exam_relevance",
+        heading: "Exam relevance",
+        kind: "exam_relevance",
+        body: `Examiners test **ECG discrimination**: diffuse ST elevation + PR depression suggests **pericarditis**; **regional ST elevation** with reciprocal changes suggests **AMI**. They also test **escalation**: if the client develops **tamponade physiology**, answers shift to **urgent evaluation** (echo/pericardiocentesis themes), not “more NSAIDs alone.”
+
+Boards may include **post-MI Dressler** or **viral** pericarditis stories—your job is **monitoring** and **clear reporting** of **new hemodynamic changes**. Avoid choosing **vigorous exercise** or **ignoring pleuritic pain** as “anxiety” without assessment.`,
+      },
+      {
+        id: "core_concept",
+        heading: "Core concept",
+        kind: "core_concept",
+        body: `- **Symptoms**: pleuritic pain, positional change, fever viral prodrome; **friction rub** may be transient—serial auscultation when ordered.
+- **ECG**: diffuse concave ST elevations; PR depression; can evolve—**serial tracings** matter when ordered.
+- **Labs**: troponin may be mildly elevated with **myopericarditis**—interpret with cardiology; **ESR/CRP** may support inflammation when shown.
+- **Management themes (order-driven)**: NSAIDs, colchicine, rest; **avoid anticoagulation** when large effusion/tamponade risk unless carefully managed—follow stem.
+- **Nursing care**: position comfort (often **leaning forward**), monitor **vitals**, **SpO₂**, **fluid balance** if HF complicates, **GI protection** with NSAIDs when ordered.
+
+**Differentiation cue:** Pleuritic + **positional** pain with **diffuse ECG** changes points away from single-vessel STEMI patterns unless coexisting disease.
+
+**Nursing focus:** trend **pain**, **vitals**, and **ECG**; teach **NSAID GI protection** when ordered; watch for **pericardial friction rub** coming/going; document **position** and **oxygen** response.`,
+      },
+      {
+        id: "clinical_scenario",
+        heading: "Clinical scenario",
+        kind: "clinical_scenario",
+        body: `**Patient vignette.** A 29-year-old client **reports sharp chest pain** worse when lying flat and better when **sitting forward**. ECG shows **diffuse ST elevation** and **PR depression**. BP is **118/76**, HR **96**, SpO₂ **97%**.
+
+**Fork:** Manage as **acute pericarditis pathway** until cardiology clears—**notify provider**, **obtain serial ECGs** per order, **monitor for effusion signs** (new hypotension, JVD, muffled sounds), and **avoid strenuous activity** themes. Do not assume **STEMI** without territory-consistent changes unless the stem supports ACS.
+
+If **hypotension and JVD** develop, pivot thinking toward **tamponade** and **escalate** per policy.`,
+      },
+      {
+        id: "takeaways",
+        heading: "Takeaways",
+        kind: "takeaways",
+        body: `- **Diffuse ST elevation + PR depression** is the classic **pericarditis** ECG pattern—contrast with **regional ST changes** that suggest **coronary occlusion** patterns in ACS items.
+- **Worsening hemodynamics** (hypotension, rising JVD, muffled heart sounds, new **pulsus paradoxus** themes) should trigger **tamponade suspicion**—urgent imaging and escalation, not “wait for rounds.”
+- **Serial monitoring** beats a single ECG snapshot: repeat **vitals**, **pain pattern**, and **ECG** when symptoms evolve—boards love “returned with worse pain” stems.
+- **Patient education after stabilization** includes activity limits while inflamed, **medication adherence**, and **warning symptoms** that require emergency re-evaluation.
+
+**NCLEX drill:** If the stem offers **NSAIDs/colchicine** versus **immediate cath lab**, match the **ECG story**—diffuse changes without territory ST elevation usually steers away from **STEMI activation** unless concurrent ACS is supported.
+
+**Related:** [endocarditis cultures](LESSON:endocarditis-blood-cultures) · [cardiac tamponade](LESSON:cardiac-tamponade-nclex-rn) · [ACS](LESSON:acute-coronary-syndrome-nclex-rn) · [PE](LESSON:pulmonary-embolism-nclex-rn) · [US RN hub](/us/rn/nclex-rn/lessons).`,
+      },
+    ],
+  },
+
+  "dvt-pe-nursing-priorities": {
+    sections: [
+      {
+        id: "clinical_meaning",
+        heading: "Clinical meaning",
+        kind: "clinical_meaning",
+        body: `**Deep vein thrombosis (DVT)** is **thrombus formation** in deep veins—often **calf or proximal lower extremity**—with risk of **embolization** to the lungs as **pulmonary embolism (PE)**. Nursing priorities center on **recognizing symptoms**, **preventing extension/embolization**, **safe anticoagulation**, **bleeding precautions**, and **mobility planning** that matches orders (bed rest themes only when unstable—many stable clients ambulate with appropriate therapy).
+
+High-yield risks include **immobility**, **surgery**, **malignancy**, **pregnancy/estrogen**, **thrombophilia**, and **prior VTE**. Your assessments pair **unilateral leg swelling**, **pain**, **warmth**, **Homans sign not relied upon alone**, with **respiratory findings** when PE is suspected.
+
+Use [PE lesson](LESSON:pulmonary-embolism-nclex-rn), [immobility prophylaxis](LESSON:immobility-dvt-prophylaxis), and [shock](LESSON:shock-recognition-fluids) when massive PE appears.`,
+      },
+      {
+        id: "exam_relevance",
+        heading: "Exam relevance",
+        kind: "exam_relevance",
+        body: `NCLEX tests **prevention** (SCDs, early ambulation, hydration when appropriate) and **acute management** (anticoagulation, **inferior vena cava filter** themes when anticoagulation is contraindicated—provider decision). Traps include **massaging a painful calf** (can dislodge clot), **delaying oxygen** in sudden dyspnea, or **choosing education** before stabilizing **hypoxia/hypotension**.
+
+Items also probe **bleeding on anticoagulation**: gums, **hematuria**, **melena**, **head injury**—know **when to hold** and **who to notify** per policy.`,
+      },
+      {
+        id: "core_concept",
+        heading: "Core concept",
+        kind: "core_concept",
+        body: `- **DVT signs**: unilateral edema, calf tenderness, erythema—compare sides; **D-dimer** in low-risk workups; **compression ultrasound** for diagnosis when indicated.
+- **PE signs**: sudden dyspnea, pleuritic pain, tachycardia, hypoxia; **massive PE** → shock, RV strain—**escalate**.
+- **Therapy themes**: anticoagulation (heparin bridging, DOACs, warfarin) per orders; **thrombolysis** in select massive PE—**provider-led**.
+- **Nursing care**: **bleeding precautions**, **fall safety**, **avoid IM injections** when anticoagulated unless necessary, **TED/SCD** per orders, **early ambulation** when stable, **teach warning signs** for recurrent VTE.
+- **Education**: **never stop anticoagulation** without provider guidance; recognize **PE red flags** (sudden dyspnea, pleuritic pain, hemoptysis, syncope) and **bleeding red flags** while on therapy.
+
+**Exam habit:** If the stem pairs **sudden dyspnea** with **unilateral leg findings**, treat as **VTE spectrum** until imaging clears you.`,
+      },
+      {
+        id: "clinical_scenario",
+        heading: "Clinical scenario",
+        kind: "clinical_scenario",
+        body: `**Patient vignette.** Five days after hip replacement, a client **reports new left calf pain** and **one-leg swelling**. The calf is **warm** and **3 cm larger** in circumference than the right. SpO₂ is **95%**, HR **104**.
+
+**Fork:** **Do not massage the calf.** Initiate **provider notification**, **prepare for vascular imaging** per protocol, **apply bleeding precautions** if anticoagulation starts, and **monitor for PE symptoms** (sudden dyspnea, pleuritic pain). Avoid **ambulating alone** if unstable or pending evaluation—follow facility policy.
+
+If **hypotension** or **syncope** develops, shift to **PE with shock** pathways—oxygen, monitoring, **rapid team activation** themes.`,
+      },
+      {
+        id: "takeaways",
+        heading: "Takeaways",
+        kind: "takeaways",
+        body: `- **Unilateral leg pain/swelling** after surgery or immobility is **DVT** until evaluated—compare calves, measure if protocol allows, and **document objective findings**.
+- **Never massage** a painful, swollen calf; **mobilize safely** only per orders when **high-risk PE** is still possible.
+- **Sudden dyspnea + tachycardia + hypoxia** should trigger **PE precautions** in your mind: **oxygen**, **monitoring**, **notify provider**, **anticipate imaging**, and **bleeding-safe care** if anticoagulation begins.
+- **Anticoagulation teaching** includes **bleeding precautions**, **head injury** urgency, **missed dose** instructions per pharmacy, and **when to seek emergency care** for recurrent **chest pain** or **neurologic changes**.
+
+**NCLEX drill:** When the client is **unstable**, choose **assessment + activation** over **education**; when stable on therapy, choose **education + safety** over ignoring mild symptoms.
+
+**Related:** [PE clues](LESSON:pulmonary-embolism-clues) · [pulmonary embolism lesson](LESSON:pulmonary-embolism-nclex-rn) · [DVT prevention](LESSON:deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn) · [immobility prophylaxis](LESSON:immobility-dvt-prophylaxis) · [Canada hub](/canada/rn/nclex-rn/lessons).`,
+      },
+    ],
+  },
+
+  "abg-interpretation-basics-hy": {
+    sections: [
+      {
+        id: "clinical_meaning",
+        heading: "Clinical meaning",
+        kind: "clinical_meaning",
+        body: `**Arterial blood gas (ABG)** interpretation links **ventilation** (CO₂ removal), **oxygenation** (PaO₂, SaO₂), and **metabolic** processes (HCO₃⁻, lactate) to **acid–base status** (pH). For NCLEX-RN, you need a **repeatable sequence**: confirm **temperature/ FiO₂ context** if the stem gives it, check **pH**, then decide whether the **primary** process is **respiratory** (PaCO₂) or **metabolic** (HCO₃⁻), and look for **compensation** or **mixed** disorders.
+
+Nursing use is practical: ABGs guide **oxygen therapy**, **ventilator adjustments** (RT/provider), **bicarbonate therapy** controversies, and **recognizing deterioration** (rising lactate, worsening acidemia). You correlate numbers with **the patient**: work of breathing, mentation, perfusion, and underlying disease ([COPD](LESSON:copd-exacerbation-oxygen), [ARDS](LESSON:ards-ventilation-basics), [DKA](LESSON:dka-vs-hhs-priorities-hy)).
+
+**Safety:** ABG draws require **arterial line or radial puncture** skills—follow scope; label samples correctly and **notify** critical values per policy.`,
+      },
+      {
+        id: "exam_relevance",
+        heading: "Exam relevance",
+        kind: "exam_relevance",
+        body: `Boards love **COPD + CO₂ retention**: avoid **over-oxygenating** chronic retainers when the stem shows **hypercapnia** and **acidosis**—titrate to **ordered SpO₂ targets** rather than 100% in every vignette. Another pattern is **metabolic acidosis** with **anion gap** in **DKA**—insulin and fluids drive management, not “bicarbonate for every low pH.”
+
+Examiners also test **interpretation speed**: **respiratory acidosis** with **acute HCO₃⁻** normal suggests **acute hypoventilation**; **chronic** COPD may show **compensated** patterns. Choose answers that **match the dominant disorder** and **treat the cause** (airway, ventilation, perfusion, toxin, renal failure).`,
+      },
+      {
+        id: "core_concept",
+        heading: "Core concept",
+        kind: "core_concept",
+        body: `- **Oxygenation**: PaO₂; consider **Aa gradient** themes when advanced; **SpO₂** correlates but is not identical—carbon monoxide, poor perfusion, and motion can mislead.
+- **Ventilation**: PaCO₂ **↑** = hypoventilation or **CO₂ retention**; **↓** = hyperventilation.
+- **Acid–base quick map**: pH **↓** + PaCO₂ **↑** → respiratory acidosis; pH **↓** + HCO₃⁻ **↓** → metabolic acidosis; combine for **mixed** when both move against pH.
+- **Compensation**: chronic respiratory disorders shift bicarbonate; metabolic disorders change PaCO₂ predictably—use stem trends, not memorized tables alone.
+- **Clinical tie-in**: always ask **why** the ABG looks abnormal—**opioids** vs **asthma** vs **PE** vs **sepsis** change the plan.
+- **Compensation check**: chronic respiratory acidosis often shows **elevated bicarbonate**; acute-on-chronic problems may look “mixed”—follow the stem’s timeline and prior baselines when provided.
+- **Oxygen vs ventilation**: correcting **SpO₂** alone may be unsafe if **CO₂** is rising and **mentation** is declining—escalate to **noninvasive ventilation** themes when ordered.
+
+**NCLEX habit:** State the **primary disturbance** in one sentence, then pick the intervention that fixes **that mechanism** first.`,
+      },
+      {
+        id: "clinical_scenario",
+        heading: "Clinical scenario",
+        kind: "clinical_scenario",
+        body: `**Patient vignette.** A 68-year-old client with COPD has ABG: **pH 7.25**, **PaCO₂ 68 mmHg**, **HCO₃⁻ 30 mEq/L**. They are **somnolent**, using **accessory muscles**, and **SpO₂ 82%** on 2 L NC.
+
+**Fork:** This is **acute-on-chronic respiratory acidosis** with **hypoxemia**—priority is **support ventilation and oxygen per protocol** (often **BiPAP** themes when ordered), **notify provider**, **avoid sedatives** that worsen CO₂ retention, and **repeat ABG** after interventions. Do not choose **discharge teaching** or **routine sleep** first.
+
+If **pH is severely acidotic** with **rising PaCO₂** despite support, prepare for **escalation** (intubation themes)—communicate trends, not single points.`,
+      },
+      {
+        id: "takeaways",
+        heading: "Takeaways",
+        kind: "takeaways",
+        body: `- **ABG interpretation is a sequence**: confirm context (**FiO₂**, device, temperature if given), read **pH**, then identify whether **PaCO₂** or **HCO₃⁻** best explains the acid–base direction, then check for **compensation** or **mixed** disorders.
+- **Oxygenation** (PaO₂/SpO₂) can be bad while **ventilation** (PaCO₂) is the primary threat—especially in **COPD exacerbation** with **rising CO₂** and **somnolence**.
+- **COPD retainers**: titrate oxygen to **ordered SpO₂ targets**; reassess **mentation** and **ventilation** because **hyperoxia** without adequate **ventilation support** can worsen **hypercapnia** in select clients.
+- **Repeat ABG** after meaningful changes to oxygen, ventilation mode, or clinical status—examiners reward **trend-based** decisions, not one-off numbers.
+
+**NCLEX drill:** If **pH is acidotic** and **PaCO₂ is high**, your first thought is **ventilation failure** until the stem proves otherwise—choose **BiPAP/escalation** over “teach pursed-lip breathing” during acute failure.
+
+**Related:** [mixed acid–base](LESSON:mixed-acid-base-patterns) · [COPD oxygen](LESSON:copd-exacerbation-oxygen) · [respiratory assessment](LESSON:respiratory-assessment-ngn) · [ARDS basics](LESSON:ards-ventilation-basics) · [US hub](/us/rn/nclex-rn/lessons).`,
+      },
+    ],
+  },
+
+  "copd-exacerbation-oxygen": {
+    sections: [
+      {
+        id: "clinical_meaning",
+        heading: "Clinical meaning",
+        kind: "clinical_meaning",
+        body: `**COPD exacerbation** is an acute worsening of **dyspnea**, **cough**, and **sputum** (often infectious or pollutant-triggered) requiring therapy change. **Oxygen** is lifesaving for hypoxemia, but in **chronic CO₂ retainers**, **uncontrolled high FiO₂** can worsen **hypercapnia** and **acidosis** by **blunting hypoxic respiratory drive** in select clients—so boards test **titrate to target SpO₂** (often **88–92%** when specified) rather than reflexively maximizing SpO₂.
+
+Nursing priorities: **assess work of breathing**, **oxygen titration per order**, **bronchodilator administration**, **steroids/antibiotics when ordered**, **early BiPAP** for **acute ventilatory failure** themes, and **monitoring mentation** for **CO₂ narcosis**.
+
+Pair with [ABG basics](LESSON:abg-interpretation-basics-hy), [pneumonia oxygenation](LESSON:pneumonia-oxygenation), and [respiratory assessment](LESSON:respiratory-assessment-ngn).`,
+      },
+      {
+        id: "exam_relevance",
+        heading: "Exam relevance",
+        kind: "exam_relevance",
+        body: `Examiners punish **“100% non-rebreather for everyone”** when the stem shows **chronic CO₂ retention** and asks for **safest oxygen strategy**. They reward **ventilation support** (BiPAP) when **acidosis and rising PaCO₂** persist despite optimized medical therapy.
+
+Traps include **sedating** an anxious COPD client without addressing **ventilation**, or **high-dose oxygen** without reassessment. Boards also test **infection recognition**: purulent sputum, fever—**antibiotics** when indicated per orders.`,
+      },
+      {
+        id: "core_concept",
+        heading: "Core concept",
+        kind: "core_concept",
+        body: `- **Assessment**: accessory muscles, **inability to speak in sentences**, **cyanosis**, **mental status** changes, **cough/sputum** character.
+- **Oxygen**: titrate to **ordered SpO₂ range**; **reassess** after changes; coordinate with **RT** for high-flow/BiPAP when ordered.
+- **Medications**: **SABA** (albuterol), **ipratropium** combinations, **systemic steroids**, **antibiotics** when bacterial exacerbation suspected—**times and interactions**.
+- **Fluids**: cautious—some clients have **right heart strain**; follow hemodynamics in stem.
+- **Education**: smoking cessation, **action plan** concepts, **when to seek care**—after stabilization.
+- **Infection triggers**: increased **sputum purulence**, fever—antibiotics when indicated per orders; support **nutrition** and **energy conservation** during recovery.
+
+**Exam anchor:** If **somnolence** rises with **rising CO₂** on ABG, **ventilation support** beats “more oxygen alone.”`,
+      },
+      {
+        id: "clinical_scenario",
+        heading: "Clinical scenario",
+        kind: "clinical_scenario",
+        body: `**Patient vignette.** A 71-year-old client with severe COPD **reports increasing dyspnea** over 24 hours and **cannot complete sentences**. On **4 L NC**, SpO₂ is **93%**, but they are **sleepy** and **difficult to arouse**. Repeat ABG shows **pH 7.22** and **PaCO₂ 78**.
+
+**Fork:** This is **acute hypercapnic respiratory failure**—**notify provider**, **prepare for BiPAP** per order, **avoid sedatives**, and **continuous monitoring**. High-flow oxygen alone may **mask** the ventilation problem—follow protocol for **noninvasive ventilation** when indicated.
+
+Do not prioritize **meal trays** or **ambulation** until ventilation and mentation improve.`,
+      },
+      {
+        id: "takeaways",
+        heading: "Takeaways",
+        kind: "takeaways",
+        body: `- **SpO₂ can look “okay”** while **CO₂ retention** and **acidosis** progress—pair oxygen saturation with **mentation**, **work of breathing**, and **ABG** when deterioration is suspected.
+- **Targeted oxygen** in chronic retainers follows **ordered SpO₂ ranges** (often mid-high 80s–low 90s when specified)—avoid reflexive **maximal FiO₂** when the stem emphasizes **CO₂ narcosis** risk.
+- **BiPAP** is a common rescue step for **acidotic hypercapnic** exacerbations: prioritize **provider notification**, **RT collaboration**, and **frequent reassessment** after initiation.
+- **Bronchodilators + steroids + antibiotics (when indicated)** are part of the bundle, but **ventilation strategy** is what prevents intubation in many vignettes.
+
+**NCLEX drill:** If the client is **sleepy** with **rising PaCO₂**, choose **ventilation support** over **sedation** for “anxiety” or **routine meals**.
+
+**Closing:** Reassess **lung sounds**, **mental status**, and **ABG** after every major oxygen or ventilation change—boards reward **trend-based** decisions.
+
+**Related:** [ABG basics](LESSON:abg-interpretation-basics-hy) · [asthma status](LESSON:asthma-status-asthmaticus) · [pneumonia oxygenation](LESSON:pneumonia-oxygenation) · [ARDS](LESSON:ards-ventilation-basics) · [US hub](/us/rn/nclex-rn/lessons).`,
+      },
+    ],
+  },
+
+  "asthma-status-asthmaticus": {
+    sections: [
+      {
+        id: "clinical_meaning",
+        heading: "Clinical meaning",
+        kind: "clinical_meaning",
+        body: `**Status asthmaticus** is **severe asthma** that persists despite initial bronchodilator therapy—approaching **respiratory failure**. Airway **inflammation** and **bronchospasm** produce **wheezing**, **accessory muscle use**, **tachypnea**, and sometimes a **silent chest** when air movement is critically reduced (a **red flag**).
+
+Nursing priorities are **rapid assessment**, **repeated inhaled bronchodilators per protocol**, **systemic corticosteroids early**, **oxygen**, **preparedness for magnesium sulfate** or **mechanical ventilation** in life-threatening cases, and **calm coaching** that does not replace objective monitoring.
+
+**Overview for exam use:** treat status asthmaticus as **airway + breathing first**: frequent **vitals**, **SpO₂**, **lung sound** reassessment, and **preparedness to escalate** when **fatigue** appears—because **normalizing wheezing** can mean **worsening obstruction**, not improvement.
+
+Differentiate from [COPD](LESSON:copd-exacerbation-oxygen) (often older smoker, chronic symptoms) though overlap exists—follow the stem’s age and history.`,
+      },
+      {
+        id: "exam_relevance",
+        heading: "Exam relevance",
+        kind: "exam_relevance",
+        body: `Boards test **silent chest** as impending arrest—**escalate**, not reassurance. They test **medication sequencing**: **continuous nebs** vs **intermittent** per protocol, **steroids early**, **epinephrine** in anaphylaxis overlap when indicated.
+
+Traps: **sedating** the anxious asthmatic, **beta blockers** that worsen bronchospasm when contraindicated, or **discharging** while still **tachypneic** with **accessory muscle use**.
+
+**Clinical application pattern:** choose **oxygen + bronchodilators + steroids** and **activation** before **education**; choose **RSI/airway** themes when **impending arrest** signs appear.`,
+      },
+      {
+        id: "core_concept",
+        heading: "Core concept",
+        kind: "core_concept",
+        body: `- **Severity signs**: inability to speak, **RR > 30**, **SpO₂ < 92%** on initial oxygen, **silent chest**, **cyanosis**, **altered mentation**, **rising PaCO₂** (late sign of fatigue).
+- **Therapies**: high-dose **SABA**, **ipratropium**, **systemic steroids**, **oxygen**; **magnesium sulfate** IV for severe bronchospasm per orders; **intubation** when exhaustion—**prepare airway supplies**.
+- **Monitoring**: **peak flow** when appropriate in stable settings; in acute severe, focus on **vitals**, **lung sounds**, **ABG** if deterioration.
+- **Education after stabilization**: trigger avoidance, **inhaler technique**, **written asthma action plan** concepts.
+- **Safety**: avoid **sedatives** that reduce respiratory drive during acute bronchospasm unless airway is protected and ordered; watch for **tremor/tachycardia** from beta-agonists and communicate **worsening perfusion**.
+
+**Exam rule:** If the client is **fatiguing** with rising CO₂, **noninvasive ventilation** may be contraindicated or limited—follow advanced airway themes in the stem.`,
+      },
+      {
+        id: "clinical_scenario",
+        heading: "Clinical scenario",
+        kind: "clinical_scenario",
+        body: `**Patient vignette.** A 22-year-old client with asthma **reports severe wheezing** and **cannot speak in full sentences**. Lung sounds are **barely audible** bilaterally (“**silent chest**”). HR **130**, RR **36**, SpO₂ **88%** on **RA**.
+
+**Fork:** Treat as **life-threatening asthma**—**high-flow oxygen per protocol**, **continuous bronchodilator therapy per order**, **early steroids**, **notify provider/rapid response**, **prepare for escalation** to **BiPAP or intubation** when indicated. **Never** leave this client unattended to finish charting elsewhere.
+
+**Clinical application detail:** Establish **continuous monitoring**, keep **airway supplies** available, repeat **lung sound** and **work of breathing** checks frequently, and **document objective trends** (RR, SpO₂, accessory muscle use, mentation). If a **repeat ABG** is ordered and **PaCO₂ rises** while the client fatigues, escalate toward **advanced airway** per policy rather than “watchful waiting.”
+
+If **hypotension** or **bradycardia** appears, anticipate **impending arrest**—**emergency airway** themes.`,
+      },
+      {
+        id: "takeaways",
+        heading: "Takeaways",
+        kind: "takeaways",
+        body: `- **Silent chest** is an **emergency pattern**: airflow may be so limited that **wheezing disappears**—do not interpret that as improvement.
+- **Rising fatigue**, **rising PaCO₂**, or **altered mentation** signals **impending respiratory arrest**—escalate beyond nebulizers alone per protocol.
+- **Systemic steroids early** are central in severe exacerbation; inhaled monotherapy is insufficient for **status** presentations in exam vignettes.
+- **Continuous therapy** and **frequent reassessment** beat one-time treatments when the client cannot speak, is using **accessory muscles**, or has **persistent hypoxia**.
+
+**NCLEX drill:** If the stem offers **reassurance** versus **rapid response**, pick **rapid response** when **silent chest** + **hypoxia** coexist.
+
+**Related:** [respiratory assessment](LESSON:respiratory-assessment-ngn) · [COPD oxygen](LESSON:copd-exacerbation-oxygen) · [shock](LESSON:shock-recognition-fluids) · [pneumonia oxygenation](LESSON:pneumonia-oxygenation) · [Canada hub](/canada/rn/nclex-rn/lessons).`,
+      },
+    ],
+  },
+
+  "ards-ventilation-basics": {
+    sections: [
+      {
+        id: "clinical_meaning",
+        heading: "Clinical meaning",
+        kind: "clinical_meaning",
+        body: `**Acute respiratory distress syndrome (ARDS)** is **non-cardiogenic pulmonary edema** from **diffuse alveolar damage**—common triggers include **sepsis**, **aspiration**, **pancreatitis**, **trauma**, and **massive transfusion**. It produces **severe hypoxemia** often refractory to **high-flow oxygen**, with **bilateral infiltrates** on imaging and **low PaO₂/FiO₂ ratios** when tested.
+
+**Mechanical ventilation** strategies in teaching emphasize **lung-protective ventilation**: **low tidal volumes**, **plateau pressure** limits, **PEEP** titration themes, and sometimes **proning** for refractory hypoxemia—**RT and provider driven**. Nursing integrates **sedation/agitation** monitoring, **DVT prophylaxis**, **stress ulcer prophylaxis when ordered**, **aspiration precautions**, and **strict I&O**.
+
+Link to [pneumonia oxygenation](LESSON:pneumonia-oxygenation), [sepsis recognition](LESSON:sepsis-early-recognition-hy), and [ABG](LESSON:abg-interpretation-basics-hy).`,
+      },
+      {
+        id: "exam_relevance",
+        heading: "Exam relevance",
+        kind: "exam_relevance",
+        body: `Boards test **nursing scope around ventilators**: you **do not** independently change **FiO₂ or tidal volume** outside standing orders—**collaborate with RT** per protocol. They test **ARDS recognition**: worsening oxygenation despite oxygen, **bilateral crackles**, **non-cardiac** fluid picture.
+
+Traps: **fluid boluses** for “hypotension” when the problem is **non-cardiogenic pulmonary edema**—follow **sepsis vs ARDS** story in stem. Another trap is **high tidal volumes** causing **barotrauma**—choose **lung protection** language when asked what matters.`,
+      },
+      {
+        id: "core_concept",
+        heading: "Core concept",
+        kind: "core_concept",
+        body: `- **Clinical picture**: **refractory hypoxemia** despite escalating oxygen, **work of breathing** may be masked if intubated—rely on **SpO₂ trends**, **ABG**, and **ventilator data** when available.
+- **Ventilation themes (exam-level)**: **lung-protective** low tidal volumes, **plateau pressure** limits, **adequate PEEP** for recruitment, **prone positioning** for refractory hypoxia when ordered—**RT/provider decisions**.
+- **Monitoring**: continuous **SpO₂**, serial **ABG** per orders, **peak/plateau pressures**, **minute ventilation**, and **alarm** investigation (disconnection, mucus plug, bronchospasm, pneumothorax themes).
+- **Hemodynamic support**: many clients need **vasopressors** for sepsis—**fluids** are not automatically “always correct” when **non-cardiogenic edema** dominates; follow **sepsis bundles** and **dynamic assessment** in the stem.
+- **Complications to anticipate**: **ventilator-associated pneumonia**, **barotrauma**, **O₂ toxicity** with prolonged **FiO₂**, **ICU weakness**, **delirium**, **stress ulcer** risk—address with **bundled nursing care** when ordered.
+
+**Exam cue:** If FiO₂ is **maxed** and SpO₂ is still poor, think **escalation pathways** (prone, inhaled pulmonary vasodilator themes, referral for **ECMO** in specialty stems)—not unsafe tidal-volume increases outside protocol.`,
+      },
+      {
+        id: "clinical_scenario",
+        heading: "Clinical scenario",
+        kind: "clinical_scenario",
+        body: `**Patient vignette.** A 54-year-old client with **septic shock** **reports** worsening **breathlessness** even though they are intubated and receiving **mechanical ventilation**. On your **assessment**, **FiO₂** is **80%** but **SpO₂** remains **86%**; breath sounds are **coarse bilaterally** with **copious secretions**. **Vital signs** show HR **112** and BP **98/58** on a **norepinephrine** infusion.
+
+**Fork:** This matches **severe ARDS physiology**—**notify RT and the provider**, **prepare for proning** per protocol, **suction** as indicated, and **avoid fluid overload** unless sepsis **resuscitation targets** clearly require volume. **Do not** silence ventilator alarms without checking **ETT position**, **circuit integrity**, and **hemodynamic trends**.
+
+**Priority nursing actions** include continuous **oxygenation monitoring**, accurate **I&O**, **sedation assessment** per orders, and a concise **SBAR** update when **oxygenation fails to improve** despite increasing support.`,
+      },
+      {
+        id: "takeaways",
+        heading: "Takeaways",
+        kind: "takeaways",
+        body: `- **ARDS** = **oxygen-refractory** hypoxemia with an **inflammatory** diffuse lung injury pattern—do not mistake it for routine pneumonia or “just turn up oxygen.”
+- **Ventilator management** is **interprofessional**: nurses **monitor trends and alarms**; **RT and providers** adjust settings per protocol—avoid independent tidal-volume or FiO₂ tweaks outside orders.
+- **Bundles** (elevation, oral care, **VAP prevention**, DVT prophylaxis when ordered) are classic exam themes because they reduce **avoidable harm** during long ICU stays.
+
+**NCLEX synthesis:** Before you pick an answer, name whether the primary problem is **oxygenation failure**, **ventilation failure**, **hemodynamic collapse**, or **a line/tube issue**—ARDS items often hide the correct fork inside **alarm** or **sudden desaturation** data.
+
+**Related:** [pneumonia oxygenation](LESSON:pneumonia-oxygenation) · [sepsis early recognition](LESSON:sepsis-early-recognition-hy) · [shock](LESSON:shock-recognition-fluids) · [ABG basics](LESSON:abg-interpretation-basics-hy) · [US RN hub](/us/rn/nclex-rn/lessons).`,
+      },
+    ],
+  },
+
+  "pneumonia-oxygenation": {
+    sections: [
+      {
+        id: "clinical_meaning",
+        heading: "Clinical meaning",
+        kind: "clinical_meaning",
+        body: `**Pneumonia** is **lower respiratory tract infection** with **consolidation** on exam/imaging—community-acquired, hospital-acquired, or ventilator-associated patterns appear on boards. **Oxygenation** problems arise from **shunt** and **V/Q mismatch**; nursing priorities are **adequate oxygen delivery**, **airway clearance**, **antibiotic timing per orders**, **culture data before antibiotics when stable**, and **monitoring for sepsis** ([sepsis lesson](LESSON:sepsis-early-recognition-hy)).
+
+Older adults may show **confusion** or **tachypnea** without fever—maintain a **low threshold** for escalation. Pair with [COPD](LESSON:copd-exacerbation-oxygen) when overlap complicates oxygen targets.
+
+**Introductory frame:** pneumonia questions often hide severity in **“stable vitals”**—still watch **work of breathing**, **oxygen response**, and **new confusion** as triggers for escalation.`,
+      },
+      {
+        id: "exam_relevance",
+        heading: "Exam relevance",
+        kind: "exam_relevance",
+        body: `Examiners test **priority**: **oxygen + monitoring + antibiotics** (when ordered) before **discharge teaching** in acute illness. They test **aspiration precautions** in stroke or GERD clients—**positioning**, **swallow screens**, **oral care**.
+
+Vaccination themes (pneumococcal, influenza) appear as **prevention** items for **stable** clients, not during acute respiratory failure.
+
+**Clinical application emphasis:** when **sepsis** is possible, **time-sensitive antibiotics** and **source control thinking** beat routine tasks—follow the stem’s severity cues.`,
+      },
+      {
+        id: "core_concept",
+        heading: "Core concept",
+        kind: "core_concept",
+        body: `- **Assessment**: fever, productive cough, pleuritic pain, **tachypnea**, **crackles/egophony** when tested, **hypoxemia**.
+- **Diagnostics**: CXR infiltrates, **procalcitonin** themes optional, **blood cultures** in severe disease per protocol, **sputum culture** when producible.
+- **Oxygen**: device selection by severity; **reassess** after changes; watch **CO₂** in COPD comorbidity.
+- **Nursing care**: **incentive spirometry** when appropriate, **mobility** as tolerated, **IS/turn/cough**, **hydration** unless contraindicated, **sepsis surveillance**.
+- **Isolation**: follow **respiratory precautions** per policy when **TB** or other airborne concerns are in the differential—communicate **travel/exposure** history when relevant to the stem.
+
+**Exam habit:** If **hypotension + pneumonia**, move to **sepsis bundle** thinking—**lactate**, **blood cultures**, **broad antibiotics** timing.`,
+      },
+      {
+        id: "clinical_scenario",
+        heading: "Clinical scenario",
+        kind: "clinical_scenario",
+        body: `**Patient vignette.** An 80-year-old client **reports increased confusion** and **tachypnea** to 28; temperature **38.1°C**. Lung exam shows **crackles** in the right base; SpO₂ **89%** on **RA**.
+
+**Fork:** **Apply oxygen per protocol**, **notify provider**, **obtain orders for CXR and labs**, and **monitor closely for sepsis**. Do not attribute confusion solely to “dementia” without treating **acute hypoxia/infection**.
+
+If **hypotension** develops, escalate to **septic shock** pathways with **fluid resuscitation** per orders and **antibiotic urgency** themes.
+
+**Clinical application expansion:** Continue **frequent reassessment** after oxygen starts: repeat **SpO₂**, **respiratory rate**, **blood pressure**, and **mental status**; prepare **sputum** samples only when productive and per orders; coordinate **incentive spirometry** when the client is stable enough to participate safely.`,
+      },
+      {
+        id: "takeaways",
+        heading: "Takeaways",
+        kind: "takeaways",
+        body: `- **Altered mentation + new respiratory findings** in older adults should be treated as **acute illness first**—hypoxia and infection can mimic or worsen baseline cognitive changes.
+- **Oxygen** should be titrated and **reassessed**; **antibiotics** belong in the plan when bacterial pneumonia is likely—**culture strategy** follows severity and protocol.
+- **Sepsis surveillance** means trending **vitals**, **labs**, **urine output**, and **perfusion**—not a single “normal enough” SpO₂ snapshot.
+- **Teaching and discharge planning** come after **stabilization**; during deterioration, prioritize **assessment + escalation**.
+
+**NCLEX drill:** If the client is **tachypneic** and **hypoxemic**, eliminate answers that prioritize **routine hygiene** or **family phone calls** before **oxygenation and provider communication**.
+
+**Related:** [sepsis recognition](LESSON:sepsis-early-recognition-hy) · [TB isolation](LESSON:tb-isolation-compliance) · [respiratory assessment](LESSON:respiratory-assessment-ngn) · [COPD oxygen](LESSON:copd-exacerbation-oxygen) · [hub](/canada/rn/nclex-rn/lessons).`,
+      },
+    ],
+  },
+
+  "pulmonary-embolism-clues": {
+    sections: [
+      {
+        id: "clinical_meaning",
+        heading: "Clinical meaning",
+        kind: "clinical_meaning",
+        body: `This lesson compresses **high-yield PE clues** for exam speed: **sudden dyspnea**, **pleuritic chest pain**, **tachycardia**, **hypoxemia**, **unilateral leg findings** suggesting **DVT**, and **risk factors** (surgery, immobility, malignancy, estrogen, prior VTE). **Massive PE** adds **hypotension**, **syncope**, **RV strain** on ECG or biomarkers—**obstructive shock** physiology.
+
+Nursing role is **recognition**, **oxygen**, **monitoring**, **activation of diagnostics**, **bleeding-safe anticoagulation** when ordered, and **clear handoffs**. You are not interpreting CTPA independently, but you **must not ignore** a classic story.
+
+Cross-link [pulmonary embolism NCLEX](LESSON:pulmonary-embolism-nclex-rn) and [DVT/PE priorities](LESSON:dvt-pe-nursing-priorities) for the full management frame.
+
+**Overview:** PE items reward connecting **risk** (immobility, surgery, estrogen, cancer, prior VTE) with **acute hypoxia/tachycardia** and **leg asymmetry**—then choosing **safe stabilization** and **timely communication**.`,
+      },
+      {
+        id: "exam_relevance",
+        heading: "Exam relevance",
+        kind: "exam_relevance",
+        body: `Boards use **PE mimics**—**ACS**, **pneumothorax**, **anxiety**—to test whether you anchor to **risk + acute change**. The best answers **stabilize oxygenation**, **monitor**, and **activate evaluation** rather than reassurance alone.
+
+They also test **contraindications to anticoagulation** (active bleeding, recent surgery nuances)—**IVC filter** themes appear as **provider decisions**.
+
+**Clinical application:** “first action” items often hinge on **oxygen + monitoring + notify** versus **routine tasks**—choose the option that **reduces harm fastest** when instability is evolving.`,
+      },
+      {
+        id: "core_concept",
+        heading: "Core concept",
+        kind: "core_concept",
+        body: `- **Wells/PE decision rules** may appear as background—follow the stem’s risk stratification.
+- **D-dimer** in **low-risk** clients; **CTPA** when **high suspicion**—don’t anchor on a “normal” D-dimer if pretest probability is high (follow item).
+- **Treatment**: anticoagulation when not contraindicated; **thrombolysis** for **massive PE** with hemodynamic compromise—**protocol**.
+- **Nursing**: **continuous telemetry** when unstable, **bleeding precautions**, **avoid IM injections**, **early mobility** when safe on therapy.
+- **Massive PE**: think **obstructive shock** physiology—**hypotension**, **RV strain** clues—prioritize **resuscitation** and **urgent team activation** per orders.
+
+**Memory:** **Unilateral leg swelling + dyspnea** = **VTE** until cleared.
+
+**Additional depth:** When boards add **pregnancy**, **malignancy**, or **recent travel**, treat those as **risk amplifiers**—your nursing story still centers on **recognition**, **oxygenation**, **monitoring**, **timely communication**, and **bleeding-safe anticoagulation** when ordered.`,
+      },
+      {
+        id: "clinical_scenario",
+        heading: "Clinical scenario",
+        kind: "clinical_scenario",
+        body: `**Patient vignette.** A 45-year-old postoperative client **reports a sharp pleuritic pain** and **sudden shortness of breath** walking to the bathroom. HR **118**, BP **122/70**, SpO₂ **91%** on **RA**, and the **right calf is swollen** compared with the left.
+
+**Fork:** **High suspicion for PE**—**oxygen**, **bed rest per protocol**, **notify provider**, **anticipate imaging**, **avoid massage** to the calf, and **continuous monitoring** for **hypotension**. Do not send them **alone** to radiology if unstable—follow facility escort policies.
+
+If **BP collapses**, switch to **massive PE** resuscitation themes—**small fluid boluses** may help select clients but **thrombolysis** decisions are provider-led.`,
+      },
+      {
+        id: "takeaways",
+        heading: "Takeaways",
+        kind: "takeaways",
+        body: `- **Postoperative** clients with **new unilateral leg swelling** plus **acute dyspnea** should trigger **VTE suspicion**—treat oxygenation and monitoring as immediate priorities.
+- **Oxygen** and **continuous assessment** come before **reassurance**; **anticoagulation** begins only when **contraindications** are considered—follow orders and policy.
+- **Never massage** a swollen painful calf when **DVT/PE** is possible—reduce **mobility risk** per protocol until evaluated.
+- **Massive PE** can present with **hypotension** and **RV failure** patterns—know escalation and **resuscitation** themes versus stable submassive presentations.
+
+**NCLEX drill:** When two answers both mention **CTPA**, pick the one that also **stabilizes the client** (oxygen, monitoring, escalation) if the stem shows **hypoxia** or **hypotension**.
+
+**Related:** [PE main lesson](LESSON:pulmonary-embolism-nclex-rn) · [DVT/PE priorities](LESSON:dvt-pe-nursing-priorities) · [shock](LESSON:shock-recognition-fluids) · [immobility prophylaxis](LESSON:immobility-dvt-prophylaxis) · [US hub](/us/rn/nclex-rn/lessons).`,
+      },
+    ],
+  },
 };

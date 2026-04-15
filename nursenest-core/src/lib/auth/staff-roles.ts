@@ -3,17 +3,18 @@ import { UserRole } from "@prisma/client";
 /** Resolved tier for RBAC (legacy `ADMIN` maps to `super`). */
 export type StaffTier = "super" | "content" | "support";
 
-const STAFF_ROLES: ReadonlySet<UserRole> = new Set([
-  UserRole.ADMIN,
-  UserRole.SUPER_ADMIN,
-  UserRole.CONTENT_ADMIN,
-  UserRole.SUPPORT_ADMIN,
+/** String keys only — avoids Prisma enum object identity issues in `Set.has`. */
+const STAFF_ROLE_STRINGS = new Set([
+  "ADMIN",
+  "SUPER_ADMIN",
+  "CONTENT_ADMIN",
+  "SUPPORT_ADMIN",
 ]);
 
 export function isStaffRole(role: UserRole | string | null | undefined): boolean {
   if (role == null || role === "") return false;
   const normalized = String(role).trim().toUpperCase();
-  return STAFF_ROLES.has(normalized as UserRole);
+  return STAFF_ROLE_STRINGS.has(normalized);
 }
 
 export function staffTierFromRole(role: UserRole): StaffTier {

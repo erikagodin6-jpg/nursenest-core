@@ -21,6 +21,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "ci:verify": "npm run db:generate && npm run typecheck && npm run build",
+    "admin:staff-users": "tsx scripts/admin-staff-users.mts",
     "audit:internal-links": "tsx scripts/audit-internal-links.ts",
     "audit:blog-quality": "tsx scripts/audit-blog-quality.ts",
     "blog:import-uk-licensure-seeds": "tsx scripts/blog/import-uk-licensure-blog-seeds.mts",

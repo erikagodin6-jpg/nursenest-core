@@ -6,6 +6,8 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { BATCH2_CATALOG_PATCHES } from "./batch2-catalog-patches";
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO = join(__dirname, "..", "..", "..");
 const AUDIT = join(REPO, "data/audit/lesson-completeness-audit.json");
@@ -44,16 +46,7 @@ function main() {
   const plan = JSON.parse(readFileSync(PLAN, "utf8")) as { lessons: PlanLesson[]; generatedAt: string };
   const byId = new Map(audit.lessons.map((r) => [r.lessonId, r]));
 
-  const BATCH_SLUGS = new Set([
-    "cardiac-tamponade-nclex-rn",
-    "phlebostatic-axis-nclex-rn",
-    "pulmonary-embolism-nclex-rn",
-    "respiratory-assessment-ngn",
-    "heart-failure-nursing-priorities-hy",
-    "acute-myocardial-infarction-troponin",
-    "shock-recognition-fluids",
-    "hypertensive-crisis-vs-urgency",
-  ]);
+  const BATCH_SLUGS = new Set(Object.keys(BATCH2_CATALOG_PATCHES));
 
   const rows: Array<Record<string, unknown>> = [];
   let improved = 0;
@@ -121,8 +114,7 @@ function main() {
       movedToProductionReadyEn: prodEn,
       productionReadyEnButLocalizationIncomplete: locOnly,
     },
-    notes:
-      "Before scores taken from lesson-fix-batch-2-plan.json (queue snapshot). Full batch has 100 plan rows; 8 unique slugs received catalog patches in this pass.",
+    notes: `Before scores taken from lesson-fix-batch-2-plan.json (queue snapshot). Full batch has 100 plan rows; ${BATCH_SLUGS.size} unique slugs have catalog patches in batch2-catalog-patches.ts.`,
   };
 
   mkdirSync(dirname(OUT_IMPACT), { recursive: true });
@@ -147,7 +139,7 @@ function main() {
 
 ## Remaining work
 
-- **~87 unique slugs** in the batch-2 queue still need the same editorial pass (see plan file).
+- **Remaining slugs** in the batch-2 plan: subtract patched count from the plan’s unique slug list (see plan file).
 - **relatedLessonRefs:** some HY rows still show 0 metadata refs; consider adding hub mapping where product SEO expects it.
 
 See \`lesson-completion-factory-notes.md\` for the repeatable workflow.

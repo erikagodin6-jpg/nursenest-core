@@ -1,6 +1,6 @@
-import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { isPathAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
+import { resolveAdminRequestPath } from "@/lib/auth/resolve-admin-request-path";
 import { getStaffSession, type StaffSession } from "@/lib/auth/staff-session";
 
 export type AdminSession = {
@@ -27,7 +27,7 @@ export async function requireAdmin(req?: Request) {
   const staff = await getStaffSession();
   if (!staff) return { ok: false as const, response: forbidden() };
 
-  const path = req ? new URL(req.url).pathname : ((await headers()).get("x-nn-admin-path") ?? "");
+  const path = req ? new URL(req.url).pathname : await resolveAdminRequestPath();
 
   if (path && !isPathAllowedForStaffTier(staff.tier, path)) {
     return {

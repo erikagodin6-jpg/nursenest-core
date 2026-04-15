@@ -141,8 +141,14 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
   const generatedAt = new Date().toISOString();
 
   const [stats, diagnostics, qa] = await Promise.all([
-    loadAdminDashboardStats(),
-    loadAdminDiagnostics(),
+    loadAdminDashboardStats().catch((e) => {
+      console.error("[loadAdminCommandCenter] loadAdminDashboardStats", e);
+      return null;
+    }),
+    loadAdminDiagnostics().catch((e) => {
+      console.error("[loadAdminCommandCenter] loadAdminDiagnostics", e);
+      return null;
+    }),
     loadAdminQaIssueSnapshot().catch(() => null),
   ]);
 
