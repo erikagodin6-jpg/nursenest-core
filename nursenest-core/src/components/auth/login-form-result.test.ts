@@ -24,4 +24,15 @@ describe("resolveLoginSubmitOutcome", () => {
     const outcome = resolveLoginSubmitOutcome(result, false);
     assert.equal(outcome, "invalid_credentials");
   });
+
+  it("treats ok: true without error as success (Auth.js happy path)", () => {
+    const result: LoginSubmitResultLike = {
+      error: undefined,
+      code: undefined,
+      status: 200,
+      ok: true,
+      url: "https://example.com/app",
+    };
+    assert.equal(resolveLoginSubmitOutcome(result, false), "success");
+  });
 });

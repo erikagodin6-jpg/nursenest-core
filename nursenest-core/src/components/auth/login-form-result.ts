@@ -13,6 +13,8 @@ export function resolveLoginSubmitOutcome(
 ): LoginSubmitOutcome {
   if (hasConfirmedSession) return "success";
   if (!result) return "generic_error";
+  /** Auth.js returns `ok: true` on successful credential exchange; treat that as success even if `error` is empty string. */
+  if (result.ok === true && !result.error) return "success";
   if (result.error) {
     if (result.code === "CredentialsSignin" || result.status === 401) {
       return "invalid_credentials";

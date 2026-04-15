@@ -49,12 +49,19 @@ export function LoginForm({
 
     setPending(true);
     try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-        redirectTo: redirectTarget,
-      });
+      let result: Awaited<ReturnType<typeof signIn>>;
+      try {
+        result = await signIn("credentials", {
+          email,
+          password,
+          redirect: false,
+          redirectTo: redirectTarget,
+        });
+      } catch (e) {
+        console.error("[login] signIn threw", e);
+        setError(t("pages.login.errorGeneric"));
+        return;
+      }
 
       let outcome = resolveLoginSubmitOutcome(result, false);
       if (outcome !== "success") {

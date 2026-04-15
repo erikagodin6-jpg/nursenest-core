@@ -41,6 +41,22 @@ if (process.env.NODE_ENV === "production") {
       new Error("AUTH_SECRET (or NEXTAUTH_SECRET) must be set in production for JWT signing"),
     );
   }
+  const nu = process.env.NEXTAUTH_URL?.trim();
+  if (nu) {
+    try {
+      const pathname = new URL(nu.startsWith("http") ? nu : `https://${nu}`).pathname;
+      if (pathname && pathname !== "/" && pathname !== "") {
+        safeServerLogCritical(
+          "auth",
+          "nextauth_url_must_be_origin_only",
+          { pathname, hint: "Use https://www.example.com — not a path to /login. Wrong pathname breaks next-auth/react credential POST URLs." },
+          new Error("NEXTAUTH_URL should be origin-only (no /login path)"),
+        );
+      }
+    } catch {
+      /* ignore malformed NEXTAUTH_URL here — runtime will surface auth errors */
+    }
+  }
 }
 
 function clientIpFromRequest(req: Request): string {
@@ -138,10 +154,33 @@ export const authConfig: NextAuthConfig = {
             // Case-insensitive: legacy or manual rows may not match normalized lowercase input.
             user = await prisma.user.findFirst({
               where: { email: { equals: identifier, mode: "insensitive" } },
+              select: {
+                id: true,
+                email: true,
+                name: true,
+                passwordHash: true,
+                role: true,
+                country: true,
+                tier: true,
+                alliedProfessionKey: true,
+                credentialVersion: true,
+              },
             });
           } else {
-            user = await prisma.user.findUnique({
-              where: { username: identifier },
+            // Case-insensitive usernames: legacy rows may differ in casing from normalized login input.
+            user = await prisma.user.findFirst({
+              where: { username: { equals: identifier, mode: "insensitive" } },
+              select: {
+                id: true,
+                email: true,
+                name: true,
+                passwordHash: true,
+                role: true,
+                country: true,
+                tier: true,
+                alliedProfessionKey: true,
+                credentialVersion: true,
+              },
             });
           }
         } catch (e) {
