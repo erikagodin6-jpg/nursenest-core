@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { ChevronDown } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -15,7 +15,7 @@ import { applyGlobalRegionSelection } from "@/lib/marketing/apply-global-region-
 import { useClientGlobalRegionCookie } from "@/lib/region/use-client-global-region";
 import { effectiveMarketingHeaderGlobalRegion } from "@/lib/marketing/marketing-header-global-region";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
-import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 
 /**
  * Desktop-only preferences rail.
@@ -25,6 +25,7 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
  */
 export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?: "standard" | "dark-bar" }) {
   const { t, locale } = useMarketingI18n();
+  const pathname = usePathname() ?? "/";
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
@@ -59,15 +60,17 @@ export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?
   }, []);
 
   const globalLocale: GlobalLocaleCode = (locale as GlobalLocaleCode) ?? "en";
+  const strippedPath = stripMarketingLocalePrefix(pathname).pathname;
   const clientGlobalRegion = useClientGlobalRegionCookie();
   const effectiveGlobalRegion: GlobalRegionSlug = useMemo(
     () =>
       effectiveMarketingHeaderGlobalRegion({
+        strippedPathname: strippedPath,
         globalRegionCookie: clientGlobalRegion,
         marketingExamRegion: region,
         sessionCountryUsCa: user?.country,
       }),
-    [clientGlobalRegion, region, user?.country],
+    [strippedPath, clientGlobalRegion, region, user?.country],
   );
 
   const buildLocalizedMarketingPath = useCallback(

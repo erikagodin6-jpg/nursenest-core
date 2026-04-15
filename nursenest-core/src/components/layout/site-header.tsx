@@ -82,15 +82,6 @@ type MegaMenuGroup = {
   links: MegaMenuLink[];
 };
 
-/** Regional alternative — used by PN and NP menus to surface the other-region hub. */
-type MegaMenuRegionLink = {
-  key: string;
-  label: string;
-  href: string;
-  /** True = the user's currently-selected region hub. */
-  isPrimary: boolean;
-};
-
 type MegaMenuConfig = {
   key: ExamMenuKey;
   label: string;
@@ -98,8 +89,6 @@ type MegaMenuConfig = {
   /** Short subtitle shown in the primary hub card (one sentence). */
   hubDescription: string;
   groups: MegaMenuGroup[];
-  /** Regional alternatives rendered in a separate low-weight section (PN, NP). */
-  regionLinks?: MegaMenuRegionLink[];
   /**
    * Badge text shown in the hub card eyebrow for menus where region matters.
    * Omit for single-path menus (RN, Allied) — they default to "Start Here".
@@ -241,20 +230,6 @@ function createMegaMenus(region: "US" | "CA"): MegaMenuConfig[] {
           links: [{ key: "pn-study-plan", label: "Build A Study Plan", href: studyPlanSignupHref }],
         },
       ],
-      regionLinks: [
-        {
-          key: "pn-primary",
-          label: region === "CA" ? "REx-PN Hub (Canada)" : "NCLEX-PN Hub (US)",
-          href: region === "CA" ? pnCaHub : pnUsHub,
-          isPrimary: true,
-        },
-        {
-          key: "pn-alt",
-          label: region === "CA" ? "NCLEX-PN Hub (US)" : "REx-PN Hub (Canada)",
-          href: region === "CA" ? pnUsHub : pnCaHub,
-          isPrimary: false,
-        },
-      ],
     },
     {
       key: "np",
@@ -284,10 +259,6 @@ function createMegaMenus(region: "US" | "CA"): MegaMenuConfig[] {
           heading: "Study Tools",
           links: [{ key: "np-study-plan", label: "Build A Study Plan", href: studyPlanSignupHref }],
         },
-      ],
-      regionLinks: [
-        { key: "np-us", label: "US NP Branches", href: npUsHub, isPrimary: region === "US" },
-        { key: "np-ca", label: "Canada NP Branches", href: npCaHub, isPrimary: region === "CA" },
       ],
     },
     {
@@ -380,15 +351,17 @@ export function SiteHeader() {
   const mobileLangRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
+  const strippedPath = stripMarketingLocalePrefix(pathname).pathname;
   const clientGlobalRegion = useClientGlobalRegionCookie();
   const effectiveGlobalRegion: GlobalRegionSlug = useMemo(
     () =>
       effectiveMarketingHeaderGlobalRegion({
+        strippedPathname: strippedPath,
         globalRegionCookie: clientGlobalRegion,
         marketingExamRegion: region,
         sessionCountryUsCa: user?.country,
       }),
-    [clientGlobalRegion, region, user?.country],
+    [strippedPath, clientGlobalRegion, region, user?.country],
   );
   const globalLocale: GlobalLocaleCode = (locale as GlobalLocaleCode) ?? "en";
 
@@ -633,8 +606,6 @@ export function SiteHeader() {
       </div>
     </div>
   );
-
-  const strippedPath = stripMarketingLocalePrefix(pathname).pathname;
 
   /** Homepage-only acquisition param; other marketing pages keep plain signup URL. */
   const guestMarketingSignupHref = useMemo(() => {
