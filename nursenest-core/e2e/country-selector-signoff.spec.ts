@@ -1,6 +1,13 @@
 /**
  * Browser sign-off: country selector (Philippines hub → US/CA, mobile drawer, keyboard).
- * Requires: `npm run dev` on BASE_URL (default http://127.0.0.1:3000).
+ *
+ * Prerequisites:
+ * - `BASE_URL` (default http://127.0.0.1:3000) with `npm run dev`
+ * - `RUN_HEAVY_BUILD_TASKS=false` if `next.config.ts` dynamic imports fail in dev
+ * - `AUTH_SECRET` / `NEXTAUTH_SECRET` set (avoids Auth.js MissingSecret noise)
+ *
+ * Locators use `.nn-header-animate-in` because the light-theme utility strip is a **sibling** of
+ * `<header data-nn-nav-mode>`, not a descendant.
  */
 import { expect, test, type Page } from "@playwright/test";
 import { GLOBAL_REGION_COOKIE } from "../src/lib/region/global-region-cookie";
