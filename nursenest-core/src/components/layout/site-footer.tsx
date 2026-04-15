@@ -80,7 +80,7 @@ export function SiteFooter() {
             </div>
 
             <div>
-              <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase("Exam Pathways", locale)}</h3>
+              <h3 className="mb-3 text-sm font-medium text-[var(--footer-fg)]">{formatTitleCase("Exam Pathways", locale)}</h3>
               <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
                 <li>
                   <FLink href={examHubs.rn}>RN</FLink>
@@ -98,7 +98,7 @@ export function SiteFooter() {
             </div>
 
             <div>
-              <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase("Explore", locale)}</h3>
+              <h3 className="mb-3 text-sm font-medium text-[var(--footer-fg)]">{formatTitleCase("Explore", locale)}</h3>
               <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
                 <li>
                   <FLink href="/pricing">Pricing</FLink>
@@ -119,7 +119,7 @@ export function SiteFooter() {
             </div>
 
             <div>
-              <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase("Account", locale)}</h3>
+              <h3 className="mb-3 text-sm font-medium text-[var(--footer-fg)]">{formatTitleCase("Account", locale)}</h3>
               <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
                 <li>
                   <FLink href={learnerSignInHref}>Login</FLink>
@@ -127,7 +127,7 @@ export function SiteFooter() {
                 <li>
                   <Link
                     href={startPracticingHref}
-                    className="nn-nav-cta inline-flex min-h-[40px] items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold"
+                    className="nn-nav-cta inline-flex min-h-[40px] items-center justify-center rounded-xl px-4 py-2 text-sm font-medium"
                   >
                     {formatTitleCase(PRIMARY_CTA, locale)}
                   </Link>
@@ -142,7 +142,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mb-6 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_4%,var(--footer-bg))] px-4 pb-6 pt-6">
-          <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">
+          <h3 className="mb-3 break-words text-sm font-medium text-[var(--footer-fg)]">
             {formatTitleCase(t("footer.studyInYourLanguage"), locale)}
           </h3>
           <div className="mb-3 flex flex-wrap gap-2">
@@ -153,7 +153,7 @@ export function SiteFooter() {
                   disabled={disabled}
                   onClick={onSelect}
                   className={`inline-flex items-center gap-1 text-xs transition-colors hover:text-[var(--footer-fg)] ${
-                    code === locale ? "font-semibold text-[var(--footer-fg)]" : "text-[var(--footer-muted)]"
+                    code === locale ? "font-medium text-[var(--footer-fg)]" : "text-[var(--footer-muted)]"
                   }`}
                 >
                   <span>{flag}</span>

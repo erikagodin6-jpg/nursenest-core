@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import Script from "next/script";
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
 import { AnalyticsProvider } from "@/components/providers/analytics-provider";
@@ -10,17 +10,6 @@ import { NURSENEST_DEFAULT_THEME, THEME_STORAGE_KEY } from "@/lib/theme/theme-re
 import "./globals.css";
 /** Bundled with root layout CSS so marketing pages avoid a second render-blocking stylesheet (rules are dark-theme + `.nn-marketing-surface` scoped). */
 import "./(marketing)/marketing-dark-utilities.css";
-
-/** Variable cut = one font request vs four static weights; `font-weight` utilities still map to the same axis. */
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
-  weight: "variable",
-  style: ["normal", "italic"],
-  display: "swap",
-  adjustFontFallback: true,
-  preload: true,
-});
 
 const inter = Inter({
   variable: "--font-inter",
@@ -90,7 +79,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${inter.variable} h-full antialiased`}
+      className={`${inter.variable} h-full antialiased`}
       data-theme="ocean"
       suppressHydrationWarning
     >

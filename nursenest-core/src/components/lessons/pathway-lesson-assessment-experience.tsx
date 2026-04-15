@@ -87,7 +87,7 @@ export function PathwayLessonAssessmentExperience({
 
   return (
     <div className="space-y-6">
-      <section className="nn-study-card nn-study-card--wash mx-auto max-w-5xl border border-[var(--semantic-border-soft)] p-4 sm:p-5">
+      <section className="mx-auto max-w-5xl rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-brand)_10%)] bg-[color-mix(in_srgb,var(--theme-page-bg)_94%,var(--semantic-panel-warm)_6%)] p-4 shadow-[var(--shadow-card)] sm:p-5">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--semantic-text-secondary)]">

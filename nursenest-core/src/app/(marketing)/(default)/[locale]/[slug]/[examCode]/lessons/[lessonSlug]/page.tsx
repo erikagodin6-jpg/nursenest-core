@@ -80,6 +80,12 @@ import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
 import { resolvePathwayLessonBankAssessments } from "@/lib/lessons/lesson-bank-assessment-selection";
 import {
+  loadPathwayLessonAdjacent,
+  mapPathwayLessonAdjacentToHrefs,
+} from "@/lib/lessons/pathway-lesson-adjacent";
+import { PathwayLessonSequenceNavBar } from "@/components/lessons/pathway-lesson-sequence-nav";
+import { PathwayLessonStickySequenceNav } from "@/components/lessons/pathway-lesson-sticky-sequence-nav";
+import {
   pickPathwayLessonMarketingRecordChipsSource,
   toPathwayLessonDeferredServerSnapshot,
 } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
@@ -214,6 +220,11 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const { lesson, fullAccess, scope, entitlementError } = routeResolution;
   const examName = pathwayRegionAwareExamName(pathway);
   const bankAssessments = await resolvePathwayLessonBankAssessments(pathway, lesson);
+  const adjacentSlugs = await loadPathwayLessonAdjacent(pathway.id, lesson.slug, lessonContentLocale);
+  const lessonAdjacentHrefs = mapPathwayLessonAdjacentToHrefs(adjacentSlugs, (slug) =>
+    pathwayLessonPublicDetailPath(pathway, slug),
+  );
+  const hasLessonSequence = Boolean(lessonAdjacentHrefs.prev || lessonAdjacentHrefs.next);
   const visible = visibleSectionsForLesson(lesson, fullAccess);
   const visibleForRender = fullAccess ? visible : visible.map(sanitizePaywallPreviewSection);
   const previewLesson =
@@ -271,7 +282,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   return (
     <div className="mx-auto max-w-6xl px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
       <div
-        className={`nn-lesson-page-shell px-3 py-3 sm:px-6 sm:py-5${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
+        className={`nn-lesson-page-shell px-3 py-3 sm:px-6 sm:py-5${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
       >
         <MarketingPathwayLessonDetailViewBeacon
           pathway={pathway}
@@ -295,6 +306,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         <div className="mb-4">
           <BreadcrumbTrail items={crumbs} />
         </div>
+        <PathwayLessonSequenceNavBar adjacent={lessonAdjacentHrefs} className="mb-4 hidden md:grid" />
         <PathwayLessonProgressTracker
           pathwayId={pathway.id}
           lessonSlug={lesson.slug}
@@ -518,6 +530,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         </p>
 
         <MarketingStudyCrossLinks className="mt-12" />
+        {hasLessonSequence ? <PathwayLessonStickySequenceNav adjacent={lessonAdjacentHrefs} /> : null}
       </div>
     </div>
   );

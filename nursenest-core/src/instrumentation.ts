@@ -7,6 +7,7 @@ import {
   logStripeCheckoutEnvStartupStatus,
   logStripeProductionPricingMisconfiguration,
 } from "@/lib/stripe/pricing-map";
+import { assertPinnedAuthBasePath } from "@/lib/auth/auth-base-path";
 
 function validateAuthEnv(): void {
   if (process.env.NODE_ENV !== "production") return;
@@ -21,6 +22,17 @@ function validateAuthEnv(): void {
     console.warn(
       "[nursenest-core] auth env: AUTH_URL is unset — relying on trustHost + forwarded headers. Set AUTH_URL to your public origin (e.g. https://app.example.com) if cookies or redirects misbehave.",
     );
+  } else {
+    try {
+      const { pathname } = new URL(url.trim());
+      if (pathname !== "/" && pathname !== "") {
+        console.warn(
+          `[nursenest-core] auth env: AUTH_URL/NEXTAUTH_URL should be origin-only (no path). Got pathname "${pathname}". NextAuth used to infer a wrong basePath from this and break /api/auth — basePath is now pinned to /api/auth; still fix the env to avoid redirect/cookie confusion.`,
+        );
+      }
+    } catch {
+      /* invalid URL — other code paths will surface */
+    }
   }
 }
 
@@ -46,6 +58,7 @@ export async function register() {
     console.error(
       `[nursenest-core] instrumentation: nodejs runtime registered PORT=${process.env.PORT ?? "(unset)"}`,
     );
+    assertPinnedAuthBasePath();
     validateAuthEnv();
     validateStripeAppEnv();
     logStripeCheckoutEnvStartupStatus();

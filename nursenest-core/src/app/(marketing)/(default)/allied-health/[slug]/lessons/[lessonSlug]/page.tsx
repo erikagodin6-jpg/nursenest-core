@@ -82,6 +82,12 @@ import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
 import { resolvePathwayLessonBankAssessments } from "@/lib/lessons/lesson-bank-assessment-selection";
+import {
+  loadPathwayLessonAdjacent,
+  mapPathwayLessonAdjacentToHrefs,
+} from "@/lib/lessons/pathway-lesson-adjacent";
+import { PathwayLessonSequenceNavBar } from "@/components/lessons/pathway-lesson-sequence-nav";
+import { PathwayLessonStickySequenceNav } from "@/components/lessons/pathway-lesson-sticky-sequence-nav";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 86400;
@@ -190,6 +196,11 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   const professionHeroPath = alliedHealthSegmentPath(prof.segment);
   const base = alliedHealthLessonsIndexPath(prof.professionKey);
   const lessonPath = alliedHealthLessonDetailPath(prof.professionKey, lesson.slug);
+  const adjacentSlugs = await loadPathwayLessonAdjacent(pathway.id, lesson.slug, lessonContentLocale);
+  const lessonAdjacentHrefs = mapPathwayLessonAdjacentToHrefs(adjacentSlugs, (slug) =>
+    alliedHealthLessonDetailPath(prof.professionKey, slug),
+  );
+  const hasLessonSequence = Boolean(lessonAdjacentHrefs.prev || lessonAdjacentHrefs.next);
 
   let related: Awaited<ReturnType<typeof getRelatedPathwayLessons>> = [];
   try {
@@ -249,7 +260,9 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
     .filter((s) => !omitHighYieldIds.has(s.id));
 
   return (
-    <div className="nn-marketing-surface mx-auto max-w-5xl px-4 py-5 sm:py-7">
+    <div
+      className={`nn-marketing-surface mx-auto max-w-5xl px-4 py-5 sm:py-7${hasLessonSequence ? " pb-20 sm:pb-7" : ""}`}
+    >
       <PathwayLessonMedicalEducationJsonLd
         path={lessonPath}
         headline={lesson.seoTitle}
@@ -261,6 +274,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       <div className="mb-4">
         <BreadcrumbTrail items={crumbs} />
       </div>
+      <PathwayLessonSequenceNavBar adjacent={lessonAdjacentHrefs} className="mb-4 hidden md:grid" />
       <PathwayLessonProgressTracker
         pathwayId={pathway.id}
         lessonSlug={lesson.slug}
@@ -478,6 +492,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       </div>
 
       <MarketingStudyCrossLinks className="mt-12" />
+      {hasLessonSequence ? <PathwayLessonStickySequenceNav adjacent={lessonAdjacentHrefs} /> : null}
     </div>
   );
 }

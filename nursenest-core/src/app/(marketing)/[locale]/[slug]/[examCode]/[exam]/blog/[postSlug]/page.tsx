@@ -156,10 +156,10 @@ export default async function LocalizedBlogPostPage({ params }: Props) {
       </Link>
 
       <header className="mt-6 space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+        <p className="text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">
           {regionName} · {exam.toUpperCase()}
         </p>
-        <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">
+        <h1 className="text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)]">
           {post.localizedTitle}
         </h1>
         {post.publishedAt ? (

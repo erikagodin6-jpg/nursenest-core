@@ -28,7 +28,7 @@ body {
  * prevented theme switching from changing page colors.
  */
 :root {
-  --font-sans: "DM Sans", system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
   --radius: 0.75rem;
   --color-warmwhite: #fdfcfa;
   --color-softgray: #6b7280;
@@ -78,8 +78,19 @@ body {
   --text-marketing-body: 1rem;
   --text-marketing-body-sm: 0.875rem;
   --text-marketing-caption: 0.8125rem;
-  --leading-marketing-body: 1.62;
+  --leading-marketing-body: 1.66;
   --leading-marketing-snug: 1.28;
+  /* Shared type scale — readable, low-fatigue hierarchy (weights stay 400–600) */
+  --nn-font-weight-body: 400;
+  --nn-font-weight-ui: 500;
+  /** Section titles + blog/lesson subheads (not the largest hero line) */
+  --nn-font-weight-heading: 500;
+  /** Primary marketing hero / page title only — slightly stronger than section heads */
+  --nn-font-weight-hero: 600;
+  /** Inline emphasis (e.g. lesson `<strong>`) without bumping all headings to 600 */
+  --nn-font-weight-emphasis: 600;
+  --nn-leading-prose: 1.65;
+  --nn-max-prose-ch: 65ch;
 
   /*
    * First-paint neutral header surface. Theme-specific values live in theme-palettes.css
@@ -811,8 +822,14 @@ body {
   margin: 0;
   background: var(--bg-page, var(--theme-page-bg));
   color: var(--theme-body-text);
-  font-family: var(--font-dm-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1.6;
   text-rendering: optimizeLegibility;
+}
+
+:where(p, li, dd) {
+  line-height: 1.65;
 }
 
 a {
@@ -896,7 +913,7 @@ a {
   align-items: center;
   justify-content: center;
   gap: 0.375rem;
-  font-weight: 600;
+  font-weight: var(--nn-font-weight-ui);
   font-size: 0.875rem;
   line-height: 1.25;
   border-radius: 9999px;
@@ -1031,7 +1048,7 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
   box-shadow: none;
   text-decoration: underline;
   text-underline-offset: 3px;
-  font-weight: 600;
+  font-weight: var(--nn-font-weight-ui);
 }
 .nn-ui-btn--link:hover:not(:disabled):not([aria-disabled="true"]) {
   color: var(--accent-hover);
@@ -1041,7 +1058,7 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
   display: inline-flex;
   align-items: center;
   max-width: 100%;
-  font-weight: 600;
+  font-weight: var(--nn-font-weight-ui);
   font-size: 0.75rem;
   line-height: 1.2;
   border-radius: 9999px;
@@ -1184,7 +1201,7 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
 /* Section titles: consistent hierarchy (H1 hero → H2 section → H3 subblock) */
 .nn-marketing-h1 {
   font-size: var(--text-hero);
-  font-weight: 750;
+  font-weight: var(--nn-font-weight-hero);
   letter-spacing: -0.03em;
   line-height: 1.02;
   color: var(--palette-heading);
@@ -1192,7 +1209,7 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
 
 .nn-marketing-h2 {
   font-size: var(--text-section);
-  font-weight: 700;
+  font-weight: var(--nn-font-weight-heading);
   letter-spacing: -0.02em;
   line-height: 1.1;
   color: var(--palette-heading);
@@ -1200,7 +1217,7 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
 
 .nn-marketing-h3 {
   font-size: var(--text-marketing-h3);
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: -0.02em;
   line-height: var(--leading-marketing-snug);
   color: var(--palette-heading);
@@ -1208,26 +1225,30 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
 
 .nn-marketing-h4 {
   font-size: var(--text-marketing-h4);
-  font-weight: 600;
+  font-weight: 500;
   line-height: var(--leading-marketing-snug);
   color: var(--palette-heading);
 }
 
 .nn-marketing-body {
   font-size: var(--text-marketing-body);
+  font-weight: 400;
   line-height: var(--leading-marketing-body);
   color: var(--palette-text);
 }
 
 .nn-marketing-body-sm {
   font-size: var(--text-marketing-body-sm);
+  font-weight: 400;
   line-height: var(--leading-marketing-body);
+  letter-spacing: 0.015em;
   color: var(--palette-text);
 }
 
 .nn-marketing-caption {
   font-size: var(--text-marketing-caption);
-  line-height: 1.45;
+  line-height: 1.5;
+  letter-spacing: 0.012em;
   color: var(--palette-text-muted);
 }
 
@@ -1248,7 +1269,7 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
 .nn-marketing-eyebrow,
 .nn-marketing-label {
   font-size: 0.6875rem;
-  font-weight: 700;
+  font-weight: var(--nn-font-weight-ui);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--theme-muted-text);
@@ -1272,6 +1293,108 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
     align-items: center;
     justify-content: center;
   }
+}
+
+/*
+ * Rich HTML from CMS / blog (`prose` class) — comfortable long-form reading without
+ * requiring @tailwindcss/typography; theme tokens only, no color redesign.
+ */
+article .prose {
+  margin-inline: auto;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: var(--nn-font-weight-body);
+  line-height: var(--nn-leading-prose);
+  color: var(--theme-body-text);
+  max-width: var(--nn-max-prose-ch);
+}
+
+article .prose :where(p) {
+  margin-top: 0;
+  margin-bottom: 1.125em;
+}
+
+article .prose :where(p:last-child) {
+  margin-bottom: 0;
+}
+
+article .prose :where(h2) {
+  margin-top: 1.75em;
+  margin-bottom: 0.5em;
+  font-size: clamp(1.2rem, 2.5vw, 1.4rem);
+  font-weight: var(--nn-font-weight-heading);
+  line-height: var(--leading-marketing-snug);
+  letter-spacing: -0.02em;
+  color: var(--theme-heading-text);
+}
+
+article .prose :where(h3) {
+  margin-top: 1.5em;
+  margin-bottom: 0.4em;
+  font-size: 1.08rem;
+  font-weight: var(--nn-font-weight-ui);
+  line-height: var(--leading-marketing-snug);
+  letter-spacing: -0.015em;
+  color: var(--theme-heading-text);
+}
+
+article .prose :where(h4) {
+  margin-top: 1.25em;
+  margin-bottom: 0.35em;
+  font-size: 1rem;
+  font-weight: var(--nn-font-weight-ui);
+  line-height: var(--leading-marketing-snug);
+  color: var(--theme-heading-text);
+}
+
+article .prose :where(ul, ol) {
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  padding-left: 1.35rem;
+}
+
+article .prose :where(li) {
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
+  line-height: var(--nn-leading-prose);
+}
+
+article .prose :where(ul) {
+  list-style-type: disc;
+}
+
+article .prose :where(ol) {
+  list-style-type: decimal;
+}
+
+article .prose :where(a) {
+  font-weight: var(--nn-font-weight-ui);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+article .prose :where(blockquote) {
+  margin: 1.25em 0;
+  padding-left: 1rem;
+  border-left: 3px solid color-mix(in srgb, var(--theme-primary) 35%, var(--border-subtle));
+  color: var(--theme-muted-text);
+  font-style: normal;
+}
+
+article .prose :where(code) {
+  font-size: 0.92em;
+  font-weight: var(--nn-font-weight-body);
+}
+
+article .prose :where(pre) {
+  margin: 1.25em 0;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle, var(--theme-border));
+  background: var(--bg-inset, var(--surface-input, var(--theme-input-bg)));
+  font-size: 0.875rem;
+  line-height: 1.55;
 }
 
 .nn-card-interactive {
@@ -1619,6 +1742,7 @@ html[data-theme] .nn-marketing-surface {
   border-radius: 9999px;
   border: 1px solid transparent;
   padding: 0.45rem 0.7rem;
+  font-weight: 500;
   color: var(--nav-link, var(--header-link, var(--nav-fg)));
   line-height: 1;
   white-space: nowrap;
@@ -2029,6 +2153,7 @@ html[data-theme] .nn-marketing-surface {
 }
 
 .nn-btn-primary {
+  font-weight: var(--nn-font-weight-ui);
   background: var(--role-cta, var(--theme-primary));
   color: var(--role-cta-foreground, #ffffff);
   border-radius: 9999px;
@@ -2060,6 +2185,7 @@ html[data-theme] .nn-marketing-surface {
 
 /* Header/nav CTA variant — remains readable on denser nav surfaces. */
 .nn-nav-cta {
+  font-weight: var(--nn-font-weight-ui);
   background: var(--header-cta);
   color: var(--header-cta-text);
   border: 1px solid color-mix(in srgb, var(--header-cta) 58%, var(--header-border));
@@ -2135,6 +2261,7 @@ html[data-theme] .nn-marketing-surface {
 }
 
 .nn-btn-secondary {
+  font-weight: var(--nn-font-weight-ui);
   background: var(--role-secondary-action-bg, var(--bg-card, var(--theme-card-bg)));
   border: 1px solid var(--role-secondary-action-border, var(--border-subtle, var(--theme-input-border)));
   color: var(--role-secondary-action-text, var(--theme-menu-text));
@@ -2659,7 +2786,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 .nn-lesson-hy-memory__text {
   margin: 0;
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: var(--nn-font-weight-ui);
   line-height: 1.45;
   color: var(--theme-heading-text);
 }
@@ -2712,13 +2839,13 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 
 /* Header line preceding a bullet list (parsed "headed-list" pattern) */
 .nn-lesson-prose .nn-lesson-list-header {
-  font-weight: 600;
+  font-weight: var(--nn-font-weight-ui);
   color: var(--palette-heading, var(--semantic-text-primary));
   margin-bottom: 0;
 }
 
 .nn-lesson-prose strong {
-  font-weight: 700;
+  font-weight: var(--nn-font-weight-emphasis);
   color: var(--palette-heading, var(--semantic-text-primary));
 }
 

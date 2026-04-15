@@ -40,6 +40,10 @@ export function PathwayLessonDetailHeader({
       data-nn-exam-short={examName}
       className="nn-gradient-safe relative overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-gradient-to-br from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-page-bg))] px-4 py-3 shadow-[var(--shadow-card)] sm:px-5 sm:py-4"
     >
+      {/*
+        Layout mirrors legacy `client/src/pages/lesson-detail.tsx` title + ~220px action column:
+        main study context left, progress / CTAs right on md+.
+      */}
       <div
         className="pointer-events-none absolute -right-10 -top-12 h-36 w-36 rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_7%,transparent)] blur-3xl"
         aria-hidden
@@ -62,8 +66,8 @@ export function PathwayLessonDetailHeader({
           <span className="text-[var(--theme-muted-text)]">{bodySystem}</span>
         </div>
         {metaChips ? <div className="mt-3 flex flex-wrap gap-1.5">{metaChips}</div> : null}
-        <div className="mt-3 flex flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0 flex-1">
+        <div className="mt-3 grid grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,1fr)_minmax(11rem,13.75rem)] md:gap-x-6">
+          <div className="min-w-0">
             <h1 className="nn-lesson-page-title mt-1 text-balance">
               {lessonTitle}
             </h1>
@@ -75,7 +79,9 @@ export function PathwayLessonDetailHeader({
               Focused lesson content with practice questions and exam-style drills linked below.
             </p>
           </div>
-          {trailing ? <div className="shrink-0">{trailing}</div> : null}
+          {trailing ? (
+            <div className="flex w-full flex-col gap-2 md:items-stretch md:justify-self-end md:pt-0.5">{trailing}</div>
+          ) : null}
         </div>
         <div className="mt-3 border-t border-[color-mix(in_srgb,var(--border-subtle)_88%,var(--theme-primary))] pt-3">
           <Link

@@ -118,12 +118,12 @@ export default async function BlogPostPage({ params }: Props) {
       </Link>
       <header className="mt-6 space-y-2">
         {post.category ? (
-          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">{post.category}</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">{post.category}</p>
         ) : null}
         {post.exam ? (
           <p className="text-xs font-medium text-primary">Exam focus: {post.exam}</p>
         ) : null}
-        <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">{post.title}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)]">{post.title}</h1>
         <p className="text-sm text-[var(--theme-muted-text)]">{publishedAt.toISOString().slice(0, 10)}</p>
         {"workflowStatus" in post && post.workflowStatus ? (
           <p className="text-xs text-muted-foreground">Editorial status: {post.workflowStatus.replace(/_/g, " ").toLowerCase()}</p>
@@ -164,7 +164,7 @@ export default async function BlogPostPage({ params }: Props) {
       />
       {"apaReferences" in post && Array.isArray(post.apaReferences) && post.apaReferences.length > 0 ? (
         <section className="mt-10 rounded-xl border border-border/60 bg-muted/20 p-5">
-          <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">References (APA 7)</h2>
+          <h2 className="text-base font-medium text-[var(--theme-heading-text)]">References (APA 7)</h2>
           <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-muted-foreground">
             {post.apaReferences.map((ref: string, idx: number) => (
               <li key={`${idx}-${ref.slice(0, 24)}`}>{ref}</li>

@@ -20,7 +20,7 @@ const SIGN_IN_CLASS =
   "nn-marketing-body-sm inline-flex items-center rounded-md px-3 py-2 font-medium tracking-normal text-[color:var(--nn-nav-fg,var(--nav-link))] transition-colors duration-150 hover:bg-[color:var(--nn-nav-hover-bg,var(--nav-hover))] hover:text-[color:var(--nn-nav-hover-fg,var(--nav-link-hover))]";
 
 const GET_STARTED_CLASS =
-  "nn-button-primary nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold";
+  "nn-button-primary nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium";
 
 function useLocalizeHref() {
   const { locale } = useMarketingI18n();

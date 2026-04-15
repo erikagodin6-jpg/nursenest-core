@@ -59,14 +59,14 @@ const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
 
 /** Keep desktop nav pills single-line and compact so the full global IA fits cleanly. */
 const NAV_LINK_CLASS =
-  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-9 items-center justify-center whitespace-nowrap px-2.5 text-center font-semibold leading-none tracking-tight xl:px-3";
+  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-9 items-center justify-center whitespace-nowrap px-2 text-center font-medium leading-none tracking-tight xl:px-2.5";
 const NAV_TIER_LINK_CLASS =
-  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-8 items-center justify-center whitespace-nowrap px-2.5 text-center font-semibold leading-none tracking-tight xl:px-3";
+  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-8 items-center justify-center whitespace-nowrap px-2 text-center font-medium leading-none tracking-tight xl:px-2.5";
 const HEADER_SECONDARY_ACTION_CLASS =
   "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
 /** Country / language / theme triggers aligned with main nav height (sits in the primary header row, not a detached strip). */
 const HEADER_MAIN_NAV_MENU_TRIGGER_CLASS =
-  "nn-marketing-body-sm inline-flex h-9 max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--nav-fg)_14%,var(--nav-border))] bg-[color-mix(in_srgb,var(--nav-fg)_04%,transparent)] px-2.5 text-center font-semibold leading-none tracking-tight text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)] xl:max-w-[13rem] xl:px-3";
+  "nn-marketing-body-sm inline-flex h-9 max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--nav-fg)_14%,var(--nav-border))] bg-[color-mix(in_srgb,var(--nav-fg)_04%,transparent)] px-2 text-center font-medium leading-none tracking-tight text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)] xl:max-w-[13rem] xl:px-2.5";
 type ExamMenuKey = "rn" | "pn" | "np" | "newgrad" | "allied";
 
 type MegaMenuLink = {
@@ -769,7 +769,7 @@ export function SiteHeader() {
                 </Link>
                 <Link
                   href={guestMarketingSignupHref}
-                  className="nn-nav-cta inline-flex min-h-[44px] min-w-0 max-w-[52%] shrink items-center justify-center rounded-xl px-2.5 py-2 text-xs font-semibold sm:max-w-none sm:px-4 sm:text-sm"
+                  className="nn-nav-cta inline-flex min-h-[44px] min-w-0 max-w-[52%] shrink items-center justify-center rounded-xl px-2.5 py-2 text-xs font-medium sm:max-w-none sm:px-4 sm:text-sm"
                   onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
                   aria-label="Start free account — nursing and healthcare exam prep"
                   title="Start free — no credit card required"
@@ -809,7 +809,7 @@ export function SiteHeader() {
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
                     href={resumeStudyingCta?.href ?? "/app"}
-                    className="nn-nav-cta inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold sm:flex-initial sm:px-4"
+                    className="nn-nav-cta inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4"
                   >
                     {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                   </Link>
@@ -821,7 +821,7 @@ export function SiteHeader() {
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
                     href={ADMIN_DASHBOARD_ROUTE}
-                    className="nn-nav-cta inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold sm:flex-initial sm:px-4"
+                    className="nn-nav-cta inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4"
                     onClick={closeMegaBeforeAuthNav}
                   >
                     {formatTitleCase(t("nav.admin"), locale)}
@@ -846,7 +846,7 @@ export function SiteHeader() {
             {isMarketingNav ? (
               <nav
                 aria-label={t("nav.marketingExplore")}
-                className="flex min-w-0 flex-1 items-center justify-center gap-0.5 xl:gap-1"
+                className="flex min-w-0 flex-1 items-center justify-center gap-0 xl:gap-0.5"
               >
                 {marketingBrowseLinks.map((item) => (
                   <Link
@@ -870,7 +870,7 @@ export function SiteHeader() {
             ) : (
               <nav
                 aria-label="Learner navigation"
-                className="flex min-w-0 flex-1 items-center justify-center gap-0.5 xl:gap-1"
+                className="flex min-w-0 flex-1 items-center justify-center gap-0 xl:gap-0.5"
               >
                 {/* Tier pill — accent-colored, visible from lg breakpoint */}
                 {learnerExamBadge ? (
@@ -913,7 +913,7 @@ export function SiteHeader() {
                   </Link>
                   <Link
                     href={guestMarketingSignupHref}
-                    className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold"
+                    className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium"
                     onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
                     aria-label="Start free account — nursing and healthcare exam prep"
                     title="Start free — no credit card required"
@@ -925,7 +925,7 @@ export function SiteHeader() {
                 <div className="flex items-center gap-2">
                   <Link
                     href={resumeStudyingCta?.href ?? "/app"}
-                    className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold"
+                    className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium"
                   >
                     {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                   </Link>
@@ -937,7 +937,7 @@ export function SiteHeader() {
                 <div className="flex items-center gap-2">
                   <Link
                     href={ADMIN_DASHBOARD_ROUTE}
-                    className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold"
+                    className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium"
                     onClick={closeMegaBeforeAuthNav}
                   >
                     {formatTitleCase(t("nav.admin"), locale)}
@@ -952,9 +952,9 @@ export function SiteHeader() {
         </div>{/* /shell */}
         {isMarketingNav ? (
           <div className="hidden w-full border-t border-[var(--nn-nav-border)] nn-header-nav-row lg:block">
-            <div className="nn-section-shell flex min-h-11 flex-wrap items-center gap-x-1 gap-y-1">
+            <div className="nn-section-shell flex min-h-11 flex-wrap items-center gap-x-1 gap-y-0.5 lg:gap-x-0.5">
               {regionalStrip === "middle_east" ? (
-                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                <div className="flex min-w-0 flex-wrap items-center gap-0 border-e border-[var(--nn-nav-border)] pe-1.5 me-0.5">
                   <Link
                     href={localizeHref("/exams/middle-east")}
                     className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
@@ -1056,7 +1056,7 @@ export function SiteHeader() {
                 </div>
               ) : null}
               {regionalStrip === "australia" ? (
-                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                <div className="flex min-w-0 flex-wrap items-center gap-0 border-e border-[var(--nn-nav-border)] pe-1.5 me-0.5">
                   <Link
                     href={localizeHref("/exams/australia")}
                     className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
@@ -1158,7 +1158,7 @@ export function SiteHeader() {
                 </div>
               ) : null}
               {regionalStrip === "china" ? (
-                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                <div className="flex min-w-0 flex-wrap items-center gap-0 border-e border-[var(--nn-nav-border)] pe-1.5 me-0.5">
                   <Link
                     href={localizeHref("/exams/china")}
                     className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
@@ -1260,7 +1260,7 @@ export function SiteHeader() {
                 </div>
               ) : null}
               {regionalStrip === "korea" ? (
-                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                <div className="flex min-w-0 flex-wrap items-center gap-0 border-e border-[var(--nn-nav-border)] pe-1.5 me-0.5">
                   <Link
                     href={localizeHref("/exams/korea")}
                     className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
@@ -1362,7 +1362,7 @@ export function SiteHeader() {
                 </div>
               ) : null}
               {regionalStrip === "japan" ? (
-                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                <div className="flex min-w-0 flex-wrap items-center gap-0 border-e border-[var(--nn-nav-border)] pe-1.5 me-0.5">
                   <Link
                     href={localizeHref("/exams/japan")}
                     className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
@@ -1464,7 +1464,7 @@ export function SiteHeader() {
                 </div>
               ) : null}
               {regionalStrip === "germany" ? (
-                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                <div className="flex min-w-0 flex-wrap items-center gap-0 border-e border-[var(--nn-nav-border)] pe-1.5 me-0.5">
                   <Link
                     href={localizeHref("/exams/germany")}
                     className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
@@ -1566,7 +1566,7 @@ export function SiteHeader() {
                 </div>
               ) : null}
               {regionalStrip === "france" ? (
-                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                <div className="flex min-w-0 flex-wrap items-center gap-0 border-e border-[var(--nn-nav-border)] pe-1.5 me-0.5">
                   <Link
                     href={localizeHref("/exams/france")}
                     className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
@@ -1668,7 +1668,7 @@ export function SiteHeader() {
                 </div>
               ) : null}
               {regionalStrip === "italy" ? (
-                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                <div className="flex min-w-0 flex-wrap items-center gap-0 border-e border-[var(--nn-nav-border)] pe-1.5 me-0.5">
                   <Link
                     href={localizeHref("/exams/italy")}
                     className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
@@ -1770,7 +1770,7 @@ export function SiteHeader() {
                 </div>
               ) : null}
               {regionalStrip === "hungary" ? (
-                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                <div className="flex min-w-0 flex-wrap items-center gap-0 border-e border-[var(--nn-nav-border)] pe-1.5 me-0.5">
                   <Link
                     href={localizeHref("/exams/hungary")}
                     className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
@@ -1872,7 +1872,7 @@ export function SiteHeader() {
                 </div>
               ) : null}
               {regionalStrip === "portugal" ? (
-                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                <div className="flex min-w-0 flex-wrap items-center gap-0 border-e border-[var(--nn-nav-border)] pe-1.5 me-0.5">
                   <Link
                     href={localizeHref("/exams/portugal")}
                     className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
@@ -1974,7 +1974,7 @@ export function SiteHeader() {
                 </div>
               ) : null}
               {regionalStrip === "mexico" ? (
-                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                <div className="flex min-w-0 flex-wrap items-center gap-0 border-e border-[var(--nn-nav-border)] pe-1.5 me-0.5">
                   <Link
                     href={localizeHref("/exams/mexico")}
                     className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
@@ -2090,7 +2090,7 @@ export function SiteHeader() {
                 </div>
               ) : null}
               {regionalStrip === "philippines" ? (
-                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                <div className="flex min-w-0 flex-wrap items-center gap-0 border-e border-[var(--nn-nav-border)] pe-1.5 me-0.5">
                   <Link
                     href={localizeHref("/exams/philippines")}
                     className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
@@ -2192,7 +2192,7 @@ export function SiteHeader() {
                 </div>
               ) : null}
               {regionalStrip === "india" ? (
-                <div className="flex min-w-0 flex-wrap items-center gap-0.5 border-e border-[var(--nn-nav-border)] pe-2 me-1">
+                <div className="flex min-w-0 flex-wrap items-center gap-0 border-e border-[var(--nn-nav-border)] pe-1.5 me-0.5">
                   <Link
                     href={localizeHref("/exams/india")}
                     className={`${NAV_TIER_LINK_CLASS} max-w-[11rem] truncate sm:max-w-none`}
@@ -2239,7 +2239,7 @@ export function SiteHeader() {
               ) : null}
               <nav
                 aria-label={t("nav.marketingExplore")}
-                className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-0.5 xl:gap-1"
+                className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-0 xl:gap-0.5"
               >
                 {megaMenus.map((menu) => {
                   const expanded = openMegaMenu === menu.key;
@@ -2295,17 +2295,17 @@ export function SiteHeader() {
                   >
                     <div>
                       {/* Badge pill */}
-                      <span className="mb-3 inline-flex items-center rounded-full border border-[var(--text-accent)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--text-accent)]">
+                      <span className="mb-3 inline-flex items-center rounded-full border border-[var(--text-accent)] px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-[var(--text-accent)]">
                         {openMega.hubBadge ?? "Start Here"}
                       </span>
-                      <h3 className="text-lg font-semibold leading-snug text-[var(--theme-heading-text)]">
+                      <h3 className="text-lg font-medium leading-snug text-[var(--theme-heading-text)]">
                         {formatTitleCase(`${openMega.label} Exam Hub`, locale)}
                       </h3>
                       <p className="mt-2 text-sm leading-relaxed text-[var(--theme-muted-text)]">
                         {openMega.hubDescription}
                       </p>
                     </div>
-                    <span className="flex items-center gap-1 text-sm font-semibold text-[var(--text-accent)] transition-[gap] group-hover:gap-2">
+                    <span className="flex items-center gap-1 text-sm font-medium text-[var(--text-accent)] transition-[gap] group-hover:gap-2">
                       Open Hub
                       <ChevronRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden />
                     </span>
@@ -2359,7 +2359,7 @@ export function SiteHeader() {
                             </p>
                             <Link
                               href={localizeHref(rl.href)}
-                              className="inline-flex items-center gap-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-success)_25%,transparent)] bg-[color-mix(in_srgb,var(--semantic-success)_8%,transparent)] px-3 py-1.5 text-xs font-semibold text-[var(--theme-heading-text)] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-success)_14%,transparent)] focus-visible:outline-2 focus-visible:outline-[var(--ring)]"
+                              className="inline-flex items-center gap-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-success)_25%,transparent)] bg-[color-mix(in_srgb,var(--semantic-success)_8%,transparent)] px-3 py-1.5 text-xs font-medium text-[var(--theme-heading-text)] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-success)_14%,transparent)] focus-visible:outline-2 focus-visible:outline-[var(--ring)]"
                               onClick={() => {
                                 setOpenMegaMenu(null);
                                 trackClientEvent(PH.marketingNavClick, {
@@ -2372,7 +2372,7 @@ export function SiteHeader() {
                             >
                               <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--semantic-success)]" aria-hidden />
                               {formatTitleCase(rl.label, locale)}
-                              <span className="text-[10px] font-semibold text-[var(--semantic-success)]">Recommended</span>
+                              <span className="text-[10px] font-medium text-[var(--semantic-success)]">Recommended</span>
                             </Link>
                           </div>
                         ))}
@@ -2477,7 +2477,7 @@ export function SiteHeader() {
             </div>
             <div className="min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-y-contain px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-5">
               <div className="space-y-1">
-                <p className="px-2 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                <p className="px-2 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                   {isLearnerAuthenticated ? formatEyebrow("Study Navigation", locale) : t("nav.marketingExplore")}
                 </p>
                 {isLearnerAuthenticated ? (
@@ -2485,7 +2485,7 @@ export function SiteHeader() {
                     <Link
                       key={item.key}
                       href={item.href}
-                      className="flex items-center rounded-xl px-3 py-3 text-[15px] font-semibold text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]"
+                      className="flex items-center rounded-xl px-3 py-3 text-[15px] font-medium text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]"
                       onClick={() => setMobileOpen(false)}
                     >
                       {item.label}
@@ -2495,68 +2495,68 @@ export function SiteHeader() {
                   <>
                     {regionalStrip === "middle_east" ? (
                       <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_10%,var(--semantic-surface))] p-3">
-                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                        <p className="px-1 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                           {formatTitleCase(t("nav.middleEast.stripLabel"), locale)}
                         </p>
                         <Link
                           href={localizeHref("/exams/middle-east")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.middleEast.examsHub"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/middle-east/prometric-nursing-exam")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.middleEast.prometricExam"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/middle-east/dha-exam")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.middleEast.dhaExam"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/middle-east/haad-exam")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.middleEast.haadExam"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/middle-east/dataflow-guide")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.middleEast.dataflowGuide"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/exams/middle-east#middle-east-dha")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.middleEast.workUae"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/exams/middle-east#middle-east-saudi")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.middleEast.saudiGuide"), locale)}
                         </Link>
                         <Link
                           href={localizeHref(HUB.questionBank)}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.middleEast.prometricPractice"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/us/rn/nclex-rn/lessons")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("exams.middleEast.links.rnLessonsUs"), locale)}
@@ -2565,61 +2565,61 @@ export function SiteHeader() {
                     ) : null}
                     {regionalStrip === "australia" ? (
                       <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_10%,var(--semantic-surface))] p-3">
-                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                        <p className="px-1 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                           {formatTitleCase(t("nav.australia.stripLabel"), locale)}
                         </p>
                         <Link
                           href={localizeHref("/exams/australia")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.australia.examsHub"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/australia/ahpra-registration")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.australia.ahpra"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/australia/osce-nursing")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.australia.osce"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/australia/oba-nursing")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.australia.oba"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/australia/nursing-pathway")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("exams.australia.next.linkPathway"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/exams/australia#au-international")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.australia.workAu"), locale)}
                         </Link>
                         <Link
                           href={localizeHref(HUB.questionBank)}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.australia.oscePrep"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/us/rn/nclex-rn/lessons")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("exams.australia.links.rnLessonsUs"), locale)}
@@ -2628,54 +2628,54 @@ export function SiteHeader() {
                     ) : null}
                     {regionalStrip === "china" ? (
                       <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-3)_10%,var(--semantic-surface))] p-3">
-                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                        <p className="px-1 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                           {formatTitleCase(t("nav.country.china.stripLabel"), locale)}
                         </p>
                         <Link
                           href={localizeHref("/exams/china")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.china.examsHub"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/china/nursing-exam")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.china.nursingExam"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/china/how-to-become-a-nurse")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.china.howToBecome"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/china/work-abroad")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.china.workAbroad"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/china/nclex-for-chinese-nurses")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.china.nclexTopic"), locale)}
                         </Link>
                         <Link
                           href={localizeHref(`/blog/tag/${encodeURIComponent("China nursing")}`)}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.china.blog"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/us/rn/nclex-rn/lessons")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.china.nclexPrepUs"), locale)}
@@ -2684,54 +2684,54 @@ export function SiteHeader() {
                     ) : null}
                     {regionalStrip === "korea" ? (
                       <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-4)_10%,var(--semantic-surface))] p-3">
-                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                        <p className="px-1 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                           {formatTitleCase(t("nav.country.korea.stripLabel"), locale)}
                         </p>
                         <Link
                           href={localizeHref("/exams/korea")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.korea.examsHub"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/korea/nursing-exam")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.korea.nursingExam"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/korea/how-to-become-a-nurse")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.korea.howToBecome"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/korea/work-abroad")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.korea.workAbroad"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/korea/nclex-for-korean-nurses")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.korea.nclexTopic"), locale)}
                         </Link>
                         <Link
                           href={localizeHref(`/blog/tag/${encodeURIComponent("Korea nursing")}`)}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.korea.blog"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/us/rn/nclex-rn/lessons")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.korea.nclexPrepUs"), locale)}
@@ -2740,54 +2740,54 @@ export function SiteHeader() {
                     ) : null}
                     {regionalStrip === "japan" ? (
                       <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-5)_10%,var(--semantic-surface))] p-3">
-                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                        <p className="px-1 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                           {formatTitleCase(t("nav.country.japan.stripLabel"), locale)}
                         </p>
                         <Link
                           href={localizeHref("/exams/japan")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.japan.examsHub"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/japan/nursing-exam")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.japan.nursingExam"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/japan/how-to-become-a-nurse")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.japan.howToBecome"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/japan/work-abroad")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.japan.workAbroad"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/japan/nclex-for-japanese-nurses")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.japan.nclexTopic"), locale)}
                         </Link>
                         <Link
                           href={localizeHref(`/blog/tag/${encodeURIComponent("Japan nursing")}`)}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.japan.blog"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/us/rn/nclex-rn/lessons")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.japan.nclexPrepUs"), locale)}
@@ -2796,54 +2796,54 @@ export function SiteHeader() {
                     ) : null}
                     {regionalStrip === "germany" ? (
                       <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-4)_10%,var(--semantic-surface))] p-3">
-                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                        <p className="px-1 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                           {formatTitleCase(t("nav.country.germany.stripLabel"), locale)}
                         </p>
                         <Link
                           href={localizeHref("/exams/germany")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.germany.examsHub"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/germany/nurse-recognition")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.germany.nurseRecognition"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/germany/work-as-a-nurse")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.germany.workAsNurse"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/germany/kenntnisprufung")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.germany.kenntnisprufungGuide"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/germany/german-language-for-nurses")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.germany.germanLanguageTopic"), locale)}
                         </Link>
                         <Link
                           href={localizeHref(`/blog/tag/${encodeURIComponent("Germany nursing")}`)}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.germany.blog"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/us/rn/nclex-rn/lessons")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.germany.nclexPrepUs"), locale)}
@@ -2852,54 +2852,54 @@ export function SiteHeader() {
                     ) : null}
                     {regionalStrip === "france" ? (
                       <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-5)_10%,var(--semantic-surface))] p-3">
-                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                        <p className="px-1 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                           {formatTitleCase(t("nav.country.france.stripLabel"), locale)}
                         </p>
                         <Link
                           href={localizeHref("/exams/france")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.france.examsHub"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/france/nurse-registration")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.france.nurseRegistration"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/france/how-to-become-a-nurse")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.france.howToBecome"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/france/work-abroad")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.france.workAbroad"), locale)}
                         </Link>
                         <Link
                           href={buildLocalizedMarketingPath("fr", "/exams/france")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.france.frenchResources"), locale)}
                         </Link>
                         <Link
                           href={localizeHref(`/blog/tag/${encodeURIComponent(t("blog.country.france.tagName"))}`)}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.france.blog"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/us/rn/nclex-rn/lessons")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.france.nclexPrepUs"), locale)}
@@ -2908,54 +2908,54 @@ export function SiteHeader() {
                     ) : null}
                     {regionalStrip === "italy" ? (
                       <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-1)_10%,var(--semantic-surface))] p-3">
-                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                        <p className="px-1 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                           {formatTitleCase(t("nav.country.italy.stripLabel"), locale)}
                         </p>
                         <Link
                           href={localizeHref("/exams/italy")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.italy.examsHub"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/italy/nurse-registration")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.italy.nurseRegistration"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/italy/how-to-become-a-nurse")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.italy.howToBecome"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/italy/work-abroad")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.italy.workAbroad"), locale)}
                         </Link>
                         <Link
                           href={buildLocalizedMarketingPath("it", "/exams/italy")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.italy.italianResources"), locale)}
                         </Link>
                         <Link
                           href={localizeHref(`/blog/tag/${encodeURIComponent(t("blog.country.italy.tagName"))}`)}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.italy.blog"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/us/rn/nclex-rn/lessons")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.italy.nclexPrepUs"), locale)}
@@ -2964,54 +2964,54 @@ export function SiteHeader() {
                     ) : null}
                     {regionalStrip === "hungary" ? (
                       <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-5)_10%,var(--semantic-surface))] p-3">
-                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                        <p className="px-1 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                           {formatTitleCase(t("nav.country.hungary.stripLabel"), locale)}
                         </p>
                         <Link
                           href={localizeHref("/exams/hungary")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.hungary.examsHub"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/hungary/nurse-registration")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.hungary.nurseRegistration"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/hungary/how-to-become-a-nurse")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.hungary.howToBecome"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/hungary/work-abroad")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.hungary.workAbroad"), locale)}
                         </Link>
                         <Link
                           href={buildLocalizedMarketingPath("hu", "/exams/hungary")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.hungary.hungarianResources"), locale)}
                         </Link>
                         <Link
                           href={localizeHref(`/blog/tag/${encodeURIComponent(t("blog.country.hungary.tagName"))}`)}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.hungary.blog"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/us/rn/nclex-rn/lessons")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.hungary.nclexPrepUs"), locale)}
@@ -3020,54 +3020,54 @@ export function SiteHeader() {
                     ) : null}
                     {regionalStrip === "portugal" ? (
                       <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-2)_10%,var(--semantic-surface))] p-3">
-                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                        <p className="px-1 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                           {formatTitleCase(t("nav.country.portugal.stripLabel"), locale)}
                         </p>
                         <Link
                           href={localizeHref("/exams/portugal")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.portugal.examsHub"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/portugal/nurse-registration")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.portugal.nurseRegistration"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/portugal/how-to-become-a-nurse")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.portugal.howToBecome"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/portugal/work-abroad")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.portugal.workAbroad"), locale)}
                         </Link>
                         <Link
                           href={buildLocalizedMarketingPath("pt", "/exams/portugal")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.portugal.portugueseResources"), locale)}
                         </Link>
                         <Link
                           href={localizeHref(`/blog/tag/${encodeURIComponent(t("blog.country.portugal.tagName"))}`)}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.portugal.blog"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/us/rn/nclex-rn/lessons")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.portugal.nclexPrepUs"), locale)}
@@ -3076,61 +3076,61 @@ export function SiteHeader() {
                     ) : null}
                     {regionalStrip === "mexico" ? (
                       <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-4)_10%,var(--semantic-surface))] p-3">
-                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                        <p className="px-1 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                           {formatTitleCase(t("nav.country.mexico.stripLabel"), locale)}
                         </p>
                         <Link
                           href={localizeHref("/exams/mexico")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.mexico.examsHub"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/mexico/nurse-registration")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.mexico.nurseRegistration"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/mexico/how-to-become-a-nurse")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.mexico.howToBecome"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/mexico/nclex-for-mexican-nurses")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.mexico.nclexForMexicanNurses"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/mexico/work-abroad")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.mexico.workAbroad"), locale)}
                         </Link>
                         <Link
                           href={buildLocalizedMarketingPath("es", "/exams/mexico")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.mexico.spanishResources"), locale)}
                         </Link>
                         <Link
                           href={localizeHref(`/blog/tag/${encodeURIComponent(t("blog.country.mexico.tagName"))}`)}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.mexico.blog"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/us/rn/nclex-rn/lessons")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.mexico.nclexPrepUs"), locale)}
@@ -3139,54 +3139,54 @@ export function SiteHeader() {
                     ) : null}
                     {regionalStrip === "philippines" ? (
                       <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-1)_10%,var(--semantic-surface))] p-3">
-                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                        <p className="px-1 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                           {formatTitleCase(t("nav.country.philippines.stripLabel"), locale)}
                         </p>
                         <Link
                           href={localizeHref("/exams/philippines")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.philippines.examsHub"), locale)}
                         </Link>
                         <Link
                           href={localizeHref(`/blog/tag/${encodeURIComponent(t("blog.country.philippines.tagName"))}`)}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.philippines.blog"), locale)}
                         </Link>
                         <Link
                           href={buildLocalizedMarketingPath("tl", HUB.pricing)}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.philippines.tagalogPricing"), locale)}
                         </Link>
                         <Link
                           href={buildLocalizedMarketingPath("tl", HUB.examLessons)}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.philippines.tagalogLessons"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/us/rn/nclex-rn/lessons")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.philippines.nclexRn"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/us/pn/nclex-pn/lessons")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.philippines.nclexPn"), locale)}
                         </Link>
                         <Link
                           href={localizeHref(HUB.tools)}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.country.philippines.tools"), locale)}
@@ -3195,40 +3195,40 @@ export function SiteHeader() {
                     ) : null}
                     {regionalStrip === "india" ? (
                       <div className="mb-3 space-y-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-info)_6%,var(--semantic-surface))] p-3">
-                        <p className="px-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                        <p className="px-1 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                           {formatTitleCase(t("nav.india.stripLabel"), locale)}
                         </p>
                         <Link
                           href={localizeHref("/exams/india")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.india.examsHub"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/india/aiims-nursing")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.india.aiimsNursing"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/india/nursing-exams")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.india.stateExams"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/exams/india#india-intl")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.india.workAbroad"), locale)}
                         </Link>
                         <Link
                           href={localizeHref("/us/rn/nclex-rn/lessons")}
-                          className="flex rounded-lg px-2 py-2 text-[14px] font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex rounded-lg px-2 py-2 text-[14px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => setMobileOpen(false)}
                         >
                           {formatTitleCase(t("nav.india.nclexIndia"), locale)}
@@ -3245,7 +3245,7 @@ export function SiteHeader() {
                             aria-expanded={expanded}
                             aria-controls={`mobile-mega-${menu.key}`}
                             data-active={isMegaMenuKeyActive(menu.key, strippedPath) || undefined}
-                            className={`flex w-full items-center justify-between px-3 py-3 text-left text-[15px] font-semibold transition-colors ${isMegaMenuKeyActive(menu.key, strippedPath) ? "text-[var(--nav-link-active)]" : "text-[var(--nav-fg)]"}`}
+                            className={`flex w-full items-center justify-between px-3 py-3 text-left text-[15px] font-medium transition-colors ${isMegaMenuKeyActive(menu.key, strippedPath) ? "text-[var(--nav-link-active)]" : "text-[var(--nav-fg)]"}`}
                             onClick={() => setMobileExpandedMega(expanded ? null : menu.key)}
                           >
                             <span className="flex items-center gap-2">
@@ -3275,10 +3275,10 @@ export function SiteHeader() {
                                 }}
                               >
                                 <div className="min-w-0">
-                                  <span className="mb-1.5 inline-flex items-center rounded-full border border-[var(--text-accent)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--text-accent)]">
+                                  <span className="mb-1.5 inline-flex items-center rounded-full border border-[var(--text-accent)] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-[var(--text-accent)]">
                                     {menu.hubBadge ?? "Start Here"}
                                   </span>
-                                  <span className="block text-[14px] font-semibold leading-snug text-[var(--nav-fg)]">
+                                  <span className="block text-[14px] font-medium leading-snug text-[var(--nav-fg)]">
                                     {formatTitleCase(`${menu.label} Exam Hub`, locale)}
                                   </span>
                                   <span className="mt-0.5 block text-[12px] leading-snug text-[var(--nav-muted)]">
@@ -3334,7 +3334,7 @@ export function SiteHeader() {
                                       </p>
                                       <Link
                                         href={localizeHref(rl.href)}
-                                        className="flex items-center gap-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-success)_25%,transparent)] bg-[color-mix(in_srgb,var(--semantic-success)_8%,transparent)] px-2.5 py-2 text-[13px] font-semibold text-[var(--nav-fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-success)_14%,transparent)]"
+                                        className="flex items-center gap-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-success)_25%,transparent)] bg-[color-mix(in_srgb,var(--semantic-success)_8%,transparent)] px-2.5 py-2 text-[13px] font-medium text-[var(--nav-fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-success)_14%,transparent)]"
                                         onClick={() => {
                                           trackClientEvent(PH.marketingNavClick, {
                                             actor: navActor,
@@ -3347,7 +3347,7 @@ export function SiteHeader() {
                                       >
                                         <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--semantic-success)]" aria-hidden />
                                         <span className="flex-1">{formatTitleCase(rl.label, locale)}</span>
-                                        <span className="text-[11px] font-semibold text-[var(--semantic-success)]">Recommended</span>
+                                        <span className="text-[11px] font-medium text-[var(--semantic-success)]">Recommended</span>
                                       </Link>
                                     </div>
                                   ))}
@@ -3387,7 +3387,7 @@ export function SiteHeader() {
                         key={item.key}
                         href={localizeHref(item.href)}
                         aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                        className={`flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-semibold transition-colors ${isActivePath(strippedPath, item.matchBase) ? "text-[var(--nav-link-active)]" : "text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                        className={`flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-medium transition-colors ${isActivePath(strippedPath, item.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
                         onClick={() => {
                           trackClientEvent(PH.marketingNavClick, {
                             actor: navActor,
@@ -3411,7 +3411,7 @@ export function SiteHeader() {
 
               {!isAuthenticated ? (
                 <div className="space-y-1">
-                  <p className="px-2 text-[11px] font-semibold uppercase tracking-widest text-[var(--nav-muted)]">
+                  <p className="px-2 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                     {t("nav.more")}
                   </p>
                   {mobileMoreNav.map((item) => (
@@ -3440,7 +3440,7 @@ export function SiteHeader() {
                   <>
                     <Link
                       href={guestMarketingSignupHref}
-                      className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold"
+                      className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium"
                       onClick={() => setMobileOpen(false)}
                       aria-label="Start free account — nursing and healthcare exam prep"
                       title="Start free — no credit card required"
@@ -3459,13 +3459,13 @@ export function SiteHeader() {
                 ) : isLearnerAuthenticated ? (
                   <>
                     {learnerExamBadge ? (
-                      <p className="rounded-lg border border-[var(--nav-border)] bg-[var(--surface)] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--nav-muted)]">
+                      <p className="rounded-lg border border-[var(--nav-border)] bg-[var(--surface)] px-3 py-2 text-xs font-medium uppercase tracking-wide text-[var(--nav-muted)]">
                         {learnerExamBadge}
                       </p>
                     ) : null}
                     <Link
                       href={resumeStudyingCta?.href ?? "/app"}
-                      className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold"
+                      className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium"
                       onClick={() => setMobileOpen(false)}
                     >
                       {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
@@ -3481,7 +3481,7 @@ export function SiteHeader() {
                   <>
                     <Link
                       href={ADMIN_DASHBOARD_ROUTE}
-                      className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold"
+                      className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium"
                       onClick={() => {
                         closeMegaBeforeAuthNav();
                         setMobileOpen(false);

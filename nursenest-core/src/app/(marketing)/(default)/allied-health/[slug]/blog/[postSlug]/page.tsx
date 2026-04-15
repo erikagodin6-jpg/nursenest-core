@@ -94,9 +94,9 @@ export default async function AlliedProfessionBlogPostPage({ params }: Props) {
       </Link>
       <header className="mt-4">
         {post.category ? (
-          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">{post.category}</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">{post.category}</p>
         ) : null}
-        <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">{post.title}</h1>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)]">{post.title}</h1>
         <p className="mt-3 text-base text-[var(--theme-muted-text)]">{post.excerpt}</p>
       </header>
       <div className="prose prose-neutral mt-8 max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: post.body }} />

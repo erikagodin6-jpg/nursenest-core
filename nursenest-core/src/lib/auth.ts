@@ -26,6 +26,7 @@ import {
 import { prisma } from "@/lib/db";
 import * as Sentry from "@sentry/nextjs";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { PINNED_AUTH_BASE_PATH } from "@/lib/auth/auth-base-path";
 
 if (process.env.NODE_ENV === "production") {
   const hasSecret = Boolean(
@@ -67,6 +68,11 @@ export const authConfig: NextAuthConfig = {
    * @auth/prisma-adapter. Credentials + JWT persist the session in the cookie only; users
    * are written via /api/signup and read here.
    */
+  /**
+   * Pinned via {@link PINNED_AUTH_BASE_PATH} — keep in lockstep with `auth-middleware.ts`.
+   * `AUTH_URL` / `NEXTAUTH_URL` must be origin-only; see `auth-base-path.ts`.
+   */
+  basePath: PINNED_AUTH_BASE_PATH,
   trustHost: true,
   session: {
     strategy: "jwt",
@@ -129,8 +135,9 @@ export const authConfig: NextAuthConfig = {
         let user;
         try {
           if (isEmailLikeIdentifier(identifier)) {
-            user = await prisma.user.findUnique({
-              where: { email: identifier },
+            // Case-insensitive: legacy or manual rows may not match normalized lowercase input.
+            user = await prisma.user.findFirst({
+              where: { email: { equals: identifier, mode: "insensitive" } },
             });
           } else {
             user = await prisma.user.findUnique({

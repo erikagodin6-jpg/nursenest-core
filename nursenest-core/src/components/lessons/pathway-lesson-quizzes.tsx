@@ -22,32 +22,45 @@ export function PathwayLessonQuizzes({
   const [postTestMode, setPostTestMode] = useState<"practice" | "exam">("practice");
 
   if (!preTest?.length && !postTest?.length) return null;
+  const panelFrame =
+    "rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-info)_12%)] bg-[color-mix(in_srgb,var(--bg-card)_96%,var(--semantic-panel-cool)_4%)] p-4 shadow-[var(--shadow-card)] sm:p-5";
   return (
-    <div className="nn-study-card nn-study-card--wash mt-10 space-y-8 p-5 sm:p-6">
+    <div className="mt-10 space-y-6">
       {!fullAccess ? (
-        <aside className="nn-study-callout p-4 text-sm text-[var(--theme-body-text)]">
+        <aside className="nn-study-callout rounded-xl border border-[var(--semantic-border-soft)] p-4 text-sm text-[var(--theme-body-text)]">
           <span className="font-medium text-foreground">Preview mode: </span>
           Pre/post questions are shown without highlighted answers or rationales. Full lesson access unlocks scoring-style
           review aligned with your plan.
         </aside>
       ) : null}
-      <PathwayLessonQuizSet
-        key={`pre-${itemsResetKey(preTest)}`}
-        variant="pre"
-        title="Pre-test"
-        subtitle="Practice"
-        items={preTest}
-        fullAccess={fullAccess}
-      />
-      <PathwayLessonQuizSet
-        key={`post-${itemsResetKey(postTest)}-${postTestMode}`}
-        variant="post"
-        title="Post-test"
-        items={postTest}
-        fullAccess={fullAccess}
-        postMode={postTestMode}
-        onPostModeChange={setPostTestMode}
-      />
+      {preTest?.length ? (
+        <section className={panelFrame} aria-label="Pre-test: before you read">
+          <PathwayLessonQuizSet
+            key={`pre-${itemsResetKey(preTest)}`}
+            variant="pre"
+            title="Pre-test"
+            subtitle="Before you read"
+            items={preTest}
+            fullAccess={fullAccess}
+            className="border-0 pb-0"
+          />
+        </section>
+      ) : null}
+      {postTest?.length ? (
+        <section className={panelFrame} aria-label="Post-test: after the lesson">
+          <PathwayLessonQuizSet
+            key={`post-${itemsResetKey(postTest)}-${postTestMode}`}
+            variant="post"
+            title="Post-test"
+            subtitle="After the lesson"
+            items={postTest}
+            fullAccess={fullAccess}
+            postMode={postTestMode}
+            onPostModeChange={setPostTestMode}
+            className="border-0 pb-0"
+          />
+        </section>
+      ) : null}
     </div>
   );
 }
