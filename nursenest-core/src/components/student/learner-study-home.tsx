@@ -124,6 +124,8 @@ export type LearnerStudyHomeProps = {
   showCoach: boolean;
   coachSummary?: CoachDashboardSummary | null;
   studySettings: StudySettings;
+  /** Eyebrow for the priority band — new learners vs returning. */
+  priorityEyebrowKey?: string;
 };
 
 export function LearnerStudyHome({
@@ -155,6 +157,7 @@ export function LearnerStudyHome({
   showCoach,
   coachSummary,
   studySettings,
+  priorityEyebrowKey = "learner.studyHome.sectionPriorityEyebrow",
 }: LearnerStudyHomeProps) {
   const trends = studySnap?.topicTrends ?? [];
   const strongHighlight = studySnap?.strongTopicsHighlight ?? [];
@@ -204,7 +207,7 @@ export function LearnerStudyHome({
       {/* Continue + exam pacing (legacy: `continue_where_left_off` + exam context) */}
       <LearnerStudySurfaceSection
         id="study-priority"
-        eyebrow={t("learner.studyHome.sectionPriorityEyebrow")}
+        eyebrow={t(priorityEyebrowKey)}
         title={t("learner.studyHome.sectionPriorityTitle")}
         intro={null}
         tone="primary"
@@ -213,7 +216,7 @@ export function LearnerStudyHome({
       >
         <div className="nn-dash-priority-grid">
           <div className="nn-dash-priority-grid__main">
-            <PrimaryActionCard action={nextAction} />
+            <PrimaryActionCard action={nextAction} t={t} />
           </div>
           <div className="nn-dash-priority-grid__rail">
             <ExamCountdownCard countdown={countdown} questionsPerDay={questionsPerDay} />

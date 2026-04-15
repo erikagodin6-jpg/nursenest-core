@@ -16,7 +16,15 @@ import type { StudySettings } from "@/lib/learner/study-settings";
  *   4. Practice questions fallback
  *
  * Returns a single action with title, subtitle, href, and reasoning.
+ * Optional `i18n` keys are resolved in the learner UI so copy stays in bundles.
  */
+
+export type NextBestActionI18n = {
+  titleKey: string;
+  subtitleKey: string;
+  reasoningKey: string;
+  params?: Record<string, string | number>;
+};
 
 export type NextBestAction = {
   title: string;
@@ -24,6 +32,7 @@ export type NextBestAction = {
   href: string;
   kind: ExplainableAction["kind"] | "fallback";
   reasoning: string;
+  i18n?: NextBestActionI18n;
 };
 
 export function getNextBestAction(
@@ -40,6 +49,11 @@ export function getNextBestAction(
         href: "/app/questions",
         kind: "fallback",
         reasoning: "Adaptive planning is off, so manual study entry points are shown instead.",
+        i18n: {
+          titleKey: "learner.dashboard.nextAction.manualSession.title",
+          subtitleKey: "learner.dashboard.nextAction.manualSession.subtitle",
+          reasoningKey: "learner.dashboard.nextAction.manualSession.reasoning",
+        },
       };
     }
     return {
@@ -48,10 +62,15 @@ export function getNextBestAction(
       href: "/app/questions",
       kind: "fallback",
       reasoning: "Adaptive planning is disabled in your study settings.",
+      i18n: {
+        titleKey: "learner.dashboard.nextAction.manualHub.title",
+        subtitleKey: "learner.dashboard.nextAction.manualHub.subtitle",
+        reasoningKey: "learner.dashboard.nextAction.manualHub.reasoning",
+      },
     };
   }
 
-  // 1. Insight engine primary recommendation
+  // 1. Insight engine primary recommendation (dynamic copy from engine)
   const primary = snapshot?.insights?.recommendations.primary;
   if (primary) {
     return {
@@ -71,6 +90,12 @@ export function getNextBestAction(
       href: snapshot.continueLesson.href,
       kind: "continue",
       reasoning: "You have an unfinished lesson",
+      i18n: {
+        titleKey: "learner.dashboard.nextAction.continueLesson.title",
+        subtitleKey: "learner.dashboard.nextAction.continueLesson.subtitle",
+        reasoningKey: "learner.dashboard.nextAction.continueLesson.reasoning",
+        params: { lessonTitle: snapshot.continueLesson.title },
+      },
     };
   }
 
@@ -83,22 +108,37 @@ export function getNextBestAction(
       href: "/app/questions",
       kind: "quiz",
       reasoning: `Your accuracy in ${topWeak.topic} needs work`,
+      i18n: {
+        titleKey: "learner.dashboard.nextAction.weakTopic.title",
+        subtitleKey: "learner.dashboard.nextAction.weakTopic.subtitle",
+        reasoningKey: "learner.dashboard.nextAction.weakTopic.reasoning",
+        params: { topic: topWeak.topic },
+      },
     };
   }
 
   // 4. Today's goal incomplete
   if (todayGoal && todayGoal.credits < todayGoal.target) {
-    const missing: string[] = [];
-    if (!todayGoal.breakdown.hasLessonTouch) missing.push("a lesson");
-    if (!todayGoal.breakdown.hasExamActivity) missing.push("exam practice");
-    if (!todayGoal.breakdown.hasPracticeCompleted) missing.push("a practice session");
-    const hint = missing.length > 0 ? `Try ${missing[0]} to earn a credit` : "Complete a study activity";
+    let subtitleKey = "learner.dashboard.nextAction.todayGoal.subtitleDefault";
+    if (!todayGoal.breakdown.hasLessonTouch) {
+      subtitleKey = "learner.dashboard.nextAction.todayGoal.subtitleLesson";
+    } else if (!todayGoal.breakdown.hasExamActivity) {
+      subtitleKey = "learner.dashboard.nextAction.todayGoal.subtitleExam";
+    } else if (!todayGoal.breakdown.hasPracticeCompleted) {
+      subtitleKey = "learner.dashboard.nextAction.todayGoal.subtitlePractice";
+    }
     return {
       title: "Finish Today's Goal",
-      subtitle: hint,
+      subtitle: "Complete a study activity",
       href: "/app/questions",
       kind: "quiz",
       reasoning: `${todayGoal.credits}/${todayGoal.target} daily credits so far`,
+      i18n: {
+        titleKey: "learner.dashboard.nextAction.todayGoal.title",
+        subtitleKey,
+        reasoningKey: "learner.dashboard.nextAction.todayGoal.reasoning",
+        params: { credits: todayGoal.credits, target: todayGoal.target },
+      },
     };
   }
 
@@ -109,6 +149,11 @@ export function getNextBestAction(
     href: "/app/questions",
     kind: "fallback",
     reasoning: "A good time to practice",
+    i18n: {
+      titleKey: "learner.dashboard.nextAction.fallback.title",
+      subtitleKey: "learner.dashboard.nextAction.fallback.subtitle",
+      reasoningKey: "learner.dashboard.nextAction.fallback.reasoning",
+    },
   };
 }
 

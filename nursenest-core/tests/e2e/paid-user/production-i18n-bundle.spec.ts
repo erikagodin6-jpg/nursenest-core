@@ -11,8 +11,8 @@ import {
   formatI18nKeyDiff,
 } from "../helpers/production-i18n-assets";
 
-test.describe("Production i18n bundle (account nav keys)", () => {
-  test("GET /i18n/en.json contains learner.account.nav.* keys", async ({ request }, testInfo) => {
+test.describe("Production i18n bundle (critical marketing + learner keys)", () => {
+  test("GET /i18n/en.json contains critical bundle keys", async ({ request }, testInfo) => {
     const baseUrl = process.env.BASE_URL ?? "http://127.0.0.1:3000";
     const r = await fetchStaticI18nEn(request, baseUrl);
     await testInfo.attach("live-i18n-static-en.json", {
@@ -34,7 +34,7 @@ test.describe("Production i18n bundle (account nav keys)", () => {
     ).toBe(true);
   });
 
-  test("GET /api/assets/i18n/en.json resolves and contains keys (follows CDN redirect)", async ({ request }, testInfo) => {
+  test("GET /api/assets/i18n/en.json resolves and contains critical keys (follows CDN redirect)", async ({ request }, testInfo) => {
     const baseUrl = process.env.BASE_URL ?? "http://127.0.0.1:3000";
     const r = await fetchApiAssetsI18nEn(request, baseUrl);
     await testInfo.attach("live-i18n-api-en.json", {

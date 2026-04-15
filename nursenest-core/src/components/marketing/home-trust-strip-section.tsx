@@ -1,6 +1,6 @@
 "use client";
 
-import { BadgeCheck, Brain, ClipboardCheck, Globe2, Layers3 } from "lucide-react";
+import { BadgeCheck, Brain, ClipboardCheck, Globe2, Layers3, Sparkles } from "lucide-react";
 import { BrandTrustInline } from "@/components/brand/brand-trust-inline";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -21,15 +21,22 @@ function formatCount(n: number, locale: string): string {
  * Uses `surfaceStrong` to clearly separate from page background.
  */
 export function HomeTrustStripSection({ questionCount, registeredLearners }: Props) {
-  const { locale } = useMarketingI18n();
+  const { locale, t } = useMarketingI18n();
   const q = formatCount(questionCount, locale);
   const learners = formatCount(registeredLearners, locale);
 
   const pills = [
-    { icon: BadgeCheck, label: "Exam-scoped content", iconClass: "text-[var(--semantic-success)]" },
-    { icon: Layers3, label: "Adaptive CAT sessions", iconClass: "text-[var(--semantic-info)]" },
-    { icon: ClipboardCheck, label: "Rationale on every item", iconClass: "text-[var(--semantic-brand)]" },
-    { icon: Brain, label: q ? `${q} questions` : "Large question bank", iconClass: "text-[var(--semantic-warning)]" },
+    { icon: BadgeCheck, label: t("pages.home.trustStrip.pill.examScoped"), iconClass: "text-[var(--semantic-success)]" },
+    { icon: Layers3, label: t("pages.home.trustStrip.pill.adaptiveCat"), iconClass: "text-[var(--semantic-info)]" },
+    { icon: ClipboardCheck, label: t("pages.home.trustStrip.pill.rationaleEveryItem"), iconClass: "text-[var(--semantic-brand)]" },
+    {
+      icon: Brain,
+      label: q
+        ? t("pages.home.trustStrip.pill.questionsCount", { count: q })
+        : t("pages.home.trustStrip.pill.questionsLarge"),
+      iconClass: "text-[var(--semantic-warning)]",
+    },
+    { icon: Sparkles, label: t("pages.home.trustStrip.updatedNclex"), iconClass: "text-[var(--semantic-chart-3)]" },
   ] as const;
 
   return (
@@ -48,13 +55,13 @@ export function HomeTrustStripSection({ questionCount, registeredLearners }: Pro
           <div className="mb-5 flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:gap-3">
             <Globe2 className="nn-icon-md shrink-0 text-[var(--semantic-info)]" aria-hidden />
             <p id="home-trust-strip-heading" className="nn-marketing-body max-w-prose font-semibold leading-snug text-[var(--palette-heading)]">
-              {formatTitleCase("Built for nursing learners in the United States and Canada", locale)}
+              {formatTitleCase(t("pages.home.trustStrip.heading"), locale)}
             </p>
           </div>
           <BrandTrustInline variant="prep" className="mb-5 justify-center text-center" />
           {learners ? (
             <p className="nn-marketing-caption mb-5 text-center text-[var(--palette-text-muted)]">
-              {formatSentenceCase(`${learners} registered learners are currently preparing in the platform.`, locale)}
+              {formatSentenceCase(t("pages.home.trustStrip.learnersLine", { count: learners }), locale)}
             </p>
           ) : null}
           <ul className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">

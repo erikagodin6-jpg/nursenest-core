@@ -1,6 +1,24 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen, Target, Layers, Brain, Play } from "lucide-react";
 import type { NextBestAction } from "@/lib/learner/next-best-action";
+import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-t";
+
+function displayNextAction(action: NextBestAction, t: LearnerMarketingT): {
+  title: string;
+  subtitle: string;
+  reasoning: string;
+} {
+  const i18n = action.i18n;
+  if (!i18n) {
+    return { title: action.title, subtitle: action.subtitle, reasoning: action.reasoning };
+  }
+  const params = i18n.params;
+  return {
+    title: t(i18n.titleKey, params),
+    subtitle: t(i18n.subtitleKey, params),
+    reasoning: t(i18n.reasoningKey, params),
+  };
+}
 
 const KIND_ICONS: Record<string, React.ReactNode> = {
   lesson: <BookOpen className="h-6 w-6" />,
@@ -19,7 +37,14 @@ const KIND_ICONS: Record<string, React.ReactNode> = {
  * Always renders. Shows the next-best-action from the insight engine
  * with a clear, actionable title and dynamic subtitle.
  */
-export function PrimaryActionCard({ action }: { action: NextBestAction }) {
+export function PrimaryActionCard({
+  action,
+  t,
+}: {
+  action: NextBestAction;
+  t: LearnerMarketingT;
+}) {
+  const { title, subtitle, reasoning } = displayNextAction(action, t);
   return (
     <Link
       href={action.href}
@@ -31,13 +56,13 @@ export function PrimaryActionCard({ action }: { action: NextBestAction }) {
         </div>
         <div className="min-w-0 flex-1">
           <h2 className="nn-primary-action-card__title">
-            {action.title}
+            {title}
           </h2>
           <p className="nn-primary-action-card__subtitle">
-            {action.subtitle}
+            {subtitle}
           </p>
           <p className="nn-primary-action-card__reasoning">
-            {action.reasoning}
+            {reasoning}
           </p>
         </div>
         <div className="nn-primary-action-card__arrow">

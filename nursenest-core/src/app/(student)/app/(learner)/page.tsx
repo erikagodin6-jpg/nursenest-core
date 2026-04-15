@@ -197,7 +197,7 @@ export default async function LearnerDashboardPage() {
             </div>
             <h1 className="mt-1.5 text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">{t("learner.dashboard.title")}</h1>
             <p className="mt-2.5 max-w-2xl text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">
-              Your study system is ready. Unlock it to get started.
+              {t("learner.dashboard.lockedTeaserBody")}
             </p>
           </div>
         </section>
@@ -292,6 +292,11 @@ export default async function LearnerDashboardPage() {
           attempted: w.attempted,
         }));
 
+      const isNewLearnerPriority =
+        !premiumSnapshot.continueLesson &&
+        premiumSnapshot.practice.gradedTotal === 0 &&
+        premiumSnapshot.studyStreakDays === 0;
+
       const identity = resolveDashboardIdentity({
         tier: session?.user?.tier,
         learnerPathId: userLearnerPath,
@@ -341,6 +346,11 @@ export default async function LearnerDashboardPage() {
           showCoach={isStudyCoachEnabled()}
           coachSummary={coachSummary}
           studySettings={studySettings}
+          priorityEyebrowKey={
+            isNewLearnerPriority
+              ? "learner.studyHome.sectionPriorityEyebrowNew"
+              : "learner.studyHome.sectionPriorityEyebrow"
+          }
         />
       );
     }

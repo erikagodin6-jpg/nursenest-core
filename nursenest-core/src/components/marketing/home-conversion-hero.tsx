@@ -15,7 +15,6 @@ import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
-import { PRIMARY_CTA, SECONDARY_CTA } from "@/lib/copy/cta-copy";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { ScaleIn, StaggerGroup, StaggerItem } from "@/lib/motion";
 
@@ -36,13 +35,10 @@ export function HomeConversionHero() {
   const trustChips = [
     {
       icon: BookOpen,
-      text:
-        region === "US"
-          ? "NCLEX-RN, NCLEX-PN, NP branches, and allied scopes"
-          : "NCLEX-RN, REx-PN, NP branches, and allied scopes",
+      text: region === "US" ? t("pages.home.hero.trustChip.usScopes") : t("pages.home.hero.trustChip.caScopes"),
     },
-    { icon: Target, text: "CAT-style readiness checks where your track supports them" },
-    { icon: Server, text: "Server-enforced access with pathway-scoped study surfaces" },
+    { icon: Target, text: t("pages.home.hero.trustChip.cat") },
+    { icon: Server, text: t("pages.home.hero.trustChip.serverAccess") },
   ] as const;
 
   return (
@@ -57,7 +53,7 @@ export function HomeConversionHero() {
             <StaggerGroup className="min-w-0 space-y-7" whenInView once viewMargin="-12px">
               <StaggerItem variant="softReveal" timing="hero">
                 <p className="nn-marketing-caption inline-block max-w-full text-balance break-words rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] px-3.5 py-1.5 font-semibold tracking-wide text-[var(--pill-fg)]">
-                  {formatTitleCase("NurseNest Exam Prep Platform", locale)}
+                  {formatTitleCase(t("pages.home.hero.eyebrowBrand"), locale)}
                 </p>
               </StaggerItem>
               <StaggerItem timing="hero">
@@ -66,12 +62,7 @@ export function HomeConversionHero() {
                   className="nn-marketing-h1 max-w-[22rem] text-balance break-words text-[var(--palette-heading)] sm:max-w-2xl sm:leading-[1.08]"
                   data-testid="text-hero-heading"
                 >
-                  <span className="block text-[var(--palette-heading)]">
-                  {formatTitleCase("Prepare for your exam with a plan", locale)}
-                  </span>
-                  <span className="mt-1 block text-[color-mix(in_srgb,var(--text-accent)_92%,var(--palette-heading))]">
-                    {formatTitleCase("matched to your license", locale)}
-                  </span>
+                  {formatTitleCase(t("pages.home.hero.headline"), locale)}
                 </h1>
               </StaggerItem>
               <StaggerItem variant="softReveal" timing="hero">
@@ -79,46 +70,43 @@ export function HomeConversionHero() {
                   className="nn-marketing-body max-w-xl text-pretty break-words leading-relaxed text-[var(--palette-text-muted)]"
                   data-testid="text-hero-subheading"
                 >
-                  {formatSentenceCase(
-                    "Exam prep for nursing and allied health careers: pathway-scoped questions, full rationales, and readiness signals so each session supports a clear prep plan.",
-                    locale,
-                  )}
+                  {formatSentenceCase(t("pages.home.hero.subheading"), locale)}
                 </p>
               </StaggerItem>
               <StaggerItem timing="hero">
                 <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-stretch sm:justify-start sm:gap-4">
                   <MarketingTrackedLink
-                    href={loc(HUB.signup)}
+                    href={loc(HUB.questionBank)}
                     event={PH.marketingHomeHeroPrimaryCta}
                     eventProps={{
                       region,
                       marketing_region: region,
                       marketing_locale: locale,
-                      destination: "signup",
+                      destination: "question_bank",
                       surface: "hero_primary",
                       exam_tier_band: "undifferentiated_cta",
                     }}
                     className={`${MARKETING_PRIMARY_CTA_CLASS} nn-motion-standard rounded-xl shadow-[var(--shadow-card)]`}
-                    data-testid="button-hero-start-practicing"
+                    data-testid="button-hero-start-practice-questions"
                   >
-                    {formatTitleCase(PRIMARY_CTA, locale)}
+                    {formatTitleCase(t("pages.home.hero.primaryCta"), locale)}
                     <ArrowRight className="h-5 w-5 shrink-0" aria-hidden />
                   </MarketingTrackedLink>
                   <MarketingTrackedLink
-                    href={loc(HUB.questionBank)}
+                    href={loc(HUB.examLessons)}
                     event={PH.marketingHomeHeroSecondaryCta}
                     eventProps={{
                       region,
                       marketing_region: region,
                       marketing_locale: locale,
-                      destination: "question_bank",
-                      surface: "hero_try_free",
+                      destination: "lessons",
+                      surface: "hero_browse_lessons",
                       exam_tier_band: "undifferentiated_cta",
                     }}
                     className={`${MARKETING_SECONDARY_CTA_CLASS} nn-motion-standard rounded-xl border border-[var(--border-subtle)] shadow-sm`}
-                    data-testid="button-hero-try-free-questions"
+                    data-testid="button-hero-browse-lessons"
                   >
-                    {formatTitleCase(SECONDARY_CTA, locale)}
+                    {formatTitleCase(t("pages.home.hero.secondaryCta"), locale)}
                   </MarketingTrackedLink>
                 </div>
               </StaggerItem>
@@ -146,7 +134,7 @@ export function HomeConversionHero() {
               <StaggerItem variant="softReveal" timing="hero">
                 <p className="nn-marketing-caption flex min-w-0 items-start gap-2 text-balance break-words text-[var(--palette-text-muted)]">
                   <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
-                  {formatSentenceCase("No credit card required for your first practice sessions.", locale)}
+                  {formatSentenceCase(t("pages.home.hero.noCreditCard"), locale)}
                 </p>
               </StaggerItem>
             </StaggerGroup>

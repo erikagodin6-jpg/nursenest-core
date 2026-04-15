@@ -10,6 +10,7 @@ import { MARKETING_HERO_NAV_CRITICAL_KEYS } from "@/lib/marketing/marketing-hero
 /** Auth / signup / password flows — minimal strings so routes are not half-English. */
 export const REQUIRED_AUTH_AND_ACCOUNT_FLOW_KEYS = [
   "pages.login.title",
+  "pages.login.cantFindAccount",
   "pages.login.submit",
   "pages.login.fieldIdentifierLabel",
   "pages.login.fieldPasswordLabel",

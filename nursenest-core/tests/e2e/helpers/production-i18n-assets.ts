@@ -4,7 +4,7 @@
  */
 
 import type { APIRequestContext } from "@playwright/test";
-import { PRODUCTION_I18N_ACCOUNT_NAV_KEYS } from "./observer-error-taxonomy";
+import { PRODUCTION_I18N_CRITICAL_BUNDLE_KEYS } from "./observer-error-taxonomy";
 
 export type ProductionI18nFetchResult = {
   /** Absolute URL that was requested */
@@ -41,7 +41,7 @@ export async function fetchStaticI18nEn(
   try {
     const json = JSON.parse(body) as Record<string, unknown>;
     parseOk = true;
-    for (const k of PRODUCTION_I18N_ACCOUNT_NAV_KEYS) {
+    for (const k of PRODUCTION_I18N_CRITICAL_BUNDLE_KEYS) {
       keysPresent[k] = typeof json[k] === "string" && String(json[k]).trim().length > 0;
     }
   } catch (e) {
@@ -78,7 +78,7 @@ export async function fetchApiAssetsI18nEn(
   try {
     const json = JSON.parse(body) as Record<string, unknown>;
     parseOk = true;
-    for (const k of PRODUCTION_I18N_ACCOUNT_NAV_KEYS) {
+    for (const k of PRODUCTION_I18N_CRITICAL_BUNDLE_KEYS) {
       keysPresent[k] = typeof json[k] === "string" && String(json[k]).trim().length > 0;
     }
   } catch (e) {

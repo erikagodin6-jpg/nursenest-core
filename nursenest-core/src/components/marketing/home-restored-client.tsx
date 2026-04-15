@@ -4,8 +4,8 @@ import { ArrowRight } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { HomeConversionHero } from "@/components/marketing/home-conversion-hero";
+import { HomeSampleQuestionPreview } from "@/components/marketing/home-sample-question-preview";
 import { HomeTrustStripSection } from "@/components/marketing/home-trust-strip-section";
-import { HomeExamSelectionSection } from "@/components/marketing/home-exam-selection-section";
 import { HomeHowItWorksSection } from "@/components/marketing/home-how-it-works-section";
 import { HomePlatformPreviewSection } from "@/components/marketing/home-platform-preview-section";
 import { HomeTrustProofSection } from "@/components/marketing/home-trust-proof-section";
@@ -27,7 +27,7 @@ type HomeStatsPayload = {
  * competitor comparison, how it works, trust, reviews, final CTA.
  */
 export default function HomeRestoredClient() {
-  const { locale } = useMarketingI18n();
+  const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const marketingRegion = region === "US" ? "US" : "CA";
   const [homeStats, setHomeStats] = useState<HomeStatsPayload | null>(null);
@@ -59,38 +59,38 @@ export default function HomeRestoredClient() {
     return [
       {
         id: "rn",
-        title: "RN (NCLEX-RN)",
-        body: "Full-length NCLEX-style questions, deep rationales, and readiness tracking built for RN success.",
-        cta: "Start RN Practice",
+        title: t("pages.home.audience.rn.title"),
+        body: t("pages.home.audience.rn.description"),
+        cta: t("pages.home.audience.rn.cta"),
         href: l(hubs.rn),
         accentColor: "var(--semantic-info)",
       },
       {
         id: "pn",
-        title: "PN / RPN (NCLEX-PN & REx-PN)",
-        body: "Focused PN-level questions and exam-specific prep tailored for both U.S. and Canadian pathways.",
-        cta: "Start PN Practice",
+        title: t("pages.home.audience.pn.title"),
+        body: t("pages.home.audience.pn.description"),
+        cta: t("pages.home.audience.pn.cta"),
         href: l(hubs.pn),
         accentColor: "var(--semantic-warning)",
       },
       {
         id: "np",
-        title: "Nurse Practitioner (NP)",
-        body: "Advanced clinical scenarios and higher-level reasoning designed for NP certification exams.",
-        cta: "Start NP Prep",
+        title: t("pages.home.audience.np.title"),
+        body: t("pages.home.audience.np.description"),
+        cta: t("pages.home.audience.np.cta"),
         href: l(hubs.np),
         accentColor: "var(--semantic-brand)",
       },
       {
         id: "allied",
-        title: "Allied Health",
-        body: "Targeted exam prep for MLA, paramedics, OT, social work, and more healthcare careers.",
-        cta: "Explore Allied Exams",
+        title: t("pages.home.audience.allied.title"),
+        body: t("pages.home.audience.allied.description"),
+        cta: t("pages.home.audience.allied.cta"),
         href: l(hubs.allied),
         accentColor: "var(--semantic-success)",
       },
     ];
-  }, [locale, region]);
+  }, [locale, region, t]);
 
   return (
     <div className="font-sans md:animate-page-enter flex min-h-screen flex-col overflow-x-hidden bg-[var(--page-bg)]">
@@ -98,6 +98,7 @@ export default function HomeRestoredClient() {
       <div className="flex-grow overflow-x-hidden">
         {/* 1. HERO */}
         <HomeConversionHero />
+        <HomeSampleQuestionPreview />
         {/* 1b. AUDIENCE BALANCE — RN / PN / NP / Allied */}
         <section
           className="nn-section-block scroll-mt-20 border-b border-[var(--border-subtle)] bg-[var(--page-bg)]"
@@ -136,8 +137,7 @@ export default function HomeRestoredClient() {
           questionCount={questionCount}
           registeredLearners={registeredLearners}
         />
-        {/* 3. PATHWAY SELECTION */}
-        <HomeExamSelectionSection />
+        {/* Pathway hub grid hidden to reduce above-the-fold choice overload; audience cards + nav cover entry points. */}
         {/* 4. HOW IT WORKS */}
         <HomeHowItWorksSection />
         {/* 5. PRODUCT PROOF */}

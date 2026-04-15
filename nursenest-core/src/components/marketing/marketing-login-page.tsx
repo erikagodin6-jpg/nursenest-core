@@ -36,10 +36,7 @@ export async function MarketingLoginPage({ locale }: { locale: string }) {
             />
           </Suspense>
           <div className="nn-account-recovery-hint">
-            <p>
-              {m["pages.login.cantFindAccount"] ??
-                "Can't find your account? Check your inbox for emails from NurseNest to confirm which email you signed up with."}
-            </p>
+            <p>{m["pages.login.cantFindAccount"]}</p>
           </div>
         </div>
       </div>

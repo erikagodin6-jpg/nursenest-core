@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BrandTrustInline } from "@/components/brand/brand-trust-inline";
 import {
   paywallTierLineI18nKey,
@@ -34,8 +34,9 @@ export function SubscriptionPaywall({
   freemiumRemainingQuestions?: number;
   freemiumRemainingLessons?: number;
 }) {
-  const { t } = useMarketingI18n();
+  const { t, locale } = useMarketingI18n();
   const { data: session } = useSession();
+  const [bankQuestionCount, setBankQuestionCount] = useState<number | null>(null);
   const tier = session?.user?.tier;
   const region = session?.user?.country === "CA" ? "CA" : "US";
   const tierLineKey = paywallTierLineI18nKey(tier);
@@ -53,6 +54,20 @@ export function SubscriptionPaywall({
   const progressLine =
     progressBits.length > 0 ? `${progressBits.join(" · ")}. ${progressTemplate}` : progressTemplate;
 
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/public/home-stats")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { questionCount?: number } | null) => {
+        if (cancelled || !d || typeof d.questionCount !== "number") return;
+        setBankQuestionCount(d.questionCount);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const sent = useRef(false);
   useEffect(() => {
     if (sent.current) return;
@@ -67,6 +82,19 @@ export function SubscriptionPaywall({
 
   return (
     <section className="nn-card space-y-4 p-6">
+      <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_06%,var(--semantic-surface))] p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-info)]">{t("paywall.preview.heading")}</p>
+        <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">{t("paywall.preview.lead")}</p>
+        <p className="mt-3 text-sm font-medium text-[var(--semantic-text-primary)]">{t("paywall.preview.sampleStem")}</p>
+        <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("paywall.preview.sampleRationale")}</p>
+        {bankQuestionCount != null && bankQuestionCount > 0 ? (
+          <p className="mt-3 text-xs font-semibold text-[var(--semantic-text-primary)]">
+            {t("paywall.preview.bankSizeLine", {
+              count: bankQuestionCount.toLocaleString(locale.replace(/_/g, "-")),
+            })}
+          </p>
+        ) : null}
+      </div>
       <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("paywall.subscriptionBadge")}</p>
         <h2 className="mt-1 text-2xl font-bold">{t(`${p}.title`)}</h2>
