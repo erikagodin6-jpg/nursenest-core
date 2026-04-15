@@ -56,9 +56,11 @@ test.describe("Desktop header navigation (public marketing)", () => {
 
     const tier = page.locator(DESKTOP_MEGA_TIER_NAV);
     await tier.getByRole("button", { name: /^RN$/ }).click();
-    const dialog = page.getByRole("dialog", { name: /RN menu/i });
-    await expect(dialog).toBeVisible({ timeout: 15_000 });
-    await dialog.getByRole("link", { name: /Open Hub/i }).click();
+    // Mega panel uses `role="dialog"` but `hidden md:block` can omit it from the a11y tree in some layouts;
+    // the stable hook is `#mega-menu-{key}` from `site-header.tsx`.
+    const megaPanel = page.locator("#mega-menu-rn");
+    await expect(megaPanel).toBeVisible({ timeout: 20_000 });
+    await megaPanel.getByRole("link", { name: /Open Hub/i }).click();
     await page.waitForLoadState("domcontentloaded");
     await expect(page).toHaveURL(new RegExp(`${CANONICAL_PATHWAY_HUB.usRn.replace(/\//g, "\\/")}(?:\\/|\\?|#|$)`));
     await expectNotPageNotFound(page);
@@ -146,7 +148,7 @@ test.describe("Desktop header navigation (public marketing)", () => {
     const rn = page.locator(DESKTOP_MEGA_TIER_NAV).getByRole("button", { name: /^RN$/ });
     await rn.focus();
     await page.keyboard.press("Enter");
-    await expect(page.getByRole("dialog", { name: /RN menu/i })).toBeVisible({ timeout: 15_000 });
+    await expect(page.locator("#mega-menu-rn")).toBeVisible({ timeout: 20_000 });
   });
 
   test("keyboard: country selector button opens listbox with Enter", async ({ page, baseURL }) => {
