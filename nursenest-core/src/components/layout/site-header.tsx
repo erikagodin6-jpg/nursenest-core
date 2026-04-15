@@ -20,10 +20,6 @@ import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/mark
 import { HeaderBrandLockup } from "@/components/brand/header-brand-lockup";
 import { ThemePicker } from "@/components/theme/theme-picker";
 import { Button } from "@/components/ui/button";
-import {
-  marketingRegionToggleSegment,
-  marketingRegionToggleShellMobileRow,
-} from "@/lib/theme/marketing-region-toggle";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { GlobalContextBar } from "@/components/layout/global-context-bar";
@@ -1517,18 +1513,19 @@ export function SiteHeader() {
                 )}
               </div>
 
-              <p className="mb-2 nn-marketing-caption text-[var(--theme-muted-text)]">{t("nav.regionLabel")}</p>
-              <div className={`mb-3 ${marketingRegionToggleShellMobileRow()}`} role="group" aria-label={t("nav.regionLabel")}>
-                <button type="button" onClick={() => setRegionAndRefresh("US")} className={marketingRegionToggleSegment(region === "US", "mobile")}>
-                  {t("home.region.us")}
-                </button>
-                <button type="button" onClick={() => setRegionAndRefresh("CA")} className={marketingRegionToggleSegment(region === "CA", "mobile")}>
-                  {t("home.region.ca")}
-                </button>
-              </div>
-              <p className="mb-3 flex items-start gap-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-muted)]">
-                <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-                {region === "US" ? t("home.region.usDesc") : t("home.region.caDesc")}
+              <p className="mb-3 flex items-start gap-2 nn-marketing-body-sm text-[var(--nav-muted)]">
+                <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--theme-muted-text)]" aria-hidden />
+                <span>
+                  {t("nav.regionLabel")}:{" "}
+                  <span className="font-medium text-[var(--nav-fg)]">
+                    {effectiveGlobalRegion === "canada"
+                      ? formatTitleCase(t("home.region.ca"), locale)
+                      : effectiveGlobalRegion === "us"
+                        ? formatTitleCase(t("home.region.us"), locale)
+                        : REGION_CONFIG[effectiveGlobalRegion].displayName}
+                  </span>
+                  . {t("nav.regionChangeHint")}
+                </span>
               </p>
               <hr className="my-3 border-[var(--header-border)]" />
               <p className="mb-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-muted)]">{t("nav.language")}</p>

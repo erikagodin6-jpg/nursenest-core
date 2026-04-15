@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { ChevronDown } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
@@ -25,6 +26,8 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?: "standard" | "dark-bar" }) {
   const { t, locale } = useMarketingI18n();
   const router = useRouter();
+  const { data: session } = useSession();
+  const user = session?.user;
   const { region, setRegion } = useNursenestRegion();
   const regionToggleAnalytics = useMemo(
     () => ({ currentRegion: region, surface: "utility_strip" as const }),
@@ -62,9 +65,9 @@ export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?
       effectiveMarketingHeaderGlobalRegion({
         globalRegionCookie: clientGlobalRegion,
         marketingExamRegion: region,
-        sessionCountryUsCa: undefined,
+        sessionCountryUsCa: user?.country,
       }),
-    [clientGlobalRegion, region],
+    [clientGlobalRegion, region, user?.country],
   );
 
   const buildLocalizedMarketingPath = useCallback(
