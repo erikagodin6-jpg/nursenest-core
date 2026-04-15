@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { Prisma } from "@prisma/client";
+import { normalizeEmailForDedup } from "@/lib/auth/email-address-normalization";
+import {
+  normalizeLoginIdentifier,
+  sanitizeRawLoginIdentifier,
+} from "@/lib/auth/normalize-login-identifier";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { prisma } from "@/lib/db";
 import { generatePasswordResetRawToken, hashPasswordResetToken } from "@/lib/password-reset-crypto";
@@ -26,8 +32,9 @@ function clientIp(req: Request): string {
   );
 }
 
-function normalizeEmail(raw: string): string {
-  return raw.trim().toLowerCase();
+/** Align with credentials login: strip invisible chars, trim, lowercase. */
+function normalizeForgotPasswordEmail(raw: string): string {
+  return normalizeLoginIdentifier(sanitizeRawLoginIdentifier(raw));
 }
 
 export function passwordResetCleanupWhere(userId: string, now: Date) {
@@ -77,7 +84,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Invalid request" }, { status: 400 });
   }
 
-  const email = normalizeEmail(parsed.data.email);
+  const email = normalizeForgotPasswordEmail(parsed.data.email);
   if (!email.includes("@")) {
     return NextResponse.json(
       {
@@ -96,10 +103,39 @@ export async function POST(req: Request) {
   }
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { email },
-      select: { id: true, passwordHash: true, isDemoUser: true },
-    });
+    const dedup = normalizeEmailForDedup(email);
+
+    let user =
+      (await prisma.user.findFirst({
+        where: {
+          OR: [
+            { email: { equals: email, mode: "insensitive" } },
+            { normalizedEmail: dedup },
+          ],
+        },
+        select: { id: true, email: true, passwordHash: true, isDemoUser: true },
+      })) ?? null;
+
+    /** Match credentials `auth.ts` btrim fallback for legacy rows with spaces in `email`. */
+    if (!user) {
+      try {
+        const idRows = await prisma.$queryRaw<{ id: string }[]>(
+          Prisma.sql`
+            SELECT id FROM "User"
+            WHERE lower(btrim(email)) = lower(btrim(${email}))
+            LIMIT 2
+          `,
+        );
+        if (idRows.length === 1) {
+          user = await prisma.user.findUnique({
+            where: { id: idRows[0].id },
+            select: { id: true, email: true, passwordHash: true, isDemoUser: true },
+          });
+        }
+      } catch {
+        /* ignore */
+      }
+    }
 
     if (!user?.passwordHash || user.isDemoUser) {
       return NextResponse.json({
@@ -133,7 +169,8 @@ export async function POST(req: Request) {
     });
 
     const resetUrl = buildPasswordResetUrl(rawToken);
-    const sendResult = await sendPasswordResetEmail({ toEmail: email, resetUrl });
+    /** Send to canonical address on file (fixes case/alias mismatch with typed email). */
+    const sendResult = await sendPasswordResetEmail({ toEmail: user.email, resetUrl });
     captureServerEvent(analyticsDistinctId(user.id), "password_reset_requested", {}).catch(() => {});
 
     const base = {

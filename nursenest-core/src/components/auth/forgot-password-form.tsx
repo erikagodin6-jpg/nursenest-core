@@ -29,7 +29,7 @@ export function ForgotPasswordForm({
   const [error, setError] = useState<string | null>(null);
   const [devUrl, setDevUrl] = useState<string | null>(null);
 
-  async function onSubmit(formData: FormData) {
+  async function submitForgotPassword(formData: FormData) {
     setError(null);
     setDevUrl(null);
     setLoading(true);
@@ -45,14 +45,26 @@ export function ForgotPasswordForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-      const data = (await res.json().catch(() => ({}))) as {
+      const raw = await res.text();
+      let data = {} as {
         ok?: boolean;
         message?: string;
         error?: string;
         _devResetUrl?: string;
       };
+      if (raw.length > 0) {
+        try {
+          data = JSON.parse(raw) as typeof data;
+        } catch {
+          /* non-JSON error page */
+        }
+      }
       if (!res.ok) {
-        setError(data.error ?? errorMessage);
+        const msg =
+          typeof data.error === "string" && data.error.length > 0
+            ? data.error
+            : `Request failed (${res.status}). ${errorMessage}`;
+        setError(msg);
         return;
       }
       setDone(true);
@@ -86,7 +98,13 @@ export function ForgotPasswordForm({
   }
 
   return (
-    <form action={onSubmit} className="mt-6 space-y-4">
+    <form
+      className="mt-6 space-y-4"
+      onSubmit={(e) => {
+        e.preventDefault();
+        void submitForgotPassword(new FormData(e.currentTarget));
+      }}
+    >
       <input
         className="w-full rounded-xl border border-border bg-white px-3 py-2"
         type="text"
