@@ -20,6 +20,8 @@ const SUPER_ONLY_PREFIXES = [
   "/api/admin/i18n-diagnostics",
   "/admin/demo-users",
   "/api/admin/demo-users",
+  /** Temporary auth diagnostics — PII-adjacent user lookup (super admin only). */
+  "/api/debug/auth-user",
 ];
 
 /** User PII + billing list/analytics — not for content editors. */

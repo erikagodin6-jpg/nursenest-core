@@ -17,6 +17,7 @@ import {
 import { isGmailLikeAddress, normalizeEmailForDedup } from "@/lib/auth/email-address-normalization";
 import { isEmailLikeIdentifier, normalizeLoginIdentifier } from "@/lib/auth/normalize-login-identifier";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
+import type { Prisma } from "@prisma/client";
 import { UserRole } from "@prisma/client";
 import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
 import {
@@ -82,6 +83,7 @@ const isProd = process.env.NODE_ENV === "production";
 const CREDENTIALS_USER_SELECT = {
   id: true,
   email: true,
+  normalizedEmail: true,
   name: true,
   passwordHash: true,
   role: true,
@@ -90,6 +92,33 @@ const CREDENTIALS_USER_SELECT = {
   alliedProfessionKey: true,
   credentialVersion: true,
 } as const;
+
+type CredentialsUserRow = Prisma.UserGetPayload<{ select: typeof CREDENTIALS_USER_SELECT }>;
+
+let authDebugStartupConfigLogged = false;
+
+function logAuthDebugStartupConfigOnce(): void {
+  if (authDebugStartupConfigLogged) return;
+  authDebugStartupConfigLogged = true;
+  const has = (k: string) =>
+    Boolean(typeof process.env[k] === "string" && process.env[k]!.trim().length > 0);
+  console.error(
+    `[auth-debug] ${JSON.stringify({
+      event: "auth_startup_config",
+      AUTH_URL: has("AUTH_URL"),
+      NEXTAUTH_URL: has("NEXTAUTH_URL"),
+      AUTH_SECRET: has("AUTH_SECRET"),
+      NEXTAUTH_SECRET: has("NEXTAUTH_SECRET"),
+      configuredBasePath: PINNED_AUTH_BASE_PATH,
+    })}`,
+  );
+}
+
+logAuthDebugStartupConfigOnce();
+
+function logAuthDebugLine(payload: Record<string, unknown>): void {
+  console.error(`[auth-debug] ${JSON.stringify(payload)}`);
+}
 
 export const authConfig: NextAuthConfig = {
   /**
@@ -126,6 +155,7 @@ export const authConfig: NextAuthConfig = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, request) {
+        const enteredEmailRaw = String(credentials.email ?? "");
         const ip = clientIpFromRequest(request);
         const rl = checkRateLimit(`login:${ip}`, { windowMs: 60_000, max: 40 });
         if (!rl.ok) {
@@ -134,10 +164,15 @@ export const authConfig: NextAuthConfig = {
             level: "warning",
             tags: { flow: "auth", kind: "rate_limit" },
           });
+          logAuthDebugLine({
+            event: "credentials_attempt",
+            failureReason: "rate_limited",
+            ip: ip.slice(0, 64),
+          });
           return null;
         }
 
-        const identifier = normalizeLoginIdentifier(String(credentials.email ?? ""));
+        const identifier = normalizeLoginIdentifier(enteredEmailRaw);
         const password = String(credentials.password ?? "");
         const idHash = identifier ? hashLoginIdentifierForLog(identifier) : "";
         const authMode = isEmailLikeIdentifier(identifier) ? "email" : "username";
@@ -146,6 +181,14 @@ export const authConfig: NextAuthConfig = {
         if (!identifier || !password) {
           safeServerLog("auth", "login_failed", {
             reason: "missing_fields",
+            ip: ip.slice(0, 64),
+          });
+          logAuthDebugLine({
+            event: "credentials_attempt",
+            enteredEmailRaw,
+            enteredEmailLower: identifier,
+            authMode,
+            failureReason: "missing_fields",
             ip: ip.slice(0, 64),
           });
           return null;
@@ -158,35 +201,99 @@ export const authConfig: NextAuthConfig = {
             ip: ip.slice(0, 64),
             remainingMin: Math.ceil(lockStatus.remainingMs / 60_000),
           });
+          logAuthDebugLine({
+            event: "credentials_attempt",
+            enteredEmailRaw,
+            enteredEmailLower: identifier,
+            authMode,
+            failureReason: "login_locked_out",
+            idHash,
+            ip: ip.slice(0, 64),
+          });
           return null;
         }
 
-        let user;
+        const enteredEmailLower = identifier;
+        const enteredEmailNormalized = isEmailLikeIdentifier(identifier)
+          ? normalizeEmailForDedup(identifier)
+          : "";
+        const gmailLike = isEmailLikeAddress(identifier);
+
+        let exactEmailUserCount = 0;
+        let normalizedEmailUserCount = 0;
+        let usernameMatchCount = 0;
+
+        let user: CredentialsUserRow | null = null;
+
+        let lookupStrategy: "exact_email" | "normalized_gmail" | "username" | null = null;
+
         try {
           if (isEmailLikeIdentifier(identifier)) {
-            // Case-insensitive: legacy or manual rows may not match normalized lowercase input.
+            const dedup = normalizeEmailForDedup(identifier);
+            [exactEmailUserCount, normalizedEmailUserCount] = await Promise.all([
+              prisma.user.count({
+                where: { email: { equals: identifier, mode: "insensitive" } },
+              }),
+              prisma.user.count({
+                where: { normalizedEmail: dedup },
+              }),
+            ]);
+
+            if (exactEmailUserCount > 1 || normalizedEmailUserCount > 1) {
+              logAuthDebugLine({
+                event: "credentials_attempt",
+                enteredEmailRaw,
+                enteredEmailLower,
+                enteredEmailNormalized,
+                isGmailLikeAddress: gmailLike,
+                exactEmailUserCount,
+                normalizedEmailUserCount,
+                failureReason: "duplicate_user_match",
+                ip: ip.slice(0, 64),
+                idHash,
+              });
+            }
+
             user = await prisma.user.findFirst({
               where: { email: { equals: identifier, mode: "insensitive" } },
               select: CREDENTIALS_USER_SELECT,
             });
+            if (user) {
+              lookupStrategy = "exact_email";
+            }
             /**
              * Gmail / Googlemail: signup stores {@link normalizeEmailForDedup} on `User.normalizedEmail`
              * (dots and +aliases normalized). A literal `email` match can fail when the user types an
              * equivalent address (e.g. `janedoe@gmail.com` vs stored `jane.doe@gmail.com`).
              */
-            if (!user && isGmailLikeAddress(identifier)) {
-              const dedup = normalizeEmailForDedup(identifier);
+            if (!user && gmailLike) {
               user = await prisma.user.findFirst({
                 where: { normalizedEmail: dedup },
                 select: CREDENTIALS_USER_SELECT,
               });
+              if (user) lookupStrategy = "normalized_gmail";
             }
           } else {
-            // Case-insensitive usernames: legacy rows may differ in casing from normalized login input.
+            usernameMatchCount = await prisma.user.count({
+              where: { username: { equals: identifier, mode: "insensitive" } },
+            });
+            if (usernameMatchCount > 1) {
+              logAuthDebugLine({
+                event: "credentials_attempt",
+                enteredEmailRaw,
+                enteredEmailLower,
+                authMode: "username",
+                usernameMatchCount,
+                failureReason: "duplicate_user_match",
+                ip: ip.slice(0, 64),
+                idHash,
+              });
+            }
             user = await prisma.user.findFirst({
               where: { username: { equals: identifier, mode: "insensitive" } },
               select: CREDENTIALS_USER_SELECT,
             });
+            if (user) lookupStrategy = "username";
           }
         } catch (e) {
           const detail = e instanceof Error ? e.message.slice(0, 800) : String(e).slice(0, 800);
@@ -197,11 +304,62 @@ export const authConfig: NextAuthConfig = {
             idHash,
             ip: ip.slice(0, 64),
           });
+          logAuthDebugLine({
+            event: "credentials_attempt",
+            enteredEmailRaw,
+            enteredEmailLower,
+            enteredEmailNormalized,
+            isGmailLikeAddress: gmailLike,
+            exactEmailUserCount,
+            normalizedEmailUserCount,
+            usernameMatchCount,
+            authMode,
+            failureReason: "db_error",
+            detail: detail.slice(0, 400),
+            ip: ip.slice(0, 64),
+            idHash,
+          });
           return null;
         }
 
+        const baseDebug = {
+          event: "credentials_attempt" as const,
+          enteredEmailRaw,
+          enteredEmailLower,
+          enteredEmailNormalized,
+          isGmailLikeAddress: gmailLike,
+          exactEmailUserCount,
+          normalizedEmailUserCount,
+          usernameMatchCount,
+          matchedUserId: user?.id ?? null,
+          matchedUserEmail: user?.email ?? null,
+          matchedUserNormalizedEmail: user?.normalizedEmail ?? null,
+          hasPasswordHash: Boolean(user?.passwordHash),
+          passwordCompareOk: null as boolean | null,
+          lookupStrategy,
+          failureReason: "" as string,
+          ip: ip.slice(0, 64),
+          idHash,
+          authMode,
+        };
+
         if (!user) {
           recordLoginFailure(lockKey);
+          let notFoundReason: string;
+          if (authMode === "email") {
+            if (!gmailLike) {
+              notFoundReason = "no_matching_user_exact";
+            } else if (exactEmailUserCount === 0 && normalizedEmailUserCount === 0) {
+              notFoundReason = "no_matching_user_normalized";
+            } else {
+              notFoundReason = "auth_config_callback_issue";
+            }
+          } else {
+            notFoundReason = "no_matching_user_username";
+          }
+          baseDebug.failureReason = notFoundReason;
+          baseDebug.passwordCompareOk = false;
+          logAuthDebugLine(baseDebug);
           safeServerLog("auth", "login_failed", {
             reason: "user_not_found",
             authMode,
@@ -216,6 +374,9 @@ export const authConfig: NextAuthConfig = {
 
         if (!user.passwordHash) {
           recordLoginFailure(lockKey);
+          baseDebug.failureReason = "missing_password_hash";
+          baseDebug.passwordCompareOk = false;
+          logAuthDebugLine(baseDebug);
           safeServerLog("auth", "login_failed", {
             reason: "no_password_hash",
             authMode,
@@ -233,6 +394,9 @@ export const authConfig: NextAuthConfig = {
         } catch (e) {
           recordLoginFailure(lockKey);
           const detail = e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200);
+          baseDebug.failureReason = "bcrypt_compare_error";
+          baseDebug.passwordCompareOk = false;
+          logAuthDebugLine({ ...baseDebug, bcryptDetail: detail });
           safeServerLog("auth", "login_failed", {
             reason: "password_compare_error",
             authMode,
@@ -246,6 +410,9 @@ export const authConfig: NextAuthConfig = {
 
         if (!passwordOk) {
           recordLoginFailure(lockKey);
+          baseDebug.failureReason = "bcrypt_mismatch";
+          baseDebug.passwordCompareOk = false;
+          logAuthDebugLine(baseDebug);
           safeServerLog("auth", "login_failed", {
             reason: "invalid_password",
             authMode,
@@ -271,6 +438,29 @@ export const authConfig: NextAuthConfig = {
           authMode,
           role: user.role,
           userIdPrefix: user.id.slice(0, 8),
+        });
+
+        logAuthDebugLine({
+          event: "credentials_success",
+          enteredEmailRaw,
+          enteredEmailLower,
+          enteredEmailNormalized,
+          isGmailLikeAddress: gmailLike,
+          exactEmailUserCount,
+          normalizedEmailUserCount,
+          usernameMatchCount,
+          matchedUserId: user.id,
+          matchedUserEmail: user.email,
+          matchedUserNormalizedEmail: user.normalizedEmail,
+          hasPasswordHash: true,
+          passwordCompareOk: true,
+          failureReason: "success",
+          lookupStrategy:
+            lookupStrategy === "username"
+              ? "username"
+              : lookupStrategy === "normalized_gmail"
+                ? "normalized_gmail"
+                : "exact_email",
         });
 
         let subscriptionStatus: SessionSubscriptionStatus = "none";

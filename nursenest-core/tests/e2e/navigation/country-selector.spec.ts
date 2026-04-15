@@ -20,6 +20,29 @@ import { expectMobileRegionSettingsHeading, openMobileRegionLanguageDrawer } fro
 
 const baseURL = getE2eBaseURL();
 
+/** Avoid substring false positives (e.g. `/enus` or unrelated `/…/us/…` segments). */
+function pathnameIsUsMarketing(url: string): boolean {
+  const p = new URL(url).pathname.replace(/\/$/, "") || "/";
+  return p === "/us" || p.startsWith("/us/");
+}
+
+function pathnameIsCanadaMarketing(url: string): boolean {
+  const p = new URL(url).pathname.replace(/\/$/, "") || "/";
+  return p === "/canada" || p.startsWith("/canada/");
+}
+
+async function waitForUsOrCanadaHubUrl(page: Page, target: "us" | "canada") {
+  await page.waitForFunction(
+    (t) => {
+      const p = new URL(window.location.href).pathname.replace(/\/$/, "") || "/";
+      if (t === "us") return p === "/us" || p.startsWith("/us/");
+      return p === "/canada" || p.startsWith("/canada/");
+    },
+    target,
+    { timeout: 45_000 },
+  );
+}
+
 async function expectPublicChromeVisible(page: Page) {
   await expect(page.locator('[data-nn-nav-mode="public"]')).toBeVisible({ timeout: 60_000 });
 }
@@ -50,28 +73,34 @@ test.describe("Country selector — desktop", () => {
     await page.setViewportSize({ width: 1280, height: 800 });
   });
 
-  test("from /exams/philippines → US: URL /us and header shows United States", async ({ page }) => {
+  test("from /exams/philippines → US: URL under /us/… (canonical hub) and header shows United States", async ({
+    page,
+  }) => {
     await setGlobalRegionCookie(page, "philippines", baseURL);
     await page.goto(`${baseURL}/exams/philippines`, { waitUntil: "domcontentloaded" });
     await expectPublicChromeVisible(page);
 
     await openDesktopCountryMenu(page);
     await selectCountryFromListbox(page, /United States/i);
-    await page.waitForURL(/\/us(\/|$|\?)/, { timeout: 30_000 });
+    await waitForUsOrCanadaHubUrl(page, "us");
+    expect(pathnameIsUsMarketing(page.url()), `expected /us marketing path, got ${page.url()}`).toBe(true);
 
     await expect(page.locator(`${HEADER_CHROME} button[aria-label*="United States"]`).first()).toBeVisible({
       timeout: 30_000,
     });
   });
 
-  test("from /exams/philippines → Canada: URL /canada and header shows Canada", async ({ page }) => {
+  test("from /exams/philippines → Canada: URL under /canada/… (canonical hub) and header shows Canada", async ({
+    page,
+  }) => {
     await setGlobalRegionCookie(page, "philippines", baseURL);
     await page.goto(`${baseURL}/exams/philippines`, { waitUntil: "domcontentloaded" });
     await expectPublicChromeVisible(page);
 
     await openDesktopCountryMenu(page);
     await selectCountryFromListbox(page, /^Canada$/);
-    await page.waitForURL(/\/canada(\/|$|\?)/, { timeout: 30_000 });
+    await waitForUsOrCanadaHubUrl(page, "canada");
+    expect(pathnameIsCanadaMarketing(page.url()), `expected /canada marketing path, got ${page.url()}`).toBe(true);
 
     await expect(page.locator(`${HEADER_CHROME} button[aria-label*="Canada"]`).first()).toBeVisible({
       timeout: 30_000,
@@ -114,7 +143,7 @@ test.describe("Country selector — mobile", () => {
     await page.setViewportSize({ width: 390, height: 844 });
   });
 
-  test("from /exams/philippines → US: URL /us and drawer shows United States", async ({ page }) => {
+  test("from /exams/philippines → US: URL under /us/… and drawer shows United States", async ({ page }) => {
     await setGlobalRegionCookie(page, "philippines", baseURL);
     await page.goto(`${baseURL}/exams/philippines`, { waitUntil: "domcontentloaded" });
     await expectPublicChromeVisible(page);
@@ -122,7 +151,7 @@ test.describe("Country selector — mobile", () => {
     await openMobileRegionLanguageDrawer(page);
     await expectMobileRegionSettingsHeading(page);
     await page.getByRole("option", { name: /United States/i }).first().click();
-    await page.waitForURL(/\/us(\/|$|\?)/, { timeout: 30_000 });
+    await waitForUsOrCanadaHubUrl(page, "us");
 
     const cookies = await page.context().cookies(baseURL);
     expect(cookies.find((c) => c.name === GLOBAL_REGION_COOKIE)?.value).toBe("us");
@@ -133,14 +162,14 @@ test.describe("Country selector — mobile", () => {
     ).toBeVisible();
   });
 
-  test("from /exams/philippines → Canada: URL /canada and drawer shows Canada", async ({ page }) => {
+  test("from /exams/philippines → Canada: URL under /canada/… and drawer shows Canada", async ({ page }) => {
     await setGlobalRegionCookie(page, "philippines", baseURL);
     await page.goto(`${baseURL}/exams/philippines`, { waitUntil: "domcontentloaded" });
     await expectPublicChromeVisible(page);
 
     await openMobileRegionLanguageDrawer(page);
     await page.getByRole("option", { name: /^Canada$/ }).first().click();
-    await page.waitForURL(/\/canada(\/|$|\?)/, { timeout: 30_000 });
+    await waitForUsOrCanadaHubUrl(page, "canada");
 
     const cookies = await page.context().cookies(baseURL);
     expect(cookies.find((c) => c.name === GLOBAL_REGION_COOKIE)?.value).toBe("canada");

@@ -2,14 +2,14 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { navigationAfterUsCaMarketingToggle } from "./marketing-us-ca-toggle-navigation";
 
-test("from Philippines exam hub to US → replace /us", () => {
+test("from Philippines exam hub to US → replace canonical US RN hub", () => {
   const r = navigationAfterUsCaMarketingToggle("/exams/philippines", "US");
-  assert.deepEqual(r, { kind: "replace", href: "/us" });
+  assert.deepEqual(r, { kind: "replace", href: "/us/rn/nclex-rn" });
 });
 
-test("from Philippines exam hub to CA → replace /canada", () => {
+test("from Philippines exam hub to CA → replace canonical CA RN hub", () => {
   const r = navigationAfterUsCaMarketingToggle("/exams/philippines", "CA");
-  assert.deepEqual(r, { kind: "replace", href: "/canada" });
+  assert.deepEqual(r, { kind: "replace", href: "/canada/rn/nclex-rn" });
 });
 
 test("already on US pathway → refresh", () => {

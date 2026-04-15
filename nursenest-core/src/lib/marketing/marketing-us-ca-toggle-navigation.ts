@@ -1,4 +1,5 @@
 import type { NursenestRegion } from "@/lib/region/use-nursenest-region";
+import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 
 export type UsCaToggleNavigation =
@@ -27,7 +28,11 @@ export function navigationAfterUsCaMarketingToggle(
   if (onUsCaHub) return { kind: "refresh" };
 
   if (bare.startsWith("/exams/")) {
-    return { kind: "replace", href: next === "US" ? "/us" : "/canada" };
+    // Bare `/us` and `/canada` are not guaranteed to resolve to marketing content; land on canonical RN hubs.
+    return {
+      kind: "replace",
+      href: next === "US" ? CANONICAL_PATHWAY_HUB.usRn : CANONICAL_PATHWAY_HUB.caRn,
+    };
   }
 
   return { kind: "refresh" };
