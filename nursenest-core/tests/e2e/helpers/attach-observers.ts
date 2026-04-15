@@ -63,10 +63,12 @@ export function attachPageObservers(page: Page, opts?: { profile?: ObserverProfi
 
   const onRequestFailed = (req: import("@playwright/test").Request) => {
     const url = req.url();
+    const fail = req.failure();
+    /** Locale / SPA transitions often abort an in-flight document fetch — not a flaky-network signal. */
+    if (fail?.errorText === "net::ERR_ABORTED") return;
     const ignore =
       profile === "app" ? shouldIgnoreFailedRequestApp(url) : shouldIgnoreFailedRequestPublic(url);
     if (ignore) return;
-    const fail = req.failure();
     failedRequests.push(`${fail?.errorText ?? "failed"} ${url}`);
   };
 

@@ -36,16 +36,16 @@ test.describe("Public site smoke", () => {
     const o = attachPageObservers(page);
     await gotoOk(page, "/");
     await expect(page.locator('[data-nn-nav-mode="public"]')).toBeVisible({ timeout: 60_000 });
-    // Prefer nav that contains the global /pricing href (locale-prefixed as /fr/pricing, etc.).
-    const pricing = page
-      .locator(`${HEADER_CHROME} nav:has(a[href$="/pricing"])`)
-      .locator(`a[href="/pricing"], a[href$="/pricing"]`)
-      .first();
+    // Marketing browse nav is the one that includes the global `/pricing` href (not pathway …/nclex-rn/pricing).
+    const marketingNav = page.getByRole("navigation", {
+      name: /who we help|marketing|explore/i,
+    });
+    const pricing = marketingNav.getByRole("link", { name: /^Pricing$/i }).first();
     await expect(pricing).toBeVisible({ timeout: 30_000 });
-    await Promise.all([
-      page.waitForURL(/\/pricing/, { timeout: 60_000 }),
-      pricing.click({ force: true }),
-    ]);
+    await pricing.scrollIntoViewIfNeeded();
+    // Avoid force: true — it can punch through the link to the page behind and leave the URL on `/`.
+    await pricing.click();
+    await expect(page).toHaveURL(/\/pricing\/?(\?|$)/, { timeout: 60_000 });
     await page.waitForLoadState("domcontentloaded");
     expect(page.url()).toMatch(/\/pricing/);
     await expect(page.locator("main, [role='main']").first()).toBeVisible();
@@ -83,12 +83,12 @@ test.describe("Public site smoke", () => {
     await expect(page.locator('[data-nn-nav-mode="public"]')).toBeVisible({ timeout: 60_000 });
     const langBtn = page.locator(HEADER_CHROME).getByRole("button", { name: /language/i }).first();
     await langBtn.click({ force: true });
-    await page.getByRole("button", { name: /Français|French/i }).first().click();
+    await page.getByRole("button", { name: /Français|French/i }).first().click({ force: true });
     await page.waitForLoadState("domcontentloaded");
     expect(page.url()).not.toMatch(/\/404/);
     const r = await page.goto(page.url(), { waitUntil: "domcontentloaded" });
     expect(r?.ok()).toBeTruthy();
-    await expect(page.locator('[data-nn-nav-mode="public"]')).toBeVisible({ timeout: 60_000 });
+    await expect(page.locator('[data-nn-nav-mode="public"]').first()).toBeVisible({ timeout: 60_000 });
     const d = await logObserverDiagnostics(o, testInfo.title);
     o.dispose();
     expect(d.consoleErrors).toEqual([]);
