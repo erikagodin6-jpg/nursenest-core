@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { isGmailLikeAddress, normalizeEmailForDedup } from "@/lib/auth/email-verification";
+import { isGmailLikeAddress, normalizeEmailForDedup } from "@/lib/auth/email-address-normalization";
 
 describe("isGmailLikeAddress", () => {
   it("returns true for gmail.com and googlemail.com", () => {

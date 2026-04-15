@@ -12,7 +12,7 @@ const freeAuthEnabled = Boolean(
 );
 
 const paidProjects = paidAuthEnabled
-  ? ([
+  ? [
       {
         name: "setup-paid-auth",
         testMatch: /tests\/e2e\/setup\/auth\.setup\.ts$/,
@@ -26,11 +26,11 @@ const paidProjects = paidAuthEnabled
           storageState: PAID_USER_AUTH_FILE,
         },
       },
-    ] as const)
+    ]
   : [];
 
 const freeProjects = freeAuthEnabled
-  ? ([
+  ? [
       {
         name: "setup-free-auth",
         testMatch: /tests\/e2e\/setup\/auth-free\.setup\.ts$/,
@@ -44,7 +44,7 @@ const freeProjects = freeAuthEnabled
           storageState: FREE_USER_AUTH_FILE,
         },
       },
-    ] as const)
+    ]
   : [];
 
 export default defineConfig({

@@ -14,7 +14,7 @@ import {
   getFailureCount,
   CAPTCHA_THRESHOLD,
 } from "@/lib/auth/login-lockout";
-import { isGmailLikeAddress, normalizeEmailForDedup } from "@/lib/auth/email-verification";
+import { isGmailLikeAddress, normalizeEmailForDedup } from "@/lib/auth/email-address-normalization";
 import { isEmailLikeIdentifier, normalizeLoginIdentifier } from "@/lib/auth/normalize-login-identifier";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { UserRole } from "@prisma/client";
