@@ -238,14 +238,12 @@ function readInitialExamThemeId(): string {
   return "plum-mist";
 }
 
-/** Pre-exam step: legacy “Customize → Begin Exam” flow before starting a practice session. */
-export function ExamPreExamCustomizeModal({
-  open,
+/** Mounts only while open so preview state re-initializes from storage each open (no setState-in-effect). */
+function ExamPreExamCustomizeModalContent({
   onClose,
   onBegin,
   starting,
 }: {
-  open: boolean;
   onClose: () => void;
   onBegin: () => void;
   starting: boolean;
@@ -256,30 +254,22 @@ export function ExamPreExamCustomizeModal({
   const panelRef = useRef<HTMLDivElement>(null);
   const [previewId, setPreviewId] = useState(readInitialExamThemeId);
 
-  useEffect(() => {
-    if (open) setPreviewId(readInitialExamThemeId());
-  }, [open]);
-
-  useModalFocusTrap(open, panelRef);
+  useModalFocusTrap(true, panelRef);
 
   useEffect(() => {
-    if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
+  }, [onClose]);
 
   useEffect(() => {
-    if (!open) return;
-    const t = window.setTimeout(() => {
+    const tmr = window.setTimeout(() => {
       panelRef.current?.querySelector<HTMLButtonElement>("button")?.focus();
     }, 0);
-    return () => window.clearTimeout(t);
-  }, [open]);
-
-  if (!open) return null;
+    return () => window.clearTimeout(tmr);
+  }, []);
 
   return (
     <div className="fixed inset-0 z-[130] flex items-center justify-center p-4" role="presentation">
@@ -301,7 +291,7 @@ export function ExamPreExamCustomizeModal({
           mode="pre-exam"
           titleId={titleId}
           previewId={previewId}
-          setPreviewId={setPreviewId}
+          setPreviewId={(id) => setPreviewId(normalizeExamInterfaceThemeId(id))}
           onClose={onClose}
           onApplySessionTheme={(id) => setSessionTheme(id)}
           onBeginExam={onBegin}
@@ -312,42 +302,54 @@ export function ExamPreExamCustomizeModal({
   );
 }
 
-export function ExamStudyThemeModal() {
-  const { t } = useMarketingI18n();
-  const { sessionTheme, setSessionTheme, themePickerOpen, setThemePickerOpen, themePickerNonce } =
-    useExamStudyTheme();
+/** Pre-exam step: legacy “Customize → Begin Exam” flow before starting a practice session. */
+export function ExamPreExamCustomizeModal({
+  open,
+  onClose,
+  onBegin,
+  starting,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onBegin: () => void;
+  starting: boolean;
+}) {
+  if (!open) return null;
+  return <ExamPreExamCustomizeModalContent onClose={onClose} onBegin={onBegin} starting={starting} />;
+}
 
-  const onClose = useCallback(() => setThemePickerOpen(false), [setThemePickerOpen]);
+function ExamStudyThemeModalInner({
+  sessionTheme,
+  setSessionTheme,
+  onClose,
+  themePickerNonce,
+}: {
+  sessionTheme: string | null;
+  setSessionTheme: (id: string | null) => void;
+  onClose: () => void;
+  themePickerNonce: number;
+}) {
+  const { t } = useMarketingI18n();
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
   const [previewId, setPreviewId] = useState(() => normalizeExamInterfaceThemeId(sessionTheme ?? undefined));
 
-  useEffect(() => {
-    if (themePickerOpen) {
-      setPreviewId(normalizeExamInterfaceThemeId(sessionTheme ?? undefined));
-    }
-  }, [themePickerOpen, themePickerNonce, sessionTheme]);
-
-  useModalFocusTrap(themePickerOpen, panelRef);
+  useModalFocusTrap(true, panelRef);
 
   useEffect(() => {
-    if (!themePickerOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [themePickerOpen, onClose]);
+  }, [onClose]);
 
   useEffect(() => {
-    if (!themePickerOpen) return;
     const tmr = window.setTimeout(() => {
       panelRef.current?.querySelector<HTMLButtonElement>("button")?.focus();
     }, 0);
     return () => window.clearTimeout(tmr);
-  }, [themePickerOpen, themePickerNonce]);
-
-  if (!themePickerOpen) return null;
+  }, [themePickerNonce]);
 
   return (
     <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-4" role="presentation">
@@ -359,7 +361,6 @@ export function ExamStudyThemeModal() {
       />
       <div
         ref={panelRef}
-        key={themePickerNonce}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -370,11 +371,29 @@ export function ExamStudyThemeModal() {
           mode="session-settings"
           titleId={titleId}
           previewId={previewId}
-          setPreviewId={setPreviewId}
+          setPreviewId={(id) => setPreviewId(normalizeExamInterfaceThemeId(id))}
           onClose={onClose}
           onApplySessionTheme={(id) => setSessionTheme(id)}
         />
       </div>
     </div>
+  );
+}
+
+export function ExamStudyThemeModal() {
+  const { sessionTheme, setSessionTheme, themePickerOpen, setThemePickerOpen, themePickerNonce } =
+    useExamStudyTheme();
+  const onClose = useCallback(() => setThemePickerOpen(false), [setThemePickerOpen]);
+
+  if (!themePickerOpen) return null;
+
+  return (
+    <ExamStudyThemeModalInner
+      key={`${themePickerNonce}-${sessionTheme ?? ""}`}
+      sessionTheme={sessionTheme}
+      setSessionTheme={setSessionTheme}
+      onClose={onClose}
+      themePickerNonce={themePickerNonce}
+    />
   );
 }

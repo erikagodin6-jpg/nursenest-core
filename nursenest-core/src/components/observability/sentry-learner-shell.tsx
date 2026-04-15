@@ -12,8 +12,10 @@ export function SentryLearnerShell({
   userId: string;
   children: React.ReactNode;
 }) {
+  const sentryOn = process.env.NEXT_PUBLIC_SENTRY_ENABLED === "true";
+
   useEffect(() => {
-    if (!userId) return;
+    if (!sentryOn || !userId) return;
     let cancelled = false;
     void (async () => {
       const id = await sentryUserHashClient(userId);
@@ -25,7 +27,11 @@ export function SentryLearnerShell({
     return () => {
       cancelled = true;
     };
-  }, [userId]);
+  }, [userId, sentryOn]);
+
+  if (!sentryOn) {
+    return <>{children}</>;
+  }
 
   return (
     <ErrorBoundary

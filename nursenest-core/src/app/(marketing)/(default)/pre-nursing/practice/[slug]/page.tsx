@@ -64,17 +64,17 @@ export default async function PreNursingPracticeExamPage({ params }: Props) {
   const questions = buildPracticeExam({ moduleSlug: slug, questionCount: 10 });
 
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Pre-Nursing", href: "/pre-nursing" },
-    { label: "Lessons", href: "/pre-nursing/lessons" },
-    { label: title, href: `/pre-nursing/lessons/${slug}` },
-    { label: "Practice Exam", href: `/pre-nursing/practice/${slug}` },
+    { name: "Home", href: "/" },
+    { name: "Pre-Nursing", href: "/pre-nursing" },
+    { name: "Lessons", href: "/pre-nursing/lessons" },
+    { name: title, href: `/pre-nursing/lessons/${slug}` },
+    { name: "Practice Exam", href: `/pre-nursing/practice/${slug}` },
   ];
 
   const schemaItems = crumbs.map((c, i) => ({
     "@type": "ListItem" as const,
     position: i + 1,
-    name: c.label,
+    name: c.name,
     item: absoluteUrl(c.href),
   }));
 

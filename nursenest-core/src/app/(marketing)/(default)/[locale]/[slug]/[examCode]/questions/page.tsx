@@ -27,6 +27,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-loader";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { pathwayQuestionsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -452,7 +453,7 @@ type QuestionCategorySection = {
 
 function groupQuestionSetsByLessonCategory(
   clusters: Array<{ topicSlug: string; label: string; count: number }>,
-  pathway: { id: string; countrySlug: string; roleTrack: string; examCode: string },
+  pathway: ExamPathwayDefinition,
   lessonsHref: string,
 ): QuestionCategorySection[] {
   const withLinks = clusters.map((cluster) => ({

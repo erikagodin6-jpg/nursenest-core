@@ -94,7 +94,7 @@ export function getRegionFlag(region: GlobalRegionSlug): string {
 
 // ── Locale display names ─────────────────────────────────────────────────────
 
-const LOCALE_DISPLAY: Record<GlobalLocaleCode, { label: string; flag: string }> = {
+const LOCALE_DISPLAY: Partial<Record<GlobalLocaleCode, { label: string; flag: string }>> = {
   en: { label: "English", flag: "🇺🇸" },
   fr: { label: "Français", flag: "🇫🇷" },
   es: { label: "Español", flag: "🇪🇸" },
@@ -106,6 +106,19 @@ const LOCALE_DISPLAY: Record<GlobalLocaleCode, { label: string; flag: string }> 
   it: { label: "Italiano", flag: "🇮🇹" },
   hu: { label: "Magyar", flag: "🇭🇺" },
   el: { label: "Ελληνικά", flag: "🇬🇷" },
+  zh: { label: "中文", flag: "🇨🇳" },
+  "zh-tw": { label: "繁體中文", flag: "🇹🇼" },
+  ar: { label: "العربية", flag: "🇸🇦" },
+  vi: { label: "Tiếng Việt", flag: "🇻🇳" },
+  pa: { label: "ਪੰਜਾਬੀ", flag: "🇮🇳" },
+  pt: { label: "Português", flag: "🇵🇹" },
+  ur: { label: "اردو", flag: "🇵🇰" },
+  fa: { label: "فارسی", flag: "🇮🇷" },
+  th: { label: "ไทย", flag: "🇹🇭" },
+  tr: { label: "Türkçe", flag: "🇹🇷" },
+  id: { label: "Bahasa Indonesia", flag: "🇮🇩" },
+  ru: { label: "Русский", flag: "🇷🇺" },
+  ht: { label: "Kreyòl", flag: "🇭🇹" },
 };
 
 export function getLocaleDisplay(locale: GlobalLocaleCode) {

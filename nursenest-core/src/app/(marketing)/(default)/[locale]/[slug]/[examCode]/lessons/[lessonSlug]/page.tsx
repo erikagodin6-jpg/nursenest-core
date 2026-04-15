@@ -221,10 +221,9 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
       ? lesson
       : { ...lesson, sections: visibleForRender, preTest: undefined, postTest: undefined };
 
-  const lessonContentTier = contentTierForPathwayLessonRender(
-    pathway,
-    entitlementError ? null : (entitlement.tier as TierCode | null),
-  );
+  const tierForLessonContent: TierCode | null =
+    entitlement === "error" ? null : (entitlement.tier as TierCode | null);
+  const lessonContentTier = contentTierForPathwayLessonRender(pathway, tierForLessonContent);
   const lessonMeasurementSystem = getMeasurementSystemForCountry(pathway.countryCode);
 
   const base = marketingPathwayLessonsIndexPath(pathway);

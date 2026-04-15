@@ -338,9 +338,9 @@ const CURRENT_CURATED: typeof LEGACY_CURATED = [
     },
   },
   {
-    path: "nursenest-core/src/components/study/cat-session-layout.tsx",
-    componentOrModule: "CatSessionLayout",
-    purpose: "CAT session grid/chrome layout.",
+    path: "nursenest-core/src/components/student/practice-test-runner-client.tsx",
+    componentOrModule: "PracticeTestRunnerClient (CAT branch)",
+    purpose: "CAT session: ExamSessionShell + split rationale (replaces legacy CatSessionLayout).",
     controls: {
       sessionStart: false,
       questionDelivery: false,

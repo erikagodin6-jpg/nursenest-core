@@ -58,6 +58,26 @@ export function ExamSessionTopBar({
   );
 }
 
+/** Full-bleed thin strip (legacy mock-exam / flashcard study) — fill uses semantic brand readiness. */
+export function ExamSessionProgressStrip({ pct }: { pct: number }) {
+  const w = Math.min(100, Math.max(0, pct));
+  return (
+    <div
+      className="h-1 w-full bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-panel-muted))]"
+      role="progressbar"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round(w)}
+      aria-label={`Progress ${Math.round(w)} percent`}
+    >
+      <div
+        className="h-full nn-progress-fill-semantic-readiness transition-[width] duration-500 ease-out"
+        style={{ width: `${w}%` }}
+      />
+    </div>
+  );
+}
+
 /** Thin progress track — fill uses theme primary at restrained opacity. */
 export function ExamProgressBar({
   current,

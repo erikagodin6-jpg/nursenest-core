@@ -17,6 +17,8 @@ import {
 } from "@/lib/blog/generate-localized-blog";
 import type { LocalizedBlogAiOutput } from "@/lib/blog/blog-localization-types";
 import { prisma } from "@/lib/db";
+import type { BlogSourceRecord } from "@/lib/blog/apa7";
+import { coerceBlogSourceRows } from "@/lib/blog/apa7";
 import {
   GLOBAL_LOCALE_CODES,
   isAllowedLocaleForRegion,
@@ -47,6 +49,12 @@ type AutomationInput = {
   translationProfession?: string;
   translationExam?: string;
 };
+
+function sourceRecordsJsonForPipeline(v: Prisma.JsonValue | undefined): BlogSourceRecord[] | undefined {
+  if (v === undefined || v === null) return undefined;
+  if (!Array.isArray(v)) return undefined;
+  return coerceBlogSourceRows(v);
+}
 
 export type AutomationResult =
   | {
@@ -215,7 +223,7 @@ async function upsertLocalizedVariant(params: {
     throw new Error(`Localization validation failed (${params.locale}): ${processed.error}`);
   }
 
-  const localizedModel = prisma.localizedBlogArticle as {
+  const localizedModel = prisma.localizedBlogArticle as unknown as {
     findUnique: (args: Record<string, unknown>) => Promise<{ id: string } | null>;
     create: (args: Record<string, unknown>) => Promise<{ localizedSlug: string }>;
     update: (args: Record<string, unknown>) => Promise<{ localizedSlug: string }>;
@@ -300,7 +308,7 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
       tone: input.tone ?? "professional",
       includeImage: input.includeImage ?? true,
       includeAiImage: input.includeAiImage ?? false,
-      sourceRecordsJson: (input.sourceRecords as Prisma.JsonValue | undefined) ?? undefined,
+      sourceRecordsJson: sourceRecordsJsonForPipeline(input.sourceRecords),
       fixedSlug: input.fixedSlug,
       allowInsufficientCitations: true,
     },

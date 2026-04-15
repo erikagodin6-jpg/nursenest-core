@@ -9,6 +9,7 @@ import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { generateAutomatedBlogPost, normalizeUniqueTopics } from "@/lib/blog/blog-automation-engine";
 import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 
 /**
@@ -115,7 +116,7 @@ export async function POST(req: Request) {
       includeAiImage: d.includeAiImage,
       targetKeyword: d.targetKeyword ?? topic,
       keywordCluster: d.keywordCluster,
-      sourceRecords: d.sourceRecords as unknown,
+      sourceRecords: d.sourceRecords as Prisma.JsonValue | undefined,
       fixedSlug: topics.length === 1 ? d.slug : undefined,
       autoPublish: publishNow,
       publishAt: publishNow ? runAt : undefined,

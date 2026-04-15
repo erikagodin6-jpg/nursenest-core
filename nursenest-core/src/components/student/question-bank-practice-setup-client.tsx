@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { ExamPreExamCustomizeModal } from "@/components/exam/exam-study-theme-modal";
 import { buildPracticeExamStartPayload } from "@/lib/practice-tests/practice-exam-start-payload";
 
 type PracticeModeId = "weak_areas" | "by_system" | "mixed_all_categories";
@@ -49,6 +50,7 @@ export function QuestionBankPracticeSetupClient({ pathwayId }: { pathwayId: stri
   const [difficultyMax, setDifficultyMax] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [customizeOpen, setCustomizeOpen] = useState(false);
 
   const needsSystemSelector = selectedMode === "by_system";
 
@@ -77,7 +79,7 @@ export function QuestionBankPracticeSetupClient({ pathwayId }: { pathwayId: stri
     );
   }
 
-  async function handleStartPractice() {
+  function openPreExamModal() {
     if (!selectedMode) {
       setError("Choose a practice exam mode to continue.");
       return;
@@ -86,6 +88,11 @@ export function QuestionBankPracticeSetupClient({ pathwayId }: { pathwayId: stri
       setError("Select at least one category/system.");
       return;
     }
+    setError(null);
+    setCustomizeOpen(true);
+  }
+
+  async function handleStartPractice() {
     setError(null);
     setIsSubmitting(true);
     try {
@@ -366,12 +373,22 @@ export function QuestionBankPracticeSetupClient({ pathwayId }: { pathwayId: stri
 
       <button
         type="button"
-        onClick={() => void handleStartPractice()}
+        onClick={() => openPreExamModal()}
         disabled={!selectedMode || isSubmitting}
         className="nn-btn-primary inline-flex min-h-11 items-center justify-center rounded-full px-6 py-2.5 text-sm font-semibold disabled:opacity-50"
       >
         {isSubmitting ? "Starting..." : "Start Practice Exam"}
       </button>
+
+      <ExamPreExamCustomizeModal
+        open={customizeOpen}
+        onClose={() => setCustomizeOpen(false)}
+        onBegin={() => {
+          setCustomizeOpen(false);
+          void handleStartPractice();
+        }}
+        starting={isSubmitting}
+      />
     </section>
   );
 }

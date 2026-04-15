@@ -44,6 +44,7 @@ test("requireAdmin sends non-staff signed-in users to /app; tier mismatch to /ad
   assert.match(guards, /redirect\(gate\.redirectTo\)/);
   assert.match(guards, /adminRouteGateDecision/);
   assert.match(guards, /x-nn-admin-path/);
+  assert.match(guards, /\/login\?callbackUrl=/);
   assert.match(policy, /redirectTo: "\/app"/);
   assert.match(policy, /redirectTo: "\/admin"/);
   assert.match(policy, /isPathAllowedForStaffTier/);

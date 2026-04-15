@@ -24,12 +24,16 @@ import { TimeAnalysisPanel } from "@/components/study/time-analysis-panel";
 import { ConfidencePatternsPanel } from "@/components/study/confidence-patterns-panel";
 import { AnalyticsNextSteps } from "@/components/study/analytics-next-steps";
 import { ReadinessTrendPanel } from "@/components/study/readiness-trend-panel";
+import { QuestionTypePerformancePanel } from "@/components/study/question-type-performance-panel";
+import { ConfidenceVsPerformancePanel } from "@/components/study/confidence-vs-performance-panel";
 import type {
   ConfidencePatternSummary,
   TimeMetrics,
   TopicRow,
   ReadinessTrendPoint,
   AnalyticsSummary,
+  QuestionTypeRow,
+  ConfidenceScatterPoint,
 } from "@/lib/study/analytics-data";
 
 type Props = {
@@ -37,6 +41,10 @@ type Props = {
   initialTrendPoints: ReadinessTrendPoint[];
   hasMorTrend: boolean;
   trendCursor: string | null;
+  questionTypeRows: QuestionTypeRow[];
+  /** Server-loaded topic stats — shown until lazy panels refresh. */
+  initialTopicRows: TopicRow[];
+  confidenceScatterPoints: ConfidenceScatterPoint[];
 };
 
 type DetailState = {
@@ -70,11 +78,14 @@ export function AnalyticsDetailClient({
   initialTrendPoints,
   hasMorTrend,
   trendCursor,
+  questionTypeRows,
+  initialTopicRows,
+  confidenceScatterPoints,
 }: Props) {
   const [detail, setDetail] = useState<DetailState>({
     patterns: null,
     timeMetrics: null,
-    topics: [],
+    topics: initialTopicRows,
     loaded: false,
   });
 
@@ -101,6 +112,16 @@ export function AnalyticsDetailClient({
 
   return (
     <div className="space-y-6">
+      {/* Legacy two-up row: question-type performance + confidence scatter / cognitive summary */}
+      <div className="grid items-stretch gap-4 lg:grid-cols-2">
+        <QuestionTypePerformancePanel rows={questionTypeRows} />
+        <ConfidenceVsPerformancePanel
+          patterns={patterns}
+          scatterPoints={confidenceScatterPoints}
+          loaded={detail.loaded}
+        />
+      </div>
+
       {/* Readiness trend — client for "Load more" interactivity */}
       <ReadinessTrendPanel
         initialPoints={initialTrendPoints}
@@ -123,6 +144,7 @@ export function AnalyticsDetailClient({
         <ConfidencePatternsPanel
           patterns={patterns}
           topics={detail.topics}
+          showCognitiveSection={false}
         />
       )}
 

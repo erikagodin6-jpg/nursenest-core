@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ConfidencePatternSummary, AnalyticsSummary } from "@/lib/study/analytics-data";
 
+type RecKind = "risk" | "build" | "measure" | "consistency" | "progress";
+
 type NextStep = {
   step: string;
   title: string;
@@ -10,6 +12,8 @@ type NextStep = {
   surface: string;
   border: string;
   ctaVariant: "primary" | "secondary";
+  priority: number;
+  kind: RecKind;
 };
 
 /**
@@ -30,7 +34,15 @@ export function AnalyticsNextSteps({
 
   return (
     <section className="space-y-4">
-      <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">Recommendations</h2>
+      <div>
+        <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--semantic-text-muted)]">
+          Recommendations
+        </p>
+        <h2 className="mt-1 text-lg font-bold text-[var(--semantic-text-primary)]">Next best actions</h2>
+        <p className="mt-1 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
+          Prioritized from your latest performance and confidence signals — tap through in order when time is tight.
+        </p>
+      </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {steps.map((step, i) => (
           <NextStepCard key={i} step={step} index={i} />
@@ -40,18 +52,48 @@ export function AnalyticsNextSteps({
   );
 }
 
+const KIND_LABEL: Record<RecKind, string> = {
+  risk: "High impact",
+  build: "Reinforce",
+  measure: "Measure",
+  consistency: "Habit",
+  progress: "Progress",
+};
+
+const KIND_SURFACE: Record<RecKind, string> = {
+  risk: "color-mix(in srgb, var(--semantic-danger) 12%, var(--semantic-surface))",
+  build: "color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface))",
+  measure: "color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface))",
+  consistency: "color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface))",
+  progress: "color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface))",
+};
+
 function NextStepCard({ step, index }: { step: NextStep; index: number }) {
   return (
     <div
-      className="flex flex-col justify-between gap-4 rounded-2xl p-5"
+      className="flex flex-col justify-between gap-4 rounded-2xl p-5 shadow-sm"
       style={{ background: step.surface, border: `1px solid ${step.border}` }}
     >
-      <div className="space-y-1.5">
+      <div className="space-y-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <span
+            className="rounded-full px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wide text-[var(--semantic-text-primary)]"
+            style={{
+              background: KIND_SURFACE[step.kind],
+              border: `1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, transparent)`,
+            }}
+          >
+            P{step.priority}
+          </span>
+          <span className="text-[0.6rem] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+            {KIND_LABEL[step.kind]}
+          </span>
+        </div>
         <p
           className="text-[0.65rem] font-bold uppercase tracking-widest"
           style={{ color: "var(--semantic-text-muted)" }}
         >
-          Step {String(index + 1).padStart(2, "0")}
+          Action {String(index + 1).padStart(2, "0")}
         </p>
         <p className="text-sm font-bold text-[var(--semantic-text-primary)]">{step.title}</p>
         <p className="text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{step.body}</p>
@@ -94,6 +136,7 @@ function buildSteps(
   patterns: ConfidencePatternSummary,
 ): NextStep[] {
   const steps: Omit<NextStep, "surface" | "border">[] = [];
+  let priority = 1;
 
   // 1. Overconfidence intervention (highest urgency)
   if (patterns.overconfidentErrors >= 3) {
@@ -104,6 +147,8 @@ function buildSteps(
       cta: "Open review queue",
       href: "/app/review",
       ctaVariant: "primary",
+      priority: priority++,
+      kind: "risk",
     });
   }
 
@@ -116,6 +161,8 @@ function buildSteps(
       cta: "Start a CAT",
       href: "/app/practice-tests",
       ctaVariant: "primary",
+      priority: priority++,
+      kind: "measure",
     });
   } else if (summary.latestReadinessBand === "not_ready" || summary.latestReadinessBand === "building") {
     steps.push({
@@ -125,6 +172,8 @@ function buildSteps(
       cta: "Go to lessons",
       href: "/app/lessons",
       ctaVariant: "primary",
+      priority: priority++,
+      kind: "build",
     });
   }
 
@@ -137,6 +186,8 @@ function buildSteps(
       cta: "Go to flashcards",
       href: "/app/flashcards",
       ctaVariant: "secondary",
+      priority: priority++,
+      kind: "build",
     });
   }
 
@@ -149,6 +200,8 @@ function buildSteps(
       cta: "Open strategy trainer",
       href: "/app/strategy",
       ctaVariant: "secondary",
+      priority: priority++,
+      kind: "build",
     });
   }
 
@@ -161,6 +214,8 @@ function buildSteps(
       cta: "Start a quick session",
       href: "/app/questions",
       ctaVariant: "secondary",
+      priority: priority++,
+      kind: "consistency",
     });
   }
 
@@ -173,6 +228,8 @@ function buildSteps(
       cta: "Take another CAT",
       href: "/app/practice-tests",
       ctaVariant: "secondary",
+      priority: priority++,
+      kind: "progress",
     });
   }
 

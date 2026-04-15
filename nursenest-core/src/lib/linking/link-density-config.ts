@@ -23,6 +23,8 @@ export type SurfaceDensityConfig = {
   question: DensityLimit;
   blog: DensityLimit;
   cat: DensityLimit;
+  /** Pathway / exam hub landing pages (link to sibling hubs). */
+  hub: DensityLimit;
   /** Max total internal links across all kinds. */
   totalMax: number;
 };
@@ -48,6 +50,7 @@ export const DENSITY_CONFIG: Record<LinkSurface, SurfaceDensityConfig> = {
     question:  { min: 1, max: 2 },
     blog:      { min: 0, max: 3 },
     cat:       { min: 0, max: 1 },
+    hub:       { min: 0, max: 1 },
     totalMax: 8,
   },
   lesson: {
@@ -56,6 +59,7 @@ export const DENSITY_CONFIG: Record<LinkSurface, SurfaceDensityConfig> = {
     question:  { min: 1, max: 2 },
     blog:      { min: 0, max: 1 },
     cat:       { min: 0, max: 0 },
+    hub:       { min: 0, max: 0 },
     totalMax: 4,
   },
   flashcard: {
@@ -64,6 +68,7 @@ export const DENSITY_CONFIG: Record<LinkSurface, SurfaceDensityConfig> = {
     question:  { min: 0, max: 1 },
     blog:      { min: 0, max: 0 }, // no blog links from flashcard pages — too noisy
     cat:       { min: 0, max: 0 },
+    hub:       { min: 0, max: 0 },
     totalMax: 2,
   },
   question: {
@@ -72,6 +77,7 @@ export const DENSITY_CONFIG: Record<LinkSurface, SurfaceDensityConfig> = {
     question:  { min: 0, max: 0 },
     blog:      { min: 0, max: 0 }, // no blog links from question pages — stay focused
     cat:       { min: 0, max: 0 },
+    hub:       { min: 0, max: 0 },
     totalMax: 2,
   },
   cat_result: {
@@ -80,6 +86,7 @@ export const DENSITY_CONFIG: Record<LinkSurface, SurfaceDensityConfig> = {
     question:  { min: 0, max: 2 },
     blog:      { min: 0, max: 1 },
     cat:       { min: 0, max: 0 },
+    hub:       { min: 0, max: 0 },
     totalMax: 6,
   },
   hub: {
@@ -88,6 +95,7 @@ export const DENSITY_CONFIG: Record<LinkSurface, SurfaceDensityConfig> = {
     question:  { min: 0, max: 1 },
     blog:      { min: 0, max: 1 },
     cat:       { min: 0, max: 1 },
+    hub:       { min: 0, max: 1 },
     totalMax: 4,
   },
 };

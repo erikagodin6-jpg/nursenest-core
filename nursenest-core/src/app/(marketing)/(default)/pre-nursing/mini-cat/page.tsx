@@ -20,15 +20,15 @@ export const metadata: Metadata = {
 };
 
 const crumbs = [
-  { label: "Home", href: "/" },
-  { label: "Pre-Nursing", href: "/pre-nursing" },
-  { label: "Mini Adaptive Exam", href: "/pre-nursing/mini-cat" },
+  { name: "Home", href: "/" },
+  { name: "Pre-Nursing", href: "/pre-nursing" },
+  { name: "Mini Adaptive Exam", href: "/pre-nursing/mini-cat" },
 ];
 
 const schemaItems = crumbs.map((c, i) => ({
   "@type": "ListItem" as const,
   position: i + 1,
-  name: c.label,
+  name: c.name,
   item: absoluteUrl(c.href),
 }));
 

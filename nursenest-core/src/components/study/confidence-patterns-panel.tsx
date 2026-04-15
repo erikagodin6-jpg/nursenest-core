@@ -16,9 +16,12 @@ import type { ConfidencePatternSummary, TopicRow } from "@/lib/study/analytics-d
 export function ConfidencePatternsPanel({
   patterns,
   topics,
+  /** When false, only the topic list is shown (cognitive block lives in `ConfidenceVsPerformancePanel`). */
+  showCognitiveSection = true,
 }: {
   patterns: ConfidencePatternSummary;
   topics: TopicRow[];
+  showCognitiveSection?: boolean;
 }) {
   const hasPatterns = patterns.totalRated > 0;
   const hasTopics = topics.length > 0;
@@ -26,68 +29,70 @@ export function ConfidencePatternsPanel({
   return (
     <section className="space-y-5">
       {/* Cognitive quadrants */}
-      <div
-        className="rounded-2xl border p-5 sm:p-6"
-        style={{
-          background: "var(--surface-soft-b, var(--semantic-panel-cool))",
-          borderColor: "var(--semantic-border-soft)",
-        }}
-      >
-        <div className="mb-4 flex items-baseline gap-2">
-          <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">
-            Confidence + Correctness Patterns
-          </h2>
-          {hasPatterns && (
-            <span className="text-xs text-[var(--semantic-text-muted)]">
-              {patterns.totalRated.toLocaleString()} rated question{patterns.totalRated !== 1 ? "s" : ""} from {patterns.sessionsAnalyzed} session{patterns.sessionsAnalyzed !== 1 ? "s" : ""}
-            </span>
+      {showCognitiveSection ? (
+        <div
+          className="rounded-2xl border p-5 sm:p-6"
+          style={{
+            background: "var(--surface-soft-b, var(--semantic-panel-cool))",
+            borderColor: "var(--semantic-border-soft)",
+          }}
+        >
+          <div className="mb-4 flex items-baseline gap-2">
+            <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">
+              Confidence vs. performance
+            </h2>
+            {hasPatterns && (
+              <span className="text-xs text-[var(--semantic-text-muted)]">
+                {patterns.totalRated.toLocaleString()} rated question{patterns.totalRated !== 1 ? "s" : ""} from {patterns.sessionsAnalyzed} session{patterns.sessionsAnalyzed !== 1 ? "s" : ""}
+              </span>
+            )}
+          </div>
+
+          {!hasPatterns ? (
+            <p className="text-sm text-[var(--semantic-text-muted)]">
+              Use the confidence selector during practice to unlock pattern analysis here.
+            </p>
+          ) : (
+            <div className="space-y-5">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <CognitiveBand
+                  label="Overconfident Errors"
+                  count={patterns.overconfidentErrors}
+                  total={patterns.totalRated}
+                  description="High confidence — wrong answer. These are your highest-risk knowledge gaps."
+                  surface="color-mix(in srgb, var(--semantic-danger) 10%, var(--semantic-surface))"
+                  border="color-mix(in srgb, var(--semantic-danger) 25%, transparent)"
+                  valueColor="var(--semantic-danger)"
+                  severity="danger"
+                />
+                <CognitiveBand
+                  label="Uncertain Correct"
+                  count={patterns.uncertainCorrect}
+                  total={patterns.totalRated}
+                  description="Low confidence — correct answer. Reinforce these to build reliable knowledge."
+                  surface="color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface))"
+                  border="color-mix(in srgb, var(--semantic-info) 25%, transparent)"
+                  valueColor="var(--semantic-info-contrast, var(--semantic-info))"
+                  severity="info"
+                />
+                <CognitiveBand
+                  label="Stable Mastery"
+                  count={patterns.stableMastery}
+                  total={patterns.totalRated}
+                  description="High confidence — correct. Reliable knowledge ready for exam conditions."
+                  surface="color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface))"
+                  border="color-mix(in srgb, var(--semantic-success) 25%, transparent)"
+                  valueColor="var(--semantic-success)"
+                  severity="success"
+                />
+                <HighConfidenceAccuracy pct={patterns.highConfidenceAccuracy} total={patterns.totalRated} />
+              </div>
+
+              <ConfidenceDistributionBar patterns={patterns} />
+            </div>
           )}
         </div>
-
-        {!hasPatterns ? (
-          <p className="text-sm text-[var(--semantic-text-muted)]">
-            Use the confidence selector during practice to unlock pattern analysis here.
-          </p>
-        ) : (
-          <div className="space-y-5">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <CognitiveBand
-                label="Overconfident Errors"
-                count={patterns.overconfidentErrors}
-                total={patterns.totalRated}
-                description="High confidence — wrong answer. These are your highest-risk knowledge gaps."
-                surface="color-mix(in srgb, var(--semantic-danger) 10%, var(--semantic-surface))"
-                border="color-mix(in srgb, var(--semantic-danger) 25%, transparent)"
-                valueColor="var(--semantic-danger)"
-                severity="danger"
-              />
-              <CognitiveBand
-                label="Uncertain Correct"
-                count={patterns.uncertainCorrect}
-                total={patterns.totalRated}
-                description="Low confidence — correct answer. Reinforce these to build reliable knowledge."
-                surface="color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface))"
-                border="color-mix(in srgb, var(--semantic-info) 25%, transparent)"
-                valueColor="var(--semantic-info-contrast, var(--semantic-info))"
-                severity="info"
-              />
-              <CognitiveBand
-                label="Stable Mastery"
-                count={patterns.stableMastery}
-                total={patterns.totalRated}
-                description="High confidence — correct. Reliable knowledge ready for exam conditions."
-                surface="color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface))"
-                border="color-mix(in srgb, var(--semantic-success) 25%, transparent)"
-                valueColor="var(--semantic-success)"
-                severity="success"
-              />
-              <HighConfidenceAccuracy pct={patterns.highConfidenceAccuracy} total={patterns.totalRated} />
-            </div>
-
-            <ConfidenceDistributionBar patterns={patterns} />
-          </div>
-        )}
-      </div>
+      ) : null}
 
       {/* Topic accuracy breakdown */}
       {hasTopics && (
@@ -99,7 +104,7 @@ export function ConfidencePatternsPanel({
           }}
         >
           <h2 className="mb-4 text-base font-bold text-[var(--semantic-text-primary)]">
-            Topic Accuracy Breakdown
+            Mastery insights (topics)
           </h2>
           <div className="space-y-2.5">
             {topics.map((row) => (
@@ -227,7 +232,8 @@ function HighConfidenceAccuracy({
   );
 }
 
-function ConfidenceDistributionBar({ patterns }: { patterns: ConfidencePatternSummary }) {
+/** Exported for the split analytics hero row (scatter + distribution). */
+export function ConfidenceDistributionBar({ patterns }: { patterns: ConfidencePatternSummary }) {
   if (patterns.totalRated === 0) return null;
 
   const segments = [

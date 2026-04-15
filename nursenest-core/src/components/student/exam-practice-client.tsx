@@ -1,5 +1,12 @@
 "use client";
 
+/**
+ * Legacy mock-exam / question-pool client (timed/untimed + optional tag filter).
+ *
+ * Not mounted on any current learner route — product flows use {@link PracticeTestRunnerClient}
+ * (`/app/practice-tests/[id]`) and API `POST /api/practice-tests`. Kept as a reference implementation
+ * for embedded exam widgets and future wiring; do not link to this from navigation until a route owns it.
+ */
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { QuestionType } from "@prisma/client";

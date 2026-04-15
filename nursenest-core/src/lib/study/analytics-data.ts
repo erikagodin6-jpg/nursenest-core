@@ -71,6 +71,14 @@ export type TopicRow = {
   accuracyPct: number; // 0–100
 };
 
+/** Aggregated accuracy by `ExamQuestion.questionType` from recent graded attempts. */
+export type QuestionTypeRow = {
+  questionType: string;
+  correctCount: number;
+  wrongCount: number;
+  accuracyPct: number;
+};
+
 export type TimeMetrics = {
   /** Average milliseconds per question across sessions. */
   avgMsPerQuestion: number | null;
@@ -88,6 +96,15 @@ export type TimeMetrics = {
   maxSessionMs: number | null;
 };
 
+/** Single rated attempt for confidence × performance scatter (exam attempts, bounded). */
+export type ConfidenceScatterPoint = {
+  id: string;
+  /** 0–100: mapped confidence (low / medium / high). */
+  x: number;
+  /** 0–100: 100 = correct, 0 = incorrect, with tiny jitter for visibility. */
+  y: number;
+};
+
 export type AnalyticsPagePayload = {
   summary: AnalyticsSummary;
   /** Initial trend window — last 10 CATs. */
@@ -96,6 +113,12 @@ export type AnalyticsPagePayload = {
   hasMorTrend: boolean;
   /** ID of the oldest item in trendWindow (used as cursor for more history). */
   trendCursor: string | null;
+  /** Topic mastery (UserTopicStat) — server-rendered for summary cards. */
+  initialTopicRows: TopicRow[];
+  /** Performance by question type — server-rendered. */
+  questionTypeRows: QuestionTypeRow[];
+  /** Points for confidence vs. performance scatter (recent graded attempts). */
+  confidenceScatterPoints: ConfidenceScatterPoint[];
 };
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -124,6 +147,12 @@ function parseAttemptResults(raw: unknown): {
   isCorrect: boolean;
   confidence: "high" | "medium" | "low" | null;
 }[] {
+  if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+    const o = raw as Record<string, unknown>;
+    if (Array.isArray(o.items)) return parseAttemptResults(o.items);
+    if (Array.isArray(o.questions)) return parseAttemptResults(o.questions);
+    if (Array.isArray(o.results)) return parseAttemptResults(o.results);
+  }
   if (!Array.isArray(raw)) return [];
   const out: { questionId: string; isCorrect: boolean; confidence: "high" | "medium" | "low" | null }[] = [];
   for (const item of raw) {
@@ -311,6 +340,65 @@ export async function loadMoreReadinessTrend(
   }
 }
 
+function confidenceLevelToX(conf: "high" | "medium" | "low"): number {
+  if (conf === "low") return 22;
+  if (conf === "medium") return 52;
+  return 82;
+}
+
+/** Deterministic micro-jitter so stacked points remain visible (stable across SSR/client). */
+function scatterJitter(seed: string, axis: "x" | "y"): number {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = Math.imul(31, h) + seed.charCodeAt(i);
+  const u = (h >>> 0) % 17;
+  const v = u - 8;
+  return axis === "x" ? v * 0.55 : v * 0.45;
+}
+
+/**
+ * Per-question coordinates for a confidence vs. performance scatter chart.
+ * Bounded scan of recent ExamAttempt sessions (same source as confidence patterns).
+ */
+export async function loadConfidenceScatterPoints(
+  userId: string,
+  sessionLimit = 25,
+  maxPoints = 160,
+): Promise<ConfidenceScatterPoint[]> {
+  if (!userId || !isDatabaseUrlConfigured()) return [];
+
+  try {
+    const sessions = await withRetry(() =>
+      prisma.examAttempt.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        take: sessionLimit,
+        select: { id: true, results: true },
+      }),
+    );
+
+    const out: ConfidenceScatterPoint[] = [];
+    for (const session of sessions) {
+      const items = parseAttemptResults(session.results);
+      for (let i = 0; i < items.length; i++) {
+        if (out.length >= maxPoints) return out;
+        const item = items[i]!;
+        if (item.confidence === null) continue;
+        const seed = `${session.id}:${item.questionId}:${i}`;
+        const x = Math.min(
+          98,
+          Math.max(2, confidenceLevelToX(item.confidence) + scatterJitter(seed, "x")),
+        );
+        const baseY = item.isCorrect ? 84 : 16;
+        const y = Math.min(98, Math.max(2, baseY + scatterJitter(`${seed}:y`, "y")));
+        out.push({ id: seed, x, y });
+      }
+    }
+    return out;
+  } catch {
+    return [];
+  }
+}
+
 /**
  * Aggregate confidence patterns from recent ExamAttempt sessions.
  * Reads last 20 sessions, parses results JSON.
@@ -490,6 +578,80 @@ export async function loadTopicBreakdown(
 }
 
 /**
+ * Aggregate performance by question type from recent ExamAttempt rows.
+ * Joins parsed item IDs to `ExamQuestion.questionType` (bounded sessions + batched lookups).
+ */
+export async function loadQuestionTypeBreakdown(
+  userId: string,
+  sessionLimit = 40,
+): Promise<QuestionTypeRow[]> {
+  if (!userId || !isDatabaseUrlConfigured()) return [];
+
+  try {
+    const sessions = await withRetry(() =>
+      prisma.examAttempt.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        take: sessionLimit,
+        select: { results: true },
+      }),
+    );
+
+    type Item = { qid: string; isCorrect: boolean };
+    const allItems: Item[] = [];
+    for (const s of sessions) {
+      for (const row of parseAttemptResults(s.results)) {
+        if (!row.questionId) continue;
+        allItems.push({ qid: row.questionId, isCorrect: row.isCorrect });
+      }
+    }
+
+    const uniqueIds = [...new Set(allItems.map((i) => i.qid))];
+    if (uniqueIds.length === 0) return [];
+
+    const typeById = new Map<string, string>();
+    const CHUNK = 200;
+    for (let i = 0; i < uniqueIds.length; i += CHUNK) {
+      const chunk = uniqueIds.slice(i, i + CHUNK);
+      const rows = await withRetry(() =>
+        prisma.examQuestion.findMany({
+          where: { id: { in: chunk } },
+          select: { id: true, questionType: true },
+        }),
+      );
+      for (const r of rows) {
+        typeById.set(r.id, r.questionType);
+      }
+    }
+
+    const tallies = new Map<string, { c: number; w: number }>();
+    for (const row of allItems) {
+      const qt = typeById.get(row.qid);
+      if (!qt) continue;
+      const t = tallies.get(qt) ?? { c: 0, w: 0 };
+      if (row.isCorrect) t.c++;
+      else t.w++;
+      tallies.set(qt, t);
+    }
+
+    return [...tallies.entries()]
+      .map(([questionType, { c, w }]) => {
+        const total = c + w;
+        return {
+          questionType,
+          correctCount: c,
+          wrongCount: w,
+          accuracyPct: total > 0 ? Math.round((c / total) * 100) : 0,
+        };
+      })
+      .filter((r) => r.correctCount + r.wrongCount >= 3)
+      .sort((a, b) => b.correctCount + b.wrongCount - (a.correctCount + a.wrongCount));
+  } catch {
+    return [];
+  }
+}
+
+/**
  * Full initial analytics payload for the RSC page.
  * Loads summary + initial trend window in parallel.
  * Detailed panels (confidence, time, topics) load on-demand.
@@ -497,15 +659,22 @@ export async function loadTopicBreakdown(
 export async function loadAnalyticsPagePayload(
   userId: string,
 ): Promise<AnalyticsPagePayload> {
-  const [summary, trendResult] = await Promise.all([
-    loadAnalyticsSummary(userId),
-    loadReadinessTrend(userId, 10),
-  ]);
+  const [summary, trendResult, initialTopicRows, questionTypeRows, confidenceScatterPoints] =
+    await Promise.all([
+      loadAnalyticsSummary(userId),
+      loadReadinessTrend(userId, 10),
+      loadTopicBreakdown(userId, 15),
+      loadQuestionTypeBreakdown(userId, 40),
+      loadConfidenceScatterPoints(userId, 25, 160),
+    ]);
 
   return {
     summary,
     trendWindow: trendResult.points,
     hasMorTrend: trendResult.hasMore,
     trendCursor: trendResult.cursor,
+    initialTopicRows,
+    questionTypeRows,
+    confidenceScatterPoints,
   };
 }

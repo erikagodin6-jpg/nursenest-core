@@ -23,7 +23,7 @@ function parsePathwayIds(): string[] {
  * Uses `CONTENT_COMPLETION_CRON_PATHWAY_IDS` (comma-separated, default `us-rn-nclex-rn`).
  * Writes: controlled by `CONTENT_COMPLETION_CRON_WRITE=true` (default dry-run metrics only).
  */
-export async function POST(_req: Request) {
+export async function POST(req: Request) {
   const secret = process.env.CRON_SECRET?.trim();
   if (secret) {
     const auth = req.headers.get("authorization");

@@ -323,7 +323,7 @@ export function FlashcardStudyClient({
       ) : null}
 
       {!subscriberSessionBlocked && !pendingResume ? (
-        <ExamSessionShell neutralPalette immersive className="overflow-hidden shadow-md">
+        <ExamSessionShell neutralPalette immersive className="overflow-visible shadow-md">
           <ActiveStudySession
             key={`${deckRef}-${sessionMountKey}-${resetToken}`}
             cards={activeCards}

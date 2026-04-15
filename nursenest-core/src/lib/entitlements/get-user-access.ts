@@ -97,6 +97,29 @@ export async function getUserAccess(userId: string): Promise<UserAccess> {
   if (!user) return base;
 
   const pathwayId = user.targetExamPathwayId?.trim() || null;
+  const baseCountry = normalizeCountryCodeForEntitlement(user.country);
+
+  /** Staff roles: full internal product access — do not run subscription queries or imply a paid Stripe plan. */
+  if (isLearnerEntitlementStaffBypassRole(user.role)) {
+    return {
+      userId,
+      hasPremium: true,
+      reason: "admin_override",
+      allowedRegion: { country: baseCountry, billingRegionSlug: null },
+      allowedProfession: {
+        tier: user.tier,
+        alliedCareer: (user.alliedProfessionKey as AlliedCareerKey) ?? null,
+      },
+      allowedExam: { pathwayId },
+      plan: {
+        planCode: null,
+        duration: null,
+        status: "none",
+        expiresAt: null,
+        cancelAtPeriodEnd: false,
+      },
+    };
+  }
 
   const [activeSubscription, latestSubscription] = await Promise.all([
     withRetry(() =>
@@ -153,29 +176,6 @@ export async function getUserAccess(userId: string): Promise<UserAccess> {
     latestSubscription?.currentPeriodEnd ??
     latestSubscription?.trialEnd ??
     null;
-
-  const baseCountry = normalizeCountryCodeForEntitlement(user.country);
-
-  if (isLearnerEntitlementStaffBypassRole(user.role)) {
-    return {
-      userId,
-      hasPremium: true,
-      reason: "admin_override",
-      allowedRegion: { country: baseCountry, billingRegionSlug },
-      allowedProfession: {
-        tier: user.tier,
-        alliedCareer: (user.alliedProfessionKey as AlliedCareerKey) ?? null,
-      },
-      allowedExam: { pathwayId },
-      plan: {
-        planCode,
-        duration: planDuration,
-        status: mapSubscriptionPlanStatus(activeSubscription?.status ?? latestSubscription?.status),
-        expiresAt,
-        cancelAtPeriodEnd,
-      },
-    };
-  }
 
   const effectiveAlliedFromSub = (activeSubscription?.alliedCareer as AlliedCareerKey | null)
     ?? (user.alliedProfessionKey as AlliedCareerKey)

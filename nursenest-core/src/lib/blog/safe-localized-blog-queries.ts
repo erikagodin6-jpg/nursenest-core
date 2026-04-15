@@ -142,7 +142,11 @@ function localizedModel(): {
   findUnique: (args: Record<string, unknown>) => Promise<unknown>;
   count: (args: Record<string, unknown>) => Promise<number>;
 } {
-  return prisma.localizedBlogArticle;
+  return prisma.localizedBlogArticle as unknown as {
+    findMany: (args: Record<string, unknown>) => Promise<unknown[]>;
+    findUnique: (args: Record<string, unknown>) => Promise<unknown>;
+    count: (args: Record<string, unknown>) => Promise<number>;
+  };
 }
 
 // ── List / index queries ─────────────────────────────────────────────────────

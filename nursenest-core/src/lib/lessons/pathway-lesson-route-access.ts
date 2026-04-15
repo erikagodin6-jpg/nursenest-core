@@ -64,7 +64,8 @@ export function resolveMarketingPathwayLessonRouteResolution(input: {
   }
 
   const entitlementError = input.entitlement === "error";
-  const scope: AccessScope = entitlementError ? syntheticScopeForEntitlementError() : input.entitlement;
+  const scope: AccessScope =
+    input.entitlement === "error" ? syntheticScopeForEntitlementError() : input.entitlement;
 
   const fullAccess = canViewFullPathwayLesson(scope, input.pathway, input.learnerPathResolved);
 

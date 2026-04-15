@@ -281,7 +281,7 @@ export async function POST(req: Request) {
     safeServerLog("stripe_checkout", "checkout_session_created_stripe_payload", {
       stripeSessionId: checkoutSession.id,
       mode: checkoutSession.mode,
-      status: checkoutSession.status,
+      status: checkoutSession.status ?? undefined,
       paymentStatus: checkoutSession.payment_status,
       amountSubtotal: checkoutSession.amount_subtotal ?? 0,
       amountTotal: checkoutSession.amount_total ?? 0,

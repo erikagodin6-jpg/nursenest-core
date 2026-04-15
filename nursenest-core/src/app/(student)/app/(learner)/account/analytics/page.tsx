@@ -94,7 +94,15 @@ export default async function AccountAnalyticsPage() {
 
   // Load summary + trend window — fast initial queries
   const payload = await loadAnalyticsPagePayload(userId);
-  const { summary, trendWindow, hasMorTrend, trendCursor } = payload;
+  const {
+    summary,
+    trendWindow,
+    hasMorTrend,
+    trendCursor,
+    initialTopicRows,
+    questionTypeRows,
+    confidenceScatterPoints,
+  } = payload;
 
   const noAnalyticsYet =
     summary.totalQuestionsAnswered === 0 &&
@@ -142,7 +150,7 @@ export default async function AccountAnalyticsPage() {
             overallAccuracyPct={summary.overallAccuracyPct}
             streakDays={summary.streakDays}
             latestReadinessScore={summary.latestReadinessScore}
-            topicRows={[]}
+            topicRows={initialTopicRows}
           />
         </>
       )}
@@ -157,6 +165,9 @@ export default async function AccountAnalyticsPage() {
         initialTrendPoints={trendWindow}
         hasMorTrend={hasMorTrend}
         trendCursor={trendCursor}
+        questionTypeRows={questionTypeRows}
+        initialTopicRows={initialTopicRows}
+        confidenceScatterPoints={confidenceScatterPoints}
       />
     </main>
   );

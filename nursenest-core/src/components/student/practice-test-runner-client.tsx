@@ -1160,7 +1160,7 @@ export function PracticeTestRunnerClient({
     }
     return (
       <div className="space-y-4" aria-busy="true">
-        <ExamSessionShell neutralPalette immersive>
+        <ExamSessionShell neutralPalette immersive className="overflow-hidden shadow-md">
           <ExamSessionTopBar
             left={
               <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
@@ -1324,13 +1324,13 @@ export function PracticeTestRunnerClient({
           : "locked";
 
     return (
-      <div>
-        <ProtectedPremiumContent
-          userLabel={userLabel}
-          flags={protectionFlags}
-          telemetrySurface="practice_test"
-        >
-          <ExamSessionShell neutralPalette immersive className="overflow-hidden">
+      <ProtectedPremiumContent
+        userLabel={userLabel}
+        flags={protectionFlags}
+        telemetrySurface="practice_test"
+      >
+        <PracticeSessionLayout className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}>
+          <ExamSessionShell neutralPalette immersive className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none">
             <ExamSessionTopBar
               left={
                 <div className="space-y-1">
@@ -1352,7 +1352,7 @@ export function PracticeTestRunnerClient({
               }
               right={
                 <div className="flex flex-wrap items-center justify-end gap-2">
-                  <ExamSessionThemeTrigger />
+                  <ExamSessionThemeTrigger variant="pill" />
                   <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
                 </div>
               }
@@ -1492,9 +1492,8 @@ export function PracticeTestRunnerClient({
               </div>
             </div>
           </ExamSessionShell>
-
-        </ProtectedPremiumContent>
-      </div>
+        </PracticeSessionLayout>
+      </ProtectedPremiumContent>
     );
   }
 

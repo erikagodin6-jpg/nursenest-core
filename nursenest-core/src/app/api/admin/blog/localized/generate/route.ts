@@ -6,7 +6,8 @@ import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { logLocalizedGenerationRun } from "@/lib/admin/blog-content-automation-log";
 
-const localizedModel = () => prisma.localizedBlogArticle as Record<string, (...args: unknown[]) => Promise<unknown>>;
+const localizedModel = () =>
+  prisma.localizedBlogArticle as unknown as Record<string, (...args: unknown[]) => Promise<unknown>>;
 import {
   extractCanonicalBrief,
   buildAdaptationSystemPrompt,

@@ -178,7 +178,11 @@ export async function recoverOverdueBlogPosts(
       }
     }
     if (count > 0) {
-      safeServerLog("blog_scheduler", "recovered_overdue_posts", { count, ids });
+      safeServerLog("blog_scheduler", "recovered_overdue_posts", {
+        count,
+        idCount: ids.length,
+        idsPreview: ids.slice(0, 8).join(","),
+      });
     }
     return { count, ids };
   } catch (e) {

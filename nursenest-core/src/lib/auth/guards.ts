@@ -5,6 +5,11 @@ import { resolveAdminRequestPath } from "@/lib/auth/resolve-admin-request-path";
 import { getStaffSession } from "@/lib/auth/staff-session";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
+function loginRedirectWithCallback(path: string): string {
+  const safe = path.startsWith("/") ? path : "/admin";
+  return `/login?callbackUrl=${encodeURIComponent(safe)}`;
+}
+
 /**
  * Server-only session check. Unauthenticated `/app/*` and `/admin/*` requests are turned away in
  * `src/proxy.ts` Edge auth middleware (HTTP redirect) before RSC runs — do not use `redirect("/login")` here for missing
@@ -29,18 +34,25 @@ function adminAccessDebug(): boolean {
 }
 
 export async function requireAdmin() {
-  const session = await requireUser();
-  const staff = await getStaffSession();
+  const session = await auth();
+  const u = session?.user as { id?: string; email?: string | null } | undefined;
+  /** Set by `src/proxy.ts` as `x-nn-admin-path` for RBAC. */
   const path = await resolveAdminRequestPath();
+  const callbackPath = path && path.length > 0 ? path : "/admin";
+
+  if (!session?.user || (!u?.id && !u?.email)) {
+    redirect(loginRedirectWithCallback(callbackPath));
+  }
+
+  const staff = await getStaffSession();
   const gate = adminRouteGateDecision(staff, path);
   if (adminAccessDebug()) {
-    const u = session?.user as { id?: string; email?: string | null } | undefined;
     safeServerLog("admin_access", "requireAdmin_gate", {
       path: path || "(empty)",
       allow: gate.allow,
       redirectTo: gate.allow ? undefined : gate.redirectTo,
-      staffTier: staff?.tier ?? null,
-      userIdPrefix: u?.id ? u.id.slice(0, 8) : null,
+      staffTier: staff?.tier ?? undefined,
+      userIdPrefix: u?.id ? u.id.slice(0, 8) : undefined,
     });
   }
   if (!gate.allow) {

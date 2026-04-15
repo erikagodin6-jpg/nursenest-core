@@ -1,7 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  BookOpen,
+  CheckCircle2,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Home,
+  Lightbulb,
+  RefreshCw,
+  XCircle,
+} from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import {
   getStudyItemState,
@@ -10,6 +21,8 @@ import {
 } from "@/lib/flashcards/study-session-persistence";
 import { resolveFlashcardRelatedLessonLink } from "@/lib/flashcards/flashcard-study-links";
 import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
+import { ExamSessionProgressStrip } from "@/components/exam/exam-session-shell";
+import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 
 export type ActiveStudyCard = {
   id: string;
@@ -45,7 +58,7 @@ type Props = {
   };
   /**
    * `split` = prompt + rationale sidebar (custom/weak sessions).
-   * `card` = FAQ-aligned two-column flashcard study: stem/controls left, answer + rationale + takeaway right (same product layout as practice questions).
+   * `card` = deck study: legacy NurseNest flip-card session (centered card, collapsible answer blocks, rating row, fixed bottom tools).
    */
   layout?: "split" | "card";
   /** `test` shows an elapsed timer (legacy DeckStudyTest). */
@@ -82,6 +95,55 @@ function dedupeCardsById(cards: ActiveStudyCard[]): ActiveStudyCard[] {
   return kept;
 }
 
+/** Queue row: stable React key + optional learn-mode retry (legacy `DeckStudyLearn`). */
+type InternalStudyCard = ActiveStudyCard & { _queueKey: string; _retry?: boolean };
+
+function toInternalQueue(cards: ActiveStudyCard[]): InternalStudyCard[] {
+  return cards.map((c) => ({ ...c, _queueKey: c.id }));
+}
+
+function FlashcardRevealAccordion({
+  label,
+  icon,
+  content,
+  variant,
+}: {
+  label: string;
+  icon: ReactNode;
+  content: string;
+  variant: "front" | "back";
+}) {
+  const [open, setOpen] = useState(false);
+  const surface =
+    variant === "back"
+      ? "border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
+      : "border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--semantic-text-primary)]";
+  return (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation();
+        setOpen((o) => !o);
+      }}
+      className={`w-full rounded-xl border text-left transition ${surface}`}
+    >
+      <div className="flex items-center gap-2 px-4 py-3">
+        {icon}
+        <span className="text-xs font-semibold uppercase tracking-wider text-[var(--semantic-text-muted)]">{label}</span>
+        <ChevronDown
+          className={`ml-auto h-3.5 w-3.5 shrink-0 text-[var(--semantic-text-muted)] transition-transform ${open ? "rotate-180" : ""}`}
+          aria-hidden
+        />
+      </div>
+      <div
+        className={`px-4 transition-all duration-300 ease-in-out ${open ? "max-h-[min(28rem,70vh)] overflow-y-auto pb-3 opacity-100" : "max-h-0 overflow-hidden opacity-0"}`}
+      >
+        <p className="text-sm leading-relaxed text-[var(--semantic-text-primary)]">{content}</p>
+      </div>
+    </button>
+  );
+}
+
 export function ActiveStudySession({
   cards,
   header,
@@ -99,7 +161,7 @@ export function ActiveStudySession({
 }: Props) {
   const { t } = useMarketingI18n();
   const dedupedCards = useMemo(() => dedupeCardsById(cards), [cards]);
-  const [sessionCards, setSessionCards] = useState<ActiveStudyCard[]>(dedupedCards);
+  const [sessionCards, setSessionCards] = useState<InternalStudyCard[]>(() => toInternalQueue(dedupedCards));
   const [index, setIndex] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -112,7 +174,7 @@ export function ActiveStudySession({
   const [elapsedSec, setElapsedSec] = useState(0);
 
   useEffect(() => {
-    setSessionCards(dedupedCards);
+    setSessionCards(toInternalQueue(dedupedCards));
     const maxIdx = Math.max(0, dedupedCards.length - 1);
     const start = Math.min(Math.max(0, initialCardIndex), maxIdx);
     setIndex(dedupedCards.length ? start : 0);
@@ -194,7 +256,7 @@ export function ActiveStudySession({
 
   const restartWith = (nextCards: ActiveStudyCard[]) => {
     onSessionRestart?.();
-    setSessionCards(nextCards);
+    setSessionCards(toInternalQueue(nextCards));
     setIndex(0);
     setRevealed(false);
     setCompleted(false);
@@ -212,6 +274,21 @@ export function ActiveStudySession({
     if (!current || !revealed) return;
     setSaving(true);
     try {
+      const lenBefore = sessionCards.length;
+      if (index >= lenBefore - 1) {
+        await onRate?.(current.id, rating);
+        setReviewedIds((prev) => ({ ...prev, [current.id]: true }));
+        setRatingStats((prev) => ({
+          known: prev.known + (rating === "known" ? 1 : 0),
+          unsure: prev.unsure + (rating === "unsure" ? 1 : 0),
+          incorrect: prev.incorrect + (rating === "incorrect" ? 1 : 0),
+        }));
+        setCompleted(true);
+        setCompletedCount(lenBefore);
+        onSessionComplete?.();
+        return;
+      }
+
       await onRate?.(current.id, rating);
       setReviewedIds((prev) => ({ ...prev, [current.id]: true }));
       setRatingStats((prev) => ({
@@ -219,12 +296,21 @@ export function ActiveStudySession({
         unsure: prev.unsure + (rating === "unsure" ? 1 : 0),
         incorrect: prev.incorrect + (rating === "incorrect" ? 1 : 0),
       }));
-      if (index >= sessionCards.length - 1) {
-        setCompleted(true);
-        setCompletedCount(sessionCards.length);
-        onSessionComplete?.();
-        return;
+
+      if (rating === "incorrect" && sessionMode === "learn" && layout === "card") {
+        setSessionCards((prev) => {
+          const next = [...prev];
+          const ins = Math.min(index + 4, next.length);
+          const retryCard: InternalStudyCard = {
+            ...current,
+            _queueKey: `${current.id}-retry-${ins}-${Date.now()}`,
+            _retry: true,
+          };
+          next.splice(ins, 0, retryCard);
+          return next;
+        });
       }
+
       goNext();
     } finally {
       setSaving(false);
@@ -458,8 +544,12 @@ export function ActiveStudySession({
     );
   }
 
+  const queueLen = Math.max(1, sessionCards.length);
+  const stripPct = Math.min(100, ((index + 1) / queueLen) * 100);
+
   return (
     <div className="space-y-4">
+      {layout !== "card" ? (
       <section className="rounded-2xl border border-border bg-[var(--theme-card-bg)] p-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
@@ -526,205 +616,280 @@ export function ActiveStudySession({
           </div>
         </div>
       </section>
+      ) : null}
 
       {layout === "card" ? (
-        <>
-          <div className="nn-progress-track-semantic nn-progress-track-semantic--md">
-            <div
-              className="h-full rounded-full nn-progress-fill-semantic-brand transition-[width] duration-500"
-              style={{ width: `${Math.min(100, ((index + 1) / sessionCount) * 100)}%` }}
-            />
-          </div>
-
-          <div className="nn-question-session nn-question-session--split px-0 pb-0 pt-1">
-            <div className="nn-question-session-primary space-y-4">
-              <div
-                role="button"
-                tabIndex={0}
-                onClick={() => !revealed && setRevealed(true)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    if (!revealed) setRevealed(true);
-                  }
-                }}
-                className={`nn-question-stem-card text-left ${
-                  !revealed
-                    ? "cursor-pointer transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-panel-warm)_45%,var(--semantic-surface))]"
-                    : ""
-                }`}
+        <div className="relative pb-[calc(5.5rem+env(safe-area-inset-bottom))]">
+          <div className="sticky top-0 z-30 border-b border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] shadow-sm backdrop-blur-[2px]">
+            <ExamSessionProgressStrip pct={stripPct} />
+            <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-x-2 gap-y-2 px-3 py-2.5 sm:px-4">
+              <Link
+                href="/app"
+                className="shrink-0 rounded-md p-0.5 opacity-90 hover:opacity-100"
+                aria-label="NurseNest home"
               >
-                <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--semantic-text-muted)]">
-                  {sessionMode === "test"
-                    ? t("learner.flashcards.session.cardFrontTest")
-                    : t("learner.flashcards.session.cardFrontLearn")}
-                </p>
-                <div className="nn-question-stem-wrap !mb-0 !border-b-0 !pb-0">
-                  <p className="nn-question-stem">{current.prompt}</p>
-                </div>
-                {current.topic || current.subtopic ? (
-                  <p className="mt-3 text-xs text-[var(--semantic-text-secondary)]">
-                    {current.topic ?? t("learner.flashcards.session.topicGeneral")}
-                    {current.subtopic ? ` · ${current.subtopic}` : ""}
-                  </p>
-                ) : null}
-                {!revealed ? (
-                  <p className="mt-5 text-center text-[10px] font-semibold uppercase tracking-widest text-[var(--semantic-text-secondary)]">
-                    {t("learner.flashcards.session.revealHint")}
-                  </p>
+                <SiteBrandLogoMark variant="learner" className="h-7 max-h-7" />
+              </Link>
+              <Link
+                href={header.exitHref}
+                onClick={onExit}
+                className="inline-flex items-center gap-1 text-sm font-medium text-[var(--semantic-brand)] hover:underline"
+              >
+                <Home className="h-4 w-4 shrink-0" aria-hidden />
+                <span className="hidden sm:inline">{t("learner.flashcards.session.breadcrumbHub")}</span>
+              </Link>
+              <ChevronRight className="h-3.5 w-3.5 shrink-0 text-[var(--semantic-text-muted)]" aria-hidden />
+              <span className="max-w-[10rem] truncate text-sm font-semibold text-[var(--semantic-text-primary)] sm:max-w-[14rem]">
+                {header.sessionTitle}
+              </span>
+              <ChevronRight className="h-3.5 w-3.5 shrink-0 text-[var(--semantic-text-muted)]" aria-hidden />
+              <span className="text-sm font-medium text-[var(--semantic-text-secondary)]">{header.modeLabel}</span>
+              <div className="ml-auto flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+                <ExamSessionThemeTrigger variant="pill" />
+                <span className="hidden font-mono text-xs tabular-nums text-[var(--semantic-text-muted)] sm:inline">
+                  {progressLabel}
+                </span>
+                <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-2 py-0.5 text-[10px] font-semibold text-[var(--semantic-text-primary)] sm:text-[11px]">
+                  {t("learner.flashcards.session.statKnownShort", { n: ratingStats.known })}
+                </span>
+                <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] px-2 py-0.5 text-[10px] font-semibold text-[var(--semantic-text-primary)] sm:text-[11px]">
+                  {t("learner.flashcards.session.statUnsureShort", { n: ratingStats.unsure })}
+                </span>
+                <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] px-2 py-0.5 text-[10px] font-semibold text-[var(--semantic-text-primary)] sm:text-[11px]">
+                  {t("learner.flashcards.session.statMissedShort", { n: ratingStats.incorrect })}
+                </span>
+                {sessionMode === "test" ? (
+                  <span className="font-mono text-xs tabular-nums text-[var(--semantic-text-primary)]">
+                    {formatElapsed(elapsedSec)}
+                  </span>
                 ) : null}
               </div>
+            </div>
+          </div>
 
-              {revealed ? (
-                <>
-                  <div className="space-y-3 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
-                    <p className="text-center text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--semantic-text-secondary)]">
-                      {t("learner.flashcards.session.howWellLabel")}
-                    </p>
-                    <div className="grid gap-3 sm:grid-cols-3">
-                      <button
-                        type="button"
-                        disabled={saving}
-                        onClick={() => void submitRating("incorrect")}
-                        className="min-h-[88px] rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-danger)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
-                      >
-                        <span className="block text-[10px] text-[var(--semantic-danger)]">
-                          {t("learner.flashcards.session.ratingRowIncorrect")}
-                        </span>
-                        <span className="mt-1 block">{t("learner.flashcards.session.ratingSubIncorrect")}</span>
-                      </button>
-                      <button
-                        type="button"
-                        disabled={saving}
-                        onClick={() => void submitRating("unsure")}
-                        className="min-h-[88px] rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-warning)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
-                      >
-                        <span className="block text-[10px] text-[var(--semantic-warning)]">
-                          {t("learner.flashcards.session.ratingRowUnsure")}
-                        </span>
-                        <span className="mt-1 block">{t("learner.flashcards.session.ratingSubUnsure")}</span>
-                      </button>
-                      <button
-                        type="button"
-                        disabled={saving}
-                        onClick={() => void submitRating("known")}
-                        className="min-h-[88px] rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-success)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
-                      >
-                        <span className="block text-[10px] text-[var(--semantic-success)]">
-                          {t("learner.flashcards.session.ratingRowKnown")}
-                        </span>
-                        <span className="mt-1 block">{t("learner.flashcards.session.ratingSubKnown")}</span>
-                      </button>
-                    </div>
-                  </div>
+          <div className="mx-auto max-w-2xl space-y-4 px-3 pt-4 sm:px-4">
+            {(typeof sessionMeta?.requestedCount === "number" ||
+              typeof sessionMeta?.returnedCount === "number") ? (
+              <p className="text-center text-[11px] text-[var(--semantic-text-muted)]">
+                {[
+                  t("learner.flashcards.session.metaRequested", {
+                    n: sessionMeta?.requestedCount ?? sessionCount,
+                  }),
+                  t("learner.flashcards.session.metaLoaded", {
+                    n: sessionMeta?.returnedCount ?? sessionCount,
+                  }),
+                  ...(typeof sessionMeta?.totalAvailable === "number"
+                    ? [
+                        t("learner.flashcards.session.metaAvailable", {
+                          n: sessionMeta.totalAvailable,
+                        }),
+                      ]
+                    : []),
+                  ...(sessionMeta?.hasMore ? [t("learner.flashcards.session.metaMoreSuffix")] : []),
+                ].join(" · ")}
+              </p>
+            ) : null}
 
-                  <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] p-4">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                      {t("learner.flashcards.session.cardTools")}
-                    </p>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        onClick={() => applyItemState({ starred: !itemState.starred })}
-                        className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold"
-                      >
-                        {itemState.starred
-                          ? t("learner.flashcards.session.starredState")
-                          : t("learner.flashcards.session.starVerb")}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => applyItemState({ confusing: !itemState.confusing })}
-                        className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold"
-                      >
-                        {itemState.confusing
-                          ? t("learner.flashcards.session.revisitState")
-                          : t("learner.flashcards.session.markConfusingVerb")}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={goPrevious}
-                        disabled={index <= 0}
-                        className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
-                      >
-                        {t("learner.flashcards.session.navPrevious")}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={goNext}
-                        disabled={!revealed || index + 1 >= sessionCards.length}
-                        className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
-                      >
-                        {t("learner.flashcards.session.navNext")}
-                      </button>
+            {current._retry ? (
+              <div className="flex items-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] px-4 py-2.5 text-xs font-medium text-[var(--semantic-text-primary)]">
+                <RefreshCw className="h-3.5 w-3.5 shrink-0 text-[var(--semantic-warning)]" aria-hidden />
+                {t("learner.flashcards.session.retryBanner")}
+              </div>
+            ) : null}
+
+            <div
+              className="min-h-[320px] cursor-pointer perspective-1000 sm:min-h-[360px]"
+              onClick={() => !revealed && setRevealed(true)}
+            >
+              <div
+                className={`flex min-h-[320px] flex-col rounded-3xl border-none p-6 text-center shadow-xl transition-all duration-300 sm:min-h-[360px] sm:p-8 md:p-10 ${
+                  revealed
+                    ? "items-start justify-start bg-[color-mix(in_srgb,var(--semantic-brand)_92%,var(--semantic-surface))] pt-8 text-[var(--semantic-text-primary)] shadow-[color-mix(in_srgb,var(--semantic-brand)_25%,transparent)]"
+                    : "items-center justify-center bg-[var(--theme-card-bg)] shadow-[color-mix(in_srgb,var(--semantic-border-soft)_80%,transparent)]"
+                }`}
+              >
+                {!revealed ? (
+                  <>
+                    <span className="mb-5 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--semantic-brand)]">
+                      {sessionMode === "test"
+                        ? t("learner.flashcards.session.cardFrontTest")
+                        : t("learner.flashcards.session.cardFrontLearn")}
+                    </span>
+                    <h2 className="max-w-lg text-xl font-bold leading-relaxed text-[var(--theme-heading-text)] sm:text-2xl">
+                      {current.prompt}
+                    </h2>
+                    {current.topic || current.subtopic ? (
+                      <p className="mt-4 text-xs text-[var(--semantic-text-secondary)]">
+                        {current.topic ?? t("learner.flashcards.session.topicGeneral")}
+                        {current.subtopic ? ` · ${current.subtopic}` : ""}
+                      </p>
+                    ) : null}
+                    <div className="mt-8 flex animate-pulse items-center gap-2 text-xs uppercase tracking-widest text-[var(--semantic-text-muted)]">
+                      <RefreshCw className="h-3 w-3" aria-hidden />
+                      {t("learner.flashcards.session.revealHint")}
                     </div>
-                    <label className="mt-3 block text-xs font-semibold text-[var(--theme-muted-text)]">
-                      {t("learner.flashcards.session.noteLabel")}
-                      <textarea
-                        value={currentNote}
-                        onChange={(event) => {
-                          const value = event.target.value;
-                          setLocalNotes((prev) => ({ ...prev, [current.id]: value }));
-                          applyItemState({ note: value });
-                        }}
-                        rows={2}
-                        className="mt-1 w-full rounded-lg border border-border bg-[var(--theme-card-bg)] px-3 py-2 text-sm"
+                  </>
+                ) : (
+                  <div className="w-full max-w-lg space-y-3 text-left">
+                    <span className="mb-1 block text-center text-[10px] font-bold uppercase tracking-[0.2em] text-[color-mix(in_srgb,var(--semantic-text-primary)_65%,transparent)]">
+                      {t("learner.flashcards.session.tapSectionsHint")}
+                    </span>
+                    <FlashcardRevealAccordion
+                      variant="back"
+                      label={t("learner.flashcards.session.correctAnswerHeading")}
+                      icon={<CheckCircle2 className="h-4 w-4 text-[color-mix(in_srgb,var(--semantic-text-primary)_70%,transparent)]" />}
+                      content={current.answer}
+                    />
+                    {current.explanation?.trim() ? (
+                      <FlashcardRevealAccordion
+                        variant="back"
+                        label={t("learner.flashcards.session.rationaleBlockHeading")}
+                        icon={<BookOpen className="h-4 w-4 text-[color-mix(in_srgb,var(--semantic-text-primary)_70%,transparent)]" />}
+                        content={current.explanation}
                       />
-                    </label>
+                    ) : null}
+                    <FlashcardRevealAccordion
+                      variant="back"
+                      label={t("learner.flashcards.session.keyTakeawayHeading")}
+                      icon={<Lightbulb className="h-4 w-4 text-[color-mix(in_srgb,var(--semantic-text-primary)_70%,transparent)]" />}
+                      content={buildClinicalPearl(
+                        current,
+                        t("learner.flashcards.session.clinicalPearlMissing"),
+                      )}
+                    />
                   </div>
-
-                  <p className="text-center text-[10px] text-[var(--theme-muted-text)]">
-                    <Link href={relatedLessonLink.href} className="font-semibold text-[var(--semantic-brand)] underline">
-                      {t(relatedLessonLink.labelKey)}
-                    </Link>
-                  </p>
-                </>
-              ) : null}
+                )}
+              </div>
             </div>
 
-            <aside className="nn-question-session-rationale space-y-4">
-              {!revealed ? (
-                <div className="nn-question-rationale-placeholder">
-                  <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-                    {t("learner.qbank.split.rationaleHeading")}
-                  </p>
-                  <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
-                    {t("learner.flashcards.split.rationalePlaceholder")}
-                  </p>
+            {revealed ? (
+              <div className="space-y-3">
+                <p className="text-center text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--semantic-text-secondary)]">
+                  {t("learner.flashcards.session.howWellLabel")}
+                </p>
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <button
+                    type="button"
+                    disabled={saving}
+                    onClick={() => void submitRating("incorrect")}
+                    className="flex min-h-[5.25rem] items-start gap-2 rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-danger)_42%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm disabled:opacity-40"
+                  >
+                    <XCircle className="mt-0.5 h-5 w-5 shrink-0 text-[var(--semantic-danger)]" aria-hidden />
+                    <span>
+                      <span className="block text-[10px] text-[var(--semantic-danger)]">
+                        {t("learner.flashcards.session.ratingRowIncorrect")}
+                      </span>
+                      <span className="mt-1 block leading-snug">{t("learner.flashcards.session.ratingSubIncorrect")}</span>
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    disabled={saving}
+                    onClick={() => void submitRating("unsure")}
+                    className="flex min-h-[5.25rem] items-start gap-2 rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-warning)_42%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm disabled:opacity-40"
+                  >
+                    <RefreshCw className="mt-0.5 h-5 w-5 shrink-0 text-[var(--semantic-warning)]" aria-hidden />
+                    <span>
+                      <span className="block text-[10px] text-[var(--semantic-warning)]">
+                        {t("learner.flashcards.session.ratingRowUnsure")}
+                      </span>
+                      <span className="mt-1 block leading-snug">{t("learner.flashcards.session.ratingSubUnsure")}</span>
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    disabled={saving}
+                    onClick={() => void submitRating("known")}
+                    className="flex min-h-[5.25rem] items-start gap-2 rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-success)_42%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_12%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm disabled:opacity-40"
+                  >
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+                    <span>
+                      <span className="block text-[10px] text-[var(--semantic-success)]">
+                        {t("learner.flashcards.session.ratingRowKnown")}
+                      </span>
+                      <span className="mt-1 block leading-snug">{t("learner.flashcards.session.ratingSubKnown")}</span>
+                    </span>
+                  </button>
                 </div>
-              ) : (
-                <>
-                  <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-sm">
-                    <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
-                      {t("learner.flashcards.session.correctAnswerHeading")}
-                    </p>
-                    <p className="mt-2 text-sm font-semibold leading-relaxed text-[var(--semantic-text-primary)]">
-                      {current.answer}
-                    </p>
-                  </div>
-                  <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-sm">
-                    <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
-                      {t("learner.flashcards.session.rationaleBlockHeading")}
-                    </p>
-                    <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-primary)]">
-                      {current.explanation?.trim()
-                        ? current.explanation
-                        : t("learner.flashcards.session.explanationMissing")}
-                    </p>
-                  </div>
-                  <div className="nn-rationale-key-point">
-                    <p className="nn-rationale-key-point__label">
-                      <span>{t("learner.flashcards.session.keyTakeawayHeading")}</span>
-                    </p>
-                    <p className="nn-rationale-key-point__body">
-                      {buildClinicalPearl(current, t("learner.flashcards.session.clinicalPearlMissing"))}
-                    </p>
-                  </div>
-                </>
-              )}
-            </aside>
+              </div>
+            ) : null}
+
+            <p className="pb-2 text-center text-[10px] text-[var(--semantic-text-muted)]">
+              {t("learner.flashcards.session.keyboardHint")}
+            </p>
           </div>
-        </>
+
+          <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_96%,var(--semantic-panel-muted))] px-3 py-3 backdrop-blur-sm supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--semantic-surface)_88%,var(--semantic-panel-muted))] pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+            <div className="mx-auto flex max-w-2xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => applyItemState({ starred: !itemState.starred })}
+                  className="rounded-full border border-[var(--semantic-border-soft)] px-3 py-2 text-xs font-semibold text-[var(--semantic-text-primary)] min-h-[44px]"
+                >
+                  {itemState.starred
+                    ? t("learner.flashcards.session.starredState")
+                    : t("learner.flashcards.session.starVerb")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applyItemState({ confusing: !itemState.confusing })}
+                  className="rounded-full border border-[var(--semantic-border-soft)] px-3 py-2 text-xs font-semibold text-[var(--semantic-text-primary)] min-h-[44px]"
+                >
+                  {itemState.confusing
+                    ? t("learner.flashcards.session.revisitState")
+                    : t("learner.flashcards.session.markConfusingVerb")}
+                </button>
+                <Link
+                  href={relatedLessonLink.href}
+                  className="rounded-full border border-[var(--semantic-border-soft)] px-3 py-2 text-xs font-semibold text-[var(--semantic-brand)] min-h-[44px] inline-flex items-center"
+                >
+                  {t(relatedLessonLink.labelKey)}
+                </Link>
+              </div>
+              <div className="flex flex-wrap items-center justify-end gap-2">
+                <span className="mr-auto text-[11px] text-[var(--semantic-text-muted)] sm:mr-0 sm:px-2">
+                  {t("learner.flashcards.session.bottomProgress", {
+                    cur: index + 1,
+                    total: queueLen,
+                  })}
+                </span>
+                <button
+                  type="button"
+                  onClick={goPrevious}
+                  disabled={index <= 0}
+                  className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-4 text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
+                >
+                  <ChevronLeft className="h-4 w-4 sm:mr-1" aria-hidden />
+                  <span className="hidden sm:inline">{t("learner.flashcards.session.navPrevious")}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={goNext}
+                  disabled={!revealed || index + 1 >= sessionCards.length}
+                  className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-4 text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
+                >
+                  <span className="hidden sm:inline">{t("learner.flashcards.session.navNext")}</span>
+                  <ChevronRight className="h-4 w-4 sm:ml-1" aria-hidden />
+                </button>
+              </div>
+            </div>
+            <label className="mx-auto mt-2 block max-w-2xl px-0 text-[11px] font-semibold text-[var(--semantic-text-muted)]">
+              <span className="sr-only">{t("learner.flashcards.session.noteLabel")}</span>
+              <textarea
+                value={currentNote}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setLocalNotes((prev) => ({ ...prev, [current.id]: value }));
+                  applyItemState({ note: value });
+                }}
+                rows={2}
+                placeholder={t("learner.flashcards.session.notePlaceholderShort")}
+                className="mt-1 w-full rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-3 py-2 text-sm text-[var(--semantic-text-primary)]"
+              />
+            </label>
+          </div>
+        </div>
       ) : (
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(300px,1fr)]">
         <div className="rounded-2xl border border-border bg-[var(--theme-card-bg)] p-4">

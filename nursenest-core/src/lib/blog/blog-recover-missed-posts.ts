@@ -5,10 +5,10 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
 const MIN_BODY_CHARS_FOR_FAILED_RECOVERY = 200;
 
-function overdueGate(now: Date) {
+function overdueGate(now: Date): Prisma.BlogPostWhereInput {
   return {
     OR: [{ publishAt: { lte: now } }, { scheduledAt: { lte: now } }],
-  } as const;
+  };
 }
 
 /** Scheduled / approved / draft rows that should already be public but never left `PUBLISHED`. */
