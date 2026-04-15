@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { BarChart3, Stethoscope, TrendingUp } from "lucide-react";
 import type { PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
-import { PathwayLessonQuizSet, itemsResetKey } from "@/components/lessons/pathway-lesson-quiz-set";
+import { PathwayLessonQuizLegacyFlow } from "@/components/lessons/pathway-lesson-quiz-legacy-flow";
+import { itemsResetKey } from "@/components/lessons/pathway-lesson-quiz-set";
 import { Progress } from "@/components/ui/progress";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 
@@ -91,7 +92,6 @@ export function PathwayLessonLegacyStudyShell({
   const [preDone, setPreDone] = useState(false);
   const [postDone, setPostDone] = useState(false);
   const [lessonProgress, setLessonProgress] = useState<PathwayLessonProgressStatus>(initialProgress);
-  const [postMode, setPostMode] = useState<"practice" | "exam">("practice");
   const [activeTab, setActiveTab] = useState<TabKey>("content");
 
   useEffect(() => {
@@ -268,9 +268,11 @@ export function PathwayLessonLegacyStudyShell({
           className="mt-2"
         >
           <section className={panelFrame} aria-label="Pre-test">
-            <PathwayLessonQuizSet
+            <PathwayLessonQuizLegacyFlow
               key={`shell-pre-${itemsResetKey(preTest)}`}
               variant="pre"
+              pathwayId={pathwayId}
+              lessonSlug={lessonSlug}
               title="Pre-test"
               subtitle="Before you read"
               items={preTest}
@@ -331,15 +333,15 @@ export function PathwayLessonLegacyStudyShell({
             </section>
           ) : (
             <section className={panelFrame} aria-label="Post-test">
-              <PathwayLessonQuizSet
-                key={`shell-post-${itemsResetKey(postTest)}-${postMode}`}
+              <PathwayLessonQuizLegacyFlow
+                key={`shell-post-${itemsResetKey(postTest)}`}
                 variant="post"
+                pathwayId={pathwayId}
+                lessonSlug={lessonSlug}
                 title="Post-test"
                 subtitle="After the lesson"
                 items={postTest}
                 fullAccess={fullAccess}
-                postMode={postMode}
-                onPostModeChange={setPostMode}
                 onAssessmentFinished={onPostFinished}
                 className="border-0 pb-0"
               />
