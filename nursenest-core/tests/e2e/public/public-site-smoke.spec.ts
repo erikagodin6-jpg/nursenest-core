@@ -1,7 +1,9 @@
 /**
  * Public site smoke: core marketing routes, nav, country/language chrome, hubs, blog, footer.
  *
- * Requires dev server: `npm run dev` (default BASE_URL http://127.0.0.1:3000).
+ * Default BASE_URL is http://127.0.0.1:3000. Playwright starts `npm run dev` automatically
+ * (RUN_HEAVY_BUILD_TASKS=false + NEXTAUTH_SECRET) unless something already listens — or set
+ * `PLAYWRIGHT_SKIP_WEB_SERVER=1` and run the dev server yourself.
  *
  * Run: `npx playwright test tests/e2e/public/public-site-smoke.spec.ts`
  */
