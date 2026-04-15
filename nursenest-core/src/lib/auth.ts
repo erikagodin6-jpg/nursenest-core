@@ -5,6 +5,7 @@ import NextAuth, { type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { NextRequest } from "next/server";
 import { authCallbacks } from "@/lib/auth-callbacks";
+import { nodeJwtCallback } from "@/lib/auth/node-jwt-callback";
 import { JWT_SESSION_MAX_AGE_SEC, JWT_SESSION_UPDATE_AGE_SEC } from "@/lib/auth/auth-session-constants";
 import { normalizeStoredPasswordHash } from "@/lib/auth/normalize-stored-password-hash";
 import { hashLoginIdentifierForLog } from "@/lib/auth/log-auth-identifier";
@@ -681,7 +682,10 @@ export const authConfig: NextAuthConfig = {
       },
     }),
   ],
-  callbacks: authCallbacks,
+  callbacks: {
+    ...authCallbacks,
+    jwt: nodeJwtCallback,
+  },
 };
 
 const { auth, signIn, signOut } = NextAuth(authConfig);

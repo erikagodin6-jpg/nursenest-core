@@ -25,6 +25,16 @@ const FEATURE_KEYS = [
 
 const LOSE_KEYS = [`lose0`, `lose1`, `lose2`] as const;
 
+/** Objection Q&A blocks rendered above the pricing CTA (order = conversion flow). */
+const PAYWALL_OBJECTION_IDS = ["worthIt", "different", "passExam", "ifStayFree", "upToDate"] as const;
+
+const PREVIEW_CHOICE_KEYS = [
+  "pages.home.sampleQuestion.choiceA",
+  "pages.home.sampleQuestion.choiceB",
+  "pages.home.sampleQuestion.choiceC",
+  "pages.home.sampleQuestion.choiceD",
+] as const;
+
 export function SubscriptionPaywall({
   context,
   freemiumRemainingQuestions,
@@ -86,7 +96,22 @@ export function SubscriptionPaywall({
         <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-info)]">{t("paywall.preview.heading")}</p>
         <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">{t("paywall.preview.lead")}</p>
         <p className="mt-3 text-sm font-medium text-[var(--semantic-text-primary)]">{t("paywall.preview.sampleStem")}</p>
-        <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("paywall.preview.sampleRationale")}</p>
+        <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+          {t("paywall.preview.choicesIntro")}
+        </p>
+        <ul className="mt-2 space-y-1.5">
+          {PREVIEW_CHOICE_KEYS.map((key, idx) => (
+            <li
+              key={key}
+              className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[color-mix(in_srgb,var(--semantic-surface)_1,var(--background))] px-3 py-2 text-sm text-[var(--semantic-text-primary)]"
+            >
+              <span className="font-semibold text-[var(--semantic-info)]">{String.fromCharCode(65 + idx)}.</span>{" "}
+              {t(key)}
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("paywall.preview.sampleRationale")}</p>
+        <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">{t("paywall.preview.contentFreshness")}</p>
         {bankQuestionCount != null && bankQuestionCount > 0 ? (
           <p className="mt-3 text-xs font-semibold text-[var(--semantic-text-primary)]">
             {t("paywall.preview.bankSizeLine", {
@@ -139,6 +164,38 @@ export function SubscriptionPaywall({
           >
             {t("paywall.sampleQuestions")}
           </Link>
+        </div>
+      </div>
+
+      <div
+        className="space-y-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_24%,var(--semantic-border-soft))] bg-[var(--semantic-panel-positive)] p-4"
+        aria-labelledby="paywall-objections-heading"
+      >
+        <div>
+          <p id="paywall-objections-heading" className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-success)]">
+            {t("paywall.objections.title")}
+          </p>
+          <p className="mt-2 text-sm font-medium leading-snug text-[var(--semantic-text-primary)]">
+            {bankQuestionCount != null && bankQuestionCount > 0
+              ? t("paywall.objections.proofWithCount", {
+                  count: bankQuestionCount.toLocaleString(locale.replace(/_/g, "-")),
+                })
+              : t("paywall.objections.proofNoCount")}
+          </p>
+        </div>
+
+        <dl className="space-y-3">
+          {PAYWALL_OBJECTION_IDS.map((id) => (
+            <div key={id}>
+              <dt className="text-sm font-semibold text-[var(--semantic-text-primary)]">{t(`paywall.objections.${id}.q`)}</dt>
+              <dd className="mt-1 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t(`paywall.objections.${id}.a`)}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_08%,var(--semantic-surface))] p-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-info)]">{t("paywall.objections.rationaleLabel")}</p>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("paywall.objections.rationaleSample")}</p>
         </div>
       </div>
 

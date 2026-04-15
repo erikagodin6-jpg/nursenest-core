@@ -79,7 +79,7 @@ const LABEL_KEYS: Record<LearnerPrimaryNavItem["key"], string> = {
   practice: "learner.shell.nav.practice",
   flashcards: "learner.shell.nav.flashcards",
   cat: "learner.shell.nav.cat",
-  reports: "learner.shell.nav.reports",
+  reports: "learner.shell.nav.progress",
   profile: "nav.account",
 };
 

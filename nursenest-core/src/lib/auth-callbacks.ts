@@ -1,32 +1,21 @@
 import type { NextAuthConfig } from "next-auth";
-import type { SessionUserRole } from "@/types/next-auth";
 import {
   JWT_SESSION_BRIEF_MAX_AGE_SEC,
   JWT_SESSION_REMEMBER_MAX_AGE_SEC,
 } from "@/lib/auth/auth-session-constants";
 
-/** Validate client-supplied role on `update()` so JWT cannot be escalated with arbitrary strings. */
-function sessionRoleFromUpdate(value: unknown): SessionUserRole | undefined {
-  if (typeof value !== "string") return undefined;
-  const r = value.trim().toUpperCase();
-  if (
-    r === "LEARNER" ||
-    r === "ADMIN" ||
-    r === "SUPER_ADMIN" ||
-    r === "CONTENT_ADMIN" ||
-    r === "SUPPORT_ADMIN"
-  ) {
-    return r;
-  }
-  return undefined;
-}
-
 /**
  * Shared JWT + session callbacks for the Node auth handler and the Edge middleware
- * auth instance. Both must stay identical so session tokens validate everywhere.
+ * auth instance. Both must stay identical for the **base** JWT branch; the Node handler
+ * replaces `jwt` with {@link nodeJwtCallback} to merge DB identity on `session.update()` and
+ * enforce `credentialVersion` (see `src/lib/auth/node-jwt-callback.ts`).
+ *
+ * Trust boundary: do **not** merge `trigger === "update"` payloads from the browser into the JWT.
+ * Callers may invoke `useSession().update()` after `/api/auth/sync-session`; the Node jwt callback
+ * reloads tier/country/subscription/role from the database.
  */
 export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
-  async jwt({ token, user, trigger, session }) {
+  async jwt({ token, user, trigger: _trigger, session: _session }) {
     if (user) {
       const u = user as {
         id?: string;
@@ -57,19 +46,6 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
       const nowSec = Math.floor(Date.now() / 1000);
       token.exp = nowSec + ttlSec;
     }
-    if (trigger === "update" && session && typeof session === "object") {
-      const s = session as Partial<{
-        tier: typeof token.tier;
-        country: typeof token.country;
-        subscriptionStatus: typeof token.subscriptionStatus;
-        role: unknown;
-      }>;
-      if (s.tier !== undefined) token.tier = s.tier;
-      if (s.country !== undefined) token.country = s.country;
-      if (s.subscriptionStatus !== undefined) token.subscriptionStatus = s.subscriptionStatus;
-      const nextRole = sessionRoleFromUpdate(s.role);
-      if (nextRole !== undefined) token.role = nextRole;
-    }
     return token;
   },
   async session({ session, token }) {
@@ -88,7 +64,9 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
     token.tier === "LVN_LPN" ||
     token.tier === "RN" ||
     token.tier === "NP" ||
-    token.tier === "ALLIED"
+    token.tier === "ALLIED" ||
+    token.tier === "PRE_NURSING" ||
+    token.tier === "NEW_GRAD"
       ? token.tier
       : "RN") as typeof token.tier;
     su.alliedProfessionKey =

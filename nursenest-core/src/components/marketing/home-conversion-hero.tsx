@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { ArrowRight, BookOpen, Server, ShieldCheck, Target } from "lucide-react";
+import { ArrowRight, BookOpen, ShieldCheck, Target } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
@@ -38,7 +38,6 @@ export function HomeConversionHero() {
       text: region === "US" ? t("pages.home.hero.trustChip.usScopes") : t("pages.home.hero.trustChip.caScopes"),
     },
     { icon: Target, text: t("pages.home.hero.trustChip.cat") },
-    { icon: Server, text: t("pages.home.hero.trustChip.serverAccess") },
   ] as const;
 
   return (

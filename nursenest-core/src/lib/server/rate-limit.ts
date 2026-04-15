@@ -18,6 +18,9 @@ const AUTH_STRICT_SUBSTRINGS = [
   "/api/auth/providers",
   "/api/auth/register",
   "/api/auth/error",
+  "/api/auth/forgot-password",
+  "/api/auth/reset-password",
+  "/api/auth/change-password",
 ] as const;
 
 const LEARNER_PREFIXES = [

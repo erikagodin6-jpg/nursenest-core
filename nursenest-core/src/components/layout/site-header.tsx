@@ -335,6 +335,7 @@ export function SiteHeader() {
   const [mobileExpandedMega, setMobileExpandedMega] = useState<ExamMenuKey | null>(null);
   const [desktopCountryOpen, setDesktopCountryOpen] = useState(false);
   const [desktopLangOpen, setDesktopLangOpen] = useState(false);
+  const [desktopMoreOpen, setDesktopMoreOpen] = useState(false);
   const [mobileLangOpen, setMobileLangOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [openMegaMenu, setOpenMegaMenu] = useState<ExamMenuKey | null>(null);
@@ -342,6 +343,7 @@ export function SiteHeader() {
   const closeMegaTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const desktopCountryRef = useRef<HTMLDivElement>(null);
   const desktopLangRef = useRef<HTMLDivElement>(null);
+  const desktopMoreRef = useRef<HTMLDivElement>(null);
   const mobileLangRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -405,6 +407,7 @@ export function SiteHeader() {
     const close = (e: PointerEvent) => {
       if (!desktopCountryRef.current?.contains(e.target as Node)) setDesktopCountryOpen(false);
       if (!desktopLangRef.current?.contains(e.target as Node)) setDesktopLangOpen(false);
+      if (!desktopMoreRef.current?.contains(e.target as Node)) setDesktopMoreOpen(false);
       if (!mobileLangRef.current?.contains(e.target as Node)) setMobileLangOpen(false);
       if (!headerRef.current?.contains(e.target as Node)) setOpenMegaMenu(null);
     };
@@ -413,6 +416,7 @@ export function SiteHeader() {
         setOpenMegaMenu(null);
         setDesktopCountryOpen(false);
         setDesktopLangOpen(false);
+        setDesktopMoreOpen(false);
         setMobileLangOpen(false);
       }
     };
@@ -438,6 +442,7 @@ export function SiteHeader() {
     setMobileExpandedMega(null);
     setDesktopCountryOpen(false);
     setDesktopLangOpen(false);
+    setDesktopMoreOpen(false);
     setMobileLangOpen(false);
   }, [pathname, locale, region]);
 
@@ -487,14 +492,40 @@ export function SiteHeader() {
     ? (user.tier === "RPN" || user.tier === "LVN_LPN" ? "pn" : user.tier === "NP" ? "np" : user.tier === "ALLIED" ? "allied" : "rn")
     : "rn";
   const activeExam: string | null = null;
-  const marketingBrowseLinks: HeaderNavLink[] = useMemo(
+  const marketingFlowLinks: HeaderNavLink[] = useMemo(
     () => [
       {
-        key: "pricing",
-        href: HUB.pricing,
-        matchBase: HUB.pricing,
-        label: formatTitleCase(t("nav.pricing"), locale),
+        key: "flow-learn",
+        href: HUB.examLessons,
+        matchBase: HUB.examLessons,
+        label: formatTitleCase(t("nav.marketingFlow.learn"), locale),
       },
+      {
+        key: "flow-practice",
+        href: HUB.questionBank,
+        matchBase: HUB.questionBank,
+        label: formatTitleCase(t("nav.marketingFlow.practice"), locale),
+      },
+      {
+        key: "flow-track",
+        href: `/signup?callbackUrl=${encodeURIComponent("/app/account/progress")}`,
+        matchBase: "/signup",
+        label: formatTitleCase(t("nav.marketingFlow.track"), locale),
+      },
+    ],
+    [t, locale],
+  );
+  const marketingPricingLink: HeaderNavLink = useMemo(
+    () => ({
+      key: "pricing",
+      href: HUB.pricing,
+      matchBase: HUB.pricing,
+      label: formatTitleCase(t("nav.pricing"), locale),
+    }),
+    [t, locale],
+  );
+  const marketingMoreLinks: HeaderNavLink[] = useMemo(
+    () => [
       {
         key: "blog",
         href: "/blog",
@@ -520,9 +551,6 @@ export function SiteHeader() {
     return `${inset}, 0 12px 36px -14px color-mix(in srgb, var(--theme-heading-text) 18%, transparent)`;
   }, [isScrolled]);
 
-  const mobileMoreNav: { key: string; href: string; label: string }[] = [
-    { key: "pre-nursing", href: "/pre-nursing", label: formatTitleCase(t("nav.preNursing"), locale) },
-  ];
   const marketingDesktopUtilityControls = (
     <div className="flex min-w-0 items-center gap-1 xl:gap-1.5">
       <div className="relative" ref={desktopCountryRef}>
@@ -807,7 +835,7 @@ export function SiteHeader() {
                 aria-label={t("nav.marketingExplore")}
                 className="flex min-w-0 items-center justify-center gap-0.5 overflow-x-auto [scrollbar-width:none] xl:gap-1 [&::-webkit-scrollbar]:hidden"
               >
-                {marketingBrowseLinks.map((item) => (
+                {marketingFlowLinks.map((item) => (
                   <Link
                     key={item.key}
                     href={localizeHref(item.href)}
@@ -825,6 +853,60 @@ export function SiteHeader() {
                     {item.label}
                   </Link>
                 ))}
+                <Link
+                  href={localizeHref(marketingPricingLink.href)}
+                  aria-current={isActivePath(strippedPath, marketingPricingLink.matchBase) ? "page" : undefined}
+                  className={NAV_LINK_CLASS}
+                  onClick={() =>
+                    trackClientEvent(PH.marketingNavClick, {
+                      actor: navActor,
+                      nav_id: marketingPricingLink.key,
+                      surface: "site_header_desktop",
+                      marketing_region: region,
+                    })
+                  }
+                >
+                  {marketingPricingLink.label}
+                </Link>
+                <div className="relative" ref={desktopMoreRef}>
+                  <button
+                    type="button"
+                    className={`${NAV_LINK_CLASS} inline-flex items-center gap-0.5`}
+                    aria-expanded={desktopMoreOpen}
+                    aria-haspopup="menu"
+                    onClick={() => setDesktopMoreOpen((o) => !o)}
+                  >
+                    {formatTitleCase(t("nav.marketingMore"), locale)}
+                    <ChevronDown className={`h-3.5 w-3.5 shrink-0 opacity-70 ${desktopMoreOpen ? "rotate-180" : ""}`} aria-hidden />
+                  </button>
+                  {desktopMoreOpen ? (
+                    <div
+                      role="menu"
+                      className="absolute end-0 z-[130] mt-2 min-w-[12rem] rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] py-1 shadow-[var(--shadow-card-hover)]"
+                    >
+                      {marketingMoreLinks.map((item) => (
+                        <Link
+                          key={item.key}
+                          role="menuitem"
+                          href={localizeHref(item.href)}
+                          aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
+                          className="flex items-center px-3 py-2.5 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          onClick={() => {
+                            setDesktopMoreOpen(false);
+                            trackClientEvent(PH.marketingNavClick, {
+                              actor: navActor,
+                              nav_id: item.key,
+                              surface: "site_header_desktop_more",
+                              marketing_region: region,
+                            });
+                          }}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
               </nav>
             ) : (
               <nav
@@ -977,17 +1059,17 @@ export function SiteHeader() {
                     <div>
                       {/* Badge pill */}
                       <span className="mb-3 inline-flex items-center rounded-full border border-[var(--text-accent)] px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-[var(--text-accent)]">
-                        {openMega.hubBadge ?? "Start Here"}
+                        {openMega.hubBadge ?? t("nav.mega.startHere")}
                       </span>
                       <h3 className="text-lg font-medium leading-snug text-[var(--theme-heading-text)]">
-                        {formatTitleCase(`${openMega.label} Exam Hub`, locale)}
+                        {formatTitleCase(`${openMega.label} — ${t("nav.mega.examHubSuffix")}`, locale)}
                       </h3>
                       <p className="mt-2 text-sm leading-relaxed text-[var(--theme-muted-text)]">
                         {openMega.hubDescription}
                       </p>
                     </div>
                     <span className="flex items-center gap-1 text-sm font-medium text-[var(--text-accent)] transition-[gap] group-hover:gap-2">
-                      Open Hub
+                      {formatTitleCase(t("nav.mega.openHub"), locale)}
                       <ChevronRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden />
                     </span>
                   </Link>
@@ -1125,6 +1207,49 @@ export function SiteHeader() {
                   ))
                 ) : (
                   <>
+                    {marketingFlowLinks.map((item) => (
+                      <Link
+                        key={item.key}
+                        href={localizeHref(item.href)}
+                        aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
+                        className={`flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-medium transition-colors ${isActivePath(strippedPath, item.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                        onClick={() => {
+                          trackClientEvent(PH.marketingNavClick, {
+                            actor: navActor,
+                            nav_id: item.key,
+                            surface: "site_header_mobile_drawer",
+                            marketing_region: region,
+                          });
+                          setMobileOpen(false);
+                        }}
+                      >
+                        <span
+                          className={`h-1.5 w-1.5 shrink-0 rounded-full transition-opacity duration-100 ${isActivePath(strippedPath, item.matchBase) ? "bg-[var(--text-accent)] opacity-100" : "opacity-0"}`}
+                          aria-hidden
+                        />
+                        {item.label}
+                      </Link>
+                    ))}
+                    <Link
+                      href={localizeHref(marketingPricingLink.href)}
+                      aria-current={isActivePath(strippedPath, marketingPricingLink.matchBase) ? "page" : undefined}
+                      className={`flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-medium transition-colors ${isActivePath(strippedPath, marketingPricingLink.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                      onClick={() => {
+                        trackClientEvent(PH.marketingNavClick, {
+                          actor: navActor,
+                          nav_id: marketingPricingLink.key,
+                          surface: "site_header_mobile_drawer",
+                          marketing_region: region,
+                        });
+                        setMobileOpen(false);
+                      }}
+                    >
+                      <span
+                        className={`h-1.5 w-1.5 shrink-0 rounded-full transition-opacity duration-100 ${isActivePath(strippedPath, marketingPricingLink.matchBase) ? "bg-[var(--text-accent)] opacity-100" : "opacity-0"}`}
+                        aria-hidden
+                      />
+                      {marketingPricingLink.label}
+                    </Link>
                     {megaMenus.map((menu) => {
                       const expanded = mobileExpandedMega === menu.key;
                       return (
@@ -1166,10 +1291,10 @@ export function SiteHeader() {
                               >
                                 <div className="min-w-0">
                                   <span className="mb-1.5 inline-flex items-center rounded-full border border-[var(--text-accent)] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-[var(--text-accent)]">
-                                    {menu.hubBadge ?? "Start Here"}
+                                    {menu.hubBadge ?? t("nav.mega.startHere")}
                                   </span>
                                   <span className="block text-[14px] font-medium leading-snug text-[var(--nav-fg)]">
-                                    {formatTitleCase(`${menu.label} Exam Hub`, locale)}
+                                    {formatTitleCase(`${menu.label} — ${t("nav.mega.examHubSuffix")}`, locale)}
                                   </span>
                                   <span className="mt-0.5 block text-[12px] leading-snug text-[var(--nav-muted)]">
                                     {menu.hubDescription}
@@ -1217,58 +1342,37 @@ export function SiteHeader() {
                         </div>
                       );
                     })}
-                    {marketingBrowseLinks.map((item) => (
-                      <Link
-                        key={item.key}
-                        href={localizeHref(item.href)}
-                        aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                        className={`flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-medium transition-colors ${isActivePath(strippedPath, item.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
-                        onClick={() => {
-                          trackClientEvent(PH.marketingNavClick, {
-                            actor: navActor,
-                            nav_id: item.key,
-                            surface: "site_header_mobile_drawer",
-                            marketing_region: region,
-                          });
-                          setMobileOpen(false);
-                        }}
-                      >
-                        <span
-                          className={`h-1.5 w-1.5 shrink-0 rounded-full transition-opacity duration-100 ${isActivePath(strippedPath, item.matchBase) ? "bg-[var(--text-accent)] opacity-100" : "opacity-0"}`}
-                          aria-hidden
-                        />
-                        {item.label}
-                      </Link>
-                    ))}
+                    <div className="space-y-1 border-t border-[var(--header-border)] pt-3">
+                      <p className="px-2 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
+                        {formatTitleCase(t("nav.marketingMore"), locale)}
+                      </p>
+                      {marketingMoreLinks.map((item) => (
+                        <Link
+                          key={item.key}
+                          href={localizeHref(item.href)}
+                          aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
+                          className={`flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-medium transition-colors ${isActivePath(strippedPath, item.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                          onClick={() => {
+                            trackClientEvent(PH.marketingNavClick, {
+                              actor: navActor,
+                              nav_id: item.key,
+                              surface: "site_header_mobile_drawer",
+                              marketing_region: region,
+                            });
+                            setMobileOpen(false);
+                          }}
+                        >
+                          <span
+                            className={`h-1.5 w-1.5 shrink-0 rounded-full transition-opacity duration-100 ${isActivePath(strippedPath, item.matchBase) ? "bg-[var(--text-accent)] opacity-100" : "opacity-0"}`}
+                            aria-hidden
+                          />
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
                   </>
                 )}
               </div>
-
-              {!isAuthenticated ? (
-                <div className="space-y-1">
-                  <p className="px-2 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
-                    {t("nav.more")}
-                  </p>
-                  {mobileMoreNav.map((item) => (
-                    <Link
-                      key={item.key}
-                      href={localizeHref(item.href)}
-                      className="flex items-center rounded-xl px-3 py-3 text-[15px] font-medium text-[var(--nav-muted)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)]"
-                      onClick={() => {
-                        trackClientEvent(PH.marketingNavClick, {
-                          actor: navActor,
-                          nav_id: item.key,
-                          surface: "site_header_mobile_drawer",
-                          marketing_region: region,
-                        });
-                        setMobileOpen(false);
-                      }}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-              ) : null}
 
               <div className="mt-1 flex flex-col gap-2 border-t border-[var(--header-border)] pt-5">
                 {!isAuthenticated ? (

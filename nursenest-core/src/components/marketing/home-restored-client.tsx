@@ -102,7 +102,7 @@ export default function HomeRestoredClient() {
         {/* 1b. AUDIENCE BALANCE — RN / PN / NP / Allied */}
         <section
           className="nn-section-block scroll-mt-20 border-b border-[var(--border-subtle)] bg-[var(--page-bg)]"
-          aria-label="Exam prep by audience"
+          aria-label={t("pages.home.audienceBalance.ariaLabel")}
           data-testid="section-home-audience-balance"
         >
           <div className="nn-section-shell py-10 sm:py-11">
