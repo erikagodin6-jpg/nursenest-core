@@ -10,6 +10,7 @@ import { useMarketingI18n, useMarketingLocale } from "@/lib/marketing-i18n";
 import { formatTitleCase } from "@/lib/format/text-case";
 import {
   buildLearnerPrimaryNavItems,
+  isLearnerPrimaryNavKey,
   learnerPrimaryNavLabelKey,
   type LearnerPrimaryNavItem,
 } from "@/lib/navigation/learner-primary-nav";
@@ -76,13 +77,14 @@ export function LearnerShellPrimaryNav({
               surface: "learner_primary_nav",
             });
           }}
-          className="inline-flex shrink-0 items-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))] px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-brand)]"
+          className="nn-header-tier-pill max-w-[14rem] shrink-0 truncate"
           aria-label={`Open your pathway hub: ${pathwayLabel}`}
         >
           {pathwayLabel}
         </Link>
         {items.map((item) => {
           const active = pathname.startsWith(item.matchPrefix);
+          const isPrimarySurface = isLearnerPrimaryNavKey(item.id);
           return (
             <Link
               key={item.id}
@@ -99,7 +101,9 @@ export function LearnerShellPrimaryNav({
               className={
                 active
                   ? "nn-marketing-body-sm max-w-full min-w-0 rounded-full border border-[var(--semantic-brand)] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--bg-card))] px-3 py-2 text-start font-medium leading-snug text-[var(--semantic-brand)] transition-colors duration-150"
-                  : "nn-marketing-body-sm max-w-full min-w-0 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-start font-medium leading-snug text-[var(--theme-body-text)] transition-colors duration-150 hover:bg-[var(--accent-soft)] hover:text-primary"
+                  : isPrimarySurface
+                    ? "nn-marketing-body-sm max-w-full min-w-0 rounded-full px-3 py-2 text-start leading-snug transition-colors duration-150 nn-learner-shell-link--primary hover:text-primary"
+                    : "nn-marketing-body-sm max-w-full min-w-0 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-start font-medium leading-snug text-[var(--theme-body-text)] transition-colors duration-150 hover:bg-[var(--accent-soft)] hover:text-primary"
               }
             >
               {item.label}
@@ -125,33 +129,39 @@ export function LearnerShellPrimaryNav({
                 surface: "learner_bottom_nav",
               });
             }}
-            className="inline-flex min-h-11 max-w-[5.5rem] shrink-0 items-center justify-center truncate rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))] px-2 text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-brand)] sm:max-w-none"
+            className="nn-header-tier-pill nn-header-tier-pill--compact inline-flex min-h-11 max-w-[5.5rem] shrink-0 items-center justify-center truncate sm:max-w-none"
             aria-label={`Open your pathway hub: ${pathwayLabel}`}
           >
             {pathwayLabel}
           </Link>
-          {items.map((item) => (
-            <Link
-              key={item.id}
-              href={item.href}
-              onClick={() => {
-                trackClientEvent(PH.learnerNavClick, {
-                  actor: "authenticated",
-                  nav_id: item.id,
-                  href: item.href,
-                  country: readMarketingRegionFromDocument(),
-                  surface: "learner_bottom_nav",
-                });
-              }}
-              className={
-                pathname.startsWith(item.matchPrefix)
-                  ? "inline-flex min-h-11 min-w-0 max-w-[5.25rem] flex-1 items-center justify-center rounded-full border border-[var(--semantic-brand)] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--bg-card))] px-1.5 text-[11px] font-semibold leading-tight text-[var(--semantic-brand)] sm:max-w-none sm:px-2 sm:text-xs"
-                  : "inline-flex min-h-11 min-w-0 max-w-[5.25rem] flex-1 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-1.5 text-[11px] font-semibold leading-tight text-[var(--theme-body-text)] sm:max-w-none sm:px-2 sm:text-xs"
-              }
-            >
-              {item.label}
-            </Link>
-          ))}
+          {items.map((item) => {
+            const active = pathname.startsWith(item.matchPrefix);
+            const isPrimarySurface = isLearnerPrimaryNavKey(item.id);
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                onClick={() => {
+                  trackClientEvent(PH.learnerNavClick, {
+                    actor: "authenticated",
+                    nav_id: item.id,
+                    href: item.href,
+                    country: readMarketingRegionFromDocument(),
+                    surface: "learner_bottom_nav",
+                  });
+                }}
+                className={
+                  active
+                    ? "inline-flex min-h-11 min-w-0 max-w-[5.25rem] flex-1 items-center justify-center rounded-full border border-[var(--semantic-brand)] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--bg-card))] px-1.5 text-[11px] font-semibold leading-tight text-[var(--semantic-brand)] sm:max-w-none sm:px-2 sm:text-xs"
+                    : isPrimarySurface
+                      ? "nn-learner-shell-bottom-link--primary inline-flex min-h-11 min-w-0 max-w-[5.25rem] flex-1 items-center justify-center rounded-full px-1.5 text-[11px] leading-tight text-[var(--theme-body-text)] sm:max-w-none sm:px-2 sm:text-xs"
+                      : "inline-flex min-h-11 min-w-0 max-w-[5.25rem] flex-1 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-1.5 text-[11px] font-semibold leading-tight text-[var(--theme-body-text)] sm:max-w-none sm:px-2 sm:text-xs"
+                }
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </div>
       </nav>
     </>

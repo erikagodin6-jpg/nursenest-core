@@ -12,6 +12,7 @@ import { CompactCountryTrigger, CountrySelector } from "@/components/layout/glob
 import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { applyGlobalRegionSelection } from "@/lib/marketing/apply-global-region-selection";
 import { useClientGlobalRegionCookie } from "@/lib/region/use-client-global-region";
+import { effectiveMarketingHeaderGlobalRegion } from "@/lib/marketing/marketing-header-global-region";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 
@@ -56,8 +57,15 @@ export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?
 
   const globalLocale: GlobalLocaleCode = (locale as GlobalLocaleCode) ?? "en";
   const clientGlobalRegion = useClientGlobalRegionCookie();
-  const legacyUsCa: GlobalRegionSlug = region === "CA" ? "canada" : "us";
-  const effectiveGlobalRegion: GlobalRegionSlug = clientGlobalRegion ?? legacyUsCa;
+  const effectiveGlobalRegion: GlobalRegionSlug = useMemo(
+    () =>
+      effectiveMarketingHeaderGlobalRegion({
+        globalRegionCookie: clientGlobalRegion,
+        marketingExamRegion: region,
+        sessionCountryUsCa: undefined,
+      }),
+    [clientGlobalRegion, region],
+  );
 
   const buildLocalizedMarketingPath = useCallback(
     (localeCode: string, path: string) => {

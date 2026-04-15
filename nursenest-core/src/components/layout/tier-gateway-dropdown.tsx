@@ -15,8 +15,7 @@ import type { LucideIcon } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
-import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { publicExamPrepHubDestinations, HUB } from "@/lib/navigation/canonical-destinations";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
@@ -46,6 +45,7 @@ export function TierGatewayDropdown({
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const localize = (href: string) => withMarketingLocale(locale, href);
+  const hubs = publicExamPrepHubDestinations(region);
 
   const items: TierItem[] = [
     {
@@ -53,28 +53,28 @@ export function TierGatewayDropdown({
       icon: Stethoscope,
       titleKey: "nav.tierDrop.rnTitle",
       descKey: "nav.tierDrop.rnDesc",
-      href: marketingExamHubPath(region, "rn"),
+      href: hubs.rn,
     },
     {
       key: "pn",
       icon: HeartPulse,
       titleKey: region === "CA" ? "nav.tierDrop.rpnTitle" : "nav.tierDrop.lpnTitle",
       descKey: region === "CA" ? "nav.tierDrop.rpnDesc" : "nav.tierDrop.lpnDesc",
-      href: marketingExamHubPath(region, "pn"),
+      href: hubs.pn,
     },
     {
       key: "np",
       icon: Award,
       titleKey: "nav.tierDrop.npTitle",
       descKey: "nav.tierDrop.npDesc",
-      href: marketingExamHubPath(region, "np"),
+      href: hubs.np,
     },
     {
       key: "allied",
       icon: Dna,
       titleKey: "nav.tierDrop.alliedTitle",
       descKey: "nav.tierDrop.alliedDesc",
-      href: marketingExamHubPath(region, "allied"),
+      href: hubs.allied,
     },
     {
       key: "pre-nursing",
