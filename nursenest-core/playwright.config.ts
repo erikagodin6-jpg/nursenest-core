@@ -40,6 +40,10 @@ function localDevWebServer() {
       /** Client session fetch uses absolute origin; unset values cause ClientFetchError in Playwright. */
       AUTH_URL: origin.origin,
       NEXTAUTH_URL: origin.origin,
+      /** When `E2E_LEARNER_DEGRADED=1`, start Next with learner degraded mode (paid degraded-mode spec). */
+      ...(process.env.E2E_LEARNER_DEGRADED === "1"
+        ? { NN_DEGRADED_MODE: "1", NEXT_PUBLIC_NN_DEGRADED_MODE: "1" }
+        : {}),
     },
   } as const;
 }
@@ -60,7 +64,7 @@ const paidProjects = paidAuthEnabled
       {
         name: "chromium-paid",
         testMatch:
-          /paid-user-(00-fast-sanity|login-flow|journey|entitlements|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke)\.spec\.ts$|paid-subscriber-audit\.spec\.ts$|production-i18n-bundle\.spec\.ts$/,
+          /paid-user-(00-fast-sanity|degraded-mode|data-load|performance|stress|login-flow|journey|entitlements|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke)\.spec\.ts$|paid-subscriber-audit\.spec\.ts$|production-i18n-bundle\.spec\.ts$/,
         dependencies: ["setup-paid-auth"],
         use: {
           ...devices["Desktop Chrome"],
@@ -121,7 +125,7 @@ export default defineConfig({
       // Project-level testIgnore replaces the root list — keep `.next` + build dirs here too.
       testIgnore: [
         /lesson-flows\.mobile\.spec\.ts$/,
-        /paid-user-(00-fast-sanity|login-flow|journey|entitlements|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke)\.spec\.ts$/,
+        /paid-user-(00-fast-sanity|degraded-mode|data-load|login-flow|journey|entitlements|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke)\.spec\.ts$/,
         /paid-subscriber-audit\.spec\.ts$/,
         /stripe-subscriber-journey\.spec\.ts$/,
         /freemium-paywall\.spec\.ts$/,

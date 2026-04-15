@@ -132,6 +132,8 @@ model User {
 
   @@index([alliedProfessionKey])
   @@index([normalizedEmail])
+  @@index([role])
+  @@index([tier])
 }
 
 /// * Admin-managed binary assets on Spaces (blogs, lessons, marketing).
@@ -334,6 +336,8 @@ model Subscription {
 
   /// Entitlement hot path: `getUserAccess` loads recent subscription rows per user (`WHERE userId = ? ORDER BY createdAt DESC LIMIT …`).
   @@index([userId, createdAt(sort: Desc)])
+  @@index([userId, status])
+  @@index([status, currentPeriodEnd])
 }
 
 /// * Dedup Stripe webhook deliveries (evt_…) so retries are safe.
@@ -761,6 +765,7 @@ model ContentItem {
 
   @@index([type, status])
   @@index([type, status, updatedAt])
+  @@index([status, publishedAt(sort: Desc)])
   @@map("content_items")
 }
 
@@ -880,6 +885,10 @@ model ExamQuestion {
   @@index([status, exam, tier, countryCode])
   @@index([status, exam, topic])
   @@index([status, exam, tier, countryCode], map: "exam_questions_status_exam_tier_country_idx")
+  @@index([topic])
+  @@index([difficulty])
+  @@index([exam, topic])
+  @@index([exam, difficulty])
   @@map("exam_questions")
 }
 
@@ -923,6 +932,7 @@ model FlashcardDeck {
 
   @@index([status, visibility, country])
   @@index([status, examFamily])
+  @@index([examFamily, pathwayId])
   @@map("flashcard_decks")
 }
 

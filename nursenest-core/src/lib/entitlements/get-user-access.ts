@@ -195,13 +195,15 @@ async function getUserAccessCore(
 
   if (subscriptionRows.length === SUBSCRIPTION_HISTORY_WINDOW && activeSubscription === null) {
     telemetry.subscriptionQueries = 2;
-    const fallbackActive = await withRetry(() =>
-      prisma.subscription.findFirst({
+    const fallbackRows = await withRetry(() =>
+      prisma.subscription.findMany({
         where: { userId, status: { in: ACTIVE_LIKE } },
         orderBy: { createdAt: "desc" },
+        take: 1,
         select: SUBSCRIPTION_ENTITLEMENT_SELECT,
       }),
     );
+    const fallbackActive = fallbackRows[0] ?? null;
     if (fallbackActive) {
       activeSubscription = fallbackActive;
     }

@@ -1,5 +1,6 @@
 import { appOriginForEmail } from "@/lib/email/app-origin";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { runWithCircuitBreaker } from "@/lib/server/circuit-breaker";
 
 export type SendTransactionalEmailResult = { ok: boolean; skippedReason?: string };
 
@@ -29,30 +30,39 @@ export async function sendTransactionalEmailHtml(params: {
   }
 
   try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
+    return await runWithCircuitBreaker(
+      "email",
+      async () => {
+        const res = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${key}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from,
+            to: [params.to],
+            subject: params.subject,
+            html: params.html,
+            ...(params.text ? { text: params.text } : {}),
+          }),
+        });
+        if (!res.ok) {
+          const text = await res.text().catch(() => "");
+          safeServerLog("email", "transactional_failed", {
+            status: res.status,
+            snippet: text.slice(0, 120),
+            subject: params.subject.slice(0, 80),
+          });
+          throw new Error(`resend_http_${res.status}`);
+        }
+        return { ok: true as const };
       },
-      body: JSON.stringify({
-        from,
-        to: [params.to],
-        subject: params.subject,
-        html: params.html,
-        ...(params.text ? { text: params.text } : {}),
-      }),
-    });
-    if (!res.ok) {
-      const text = await res.text().catch(() => "");
-      safeServerLog("email", "transactional_failed", {
-        status: res.status,
-        snippet: text.slice(0, 120),
-        subject: params.subject.slice(0, 80),
-      });
-      return { ok: false, skippedReason: "resend_error" };
-    }
-    return { ok: true };
+      () => {
+        safeServerLog("email", "transactional_skipped", { reason: "circuit_open", subject: params.subject.slice(0, 80) });
+        return { ok: false as const, skippedReason: "circuit_open" as const };
+      },
+    );
   } catch (e) {
     safeServerLog("email", "transactional_error", { message: String(e).slice(0, 200) });
     return { ok: false, skippedReason: "network" };

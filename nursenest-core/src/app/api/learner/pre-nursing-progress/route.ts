@@ -10,6 +10,7 @@ import {
   PRE_NURSING_PROGRESS_PREFIX,
 } from "@/lib/pre-nursing/pre-nursing-constants";
 import { nextPreNursingModuleSlug, preNursingCompletionFraction } from "@/lib/pre-nursing/pre-nursing-adaptive";
+import { HARD_CAP_FIND_MANY } from "@/lib/api/safe-query-take";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
@@ -22,6 +23,9 @@ const bodySchema = z.object({
 function isValidModuleSlug(slug: string): boolean {
   return PRE_NURSING_MODULE_REGISTRY.some((m) => m.slug === slug);
 }
+
+/** At most one progress row per module; cap matches registry size (bounded by {@link HARD_CAP_FIND_MANY}). */
+const PRE_NURSING_PROGRESS_LIST_TAKE = Math.min(HARD_CAP_FIND_MANY, PRE_NURSING_MODULE_REGISTRY.length);
 
 export async function GET() {
   const session = await auth();
@@ -48,6 +52,7 @@ export async function GET() {
         lessonId: { startsWith: PRE_NURSING_PROGRESS_PREFIX },
       },
       select: { lessonId: true },
+      take: PRE_NURSING_PROGRESS_LIST_TAKE,
     });
     const completedSlugs = rows
       .map((r) => parsePreNursingModuleSlugFromLessonId(r.lessonId))
@@ -114,6 +119,7 @@ export async function POST(req: Request) {
         lessonId: { startsWith: PRE_NURSING_PROGRESS_PREFIX },
       },
       select: { lessonId: true },
+      take: PRE_NURSING_PROGRESS_LIST_TAKE,
     });
     const completedCount = rows.length;
     const totalModules = PRE_NURSING_MODULE_REGISTRY.length;

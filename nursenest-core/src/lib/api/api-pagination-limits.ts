@@ -12,10 +12,10 @@ export const LESSON_PAGE = {
   default: 12,
 } as const;
 
-/** GET `/api/lessons` offset mode: `limit` or `pageSize` (default 20, max 50). */
+/** GET `/api/lessons` offset mode: `limit` or `pageSize` (default 20, max 100). */
 export const LESSON_API_OFFSET_LIMIT = {
   min: 1,
-  max: 50,
+  max: 100,
   default: 20,
 } as const;
 
@@ -33,10 +33,11 @@ export const FLASHCARD_PAGE = {
   default: 12,
 } as const;
 
+/** Deck list API: default 20, max 100 (aligned with {@link MAX_PAGE_LIMIT}). */
 export const FLASHCARD_DECK_PAGE = {
   min: 6,
-  max: 30,
-  default: 18,
+  max: 100,
+  default: 20,
 } as const;
 
 export type PageSizeParseError = {

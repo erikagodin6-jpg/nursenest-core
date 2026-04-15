@@ -3,6 +3,12 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 /** Log Prisma operations slower than this (ms). */
 export const SLOW_PRISMA_QUERY_MS = 500;
 
+/** `slow_query_detected` — warn tier (ms). */
+export const SLOW_QUERY_WARN_MS = 500;
+
+/** `slow_query_detected` — critical tier (ms). */
+export const SLOW_QUERY_CRITICAL_MS = 1000;
+
 /** Log JSON API bodies estimated above this (UTF-8 bytes). */
 export const LARGE_API_RESPONSE_BYTES = 500_000;
 
@@ -33,6 +39,16 @@ function safeMemoryUsage(): NodeJS.MemoryUsage | null {
 
 export function logSlowPrismaQuery(meta: { model: string; operation: string; durationMs: number }): void {
   if (meta.durationMs <= SLOW_PRISMA_QUERY_MS) return;
+  const queryName = `${meta.model}.${meta.operation}`.slice(0, 120);
+  const severity = meta.durationMs > SLOW_QUERY_CRITICAL_MS ? "critical" : "warn";
+  safeServerLog("perf", "slow_query_detected", {
+    queryName,
+    durationMs: meta.durationMs,
+    severity,
+  });
+  if (meta.durationMs > SLOW_QUERY_CRITICAL_MS) {
+    void import("@/lib/config/auto-degraded-mode").then((m) => m.recordSlowQueryCriticalForAutoDegraded(meta.durationMs));
+  }
   const mem = safeMemoryUsage();
   const heapHigh = mem !== null && mem.heapUsed >= HIGH_HEAP_BYTES;
   safeServerLog("perf", "slow_prisma_query", {

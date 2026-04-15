@@ -771,7 +771,7 @@ async function getLessonsForTopicPageImpl(
         prisma.pathwayLesson.findMany({
           where: { pathwayId, status: ContentStatus.PUBLISHED, topicSlug, locale: effective },
           orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
-          take: 800,
+          take: 200,
           select: { ...PATHWAY_LESSON_HUB_LIST_SELECT, sections: true },
         }),
       [],
@@ -1307,18 +1307,21 @@ async function listTopicClustersImpl(pathwayId: string, marketingLocale?: string
       pathwayId,
       normalizePathwayLessonLocale(marketingLocale),
     );
-    const rows = await dbCall(
+    const groups = await dbCall(
       () =>
-        prisma.pathwayLesson.findMany({
-          where: { pathwayId, status: ContentStatus.PUBLISHED, locale: effective },
-          select: { topicSlug: true, topic: true, sections: true, slug: true, title: true, bodySystem: true, seoTitle: true, seoDescription: true, previewSectionCount: true, locale: true },
-          take: 2000,
-          orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
+        prisma.pathwayLesson.groupBy({
+          by: ["topicSlug"],
+          where: {
+            pathwayId,
+            status: ContentStatus.PUBLISHED,
+            locale: effective,
+            topicSlug: { not: "" },
+          },
+          _count: { _all: true },
         }),
       [],
     );
-    const completeRows = rows;
-    if (completeRows.length === 0) {
+    if (groups.length === 0) {
       const catClusters = topicClustersFromCatalogPathway(pathwayId);
       if (catClusters.length > 0) {
         safeServerLog("pathway_lessons", "topic_index_catalog_supplement", {
@@ -1330,19 +1333,30 @@ async function listTopicClustersImpl(pathwayId: string, marketingLocale?: string
       }
       return [];
     }
-    const bySlug = new Map<string, { label: string; count: number }>();
-    for (const row of completeRows) {
-      const key = row.topicSlug;
-      if (!key) continue;
-      const cur = bySlug.get(key) ?? { label: row.topic || key, count: 0 };
-      cur.count += 1;
-      bySlug.set(key, cur);
-    }
-    return [...bySlug.entries()]
-      .map(([topicSlug, value]) => ({
-        topicSlug,
-        label: value.label,
-        count: value.count,
+    const slugList = groups.map((g) => g.topicSlug).filter(Boolean);
+    const labelRows =
+      slugList.length === 0
+        ? []
+        : await dbCall(
+            () =>
+              prisma.pathwayLesson.findMany({
+                where: {
+                  pathwayId,
+                  status: ContentStatus.PUBLISHED,
+                  locale: effective,
+                  topicSlug: { in: slugList },
+                },
+                select: { topicSlug: true, topic: true },
+                distinct: ["topicSlug"],
+              }),
+            [],
+          );
+    const labelBySlug = new Map(labelRows.map((r) => [r.topicSlug, r.topic]));
+    return groups
+      .map((g) => ({
+        topicSlug: g.topicSlug,
+        label: labelBySlug.get(g.topicSlug) ?? g.topicSlug,
+        count: g._count._all,
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
   }

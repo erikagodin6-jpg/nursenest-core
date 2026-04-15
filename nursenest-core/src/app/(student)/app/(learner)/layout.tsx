@@ -14,7 +14,6 @@ import {
   DEFAULT_LEARNER_PATHWAY_NAV_METADATA,
   isLearnerPathwayNavMetadata,
   loadLearnerPathwayNavMetadata,
-  type LearnerPathwayNavMetadata,
 } from "@/lib/learner/load-learner-shell-pathway-metadata";
 import { safeOptional } from "@/lib/server/safe-optional";
 import { getLearnerFallback, setLearnerFallback } from "@/lib/server/fallback-cache";
@@ -53,43 +52,39 @@ export default async function LearnerShellLayout({ children }: { children: React
     safeServerLog("learner_shell", "degraded_mode_active", { active: true });
   }
 
-  let entitlement = await resolveEntitlementForPage(userId);
+  if (!userId) {
+    return <LearnerUnauthenticatedGate />;
+  }
+
+  const entitlement = await resolveEntitlementForPage(userId);
 
   const skipNonCritical = shouldSkipNonCriticalLearnerWork();
   const coreOnlyEmergency = isCoreOnlyEmergencyMode();
 
-  let pathwayNav: LearnerPathwayNavMetadata = { ...DEFAULT_LEARNER_PATHWAY_NAV_METADATA };
+  const cachedNav =
+    entitlement !== "error" ? getLearnerFallback(userId, entitlement, isLearnerPathwayNavMetadata) : null;
 
-  if (userId) {
-    const cachedNav =
-      entitlement !== "error" ? getLearnerFallback(userId, entitlement, isLearnerPathwayNavMetadata) : null;
-
-    pathwayNav = await safeOptional(
-      async () => {
-        const fresh = await loadLearnerPathwayNavMetadata(userId);
-        if (entitlement !== "error") {
-          setLearnerFallback(userId, entitlement, fresh);
+  const pathwayNav = await safeOptional(
+    async () => {
+      const fresh = await loadLearnerPathwayNavMetadata(userId);
+      if (entitlement !== "error") {
+        setLearnerFallback(userId, entitlement, fresh);
+      }
+      return fresh;
+    },
+    cachedNav ?? DEFAULT_LEARNER_PATHWAY_NAV_METADATA,
+    {
+      label: "learner_pathway_nav_metadata",
+      onUsedFallback: (reason) => {
+        if (cachedNav != null) {
+          safeServerLog("learner_shell", "fallback_used", {
+            surface: "pathway_nav",
+            reason,
+          });
         }
-        return fresh;
       },
-      cachedNav ?? DEFAULT_LEARNER_PATHWAY_NAV_METADATA,
-      {
-        label: "learner_pathway_nav_metadata",
-        onUsedFallback: (reason) => {
-          if (cachedNav != null) {
-            safeServerLog("learner_shell", "fallback_used", {
-              surface: "pathway_nav",
-              reason,
-            });
-          }
-        },
-      },
-    );
-
-    if (pathwayNav === DEFAULT_LEARNER_PATHWAY_NAV_METADATA && cachedNav != null) {
-      pathwayNav = cachedNav;
-    }
-  }
+    },
+  );
 
   let {
     showBaselinePrompt,
@@ -114,10 +109,6 @@ export default async function LearnerShellLayout({ children }: { children: React
       pathwayHubHref = "/us/np/fnp";
       examsLabel = "CAT Exams";
     } else if (tier === "ALLIED") pathwayHubHref = "/us/allied/allied-health";
-  }
-
-  if (!userId) {
-    return <LearnerUnauthenticatedGate />;
   }
 
   /** Tier 2 — study next (optional): skip entirely in degraded / emergency, else safeOptional. */
@@ -196,7 +187,11 @@ export default async function LearnerShellLayout({ children }: { children: React
               <PageTransitionShell shouldDisableTransition={learnerShellShouldDisablePageTransition}>
                 <LearnerSilentSectionBoundary name="route_body">{children}</LearnerSilentSectionBoundary>
               </PageTransitionShell>
-              {tutorContext ? <LearnerTutorShell context={tutorContext} /> : null}
+              {tutorContext ? (
+                <LearnerSilentSectionBoundary name="tutor">
+                  <LearnerTutorShell context={tutorContext} />
+                </LearnerSilentSectionBoundary>
+              ) : null}
             </div>
           </LearnerFeedbackShell>
         </LearnerExamChromeGate>

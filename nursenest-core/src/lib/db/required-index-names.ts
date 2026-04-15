@@ -23,6 +23,17 @@ export const REQUIRED_PUBLIC_INDEX_NAMES = [
   "exam_questions_status_updated_at_idx",
   "exam_questions_status_exam_tier_country_idx",
   "content_items_type_status_updated_at_idx",
+  // 20260616130000_add_performance_indexes — subscriptions, users, questions, content_items, flashcard_decks.
+  "Subscription_userId_status_idx",
+  "Subscription_status_currentPeriodEnd_idx",
+  "User_role_idx",
+  "User_tier_idx",
+  "content_items_status_published_at_idx",
+  "exam_questions_topic_idx",
+  "exam_questions_difficulty_idx",
+  "exam_questions_exam_topic_idx",
+  "exam_questions_exam_difficulty_idx",
+  "flashcard_decks_examFamily_pathway_id_idx",
 ] as const;
 
 /** Optional: absent if `Progress` model not migrated in a fork. */

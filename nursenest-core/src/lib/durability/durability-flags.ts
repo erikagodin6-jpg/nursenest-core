@@ -1,3 +1,5 @@
+import { isAutoDegradedActive } from "@/lib/config/auto-degraded-mode";
+
 function truthyEnv(v: string | undefined): boolean {
   const t = v?.trim().toLowerCase();
   return t === "1" || t === "true" || t === "yes";
@@ -7,9 +9,14 @@ function truthyEnv(v: string | undefined): boolean {
  * Degraded mode: skip non-critical DB work, optional panels, and client analytics.
  * Server: `NN_DEGRADED_MODE=1`
  * Client (PostHog / section analytics): also set `NEXT_PUBLIC_NN_DEGRADED_MODE=1` so the flag is bundled.
+ * Auto (Node only): stress signals may enable degraded briefly — see {@link isAutoDegradedActive}.
  */
 export function isDurabilityDegradedMode(): boolean {
-  return truthyEnv(process.env.NN_DEGRADED_MODE) || truthyEnv(process.env.NEXT_PUBLIC_NN_DEGRADED_MODE);
+  return (
+    truthyEnv(process.env.NN_DEGRADED_MODE) ||
+    truthyEnv(process.env.NEXT_PUBLIC_NN_DEGRADED_MODE) ||
+    isAutoDegradedActive()
+  );
 }
 
 /**

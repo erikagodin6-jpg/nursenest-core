@@ -19,6 +19,7 @@ import {
   parseListPage,
 } from "@/lib/api/api-pagination-limits";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { jsonResponseGuarded } from "@/lib/server/response-guard";
 import { logDurabilityEvent } from "@/lib/durability/durability-log";
 import { getPaidContentStaleCache } from "@/lib/durability/paid-content-stale-cache";
 import { runWithCoreReadTelemetry } from "@/lib/durability/with-core-read-timeout";
@@ -180,7 +181,7 @@ export async function GET(req: NextRequest) {
       logFlashcardLargePayload({ route: "/api/flashcards/decks", approxUtf8: approx });
     }
 
-    return NextResponse.json(body);
+    return jsonResponseGuarded("/api/flashcards/decks", body);
   } catch (e) {
     const stale = getPaidContentStaleCache().get<Record<string, unknown>>(
       flashcardDeckListStaleKey(cacheUserKey, req),

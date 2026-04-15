@@ -25,6 +25,7 @@ import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics"
 import { diagnoseSubscriberQuestionListEmpty } from "@/lib/questions/question-list-empty-diagnostics";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { jsonResponseGuarded } from "@/lib/server/response-guard";
 import { MAX_LIST_SKIP_ROWS_DEFAULT } from "@/lib/api/api-pagination-limits";
 import { FREEMIUM_QUESTION_LIST_MAX_PER_REQUEST } from "@/lib/conversion/constants";
 import { parseCommaSeparatedQuestionIds } from "@/lib/questions/question-id-list-param";
@@ -489,7 +490,7 @@ export async function GET(req: NextRequest) {
         subscriberQuestionsListStaleKey(gate.userId, req.nextUrl.searchParams),
         subscriberBody,
       );
-      return NextResponse.json(subscriberBody);
+      return jsonResponseGuarded("/api/questions", subscriberBody);
     } catch (e) {
       const staleKey = subscriberQuestionsListStaleKey(gate.userId, req.nextUrl.searchParams);
       const stale = getPaidContentStaleCache().get<Record<string, unknown>>(staleKey);
@@ -631,7 +632,7 @@ export async function GET(req: NextRequest) {
         : {}),
     };
     logLargeApiResponse("/api/questions", estimateJsonUtf8Bytes(freemiumBody));
-    return NextResponse.json(freemiumBody);
+    return jsonResponseGuarded("/api/questions", freemiumBody);
   } catch (e) {
     safeServerLogCritical("api_questions", "prisma_find_failed_freemium", { page }, e, { flow: "questions_load" });
     return NextResponse.json(

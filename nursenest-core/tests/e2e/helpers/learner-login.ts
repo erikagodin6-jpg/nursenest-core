@@ -2,7 +2,7 @@ import type { Page } from "@playwright/test";
 
 /** Human-readable hint for assertion errors (routes may use `/app/*` or direct learner paths). */
 export const LEARNER_SHELL_PATH_EXPECTATION =
-  "learner shell: pathname under /app (excluding /app/onboarding), or /lessons, /questions, /flashcards; not /login, /signup, or onboarding";
+  "learner shell: pathname under /app (excluding /app/onboarding), or /lessons, /questions, /flashcards; not /login, /signup, /sign-up, or onboarding";
 
 /**
  * Route-agnostic learner shell detection. The app may serve the same chrome at `/app/...` or at
@@ -11,7 +11,7 @@ export const LEARNER_SHELL_PATH_EXPECTATION =
 export function isLearnerShell(pathname: string): boolean {
   if (!pathname) return false;
   if (pathname.includes("/login")) return false;
-  if (pathname.includes("/signup")) return false;
+  if (pathname.includes("/signup") || pathname.includes("/sign-up")) return false;
   if (pathname.includes("/app/onboarding")) return false;
 
   const underApp =
@@ -44,7 +44,8 @@ export async function loginWithCredentials(page: Page, email: string, password: 
     () => {
       const path = window.location.pathname;
       if (!path) return false;
-      if (path.includes("/login") || path.includes("/signup") || path.includes("/app/onboarding")) return false;
+      if (path.includes("/login") || path.includes("/signup") || path.includes("/sign-up") || path.includes("/app/onboarding"))
+        return false;
       const underApp =
         path === "/app" || (path.startsWith("/app/") && !path.startsWith("/app/onboarding"));
       const onLearnerShell =

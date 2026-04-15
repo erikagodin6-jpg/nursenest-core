@@ -12,6 +12,8 @@ import { getToken } from "next-auth/jwt";
 import { middlewareAuth } from "@/lib/auth-middleware";
 import { canonicalExamHubPathFromPossiblyLocalizedPath } from "@/lib/i18n/exam-hub-path";
 import { MARKETING_LOCALE_COOKIE, MARKETING_LOCALE_COOKIE_MAX_AGE } from "@/lib/i18n/marketing-locale-cookie";
+import { isRateLimitingEnabled } from "@/lib/config/production-safety-flags";
+import { enforceApiRateLimit } from "@/lib/server/rate-limit";
 
 /** NextAuth `auth` middleware typing does not always align with App Router `NextRequest` + `NextFetchEvent`. */
 const runAuthMiddleware = middlewareAuth as unknown as NextMiddleware;
@@ -44,6 +46,11 @@ function withPathnameHeader(request: NextRequest): NextRequest {
 
 export async function proxy(request: NextRequest, event: NextFetchEvent) {
   const pathname = request.nextUrl.pathname;
+
+  if (pathname.startsWith("/api/") && isRateLimitingEnabled()) {
+    const limited = await enforceApiRateLimit(request);
+    if (limited) return limited;
+  }
 
   // ── Existing: locale-prefixed exam hub canonical redirect ──────────────────
   const canonicalExamHub = canonicalExamHubPathFromPossiblyLocalizedPath(pathname);
@@ -84,6 +91,8 @@ export const config = {
     "/app/:path*",
     "/admin",
     "/admin/:path*",
+    "/api",
+    "/api/:path*",
     "/api/admin",
     "/api/admin/:path*",
     "/us",

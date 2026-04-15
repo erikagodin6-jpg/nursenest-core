@@ -28,6 +28,7 @@ import {
   parseListPage,
 } from "@/lib/api/api-pagination-limits";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { jsonResponseGuarded } from "@/lib/server/response-guard";
 
 function wantsCursorMode(req: NextRequest): boolean {
   const mode = req.nextUrl.searchParams.get("paginationMode");
@@ -173,7 +174,7 @@ export async function GET(req: NextRequest) {
           },
         };
         logLargeApiResponse("/api/lessons", estimateJsonUtf8Bytes(subscriberCursorBody));
-        return NextResponse.json(subscriberCursorBody);
+        return jsonResponseGuarded("/api/lessons", subscriberCursorBody);
       } catch (e) {
         safeServerLogCritical("api_lessons", "prisma_find_failed_cursor", { pageSize }, e);
         return NextResponse.json({ error: "Unable to load lessons. Try again shortly." }, { status: 503 });
@@ -218,7 +219,7 @@ export async function GET(req: NextRequest) {
         },
       };
       logLargeApiResponse("/api/lessons", estimateJsonUtf8Bytes(subscriberBody));
-      return NextResponse.json(subscriberBody);
+      return jsonResponseGuarded("/api/lessons", subscriberBody);
     } catch (e) {
       safeServerLogCritical("api_lessons", "prisma_find_failed", { page }, e);
       return NextResponse.json({ error: "Unable to load lessons. Try again shortly." }, { status: 503 });
@@ -302,7 +303,7 @@ export async function GET(req: NextRequest) {
       },
     };
     logLargeApiResponse("/api/lessons", estimateJsonUtf8Bytes(freemiumBody));
-    return NextResponse.json(freemiumBody);
+    return jsonResponseGuarded("/api/lessons", freemiumBody);
   } catch (e) {
     safeServerLogCritical("api_lessons", "prisma_find_failed_freemium", { page }, e);
     return NextResponse.json({ error: "Unable to load lessons. Try again shortly." }, { status: 503 });
