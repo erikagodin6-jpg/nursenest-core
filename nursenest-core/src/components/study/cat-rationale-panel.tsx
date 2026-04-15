@@ -1,4 +1,7 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 import type { CatStudyFeedbackPayload } from "@/lib/practice-tests/types";
 
 export type RationalePanelMode =
@@ -29,13 +32,16 @@ export function RationaleSection({
 }
 
 function WaitingPlaceholder({ mode }: { mode: "waiting" | "locked" }) {
+  const { t } = useMarketingI18n();
   if (mode === "locked") {
     return (
       <div className="nn-cat-rationale-placeholder">
         <span className="nn-cat-rationale-placeholder__icon" aria-hidden="true">🔒</span>
-        <p className="nn-cat-rationale-placeholder__title">Explanation locked</p>
+        <p className="nn-cat-rationale-placeholder__title">
+          {t("learner.session.split.catRationaleLockedTitle")}
+        </p>
         <p className="nn-cat-rationale-placeholder__body">
-          Rationale and correct answers are revealed after you complete the session.
+          {t("learner.session.split.rationaleLocked")}
         </p>
       </div>
     );
@@ -43,10 +49,10 @@ function WaitingPlaceholder({ mode }: { mode: "waiting" | "locked" }) {
   return (
     <div className="nn-cat-rationale-placeholder">
       <span className="nn-cat-rationale-placeholder__icon" aria-hidden="true">○</span>
-      <p className="nn-cat-rationale-placeholder__title">Awaiting answer</p>
-      <p className="nn-cat-rationale-placeholder__body">
-        Select an option and submit to see the explanation.
+      <p className="nn-cat-rationale-placeholder__title">
+        {t("learner.session.split.catRationaleWaitingTitle")}
       </p>
+      <p className="nn-cat-rationale-placeholder__body">{t("learner.qbank.split.rationalePlaceholder")}</p>
     </div>
   );
 }

@@ -36,7 +36,7 @@ export function pathwayLessonsAppListWhere(
     { locale: "en" },
   ];
 
-  if (scope.reason === "admin_override") {
+  if (accessScopeIsStaffLearnerEntitlementBypass(scope)) {
     const country = scope.country as CountryCode | null;
     const tier = scope.tier as TierCode | null;
     if (country) {

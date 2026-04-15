@@ -8,6 +8,7 @@ import { publicCopyForReadinessConfig, readinessConfigForPathway } from "@/lib/e
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { CatPracticeReadinessResult } from "@/lib/practice-tests/cat-practice-readiness";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
+import { ExamPreExamCustomizeModal } from "@/components/exam/exam-study-theme-modal";
 import { CatAmbiguityPathwayPicker } from "@/components/student/cat-ambiguity-pathway-picker";
 import {
   isHardBlockingReadinessCode,
@@ -41,6 +42,7 @@ export function PathwayCatSessionStartClient({
   const [readinessLoading, setReadinessLoading] = useState(false);
   const [readiness, setReadiness] = useState<CatPracticeReadinessResult | null>(null);
   const [readinessRefreshToken, setReadinessRefreshToken] = useState(0);
+  const [customizeOpen, setCustomizeOpen] = useState(false);
 
   const pathwayMeta = useMemo(() => (normalizedPathwayId ? getExamPathwayById(normalizedPathwayId) : undefined), [normalizedPathwayId]);
   const catShort = pathwayMeta ? catPathwayShortCatLabel(pathwayMeta) : null;
@@ -380,7 +382,7 @@ export function PathwayCatSessionStartClient({
             false
           }
           className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
-          onClick={() => void start()}
+          onClick={() => setCustomizeOpen(true)}
         >
           {creating ? "Starting…" : readinessLoading ? "Checking…" : "Start Readiness Exam"}
         </button>
@@ -403,6 +405,16 @@ export function PathwayCatSessionStartClient({
           Full practice test builder
         </Link>
       </div>
+
+      <ExamPreExamCustomizeModal
+        open={customizeOpen}
+        onClose={() => setCustomizeOpen(false)}
+        onBegin={() => {
+          setCustomizeOpen(false);
+          void start();
+        }}
+        starting={creating}
+      />
     </div>
   );
 }

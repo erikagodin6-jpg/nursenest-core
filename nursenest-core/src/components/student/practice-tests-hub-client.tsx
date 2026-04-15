@@ -31,6 +31,7 @@ import {
 } from "@/lib/student/interaction-priority";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 import { buildPracticeExamStartPayload } from "@/lib/practice-tests/practice-exam-start-payload";
+import { ExamPreExamCustomizeModal } from "@/components/exam/exam-study-theme-modal";
 
 type TestListRow = {
   id: string;
@@ -70,6 +71,7 @@ export function PracticeTestsHubClient({
   const [error, setError] = useState<string | null>(null);
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
+  const [customizeOpen, setCustomizeOpen] = useState(false);
 
   const [title, setTitle] = useState("");
   const [questionCount, setQuestionCount] = useState(20);
@@ -772,11 +774,21 @@ export function PracticeTestsHubClient({
               catEligibleOptionCount: catOptions.length,
             })
           }
-          onClick={() => void createTest()}
+          onClick={() => setCustomizeOpen(true)}
           className="nn-btn-primary mt-6 px-6 py-2.5 text-sm font-semibold disabled:opacity-50"
         >
           {creating ? "Building…" : "Start Practice Exam"}
         </button>
+
+        <ExamPreExamCustomizeModal
+          open={customizeOpen}
+          onClose={() => setCustomizeOpen(false)}
+          onBegin={() => {
+            setCustomizeOpen(false);
+            void createTest();
+          }}
+          starting={creating}
+        />
       </section>
 
       <section>

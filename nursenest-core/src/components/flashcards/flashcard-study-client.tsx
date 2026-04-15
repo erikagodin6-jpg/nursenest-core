@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { formatTitleCase } from "@/lib/format/text-case";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import {
@@ -55,6 +56,7 @@ export function FlashcardStudyClient({
   /** From `?mode=test` — legacy-style timed study shell (elapsed timer). */
   studyMode?: "learn" | "test";
 }) {
+  const { t } = useMarketingI18n();
   const DECK_SESSION_REQUEST_COUNT = 40;
   const [title, setTitle] = useState<string>("");
   const [mode, setMode] = useState<"preview" | "subscriber" | null>(null);
@@ -175,10 +177,10 @@ export function FlashcardStudyClient({
       });
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error ?? "Could not save review");
+        throw new Error(data.error ?? t("learner.flashcards.deckStudy.reviewSaveFailed"));
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Save failed");
+      setError(e instanceof Error ? e.message : t("learner.flashcards.deckStudy.genericError"));
     }
   };
 
@@ -200,7 +202,9 @@ export function FlashcardStudyClient({
 
   if (loading && queue.length === 0) {
     return (
-      <div className="mx-auto max-w-lg px-4 py-16 text-center text-sm text-[var(--theme-muted-text)]">Loading deck…</div>
+      <div className="mx-auto max-w-lg px-4 py-16 text-center text-sm text-[var(--theme-muted-text)]">
+        {t("learner.flashcards.deckStudy.loadingDeck")}
+      </div>
     );
   }
 
@@ -209,7 +213,7 @@ export function FlashcardStudyClient({
       <div className="mx-auto max-w-lg px-4 py-16">
         <p className="text-sm text-red-600">{error}</p>
         <Link href="/app/flashcards" className="mt-4 inline-block text-sm font-semibold text-primary">
-          ← All decks
+          {t("learner.flashcards.deckStudy.backToAllDecks")}
         </Link>
       </div>
     );
@@ -221,10 +225,10 @@ export function FlashcardStudyClient({
   if (queue.length === 0) {
     return (
       <div className="mx-auto max-w-lg px-4 py-16 text-center text-sm text-[var(--theme-muted-text)]">
-        No cards are available for this deck right now.
+        {t("learner.flashcards.deckStudy.noCardsBody")}
         <div className="mt-6">
           <Link href="/app/flashcards" className="font-semibold text-primary">
-            ← Back
+            {t("learner.flashcards.deckStudy.backShort")}
           </Link>
         </div>
       </div>
@@ -235,7 +239,7 @@ export function FlashcardStudyClient({
     <div className="mx-auto max-w-[min(112rem,100%)] px-4 py-6">
       <div className="mb-3 flex items-center justify-between gap-2">
         <Link href="/app/flashcards" className="text-sm font-medium text-primary">
-          ← Back to Flashcards
+          {t("learner.flashcards.deckStudy.backToFlashcards")}
         </Link>
         {mode === "subscriber" ? (
           <div className="flex items-center gap-2">
@@ -246,11 +250,11 @@ export function FlashcardStudyClient({
                 onChange={(e) => {
                   clearDeckSessionCheckpoint(deckRef);
                   setShuffleOn(e.target.checked);
-                  setResetToken((t) => t + 1);
+                  setResetToken((x) => x + 1);
                 }}
                 className="rounded border-border"
               />
-              Shuffle
+              {t("learner.flashcards.deckStudy.shuffle")}
             </label>
             <button
               type="button"
@@ -259,10 +263,10 @@ export function FlashcardStudyClient({
                 clearDeckSessionCheckpoint(deckRef);
                 setResumeGateOpen(false);
                 setSessionMountKey((k) => k + 1);
-                setResetToken((t) => t + 1);
+                setResetToken((x) => x + 1);
               }}
             >
-              Reset Session
+              {t("learner.flashcards.deckStudy.resetSession")}
             </button>
           </div>
         ) : null}
@@ -270,7 +274,7 @@ export function FlashcardStudyClient({
 
       {mode === "preview" ? (
         <p className="mb-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-950">
-          Preview sample. Subscribe for full study scheduling and premium progression.
+          {t("learner.flashcards.deckStudy.previewBanner")}
         </p>
       ) : null}
 
@@ -278,16 +282,18 @@ export function FlashcardStudyClient({
 
       {subscriberSessionBlocked ? (
         <div className="mb-4 rounded-xl border border-border bg-[var(--theme-card-bg)] px-4 py-10 text-center text-sm text-[var(--theme-muted-text)]">
-          Preparing study session…
+          {t("learner.flashcards.deckStudy.preparingShell")}
         </div>
       ) : null}
 
       {!subscriberSessionBlocked && pendingResume ? (
         <div className="mb-4 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] p-4 text-sm text-[var(--semantic-text-primary)] shadow-sm">
-          <p className="font-semibold text-[var(--semantic-text-primary)]">Resume this deck?</p>
+          <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.flashcards.deckStudy.resumeTitle")}</p>
           <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">
-            You have a saved position in this session (card {resumeInitial.index + 1}
-            {resumeInitial.revealed ? ", answer revealed" : ""}). Continue from there or start over.
+            {t("learner.flashcards.deckStudy.resumeBody", {
+              n: resumeInitial.index + 1,
+              revealed: resumeInitial.revealed ? t("learner.flashcards.deckStudy.resumeRevealedSuffix") : "",
+            })}
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             <button
@@ -298,7 +304,7 @@ export function FlashcardStudyClient({
                 setSessionMountKey((k) => k + 1);
               }}
             >
-              Resume
+              {t("learner.flashcards.deckStudy.resumeCta")}
             </button>
             <button
               type="button"
@@ -310,7 +316,7 @@ export function FlashcardStudyClient({
                 setSessionMountKey((k) => k + 1);
               }}
             >
-              Start fresh
+              {t("learner.flashcards.deckStudy.startFresh")}
             </button>
           </div>
         </div>
@@ -333,9 +339,12 @@ export function FlashcardStudyClient({
               hasMore: studyMeta?.hasMore ?? false,
             }}
             header={{
-              sessionTitle: title || "Flashcard Study Session",
-              modeLabel: studyMode === "test" ? "Test-style recall" : "Learn mode",
-              categoriesLabel: "Deck Session",
+              sessionTitle: title || t("learner.flashcards.deckStudy.defaultTitle"),
+              modeLabel:
+                studyMode === "test"
+                  ? t("learner.flashcards.deckStudy.modeTest")
+                  : t("learner.flashcards.deckStudy.modeLearn"),
+              categoriesLabel: t("learner.flashcards.deckStudy.sessionKind"),
               exitHref: "/app/flashcards",
             }}
             onRate={mode === "subscriber" ? onRate : undefined}
@@ -346,8 +355,15 @@ export function FlashcardStudyClient({
         </ExamSessionShell>
       ) : !subscriberSessionBlocked ? (
         <div className="rounded-xl border border-border bg-[var(--theme-card-bg)] p-8 text-center text-sm text-[var(--theme-muted-text)]">
-          Choose <span className="font-semibold text-[var(--semantic-text-primary)]">Resume</span> or{" "}
-          <span className="font-semibold text-[var(--semantic-text-primary)]">Start fresh</span> above to begin.
+          {t("learner.flashcards.deckStudy.chooseBefore")}{" "}
+          <span className="font-semibold text-[var(--semantic-text-primary)]">
+            {t("learner.flashcards.deckStudy.resumeCta")}
+          </span>{" "}
+          {t("learner.flashcards.deckStudy.chooseOr")}{" "}
+          <span className="font-semibold text-[var(--semantic-text-primary)]">
+            {t("learner.flashcards.deckStudy.startFresh")}
+          </span>{" "}
+          {t("learner.flashcards.deckStudy.chooseAfter")}
         </div>
       ) : null}
     </div>

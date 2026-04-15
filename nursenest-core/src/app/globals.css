@@ -3589,6 +3589,22 @@ html[data-theme="deep-twilight"] .nn-question-rationale-card__verdict--miss {
   }
 }
 
+/* Linear mock / practice runner uses `.nn-practice-session` shell — same sticky nav affordance */
+@media (max-width: 1023px) {
+  .nn-practice-session .nn-question-nav-actions {
+    position: sticky;
+    bottom: env(safe-area-inset-bottom, 0);
+    z-index: 15;
+    padding-bottom: 0.75rem;
+    margin-top: 1rem;
+    background: linear-gradient(
+      to top,
+      var(--semantic-surface) 72%,
+      color-mix(in srgb, var(--semantic-surface) 8%, transparent) 100%
+    );
+  }
+}
+
 /* Mobile: keep prev/next + primary actions in thumb reach (exam shell) */
 @media (max-width: 1023px) {
   .nn-exam-session .nn-question-nav-actions {

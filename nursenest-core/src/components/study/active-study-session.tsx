@@ -60,13 +60,7 @@ type Props = {
   onSessionRestart?: () => void;
 };
 
-const RATINGS: Array<{ id: "incorrect" | "unsure" | "known"; label: string }> = [
-  { id: "incorrect", label: "Incorrect" },
-  { id: "unsure", label: "Unsure" },
-  { id: "known", label: "Known" },
-];
-
-function buildClinicalPearl(card: ActiveStudyCard): string {
+function buildClinicalPearl(card: ActiveStudyCard, emptyPearlMessage: string): string {
   if (card.explanation?.trim()) {
     const firstSentence = card.explanation
       .split(".")
@@ -74,7 +68,7 @@ function buildClinicalPearl(card: ActiveStudyCard): string {
       .find(Boolean);
     if (firstSentence) return firstSentence.endsWith(".") ? firstSentence : `${firstSentence}.`;
   }
-  return "A clinical pearl is not available for this item yet.";
+  return emptyPearlMessage;
 }
 
 function dedupeCardsById(cards: ActiveStudyCard[]): ActiveStudyCard[] {
@@ -169,8 +163,18 @@ export function ActiveStudySession({
     : {
         href: "/app/lessons",
         isExactLesson: false as const,
-        label: "Browse Related Lessons" as const,
+        labelKey: "learner.flashcards.session.linkBrowseRelated" as const,
       };
+
+  const ratings = useMemo(
+    () =>
+      [
+        { id: "incorrect" as const, label: t("learner.flashcards.session.ratingIncorrect") },
+        { id: "unsure" as const, label: t("learner.flashcards.session.ratingUnsure") },
+        { id: "known" as const, label: t("learner.flashcards.session.ratingKnown") },
+      ] as const,
+    [t],
+  );
 
   const applyItemState = (patch: Partial<StudyItemState>) => {
     if (!current) return;
@@ -322,7 +326,7 @@ export function ActiveStudySession({
   if (loading) {
     return (
       <div className="rounded-xl border border-border p-4 text-sm text-[var(--theme-muted-text)]">
-        Preparing Study Session…
+        {t("learner.flashcards.session.loadingPreparing")}
       </div>
     );
   }
@@ -330,7 +334,7 @@ export function ActiveStudySession({
   if (!current) {
     return (
       <div className="rounded-xl border border-border p-5 text-sm text-[var(--theme-muted-text)]">
-        No items match this Study Session.
+        {t("learner.flashcards.session.emptyNoItems")}
       </div>
     );
   }
@@ -339,58 +343,82 @@ export function ActiveStudySession({
     return (
       <div className="space-y-4">
         <section className="rounded-2xl border border-border bg-[var(--theme-card-bg)] p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Session Complete</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+            {t("learner.flashcards.session.completionEyebrow")}
+          </p>
           <h2 className="mt-1 text-lg font-bold text-[var(--theme-heading-text)]">{header.sessionTitle}</h2>
           <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-            You completed {completedCount} item{completedCount === 1 ? "" : "s"} in {header.modeLabel}.
+            {completedCount === 1
+              ? t("learner.flashcards.session.completionBody_one", {
+                  count: completedCount,
+                  mode: header.modeLabel,
+                })
+              : t("learner.flashcards.session.completionBody_other", {
+                  count: completedCount,
+                  mode: header.modeLabel,
+                })}
           </p>
           <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-            This session:{" "}
-            <span className="font-semibold text-[var(--semantic-success)]">{ratingStats.known} knew</span>
+            {t("learner.flashcards.session.completionStatsIntro")}{" "}
+            <span className="font-semibold text-[var(--semantic-success)]">
+              {t("learner.flashcards.session.statKnown", { n: ratingStats.known })}
+            </span>
             {" · "}
-            <span className="font-semibold text-[var(--semantic-warning)]">{ratingStats.unsure} unsure</span>
+            <span className="font-semibold text-[var(--semantic-warning)]">
+              {t("learner.flashcards.session.statUnsure", { n: ratingStats.unsure })}
+            </span>
             {" · "}
-            <span className="font-semibold text-[var(--semantic-danger)]">{ratingStats.incorrect} missed</span>
+            <span className="font-semibold text-[var(--semantic-danger)]">
+              {t("learner.flashcards.session.statMissed", { n: ratingStats.incorrect })}
+            </span>
           </p>
-          <p className="mt-1 text-xs text-[var(--theme-muted-text)]">Categories: {header.categoriesLabel}</p>
+          <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
+            {t("learner.flashcards.session.categoriesPrefix")} {header.categoriesLabel}
+          </p>
         </section>
 
         <section className="rounded-2xl border border-border bg-[var(--theme-card-bg)] p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Completion Summary</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+            {t("learner.flashcards.session.completionSummaryHeading")}
+          </p>
           <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             <div className="rounded-xl border border-border px-3 py-2 text-sm">
-              <p className="text-xs text-[var(--theme-muted-text)]">Total Items Completed</p>
+              <p className="text-xs text-[var(--theme-muted-text)]">
+                {t("learner.flashcards.session.summaryTotalItems")}
+              </p>
               <p className="font-semibold text-[var(--theme-heading-text)]">{completedCount}</p>
             </div>
             <div className="rounded-xl border border-border px-3 py-2 text-sm">
-              <p className="text-xs text-[var(--theme-muted-text)]">Starred</p>
+              <p className="text-xs text-[var(--theme-muted-text)]">{t("learner.flashcards.session.summaryStarred")}</p>
               <p className="font-semibold text-[var(--theme-heading-text)]">{completionSummary.starred}</p>
             </div>
             <div className="rounded-xl border border-border px-3 py-2 text-sm">
-              <p className="text-xs text-[var(--theme-muted-text)]">Saved / Bookmarked</p>
+              <p className="text-xs text-[var(--theme-muted-text)]">{t("learner.flashcards.session.summarySaved")}</p>
               <p className="font-semibold text-[var(--theme-heading-text)]">{completionSummary.saved}</p>
             </div>
             <div className="rounded-xl border border-border px-3 py-2 text-sm">
-              <p className="text-xs text-[var(--theme-muted-text)]">Revisit / Confusing</p>
+              <p className="text-xs text-[var(--theme-muted-text)]">{t("learner.flashcards.session.summaryRevisit")}</p>
               <p className="font-semibold text-[var(--theme-heading-text)]">{completionSummary.confusing}</p>
             </div>
             <div className="rounded-xl border border-border px-3 py-2 text-sm">
-              <p className="text-xs text-[var(--theme-muted-text)]">Notes</p>
+              <p className="text-xs text-[var(--theme-muted-text)]">{t("learner.flashcards.session.summaryNotes")}</p>
               <p className="font-semibold text-[var(--theme-heading-text)]">{completionSummary.noted}</p>
             </div>
             <div className="rounded-xl border border-border px-3 py-2 text-sm">
-              <p className="text-xs text-[var(--theme-muted-text)]">Items Rated</p>
+              <p className="text-xs text-[var(--theme-muted-text)]">{t("learner.flashcards.session.summaryRated")}</p>
               <p className="font-semibold text-[var(--theme-heading-text)]">{completionSummary.reviewedCount}</p>
             </div>
             <div className="rounded-xl border border-border px-3 py-2 text-sm">
-              <p className="text-xs text-[var(--theme-muted-text)]">Rationale Highlights</p>
+              <p className="text-xs text-[var(--theme-muted-text)]">{t("learner.flashcards.session.summaryHighlights")}</p>
               <p className="font-semibold text-[var(--theme-heading-text)]">{completionSummary.highlighted}</p>
             </div>
           </div>
         </section>
 
         <section className="rounded-2xl border border-border bg-[var(--theme-card-bg)] p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Next Actions</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+            {t("learner.flashcards.session.nextActions")}
+          </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {completionSummary.revisitCards.length > 0 ? (
               <button
@@ -398,7 +426,7 @@ export function ActiveStudySession({
                 onClick={() => restartWith(completionSummary.revisitCards)}
                 className="rounded-full border border-border px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)]"
               >
-                Study Revisit Items
+                {t("learner.flashcards.session.btnStudyRevisit")}
               </button>
             ) : null}
             {completionSummary.starredCards.length > 0 ? (
@@ -407,7 +435,7 @@ export function ActiveStudySession({
                 onClick={() => restartWith(completionSummary.starredCards)}
                 className="rounded-full border border-border px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)]"
               >
-                Study Starred Items
+                {t("learner.flashcards.session.btnStudyStarred")}
               </button>
             ) : null}
             <button
@@ -415,14 +443,14 @@ export function ActiveStudySession({
               onClick={restartCurrentSession}
               className="rounded-full border border-border px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)]"
             >
-              Start New Session
+              {t("learner.flashcards.session.btnStartNewSession")}
             </button>
             <Link
               href={header.exitHref}
               onClick={onExit}
               className="rounded-full border border-border px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)]"
             >
-              Exit Back to Flashcards
+              {t("learner.flashcards.session.btnExitToFlashcards")}
             </Link>
           </div>
         </section>
@@ -436,40 +464,52 @@ export function ActiveStudySession({
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-              Study Session
+              {t("learner.flashcards.session.studySessionLabel")}
             </p>
             <h1 className="text-lg font-bold text-[var(--theme-heading-text)]">{header.sessionTitle}</h1>
             <p className="text-xs text-[var(--theme-muted-text)]">
               {progressLabel} · {header.modeLabel} · {header.categoriesLabel}
             </p>
             <p className="mt-1 text-[10px] text-[var(--theme-muted-text)]">
-              Keyboard: Space/Enter to reveal · ←/→ to navigate · After reveal: 1 Incorrect · 2 Unsure · 3 Known
+              {t("learner.flashcards.session.keyboardHint")}
             </p>
             {(typeof sessionMeta?.requestedCount === "number" ||
               typeof sessionMeta?.returnedCount === "number") ? (
               <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
-                Requested {sessionMeta?.requestedCount ?? sessionCount} · Loaded{" "}
-                {sessionMeta?.returnedCount ?? sessionCount}
-                {typeof sessionMeta?.totalAvailable === "number"
-                  ? ` · Available ${sessionMeta.totalAvailable}`
-                  : ""}
-                {sessionMeta?.hasMore ? " · More Available" : ""}
+                {[
+                  t("learner.flashcards.session.metaRequested", {
+                    n: sessionMeta?.requestedCount ?? sessionCount,
+                  }),
+                  t("learner.flashcards.session.metaLoaded", {
+                    n: sessionMeta?.returnedCount ?? sessionCount,
+                  }),
+                  ...(typeof sessionMeta?.totalAvailable === "number"
+                    ? [
+                        t("learner.flashcards.session.metaAvailable", {
+                          n: sessionMeta.totalAvailable,
+                        }),
+                      ]
+                    : []),
+                  ...(sessionMeta?.hasMore
+                    ? [t("learner.flashcards.session.metaMoreSuffix")]
+                    : []),
+                ].join(" · ")}
               </p>
             ) : null}
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <ExamSessionThemeTrigger />
             <span className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">
-              Progress: {progressLabel}
+              {t("learner.flashcards.session.progressChip", { label: progressLabel })}
             </span>
             <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-2.5 py-1 text-[11px] font-semibold text-[var(--semantic-text-primary)]">
-              {ratingStats.known} knew
+              {t("learner.flashcards.session.statKnown", { n: ratingStats.known })}
             </span>
             <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] px-2.5 py-1 text-[11px] font-semibold text-[var(--semantic-text-primary)]">
-              {ratingStats.unsure} unsure
+              {t("learner.flashcards.session.statUnsure", { n: ratingStats.unsure })}
             </span>
             <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] px-2.5 py-1 text-[11px] font-semibold text-[var(--semantic-text-primary)]">
-              {ratingStats.incorrect} missed
+              {t("learner.flashcards.session.statMissed", { n: ratingStats.incorrect })}
             </span>
             {sessionMode === "test" ? (
               <span className="rounded-full border border-border px-2.5 py-1 font-mono text-xs text-[var(--theme-muted-text)]">
@@ -481,7 +521,7 @@ export function ActiveStudySession({
               onClick={onExit}
               className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-[var(--theme-heading-text)]"
             >
-              Exit Session
+              {t("learner.flashcards.session.exitSession")}
             </Link>
           </div>
         </div>
@@ -496,7 +536,7 @@ export function ActiveStudySession({
             />
           </div>
 
-          <div className="nn-question-session--split px-0 pb-0 pt-1">
+          <div className="nn-question-session nn-question-session--split px-0 pb-0 pt-1">
             <div className="nn-question-session-primary space-y-4">
               <div
                 role="button"
@@ -515,20 +555,22 @@ export function ActiveStudySession({
                 }`}
               >
                 <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--semantic-text-muted)]">
-                  {sessionMode === "test" ? "Test mode · Front" : "Card front"}
+                  {sessionMode === "test"
+                    ? t("learner.flashcards.session.cardFrontTest")
+                    : t("learner.flashcards.session.cardFrontLearn")}
                 </p>
                 <div className="nn-question-stem-wrap !mb-0 !border-b-0 !pb-0">
                   <p className="nn-question-stem">{current.prompt}</p>
                 </div>
                 {current.topic || current.subtopic ? (
                   <p className="mt-3 text-xs text-[var(--semantic-text-secondary)]">
-                    {current.topic ?? "General"}
+                    {current.topic ?? t("learner.flashcards.session.topicGeneral")}
                     {current.subtopic ? ` · ${current.subtopic}` : ""}
                   </p>
                 ) : null}
                 {!revealed ? (
                   <p className="mt-5 text-center text-[10px] font-semibold uppercase tracking-widest text-[var(--semantic-text-secondary)]">
-                    Tap or press Space to reveal — answer & rationale on the right
+                    {t("learner.flashcards.session.revealHint")}
                   </p>
                 ) : null}
               </div>
@@ -537,7 +579,7 @@ export function ActiveStudySession({
                 <>
                   <div className="space-y-3 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
                     <p className="text-center text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--semantic-text-secondary)]">
-                      How well did you know this?
+                      {t("learner.flashcards.session.howWellLabel")}
                     </p>
                     <div className="grid gap-3 sm:grid-cols-3">
                       <button
@@ -546,8 +588,10 @@ export function ActiveStudySession({
                         onClick={() => void submitRating("incorrect")}
                         className="min-h-[88px] rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-danger)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
                       >
-                        <span className="block text-[10px] text-[var(--semantic-danger)]">1 · Incorrect</span>
-                        <span className="mt-1 block">Need more review</span>
+                        <span className="block text-[10px] text-[var(--semantic-danger)]">
+                          {t("learner.flashcards.session.ratingRowIncorrect")}
+                        </span>
+                        <span className="mt-1 block">{t("learner.flashcards.session.ratingSubIncorrect")}</span>
                       </button>
                       <button
                         type="button"
@@ -555,8 +599,10 @@ export function ActiveStudySession({
                         onClick={() => void submitRating("unsure")}
                         className="min-h-[88px] rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-warning)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
                       >
-                        <span className="block text-[10px] text-[var(--semantic-warning)]">2 · Unsure</span>
-                        <span className="mt-1 block">Almost there</span>
+                        <span className="block text-[10px] text-[var(--semantic-warning)]">
+                          {t("learner.flashcards.session.ratingRowUnsure")}
+                        </span>
+                        <span className="mt-1 block">{t("learner.flashcards.session.ratingSubUnsure")}</span>
                       </button>
                       <button
                         type="button"
@@ -564,28 +610,36 @@ export function ActiveStudySession({
                         onClick={() => void submitRating("known")}
                         className="min-h-[88px] rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-success)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-3 py-4 text-left text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
                       >
-                        <span className="block text-[10px] text-[var(--semantic-success)]">3 · Known</span>
-                        <span className="mt-1 block">Got it</span>
+                        <span className="block text-[10px] text-[var(--semantic-success)]">
+                          {t("learner.flashcards.session.ratingRowKnown")}
+                        </span>
+                        <span className="mt-1 block">{t("learner.flashcards.session.ratingSubKnown")}</span>
                       </button>
                     </div>
                   </div>
 
                   <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] p-4">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Card tools</p>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+                      {t("learner.flashcards.session.cardTools")}
+                    </p>
                     <div className="mt-2 flex flex-wrap gap-2">
                       <button
                         type="button"
                         onClick={() => applyItemState({ starred: !itemState.starred })}
                         className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold"
                       >
-                        {itemState.starred ? "Starred" : "Star"}
+                        {itemState.starred
+                          ? t("learner.flashcards.session.starredState")
+                          : t("learner.flashcards.session.starVerb")}
                       </button>
                       <button
                         type="button"
                         onClick={() => applyItemState({ confusing: !itemState.confusing })}
                         className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold"
                       >
-                        {itemState.confusing ? "Revisit" : "Mark confusing"}
+                        {itemState.confusing
+                          ? t("learner.flashcards.session.revisitState")
+                          : t("learner.flashcards.session.markConfusingVerb")}
                       </button>
                       <button
                         type="button"
@@ -593,7 +647,7 @@ export function ActiveStudySession({
                         disabled={index <= 0}
                         className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
                       >
-                        Previous
+                        {t("learner.flashcards.session.navPrevious")}
                       </button>
                       <button
                         type="button"
@@ -601,11 +655,11 @@ export function ActiveStudySession({
                         disabled={!revealed || index + 1 >= sessionCards.length}
                         className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
                       >
-                        Next
+                        {t("learner.flashcards.session.navNext")}
                       </button>
                     </div>
                     <label className="mt-3 block text-xs font-semibold text-[var(--theme-muted-text)]">
-                      Note
+                      {t("learner.flashcards.session.noteLabel")}
                       <textarea
                         value={currentNote}
                         onChange={(event) => {
@@ -621,7 +675,7 @@ export function ActiveStudySession({
 
                   <p className="text-center text-[10px] text-[var(--theme-muted-text)]">
                     <Link href={relatedLessonLink.href} className="font-semibold text-[var(--semantic-brand)] underline">
-                      {relatedLessonLink.label}
+                      {t(relatedLessonLink.labelKey)}
                     </Link>
                   </p>
                 </>
@@ -642,7 +696,7 @@ export function ActiveStudySession({
                 <>
                   <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-sm">
                     <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
-                      Correct answer
+                      {t("learner.flashcards.session.correctAnswerHeading")}
                     </p>
                     <p className="mt-2 text-sm font-semibold leading-relaxed text-[var(--semantic-text-primary)]">
                       {current.answer}
@@ -650,19 +704,21 @@ export function ActiveStudySession({
                   </div>
                   <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-sm">
                     <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
-                      Rationale
+                      {t("learner.flashcards.session.rationaleBlockHeading")}
                     </p>
                     <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-primary)]">
                       {current.explanation?.trim()
                         ? current.explanation
-                        : "Detailed explanation is not available for this item yet."}
+                        : t("learner.flashcards.session.explanationMissing")}
                     </p>
                   </div>
                   <div className="nn-rationale-key-point">
                     <p className="nn-rationale-key-point__label">
-                      <span>Key takeaway</span>
+                      <span>{t("learner.flashcards.session.keyTakeawayHeading")}</span>
                     </p>
-                    <p className="nn-rationale-key-point__body">{buildClinicalPearl(current)}</p>
+                    <p className="nn-rationale-key-point__body">
+                      {buildClinicalPearl(current, t("learner.flashcards.session.clinicalPearlMissing"))}
+                    </p>
                   </div>
                 </>
               )}
@@ -672,13 +728,15 @@ export function ActiveStudySession({
       ) : (
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(300px,1fr)]">
         <div className="rounded-2xl border border-border bg-[var(--theme-card-bg)] p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Prompt</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+            {t("learner.flashcards.session.splitPromptHeading")}
+          </p>
           <h2 className="mt-2 text-base font-semibold leading-snug text-[var(--theme-heading-text)]">
             {current.prompt}
           </h2>
           {current.topic || current.subtopic ? (
             <p className="mt-2 text-xs text-[var(--theme-muted-text)]">
-              {current.topic ?? "General"}
+              {current.topic ?? t("learner.flashcards.session.topicGeneral")}
               {current.subtopic ? ` · ${current.subtopic}` : ""}
             </p>
           ) : null}
@@ -689,12 +747,12 @@ export function ActiveStudySession({
               onClick={() => setRevealed(true)}
               className="mt-4 rounded-xl border border-border px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)]"
             >
-              Reveal Answer
+              {t("learner.flashcards.session.revealAnswerCta")}
             </button>
           ) : (
             <div className="mt-4 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                Correct Answer
+                {t("learner.flashcards.session.correctAnswerLabel")}
               </p>
               <p className="mt-1 text-sm font-medium leading-relaxed text-[var(--theme-heading-text)]">
                 {current.answer}
@@ -709,7 +767,7 @@ export function ActiveStudySession({
               disabled={index <= 0}
               className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
             >
-              Previous
+              {t("learner.flashcards.session.navPrevious")}
             </button>
             <button
               type="button"
@@ -717,12 +775,12 @@ export function ActiveStudySession({
               disabled={!revealed || index + 1 >= sessionCards.length}
               className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
             >
-              Next
+              {t("learner.flashcards.session.navNext")}
             </button>
           </div>
 
           <div className="mt-4 grid grid-cols-3 gap-2">
-            {RATINGS.map((rating) => (
+            {ratings.map((rating) => (
               <button
                 key={rating.id}
                 type="button"
@@ -741,31 +799,31 @@ export function ActiveStudySession({
             className={`rounded-2xl border border-border bg-[var(--theme-card-bg)] p-4 ${itemState.highlighted ? "ring-1 ring-[var(--semantic-brand)]" : ""}`}
           >
             <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-              Rationale
+              {t("learner.flashcards.session.rationaleAsideHeading")}
             </p>
             {!revealed ? (
               <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-                Reveal the answer to see detailed rationale.
+                {t("learner.flashcards.session.revealToSeeRationale")}
               </p>
             ) : (
               <div className="mt-2 space-y-3 text-sm">
                 <section>
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                    1. Correct Answer
+                    {t("learner.flashcards.session.rationaleStepCorrect")}
                   </h3>
                   <p className="mt-1 font-medium text-[var(--theme-heading-text)]">{current.answer}</p>
                 </section>
                 <section>
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                    2. Why It Is Correct
+                    {t("learner.flashcards.session.rationaleStepWhyCorrect")}
                   </h3>
                   <p className="mt-1 text-[var(--theme-heading-text)]">
-                    {current.explanation ?? "Detailed explanation is not available for this item yet."}
+                    {current.explanation ?? t("learner.flashcards.session.explanationMissing")}
                   </p>
                 </section>
                 <section>
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                    3. Why the Other Options Are Wrong
+                    {t("learner.flashcards.session.rationaleStepWhyWrong")}
                   </h3>
                   {current.distractors && current.distractors.length > 0 ? (
                     <ul className="mt-1 space-y-1 text-[var(--theme-heading-text)]">
@@ -777,25 +835,27 @@ export function ActiveStudySession({
                     </ul>
                   ) : (
                     <p className="mt-1 text-[var(--theme-muted-text)]">
-                      Detailed distractor explanations are not available for this item yet.
+                      {t("learner.flashcards.session.distractorMissing")}
                     </p>
                   )}
                 </section>
                 <section>
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                    4. Clinical Pearl / Exam Tip
+                    {t("learner.flashcards.session.rationaleStepPearl")}
                   </h3>
-                  <p className="mt-1 text-[var(--theme-heading-text)]">{buildClinicalPearl(current)}</p>
+                  <p className="mt-1 text-[var(--theme-heading-text)]">
+                    {buildClinicalPearl(current, t("learner.flashcards.session.clinicalPearlMissing"))}
+                  </p>
                 </section>
                 <section>
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                    5. Related Lesson Link
+                    {t("learner.flashcards.session.rationaleStepRelated")}
                   </h3>
                   <Link
                     href={relatedLessonLink.href}
                     className="mt-1 inline-flex font-semibold text-[var(--semantic-brand)] underline underline-offset-2"
                   >
-                    {relatedLessonLink.label}
+                    {t(relatedLessonLink.labelKey)}
                   </Link>
                 </section>
               </div>
@@ -804,7 +864,7 @@ export function ActiveStudySession({
 
           <div className="rounded-2xl border border-border bg-[var(--theme-card-bg)] p-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-              Item Actions
+              {t("learner.flashcards.session.itemActionsHeading")}
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
               <button
@@ -812,32 +872,40 @@ export function ActiveStudySession({
                 onClick={() => applyItemState({ starred: !itemState.starred })}
                 className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-[var(--theme-heading-text)]"
               >
-                {itemState.starred ? "Starred" : "Star for Later"}
+                {itemState.starred
+                  ? t("learner.flashcards.session.starredState")
+                  : t("learner.flashcards.session.starForLater")}
               </button>
               <button
                 type="button"
                 onClick={() => applyItemState({ saved: !itemState.saved })}
                 className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-[var(--theme-heading-text)]"
               >
-                {itemState.saved ? "Saved" : "Save for Later"}
+                {itemState.saved
+                  ? t("learner.flashcards.session.savedState")
+                  : t("learner.flashcards.session.saveForLater")}
               </button>
               <button
                 type="button"
                 onClick={() => applyItemState({ confusing: !itemState.confusing })}
                 className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-[var(--theme-heading-text)]"
               >
-                {itemState.confusing ? "Marked for Revisit" : "Mark as Confusing"}
+                {itemState.confusing
+                  ? t("learner.flashcards.session.markedRevisit")
+                  : t("learner.flashcards.session.markConfusingFull")}
               </button>
               <button
                 type="button"
                 onClick={() => applyItemState({ highlighted: !itemState.highlighted })}
                 className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-[var(--theme-heading-text)]"
               >
-                {itemState.highlighted ? "Highlighted" : "Highlight Rationale"}
+                {itemState.highlighted
+                  ? t("learner.flashcards.session.highlightedState")
+                  : t("learner.flashcards.session.highlightRationale")}
               </button>
             </div>
             <label className="mt-3 block text-xs font-semibold text-[var(--theme-muted-text)]">
-              Personal Note
+              {t("learner.flashcards.session.personalNoteLabel")}
               <textarea
                 value={currentNote}
                 onChange={(event) => {
@@ -847,7 +915,7 @@ export function ActiveStudySession({
                 }}
                 rows={3}
                 className="mt-1 w-full rounded-lg border border-border bg-[var(--theme-card-bg)] px-3 py-2 text-sm text-[var(--theme-heading-text)]"
-                placeholder="Capture your nursing takeaway for this item."
+                placeholder={t("learner.flashcards.session.notePlaceholder")}
               />
             </label>
           </div>

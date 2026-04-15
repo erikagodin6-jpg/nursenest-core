@@ -1,4 +1,5 @@
 import type { TierCode } from "@prisma/client";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { LessonContent } from "@legacy-client/data/lessons/types";
 import { contentMap, loadNpGeneratedBatches } from "@legacy-client/data/lessons/index";
@@ -68,7 +69,7 @@ export function allowedLessonContentTiersForUser(userTier: string): string[] {
 
 /** Map Prisma subscription scope → monolith lesson paywall tier string. */
 export function prismaTierToLegacyLessonUserTier(scope: AccessScope): string {
-  if (scope.reason === "admin_override") return "admin";
+  if (accessScopeIsStaffLearnerEntitlementBypass(scope)) return "admin";
   const tier = scope.tier as TierCode | null;
   if (!tier) return "free";
   switch (tier) {

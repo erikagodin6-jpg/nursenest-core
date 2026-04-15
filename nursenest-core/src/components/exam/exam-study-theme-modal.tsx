@@ -1,147 +1,312 @@
 "use client";
 
-import { useCallback, useEffect, useId, useMemo, useState } from "react";
-import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type RefObject } from "react";
+import { ArrowRight, Check, Palette } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { useExamStudyTheme } from "@/components/exam/exam-study-theme-context";
+import {
+  EXAM_STUDY_THEME_STORAGE_KEY,
+  useExamStudyTheme,
+} from "@/components/exam/exam-study-theme-context";
+import {
+  getExamInterfaceThemePresets,
+  normalizeExamInterfaceThemeId,
+} from "@/lib/exam/exam-interface-theme-presets";
 
-function ThemePreviewSample() {
+function useModalFocusTrap(active: boolean, rootRef: RefObject<HTMLDivElement | null>) {
+  useEffect(() => {
+    if (!active || !rootRef.current) return;
+    const root = rootRef.current;
+    const sel =
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+      const nodes = [...root.querySelectorAll<HTMLElement>(sel)].filter(
+        (el) => !el.hasAttribute("disabled") && el.tabIndex !== -1,
+      );
+      if (nodes.length === 0) return;
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    root.addEventListener("keydown", onKey);
+    return () => root.removeEventListener("keydown", onKey);
+  }, [active, rootRef]);
+}
+
+/** Legacy mock-exams preview: thin chrome bar + stem skeleton + options + footer nav — inherit `data-theme` from parent. */
+function ExamShellMiniPreview() {
+  const { t } = useMarketingI18n();
   return (
-    <div
-      className="rounded-xl border border-[var(--semantic-border-soft)] p-4 text-left shadow-[var(--semantic-shadow-soft)]"
-      style={{
-        background: "color-mix(in srgb, var(--semantic-panel-cool) 35%, var(--semantic-surface))",
-      }}
-    >
-      <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
-        Preview
-      </p>
-      <p className="mt-2 text-sm font-semibold text-[var(--theme-heading-text)]">Study session</p>
-      <div className="mt-3 h-2 w-full max-w-[12rem] rounded-full nn-progress-track-semantic">
-        <div
-          className="h-full rounded-full nn-progress-fill-semantic-brand"
-          style={{ width: "62%" }}
-        />
+    <div className="overflow-hidden rounded-lg border border-[var(--semantic-border-soft)] shadow-sm">
+      <div className="flex h-8 items-center gap-2 bg-[color-mix(in_srgb,var(--theme-primary)_20%,var(--semantic-surface))] px-3">
+        <span className="text-[10px] font-semibold tabular-nums text-[var(--theme-heading-text)]">
+          {t("learner.examTheme.previewProgress")}
+        </span>
+        <div className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_25%,transparent)]">
+          <div
+            className="h-full w-1/3 rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_85%,var(--semantic-text-primary))]"
+            aria-hidden
+          />
+        </div>
+        <span className="font-mono text-[10px] tabular-nums text-[var(--theme-heading-text)]">12:34</span>
       </div>
-      <div
-        className="mt-3 min-h-[2.5rem] rounded-xl border px-3 py-2 text-xs text-[var(--theme-body-text)]"
-        style={{
-          borderColor: "var(--semantic-border-soft)",
-          background: "var(--semantic-surface)",
-        }}
-      >
-        Answer option sample
+      <div className="space-y-1.5 bg-[var(--semantic-surface)] p-2.5">
+        <div className="h-2 w-3/4 rounded bg-[color-mix(in_srgb,var(--semantic-text-muted)_35%,transparent)]" />
+        <div className="h-2 w-1/2 rounded bg-[color-mix(in_srgb,var(--semantic-text-muted)_22%,transparent)]" />
+        <div className="mt-2 flex gap-1.5">
+          <div className="h-5 flex-1 rounded border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)]" />
+          <div
+            className="h-5 flex-1 rounded border-l-2 bg-[color-mix(in_srgb,var(--theme-primary)_12%,var(--semantic-surface))]"
+            style={{ borderLeftColor: "var(--theme-primary)" }}
+          />
+        </div>
+      </div>
+      <div className="flex h-7 items-center justify-between bg-[color-mix(in_srgb,var(--theme-primary)_16%,var(--semantic-surface))] px-3">
+        <span className="text-[9px] font-medium text-[var(--semantic-text-muted)]">
+          {t("learner.examTheme.previewPrevious")}
+        </span>
+        <span className="rounded px-2 py-0.5 text-[9px] font-semibold text-[var(--role-cta-foreground,var(--theme-primary-foreground))]"
+          style={{ background: "var(--role-cta, var(--theme-primary))" }}
+        >
+          {t("learner.examTheme.previewNext")}
+        </span>
       </div>
     </div>
   );
 }
 
-function ExamStudyThemeModalInner({
-  initialPreviewId,
+type CustomizeMode = "session-settings" | "pre-exam";
+
+function ExamCustomizeDialogBody({
+  mode,
+  titleId,
+  previewId,
+  setPreviewId,
   onClose,
+  onApplySessionTheme,
+  onBeginExam,
+  beginDisabled,
 }: {
-  initialPreviewId: string;
+  mode: CustomizeMode;
+  titleId: string;
+  previewId: string;
+  setPreviewId: (id: string) => void;
   onClose: () => void;
+  onApplySessionTheme: (id: string | null) => void;
+  onBeginExam?: () => void;
+  beginDisabled?: boolean;
+}) {
+  const { t } = useMarketingI18n();
+  const beginLabel = beginDisabled ? t("learner.examPractice.preparing") : t("learner.examTheme.beginExam");
+  const presets = useMemo(() => getExamInterfaceThemePresets(), []);
+
+  return (
+    <div className="space-y-6 p-6 sm:p-8">
+      <div className="space-y-2 text-center">
+        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))]">
+          <Palette className="h-6 w-6 text-[var(--semantic-brand)]" aria-hidden />
+        </div>
+        <h2 id={titleId} className="text-xl font-bold text-[var(--theme-heading-text)]">
+          {t("learner.examTheme.title")}
+        </h2>
+        <p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.examTheme.subtitle")}</p>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {presets.map((theme) => {
+          const selected = previewId === theme.id;
+          return (
+            <button
+              key={theme.id}
+              type="button"
+              data-testid={`button-exam-theme-${theme.id}`}
+              onClick={() => setPreviewId(theme.id)}
+              className={`relative overflow-hidden rounded-xl border-2 p-0 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)] ${
+                selected
+                  ? "border-[color-mix(in_srgb,var(--semantic-brand)_55%,var(--semantic-border-soft))] shadow-lg ring-2 ring-[color-mix(in_srgb,var(--semantic-brand)_22%,transparent)]"
+                  : "border-[var(--semantic-border-soft)] hover:border-[color-mix(in_srgb,var(--semantic-text-muted)_40%,var(--semantic-border-soft))]"
+              }`}
+            >
+              <div
+                className="h-8 w-full border-b border-[var(--semantic-border-soft)]"
+                style={{ background: theme.color }}
+                aria-hidden
+              />
+              <div className="bg-[var(--semantic-surface)] px-2 py-2.5">
+                <span className="block text-xs font-semibold leading-tight text-[var(--theme-heading-text)]">
+                  {theme.label}
+                </span>
+              </div>
+              {selected ? (
+                <div className="absolute right-1.5 top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--semantic-brand)] text-[var(--role-cta-foreground,var(--theme-primary-foreground))] shadow-sm">
+                  <Check className="h-3 w-3" strokeWidth={3} aria-hidden />
+                </div>
+              ) : null}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_70%,var(--semantic-surface))] p-3">
+        <p className="mb-2 text-xs font-medium text-[var(--semantic-text-muted)]">
+          {t("learner.examTheme.previewLabel")}
+        </p>
+        <div data-theme={previewId}>
+          <ExamShellMiniPreview />
+        </div>
+      </div>
+
+      {mode === "session-settings" ? (
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <button
+            type="button"
+            className="min-h-12 rounded-full border border-[var(--semantic-border-soft)] px-4 text-sm font-semibold text-[var(--semantic-text-secondary)] hover:bg-[var(--semantic-surface)]"
+            onClick={() => {
+              onApplySessionTheme(null);
+              onClose();
+            }}
+          >
+            {t("learner.examTheme.useAppDefault")}
+          </button>
+          <div className="flex flex-wrap gap-2 sm:justify-end">
+            <button
+              type="button"
+              className="min-h-12 rounded-full border border-[var(--semantic-border-soft)] px-4 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-[var(--semantic-surface)]"
+              onClick={onClose}
+            >
+              {t("learner.examTheme.cancel")}
+            </button>
+            <button
+              type="button"
+              className="flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold text-[var(--role-cta-foreground,var(--theme-primary-foreground))]"
+              style={{ background: "var(--role-cta, var(--theme-primary))" }}
+              onClick={() => {
+                onApplySessionTheme(previewId);
+                onClose();
+              }}
+            >
+              {t("learner.examTheme.apply")}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex gap-3">
+          <button
+            type="button"
+            className="min-h-12 flex-1 rounded-full border border-[var(--semantic-border-soft)] text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-[var(--semantic-surface)]"
+            onClick={onClose}
+            data-testid="button-exam-customize-back"
+          >
+            {t("learner.examTheme.back")}
+          </button>
+          <button
+            type="button"
+            className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full text-base font-semibold text-[var(--role-cta-foreground,var(--theme-primary-foreground))] disabled:opacity-60"
+            style={{ background: "var(--role-cta, var(--theme-primary))" }}
+            disabled={beginDisabled}
+            onClick={() => {
+              onApplySessionTheme(previewId);
+              onBeginExam?.();
+            }}
+            data-testid="button-exam-customize-begin"
+          >
+            {beginLabel}
+            {!beginDisabled ? <ArrowRight className="h-5 w-5 shrink-0" aria-hidden /> : null}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function readInitialExamThemeId(): string {
+  if (typeof window === "undefined") return "plum-mist";
+  try {
+    const v = localStorage.getItem(EXAM_STUDY_THEME_STORAGE_KEY);
+    if (v && v.length > 0 && v !== "inherit") {
+      return normalizeExamInterfaceThemeId(v);
+    }
+  } catch {
+    /* ignore */
+  }
+  return "plum-mist";
+}
+
+/** Pre-exam step: legacy “Customize → Begin Exam” flow before starting a practice session. */
+export function ExamPreExamCustomizeModal({
+  open,
+  onClose,
+  onBegin,
+  starting,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onBegin: () => void;
+  starting: boolean;
 }) {
   const { t } = useMarketingI18n();
   const { setSessionTheme } = useExamStudyTheme();
   const titleId = useId();
-  const [previewId, setPreviewId] = useState(initialPreviewId);
-  const themeChoices = useMemo(
-    () => [...THEME_OPTIONS].sort((a, b) => Number(!!b.named) - Number(!!a.named)),
-    [],
-  );
+  const panelRef = useRef<HTMLDivElement>(null);
+  const [previewId, setPreviewId] = useState(readInitialExamThemeId);
+
+  useEffect(() => {
+    if (open) setPreviewId(readInitialExamThemeId());
+  }, [open]);
+
+  useModalFocusTrap(open, panelRef);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  useEffect(() => {
+    if (!open) return;
+    const t = window.setTimeout(() => {
+      panelRef.current?.querySelector<HTMLButtonElement>("button")?.focus();
+    }, 0);
+    return () => window.clearTimeout(t);
+  }, [open]);
+
+  if (!open) return null;
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={titleId}
-      className="relative z-[121] flex max-h-[min(92dvh,840px)] w-full max-w-3xl flex-col overflow-hidden rounded-t-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] shadow-[var(--semantic-shadow-soft)] sm:rounded-2xl"
-    >
-      <div className="border-b border-[var(--semantic-border-soft)] px-4 py-3 sm:px-6 sm:py-4">
-        <h2 id={titleId} className="text-lg font-bold text-[var(--theme-heading-text)]">
-          {t("learner.examTheme.title")}
-        </h2>
-        <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
-          {t("learner.examTheme.subtitle")}
-        </p>
-      </div>
-
-      <div className="grid min-h-0 flex-1 gap-4 overflow-y-auto p-4 sm:grid-cols-[1fr_min(240px,38%)] sm:p-6">
-        <div>
-          <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[var(--semantic-text-muted)]">
-            {t("learner.examTheme.choose")}
-          </p>
-          <div className="grid max-h-[min(52vh,420px)] grid-cols-2 gap-2 overflow-y-auto pr-1 sm:grid-cols-3">
-            {themeChoices.map((opt) => {
-              const selected = previewId === opt.id;
-              return (
-                <button
-                  key={opt.id}
-                  type="button"
-                  onClick={() => setPreviewId(opt.id)}
-                  className={`flex flex-col gap-2 rounded-xl border p-2.5 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)] ${
-                    selected
-                      ? "border-[color-mix(in_srgb,var(--semantic-brand)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))]"
-                      : "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-cool)_40%,var(--semantic-surface))]"
-                  }`}
-                >
-                  <span
-                    className="h-8 w-full rounded-lg border border-[var(--semantic-border-soft)]"
-                    style={{ background: opt.color }}
-                    aria-hidden
-                  />
-                  <span className="line-clamp-2 text-[11px] font-semibold leading-tight text-[var(--theme-heading-text)]">
-                    {opt.label}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="flex min-h-[140px] flex-col gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3 sm:min-h-0">
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-[var(--semantic-text-muted)]">
-            {t("learner.examTheme.previewLabel")}
-          </p>
-          <div className="min-h-0 flex-1 overflow-hidden rounded-lg p-1" data-theme={previewId}>
-            <ThemePreviewSample />
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-2 border-t border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))] px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-        <button
-          type="button"
-          className="min-h-11 rounded-full border border-[var(--semantic-border-soft)] px-4 text-sm font-semibold text-[var(--semantic-text-secondary)] hover:bg-[var(--semantic-surface)]"
-          onClick={() => {
-            setSessionTheme(null);
-            onClose();
-          }}
-        >
-          {t("learner.examTheme.useAppDefault")}
-        </button>
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            className="min-h-11 rounded-full border border-[var(--semantic-border-soft)] px-4 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-[var(--semantic-surface)]"
-            onClick={onClose}
-          >
-            {t("learner.examTheme.cancel")}
-          </button>
-          <button
-            type="button"
-            className="min-h-11 rounded-full px-5 text-sm font-semibold text-[var(--role-cta-foreground,var(--theme-primary-foreground))]"
-            style={{ background: "var(--role-cta, var(--theme-primary))" }}
-            onClick={() => {
-              setSessionTheme(previewId);
-              onClose();
-            }}
-          >
-            {t("learner.examTheme.apply")}
-          </button>
-        </div>
+    <div className="fixed inset-0 z-[130] flex items-center justify-center p-4" role="presentation">
+      <button
+        type="button"
+        className="absolute inset-0 bg-[color-mix(in_srgb,var(--semantic-text-primary)_28%,transparent)] backdrop-blur-[2px]"
+        aria-label={t("learner.examTheme.close")}
+        onClick={onClose}
+      />
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
+        className="relative z-[131] w-full max-w-lg animate-in fade-in zoom-in-95 duration-200 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] shadow-[var(--semantic-shadow-soft)] outline-none"
+      >
+        <ExamCustomizeDialogBody
+          mode="pre-exam"
+          titleId={titleId}
+          previewId={previewId}
+          setPreviewId={setPreviewId}
+          onClose={onClose}
+          onApplySessionTheme={(id) => setSessionTheme(id)}
+          onBeginExam={onBegin}
+          beginDisabled={starting}
+        />
       </div>
     </div>
   );
@@ -149,9 +314,21 @@ function ExamStudyThemeModalInner({
 
 export function ExamStudyThemeModal() {
   const { t } = useMarketingI18n();
-  const { sessionTheme, themePickerOpen, setThemePickerOpen, themePickerNonce } = useExamStudyTheme();
+  const { sessionTheme, setSessionTheme, themePickerOpen, setThemePickerOpen, themePickerNonce } =
+    useExamStudyTheme();
 
   const onClose = useCallback(() => setThemePickerOpen(false), [setThemePickerOpen]);
+  const titleId = useId();
+  const panelRef = useRef<HTMLDivElement>(null);
+  const [previewId, setPreviewId] = useState(() => normalizeExamInterfaceThemeId(sessionTheme ?? undefined));
+
+  useEffect(() => {
+    if (themePickerOpen) {
+      setPreviewId(normalizeExamInterfaceThemeId(sessionTheme ?? undefined));
+    }
+  }, [themePickerOpen, themePickerNonce, sessionTheme]);
+
+  useModalFocusTrap(themePickerOpen, panelRef);
 
   useEffect(() => {
     if (!themePickerOpen) return;
@@ -162,26 +339,42 @@ export function ExamStudyThemeModal() {
     return () => window.removeEventListener("keydown", onKey);
   }, [themePickerOpen, onClose]);
 
+  useEffect(() => {
+    if (!themePickerOpen) return;
+    const tmr = window.setTimeout(() => {
+      panelRef.current?.querySelector<HTMLButtonElement>("button")?.focus();
+    }, 0);
+    return () => window.clearTimeout(tmr);
+  }, [themePickerOpen, themePickerNonce]);
+
   if (!themePickerOpen) return null;
 
-  const initialPreviewId = sessionTheme ?? "ocean";
-
   return (
-    <div
-      className="fixed inset-0 z-[120] flex items-end justify-center p-0 sm:items-center sm:p-4"
-      role="presentation"
-    >
+    <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-4" role="presentation">
       <button
         type="button"
         className="absolute inset-0 bg-[color-mix(in_srgb,var(--semantic-text-primary)_22%,transparent)] backdrop-blur-[2px]"
         aria-label={t("learner.examTheme.close")}
         onClick={onClose}
       />
-      <ExamStudyThemeModalInner
+      <div
+        ref={panelRef}
         key={themePickerNonce}
-        initialPreviewId={initialPreviewId}
-        onClose={onClose}
-      />
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
+        className="relative z-[121] max-h-[min(92dvh,880px)] w-full max-w-lg animate-in fade-in zoom-in-95 duration-200 overflow-y-auto rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] shadow-[var(--semantic-shadow-soft)] outline-none"
+      >
+        <ExamCustomizeDialogBody
+          mode="session-settings"
+          titleId={titleId}
+          previewId={previewId}
+          setPreviewId={setPreviewId}
+          onClose={onClose}
+          onApplySessionTheme={(id) => setSessionTheme(id)}
+        />
+      </div>
     </div>
   );
 }

@@ -447,9 +447,8 @@ export function PracticeTestRunnerClient({
   const chromeClass = `nn-exam-variant--${chromeVariant}`;
   const examSimulation = testConfig?.catPresentationMode === "exam_simulation";
   const catFeedbackStudy = Boolean(catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study");
-  // isExamStyle — single-column minimal layout for CAT test mode (spec §1, §14).
-  // Mirrors real NCLEX: one question at a time, no visible rationale panel.
-  // CAT study mode (catFeedbackStudy=true) stays on the 2-column layout.
+  // isExamStyle — CAT test mode: FAQ-aligned split with locked rationale column (reference parity with question bank).
+  // CAT study mode uses the same split; rationale panel unlocks after submit (see explanation flow).
   const isExamStyle = catMode && !catFeedbackStudy;
   const catStudyLocked =
     catFeedbackStudy &&
@@ -1687,7 +1686,7 @@ export function PracticeTestRunnerClient({
                 </div>
               )}
 
-              <div className="nn-practice-q-nav">
+              <div className="nn-practice-q-nav nn-question-nav-actions">
                 <button
                   type="button"
                   aria-pressed={Boolean(flagged[current.id])}
@@ -1758,23 +1757,23 @@ export function PracticeTestRunnerClient({
                 </button>
               </div>
             </PracticeQuestionCard>
+            </div>
+            <aside className="nn-question-session-rationale min-h-0 space-y-4 overflow-y-auto">
+              <PracticeRationaleFullPanel
+                status={rationaleFullStatus}
+                correctKeys={linearFeedback?.correctKeys}
+                optionDisplayMap={optionDisplayMap}
+                allOptionKeys={optsCanonical}
+                correctAnswerExplanation={linearFeedback?.correctAnswerExplanation}
+                rationale={linearFeedback?.rationale}
+                distractorRationalesMap={linearFeedback?.distractorRationalesMap}
+                keyTakeaway={linearFeedback?.keyTakeaway}
+                relatedLessons={linearFeedback?.relatedLessons ?? []}
+                confidenceLevel={confidenceTrackingEnabled ? (confidence[current.id] ?? null) : null}
+              />
+            </aside>
           </div>
-          {/* RIGHT — full rationale: correct answer + why correct + each wrong option + takeaway + lessons */}
-          <div>
-            <PracticeRationaleFullPanel
-              status={rationaleFullStatus}
-              correctKeys={linearFeedback?.correctKeys}
-              optionDisplayMap={optionDisplayMap}
-              allOptionKeys={optsCanonical}
-              correctAnswerExplanation={linearFeedback?.correctAnswerExplanation}
-              rationale={linearFeedback?.rationale}
-              distractorRationalesMap={linearFeedback?.distractorRationalesMap}
-              keyTakeaway={linearFeedback?.keyTakeaway}
-              relatedLessons={linearFeedback?.relatedLessons ?? []}
-              confidenceLevel={confidenceTrackingEnabled ? (confidence[current.id] ?? null) : null}
-            />
-          </div>
-        </PracticeSessionGrid>
+        </ExamSessionShell>
       </PracticeSessionLayout>
     </ProtectedPremiumContent>
   );

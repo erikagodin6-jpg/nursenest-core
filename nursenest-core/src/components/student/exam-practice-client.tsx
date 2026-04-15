@@ -12,6 +12,7 @@ import {
   ExamSessionTopBar,
   ExamTimerReadout,
 } from "@/components/exam/exam-session-shell";
+import { ExamPreExamCustomizeModal } from "@/components/exam/exam-study-theme-modal";
 import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
 import type { EmptyCopyI18n } from "@/lib/student/gated-state-messages-i18n";
 import { examPoolEmptyKeys, examStartFailureKey } from "@/lib/student/gated-state-messages-i18n";
@@ -111,6 +112,10 @@ export function ExamPracticeClient({
   /** Flag items for review (client-side; helps pacing habits, not persisted to server). */
   const [flagged, setFlagged] = useState<Record<string, boolean>>({});
   const [sessionPhase, setSessionPhase] = useState<"active" | "review">("active");
+  /** Legacy mock-exams flow: choose timed/untimed → customize exam theme → begin. */
+  const [customizeOpen, setCustomizeOpen] = useState(false);
+  const [pendingTimed, setPendingTimed] = useState<boolean | null>(null);
+  const [launchingSession, setLaunchingSession] = useState(false);
   const sessionStartMsRef = useRef<number | null>(null);
   const currentIndexRef = useRef(0);
   const answersRef = useRef<Record<string, unknown>>({});
@@ -326,6 +331,7 @@ export function ExamPracticeClient({
   }, [STORAGE_SESSION, STORAGE_EXAM, examId, applySessionPayload]);
 
   async function startExamSession(useTimed: boolean) {
+    setLaunchingSession(true);
     setPhase("loading");
     setBlockingError(null);
     const limitSec = useTimed ? Math.round(timedSuggestedMinutes * 60) : null;
@@ -389,6 +395,8 @@ export function ExamPracticeClient({
     } catch {
       setBlockingError(t("learner.examPractice.networkStart"));
       setPhase("error");
+    } finally {
+      setLaunchingSession(false);
     }
   }
 
@@ -451,49 +459,78 @@ export function ExamPracticeClient({
 
   if (phase === "pickMode") {
     return (
-      <div className="nn-card mt-4 space-y-4 p-6">
-        {examTitle ? <p className="text-sm font-medium text-muted">{examTitle}</p> : null}
-        <p className="text-sm text-muted">{t("learner.examPractice.chooseMode")}</p>
-        <p className="text-xs text-muted">{t("learner.examPractice.disclaimer")}</p>
-        <div className="flex flex-wrap gap-2">
-          {timedPreferredFirst ? (
-            <>
-              <button
-                type="button"
-                className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-                onClick={() => void startExamSession(true)}
-              >
-                {t("learner.examPractice.timedButton", { minutes: timedSuggestedMinutes })}
-              </button>
-              <button
-                type="button"
-                className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-primary/5"
-                onClick={() => void startExamSession(false)}
-              >
-                {t("learner.examPractice.untimed")}
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                type="button"
-                className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-primary/5"
-                onClick={() => void startExamSession(false)}
-              >
-                {t("learner.examPractice.untimed")}
-              </button>
-              <button
-                type="button"
-                className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-                onClick={() => void startExamSession(true)}
-              >
-                {t("learner.examPractice.timedButton", { minutes: timedSuggestedMinutes })}
-              </button>
-            </>
-          )}
+      <>
+        <div className="nn-card mt-4 space-y-4 p-6">
+          {examTitle ? <p className="text-sm font-medium text-muted">{examTitle}</p> : null}
+          <p className="text-sm text-muted">{t("learner.examPractice.chooseMode")}</p>
+          <p className="text-xs text-muted">{t("learner.examPractice.disclaimer")}</p>
+          <div className="flex flex-wrap gap-2">
+            {timedPreferredFirst ? (
+              <>
+                <button
+                  type="button"
+                  className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+                  onClick={() => {
+                    setPendingTimed(true);
+                    setCustomizeOpen(true);
+                  }}
+                >
+                  {t("learner.examPractice.timedButton", { minutes: timedSuggestedMinutes })}
+                </button>
+                <button
+                  type="button"
+                  className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-primary/5"
+                  onClick={() => {
+                    setPendingTimed(false);
+                    setCustomizeOpen(true);
+                  }}
+                >
+                  {t("learner.examPractice.untimed")}
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-primary/5"
+                  onClick={() => {
+                    setPendingTimed(false);
+                    setCustomizeOpen(true);
+                  }}
+                >
+                  {t("learner.examPractice.untimed")}
+                </button>
+                <button
+                  type="button"
+                  className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+                  onClick={() => {
+                    setPendingTimed(true);
+                    setCustomizeOpen(true);
+                  }}
+                >
+                  {t("learner.examPractice.timedButton", { minutes: timedSuggestedMinutes })}
+                </button>
+              </>
+            )}
+          </div>
+          <p className="text-xs text-muted">{t("learner.examPractice.timedModeHint")}</p>
         </div>
-        <p className="text-xs text-muted">{t("learner.examPractice.timedModeHint")}</p>
-      </div>
+        <ExamPreExamCustomizeModal
+          open={customizeOpen}
+          onClose={() => {
+            setCustomizeOpen(false);
+            setPendingTimed(null);
+          }}
+          onBegin={() => {
+            if (pendingTimed === null) return;
+            const useTimed = pendingTimed;
+            setCustomizeOpen(false);
+            setPendingTimed(null);
+            void startExamSession(useTimed);
+          }}
+          starting={launchingSession}
+        />
+      </>
     );
   }
 

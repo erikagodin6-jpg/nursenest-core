@@ -1,7 +1,12 @@
+/** i18n keys — resolve with `useMarketingI18n().t(labelKey)` in UI. */
+export type FlashcardLessonLinkLabelKey =
+  | "learner.flashcards.session.linkReviewLesson"
+  | "learner.flashcards.session.linkBrowseRelated";
+
 export type ResolvedFlashcardLessonLink = {
   href: string;
   isExactLesson: boolean;
-  label: "Review Lesson" | "Browse Related Lessons";
+  labelKey: FlashcardLessonLinkLabelKey;
 };
 
 function looksLikeLessonId(value: string): boolean {
@@ -26,7 +31,7 @@ export function resolveFlashcardRelatedLessonLink(input: {
       return {
         href: `/app/lessons/${encodeURIComponent(lessonRef)}`,
         isExactLesson: true,
-        label: "Review Lesson",
+        labelKey: "learner.flashcards.session.linkReviewLesson",
       };
     }
     const embeddedIdPart = parts.find((part) => part.startsWith("id="));
@@ -35,7 +40,7 @@ export function resolveFlashcardRelatedLessonLink(input: {
       return {
         href: `/app/lessons/${encodeURIComponent(embeddedId)}`,
         isExactLesson: true,
-        label: "Review Lesson",
+        labelKey: "learner.flashcards.session.linkReviewLesson",
       };
     }
     if (lessonRef) {
@@ -45,7 +50,7 @@ export function resolveFlashcardRelatedLessonLink(input: {
       return {
         href: `/app/lessons?${params.toString()}`,
         isExactLesson: false,
-        label: "Browse Related Lessons",
+        labelKey: "learner.flashcards.session.linkBrowseRelated",
       };
     }
   }
@@ -58,6 +63,6 @@ export function resolveFlashcardRelatedLessonLink(input: {
   return {
     href: query ? `/app/lessons?${query}` : "/app/lessons",
     isExactLesson: false,
-    label: "Browse Related Lessons",
+    labelKey: "learner.flashcards.session.linkBrowseRelated",
   };
 }
