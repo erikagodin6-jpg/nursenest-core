@@ -93,4 +93,5 @@ attached_assets/
 # Legacy extract + backup archives (never commit)
 .legacy-extract/
 external/
+*.zip
 *.tgz
