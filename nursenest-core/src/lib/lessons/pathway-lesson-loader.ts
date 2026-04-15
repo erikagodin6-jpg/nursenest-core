@@ -920,7 +920,7 @@ async function getPathwayLessonImpl(
     null,
   );
   if (rowEn && rowEn.status === ContentStatus.PUBLISHED) {
-    return applyOverlayAndStructural(
+    const fromDb = applyOverlayAndStructural(
       withLocaleMeta(
         normalizeLesson(pathwayLessonRowToInput(rowEn), pathwayId),
         lessonLocaleMeta(marketingLocale, PATHWAY_LESSON_CANONICAL_DB_LOCALE, false, false),
@@ -929,6 +929,30 @@ async function getPathwayLessonImpl(
       pathwayId,
       lessonDbOverlays,
     );
+    /** Stale or partial DB rows can fail `publicComplete` while catalog JSON is editorially complete — prefer catalog for marketing detail. */
+    if (pathwayLessonEligibleForPublicMarketingSurface(fromDb)) {
+      return fromDb;
+    }
+    const catalogHit = getCatalogLessonsRaw(pathwayId).find((l) => l.slug === slug);
+    if (catalogHit) {
+      const fromCatalog = applyOverlayAndStructural(
+        withLocaleMeta(
+          normalizeLesson(catalogHit, pathwayId),
+          lessonLocaleMeta(marketingLocale, PATHWAY_LESSON_CANONICAL_DB_LOCALE, overlayLocale !== "en", true),
+        ),
+        marketingLocale,
+        pathwayId,
+        lessonDbOverlays,
+      );
+      if (pathwayLessonEligibleForPublicMarketingSurface(fromCatalog)) {
+        safeServerLog("pathway_lessons", "lesson_detail_catalog_fallback_after_db_incomplete", {
+          pathwayId,
+          slug,
+        });
+        return fromCatalog;
+      }
+    }
+    return fromDb;
   }
 
   if (overlayLocale !== PATHWAY_LESSON_CANONICAL_DB_LOCALE) {

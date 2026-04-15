@@ -16,7 +16,11 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { userShouldSeeBaselinePrompt } from "@/lib/baseline/baseline-assessment";
 import { BaselineAssessmentPrompt } from "@/components/student/baseline-assessment-prompt";
 import { PathwayLessonProgressRefreshListener } from "@/components/lessons/pathway-lesson-progress-refresh-listener";
-import { LearnerShellPrimaryNav } from "@/components/layout/learner-shell-primary-nav";
+import {
+  LearnerShellDesktopStudyLinks,
+  LearnerShellMobileBottomNav,
+  LearnerShellPathwayPill,
+} from "@/components/layout/learner-shell-primary-nav";
 import { LearnerShellBrandHomeLink } from "@/components/student/learner-shell-brand-home-link";
 import { LearnerUnauthenticatedGate } from "@/components/student/learner-unauthenticated-gate";
 import {
@@ -125,24 +129,33 @@ export default async function LearnerShellLayout({ children }: { children: React
             <div className="nn-learner-app mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+5rem+env(safe-area-inset-bottom,0px))] sm:px-6 md:pb-[var(--nn-rhythm-shell-y)]">
             <PathwayLessonProgressRefreshListener />
             <LearnerAppSectionAnalytics />
-            <header className="nn-learner-exam-chrome-target nn-card mb-[var(--nn-rhythm-tight-y)] flex min-h-14 flex-col gap-3 rounded-2xl p-3 sm:gap-4 lg:min-h-16 lg:flex-row lg:items-center lg:justify-between lg:p-4">
-              <div className="flex min-w-0 flex-wrap items-center gap-3 md:gap-4">
-                <LearnerShellBrandHomeLink />
-                <LearnerShellPrimaryNav
-                  hasActiveSubscription={entitlement !== "error" && entitlement.hasAccess}
-                  pathwayPillLabel={pathwayShortLabel}
-                  pathwayId={pathwayId}
-                  pathwayHubHref={pathwayHubHref}
-                  examsLabel={examsLabel}
-                />
+            <div className="nn-learner-exam-chrome-target nn-learner-shell-sticky sticky top-0 z-50 mb-[var(--nn-rhythm-tight-y)] bg-[var(--semantic-bg-base)] pt-1">
+              <div className="flex flex-col gap-2">
+                <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 shadow-sm sm:px-4 sm:py-2.5">
+                  <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+                    <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+                      <LearnerShellBrandHomeLink />
+                      <LearnerShellPathwayPill pathwayPillLabel={pathwayShortLabel} pathwayHubHref={pathwayHubHref} />
+                    </div>
+                    <div className="flex flex-shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-2.5">
+                      <LearnerShellUserBar pathwayShortLabel={pathwayShortLabel} />
+                      <UserFeedbackNavPill />
+                      <LearnerShellLanguageControl />
+                      <LearnerThemeControl />
+                    </div>
+                  </div>
+                </div>
+                <div className="nn-learner-shell-nav-row rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-2 shadow-[0_1px_0_0_color-mix(in_srgb,var(--semantic-text-primary)_06%,transparent)] sm:px-3">
+                  <LearnerShellDesktopStudyLinks pathwayId={pathwayId} examsLabel={examsLabel} />
+                </div>
               </div>
-              <div className="flex flex-wrap items-center gap-3">
-                <LearnerShellUserBar pathwayShortLabel={pathwayShortLabel} />
-                <UserFeedbackNavPill />
-                <LearnerShellLanguageControl />
-                <LearnerThemeControl />
-              </div>
-            </header>
+              <LearnerShellMobileBottomNav
+                pathwayPillLabel={pathwayShortLabel}
+                pathwayId={pathwayId}
+                pathwayHubHref={pathwayHubHref}
+                examsLabel={examsLabel}
+              />
+            </div>
             {studyNextBlock ? (
               <div className="nn-learner-exam-chrome-dim mb-[var(--nn-rhythm-tight-y)]">
                 <Suspense

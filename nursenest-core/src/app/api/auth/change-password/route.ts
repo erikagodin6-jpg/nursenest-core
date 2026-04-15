@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { compare, hash } from "bcryptjs";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
+import { normalizeStoredPasswordHash } from "@/lib/auth/normalize-stored-password-hash";
 import { strongPasswordSchema } from "@/lib/auth/password-policy";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { prisma } from "@/lib/db";
@@ -69,7 +70,8 @@ export async function POST(req: Request) {
       select: { passwordHash: true },
     });
 
-    if (!user?.passwordHash) {
+    const storedHash = normalizeStoredPasswordHash(user?.passwordHash);
+    if (!storedHash) {
       return NextResponse.json(
         {
           ok: false,
@@ -79,7 +81,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const ok = await compare(currentPassword, user.passwordHash);
+    const ok = await compare(currentPassword, storedHash);
     if (!ok) {
       safeServerLog("auth", "change_password_failed", { reason: "bad_current", userIdPrefix: userId.slice(0, 8) });
       return NextResponse.json({ ok: false, error: "Current password is incorrect." }, { status: 400 });

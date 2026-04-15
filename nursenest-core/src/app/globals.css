@@ -2776,7 +2776,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 
 /* Pathway lesson: restrained title scale (avoids global marketing hero --text-section sizing). */
 .nn-lesson-page-title {
-  font-size: clamp(1.28rem, 2vw, 1.72rem);
+  font-size: clamp(1.12rem, 1.65vw, 1.5rem);
   font-weight: 600;
   letter-spacing: -0.018em;
   line-height: 1.22;
@@ -2954,9 +2954,9 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
  */
 .nn-lesson-content.nn-lesson-prose,
 .nn-lesson-prose {
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 400;
-  line-height: 1.7;
+  line-height: 1.68;
   letter-spacing: -0.003em;
   color: var(--theme-body-text, var(--semantic-text-primary, var(--palette-text)));
   max-width: min(65ch, 100%);
@@ -2965,7 +2965,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 @media (min-width: 768px) {
   .nn-lesson-content.nn-lesson-prose,
   .nn-lesson-prose {
-    font-size: 0.96875rem;
+    font-size: 0.9375rem;
     line-height: 1.72;
   }
 }
@@ -3516,11 +3516,12 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   }
 }
 
-@media (min-width: 1024px) {
+/* Two columns only when the split container is wide enough (~≥420px per column) */
+@media (min-width: 1100px) {
   .nn-question-session--split {
-    grid-template-columns: minmax(0, 1.12fr) minmax(300px, 0.88fr);
-    gap: 1.75rem;
-    padding: 1.5rem 1.5rem 2.25rem;
+    grid-template-columns: minmax(0, 1.12fr) minmax(420px, 0.88fr);
+    gap: 1.5rem;
+    padding: 1.25rem 1.25rem 2rem;
   }
 }
 
@@ -3531,46 +3532,63 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 
 .nn-question-session-primary {
   min-width: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .nn-question-session-rationale {
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  position: relative;
+  z-index: 1;
 }
 
-@media (min-width: 1024px) {
+.nn-question-session-rationale > .nn-practice-rationale-full,
+.nn-question-session-rationale > .nn-practice-rationale-panel {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+@media (min-width: 1100px) {
   .nn-question-session-rationale {
     position: sticky;
+    align-self: start;
     top: 0.75rem;
     max-height: min(88vh, calc(100dvh - 5.5rem));
-    overflow-y: auto;
-    padding-right: 0.2rem;
+    overflow: hidden;
+    padding-right: 0;
     scrollbar-gutter: stable;
   }
 }
 
 .nn-question-rationale-placeholder {
   border-radius: 1rem;
-  border: 1px dashed color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-panel-cool) 55%, var(--semantic-surface));
-  padding: 1.25rem 1.25rem 1.35rem;
-  min-height: 12rem;
+  border: 1px dashed var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  box-shadow: var(--semantic-shadow-soft, 0 1px 3px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent));
+  padding: 1.15rem 1.15rem 1.25rem;
+  min-height: 11rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow-wrap: anywhere;
 }
 
 .nn-question-stem {
-  font-size: 1.0625rem;
-  line-height: 1.65;
+  font-size: clamp(13px, 1.05vw, 15px);
+  line-height: 1.45;
   font-weight: 400;
-  letter-spacing: -0.012em;
+  letter-spacing: -0.01em;
   color: var(--theme-heading-text);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 @media (min-width: 768px) {
   .nn-question-stem {
-    font-size: 1.1875rem;
-    line-height: 1.62;
+    line-height: 1.5;
   }
 }
 
@@ -3580,14 +3598,18 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   border-bottom: 1px solid color-mix(in srgb, var(--theme-primary) 8%, var(--border-subtle));
 }
 
-/* Soft stem “card” for bank / focused sessions — use instead of plain stem-wrap when a floating stem is desired */
+/* Soft stem “card” for bank / focused sessions — solid panel above session theme (no transparency) */
 .nn-question-stem-card {
   margin-bottom: 0.5rem;
-  padding: 1.25rem 1.25rem 1.35rem;
+  padding: 1rem 1rem 1.1rem;
   border-radius: 1rem;
-  border: 1px solid color-mix(in srgb, var(--theme-primary) 11%, var(--border-subtle));
-  background: var(--surface-emphasis, color-mix(in srgb, var(--theme-primary) 2.8%, var(--theme-card-bg)));
-  box-shadow: var(--shadow-card);
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  box-shadow: var(--semantic-shadow-soft, 0 1px 3px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent));
+  position: relative;
+  z-index: 1;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .nn-question-stem-card .nn-question-stem-wrap {
@@ -3608,14 +3630,32 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   }
 }
 
+/* Question bank split session: match practice typography + wrapping */
+.nn-question-session-primary ul.nn-qopt-list button.flex-1 {
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.45;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+}
+
+.nn-question-session-primary ul.nn-qopt-list label span.min-w-0.flex-1 {
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.45;
+}
+
 /* Flashcard stems / rationales may include legacy HTML (<img>, <p>) */
+.nn-flashcard-rich {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 .nn-flashcard-rich img {
   max-width: 100%;
   height: auto;
   border-radius: 0.75rem;
   margin: 0.75rem 0 0;
-  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 90%, transparent);
-  background: color-mix(in srgb, var(--semantic-surface) 88%, var(--theme-card-bg));
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
 }
 .nn-flashcard-rich figure {
   margin: 0.75rem 0 0;
@@ -3629,9 +3669,11 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 
 .nn-rationale-key-point {
   border-radius: 0.75rem;
-  border: 1px solid color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-surface));
-  padding: 0.9rem 1rem 1rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-panel-cool);
+  padding: 0.85rem 0.95rem 0.95rem;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .nn-rationale-key-point__label {
@@ -3859,14 +3901,14 @@ html[data-theme="deep-twilight"] .nn-qopt-surface--incorrect .nn-qopt-letter {
 .nn-question-rationale-card {
   overflow: hidden;
   border-radius: 1rem;
-  border: 1px solid color-mix(in srgb, var(--theme-primary) 12%, var(--border-subtle));
-  background: var(--theme-card-bg);
-  box-shadow: var(--shadow-card);
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  box-shadow: var(--semantic-shadow-soft, 0 1px 3px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent));
 }
 
 .nn-question-rationale-card__verdict {
-  border-bottom: 1px solid color-mix(in srgb, var(--theme-primary) 8%, var(--border-subtle));
-  padding: 1rem 1.125rem;
+  border-bottom: 1px solid var(--semantic-border-soft);
+  padding: 0.85rem 1rem;
 }
 
 .nn-question-rationale-card__verdict--ok {
@@ -3886,8 +3928,8 @@ html[data-theme="deep-twilight"] .nn-question-rationale-card__verdict--miss {
 }
 
 .nn-question-rationale-card__body {
-  border-top: 1px solid color-mix(in srgb, var(--theme-primary) 6%, var(--border-subtle));
-  background: var(--surface-soft-a, color-mix(in srgb, var(--theme-primary) 4%, var(--theme-card-bg)));
+  border-top: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-panel-muted);
 }
 
 /* Long rationales: scroll inside the card instead of pushing nav away */
@@ -4706,39 +4748,50 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   }
 }
 
-/* Right column: rationale / review — uses surface-soft-a for gentle visual separation */
+/* Right column: page tint only — inner cards use solid surfaces */
 .nn-practice-rationale-col {
   border-top: 1px solid var(--semantic-border-soft);
-  background: var(--surface-soft-a, color-mix(in srgb, var(--semantic-brand) 3%, var(--semantic-surface)));
+  background: var(--semantic-bg-soft);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1100px) {
   .nn-practice-rationale-col {
     border-top: none;
     border-left: 1px solid var(--semantic-border-soft);
   }
 }
 
-/* Rationale panel inner scroll container */
+/* CAT / legacy rationale: same box model as linear full panel */
 .nn-practice-rationale-panel {
-  padding: 1.25rem 1rem 1.75rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  box-shadow: var(--semantic-shadow-soft, 0 1px 3px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent));
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: min(320px, 42vh);
+  max-height: min(72vh, 40rem);
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.nn-practice-rationale-panel__scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1rem 1.125rem 1.15rem;
   display: flex;
   flex-direction: column;
   gap: 0.875rem;
 }
 
 @media (min-width: 640px) {
-  .nn-practice-rationale-panel {
-    padding: 1.5rem 1.25rem 2rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .nn-practice-rationale-panel {
-    padding: 1.75rem 1.5rem 2.25rem;
-    max-height: min(82vh, 60rem);
-    overflow-y: auto;
-    overscroll-behavior: contain;
+  .nn-practice-rationale-panel__scroll {
+    padding: 1.15rem 1.25rem 1.35rem;
   }
 }
 
@@ -4823,19 +4876,26 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
 }
 
 .nn-practice-rationale-section__body {
-  font-size: 0.9375rem;
-  line-height: 1.62;
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.45;
   color: var(--semantic-text-primary);
   letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* Placeholder state — waiting for answer submission */
 .nn-practice-rationale-placeholder {
   border-radius: 0.875rem;
-  border: 1px dashed color-mix(in srgb, var(--semantic-brand) 20%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-brand) 3%, var(--semantic-surface));
-  padding: 2rem 1.25rem;
+  border: 1px dashed var(--semantic-border-soft);
+  background: var(--semantic-panel-muted);
+  padding: 1.75rem 1.15rem;
   text-align: center;
+  min-height: 11rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Topic chip in question header */
@@ -6057,11 +6117,15 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
    max-width 1280px | 60/40 grid | desktop-fixed, mobile-stack
    ============================================================ */
 
-/* Outer centering container — sets max-width, horizontal padding */
+/* Outer centering container — subtle page background only; cards sit above (z-index + solid surfaces) */
 .nn-practice-session {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 24px;
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+  background: var(--semantic-bg-base, var(--semantic-bg-soft));
   --nn-exam-accent: color-mix(in srgb, var(--semantic-info) 68%, var(--semantic-text-primary));
 }
 
@@ -6078,7 +6142,7 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 }
 
 /* On desktop: fill remaining viewport so page itself does not scroll */
-@media (min-width: 1024px) {
+@media (min-width: 1100px) {
   .nn-practice-session {
     height: calc(100dvh - 120px); /* header ~64px + layout rhythm + gap */
     display: flex;
@@ -6163,10 +6227,10 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   padding: 16px 0 24px;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1100px) {
   .nn-practice-session-grid {
-    grid-template-columns: 60fr 40fr;
-    gap: 24px;
+    grid-template-columns: minmax(420px, 60fr) minmax(420px, 40fr);
+    gap: 20px;
     padding: 16px 0 16px;
     flex: 1;
     overflow: hidden;
@@ -6186,16 +6250,23 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 .nn-practice-q-card {
   border-radius: 1.25rem;
   border: 1px solid var(--semantic-border-soft);
-  background: var(--semantic-surface-elevated, var(--semantic-surface));
-  padding: 28px;
+  background: var(--semantic-surface);
+  box-shadow: var(--semantic-shadow-soft, 0 1px 3px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent));
+  padding: 1rem 1.125rem;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 0.875rem;
+  min-height: 12rem;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
 }
 
 @media (min-width: 640px) {
   .nn-practice-q-card {
-    padding: 32px;
+    padding: 1.25rem 1.35rem;
+    gap: 1rem;
   }
 }
 
@@ -6204,40 +6275,38 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  padding-bottom: 16px;
+  padding-bottom: 0.75rem;
   border-bottom: 1px solid var(--semantic-border-soft);
+  flex-shrink: 0;
 }
 
 .nn-practice-q-card__meta-chip {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--semantic-text-muted);
-  background: var(--surface-soft-a,
-    color-mix(in srgb, var(--theme-primary) 4%, var(--semantic-surface)));
+  color: var(--semantic-text-secondary);
+  background: var(--semantic-panel-muted);
   border: 1px solid var(--semantic-border-soft);
   border-radius: 99px;
-  padding: 3px 10px;
+  padding: 2px 9px;
 }
 
 .nn-practice-q-card__stem {
-  font-size: 1.0625rem;
-  line-height: 1.68;
+  font-size: clamp(16px, 1.5vw, 20px);
+  line-height: 1.42;
   color: var(--semantic-text-primary);
   max-width: 65ch;
-}
-
-@media (min-width: 1280px) {
-  .nn-practice-q-card__stem {
-    font-size: 1.125rem;
-  }
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  flex-shrink: 0;
 }
 
 .nn-practice-q-opts-label {
   font-size: 0.8125rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   color: var(--semantic-text-muted);
+  flex-shrink: 0;
 }
 
 /* ── ANSWER OPTION ROWS ────────────────────────────────────── */
@@ -6245,7 +6314,7 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 .nn-practice-opt-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -6254,13 +6323,14 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 .nn-practice-opt {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  padding: 16px;
+  gap: 10px;
+  padding: 11px 12px;
   width: 100%;
+  min-height: 2.75rem;
   text-align: left;
   border-radius: 0.75rem;
   border: 1px solid var(--semantic-border-soft);
-  background: var(--bg-card, var(--semantic-surface));
+  background: var(--semantic-surface);
   color: var(--semantic-text-primary);
   transition:
     border-color 0.18s ease,
@@ -6269,8 +6339,8 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 }
 
 .nn-practice-opt:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--nn-exam-accent) 4%, var(--semantic-surface));
-  border-color: color-mix(in srgb, var(--nn-exam-accent) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-exam-accent) 5%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--nn-exam-accent) 28%, var(--semantic-border-soft));
 }
 
 .nn-practice-opt:focus-visible {
@@ -6352,8 +6422,11 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 .nn-practice-opt__text {
   flex: 1;
   min-width: 0;
-  font-size: 0.9375rem;
-  line-height: 1.58;
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  padding-top: 0.1rem;
 }
 
 /* ── NAV BAR (below options) ───────────────────────────────── */
@@ -6372,12 +6445,12 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   .nn-practice-q-nav {
     position: sticky;
     bottom: 0;
-    z-index: 30;
+    z-index: 2;
     margin: 1rem -1.25rem -1.25rem;
-    padding: 0.9rem 1rem calc(0.9rem + env(safe-area-inset-bottom));
+    padding: 0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom));
     border-top: 1px solid var(--semantic-border-soft);
-    background: color-mix(in srgb, var(--semantic-surface) 94%, transparent);
-    backdrop-filter: blur(8px);
+    background: var(--semantic-surface);
+    box-shadow: 0 -8px 24px color-mix(in srgb, var(--semantic-text-primary) 6%, transparent);
   }
 }
 
@@ -6387,14 +6460,39 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 
 /* ── RATIONALE FULL PANEL (right column) ───────────────────── */
 
+/* Rationale column: outer frame + inner scroll so long content never breaks layout */
 .nn-practice-rationale-full {
   border-radius: 1.25rem;
   border: 1px solid var(--semantic-border-soft);
-  background: var(--semantic-surface-elevated, var(--semantic-surface));
-  padding: 24px;
+  background: var(--semantic-surface);
+  box-shadow: var(--semantic-shadow-soft, 0 1px 3px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent));
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  flex: 1 1 auto;
+  min-height: min(320px, 42vh);
+  max-height: min(72vh, 40rem);
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.nn-practice-rationale-full__scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1rem 1.125rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .nn-practice-rationale-full__scroll {
+    padding: 1.15rem 1.25rem 1.35rem;
+    gap: 0.875rem;
+  }
 }
 
 /* Section block within rationale */
@@ -6451,9 +6549,11 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 }
 
 .nn-practice-rsection__body {
-  font-size: 0.875rem;
-  line-height: 1.62;
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1.45;
   color: var(--semantic-text-secondary);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* ── INCORRECT OPTION ROWS ─────────────────────────────────── */
@@ -6553,20 +6653,25 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 32px 16px;
-  gap: 10px;
+  justify-content: center;
+  padding: 1.75rem 1rem;
+  gap: 0.5rem;
+  min-height: 11rem;
+  flex: 1 1 auto;
 }
 
 .nn-practice-rationale-waiting__text {
-  font-size: 0.9375rem;
-  font-weight: 500;
+  font-size: clamp(14px, 1.2vw, 16px);
+  font-weight: 600;
   color: var(--semantic-text-secondary);
+  max-width: 36ch;
 }
 
 .nn-practice-rationale-waiting__sub {
   font-size: 0.8125rem;
   color: var(--semantic-text-muted);
-  line-height: 1.6;
+  line-height: 1.45;
+  max-width: 40ch;
 }
 
 /* ── EXAM-LOCKED RATIONALE ─────────────────────────────────── */
@@ -8400,8 +8505,12 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   gap: 2.5rem;
   padding-bottom: 1rem;
 }
+.nn-dash--learner-home {
+  gap: clamp(1.25rem, 2.4vw, 2rem);
+  width: 100%;
+}
 @media (min-width: 640px) {
-  .nn-dash {
+  .nn-dash:not(.nn-dash--learner-home) {
     gap: 3.25rem;
   }
 }
@@ -8412,6 +8521,23 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   gap: 1.25rem;
   animation: pageEnter 0.36s cubic-bezier(0.25, 0.1, 0.25, 1) both;
 }
+.nn-dash-section .nn-ls-title {
+  font-size: clamp(1.05rem, 1.35vw, 1.28rem);
+  line-height: 1.25;
+}
+.nn-dash-section .nn-ls-intro {
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+/* Top-level study bands: consistent neutral shells (hierarchy comes from content, not tinted panels). */
+.nn-dash--learner-home .nn-dash-section > .nn-ls-surface {
+  border-radius: 1.25rem;
+  background: var(--semantic-surface);
+  border-color: var(--semantic-border-soft);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
 @media (min-width: 640px) {
   .nn-dash-section {
     gap: 1.5rem;
@@ -8440,6 +8566,188 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
     var(--semantic-border-soft) 50%,
     color-mix(in srgb, var(--semantic-border-soft) 60%, transparent) 100%
   );
+}
+
+/* Learner `/app` hub — compact page header (shell owns primary navigation) */
+.nn-dash-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.2rem 1.15rem;
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-border-soft));
+  background: var(--semantic-surface);
+  box-shadow: 0 1px 2px -1px color-mix(in srgb, var(--semantic-text-primary) 10%, transparent);
+}
+@media (min-width: 640px) {
+  .nn-dash-page-header {
+    padding: 1.35rem 1.5rem;
+  }
+}
+.nn-dash-page-header__top {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .nn-dash-page-header__top {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.25rem;
+  }
+}
+.nn-dash-page-header__eyebrow {
+  font-size: 0.65rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+.nn-dash-page-header__title {
+  margin-top: 0.35rem;
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--semantic-text-primary);
+}
+.nn-dash-page-header__subtitle {
+  margin-top: 0.4rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--semantic-text-secondary);
+  max-width: 42rem;
+}
+.nn-dash-page-header__identity {
+  margin-top: 0.65rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+.nn-dash-page-header__pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface));
+  padding: 0.2rem 0.65rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--semantic-brand);
+}
+.nn-dash-page-header__meta {
+  font-size: 0.8125rem;
+  color: var(--semantic-text-secondary);
+}
+.nn-dash-page-header__context {
+  margin-top: 0.65rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--semantic-text-secondary);
+  max-width: 48rem;
+}
+.nn-dash-page-header__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+@media (min-width: 640px) {
+  .nn-dash-page-header__actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem 1rem;
+  }
+}
+.nn-dash-page-header__secondary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+@media (min-width: 640px) {
+  .nn-dash-page-header__secondary-actions {
+    padding-top: 0.1rem;
+  }
+}
+.nn-dash-page-header__secondary-link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--semantic-brand);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.nn-dash-page-header__secondary-link:hover {
+  color: color-mix(in srgb, var(--semantic-brand) 88%, var(--semantic-text-primary));
+}
+/* Lighter than the shell: page chrome only, must not compete with learner primary nav */
+.nn-dash-page-header--compact {
+  padding: 0.95rem 1rem;
+  gap: 0.5rem;
+  border-radius: 1rem;
+  border-color: var(--semantic-border-soft);
+  background: color-mix(in srgb, var(--semantic-brand) 03%, var(--semantic-surface));
+  box-shadow: none;
+}
+.nn-dash-page-header--compact .nn-dash-page-header__top {
+  gap: 0.65rem;
+}
+@media (min-width: 640px) {
+  .nn-dash-page-header--compact {
+    padding: 1rem 1.15rem;
+  }
+  .nn-dash-page-header--compact .nn-dash-page-header__top {
+    gap: 0.85rem;
+  }
+}
+@media (min-width: 768px) {
+  .nn-dash-page-header--compact .nn-dash-page-header__top {
+    gap: 1rem;
+  }
+}
+
+/* Learner hub: shell owns primary CTAs — keep this row short so content starts faster. */
+.nn-dash-page-header--learner-hub.nn-dash-page-header--compact {
+  padding: 0.75rem 0.95rem;
+  gap: 0.35rem;
+}
+@media (min-width: 640px) {
+  .nn-dash-page-header--learner-hub.nn-dash-page-header--compact {
+    padding: 0.85rem 1.1rem;
+  }
+}
+
+.nn-dash-page-header__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.75rem;
+}
+.nn-dash-page-header--compact .nn-dash-page-header__title {
+  margin-top: 0.25rem;
+  font-size: clamp(1.2rem, 1.85vw, 1.55rem);
+}
+.nn-dash-page-header__identity--inline {
+  margin-top: 0;
+  align-items: baseline;
+}
+@media (min-width: 900px) {
+  .nn-dash-page-header__identity--inline .nn-dash-page-header__pill {
+    font-size: 0.6rem;
+    padding: 0.15rem 0.5rem;
+  }
+}
+
+/* Sticky learner shell: primary nav stays in view while scrolling page content */
+.nn-learner-shell-sticky {
+  box-decoration-break: clone;
 }
 
 .nn-dash-hero-shell {
@@ -8603,35 +8911,37 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 .nn-dash-explore-grid {
   display: grid;
   gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
 }
-@media (min-width: 1024px) {
+/* Two columns only when the viewport is wide enough that each track stays ~≥360px (stack sooner on laptops). */
+@media (min-width: 1180px) {
   .nn-dash-priority-grid {
-    grid-template-columns: minmax(0, 1.45fr) minmax(16rem, 0.72fr);
+    grid-template-columns: minmax(min(100%, 400px), 1.35fr) minmax(min(100%, 340px), 0.85fr);
     gap: 1.1rem;
     align-items: stretch;
   }
   .nn-dash-snapshot-grid {
-    grid-template-columns: minmax(0, 1.32fr) minmax(19rem, 0.78fr);
+    grid-template-columns: minmax(min(100%, 400px), 1.28fr) minmax(min(100%, 340px), 0.92fr);
     gap: 1.25rem;
     align-items: start;
   }
   .nn-dash-today-grid {
-    grid-template-columns: minmax(0, 1.25fr) minmax(18rem, 0.82fr);
+    grid-template-columns: minmax(min(100%, 400px), 1.2fr) minmax(min(100%, 340px), 0.88fr);
     gap: 1.1rem;
     align-items: start;
   }
   .nn-dash-attention-grid {
-    grid-template-columns: minmax(0, 1.22fr) minmax(17rem, 0.78fr);
+    grid-template-columns: minmax(min(100%, 400px), 1.18fr) minmax(min(100%, 340px), 0.9fr);
     gap: 1.1rem;
     align-items: start;
   }
   .nn-dash-momentum-grid {
-    grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
+    grid-template-columns: minmax(min(100%, 400px), 1.12fr) minmax(min(100%, 340px), 0.94fr);
     gap: 1.1rem;
     align-items: start;
   }
   .nn-dash-explore-grid {
-    grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+    grid-template-columns: minmax(min(100%, 360px), 1fr) minmax(min(100%, 360px), 1fr);
     gap: 1.1rem;
     align-items: start;
   }
@@ -8661,6 +8971,11 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   }
 }
 .nn-dash-explore-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.nn-dash-explore-tail {
   display: flex;
   flex-direction: column;
   gap: 1rem;

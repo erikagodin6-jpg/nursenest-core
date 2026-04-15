@@ -1322,7 +1322,7 @@ export function QuestionBankPracticeClient({
           <ExamProgressBar current={idx + 1} total={total} answeredCount={sessionTotal} />
 
           <div className="nn-question-session nn-question-session--split">
-            <div className="nn-question-session-primary space-y-6">
+            <div className="nn-question-session-primary min-h-0 space-y-6 overflow-x-hidden overflow-y-auto">
               <div className="nn-question-stem-card">
                 <div className="mb-2 flex flex-wrap items-center gap-2">
                   {current.questionType ? (
@@ -1584,9 +1584,9 @@ export function QuestionBankPracticeClient({
             )}
             </div>
 
-            <aside className="nn-question-session-rationale space-y-4">
+            <aside className="nn-question-session-rationale flex min-h-0 flex-col">
               {!g ? (
-                <div className="nn-question-rationale-placeholder">
+                <div className="nn-question-rationale-placeholder min-h-0 flex-1">
                   <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
                     {t("learner.qbank.split.rationaleHeading")}
                   </p>
@@ -1595,7 +1595,7 @@ export function QuestionBankPracticeClient({
                   </p>
                 </div>
               ) : (
-                <div ref={feedbackAnchorRef} className="space-y-4">
+                <div ref={feedbackAnchorRef} className="min-h-0 flex-1 space-y-4 overflow-x-hidden overflow-y-auto overscroll-contain">
                   {examShell && !examShowExplanation ? (
                     <div className="nn-question-rationale-card">
                       <div

@@ -3,6 +3,14 @@
 import type { ReactNode } from "react";
 import { BookOpen, CheckCircle, XCircle, Lightbulb, Info, AlertCircle } from "lucide-react";
 
+function RationalePanelFrame({ children }: { children: ReactNode }) {
+  return (
+    <div className="nn-practice-rationale-panel">
+      <div className="nn-practice-rationale-panel__scroll">{children}</div>
+    </div>
+  );
+}
+
 /**
  * Practice session rationale panel — right column of the 2-col session layout.
  *
@@ -134,14 +142,14 @@ function VerdictBanner({
 function WaitingPlaceholder({ modeLabel }: { modeLabel?: string }) {
   return (
     <>
-      <div>
+      <header className="shrink-0">
         <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
           {modeLabel ?? "Practice"}
         </p>
-        <h3 className="mt-0.5 text-base font-bold text-[var(--semantic-text-primary)]">
+        <h3 className="mt-0.5 text-sm font-bold text-[var(--semantic-text-primary)]">
           Explanation
         </h3>
-      </div>
+      </header>
       <div className="nn-practice-rationale-placeholder">
         <BookOpen
           className="mx-auto mb-3 h-6 w-6 text-[var(--semantic-text-muted)]"
@@ -168,36 +176,36 @@ export function PracticeRationalePanel({
 }: PracticeRationalePanelProps) {
   if (children) {
     return (
-      <div className="nn-practice-rationale-panel">
+      <RationalePanelFrame>
         <div>
           <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
             {modeLabel ?? "Session"}
           </p>
-          <h3 className="mt-0.5 text-base font-bold text-[var(--semantic-text-primary)]">
+          <h3 className="mt-0.5 text-sm font-bold text-[var(--semantic-text-primary)]">
             Explanation
           </h3>
         </div>
         {children}
-      </div>
+      </RationalePanelFrame>
     );
   }
 
   if (status === "waiting" || status === null) {
     return (
-      <div className="nn-practice-rationale-panel">
+      <RationalePanelFrame>
         <WaitingPlaceholder modeLabel={modeLabel} />
-      </div>
+      </RationalePanelFrame>
     );
   }
 
   if (status === "exam_locked") {
     return (
-      <div className="nn-practice-rationale-panel">
+      <RationalePanelFrame>
         <div>
           <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
             {modeLabel ?? "Exam"}
           </p>
-          <h3 className="mt-0.5 text-base font-bold text-[var(--semantic-text-primary)]">
+          <h3 className="mt-0.5 text-sm font-bold text-[var(--semantic-text-primary)]">
             Answer Locked
           </h3>
         </div>
@@ -207,7 +215,7 @@ export function PracticeRationalePanel({
             full test.
           </p>
         </RationaleSection>
-      </div>
+      </RationalePanelFrame>
     );
   }
 
@@ -217,12 +225,12 @@ export function PracticeRationalePanel({
       : null;
 
   return (
-    <div className="nn-practice-rationale-panel">
+    <RationalePanelFrame>
       <div>
         <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
           {modeLabel ?? "Practice"}
         </p>
-        <h3 className="mt-0.5 text-base font-bold text-[var(--semantic-text-primary)]">
+        <h3 className="mt-0.5 text-sm font-bold text-[var(--semantic-text-primary)]">
           Explanation
         </h3>
       </div>
@@ -256,6 +264,6 @@ export function PracticeRationalePanel({
           in context help build clinical reasoning.
         </p>
       </RationaleSection>
-    </div>
+    </RationalePanelFrame>
   );
 }

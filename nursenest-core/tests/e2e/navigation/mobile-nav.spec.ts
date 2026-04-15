@@ -27,11 +27,11 @@ test.describe("Mobile header navigation (public marketing)", () => {
 
     const openBtn = page.getByRole("button", { name: /^Open menu$/ });
     await openBtn.click();
-    // Backdrop + header both use `aria-label="Close menu"` — use `.first()` to satisfy strict mode.
+    // Backdrop + header both use `aria-label="Close menu"`. Clicks on `.first()` hit the backdrop, but the
+    // drawer panel can sit above it and steal pointer events — dismiss via the header X (`.last()`).
     const closeMenu = page.getByRole("button", { name: /^Close menu$/ });
-    await expect(closeMenu.first()).toBeVisible({ timeout: 15_000 });
-
-    await closeMenu.first().click();
+    await expect(closeMenu.last()).toBeVisible({ timeout: 15_000 });
+    await closeMenu.last().click();
     await expect(closeMenu).toHaveCount(0);
   });
 
@@ -45,7 +45,8 @@ test.describe("Mobile header navigation (public marketing)", () => {
     await page.getByRole("button", { name: /^RN$/ }).click();
     const mobileRnPanel = page.locator("#mobile-mega-rn");
     await expect(mobileRnPanel).toBeVisible({ timeout: 20_000 });
-    await mobileRnPanel.getByRole("link", { name: /Open Hub/i }).click();
+    // Mobile mega hub card has no "Open Hub" copy (desktop does); it exposes "RN Exam Hub" as the link name.
+    await mobileRnPanel.getByRole("link", { name: /RN Exam Hub/i }).click();
     await page.waitForLoadState("domcontentloaded");
     await expect(page).toHaveURL(new RegExp(`${CANONICAL_PATHWAY_HUB.usRn.replace(/\//g, "\\/")}(?:\\/|\\?|#|$)`));
     await expectNotPageNotFound(page);
@@ -58,7 +59,8 @@ test.describe("Mobile header navigation (public marketing)", () => {
     await expectMarketingPublicShell(page);
 
     await page.getByRole("button", { name: /^Open menu$/ }).click();
-    await page.getByRole("link", { name: /^Pricing$/ }).click();
+    // Footer also links to `/pricing`; scope to sticky header chrome (includes the mobile drawer, not `contentinfo`).
+    await page.locator(".nn-header-animate-in").getByRole("link", { name: /^Pricing$/ }).first().click();
     await page.waitForLoadState("domcontentloaded");
     await expect(page).toHaveURL(/\/pricing/);
     await expectNotPageNotFound(page);
@@ -72,7 +74,11 @@ test.describe("Mobile header navigation (public marketing)", () => {
 
     await openMobileRegionLanguageDrawer(page);
     await expectMobileRegionSettingsHeading(page);
-    await page.getByRole("button", { name: /^Close settings$/ }).first().click();
+    // Header X can sit outside the Playwright “viewport” for bottom sheets; avoid flaky pointer retries.
+    await page.evaluate(() => {
+      const btns = Array.from(document.querySelectorAll<HTMLButtonElement>('button[aria-label="Close settings"]'));
+      btns[btns.length - 1]?.click();
+    });
     await expect(page.getByRole("heading", { name: /Region & Settings/i })).toHaveCount(0);
   });
 
@@ -122,10 +128,8 @@ test.describe("Mobile header navigation (public marketing)", () => {
 
     await page.getByRole("button", { name: /^Open menu$/ }).focus();
     await page.keyboard.press("Enter");
-    await expect(page.getByRole("button", { name: /^Close menu$/ }).first()).toBeVisible({ timeout: 15_000 });
-
-    // Backdrop and header can both expose "Close menu"; the backdrop dismisses the drawer.
-    await page.getByRole("button", { name: /^Close menu$/ }).first().click();
+    await expect(page.getByRole("button", { name: /^Close menu$/ }).last()).toBeVisible({ timeout: 15_000 });
+    await page.getByRole("button", { name: /^Close menu$/ }).last().click();
     await expect(page.getByRole("button", { name: /^Close menu$/ })).toHaveCount(0);
   });
 

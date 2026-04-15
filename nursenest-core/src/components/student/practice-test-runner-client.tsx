@@ -1361,7 +1361,7 @@ export function PracticeTestRunnerClient({
             {sessionRecoveryBanner}
             <div className={`nn-cat-session ${chromeClass}`}>
               <div className="nn-question-session nn-question-session--split !px-0 sm:!px-0">
-                <div className="nn-question-session-primary">
+                <div className="nn-question-session-primary min-h-0 overflow-y-auto overflow-x-hidden">
                   <QuestionCard
                     stem={current.stem ?? ""}
                     topic={current.topic}
@@ -1478,7 +1478,7 @@ export function PracticeTestRunnerClient({
                 {isExamStyle ? (
                   <SessionSplitRationaleAside variant="locked" />
                 ) : (
-                  <aside className="nn-question-session-rationale space-y-4">
+                  <aside className="nn-question-session-rationale flex min-h-0 flex-col">
                     <RationalePanel
                       mode={rationalePanelMode}
                       feedback={
@@ -1757,7 +1757,7 @@ export function PracticeTestRunnerClient({
               </div>
             </PracticeQuestionCard>
             </div>
-            <aside className="nn-question-session-rationale min-h-0 space-y-4 overflow-y-auto">
+            <aside className="nn-question-session-rationale flex min-h-0 flex-col">
               <PracticeRationaleFullPanel
                 status={rationaleFullStatus}
                 correctKeys={linearFeedback?.correctKeys}

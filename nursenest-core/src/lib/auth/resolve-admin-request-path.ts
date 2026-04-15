@@ -19,7 +19,7 @@ function normalizeToPathname(raw: string): string | null {
 /**
  * Path for RBAC checks on admin UI + `/api/admin/*`.
  * Prefer `x-nn-admin-path` from `src/proxy.ts` (set before NextAuth middleware runs).
- * Falls back to other forwarded URL headers or `Referer` when the proxy header is missing in RSC.
+ * Falls back to other same-request URL headers (never `Referer` — it can point at the previous page).
  */
 export async function resolveAdminRequestPath(): Promise<string> {
   const h = await headers();
@@ -34,15 +34,6 @@ export async function resolveAdminRequestPath(): Promise<string> {
   for (const c of headerCandidates) {
     const p = c ? normalizeToPathname(c) : null;
     if (p) return p;
-  }
-  const referer = h.get("referer");
-  if (referer) {
-    try {
-      const p = normalizeToPathname(new URL(referer).pathname);
-      if (p) return p;
-    } catch {
-      /* ignore */
-    }
   }
   return "";
 }

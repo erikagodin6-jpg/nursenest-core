@@ -577,7 +577,7 @@ export function ActiveStudySession({
 
       {layout === "card" ? (
         <div className="relative pb-[calc(5.5rem+env(safe-area-inset-bottom))]">
-          <div className="sticky top-0 z-30 border-b border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] shadow-sm backdrop-blur-[2px]">
+          <div className="sticky top-0 z-30 border-b border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] shadow-sm">
             <ExamSessionProgressStrip pct={stripPct} />
             <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-x-2 gap-y-2 px-3 py-2.5 sm:px-4">
               <Link
@@ -740,7 +740,7 @@ export function ActiveStudySession({
             </p>
           </div>
 
-          <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_96%,var(--semantic-panel-muted))] px-3 py-3 backdrop-blur-sm supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--semantic-surface)_88%,var(--semantic-panel-muted))] pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_24px_color-mix(in_srgb,var(--semantic-text-primary)_6%,transparent)]">
             <div className="mx-auto flex max-w-2xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex flex-wrap items-center gap-2">
                 <button
@@ -812,8 +812,8 @@ export function ActiveStudySession({
           </div>
         </div>
       ) : (
-      <section className="grid gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(300px,1fr)]">
-        <div className="rounded-2xl border border-border bg-[var(--theme-card-bg)] p-4">
+      <section className="grid min-w-0 gap-4 min-[1100px]:grid-cols-[minmax(0,1.15fr)_minmax(420px,1fr)]">
+        <div className="min-w-0 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
             {t("learner.flashcards.session.splitPromptHeading")}
           </p>
@@ -882,9 +882,9 @@ export function ActiveStudySession({
           </div>
         </div>
 
-        <aside className="space-y-3">
+        <aside className="flex min-h-0 min-w-0 flex-col space-y-3">
           <div
-            className={`rounded-2xl border border-border bg-[var(--theme-card-bg)] p-4 ${itemState.highlighted ? "ring-1 ring-[var(--semantic-brand)]" : ""}`}
+            className={`min-h-0 min-w-0 max-h-[min(72vh,40rem)] overflow-x-hidden overflow-y-auto overscroll-contain rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-sm ${itemState.highlighted ? "ring-1 ring-[var(--semantic-brand)]" : ""}`}
           >
             <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
               {t("learner.flashcards.session.rationaleAsideHeading")}

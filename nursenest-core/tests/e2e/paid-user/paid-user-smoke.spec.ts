@@ -1,8 +1,8 @@
 /**
  * Paid-user end-to-end smoke: session check, lessons, flashcards, CAT, nav, account.
  *
- * Auth: run with project `chromium-paid` (depends on `setup-paid-auth`). Login runs once in
- * `tests/e2e/setup/auth.setup.ts`; cookies/localStorage are saved to `tests/e2e/.auth/paid-user.json` and reused.
+ * Auth: `--project=chromium-paid` (depends on `setup-paid-auth`). One login in `setup/auth.setup.ts` →
+ * `saveStorageStateToFile` writes `tests/e2e/.auth/paid-user.json`; all specs in the project reuse it (see `auth-state-paths.ts`).
  *
  * Setup env (for `setup-paid-auth` only) — see `helpers/paid-test-credentials.ts`:
  *   E2E_PAID_EMAIL + E2E_PAID_PASSWORD, or PLAYWRIGHT_TEST_EMAIL + PLAYWRIGHT_TEST_PASSWORD
@@ -13,9 +13,12 @@
  *
  * Run:
  *   cd nursenest-core && E2E_PAID_EMAIL=... E2E_PAID_PASSWORD=... BASE_URL=https://www.nursenest.ca npx playwright test --project=chromium-paid
+ *
+ * Companion: `paid-user-login-flow.spec.ts` — explicit /login → /app (empty storage). Same project.
  */
 import { expect, test, type Page } from "@playwright/test";
 import { attachPageObservers } from "../helpers/attach-observers";
+import { logObserverFailureSummary } from "../helpers/log-observer-failure-summary";
 
 const PLACEHOLDER_RE = /\b(TBD|null|undefined)\b/i;
 
@@ -227,10 +230,23 @@ test.describe("Paid user smoke (serial)", () => {
         try {
           await page.goto("/app", { waitUntil: "domcontentloaded" });
           const leaks = await globalContentScan(page);
+          if (leaks.length > 0) {
+            console.log(`[paid-smoke] globalChecks — content/placeholder issues:\n  ${leaks.join("\n  ")}`);
+          }
           expect(leaks, leaks.join("; ")).toEqual([]);
           const seriousConsole = obs.consoleErrors.filter(
             (x) => !/cookie|Content Security Policy|third-party|analytics/i.test(x),
           );
+          if (seriousConsole.length > 0 || obs.failedRequests.length > 0) {
+            logObserverFailureSummary({
+              tag: "[paid-smoke]",
+              routeLabel: "globalChecks",
+              seriousConsole,
+              failedRequests: obs.failedRequests,
+              pageUrl: page.url(),
+              artifactHint: "(see section-results.json attachment)",
+            });
+          }
           if (seriousConsole.length > 0) {
             broken.push(`console: ${seriousConsole.slice(0, 5).join(" | ")}`);
           }

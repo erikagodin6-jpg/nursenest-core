@@ -46,8 +46,8 @@ export function FlashcardStudyQuestionStack({
     !exp && pearlTrim.length > 0 && (!missing || pearlTrim !== missing);
 
   return (
-    <div className="w-full max-w-2xl space-y-5">
-      <div className="nn-question-stem-card text-left shadow-[var(--shadow-card)]">
+    <div className="w-full min-w-0 max-w-2xl space-y-5">
+      <div className="nn-question-stem-card text-left">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <span className="nn-marketing-caption font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
             {sessionModeLabel}

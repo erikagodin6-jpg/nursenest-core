@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Activity, BookOpen, Layers, Target } from "lucide-react";
 import { PreNursingSurfaceAnalytics } from "@/components/pre-nursing/pre-nursing-surface-analytics";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { StudyCard } from "@/components/ui/study-card";
@@ -55,7 +54,6 @@ export default function PreNursingLandingPage() {
                 surface="hub"
                 variant="featured"
                 href="/pre-nursing/lessons"
-                icon={BookOpen}
                 title="Lessons"
                 description="Review concepts by topic."
                 cta="Lessons"
@@ -67,7 +65,6 @@ export default function PreNursingLandingPage() {
                 surface="hub"
                 variant="featured"
                 href="/flashcards"
-                icon={Layers}
                 title="Flashcards"
                 description="Strengthen recall quickly."
                 cta="Flashcards"
@@ -79,7 +76,6 @@ export default function PreNursingLandingPage() {
                 surface="hub"
                 variant="featured"
                 href="/question-bank"
-                icon={Target}
                 title="Practice"
                 description="Drill by topic or weakness."
                 cta="Practice"
@@ -91,7 +87,6 @@ export default function PreNursingLandingPage() {
                 surface="hub"
                 variant="featured"
                 href="/pre-nursing/mini-cat"
-                icon={Activity}
                 title="Exams"
                 description="Take longer exam-style sessions."
                 cta="Exams"

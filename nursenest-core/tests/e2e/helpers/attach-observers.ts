@@ -38,7 +38,9 @@ function shouldIgnoreConsolePublic(text: string): boolean {
     /** Dev without DATABASE_URL: server logs hub fallback as styled console "errors". */
     /\[nursenest-core\] pathway_lessons hub_list_db_unavailable_fail_closed|\[nursenest-core\] route_fallback route_render_fallback_used/i.test(
       text,
-    )
+    ) ||
+    /** Known i18n gaps on marketing auth pages — not runtime failures. */
+    /\[nursenest-core\].*marketing_message_key_missing/i.test(text)
   );
 }
 

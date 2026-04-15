@@ -6,7 +6,30 @@ Production-oriented browser tests under `tests/e2e/`. The Playwright config live
 
 - Install browsers once: `npx playwright install` (from `nursenest-core/`).
 - For local runs, start the app: `npm run dev` (default `BASE_URL=http://127.0.0.1:3000`).
-- For production or staging, set `BASE_URL` (e.g. `https://www.nursenest.ca`).
+- For production or staging, set `BASE_URL` (e.g. `https://www.nursenest.ca`) and `PLAYWRIGHT_SKIP_WEB_SERVER=1` so Playwright does not start `next dev`.
+- Optional: put `E2E_PAID_EMAIL` / `E2E_PAID_PASSWORD` in **`.env.playwright.local`** (gitignored) or set `PLAYWRIGHT_DOTENV_PATH` to another file — also loaded before `playwright.config.ts` (`playwright.env.ts`) and by `scripts/check-paid-e2e-credentials.cjs`.
+
+### Local development (no manual exports)
+
+Create a file:
+
+`.env.playwright.local`
+
+With:
+
+```bash
+E2E_PAID_EMAIL=your-email@example.com
+E2E_PAID_PASSWORD=your-password
+BASE_URL=https://www.nursenest.ca
+```
+
+Then run (from the `nursenest-core` package root, no `export` needed):
+
+```bash
+npx playwright test --project=chromium-paid
+```
+
+`paid-test-credentials.ts` loads this file when it exists and does **not** override variables already set (CI injected secrets win). **Do not commit real credentials** — the file is listed in `.gitignore`.
 
 ## Layout
 
@@ -58,6 +81,8 @@ npx playwright test --project=mobile
 npm run qa:lesson-flows:browser
 npm run qa:cat-entrypoints:browser
 npm run qa:paid-smoke:browser
+# Paid smoke vs production (uses BASE_URL https://www.nursenest.ca; requires paid creds in env or .env.playwright.local)
+npm run qa:paid-smoke:production
 npm run qa:freemium:browser
 ```
 

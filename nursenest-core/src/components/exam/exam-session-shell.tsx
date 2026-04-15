@@ -44,7 +44,7 @@ export function ExamSessionTopBar({
   right?: ReactNode;
 }) {
   return (
-    <div className="border-b border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] px-4 py-3 backdrop-blur-[2px]">
+    <div className="border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="nn-marketing-body-sm min-w-0 flex-1 leading-snug text-[var(--theme-body-text)]">{left}</div>
         {center ? (

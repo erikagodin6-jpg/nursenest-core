@@ -1,11 +1,10 @@
 /**
  * Free-tier user login once; storage reused by `chromium-free` (see playwright.config.ts).
  */
-import fs from "node:fs";
-import path from "node:path";
 import { test as setup } from "@playwright/test";
 import { FREE_USER_AUTH_FILE } from "../helpers/auth-state-paths";
 import { loginWithCredentials } from "../helpers/learner-login";
+import { saveStorageStateToFile } from "../helpers/save-session-state";
 
 setup("save free-user storage state", async ({ page }) => {
   const email = process.env.E2E_FREE_EMAIL?.trim();
@@ -16,6 +15,5 @@ setup("save free-user storage state", async ({ page }) => {
 
   await loginWithCredentials(page, email, password);
 
-  fs.mkdirSync(path.dirname(FREE_USER_AUTH_FILE), { recursive: true });
-  await page.context().storageState({ path: FREE_USER_AUTH_FILE });
+  await saveStorageStateToFile(page, FREE_USER_AUTH_FILE);
 });

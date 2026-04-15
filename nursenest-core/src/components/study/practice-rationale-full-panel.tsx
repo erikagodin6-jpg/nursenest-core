@@ -5,6 +5,14 @@ import { BookOpen } from "lucide-react";
 import type { ReactNode } from "react";
 import { ConfidenceChip, type ConfidenceLevel } from "./confidence-selector";
 
+function RationaleFullFrame({ children }: { children: ReactNode }) {
+  return (
+    <div className="nn-practice-rationale-full">
+      <div className="nn-practice-rationale-full__scroll">{children}</div>
+    </div>
+  );
+}
+
 // ── PracticeRationaleSection ───────────────────────────────────────────────
 
 type SectionVariant = "success" | "info" | "error" | "muted" | "takeaway";
@@ -162,7 +170,7 @@ export function PracticeRationaleFullPanel({
   // ── Waiting / not-yet-submitted ──────────────────────────────────────────
   if (status === "waiting" || status === null) {
     return (
-      <div className="nn-practice-rationale-full">
+      <RationaleFullFrame>
         <div className="nn-practice-rationale-waiting">
           <BookOpen
             className="h-6 w-6 text-[var(--semantic-text-muted)]"
@@ -176,14 +184,14 @@ export function PracticeRationaleFullPanel({
             lessons will appear here.
           </p>
         </div>
-      </div>
+      </RationaleFullFrame>
     );
   }
 
   // ── Exam locked ──────────────────────────────────────────────────────────
   if (status === "exam_locked") {
     return (
-      <div className="nn-practice-rationale-full">
+      <RationaleFullFrame>
         <div className="nn-practice-rationale-locked">
           <p className="nn-practice-rationale-locked__title">Answer Locked</p>
           <p className="nn-practice-rationale-locked__body">
@@ -191,7 +199,7 @@ export function PracticeRationaleFullPanel({
             when you finish the full exam.
           </p>
         </div>
-      </div>
+      </RationaleFullFrame>
     );
   }
 
@@ -208,7 +216,7 @@ export function PracticeRationaleFullPanel({
     .join(", ");
 
   return (
-    <div className="nn-practice-rationale-full">
+    <RationaleFullFrame>
       {/* Confidence chip — shown when user rated their confidence */}
       {confidenceLevel ? (
         <div className="flex items-center gap-2">
@@ -264,6 +272,6 @@ export function PracticeRationaleFullPanel({
       {relatedLessons.length > 0 ? (
         <PracticeRelatedLessons lessons={relatedLessons} />
       ) : null}
-    </div>
+    </RationaleFullFrame>
   );
 }

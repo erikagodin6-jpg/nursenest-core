@@ -6,6 +6,7 @@ import Credentials from "next-auth/providers/credentials";
 import { NextRequest } from "next/server";
 import { authCallbacks } from "@/lib/auth-callbacks";
 import { JWT_SESSION_MAX_AGE_SEC, JWT_SESSION_UPDATE_AGE_SEC } from "@/lib/auth/auth-session-constants";
+import { normalizeStoredPasswordHash } from "@/lib/auth/normalize-stored-password-hash";
 import { hashLoginIdentifierForLog } from "@/lib/auth/log-auth-identifier";
 import {
   isLoginLocked,
@@ -157,6 +158,11 @@ export const authConfig: NextAuthConfig = {
         password: { label: "Password", type: "password" },
         rememberMe: { label: "Stay signed in", type: "text" },
       },
+      /**
+       * Credentials login does **not** require `emailVerified` — only a matching user row,
+       * non-empty bcrypt `passwordHash`, and `bcrypt.compare` success. Email verification is enforced
+       * elsewhere (e.g. trial flows), not here.
+       */
       async authorize(credentials, request) {
         const enteredEmailRaw = String(credentials.email ?? "");
         const enteredEmailSanitized = sanitizeRawLoginIdentifier(enteredEmailRaw);
@@ -523,7 +529,8 @@ export const authConfig: NextAuthConfig = {
           return null;
         }
 
-        if (!user.passwordHash) {
+        const storedPasswordHash = normalizeStoredPasswordHash(user.passwordHash);
+        if (!storedPasswordHash) {
           recordLoginFailure(lockKey);
           logAuthIncidentLine({
             ...incidentBase,
@@ -545,7 +552,7 @@ export const authConfig: NextAuthConfig = {
 
         let passwordOk = false;
         try {
-          passwordOk = await compare(password, user.passwordHash);
+          passwordOk = await compare(password, storedPasswordHash);
         } catch (e) {
           recordLoginFailure(lockKey);
           const detail = e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200);

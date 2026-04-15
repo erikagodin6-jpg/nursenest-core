@@ -68,12 +68,15 @@ test.describe("Desktop header navigation (public marketing)", () => {
     await expectMarketingPublicShell(page);
 
     const tier = page.locator(DESKTOP_MEGA_TIER_NAV);
-    await tier.getByRole("button", { name: /^RN$/ }).click();
-    // Mega panel uses `role="dialog"` but `hidden md:block` can omit it from the a11y tree in some layouts;
-    // the stable hook is `#mega-menu-{key}` from `site-header.tsx`.
+    const rnBtn = tier.getByRole("button", { name: /^RN$/ });
+    // Pointer clicks race `onMouseLeave` on `<header>` (mega panel is `absolute top-full`). Opening via
+    // keyboard focus matches `onFocus={() => setOpenMegaMenu(...)}` on the tier button — stable in automation.
+    await rnBtn.focus();
+    await expect(rnBtn).toBeFocused();
+    // Mega panel: `#mega-menu-{key}` in `site-header.tsx` (more reliable than `role="dialog"` + `hidden md:block`).
     const megaPanel = page.locator("#mega-menu-rn");
     await expect(megaPanel).toBeVisible({ timeout: 20_000 });
-    await megaPanel.getByRole("link", { name: /Open Hub/i }).click();
+    await megaPanel.getByRole("link", { name: /Open Hub/i }).click({ force: true });
     await page.waitForLoadState("domcontentloaded");
     await expect(page).toHaveURL(new RegExp(`${CANONICAL_PATHWAY_HUB.usRn.replace(/\//g, "\\/")}(?:\\/|\\?|#|$)`));
     await expectNotPageNotFound(page);

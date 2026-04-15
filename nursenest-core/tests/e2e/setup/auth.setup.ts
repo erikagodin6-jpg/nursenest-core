@@ -1,17 +1,16 @@
 /**
- * One-time login for the **paid seeded** E2E account; writes storage state for `chromium-paid`.
+ * One-time login for the **paid seeded** E2E account; writes `PAID_USER_AUTH_FILE` for reuse.
  *
- * Credentials: see `../helpers/paid-test-credentials.ts` (`E2E_PAID_*` or `PLAYWRIGHT_TEST_*`).
- *
- * Playwright project `setup-paid-auth` runs this file before `paid-user-smoke` and any future
- * `--project=chromium-paid` specs.
+ * Credentials: `../helpers/paid-test-credentials.ts` (`E2E_PAID_*` or `PLAYWRIGHT_TEST_*`).
+ * Project `setup-paid-auth` runs before `chromium-paid` (`dependencies` + `storageState` in playwright.config).
  */
-import fs from "node:fs";
-import path from "node:path";
+import fs from "fs";
+import path from "path";
 import { expect, test as setup } from "@playwright/test";
 import { PAID_USER_AUTH_FILE } from "../helpers/auth-state-paths";
 import { loginWithCredentials } from "../helpers/learner-login";
 import { getPaidTestCredentials } from "../helpers/paid-test-credentials";
+import { saveStorageStateToFile } from "../helpers/save-session-state";
 
 setup("authenticate paid test account and save storage state", async ({ page }) => {
   const creds = getPaidTestCredentials();

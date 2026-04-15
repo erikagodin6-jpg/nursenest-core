@@ -8,10 +8,9 @@
  */
 import { expect, test, type Page, type TestInfo } from "@playwright/test";
 import { attachPageObservers, logObserverDiagnostics, type PageObservers } from "../helpers/attach-observers";
-import { HEADER_CHROME, getE2eBaseURL } from "../helpers/country-selector";
+import { logObserverFailureSummary } from "../helpers/log-observer-failure-summary";
+import { HEADER_CHROME } from "../helpers/country-selector";
 import { LESSON_FLOW_PATHWAY_QA } from "../../../src/lib/qa/lesson-flow-pathways";
-
-const baseURL = getE2eBaseURL();
 
 const usRn = LESSON_FLOW_PATHWAY_QA.find((x) => x.pathwayId === "us-rn-nclex-rn");
 const caRn = LESSON_FLOW_PATHWAY_QA.find((x) => x.pathwayId === "ca-rn-nclex-rn");
@@ -50,6 +49,7 @@ async function recordAndAssertCleanObservers(
   o: PageObservers,
   testInfo: TestInfo,
   routeLabel: string,
+  page: Page,
 ) {
   const { consoleErrors, failedRequests } = o;
   const seriousConsole = seriousPublicSmokeConsoleErrors(consoleErrors);
@@ -69,6 +69,16 @@ async function recordAndAssertCleanObservers(
     ),
     contentType: "application/json",
   });
+  if (seriousConsole.length > 0 || failedRequests.length > 0) {
+    logObserverFailureSummary({
+      tag: "[public-smoke]",
+      routeLabel,
+      seriousConsole,
+      failedRequests,
+      pageUrl: page.url(),
+      artifactHint: "(full detail in JSON attachment)",
+    });
+  }
   expect(seriousConsole, `unexpected console errors on ${routeLabel} (see attachment for raw)`).toEqual([]);
   expect(failedRequests, `failed requests on ${routeLabel}`).toEqual([]);
 }
@@ -120,7 +130,7 @@ async function visitPublicPage(
     await expectPublicShell(page);
     await expectNoObvious404(page);
     if (afterLoad) await afterLoad(page);
-    await recordAndAssertCleanObservers(o, testInfo, routeLabel);
+    await recordAndAssertCleanObservers(o, testInfo, routeLabel, page);
   } finally {
     o.dispose();
   }
@@ -142,7 +152,7 @@ test.describe("Public smoke (core routes)", () => {
       const chrome = page.locator(HEADER_CHROME);
       await expect(chrome.getByRole("link", { name: /^Pricing$/i }).first()).toBeVisible({ timeout: 15_000 });
       await expect(chrome.getByRole("link", { name: /NurseNest home|Home/i }).first()).toBeVisible();
-      await recordAndAssertCleanObservers(o, testInfo, "top-nav");
+      await recordAndAssertCleanObservers(o, testInfo, "top-nav", page);
     } finally {
       o.dispose();
     }
@@ -158,7 +168,7 @@ test.describe("Public smoke (core routes)", () => {
       await gotoExpect2xx(page, "/login");
       await expect(page.getByRole("heading", { name: /log in|sign in/i })).toBeVisible({ timeout: 30_000 });
       await expectNoObvious404(page);
-      await recordAndAssertCleanObservers(o, testInfo, "login");
+      await recordAndAssertCleanObservers(o, testInfo, "login", page);
     } finally {
       o.dispose();
     }
@@ -170,7 +180,7 @@ test.describe("Public smoke (core routes)", () => {
       await gotoExpect2xx(page, "/signup");
       await expect(page.locator("main, [role='main']").first()).toBeVisible({ timeout: 30_000 });
       await expectNoObvious404(page);
-      await recordAndAssertCleanObservers(o, testInfo, "signup");
+      await recordAndAssertCleanObservers(o, testInfo, "signup", page);
     } finally {
       o.dispose();
     }
@@ -207,7 +217,7 @@ test.describe("Public smoke (core routes)", () => {
       }
       await expectPublicShell(page);
       await expectNoObvious404(page);
-      await recordAndAssertCleanObservers(o, testInfo, "blog");
+      await recordAndAssertCleanObservers(o, testInfo, "blog", page);
     } finally {
       o.dispose();
     }
@@ -237,7 +247,7 @@ test.describe("Public smoke (core routes)", () => {
         expect(nf, `unexpected 404 page for ${path}`).toBe(false);
       }
       await gotoExpect2xx(page, "/");
-      await recordAndAssertCleanObservers(o, testInfo, "footer-sample");
+      await recordAndAssertCleanObservers(o, testInfo, "footer-sample", page);
     } finally {
       o.dispose();
     }

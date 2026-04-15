@@ -1,3 +1,16 @@
+/**
+ * Playwright E2E — authenticated session reuse
+ *
+ * Login happens **once** in setup projects, not per test:
+ * - `setup-paid-auth` → `tests/e2e/.auth/paid-user.json` → `chromium-paid` (`storageState` + `dependencies`)
+ * - `setup-free-auth` → `tests/e2e/.auth/free-user.json` → `chromium-free`
+ *
+ * Default `chromium` / `mobile` projects use **no** saved auth (marketing, public, anonymous flows).
+ * To force a fresh login inside a paid project, use `test.use({ storageState: { cookies: [], origins: [] } })`.
+ *
+ * See `tests/e2e/helpers/auth-state-paths.ts` for path overrides and opt-out details.
+ */
+import "./playwright.env";
 import { defineConfig, devices } from "@playwright/test";
 import { FREE_USER_AUTH_FILE, PAID_USER_AUTH_FILE } from "./tests/e2e/helpers/auth-state-paths";
 import { hasPaidTestCredentials } from "./tests/e2e/helpers/paid-test-credentials";
@@ -31,7 +44,7 @@ function localDevWebServer() {
   } as const;
 }
 
-/** Paid E2E projects only when creds are present — avoids loading missing `storageState` when setup would skip. */
+/** Paid projects: require credentials so we never point `storageState` at a missing file. */
 const paidAuthEnabled = hasPaidTestCredentials();
 
 const freeAuthEnabled = Boolean(
@@ -46,7 +59,7 @@ const paidProjects = paidAuthEnabled
       },
       {
         name: "chromium-paid",
-        testMatch: /paid-user-smoke\.spec\.ts$/,
+        testMatch: /paid-user-(login-flow|smoke)\.spec\.ts$|paid-subscriber-audit\.spec\.ts$/,
         dependencies: ["setup-paid-auth"],
         use: {
           ...devices["Desktop Chrome"],
@@ -98,11 +111,18 @@ export default defineConfig({
     ...paidProjects,
     ...freeProjects,
     {
+      name: "chromium-stripe-journey",
+      testMatch: /stripe-subscriber-journey\.spec\.ts$/,
+      use: { ...devices["Desktop Chrome"] },
+    },
+    {
       name: "chromium",
       // Project-level testIgnore replaces the root list — keep `.next` + build dirs here too.
       testIgnore: [
         /lesson-flows\.mobile\.spec\.ts$/,
-        /paid-user-smoke\.spec\.ts$/,
+        /paid-user-(login-flow|smoke)\.spec\.ts$/,
+        /paid-subscriber-audit\.spec\.ts$/,
+        /stripe-subscriber-journey\.spec\.ts$/,
         /freemium-paywall\.spec\.ts$/,
         /^\.next[\\/]/,
         /[\\/]\.next[\\/]/,
