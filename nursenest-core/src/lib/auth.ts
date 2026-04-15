@@ -12,13 +12,11 @@ import {
   recordLoginFailure,
   clearLoginFailures,
   getFailureCount,
-  CAPTCHA_THRESHOLD,
 } from "@/lib/auth/login-lockout";
 import { isGmailLikeAddress, normalizeEmailForDedup } from "@/lib/auth/email-address-normalization";
 import { isEmailLikeIdentifier, normalizeLoginIdentifier } from "@/lib/auth/normalize-login-identifier";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import type { Prisma } from "@prisma/client";
-import { UserRole } from "@prisma/client";
 import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
 import {
   getUserAccess,
