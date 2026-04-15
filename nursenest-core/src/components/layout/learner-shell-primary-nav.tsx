@@ -2,10 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useMemo } from "react";
 import { readMarketingRegionFromDocument } from "@/lib/observability/learner-analytics-context.client";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
+import { useMarketingI18n, useMarketingLocale } from "@/lib/marketing-i18n";
+import { formatTitleCase } from "@/lib/format/text-case";
+import {
+  buildLearnerPrimaryNavItems,
+  learnerPrimaryNavLabelKey,
+  type LearnerPrimaryNavItem,
+} from "@/lib/navigation/learner-primary-nav";
 
 type LearnerShellPrimaryNavProps = {
   hasActiveSubscription: boolean;
@@ -16,17 +23,11 @@ type LearnerShellPrimaryNavProps = {
 };
 
 type NavItem = {
-  id: string;
+  id: LearnerPrimaryNavItem["key"];
   label: string;
   href: string;
   matchPrefix: string;
 };
-
-function sharedActionHref(base: string, pathwayId: string | null): string {
-  if (!pathwayId) return base;
-  const query = `pathwayId=${encodeURIComponent(pathwayId)}`;
-  return base.includes("?") ? `${base}&${query}` : `${base}?${query}`;
-}
 
 export function LearnerShellPrimaryNav({
   hasActiveSubscription,
@@ -36,15 +37,28 @@ export function LearnerShellPrimaryNav({
   examsLabel,
 }: LearnerShellPrimaryNavProps) {
   const pathname = usePathname();
+  const { t } = useMarketingI18n();
+  const locale = useMarketingLocale();
+
+  const items: NavItem[] = useMemo(() => {
+    const built = buildLearnerPrimaryNavItems(pathwayId, { examsLabel });
+    return built.map((row) => {
+      const labelKey = learnerPrimaryNavLabelKey(row.key);
+      let label = formatTitleCase(t(labelKey), locale);
+      if (row.key === "cat" && examsLabel === "Exams") {
+        label = formatTitleCase(t("learner.shell.nav.examsSurface"), locale);
+      }
+      return {
+        id: row.key,
+        href: row.href,
+        matchPrefix: row.matchBase,
+        label,
+      };
+    });
+  }, [pathwayId, examsLabel, t, locale]);
+
   if (!hasActiveSubscription) return null;
 
-  const examsHref = examsLabel === "CAT Exams" && pathwayId ? appPathwayCatSessionStartPath(pathwayId) : "/app/exams";
-  const items: NavItem[] = [
-    { id: "lessons", label: "Lessons", href: sharedActionHref("/app/lessons", pathwayId), matchPrefix: "/app/lessons" },
-    { id: "flashcards", label: "Flashcards", href: sharedActionHref("/app/flashcards", pathwayId), matchPrefix: "/app/flashcards" },
-    { id: "practice", label: "Practice", href: sharedActionHref("/app/questions", pathwayId), matchPrefix: "/app/questions" },
-    { id: "exams", label: examsLabel, href: examsHref, matchPrefix: examsLabel === "CAT Exams" ? "/app/practice-tests" : "/app/exams" },
-  ];
   const pathwayHref = pathwayHubHref ?? "/app";
   const pathwayLabel = pathwayPillLabel ?? "Pathway";
 
@@ -95,10 +109,10 @@ export function LearnerShellPrimaryNav({
       </nav>
 
       <nav
-        className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--border-subtle)] bg-[var(--surface-strong)] px-2 pb-[max(0.35rem,env(safe-area-inset-bottom))] pt-2 md:hidden"
+        className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--border-subtle)] bg-[var(--surface-strong)] px-1 pb-[max(0.35rem,env(safe-area-inset-bottom))] pt-2 md:hidden"
         aria-label="Learner bottom navigation"
       >
-        <div className="mx-auto grid max-w-6xl grid-cols-5 gap-1.5">
+        <div className="mx-auto flex max-w-6xl flex-wrap justify-center gap-1">
           <Link
             href={pathwayHref}
             title={pathwayLabel}
@@ -131,8 +145,8 @@ export function LearnerShellPrimaryNav({
               }}
               className={
                 pathname.startsWith(item.matchPrefix)
-                  ? "inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-brand)] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--bg-card))] px-2 text-xs font-semibold text-[var(--semantic-brand)]"
-                  : "inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-2 text-xs font-semibold text-[var(--theme-body-text)]"
+                  ? "inline-flex min-h-11 min-w-0 max-w-[5.25rem] flex-1 items-center justify-center rounded-full border border-[var(--semantic-brand)] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--bg-card))] px-1.5 text-[11px] font-semibold leading-tight text-[var(--semantic-brand)] sm:max-w-none sm:px-2 sm:text-xs"
+                  : "inline-flex min-h-11 min-w-0 max-w-[5.25rem] flex-1 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-1.5 text-[11px] font-semibold leading-tight text-[var(--theme-body-text)] sm:max-w-none sm:px-2 sm:text-xs"
               }
             >
               {item.label}

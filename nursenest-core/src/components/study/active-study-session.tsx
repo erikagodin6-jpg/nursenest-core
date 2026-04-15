@@ -2,16 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  BookOpen,
-  CheckCircle2,
-  ChevronLeft,
-  ChevronRight,
-  Home,
-  Lightbulb,
-  RefreshCw,
-  XCircle,
-} from "lucide-react";
+import { CheckCircle2, ChevronLeft, ChevronRight, Home, RefreshCw, XCircle } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import {
   getStudyItemState,
@@ -59,7 +50,7 @@ type Props = {
   };
   /**
    * `split` = prompt + rationale sidebar (custom/weak sessions).
-   * `card` = deck study: legacy NurseNest flip-card session (centered card, collapsible answer blocks, rating row, fixed bottom tools).
+   * `card` = deck study: question-stem stack (answer + rationale below), rating row, fixed bottom tools.
    */
   layout?: "split" | "card";
   /** `test` shows an elapsed timer (legacy DeckStudyTest). */
@@ -826,9 +817,11 @@ export function ActiveStudySession({
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
             {t("learner.flashcards.session.splitPromptHeading")}
           </p>
-          <h2 className="mt-2 text-base font-semibold leading-snug text-[var(--theme-heading-text)]">
-            {current.prompt}
-          </h2>
+          <div className="nn-question-stem-card mt-2 text-left">
+            <div className="nn-question-stem-wrap">
+              <FlashcardRichContent text={current.prompt} />
+            </div>
+          </div>
           {current.topic || current.subtopic ? (
             <p className="mt-2 text-xs text-[var(--theme-muted-text)]">
               {current.topic ?? t("learner.flashcards.session.topicGeneral")}
@@ -849,9 +842,9 @@ export function ActiveStudySession({
               <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                 {t("learner.flashcards.session.correctAnswerLabel")}
               </p>
-              <p className="mt-1 text-sm font-medium leading-relaxed text-[var(--theme-heading-text)]">
-                {current.answer}
-              </p>
+              <div className="mt-1 text-sm font-medium leading-relaxed text-[var(--theme-heading-text)]">
+                <FlashcardRichContent text={current.answer} />
+              </div>
             </div>
           )}
 
@@ -906,15 +899,23 @@ export function ActiveStudySession({
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                     {t("learner.flashcards.session.rationaleStepCorrect")}
                   </h3>
-                  <p className="mt-1 font-medium text-[var(--theme-heading-text)]">{current.answer}</p>
+                  <div className="mt-1 font-medium text-[var(--theme-heading-text)]">
+                    <FlashcardRichContent text={current.answer} />
+                  </div>
                 </section>
                 <section>
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                     {t("learner.flashcards.session.rationaleStepWhyCorrect")}
                   </h3>
-                  <p className="mt-1 text-[var(--theme-heading-text)]">
-                    {current.explanation ?? t("learner.flashcards.session.explanationMissing")}
-                  </p>
+                  {current.explanation?.trim() ? (
+                    <div className="mt-1 text-[var(--theme-heading-text)]">
+                      <FlashcardRichContent text={current.explanation} />
+                    </div>
+                  ) : (
+                    <p className="mt-1 text-[var(--theme-heading-text)]">
+                      {t("learner.flashcards.session.explanationMissing")}
+                    </p>
+                  )}
                 </section>
                 <section>
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">

@@ -3452,6 +3452,25 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   }
 }
 
+/* Flashcard stems / rationales may include legacy HTML (<img>, <p>) */
+.nn-flashcard-rich img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin: 0.75rem 0 0;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 90%, transparent);
+  background: color-mix(in srgb, var(--semantic-surface) 88%, var(--theme-card-bg));
+}
+.nn-flashcard-rich figure {
+  margin: 0.75rem 0 0;
+}
+.nn-flashcard-rich figcaption {
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--semantic-text-muted);
+}
+
 .nn-rationale-key-point {
   border-radius: 0.75rem;
   border: 1px solid color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));

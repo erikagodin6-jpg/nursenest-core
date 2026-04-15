@@ -69,9 +69,6 @@ export function FlashcardStudyQuestionStack({
               className="inline-flex min-h-[44px] min-w-[min(100%,12rem)] shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-5 py-3 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))]"
             >
               {labels.revealCta}
-              <span className="ml-2 text-xs font-normal text-[var(--semantic-text-muted)]" aria-hidden>
-                (Space)
-              </span>
             </button>
           </div>
         ) : null}

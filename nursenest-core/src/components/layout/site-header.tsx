@@ -47,8 +47,9 @@ import {
   npNpQuestionsForRegion,
 } from "@/lib/marketing/marketing-entry-routes";
 import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
-import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
 import { ALLIED_PROFESSIONS, ALLIED_HUB_CATEGORY_ORDER, ALLIED_HUB_CATEGORY_META } from "@/lib/allied/allied-professions-registry";
+import { useActiveNavContext } from "@/lib/navigation/use-active-nav-context";
+import { buildLearnerPrimaryNavItems, learnerPrimaryNavLabelKey } from "@/lib/navigation/learner-primary-nav";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
@@ -171,50 +172,6 @@ function examIndicatorLabel(country: LearnerCountry, tier: LearnerTier, alliedPr
     return "Allied Health";
   }
   return `${regionLabel} ${tier}`;
-}
-
-function createLearnerNavLinks(
-  t: (key: string) => string,
-  locale: string,
-  pathwayId: string | null,
-): HeaderNavLink[] {
-  const lessonsHref = pathwayId ? `/app/lessons?pathwayId=${encodeURIComponent(pathwayId)}` : "/app/lessons";
-  const catHref = resolveStudySurfaceCatHref({
-    pathwayId,
-    availablePathwayIds: pathwayId ? [pathwayId] : [],
-  });
-  return [
-    {
-      key: "questions",
-      href: "/app/questions",
-      matchBase: "/app/questions",
-      label: formatTitleCase(t("learner.shell.nav.questions"), locale),
-    },
-    {
-      key: "lessons",
-      href: lessonsHref,
-      matchBase: "/app/lessons",
-      label: formatTitleCase(t("learner.shell.nav.lessons"), locale),
-    },
-    {
-      key: "cat",
-      href: catHref,
-      matchBase: "/app/practice-tests",
-      label: formatTitleCase(t("learner.shell.nav.cat"), locale),
-    },
-    {
-      key: "flashcards",
-      href: "/app/flashcards",
-      matchBase: "/app/flashcards",
-      label: formatTitleCase(t("learner.shell.nav.flashcards"), locale),
-    },
-    {
-      key: "progress",
-      href: "/app/account/progress",
-      matchBase: "/app/account/progress",
-      label: formatTitleCase(t("learner.shell.nav.progress"), locale),
-    },
-  ];
 }
 
 function createMegaMenus(region: "US" | "CA"): MegaMenuConfig[] {
@@ -531,33 +488,41 @@ export function SiteHeader() {
     [],
   );
 
+  const activeNav = useActiveNavContext();
   const megaMenus = useMemo(() => createMegaMenus(region), [region]);
   const user = session?.user;
   const isAuthenticated = Boolean(sessionStatus === "authenticated" && user);
   const isAdminAuthenticated = Boolean(isAuthenticated && user?.role && isStaffRole(user.role));
-  const isLearnerAuthenticated = Boolean(
-    isAuthenticated &&
-      user?.role &&
-      !isStaffRole(user.role),
+  const isLearnerRole = Boolean(isAuthenticated && user?.role && !isStaffRole(user.role));
+  const isPublicNavMode = activeNav.navMode === "public";
+  const isLearnerNavMode = activeNav.navMode === "learner";
+  const navActor = isAdminAuthenticated ? "admin" : isLearnerRole ? "learner" : "anonymous";
+  const learnerPathwayId = useMemo(() => {
+    if (!isLearnerNavMode || !user) return null;
+    return defaultPathwayIdForMarketingOffering(
+      user.country as LearnerCountry,
+      offeringIdForTier(user.tier as LearnerTier),
+    );
+  }, [isLearnerNavMode, user]);
+  const learnerNavModel = useMemo(
+    () => (isLearnerNavMode ? buildLearnerPrimaryNavItems(learnerPathwayId) : []),
+    [isLearnerNavMode, learnerPathwayId],
   );
-  const isMarketingNav = !isLearnerAuthenticated;
-  const navActor = isAdminAuthenticated ? "admin" : isLearnerAuthenticated ? "learner" : "anonymous";
-  const learnerPathwayId =
-    isLearnerAuthenticated && user
-      ? defaultPathwayIdForMarketingOffering(
-          user.country as LearnerCountry,
-          offeringIdForTier(user.tier as LearnerTier),
-        )
-      : null;
   const learnerLinks = useMemo(
-    () => createLearnerNavLinks(t, locale, learnerPathwayId),
-    [t, locale, learnerPathwayId],
+    () =>
+      learnerNavModel.map((item) => ({
+        key: item.key,
+        href: item.href,
+        matchBase: item.matchBase,
+        label: formatTitleCase(t(learnerPrimaryNavLabelKey(item.key)), locale),
+      })),
+    [learnerNavModel, t, locale],
   );
   const learnerExamBadge =
-    isLearnerAuthenticated && user
+    isLearnerNavMode && user
       ? examIndicatorLabel(user.country as LearnerCountry, user.tier as LearnerTier, (user as { alliedProfessionKey?: string | null }).alliedProfessionKey)
       : null;
-  const activeProfession: string = isLearnerAuthenticated && user?.tier
+  const activeProfession: string = isLearnerRole && user?.tier
     ? (user.tier === "RPN" || user.tier === "LVN_LPN" ? "pn" : user.tier === "NP" ? "np" : user.tier === "ALLIED" ? "allied" : "rn")
     : "rn";
   const activeExam: string | null = null;
@@ -692,14 +657,14 @@ export function SiteHeader() {
   }, [locale, strippedPath]);
 
   useEffect(() => {
-    if (!isMarketingNav) {
+    if (!isPublicNavMode) {
       setOpenMegaMenu(null);
       setMobileExpandedMega(null);
     }
-  }, [isMarketingNav]);
+  }, [isPublicNavMode]);
 
   useEffect(() => {
-    if (!isLearnerAuthenticated) {
+    if (!isLearnerNavMode) {
       setResumeStudyingCta(null);
       return;
     }
@@ -732,7 +697,7 @@ export function SiteHeader() {
         if (!controller.signal.aborted) setResumeStudyingCta(null);
       });
     return () => controller.abort();
-  }, [isLearnerAuthenticated, locale]);
+  }, [isLearnerNavMode, locale]);
 
   return (
     <div style={navChromeVars} className="sticky top-0 z-50 nn-header-animate-in" ref={headerRef}>
@@ -743,8 +708,8 @@ export function SiteHeader() {
             ? ` nn-header-logo-row${isScrolled ? " nn-header-logo-row--scrolled" : ""}`
             : " nn-header-dark-surface"
         } overflow-visible`}
-        onMouseEnter={isMarketingNav ? clearMegaCloseTimer : undefined}
-        onMouseLeave={isMarketingNav ? scheduleMegaClose : undefined}
+        onMouseEnter={isPublicNavMode ? clearMegaCloseTimer : undefined}
+        onMouseLeave={isPublicNavMode ? scheduleMegaClose : undefined}
       >
         <div className="nn-section-shell flex flex-col overflow-visible">
           {/* ── Mobile brand row ── */}
@@ -762,7 +727,7 @@ export function SiteHeader() {
                 <Link
                   href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)}
                   className="inline-flex min-h-[44px] max-w-[38%] shrink-0 items-center justify-center rounded-xl border border-[var(--nav-border)] px-2 py-2 text-xs font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] sm:max-w-none sm:px-3 sm:text-sm"
-                  onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
+                  onClick={isPublicNavMode ? closeMegaBeforeAuthNav : undefined}
                   aria-label="Log in to your NurseNest account"
                 >
                   {formatTitleCase(t("nav.logIn"), locale)}
@@ -770,7 +735,7 @@ export function SiteHeader() {
                 <Link
                   href={guestMarketingSignupHref}
                   className="nn-nav-cta inline-flex min-h-[44px] min-w-0 max-w-[52%] shrink items-center justify-center rounded-xl px-2.5 py-2 text-xs font-medium sm:max-w-none sm:px-4 sm:text-sm"
-                  onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
+                  onClick={isPublicNavMode ? closeMegaBeforeAuthNav : undefined}
                   aria-label="Start free account — nursing and healthcare exam prep"
                   title="Start free — no credit card required"
                 >
@@ -805,7 +770,7 @@ export function SiteHeader() {
           {/* Mobile/tablet: signed-in CTAs (learners/staff) — guests use the top row above */}
           {isAuthenticated ? (
             <div className="relative z-[130] flex items-center justify-end gap-2 border-b border-[var(--header-border)] bg-[var(--nav-bg)] px-4 py-2.5 lg:hidden">
-              {isLearnerAuthenticated ? (
+              {isLearnerNavMode ? (
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
                     href={resumeStudyingCta?.href ?? "/app"}
@@ -817,7 +782,7 @@ export function SiteHeader() {
                     {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
                 </div>
-              ) : (
+              ) : isAdminAuthenticated ? (
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
                     href={ADMIN_DASHBOARD_ROUTE}
@@ -825,6 +790,19 @@ export function SiteHeader() {
                     onClick={closeMegaBeforeAuthNav}
                   >
                     {formatTitleCase(t("nav.admin"), locale)}
+                  </Link>
+                  <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
+                    {formatTitleCase(t("nav.dashboard"), locale)}
+                  </Link>
+                </div>
+              ) : (
+                <div className="flex w-full min-w-0 items-center justify-end gap-2">
+                  <Link
+                    href={localizeHref(HUB.pricing)}
+                    className="nn-nav-cta inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4"
+                    onClick={closeMegaBeforeAuthNav}
+                  >
+                    {formatTitleCase(t("nav.pricing"), locale)}
                   </Link>
                   <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
                     {formatTitleCase(t("nav.dashboard"), locale)}
@@ -843,7 +821,7 @@ export function SiteHeader() {
             >
               <HeaderBrandLockup />
             </Link>
-            {isMarketingNav ? (
+            {isPublicNavMode ? (
               <nav
                 aria-label={t("nav.marketingExplore")}
                 className="flex min-w-0 flex-1 items-center justify-center gap-0 xl:gap-0.5"
@@ -894,7 +872,7 @@ export function SiteHeader() {
               </nav>
             )}
 
-            {isMarketingNav ? (
+            {isPublicNavMode ? (
               <div className="flex min-w-0 shrink-0 items-center gap-1 xl:gap-1.5">
                 {marketingDesktopUtilityControls}
               </div>
@@ -906,7 +884,7 @@ export function SiteHeader() {
                   <Link
                     href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)}
                     className={HEADER_SECONDARY_ACTION_CLASS}
-                    onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
+                    onClick={isPublicNavMode ? closeMegaBeforeAuthNav : undefined}
                     aria-label="Log in to your NurseNest account"
                   >
                     {formatTitleCase(t("nav.logIn"), locale)}
@@ -914,14 +892,14 @@ export function SiteHeader() {
                   <Link
                     href={guestMarketingSignupHref}
                     className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium"
-                    onClick={isMarketingNav ? closeMegaBeforeAuthNav : undefined}
+                    onClick={isPublicNavMode ? closeMegaBeforeAuthNav : undefined}
                     aria-label="Start free account — nursing and healthcare exam prep"
                     title="Start free — no credit card required"
                   >
                     {formatTitleCase(t("nav.signup"), locale)}
                   </Link>
                 </div>
-              ) : isLearnerAuthenticated ? (
+              ) : isLearnerNavMode ? (
                 <div className="flex items-center gap-2">
                   <Link
                     href={resumeStudyingCta?.href ?? "/app"}
@@ -933,7 +911,7 @@ export function SiteHeader() {
                     {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
                 </div>
-              ) : (
+              ) : isAdminAuthenticated ? (
                 <div className="flex items-center gap-2">
                   <Link
                     href={ADMIN_DASHBOARD_ROUTE}
@@ -946,11 +924,24 @@ export function SiteHeader() {
                     {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
                 </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Link
+                    href={localizeHref(HUB.pricing)}
+                    className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium"
+                    onClick={closeMegaBeforeAuthNav}
+                  >
+                    {formatTitleCase(t("nav.pricing"), locale)}
+                  </Link>
+                  <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
+                    {formatTitleCase(t("nav.dashboard"), locale)}
+                  </Link>
+                </div>
               )}
           </div>
           </div>{/* /nav-row */}
         </div>{/* /shell */}
-        {isMarketingNav ? (
+        {isPublicNavMode ? (
           <div className="hidden w-full border-t border-[var(--nn-nav-border)] nn-header-nav-row lg:block">
             <div className="nn-section-shell flex min-h-11 flex-wrap items-center gap-x-1 gap-y-0.5 lg:gap-x-0.5">
               {regionalStrip === "middle_east" ? (
@@ -2268,7 +2259,7 @@ export function SiteHeader() {
             </div>
           </div>
         ) : null}
-        {isMarketingNav && openMega ? (
+        {isPublicNavMode && openMega ? (
           <div
             id={`mega-menu-${openMega.key}`}
             role="dialog"
@@ -2412,7 +2403,7 @@ export function SiteHeader() {
       </header>
 
       {/* Context chip row — shows current country, language, profession, exam */}
-      {!isMarketingNav ? (
+      {!isPublicNavMode ? (
         <GlobalContextBar
           region={effectiveGlobalRegion}
           locale={globalLocale}
@@ -2478,9 +2469,9 @@ export function SiteHeader() {
             <div className="min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-y-contain px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-5">
               <div className="space-y-1">
                 <p className="px-2 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
-                  {isLearnerAuthenticated ? formatEyebrow("Study Navigation", locale) : t("nav.marketingExplore")}
+                  {isLearnerNavMode ? formatEyebrow("Study Navigation", locale) : t("nav.marketingExplore")}
                 </p>
-                {isLearnerAuthenticated ? (
+                {isLearnerNavMode ? (
                   learnerLinks.map((item) => (
                     <Link
                       key={item.key}
@@ -3456,7 +3447,7 @@ export function SiteHeader() {
                       {formatTitleCase(t("nav.logIn"), locale)}
                     </Link>
                   </>
-                ) : isLearnerAuthenticated ? (
+                ) : isLearnerNavMode ? (
                   <>
                     {learnerExamBadge ? (
                       <p className="rounded-lg border border-[var(--nav-border)] bg-[var(--surface)] px-3 py-2 text-xs font-medium uppercase tracking-wide text-[var(--nav-muted)]">
@@ -3477,7 +3468,7 @@ export function SiteHeader() {
                       {formatTitleCase(t("nav.account"), locale)}
                     </Link>
                   </>
-                ) : (
+                ) : isAdminAuthenticated ? (
                   <>
                     <Link
                       href={ADMIN_DASHBOARD_ROUTE}
@@ -3488,6 +3479,33 @@ export function SiteHeader() {
                       }}
                     >
                       {formatTitleCase(t("nav.admin"), locale)}
+                    </Link>
+                    <Link
+                      href="/app"
+                      className={HEADER_SECONDARY_ACTION_CLASS}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {formatTitleCase(t("nav.dashboard"), locale)}
+                    </Link>
+                    <Link
+                      href="/app/account/overview"
+                      className={HEADER_SECONDARY_ACTION_CLASS}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {formatTitleCase(t("nav.account"), locale)}
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href={localizeHref(HUB.pricing)}
+                      className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium"
+                      onClick={() => {
+                        closeMegaBeforeAuthNav();
+                        setMobileOpen(false);
+                      }}
+                    >
+                      {formatTitleCase(t("nav.pricing"), locale)}
                     </Link>
                     <Link
                       href="/app"
