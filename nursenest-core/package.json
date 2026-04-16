@@ -154,6 +154,7 @@
     "qa:postdeploy": "playwright test -c playwright.postdeploy.config.ts",
     "qa:smoke": "node scripts/run-smoke.mjs",
     "qa:smoke:extended": "playwright test -c playwright.smoke-extended.config.ts",
+    "qa:rn-full-content": "playwright test -c playwright.rn-full-content.config.ts",
     "qa:pathways": "node scripts/check-pathway-e2e-credentials.cjs && playwright test -c playwright.pathways.config.ts",
     "qa:pathways:prenursing-allied": "node scripts/check-prenursing-allied-e2e-credentials.cjs && playwright test -c playwright.pathways-prenursing-allied.config.ts",
     "qa:verify:production": "node scripts/verify-production-release.mjs",

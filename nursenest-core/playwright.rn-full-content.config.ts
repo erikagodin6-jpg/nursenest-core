@@ -1,9 +1,9 @@
 /**
- * Extended smoke — all legacy specs under `tests/e2e/smoke` (localized, auth variants, etc.).
+ * Full RN lesson crawl + flashcards + question bank + CAT — long-running, paid credentials.
  *
- *   npm run qa:smoke:extended
+ * Kept out of `playwright.smoke-extended.config.ts` so the extended smoke lane stays bounded.
  *
- * For deploy verification, prefer `npm run qa:smoke` (minimal 4-group suite).
+ *   cd nursenest-core && npm run qa:rn-full-content
  */
 import "./playwright.env";
 import { defineConfig, devices } from "@playwright/test";
@@ -41,19 +41,14 @@ const e2eWebServer = localDevWebServer();
 export default defineConfig({
   ...(e2eWebServer ? { webServer: e2eWebServer } : {}),
   testDir: "tests/e2e/smoke",
-  testMatch: /.*\.spec\.ts$/,
-  /** Long pathway suites use dedicated configs (`npm run qa:pathways*`). */
-  testIgnore: [
-    /pathway-content-access\.spec\.ts$/,
-    /pathway-prenursing-allied-access\.spec\.ts$/,
-    /rn-full-content-access\.spec\.ts$/,
-  ],
+  testMatch: /rn-full-content-access\.spec\.ts$/,
+  testIgnore: [],
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 1 : 0,
+  retries: 0,
   workers: 1,
-  /** Long single-spec crawls use `playwright.rn-full-content.config.ts` (`npm run qa:rn-full-content`). */
-  timeout: 180_000,
+  /** Full RN library crawl can run 30–60+ minutes against production-like data — isolated to this config only. */
+  timeout: 3_600_000,
   expect: { timeout: 45_000 },
   reporter: [["list"]],
   use: {
