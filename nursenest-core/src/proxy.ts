@@ -2,14 +2,14 @@
  * Next.js 16+: `proxy` replaces `middleware` (same matcher + auth behavior).
  * @see https://nextjs.org/docs/messages/middleware-to-proxy
  *
- * Guests on `/app/lessons` are redirected to the public `/lessons` hub; signed-in learners keep
- * the subscriber lesson list (auth runs after this check).
+ * Unauthenticated `/app/*` requests are handled by {@link middlewareAuth}'s `authorized` callback
+ * (sign-in). Do **not** pre-redirect `/app/lessons` with `getToken()` — in Edge it can miss valid JWTs
+ * that the same middleware resolves, incorrectly sending paying subscribers to the public `/lessons` hub.
  */
 import "@/lib/auth-trust-env";
 import type { NextFetchEvent, NextMiddleware } from "next/server";
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
-import { getToken } from "next-auth/jwt";
 import { middlewareAuth } from "@/lib/auth-middleware";
 import { NN_CORRELATION_HEADER } from "@/lib/observability/request-correlation";
 import { canonicalExamHubPathFromPossiblyLocalizedPath } from "@/lib/i18n/exam-hub-path";
@@ -84,18 +84,6 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
       httpOnly: true,
     });
     return response;
-  }
-
-  // ── Existing: guest /app/lessons → /lessons ────────────────────────────────
-  if (pathname === "/app/lessons") {
-    const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
-    const token = secret ? await getToken({ req, secret }) : null;
-    if (!token) {
-      const r = NextResponse.redirect(new URL("/lessons", req.url));
-      const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
-      r.headers.set(NN_CORRELATION_HEADER, cid.slice(0, 128));
-      return r;
-    }
   }
 
   const forwarded = withPathnameHeader(req);
