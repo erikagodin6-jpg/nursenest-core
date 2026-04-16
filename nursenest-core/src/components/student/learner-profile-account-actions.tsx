@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
-import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { useMarketingI18n, useMarketingLocale } from "@/lib/marketing-i18n";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 
 export function LearnerProfileAccountActions({
@@ -17,6 +18,7 @@ export function LearnerProfileAccountActions({
   variant?: "full" | "passwordOnly" | "billingOnly";
 }) {
   const { t } = useMarketingI18n();
+  const locale = useMarketingLocale();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
