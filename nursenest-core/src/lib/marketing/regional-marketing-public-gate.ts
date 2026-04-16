@@ -23,6 +23,22 @@ const REGIONAL_TOPIC_TREE_FIRST_SEGMENT_TO_SLUG: Record<string, GlobalRegionSlug
 };
 
 /**
+ * First URL segment for regional topic trees (`/japan/...`, `/india/...`, …).
+ * Used by the Edge proxy matcher so locale-prefixed marketing URLs (`/fr/japan/...`) get the same
+ * unpublished-region redirect as unprefixed routes.
+ */
+export const REGIONAL_MARKETING_TOPIC_PATH_SEGMENTS: readonly string[] = Object.keys(
+  REGIONAL_TOPIC_TREE_FIRST_SEGMENT_TO_SLUG,
+);
+
+/**
+ * Next.js `matcher` entries: `/:locale/{segment}` and `/:locale/{segment}/:path*` for each regional tree.
+ */
+export const REGIONAL_MARKETING_LOCALE_PREFIX_MATCHERS: readonly string[] = REGIONAL_MARKETING_TOPIC_PATH_SEGMENTS.flatMap(
+  (segment) => [`/:locale/${segment}`, `/:locale/${segment}/:path*`] as const,
+);
+
+/**
  * Returns the expansion/global region for a marketing URL that should be gated the same way as
  * `/exams/…` hubs: regional exam hubs **or** country-topic SEO trees. `null` if this path is not
  * part of those surfaces (e.g. `/blog`, `/us/rn/…`).

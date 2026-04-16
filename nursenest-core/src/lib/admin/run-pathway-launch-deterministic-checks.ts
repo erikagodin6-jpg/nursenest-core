@@ -40,6 +40,27 @@ function marketingExamsPagePath(segment: string): string {
   return join(process.cwd(), "src", "app", "(marketing)", "(default)", "exams", segment, "page.tsx");
 }
 
+/** Many `/exams/{segment}/page.tsx` files only import a HubShell; breadcrumbs/links live in the shell. */
+function regionalHubShellPath(segment: string): string {
+  return join(process.cwd(), "src", "components", "marketing", `exams-${segment}`, `exams-${segment}-hub-shell.tsx`);
+}
+
+function loadRegionalMarketingHubSources(segment: string): { combined: string; pagePath: string; shellPath: string | null } {
+  const pagePath = marketingExamsPagePath(segment);
+  const shellPath = regionalHubShellPath(segment);
+  let combined = "";
+  if (existsSync(pagePath)) {
+    combined += readFileSync(pagePath, "utf8");
+  }
+  let shellUsed: string | null = null;
+  if (existsSync(shellPath)) {
+    const shellSrc = readFileSync(shellPath, "utf8");
+    combined += `\n${shellSrc}`;
+    shellUsed = shellPath;
+  }
+  return { combined, pagePath, shellPath: shellUsed };
+}
+
 function analyzeRegionalHubPageSource(src: string): { linkCount: number; hasBreadcrumbJsonLd: boolean; hasBreadcrumbTrail: boolean } {
   const linkCount = (src.match(/href=\"\//g) ?? []).length + (src.match(/<Link/g) ?? []).length;
   return {
@@ -174,29 +195,30 @@ export async function runPathwayLaunchDeterministicChecks(
       source: "filesystem",
     });
     if (exists) {
-      const src = readFileSync(pagePath, "utf8");
-      const a = analyzeRegionalHubPageSource(src);
+      const { combined, shellPath } = loadRegionalMarketingHubSources(segment);
+      const pageOnly = readFileSync(pagePath, "utf8");
+      const a = analyzeRegionalHubPageSource(combined);
       checks.push({
         id: "region_hub_internal_links",
-        label: "Hub page has internal links (min. 3 href / Link markers)",
+        label: "Regional hub has internal links (min. 3 href / Link markers; page + shell)",
         pass: a.linkCount >= 3,
-        detail: `Counted ${a.linkCount} markers`,
+        detail: `Counted ${a.linkCount} markers${shellPath ? ` (includes ${shellPath.split("/").slice(-2).join("/")})` : ""}`,
         source: "filesystem",
       });
       checks.push({
         id: "region_hub_breadcrumbs",
-        label: "Hub page includes breadcrumb components",
+        label: "Regional hub includes breadcrumb components (page or shell)",
         pass: a.hasBreadcrumbJsonLd && a.hasBreadcrumbTrail,
         detail:
           a.hasBreadcrumbJsonLd && a.hasBreadcrumbTrail
             ? undefined
-            : "Include BreadcrumbJsonLd + BreadcrumbTrail for SEO and navigation.",
+            : "Include BreadcrumbJsonLd + BreadcrumbTrail on the hub page or its HubShell.",
         source: "filesystem",
       });
       checks.push({
         id: "region_hub_metadata",
         label: "Hub page defines generateMetadata (title + description)",
-        pass: src.includes("generateMetadata") && src.includes("description"),
+        pass: pageOnly.includes("generateMetadata") && pageOnly.includes("description"),
         detail: undefined,
         source: "filesystem",
       });

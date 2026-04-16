@@ -14,6 +14,7 @@ export type GlobalRegionExamHub = {
 
 /** Shipped `/exams/…` hubs by region — exported for route-aware header defaults. */
 export const HUB_BY_REGION: Partial<Record<GlobalRegionSlug, GlobalRegionExamHub>> = {
+  canada: { hubPath: "/exams/canada", defaultLocale: "en" },
   china: { hubPath: "/exams/china", defaultLocale: "zh" },
   germany: { hubPath: "/exams/germany", defaultLocale: "de" },
   france: { hubPath: "/exams/france", defaultLocale: "fr" },

@@ -129,6 +129,11 @@ export type LearnerDashboardPreload = {
     alliedProfessionKey: string | null;
   };
   /**
+   * When set (including an empty array), skips `examAttempt.findMany` in the dashboard core batch.
+   * Callers that load a larger mock slice elsewhere (e.g. report card) should pass the first five here.
+   */
+  recentMocksPreload?: RecentMock[];
+  /**
    * Call-site id for `learner_dashboard_perf` logs (e.g. `loadPremiumDashboardSnapshot`, `api:GET:learner/readiness`).
    * Avoids PII; use stable builder/route identifiers only.
    */
@@ -145,6 +150,26 @@ export type LearnerDashboardPreload = {
   /** Pathway catalog rows used for split counts when the content pool exceeds the id cap. */
   pathwayRowsForScope?: PathwayLessonKeyRow[];
 };
+
+/** Maps graded exam attempt rows to dashboard “recent mock” cards (same shape as {@link loadLearnerDashboard} batch). */
+export function mapExamAttemptRowsToRecentMocks(
+  rows: Array<{
+    id: string;
+    score: number;
+    total: number;
+    createdAt: Date;
+    exam: { title: string };
+  }>,
+): RecentMock[] {
+  return rows.map((a) => ({
+    id: a.id,
+    examTitle: a.exam.title,
+    score: a.score,
+    total: a.total,
+    pct: a.total > 0 ? Math.round((a.score / a.total) * 100) : 0,
+    at: a.createdAt.toISOString(),
+  }));
+}
 
 /** Single `User` row slice from {@link loadPathwayLessonProgressBundle} (no duplicate reads for dashboard + planner + premium). */
 export type PathwayLessonBundleUserProfile = {
@@ -357,26 +382,33 @@ export async function loadLearnerDashboard(
     });
   }
 
+  const recentMocksPromise =
+    preload?.recentMocksPreload !== undefined
+      ? Promise.resolve(preload.recentMocksPreload.slice(0, 5))
+      : prisma.examAttempt
+          .findMany({
+            where: { userId },
+            orderBy: { createdAt: "desc" },
+            take: 5,
+            select: {
+              id: true,
+              score: true,
+              total: true,
+              createdAt: true,
+              exam: { select: { title: true } },
+            },
+          })
+          .then((raw) => mapExamAttemptRowsToRecentMocks(raw));
+
   const tParallel = performance.now();
-  const [contentLessonTotal, pathwayLessonPublishedCount, lessonsCompleted, incompleteProgress, exam14dPacked, recentMocksRaw] =
+  const [contentLessonTotal, pathwayLessonPublishedCount, lessonsCompleted, incompleteProgress, exam14dPacked, recentMocks] =
     await Promise.all([
       prisma.contentItem.count({ where: { ...lessonWhere, type: "lesson" } }),
       prisma.pathwayLesson.count({ where: pathwayWhere }),
       countScopedLessonsCompleted(userId, entitlement, visibleLessonScope, pathwayRowsForScope ?? []),
       findLatestIncompleteProgressLessonId(userId, visibleLessonScope.lessonIds),
       exam14dTimed,
-      prisma.examAttempt.findMany({
-        where: { userId },
-        orderBy: { createdAt: "desc" },
-        take: 5,
-        select: {
-          id: true,
-          score: true,
-          total: true,
-          createdAt: true,
-          exam: { select: { title: true } },
-        },
-      }),
+      recentMocksPromise,
     ]);
   const durationMsCoreParallelBatch = Math.round(performance.now() - tParallel);
   const exam14dSum = exam14dPacked.sum;
@@ -386,15 +418,6 @@ export async function loadLearnerDashboard(
   const lessonsAvailable = contentLessonTotal + pathwayLessonPublishedCount;
 
   const questionsInMocksLast14d = exam14dSum._sum.total ?? 0;
-
-  const recentMocks: RecentMock[] = recentMocksRaw.map((a) => ({
-    id: a.id,
-    examTitle: a.exam.title,
-    score: a.score,
-    total: a.total,
-    pct: a.total > 0 ? Math.round((a.score / a.total) * 100) : 0,
-    at: a.createdAt.toISOString(),
-  }));
 
   const skipHeavy = shouldSkipNonCriticalLearnerWork();
 

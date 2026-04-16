@@ -20,7 +20,10 @@ import { enforceApiRateLimit } from "@/lib/server/rate-limit";
 import {
   REGIONAL_EXAM_MARKETING_FALLBACK_PATH,
 } from "@/lib/marketing/expansion-exams-path-gate";
-import { globalRegionSlugFromRegionalMarketingPublicPath } from "@/lib/marketing/regional-marketing-public-gate";
+import {
+  REGIONAL_MARKETING_LOCALE_PREFIX_MATCHERS,
+  globalRegionSlugFromRegionalMarketingPublicPath,
+} from "@/lib/marketing/regional-marketing-public-gate";
 import { EXAM_HUB_PREVIEW_COOKIE } from "@/lib/admin/exam-hub-preview-cookie";
 import { isRegionPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 
@@ -187,6 +190,7 @@ export const config = {
     "/:locale/canada/:path*",
     "/:locale/exams",
     "/:locale/exams/:path*",
+    ...REGIONAL_MARKETING_LOCALE_PREFIX_MATCHERS,
     "/japan",
     "/japan/:path*",
     "/india",

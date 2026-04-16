@@ -6,6 +6,10 @@ import {
   isExpansionExamMarketingPath,
 } from "@/lib/i18n/exam-hub-path";
 import { globalRegionSlugFromExpansionExamsPathname } from "@/lib/marketing/expansion-exams-path-gate";
+import {
+  REGIONAL_MARKETING_LOCALE_PREFIX_MATCHERS,
+  globalRegionSlugFromRegionalMarketingPublicPath,
+} from "@/lib/marketing/regional-marketing-public-gate";
 import { globalRegionSlugFromRegionalMarketingPublicPath } from "@/lib/marketing/regional-marketing-public-gate";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 
@@ -55,6 +59,16 @@ test("globalRegionSlugFromExpansionExamsPathname maps /exams segments to GlobalR
   assert.equal(globalRegionSlugFromExpansionExamsPathname("/fr/exams/japan"), "japan");
   assert.equal(globalRegionSlugFromExpansionExamsPathname("/exams"), null);
   assert.equal(globalRegionSlugFromExpansionExamsPathname("/pricing"), null);
+});
+
+test("globalRegionSlugFromRegionalMarketingPublicPath maps locale-prefixed regional topic paths", () => {
+  assert.equal(globalRegionSlugFromRegionalMarketingPublicPath("/fr/japan/nursing-exam"), "japan");
+  assert.equal(globalRegionSlugFromRegionalMarketingPublicPath("/zh-tw/india/nursing-exams"), "india");
+  assert.equal(globalRegionSlugFromRegionalMarketingPublicPath("/japan/nursing-exam"), "japan");
+});
+
+test("REGIONAL_MARKETING_LOCALE_PREFIX_MATCHERS covers hyphenated middle-east", () => {
+  assert.ok(REGIONAL_MARKETING_LOCALE_PREFIX_MATCHERS.includes("/:locale/middle-east/:path*"));
 });
 
 test("globalRegionSlugFromRegionalMarketingPublicPath covers /exams and country-topic trees", () => {

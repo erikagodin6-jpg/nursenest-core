@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useEffect, useMemo } from "react";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { HomeConversionHero } from "@/components/marketing/home-conversion-hero";
@@ -21,6 +22,23 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import type { HomeMarketingStats } from "@/components/marketing/home-marketing-stats";
 
+const HomeHeroScreenshotSection = dynamic(
+  () => import("@/components/marketing/home-hero-screenshot-section").then((m) => m.HomeHeroScreenshotSection),
+  {
+    loading: () => (
+      <div
+        className="border-b border-[var(--header-nav-border)] bg-[var(--page-bg)]"
+        aria-hidden
+      >
+        <div className="nn-section-shell py-4 sm:py-5 md:py-6">
+          {/* Reserve 16:10 space to match {@link MarketingHeroCarousel} section frame — avoids CLS while the chunk loads */}
+          <div className="mx-auto aspect-[16/10] w-full max-w-[52rem] rounded-2xl border border-[var(--border-subtle)] bg-[var(--semantic-panel-muted)] shadow-sm" />
+        </div>
+      </div>
+    ),
+  },
+);
+
 export type HomeRestoredClientProps = {
   homeMarketingStats: HomeMarketingStats;
   /** Homepage global region cards — must exclude unpublished expansion exam hubs. */
@@ -28,7 +46,7 @@ export type HomeRestoredClientProps = {
 };
 
 /**
- * Homepage: hero → sample proof → trust strip → trust Q&A → pathways → how it works → platform proof → differentiation → objection FAQ → final CTA.
+ * Homepage: hero → product screenshots → sample proof → trust strip → trust Q&A → pathways → how it works → platform proof → differentiation → objection FAQ → final CTA.
  *
  * Stats are resolved on the server (`getCachedPublicHomeStats`) and passed in so the hero/trust sections paint real numbers on first paint—no client waterfall or 0→value jumps.
  */
@@ -88,8 +106,10 @@ export default function HomeRestoredClient({ homeMarketingStats, publishedGlobal
     <div className="font-sans md:animate-page-enter flex min-h-screen flex-col overflow-x-hidden bg-[var(--page-bg)]">
       <FunnelHomepageViewBeacon marketingRegion={marketingRegion} marketingLocale={locale} />
       <div className="flex-grow overflow-x-hidden">
-        {/* 1. HERO + platform preview */}
+        {/* 1. HERO */}
         <HomeConversionHero questionCount={questionCount} lessonCount={lessonCount} />
+        {/* 1b. Product screenshots — directly under hero; carousel chunk loads after first paint */}
+        <HomeHeroScreenshotSection />
         {/* 2. PROOF — sample item + rationale */}
         <HomeSampleQuestionPreview />
         {/* 2b. Global regions — licensing hubs beyond US/Canada */}

@@ -21,6 +21,7 @@ test("proxy matcher includes /app, /admin, and exam hub roots; auth-middleware u
   assert.match(proxySrc, /\/:locale\/canada",/);
   assert.match(proxySrc, /\/exams",/);
   assert.match(proxySrc, /\/:locale\/exams",/);
+  assert.match(proxySrc, /REGIONAL_MARKETING_LOCALE_PREFIX_MATCHERS/);
   assert.match(proxySrc, /\/japan\/:path\*"/);
   assert.match(proxySrc, /matcher/);
 

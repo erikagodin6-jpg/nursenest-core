@@ -4,6 +4,7 @@ import {
   getExamPathwayByRoute,
   resolveExamPathwayFromMarketingHubSegment,
 } from "@/lib/exam-pathways/exam-product-registry";
+import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { isSafeRelativeNavHref, sanitizeRelativeNavHrefOrFallback } from "@/lib/ui/safe-relative-href";
@@ -65,7 +66,13 @@ export function normalizeNotFoundPathname(raw: string | null | undefined): strin
 function listPathwaysForRoutePrefix(countrySlug: string, roleTrack: string): ExamPathwayDefinition[] {
   const c = norm(countrySlug);
   const r = norm(roleTrack);
-  return EXAM_PATHWAYS.filter((p) => norm(p.countrySlug) === c && norm(p.roleTrack) === r && p.status !== "hidden");
+  return EXAM_PATHWAYS.filter(
+    (p) =>
+      norm(p.countrySlug) === c &&
+      norm(p.roleTrack) === r &&
+      p.status !== "hidden" &&
+      isPathwayPublishedForPublicSite(p.id),
+  );
 }
 
 export function closestPathwayInFamily(
@@ -112,7 +119,7 @@ export function buildNotFoundRecoverySuggestions(pathname: string): NotFoundReco
         getExamPathwayByRoute(country, role, examSeg) ??
         resolveExamPathwayFromMarketingHubSegment(country, role, examSeg);
 
-      if (resolved) {
+      if (resolved && isPathwayPublishedForPublicSite(resolved.id)) {
         if (segments[3] === "lessons" && segments.length >= 5) {
           const hub = pathwayHrefOrSkip(resolved, "lessons");
           if (hub) {

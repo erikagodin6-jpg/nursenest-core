@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { createRouteValidator } from "../../../scripts/audit-internal-links";
+import { createRouteValidator } from "../../../../scripts/audit-internal-links";
 import {
+  defaultPathwayIdForMarketingOffering,
+  EXAM_PATHWAY_ORDER,
   getHomeHeroPrimaryTrackSpecs,
   marketingExamHubPath,
 } from "@/lib/marketing/country-exam-offerings";
+import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import {
   marketingExamPrepHubs,
@@ -55,13 +58,13 @@ describe("marketing route integrity", () => {
     const expectedPaths = {
       US: {
         rn: "/us/rn/nclex-rn",
-        pn: "/us/lpn/nclex-pn",
+        pn: "/us/pn/nclex-pn",
         np: "/us/np/fnp",
         allied: "/us/allied/allied-health",
       },
       CA: {
         rn: "/canada/rn/nclex-rn",
-        pn: "/canada/rpn/rex-pn",
+        pn: "/canada/pn/rex-pn",
         np: "/canada/np/cnple",
         allied: "/canada/allied/allied-health",
       },
@@ -72,15 +75,18 @@ describe("marketing route integrity", () => {
       const exp = expectedPaths[region];
       const byId = Object.fromEntries(specs.map((s) => [s.id, s])) as Record<string, (typeof specs)[number]>;
 
-      assert.equal(byId.rn.path, exp.rn);
-      assert.equal(byId.pn.path, exp.pn);
-      assert.equal(byId.np.path, exp.np);
-      assert.equal(byId.allied.path, exp.allied);
-
-      assert.equal(isWellFormedExamHubPath(byId.rn.path), true);
-      assert.equal(isWellFormedExamHubPath(byId.pn.path), true);
-      assert.equal(isWellFormedExamHubPath(byId.np.path), true);
-      assert.equal(isWellFormedExamHubPath(byId.allied.path), true);
+      for (const id of EXAM_PATHWAY_ORDER) {
+        const pathwayId = defaultPathwayIdForMarketingOffering(region, id);
+        const published = isPathwayPublishedForPublicSite(pathwayId);
+        const row = byId[id];
+        if (published) {
+          assert.ok(row, `${region} hero must include ${id} when ${pathwayId} is launch-published`);
+          assert.equal(row.path, exp[id]);
+          assert.equal(isWellFormedExamHubPath(row.path), true);
+        } else {
+          assert.equal(row, undefined, `${region} hero must omit ${id} until ${pathwayId} is launch-published`);
+        }
+      }
     }
   });
 

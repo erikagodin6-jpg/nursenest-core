@@ -1,6 +1,7 @@
-import { ContentStatus, FlashcardDeckVisibility, Prisma } from "@prisma/client";
+import { ContentStatus, ExamDatePlanType, FlashcardDeckVisibility, Prisma, TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { buildLearnerInsightSnapshot } from "@/lib/insights/learner-insight-engine";
@@ -245,6 +246,17 @@ export type PremiumDashboardSnapshot = {
   lessonContinuations: LessonContinuationRow[];
   /** Pass to {@link buildLearnerStudySnapshot} to avoid a second topic-performance query on the home dashboard. */
   topicPerformance: TopicPerformanceSnapshot | null;
+  /**
+   * Profile slice from the pathway bundle (same request as dashboard) — avoids a redundant `User`
+   * read on the home page for study snapshot + exam countdown.
+   */
+  studyBootstrap: {
+    alliedProfessionKey: string | null;
+    tier: TierCode | null;
+    learnerPath: string | null;
+    examDate: Date | null;
+    examDatePlanType: ExamDatePlanType | null;
+  };
 };
 
 export async function loadPremiumDashboardSnapshot(
@@ -268,21 +280,21 @@ export async function loadPremiumDashboardSnapshot(
   });
   if (!dash) return null;
 
+  const skipOptional = shouldSkipNonCriticalLearnerWork();
+
   const [pathwayRaw, streakDays, topStrongTopic] = await Promise.all([
     loadPathwayStudySummaries(userId, entitlement, {
       lessonRows: bundle.pathwayLessonRows,
       pathwayProgress: bundle.pathwayProgressScoped,
       learnerPath: bundle.user.learnerPath,
     }),
-    loadStudyStreakDays(userId),
-    topStrongTopicFromLedger(userId),
+    skipOptional ? Promise.resolve(0) : loadStudyStreakDays(userId),
+    skipOptional ? Promise.resolve(null) : topStrongTopicFromLedger(userId),
   ]);
 
-  const lessonContinuations = await loadLessonContinuationRows(
-    userId,
-    entitlement,
-    bundle.user.learnerPath ?? null,
-  );
+  const lessonContinuations = skipOptional
+    ? []
+    : await loadLessonContinuationRows(userId, entitlement, bundle.user.learnerPath ?? null);
 
   const pathways: PathwayProgressRow[] = pathwayRaw.map((p) => {
     const pct = p.lessonsTotal > 0 ? Math.round((p.lessonsCompleted / p.lessonsTotal) * 100) : 0;
@@ -310,9 +322,10 @@ export async function loadPremiumDashboardSnapshot(
 
   const headline = examReadyHeadline(dash.readiness);
 
-  const mockCount = await prisma.examAttempt
-    .count({ where: { userId } })
-    .catch(() => dash.recentMocks.length);
+  /** Full-table counts are expensive at scale; in degraded mode use recent mock list length only. */
+  const mockCount = skipOptional
+    ? dash.recentMocks.length
+    : await prisma.examAttempt.count({ where: { userId } }).catch(() => dash.recentMocks.length);
 
   const milestones = milestoneLines({
     pathways,
@@ -323,45 +336,49 @@ export async function loadPremiumDashboardSnapshot(
   });
 
   let flashcards: PremiumDashboardSnapshot["flashcards"] = null;
-  try {
-    const [fcStats, suggested] = await Promise.all([
-      prisma.flashcardUserStats.findUnique({
-        where: { userId },
-        select: { cardsReviewedTotal: true, currentStreak: true },
-      }),
-      prisma.flashcardDeck.findMany({
-        where: {
-          status: ContentStatus.PUBLISHED,
-          visibility: { not: FlashcardDeckVisibility.HIDDEN },
-        },
-        orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
-        take: 4,
-        select: { slug: true, title: true, cardCount: true },
-      }),
-    ]);
-    flashcards = {
-      cardsReviewedTotal: fcStats?.cardsReviewedTotal ?? 0,
-      reviewStreak: fcStats?.currentStreak ?? 0,
-      suggestedDecks: suggested.map((d) => ({
-        slug: d.slug,
-        title: d.title,
-        cardCount: d.cardCount,
-      })),
-    };
-  } catch {
-    flashcards = null;
+  if (!skipOptional) {
+    try {
+      const [fcStats, suggested] = await Promise.all([
+        prisma.flashcardUserStats.findUnique({
+          where: { userId },
+          select: { cardsReviewedTotal: true, currentStreak: true },
+        }),
+        prisma.flashcardDeck.findMany({
+          where: {
+            status: ContentStatus.PUBLISHED,
+            visibility: { not: FlashcardDeckVisibility.HIDDEN },
+          },
+          orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
+          take: 4,
+          select: { slug: true, title: true, cardCount: true },
+        }),
+      ]);
+      flashcards = {
+        cardsReviewedTotal: fcStats?.cardsReviewedTotal ?? 0,
+        reviewStreak: fcStats?.currentStreak ?? 0,
+        suggestedDecks: suggested.map((d) => ({
+          slug: d.slug,
+          title: d.title,
+          cardCount: d.cardCount,
+        })),
+      };
+    } catch {
+      flashcards = null;
+    }
   }
 
   let insights: LearnerInsightSnapshot | null = null;
-  try {
-    insights = await buildLearnerInsightSnapshot(userId, entitlement, dash, {
-      streakDays,
-      mockCount,
-      examDate: bundle.user.examDate,
-      examDatePlanType: bundle.user.examDatePlanType,
-    });
-  } catch {
-    insights = null;
+  if (!skipOptional) {
+    try {
+      insights = await buildLearnerInsightSnapshot(userId, entitlement, dash, {
+        streakDays,
+        mockCount,
+        examDate: bundle.user.examDate,
+        examDatePlanType: bundle.user.examDatePlanType,
+      });
+    } catch {
+      insights = null;
+    }
   }
 
   return {
@@ -386,5 +403,12 @@ export async function loadPremiumDashboardSnapshot(
     insights,
     lessonContinuations,
     topicPerformance: dash.topicPerformance,
+    studyBootstrap: {
+      alliedProfessionKey: bundle.user.alliedProfessionKey ?? null,
+      tier: bundle.user.tier ?? null,
+      learnerPath: bundle.user.learnerPath ?? null,
+      examDate: bundle.user.examDate ?? null,
+      examDatePlanType: bundle.user.examDatePlanType ?? null,
+    },
   };
 }

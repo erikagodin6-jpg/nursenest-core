@@ -6,12 +6,9 @@
  * `MAX_PATHWAY_TOPIC_PROGRAMMATIC_SITEMAP_URLS`.
  */
 import { ExamFamily } from "@prisma/client";
-import {
-  buildExamPathwayPath,
-  getExamPathwayById,
-  listPublicExamPathways,
-} from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import type { SeoCluster, SeoPageDefinition } from "@/lib/seo/programmatic-registry";
 import type { SeoPageKind } from "@/lib/seo/programmatic-page-kind";
 import { PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS } from "@/lib/seo/programmatic-registry";
@@ -531,7 +528,7 @@ function buildRegistryMaps(): {
 } {
   const byKey = new Map<string, PathwayTopicProgrammaticRow>();
   const rows: PathwayTopicProgrammaticRow[] = [];
-  for (const pathway of listPublicExamPathways()) {
+  for (const pathway of listPublishedExamPathwaysForPublicSite()) {
     for (const row of expandRowsForPathway(pathway)) {
       const k = registryKey(row.pathwayId, row.seoSlug);
       if (byKey.has(k)) continue;

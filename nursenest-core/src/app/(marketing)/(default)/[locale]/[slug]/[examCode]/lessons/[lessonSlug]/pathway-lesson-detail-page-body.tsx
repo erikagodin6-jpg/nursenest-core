@@ -36,9 +36,10 @@ import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-s
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
-import { PathwayLessonQuickReview } from "@/components/lessons/pathway-lesson-quick-review";
 import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
+import { extractExamFocusHighYieldLines, extractSecondaryExamContextLines } from "@/lib/lessons/pathway-lesson-study-extract";
+import { PathwayLessonStudyRail } from "@/components/lessons/pathway-lesson-study-rail";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
 import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
 import { LessonAudioCard } from "@/components/lessons/lesson-audio-card";
@@ -57,8 +58,10 @@ import { PathwayLessonAssessmentExperience } from "@/components/lessons/pathway-
 import { PathwayLessonDetailHeader } from "@/components/lessons/pathway-lesson-detail-header";
 import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import {
+  PathwayLessonDeferredRelatedRail,
   PathwayLessonDetailDeferred,
   PathwayLessonDetailDeferredSkeleton,
+  PathwayLessonRelatedRailSkeleton,
 } from "@/components/lessons/pathway-lesson-detail-deferred";
 import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-lesson-record-chips";
 import { MarketingPathwayLessonDetailViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
@@ -69,7 +72,7 @@ import {
   shouldRenderPathwayLessonSection,
 } from "@/lib/lessons/lesson-section-page-layout";
 import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
-import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
+import { PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
 import { resolvePathwayLessonBankAssessments } from "@/lib/lessons/lesson-bank-assessment-selection";
 import {
@@ -180,6 +183,9 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
   const contentDates = await getPathwayLessonContentDates(pathway.id, lesson.slug, lessonContentLocale);
   const jsonLdLessonPath = pathwayLessonPublicDetailPath(pathway, lesson.slug) ?? pathname;
   const quickReviewBullets = buildQuickReviewBullets(previewLesson);
+  const examFocusPrimary = extractExamFocusHighYieldLines(previewLesson);
+  const examFocusFallback = extractSecondaryExamContextLines(previewLesson.sections);
+  const examFocusRailLines = examFocusPrimary.length > 0 ? examFocusPrimary : examFocusFallback;
   const matchedLessonImage = resolveLessonImage({
     slug: lesson.slug,
     title: lesson.title,
@@ -258,7 +264,6 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
         <div className="mt-4 space-y-2">
           {fullAccess ? <PremiumLessonPublishNotice validation={lesson.premiumValidation} /> : null}
           {fullAccess ? <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} /> : null}
-          <PathwayLessonQuickReview quickReviewLines={quickReviewBullets} />
           <EeatContentAttribution variant="lesson" />
         </div>
         {fullAccess && lesson.memoryAnchor ? (
@@ -314,6 +319,29 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
           )
         ) : null}
 
+        <div className="mt-4 flex flex-col gap-6 xl:grid xl:grid-cols-[minmax(0,1fr)_17.5rem] xl:items-start xl:gap-8 2xl:gap-10">
+          <aside
+            className="shrink-0 space-y-4 xl:sticky xl:top-24 xl:order-2 xl:col-start-2 xl:w-full xl:self-start xl:max-h-[calc(100vh-5.5rem)] xl:overflow-y-auto xl:overscroll-contain xl:pr-1"
+            aria-label="Lesson quick review"
+          >
+            <PathwayLessonStudyRail
+              quickReviewLines={quickReviewBullets}
+              examFocusLines={examFocusRailLines}
+              commonMistakes={fullAccess ? lesson.studyCommonTraps : undefined}
+              fullAccess={fullAccess}
+              relatedQuestionsSlot={
+                <Suspense fallback={<PathwayLessonRelatedRailSkeleton />}>
+                  <PathwayLessonDeferredRelatedRail
+                    pathway={pathway}
+                    lesson={toPathwayLessonDeferredServerSnapshot(lesson)}
+                    contentLocale={lessonContentLocale}
+                  />
+                </Suspense>
+              }
+            />
+          </aside>
+
+          <div className="min-w-0 xl:order-1 xl:col-start-1 xl:row-start-1">
         {matchedLessonImage.url ? (
           <LessonClinicalImageCard
             url={matchedLessonImage.url}
@@ -386,11 +414,6 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
                   );
                 })}
               </article>
-              {fullAccess && lesson.studyCommonTraps && lesson.studyCommonTraps.length > 0 ? (
-                <div className="mx-auto mt-6 max-w-5xl">
-                  <PathwayLessonCommonTrapsStrip items={lesson.studyCommonTraps} />
-                </div>
-              ) : null}
             </div>
             {fullAccess && lessonHasExamTakeaways(lesson.studyTakeaways) ? (
               <div className="mx-auto mt-6 max-w-5xl">
@@ -415,6 +438,8 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
             initialProgress={lessonProgress}
           />
         </PathwayLessonAssessmentExperience>
+          </div>
+        </div>
 
         <Suspense fallback={<PathwayLessonDetailDeferredSkeleton />}>
           <PathwayLessonDetailDeferred

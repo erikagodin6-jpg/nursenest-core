@@ -144,9 +144,9 @@
   --mastery-low: var(--semantic-mastery-low);
   --decorative-1: color-mix(in srgb, var(--semantic-info) 42%, var(--semantic-brand));
   --decorative-2: color-mix(in srgb, var(--semantic-success) 38%, var(--semantic-warning));
-  --hero-gradient-start: color-mix(in srgb, var(--semantic-info) 9%, var(--semantic-surface));
-  --hero-gradient-mid: color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-surface));
-  --hero-gradient-end: color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface));
+  --hero-gradient-start: transparent;
+  --hero-gradient-mid: transparent;
+  --hero-gradient-end: transparent;
 
   /* ── Requested surface aliases ── */
   --surface-soft: var(--surface-soft-a);

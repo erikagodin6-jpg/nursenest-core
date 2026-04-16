@@ -1388,10 +1388,11 @@ article .prose :where(pre) {
 .nn-elevation-panel {
   border: 1px solid var(--border-subtle);
   background: var(--bg-card);
-  box-shadow: var(--elevation-rest);
+  box-shadow: none;
 }
 .nn-elevation-panel:hover {
-  box-shadow: var(--elevation-hover);
+  border-color: var(--border-medium);
+  box-shadow: none;
 }
 .nn-motion-standard {
   transition:
@@ -1492,7 +1493,7 @@ html[data-theme] .nn-marketing-surface {
   background: var(--nn-aesthetic-card-bg);
   border: 1px solid var(--nn-aesthetic-border-soft);
   border-radius: 1.25rem;
-  box-shadow: var(--elevation-rest);
+  box-shadow: none;
   transition:
     transform var(--motion-base) var(--motion-ease),
     box-shadow var(--motion-base) var(--motion-ease),
@@ -1502,7 +1503,7 @@ html[data-theme] .nn-marketing-surface {
 
 .nn-card-soft:hover {
   transform: translateY(var(--lift-card-hover-y));
-  box-shadow: var(--elevation-hover);
+  box-shadow: none;
   border-color: var(--border-strong);
 }
 
@@ -1514,7 +1515,7 @@ html[data-theme] .nn-marketing-surface {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
-  box-shadow: var(--elevation-rest);
+  box-shadow: none;
 }
 
 .nn-card-system-pad {

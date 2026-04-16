@@ -8,12 +8,16 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getAllProgrammaticSlugs } from "../src/lib/seo/programmatic-registry";
-import { MARKETING_LOCALE_CODES } from "../src/lib/i18n/marketing-locale-policy";
+import { getAllProgrammaticSlugs } from "../nursenest-core/src/lib/seo/programmatic-registry";
+import { MARKETING_LOCALE_CODES } from "../nursenest-core/src/lib/i18n/marketing-locale-policy";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const ROOT = path.resolve(__dirname, "..");
+/** Monorepo: Next app lives in `nursenest-core/`; legacy layout had `src/` at repo root. */
+const REPO_ROOT = path.resolve(__dirname, "..");
+const ROOT = fs.existsSync(path.join(REPO_ROOT, "nursenest-core", "src", "app"))
+  ? path.join(REPO_ROOT, "nursenest-core")
+  : REPO_ROOT;
 const APP_DIR = path.join(ROOT, "src", "app");
 
 type SegToken =

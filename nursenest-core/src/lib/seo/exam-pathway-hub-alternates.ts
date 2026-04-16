@@ -1,5 +1,6 @@
 import { buildExamPathwayPath, EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 /**
@@ -17,7 +18,8 @@ export function examPathwayRegionalHreflang(pathway: ExamPathwayDefinition): Rec
     (p) =>
       p.roleTrack === pathway.roleTrack &&
       p.examCode === pathway.examCode &&
-      p.status !== "hidden",
+      p.status !== "hidden" &&
+      isPathwayPublishedForPublicSite(p.id),
   );
   const out: Record<string, string> = {};
   const us = siblings.find((p) => p.countrySlug === "us");

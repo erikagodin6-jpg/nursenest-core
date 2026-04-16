@@ -9,6 +9,7 @@ import {
   filterWeakTopicsForAlliedProfession,
 } from "@/lib/allied/allied-weak-topic-filter";
 import { resolvePathwayLessonForWeakTopic, resolvePathwayNextLesson, type PathwayNextLesson } from "@/lib/learner/resolve-pathway-next-lesson";
+import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import {
   loadUnifiedTopicPerformance,
   type TopicPerformanceSnapshot,
@@ -76,6 +77,14 @@ export type BuildLearnerStudySnapshotOptions = {
    * `topicPerformance` after {@link loadLearnerDashboard} has already computed it.
    */
   topicPerformance?: TopicPerformanceSnapshot | null;
+  /**
+   * When set with threaded `topicPerformance`, skips a duplicate `User` read (same pathway bundle as premium snapshot).
+   */
+  studyBootstrap?: {
+    alliedProfessionKey: string | null;
+    tier: TierCode | null;
+    learnerPath: string | null;
+  };
 };
 
 /**
@@ -89,6 +98,25 @@ export async function buildLearnerStudySnapshot(
 ): Promise<LearnerStudySnapshot | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
 
+  /**
+   * When durability mode skips topic perf in {@link loadLearnerDashboard}, `topicPerformance` is null.
+   * Do **not** run a second {@link loadUnifiedTopicPerformance} here — that would undo degraded-mode savings.
+   */
+  if (options?.topicPerformance == null && shouldSkipNonCriticalLearnerWork()) {
+    return {
+      weakTopics: [],
+      topicPerformanceSource: "fallback",
+      topicTrends: [],
+      strongTopicsHighlight: [],
+      recommendedFocusTopic: null,
+      topWeak: null,
+      pathwayNext: null,
+      weakTopicPathwayLesson: null,
+      hasWeakTopicFlashcards: false,
+      weakTopicCodes: [],
+    };
+  }
+
   let perf: TopicPerformanceSnapshot;
   if (options?.topicPerformance != null) {
     perf = options.topicPerformance;
@@ -97,10 +125,16 @@ export async function buildLearnerStudySnapshot(
   }
   let weakTopics = perf.weakTopics;
 
-  const userRow = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { alliedProfessionKey: true, tier: true, learnerPath: true },
-  });
+  const userRow = options?.studyBootstrap
+    ? {
+        alliedProfessionKey: options.studyBootstrap.alliedProfessionKey,
+        tier: options.studyBootstrap.tier,
+        learnerPath: options.studyBootstrap.learnerPath,
+      }
+    : await prisma.user.findUnique({
+        where: { id: userId },
+        select: { alliedProfessionKey: true, tier: true, learnerPath: true },
+      });
 
   const learnerPathResolved = (learnerPath ?? userRow?.learnerPath ?? null)?.trim() || null;
 

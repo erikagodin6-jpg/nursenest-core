@@ -84,7 +84,7 @@ describe("paywall surface policy (static checks)", () => {
     );
     assert.match(body, /fullAccess\s*&&\s*lessonHasExamTakeaways/);
     assert.match(body, /fullAccess\s*&&\s*lesson\.memoryAnchor/);
-    assert.match(body, /fullAccess\s*&&\s*lesson\.studyCommonTraps/);
+    assert.match(body, /commonMistakes=\{fullAccess\s*\?\s*lesson\.studyCommonTraps/);
   });
 
   it("marketing pathway lesson server body uses thin client/deferred helpers (no full record across boundaries)", () => {
@@ -106,7 +106,7 @@ describe("paywall surface policy (static checks)", () => {
     );
     assert.match(body, /toPathwayLessonDeferredServerSnapshot\(/);
     assert.match(body, /pickPathwayLessonMarketingRecordChipsSource\(/);
-    assert.match(body, /<PathwayLessonQuickReview\s+quickReviewLines=/);
+    assert.match(body, /<PathwayLessonStudyRail[\s\S]*?quickReviewLines=/);
   });
 
   it("marketing pathway lesson page.tsx stays a thin shell (body owns paywall render tree)", () => {

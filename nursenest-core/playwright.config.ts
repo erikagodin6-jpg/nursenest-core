@@ -118,6 +118,8 @@ export default defineConfig({
     /[\\/]dist[\\/]/,
     /** Dedicated `playwright.smoke.config.ts` + `npm run qa:smoke` — keep out of default E2E projects. */
     /[\\/]tests[\\/]e2e[\\/]smoke[\\/]/,
+    /** `playwright.button-audit.config.ts` — long-running audits; opt-in via `npm run qa:button-audit`. */
+    /[\\/]tests[\\/]e2e[\\/]audit[\\/]/,
   ],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -169,6 +171,7 @@ export default defineConfig({
         /stripe-subscriber-journey\.spec\.ts$/,
         /freemium-paywall\.spec\.ts$/,
         /[\\/]tests[\\/]e2e[\\/]smoke[\\/]/,
+        /[\\/]tests[\\/]e2e[\\/]audit[\\/]/,
         /[\\/]tests[\\/]e2e[\\/]i18n[\\/]/,
         /^\.next[\\/]/,
         /[\\/]\.next[\\/]/,

@@ -44,6 +44,18 @@ export const PATHWAY_LAUNCH_APPROVED: ReadonlySet<string> = new Set([
   "us-lpn-nclex-pn",
   "ca-rn-nclex-rn",
   "ca-rpn-rex-pn",
+  /** Active US NP tracks (each hub is a separate product row). */
+  "us-np-fnp",
+  "us-np-agpcnp",
+  "us-np-pmhnp",
+  "us-np-whnp",
+  "us-np-pnp-pc",
+  /** New grad transition lessons (NEW_GRAD tier). */
+  "us-rn-new-grad-transition",
+  /** Allied parallel hubs. */
+  "us-allied-core",
+  "ca-allied-core",
+  /** Not listed until `status: "active"` + snapshot thresholds: `ca-np-cnple`. */
 ]);
 
 /** When an expansion region clears market + hub checks, add it here to allow `published` (rare). */
@@ -365,4 +377,35 @@ export function evaluateGlobalRegionLaunchReadiness(
 /** True when the region may appear in public country dropdowns / hubs. */
 export function isRegionPublishedForPublicSite(region: GlobalRegionSlug): boolean {
   return evaluateGlobalRegionLaunchReadiness(region).status === "published";
+}
+
+// ── Public pathway visibility (snapshot-only; no live DB) ─────────────────────
+
+/**
+ * Same inputs the live site should use for gating: committed snapshot counts + registry + {@link PATHWAY_LAUNCH_APPROVED}.
+ * Use this instead of live inventory for hot paths (nav, sitemap, programmatic SEO registry).
+ */
+export function evaluatePathwayLaunchReadinessFromSnapshot(pathway: ExamPathwayDefinition): PathwayLaunchEvaluation {
+  const snap = getSnapshotCounts(pathway.id);
+  return evaluatePathwayLaunchReadiness(pathway, {
+    lessonCount: snap.lessons,
+    questionCount: snap.questions,
+  });
+}
+
+/** True when this pathway may appear in public marketing nav, sitemaps, and pathway pickers. */
+export function isPathwayPublishedForPublicSite(pathwayId: string): boolean {
+  const pathway = EXAM_PATHWAYS.find((p) => p.id === pathwayId);
+  if (!pathway || pathway.status === "hidden") return false;
+  return evaluatePathwayLaunchReadinessFromSnapshot(pathway).status === "published";
+}
+
+/**
+ * Subset of {@link listPublicExamPathways} that is fully launch-ready for end users.
+ * Draft / needs_content / ready_for_review pathways stay admin-only.
+ */
+export function listPublishedExamPathwaysForPublicSite(): ExamPathwayDefinition[] {
+  return listPublicExamPathways().filter(
+    (p) => evaluatePathwayLaunchReadinessFromSnapshot(p).status === "published",
+  );
 }

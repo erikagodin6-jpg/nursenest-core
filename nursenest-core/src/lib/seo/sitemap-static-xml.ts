@@ -33,7 +33,11 @@ import {
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import { getPreNursingOverlaySlugsForLocale } from "@/lib/i18n/pre-nursing-content-overlay";
 import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "@/lib/exam-pathways/programmatic-slug-redirects";
-import { buildExamPathwayPath, getExamPathwayById, listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import {
+  isPathwayPublishedForPublicSite,
+  listPublishedExamPathwaysForPublicSite,
+} from "@/lib/navigation/country-exam-launch-readiness";
 import { listNpPracticeTestSegmentPaths } from "@/lib/exam-pathways/np-practice-test-segments";
 import {
   PATHWAY_LESSON_SITEMAP_BATCH,
@@ -49,12 +53,14 @@ import {
   getAllProgrammaticSlugs,
   MAX_PROGRAMMATIC_SEO_SITEMAP_SLUGS,
 } from "@/lib/seo/programmatic-registry";
+import { getAllProgrammaticQuestionTopicSlugs } from "@/lib/seo/programmatic-question-topic-registry";
 import { getAllToolSlugs } from "@/lib/tools/tool-registry";
 import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
 import {
   isRegionalMarketingUrlPublished,
   listPublishedExpansionExamMarketingPaths,
 } from "@/lib/marketing/published-regional-marketing-urls";
+import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 
 /**
  * Locales included in the sitemap index (full + partial tier only).
@@ -87,9 +93,13 @@ export function normalizeOrigin(origin: string): string {
 /** NP keyword practice-test hubs (`/us/np/aanp-practice-test`, …) — indexable alongside canonical exam codes. */
 export function collectNpPracticeTestHubUrls(origin: string): string[] {
   const o = normalizeOrigin(origin);
-  return listNpPracticeTestSegmentPaths().map(
-    ({ countrySlug, roleTrack, segment }) => `${o}/${countrySlug}/${roleTrack}/${segment}`,
-  );
+  return listNpPracticeTestSegmentPaths()
+    .filter(({ countrySlug, roleTrack, segment }) => {
+      const copy = getNpPracticeTestLandingCopy(countrySlug, roleTrack, segment);
+      if (!copy) return false;
+      return isPathwayPublishedForPublicSite(copy.pathwayId);
+    })
+    .map(({ countrySlug, roleTrack, segment }) => `${o}/${countrySlug}/${roleTrack}/${segment}`);
 }
 
 /** Pathway hub long-tail programmatic SEO (`/{country}/{role}/{exam}/{seoSlug}`). */
@@ -102,7 +112,7 @@ export function collectPathwayTopicProgrammaticUrls(origin: string): string[] {
 export function collectExamPathwayUrls(origin: string): string[] {
   const o = normalizeOrigin(origin);
   const urls: string[] = [];
-  for (const p of listPublicExamPathways()) {
+  for (const p of listPublishedExamPathwaysForPublicSite()) {
     urls.push(`${o}${buildExamPathwayPath(p)}`);
     urls.push(`${o}${buildExamPathwayPath(p, "pricing")}`);
     urls.push(`${o}${buildExamPathwayPath(p, "questions")}`);
@@ -150,6 +160,7 @@ export async function collectPathwayLessonSeoUrls(origin: string): Promise<strin
 
   const pathwayIds = await listPathwayIdsWithLessons();
   for (const pid of pathwayIds) {
+    if (!isPathwayPublishedForPublicSite(pid)) continue;
     const p = getExamPathwayById(pid);
     if (!p || p.status === "hidden") continue;
     if (!push(`${o}${buildExamPathwayPath(p, "lessons")}`)) {
@@ -318,6 +329,7 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     add("/"),
     add("/about"),
     add("/question-bank"),
+    ...getAllProgrammaticQuestionTopicSlugs().map((s) => add(`/questions/${s}`)),
     add("/practice-exams"),
     add("/lessons"),
     add("/pricing"),

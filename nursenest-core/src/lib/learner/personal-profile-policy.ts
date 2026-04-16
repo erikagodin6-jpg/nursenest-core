@@ -2,7 +2,7 @@ import { SubscriptionStatus, type CountryCode, type TierCode } from "@prisma/cli
 import { accessibleTiersForUserTier } from "@/lib/entitlements/content-access-scope";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
+import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 
 export type PathwayPickOption = { id: string; label: string };
@@ -60,9 +60,9 @@ export function listPathwayPicksForProfile(
     }));
   }
   const allowedTiers = new Set(accessibleTiersForUserTier(profileTier));
-  return EXAM_PATHWAYS.filter(
-    (p) => p.status !== "hidden" && p.countryCode === profileCountry && allowedTiers.has(p.stripeTier),
-  ).map((p) => ({
+  return listPublishedExamPathwaysForPublicSite()
+    .filter((p) => p.countryCode === profileCountry && allowedTiers.has(p.stripeTier))
+    .map((p) => ({
     id: p.id,
     label: p.shortName || p.displayName,
   }));

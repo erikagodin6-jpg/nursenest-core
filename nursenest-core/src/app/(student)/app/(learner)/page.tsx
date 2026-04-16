@@ -227,27 +227,31 @@ export default async function LearnerDashboardPage() {
   let weakTopicTitles: string[] = [];
   let benchmark: BenchmarkData | null = null;
   const studySettings = await loadStudySettings(userId);
+  const skipNonCriticalHome = shouldSkipNonCriticalLearnerWork();
   try {
     const snap = await loadPremiumDashboardSnapshot(userId, entitlement);
-    const [nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs, examUser, daysSinceLastActivity] =
+    const [nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs, daysSinceLastActivity] =
       await Promise.all([
         buildLearnerStudySnapshot(userId, entitlement, undefined, {
           topicPerformance: snap?.topicPerformance,
+          studyBootstrap: snap
+            ? {
+                alliedProfessionKey: snap.studyBootstrap.alliedProfessionKey,
+                tier: snap.studyBootstrap.tier,
+                learnerPath: snap.studyBootstrap.learnerPath,
+              }
+            : undefined,
         }),
         loadRecentLearnerNotesSummary(userId),
         loadTodayGoalProgress(userId),
         loadDailyQuestionGoalProgress(userId),
         loadLearnerRetentionPreferences(userId),
-        prisma.user.findUnique({
-          where: { id: userId },
-          select: { examDate: true, examDatePlanType: true },
-        }),
-        loadDaysSinceLastActivity(userId),
+        skipNonCriticalHome ? Promise.resolve(null) : loadDaysSinceLastActivity(userId),
       ]);
     snapshot = snap;
     studySnap = nextSnap;
     weakTopicTitles = studySnap?.weakTopics.map((w) => w.topic) ?? [];
-    benchmark = snap ? await computeBenchmarkData(userId, snap.readiness) : null;
+    benchmark = snap && !skipNonCriticalHome ? await computeBenchmarkData(userId, snap.readiness) : null;
     const progressFeedbackLine = studySnap?.topicTrends.find((r) => r.momentum === "improving")?.summary ?? null;
     if (snapshot) {
       const premiumSnapshot = snapshot;
@@ -281,11 +285,11 @@ export default async function LearnerDashboardPage() {
       };
 
       const countdown = buildCountdownCopy({
-        examDatePlanType: examUser?.examDatePlanType ?? null,
-        examDate: examUser?.examDate ?? null,
+        examDatePlanType: premiumSnapshot.studyBootstrap.examDatePlanType,
+        examDate: premiumSnapshot.studyBootstrap.examDate,
       });
 
-      const daysLeft = daysUntilExamUtc(examUser?.examDate ?? null);
+      const daysLeft = daysUntilExamUtc(premiumSnapshot.studyBootstrap.examDate);
       const questionsPerDay =
         daysLeft != null && daysLeft > 0
           ? Math.max(5, Math.ceil(200 / daysLeft))

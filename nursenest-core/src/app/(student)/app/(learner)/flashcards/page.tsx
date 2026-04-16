@@ -3,7 +3,7 @@ import { FlashcardsHubClient } from "@/components/flashcards/flashcards-hub-clie
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { auth } from "@/lib/auth";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
+import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 
 export default async function FlashcardsPage() {
@@ -27,7 +27,7 @@ export default async function FlashcardsPage() {
       </div>
     );
   }
-  const pathwayOptions = EXAM_PATHWAYS.map((p) => ({ id: p.id, label: p.displayName }));
+  const pathwayOptions = listPublishedExamPathwaysForPublicSite().map((p) => ({ id: p.id, label: p.displayName }));
   return (
     <Suspense fallback={<div className="mx-auto max-w-3xl px-4 py-8 text-sm">{t("learner.loading.flashcards")}</div>}>
       <FlashcardsHubClient pathwayOptions={pathwayOptions} />

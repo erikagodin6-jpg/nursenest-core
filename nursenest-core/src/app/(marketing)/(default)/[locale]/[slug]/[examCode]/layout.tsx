@@ -1,5 +1,6 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
+import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 
 /**
  * This segment and the marketing `(default)` layout read cookies (locale, region, optional session).
@@ -25,6 +26,9 @@ export default async function ExamPathwayLayout({ children, params }: Props) {
   const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   if (!pathway || pathway.status === "hidden") {
     notFound();
+  }
+  if (!isPathwayPublishedForPublicSite(pathway.id)) {
+    redirect("/lessons");
   }
   return <>{children}</>;
 }

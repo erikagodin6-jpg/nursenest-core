@@ -17,11 +17,8 @@ import {
   type GlobalRegionSlug,
 } from "@/lib/i18n/global-regions";
 import { getExamHubForGlobalRegion } from "@/lib/marketing/global-region-exam-hubs";
-import {
-  listPublicExamPathways,
-  buildExamPathwayPath,
-  type ExamPathwayDefinition,
-} from "@/lib/exam-pathways";
+import { buildExamPathwayPath, type ExamPathwayDefinition } from "@/lib/exam-pathways";
+import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { isPublicCountrySwitcherReady } from "@/lib/navigation/market-readiness";
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -317,7 +314,7 @@ function getPathwaysForRegion(region: GlobalRegionSlug): ExamPathwayDefinition[]
   const countrySlug = countrySlugMap[region];
   if (!countrySlug) return [];
 
-  return listPublicExamPathways().filter((p) => p.countrySlug === countrySlug);
+  return listPublishedExamPathwaysForPublicSite().filter((p) => p.countrySlug === countrySlug);
 }
 
 function professionDisplayLabel(roleTrack: string): string {

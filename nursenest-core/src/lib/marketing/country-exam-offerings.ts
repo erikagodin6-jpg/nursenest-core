@@ -13,6 +13,7 @@
  * Order is always RN → PN → NP → Allied (`EXAM_PATHWAY_ORDER`).
  */
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { alliedHub, pnPrimaryHub } from "@/lib/marketing/marketing-entry-routes";
@@ -39,6 +40,11 @@ export const EXAM_PATHWAY_ORDER: readonly CountryExamOfferingId[] = ["rn", "pn",
  * Canonical pathway id for each marketing offering (RN/PN/NP/Allied), aligned with {@link marketingExamHubPath}.
  * Use for CAT URLs, app deep links, and analytics — avoids duplicating hub ↔ registry mapping elsewhere.
  */
+/** True when the canonical hub for this marketing offering is launch-ready for public users. */
+export function isMarketingOfferingPublishedForPublicSite(region: MarketingRegionToggle, id: CountryExamOfferingId): boolean {
+  return isPathwayPublishedForPublicSite(defaultPathwayIdForMarketingOffering(region, id));
+}
+
 export function defaultPathwayIdForMarketingOffering(region: MarketingRegionToggle, id: CountryExamOfferingId): string {
   const isUs = region === "US";
   switch (id) {
@@ -149,12 +155,16 @@ function examPathwayHeroItemFor(region: MarketingRegionToggle, id: CountryExamOf
 }
 
 export function getExamNavStripItems(region: MarketingRegionToggle): ExamNavStripItem[] {
-  return EXAM_PATHWAY_ORDER.map((id) => examNavStripItemFor(region, id));
+  return EXAM_PATHWAY_ORDER.filter((id) => isMarketingOfferingPublishedForPublicSite(region, id)).map((id) =>
+    examNavStripItemFor(region, id),
+  );
 }
 
 /** Hero / quick-entry row: same order and labels as the nav strip; links go to each exam hub. */
 export function getExamPathwayHeroItems(region: MarketingRegionToggle): ExamPathwayHeroItem[] {
-  return EXAM_PATHWAY_ORDER.map((id) => examPathwayHeroItemFor(region, id));
+  return EXAM_PATHWAY_ORDER.filter((id) => isMarketingOfferingPublishedForPublicSite(region, id)).map((id) =>
+    examPathwayHeroItemFor(region, id),
+  );
 }
 
 /** Homepage hero primary tracks (RN, PN, NP, Allied) — hub paths + i18n keys for card copy. */
@@ -177,7 +187,7 @@ export type HomeHeroPrimaryTrackSpec = {
  */
 export function getHomeHeroPrimaryTrackSpecs(region: MarketingRegionToggle): HomeHeroPrimaryTrackSpec[] {
   const isUs = region === "US";
-  return [
+  const rows: HomeHeroPrimaryTrackSpec[] = [
     {
       id: "rn",
       path: marketingExamHubPath(region, "rn"),
@@ -215,4 +225,5 @@ export function getHomeHeroPrimaryTrackSpecs(region: MarketingRegionToggle): Hom
       ctaKey: "home.conversion.examCard.ctaAllied",
     },
   ];
+  return rows.filter((row) => isMarketingOfferingPublishedForPublicSite(region, row.id));
 }

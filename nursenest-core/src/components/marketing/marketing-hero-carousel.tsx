@@ -12,8 +12,10 @@ import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
 import {
   MARKETING_CAROUSEL_SIZES,
   MARKETING_HERO_LCP_SIZES,
+  MARKETING_HOME_SCREENSHOT_SECTION_SIZES,
   MARKETING_PHOTO_QUALITY,
   MARKETING_PHOTO_QUALITY_HERO,
+  MARKETING_PHOTO_QUALITY_HOME_SCREENSHOT_SECTION,
   marketingImageShouldUnoptimize,
 } from "@/lib/marketing-image-delivery";
 
@@ -22,9 +24,10 @@ export type MarketingHeroCarouselProps = {
   onMediaUnavailable?: () => void;
   /**
    * `hero` — tall, viewport-aware frame for the homepage column (fills beside long copy).
+   * `section` — screenshot strip under the hero (`max-w-[52rem]` in parent); sharp, lazy, no LCP priority.
    * `default` — fixed 16:10 box (e.g. “Platform in Action”).
    */
-  mediaFrame?: "default" | "hero";
+  mediaFrame?: "default" | "hero" | "section";
   /** Merged onto the outer wrapper (layout flex/min-height). */
   className?: string;
   /** Root `data-testid` (default `hero-carousel`). */
@@ -49,6 +52,10 @@ export type MarketingHeroCarouselProps = {
 /** Hero column: stable 16:10, larger than the compact carousel frame; height capped for fold balance. */
 const heroMediaFrameClass =
   "relative aspect-[16/10] w-full min-h-[11rem] max-h-[min(28rem,62vh)] shrink-0 overflow-hidden sm:min-h-[12rem] sm:max-h-[min(30rem,65vh)] md:min-h-[13rem] md:max-h-[min(34rem,68vh)]";
+
+/** Below-hero screenshot strip: 16:10, width from parent; no max-height cap so previews read larger. */
+const sectionMediaFrameClass =
+  "relative aspect-[16/10] w-full min-h-[13rem] shrink-0 overflow-hidden sm:min-h-[16rem]";
 
 export function MarketingHeroCarousel({
   slides,
@@ -203,10 +210,24 @@ export function MarketingHeroCarousel({
   const frameShell =
     mediaFrame === "hero"
       ? heroMediaFrameClass
-      : "relative aspect-[16/10] w-full max-h-[min(15rem,42vh)] min-h-[9rem] sm:min-h-[9.5rem]";
+      : mediaFrame === "section"
+        ? sectionMediaFrameClass
+        : "relative aspect-[16/10] w-full max-h-[min(15rem,42vh)] min-h-[9rem] sm:min-h-[9.5rem]";
 
-  const carouselSizes = mediaFrame === "hero" ? MARKETING_HERO_LCP_SIZES : MARKETING_CAROUSEL_SIZES;
-  const photoQuality = mediaFrame === "hero" ? MARKETING_PHOTO_QUALITY_HERO : MARKETING_PHOTO_QUALITY;
+  const carouselSizes =
+    mediaFrame === "hero"
+      ? MARKETING_HERO_LCP_SIZES
+      : mediaFrame === "section"
+        ? MARKETING_HOME_SCREENSHOT_SECTION_SIZES
+        : MARKETING_CAROUSEL_SIZES;
+  const photoQuality =
+    mediaFrame === "hero"
+      ? MARKETING_PHOTO_QUALITY_HERO
+      : mediaFrame === "section"
+        ? MARKETING_PHOTO_QUALITY_HOME_SCREENSHOT_SECTION
+        : MARKETING_PHOTO_QUALITY;
+
+  const isBelowFoldSection = mediaFrame === "section";
 
   if (validCount === 0) {
     return (
@@ -243,8 +264,14 @@ export function MarketingHeroCarousel({
       >
         {!hasLoaded && mediaOk ? (
           <div
-            className={`absolute inset-0 bg-gradient-to-br from-[var(--theme-separator)] via-[var(--theme-muted-surface)] to-[var(--theme-input-border)] ${
-              reducedMotion ? "opacity-90" : "nn-skeleton-fade nn-skeleton-soft-pulse"
+            className={`absolute inset-0 bg-[var(--theme-muted-surface)] ${
+              isBelowFoldSection
+                ? reducedMotion
+                  ? "opacity-100"
+                  : "nn-skeleton-fade"
+                : `bg-gradient-to-br from-[var(--theme-separator)] via-[var(--theme-muted-surface)] to-[var(--theme-input-border)] ${
+                    reducedMotion ? "opacity-90" : "nn-skeleton-fade nn-skeleton-soft-pulse"
+                  }`
             }`}
             aria-hidden
           />
@@ -260,6 +287,7 @@ export function MarketingHeroCarousel({
           const src = chain[tier];
           const active = index === current;
           const lcp = mediaFrame === "hero" && index === 0;
+          const loadLazy = isBelowFoldSection ? index > 0 : !lcp && index > 0;
           return (
             <Image
               key={`${slide.objectKey}-${index}-${tier}`}
@@ -269,9 +297,11 @@ export function MarketingHeroCarousel({
               sizes={carouselSizes}
               quality={photoQuality}
               priority={lcp}
+              loading={loadLazy ? "lazy" : undefined}
+              fetchPriority={isBelowFoldSection && index === 0 ? "low" : undefined}
               unoptimized={marketingImageShouldUnoptimize(src)}
-              className={`pointer-events-none object-contain bg-[var(--theme-muted-surface)] nn-carousel-slide-crossfade will-change-[opacity] ${
-                active ? "opacity-100" : "opacity-0"
+              className={`pointer-events-none object-contain bg-[var(--theme-muted-surface)] nn-carousel-slide-crossfade ${
+                active ? "opacity-100 z-[1]" : "opacity-0 z-0"
               }`}
               data-testid={`img-${imgTestIdPrefix}-slide-${index}`}
               aria-hidden={!active}
@@ -307,13 +337,35 @@ export function MarketingHeroCarousel({
       {hasLoaded && mediaOk ? (
         <>
           {currentSlide && !captionOverlay ? (
-            <div className="mt-2 space-y-1 px-0 text-center" data-testid={captionTestId}>
-              <p className="nn-marketing-h4 text-balance break-words">{currentSlide.title}</p>
-              <p className="nn-marketing-caption text-balance break-words text-[var(--theme-body-text)]">{currentSlide.caption}</p>
+            <div
+              className={`px-0 text-center ${isBelowFoldSection ? "mt-1.5 space-y-0.5" : "mt-2 space-y-1"}`}
+              data-testid={captionTestId}
+            >
+              <p
+                className={
+                  isBelowFoldSection
+                    ? "line-clamp-2 text-balance break-words text-sm font-semibold leading-snug text-[var(--palette-text-muted)]"
+                    : "nn-marketing-h4 text-balance break-words"
+                }
+              >
+                {currentSlide.title}
+              </p>
+              <p
+                className={
+                  isBelowFoldSection
+                    ? "line-clamp-3 text-balance break-words text-xs leading-snug text-[var(--palette-text-muted)] sm:line-clamp-4 sm:text-[0.8125rem]"
+                    : "nn-marketing-caption text-balance break-words text-[var(--theme-body-text)]"
+                }
+              >
+                {currentSlide.caption}
+              </p>
             </div>
           ) : null}
           {extraSlidesMounted || slides.length <= 1 ? (
-            <div className="mt-3 flex flex-wrap justify-center gap-2" data-testid={dotsTestId}>
+            <div
+              className={`flex flex-wrap justify-center ${isBelowFoldSection ? "mt-2 gap-1.5" : "mt-3 gap-2"}`}
+              data-testid={dotsTestId}
+            >
               {slides.map((_, index) => (
                 <button
                   key={index}

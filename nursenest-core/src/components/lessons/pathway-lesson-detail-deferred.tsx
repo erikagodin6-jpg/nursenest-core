@@ -2,12 +2,7 @@ import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-less
 import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
 import { PathwayLessonWayfinding } from "@/components/lessons/pathway-lesson-wayfinding";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
-import {
-  getRelatedPathwayLessons,
-  RELATED_PATHWAY_LESSONS_LIMIT,
-} from "@/lib/lessons/pathway-lesson-loader";
-import { mergeRelatedLessonDisplayList, pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
+import { loadPathwayLessonDeferredPracticeBundle } from "@/lib/lessons/pathway-lesson-deferred-practice-data";
 import type { PathwayLessonDeferredServerSnapshot } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
 
 /**
@@ -28,24 +23,9 @@ export async function PathwayLessonDetailDeferred({
   lessonsBasePath: string;
   contentLocale: string;
 }) {
-  const [relatedRaw, relatedQuestionStems] = await Promise.all([
-    getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, contentLocale, lesson.bodySystem),
-    loadRelatedExamQuestionStemsForPathwayLesson({
-      pathway,
-      lessonSlug: lesson.slug,
-      lessonTitle: lesson.title,
-      lessonTopic: lesson.topic,
-      lessonTopicSlug: lesson.topicSlug,
-      bodySystem: lesson.bodySystem,
-    }),
-  ]);
-
-  const relatedTopicRows = relatedRaw.filter(pathwayLessonHasRenderableHubSlug);
-  const relatedDisplay = mergeRelatedLessonDisplayList(
-    lesson.relatedLessonRefs,
-    relatedTopicRows,
-    RELATED_PATHWAY_LESSONS_LIMIT,
-  );
+  const bundle = await loadPathwayLessonDeferredPracticeBundle(pathway.id, contentLocale, lesson);
+  const relatedQuestionStems = bundle?.relatedQuestionStems ?? [];
+  const relatedDisplay = bundle?.relatedDisplay ?? [];
 
   return (
     <>
@@ -57,12 +37,14 @@ export async function PathwayLessonDetailDeferred({
         currentSlug={lesson.slug}
         relatedLessonRefs={lesson.relatedLessonRefs}
       />
-      <PathwayLessonRelatedQuestions
-        pathway={pathway}
-        lessonTopic={lesson.topic}
-        topicSlug={lesson.topicSlug}
-        items={relatedQuestionStems}
-      />
+      <div className="xl:hidden">
+        <PathwayLessonRelatedQuestions
+          pathway={pathway}
+          lessonTopic={lesson.topic}
+          topicSlug={lesson.topicSlug}
+          items={relatedQuestionStems}
+        />
+      </div>
       <PathwayLessonStudyLoopCta
         pathway={pathway}
         lessonsBasePath={lessonsBasePath}
@@ -76,6 +58,29 @@ export async function PathwayLessonDetailDeferred({
   );
 }
 
+/** Sticky-rail related stems — shares {@link loadPathwayLessonDeferredPracticeBundle} with the footer lane. */
+export async function PathwayLessonDeferredRelatedRail({
+  pathway,
+  lesson,
+  contentLocale,
+}: {
+  pathway: ExamPathwayDefinition;
+  lesson: PathwayLessonDeferredServerSnapshot;
+  contentLocale: string;
+}) {
+  const bundle = await loadPathwayLessonDeferredPracticeBundle(pathway.id, contentLocale, lesson);
+  if (!bundle) return null;
+  return (
+    <PathwayLessonRelatedQuestions
+      pathway={pathway}
+      lessonTopic={lesson.topic}
+      topicSlug={lesson.topicSlug}
+      items={bundle.relatedQuestionStems}
+      compact
+    />
+  );
+}
+
 /** Shown while related-lesson + question-stem queries resolve (streaming slot). */
 export function PathwayLessonDetailDeferredSkeleton() {
   return (
@@ -86,6 +91,25 @@ export function PathwayLessonDetailDeferredSkeleton() {
     >
       <div className="h-28 animate-pulse rounded-xl bg-muted/20" />
       <div className="h-44 animate-pulse rounded-xl bg-muted/15" />
+    </div>
+  );
+}
+
+/** Compact skeleton for the sticky study rail’s deferred question stems. */
+export function PathwayLessonRelatedRailSkeleton() {
+  return (
+    <div
+      className="min-h-[10rem] rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)]/40 p-4"
+      aria-busy="true"
+      aria-label="Loading related questions"
+    >
+      <div className="h-4 w-40 animate-pulse rounded bg-muted/30" />
+      <div className="mt-4 space-y-2">
+        <div className="h-3 w-full animate-pulse rounded bg-muted/25" />
+        <div className="h-3 w-[92%] animate-pulse rounded bg-muted/25" />
+        <div className="h-3 w-[88%] animate-pulse rounded bg-muted/25" />
+      </div>
+      <div className="mt-4 h-9 w-full animate-pulse rounded-full bg-muted/20" />
     </div>
   );
 }

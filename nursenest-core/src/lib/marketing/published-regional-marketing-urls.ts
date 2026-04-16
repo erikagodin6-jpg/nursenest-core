@@ -1,3 +1,7 @@
+/**
+ * Published-only regional marketing URLs for sitemaps and link eligibility.
+ * Aligns with Edge `proxy.ts` (unpublished → redirect) and `robotsForRegionalMarketingHub` (noindex).
+ */
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { EXAMS_MARKETING_SEGMENT_TO_REGION } from "@/lib/marketing/expansion-exams-path-gate";
 import { globalRegionSlugFromRegionalMarketingPublicPath } from "@/lib/marketing/regional-marketing-public-gate";

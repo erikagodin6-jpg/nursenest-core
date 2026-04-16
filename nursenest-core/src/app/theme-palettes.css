@@ -515,7 +515,8 @@
 }
 
 /*
- * Shared light-UI surfaces — every non-dark theme gets consistent chrome.
+ * Shared light-UI surfaces — every non-dark theme gets the same structure:
+ * white page/cards (#fff), gray-50 section alt via --theme-surface-strong, theme hue on primary/links/CTAs only.
  *
  * SPECIFICITY vs :root — This :is() block has [0,1,0] specificity (attribute selector),
  * which WINS over :root's [0,0,0,1]. This is intentional — it lets [data-theme] override

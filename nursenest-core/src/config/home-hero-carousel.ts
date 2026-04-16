@@ -73,6 +73,12 @@ export const HOMEPAGE_HERO_SLIDE_METADATA: readonly HomeHeroSlideMetadata[] = Ar
   },
 );
 
+/**
+ * 0-based indices into {@link HOMEPAGE_HERO_SLIDE_METADATA} for the homepage product screenshot carousel
+ * (same set previously shown beside the hero headline).
+ */
+export const HOME_HERO_PRIMARY_CAROUSEL_INDICES = [9, 0, 6, 2, 8] as const;
+
 const HOME_HERO_SLIDE_KEY_PREFIX = "components.homeHeroCarousel";
 
 export function homeHeroSlideTitleKey(index1To15: number): string {

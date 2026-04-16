@@ -85,6 +85,15 @@ export async function validateStageTransition(
     }
   }
 
+  if (nextStage === PathwayLaunchWorkflowStage.POST_PUBLISH_VERIFY) {
+    if (!attestations.postPublishVerified) {
+      return {
+        ok: false,
+        error: "Confirm post-publish smoke checks and monitoring before advancing to post-publish verification.",
+      };
+    }
+  }
+
   return { ok: true };
 }
 

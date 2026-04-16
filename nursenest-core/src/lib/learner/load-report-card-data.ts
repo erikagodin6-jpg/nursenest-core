@@ -1,5 +1,6 @@
 import "server-only";
 
+import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import { ExamSessionStatus, PracticeTestStatus } from "@prisma/client";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
@@ -14,6 +15,7 @@ import {
   loadLearnerDashboard,
   loadPathwayLessonProgressBundle,
   loadPathwayStudySummaries,
+  mapExamAttemptRowsToRecentMocks,
   type RecentMock,
 } from "@/lib/learner/load-learner-dashboard";
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
@@ -212,6 +214,20 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
 
   const visibleLessonScope = await buildVisibleLessonScopeForLearner(entitlement, bundle.pathwayLessonRows);
 
+  /** One graded-mock query for both dashboard “recent five” and report analytics (avoids duplicate findMany). */
+  const mockAttempts = await prisma.examAttempt.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+    take: MOCK_ATTEMPT_LIMIT,
+    select: {
+      id: true,
+      score: true,
+      total: true,
+      createdAt: true,
+      exam: { select: { tier: true, title: true } },
+    },
+  });
+
   const dash = await loadLearnerDashboard(userId, entitlement, {
     source: "loadReportCardData",
     userProfile: bundle.user,
@@ -219,13 +235,14 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     pathwayRowsForScope: bundle.pathwayLessonRows,
     pathwayMetadataRowCount: bundle.pathwayLessonRows.length,
     pathwayProgressRowCount: bundle.pathwayProgressScoped.length,
+    recentMocksPreload: mapExamAttemptRowsToRecentMocks(mockAttempts.slice(0, 5)),
   });
   if (!dash) return null;
 
   const pathwayOptions = listPathwaysCompatibleWithSubscription(entitlement);
   const pathwayLabelById = new Map(pathwayOptions.map((p) => [p.id, p.shortName || p.displayName]));
 
-  const [pathwayRaw, sessions, mockAttempts, practiceRows] = await Promise.all([
+  const [pathwayRaw, sessions, practiceRows] = await Promise.all([
     loadPathwayStudySummaries(userId, entitlement, {
       lessonRows: bundle.pathwayLessonRows,
       pathwayProgress: bundle.pathwayProgressScoped,
@@ -242,18 +259,6 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
         updatedAt: true,
         examMode: true,
         exam: { select: { title: true } },
-      },
-    }),
-    prisma.examAttempt.findMany({
-      where: { userId },
-      orderBy: { createdAt: "desc" },
-      take: MOCK_ATTEMPT_LIMIT,
-      select: {
-        id: true,
-        score: true,
-        total: true,
-        createdAt: true,
-        exam: { select: { tier: true, title: true } },
       },
     }),
     prisma.practiceTest.findMany({
@@ -430,7 +435,9 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     overallAccuracyPct: bankGraded.accuracyPct,
     preferredPathwayId,
   });
-  const peerBenchmark = await computePeerComparison(peerComparisonArgs).catch(() => null);
+  const peerBenchmark = shouldSkipNonCriticalLearnerWork()
+    ? null
+    : await computePeerComparison(peerComparisonArgs).catch(() => null);
 
   return {
     scopeTier: dash.scope.tier,

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ExamFamily } from "@prisma/client";
 import { buildExamPathwayPath, EXAM_PATHWAYS, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 
@@ -14,7 +15,7 @@ const US_NP_TRACK_ORDER = [
 
 function CaNpCnmpleSection() {
   const ca = getExamPathwayById("ca-np-cnple");
-  if (!ca) return null;
+  if (!ca || !isPathwayPublishedForPublicSite(ca.id)) return null;
   const waitlistOrUpcoming = ca.acquisitionMode === "waitlist" || ca.status === "upcoming";
 
   return (
@@ -59,7 +60,8 @@ function UsNpTracksSection() {
       p !== undefined &&
       p.examFamily === ExamFamily.NP &&
       p.countrySlug === "us" &&
-      p.status === "active",
+      p.status === "active" &&
+      isPathwayPublishedForPublicSite(p.id),
   );
 
   return (

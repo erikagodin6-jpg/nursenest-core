@@ -1,15 +1,27 @@
 import { userShouldSeeBaselinePrompt } from "@/lib/baseline/baseline-assessment";
+import { CountryCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { countryLabelFromSlug, formatRoleTrackLabel } from "@/lib/seo/breadcrumb-utils";
 
 export type LearnerPathwayNavMetadata = {
   showBaselinePrompt: boolean;
   pathwayId: string | null;
   pathwayShortLabel: string | null;
   pathwayHubHref: string | null;
+  /** e.g. "RN • United States • NCLEX-RN" — derived from pathway registry, no extra queries. */
+  pathwayContextBar: string | null;
   examsLabel: "CAT Exams" | "Exams";
 };
+
+/** Visible pathway context (tier · country · exam short name). */
+export function formatPathwayContextBar(p: ExamPathwayDefinition): string {
+  const tier = formatRoleTrackLabel(p.roleTrack, p.countrySlug);
+  const country = countryLabelFromSlug(p.countrySlug);
+  return `${tier} • ${country} • ${p.shortName}`;
+}
 
 function pillLabelForRoleTrack(roleTrack: string): string {
   if (roleTrack === "rn") return "RN";
@@ -24,6 +36,7 @@ export const DEFAULT_LEARNER_PATHWAY_NAV_METADATA: LearnerPathwayNavMetadata = {
   pathwayId: null,
   pathwayShortLabel: null,
   pathwayHubHref: null,
+  pathwayContextBar: null,
   examsLabel: "Exams",
 };
 
@@ -35,6 +48,7 @@ export function isLearnerPathwayNavMetadata(v: unknown): v is LearnerPathwayNavM
     (o.pathwayId === null || typeof o.pathwayId === "string") &&
     (o.pathwayShortLabel === null || typeof o.pathwayShortLabel === "string") &&
     (o.pathwayHubHref === null || typeof o.pathwayHubHref === "string") &&
+    (o.pathwayContextBar === null || typeof o.pathwayContextBar === "string") &&
     (o.examsLabel === "CAT Exams" || o.examsLabel === "Exams")
   );
 }
@@ -55,6 +69,7 @@ export async function loadLearnerPathwayNavMetadata(userId: string): Promise<Lea
       baselineAssessmentCompletedAt: true,
       learnerPath: true,
       alliedProfessionKey: true,
+      country: true,
     },
   });
 
@@ -62,6 +77,7 @@ export async function loadLearnerPathwayNavMetadata(userId: string): Promise<Lea
   let pathwayShortLabel: string | null = null;
   let pathwayId: string | null = null;
   let pathwayHubHref: string | null = null;
+  let pathwayContextBar: string | null = null;
   let examsLabel: "CAT Exams" | "Exams" = "Exams";
 
   if (u != null) {
@@ -73,13 +89,17 @@ export async function loadLearnerPathwayNavMetadata(userId: string): Promise<Lea
       pathwayShortLabel = p ? pillLabelForRoleTrack(p.roleTrack) : lp.slice(0, 48);
       if (p) {
         pathwayHubHref = buildExamPathwayPath(p);
+        pathwayContextBar = formatPathwayContextBar(p);
         if (p.roleTrack === "rn" || p.roleTrack === "rpn" || p.roleTrack === "lpn" || p.roleTrack === "np") {
           examsLabel = "CAT Exams";
         }
       }
     } else if (u.alliedProfessionKey) {
       pathwayShortLabel = "Allied";
-      pathwayHubHref = "/us/allied/allied-health";
+      const alliedId = u.country === CountryCode.CA ? "ca-allied-core" : "us-allied-core";
+      const alliedPath = getExamPathwayById(alliedId);
+      pathwayHubHref = alliedPath ? buildExamPathwayPath(alliedPath) : "/us/allied/allied-health";
+      pathwayContextBar = alliedPath ? formatPathwayContextBar(alliedPath) : "Allied • United States • Allied health";
     }
   }
 
@@ -88,6 +108,7 @@ export async function loadLearnerPathwayNavMetadata(userId: string): Promise<Lea
     pathwayId,
     pathwayShortLabel,
     pathwayHubHref,
+    pathwayContextBar,
     examsLabel,
   };
 }
