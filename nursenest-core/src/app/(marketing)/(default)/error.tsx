@@ -19,8 +19,8 @@ export default function MarketingDefaultSegmentError({
       error={error}
       reset={reset}
       surface="marketing_default"
-      title="This page couldn't load"
-      description="A temporary issue prevented this page from loading. Try again, or pick a study track below."
+      title="Just a moment"
+      description="We’re loading this page. If it doesn’t appear, try again in a moment — or pick a study track below."
       primaryAction={{ label: "Go home", href: "/" }}
       secondaryAction={{ label: "Browse exam pathways", href: "/lessons" }}
     />

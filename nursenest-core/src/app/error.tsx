@@ -7,7 +7,7 @@ import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { ProductErrorState } from "@/components/ui/product-error-state";
 import { getErrorMessageDevLine, shouldShowErrorBoundaryDevDetail } from "@/lib/runtime/error-message";
 
-export default function GlobalError({
+export default function AppError({
   error,
   reset,
 }: {

@@ -19,10 +19,9 @@ export default function ExamShellError({
       error={error}
       reset={reset}
       surface="exam_shell"
-      title="Exam couldn't load"
-      description="We couldn't start or resume this exam session. Your progress is saved — try again or return to your dashboard."
+      title="Just a moment"
+      description="We’re loading your exam session. This is usually temporary — try again in a moment. Your progress stays saved."
       primaryAction={{ label: "Back to dashboard", href: "/app" }}
-      secondaryAction={{ label: "Try again", href: "#" }}
     />
   );
 }

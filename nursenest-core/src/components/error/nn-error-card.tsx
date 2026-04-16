@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
 import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { useErrorBoundaryAutoRetry } from "@/lib/runtime/use-error-boundary-auto-retry";
 
 export type NnErrorCardProps = {
   /** Error object from Next.js error boundary. */
@@ -22,6 +23,10 @@ export type NnErrorCardProps = {
   secondaryAction?: { label: string; href: string };
   /** Whether to show the error digest reference (always shown, helps support). */
   showDigest?: boolean;
+  /** Automatic retry after this delay (ms); off when `reset` is missing. Default 2200. */
+  autoRetryAfterMs?: number;
+  /** Disable automatic retry (e.g. flows where remount must be manual). */
+  disableAutoRetry?: boolean;
 };
 
 /**
@@ -35,12 +40,20 @@ export function NnErrorCard({
   error,
   reset,
   surface,
-  title = "Something went wrong",
-  description = "We ran into an unexpected problem. Try again or navigate to a different section.",
+  title = "Just a moment",
+  description = "We hit a temporary issue. Try again in a moment, or pick another page — nothing is wrong with your account.",
   primaryAction = { label: "Go home", href: "/" },
   secondaryAction,
   showDigest = true,
+  autoRetryAfterMs = 2200,
+  disableAutoRetry = false,
 }: NnErrorCardProps) {
+  const autoRetry = useErrorBoundaryAutoRetry(reset ?? (() => {}), {
+    errorKey: error.digest,
+    delayMs: autoRetryAfterMs,
+    enabled: Boolean(reset && !disableAutoRetry && autoRetryAfterMs > 0),
+  });
+
   useEffect(() => {
     Sentry.captureException(error, {
       tags: { surface, feature: "react_error_boundary" },
@@ -69,6 +82,12 @@ export function NnErrorCard({
 
         <h1 className="nn-marketing-h3">{title}</h1>
         <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">{description}</p>
+
+        {autoRetry.status === "scheduled" ? (
+          <p className="nn-marketing-caption mt-2 text-[var(--theme-muted-text)]" aria-live="polite">
+            Retrying automatically…
+          </p>
+        ) : null}
 
         {digest ? (
           <p className="nn-marketing-caption mt-3 text-[var(--theme-muted-text)]" suppressHydrationWarning>

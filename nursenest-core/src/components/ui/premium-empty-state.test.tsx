@@ -39,7 +39,7 @@ describe("PremiumEmptyState", () => {
         animateEntrance={false}
       />,
     );
-    assert.match(html, /viewBox="0 0 50 32"/);
+    assert.match(html, /nursenest-images.*_leaf\.png/);
     assert.match(html, /href="\/ok"/);
   });
 

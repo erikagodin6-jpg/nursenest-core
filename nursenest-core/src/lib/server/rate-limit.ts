@@ -296,7 +296,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   if (pathname.startsWith("/api/auth/session")) {
     const cap = publicCapForIp(ip, 120);
     const key = `ratelimit:auth_session:ip:${ip}`;
-    const { ok } = checkRateLimit(key, { windowMs: PUBLIC_WINDOW_MS, max: cap });
+    const { ok } = await checkRateLimitUnified(key, { windowMs: PUBLIC_WINDOW_MS, max: cap });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "auth_session", path: "/api/auth/session" });
       const res = json429WithBackoff(ip);
@@ -308,9 +308,22 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     return null;
   }
 
+  if (pathname.startsWith(SUBSCRIPTION_API_STRICT_PREFIX) && !pathname.startsWith("/api/subscriptions/webhook")) {
+    const key = `ratelimit:subscriptions:ip:${ip}`;
+    const { ok } = await checkRateLimitUnified(key, {
+      windowMs: SUBSCRIPTION_STRICT_WINDOW_MS,
+      max: SUBSCRIPTION_STRICT_MAX,
+    });
+    if (!ok) {
+      safeServerLog("security", "rate_limit_exceeded", { kind: "subscriptions_api", path: pathname.slice(0, 96) });
+      return json429WithBackoff(ip);
+    }
+    return null;
+  }
+
   if (isLearnerPath(pathname) && userId) {
     const key = `ratelimit:learner:user:${userId}`;
-    const { ok } = checkRateLimit(key, { windowMs: LEARNER_WINDOW_MS, max: LEARNER_MAX });
+    const { ok } = await checkRateLimitUnified(key, { windowMs: LEARNER_WINDOW_MS, max: LEARNER_MAX });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "learner", path: pathname.slice(0, 96) });
       return json429LearnerFixed();
@@ -321,7 +334,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   if (isPublicJsonRateLimitPath(pathname)) {
     const cap = publicCapForIp(ip, PUBLIC_JSON_MAX);
     const key = `ratelimit:public_json:ip:${ip}`;
-    const { ok } = checkRateLimit(key, { windowMs: PUBLIC_JSON_WINDOW_MS, max: cap });
+    const { ok } = await checkRateLimitUnified(key, { windowMs: PUBLIC_JSON_WINDOW_MS, max: cap });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "public_json", path: pathname.slice(0, 96) });
       const res = json429WithBackoff(ip);
@@ -335,7 +348,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
 
   const cap = publicCapForIp(ip, PUBLIC_MAX);
   const key = `ratelimit:public:ip:${ip}`;
-  const { ok } = checkRateLimit(key, { windowMs: PUBLIC_WINDOW_MS, max: cap });
+  const { ok } = await checkRateLimitUnified(key, { windowMs: PUBLIC_WINDOW_MS, max: cap });
   if (!ok) {
     safeServerLog("security", "rate_limit_exceeded", { kind: "public", path: pathname.slice(0, 96) });
     const res = json429WithBackoff(ip);

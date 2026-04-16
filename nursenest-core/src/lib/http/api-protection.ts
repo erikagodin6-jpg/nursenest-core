@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { checkRateLimit, consumeRateLimit } from "@/lib/http/rate-limit-in-memory";
+import { checkRateLimitUnified, consumeRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import { getTrustedClientIp, ipRateLimitKey } from "@/lib/http/client-ip";
 import { readDeviceRequestContext } from "@/lib/http/device-request";
 import { recordPremiumProtectionAbuseFromLog } from "@/lib/premium-protection/telemetry-db";

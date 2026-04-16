@@ -36,7 +36,7 @@ function adminAccessDebug(): boolean {
 export async function requireAdmin() {
   const session = await auth();
   const u = session?.user as { id?: string; email?: string | null } | undefined;
-  /** Set by `src/proxy.ts` as `x-nn-admin-path` for RBAC. */
+  /** Set by `src/proxy.ts` as `x-nn-admin-path` / `x-nn-request-pathname` for RBAC. */
   const path = await resolveAdminRequestPath();
   const callbackPath = path && path.length > 0 ? path : "/admin";
 

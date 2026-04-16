@@ -19,8 +19,8 @@ export default function MarketingSegmentError({
       error={error}
       reset={reset}
       surface="marketing_segment"
-      title="Something went wrong"
-      description="This page ran into a temporary problem. Please try again or navigate to another section."
+      title="Just a moment"
+      description="We’re having a temporary hiccup on this page. Try again in a moment, or continue browsing below."
       primaryAction={{ label: "Go home", href: "/" }}
       secondaryAction={{ label: "Browse exam pathways", href: "/lessons" }}
     />

@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
 import { ProductErrorState } from "@/components/ui/product-error-state";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { getErrorMessage } from "@/lib/runtime/error-message";
+import { getErrorMessageDevLine, shouldShowErrorBoundaryDevDetail } from "@/lib/runtime/error-message";
 
 export default function PracticeTestRunSegmentError({
   error,
@@ -28,7 +28,8 @@ export default function PracticeTestRunSegmentError({
         title={t("learner.practiceTests.run.loadFailedTitle")}
         description={t("learner.error.section.description")}
         reference={error.digest}
-        detail={showDetail ? getErrorMessage(error) : null}
+        detail={showDetail ? getErrorMessageDevLine(error) : null}
+        autoRetryAfterMs={2200}
         onRetry={() => reset()}
         retryLabel={t("learner.error.section.tryAgain")}
         homeHref="/app/practice-tests"
