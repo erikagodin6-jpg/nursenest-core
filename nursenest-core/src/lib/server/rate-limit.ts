@@ -83,6 +83,16 @@ const ADMIN_API_MAX_PER_IP_UNAUTH = 90;
 const SIGNUP_WINDOW_MS = 60_000;
 const SIGNUP_MAX = 4;
 
+/**
+ * Single bucket for `POST /api/signup` (Node route handler). Proxy does **not** duplicate this key — one increment per request.
+ * @see nursenest-core/src/app/api/signup/route.ts
+ */
+export const API_SIGNUP_PER_IP_RATE_LIMIT = {
+  windowMs: SIGNUP_WINDOW_MS,
+  max: SIGNUP_MAX,
+  rateLimitKeyForIp: (ip: string) => `ratelimit:signup:ip:${ip}`,
+} as const;
+
 /** Per auth *kind* so login throttles don’t consume forgot-password quota (and vice versa). */
 const AUTH_KIND_LIMITS: Record<string, { windowMs: number; max: number }> = {
   signin: { windowMs: 60_000, max: 6 },
@@ -322,19 +332,6 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
         });
         return await json429WithBackoff(ip);
       }
-    }
-    return null;
-  }
-
-  if (pathname === "/api/signup" || pathname.startsWith("/api/signup/")) {
-    const key = `ratelimit:signup:ip:${ip}`;
-    const { ok } = await checkRateLimitUnified(key, {
-      windowMs: SIGNUP_WINDOW_MS,
-      max: tightenPublicCap(SIGNUP_MAX),
-    });
-    if (!ok) {
-      safeServerLog("security", "rate_limit_exceeded", { kind: "signup", path: pathname.slice(0, 96) });
-      return await json429WithBackoff(ip);
     }
     return null;
   }

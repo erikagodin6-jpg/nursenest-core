@@ -84,6 +84,10 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/api/admin/scalability-report",
   "/api/admin/pathway-lesson-translations",
   "/api/admin/pre-nursing-report",
+  "/api/admin/inline-content",
+  "/admin/pathway-launch-workflow",
+  "/api/admin/pathway-launch-workflow",
+  "/api/admin/exam-hub-preview",
 ];
 
 function isSuperOnlyPath(path: string): boolean {

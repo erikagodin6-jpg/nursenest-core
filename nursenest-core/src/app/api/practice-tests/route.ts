@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { ExamFamily, PracticeTestStatus } from "@prisma/client";
 import { z } from "zod";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
@@ -106,6 +107,7 @@ function linearConfigFingerprint(config: PracticeTestConfigJson) {
 }
 
 export async function GET(req: NextRequest) {
+  return runWithApiTelemetry(req, "GET /api/practice-tests", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -161,9 +163,11 @@ export async function GET(req: NextRequest) {
   });
 
   return NextResponse.json({ tests: list });
+  });
 }
 
 export async function POST(req: Request) {
+  return runWithApiTelemetry(req, "POST /api/practice-tests", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -529,4 +533,5 @@ export async function POST(req: Request) {
   });
 
   return NextResponse.json({ id: row.id, questionCount: picked.ids.length, config }, { status: 201 });
+  });
 }

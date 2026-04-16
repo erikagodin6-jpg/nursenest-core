@@ -228,10 +228,12 @@ export default async function LearnerDashboardPage() {
   let benchmark: BenchmarkData | null = null;
   const studySettings = await loadStudySettings(userId);
   try {
-    const [snap, nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs, examUser, daysSinceLastActivity] =
+    const snap = await loadPremiumDashboardSnapshot(userId, entitlement);
+    const [nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs, examUser, daysSinceLastActivity] =
       await Promise.all([
-        loadPremiumDashboardSnapshot(userId, entitlement),
-        buildLearnerStudySnapshot(userId, entitlement, undefined),
+        buildLearnerStudySnapshot(userId, entitlement, undefined, {
+          topicPerformance: snap?.topicPerformance,
+        }),
         loadRecentLearnerNotesSummary(userId),
         loadTodayGoalProgress(userId),
         loadDailyQuestionGoalProgress(userId),

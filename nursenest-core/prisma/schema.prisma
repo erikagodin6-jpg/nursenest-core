@@ -136,6 +136,7 @@ model User {
   premiumProtectionUserDays     PremiumProtectionUserDay[]
   abuseReviewsDismissed         ProtectionAbuseReview[]     @relation("ProtectionAbuseReviewDismissedBy")
   protectionAbuseReviews        ProtectionAbuseReview[]
+  inlineContentEdits            InlineContentEntry[]   @relation("InlineContentUpdatedBy")
 
   @@index([alliedProfessionKey])
   @@index([normalizedEmail])
@@ -1367,6 +1368,19 @@ model EducationalTranslationOverlay {
   @@map("educational_translation_overlays")
 }
 
+/// * Admin-editable page copy keyed by stable string (marketing, pre-nursing modules, etc.).
+model InlineContentEntry {
+  key         String            @id @db.VarChar(512)
+  body        String            @db.Text
+  kind        InlineContentKind @default(PLAIN)
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+  updatedById String?           @map("updated_by_id")
+  updatedBy   User?             @relation("InlineContentUpdatedBy", fields: [updatedById], references: [id], onDelete: SetNull)
+
+  @@index([updatedAt])
+  @@map("inline_content_entries")
+}
+
 /// *
 /// * Structured product feedback and bug reports (learner + marketing).
 /// * Optional screenshot stored as data URL when small enough — prefer object storage for heavy media later.
@@ -2138,6 +2152,11 @@ model content_import_runs {
   @@index([status, started_at(sort: Desc)])
 }
 
+enum InlineContentKind {
+  PLAIN
+  RICH_HTML
+}
+
 enum CountryCode {
   CA
   US
@@ -2505,4 +2524,35 @@ enum ContentImportRunStatus {
   COMPLETED
   FAILED
   CANCELLED
+}
+
+/// * Operational launch pipeline for one exam pathway or one global expansion region (`/exams/…`).
+/// * Stages are team-controlled; advancing to READY_TO_PUBLISH is blocked server-side until automated checks pass.
+enum PathwayLaunchWorkflowStage {
+  DRAFT
+  CONTENT_BUILD
+  QA_REVIEW
+  SEO_REVIEW
+  READY_TO_PUBLISH
+  PUBLISHED_LIVE
+  POST_PUBLISH_VERIFY
+}
+
+/// * `targetKey` format: `pathway:{pathwayId}` or `region:{GlobalRegionSlug}` (e.g. `region:japan`).
+model PathwayLaunchWorkflow {
+  id           String                   @id @default(cuid())
+  targetKey    String                   @unique @db.VarChar(128)
+  stage        PathwayLaunchWorkflowStage @default(DRAFT)
+  /// * Manual sign-offs: { "qaReviewed": true, "seoReviewed": true, "postPublishVerified": true }
+  attestations Json                     @default("{}")
+  /// * At most one row should be true — enforced in application code when setting focus.
+  isTeamFocus  Boolean                  @default(false) @map("is_team_focus")
+  notes        String?                  @db.Text
+  createdAt    DateTime                 @default(now()) @map("created_at")
+  updatedAt    DateTime                 @updatedAt @map("updated_at")
+  updatedById  String?                @map("updated_by_id")
+
+  @@index([stage])
+  @@index([isTeamFocus])
+  @@map("pathway_launch_workflows")
 }

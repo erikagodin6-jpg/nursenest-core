@@ -25,9 +25,9 @@ function CaNpCnmpleSection() {
       <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
         {waitlistOrUpcoming ? (
           <>
-            This track is <strong className="text-[var(--theme-heading-text)]">coming online</strong> as national requirements
-            stabilize. Join the waitlist for updates—lessons and questions ramp with the pathway; checkout opens when the
-            offering is active.
+            This track is <strong className="text-[var(--theme-heading-text)]">rolling out in phases</strong> as national
+            requirements stabilize. Join the waitlist for updates. Lessons and questions expand with the pathway, and checkout
+            opens when billing is active for this track.
           </>
         ) : (
           <>Pathway-scoped lessons, questions, and practice modes aligned to Canadian advanced practice expectations.</>
@@ -38,7 +38,7 @@ function CaNpCnmpleSection() {
           href={buildExamPathwayPath(ca)}
           className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground"
         >
-          {waitlistOrUpcoming ? "CNPLE hub (status & waitlist) →" : "Open Canadian NP hub →"}
+          {waitlistOrUpcoming ? "Canadian NP hub →" : "Open Canadian NP hub →"}
         </Link>
         {waitlistOrUpcoming ? (
           <Link

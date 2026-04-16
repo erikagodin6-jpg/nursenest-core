@@ -99,7 +99,7 @@ function pathwayWaitlistOrUpcomingBlock(pathway: ExamPathwayDefinition): CatElig
       reason: "pathway_waitlist",
       nextAction: "join_waitlist",
       marketingPrimaryCta: "none",
-      safeUserMessage: `${cat} is not ready yet — this pathway is on waitlist prep. You can still study lessons and the question bank; CAT opens when the track goes live.`,
+      safeUserMessage: `${cat} adaptive practice is not enabled for this pathway yet. Use lessons and the question bank on the pathway hub, or join the waitlist to hear when CAT opens.`,
       pathway,
       pathwayId: pathway.id,
       marketingCatPath: marketingCatPathForPathway(pathway),

@@ -3,7 +3,7 @@
  *
  * - **Active store:** {@link getPostgresRateLimitStore} when {@link shouldUsePostgresRateLimitStore}; otherwise
  *   {@link getInMemoryRateLimitStoreSingleton} (dev/tests/Edge).
- * - **Edge runtime:** Prisma unavailable — in-memory only (per region/instance; unavoidable).
+ * - **Edge runtime:** Prisma unavailable — in-memory only (per region/instance). App `proxy.ts` defaults to **Node** in Next.js 16+, so production global API limits use Postgres.
  * - **Production Node with Postgres:** if the shared store throws (DB down, migration missing, etc.),
  *   we **fail closed** (`ok: false` → callers typically map to HTTP 429). We do **not** fall back to
  *   in-memory there — that would diverge per instance. Non-production still falls back to in-memory

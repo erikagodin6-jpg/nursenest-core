@@ -282,10 +282,10 @@ export async function loadCoachBundleForApi(
   userId: string,
   entitlement: AccessScope,
 ): Promise<CoachDashboardBundle | null> {
-  const [snapshot, studySnap] = await Promise.all([
-    loadPremiumDashboardSnapshot(userId, entitlement),
-    buildLearnerStudySnapshot(userId, entitlement, undefined),
-  ]);
+  const snapshot = await loadPremiumDashboardSnapshot(userId, entitlement);
+  const studySnap = await buildLearnerStudySnapshot(userId, entitlement, undefined, {
+    topicPerformance: snapshot?.topicPerformance,
+  });
   if (!snapshot || !studySnap) return null;
   const days = await loadDaysSinceLastActivity(userId);
   return buildCoachDashboardBundle(snapshot, studySnap, days);

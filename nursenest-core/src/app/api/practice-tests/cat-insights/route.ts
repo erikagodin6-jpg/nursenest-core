@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { PracticeTestStatus } from "@prisma/client";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { prisma } from "@/lib/db";
@@ -22,6 +23,7 @@ export type CatInsightRow = {
 };
 
 export async function GET(req: NextRequest) {
+  return runWithApiTelemetry(req, "GET /api/practice-tests/cat-insights", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -89,10 +91,11 @@ export async function GET(req: NextRequest) {
     };
   });
 
-  return NextResponse.json({
-    page: pageNum,
-    pageSize: PAGE_SIZE,
-    hasMore,
-    items,
+    return NextResponse.json({
+      page: pageNum,
+      pageSize: PAGE_SIZE,
+      hasMore,
+      items,
+    });
   });
 }

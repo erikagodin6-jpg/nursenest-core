@@ -1,4 +1,4 @@
-import { TierCode } from "@prisma/client";
+import { ExamDatePlanType, TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import {
@@ -39,9 +39,9 @@ import {
  * ## Learner pathway catalog — who may query Prisma directly
  *
  * **`loadPathwayLessonProgressBundle`** is the canonical entry for one request’s scoped pathway
- * inventory (user row + capped metadata `findMany` + chunked `Progress` for synthetic lesson ids).
- * Composite loaders (report card, progress page, study planner, premium snapshot) should call it
- * once and thread the result through optional preloads below.
+ * inventory (one **User** read including exam/planner scalars + capped metadata `findMany` + chunked
+ * `Progress` for synthetic lesson ids). Composite loaders (readiness API, report card, progress page,
+ * study planner, premium snapshot) should call it once and thread the result through optional preloads below.
  *
  * **`loadLearnerDashboard`** may always run its own queries: it needs an uncapped
  * `pathwayLesson.count` for `lessonsAvailable` (bundle uses a capped list for progress joins only).
@@ -146,6 +146,18 @@ export type LearnerDashboardPreload = {
   pathwayRowsForScope?: PathwayLessonKeyRow[];
 };
 
+/** Single `User` row slice from {@link loadPathwayLessonProgressBundle} (no duplicate reads for dashboard + planner + premium). */
+export type PathwayLessonBundleUserProfile = {
+  learnerPath: string | null;
+  tier: TierCode | null;
+  alliedProfessionKey: string | null;
+  examDate: Date | null;
+  examDatePlanType: ExamDatePlanType | null;
+  dailyStudyMinutes: number | null;
+  examFocus: string | null;
+  studyGoal: string | null;
+};
+
 /** Options for {@link loadPathwayLessonProgressBundle} observability only. */
 export type PathwayLessonProgressBundleOptions = {
   source?: string;
@@ -208,11 +220,7 @@ export async function loadPathwayLessonProgressBundle(
   entitlement: AccessScope,
   options?: PathwayLessonProgressBundleOptions | null,
 ): Promise<{
-  user: {
-    learnerPath: string | null;
-    tier: TierCode | null;
-    alliedProfessionKey: string | null;
-  };
+  user: PathwayLessonBundleUserProfile;
   pathwayLessonRows: PathwayLessonDashboardRow[];
   pathwayProgressScoped: { lessonId: string; completed: boolean }[];
 } | null> {
@@ -225,7 +233,16 @@ export async function loadPathwayLessonProgressBundle(
   const tUser = performance.now();
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { learnerPath: true, tier: true, alliedProfessionKey: true },
+    select: {
+      learnerPath: true,
+      tier: true,
+      alliedProfessionKey: true,
+      examDate: true,
+      examDatePlanType: true,
+      dailyStudyMinutes: true,
+      examFocus: true,
+      studyGoal: true,
+    },
   });
   durationMsUser = Math.round(performance.now() - tUser);
 
@@ -270,6 +287,11 @@ export async function loadPathwayLessonProgressBundle(
       learnerPath: user?.learnerPath ?? null,
       tier: user?.tier ?? null,
       alliedProfessionKey: user?.alliedProfessionKey ?? null,
+      examDate: user?.examDate ?? null,
+      examDatePlanType: user?.examDatePlanType ?? null,
+      dailyStudyMinutes: user?.dailyStudyMinutes ?? null,
+      examFocus: user?.examFocus ?? null,
+      studyGoal: user?.studyGoal ?? null,
     },
     pathwayLessonRows,
     pathwayProgressScoped,
@@ -383,12 +405,7 @@ export async function loadLearnerDashboard(
   let recommendedQuizTopic: string | null = null;
   let practiceAgg = { correct: 0, total: 0, sessionCount: 0 };
 
-  if (skipHeavy) {
-    safeServerLog("learner_dashboard", "optional_aggregates_skipped", {
-      reason: "durability_degraded",
-      surface: "topic_performance_and_session_grading",
-    });
-  } else {
+  if (!skipHeavy) {
     try {
       const perf = await loadUnifiedTopicPerformance(userId, entitlement, 8);
       topicPerformance = perf;
@@ -462,6 +479,7 @@ export async function loadLearnerDashboard(
     pathwayCountsFromPreload: Boolean(
       preload?.pathwayMetadataRowCount != null || preload?.pathwayProgressRowCount != null,
     ),
+    visibleScopeFromPreload: Boolean(preload?.visibleLessonScope),
     pathwayMetadataRowCount: preload?.pathwayMetadataRowCount ?? 0,
     pathwayProgressRowCount: preload?.pathwayProgressRowCount ?? 0,
     pathwaySectionsJsonLoaded: false,

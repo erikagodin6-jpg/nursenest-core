@@ -51,6 +51,10 @@ import {
 } from "@/lib/seo/programmatic-registry";
 import { getAllToolSlugs } from "@/lib/tools/tool-registry";
 import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
+import {
+  isRegionalMarketingUrlPublished,
+  listPublishedExpansionExamMarketingPaths,
+} from "@/lib/marketing/published-regional-marketing-urls";
 
 /**
  * Locales included in the sitemap index (full + partial tier only).

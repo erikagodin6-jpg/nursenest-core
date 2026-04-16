@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
-import { loadLearnerDashboard } from "@/lib/learner/load-learner-dashboard";
+import { buildVisibleLessonScopeForLearner } from "@/lib/learner/learner-visible-lesson-scope";
+import {
+  loadLearnerDashboard,
+  loadPathwayLessonProgressBundle,
+} from "@/lib/learner/load-learner-dashboard";
 import { remediationLessonsTopicHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import type { ReadinessBand } from "@/lib/learner/readiness-score";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
@@ -47,7 +51,8 @@ function passLikelihoodFromReadiness(
 }
 
 /**
- * Subscriber readiness snapshot: reuses {@link loadLearnerDashboard} (same aggregates as the learner dashboard).
+ * Subscriber readiness snapshot: one pathway bundle per request, then {@link loadLearnerDashboard}
+ * (same aggregates as the learner dashboard; avoids a second pathway inventory read).
  *
  * - **Score0–100** and factor breakdown: `readiness`
  * - **Weak content areas** (topic-level): `contentAreas` with lesson + question drill links
@@ -60,7 +65,23 @@ export async function GET(req: Request) {
 
     setSentryServerContext({ route: "/api/learner/readiness", feature: SERVER_FEATURE.api, userId: gate.userId });
 
-    const dashboard = await loadLearnerDashboard(gate.userId, gate.entitlement);
+    const bundle = await loadPathwayLessonProgressBundle(gate.userId, gate.entitlement, {
+      source: "api:GET:learner/readiness",
+    });
+    if (!bundle) {
+      return NextResponse.json({ error: "Dashboard unavailable", code: "dashboard_unavailable" }, { status: 503 });
+    }
+
+    const visibleLessonScope = await buildVisibleLessonScopeForLearner(gate.entitlement, bundle.pathwayLessonRows);
+
+    const dashboard = await loadLearnerDashboard(gate.userId, gate.entitlement, {
+      source: "api:GET:learner/readiness",
+      userProfile: bundle.user,
+      visibleLessonScope,
+      pathwayRowsForScope: bundle.pathwayLessonRows,
+      pathwayMetadataRowCount: bundle.pathwayLessonRows.length,
+      pathwayProgressRowCount: bundle.pathwayProgressScoped.length,
+    });
     if (!dashboard) {
       return NextResponse.json({ error: "Dashboard unavailable", code: "dashboard_unavailable" }, { status: 503 });
     }

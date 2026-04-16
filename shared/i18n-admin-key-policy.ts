@@ -16,7 +16,7 @@ function isPagesAdminSecondSegment(seg: string): boolean {
  * Returns true if the key is operational / staff UI and must not ship in public i18n shards.
  */
 export function isAdminOnlyFlatI18nKey(key: string): boolean {
-  if (key === "nav.admin") return true;
+  /** `nav.admin` is public chrome (signed-in staff nav label) — must live in the `nav` shard, not staff-only. */
   if (key.startsWith("allied.")) {
     const second = key.split(".")[1] ?? "";
     /** e.g. alliedAdmin, articleAdmin, encyclopediaAdmin — staff tooling, not public marketing body copy. */

@@ -693,7 +693,7 @@ export function PricingPageClient({
                       onClick={() => requestCheckout(duration)}
                       className={`${isHighlighted ? MARKETING_PRIMARY_CTA_CLASS : MARKETING_SECONDARY_CTA_CLASS} mt-6 w-full justify-center disabled:pointer-events-none disabled:opacity-50`}
                     >
-                      {row.checkoutAvailable ? TRIAL_PRIMARY_COPY : "Coming Soon"}
+                      {row.checkoutAvailable ? TRIAL_PRIMARY_COPY : t("pages.pricing.checkout.comingSoon")}
                     </button>
                     {row.checkoutAvailable ? (
                       <>
@@ -706,7 +706,7 @@ export function PricingPageClient({
                       </>
                     ) : (
                       <p className="mt-3 text-center text-xs leading-snug text-muted-foreground">
-                        This plan is not yet available for checkout
+                        {t("pages.pricing.checkout.unavailableBody")}
                       </p>
                     )}
                   </>

@@ -3,6 +3,7 @@ import "server-only";
 import { ContentStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
+import { syntheticPathwayLessonId } from "@/lib/lessons/pathway-lesson-progress";
 
 export type PathwayTopicCoverage = {
   pathwayId: string;
@@ -29,13 +30,15 @@ function emptyMap(pathwayIds: string[]): Map<string, PathwayTopicCoverage> {
 /**
  * Batch-computes lesson-based topic coverage for one or more pathways.
  *
- * Three DB round-trips total, regardless of how many pathways are passed:
- *   1. All completed pathway progress rows for this user (prefix scan).
+ * Bounded reads:
+ *   1. Published lesson slugs per pathway (≤ {@link MAX_SLUGS_PER_PATHWAY} each) → synthetic ids → chunked `Progress` `IN` for completed rows only.
  *   2. Total distinct topicSlugs per pathway (single groupBy).
  *   3. Distinct topicSlugs for the completed slugs (single OR query).
  *
  * Falls back to zeros on DB error — never throws.
  */
+const COVERAGE_PROGRESS_CHUNK = 400;
+
 export async function loadPathwayTopicCoverageBatch(
   userId: string,
   pathwayIds: string[],
@@ -46,11 +49,35 @@ export async function loadPathwayTopicCoverageBatch(
   if (safeIds.length === 0) return emptyMap(pathwayIds);
 
   return withDatabaseFallback(async () => {
-    // --- Query 1: completed pathway lesson progress rows for this user ---
-    const completedRows = await prisma.progress.findMany({
-      where: { userId, completed: true, lessonId: { startsWith: "pathway:" } },
-      select: { lessonId: true },
-    });
+    // --- Query 1: completed progress only for inventory synthetic ids (no global `pathway:` prefix scan) ---
+    const syntheticIds: string[] = [];
+    const slugBatches = await Promise.all(
+      safeIds.map((pid) =>
+        prisma.pathwayLesson
+          .findMany({
+            where: { pathwayId: pid, status: ContentStatus.PUBLISHED },
+            select: { slug: true },
+            orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
+            take: MAX_SLUGS_PER_PATHWAY,
+          })
+          .then((rows) => ({ pid, rows })),
+      ),
+    );
+    for (const { pid, rows } of slugBatches) {
+      for (const r of rows) {
+        syntheticIds.push(syntheticPathwayLessonId(pid, r.slug));
+      }
+    }
+
+    const completedRows: { lessonId: string }[] = [];
+    for (let i = 0; i < syntheticIds.length; i += COVERAGE_PROGRESS_CHUNK) {
+      const chunk = syntheticIds.slice(i, i + COVERAGE_PROGRESS_CHUNK);
+      const part = await prisma.progress.findMany({
+        where: { userId, completed: true, lessonId: { in: chunk } },
+        select: { lessonId: true },
+      });
+      completedRows.push(...part);
+    }
 
     // Parse "pathway:{pathwayId}:{slug}" synthetic IDs.
     const byPathway = new Map<string, string[]>();

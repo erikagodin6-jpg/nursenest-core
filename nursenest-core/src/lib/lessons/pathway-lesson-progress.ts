@@ -1,5 +1,7 @@
+import { ContentStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { PATHWAY_CATALOG_LIST_HARD_CAP } from "@/lib/lessons/pathway-lesson-scale";
 
 /** Never issue more than this many `lessonId IN (...)` keys per hub request (matches hub page cap). */
 export const PATHWAY_HUB_PROGRESS_SLUG_CAP = 64;
@@ -8,6 +10,81 @@ export type PathwayLessonProgressStatus = "not_started" | "in_progress" | "compl
 
 export function syntheticPathwayLessonId(pathwayId: string, slug: string): string {
   return `pathway:${pathwayId}:${slug}`;
+}
+
+const PROGRESS_INVENTORY_CHUNK = 400;
+
+/**
+ * Published pathway lesson slugs up to {@link PATHWAY_CATALOG_LIST_HARD_CAP} — same bound as learner catalog inventory.
+ * Used for `lessonId IN (...)` progress queries (avoids `startsWith` / `LIKE` scans on `Progress`).
+ */
+export async function listPublishedSyntheticLessonIdsForPathway(pathwayId: string): Promise<string[]> {
+  const rows = await prisma.pathwayLesson.findMany({
+    where: { pathwayId, status: ContentStatus.PUBLISHED },
+    select: { slug: true },
+    orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
+    take: PATHWAY_CATALOG_LIST_HARD_CAP,
+  });
+  return rows.map((r) => syntheticPathwayLessonId(pathwayId, r.slug));
+}
+
+export async function countProgressCompletedForSyntheticIds(userId: string, lessonIds: string[]): Promise<number> {
+  if (lessonIds.length === 0) return 0;
+  let n = 0;
+  for (let i = 0; i < lessonIds.length; i += PROGRESS_INVENTORY_CHUNK) {
+    const chunk = lessonIds.slice(i, i + PROGRESS_INVENTORY_CHUNK);
+    n += await prisma.progress.count({
+      where: { userId, completed: true, lessonId: { in: chunk } },
+    });
+  }
+  return n;
+}
+
+export async function countProgressInProgressForSyntheticIds(userId: string, lessonIds: string[]): Promise<number> {
+  if (lessonIds.length === 0) return 0;
+  let n = 0;
+  for (let i = 0; i < lessonIds.length; i += PROGRESS_INVENTORY_CHUNK) {
+    const chunk = lessonIds.slice(i, i + PROGRESS_INVENTORY_CHUNK);
+    n += await prisma.progress.count({
+      where: { userId, completed: false, lessonId: { in: chunk } },
+    });
+  }
+  return n;
+}
+
+/** Any progress row (opened / touched) for the lesson id set — used for hub “total opened” style stats. */
+export async function countProgressTouchedForSyntheticIds(userId: string, lessonIds: string[]): Promise<number> {
+  if (lessonIds.length === 0) return 0;
+  let n = 0;
+  for (let i = 0; i < lessonIds.length; i += PROGRESS_INVENTORY_CHUNK) {
+    const chunk = lessonIds.slice(i, i + PROGRESS_INVENTORY_CHUNK);
+    n += await prisma.progress.count({ where: { userId, lessonId: { in: chunk } } });
+  }
+  return n;
+}
+
+/**
+ * Latest touched progress row among a bounded set of lesson ids (max `updatedAt` across chunked queries).
+ */
+export async function findLatestProgressTouchAmongLessonIds(
+  userId: string,
+  lessonIds: string[],
+): Promise<{ lessonId: string; completed: boolean; updatedAt: Date } | null> {
+  if (lessonIds.length === 0) return null;
+  let best: { lessonId: string; completed: boolean; updatedAt: Date } | null = null;
+  for (let i = 0; i < lessonIds.length; i += PROGRESS_INVENTORY_CHUNK) {
+    const chunk = lessonIds.slice(i, i + PROGRESS_INVENTORY_CHUNK);
+    const row = await prisma.progress.findFirst({
+      where: { userId, lessonId: { in: chunk } },
+      orderBy: { updatedAt: "desc" },
+      select: { lessonId: true, completed: true, updatedAt: true },
+    });
+    if (!row) continue;
+    if (!best || row.updatedAt > best.updatedAt) {
+      best = { lessonId: row.lessonId, completed: row.completed, updatedAt: row.updatedAt };
+    }
+  }
+  return best;
 }
 
 export function pathwayLessonProgressStatusFromRow(row: { completed: boolean } | null): PathwayLessonProgressStatus {
@@ -62,42 +139,27 @@ export async function loadPathwayLessonProgressMap(
 }
 
 /**
- * Single DB round-trip for pathway-scoped completed vs in-progress row counts (synthetic `pathway:{id}:` ids).
+ * Completed vs in-progress counts for **published pathway inventory** (capped list) — chunked `IN`, no prefix scans.
+ * Pass `inventoryIds` when the caller already listed slugs (avoids a second `pathwayLesson` read).
  */
 export async function aggregatePathwayProgressCounts(
   userId: string,
   pathwayId: string,
+  inventoryIdsPreloaded?: string[],
 ): Promise<{ lessonsCompleted: number; lessonsInProgress: number }> {
   if (!userId || !isDatabaseUrlConfigured()) {
     return { lessonsCompleted: 0, lessonsInProgress: 0 };
   }
-  const prefix = `pathway:${pathwayId}:`;
-  const pattern = `${prefix}%`;
-  try {
-    const rows = await prisma.$queryRaw<{ completed: bigint; in_progress: bigint }[]>`
-      SELECT
-        COUNT(*) FILTER (WHERE "completed")::bigint AS completed,
-        COUNT(*) FILTER (WHERE NOT "completed")::bigint AS in_progress
-      FROM "Progress"
-      WHERE "userId" = ${userId}
-        AND "lessonId" LIKE ${pattern}
-    `;
-    const r = rows[0];
-    return {
-      lessonsCompleted: Number(r?.completed ?? 0),
-      lessonsInProgress: Number(r?.in_progress ?? 0),
-    };
-  } catch {
-    const [lessonsCompleted, lessonsInProgress] = await Promise.all([
-      prisma.progress.count({
-        where: { userId, completed: true, lessonId: { startsWith: prefix } },
-      }),
-      prisma.progress.count({
-        where: { userId, completed: false, lessonId: { startsWith: prefix } },
-      }),
-    ]);
-    return { lessonsCompleted, lessonsInProgress };
+  const inventoryIds =
+    inventoryIdsPreloaded ?? (await listPublishedSyntheticLessonIdsForPathway(pathwayId));
+  if (inventoryIds.length === 0) {
+    return { lessonsCompleted: 0, lessonsInProgress: 0 };
   }
+  const [lessonsCompleted, lessonsInProgress] = await Promise.all([
+    countProgressCompletedForSyntheticIds(userId, inventoryIds),
+    countProgressInProgressForSyntheticIds(userId, inventoryIds),
+  ]);
+  return { lessonsCompleted, lessonsInProgress };
 }
 
 /**
@@ -127,6 +189,8 @@ export async function loadPathwayHubProgressBatch(
   const cappedSlugs = hubSlugs.slice(0, PATHWAY_HUB_PROGRESS_SLUG_CAP);
   const narrowIds = cappedSlugs.map((s) => syntheticPathwayLessonId(pathwayId, s));
 
+  const inventoryIds = await listPublishedSyntheticLessonIdsForPathway(pathwayId);
+
   const [idRows, lastRow, counts] = await Promise.all([
     narrowIds.length > 0
       ? prisma.progress.findMany({
@@ -134,12 +198,8 @@ export async function loadPathwayHubProgressBatch(
           select: { lessonId: true, completed: true },
         })
       : Promise.resolve([]),
-    prisma.progress.findFirst({
-      where: { userId, lessonId: { startsWith: prefix } },
-      orderBy: { updatedAt: "desc" },
-      select: { lessonId: true, completed: true },
-    }),
-    aggregatePathwayProgressCounts(userId, pathwayId),
+    findLatestProgressTouchAmongLessonIds(userId, inventoryIds),
+    aggregatePathwayProgressCounts(userId, pathwayId, inventoryIds),
   ]);
 
   const progressMap: Record<string, PathwayLessonProgressStatus> = {};
@@ -154,7 +214,6 @@ export async function loadPathwayHubProgressBatch(
     const slug = lastRow.lessonId.slice(prefix.length);
     if (slug) lastForResume = { slug, completed: lastRow.completed };
   }
-
   return {
     progressMap,
     lastForResume,

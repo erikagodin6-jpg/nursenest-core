@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { PracticeTestStatus } from "@prisma/client";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { prisma } from "@/lib/db";
@@ -21,6 +22,7 @@ function asIdList(raw: unknown): string[] {
  * when `adaptiveState.catStudyAwaitingContinue` is true.
  */
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
+  return runWithApiTelemetry(req, "GET /api/practice-tests/[id]/cat-study-review", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -125,4 +127,5 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   }
 
   return NextResponse.json({ studyFeedback: feedback });
+  });
 }

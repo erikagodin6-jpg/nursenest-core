@@ -25,7 +25,7 @@ export function pathwayLessonsHubLead(pathway: ExamPathwayDefinition): string {
     case "us-np-pnp-pc":
       return "Pediatric primary care NP lessons center on growth, development, common childhood conditions, immunizations, and family-centered management for PNP-PC boards—scoped separately from adult-only AGPCNP tracks. Pair lessons with pathway questions; subscription unlocks full depth.";
     case "ca-np-cnple":
-      return "Canadian NP licensure (CNPLE) is evolving—this hub stays aligned as requirements finalize. Use pathway-scoped questions and CAT practice now; structured lessons will deepen here as they publish. Join the waitlist on the exam hub if checkout is not yet open for this track.";
+      return "Canadian NP licensure (CNPLE) pathways vary by jurisdiction—this hub reflects the pathway you selected. Use pathway-scoped questions and CAT practice; pair with structured lessons where they exist in your hub. For billing or access limits, use the Canadian NP exam hub from your account menu.";
     default: {
       const place = pathway.countrySlug === "canada" ? "Canada" : "the United States";
       const examName = pathwayRegionAwareExamName(pathway);

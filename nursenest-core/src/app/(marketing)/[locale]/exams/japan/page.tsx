@@ -5,6 +5,8 @@ import { DEFAULT_MARKETING_LOCALE, isCoreHostedNonDefaultLocale } from "@/lib/i1
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { robotsForRegionalMarketingHub } from "@/lib/seo/expansion-hub-robots";
+
 
 export const revalidate = 86400;
 
@@ -32,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         title,
         description,
         alternates: { canonical: alt.canonical, languages: alt.languages },
-        robots: { index: true, follow: true },
+        robots: robotsForRegionalMarketingHub("japan"),
         keywords: [
           "nursing exam Japan",
           "Japan National Nursing Examination",

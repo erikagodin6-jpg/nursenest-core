@@ -19,7 +19,7 @@ import {
 import { isStaffRole } from "@/lib/auth/staff-roles";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { CONTINUE_STUDYING_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
-import { formatTitleCase } from "@/lib/format/text-case";
+import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { SiteFooterFeedbackTrigger } from "@/components/layout/site-footer-feedback-trigger";
 import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 import { useActiveNavContext } from "@/lib/navigation/use-active-nav-context";
@@ -114,7 +114,13 @@ export function SiteFooter() {
                   <SiteBrandLogoMark variant="footer" logoVariant="leaf" />
                 </div>
                 <p className="max-w-xs text-sm leading-relaxed text-[var(--footer-muted)]">
-                  Exam-focused prep for RN, LPN/LVN, NP, and Allied Health learners worldwide.
+                  {formatTitleCase(t("footer.supportingNursesGlobally"), locale)}
+                </p>
+                <p className="mt-2 max-w-xs text-sm leading-relaxed text-[var(--footer-muted)]">
+                  {formatSentenceCase(t("footer.brandTagline"), locale)}
+                </p>
+                <p className="mt-2 max-w-xs text-xs leading-relaxed text-[var(--footer-muted)]">
+                  {formatSentenceCase(t("footer.globalPathwaysLine"), locale)}
                 </p>
               </div>
 

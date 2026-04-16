@@ -55,6 +55,9 @@ export default async function AdminCountryExamReadinessPage() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2 text-sm">
+          <Link href="/admin/pathway-launch-workflow" className="rounded-lg border border-border px-3 py-2 font-medium hover:bg-muted">
+            Launch workflow
+          </Link>
           <Link href="/admin/product-availability" className="rounded-lg border border-border px-3 py-2 font-medium hover:bg-muted">
             Product availability
           </Link>

@@ -38,6 +38,11 @@ export function getExamHubForGlobalRegion(region: GlobalRegionSlug): GlobalRegio
   return HUB_BY_REGION[region];
 }
 
+/** Regions with a shipped `/exams/…` marketing implementation (admin launch workflow). */
+export function listExpansionHubRegions(): GlobalRegionSlug[] {
+  return Object.keys(HUB_BY_REGION) as GlobalRegionSlug[];
+}
+
 /**
  * Preferred locale after switching country: hub default if user’s current locale
  * is not allowed for the new region.

@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { PracticeTestStatus } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
@@ -57,6 +58,7 @@ function toJsonObject(value: unknown): object {
 }
 
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
+  return runWithApiTelemetry(req, "GET /api/practice-tests/[id]", "content", async () => {
   const gate = await practiceTestRouteDeps.requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -170,6 +172,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       ? { teachingReviewUnavailable: true as const }
       : {}),
   });
+  });
 }
 
 const patchSchema = z.object({
@@ -181,6 +184,7 @@ const patchSchema = z.object({
 });
 
 export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
+  return runWithApiTelemetry(req, "PATCH /api/practice-tests/[id]", "content", async () => {
   const gate = await practiceTestRouteDeps.requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -540,4 +544,5 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   }
 
   return NextResponse.json({ error: "Unsupported action" }, { status: 400 });
+  });
 }

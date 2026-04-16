@@ -10,7 +10,9 @@ import { isTurnstileEnforced, verifyTurnstileToken } from "@/lib/captcha/verify-
 import { DEMO_USER_EMAIL_DOMAIN } from "@/lib/demo-users/create-demo-user";
 import { prisma } from "@/lib/db";
 import { JSON_BODY_SIGNUP, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
+import { tightenPublicCap } from "@/lib/config/rate-limit-tightening";
 import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
+import { API_SIGNUP_PER_IP_RATE_LIMIT } from "@/lib/server/rate-limit";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { productEvent } from "@/lib/observability/product-events";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
@@ -61,7 +63,10 @@ const schema = z.object({
 export async function POST(req: Request) {
   setSentryServerContext({ route: "/api/signup", feature: SERVER_FEATURE.signup });
   const ip = clientIp(req);
-  const rl = await checkRateLimitUnified(`signup:${ip}`, { windowMs: 60_000, max: 10 });
+  const rl = await checkRateLimitUnified(API_SIGNUP_PER_IP_RATE_LIMIT.rateLimitKeyForIp(ip), {
+    windowMs: API_SIGNUP_PER_IP_RATE_LIMIT.windowMs,
+    max: tightenPublicCap(API_SIGNUP_PER_IP_RATE_LIMIT.max),
+  });
   if (!rl.ok) {
     signupStructuredFailed(req, "rate_limited");
     productEvent("signup_rate_limited", {});

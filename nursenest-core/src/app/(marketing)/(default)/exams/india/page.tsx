@@ -4,6 +4,7 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { robotsForRegionalMarketingHub } from "@/lib/seo/expansion-hub-robots";
 
 export const revalidate = 86400;
 
@@ -23,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
         title,
         description,
         alternates: { canonical: alt.canonical, languages: alt.languages },
-        robots: { index: true, follow: true },
+        robots: robotsForRegionalMarketingHub("india"),
         keywords: [
           "nursing exam India",
           "Indian Nursing Council exam",

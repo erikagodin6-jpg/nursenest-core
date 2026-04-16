@@ -207,15 +207,18 @@ function gradeSessionAgainstMap(
 export async function loadReportCardData(userId: string, entitlement: AccessScope): Promise<ReportCardData | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
 
-  const bundle = await loadPathwayLessonProgressBundle(userId, entitlement);
+  const bundle = await loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadReportCardData" });
   if (!bundle) return null;
 
   const visibleLessonScope = await buildVisibleLessonScopeForLearner(entitlement, bundle.pathwayLessonRows);
 
   const dash = await loadLearnerDashboard(userId, entitlement, {
+    source: "loadReportCardData",
     userProfile: bundle.user,
     visibleLessonScope,
     pathwayRowsForScope: bundle.pathwayLessonRows,
+    pathwayMetadataRowCount: bundle.pathwayLessonRows.length,
+    pathwayProgressRowCount: bundle.pathwayProgressScoped.length,
   });
   if (!dash) return null;
 

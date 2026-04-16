@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { PracticeTestStatus } from "@prisma/client";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
@@ -42,6 +43,7 @@ function parsePracticeTestRouteParams(raw: unknown): { id: string } | null {
  * Keeps large CAT/linear runs off the wire and out of React state in one payload.
  */
 export async function GET(req: NextRequest, ctx: { params: Promise<unknown> }) {
+  return runWithApiTelemetry(req, "GET /api/practice-tests/[id]/question", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -126,4 +128,5 @@ export async function GET(req: NextRequest, ctx: { params: Promise<unknown> }) {
   } catch {
     return NextResponse.json({ error: "Unable to load question" }, { status: 503 });
   }
+  });
 }

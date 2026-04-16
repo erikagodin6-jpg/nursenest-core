@@ -10,8 +10,8 @@
  *   1. If they switch to their purchased market → full access, no restrictions
  *   2. If they switch to another supported market → public pages allowed,
  *      protected content blocked with upgrade messaging
- *   3. If they switch to an unsupported market → marketing pages only,
- *      clear "coming soon" messaging
+ *   3. If they switch to an unsupported market → marketing pages only;
+ *      in-app prep redirects without unfinished-market placeholder copy
  *
  * This module provides the decision logic; UI components consume these results
  * to show appropriate messaging, CTAs, and redirects.
@@ -40,7 +40,7 @@ export type ContextSwitchDecision = {
   /** The support level of the target market. */
   marketSupport: MarketSupportTier;
   /** What should happen when the user tries to access protected content. */
-  protectedContentAction: "allow" | "paywall" | "upgrade_cta" | "coming_soon";
+  protectedContentAction: "allow" | "paywall" | "upgrade_cta" | "limited_market";
   /** User-facing messaging for the context banner. */
   contextMessage: string | null;
   /** Whether to show a "return to your purchased content" link. */
@@ -98,8 +98,9 @@ export function evaluateContextSwitch(
       canAccessProtectedContent: false,
       isHomeRegion: false,
       marketSupport: "partial",
-      protectedContentAction: "coming_soon",
-      contextMessage: "Study content for this market is in development.",
+      protectedContentAction: "limited_market",
+      contextMessage:
+        "Exam prep for this region is not offered in the app yet. Switch to United States or Canada in your profile to use the full library.",
       showReturnHome: entitlement.hasActiveSubscription,
       homeRegion,
     };
@@ -110,10 +111,11 @@ export function evaluateContextSwitch(
     canAccessProtectedContent: false,
     isHomeRegion: false,
     marketSupport: market.supportTier,
-    protectedContentAction: "coming_soon",
-    contextMessage: market.supportTier === "planned"
-      ? "We're working on bringing NurseNest to this market."
-      : "Full exam prep for this market is coming soon.",
+    protectedContentAction: "limited_market",
+    contextMessage:
+      market.supportTier === "planned"
+        ? "This market is not available in the app yet. Use United States or Canada for full exam prep."
+        : "Exam prep accounts for this region are not available in the app yet. Use United States or Canada for the full experience.",
     showReturnHome: entitlement.hasActiveSubscription,
     homeRegion,
   };
@@ -138,7 +140,7 @@ export function evaluateRouteAccess(
 
   if (!isProtectedRoute) return "public";
   if (decision.canAccessProtectedContent) return "allow";
-  if (decision.protectedContentAction === "coming_soon") return "redirect";
+  if (decision.protectedContentAction === "limited_market") return "redirect";
 
   return "paywall";
 }

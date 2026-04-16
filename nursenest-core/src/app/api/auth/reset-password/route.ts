@@ -4,7 +4,6 @@ import { hash } from "bcryptjs";
 import { z } from "zod";
 import { strongPasswordSchema } from "@/lib/auth/password-policy";
 import { JSON_BODY_AUTH_FORM, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
-import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import { prisma } from "@/lib/db";
 import { hashPasswordResetToken } from "@/lib/password-reset-crypto";
 import { PASSWORD_RESET_TOKEN_TTL_MS } from "@/lib/auth/password-reset-constants";
@@ -31,13 +30,7 @@ export async function POST(req: Request) {
   return runWithApiTelemetry(req, "POST /api/auth/reset-password", "auth", async () => {
   const ip = clientIp(req);
   const correlation = correlationIdFromRequest(req) ?? "";
-  const rl = await checkRateLimitUnified(`reset-password:${ip}`, { windowMs: 60_000, max: 10 });
-  if (!rl.ok) {
-    return NextResponse.json(
-      { ok: false, error: "Too many requests. Try again shortly." },
-      { status: 429 },
-    );
-  }
+  /** Per-IP limit: global proxy uses `ratelimit:auth:reset:ip:*` (see {@link enforceApiRateLimit}) — not duplicated here. */
 
   const bodyRead = await parseJsonBodyWithLimit(req, JSON_BODY_AUTH_FORM);
   if (!bodyRead.ok) return bodyRead.response;

@@ -54,6 +54,27 @@ describe("security regression (source contracts)", () => {
     assert.match(src, /requireAdmin\(req\)/);
   });
 
+  it("signup route uses the same distributed key as API_SIGNUP_PER_IP_RATE_LIMIT (no duplicate proxy bucket)", () => {
+    const signup = readFileSync(join(nursenestCoreRoot, "src", "app", "api", "signup", "route.ts"), "utf8");
+    assert.match(signup, /API_SIGNUP_PER_IP_RATE_LIMIT\.rateLimitKeyForIp/);
+    const rl = readFileSync(join(nursenestCoreRoot, "src", "lib", "server", "rate-limit.ts"), "utf8");
+    assert.match(rl, /ratelimit:signup:ip:/);
+    assert.doesNotMatch(
+      readFileSync(join(nursenestCoreRoot, "src", "lib", "server", "rate-limit.ts"), "utf8"),
+      /if \(pathname === "\/api\/signup"/,
+      "signup should not be rate-limited twice in proxy and route",
+    );
+  });
+
+  it("RATE_LIMIT_STORE=memory cannot silently disable Postgres buckets in production when DATABASE_URL is set", () => {
+    const src = readFileSync(
+      join(nursenestCoreRoot, "src", "lib", "http", "rate-limit-store-resolve.ts"),
+      "utf8",
+    );
+    assert.match(src, /NN_RATE_LIMIT_ALLOW_MEMORY_IN_PRODUCTION/);
+    assert.match(src, /rate_limit_store_memory_ignored_in_production/);
+  });
+
   it("unified rate limit fails closed in production when Postgres path throws", () => {
     const src = readFileSync(
       join(nursenestCoreRoot, "src", "lib", "http", "rate-limit-unified.ts"),

@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import {
+  countProgressCompletedForSyntheticIds,
+  countProgressTouchedForSyntheticIds,
+  listPublishedSyntheticLessonIdsForPathway,
+} from "@/lib/lessons/pathway-lesson-progress";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
@@ -40,22 +44,10 @@ export async function GET(req: Request) {
   }
 
   try {
-    const prefix = `pathway:${pathwayId}:`;
-
+    const inventoryIds = await listPublishedSyntheticLessonIdsForPathway(pathwayId);
     const [completed, total] = await Promise.all([
-      prisma.progress.count({
-        where: {
-          userId,
-          lessonId: { startsWith: prefix },
-          completed: true,
-        },
-      }),
-      prisma.progress.count({
-        where: {
-          userId,
-          lessonId: { startsWith: prefix },
-        },
-      }),
+      countProgressCompletedForSyntheticIds(userId, inventoryIds),
+      countProgressTouchedForSyntheticIds(userId, inventoryIds),
     ]);
 
     return NextResponse.json({ completed, total });

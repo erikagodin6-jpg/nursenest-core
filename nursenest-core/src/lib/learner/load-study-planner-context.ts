@@ -1,4 +1,3 @@
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { buildVisibleLessonScopeForLearner } from "@/lib/learner/learner-visible-lesson-scope";
@@ -26,33 +25,32 @@ export async function loadStudyPlannerContext(
 ): Promise<StudyPlannerContext | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
 
-  const bundle = await loadPathwayLessonProgressBundle(userId, entitlement);
+  const bundle = await loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadStudyPlannerContext" });
   if (!bundle) return null;
 
   const visibleLessonScope = await buildVisibleLessonScopeForLearner(entitlement, bundle.pathwayLessonRows);
 
-  const [dashboard, pathways, user] = await Promise.all([
+  const [dashboard, pathways] = await Promise.all([
     loadLearnerDashboard(userId, entitlement, {
+      source: "loadStudyPlannerContext",
       userProfile: bundle.user,
       visibleLessonScope,
       pathwayRowsForScope: bundle.pathwayLessonRows,
+      pathwayMetadataRowCount: bundle.pathwayLessonRows.length,
+      pathwayProgressRowCount: bundle.pathwayProgressScoped.length,
     }),
     loadPathwayStudySummaries(userId, entitlement, {
       lessonRows: bundle.pathwayLessonRows,
       pathwayProgress: bundle.pathwayProgressScoped,
       learnerPath: bundle.user.learnerPath,
     }),
-    prisma.user.findUnique({
-      where: { id: userId },
-      select: { dailyStudyMinutes: true, examFocus: true, studyGoal: true },
-    }),
   ]);
 
   return {
     dashboard,
     pathways,
-    dailyStudyMinutes: user?.dailyStudyMinutes ?? null,
-    examFocus: user?.examFocus ?? null,
-    studyGoal: user?.studyGoal ?? null,
+    dailyStudyMinutes: bundle.user.dailyStudyMinutes,
+    examFocus: bundle.user.examFocus,
+    studyGoal: bundle.user.studyGoal,
   };
 }

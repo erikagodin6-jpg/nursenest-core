@@ -13,6 +13,7 @@ import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { PilotHubFeaturedBlog } from "@/components/marketing/pilot-hub-featured-blog";
+import { robotsForRegionalMarketingHub } from "@/lib/seo/expansion-hub-robots";
 
 const PATH = "/exams/philippines";
 
@@ -88,7 +89,7 @@ export async function generateMetadata(): Promise<Metadata> {
         title: PAGE_TITLE,
         description: PAGE_DESCRIPTION,
         alternates: { canonical: alt.canonical, languages: alt.languages },
-        robots: { index: true, follow: true },
+        robots: robotsForRegionalMarketingHub("philippines"),
         keywords: [
           "Philippines nursing board exam",
           "NLE nursing",

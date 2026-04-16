@@ -17,6 +17,7 @@ import {
   type RecentMock,
 } from "@/lib/learner/load-learner-dashboard";
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
+import type { TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
 
 export type PathwayProgressRow = {
   pathwayId: string;
@@ -242,6 +243,8 @@ export type PremiumDashboardSnapshot = {
   insights: LearnerInsightSnapshot | null;
   /** Marketing deep links to last pathway lesson per track (RN / PN / NP). */
   lessonContinuations: LessonContinuationRow[];
+  /** Pass to {@link buildLearnerStudySnapshot} to avoid a second topic-performance query on the home dashboard. */
+  topicPerformance: TopicPerformanceSnapshot | null;
 };
 
 export async function loadPremiumDashboardSnapshot(
@@ -250,19 +253,22 @@ export async function loadPremiumDashboardSnapshot(
 ): Promise<PremiumDashboardSnapshot | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
 
-  const bundle = await loadPathwayLessonProgressBundle(userId, entitlement);
+  const bundle = await loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadPremiumDashboardSnapshot" });
   if (!bundle) return null;
 
   const visibleLessonScope = await buildVisibleLessonScopeForLearner(entitlement, bundle.pathwayLessonRows);
 
   const dash = await loadLearnerDashboard(userId, entitlement, {
+    source: "loadPremiumDashboardSnapshot",
     userProfile: bundle.user,
     visibleLessonScope,
     pathwayRowsForScope: bundle.pathwayLessonRows,
+    pathwayMetadataRowCount: bundle.pathwayLessonRows.length,
+    pathwayProgressRowCount: bundle.pathwayProgressScoped.length,
   });
   if (!dash) return null;
 
-  const [pathwayRaw, streakDays, topStrongTopic, userRow] = await Promise.all([
+  const [pathwayRaw, streakDays, topStrongTopic] = await Promise.all([
     loadPathwayStudySummaries(userId, entitlement, {
       lessonRows: bundle.pathwayLessonRows,
       pathwayProgress: bundle.pathwayProgressScoped,
@@ -270,10 +276,6 @@ export async function loadPremiumDashboardSnapshot(
     }),
     loadStudyStreakDays(userId),
     topStrongTopicFromLedger(userId),
-    prisma.user.findUnique({
-      where: { id: userId },
-      select: { examDate: true, examDatePlanType: true },
-    }),
   ]);
 
   const lessonContinuations = await loadLessonContinuationRows(
@@ -355,8 +357,8 @@ export async function loadPremiumDashboardSnapshot(
     insights = await buildLearnerInsightSnapshot(userId, entitlement, dash, {
       streakDays,
       mockCount,
-      examDate: userRow?.examDate ?? null,
-      examDatePlanType: userRow?.examDatePlanType ?? null,
+      examDate: bundle.user.examDate,
+      examDatePlanType: bundle.user.examDatePlanType,
     });
   } catch {
     insights = null;
@@ -383,5 +385,6 @@ export async function loadPremiumDashboardSnapshot(
     flashcards,
     insights,
     lessonContinuations,
+    topicPerformance: dash.topicPerformance,
   };
 }

@@ -8,7 +8,12 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 import { resolveNextIncompleteMarketingPathwayLesson } from "@/lib/learner/resolve-pathway-next-lesson";
-import { loadPathwayHubProgressBatch, type PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import {
+  findLatestProgressTouchAmongLessonIds,
+  listPublishedSyntheticLessonIdsForPathway,
+  loadPathwayHubProgressBatch,
+  type PathwayLessonProgressStatus,
+} from "@/lib/lessons/pathway-lesson-progress";
 
 /**
  * Most recently touched pathway lesson for this user — derived from `Progress.updatedAt`
@@ -20,14 +25,11 @@ export async function getLastTouchedPathwayLesson(
 ): Promise<{ title: string; slug: string; completed: boolean } | null> {
   if (!userId || !isDatabaseUrlConfigured()) return null;
   const prefix = `pathway:${pathwayId}:`;
-  const row = await prisma.progress.findFirst({
-    where: { userId, lessonId: { startsWith: prefix } },
-    orderBy: { updatedAt: "desc" },
-    select: { lessonId: true, completed: true },
-  });
+  const inventoryIds = await listPublishedSyntheticLessonIdsForPathway(pathwayId);
+  const row = await findLatestProgressTouchAmongLessonIds(userId, inventoryIds);
   if (!row) return null;
-  const slug = row.lessonId.slice(prefix.length);
-  if (!slug) return null;
+  const slug = row.lessonId.startsWith(prefix) ? row.lessonId.slice(prefix.length) : "";
+  if (!slug?.trim()) return null;
   const lesson = await prisma.pathwayLesson.findFirst({
     where: { pathwayId, slug, status: "PUBLISHED" },
     select: {

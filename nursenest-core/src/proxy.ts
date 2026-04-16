@@ -17,6 +17,12 @@ import { canonicalExamHubPathFromPossiblyLocalizedPath } from "@/lib/i18n/exam-h
 import { MARKETING_LOCALE_COOKIE, MARKETING_LOCALE_COOKIE_MAX_AGE } from "@/lib/i18n/marketing-locale-cookie";
 import { isRateLimitingEnabled } from "@/lib/config/production-safety-flags";
 import { enforceApiRateLimit } from "@/lib/server/rate-limit";
+import {
+  REGIONAL_EXAM_MARKETING_FALLBACK_PATH,
+  globalRegionSlugFromExpansionExamsPathname,
+} from "@/lib/marketing/expansion-exams-path-gate";
+import { EXAM_HUB_PREVIEW_COOKIE } from "@/lib/admin/exam-hub-preview-cookie";
+import { isRegionPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 
 /** NextAuth `auth` middleware typing does not always align with App Router `NextRequest` + `NextFetchEvent`. */
 const runAuthMiddleware = middlewareAuth as unknown as NextMiddleware;
@@ -100,6 +106,7 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     });
   }
 
+  /** Next.js 16+ proxy defaults to the Node.js runtime — `checkRateLimitUnified` uses shared Postgres buckets when `DATABASE_URL` is set (not per-instance memory). */
   if (pathname.startsWith("/api/") && isRateLimitingEnabled()) {
     const limited = await enforceApiRateLimit(req);
     if (limited) {
@@ -124,6 +131,21 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
       httpOnly: true,
     });
     return response;
+  }
+
+  // Unpublished regional exam marketing hubs (`/exams/…`): redirect to a canonical public hub (no thin “placeholder” pages).
+  const expansionRegion = globalRegionSlugFromExpansionExamsPathname(pathname);
+  if (expansionRegion && !isRegionPublishedForPublicSite(expansionRegion)) {
+    const previewRegion = req.cookies.get(EXAM_HUB_PREVIEW_COOKIE)?.value ?? "";
+    const allowStaffPreview = previewRegion === expansionRegion;
+    if (!allowStaffPreview) {
+      const url = req.nextUrl.clone();
+      url.pathname = REGIONAL_EXAM_MARKETING_FALLBACK_PATH;
+      const response = NextResponse.redirect(url, 307);
+      const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
+      response.headers.set(NN_CORRELATION_HEADER, cid.slice(0, 128));
+      return response;
+    }
   }
 
   const forwarded = withPathnameHeader(req);
@@ -153,6 +175,8 @@ export const config = {
     "/api/:path*",
     "/api/admin",
     "/api/admin/:path*",
+    "/exams",
+    "/exams/:path*",
     "/us",
     "/us/:path*",
     "/canada",
@@ -161,5 +185,7 @@ export const config = {
     "/:locale/us/:path*",
     "/:locale/canada",
     "/:locale/canada/:path*",
+    "/:locale/exams",
+    "/:locale/exams/:path*",
   ],
 };

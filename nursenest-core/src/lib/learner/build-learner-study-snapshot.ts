@@ -70,6 +70,14 @@ async function hasFlashcardsForTopicCodes(
   return row != null;
 }
 
+export type BuildLearnerStudySnapshotOptions = {
+  /**
+   * When set, skips {@link loadUnifiedTopicPerformance} — pass {@link loadPremiumDashboardSnapshot}'s
+   * `topicPerformance` after {@link loadLearnerDashboard} has already computed it.
+   */
+  topicPerformance?: TopicPerformanceSnapshot | null;
+};
+
 /**
  * Bounded read-through snapshot for Study Next (no new persistence).
  */
@@ -77,10 +85,16 @@ export async function buildLearnerStudySnapshot(
   userId: string,
   entitlement: AccessScope,
   learnerPath: string | null | undefined,
+  options?: BuildLearnerStudySnapshotOptions | null,
 ): Promise<LearnerStudySnapshot | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
 
-  let perf = await loadUnifiedTopicPerformance(userId, entitlement, 8);
+  let perf: TopicPerformanceSnapshot;
+  if (options?.topicPerformance != null) {
+    perf = options.topicPerformance;
+  } else {
+    perf = await loadUnifiedTopicPerformance(userId, entitlement, 8);
+  }
   let weakTopics = perf.weakTopics;
 
   const userRow = await prisma.user.findUnique({

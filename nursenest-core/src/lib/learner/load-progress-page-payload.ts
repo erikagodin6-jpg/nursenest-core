@@ -125,7 +125,7 @@ function sortPathways(a: PathwayProgressCardModel, b: PathwayProgressCardModel):
 export async function loadProgressPagePayload(userId: string, entitlement: AccessScope): Promise<ProgressPagePayload | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
 
-  const bundle = await loadPathwayLessonProgressBundle(userId, entitlement);
+  const bundle = await loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadProgressPagePayload" });
   if (!bundle) return null;
 
   const learnerPath = bundle.user.learnerPath ?? null;

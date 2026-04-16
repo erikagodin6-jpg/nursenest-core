@@ -12,9 +12,9 @@ function getSlugFromRoute(route: string): string {
   return route.split("/").pop() || "";
 }
 
-function computeCountRange(careers: typeof ALLIED_HEALTH_CAREERS): string {
+function computeCountRange(careers: typeof ALLIED_HEALTH_CAREERS, emptyLabel: string): string {
   const counts = careers.map((c) => getQuestionCount(getSlugFromRoute(c.route))).filter((n) => n > 0);
-  if (counts.length === 0) return "Coming Soon";
+  if (counts.length === 0) return emptyLabel;
   const min = Math.min(...counts);
   const max = Math.max(...counts);
   const roundDown = (n: number) => Math.floor(n / 100) * 100;
@@ -111,7 +111,7 @@ export default function HeroAlliedHealth() {
           <div className="space-y-6">
             <div>
               <h3 className="mb-3 nn-marketing-label">
-                Major Careers: {computeCountRange(majorCareers)}
+                Major Careers: {computeCountRange(majorCareers, t("components.heroAlliedHealth.comingSoon"))}
               </h3>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {majorCareers.map((career) => {
@@ -150,7 +150,7 @@ export default function HeroAlliedHealth() {
 
             <div>
               <h3 className="mb-3 nn-marketing-label">
-                Mid-Size Careers: {computeCountRange(midCareers)}
+                Mid-Size Careers: {computeCountRange(midCareers, t("components.heroAlliedHealth.comingSoon2"))}
               </h3>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {midCareers.map((career) => {

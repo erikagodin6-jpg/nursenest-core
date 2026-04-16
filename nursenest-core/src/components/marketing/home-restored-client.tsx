@@ -5,6 +5,7 @@ import { useEffect, useMemo } from "react";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { HomeConversionHero } from "@/components/marketing/home-conversion-hero";
 import { HomeSampleQuestionPreview } from "@/components/marketing/home-sample-question-preview";
+import { HomeGlobalRegionsSection } from "@/components/marketing/home-global-regions-section";
 import { HomeTrustFearsSection } from "@/components/marketing/home-trust-fears-section";
 import { HomeTrustStripSection } from "@/components/marketing/home-trust-strip-section";
 import { HomeHowItWorksSection } from "@/components/marketing/home-how-it-works-section";
@@ -85,6 +86,8 @@ export default function HomeRestoredClient({ homeMarketingStats }: { homeMarketi
         <HomeConversionHero questionCount={questionCount} lessonCount={lessonCount} />
         {/* 2. PROOF — sample item + rationale */}
         <HomeSampleQuestionPreview />
+        {/* 2b. Global regions — licensing hubs beyond US/Canada */}
+        <HomeGlobalRegionsSection />
         {/* 3. TRUST — credibility + freshness (stats shown in hero; strip avoids repeating counts) */}
         <HomeTrustStripSection
           lessonCount={lessonCount}

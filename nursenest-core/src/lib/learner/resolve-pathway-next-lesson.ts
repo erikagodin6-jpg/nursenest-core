@@ -2,7 +2,12 @@ import { prisma } from "@/lib/db";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { pathwayLessonsAppListWhere, visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
-import { syntheticPathwayLessonId } from "@/lib/lessons/pathway-lesson-progress";
+import {
+  countProgressCompletedForSyntheticIds,
+  findLatestProgressTouchAmongLessonIds,
+  listPublishedSyntheticLessonIdsForPathway,
+  syntheticPathwayLessonId,
+} from "@/lib/lessons/pathway-lesson-progress";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 
 const NEXT_LESSON_CHUNK = 80;
@@ -46,7 +51,7 @@ export async function resolvePathwayNextLesson(
   const now = Date.now();
 
   for (const pathwayId of orderedPathwayIds(learnerPath, visible)) {
-    const prefix = `pathway:${pathwayId}:`;
+    const inventoryIds = await listPublishedSyntheticLessonIdsForPathway(pathwayId);
 
     const [lessonsRaw, completedCount, lastProgress] = await Promise.all([
       prisma.pathwayLesson.findMany({
@@ -66,14 +71,8 @@ export async function resolvePathwayNextLesson(
           locale: true,
         },
       }),
-      prisma.progress.count({
-        where: { userId, completed: true, lessonId: { startsWith: prefix } },
-      }),
-      prisma.progress.findFirst({
-        where: { userId, lessonId: { startsWith: prefix } },
-        orderBy: { updatedAt: "desc" },
-        select: { lessonId: true, completed: true, updatedAt: true },
-      }),
+      countProgressCompletedForSyntheticIds(userId, inventoryIds),
+      findLatestProgressTouchAmongLessonIds(userId, inventoryIds),
     ]);
 
     /** `pathwayWhere` already requires PUBLISHED + entitlement scope — avoid loading multi‑MB `sections` JSON per row. */
@@ -93,8 +92,7 @@ export async function resolvePathwayNextLesson(
         const synthetic = syntheticPathwayLessonId(pathwayId, l.slug);
         if (byLesson.get(synthetic) === true) continue;
 
-        const engagedInPathway =
-          completedCount > 0 || (lastProgress != null && lastProgress.lessonId.startsWith(prefix));
+        const engagedInPathway = completedCount > 0 || lastProgress != null;
         const stalled =
           completedCount > 0 &&
           lastProgress != null &&

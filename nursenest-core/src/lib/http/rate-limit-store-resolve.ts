@@ -2,7 +2,7 @@
  * Resolves which {@link RateLimitStore} implementation to use (nn-db-final-004).
  *
  * **Env**
- * - `RATE_LIMIT_STORE=memory` — force in-memory.
+ * - `RATE_LIMIT_STORE=memory` — force in-memory (ignored in **production** when `DATABASE_URL` is set unless `NN_RATE_LIMIT_ALLOW_MEMORY_IN_PRODUCTION=1`).
  * - `RATE_LIMIT_STORE=postgres` — force Postgres (Node + `DATABASE_URL`); creation may fail → see {@link getPostgresRateLimitStore}.
  * - Unset / `auto` — Postgres when {@link shouldUsePostgresRateLimitStore} is true (same as historical `RATE_LIMIT_DISTRIBUTED` rules).
  *
@@ -12,6 +12,21 @@ import type { RateLimitStore } from "@/lib/http/rate-limit-store";
 import { createInMemoryRateLimitStore } from "@/lib/http/rate-limit-in-memory";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+
+let rateLimitMemoryForcedIgnoredInProdLogged = false;
+
+function logRateLimitMemoryForcedIgnoredOnce(): void {
+  if (rateLimitMemoryForcedIgnoredInProdLogged) return;
+  rateLimitMemoryForcedIgnoredInProdLogged = true;
+  safeServerLogCritical(
+    "security",
+    "rate_limit_store_memory_ignored_in_production",
+    {
+      hint: "RATE_LIMIT_STORE=memory is unsafe for multi-instance production when DATABASE_URL is set. Using Postgres unless NN_RATE_LIMIT_ALLOW_MEMORY_IN_PRODUCTION=1.",
+    },
+    new Error("RATE_LIMIT_STORE=memory ignored in production"),
+  );
+}
 
 let rateLimitFalseIgnoredInProdLogged = false;
 
@@ -31,7 +46,21 @@ function logRateLimitDistributedFalseIgnoredOnce(): void {
  */
 export function shouldUsePostgresRateLimitStore(): boolean {
   const forced = process.env.RATE_LIMIT_STORE?.trim().toLowerCase();
-  if (forced === "memory") return false;
+  if (forced === "memory") {
+    const memAllow = process.env.NN_RATE_LIMIT_ALLOW_MEMORY_IN_PRODUCTION?.trim();
+    const allowProdMemory = memAllow === "1" || memAllow?.toLowerCase() === "true";
+    if (
+      process.env.NODE_ENV === "production" &&
+      isDatabaseUrlConfigured() &&
+      process.env.NEXT_RUNTIME !== "edge" &&
+      !allowProdMemory
+    ) {
+      logRateLimitMemoryForcedIgnoredOnce();
+      /* fall through — use Postgres like `auto` */
+    } else {
+      return false;
+    }
+  }
   if (forced === "postgres") return isDatabaseUrlConfigured() && process.env.NEXT_RUNTIME !== "edge";
 
   if (process.env.NEXT_RUNTIME === "edge") return false;

@@ -16,6 +16,7 @@ import {
   type GlobalLocaleCode,
   type GlobalRegionSlug,
 } from "@/lib/i18n/global-regions";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 import {
   getRegionFlag,
   getLocaleDisplay,
@@ -342,6 +343,7 @@ type CompactCountryTriggerProps = {
 };
 
 export function CompactCountryTrigger({ region, onClick }: CompactCountryTriggerProps) {
+  const { t } = useMarketingI18n();
   const flag = getRegionFlag(region);
   const regionCfg = REGION_CONFIG[region];
 
@@ -350,9 +352,11 @@ export function CompactCountryTrigger({ region, onClick }: CompactCountryTrigger
       type="button"
       onClick={onClick}
       className="flex items-center gap-1 rounded-full bg-transparent px-2 py-0.5 text-[11px] font-normal tracking-wide text-[var(--header-utility-text)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)]"
-      aria-label={`Country: ${regionCfg.displayName}. Click to change.`}
+      aria-label={`${t("nav.selectCountry")}: ${regionCfg.displayName}`}
+      title={`${t("nav.selectCountry")} — ${regionCfg.displayName}`}
     >
       <Globe className="h-3 w-3 shrink-0 opacity-60" aria-hidden />
+      <span className="hidden min-[900px]:inline text-[10px] font-medium opacity-75">{t("nav.selectCountry")}</span>
       <span className="hidden sm:inline">{flag}</span>
       <span className="max-w-[80px] truncate">{regionCfg.displayName}</span>
       <ChevronDown className="h-3 w-3 shrink-0 opacity-50" aria-hidden />
