@@ -36,15 +36,22 @@ import { getRegionalPricing } from "@/lib/pricing/regional-pricing-map";
 import { isGlobalRegionSlug, type GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import type { TierCode } from "@prisma/client";
 
-const bodySchema = z.object({
-  tier: z.enum(["PRE_NURSING", "NEW_GRAD", "RPN", "LVN_LPN", "RN", "NP", "ALLIED"]),
-  duration: z.enum(["monthly", "3-month", "6-month", "yearly"]),
-  alliedCareer: z.enum(ALLIED_CAREER_KEYS as unknown as [string, ...string[]]).optional(),
-  /** Global region slug for regional pricing (e.g. "philippines", "india"). Falls back to "canada" (CA). */
-  region: z.string().optional(),
-  acceptPolicies: z.literal(true),
-  policyVersion: z.string().min(1).max(64),
-});
+/**
+ * Stripe Checkout: **line_items** use Price IDs resolved only from server env maps (`pricing-map`, `regional-pricing-map`).
+ * No client `price_id`. Premium access is granted by webhooks into `Subscription`, not by `success_url` query params.
+ */
+/** Strict: rejects client-supplied price IDs, amounts, or other undeclared fields — only enum selections the server maps to env-backed Stripe Prices. */
+const bodySchema = z
+  .object({
+    tier: z.enum(["PRE_NURSING", "NEW_GRAD", "RPN", "LVN_LPN", "RN", "NP", "ALLIED"]),
+    duration: z.enum(["monthly", "3-month", "6-month", "yearly"]),
+    alliedCareer: z.enum(ALLIED_CAREER_KEYS as unknown as [string, ...string[]]).optional(),
+    /** Global region slug for regional pricing (e.g. "philippines", "india"). Falls back to legacy CA/US map when absent/invalid. */
+    region: z.string().optional(),
+    acceptPolicies: z.literal(true),
+    policyVersion: z.string().min(1).max(64),
+  })
+  .strict();
 
 function sessionUserId(session: { user?: unknown } | null): string | undefined {
   const u = session?.user;
@@ -81,11 +88,11 @@ export async function POST(req: Request) {
       );
     }
 
-    const demoBlock = await prisma.user.findUnique({
+    const userCheckoutRow = await prisma.user.findUnique({
       where: { id: userId },
-      select: { isDemoUser: true },
+      select: { isDemoUser: true, tier: true, country: true },
     });
-    if (demoBlock?.isDemoUser) {
+    if (userCheckoutRow?.isDemoUser) {
       recordCheckoutFailure("demo_forbidden", req);
       const msg = "Demo accounts cannot use real billing. Use a full test account for checkout.";
       return NextResponse.json(
@@ -164,6 +171,16 @@ export async function POST(req: Request) {
     const durationCode = duration as BillingDuration;
     const careerKey = alliedCareer as AlliedCareerKey | undefined;
     const requestedPathway = tierCode === "ALLIED" ? (careerKey ?? "ALLIED") : tierCode;
+
+    if (userCheckoutRow && userCheckoutRow.tier !== tierCode) {
+      safeServerLog("stripe_checkout", "checkout_tier_differs_from_profile", {
+        userIdPrefix: userId.slice(0, 8),
+        profileTier: String(userCheckoutRow.tier),
+        requestedTier: String(tierCode),
+        severity: "info",
+      });
+    }
+
     safeServerLog("stripe_checkout", "checkout_request_selection", {
       tier: tierCode,
       duration: durationCode,
@@ -281,7 +298,6 @@ export async function POST(req: Request) {
     const trialDays = STRIPE_TRIAL_DAYS;
     const metadata: Record<string, string> = {
       userId,
-      country,
       currency: resolvedCurrency,
       tier,
       duration,
@@ -291,11 +307,22 @@ export async function POST(req: Request) {
       legalPolicyVersion: policyVersion,
       legalPoliciesAcceptedAt: acceptedAt.toISOString(),
     };
-    if (careerKey) {
-      metadata.alliedCareer = careerKey;
-    }
+    /**
+     * CA/US pool for `planFromCheckoutMetadata` + entitlements. For global regional markets (e.g. philippines),
+     * omit `country` so we never label the session as Canada when the learner bought a non-NA price.
+     */
     if (resolvedRegion) {
       metadata.region = resolvedRegion;
+      if (resolvedRegion === "us") {
+        metadata.country = "US";
+      } else if (resolvedRegion === "canada") {
+        metadata.country = "CA";
+      }
+    } else {
+      metadata.country = country;
+    }
+    if (careerKey) {
+      metadata.alliedCareer = careerKey;
     }
 
     const subscriptionData = trialDays > 0
@@ -337,6 +364,13 @@ export async function POST(req: Request) {
     safeServerLog("stripe_checkout", "checkout_session_url_returned", {
       stripeSessionId: checkoutSession.id,
       checkoutUrl,
+    });
+    emitStructuredLog("checkout_session_created", "info", {
+      correlationId: correlationIdFromRequest(req) ?? undefined,
+      route: "/api/subscriptions/checkout",
+      method: "POST",
+      flow: "billing",
+      message: `stripe session ${checkoutSession.id.slice(0, 12)} planCode=${planCode.slice(0, 48)} priceIdPrefix=${priceId.slice(0, 14)}`,
     });
 
     void captureServerEvent(analyticsDistinctId(userId), "checkout_session_created", {

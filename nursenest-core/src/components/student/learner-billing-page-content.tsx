@@ -68,12 +68,24 @@ function includesListKeys(tier: BillingPagePayload["effectiveTier"]): string[] {
   }
 }
 
-function StatusBanner({ surface, t }: { surface: BillingPagePayload["surface"]; t: LearnerMarketingT }) {
+function StatusBanner({
+  surface,
+  pastDueGraceEndsAt,
+  localeTag,
+  t,
+}: {
+  surface: BillingPagePayload["surface"];
+  pastDueGraceEndsAt: Date | null;
+  localeTag: string;
+  t: LearnerMarketingT;
+}) {
   const styles: Record<BillingPagePayload["surface"], string> = {
     active_paid:
       "border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))] bg-[var(--semantic-success-soft)] text-[var(--semantic-success-contrast)]",
     grace:
       "border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] text-[var(--semantic-warning-contrast)]",
+    past_due_grace:
+      "border-[color-mix(in_srgb,var(--semantic-warning)_32%,var(--semantic-border-soft))] bg-[var(--semantic-panel-warm)] text-[var(--semantic-warning-contrast)]",
     past_due:
       "border-[color-mix(in_srgb,var(--semantic-danger)_30%,var(--semantic-border-soft))] bg-[var(--semantic-danger-soft)] text-[var(--semantic-danger-contrast)]",
     cancelled: "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-primary)]",
@@ -86,10 +98,19 @@ function StatusBanner({ surface, t }: { surface: BillingPagePayload["surface"]; 
   };
   const titleKey = `learner.billingPage.surface.${surface}.title` as const;
   const bodyKey = `learner.billingPage.surface.${surface}.body` as const;
+  const deadlineFmt =
+    pastDueGraceEndsAt != null
+      ? pastDueGraceEndsAt.toLocaleDateString(localeTag, { year: "numeric", month: "short", day: "numeric" })
+      : null;
   return (
     <div className={`rounded-2xl border px-4 py-4 sm:px-5 ${styles[surface]}`}>
       <p className="text-sm font-semibold">{t(titleKey)}</p>
       <p className="mt-2 text-sm leading-relaxed opacity-95">{t(bodyKey)}</p>
+      {surface === "past_due_grace" && deadlineFmt ? (
+        <p className="mt-2 text-sm font-medium leading-relaxed opacity-95">
+          {t("learner.billingPage.surface.past_due_grace.deadlineLine", { deadline: deadlineFmt })}
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -114,6 +135,7 @@ export function LearnerBillingPageContent({
     effectiveTier,
     effectiveCountry,
     showTrialEndCallout,
+    pastDueGraceEndsAt,
   } = payload;
 
   const planLabel = formatBillingTierLabel(effectiveTier, effectiveCountry);
@@ -128,7 +150,7 @@ export function LearnerBillingPageContent({
         </div>
       ) : null}
 
-      <StatusBanner surface={surface} t={t} />
+      <StatusBanner surface={surface} pastDueGraceEndsAt={pastDueGraceEndsAt} localeTag={localeTag} t={t} />
 
       <section className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] shadow-sm">
         <div className="border-b border-[var(--semantic-border-soft)] bg-gradient-to-r from-primary/[0.06] to-transparent px-5 py-4">

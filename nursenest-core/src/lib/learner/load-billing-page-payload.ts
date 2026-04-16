@@ -5,7 +5,13 @@ import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
+import type { AccessScope } from "@/lib/entitlements/user-access-types";
 import { resolveEntitlementForPage, type PageEntitlementResult } from "@/lib/entitlements/resolve-entitlement-for-page";
+import {
+  pastDueGraceWindowEndMs,
+  readPastDueEntitlementPolicy,
+  readPastDueGraceDays,
+} from "@/lib/entitlements/past-due-policy";
 import { effectiveTierCountryForAccess } from "@/lib/entitlements/subscription-plan";
 
 export type BillingSubscriptionRow = {
@@ -61,6 +67,8 @@ export type BillingPagePayload = {
   effectiveCountry: CountryCode | null;
   /** Trial end callout when trial is active, not expired, and no paid ACTIVE row. */
   showTrialEndCallout: boolean;
+  /** When `surface` is `past_due_grace`, when premium access ends if payment is not fixed (min of grace anchor+days and period end). */
+  pastDueGraceEndsAt: Date | null;
 };
 
 function tierHuman(tier: TierCode): string {
@@ -112,10 +120,12 @@ async function loadStripeRenewalSnapshot(stripeSubscriptionId: string | null | u
   }
 }
 
-function deriveSurface(args: {
+/** Exported for unit tests — mirrors billing page banner selection. */
+export function deriveBillingSurface(args: {
   user: BillingUserRow;
   subscription: BillingSubscriptionRow | null;
   hasAccess: boolean;
+  entitlementReason: AccessScope["reason"] | "error";
   trialEndsAt: Date | null;
 }): BillingStatusSurface {
   if (isLearnerEntitlementStaffBypassRole(args.user.role)) return "admin";
@@ -123,6 +133,7 @@ function deriveSurface(args: {
   const sub = args.subscription;
   const now = Date.now();
   const trialActive = args.user.trialStatus === TrialStatus.ACTIVE && args.trialEndsAt && args.trialEndsAt.getTime() > now;
+  const reason = args.entitlementReason === "error" ? ("no_access" as const) : args.entitlementReason;
 
   if (sub?.status === SubscriptionStatus.ACTIVE && args.hasAccess) {
     return "active_paid";
@@ -130,9 +141,19 @@ function deriveSurface(args: {
   if (sub?.status === SubscriptionStatus.GRACE && args.hasAccess) {
     return "grace";
   }
+
   if (sub?.status === SubscriptionStatus.PAST_DUE) {
+    if (args.hasAccess && reason === "past_due_grace") {
+      return "past_due_grace";
+    }
+    if (args.hasAccess && reason === "active_trial" && trialActive && args.trialEndsAt) {
+      const daysLeft = (args.trialEndsAt.getTime() - now) / 86400000;
+      if (daysLeft <= 14) return "trial_ending";
+      return "trial";
+    }
     return "past_due";
   }
+
   if (sub?.status === SubscriptionStatus.CANCELLED) {
     return "cancelled";
   }
@@ -181,6 +202,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
         cancelAtPeriodEnd: true,
         createdAt: true,
         updatedAt: true,
+        pastDueSince: true,
       },
     }),
     resolveEntitlementForPage(userId),
@@ -241,12 +263,35 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
     };
   }
 
-  const surface = deriveSurface({
+  const entitlementReason: AccessScope["reason"] | "error" =
+    entitlement === "error" ? "error" : entitlement.reason;
+
+  const surface = deriveBillingSurface({
     user,
     subscription,
     hasAccess,
+    entitlementReason,
     trialEndsAt: user.trialEndsAt,
   });
+
+  let pastDueGraceEndsAt: Date | null = null;
+  if (
+    subscription?.status === SubscriptionStatus.PAST_DUE &&
+    hasAccess &&
+    entitlementReason === "past_due_grace" &&
+    subscriptionRow &&
+    readPastDueEntitlementPolicy() === "grace"
+  ) {
+    const endMs = pastDueGraceWindowEndMs(
+      {
+        updatedAt: subscriptionRow.updatedAt,
+        currentPeriodEnd: subscriptionRow.currentPeriodEnd,
+        pastDueSince: subscriptionRow.pastDueSince,
+      },
+      readPastDueGraceDays(),
+    );
+    pastDueGraceEndsAt = new Date(endMs);
+  }
 
   const portalEligibleSub =
     subscription &&
@@ -273,5 +318,6 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
     effectiveTier,
     effectiveCountry,
     showTrialEndCallout,
+    pastDueGraceEndsAt,
   };
 }

@@ -12,8 +12,8 @@ import {
   firstSubscriptionPriceId,
   mapStripeSubscriptionStatus,
 } from "@/lib/stripe/stripe-subscription-field-map";
+import { planFromCheckoutMetadata } from "@/lib/stripe/checkout-plan-metadata";
 import {
-  planFromCheckoutMetadata,
   syncUserFromCheckoutSessionMetadata,
   syncUserFromStripePriceId,
 } from "@/lib/stripe/sync-user-from-stripe-subscription";
@@ -212,7 +212,8 @@ export async function applyStripeWebhookEvent(
           update: {
             status: statusForDb,
             pastDueSince: null,
-            ...(plan ? { planTier: plan.tier, planCountry: plan.country } : {}),
+            ...(plan?.tier ? { planTier: plan.tier } : {}),
+            ...(plan?.country != null ? { planCountry: plan.country } : {}),
             ...(durationMeta ? { planDuration: durationMeta } : {}),
             ...(alliedCareerMeta ? { alliedCareer: alliedCareerMeta } : {}),
             ...(planCodeMeta ? { planCode: planCodeMeta } : {}),
@@ -228,7 +229,7 @@ export async function applyStripeWebhookEvent(
             stripeSubscriptionId: subId,
             stripeCustomerId: customerId,
             planTier: plan?.tier,
-            planCountry: plan?.country,
+            planCountry: plan ? plan.country : undefined,
             planDuration: durationMeta,
             planCode: planCodeMeta,
             billingRegionSlug: billingRegionMeta,

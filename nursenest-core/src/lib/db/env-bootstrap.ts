@@ -7,7 +7,7 @@
  * Tunables (defaults applied only when the URL omits the param — see `tuneDatabaseUrlForProcess`):
  * - `PRISMA_CONNECTION_LIMIT` / `PRISMA_POOL_TIMEOUT` — Prisma pool sizing vs `max_connections`
  * - `PRISMA_CONNECT_TIMEOUT_SEC` — libpq connect timeout (fail fast during failover / network blips)
- * - `PRISMA_STATEMENT_TIMEOUT_MS` — server-side `statement_timeout` (caps runaway queries); set `0` to skip injection
+ * - `PRISMA_STATEMENT_TIMEOUT_MS` — server-side `statement_timeout` (caps runaway queries); set `0` to skip injection. Injection is **skipped** automatically for common poolers (e.g. DigitalOcean `*.db.ondigitalocean.com:25061`, `pgbouncer=true`, port 6432) — those reject `options=-c statement_timeout=…`.
  * - **PgBouncer / DO pooler**: set `PRISMA_USE_PGBOUNCER=true` to append `pgbouncer=true` (or add it to the URL). Set `DATABASE_DIRECT_URL` to the
  *   provider’s **direct** Postgres URI (non-pooler port) — required when the pooled URL uses `pgbouncer=true` (Prisma Migrate cannot use transaction pooling).
  *
@@ -62,6 +62,23 @@ function withDefaultStatementTimeout(urlString: string): string {
   } catch {
     return urlString;
   }
+}
+
+/**
+ * PgBouncer / DigitalOcean **pool** endpoints reject libpq `options=-c statement_timeout=…`
+ * (`FATAL: unsupported startup parameter in options: statement_timeout`). Direct Postgres is fine.
+ */
+function shouldOmitStatementTimeoutOptions(urlString: string): boolean {
+  try {
+    const url = new URL(urlString);
+    if (url.searchParams.get("pgbouncer") === "true") return true;
+    const port = url.port || "";
+    if (port === "6432") return true;
+    if (/\.db\.ondigitalocean\.com$/i.test(url.hostname) && port === "25061") return true;
+  } catch {
+    /* ignore */
+  }
+  return false;
 }
 
 /** Avoid direct `process.argv` references so Edge bundles do not flag Node-only APIs (Turbopack). */
@@ -130,7 +147,11 @@ function tuneDatabaseUrlForProcess(rawUrl: string, role: "pooled" | "direct" = "
   tuned = withDefaultQueryParam(tuned, "connection_limit", connectionLimit);
   tuned = withDefaultQueryParam(tuned, "pool_timeout", poolTimeout);
   tuned = withDefaultQueryParam(tuned, "connect_timeout", connectTimeoutSec);
-  if (!isScriptProcess) {
+  const omitStmtTimeout =
+    isScriptProcess ||
+    isPrismaPgbouncerMode() ||
+    shouldOmitStatementTimeoutOptions(working);
+  if (!omitStmtTimeout) {
     tuned = withDefaultStatementTimeout(tuned);
   }
   if (usePoolerFlag) {

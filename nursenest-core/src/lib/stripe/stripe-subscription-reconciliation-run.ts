@@ -1,6 +1,26 @@
 /**
- * Stripe ↔ Prisma Subscription reconciliation (Stripe is source of truth).
- * Used by `scripts/reconcile-stripe-subscriptions.ts` and `/api/cron/stripe-reconcile`.
+ * Stripe ↔ Prisma Subscription reconciliation (**Stripe is source of truth** for paid lifecycle).
+ *
+ * ## Sync model (audit)
+ * - **Primary**: Webhooks (`applyStripeWebhookEvent`) apply Stripe → DB in near real time.
+ * - **Drift sources**: missed webhooks, Stripe/API outage, handler 500 + claim release, manual Stripe Dashboard edits,
+ *   race between checkout + `customer.subscription.*`, regional Price IDs not in `pricing-map` (tier sync skipped).
+ *
+ * ## Stale DB scenarios
+ * - `status` / `currentPeriodEnd` / `cancelAtPeriodEnd` behind Stripe.
+ * - `planTier` / `planCountry` wrong if price changed or unknown price id.
+ * - `billingRegionSlug` missing vs Stripe subscription metadata `region`.
+ * - Row **missing** in DB (Stripe sub exists) — create only with trusted `metadata.userId` + customer guard.
+ * - Row **orphaned** (DB points to deleted Stripe sub) — **report only** (no delete — avoid accidental data loss).
+ *
+ * ## Safety
+ * - **No premium grant on uncertain state**: missing DB rows are **created** only with validated metadata user id;
+ *   `incomplete` / `paused` skip auto-create. Updates use the same `mapStripeSubscriptionStatus` as webhooks.
+ * - **Idempotent**: safe to rerun; patches are deterministic from current Stripe retrieval.
+ * - **Not per-request**: invoked by daily cron, CLI, or admin POST only.
+ *
+ * @see `/api/cron/stripe-reconcile` — scheduled (see `vercel.json`)
+ * @see `/api/admin/billing/stripe-reconcile` — on-demand (staff)
  */
 import type Stripe from "stripe";
 import { Prisma, SubscriptionStatus, type TierCode } from "@prisma/client";
@@ -22,6 +42,9 @@ import {
   isTrustedStripeReconciliationUserId,
 } from "@/lib/stripe/stripe-reconcile-metadata";
 import { pastDueSinceForStatusTransition } from "@/lib/stripe/subscription-past-due-since";
+import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { emitStructuredLog } from "@/lib/observability/structured-log";
+import { sentryCount } from "@/lib/observability/sentry-metrics";
 
 export type DiscrepancyBase = { stripeSubscriptionId: string };
 
@@ -140,6 +163,70 @@ function unknownPriceReportFromMap(map: Map<string, string[]>): UnknownPriceAggr
   }));
 }
 
+function logSubscriptionRepaired(args: {
+  operation: "update" | "create";
+  stripeSubscriptionId: string;
+  userId: string;
+  patchKeys: string[];
+}): void {
+  safeServerLog("billing_reconcile", "subscription_repaired", {
+    operation: args.operation,
+    stripeSubscriptionIdPrefix: args.stripeSubscriptionId.slice(0, 14),
+    userIdPrefix: args.userId.slice(0, 8),
+    patchKeys: args.patchKeys.join(",").slice(0, 200),
+  });
+}
+
+/** Metrics + logs for log drains / Sentry — call once per run. */
+export function emitReconciliationDriftSignals(report: StripeSubscriptionReconciliationReport): void {
+  const summary = summarizeStripeSubscriptionReconciliationReport(report);
+  const c = summary.counts;
+  const unknown = report.unknownStripePriceIds.length;
+  const highRisk = report.discrepancies.dbActiveButStripeNotEntitled.length;
+
+  sentryCount("billing.reconcile.drifts.status_mismatch", c.statusMismatch);
+  sentryCount("billing.reconcile.drifts.tier_mismatch", c.tierMismatch);
+  sentryCount("billing.reconcile.drifts.period_end_drift", c.periodEndDrift);
+  sentryCount("billing.reconcile.drifts.missing_in_db", c.missingInDb);
+  sentryCount("billing.reconcile.drifts.orphan_db_row", report.discrepancies.dbRowNotFoundInStripeList.length);
+  sentryCount("billing.reconcile.unknown_price_kinds", unknown);
+  sentryCount("billing.reconcile.high_risk_db_active_stripe_ended", highRisk);
+
+  if (highRisk > 0 || c.statusMismatch > 0) {
+    safeServerLogCritical(
+      "billing_reconcile",
+      "stripe_db_drift_requires_attention",
+      {
+        highRiskDbActiveRows: highRisk,
+        statusMismatchCount: c.statusMismatch,
+        dryRun: report.dryRun ? 1 : 0,
+        errorsInApply: report.apply.errors.length,
+        severity: "warning",
+      },
+      undefined,
+      { flow: "stripe_reconcile" },
+    );
+  }
+
+  if (unknown > 0) {
+    safeServerLog("billing_reconcile", "unknown_stripe_price_ids", {
+      unknownPriceKinds: unknown,
+      severity: "warning",
+    });
+  }
+
+  const warnDrift = highRisk > 0 || c.statusMismatch > 5 || unknown > 0;
+  emitStructuredLog("billing_reconcile_run", warnDrift ? "warn" : "info", {
+    flow: "billing",
+    degraded: warnDrift,
+    message: `stripe_reconcile dryRun=${report.dryRun} subRowsUpdated=${report.apply.subscriptionRowsUpdated} creates=${report.apply.createsApplied} statusMismatch=${c.statusMismatch} tierMismatch=${c.tierMismatch} missingDb=${c.missingInDb} unknownPrices=${unknown} highRisk=${highRisk}`,
+  });
+}
+
+function finalizeReconciliationRun(report: StripeSubscriptionReconciliationReport): void {
+  emitReconciliationDriftSignals(report);
+}
+
 export function summarizeStripeSubscriptionReconciliationReport(r: StripeSubscriptionReconciliationReport) {
   const d = r.discrepancies;
   return {
@@ -203,11 +290,13 @@ export async function runStripeSubscriptionReconciliation(
   const stripe = await getStripeClient();
   if (!stripe) {
     report.apply.errors.push({ message: "STRIPE_SECRET_KEY not set — cannot list Stripe subscriptions." });
+    finalizeReconciliationRun(report);
     return report;
   }
 
   if (!isDatabaseUrlConfigured()) {
     report.apply.errors.push({ message: "DATABASE_URL not configured — cannot compare to Prisma." });
+    finalizeReconciliationRun(report);
     return report;
   }
 
@@ -224,6 +313,8 @@ export async function runStripeSubscriptionReconciliation(
       status: true,
       planTier: true,
       planCountry: true,
+      planCode: true,
+      billingRegionSlug: true,
       currentPeriodEnd: true,
       cancelAtPeriodEnd: true,
     },
@@ -242,8 +333,11 @@ export async function runStripeSubscriptionReconciliation(
     const mapped = priceId ? findTierCountryByPriceId(priceId) : undefined;
     const mappedStatus = mapStripeSubscriptionStatus(sub.status);
     const lifecycle = billingLifecycleFields(sub);
-    const meta = sub.metadata && typeof sub.metadata === "object" ? sub.metadata : {};
-    const rawUserId = typeof meta.userId === "string" ? meta.userId.trim() : "";
+    const stripeMeta = (sub.metadata && typeof sub.metadata === "object" ? sub.metadata : {}) as Record<
+      string,
+      string
+    >;
+    const rawUserId = typeof stripeMeta.userId === "string" ? stripeMeta.userId.trim() : "";
     const metadataUserId = rawUserId.length ? rawUserId : null;
 
     const row = dbByStripeId.get(sub.id);
@@ -285,6 +379,8 @@ export async function runStripeSubscriptionReconciliation(
                 message: guard.reason,
               });
             } else {
+              const planCodeMeta = stripeMeta.planCode?.trim();
+              const billingRegionMeta = stripeMeta.region?.trim();
               await prisma.subscription.create({
                 data: {
                   userId: metadataUserId,
@@ -294,12 +390,22 @@ export async function runStripeSubscriptionReconciliation(
                   ...(mappedStatus === SubscriptionStatus.PAST_DUE ? { pastDueSince: new Date() } : {}),
                   planTier: mapped?.tier ?? undefined,
                   planCountry: mapped?.country ?? undefined,
+                  planCode: planCodeMeta || undefined,
+                  billingRegionSlug: billingRegionMeta || undefined,
                   currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
                   trialEnd: lifecycle.trialEnd ?? null,
                   cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
                 },
               });
               report.apply.createsApplied += 1;
+              logSubscriptionRepaired({
+                operation: "create",
+                stripeSubscriptionId: sub.id,
+                userId: metadataUserId,
+                patchKeys: ["create", String(mappedStatus), planCodeMeta ? "planCode" : "", billingRegionMeta ? "billingRegionSlug" : ""].filter(
+                  Boolean,
+                ),
+              });
               if (priceId) {
                 await syncUserFromStripePriceId(metadataUserId, priceId);
                 report.apply.userSyncsApplied += 1;
@@ -389,13 +495,26 @@ export async function runStripeSubscriptionReconciliation(
       patch.cancelAtPeriodEnd = lifecycle.cancelAtPeriodEnd;
     }
 
+    const billingRegionFromMeta =
+      typeof stripeMeta.region === "string" ? stripeMeta.region.trim() : "";
+    if (billingRegionFromMeta && row.billingRegionSlug !== billingRegionFromMeta) {
+      patch.billingRegionSlug = billingRegionFromMeta;
+    }
+
     if (apply && Object.keys(patch).length > 0) {
       try {
+        const patchKeys = Object.keys(patch);
         await prisma.subscription.update({
           where: { id: row.id },
           data: patch,
         });
         report.apply.subscriptionRowsUpdated += 1;
+        logSubscriptionRepaired({
+          operation: "update",
+          stripeSubscriptionId: sub.id,
+          userId: row.userId,
+          patchKeys,
+        });
         if (syncUserFromPrice && priceId) {
           await syncUserFromStripePriceId(row.userId, priceId);
           report.apply.userSyncsApplied += 1;
@@ -447,5 +566,6 @@ export async function runStripeSubscriptionReconciliation(
     }
   }
 
+  finalizeReconciliationRun(report);
   return report;
 }

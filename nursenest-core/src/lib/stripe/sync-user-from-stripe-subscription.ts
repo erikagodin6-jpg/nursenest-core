@@ -1,34 +1,11 @@
-import { CountryCode, TierCode, type Prisma } from "@prisma/client";
+import { type Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { planFromCheckoutMetadata } from "@/lib/stripe/checkout-plan-metadata";
 import { findTierCountryByPriceId } from "@/lib/stripe/pricing-map";
-import { ALLIED_CAREER_KEYS, type AlliedCareerKey } from "@/lib/pricing/display-catalog";
 
-const TIER_VALUES = new Set<string>(Object.values(TierCode));
-const CAREER_SET = new Set<string>(ALLIED_CAREER_KEYS);
-
-export type CheckoutPlan = {
-  tier: TierCode;
-  country: CountryCode;
-  alliedCareer?: AlliedCareerKey;
-};
-
-/** Parsed Stripe Checkout metadata (`country`, `tier`, optionally `alliedCareer`). */
-export function planFromCheckoutMetadata(
-  metadata: Record<string, string> | null | undefined,
-): CheckoutPlan | null {
-  if (!metadata) return null;
-  const countryRaw = metadata.country;
-  const tierRaw = metadata.tier;
-  if (countryRaw !== "CA" && countryRaw !== "US") return null;
-  if (!tierRaw || !TIER_VALUES.has(tierRaw)) return null;
-  const result: CheckoutPlan = { tier: tierRaw as TierCode, country: countryRaw as CountryCode };
-  const careerRaw = metadata.alliedCareer;
-  if (careerRaw && CAREER_SET.has(careerRaw)) {
-    result.alliedCareer = careerRaw as AlliedCareerKey;
-  }
-  return result;
-}
+export type { CheckoutPlan } from "@/lib/stripe/checkout-plan-metadata";
+export { planFromCheckoutMetadata } from "@/lib/stripe/checkout-plan-metadata";
 
 /**
  * Aligns `User.tier`, `User.country`, and `User.alliedProfessionKey`
@@ -40,14 +17,18 @@ export async function syncUserFromCheckoutSessionMetadata(
 ): Promise<void> {
   const plan = planFromCheckoutMetadata(metadata);
   if (!plan) return;
-  const data: Prisma.UserUpdateInput = { tier: plan.tier, country: plan.country };
+  const data: Prisma.UserUpdateInput = { tier: plan.tier };
+  if (plan.country != null) {
+    data.country = plan.country;
+  }
   if (plan.alliedCareer) {
     data.alliedProfessionKey = plan.alliedCareer;
   }
   await prisma.user.update({ where: { id: userId }, data });
   safeServerLog("stripe_sync", "user_profile_from_checkout_metadata", {
     tier: plan.tier,
-    country: plan.country,
+    country: plan.country ?? undefined,
+    regionalOnly: plan.country == null ? 1 : 0,
     alliedCareer: plan.alliedCareer ?? undefined,
   });
 }

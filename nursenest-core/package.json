@@ -121,7 +121,7 @@
     "test:educational-translation-quality": "tsx --test src/lib/i18n/educational-translation-quality.test.ts",
     "test:i18n-user-ui": "tsx --test src/lib/i18n/required-user-ui-i18n-keys.test.ts src/lib/i18n/language-readiness-robots.test.ts",
     "test:tier-blocks": "tsx --test src/lib/lessons/tier-block-content.test.ts",
-    "test:stripe-reconcile": "tsx --test src/lib/stripe/stripe-subscription-field-map.test.ts src/lib/stripe/stripe-reconcile-metadata.test.ts src/lib/stripe/stripe-webhook-policy.test.ts",
+    "test:stripe-reconcile": "tsx --test src/lib/stripe/stripe-subscription-field-map.test.ts src/lib/stripe/stripe-reconcile-metadata.test.ts src/lib/stripe/stripe-webhook-policy.test.ts src/lib/stripe/stripe-reconciliation-contract.test.ts src/lib/stripe/checkout-plan-metadata.test.ts",
     "test:http-limits": "tsx --test src/lib/http/json-body-limit.test.ts src/lib/http/rate-limit-store.test.ts src/lib/server/api-rate-limit-policy.test.ts",
     "test:database-policy": "tsx --test src/lib/db/database-policy.test.ts src/lib/db/prisma-find-many-bounds.test.ts",
     "test:env-policy": "tsx --test src/lib/env/redact-secrets.test.ts src/lib/env/production-env-guard.test.ts",

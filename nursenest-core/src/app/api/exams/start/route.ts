@@ -35,6 +35,7 @@ import { allowRuntimeMinimalQuestionBankSeed } from "@/lib/jobs/runtime-heavy-wo
 import { diagnoseExamStartEmpty } from "@/lib/questions/exam-start-empty-diagnostics";
 import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
@@ -106,6 +107,7 @@ function pickStratifiedByDifficulty<T extends { id: string; difficulty: number |
 }
 
 export async function POST(req: NextRequest) {
+  return runWithApiTelemetry(req, "POST /api/exams/start", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -406,4 +408,5 @@ export async function POST(req: NextRequest) {
       { status: 503 },
     );
   }
+  });
 }

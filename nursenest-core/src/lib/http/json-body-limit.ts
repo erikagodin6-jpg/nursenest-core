@@ -3,6 +3,7 @@
  * Rejects oversize Content-Length first; streamed bodies are capped by byte count.
  */
 import { NextResponse } from "next/server";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /** Email + password / token forms. */
 export const JSON_BODY_AUTH_FORM = 16_384;
@@ -55,6 +56,12 @@ export async function readTextBodyWithByteLimit(
       if (!value?.length) continue;
       if (total + value.length > maxBytes) {
         await reader.cancel().catch(() => {});
+        safeServerLog("api", "request_body_too_large", {
+          phase: "stream",
+          maxBytes,
+          readBytes: total + value.length,
+          severity: "warning",
+        });
         return { ok: false, status: 413 };
       }
       total += value.length;
@@ -84,11 +91,16 @@ export type ParseJsonBodyResult =
 export async function parseJsonBodyWithLimit(req: Request, maxBytes: number): Promise<ParseJsonBodyResult> {
   const raw = await readTextBodyWithByteLimit(req, maxBytes);
   if (!raw.ok) {
+    safeServerLog("api", "json_body_rejected", {
+      code: "payload_too_large",
+      maxBytes,
+      severity: "warning",
+    });
     return {
       ok: false,
       response: NextResponse.json(
         { error: "Payload too large", code: "payload_too_large" },
-        { status: 413 },
+        { status: 413, headers: { "Cache-Control": "no-store" } },
       ),
     };
   }

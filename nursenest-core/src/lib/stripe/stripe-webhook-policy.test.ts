@@ -67,4 +67,14 @@ describe("stripe webhook policy (static)", () => {
     assert.match(checkout, /sessionUserId\(session\)/);
     assert.match(checkout, /metadata/);
   });
+
+  it("checkout rejects undeclared JSON fields and binds Stripe price from server resolution only", () => {
+    const checkout = readFileSync(
+      join(nursenestCoreRoot, "src", "app", "api", "subscriptions", "checkout", "route.ts"),
+      "utf8",
+    );
+    assert.match(checkout, /\.strict\(\)/);
+    assert.match(checkout, /line_items:\s*\[\{\s*price:\s*priceId/);
+    assert.ok(!/req\.json\(\)/.test(checkout), "use size-limited JSON parse");
+  });
 });

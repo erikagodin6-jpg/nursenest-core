@@ -73,6 +73,7 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/api/admin/jobs",
   "/api/admin/operations-dashboard",
   "/api/admin/operations-health",
+  "/api/admin/billing/stripe-reconcile",
   "/api/admin/stats",
   "/api/admin/system-status",
   "/api/admin/users",

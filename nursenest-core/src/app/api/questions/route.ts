@@ -6,6 +6,7 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
@@ -132,6 +133,7 @@ function logSubscriberPayload(
 }
 
 export async function GET(req: NextRequest) {
+  return runWithApiTelemetry(req, "GET /api/questions", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) {
@@ -672,4 +674,5 @@ export async function GET(req: NextRequest) {
       { status: 503 },
     );
   }
+  });
 }

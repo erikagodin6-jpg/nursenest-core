@@ -73,6 +73,20 @@ export function recordApiRouteTelemetry(opts: ApiRouteTelemetryOpts): void {
     degraded,
   });
 
+  /** Distinct event for log routers / alerts (slow handler, not necessarily platform timeout). */
+  if (degraded && durationMs < timeoutMs) {
+    emitStructuredLog("route_degraded", "warn", {
+      correlationId,
+      route: routePath,
+      method,
+      durationMs,
+      httpStatus,
+      flow,
+      errorClass: "slow_handler",
+      message: `duration ${durationMs}ms >= slow threshold ${slowMs}ms`,
+    });
+  }
+
   if (httpStatus >= 500) {
     emitStructuredLog("request_failed", "error", {
       correlationId,
