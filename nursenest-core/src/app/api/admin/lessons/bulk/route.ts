@@ -3,6 +3,7 @@ import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
+import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 
 const schema = z.discriminatedUnion("action", [
@@ -47,6 +48,7 @@ export async function POST(req: Request) {
   const rows = await prisma.contentItem.findMany({
     where: { id: { in: body.ids }, type: "lesson" },
     select: { id: true, tags: true },
+    take: takeForIdIn(body.ids, 500),
   });
 
   let updated = 0;

@@ -138,6 +138,7 @@ export async function POST(req: Request) {
     const created = await tx.lessonBatchQueueItem.findMany({
       where: { jobId: job.id },
       orderBy: { position: "asc" },
+      take: topics.length,
     });
 
     const built: LessonBatchResultSummaryV1 = {

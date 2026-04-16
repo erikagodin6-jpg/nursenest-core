@@ -31,6 +31,10 @@ const SUPER_ONLY_PREFIXES = [
    * (see `login-lockout.ts`); otherwise the per-process Map. Super admin only.
    */
   "/api/debug/clear-login-lock",
+  /** Session diagnostic — PII when detailed payload is returned (nn-db-final-005). */
+  "/api/debug/session",
+  /** Intentional Sentry throw — abuse/noise if callable by non-super (nn-db-final-005). */
+  "/api/debug/sentry-test",
 ];
 
 /** User PII + billing list/analytics — not for content editors. */

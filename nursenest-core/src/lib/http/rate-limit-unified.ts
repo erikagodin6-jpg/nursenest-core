@@ -1,75 +1,54 @@
 /**
- * Unified rate limiting for horizontal scale:
+ * Unified rate limiting for horizontal scale (nn-db-final-004):
  *
- * - **Node + `DATABASE_URL` (non-test):** Postgres-backed buckets — shared across instances (consistent).
- * - **Edge runtime:** Prisma is unavailable — in-memory only (per region/instance; unavoidable).
- * - **Dev / tests / no DB:** in-memory (acceptable; not production multi-instance).
+ * - **Active store:** {@link getPostgresRateLimitStore} when {@link shouldUsePostgresRateLimitStore}; otherwise
+ *   {@link getInMemoryRateLimitStoreSingleton} (dev/tests/Edge).
+ * - **Edge runtime:** Prisma unavailable — in-memory only (per region/instance; unavoidable).
+ * - **Production Node with Postgres:** if the shared store throws (DB down, migration missing, etc.),
+ *   we **fail closed** (`ok: false` → callers typically map to HTTP 429). We do **not** fall back to
+ *   in-memory there — that would diverge per instance. Non-production still falls back to in-memory
+ *   so local dev keeps working when Postgres is stopped.
  *
- * **Production Node with Postgres:** if the distributed check throws (DB down, migration missing, etc.),
- * we **fail closed** (`ok: false` → callers typically map to HTTP 429). We do **not** fall back to
- * in-memory there — that would diverge per instance. Non-production still falls back to in-memory
- * so local dev keeps working when Postgres is stopped.
+ * @see RateLimitStore — abstraction for future Redis/KV backends
  */
-import { checkRateLimit, consumeRateLimit } from "@/lib/http/rate-limit-in-memory";
-import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import {
+  getInMemoryRateLimitStoreSingleton,
+  getPostgresRateLimitStore,
+  logRateLimitPgUnavailableOnce,
+  shouldUsePostgresRateLimitStore,
+} from "@/lib/http/rate-limit-store-resolve";
 
-let rateLimitFalseIgnoredInProdLogged = false;
-/** One-shot: Postgres unavailable for distributed rate limits (production fail-closed). */
-let rateLimitPgUnavailableLogged = false;
-
-function logRateLimitPgUnavailableOnce(): void {
-  if (rateLimitPgUnavailableLogged) return;
-  rateLimitPgUnavailableLogged = true;
-  safeServerLog("security", "rate_limit_unified_pg_unavailable", { action: "fail_closed" });
-}
+export {
+  shouldUsePostgresRateLimitStore,
+  shouldUsePostgresRateLimitStore as isDistributedRateLimitEnabled,
+} from "@/lib/http/rate-limit-store-resolve";
 
 /**
- * Postgres-backed limits are disabled on the Edge runtime because Prisma is Node-only (in-memory there only).
- * In Node production with `DATABASE_URL`, limits use Postgres; `RATE_LIMIT_DISTRIBUTED=false` is ignored in production.
- */
-export function isDistributedRateLimitEnabled(): boolean {
-  if (process.env.NEXT_RUNTIME === "edge") return false;
-  if (!isDatabaseUrlConfigured()) return false;
-  if (process.env.NODE_ENV === "test") return false;
-  if (process.env.RATE_LIMIT_DISTRIBUTED === "true") return true;
-  if (process.env.NODE_ENV !== "production") return false;
-  if (process.env.RATE_LIMIT_DISTRIBUTED === "false" && !rateLimitFalseIgnoredInProdLogged) {
-    rateLimitFalseIgnoredInProdLogged = true;
-    safeServerLogCritical(
-      "security",
-      "rate_limit_distributed_false_ignored_in_production",
-      { hint: "Per-instance buckets are disabled when DATABASE_URL is set (Node runtime)." },
-      new Error("RATE_LIMIT_DISTRIBUTED=false ignored in production"),
-    );
-  }
-  return true;
-}
-
-/**
- * Fixed-window limiter: Postgres when {@link isDistributedRateLimitEnabled}; otherwise in-memory (dev/tests only).
- * Dynamic-imports the distributed module so Edge bundles never load Prisma.
- *
- * Production must not fall back to in-memory rate limiting because it breaks consistency across instances.
- * If Postgres fails in production, returns `ok: false` (same deny on every instance — fail closed).
+ * Fixed-window limiter: Postgres-backed {@link RateLimitStore} when enabled; otherwise in-memory (dev/tests only).
  */
 export async function checkRateLimitUnified(
   key: string,
   opts: { windowMs: number; max: number },
 ): Promise<{ ok: boolean; remaining: number }> {
-  if (!isDistributedRateLimitEnabled()) {
-    return checkRateLimit(key, opts);
+  if (!shouldUsePostgresRateLimitStore()) {
+    return getInMemoryRateLimitStoreSingleton().check(key, opts);
+  }
+  const pg = await getPostgresRateLimitStore();
+  if (!pg) {
+    if (process.env.NODE_ENV === "production") {
+      logRateLimitPgUnavailableOnce();
+      return { ok: false, remaining: 0 };
+    }
+    return getInMemoryRateLimitStoreSingleton().check(key, opts);
   }
   try {
-    const { checkRateLimitDistributed } = await import("@/lib/http/rate-limit-distributed");
-    const r = await checkRateLimitDistributed(key, opts);
-    return { ok: r.ok, remaining: r.ok ? opts.max : 0 };
+    return await pg.check(key, opts);
   } catch {
     if (process.env.NODE_ENV === "production") {
       logRateLimitPgUnavailableOnce();
       return { ok: false, remaining: 0 };
     }
-    return checkRateLimit(key, opts);
+    return getInMemoryRateLimitStoreSingleton().check(key, opts);
   }
 }
 
@@ -78,18 +57,24 @@ export async function consumeRateLimitUnified(
   cost: number,
   opts: { windowMs: number; max: number },
 ): Promise<{ ok: boolean; remaining: number }> {
-  if (!isDistributedRateLimitEnabled()) {
-    return consumeRateLimit(key, cost, opts);
+  if (!shouldUsePostgresRateLimitStore()) {
+    return getInMemoryRateLimitStoreSingleton().consume(key, cost, opts);
+  }
+  const pg = await getPostgresRateLimitStore();
+  if (!pg) {
+    if (process.env.NODE_ENV === "production") {
+      logRateLimitPgUnavailableOnce();
+      return { ok: false, remaining: 0 };
+    }
+    return getInMemoryRateLimitStoreSingleton().consume(key, cost, opts);
   }
   try {
-    const { consumeRateLimitDistributed } = await import("@/lib/http/rate-limit-distributed");
-    const r = await consumeRateLimitDistributed(key, cost, opts);
-    return { ok: r.ok, remaining: r.ok ? 0 : 0 };
+    return await pg.consume(key, cost, opts);
   } catch {
     if (process.env.NODE_ENV === "production") {
       logRateLimitPgUnavailableOnce();
       return { ok: false, remaining: 0 };
     }
-    return consumeRateLimit(key, cost, opts);
+    return getInMemoryRateLimitStoreSingleton().consume(key, cost, opts);
   }
 }

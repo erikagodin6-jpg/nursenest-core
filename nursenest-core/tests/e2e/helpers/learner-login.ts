@@ -1,8 +1,7 @@
 /**
- * Credentials login → learner shell. Canonical shell rules: {@link ./learner-shell}.
+ * Credentials login → learner shell. Canonical shell rules: `src/lib/navigation/learner-shell.ts` ({@link isLearnerShell}).
  *
- * **Browser serialization:** `waitForFunction` must mirror {@link isLearnerShell} in `learner-shell.ts`
- * (same branches). It cannot import helpers — Playwright runs the callback in the page context.
+ * **Browser serialization:** `waitForFunction` must mirror {@link isLearnerShell} inline — Playwright runs the callback in the page context (no imports).
  */
 import type { Page } from "@playwright/test";
 import { describeAuthFailureSurface } from "./auth-diagnostics";
@@ -39,8 +38,9 @@ export async function loginWithCredentials(page: Page, email: string, password: 
         path.includes("/signup") ||
         path.includes("/sign-up") ||
         path.includes("/app/onboarding")
-      )
+      ) {
         return false;
+      }
 
       return (
         path === "/app" ||

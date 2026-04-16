@@ -90,3 +90,10 @@ test("non-super denied for ambiguous root path /", () => {
   assert.equal(isPathAllowedForStaffTier("content", "/"), false);
   assert.equal(isPathAllowedForStaffTier("support", "/"), false);
 });
+
+test("nn-db-final-005: /api/debug session + sentry-test are super-only", () => {
+  assert.equal(isPathAllowedForStaffTier("super", "/api/debug/session"), true);
+  assert.equal(isPathAllowedForStaffTier("super", "/api/debug/sentry-test"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/debug/session"), false);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/debug/sentry-test"), false);
+});

@@ -1,7 +1,11 @@
 /**
  * Best-effort in-process rate limiter for a single Node instance.
  * Not suitable for multi-instance horizontal scale without a shared store.
+ *
+ * @see RateLimitStore — {@link createInMemoryRateLimitStore} wraps these functions for the pluggable API (nn-db-final-004).
  */
+import type { RateLimitCheckResult, RateLimitStore, RateLimitWindowOpts } from "@/lib/http/rate-limit-store";
+
 type Bucket = { count: number; resetAt: number };
 
 const buckets = new Map<string, Bucket>();
@@ -52,4 +56,16 @@ export function consumeRateLimit(
   }
   b.count += cost;
   return { ok: true, remaining: opts.max - b.count };
+}
+
+/** {@link RateLimitStore} adapter — one Map per created instance (tests may use a fresh store via this factory). */
+export function createInMemoryRateLimitStore(): RateLimitStore {
+  return {
+    check(key: string, opts: RateLimitWindowOpts): Promise<RateLimitCheckResult> {
+      return Promise.resolve(checkRateLimit(key, opts));
+    },
+    consume(key: string, cost: number, opts: RateLimitWindowOpts): Promise<RateLimitCheckResult> {
+      return Promise.resolve(consumeRateLimit(key, cost, opts));
+    },
+  };
 }

@@ -62,7 +62,7 @@ describe("security regression (source contracts)", () => {
     assert.match(src, /NODE_ENV === "production"/);
     assert.match(src, /logRateLimitPgUnavailableOnce/);
     assert.match(src, /return \{ ok: false, remaining: 0 \}/);
-    assert.match(src, /checkRateLimit\(key, opts\)/);
+    assert.match(src, /getInMemoryRateLimitStoreSingleton\(\)\.check/);
   });
 
   it("admin/debug API routes do not use requireAdmin(_req)", () => {

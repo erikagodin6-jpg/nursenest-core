@@ -9,6 +9,7 @@
  */
 import { scopedGoldHubRowsForPathway } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
 import { prisma } from "@/lib/db";
+import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import type { PathwayLessonEducationalOverlay } from "@/lib/i18n/educational-content-overlay";
 import { applyPathwayLessonEducationalOverlay } from "@/lib/i18n/educational-content-overlay";
@@ -1348,6 +1349,7 @@ async function listTopicClustersImpl(pathwayId: string, marketingLocale?: string
                 },
                 select: { topicSlug: true, topic: true },
                 distinct: ["topicSlug"],
+                take: takeForIdIn(slugList),
               }),
             [],
           );

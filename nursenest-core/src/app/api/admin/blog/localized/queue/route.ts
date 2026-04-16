@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
+import { PRISMA_INTERNAL_BATCH_MAX } from "@/lib/db/prisma-find-many-bounds";
 
 // @ts-expect-error — available after prisma generate + migration
 const localizedModel = () => prisma.localizedBlogArticle as Record<string, (...args: unknown[]) => Promise<unknown>>;
@@ -64,6 +65,7 @@ export async function POST(req: NextRequest) {
   const existingVariants = await localizedModel().findMany({
     where: { canonicalArticleId: d.canonicalArticleId },
     select: { locale: true, region: true, contentStatus: true },
+    take: PRISMA_INTERNAL_BATCH_MAX,
   }) as { locale: string; region: string; contentStatus: string }[];
 
   const existingMap = new Map<string, string>(

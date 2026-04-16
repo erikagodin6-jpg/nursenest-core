@@ -1,5 +1,6 @@
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
+import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { scanMediaUsage } from "@/lib/media/scan-media-usage";
 import { NextResponse } from "next/server";
 
@@ -27,6 +28,7 @@ export async function POST(req: Request) {
   const rows = await prisma.mediaAsset.findMany({
     where: { id: { in: slice } },
     select: { id: true, publicUrl: true, storageKey: true },
+    take: takeForIdIn(slice, MAX_BATCH),
   });
 
   const results: Array<{ id: string; count: number }> = [];

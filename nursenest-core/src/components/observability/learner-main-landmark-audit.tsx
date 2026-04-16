@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { isLearnerShell } from "@/lib/navigation/learner-shell";
 
 /**
  * Temporary diagnostics: `app/not-found` and nested error UIs must not render a second `<main>`
@@ -12,7 +13,7 @@ export function LearnerMainLandmarkAudit() {
   const pathname = usePathname() ?? "";
 
   useEffect(() => {
-    if (!pathname.startsWith("/app")) return;
+    if (!isLearnerShell(pathname)) return;
     const mains = [...document.querySelectorAll("main")];
     if (mains.length === 1) return;
     const detail = mains.map((el, index) => ({

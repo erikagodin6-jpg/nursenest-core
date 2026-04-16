@@ -1,7 +1,7 @@
 import type { Page } from "@playwright/test";
 import { describeAuthFailureSurface } from "./auth-diagnostics";
 import { assertSyncNotOnboardingBlocking } from "./paid-durability";
-import { formatLearnerShellMismatch, isLearnerShell } from "./learner-shell";
+import { isLearnerShell } from "./learner-shell";
 
 /** Premium learner surfaces should not render the freemium subscription gate heading. */
 export async function expectNoSubscriptionPaywall(page: Page, context: string): Promise<void> {
@@ -30,42 +30,35 @@ export async function expectNotOnAppOnboarding(page: Page, context: string): Pro
 export async function expectOnLearnerApp(page: Page): Promise<void> {
   assertSyncNotOnboardingBlocking(page, "expectOnLearnerApp");
   const url = page.url();
-  let path = "";
+  let pathname = "";
   try {
-    path = new URL(url).pathname;
+    pathname = new URL(url).pathname;
   } catch {
     const diag = await describeAuthFailureSurface(page).catch(() => "");
     throw new Error(`Invalid page URL for learner shell check. url=${url} ${diag}`);
   }
 
-  if (!isLearnerShell(path)) {
+  if (!isLearnerShell(pathname)) {
     const diag = await describeAuthFailureSurface(page).catch(() => "");
-    throw new Error(`${formatLearnerShellMismatch(url, path)} ${diag}`);
+    throw new Error(`Not on learner shell. url=${url} pathname=${pathname} ${diag}`);
   }
 }
 
 /**
- * Paid subscriber E2E: must be on the in-app shell (`/app`, `/app/*`), not the public marketing lesson hub
- * (`/lessons` after guest redirect from `/app/lessons`) or other top-level marketing routes.
+ * Paid subscriber E2E: must be on a learner-shell pathname (see {@link isLearnerShell}), not auth/marketing-only routes.
  */
 export async function expectOnPaidSubscriberApp(page: Page): Promise<void> {
   assertSyncNotOnboardingBlocking(page, "expectOnPaidSubscriberApp");
   const url = page.url();
-  let path = "";
+  let pathname = "";
   try {
-    path = new URL(url).pathname;
+    pathname = new URL(url).pathname;
   } catch {
     const diag = await describeAuthFailureSurface(page).catch(() => "");
     throw new Error(`Invalid page URL for paid learner shell. url=${url} ${diag}`);
   }
-  if (path.includes("/app/onboarding")) {
+  if (!isLearnerShell(pathname)) {
     const diag = await describeAuthFailureSurface(page).catch(() => "");
-    throw new Error(`On onboarding route — not subscriber shell. url=${url} ${diag}`);
-  }
-  if (path !== "/app" && !path.startsWith("/app/")) {
-    const diag = await describeAuthFailureSurface(page).catch(() => "");
-    throw new Error(
-      `Expected /app subscriber surface; got pathname=${path}. Often a guest redirect from /app/lessons to /lessons (session missing). url=${url} ${diag}`,
-    );
+    throw new Error(`Not on learner shell. url=${url} pathname=${pathname} ${diag}`);
   }
 }

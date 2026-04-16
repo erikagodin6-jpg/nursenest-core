@@ -1,28 +1,35 @@
 import { NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { auth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 /**
- * Temporary authenticated session diagnostic for incident response.
+ * Authenticated session diagnostic for incident response.
  * Does not expose secrets, tokens, or raw cookies.
  *
- * In production, returns a minimal payload unless `DEBUG_SESSION_ROUTE_ENABLED=1`
- * (same pattern as `/api/debug/sentry-test`).
+ * - **Minimal:** `{ authenticated: boolean }` only — safe for any caller (no PII).
+ * - **Detailed** (user id, email, role, …): only after {@link requireAdmin} — super tier per RBAC
+ *   (`/api/debug/session` is super-only). Enabled in non-production, or in production when
+ *   `DEBUG_SESSION_ROUTE_ENABLED=1` or `SENTRY_DEBUG_ROUTE=1` (same gate as before).
  */
-export async function GET() {
+export async function GET(req: Request) {
   const session = await auth();
   if (!session?.user) {
     return NextResponse.json({ authenticated: false });
   }
 
-  const enabledInProd =
+  const detailEnvEnabled =
     process.env.NODE_ENV !== "production" ||
     process.env.DEBUG_SESSION_ROUTE_ENABLED === "1" ||
     process.env.SENTRY_DEBUG_ROUTE === "1";
-  if (!enabledInProd) {
+
+  if (!detailEnvEnabled) {
     return NextResponse.json({ authenticated: true });
   }
+
+  const gate = await requireAdmin(req);
+  if (!gate.ok) return gate.response;
 
   const u = session.user as {
     id?: string;

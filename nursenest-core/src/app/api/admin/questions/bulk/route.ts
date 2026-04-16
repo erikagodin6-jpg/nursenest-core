@@ -5,6 +5,7 @@ import { ContentStatus, QuestionType } from "@prisma/client";
 import { governExamQuestionPublish } from "@/lib/content/editorial-publish-policy";
 import { assertExamQuestionContextForPublish } from "@/lib/content-quality/exam-question-context-validation";
 import { prisma } from "@/lib/db";
+import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 
 const schema = z.discriminatedUnion("action", [
@@ -108,6 +109,7 @@ export async function POST(req: Request) {
   const rows = await prisma.examQuestion.findMany({
     where: { id: { in: body.ids } },
     select: { id: true, tags: true },
+    take: takeForIdIn(body.ids, 500),
   });
 
   let updated = 0;

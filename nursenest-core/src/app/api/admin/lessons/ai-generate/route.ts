@@ -17,6 +17,7 @@ import {
   generateAdminAiLesson,
 } from "@/lib/lessons/admin-ai-lesson-pipeline";
 import { prisma } from "@/lib/db";
+import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 
 export const runtime = "nodejs";
 export const maxDuration = 120;
@@ -62,6 +63,7 @@ export async function POST(req: Request) {
     const cats = await prisma.category.findMany({
       where: { id: { in: d.relatedCategoryIds } },
       select: { name: true, slug: true },
+      take: takeForIdIn(d.relatedCategoryIds, 12),
     });
     relatedCategoryLabels = cats.map((c) => c.name || c.slug);
   }

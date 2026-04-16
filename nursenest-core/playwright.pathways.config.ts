@@ -1,9 +1,10 @@
 /**
- * Extended smoke — all legacy specs under `tests/e2e/smoke` (localized, auth variants, etc.).
+ * Pathway content access — multi-pathway paid learner verification (`pathway-content-access.spec.ts`).
  *
- *   npm run qa:smoke:extended
+ * Kept separate from `playwright.smoke-extended.config.ts` due to runtime (several pathways × surfaces).
  *
- * For deploy verification, prefer `npm run qa:smoke` (minimal 4-group suite).
+ *   npm run qa:pathways
+ *   PLAYWRIGHT_SKIP_WEB_SERVER=1 BASE_URL=https://www.example.com npm run qa:pathways
  */
 import "./playwright.env";
 import { defineConfig, devices } from "@playwright/test";
@@ -41,14 +42,12 @@ const e2eWebServer = localDevWebServer();
 export default defineConfig({
   ...(e2eWebServer ? { webServer: e2eWebServer } : {}),
   testDir: "tests/e2e/smoke",
-  testMatch: /.*\.spec\.ts$/,
-  /** Long multi-pathway suite has its own config (`playwright.pathways.config.ts` / `npm run qa:pathways`). */
-  testIgnore: /pathway-content-access\.spec\.ts$/,
+  testMatch: /pathway-content-access\.spec\.ts$/,
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   workers: 1,
-  timeout: 180_000,
+  timeout: 900_000,
   expect: { timeout: 45_000 },
   reporter: [["list"]],
   use: {
@@ -56,6 +55,6 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "off",
+    ...devices["Desktop Chrome"],
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
 });
