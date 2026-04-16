@@ -7,6 +7,7 @@
  * Never pass passwords, tokens, or full PII in `message`.
  */
 import * as Sentry from "@sentry/nextjs";
+import { captureUxFailure } from "@/lib/observability/frontend-ux-tracking";
 
 /** Keep aligned with {@link STRUCTURED_LOG_SCHEMA} in `structured-log.ts`. */
 const CLIENT_STRUCTURED_LOG_SCHEMA = "nn.structured_log.v1" as const;
@@ -42,4 +43,22 @@ export function emitClientStructuredLog(
     level: fields.httpStatus && fields.httpStatus >= 500 ? "error" : "warning",
     data,
   });
+
+  if (process.env.NEXT_PUBLIC_SENTRY_ENABLED === "true") {
+    const level = fields.httpStatus && fields.httpStatus >= 500 ? "error" : "warning";
+    captureUxFailure({
+      kind: "fetch_failed",
+      level,
+      message: `${event}: ${fields.message ?? fields.errorClass ?? "unknown"}`,
+      extra: {
+        schemaEvent: event,
+        route: fields.route,
+        method: fields.method,
+        httpStatus: fields.httpStatus,
+        errorClass: fields.errorClass,
+        degraded: fields.degraded,
+        locale: fields.locale,
+      },
+    });
+  }
 }

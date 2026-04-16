@@ -3,7 +3,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
-    const { registerNodeInstrumentation } = await import("@/instrumentation/register-node");
+    const { registerNodeInstrumentation } = await import("@/lib/instrumentation/register-node");
     await registerNodeInstrumentation();
     if (process.env.SENTRY_ENABLED === "true") {
       await import("./sentry.server.config");

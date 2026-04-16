@@ -1757,15 +1757,7 @@ export function QuestionBankPracticeClient({
           scope={LearnerNoteScope.QUESTION_BANK}
           contextId={current.id}
           topic={current.topic}
-          sourceLabel={`Question ${current.id.slice(0, 8)}…${current.topic ? ` · ${current.topic}` : ""}`}
-          userLabel={userLabel}
-          flags={protectionFlags}
-        />
-      </div>
-    </div>
-  );
-}
-`}
+          sourceLabel={`Question ${current.id.slice(0, 8)}…${current.topic ? " · " + current.topic : ""}`}
           userLabel={userLabel}
           flags={protectionFlags}
         />

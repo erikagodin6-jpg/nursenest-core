@@ -23,7 +23,8 @@ import {
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC } from "@/lib/server/api-route-constants";
 
-export const maxDuration = API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC;
+/** Keep numeric literal — Next segment config must be statically analyzable (see `API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC`). */
+export const maxDuration = 60;
 
 /**
  * Subscriber-only flashcard list (backend-enforced; no freemium bypass of full backs).

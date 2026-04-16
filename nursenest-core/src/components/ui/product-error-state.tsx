@@ -17,6 +17,8 @@ export type ProductErrorStateProps = {
   detail?: string | null;
   /** One automatic retry after this delay (ms), deduped per {@link reference} in session storage. */
   autoRetryAfterMs?: number;
+  /** Called when the automatic delayed reset runs (before remount). */
+  onAutoRetryInvoked?: () => void;
   /** Shown while an automatic retry is scheduled (optional). */
   autoRetryNotice?: string;
   onRetry?: () => void;
@@ -42,6 +44,7 @@ export function ProductErrorState({
   referenceLabel = "Reference",
   detail,
   autoRetryAfterMs,
+  onAutoRetryInvoked,
   autoRetryNotice = "Retrying automatically…",
   onRetry,
   retryLabel = "Try again",
@@ -57,6 +60,7 @@ export function ProductErrorState({
     errorKey: reference,
     delayMs: autoRetryAfterMs ?? 0,
     enabled: Boolean(onRetry && autoRetryAfterMs && autoRetryAfterMs > 0),
+    onAutoResetInvoked: onAutoRetryInvoked,
   });
 
   const surface =

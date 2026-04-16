@@ -3,14 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  /// Primary app + Prisma data plane: **only** `DATABASE_URL` is supported (no `PROD_DATABASE_URL` or other aliases).
-  /// Pooled URL (e.g. DO pooler / PgBouncer): add `pgbouncer=true` — see `src/lib/db/env-bootstrap.ts`.
-  url = env("DATABASE_URL")
-  /// Same database, **direct** connection for migrate/introspect (non-pooler). Optional; derived from `DATABASE_URL` when unset.
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DATABASE_DIRECT_URL")
 }
 
+/// Same database, **direct** connection for migrate/introspect (non-pooler). Optional; derived from `DATABASE_URL` when unset.
 model User {
   id                            String                      @id @default(cuid())
   email                         String                      @unique
@@ -71,8 +69,6 @@ model User {
   /// * Lowercase, trimmed email for dedup (dot-stripping, alias-insensitive).
   normalizedEmail               String?
   emailVerified                 Boolean                     @default(false)
-  /// * Demo QA accounts: admin-only creation, no real billing (guards checkout/trial).
-  isDemoUser                    Boolean                     @default(false) @map("is_demo_user")
   /// * How the account was created (credentials, google, etc.).
   authProvider                  String                      @default("credentials") @db.VarChar(32)
   signupIp                      String?                     @db.VarChar(64)
@@ -100,9 +96,11 @@ model User {
   /// * Default smart-session size for learner flows; null uses product default.
   preferredSessionLength        Int?                        @map("preferred_session_length")
   /// *
-  ///    * When false, guided lesson study loop (optional bank-backed pre/post quick check + review) stays off.
-  ///    * Null defaults to enabled in app normalization.
+  /// * When false, guided lesson study loop (optional bank-backed pre/post quick check + review) stays off.
+  /// * Null defaults to enabled in app normalization.
   lessonStudyLoopEnabled        Boolean?                    @map("lesson_study_loop_enabled")
+  /// * Demo QA accounts: admin-only creation, no real billing (guards checkout/trial).
+  isDemoUser                    Boolean                     @default(false) @map("is_demo_user")
   aiGenerationJobs              AiGenerationJob[]           @relation("AiJobCreatedBy")
   baselineAssessmentAttempts    BaselineAssessmentAttempt[]
   blogBatchSchedules            BlogBatchSchedule[]
@@ -133,16 +131,10 @@ model User {
   premiumProtectionUserDays     PremiumProtectionUserDay[]
   abuseReviewsDismissed         ProtectionAbuseReview[]     @relation("ProtectionAbuseReviewDismissedBy")
   protectionAbuseReviews        ProtectionAbuseReview[]
-  examQuestionsPublished        ExamQuestion[]              @relation("ExamQuestionPublishedBy")
-  pathwayLessonsPublished       PathwayLesson[]             @relation("PathwayLessonPublishedBy")
-  contentItemsPublished         ContentItem[]               @relation("ContentItemPublishedBy")
-  contentImportRunsTriggered    ContentImportRun[]          @relation("ContentImportRunTriggeredBy")
-  contentEntityRevisionsCreated ContentEntityRevision[]     @relation("ContentRevisionCreatedBy")
 
   @@index([alliedProfessionKey])
   @@index([normalizedEmail])
-  @@index([role])
-  @@index([tier])
+  @@index([isDemoUser])
 }
 
 /// * Admin-managed binary assets on Spaces (blogs, lessons, marketing).
@@ -341,14 +333,8 @@ model Subscription {
   planCode             String?            @db.VarChar(96)
   /// * Checkout `metadata.region` when global regional pricing was used (e.g. `philippines`).
   billingRegionSlug    String?            @db.VarChar(32)
+  pastDueSince         DateTime?
   user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  /// Entitlement hot path: `getUserAccess` loads recent subscription rows per user (`WHERE userId = ? ORDER BY createdAt DESC LIMIT …`).
-  @@index([userId, createdAt(sort: Desc)])
-  @@index([userId, status])
-  @@index([status, currentPeriodEnd])
-  /// Stripe portal / reconciliation lookups by customer id (nullable; index still helps non-null rows).
-  @@index([stripeCustomerId])
 }
 
 /// * Records Stripe webhook `evt_…` ids **after** handlers succeed (`/api/subscriptions/webhook`).
@@ -383,110 +369,115 @@ model ContentQualityCorpusSnapshot {
 
 /// * Public SEO blog posts (migrated from legacy content_items / static allied data). Not the same rows as `content_items.type = 'lesson'`.
 model BlogPost {
-  id                        String                         @id @default(cuid())
-  slug                      String                         @unique
-  title                     String
-  excerpt                   String
-  body                      String
-  coverImage                String?
-  tags                      String[]                       @default([])
-  category                  String?
-  createdAt                 DateTime                       @default(now())
-  updatedAt                 DateTime                       @updatedAt
+  id                         String                         @id @default(cuid())
+  slug                       String                         @unique
+  title                      String
+  excerpt                    String
+  body                       String
+  coverImage                 String?
+  tags                       String[]                       @default([])
+  category                   String?
+  createdAt                  DateTime                       @default(now())
+  updatedAt                  DateTime                       @updatedAt
   /// * e.g. content_items, paramedic-static, legacy-json
-  legacySource              String?
+  legacySource               String?
   /// * Visibility: DRAFT never public; SCHEDULED goes live when publishAt <= now; PUBLISHED always public (after publishAt if set).
-  postStatus                BlogPostStatus                 @default(DRAFT)
+  postStatus                 BlogPostStatus                 @default(DRAFT)
   /// * When status is SCHEDULED, this is the go-live instant (UTC). Also used as canonical “publish” time for SEO when set.
-  publishAt                 DateTime?
+  publishAt                  DateTime?
   /// * RN | PN | NP | Allied — drives cross-links and topic hubs (string for flexibility vs exam registry keys).
-  exam                      String?
+  exam                       String?
   /// * Optional: overrides <title> / OG when set.
-  seoTitle                  String?
-  seoDescription            String?
+  seoTitle                   String?
+  seoDescription             String?
   /// * Structured template for generators and footer CTAs.
-  postTemplate              BlogPostTemplate?
+  postTemplate               BlogPostTemplate?
   /// * Internal paths e.g. `/us/rn/nclex-rn/lessons/slug` — no full lesson HTML stored here.
-  relatedLessonPaths        String[]                       @default([])
+  relatedLessonPaths         String[]                       @default([])
   /// * Exam question UUIDs for deep links (public pages never expose rationales).
-  relatedQuestionIds        String[]                       @default([])
+  relatedQuestionIds         String[]                       @default([])
   /// * Tool route slugs e.g. `labs`, `med-math` resolved under /tools.
-  relatedTools              String[]                       @default([])
+  relatedTools               String[]                       @default([])
   /// * Admin-only append-only JSON array: generation, saves, publish attempts, status transitions.
-  adminPublishLog           Json                           @default("[]")
-  campaignId                String?
-  targetKeyword             String?
-  keywordCluster            String?
-  countryTarget             CountryCode?
-  intent                    BlogPostIntent?
-  funnelStage               BlogFunnelStage?
-  workflowStatus            BlogWorkflowStatus             @default(GENERATED)
-  outlineJson               Json?
-  keyQuestions              String[]                       @default([])
-  keywordPlan               String[]                       @default([])
-  internalLinkPlan          Json?
-  ctaType                   String?
-  ctaText                   String?
-  ctaHref                   String?
-  titleAlternates           String[]                       @default([])
-  clickTitle                String?
-  metaTitleVariant          String?
-  metaDescriptionVariant    String?
-  featuredSnippet           String?
-  keyTakeaways              String[]                       @default([])
-  faqBlock                  Json?
-  definitionBox             String?
-  checklistBlock            Json?
-  quickReferenceBlock       Json?
-  sourceReliabilityScore    Int?
-  sourcesJson               Json?
-  apaReferences             String[]                       @default([])
-  requiresReferences        Boolean                        @default(false)
-  medicalRiskFlags          String[]                       @default([])
-  reviewDueAt               DateTime?
-  lastReviewedAt            DateTime?
-  coverImageAlt             String?
-  coverImageCaption         String?
-  coverImagePrompt          String?
-  imageStyleType            String?
-  imageStatus               BlogImageStatus                @default(NONE)
-  socialCaption             String?
-  emailTeaser               String?
-  shortSummary              String?
-  promoBlurb                String?
-  schemaSummary             String?
-  perfImpressions           Int?
-  perfClicks                Int?
-  perfCtr                   Float?
-  perfInternalClicks        Int?
-  perfConversionAssists     Int?
-  perfSubscriptionAssists   Int?
-  updateNeeded              Boolean                        @default(false)
-  rankingNote               String?
+  adminPublishLog            Json                           @default("[]")
+  campaignId                 String?
+  targetKeyword              String?
+  keywordCluster             String?
+  countryTarget              CountryCode?
+  intent                     BlogPostIntent?
+  funnelStage                BlogFunnelStage?
+  workflowStatus             BlogWorkflowStatus             @default(GENERATED)
+  outlineJson                Json?
+  keyQuestions               String[]                       @default([])
+  keywordPlan                String[]                       @default([])
+  internalLinkPlan           Json?
+  ctaType                    String?
+  ctaText                    String?
+  ctaHref                    String?
+  titleAlternates            String[]                       @default([])
+  clickTitle                 String?
+  metaTitleVariant           String?
+  metaDescriptionVariant     String?
+  featuredSnippet            String?
+  keyTakeaways               String[]                       @default([])
+  faqBlock                   Json?
+  definitionBox              String?
+  checklistBlock             Json?
+  quickReferenceBlock        Json?
+  sourceReliabilityScore     Int?
+  sourcesJson                Json?
+  apaReferences              String[]                       @default([])
+  requiresReferences         Boolean                        @default(false)
+  medicalRiskFlags           String[]                       @default([])
+  reviewDueAt                DateTime?
+  lastReviewedAt             DateTime?
+  coverImageAlt              String?
+  coverImageCaption          String?
+  coverImagePrompt           String?
+  imageStyleType             String?
+  imageStatus                BlogImageStatus                @default(NONE)
+  socialCaption              String?
+  emailTeaser                String?
+  shortSummary               String?
+  promoBlurb                 String?
+  schemaSummary              String?
+  perfImpressions            Int?
+  perfClicks                 Int?
+  perfCtr                    Float?
+  perfInternalClicks         Int?
+  perfConversionAssists      Int?
+  perfSubscriptionAssists    Int?
+  updateNeeded               Boolean                        @default(false)
+  rankingNote                String?
   /// * Original legacy schedule timestamp (if imported from scheduled content).
-  scheduledAt               DateTime?
+  scheduledAt                DateTime?
   /// * Profession/career dimension for shared nursing+allied infrastructure (e.g., rn, paramedic, mlt).
-  careerSlug                String?
+  careerSlug                 String?
   /// * Content locale used for language-aware blog delivery.
-  locale                    String                         @default("en")
+  locale                     String                         @default("en")
   /// * Shared identifier linking translations of the same post.
-  translationGroupId        String?
+  translationGroupId         String?
   /// * Locale of the canonical/source article.
-  sourceLocale              String?
+  sourceLocale               String?
   /// * Whether this row was auto-translated from a source post.
-  isAutoTranslated          Boolean                        @default(false)
+  isAutoTranslated           Boolean                        @default(false)
   /// * Translation provenance such as `ai`, `manual`, or `legacy`.
-  translationSource         String?
+  translationSource          String?
   /// * Canonical/source BlogPost row for translation variants (self relation).
-  canonicalPostId           String?
-  batchScheduleItems        BlogBatchScheduleItem[]
-  campaignItems             BlogCampaignItem[]
-  draftGenerationBatchItems BlogDraftGenerationBatchItem[]
-  campaign                  BlogCampaign?                  @relation(fields: [campaignId], references: [id])
-  canonicalPost             BlogPost?                      @relation("BlogPostCanonicalRelation", fields: [canonicalPostId], references: [id])
-  translatedVariants        BlogPost[]                     @relation("BlogPostCanonicalRelation")
-  contentAutomationLogs     ContentAutomationLog[]
-  localizedVariants         LocalizedBlogArticle[]
+  canonicalPostId            String?
+  authorDisplayName          String?
+  authorCredentials          String?
+  authorBio                  String?
+  medicalReviewerName        String?
+  medicalReviewerCredentials String?
+  batchScheduleItems         BlogBatchScheduleItem[]
+  campaignItems              BlogCampaignItem[]
+  draftGenerationBatchItems  BlogDraftGenerationBatchItem[]
+  campaign                   BlogCampaign?                  @relation(fields: [campaignId], references: [id])
+  canonicalPost              BlogPost?                      @relation("BlogPostCanonicalRelation", fields: [canonicalPostId], references: [id])
+  translatedVariants         BlogPost[]                     @relation("BlogPostCanonicalRelation")
+  contentAutomationLogs      ContentAutomationLog[]
+  localizedVariants          LocalizedBlogArticle[]
 
   @@index([postStatus, publishAt])
   @@index([careerSlug, locale, postStatus, publishAt])
@@ -556,8 +547,8 @@ model BlogCampaignItem {
 }
 
 /// *
-///  * Paste-many-topics batch schedule (admin). Items get staggered `plannedPublishAt`; a cron/admin runner
-///  * generates AI drafts and schedules publication (reuses `generateBlogAiDraft` + canonical intent dedupe).
+/// * Paste-many-topics batch schedule (admin). Items get staggered `plannedPublishAt`; a cron/admin runner
+/// * generates AI drafts and schedules publication (reuses `generateBlogAiDraft` + canonical intent dedupe).
 model BlogBatchSchedule {
   id                  String                  @id @default(cuid())
   status              BlogBatchScheduleStatus @default(ACTIVE)
@@ -608,8 +599,8 @@ model BlogBatchScheduleItem {
 }
 
 /// *
-///  * Admin paste-many-topics draft batch: one `BlogPost` draft per line when processed.
-///  * Progress is persisted; call process API in chunks to stay within request timeouts.
+/// * Admin paste-many-topics draft batch: one `BlogPost` draft per line when processed.
+/// * Progress is persisted; call process API in chunks to stay within request timeouts.
 model BlogDraftGenerationBatch {
   id                           String                         @id @default(cuid())
   status                       BlogDraftGenerationBatchStatus @default(ACTIVE)
@@ -683,12 +674,12 @@ model ContentAutomationLog {
 }
 
 /// *
-///  * Localized variant of a canonical BlogPost for international SEO expansion.
-///  * References the canonical BlogPost via canonicalArticleId but stores its own
-///  * fully adapted content, SEO metadata, and editorial state.
-///  *
-///  * Each (canonicalArticleId, locale, region) tuple is unique — one variant per
-///  * locale/region combination per canonical article.
+/// * Localized variant of a canonical BlogPost for international SEO expansion.
+/// * References the canonical BlogPost via canonicalArticleId but stores its own
+/// * fully adapted content, SEO metadata, and editorial state.
+/// *
+/// * Each (canonicalArticleId, locale, region) tuple is unique — one variant per
+/// * locale/region combination per canonical article.
 model LocalizedBlogArticle {
   id                       String              @id @default(cuid())
   canonicalArticleId       String
@@ -771,21 +762,18 @@ model ContentItem {
   updatedByAi              Boolean                   @default(false) @map("updated_by_ai")
   protectedFields          String[]                  @default([]) @map("protected_fields")
   sourceVersion            Int                       @default(1) @map("source_version")
-  publishedByUserId        String?                   @map("published_by_user_id")
-  publishedBy              User?                     @relation("ContentItemPublishedBy", fields: [publishedByUserId], references: [id], onDelete: SetNull)
   generatedFlashcardDrafts GeneratedFlashcardDraft[]
   lessonEnhancementTargets GeneratedLessonDraft[]    @relation("LessonEnhancementTarget")
   generatedQuestionDrafts  GeneratedQuestionDraft[]
 
   @@index([type, status])
   @@index([type, status, updatedAt])
-  @@index([status, publishedAt(sort: Desc)])
   @@map("content_items")
 }
 
 /// *
-///  * Marketing exam-pathway lessons (`/[locale]/[slug]/[exam]/lessons/...`).
-///  * The loader prefers published rows for each `pathwayId` and falls back to `catalog.json` when that pathway has no DB rows.
+/// * Marketing exam-pathway lessons (`/[locale]/[slug]/[exam]/lessons/...`).
+/// * The loader prefers published rows for each `pathwayId` and falls back to `catalog.json` when that pathway has no DB rows.
 model PathwayLesson {
   id                  String        @id @default(cuid())
   pathwayId           String        @map("pathway_id")
@@ -814,11 +802,6 @@ model PathwayLesson {
   priority            String        @default("medium")
   /// * Exam-specific yield metadata: [{ exam, yieldLevel, clinicalPriority? }].
   examMeta            Json          @default("[]") @map("exam_meta")
-  /// * Monotonic version for this row (publish / import / rollback); learner queries unchanged.
-  contentVersion      Int           @default(1) @map("content_version")
-  publishedAt         DateTime?     @map("published_at")
-  publishedByUserId   String?       @map("published_by_user_id")
-  publishedBy         User?         @relation("PathwayLessonPublishedBy", fields: [publishedByUserId], references: [id], onDelete: SetNull)
 
   @@unique([pathwayId, slug, locale])
   @@unique([pathwayId, slug])
@@ -892,8 +875,6 @@ model ExamQuestion {
   updatedAt                   DateTime  @updatedAt @map("updated_at")
   publishedAt                 DateTime? @map("published_at")
   sourceVersion               Int       @default(1) @map("source_version")
-  publishedByUserId           String?   @map("published_by_user_id")
-  publishedBy                 User?     @relation("ExamQuestionPublishedBy", fields: [publishedByUserId], references: [id], onDelete: SetNull)
   /// Blueprint major id: NCLEX client-needs (e.g. safe-effective) or AANP-style NP (e.g. aanp-clinical-management). See `exam-config`.
   nclexClientNeedsCategory    String?   @map("nclex_client_needs_category") @db.VarChar(64)
   /// Optional subcategory / content area label for audits (not required for CAT balancing).
@@ -906,69 +887,12 @@ model ExamQuestion {
   @@index([status, exam, tier, countryCode])
   @@index([status, exam, topic])
   @@index([status, exam, tier, countryCode], map: "exam_questions_status_exam_tier_country_idx")
-  @@index([topic])
-  @@index([difficulty])
-  @@index([exam, topic])
-  @@index([exam, difficulty])
   @@map("exam_questions")
 }
 
-/// * One import / batch job: manifest + report for traceability (every ingestion run should finish one row).
-model ContentImportRun {
-  id                  String                @id @default(cuid())
-  label               String?               @db.VarChar(200)
-  /// * e.g. jsonl | legacy-client | pathway-catalog | admin
-  sourceKind          String                @map("source_kind") @db.VarChar(64)
-  status              ContentImportRunStatus @default(STARTED)
-  startedAt           DateTime              @default(now()) @map("started_at")
-  finishedAt          DateTime?             @map("finished_at")
-  /// * Inputs: paths, env flags, slice keys (no secrets).
-  manifest            Json                  @default("{}")
-  /// * Outcomes: errors sample, dedup stats, row counts.
-  report              Json                  @default("{}")
-  /// * Aggregates: { upserted, skipped, failed, durationMs }.
-  stats               Json                  @default("{}")
-  /// * Optional fingerprint of input blob(s) for repeatability checks.
-  inputSha256         String?               @map("input_sha256") @db.VarChar(64)
-  gitCommitSha        String?               @map("git_commit_sha") @db.VarChar(64)
-  environment         String?               @db.VarChar(32)
-  errorMessage        String?               @map("error_message") @db.VarChar(2000)
-  triggeredByUserId   String?               @map("triggered_by_user_id")
-  triggeredBy         User?                 @relation("ContentImportRunTriggeredBy", fields: [triggeredByUserId], references: [id], onDelete: SetNull)
-  revisions           ContentEntityRevision[]
-
-  @@index([status, startedAt(sort: Desc)])
-  @@index([sourceKind, startedAt(sort: Desc)])
-  @@map("content_import_runs")
-}
-
-/// * Point-in-time snapshot for rollback; keep bounded via retention policy / pruning jobs for old rows.
-model ContentEntityRevision {
-  id                String            @id @default(cuid())
-  entityKind        ContentEntityKind @map("entity_kind")
-  entityId          String            @map("entity_id") @db.VarChar(128)
-  /// * Matches `sourceVersion` / `contentVersion` / `sourceVersion` on the live row at archive time.
-  version           Int
-  /// * Canonical JSON payload for restore (subset of Prisma fields — see content-integrity helpers).
-  snapshot          Json
-  snapshotSha256    String            @map("snapshot_sha256") @db.VarChar(64)
-  reason            String?           @db.VarChar(64)
-  previousVersion   Int?              @map("previous_version")
-  importRunId       String?           @map("import_run_id")
-  importRun         ContentImportRun? @relation(fields: [importRunId], references: [id], onDelete: SetNull)
-  createdAt         DateTime          @default(now()) @map("created_at")
-  createdByUserId   String?           @map("created_by_user_id")
-  createdBy         User?             @relation("ContentRevisionCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
-
-  @@index([entityKind, entityId, version(sort: Desc)])
-  @@index([importRunId])
-  @@index([createdAt(sort: Desc)])
-  @@map("content_entity_revisions")
-}
-
 /// *
-///  * Allied exam blueprint definitions (legacy monolith `allied_blueprints` / Replit export).
-///  * Referenced by import pipelines; no FK from `exam_questions` required.
+/// * Allied exam blueprint definitions (legacy monolith `allied_blueprints` / Replit export).
+/// * Referenced by import pipelines; no FK from `exam_questions` required.
 model AlliedBlueprint {
   id                     String   @id @default(uuid()) @db.VarChar
   careerType             String   @map("career_type")
@@ -1006,7 +930,6 @@ model FlashcardDeck {
 
   @@index([status, visibility, country])
   @@index([status, examFamily])
-  @@index([examFamily, pathwayId])
   @@map("flashcard_decks")
 }
 
@@ -1045,9 +968,9 @@ model Flashcard {
   deckId          String?             @map("deck_id")
   positionInDeck  Int                 @default(0) @map("position_in_deck")
   /// *
-  ///    * Stable deduplication key for pipeline-generated cards.
-  ///    * Format: "{sourceType}:{sourceId}" — e.g. "exam_q:abc123", "lesson:cardio-basics:intro:0"
-  ///    * Null for manually authored cards. Unique so sync scripts can upsert without duplicating.
+  /// * Stable deduplication key for pipeline-generated cards.
+  /// * Format: "{sourceType}:{sourceId}" — e.g. "exam_q:abc123", "lesson:cardio-basics:intro:0"
+  /// * Null for manually authored cards. Unique so sync scripts can upsert without duplicating.
   sourceKey       String?             @unique(map: "flashcards_source_key_key") @map("source_key")
   category        Category            @relation(fields: [categoryId], references: [id])
   deck            FlashcardDeck?      @relation(fields: [deckId], references: [id])
@@ -1408,7 +1331,7 @@ model EducationalTranslationOverlay {
   id          String                           @id @default(cuid())
   sourceKind  EducationalTranslationSourceKind @map("source_kind")
   /// *
-  ///    * Stable key: `ExamQuestion.id`, `pathwayId:slug` for pathway lessons, `FlashcardDeck.id`, `Flashcard.id`, `FlashcardTag.id`.
+  /// * Stable key: `ExamQuestion.id`, `pathwayId:slug` for pathway lessons, `FlashcardDeck.id`, `Flashcard.id`, `FlashcardTag.id`.
   sourceId    String                           @map("source_id") @db.VarChar(512)
   locale      String                           @db.VarChar(32)
   status      EducationalTranslationStatus     @default(DRAFT)
@@ -1426,8 +1349,8 @@ model EducationalTranslationOverlay {
 }
 
 /// *
-///  * Structured product feedback and bug reports (learner + marketing).
-///  * Optional screenshot stored as data URL when small enough — prefer object storage for heavy media later.
+/// * Structured product feedback and bug reports (learner + marketing).
+/// * Optional screenshot stored as data URL when small enough — prefer object storage for heavy media later.
 model UserFeedbackReport {
   id                String               @id @default(cuid())
   createdAt         DateTime             @default(now())
@@ -2218,20 +2141,6 @@ enum QuestionType {
   FIB_NUMERIC
 }
 
-/// * Versioning / rollback discriminator for `content_entity_revisions`.
-enum ContentEntityKind {
-  EXAM_QUESTION
-  PATHWAY_LESSON
-  CONTENT_ITEM
-}
-
-enum ContentImportRunStatus {
-  STARTED
-  COMPLETED
-  FAILED
-  CANCELLED
-}
-
 enum SubscriptionStatus {
   ACTIVE
   GRACE
@@ -2507,9 +2416,9 @@ enum BlogAdaptationType {
 }
 
 /// *
-///  * Localized display overlays for canonical English educational content (questions, pathway lessons, flashcards).
-///  * English remains on core rows / catalog JSON; overlays attach by stable `sourceId` + `locale`.
-///  * Only `PUBLISHED` rows are merged at read time (see `educational-translation-db.ts`).
+/// * Localized display overlays for canonical English educational content (questions, pathway lessons, flashcards).
+/// * English remains on core rows / catalog JSON; overlays attach by stable `sourceId` + `locale`.
+/// * Only `PUBLISHED` rows are merged at read time (see `educational-translation-db.ts`).
 enum EducationalTranslationSourceKind {
   EXAM_QUESTION
   PATHWAY_LESSON
@@ -2522,26 +2431,4 @@ enum EducationalTranslationStatus {
   DRAFT
   REVIEWED
   PUBLISHED
-}
-
-/// * Fixed-window rate limit counters stored in Postgres — shared across horizontally scaled instances (replaces per-process Maps for those paths).
-/// * Keys are SHA-256 hashes of logical limiter keys; rows expire by `expiresAt` and may be pruned periodically.
-model AppRateLimitBucket {
-  id        String   @id @db.VarChar(128)
-  count     Int
-  expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
-
-  @@index([expiresAt])
-  @@map("app_rate_limit_bucket")
-}
-
-/// Progressive credential lockout state — shared across app instances (replaces per-process Map when distributed mode is on).
-model AppLoginLockout {
-  id            String    @id @db.VarChar(128)
-  failures      Int       @default(0)
-  lockedUntil   DateTime? @map("locked_until") @db.Timestamptz(6)
-  lastFailureAt DateTime  @map("last_failure_at") @db.Timestamptz(6)
-
-  @@index([lockedUntil])
-  @@map("app_login_lockout")
 }

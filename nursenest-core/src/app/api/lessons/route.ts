@@ -34,7 +34,8 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { jsonResponseGuarded } from "@/lib/server/response-guard";
 import { API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC } from "@/lib/server/api-route-constants";
 
-export const maxDuration = API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC;
+/** Keep numeric literal — Next segment config must be statically analyzable (see `API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC`). */
+export const maxDuration = 60;
 
 function wantsCursorMode(req: NextRequest): boolean {
   const mode = req.nextUrl.searchParams.get("paginationMode");
@@ -112,6 +113,15 @@ export async function GET(req: NextRequest) {
   try {
     entitlement = await resolveEntitlement(userId);
   } catch (e) {
+    emitStructuredLog("lesson_load_failed", "error", {
+      correlationId: correlationIdFromRequest(req),
+      route: "/api/lessons",
+      method: "GET",
+      flow: "content",
+      httpStatus: 503,
+      errorClass: e instanceof Error ? e.name : "unknown",
+      message: "entitlement resolve failure",
+    });
     safeServerLogCritical("api_lessons", "entitlement_resolve_failed", { page }, e);
     return NextResponse.json({ error: "Unable to verify access. Try again shortly." }, { status: 503 });
   }

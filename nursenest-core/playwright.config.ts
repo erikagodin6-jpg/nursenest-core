@@ -45,7 +45,8 @@ function localDevWebServer() {
     command: `npm run dev -- --hostname ${bindHost} --port ${port}`,
     url: origin.origin,
     reuseExistingServer: !process.env.CI,
-    timeout: 180_000,
+    /** Cold compile after `scripts/clean-next-for-e2e.cjs` can exceed 3m on constrained CI — keep below RN full-content cap. */
+    timeout: 420_000,
     env: {
       RUN_HEAVY_BUILD_TASKS: "false",
       NEXTAUTH_SECRET: secret,

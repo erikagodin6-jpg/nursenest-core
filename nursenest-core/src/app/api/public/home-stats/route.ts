@@ -9,7 +9,8 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { API_ROUTE_MAX_DURATION_PUBLIC_MARKETING_SEC } from "@/lib/server/api-route-constants";
 import { safeJsonRoute } from "@/lib/server/safe-api-route";
 
-export const maxDuration = API_ROUTE_MAX_DURATION_PUBLIC_MARKETING_SEC;
+/** Keep numeric literal — Next segment config must be statically analyzable (see `API_ROUTE_MAX_DURATION_PUBLIC_MARKETING_SEC`). */
+export const maxDuration = 30;
 
 /** Public marketing stats — freemium-visible scope only. Same data as homepage SSR (`getCachedPublicHomeStats`). */
 export async function GET(req: NextRequest) {

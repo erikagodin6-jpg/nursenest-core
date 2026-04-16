@@ -6,7 +6,8 @@ import { publicMarketingFlashcardDeckWhere } from "@/lib/entitlements/content-ac
 import { API_ROUTE_MAX_DURATION_DEFAULT_SEC } from "@/lib/server/api-route-constants";
 import { safeJsonReadRoute } from "@/lib/server/safe-api-route";
 
-export const maxDuration = API_ROUTE_MAX_DURATION_DEFAULT_SEC;
+/** Keep numeric literal — Next segment config must be statically analyzable (see `API_ROUTE_MAX_DURATION_DEFAULT_SEC`). */
+export const maxDuration = 25;
 
 const TAG_QUERY_TIMEOUT_MS = 12_000;
 

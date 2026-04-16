@@ -16,11 +16,15 @@ export function useErrorBoundaryAutoRetry(
     errorKey: string | undefined;
     delayMs: number;
     enabled?: boolean;
+    /** Fires once when the delayed automatic reset runs (before `reset()`). */
+    onAutoResetInvoked?: () => void;
   },
 ): { status: "idle" | "scheduled" | "fired" } {
-  const { errorKey, delayMs, enabled = true } = options;
+  const { errorKey, delayMs, enabled = true, onAutoResetInvoked } = options;
   const [status, setStatus] = useState<"idle" | "scheduled" | "fired">("idle");
   const resetRef = useRef(reset);
+  const onInvokedRef = useRef(onAutoResetInvoked);
+  onInvokedRef.current = onAutoResetInvoked;
   resetRef.current = reset;
 
   useEffect(() => {
@@ -46,6 +50,11 @@ export function useErrorBoundaryAutoRetry(
         /* private mode — still attempt reset */
       }
       setStatus("fired");
+      try {
+        onInvokedRef.current?.();
+      } catch {
+        /* ignore */
+      }
       resetRef.current();
     }, delayMs);
 

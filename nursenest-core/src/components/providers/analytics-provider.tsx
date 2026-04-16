@@ -3,6 +3,8 @@
 import { Suspense, useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import * as Sentry from "@sentry/nextjs";
+import { FrontendUxInit } from "@/components/observability/frontend-ux-init";
+import { touchUxNavigation } from "@/lib/observability/frontend-ux-tracking";
 import { initPosthogClient, posthog, trackClientEvent } from "@/lib/observability/posthog-client";
 
 function PostHogPageViews() {
@@ -20,6 +22,7 @@ function PostHogPageViews() {
     const url = qs ? `${pathname}?${qs}` : pathname;
     if (last.current === url) return;
     last.current = url;
+    touchUxNavigation();
     if (typeof window === "undefined") return;
     try {
       posthog.capture("$pageview", {
@@ -41,6 +44,7 @@ function PostHogPageViews() {
 export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
   return (
     <>
+      <FrontendUxInit />
       <Suspense fallback={null}>
         <PostHogPageViews />
       </Suspense>

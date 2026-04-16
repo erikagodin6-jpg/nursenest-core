@@ -53,7 +53,8 @@ import { getWeakTopicTargetsForPractice } from "@/lib/learner/topic-performance"
 import { API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC } from "@/lib/server/api-route-constants";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 
-export const maxDuration = API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC;
+/** Keep numeric literal — Next segment config must be statically analyzable (see `API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC`). */
+export const maxDuration = 60;
 
 /** Deep offset pagination is expensive on large tables; reject before issuing heavy skip scans. */
 const MAX_QUESTION_LIST_SKIP_ROWS = MAX_LIST_SKIP_ROWS_DEFAULT;

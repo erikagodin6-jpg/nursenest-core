@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
+import { captureUxFailure, enrichSentryScopeWithUx } from "@/lib/observability/frontend-ux-tracking";
 import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { useErrorBoundaryAutoRetry } from "@/lib/runtime/use-error-boundary-auto-retry";
