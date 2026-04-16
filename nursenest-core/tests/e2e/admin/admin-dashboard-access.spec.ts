@@ -9,6 +9,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { attachPageObservers, type PageObservers } from "../helpers/attach-observers";
 import { attachAdminResponseTap, attachRedirectLog, attachSlowRequestTap } from "../helpers/smoke-evidence";
 import { getAdminE2eCredentials, hasAdminE2eCredentials } from "../helpers/admin-e2e-credentials";
+import { marketingLoginSubmitButton } from "../helpers/marketing-login-locators";
 
 const LOGIN_TIMEOUT_MS = 120_000;
 const NAV_TIMEOUT_MS = 60_000;
@@ -71,7 +72,7 @@ test.describe("Admin — dashboard access", () => {
         await page.goto("/login", { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT_MS });
         await page.locator("#login-identifier").fill(creds.email);
         await page.locator("#login-password").fill(creds.password);
-        await page.getByRole("button", { name: /^Sign In$/i }).click();
+        await marketingLoginSubmitButton(page).click();
         await page.waitForFunction(() => !window.location.pathname.includes("/login"), undefined, {
           timeout: LOGIN_TIMEOUT_MS,
         });

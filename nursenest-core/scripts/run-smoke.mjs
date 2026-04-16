@@ -51,9 +51,11 @@ const result = spawnSync("npx", pwArgs, {
 
 const code = result.status === 0 ? 0 : (result.status ?? 1);
 console.log("");
-if (code === 0) {
-  console.log("qa:smoke summary: PASS (exit 0)");
-} else {
-  console.log(`qa:smoke summary: FAIL (exit ${code})`);
+if (!extraArgs.includes("--list") && !extraArgs.includes("--version")) {
+  if (code === 0) {
+    console.log("qa:smoke summary: PASS (exit 0)");
+  } else {
+    console.log(`qa:smoke summary: FAIL (exit ${code})`);
+  }
 }
 process.exit(code);

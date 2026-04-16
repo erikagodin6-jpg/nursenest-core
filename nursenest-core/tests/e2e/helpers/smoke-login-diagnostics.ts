@@ -2,7 +2,7 @@ import type { Page, TestInfo } from "@playwright/test";
 import type { PageObservers } from "./attach-observers";
 
 /**
- * Waits until the browser leaves any `*/login*` path (same heuristic as legacy smoke).
+ * Waits until the browser leaves the sign-in page (pathname still includes "login" until then).
  * On timeout: attaches URL, alert text, body snippet, observers, screenshot — then throws a precise error.
  */
 export async function waitForLoginToCompleteOrAttachFailure(
@@ -25,8 +25,9 @@ export async function waitForLoginToCompleteOrAttachFailure(
   } catch {
     const finalUrl = page.url();
     const bodySnippet = (await page.locator("body").innerText().catch(() => "")).slice(0, 6000);
-    const alertText = (await page.locator('[role="alert"]').innerText().catch(() => "")).trim();
-    await testInfo.attach(`${opts.label}-login-stuck.json`, {
+    const alertText = (await page.getByRole("alert").first().innerText().catch(() => "")).trim();
+    const stuckJsonName = opts.label + "-login-stuck.json";
+    await testInfo.attach(stuckJsonName, {
       body: Buffer.from(
         JSON.stringify(
           {
@@ -48,14 +49,19 @@ export async function waitForLoginToCompleteOrAttachFailure(
     });
     const shot = await page.screenshot({ fullPage: true }).catch(() => null);
     if (shot) {
-      await testInfo.attach(`${opts.label}-login-stuck.png`, { body: shot, contentType: "image/png" });
+      await testInfo.attach(opts.label + "-login-stuck.png", { body: shot, contentType: "image/png" });
     }
-    throw new Error(
-      [
-        `Login did not leave a /login URL within ${timeoutMs}ms (final URL: ${finalUrl}).`,
-        alertText ? `Visible [role=alert]: ${alertText.slice(0, 800)}` : "No visible [role=alert] (check body snippet in attachment).",
-        "Verify credentials, staff role for admin, and that BASE_URL matches the app’s Auth.js issuer (AUTH_URL / NEXTAUTH_URL on the server).",
-      ].join(" "),
-    );
+    const msg1 =
+      "Login did not leave the sign-in page within " +
+      String(timeoutMs) +
+      "ms (final URL: " +
+      finalUrl +
+      ").";
+    const msg2 = alertText
+      ? "Auth message: " + alertText.slice(0, 800)
+      : "No visible alert (see body snippet in attachment).";
+    const msg3 =
+      "Verify credentials, staff role for admin, and that BASE_URL matches the Auth.js issuer (AUTH_URL and NEXTAUTH_URL on the server).";
+    throw new Error([msg1, msg2, msg3].join(" "));
   }
 }
