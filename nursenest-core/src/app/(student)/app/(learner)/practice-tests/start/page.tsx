@@ -56,8 +56,8 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
         <div className="mt-6">
           <SubscriptionPaywall
             context="questions"
-            freemiumRemainingQuestions={snap?.questionRemaining ?? 0}
-            freemiumRemainingLessons={snap?.lessonRemaining ?? 0}
+            freemiumRemainingQuestions={snap != null ? snap.questionRemaining : undefined}
+            freemiumRemainingLessons={snap != null ? snap.lessonRemaining : undefined}
           />
         </div>
         <FreemiumPreviewExhaustedSurface kind="cat" />

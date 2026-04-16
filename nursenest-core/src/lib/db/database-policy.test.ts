@@ -21,8 +21,8 @@ describe("database operations doc", () => {
 });
 
 describe("production DB validation wiring", () => {
-  it("instrumentation calls validateProductionDatabaseEnv", () => {
-    const instr = readInstr(join(nursenestCoreRoot, "src", "instrumentation.ts"), "utf8");
-    assert.match(instr, /validateProductionDatabaseEnv/);
+  it("Node instrumentation calls validateProductionDatabaseEnv", () => {
+    const reg = readInstr(join(nursenestCoreRoot, "src", "lib", "instrumentation", "register-node.ts"), "utf8");
+    assert.match(reg, /validateProductionDatabaseEnv/);
   });
 });

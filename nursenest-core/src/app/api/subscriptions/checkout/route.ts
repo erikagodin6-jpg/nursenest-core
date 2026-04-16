@@ -8,6 +8,7 @@ import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sent
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { recordCheckoutFailure } from "@/lib/observability/production-signal-metrics";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { emitBillingAudit, prefixUserId } from "@/lib/observability/billing-entitlement-audit";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { publicAppOriginForBilling } from "@/lib/env/public-app-origin";
@@ -61,11 +62,27 @@ function sessionUserId(session: { user?: unknown } | null): string | undefined {
   return undefined;
 }
 
+function auditCheckoutFailed(args: {
+  correlation: string | undefined;
+  reason: string;
+  userId?: string;
+  severity?: "warn" | "error";
+}) {
+  emitBillingAudit("checkout_failed", {
+    correlationId: args.correlation,
+    userIdPrefix: args.userId ? prefixUserId(args.userId) : undefined,
+    reason: args.reason,
+    source: "checkout",
+    severity: args.severity ?? "warn",
+  });
+}
+
 export async function POST(req: Request) {
   return runWithApiTelemetry(req, "POST /api/subscriptions/checkout", "billing", async () => {
   try {
+    const correlation = correlationIdFromRequest(req) ?? undefined;
     emitStructuredLog("checkout_started", "info", {
-      correlationId: correlationIdFromRequest(req),
+      correlationId: correlation,
       route: "/api/subscriptions/checkout",
       method: "POST",
       flow: "billing",
@@ -80,6 +97,7 @@ export async function POST(req: Request) {
     });
     if (!userId) {
       safeServerLog("stripe_checkout", "checkout_route_unauthorized", { route: "/api/subscriptions/checkout" });
+      auditCheckoutFailed({ correlation, reason: "unauthorized" });
       recordCheckoutFailure("unauthorized", req);
       const msg = "Sign in required to start checkout.";
       return NextResponse.json(
@@ -93,6 +111,7 @@ export async function POST(req: Request) {
       select: { isDemoUser: true, tier: true, country: true },
     });
     if (userCheckoutRow?.isDemoUser) {
+      auditCheckoutFailed({ correlation, reason: "demo_forbidden", userId });
       recordCheckoutFailure("demo_forbidden", req);
       const msg = "Demo accounts cannot use real billing. Use a full test account for checkout.";
       return NextResponse.json(
@@ -103,10 +122,19 @@ export async function POST(req: Request) {
 
     setSentryServerContext({ route: "/api/subscriptions/checkout", feature: SERVER_FEATURE.payment, userId });
 
+    emitBillingAudit("checkout_started", {
+      correlationId: correlation,
+      userIdPrefix: prefixUserId(userId),
+      country: userCheckoutRow?.country != null ? String(userCheckoutRow.country) : undefined,
+      tier: userCheckoutRow?.tier != null ? String(userCheckoutRow.tier) : undefined,
+      source: "checkout",
+    });
+
     const bodyRead = await parseJsonBodyWithLimit(req, JSON_BODY_CHECKOUT);
     if (!bodyRead.ok) {
       const status = bodyRead.response.status;
       if (status === 413) {
+        auditCheckoutFailed({ correlation, reason: "payload_too_large", userId });
         recordCheckoutFailure("invalid_payload", req);
         const msg = "Request too large. Refresh the page and try again.";
         return NextResponse.json(
@@ -116,6 +144,7 @@ export async function POST(req: Request) {
       }
       console.error("[stripe_checkout] invalid_json_payload", { status });
       safeServerLog("stripe_checkout", "checkout_invalid_json_payload", { route: "/api/subscriptions/checkout" });
+      auditCheckoutFailed({ correlation, reason: "invalid_json", userId });
       recordCheckoutFailure("invalid_payload", req);
       const msg = "Invalid checkout request. Refresh the page and try again.";
       return NextResponse.json(
@@ -130,6 +159,7 @@ export async function POST(req: Request) {
         route: "/api/subscriptions/checkout",
         issues: parsed.error.issues.map((issue) => issue.path.join(".")).join(","),
       });
+      auditCheckoutFailed({ correlation, reason: "payload_validation_failed", userId });
       recordCheckoutFailure("invalid_payload", req);
       const msg = "Invalid checkout request. Refresh the page and try again.";
       return NextResponse.json(
@@ -146,6 +176,7 @@ export async function POST(req: Request) {
 
     if (tier === "ALLIED" && !alliedCareer) {
       safeServerLog("stripe_checkout", "checkout_missing_allied_career", { tier, duration });
+      auditCheckoutFailed({ correlation, reason: "missing_allied_career", userId });
       recordCheckoutFailure("invalid_payload", req);
       const msg = "Please select a specific career line for Allied Health.";
       return NextResponse.json(
@@ -159,6 +190,7 @@ export async function POST(req: Request) {
         policyVersion,
         expectedPolicyVersion: LEGAL_POLICY_BUNDLE_VERSION,
       });
+      auditCheckoutFailed({ correlation, reason: "policy_version_mismatch", userId });
       recordCheckoutFailure("policy_mismatch", req);
       const msg = "Policy version outdated. Refresh the page and try again.";
       return NextResponse.json(
@@ -243,6 +275,7 @@ export async function POST(req: Request) {
       if (includeStripePriceEnvKeyInCheckoutResponse()) {
         payload.envKey = missingEnvKey;
       }
+      auditCheckoutFailed({ correlation, reason: "price_not_configured", userId });
       recordCheckoutFailure("price_not_configured", req);
       return NextResponse.json(payload, { status: 400 });
     }
@@ -259,6 +292,7 @@ export async function POST(req: Request) {
     const stripe = await getStripeClient();
     if (!stripe) {
       safeServerLog("stripe_checkout", "stripe_client_unavailable", {});
+      auditCheckoutFailed({ correlation, reason: "stripe_client_unavailable", userId });
       recordCheckoutFailure("stripe_unavailable", req);
       const msg = "Billing is temporarily unavailable. Try again shortly.";
       return NextResponse.json(
@@ -271,6 +305,7 @@ export async function POST(req: Request) {
     if (!appUrl) {
       const msg = "Billing URL is not configured. Set NEXT_PUBLIC_APP_URL to your public https origin.";
       safeServerLog("stripe_checkout", "checkout_app_origin_missing", {});
+      auditCheckoutFailed({ correlation, reason: "app_origin_missing", userId });
       recordCheckoutFailure("app_origin", req);
       return NextResponse.json(
         { code: CHECKOUT_APP_ORIGIN_MISCONFIGURED_CODE, message: msg, error: msg },
@@ -382,6 +417,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ url: checkoutUrl });
   } catch (e) {
     console.error("[stripe_checkout] unhandled_checkout_error", e);
+    auditCheckoutFailed({
+      correlation: correlationIdFromRequest(req) ?? undefined,
+      reason: "checkout_session_exception",
+      severity: "error",
+    });
     safeServerLog("stripe_checkout", "checkout_session_create_failed", {
       route: "/api/subscriptions/checkout",
     });

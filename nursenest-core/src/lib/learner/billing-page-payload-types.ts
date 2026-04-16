@@ -7,6 +7,8 @@ export type BillingSubscriptionRow = {
   planTier: TierCode | null;
   planCountry: CountryCode | null;
   alliedCareer: string | null;
+  /** Mirrors Stripe `cancel_at_period_end` when synced (scheduled cancellation). */
+  cancelAtPeriodEnd: boolean;
   createdAt: Date;
   updatedAt: Date;
 };

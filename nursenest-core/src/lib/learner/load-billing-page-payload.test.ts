@@ -18,7 +18,10 @@ function user(over: Partial<BillingUserRow> = {}): BillingUserRow {
   };
 }
 
-function sub(status: SubscriptionStatus): BillingSubscriptionRow {
+function sub(
+  status: SubscriptionStatus,
+  opts: { cancelAtPeriodEnd?: boolean } = {},
+): BillingSubscriptionRow {
   return {
     status,
     stripeSubscriptionId: "sub_test",
@@ -26,6 +29,7 @@ function sub(status: SubscriptionStatus): BillingSubscriptionRow {
     planTier: TierCode.RN,
     planCountry: CountryCode.US,
     alliedCareer: null,
+    cancelAtPeriodEnd: opts.cancelAtPeriodEnd ?? false,
     createdAt: new Date("2026-01-01T00:00:00.000Z"),
     updatedAt: new Date("2026-01-01T00:00:00.000Z"),
   };
@@ -82,6 +86,19 @@ describe("deriveBillingSurface", () => {
         trialEndsAt: null,
       }),
       "active_paid",
+    );
+  });
+
+  it("maps ACTIVE + cancel_at_period_end + access to active_scheduled_cancel (end-of-period cancellation)", () => {
+    assert.equal(
+      deriveBillingSurface({
+        user: user(),
+        subscription: sub(SubscriptionStatus.ACTIVE, { cancelAtPeriodEnd: true }),
+        hasAccess: true,
+        entitlementReason: "active_subscription",
+        trialEndsAt: null,
+      }),
+      "active_scheduled_cancel",
     );
   });
 });

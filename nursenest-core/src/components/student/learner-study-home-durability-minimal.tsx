@@ -30,8 +30,8 @@ export function LearnerStudyHomeDurabilityMinimal({
 }) {
   const notice =
     banner === "degraded"
-      ? "Study tools stay available. Some dashboard details are temporarily simplified."
-      : "We could not load your full dashboard. Your lessons, practice bank, and flashcards are still available.";
+      ? t("learner.durability.minimalNoticeDegraded")
+      : t("learner.durability.minimalNoticeErrorFallback");
 
   return (
     <div className="nn-dash nn-dash--learner-home min-w-0 overflow-x-hidden">

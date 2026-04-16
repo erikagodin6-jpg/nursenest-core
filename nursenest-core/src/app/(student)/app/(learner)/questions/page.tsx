@@ -5,6 +5,7 @@ import { FreemiumQuestionPeek } from "@/components/student/freemium-question-pee
 import { QuestionBankPracticeClient } from "@/components/student/question-bank-practice-client";
 import { QuestionBankPracticeSetupClient } from "@/components/student/question-bank-practice-setup-client";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -25,9 +26,15 @@ export default async function QuestionBankPage() {
 
   if (entitlement === "error") {
     return (
-      <div>
-        <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
-      </div>
+      <PremiumEmptyState
+        headline={t("learner.questions.title")}
+        body={t("learner.entitlement.verifyFailed")}
+        tone="default"
+        primaryCta={{ label: t("learner.dashboard.openAccountHub"), href: "/app/account/overview", variant: "primary" }}
+        secondaryCtas={[{ label: t("nav.lessons"), href: "/app/lessons", variant: "secondary" }]}
+        visualLayout="stack"
+        ctaLayout="stack"
+      />
     );
   }
 
@@ -71,8 +78,8 @@ export default async function QuestionBankPage() {
         <div className="mt-6">
           <SubscriptionPaywall
             context="questions"
-            freemiumRemainingQuestions={snap?.questionRemaining ?? 0}
-            freemiumRemainingLessons={snap?.lessonRemaining ?? 0}
+            freemiumRemainingQuestions={snap != null ? snap.questionRemaining : undefined}
+            freemiumRemainingLessons={snap != null ? snap.lessonRemaining : undefined}
           />
         </div>
         {userId && snap && freemiumLessonsExhausted(snap) && !freemiumQuestionsExhausted(snap) ? (
@@ -91,7 +98,18 @@ export default async function QuestionBankPage() {
   return (
     <div className="space-y-6">
       {userId ? (
-        <Suspense fallback={<p className="text-sm text-muted">{t("learner.loading.questionBank")}</p>}>
+        <Suspense
+          fallback={
+            <div
+              role="status"
+              aria-busy="true"
+              aria-live="polite"
+              className="flex min-h-[8rem] items-center justify-center rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-6"
+            >
+              <p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.loading.questionBank")}</p>
+            </div>
+          }
+        >
           <QuestionBankPracticeSetupClient pathwayId={defaultPathwayId} />
         </Suspense>
       ) : null}
@@ -113,7 +131,18 @@ export default async function QuestionBankPage() {
               interaction model on current NurseNest themes.
             </p>
           </div>
-          <Suspense fallback={<p className="text-sm text-muted">{t("learner.loading.questionBank")}</p>}>
+          <Suspense
+            fallback={
+              <div
+                role="status"
+                aria-busy="true"
+                aria-live="polite"
+                className="flex min-h-[12rem] items-center justify-center rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-8"
+              >
+                <p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.loading.questionBank")}</p>
+              </div>
+            }
+          >
             <QuestionBankPracticeClient
               userId={userId}
               userLabel={userLabel}

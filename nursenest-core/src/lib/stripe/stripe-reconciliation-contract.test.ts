@@ -22,6 +22,9 @@ describe("stripe subscription reconciliation (static)", () => {
     const route = readFileSync(join(root, "src", "app", "api", "admin", "billing", "stripe-reconcile", "route.ts"), "utf8");
     assert.match(route, /runStripeSubscriptionReconciliation/);
     assert.match(route, /requireAdmin/);
+    assert.match(route, /billing_reconcile_apply_requires_super/);
+    assert.match(route, /admin_reconciliation_invoked/);
+    assert.match(route, /x-nn-billing-reconcile-confirm/);
   });
 
   it("vercel cron schedules stripe-reconcile daily", () => {

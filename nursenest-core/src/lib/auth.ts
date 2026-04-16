@@ -24,6 +24,7 @@ import {
 import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import { Prisma } from "@prisma/client";
 import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
+import { emitBillingAudit, prefixUserId } from "@/lib/observability/billing-entitlement-audit";
 import {
   getUserAccess,
   subscriptionStatusForSession,
@@ -717,6 +718,15 @@ export const authConfig: NextAuthConfig = {
         let subscriptionStatus: SessionSubscriptionStatus = "none";
         if (isLearnerEntitlementStaffBypassRole(user.role)) {
           subscriptionStatus = "active";
+          emitBillingAudit("admin_override_applied", {
+            userIdPrefix: prefixUserId(user.id),
+            source: "admin",
+            priorState: "entitlement_lookup_skipped",
+            newState: "session_subscription_active",
+            tier: String(user.tier),
+            country: user.country != null ? String(user.country) : undefined,
+            reason: "staff_learner_entitlement_bypass",
+          });
         } else {
           try {
             const ua = await getUserAccess(user.id);

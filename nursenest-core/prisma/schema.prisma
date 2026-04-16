@@ -123,17 +123,20 @@ model User {
   trialDeviceBindings           TrialDeviceBinding[]
   feedbackReports               UserFeedbackReport[]
   topicStats                    UserTopicStat[]
+  content_entity_revisions      content_entity_revisions[]
+  content_import_runs           content_import_runs[]
+  content_items                 ContentItem[]
+  exam_questions                ExamQuestion[]
   flashcardProgress             FlashcardProgress[]
   flashcardStudySessions        FlashcardStudySession[]
   flashcardUserStats            FlashcardUserStats?
   mediaAssetsUploaded           MediaAsset[]                @relation("MediaAssetUploadedBy")
+  pathway_lessons               PathwayLesson[]
   practiceTests                 PracticeTest[]
   premiumProtectionUserDays     PremiumProtectionUserDay[]
   abuseReviewsDismissed         ProtectionAbuseReview[]     @relation("ProtectionAbuseReviewDismissedBy")
   protectionAbuseReviews        ProtectionAbuseReview[]
 
-  /// * Marketing home-stats: `COUNT(*)` for `role = LEARNER` (hot path).
-  @@index([role])
   @@index([alliedProfessionKey])
   @@index([normalizedEmail])
   @@index([isDemoUser])
@@ -337,6 +340,8 @@ model Subscription {
   billingRegionSlug    String?            @db.VarChar(32)
   pastDueSince         DateTime?
   user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
 }
 
 /// * **Claim** row inserted **before** webhook handlers run — prevents concurrent double-apply across instances.
@@ -764,9 +769,11 @@ model ContentItem {
   updatedByAi              Boolean                   @default(false) @map("updated_by_ai")
   protectedFields          String[]                  @default([]) @map("protected_fields")
   sourceVersion            Int                       @default(1) @map("source_version")
+  published_by_user_id     String?
   generatedFlashcardDrafts GeneratedFlashcardDraft[]
   lessonEnhancementTargets GeneratedLessonDraft[]    @relation("LessonEnhancementTarget")
   generatedQuestionDrafts  GeneratedQuestionDraft[]
+  User                     User?                     @relation(fields: [published_by_user_id], references: [id])
 
   @@index([type, status])
   @@index([type, status, updatedAt])
@@ -777,33 +784,37 @@ model ContentItem {
 /// * Marketing exam-pathway lessons (`/[locale]/[slug]/[exam]/lessons/...`).
 /// * The loader prefers published rows for each `pathwayId` and falls back to `catalog.json` when that pathway has no DB rows.
 model PathwayLesson {
-  id                  String        @id @default(cuid())
-  pathwayId           String        @map("pathway_id")
-  slug                String
-  title               String
-  topic               String
-  topicSlug           String        @map("topic_slug")
-  bodySystem          String        @map("body_system")
-  previewSectionCount Int           @default(1) @map("preview_section_count")
-  seoTitle            String        @map("seo_title")
-  seoDescription      String        @map("seo_description")
+  id                   String        @id @default(cuid())
+  pathwayId            String        @map("pathway_id")
+  slug                 String
+  title                String
+  topic                String
+  topicSlug            String        @map("topic_slug")
+  bodySystem           String        @map("body_system")
+  previewSectionCount  Int           @default(1) @map("preview_section_count")
+  seoTitle             String        @map("seo_title")
+  seoDescription       String        @map("seo_description")
   /// * Array of { id, heading, kind, body } — normalized to five canonical sections at read time.
-  sections            Json
+  sections             Json
   /// * Optional row-level filter; null means “follow pathway registry” (country implied by pathway).
-  countryCode         CountryCode?  @map("country_code")
-  tierCode            TierCode?     @map("tier_code")
-  status              ContentStatus @default(PUBLISHED)
-  sortOrder           Int           @default(0) @map("sort_order")
+  countryCode          CountryCode?  @map("country_code")
+  tierCode             TierCode?     @map("tier_code")
+  status               ContentStatus @default(PUBLISHED)
+  sortOrder            Int           @default(0) @map("sort_order")
   /// * BCP 47-style language tag (`en`, `fr`, …). Default `en` for catalog imports.
-  locale              String        @default("en")
-  createdAt           DateTime      @default(now()) @map("created_at")
-  updatedAt           DateTime      @updatedAt @map("updated_at")
-  countries           String[]      @default([])
+  locale               String        @default("en")
+  createdAt            DateTime      @default(now()) @map("created_at")
+  updatedAt            DateTime      @updatedAt @map("updated_at")
+  countries            String[]      @default([])
   /// * Runtime region-aware lesson filtering metadata (single global lesson dataset).
-  exams               String[]      @default([])
-  priority            String        @default("medium")
+  exams                String[]      @default([])
+  priority             String        @default("medium")
   /// * Exam-specific yield metadata: [{ exam, yieldLevel, clinicalPriority? }].
-  examMeta            Json          @default("[]") @map("exam_meta")
+  examMeta             Json          @default("[]") @map("exam_meta")
+  content_version      Int           @default(1)
+  published_at         DateTime?
+  published_by_user_id String?
+  User                 User?         @relation(fields: [published_by_user_id], references: [id])
 
   @@unique([pathwayId, slug, locale])
   @@unique([pathwayId, slug])
@@ -881,6 +892,8 @@ model ExamQuestion {
   nclexClientNeedsCategory    String?   @map("nclex_client_needs_category") @db.VarChar(64)
   /// Optional subcategory / content area label for audits (not required for CAT balancing).
   nclexClientNeedsSubcategory String?   @map("nclex_client_needs_subcategory") @db.VarChar(128)
+  published_by_user_id        String?
+  User                        User?     @relation(fields: [published_by_user_id], references: [id])
 
   @@index([status, tier])
   @@index([exam])
@@ -2079,6 +2092,48 @@ model weak_area_alerts {
   created_at          DateTime @default(now()) @db.Timestamp(6)
 }
 
+model content_entity_revisions {
+  id                  String               @id
+  entity_kind         ContentEntityKind
+  entity_id           String               @db.VarChar(128)
+  version             Int
+  snapshot            Json
+  snapshot_sha256     String               @db.VarChar(64)
+  reason              String?              @db.VarChar(64)
+  previous_version    Int?
+  import_run_id       String?
+  created_at          DateTime             @default(now())
+  created_by_user_id  String?
+  User                User?                @relation(fields: [created_by_user_id], references: [id])
+  content_import_runs content_import_runs? @relation(fields: [import_run_id], references: [id])
+
+  @@index([created_at(sort: Desc)])
+  @@index([entity_kind, entity_id, version(sort: Desc)])
+  @@index([import_run_id])
+}
+
+model content_import_runs {
+  id                       String                     @id
+  label                    String?                    @db.VarChar(200)
+  source_kind              String                     @db.VarChar(64)
+  status                   ContentImportRunStatus     @default(STARTED)
+  started_at               DateTime                   @default(now())
+  finished_at              DateTime?
+  manifest                 Json                       @default("{}")
+  report                   Json                       @default("{}")
+  stats                    Json                       @default("{}")
+  input_sha256             String?                    @db.VarChar(64)
+  git_commit_sha           String?                    @db.VarChar(64)
+  environment              String?                    @db.VarChar(32)
+  error_message            String?                    @db.VarChar(2000)
+  triggered_by_user_id     String?
+  content_entity_revisions content_entity_revisions[]
+  User                     User?                      @relation(fields: [triggered_by_user_id], references: [id])
+
+  @@index([source_kind, started_at(sort: Desc)])
+  @@index([status, started_at(sort: Desc)])
+}
+
 enum CountryCode {
   CA
   US
@@ -2433,4 +2488,17 @@ enum EducationalTranslationStatus {
   DRAFT
   REVIEWED
   PUBLISHED
+}
+
+enum ContentEntityKind {
+  EXAM_QUESTION
+  PATHWAY_LESSON
+  CONTENT_ITEM
+}
+
+enum ContentImportRunStatus {
+  STARTED
+  COMPLETED
+  FAILED
+  CANCELLED
 }

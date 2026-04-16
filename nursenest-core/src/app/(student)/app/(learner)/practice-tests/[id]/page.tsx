@@ -63,7 +63,10 @@ export default async function PracticeTestRunPage({ params }: Props) {
         <h1 className="text-2xl font-bold">{t("learner.practiceTests.run.title")}</h1>
         <p className="mt-2 text-sm text-muted">{t("learner.practiceTests.run.subtitleLocked")}</p>
         <div className="mt-6">
-          <SubscriptionPaywall context="questions" freemiumRemainingQuestions={snap?.questionRemaining ?? 0} />
+          <SubscriptionPaywall
+            context="questions"
+            freemiumRemainingQuestions={snap != null ? snap.questionRemaining : undefined}
+          />
         </div>
       </div>
     );

@@ -3,6 +3,7 @@
  */
 import { recordSlowDbQuery } from "@/lib/observability/production-signal-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { getPrismaQueryContext } from "@/lib/server/prisma-query-context";
 
 /** Log Prisma operations slower than this (ms). */
 export const SLOW_PRISMA_QUERY_MS = 500;
@@ -45,11 +46,21 @@ export function logSlowPrismaQuery(meta: { model: string; operation: string; dur
   if (meta.durationMs <= SLOW_PRISMA_QUERY_MS) return;
   const queryName = `${meta.model}.${meta.operation}`.slice(0, 120);
   const severity = meta.durationMs > SLOW_QUERY_CRITICAL_MS ? "critical" : "warn";
-  recordSlowDbQuery(meta.durationMs, severity, queryName);
+  const ctx = getPrismaQueryContext();
+  const route = ctx?.route?.slice(0, 200);
+  const correlationId = ctx?.correlationId?.slice(0, 128);
+  recordSlowDbQuery(meta.durationMs, severity, queryName, {
+    route,
+    correlationId,
+    model: meta.model.slice(0, 64),
+    operation: meta.operation.slice(0, 64),
+  });
   safeServerLog("perf", "slow_query_detected", {
     queryName,
     durationMs: meta.durationMs,
     severity,
+    ...(route ? { route } : {}),
+    ...(correlationId ? { correlationId } : {}),
   });
   if (meta.durationMs > SLOW_QUERY_CRITICAL_MS) {
     void import("@/lib/config/auto-degraded-mode").then((m) => m.recordSlowQueryCriticalForAutoDegraded(meta.durationMs));
@@ -62,6 +73,8 @@ export function logSlowPrismaQuery(meta: { model: string; operation: string; dur
     durationMs: meta.durationMs,
     heapHigh: heapHigh ? 1 : 0,
     heapUsedMb: mem ? Math.round(mem.heapUsed / 1024 / 1024) : 0,
+    ...(route ? { route } : {}),
+    ...(correlationId ? { correlationId } : {}),
   });
   if (heapHigh) {
     logHighMemory("with_slow_prisma_query");

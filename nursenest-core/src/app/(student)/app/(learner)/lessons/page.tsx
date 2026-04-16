@@ -165,8 +165,8 @@ export default async function LessonsPage({ searchParams }: Props) {
         <div className="mt-6">
           <SubscriptionPaywall
             context="lessons"
-            freemiumRemainingLessons={snap?.lessonRemaining ?? 0}
-            freemiumRemainingQuestions={snap?.questionRemaining ?? 0}
+            freemiumRemainingLessons={snap != null ? snap.lessonRemaining : undefined}
+            freemiumRemainingQuestions={snap != null ? snap.questionRemaining : undefined}
           />
         </div>
         {userId && snap && freemiumQuestionsExhausted(snap) && !freemiumLessonsExhausted(snap) ? (

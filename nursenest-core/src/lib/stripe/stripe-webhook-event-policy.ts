@@ -12,6 +12,8 @@ export const STRIPE_WEBHOOK_HANDLED_EVENT_TYPES = [
   "customer.subscription.deleted",
   "invoice.payment_succeeded",
   "invoice.payment_failed",
+  /** Audit-only: subscription updates still come from other events; no DB entitlement mutation here. */
+  "charge.refunded",
 ] as const;
 
 export type StripeWebhookHandledEventType = (typeof STRIPE_WEBHOOK_HANDLED_EVENT_TYPES)[number];

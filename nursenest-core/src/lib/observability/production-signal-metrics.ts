@@ -126,13 +126,25 @@ export function recordHealthReadyDatabaseFailure(): void {
   });
 }
 
+export type SlowDbQueryLogContext = {
+  route?: string;
+  correlationId?: string;
+  model?: string;
+  operation?: string;
+};
+
 /** Slow Prisma query — paired with `perf` logs in {@link logSlowPrismaQuery}. `queryHint` is low-cardinality (e.g. `User.findMany`). */
 export function recordSlowDbQuery(
   durationMs: number,
   severity: "warn" | "critical",
   queryHint?: string,
+  ctx?: SlowDbQueryLogContext,
 ): void {
   const hint = queryHint?.trim().slice(0, 120);
+  const route = ctx?.route?.trim().slice(0, 200);
+  const correlationId = ctx?.correlationId?.trim().slice(0, 128);
+  const model = ctx?.model?.trim().slice(0, 64);
+  const operation = ctx?.operation?.trim().slice(0, 64);
   sentryDistribution("db.query.duration_ms", durationMs, { severity });
   sentryCount("db.query.slow", 1, { severity });
   emitMonitoringRecord({
@@ -140,12 +152,21 @@ export function recordSlowDbQuery(
     event: "slow_query",
     severity: severity === "critical" ? "error" : "warn",
     durationMs,
-    meta: { severity, ...(hint ? { queryHint: hint } : {}) },
+    correlationId,
+    route,
+    meta: {
+      severity,
+      ...(hint ? { queryHint: hint } : {}),
+      ...(model ? { model } : {}),
+      ...(operation ? { operation } : {}),
+    },
   });
   emitStructuredLog("db_query_slow", severity === "critical" ? "error" : "warn", {
     durationMs,
     degraded: severity === "critical",
     errorClass: severity === "critical" ? "slow_query_critical" : "slow_query_warn",
+    correlationId,
+    route,
     message: hint
       ? `slow prisma query ${durationMs}ms (${hint})`
       : `slow prisma query ${durationMs}ms`,

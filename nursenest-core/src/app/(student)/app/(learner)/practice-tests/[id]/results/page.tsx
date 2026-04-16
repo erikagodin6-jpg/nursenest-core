@@ -72,7 +72,10 @@ export default async function PracticeTestResultsPage({ params }: Props) {
         <h1 className="text-2xl font-bold">Practice test results</h1>
         <p className="mt-2 text-sm text-muted">Subscribe to view saved results.</p>
         <div className="mt-6">
-          <SubscriptionPaywall context="questions" freemiumRemainingQuestions={snap?.questionRemaining ?? 0} />
+          <SubscriptionPaywall
+            context="questions"
+            freemiumRemainingQuestions={snap != null ? snap.questionRemaining : undefined}
+          />
         </div>
       </div>
     );

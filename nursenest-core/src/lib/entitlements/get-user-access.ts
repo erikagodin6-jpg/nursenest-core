@@ -1,4 +1,5 @@
-import { SubscriptionStatus, TrialStatus, type CountryCode, type TierCode } from "@prisma/client";
+import { cache } from "react";
+import { SubscriptionStatus, TrialStatus, type CountryCode, type TierCode, type UserRole } from "@prisma/client";
 import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
 import { normalizeCountryCodeForEntitlement } from "@/lib/entitlements/country-code";
 import {
@@ -99,7 +100,7 @@ function emptyAccess(userId: string): UserAccess {
  *
  * **Audit matrix** (Stripe ↔ DB ↔ premium ↔ content gates): `entitlement-state-matrix.ts`.
  */
-export async function getUserAccess(userId: string): Promise<UserAccess> {
+const getUserAccessCached = cache(async function getUserAccessCached(userId: string): Promise<UserAccess> {
   const t0 = performance.now();
   const telemetry = {
     userFound: false,
@@ -125,6 +126,14 @@ export async function getUserAccess(userId: string): Promise<UserAccess> {
     });
     throw e;
   }
+});
+
+/**
+ * Subscription + trial access for gating. Deduplicated per React request via `cache()` when the same `userId`
+ * is resolved multiple times (e.g. `resolveEntitlement` + layout).
+ */
+export async function getUserAccess(userId: string): Promise<UserAccess> {
+  return getUserAccessCached(userId);
 }
 
 type EntitlementReadTelemetry = {
@@ -151,6 +160,7 @@ async function getUserAccessCore(
         trialEndsAt: true,
         alliedProfessionKey: true,
         targetExamPathwayId: true,
+        credentialVersion: true,
       },
     }),
   );
@@ -163,24 +173,27 @@ async function getUserAccessCore(
 
   /** Staff roles: full internal product access — do not run subscription queries or imply a paid Stripe plan. */
   if (isLearnerEntitlementStaffBypassRole(user.role)) {
-    return {
-      userId,
-      hasPremium: true,
-      reason: "admin_override",
-      allowedRegion: { country: baseCountry, billingRegionSlug: null },
-      allowedProfession: {
-        tier: user.tier,
-        alliedCareer: (user.alliedProfessionKey as AlliedCareerKey) ?? null,
+    return withSessionJwt(
+      {
+        userId,
+        hasPremium: true,
+        reason: "admin_override",
+        allowedRegion: { country: baseCountry, billingRegionSlug: null },
+        allowedProfession: {
+          tier: user.tier,
+          alliedCareer: (user.alliedProfessionKey as AlliedCareerKey) ?? null,
+        },
+        allowedExam: { pathwayId },
+        plan: {
+          planCode: null,
+          duration: null,
+          status: "none",
+          expiresAt: null,
+          cancelAtPeriodEnd: false,
+        },
       },
-      allowedExam: { pathwayId },
-      plan: {
-        planCode: null,
-        duration: null,
-        status: "none",
-        expiresAt: null,
-        cancelAtPeriodEnd: false,
-      },
-    };
+      user,
+    );
   }
 
   telemetry.subscriptionQueries = 1;
@@ -244,45 +257,51 @@ async function getUserAccessCore(
   }
 
   if (activeSubscription?.status === SubscriptionStatus.ACTIVE) {
-    return {
-      userId,
-      hasPremium: true,
-      reason: "active_subscription",
-      allowedRegion: { country: effectiveCountry, billingRegionSlug },
-      allowedProfession: {
-        tier: effectiveTier,
-        alliedCareer: effectiveTier === "ALLIED" ? effectiveAlliedFromSub : null,
+    return withSessionJwt(
+      {
+        userId,
+        hasPremium: true,
+        reason: "active_subscription",
+        allowedRegion: { country: effectiveCountry, billingRegionSlug },
+        allowedProfession: {
+          tier: effectiveTier,
+          alliedCareer: effectiveTier === "ALLIED" ? effectiveAlliedFromSub : null,
+        },
+        allowedExam: { pathwayId },
+        plan: {
+          planCode,
+          duration: planDuration,
+          status: "active",
+          expiresAt,
+          cancelAtPeriodEnd,
+        },
       },
-      allowedExam: { pathwayId },
-      plan: {
-        planCode,
-        duration: planDuration,
-        status: "active",
-        expiresAt,
-        cancelAtPeriodEnd,
-      },
-    };
+      user,
+    );
   }
 
   if (activeSubscription?.status === SubscriptionStatus.GRACE) {
-    return {
-      userId,
-      hasPremium: true,
-      reason: "grace_period",
-      allowedRegion: { country: effectiveCountry, billingRegionSlug },
-      allowedProfession: {
-        tier: effectiveTier,
-        alliedCareer: effectiveTier === "ALLIED" ? effectiveAlliedFromSub : null,
+    return withSessionJwt(
+      {
+        userId,
+        hasPremium: true,
+        reason: "grace_period",
+        allowedRegion: { country: effectiveCountry, billingRegionSlug },
+        allowedProfession: {
+          tier: effectiveTier,
+          alliedCareer: effectiveTier === "ALLIED" ? effectiveAlliedFromSub : null,
+        },
+        allowedExam: { pathwayId },
+        plan: {
+          planCode,
+          duration: planDuration,
+          status: mapSubscriptionPlanStatus(activeSubscription.status),
+          expiresAt,
+          cancelAtPeriodEnd,
+        },
       },
-      allowedExam: { pathwayId },
-      plan: {
-        planCode,
-        duration: planDuration,
-        status: mapSubscriptionPlanStatus(activeSubscription.status),
-        expiresAt,
-        cancelAtPeriodEnd,
-      },
-    };
+      user,
+    );
   }
 
   if (activeSubscription?.status === SubscriptionStatus.PAST_DUE) {
@@ -293,24 +312,27 @@ async function getUserAccessCore(
       pastDueSince: activeSubscription.pastDueSince,
     });
     if (grantPastDue) {
-      return {
-        userId,
-        hasPremium: true,
-        reason: "past_due_grace",
-        allowedRegion: { country: effectiveCountry, billingRegionSlug },
-        allowedProfession: {
-          tier: effectiveTier,
-          alliedCareer: effectiveTier === "ALLIED" ? effectiveAlliedFromSub : null,
+      return withSessionJwt(
+        {
+          userId,
+          hasPremium: true,
+          reason: "past_due_grace",
+          allowedRegion: { country: effectiveCountry, billingRegionSlug },
+          allowedProfession: {
+            tier: effectiveTier,
+            alliedCareer: effectiveTier === "ALLIED" ? effectiveAlliedFromSub : null,
+          },
+          allowedExam: { pathwayId },
+          plan: {
+            planCode,
+            duration: planDuration,
+            status: "past_due",
+            expiresAt,
+            cancelAtPeriodEnd,
+          },
         },
-        allowedExam: { pathwayId },
-        plan: {
-          planCode,
-          duration: planDuration,
-          status: "past_due",
-          expiresAt,
-          cancelAtPeriodEnd,
-        },
-      };
+        user,
+      );
     }
   }
 
@@ -319,10 +341,34 @@ async function getUserAccessCore(
     user.trialEndsAt &&
     user.trialEndsAt.getTime() > Date.now()
   ) {
-    return {
+    return withSessionJwt(
+      {
+        userId,
+        hasPremium: true,
+        reason: "active_trial",
+        allowedRegion: { country: baseCountry, billingRegionSlug },
+        allowedProfession: {
+          tier: user.tier,
+          alliedCareer: user.tier === "ALLIED" ? effectiveAlliedFromSub : null,
+        },
+        allowedExam: { pathwayId },
+        plan: {
+          planCode,
+          duration: planDuration,
+          status: "active",
+          expiresAt: user.trialEndsAt,
+          cancelAtPeriodEnd,
+        },
+      },
+      user,
+    );
+  }
+
+  return withSessionJwt(
+    {
       userId,
-      hasPremium: true,
-      reason: "active_trial",
+      hasPremium: false,
+      reason: "no_access",
       allowedRegion: { country: baseCountry, billingRegionSlug },
       allowedProfession: {
         tier: user.tier,
@@ -332,31 +378,13 @@ async function getUserAccessCore(
       plan: {
         planCode,
         duration: planDuration,
-        status: "active",
-        expiresAt: user.trialEndsAt,
+        status: mapSubscriptionPlanStatus(latestSubscription?.status),
+        expiresAt,
         cancelAtPeriodEnd,
       },
-    };
-  }
-
-  return {
-    userId,
-    hasPremium: false,
-    reason: "no_access",
-    allowedRegion: { country: baseCountry, billingRegionSlug },
-    allowedProfession: {
-      tier: user.tier,
-      alliedCareer: user.tier === "ALLIED" ? effectiveAlliedFromSub : null,
     },
-    allowedExam: { pathwayId },
-    plan: {
-      planCode,
-      duration: planDuration,
-      status: mapSubscriptionPlanStatus(latestSubscription?.status),
-      expiresAt,
-      cancelAtPeriodEnd,
-    },
-  };
+    user,
+  );
 }
 
 /** Narrow legacy shape for question/lesson SQL helpers. */

@@ -1,4 +1,4 @@
-import type { CountryCode, TierCode } from "@prisma/client";
+import type { CountryCode, TierCode, UserRole } from "@prisma/client";
 import type { AlliedCareerKey } from "../pricing/display-catalog";
 
 /** Narrow legacy shape for question/lesson SQL helpers (shared type; avoid circular imports). */
@@ -51,5 +51,13 @@ export type UserAccess = {
     /** Best-effort access end: current period end, else trial end. */
     expiresAt: Date | null;
     cancelAtPeriodEnd: boolean;
+  };
+  /**
+   * Present when a backing `User` row was loaded. Used by JWT/session sync to avoid a second `User` query.
+   * Absent when the user id did not resolve (`emptyAccess`) or DB is unavailable.
+   */
+  sessionJwt?: {
+    role: UserRole;
+    credentialVersion: number;
   };
 };

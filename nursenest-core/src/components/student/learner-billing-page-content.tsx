@@ -7,7 +7,14 @@ import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { LearnerBillingPortalButton } from "@/components/student/learner-billing-portal-button";
 import { LearnerProfileAccountActions } from "@/components/student/learner-profile-account-actions";
 
-function subscriptionStatusLabel(status: SubscriptionStatus, t: LearnerMarketingT): string {
+function subscriptionStatusLabel(
+  status: SubscriptionStatus,
+  t: LearnerMarketingT,
+  opts?: { pastDueGraceAccess: boolean },
+): string {
+  if (status === "PAST_DUE" && opts?.pastDueGraceAccess) {
+    return t("learner.billingPage.stripeStatus.past_due_grace");
+  }
   switch (status) {
     case "ACTIVE":
       return t("learner.billingPage.stripeStatus.active");
@@ -19,6 +26,30 @@ function subscriptionStatusLabel(status: SubscriptionStatus, t: LearnerMarketing
       return t("learner.billingPage.stripeStatus.cancelled");
     default:
       return String(status);
+  }
+}
+
+function billingAccessWhyLine(
+  entitlement: BillingPagePayload["entitlement"],
+  accessOk: boolean,
+  t: LearnerMarketingT,
+): string | null {
+  if (!accessOk || entitlement === "error") return null;
+  const r = entitlement.reason;
+  if (r === "no_access") return null;
+  switch (r) {
+    case "active_subscription":
+      return t("learner.billingPage.accessDetail.active_subscription");
+    case "past_due_grace":
+      return t("learner.billingPage.accessDetail.past_due_grace");
+    case "grace_period":
+      return t("learner.billingPage.accessDetail.grace_period");
+    case "active_trial":
+      return t("learner.billingPage.accessDetail.active_trial");
+    case "admin_override":
+      return t("learner.billingPage.accessDetail.admin_override");
+    default:
+      return null;
   }
 }
 
@@ -71,15 +102,19 @@ function includesListKeys(tier: BillingPagePayload["effectiveTier"]): string[] {
 function StatusBanner({
   surface,
   pastDueGraceEndsAt,
+  billingPeriodEndDisplay,
   localeTag,
   t,
 }: {
   surface: BillingPagePayload["surface"];
   pastDueGraceEndsAt: Date | null;
+  billingPeriodEndDisplay: Date | null;
   localeTag: string;
   t: LearnerMarketingT;
 }) {
   const styles: Record<BillingPagePayload["surface"], string> = {
+    active_scheduled_cancel:
+      "border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[var(--semantic-panel-warm)] text-[var(--semantic-warning-contrast)]",
     active_paid:
       "border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))] bg-[var(--semantic-success-soft)] text-[var(--semantic-success-contrast)]",
     grace:
@@ -102,6 +137,10 @@ function StatusBanner({
     pastDueGraceEndsAt != null
       ? pastDueGraceEndsAt.toLocaleDateString(localeTag, { year: "numeric", month: "short", day: "numeric" })
       : null;
+  const periodFmt =
+    billingPeriodEndDisplay != null
+      ? billingPeriodEndDisplay.toLocaleDateString(localeTag, { year: "numeric", month: "short", day: "numeric" })
+      : null;
   return (
     <div className={`rounded-2xl border px-4 py-4 sm:px-5 ${styles[surface]}`}>
       <p className="text-sm font-semibold">{t(titleKey)}</p>
@@ -109,6 +148,16 @@ function StatusBanner({
       {surface === "past_due_grace" && deadlineFmt ? (
         <p className="mt-2 text-sm font-medium leading-relaxed opacity-95">
           {t("learner.billingPage.surface.past_due_grace.deadlineLine", { deadline: deadlineFmt })}
+        </p>
+      ) : null}
+      {surface === "active_scheduled_cancel" && periodFmt ? (
+        <p className="mt-2 text-sm font-medium leading-relaxed opacity-95">
+          {t("learner.billingPage.surface.active_scheduled_cancel.periodEndLine", { date: periodFmt })}
+        </p>
+      ) : null}
+      {surface === "cancelled" && periodFmt ? (
+        <p className="mt-2 text-sm font-medium leading-relaxed opacity-95">
+          {t("learner.billingPage.surface.cancelled.periodEndLine", { date: periodFmt })}
         </p>
       ) : null}
     </div>
@@ -136,11 +185,18 @@ export function LearnerBillingPageContent({
     effectiveCountry,
     showTrialEndCallout,
     pastDueGraceEndsAt,
+    billingPeriodEndDisplay,
   } = payload;
 
   const planLabel = formatBillingTierLabel(effectiveTier, effectiveCountry);
   const accessOk = entitlement !== "error" && entitlement.hasAccess;
   const verifyFailed = entitlement === "error";
+  const accessWhy = billingAccessWhyLine(entitlement, accessOk, t);
+  const pastDueGraceAccess =
+    accessOk &&
+    entitlement !== "error" &&
+    entitlement.reason === "past_due_grace" &&
+    subscription?.status === SubscriptionStatus.PAST_DUE;
 
   return (
     <div className="space-y-8">
@@ -150,7 +206,13 @@ export function LearnerBillingPageContent({
         </div>
       ) : null}
 
-      <StatusBanner surface={surface} pastDueGraceEndsAt={pastDueGraceEndsAt} localeTag={localeTag} t={t} />
+      <StatusBanner
+        surface={surface}
+        pastDueGraceEndsAt={pastDueGraceEndsAt}
+        billingPeriodEndDisplay={billingPeriodEndDisplay}
+        localeTag={localeTag}
+        t={t}
+      />
 
       <section className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] shadow-sm">
         <div className="border-b border-[var(--semantic-border-soft)] bg-gradient-to-r from-primary/[0.06] to-transparent px-5 py-4">
@@ -164,6 +226,9 @@ export function LearnerBillingPageContent({
             <p className="mt-2 text-sm text-muted-foreground">
               {accessOk ? t("learner.billingPage.accessActive") : t("learner.billingPage.accessInactive")}
             </p>
+            {accessWhy ? (
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{accessWhy}</p>
+            ) : null}
             {showTrialEndCallout && user.trialEndsAt ? (
               <p className="mt-2 text-sm font-medium text-primary">
                 {t("learner.billingPage.trialEndsLine", {
@@ -242,7 +307,9 @@ export function LearnerBillingPageContent({
           {subscription ? (
             <div>
               <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("learner.billingPage.recordStatus")}</dt>
-              <dd className="mt-1 text-sm font-medium text-foreground">{subscriptionStatusLabel(subscription.status, t)}</dd>
+              <dd className="mt-1 text-sm font-medium text-foreground">
+                {subscriptionStatusLabel(subscription.status, t, { pastDueGraceAccess })}
+              </dd>
             </div>
           ) : (
             <div>

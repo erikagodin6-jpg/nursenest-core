@@ -40,6 +40,8 @@ export type BillingPagePayload = {
   showTrialEndCallout: boolean;
   /** When `surface` is `past_due_grace`, when premium access ends if payment is not fixed (min of grace anchor+days and period end). */
   pastDueGraceEndsAt: Date | null;
+  /** Best-effort current period end (Stripe API, else DB) for “access until” copy. */
+  billingPeriodEndDisplay: Date | null;
 };
 
 function tierHuman(tier: TierCode): string {
@@ -151,6 +153,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
         planTier: subscriptionRow.planTier,
         planCountry: subscriptionRow.planCountry,
         alliedCareer: subscriptionRow.alliedCareer ?? null,
+        cancelAtPeriodEnd: subscriptionRow.cancelAtPeriodEnd ?? false,
         createdAt: subscriptionRow.createdAt,
         updatedAt: subscriptionRow.updatedAt,
       }
@@ -184,6 +187,9 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
       cancelAtPeriodEnd: subscriptionRow.cancelAtPeriodEnd ?? false,
     };
   }
+
+  const billingPeriodEndDisplay =
+    stripeRenewal?.currentPeriodEnd ?? subscriptionRow?.currentPeriodEnd ?? null;
 
   const entitlementReason: AccessScope["reason"] | "error" =
     entitlement === "error" ? "error" : entitlement.reason;
@@ -241,5 +247,6 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
     effectiveCountry,
     showTrialEndCallout,
     pastDueGraceEndsAt,
+    billingPeriodEndDisplay,
   };
 }

@@ -6,7 +6,6 @@ import {
   subscriptionStatusForSession,
   type SessionSubscriptionStatus,
 } from "@/lib/entitlements/get-user-access";
-import { prisma } from "@/lib/db";
 import type { SessionUserRole } from "@/types/next-auth";
 
 export type SessionIdentityPayload = {
@@ -43,21 +42,17 @@ function roleToSessionRole(role: UserRole): SessionUserRole {
  * Authoritative session identity for JWT + `/api/auth/sync-session` (DB — never trust client `session.update` alone).
  */
 export async function getSessionIdentityPayload(userId: string): Promise<SessionIdentityPayload | null> {
-  const userRow = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { role: true, credentialVersion: true },
-  });
-  if (!userRow) return null;
-
   const userAccess = await getUserAccess(userId);
+  if (!userAccess.sessionJwt) return null;
+
   const subscriptionStatus = subscriptionStatusForSession(userAccess);
 
   return {
     tier: userAccess.allowedProfession.tier,
     country: userAccess.allowedRegion.country,
     subscriptionStatus,
-    role: roleToSessionRole(userRow.role),
-    credentialVersion: userRow.credentialVersion ?? 0,
+    role: roleToSessionRole(userAccess.sessionJwt.role),
+    credentialVersion: userAccess.sessionJwt.credentialVersion,
     subscription: {
       planCode: userAccess.plan.planCode,
       planDuration: userAccess.plan.duration,

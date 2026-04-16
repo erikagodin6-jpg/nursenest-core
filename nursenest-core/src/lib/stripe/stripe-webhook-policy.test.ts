@@ -44,7 +44,7 @@ describe("stripe webhook policy (static)", () => {
       .map((m) => m[1])
       .filter((t) => t.includes(".") || t.includes("_"));
     const unique = [...new Set(handled)];
-    assert.equal(unique.length, 6, `expected 6 handled types, got ${unique.join(",")}`);
+    assert.equal(unique.length, 7, `expected 7 handled types, got ${unique.join(",")}`);
     for (const t of unique) {
       assert.match(applySrc, new RegExp(`"${t}"`), `missing ${t}`);
     }

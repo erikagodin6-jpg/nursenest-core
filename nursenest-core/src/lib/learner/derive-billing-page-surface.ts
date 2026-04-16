@@ -4,6 +4,7 @@ import type { AccessScope } from "@/lib/entitlements/user-access-types";
 import type { BillingSubscriptionRow, BillingUserRow } from "@/lib/learner/billing-page-payload-types";
 
 export type BillingStatusSurface =
+  | "active_scheduled_cancel"
   | "active_paid"
   | "grace"
   | "past_due_grace"
@@ -32,6 +33,9 @@ export function deriveBillingSurface(args: {
   const trialActive = args.user.trialStatus === TrialStatus.ACTIVE && args.trialEndsAt && args.trialEndsAt.getTime() > now;
   const reason = args.entitlementReason === "error" ? ("no_access" as const) : args.entitlementReason;
 
+  if (sub?.status === SubscriptionStatus.ACTIVE && args.hasAccess && sub.cancelAtPeriodEnd) {
+    return "active_scheduled_cancel";
+  }
   if (sub?.status === SubscriptionStatus.ACTIVE && args.hasAccess) {
     return "active_paid";
   }

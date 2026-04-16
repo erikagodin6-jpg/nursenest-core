@@ -20,7 +20,7 @@
  * - **Not per-request**: invoked by daily cron, CLI, or admin POST only.
  *
  * @see `/api/cron/stripe-reconcile` — scheduled (see `vercel.json`)
- * @see `/api/admin/billing/stripe-reconcile` — on-demand (staff)
+ * @see `/api/admin/billing/stripe-reconcile` — on-demand dry-run (any staff); **`?apply=1` super-tier + reason + confirm header** (see route)
  */
 import type Stripe from "stripe";
 import { Prisma, SubscriptionStatus, type TierCode } from "@prisma/client";
@@ -42,6 +42,7 @@ import {
   isTrustedStripeReconciliationUserId,
 } from "@/lib/stripe/stripe-reconcile-metadata";
 import { pastDueSinceForStatusTransition } from "@/lib/stripe/subscription-past-due-since";
+import { emitBillingAudit, prefixUserId, prefixStripeId } from "@/lib/observability/billing-entitlement-audit";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { sentryCount } from "@/lib/observability/sentry-metrics";
@@ -174,6 +175,13 @@ function logSubscriptionRepaired(args: {
     stripeSubscriptionIdPrefix: args.stripeSubscriptionId.slice(0, 14),
     userIdPrefix: args.userId.slice(0, 8),
     patchKeys: args.patchKeys.join(",").slice(0, 200),
+  });
+  emitBillingAudit("reconciliation_repaired", {
+    source: "reconciliation",
+    operation: args.operation,
+    subscriptionIdPrefix: prefixStripeId(args.stripeSubscriptionId),
+    userIdPrefix: prefixUserId(args.userId),
+    reason: args.patchKeys.join(",").slice(0, 200),
   });
 }
 
@@ -355,6 +363,21 @@ export async function runStripeSubscriptionReconciliation(
             ? "No DB row; metadata userId failed format validation — cannot auto-create."
             : "No DB row; metadata userId present and trusted — --apply can create Subscription if user exists and customer guard passes.",
       });
+      emitBillingAudit("reconciliation_mismatch_found", {
+        source: "reconciliation",
+        mismatchKind: "missing_in_db",
+        subscriptionIdPrefix: prefixStripeId(sub.id),
+        userIdPrefix: metadataUserId ? prefixUserId(metadataUserId) : undefined,
+        priorState: "absent",
+        newState: String(sub.status),
+        reason: !metadataUserId
+          ? "no_metadata_user_id"
+          : !trusted
+            ? "untrusted_metadata_user_id"
+            : apply
+              ? "apply_attempt"
+              : "dry_run",
+      });
 
       if (apply && metadataUserId && trusted) {
         try {
@@ -423,6 +446,15 @@ export async function runStripeSubscriptionReconciliation(
     }
 
     if (mappedStatus !== null && row.status !== mappedStatus) {
+      emitBillingAudit("reconciliation_mismatch_found", {
+        source: "reconciliation",
+        mismatchKind: "stripe_db_status",
+        priorState: String(row.status),
+        newState: String(mappedStatus),
+        subscriptionIdPrefix: prefixStripeId(sub.id),
+        userIdPrefix: prefixUserId(row.userId),
+        reason: apply ? "will_repair_if_apply" : "dry_run",
+      });
       report.discrepancies.statusMismatch.push({
         stripeSubscriptionId: sub.id,
         userId: row.userId,
@@ -460,6 +492,17 @@ export async function runStripeSubscriptionReconciliation(
       const tierOk = row.planTier === mapped.tier;
       const countryOk = row.planCountry === mapped.country;
       if (!tierOk || !countryOk) {
+        emitBillingAudit("reconciliation_mismatch_found", {
+          source: "reconciliation",
+          mismatchKind: "plan_tier_country",
+          subscriptionIdPrefix: prefixStripeId(sub.id),
+          userIdPrefix: prefixUserId(row.userId),
+          tier: String(mapped.tier),
+          country: mapped.country,
+          priorState: [row.planTier ?? "?", row.planCountry ?? "?"].join("|"),
+          newState: [mapped.tier, mapped.country].join("|"),
+          reason: apply ? "will_repair_if_apply" : "dry_run",
+        });
         report.discrepancies.tierMismatch.push({
           stripeSubscriptionId: sub.id,
           userId: row.userId,
@@ -528,6 +571,15 @@ export async function runStripeSubscriptionReconciliation(
     }
 
     if (isHighRiskDbActiveStripeEndedOrPaused(row.status, sub.status)) {
+      emitBillingAudit("reconciliation_mismatch_found", {
+        source: "reconciliation",
+        mismatchKind: "db_active_stripe_not_entitled",
+        subscriptionIdPrefix: prefixStripeId(sub.id),
+        userIdPrefix: prefixUserId(row.userId),
+        priorState: String(row.status),
+        newState: String(sub.status),
+        reason: sub.status === "paused" ? "stripe_paused_db_active" : "stripe_ended_db_active",
+      });
       report.discrepancies.dbActiveButStripeNotEntitled.push({
         stripeSubscriptionId: sub.id,
         userId: row.userId,

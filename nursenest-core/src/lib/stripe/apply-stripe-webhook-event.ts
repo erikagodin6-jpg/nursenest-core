@@ -3,6 +3,14 @@ import type Stripe from "stripe";
 import { Prisma, SubscriptionStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import {
+  emitBillingAudit,
+  emitEntitlementShiftFromRowTransition,
+  emitSubscriptionStateChangedAudit,
+  prefixStripeId,
+  prefixUserId,
+  tierToAuditString,
+} from "@/lib/observability/billing-entitlement-audit";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { productEvent } from "@/lib/observability/product-events";
@@ -32,6 +40,12 @@ export type ApplyStripeWebhookContext = {
  * - **Our Postgres `Subscription` + `User` tier/country** are the **app mirror** used for entitlements (`getUserAccess`).
  * - **Entitlements** are computed **only** from DB via `getUserAccess` — never from client query params or redirect URLs.
  * - Webhooks + optional CLI reconcile apply Stripe → DB; checkout metadata must match server-created sessions.
+ *
+ * **Refunds / chargebacks:** `charge.refunded` is acknowledged for audit (`refund_processed`) only; subscription state
+ * is still repaired by `customer.subscription.updated`, `customer.subscription.deleted`, and `invoice.*` plus reconciliation.
+ * If Stripe cancels or ends a subscription after a refund, the subscription object update should arrive before
+ * or after invoice events; `invoice.payment_succeeded` skips rows already marked `CANCELLED` in the database
+ * to avoid briefly resurrecting access from a stale invoice webhook.
  */
 
 function logBillingTransition(args: {
@@ -43,6 +57,8 @@ function logBillingTransition(args: {
   stripeStatus?: string;
   eventIdPrefix: string;
   correlation: string;
+  stripeEventType: string;
+  stripeCustomerId?: string | null;
 }): void {
   safeServerLog("billing_sync", "subscription_transition", {
     kind: args.kind,
@@ -55,6 +71,18 @@ function logBillingTransition(args: {
     correlation: args.correlation,
     severity: "info",
   });
+  emitSubscriptionStateChangedAudit({
+    correlationId: args.correlation,
+    userId: args.userId,
+    stripeSubscriptionId: args.stripeSubscriptionId,
+    stripeCustomerId: args.stripeCustomerId,
+    priorStatus: args.fromStatus,
+    newStatus: args.toStatus,
+    source: "webhook",
+    stripeEventType: args.stripeEventType,
+    stripeEventIdPrefix: args.eventIdPrefix,
+    transitionKind: args.kind,
+  });
 }
 
 /**
@@ -65,11 +93,22 @@ async function applyCustomerSubscriptionUpsert(
   sub: Stripe.Subscription,
   ctx: ApplyStripeWebhookContext,
   eventIdPrefix: string,
+  stripeEventType: string,
 ): Promise<void> {
   const mappedStatus = mapStripeSubscriptionStatus(sub.status);
   const row = await prisma.subscription.findUnique({
     where: { stripeSubscriptionId: sub.id },
-    select: { id: true, userId: true, status: true },
+    select: {
+      id: true,
+      userId: true,
+      status: true,
+      updatedAt: true,
+      currentPeriodEnd: true,
+      pastDueSince: true,
+      planTier: true,
+      planCountry: true,
+      stripeCustomerId: true,
+    },
   });
   const priceId = firstSubscriptionPriceId(sub);
   const mapped = priceId ? findTierCountryByPriceId(priceId) : undefined;
@@ -111,9 +150,17 @@ async function applyCustomerSubscriptionUpsert(
     if (mapped.alliedCareer) data.alliedCareer = mapped.alliedCareer;
   }
 
-  await prisma.subscription.update({
+  const updated = await prisma.subscription.update({
     where: { id: row.id },
     data,
+    select: {
+      status: true,
+      updatedAt: true,
+      currentPeriodEnd: true,
+      pastDueSince: true,
+      planTier: true,
+      planCountry: true,
+    },
   });
 
   logBillingTransition({
@@ -125,6 +172,31 @@ async function applyCustomerSubscriptionUpsert(
     stripeStatus: sub.status,
     eventIdPrefix,
     correlation: ctx.correlation ?? "",
+    stripeEventType,
+    stripeCustomerId: row.stripeCustomerId ?? undefined,
+  });
+
+  emitEntitlementShiftFromRowTransition({
+    correlationId: ctx.correlation,
+    userId: row.userId,
+    stripeSubscriptionId: sub.id,
+    country: updated.planCountry != null ? String(updated.planCountry) : undefined,
+    tier: tierToAuditString(updated.planTier),
+    before: {
+      status: row.status,
+      updatedAt: row.updatedAt,
+      currentPeriodEnd: row.currentPeriodEnd,
+      pastDueSince: row.pastDueSince,
+    },
+    after: {
+      status: updated.status,
+      updatedAt: updated.updatedAt,
+      currentPeriodEnd: updated.currentPeriodEnd,
+      pastDueSince: updated.pastDueSince,
+    },
+    source: "webhook",
+    stripeEventType,
+    stripeEventIdPrefix: eventIdPrefix,
   });
 }
 
@@ -206,6 +278,18 @@ export async function applyStripeWebhookEvent(
       const planCodeMeta = session.metadata?.planCode?.trim() || undefined;
       const billingRegionMeta = session.metadata?.region?.trim() || undefined;
 
+      const priorCheckoutRow = await prisma.subscription.findUnique({
+        where: { stripeSubscriptionId: subId },
+        select: {
+          status: true,
+          updatedAt: true,
+          currentPeriodEnd: true,
+          pastDueSince: true,
+          planTier: true,
+          planCountry: true,
+        },
+      });
+
       await prisma.$transaction(async (tx) => {
         await tx.subscription.upsert({
           where: { stripeSubscriptionId: subId },
@@ -241,15 +325,75 @@ export async function applyStripeWebhookEvent(
         });
       });
 
+      const afterCheckoutRow = await prisma.subscription.findUnique({
+        where: { stripeSubscriptionId: subId },
+        select: {
+          status: true,
+          updatedAt: true,
+          currentPeriodEnd: true,
+          pastDueSince: true,
+          planTier: true,
+          planCountry: true,
+        },
+      });
+
+      emitBillingAudit("checkout_completed", {
+        correlationId: correlation,
+        userIdPrefix: prefixUserId(userId),
+        subscriptionIdPrefix: prefixStripeId(subId),
+        customerIdPrefix: prefixStripeId(customerId, 12),
+        country: plan?.country != null ? String(plan.country) : undefined,
+        tier: plan?.tier != null ? String(plan.tier) : undefined,
+        newState: String(statusForDb),
+        priorState: priorCheckoutRow ? String(priorCheckoutRow.status) : "none",
+        source: "webhook",
+        stripeEventType: event.type,
+        stripeEventIdPrefix: eventIdPrefix,
+      });
+
       logBillingTransition({
         kind: "checkout_session_completed",
         stripeSubscriptionId: subId,
         userId,
+        fromStatus: priorCheckoutRow?.status,
         toStatus: statusForDb,
         stripeStatus: stripeSubStatus ?? "unknown_after_retrieve_failure",
         eventIdPrefix,
         correlation,
+        stripeEventType: event.type,
+        stripeCustomerId: customerId || undefined,
       });
+
+      if (afterCheckoutRow) {
+        const beforeSnap = priorCheckoutRow ?? {
+          status: SubscriptionStatus.CANCELLED,
+          updatedAt: new Date(0),
+          currentPeriodEnd: null,
+          pastDueSince: null,
+        };
+        emitEntitlementShiftFromRowTransition({
+          correlationId: correlation,
+          userId,
+          stripeSubscriptionId: subId,
+          country: afterCheckoutRow.planCountry != null ? String(afterCheckoutRow.planCountry) : undefined,
+          tier: tierToAuditString(afterCheckoutRow.planTier),
+          before: {
+            status: beforeSnap.status,
+            updatedAt: beforeSnap.updatedAt,
+            currentPeriodEnd: beforeSnap.currentPeriodEnd,
+            pastDueSince: beforeSnap.pastDueSince,
+          },
+          after: {
+            status: afterCheckoutRow.status,
+            updatedAt: afterCheckoutRow.updatedAt,
+            currentPeriodEnd: afterCheckoutRow.currentPeriodEnd,
+            pastDueSince: afterCheckoutRow.pastDueSince,
+          },
+          source: "webhook",
+          stripeEventType: event.type,
+          stripeEventIdPrefix: eventIdPrefix,
+        });
+      }
 
       if (activeBefore === 0 && statusForDb === SubscriptionStatus.ACTIVE) {
         void captureServerEvent(analyticsDistinctId(userId), PH.learnerConversionSubscribed, {
@@ -268,7 +412,7 @@ export async function applyStripeWebhookEvent(
 
   if (event.type === "customer.subscription.created" || event.type === "customer.subscription.updated") {
     const sub = event.data.object as Stripe.Subscription;
-    await applyCustomerSubscriptionUpsert(sub, ctx ?? {}, eventIdPrefix);
+    await applyCustomerSubscriptionUpsert(sub, ctx ?? {}, eventIdPrefix, event.type);
     productEvent("stripe_webhook_ok", { eventType: event.type });
     return;
   }
@@ -278,18 +422,36 @@ export async function applyStripeWebhookEvent(
     const lifecycle = billingLifecycleFields(sub);
     const existing = await prisma.subscription.findUnique({
       where: { stripeSubscriptionId: sub.id },
-      select: { id: true, status: true, userId: true },
+      select: {
+        id: true,
+        status: true,
+        userId: true,
+        updatedAt: true,
+        currentPeriodEnd: true,
+        pastDueSince: true,
+        planTier: true,
+        planCountry: true,
+        stripeCustomerId: true,
+      },
     });
     if (existing) {
       const pastPatch = pastDueSinceForStatusTransition(SubscriptionStatus.CANCELLED, existing.status);
-      await prisma.subscription.update({
+      const updated = await prisma.subscription.update({
         where: { id: existing.id },
         data: {
           status: SubscriptionStatus.CANCELLED,
-          cancelAtPeriodEnd: true,
+          cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
           currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
           trialEnd: lifecycle.trialEnd ?? null,
           ...(pastPatch ?? {}),
+        },
+        select: {
+          status: true,
+          updatedAt: true,
+          currentPeriodEnd: true,
+          pastDueSince: true,
+          planTier: true,
+          planCountry: true,
         },
       });
       logBillingTransition({
@@ -301,6 +463,30 @@ export async function applyStripeWebhookEvent(
         stripeStatus: sub.status,
         eventIdPrefix,
         correlation,
+        stripeEventType: event.type,
+        stripeCustomerId: existing.stripeCustomerId,
+      });
+      emitEntitlementShiftFromRowTransition({
+        correlationId: correlation,
+        userId: existing.userId,
+        stripeSubscriptionId: sub.id,
+        country: updated.planCountry != null ? String(updated.planCountry) : undefined,
+        tier: tierToAuditString(updated.planTier),
+        before: {
+          status: existing.status,
+          updatedAt: existing.updatedAt,
+          currentPeriodEnd: existing.currentPeriodEnd,
+          pastDueSince: existing.pastDueSince,
+        },
+        after: {
+          status: updated.status,
+          updatedAt: updated.updatedAt,
+          currentPeriodEnd: updated.currentPeriodEnd,
+          pastDueSince: updated.pastDueSince,
+        },
+        source: "webhook",
+        stripeEventType: event.type,
+        stripeEventIdPrefix: eventIdPrefix,
       });
     }
     productEvent("stripe_webhook_ok", { eventType: event.type });
@@ -315,38 +501,87 @@ export async function applyStripeWebhookEvent(
     if (subId) {
       const row = await prisma.subscription.findUnique({
         where: { stripeSubscriptionId: subId },
-        select: { id: true, status: true, userId: true },
+        select: {
+          id: true,
+          status: true,
+          userId: true,
+          updatedAt: true,
+          currentPeriodEnd: true,
+          pastDueSince: true,
+          planTier: true,
+          planCountry: true,
+          stripeCustomerId: true,
+        },
       });
+      let invoiceSucceededSkippedCancelled = false;
       if (row) {
-        const pastPatch = pastDueSinceForStatusTransition(SubscriptionStatus.ACTIVE, row.status);
-        await prisma.subscription.update({
-          where: { id: row.id },
-          data: {
-            status: SubscriptionStatus.ACTIVE,
-            ...(pastPatch ?? {}),
-          },
-        });
-        logBillingTransition({
-          kind: "invoice_payment_succeeded",
-          stripeSubscriptionId: subId,
-          userId: row.userId,
-          fromStatus: row.status,
-          toStatus: SubscriptionStatus.ACTIVE,
-          eventIdPrefix,
-          correlation,
-        });
-      }
-      if (billingReason === "subscription_cycle") {
-        const rowUser = await prisma.subscription.findUnique({
-          where: { stripeSubscriptionId: subId },
-          select: { userId: true },
-        });
-        if (rowUser?.userId) {
-          void captureServerEvent(analyticsDistinctId(rowUser.userId), PH.funnelSubscriptionRenewed, {
-            source: "stripe_invoice_payment_succeeded",
-            billing_reason: billingReason,
+        if (row.status === SubscriptionStatus.CANCELLED) {
+          invoiceSucceededSkippedCancelled = true;
+          safeServerLog("billing_sync", "invoice_payment_succeeded_skipped_cancelled_row", {
+            stripeSubscriptionIdPrefix: subId.slice(0, 14),
+            userIdPrefix: row.userId.slice(0, 8),
+            eventIdPrefix,
+            correlation,
+            severity: "info",
+            hint: "Avoid resurrecting ACTIVE after refund/cancel; wait for subscription.updated or reconcile",
+          });
+        } else {
+          const pastPatch = pastDueSinceForStatusTransition(SubscriptionStatus.ACTIVE, row.status);
+          const updated = await prisma.subscription.update({
+            where: { id: row.id },
+            data: {
+              status: SubscriptionStatus.ACTIVE,
+              ...(pastPatch ?? {}),
+            },
+            select: {
+              status: true,
+              updatedAt: true,
+              currentPeriodEnd: true,
+              pastDueSince: true,
+              planTier: true,
+              planCountry: true,
+            },
+          });
+          logBillingTransition({
+            kind: "invoice_payment_succeeded",
+            stripeSubscriptionId: subId,
+            userId: row.userId,
+            fromStatus: row.status,
+            toStatus: SubscriptionStatus.ACTIVE,
+            eventIdPrefix,
+            correlation,
+            stripeEventType: event.type,
+            stripeCustomerId: row.stripeCustomerId,
+          });
+          emitEntitlementShiftFromRowTransition({
+            correlationId: correlation,
+            userId: row.userId,
+            stripeSubscriptionId: subId,
+            country: updated.planCountry != null ? String(updated.planCountry) : undefined,
+            tier: tierToAuditString(updated.planTier),
+            before: {
+              status: row.status,
+              updatedAt: row.updatedAt,
+              currentPeriodEnd: row.currentPeriodEnd,
+              pastDueSince: row.pastDueSince,
+            },
+            after: {
+              status: updated.status,
+              updatedAt: updated.updatedAt,
+              currentPeriodEnd: updated.currentPeriodEnd,
+              pastDueSince: updated.pastDueSince,
+            },
+            source: "webhook",
+            stripeEventType: event.type,
+            stripeEventIdPrefix: eventIdPrefix,
           });
         }
+      }
+      if (billingReason === "subscription_cycle" && !invoiceSucceededSkippedCancelled && row?.userId) {
+        void captureServerEvent(analyticsDistinctId(row.userId), PH.funnelSubscriptionRenewed, {
+          source: "stripe_invoice_payment_succeeded",
+          billing_reason: billingReason,
+        });
       }
     }
     productEvent("stripe_webhook_ok", { eventType: event.type });
@@ -360,15 +595,33 @@ export async function applyStripeWebhookEvent(
     if (subId) {
       const row = await prisma.subscription.findUnique({
         where: { stripeSubscriptionId: subId },
-        select: { id: true, status: true, userId: true },
+        select: {
+          id: true,
+          status: true,
+          userId: true,
+          updatedAt: true,
+          currentPeriodEnd: true,
+          pastDueSince: true,
+          planTier: true,
+          planCountry: true,
+          stripeCustomerId: true,
+        },
       });
       if (row) {
         const pastPatch = pastDueSinceForStatusTransition(SubscriptionStatus.PAST_DUE, row.status);
-        await prisma.subscription.update({
+        const updated = await prisma.subscription.update({
           where: { id: row.id },
           data: {
             status: SubscriptionStatus.PAST_DUE,
             ...(pastPatch ?? {}),
+          },
+          select: {
+            status: true,
+            updatedAt: true,
+            currentPeriodEnd: true,
+            pastDueSince: true,
+            planTier: true,
+            planCountry: true,
           },
         });
         logBillingTransition({
@@ -379,9 +632,58 @@ export async function applyStripeWebhookEvent(
           toStatus: SubscriptionStatus.PAST_DUE,
           eventIdPrefix,
           correlation,
+          stripeEventType: event.type,
+          stripeCustomerId: row.stripeCustomerId,
+        });
+        emitEntitlementShiftFromRowTransition({
+          correlationId: correlation,
+          userId: row.userId,
+          stripeSubscriptionId: subId,
+          country: updated.planCountry != null ? String(updated.planCountry) : undefined,
+          tier: tierToAuditString(updated.planTier),
+          before: {
+            status: row.status,
+            updatedAt: row.updatedAt,
+            currentPeriodEnd: row.currentPeriodEnd,
+            pastDueSince: row.pastDueSince,
+          },
+          after: {
+            status: updated.status,
+            updatedAt: updated.updatedAt,
+            currentPeriodEnd: updated.currentPeriodEnd,
+            pastDueSince: updated.pastDueSince,
+          },
+          source: "webhook",
+          stripeEventType: event.type,
+          stripeEventIdPrefix: eventIdPrefix,
         });
       }
     }
+    productEvent("stripe_webhook_ok", { eventType: event.type });
+    return;
+  }
+
+  if (event.type === "charge.refunded") {
+    const charge = event.data.object as Stripe.Charge;
+    const chId = charge.id;
+    const currency = charge.currency ?? undefined;
+    const customerRaw = charge.customer;
+    const customerStr =
+      typeof customerRaw === "string" ? customerRaw : customerRaw && typeof customerRaw === "object" && "id" in customerRaw
+        ? String((customerRaw as { id: string }).id)
+        : undefined;
+    emitBillingAudit("refund_processed", {
+      correlationId: correlation,
+      customerIdPrefix: prefixStripeId(customerStr, 12),
+      subscriptionIdPrefix: undefined,
+      reason: charge.refunded ? "charge_refunded" : "charge_partial_event",
+      source: "webhook",
+      stripeEventType: event.type,
+      stripeEventIdPrefix: eventIdPrefix,
+      refundChargeIdPrefix: prefixStripeId(chId, 14),
+      currency,
+      severity: "info",
+    });
     productEvent("stripe_webhook_ok", { eventType: event.type });
     return;
   }

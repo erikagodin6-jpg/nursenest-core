@@ -1,5 +1,6 @@
 import "server-only";
 
+import { runWithPrismaQueryContextFromRequest } from "@/lib/server/prisma-query-context";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { emitMonitoringRecord } from "@/lib/observability/observability-record";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
@@ -40,7 +41,7 @@ export async function runWithApiTelemetry(
   fn: () => Promise<Response>,
 ): Promise<Response> {
   const startedAt = performance.now();
-  const response = await fn();
+  const response = await runWithPrismaQueryContextFromRequest(req, routeId, fn);
   recordApiRouteTelemetry({ req, routeId, startedAt, response, flow });
   return response;
 }

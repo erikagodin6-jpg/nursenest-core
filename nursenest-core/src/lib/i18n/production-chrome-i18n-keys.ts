@@ -215,8 +215,9 @@ export const PRODUCTION_LEARNER_SHELL_KEYS = [
   "learner.studyHome.sectionPriorityEyebrowNew",
 ] as const;
 
-export const PRODUCTION_CHROME_I18N_KEYS: readonly string[] = Array.from(
-  new Set<string>([
+/** Merged, deduplicated production chrome keys (Set iteration order). */
+export const PRODUCTION_CHROME_I18N_KEYS = [
+  ...new Set<string>([
     ...MARKETING_HERO_NAV_CRITICAL_KEYS,
     ...PRODUCTION_HOME_KEYS,
     ...PRODUCTION_PAYWALL_KEYS,
@@ -224,4 +225,4 @@ export const PRODUCTION_CHROME_I18N_KEYS: readonly string[] = Array.from(
     ...PRODUCTION_CTA_KEYS,
     ...PRODUCTION_LEARNER_SHELL_KEYS,
   ]),
-);
+];

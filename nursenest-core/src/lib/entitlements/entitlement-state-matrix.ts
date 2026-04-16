@@ -12,7 +12,10 @@
  * ## Decision order in {@link getUserAccess} (first match wins)
  *
  * 1. **Staff / student-ops roles** → `hasPremium: true`, `reason: admin_override` (not a paid subscription; full learner
- *    access for internal QA — see {@link isLearnerEntitlementStaffBypassRole}).
+ *    access for internal QA — see {@link isLearnerEntitlementStaffBypassRole}). This branch runs **before** any
+ *    `Subscription` query, so Stripe/webhook updates to paid rows do not change staff access — there is no “silent fight”
+ *    with reconciliation. **Reconciliation** (`runStripeSubscriptionReconciliation`) only aligns **learner** `Subscription`
+ *    rows to Stripe; it does not grant or revoke the staff role bypass.
  * 2. **Subscription row** in `ACTIVE_LIKE` (`ACTIVE`, `GRACE`, `PAST_DUE`), newest history window — see below.
  * 3. **`ACTIVE`** → `active_subscription`; tier/country from {@link effectiveTierCountryForAccess} (Stripe plan snapshot
  *    wins when `planTier` / `planCountry` set).
@@ -26,6 +29,7 @@
  * **Scheduled cancellation:** While Stripe still reports `active` with `cancel_at_period_end`, webhooks should keep DB
  * **`ACTIVE`** with `cancelAtPeriodEnd: true` — user keeps premium until period end. If DB is **`CANCELLED`** early,
  * `getUserAccess` does **not** treat period end as access (deny until data fixed or trial applies).
+ * **Billing UI:** `deriveBillingSurface` maps that row to `active_scheduled_cancel` (not the same copy as fully active).
  *
  * **Duration / plan code:** Exposed on `UserAccess.plan` for UI; content gates use **effective tier + country**, not plan
  * string alone.

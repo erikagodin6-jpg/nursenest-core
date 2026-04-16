@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { emitBillingAudit } from "@/lib/observability/billing-entitlement-audit";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
@@ -56,6 +57,12 @@ export async function POST(req: Request) {
       correlation,
       severity: "warning",
     });
+    emitBillingAudit("webhook_rejected", {
+      correlationId: correlation || undefined,
+      source: "webhook",
+      reason: "configuration_or_signature_missing",
+      severity: "warn",
+    });
     return NextResponse.json({ error: "Webhook not configured" }, { status: 400 });
   }
 
@@ -71,6 +78,12 @@ export async function POST(req: Request) {
       correlation,
       severity: "warning",
     });
+    emitBillingAudit("webhook_rejected", {
+      correlationId: correlation || undefined,
+      source: "webhook",
+      reason: "payload_too_large",
+      severity: "warn",
+    });
     return NextResponse.json({ error: "Payload too large" }, { status: 413 });
   }
   let event: import("stripe").Stripe.Event;
@@ -80,6 +93,12 @@ export async function POST(req: Request) {
     safeServerLog("stripe_webhook", "signature_verification_failed", {
       correlation,
       severity: "warning",
+    });
+    emitBillingAudit("webhook_rejected", {
+      correlationId: correlation || undefined,
+      source: "webhook",
+      reason: "signature_verification_failed",
+      severity: "warn",
     });
     Sentry.captureMessage("stripe_webhook_invalid_signature", {
       level: "warning",
@@ -106,12 +125,27 @@ export async function POST(req: Request) {
     flow: "webhook",
     message: `stripe type=${event.type.slice(0, 64)} idPrefix=${event.id.slice(0, 12)}`,
   });
+  emitBillingAudit("webhook_received", {
+    correlationId: correlation || undefined,
+    source: "webhook",
+    stripeEventType: event.type,
+    stripeEventIdPrefix: event.id.slice(0, 12),
+    reason: `keyMode=${keyMode}`,
+  });
 
   let claim: Awaited<ReturnType<typeof claimStripeWebhookEventOrDuplicate>>;
   try {
     claim = await claimStripeWebhookEventOrDuplicate(event.id);
   } catch (e) {
     recordStripeWebhookFailure("claim", event.type, req);
+    emitBillingAudit("webhook_failed", {
+      correlationId: correlation || undefined,
+      source: "webhook",
+      stripeEventType: event.type,
+      stripeEventIdPrefix: event.id.slice(0, 12),
+      reason: "idempotency_claim_failed",
+      severity: "error",
+    });
     safeServerLogCritical(
       "stripe_webhook",
       "claim_failed",
@@ -159,6 +193,21 @@ export async function POST(req: Request) {
     await releaseStripeWebhookEventClaim(event.id);
     recordStripeWebhookFailure("handler", event.type, req);
     productEvent("stripe_webhook_failed", { eventType: event.type });
+    emitBillingAudit("webhook_failed", {
+      correlationId: correlation || undefined,
+      source: "webhook",
+      stripeEventType: event.type,
+      stripeEventIdPrefix: event.id.slice(0, 12),
+      reason: "handler_exception",
+      severity: "error",
+    });
+    emitStructuredLog("webhook_failed", "error", {
+      correlationId: correlation || undefined,
+      route: "/api/subscriptions/webhook",
+      method: "POST",
+      flow: "webhook",
+      message: `stripe handler failed type=${event.type.slice(0, 64)}`,
+    });
     safeServerLogCritical(
       "stripe_webhook",
       "handler_failed",

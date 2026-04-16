@@ -67,6 +67,7 @@ import { ExamPlanLazyClient } from "./exam-plan-lazy-client";
 import { loadExamPlanPageData } from "@/lib/study/exam-plan/exam-plan-data";
 import { loadExamPlanTrendAction } from "./actions";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
+import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 
 // ── Breadcrumbs ───────────────────────────────────────────────────────────────
 
@@ -91,6 +92,7 @@ export async function generateMetadata(): Promise<Metadata> {
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function ExamPlanPage() {
+  const { t: lt } = await getLearnerMarketingBundle();
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
@@ -119,7 +121,7 @@ export default async function ExamPlanPage() {
         <BreadcrumbTrail items={CRUMBS} />
         <PremiumEmptyState
           headline="My Exam Plan"
-          body="We couldn't verify your access. Please try again."
+          body={lt("learner.entitlement.verifyFailed")}
           primaryCta={{ label: OPEN_STUDY_HUB_CTA, href: "/app", variant: "primary" }}
           secondaryCtas={[{ label: BROWSE_LESSONS_CTA, href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
@@ -157,7 +159,7 @@ export default async function ExamPlanPage() {
         </div>
         <SubscriptionPaywall
           context="questions"
-          freemiumRemainingQuestions={snap?.questionRemaining ?? 0}
+          freemiumRemainingQuestions={snap != null ? snap.questionRemaining : undefined}
         />
         <PremiumExamPlanUpgradeCard />
       </div>
