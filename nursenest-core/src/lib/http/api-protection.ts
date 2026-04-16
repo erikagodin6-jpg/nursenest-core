@@ -168,7 +168,7 @@ export async function enforceQuestionGradeProtection(req: NextRequest, userId: s
 }
 
 /** POST /api/learner/protection-telemetry — batched client deterrence counters. */
-export function enforceProtectionTelemetryPost(req: NextRequest, userId: string): NextResponse | null {
+export async function enforceProtectionTelemetryPost(req: NextRequest, userId: string): Promise<NextResponse | null> {
   const ip = getTrustedClientIp(req);
   const route = "protection_telemetry";
   if (!(await checkRateLimitUnified(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 120 })).ok) {
@@ -181,7 +181,7 @@ export function enforceProtectionTelemetryPost(req: NextRequest, userId: string)
 }
 
 /** GET/POST/DELETE /api/learner/notes — note save/load; throttle bulk abuse. */
-export function enforceLearnerNotesProtection(req: NextRequest, userId: string): NextResponse | null {
+export async function enforceLearnerNotesProtection(req: NextRequest, userId: string): Promise<NextResponse | null> {
   const ip = getTrustedClientIp(req);
   const route = "learner_notes";
   checkDeviceMismatch(req, route, userId, ip);
@@ -200,7 +200,7 @@ export function enforceLearnerNotesProtection(req: NextRequest, userId: string):
 }
 
 /** GET /api/practice-tests/[id] — session metadata; question bodies optional (hydrate=full). */
-export function enforcePracticeTestDetailProtection(req: NextRequest, userId: string): NextResponse | null {
+export async function enforcePracticeTestDetailProtection(req: NextRequest, userId: string): Promise<NextResponse | null> {
   const ip = getTrustedClientIp(req);
   const route = "practice_test_detail";
   checkDeviceMismatch(req, route, userId, ip);
@@ -219,7 +219,7 @@ export function enforcePracticeTestDetailProtection(req: NextRequest, userId: st
 }
 
 /** GET /api/practice-tests/[id]/question — per-index fetch (CAT / long linear runs). */
-export function enforcePracticeTestQuestionProtection(req: NextRequest, userId: string): NextResponse | null {
+export async function enforcePracticeTestQuestionProtection(req: NextRequest, userId: string): Promise<NextResponse | null> {
   const ip = getTrustedClientIp(req);
   const route = "practice_test_run_question";
   checkDeviceMismatch(req, route, userId, ip);
@@ -238,7 +238,7 @@ export function enforcePracticeTestQuestionProtection(req: NextRequest, userId: 
 }
 
 /** PATCH /api/practice-tests/[id] — save, complete, CAT advance, abandon. */
-export function enforcePracticeTestMutationProtection(req: NextRequest, userId: string): NextResponse | null {
+export async function enforcePracticeTestMutationProtection(req: NextRequest, userId: string): Promise<NextResponse | null> {
   const ip = getTrustedClientIp(req);
   const route = "practice_test_mutate";
   checkDeviceMismatch(req, route, userId, ip);
@@ -257,7 +257,7 @@ export function enforcePracticeTestMutationProtection(req: NextRequest, userId: 
 }
 
 /** GET /api/exams/attempt/[id] — graded review snapshot. */
-export function enforceExamAttemptDetailProtection(req: NextRequest, userId: string): NextResponse | null {
+export async function enforceExamAttemptDetailProtection(req: NextRequest, userId: string): Promise<NextResponse | null> {
   const ip = getTrustedClientIp(req);
   const route = "exam_attempt_detail";
   checkDeviceMismatch(req, route, userId, ip);
@@ -276,7 +276,7 @@ export function enforceExamAttemptDetailProtection(req: NextRequest, userId: str
 }
 
 /** GET /api/practice-tests — list user sessions (bounded take in handler). */
-export function enforcePracticeTestsListProtection(req: NextRequest, userId: string): NextResponse | null {
+export async function enforcePracticeTestsListProtection(req: NextRequest, userId: string): Promise<NextResponse | null> {
   const ip = getTrustedClientIp(req);
   const route = "practice_tests_list";
   checkDeviceMismatch(req, route, userId, ip);
@@ -295,7 +295,7 @@ export function enforcePracticeTestsListProtection(req: NextRequest, userId: str
 }
 
 /** GET /api/practice-tests/cat-readiness — lightweight pool preflight (per pathway). */
-export function enforcePracticeTestsCatReadinessProtection(req: NextRequest, userId: string): NextResponse | null {
+export async function enforcePracticeTestsCatReadinessProtection(req: NextRequest, userId: string): Promise<NextResponse | null> {
   const ip = getTrustedClientIp(req);
   const route = "practice_tests_cat_readiness";
   checkDeviceMismatch(req, route, userId, ip);
@@ -314,7 +314,7 @@ export function enforcePracticeTestsCatReadinessProtection(req: NextRequest, use
 }
 
 /** GET /api/flashcards/decks/[deckRef]/study — subscriber card batches. */
-export function enforceFlashcardStudyProtection(req: NextRequest, userId: string): NextResponse | null {
+export async function enforceFlashcardStudyProtection(req: NextRequest, userId: string): Promise<NextResponse | null> {
   const ip = getTrustedClientIp(req);
   const route = "flashcard_study";
   checkDeviceMismatch(req, route, userId, ip);
@@ -333,7 +333,7 @@ export function enforceFlashcardStudyProtection(req: NextRequest, userId: string
 }
 
 /** POST /api/flashcards/decks/[deckRef]/review */
-export function enforceFlashcardReviewProtection(req: NextRequest, userId: string): NextResponse | null {
+export async function enforceFlashcardReviewProtection(req: NextRequest, userId: string): Promise<NextResponse | null> {
   const ip = getTrustedClientIp(req);
   const route = "flashcard_review";
   checkDeviceMismatch(req, route, userId, ip);

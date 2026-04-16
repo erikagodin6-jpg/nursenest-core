@@ -243,7 +243,7 @@ export const authConfig: NextAuthConfig = {
           return null;
         }
 
-        const lockStatus = isLoginLocked(lockKey);
+        const lockStatus = await isLoginLocked(lockKey);
         if (lockStatus.locked) {
           safeServerLog("auth", "login_locked_out", {
             idHash,
@@ -311,7 +311,7 @@ export const authConfig: NextAuthConfig = {
             ]);
 
             if (exactEmailUserCount > 1 || normalizedEmailUserCount > 1 || trimmedEmailUserCount > 1) {
-              recordLoginFailure(lockKey);
+              await recordLoginFailure(lockKey);
               logAuthIncidentLine({
                 event: "credentials_login",
                 outcome: "failure",
@@ -387,7 +387,7 @@ export const authConfig: NextAuthConfig = {
               where: { username: { equals: enteredEmailLower, mode: "insensitive" } },
             });
             if (usernameMatchCount > 1) {
-              recordLoginFailure(lockKey);
+              await recordLoginFailure(lockKey);
               logAuthIncidentLine({
                 event: "credentials_login",
                 outcome: "failure",
@@ -494,7 +494,7 @@ export const authConfig: NextAuthConfig = {
         };
 
         if (!user) {
-          recordLoginFailure(lockKey);
+          await recordLoginFailure(lockKey);
           let finalFailureReason:
             | "no_matching_user_exact"
             | "no_matching_user_normalized"

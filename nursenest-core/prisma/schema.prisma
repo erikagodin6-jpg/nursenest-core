@@ -2530,3 +2530,14 @@ model AppRateLimitBucket {
   @@index([expiresAt])
   @@map("app_rate_limit_bucket")
 }
+
+/// Progressive credential lockout state — shared across app instances (replaces per-process Map when distributed mode is on).
+model AppLoginLockout {
+  id            String    @id @db.VarChar(128)
+  failures      Int       @default(0)
+  lockedUntil   DateTime? @map("locked_until") @db.Timestamptz(6)
+  lastFailureAt DateTime  @map("last_failure_at") @db.Timestamptz(6)
+
+  @@index([lockedUntil])
+  @@map("app_login_lockout")
+}

@@ -361,16 +361,16 @@ export function PricingPageClient({
             contentType,
             body: responseText,
           });
-          throw new Error("Checkout service returned an unexpected response format.");
+          throw new Error(t("pages.pricing.error.checkoutTemporarilyUnavailable"));
         }
 
         if (!parsedBody || typeof parsedBody !== "object") {
-          throw new Error("Checkout service returned an empty response.");
+          throw new Error(t("pages.pricing.error.checkoutTemporarilyUnavailable"));
         }
 
         const checkoutUrl = (parsedBody as { url?: unknown }).url;
         if (typeof checkoutUrl !== "string" || checkoutUrl.trim().length === 0) {
-          throw new Error("Checkout service did not return a Stripe redirect URL.");
+          throw new Error(t("pages.pricing.error.checkoutTemporarilyUnavailable"));
         }
         console.info("[pricing_checkout] redirect_url_received", { checkoutUrl });
         window.location.assign(checkoutUrl);
@@ -384,10 +384,21 @@ export function PricingPageClient({
             setCheckoutOpsHint(t("pages.pricing.error.checkoutOpsStripePrice", { envKey: checkoutErr.parsed.envKey }));
           }
         } else {
-          const msg = error instanceof Error && error.message.trim().length > 0
-            ? error.message
-            : t("pages.pricing.error.checkoutNetwork");
-          setCheckoutError(msg);
+          const raw = error instanceof Error ? error.message.trim() : "";
+          if (!raw) {
+            setCheckoutError(t("pages.pricing.error.checkoutNetwork"));
+          } else if (/failed to fetch|networkerror|load[_ ]failed/i.test(raw)) {
+            setCheckoutError(t("pages.pricing.error.checkoutNetwork"));
+          } else if (
+            raw.includes("Checkout service") ||
+            raw.includes("Stripe redirect") ||
+            raw.includes("unexpected response") ||
+            raw.includes("empty response")
+          ) {
+            setCheckoutError(t("pages.pricing.error.checkoutTemporarilyUnavailable"));
+          } else {
+            setCheckoutError(raw);
+          }
         }
         setCheckoutLoading(false);
       }

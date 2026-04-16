@@ -34,11 +34,20 @@ export class PricingPageErrorBoundary extends Component<Props, State> {
         <div className="mx-auto max-w-2xl px-4 py-16 text-center">
           <p className="nn-marketing-h3">Just a moment</p>
           <p className="mt-2 nn-marketing-body-sm text-muted-foreground">
-            We hit a temporary issue loading pricing. Refresh the page or go home and try again in a moment.
+            We hit a temporary issue loading pricing. Try again in a moment — your account and checkout are still secure.
           </p>
-          <a href="/" className={`mt-6 ${MARKETING_PRIMARY_CTA_COMPACT_CLASS}`}>
-            Go to home
-          </a>
+          <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <button
+              type="button"
+              className={MARKETING_PRIMARY_CTA_COMPACT_CLASS}
+              onClick={() => window.location.reload()}
+            >
+              Refresh page
+            </button>
+            <a href="/" className="nn-marketing-body-sm font-medium text-primary underline underline-offset-2 hover:opacity-90">
+              Go to home
+            </a>
+          </div>
         </div>
       );
     }

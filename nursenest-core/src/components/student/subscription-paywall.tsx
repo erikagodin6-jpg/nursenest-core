@@ -28,8 +28,16 @@ const FEATURE_KEYS = [
 
 const LOSE_KEYS = [`lose0`, `lose1`, `lose2`] as const;
 
-/** Objection Q&A blocks rendered above the pricing CTA (order = conversion flow: pass → difference → value → loss → trust). */
-const PAYWALL_OBJECTION_IDS = ["passExam", "different", "worthIt", "ifStayFree", "upToDate"] as const;
+/** Objection Q&A blocks rendered above the pricing CTA (pass → difference → vs other prep → after pay → value → loss → trust). */
+const PAYWALL_OBJECTION_IDS = [
+  "passExam",
+  "different",
+  "otherPrep",
+  "afterPay",
+  "worthIt",
+  "ifStayFree",
+  "upToDate",
+] as const;
 
 const PREVIEW_CHOICE_KEYS = [
   "pages.home.sampleQuestion.choiceA",

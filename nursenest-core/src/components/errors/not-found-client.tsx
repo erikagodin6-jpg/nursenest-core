@@ -74,10 +74,10 @@ export function NotFoundClient({
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-secondary)]">404</p>
 
         <h1 className="mt-4 text-balance text-2xl font-bold tracking-tight text-[var(--theme-heading-text)] sm:text-[1.65rem]">
-          Page Not Found
+          Page not found
         </h1>
         <p className="mt-3 max-w-md text-pretty text-sm leading-relaxed text-[var(--theme-muted-text)] sm:text-[0.95rem]">
-          This page is not available or may have moved.
+          This link may have moved — NurseNest is still here. Use the shortcuts below to keep studying.
         </p>
 
         <div className="mt-10 flex w-full max-w-md flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
