@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  const blocked = enforceLearnerNotesProtection(req, gate.userId);
+  const blocked = await enforceLearnerNotesProtection(req, gate.userId);
   if (blocked) return blocked;
 
   setSentryServerContext({ route: "/api/learner/notes", feature: SERVER_FEATURE.other, userId: gate.userId });
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  const blocked = enforceLearnerNotesProtection(req, gate.userId);
+  const blocked = await enforceLearnerNotesProtection(req, gate.userId);
   if (blocked) return blocked;
 
   setSentryServerContext({ route: "/api/learner/notes", feature: SERVER_FEATURE.other, userId: gate.userId });
@@ -111,7 +111,7 @@ export async function DELETE(req: NextRequest) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  const blocked = enforceLearnerNotesProtection(req, gate.userId);
+  const blocked = await enforceLearnerNotesProtection(req, gate.userId);
   if (blocked) return blocked;
 
   const { searchParams } = new URL(req.url);

@@ -16,8 +16,9 @@ const bodySchema = z.object({
 });
 
 /**
- * Clears in-memory progressive lockout for the same key used by credentials login.
- * Super-admin only; does not affect rate limits or other instances.
+ * Clears progressive login lockout for the same key used by credentials login
+ * (in-memory or `app_login_lockout` when distributed mode is on).
+ * Super-admin only.
  */
 export async function POST(req: Request) {
   const gate = await requireAdmin(req);
@@ -38,7 +39,7 @@ export async function POST(req: Request) {
     req.headers.get("x-real-ip") ??
     "unknown";
   const lockKey = `login-lock:${idHash || ip}`;
-  clearLoginFailures(lockKey);
+  await clearLoginFailures(lockKey);
 
   return NextResponse.json({
     ok: true,

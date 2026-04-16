@@ -21,7 +21,7 @@ import {
   normalizeLoginIdentifier,
   sanitizeRawLoginIdentifier,
 } from "@/lib/auth/normalize-login-identifier";
-import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
+import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import { Prisma } from "@prisma/client";
 import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
 import {
@@ -523,7 +523,7 @@ export const authConfig: NextAuthConfig = {
             authMode,
             idHash,
             ip: ip.slice(0, 64),
-            failureCount: getFailureCount(lockKey),
+            failureCount: await getFailureCount(lockKey),
             gmailNormalizedLookupTried:
               isEmailLikeIdentifier(enteredEmailLower) && isGmailLikeAddress(enteredEmailLower) ? "yes" : "no",
           });
@@ -532,7 +532,7 @@ export const authConfig: NextAuthConfig = {
 
         const storedPasswordHash = normalizeStoredPasswordHash(user.passwordHash);
         if (!storedPasswordHash) {
-          recordLoginFailure(lockKey);
+          await recordLoginFailure(lockKey);
           logAuthIncidentLine({
             ...incidentBase,
             outcome: "failure",
@@ -555,7 +555,7 @@ export const authConfig: NextAuthConfig = {
         try {
           passwordOk = await compare(password, storedPasswordHash);
         } catch (e) {
-          recordLoginFailure(lockKey);
+          await recordLoginFailure(lockKey);
           const detail = e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200);
           logAuthIncidentLine({
             ...incidentBase,
@@ -577,7 +577,7 @@ export const authConfig: NextAuthConfig = {
         }
 
         if (!passwordOk) {
-          recordLoginFailure(lockKey);
+          await recordLoginFailure(lockKey);
           logAuthIncidentLine({
             ...incidentBase,
             outcome: "failure",
@@ -590,13 +590,13 @@ export const authConfig: NextAuthConfig = {
             authMode,
             idHash,
             ip: ip.slice(0, 64),
-            failureCount: getFailureCount(lockKey),
+            failureCount: await getFailureCount(lockKey),
             passwordCompareOk: false,
           });
           return null;
         }
 
-        clearLoginFailures(lockKey);
+        await clearLoginFailures(lockKey);
 
         prisma.user.update({
           where: { id: user.id },

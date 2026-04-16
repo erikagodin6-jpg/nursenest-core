@@ -11,7 +11,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
 
   setSentryServerContext({ route: "/api/exams/attempt/[id]", feature: SERVER_FEATURE.exam, userId: gate.userId });
 
-  const limited = enforceExamAttemptDetailProtection(req, gate.userId);
+  const limited = await enforceExamAttemptDetailProtection(req, gate.userId);
   if (limited) return limited;
 
   const { id } = await ctx.params;

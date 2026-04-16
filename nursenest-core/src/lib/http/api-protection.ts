@@ -352,7 +352,7 @@ export async function enforceFlashcardReviewProtection(req: NextRequest, userId:
 }
 
 /** POST /api/exams/start — heavy session build. */
-export function enforceExamStartProtection(req: NextRequest, userId: string): NextResponse | null {
+export async function enforceExamStartProtection(req: NextRequest, userId: string): Promise<NextResponse | null> {
   const ip = getTrustedClientIp(req);
   const route = "exam_start";
   checkDeviceMismatch(req, route, userId, ip);

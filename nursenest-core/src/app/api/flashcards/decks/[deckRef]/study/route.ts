@@ -166,7 +166,7 @@ export async function GET(req: NextRequest, { params }: Props) {
       return notSubscribedResponse();
     }
 
-    const studyLimited = enforceFlashcardStudyProtection(req, userId);
+    const studyLimited = await enforceFlashcardStudyProtection(req, userId);
     if (studyLimited) return studyLimited;
 
     const cardWhere: Prisma.FlashcardWhereInput = {

@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  const blocked = enforceProtectionTelemetryPost(req, gate.userId);
+  const blocked = await enforceProtectionTelemetryPost(req, gate.userId);
   if (blocked) return blocked;
 
   setSentryServerContext({ route: "/api/learner/protection-telemetry", feature: SERVER_FEATURE.other, userId: gate.userId });

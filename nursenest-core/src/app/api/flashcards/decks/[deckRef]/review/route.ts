@@ -57,7 +57,7 @@ export async function POST(req: NextRequest, { params }: Props) {
 
   setSentryServerContext({ route: "/api/flashcards/decks/[deckRef]/review", feature: SERVER_FEATURE.flashcard, userId });
 
-  const reviewLimited = enforceFlashcardReviewProtection(req, userId);
+  const reviewLimited = await enforceFlashcardReviewProtection(req, userId);
   if (reviewLimited) return reviewLimited;
 
   const parsed = bodySchema.safeParse(await req.json());

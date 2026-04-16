@@ -231,7 +231,7 @@ export async function GET(req: NextRequest) {
     if (!gate.ok) return gate.response;
     setSentryServerContext({ route: "/api/questions", feature: SERVER_FEATURE.question, userId: gate.userId });
 
-    const rateLimited = enforceQuestionsListProtection(req, gate.userId, pageSize);
+    const rateLimited = await enforceQuestionsListProtection(req, gate.userId, pageSize);
     if (rateLimited) return rateLimited;
 
     await seedMinimalQuestionBankIfEmpty();
@@ -551,7 +551,7 @@ export async function GET(req: NextRequest) {
   const take = Math.min(FREEMIUM_QUESTION_LIST_MAX_PER_REQUEST, snap.questionRemaining);
   const freemiumFields: QuestionListResponseMode = "preview";
 
-  const freemiumRateLimited = enforceQuestionsListProtection(req, userId, take);
+  const freemiumRateLimited = await enforceQuestionsListProtection(req, userId, take);
   if (freemiumRateLimited) return freemiumRateLimited;
 
   try {

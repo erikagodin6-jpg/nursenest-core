@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  const blocked = enforceLearnerNotesProtection(req, gate.userId);
+  const blocked = await enforceLearnerNotesProtection(req, gate.userId);
   if (blocked) return blocked;
 
   setSentryServerContext({ route: "/api/learner/notes/recent", feature: SERVER_FEATURE.other, userId: gate.userId });

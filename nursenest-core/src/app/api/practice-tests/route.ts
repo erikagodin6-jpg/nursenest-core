@@ -109,7 +109,7 @@ export async function GET(req: NextRequest) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  const rl = enforcePracticeTestsListProtection(req, gate.userId);
+  const rl = await enforcePracticeTestsListProtection(req, gate.userId);
   if (rl) return rl;
 
   setSentryServerContext({ route: "/api/practice-tests", feature: SERVER_FEATURE.practiceTest, userId: gate.userId });

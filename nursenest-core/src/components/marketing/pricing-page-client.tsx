@@ -588,7 +588,21 @@ export function PricingPageClient({
           </div>
         )}
 
-        {loadError ? <p className="text-center text-sm text-destructive">{loadError}</p> : null}
+        {loadError ? (
+          <div
+            className="mx-auto max-w-lg rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_06%,var(--semantic-surface))] px-4 py-3 text-center text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]"
+            role="status"
+          >
+            <p>{loadError}</p>
+            <button
+              type="button"
+              className="mt-2 text-sm font-semibold text-primary underline underline-offset-2 hover:opacity-90"
+              onClick={() => window.location.reload()}
+            >
+              Refresh page
+            </button>
+          </div>
+        ) : null}
 
         <Suspense fallback={null}>
           <CheckoutCancelledNotice />

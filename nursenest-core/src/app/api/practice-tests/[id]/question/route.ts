@@ -45,7 +45,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<unknown> }) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  const limited = enforcePracticeTestQuestionProtection(req, gate.userId);
+  const limited = await enforcePracticeTestQuestionProtection(req, gate.userId);
   if (limited) return limited;
 
   const parsedParams = parsePracticeTestRouteParams(await ctx.params);

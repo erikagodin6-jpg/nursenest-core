@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
   const requestedLanguage = req.nextUrl.searchParams.get("language")?.trim() || "en";
   const examContext = requestedPathwayId ? buildGlobalExamContext(requestedPathwayId, requestedLanguage) : null;
 
-  const blocked = enforceDiscoveryProtection(req, gate.userId);
+  const blocked = await enforceDiscoveryProtection(req, gate.userId);
   if (blocked) return blocked;
 
   setSentryServerContext({ route: "/api/questions/discovery", feature: SERVER_FEATURE.question, userId: gate.userId });

@@ -24,7 +24,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  const limited = enforcePracticeTestDetailProtection(req, gate.userId);
+  const limited = await enforcePracticeTestDetailProtection(req, gate.userId);
   if (limited) return limited;
 
   const { id } = await ctx.params;

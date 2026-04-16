@@ -12,27 +12,27 @@ import {
 } from "@/lib/auth/login-lockout";
 
 describe("login lockout", () => {
-  afterEach(() => {
-    clearLoginFailures("k-test-lockout");
+  afterEach(async () => {
+    await clearLoginFailures("k-test-lockout");
   });
 
-  it("locks after MAX_ATTEMPTS failures and clears after clearLoginFailures", () => {
+  it("locks after MAX_ATTEMPTS failures and clears after clearLoginFailures", async () => {
     const key = "k-test-lockout";
-    for (let i = 0; i < 4; i += 1) recordLoginFailure(key);
-    assert.equal(isLoginLocked(key).locked, false);
-    recordLoginFailure(key);
-    assert.equal(isLoginLocked(key).locked, true);
-    assert.ok(isLoginLocked(key).remainingMs > 0);
-    clearLoginFailures(key);
-    assert.equal(isLoginLocked(key).locked, false);
+    for (let i = 0; i < 4; i += 1) await recordLoginFailure(key);
+    assert.equal((await isLoginLocked(key)).locked, false);
+    await recordLoginFailure(key);
+    assert.equal((await isLoginLocked(key)).locked, true);
+    assert.ok((await isLoginLocked(key)).remainingMs > 0);
+    await clearLoginFailures(key);
+    assert.equal((await isLoginLocked(key)).locked, false);
   });
 
-  it("exposes CAPTCHA_THRESHOLD before full lockout", () => {
+  it("exposes CAPTCHA_THRESHOLD before full lockout", async () => {
     assert.equal(CAPTCHA_THRESHOLD, 3);
     const key = "k-test-lockout";
-    assert.equal(getFailureCount(key), 0);
-    recordLoginFailure(key);
-    recordLoginFailure(key);
-    assert.equal(getFailureCount(key), 2);
+    assert.equal(await getFailureCount(key), 0);
+    await recordLoginFailure(key);
+    await recordLoginFailure(key);
+    assert.equal(await getFailureCount(key), 2);
   });
 });

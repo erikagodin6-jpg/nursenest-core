@@ -60,7 +60,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   const gate = await practiceTestRouteDeps.requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  const limited = practiceTestRouteDeps.enforcePracticeTestDetailProtection(req, gate.userId);
+  const limited = await practiceTestRouteDeps.enforcePracticeTestDetailProtection(req, gate.userId);
   if (limited) return limited;
 
   const { id } = await ctx.params;
@@ -183,7 +183,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   const gate = await practiceTestRouteDeps.requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  const mutateLimited = practiceTestRouteDeps.enforcePracticeTestMutationProtection(req, gate.userId);
+  const mutateLimited = await practiceTestRouteDeps.enforcePracticeTestMutationProtection(req, gate.userId);
   if (mutateLimited) return mutateLimited;
 
   const { id } = await ctx.params;

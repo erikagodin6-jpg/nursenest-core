@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized", code: "unauthorized" }, { status: 401 });
   }
 
-  const rateLimited = enforceQuestionGradeProtection(req, userId);
+  const rateLimited = await enforceQuestionGradeProtection(req, userId);
   if (rateLimited) return rateLimited;
 
   let body: { questionId?: string; answer?: unknown };

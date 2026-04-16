@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  const rl = enforcePracticeTestsCatReadinessProtection(req, gate.userId);
+  const rl = await enforcePracticeTestsCatReadinessProtection(req, gate.userId);
   if (rl) return rl;
 
   setSentryServerContext({
