@@ -149,17 +149,17 @@ export async function enforceLessonsListProtection(
 }
 
 /** POST /api/questions/grade */
-export function enforceQuestionGradeProtection(req: NextRequest, userId: string): NextResponse | null {
+export async function enforceQuestionGradeProtection(req: NextRequest, userId: string): Promise<NextResponse | null> {
   const ip = getTrustedClientIp(req);
   const route = "questions_grade";
   checkDeviceMismatch(req, route, userId, ip);
 
-  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 90 }).ok) {
+  if (!(await checkRateLimitUnified(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 90 })).ok) {
     logAbuse("ip_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
-  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 180 }).ok) {
+  if (!(await checkRateLimitUnified(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 180 })).ok) {
     logAbuse("user_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
@@ -171,10 +171,10 @@ export function enforceQuestionGradeProtection(req: NextRequest, userId: string)
 export function enforceProtectionTelemetryPost(req: NextRequest, userId: string): NextResponse | null {
   const ip = getTrustedClientIp(req);
   const route = "protection_telemetry";
-  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 120 }).ok) {
+  if (!(await checkRateLimitUnified(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 120 })).ok) {
     return tooMany("rate_limited", 60);
   }
-  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 48 }).ok) {
+  if (!(await checkRateLimitUnified(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 48 })).ok) {
     return tooMany("rate_limited", 60);
   }
   return null;
@@ -186,12 +186,12 @@ export function enforceLearnerNotesProtection(req: NextRequest, userId: string):
   const route = "learner_notes";
   checkDeviceMismatch(req, route, userId, ip);
 
-  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 120 }).ok) {
+  if (!(await checkRateLimitUnified(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 120 })).ok) {
     logAbuse("ip_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
-  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 90 }).ok) {
+  if (!(await checkRateLimitUnified(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 90 })).ok) {
     logAbuse("user_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
@@ -205,12 +205,12 @@ export function enforcePracticeTestDetailProtection(req: NextRequest, userId: st
   const route = "practice_test_detail";
   checkDeviceMismatch(req, route, userId, ip);
 
-  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 90 }).ok) {
+  if (!(await checkRateLimitUnified(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 90 })).ok) {
     logAbuse("ip_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
-  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 120 }).ok) {
+  if (!(await checkRateLimitUnified(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 120 })).ok) {
     logAbuse("user_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
@@ -224,12 +224,12 @@ export function enforcePracticeTestQuestionProtection(req: NextRequest, userId: 
   const route = "practice_test_run_question";
   checkDeviceMismatch(req, route, userId, ip);
 
-  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 120 }).ok) {
+  if (!(await checkRateLimitUnified(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 120 })).ok) {
     logAbuse("ip_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
-  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 300 }).ok) {
+  if (!(await checkRateLimitUnified(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 300 })).ok) {
     logAbuse("user_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
@@ -243,12 +243,12 @@ export function enforcePracticeTestMutationProtection(req: NextRequest, userId: 
   const route = "practice_test_mutate";
   checkDeviceMismatch(req, route, userId, ip);
 
-  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 120 }).ok) {
+  if (!(await checkRateLimitUnified(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 120 })).ok) {
     logAbuse("ip_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
-  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 180 }).ok) {
+  if (!(await checkRateLimitUnified(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 180 })).ok) {
     logAbuse("user_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
@@ -262,12 +262,12 @@ export function enforceExamAttemptDetailProtection(req: NextRequest, userId: str
   const route = "exam_attempt_detail";
   checkDeviceMismatch(req, route, userId, ip);
 
-  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 90 }).ok) {
+  if (!(await checkRateLimitUnified(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 90 })).ok) {
     logAbuse("ip_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
-  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 120 }).ok) {
+  if (!(await checkRateLimitUnified(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 120 })).ok) {
     logAbuse("user_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
@@ -281,12 +281,12 @@ export function enforcePracticeTestsListProtection(req: NextRequest, userId: str
   const route = "practice_tests_list";
   checkDeviceMismatch(req, route, userId, ip);
 
-  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 180 }).ok) {
+  if (!(await checkRateLimitUnified(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 180 })).ok) {
     logAbuse("ip_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
-  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 90 }).ok) {
+  if (!(await checkRateLimitUnified(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 90 })).ok) {
     logAbuse("user_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
@@ -300,12 +300,12 @@ export function enforcePracticeTestsCatReadinessProtection(req: NextRequest, use
   const route = "practice_tests_cat_readiness";
   checkDeviceMismatch(req, route, userId, ip);
 
-  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 200 }).ok) {
+  if (!(await checkRateLimitUnified(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 200 })).ok) {
     logAbuse("ip_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
-  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 72 }).ok) {
+  if (!(await checkRateLimitUnified(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 72 })).ok) {
     logAbuse("user_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
@@ -319,12 +319,12 @@ export function enforceFlashcardStudyProtection(req: NextRequest, userId: string
   const route = "flashcard_study";
   checkDeviceMismatch(req, route, userId, ip);
 
-  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 120 }).ok) {
+  if (!(await checkRateLimitUnified(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 120 })).ok) {
     logAbuse("ip_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
-  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 90 }).ok) {
+  if (!(await checkRateLimitUnified(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 90 })).ok) {
     logAbuse("user_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
@@ -338,12 +338,12 @@ export function enforceFlashcardReviewProtection(req: NextRequest, userId: strin
   const route = "flashcard_review";
   checkDeviceMismatch(req, route, userId, ip);
 
-  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 180 }).ok) {
+  if (!(await checkRateLimitUnified(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 180 })).ok) {
     logAbuse("ip_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
-  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 240 }).ok) {
+  if (!(await checkRateLimitUnified(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 240 })).ok) {
     logAbuse("user_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
@@ -357,12 +357,12 @@ export function enforceExamStartProtection(req: NextRequest, userId: string): Ne
   const route = "exam_start";
   checkDeviceMismatch(req, route, userId, ip);
 
-  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 24 }).ok) {
+  if (!(await checkRateLimitUnified(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 24 })).ok) {
     logAbuse("ip_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
-  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 8 }).ok) {
+  if (!(await checkRateLimitUnified(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 8 })).ok) {
     logAbuse("user_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 120);
   }
