@@ -87,18 +87,28 @@ npm run qa:release-gate
 cd nursenest-core
 export BASE_URL="https://www.nursenest.ca"
 export PLAYWRIGHT_SKIP_WEB_SERVER=1
-npx playwright test tests/e2e/release/release-postdeploy-smoke.spec.ts --project=chromium
-# or:
 npm run qa:post-deploy-smoke
+# alias:
+npm run qa:postdeploy
 ```
 
 ### Local emergency smoke (fastest signal)
 
 ```bash
 cd nursenest-core
+npm run qa:smoke:emergency
+```
+
+Health-only (no Playwright paid setup):
+
+```bash
 npm run test:e2e:learner-shell-contract
 npx playwright test -c playwright.release-gate.config.ts --project=release-health
-# With paid creds:
+```
+
+With paid creds, fast sanity alone:
+
+```bash
 npm run test:e2e:paid-fast-sanity
 ```
 
@@ -107,9 +117,12 @@ npm run test:e2e:paid-fast-sanity
 | Script | Purpose |
 |--------|---------|
 | `npm run qa:release-gate` | Full release gate (contract + health + paid blockers) |
+| `npm run qa:predeploy` | Same as `qa:release-gate` |
 | `npm run qa:release-gate:health` | `/api/health` + `/api/health/ready` only |
 | `npm run qa:important-regression` | CI master paid bundle + public pre-deploy |
-| `npm run qa:post-deploy-smoke` | Post-deploy health + home |
+| `npm run qa:post-deploy-smoke` | Post-deploy health + home (`playwright.postdeploy.config.ts`) |
+| `npm run qa:postdeploy` | Same as `qa:post-deploy-smoke` |
+| `npm run qa:smoke:emergency` | Health APIs + paid fast sanity when creds exist (`playwright.emergency.config.ts`) |
 
 ---
 

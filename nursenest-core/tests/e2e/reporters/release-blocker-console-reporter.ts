@@ -4,8 +4,9 @@
 import type { FullResult, Reporter, TestCase, TestResult } from "@playwright/test/reporter";
 import { classifyReleaseDeployFailure } from "../helpers/release-deploy-classifier";
 
+/** Matches release-gate + post-deploy + emergency paid slice (see `playwright.release-gate.config.ts`). */
 const RELEASE_FILES =
-  /tests\/e2e\/(release\/.*\.spec\.ts|paid-user\/paid-user-00-fast-sanity\.spec\.ts|paid-user\/paid-user-api-health\.spec\.ts)$/;
+  /tests\/e2e\/(release\/.*\.spec\.ts|paid-user\/(paid-user-00-fast-sanity|paid-user-entitlements|paid-user-api-health|paid-user-cat-smoke)\.spec\.ts)$/;
 
 export default class ReleaseBlockerConsoleReporter implements Reporter {
   onTestEnd(test: TestCase, result: TestResult): void {

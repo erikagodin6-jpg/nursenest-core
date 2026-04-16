@@ -83,7 +83,11 @@ export default defineConfig({
   workers: 1,
   timeout: 300_000,
   expect: { timeout: 30_000 },
-  reporter: [["list"], ["./tests/e2e/reporters/paid-user-summary-reporter.ts"]],
+  reporter: [
+    ["list"],
+    ["./tests/e2e/reporters/release-blocker-console-reporter.ts"],
+    ["./tests/e2e/reporters/paid-user-summary-reporter.ts"],
+  ],
   use: {
     baseURL,
     trace: "on-first-retry",
