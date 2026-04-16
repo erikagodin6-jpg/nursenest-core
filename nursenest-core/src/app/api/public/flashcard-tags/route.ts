@@ -3,7 +3,6 @@ import { CACHE_HEADER_PUBLIC_LIST } from "@/lib/cache/public-edge-cache";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { publicMarketingFlashcardDeckWhere } from "@/lib/entitlements/content-access-scope";
-import { API_ROUTE_MAX_DURATION_DEFAULT_SEC } from "@/lib/server/api-route-constants";
 import { safeJsonReadRoute } from "@/lib/server/safe-api-route";
 
 /** Keep numeric literal — Next segment config must be statically analyzable (see `API_ROUTE_MAX_DURATION_DEFAULT_SEC`). */

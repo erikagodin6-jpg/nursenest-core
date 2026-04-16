@@ -92,20 +92,23 @@ export type CheckoutFailureReason =
   | "app_origin"
   | "session_failed";
 
-export function recordCheckoutFailure(reason: CheckoutFailureReason): void {
+export function recordCheckoutFailure(reason: CheckoutFailureReason, request?: Request): void {
   sentryCount("billing.checkout.failure", 1, { reason });
   emitMonitoringRecord({
     scope: "billing",
     event: "checkout_failure",
     severity: reason === "session_failed" || reason === "stripe_unavailable" ? "error" : "warn",
     meta: { reason },
+    correlationId: request ? correlationIdFromRequest(request) : undefined,
   });
   emitStructuredLog(
     "checkout_failed",
     reason === "session_failed" || reason === "stripe_unavailable" ? "error" : "warn",
     {
+      correlationId: request ? correlationIdFromRequest(request) : undefined,
       route: "/api/subscriptions/checkout",
       method: "POST",
+      flow: "billing",
       errorClass: reason,
       message: `checkout failed: ${reason}`,
     },
@@ -141,17 +144,25 @@ export function recordSlowDbQuery(durationMs: number, severity: "warn" | "critic
 }
 
 /** Stripe webhook handler or dedupe persistence failed after verified event (alert: HIGH). */
-export function recordStripeWebhookFailure(phase: "handler" | "dedupe", eventType: string): void {
+export function recordStripeWebhookFailure(
+  phase: "handler" | "dedupe",
+  eventType: string,
+  request?: Request,
+): void {
   sentryCount("billing.webhook.failure", 1, { phase });
+  const correlationId = request ? correlationIdFromRequest(request) : undefined;
   emitMonitoringRecord({
     scope: "billing",
     event: "stripe_webhook_failure",
     severity: "error",
+    correlationId,
     meta: { phase, eventType: eventType.slice(0, 80) },
   });
   emitStructuredLog("webhook_failed", "error", {
+    correlationId,
     route: "/api/subscriptions/webhook",
     method: "POST",
+    flow: "webhook",
     errorClass: phase,
     message: `stripe webhook ${phase} failed for ${eventType.slice(0, 60)}`,
   });

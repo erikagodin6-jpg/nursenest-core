@@ -50,7 +50,6 @@ import {
   topicEqualsSql,
 } from "@/lib/questions/exam-question-access-sql";
 import { getWeakTopicTargetsForPractice } from "@/lib/learner/topic-performance";
-import { API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC } from "@/lib/server/api-route-constants";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 
 /** Keep numeric literal — Next segment config must be statically analyzable (see `API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC`). */

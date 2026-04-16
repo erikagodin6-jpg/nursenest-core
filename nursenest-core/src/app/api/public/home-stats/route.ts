@@ -6,7 +6,6 @@ import {
 } from "@/lib/marketing/public-home-stats";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { API_ROUTE_MAX_DURATION_PUBLIC_MARKETING_SEC } from "@/lib/server/api-route-constants";
 import { safeJsonRoute } from "@/lib/server/safe-api-route";
 
 /** Keep numeric literal — Next segment config must be statically analyzable (see `API_ROUTE_MAX_DURATION_PUBLIC_MARKETING_SEC`). */

@@ -92,7 +92,7 @@ export async function POST(req: Request) {
   try {
     await applyStripeWebhookEvent(stripe, event, { correlation });
   } catch (e) {
-    recordStripeWebhookFailure("handler", event.type);
+    recordStripeWebhookFailure("handler", event.type, req);
     productEvent("stripe_webhook_failed", { eventType: event.type });
     safeServerLogCritical(
       "stripe_webhook",

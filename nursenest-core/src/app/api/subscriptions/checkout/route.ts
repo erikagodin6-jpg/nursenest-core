@@ -73,7 +73,7 @@ export async function POST(req: Request) {
     });
     if (!userId) {
       safeServerLog("stripe_checkout", "checkout_route_unauthorized", { route: "/api/subscriptions/checkout" });
-      recordCheckoutFailure("unauthorized");
+      recordCheckoutFailure("unauthorized", req);
       const msg = "Sign in required to start checkout.";
       return NextResponse.json(
         { code: CHECKOUT_UNAUTHORIZED_CODE, message: msg, error: msg },
@@ -86,7 +86,7 @@ export async function POST(req: Request) {
       select: { isDemoUser: true },
     });
     if (demoBlock?.isDemoUser) {
-      recordCheckoutFailure("demo_forbidden");
+      recordCheckoutFailure("demo_forbidden", req);
       const msg = "Demo accounts cannot use real billing. Use a full test account for checkout.";
       return NextResponse.json(
         { code: CHECKOUT_DEMO_USER_FORBIDDEN_CODE, message: msg, error: msg },
@@ -100,7 +100,7 @@ export async function POST(req: Request) {
     if (!bodyRead.ok) {
       const status = bodyRead.response.status;
       if (status === 413) {
-        recordCheckoutFailure("invalid_payload");
+        recordCheckoutFailure("invalid_payload", req);
         const msg = "Request too large. Refresh the page and try again.";
         return NextResponse.json(
           { code: CHECKOUT_INVALID_PAYLOAD_CODE, message: msg, error: msg },
@@ -109,7 +109,7 @@ export async function POST(req: Request) {
       }
       console.error("[stripe_checkout] invalid_json_payload", { status });
       safeServerLog("stripe_checkout", "checkout_invalid_json_payload", { route: "/api/subscriptions/checkout" });
-      recordCheckoutFailure("invalid_payload");
+      recordCheckoutFailure("invalid_payload", req);
       const msg = "Invalid checkout request. Refresh the page and try again.";
       return NextResponse.json(
         { code: CHECKOUT_INVALID_PAYLOAD_CODE, message: msg, error: msg },
@@ -123,7 +123,7 @@ export async function POST(req: Request) {
         route: "/api/subscriptions/checkout",
         issues: parsed.error.issues.map((issue) => issue.path.join(".")).join(","),
       });
-      recordCheckoutFailure("invalid_payload");
+      recordCheckoutFailure("invalid_payload", req);
       const msg = "Invalid checkout request. Refresh the page and try again.";
       return NextResponse.json(
         { code: CHECKOUT_INVALID_PAYLOAD_CODE, message: msg, error: msg },
@@ -139,7 +139,7 @@ export async function POST(req: Request) {
 
     if (tier === "ALLIED" && !alliedCareer) {
       safeServerLog("stripe_checkout", "checkout_missing_allied_career", { tier, duration });
-      recordCheckoutFailure("invalid_payload");
+      recordCheckoutFailure("invalid_payload", req);
       const msg = "Please select a specific career line for Allied Health.";
       return NextResponse.json(
         { code: CHECKOUT_INVALID_PAYLOAD_CODE, message: msg, error: msg },
@@ -152,7 +152,7 @@ export async function POST(req: Request) {
         policyVersion,
         expectedPolicyVersion: LEGAL_POLICY_BUNDLE_VERSION,
       });
-      recordCheckoutFailure("policy_mismatch");
+      recordCheckoutFailure("policy_mismatch", req);
       const msg = "Policy version outdated. Refresh the page and try again.";
       return NextResponse.json(
         { code: CHECKOUT_POLICY_VERSION_MISMATCH_CODE, message: msg, error: msg },
@@ -226,7 +226,7 @@ export async function POST(req: Request) {
       if (includeStripePriceEnvKeyInCheckoutResponse()) {
         payload.envKey = missingEnvKey;
       }
-      recordCheckoutFailure("price_not_configured");
+      recordCheckoutFailure("price_not_configured", req);
       return NextResponse.json(payload, { status: 400 });
     }
     safeServerLog("stripe_checkout", "checkout_price_selected", {
@@ -242,7 +242,7 @@ export async function POST(req: Request) {
     const stripe = await getStripeClient();
     if (!stripe) {
       safeServerLog("stripe_checkout", "stripe_client_unavailable", {});
-      recordCheckoutFailure("stripe_unavailable");
+      recordCheckoutFailure("stripe_unavailable", req);
       const msg = "Billing is temporarily unavailable. Try again shortly.";
       return NextResponse.json(
         { code: CHECKOUT_STRIPE_UNAVAILABLE_CODE, message: msg, error: msg },

@@ -21,7 +21,6 @@ import {
   parseListPage,
 } from "@/lib/api/api-pagination-limits";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC } from "@/lib/server/api-route-constants";
 
 /** Keep numeric literal — Next segment config must be statically analyzable (see `API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC`). */
 export const maxDuration = 60;
