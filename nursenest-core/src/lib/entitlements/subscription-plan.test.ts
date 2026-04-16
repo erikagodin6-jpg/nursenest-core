@@ -20,4 +20,13 @@ describe("effectiveTierCountryForAccess", () => {
     assert.equal(r.tier, TierCode.RPN);
     assert.equal(r.country, CountryCode.CA);
   });
+
+  it("entitlement aligns to purchased plan (user profile can differ — server uses plan snapshot)", () => {
+    const r = effectiveTierCountryForAccess(
+      { tier: TierCode.NP, country: CountryCode.US },
+      { planTier: TierCode.RN, planCountry: CountryCode.CA },
+    );
+    assert.equal(r.tier, TierCode.RN);
+    assert.equal(r.country, CountryCode.CA);
+  });
 });

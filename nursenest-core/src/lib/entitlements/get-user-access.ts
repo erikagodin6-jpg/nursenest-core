@@ -96,6 +96,8 @@ function emptyAccess(userId: string): UserAccess {
 /**
  * Resolves subscription-backed access for billing, gating, and upgrade flows.
  * Server-only; never trust client-sent tier/country over this for protected content.
+ *
+ * **Audit matrix** (Stripe ↔ DB ↔ premium ↔ content gates): `entitlement-state-matrix.ts`.
  */
 export async function getUserAccess(userId: string): Promise<UserAccess> {
   const t0 = performance.now();

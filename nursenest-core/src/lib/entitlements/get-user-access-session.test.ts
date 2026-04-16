@@ -73,3 +73,60 @@ test("subscriptionStatusForSession: active subscription is active", () => {
     "active",
   );
 });
+
+test("subscriptionStatusForSession: app trial maps to active (server used active_trial reason)", () => {
+  assert.equal(
+    subscriptionStatusForSession(
+      ua({
+        hasPremium: true,
+        reason: "active_trial",
+        plan: {
+          planCode: null,
+          duration: null,
+          status: "active",
+          expiresAt: new Date("2099-01-01"),
+          cancelAtPeriodEnd: false,
+        },
+      }),
+    ),
+    "active",
+  );
+});
+
+test("subscriptionStatusForSession: canceled / expired learner shows none (not past_due)", () => {
+  assert.equal(
+    subscriptionStatusForSession(
+      ua({
+        hasPremium: false,
+        reason: "no_access",
+        plan: {
+          planCode: null,
+          duration: null,
+          status: "canceled",
+          expiresAt: new Date("2020-01-01"),
+          cancelAtPeriodEnd: false,
+        },
+      }),
+    ),
+    "none",
+  );
+});
+
+test("subscriptionStatusForSession: cancel_at_period_end while still ACTIVE remains active", () => {
+  assert.equal(
+    subscriptionStatusForSession(
+      ua({
+        hasPremium: true,
+        reason: "active_subscription",
+        plan: {
+          planCode: null,
+          duration: null,
+          status: "active",
+          expiresAt: new Date("2099-06-01"),
+          cancelAtPeriodEnd: true,
+        },
+      }),
+    ),
+    "active",
+  );
+});

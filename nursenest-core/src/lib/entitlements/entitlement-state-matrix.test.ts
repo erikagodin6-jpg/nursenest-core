@@ -2,7 +2,11 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { SubscriptionStatus } from "@prisma/client";
 import { mapStripeSubscriptionStatus } from "@/lib/stripe/stripe-subscription-field-map";
-import { GET_USER_ACCESS_REASON_PREMIUM, STRIPE_STATUS_DB_MAPPING_NOTES } from "./entitlement-state-matrix";
+import {
+  DB_SUBSCRIPTION_TO_PREMIUM_MATRIX,
+  GET_USER_ACCESS_REASON_PREMIUM,
+  STRIPE_STATUS_DB_MAPPING_NOTES,
+} from "./entitlement-state-matrix";
 
 describe("entitlement-state-matrix vs mapStripeSubscriptionStatus", () => {
   it("matrix rows for concrete Stripe statuses match the mapper", () => {
@@ -39,5 +43,27 @@ describe("GET_USER_ACCESS_REASON_PREMIUM", () => {
     for (const r of ["active_subscription", "admin_override", "grace_period", "past_due_grace", "active_trial", "no_access"]) {
       assert.ok(reasons.has(r), `missing reason ${r}`);
     }
+  });
+});
+
+describe("DB_SUBSCRIPTION_TO_PREMIUM_MATRIX", () => {
+  it("documents ACTIVE and GRACE as premium", () => {
+    const active = DB_SUBSCRIPTION_TO_PREMIUM_MATRIX.find((r) => r.dbSubscriptionStatus === "ACTIVE");
+    assert.equal(active?.hasPremium, true);
+    const grace = DB_SUBSCRIPTION_TO_PREMIUM_MATRIX.find((r) => r.dbSubscriptionStatus === "GRACE");
+    assert.equal(grace?.hasPremium, true);
+  });
+
+  it("documents PAST_DUE premium only when policy grants", () => {
+    const rows = DB_SUBSCRIPTION_TO_PREMIUM_MATRIX.filter((r) => r.dbSubscriptionStatus === "PAST_DUE");
+    assert.equal(rows.length, 2);
+    assert.ok(rows.some((r) => r.pastDuePolicyGrants && r.hasPremium));
+    assert.ok(rows.some((r) => !r.pastDuePolicyGrants && !r.hasPremium));
+  });
+
+  it("documents CANCELLED + trial vs expired", () => {
+    const cancelled = DB_SUBSCRIPTION_TO_PREMIUM_MATRIX.filter((r) => r.dbSubscriptionStatus === "CANCELLED");
+    assert.ok(cancelled.some((r) => r.userTrialActiveInWindow && r.hasPremium));
+    assert.ok(cancelled.some((r) => !r.userTrialActiveInWindow && !r.hasPremium));
   });
 });
