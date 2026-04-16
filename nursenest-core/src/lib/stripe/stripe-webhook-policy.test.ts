@@ -31,17 +31,22 @@ describe("stripe webhook policy (static)", () => {
     assert.ok(!route.includes("constructEvent(body, signature"), "use shared verify helper");
   });
 
-  it("handler module covers checkout, subscription created/updated/deleted, invoice succeeded/failed", () => {
-    const src = readFileSync(join(nursenestCoreRoot, "src", "lib", "stripe", "apply-stripe-webhook-event.ts"), "utf8");
-    for (const t of [
-      "checkout.session.completed",
-      "customer.subscription.created",
-      "customer.subscription.updated",
-      "customer.subscription.deleted",
-      "invoice.payment_succeeded",
-      "invoice.payment_failed",
-    ]) {
-      assert.match(src, new RegExp(`"${t}"`), `missing ${t}`);
+  it("handler module covers allowlisted event types (keep in sync with stripe-webhook-event-policy)", () => {
+    const applySrc = readFileSync(join(nursenestCoreRoot, "src", "lib", "stripe", "apply-stripe-webhook-event.ts"), "utf8");
+    const policy = readFileSync(
+      join(nursenestCoreRoot, "src", "lib", "stripe", "stripe-webhook-event-policy.ts"),
+      "utf8",
+    );
+    const block = policy.slice(policy.indexOf("STRIPE_WEBHOOK_HANDLED_EVENT_TYPES"));
+    const end = block.indexOf("] as const");
+    const arr = block.slice(0, end > 0 ? end : 400);
+    const handled = [...arr.matchAll(/"([^"]+)"/g)]
+      .map((m) => m[1])
+      .filter((t) => t.includes(".") || t.includes("_"));
+    const unique = [...new Set(handled)];
+    assert.equal(unique.length, 6, `expected 6 handled types, got ${unique.join(",")}`);
+    for (const t of unique) {
+      assert.match(applySrc, new RegExp(`"${t}"`), `missing ${t}`);
     }
   });
 

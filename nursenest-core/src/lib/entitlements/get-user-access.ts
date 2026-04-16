@@ -119,6 +119,7 @@ export async function getUserAccess(userId: string): Promise<UserAccess> {
   } catch (e) {
     safeServerLog("entitlement", "get_user_access_error", {
       durationMs: Math.round(performance.now() - t0),
+      errorName: e instanceof Error ? e.name : typeof e,
     });
     throw e;
   }
