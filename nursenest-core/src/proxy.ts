@@ -11,7 +11,8 @@ import type { NextFetchEvent, NextMiddleware } from "next/server";
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { middlewareAuth } from "@/lib/auth-middleware";
-import { NN_CORRELATION_HEADER } from "@/lib/observability/request-correlation";
+import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
+import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { canonicalExamHubPathFromPossiblyLocalizedPath } from "@/lib/i18n/exam-hub-path";
 import { MARKETING_LOCALE_COOKIE, MARKETING_LOCALE_COOKIE_MAX_AGE } from "@/lib/i18n/marketing-locale-cookie";
 import { isRateLimitingEnabled } from "@/lib/config/production-safety-flags";
@@ -89,6 +90,15 @@ function mergeAuthContinueWithForwardedRequest(res: Response, forwarded: NextReq
 export async function proxy(request: NextRequest, event: NextFetchEvent) {
   const req = ensureIncomingCorrelationId(request);
   const pathname = req.nextUrl.pathname;
+
+  if (pathname.startsWith("/api")) {
+    const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim();
+    emitStructuredLog("request_start", "info", {
+      correlationId: cid,
+      route: pathname.slice(0, 200),
+      method: req.method,
+    });
+  }
 
   if (pathname.startsWith("/api/") && isRateLimitingEnabled()) {
     const limited = await enforceApiRateLimit(req);

@@ -28,7 +28,7 @@ export type PrenursingAlliedSuiteResultArtifact = {
   environmentHandlingStatus: "STABLE" | "NOT_STABLE";
   /** Full learner pathway tests passed with login + assertions (not skipped, not failed). */
   suiteExecutionStatus: "STABLE" | "NOT_STABLE";
-  /** STABLE only when environment preflight passed, login succeeded, and all required pathway rows passed. */
+  /** STABLE only when `environmentHandlingStatus` and `suiteExecutionStatus` are both STABLE (see `buildPrenursingAlliedSuiteResultArtifact`). */
   finalVerdict: "STABLE" | "NOT_STABLE";
   failureReason: string | null;
 
@@ -207,15 +207,18 @@ export function buildPrenursingAlliedSuiteResultArtifact(): PrenursingAlliedSuit
     if (credentialsResolvedComputed === false) {
       failureReason =
         "QA credentials were missing for one or more required rows (see rowCredentialsResolved map / per-test skip reasons). suiteExecutionStatus NOT_STABLE.";
-    } else if (!anyLoginSucceeded) {
-      failureReason =
-        "Login did not succeed for the suite (see login step attachments and [prenursing-allied:phase] errors). suiteExecutionStatus NOT_STABLE.";
     } else if (anyRequiredSkipped) {
       failureReason =
         "Required suite rows were skipped — configure QA credentials or satisfy test.skip conditions. suiteExecutionStatus NOT_STABLE.";
+    } else if (anyRequiredFailed && lastEnvCheck && !lastEnvCheck.suiteCanProceed && !loginAttempted) {
+      failureReason =
+        "Required rows failed at environment preflight (unreachable BASE_URL or /login not usable) — see lastEnvironmentCheck, prenursing-allied-environment-check.json, and ENV_* errors. suiteExecutionStatus NOT_STABLE.";
+    } else if (anyRequiredFailed && loginAttempted && !anyLoginSucceeded) {
+      failureReason =
+        "Login did not succeed after a reachable /login (see login step attachments and [prenursing-allied:phase] errors). suiteExecutionStatus NOT_STABLE.";
     } else if (anyRequiredFailed) {
       failureReason =
-        "One or more required pathway rows failed after a reachable /login (see rowsFailed and per-test attachments). suiteExecutionStatus NOT_STABLE.";
+        "One or more required pathway rows failed after environment preflight (see rowsFailed and per-test attachments). suiteExecutionStatus NOT_STABLE.";
     } else {
       failureReason = "Required pathway rows did not all pass. suiteExecutionStatus NOT_STABLE.";
     }

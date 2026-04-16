@@ -13,8 +13,21 @@ import { JSON_BODY_SIGNUP, parseJsonBodyWithLimit } from "@/lib/http/json-body-l
 import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { productEvent } from "@/lib/observability/product-events";
+import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+
+function signupStructuredFailed(req: Request, errorClass: string, severity: "warn" | "error" = "warn"): void {
+  emitStructuredLog("signup_failed", severity, {
+    correlationId: correlationIdFromRequest(req),
+    route: "/api/signup",
+    method: "POST",
+    flow: "auth",
+    errorClass,
+    message: `signup failed: ${errorClass}`,
+  });
+}
 
 function clientIp(req: Request): string {
   return (
@@ -50,6 +63,7 @@ export async function POST(req: Request) {
   const ip = clientIp(req);
   const rl = await checkRateLimitUnified(`signup:${ip}`, { windowMs: 60_000, max: 10 });
   if (!rl.ok) {
+    signupStructuredFailed(req, "rate_limited");
     productEvent("signup_rate_limited", {});
     Sentry.captureMessage("signup_rate_limited", {
       level: "warning",
@@ -60,12 +74,14 @@ export async function POST(req: Request) {
 
   const bodyRead = await parseJsonBodyWithLimit(req, JSON_BODY_SIGNUP);
   if (!bodyRead.ok) {
+    signupStructuredFailed(req, "invalid_json");
     safeServerLog("signup", "invalid_json_body", {});
     return bodyRead.response;
   }
 
   const parsed = schema.safeParse(bodyRead.value);
   if (!parsed.success) {
+    signupStructuredFailed(req, "validation");
     safeServerLog("signup", "validation_failed", {
       issueCount: parsed.error.issues.length,
       codes: parsed.error.issues
@@ -83,6 +99,7 @@ export async function POST(req: Request) {
 
   const signupEmail = parsed.data.email.toLowerCase();
   if (signupEmail.endsWith(`@${DEMO_USER_EMAIL_DOMAIN}`)) {
+    signupStructuredFailed(req, "reserved_email");
     return NextResponse.json(
       { error: "This email domain is reserved for internal demo accounts.", code: "reserved_email" },
       { status: 400 },
@@ -91,6 +108,7 @@ export async function POST(req: Request) {
 
   const usernameCheck = validateUsernameForSignup(parsed.data.username);
   if (!usernameCheck.ok) {
+    signupStructuredFailed(req, "invalid_username");
     const msg =
       usernameCheck.reason === "empty"
         ? "Enter a username."
@@ -108,6 +126,7 @@ export async function POST(req: Request) {
   if (isTurnstileEnforced()) {
     const ok = await verifyTurnstileToken(parsed.data.captchaToken);
     if (!ok) {
+      signupStructuredFailed(req, "captcha");
       productEvent("signup_captcha_failed", {});
       return NextResponse.json(
         { error: "Captcha verification failed. Refresh and try again.", code: "captcha" },
@@ -123,6 +142,7 @@ export async function POST(req: Request) {
       select: { id: true },
     });
   } catch (e) {
+    signupStructuredFailed(req, "email_lookup_db", "error");
     safeServerLogCritical("signup", "email_lookup_failed", { surface: "api" }, e, { flow: "signup" });
     return NextResponse.json({ error: "Unable to sign up. Try again shortly.", code: "db" }, { status: 503 });
   }
@@ -137,6 +157,7 @@ export async function POST(req: Request) {
       select: { id: true },
     });
   } catch (e) {
+    signupStructuredFailed(req, "username_lookup_db", "error");
     safeServerLogCritical("signup", "username_lookup_failed", { surface: "api" }, e, { flow: "signup" });
     return NextResponse.json({ error: "Unable to sign up. Try again shortly.", code: "db" }, { status: 503 });
   }
@@ -174,6 +195,7 @@ export async function POST(req: Request) {
     });
     createdId = created.id;
   } catch (e) {
+    signupStructuredFailed(req, "user_create_failed", "error");
     const prismaCode = e instanceof Prisma.PrismaClientKnownRequestError ? e.code : undefined;
     const prismaMeta = e instanceof Prisma.PrismaClientKnownRequestError ? e.meta : undefined;
     safeServerLogCritical(

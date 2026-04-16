@@ -13,7 +13,7 @@
  *
  * Run: `npm run qa:pathways:prenursing-allied` (from `nursenest-core/`).
  */
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
 import { attachPageObservers, type PageObservers } from "../helpers/attach-observers";
 import { ALLIED_LEARNER_PROFESSION_KEYS } from "../helpers/allied-profession-keys";
 import { loginWithCredentials } from "../helpers/learner-login";
@@ -51,12 +51,59 @@ import {
   attachSlowRequestTap,
   buildCaptureFromObservers,
 } from "../helpers/smoke-evidence";
+import {
+  buildPrenursingAlliedSuiteResultArtifact,
+  recordLastEnvironmentCheck,
+  recordLoginAttempted,
+  recordLoginSucceeded,
+  recordPreflightAttachmentHardFailure,
+  recordRowCredentialsResolved,
+  recordRowOutcome,
+  resetSuiteLedgerForTestFile,
+  type RowKey,
+} from "../helpers/prenursing-allied-suite-ledger";
 
 test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe.configure({ timeout: 900_000 });
 
-test("suite: coverage manifest (documentation only)", async ({}, testInfo) => {
+test.beforeAll(() => {
+  resetSuiteLedgerForTestFile();
+});
+
+test.afterEach(({}, testInfo) => {
+  const m = /\[prenursing-allied-row:([^\]]+)\]/.exec(testInfo.title);
+  if (!m) return;
+  const key = m[1] as RowKey;
+  const st = testInfo.status;
+  if (st === "passed") recordRowOutcome(key, "passed");
+  else if (st === "skipped") recordRowOutcome(key, "skipped");
+  else recordRowOutcome(key, "failed");
+});
+
+async function runPreflightSuiteGate(
+  request: APIRequestContext,
+  baseURL: string | undefined,
+  credentialPrefixes: string[],
+  testInfo: import("@playwright/test").TestInfo,
+): Promise<PrenursingAlliedEnvironmentCheck> {
+  const envCheck = await runEnvironmentPreflight({
+    request,
+    baseURL,
+    credentialPrefixes,
+  });
+  try {
+    await attachPrenursingAlliedEnvironmentCheck(testInfo, envCheck);
+  } catch (e) {
+    recordPreflightAttachmentHardFailure();
+    throw e;
+  }
+  recordLastEnvironmentCheck(envCheck);
+  assertEnvironmentAllowsSuite(envCheck);
+  return envCheck;
+}
+
+test("suite: coverage manifest (documentation only) [prenursing-allied-row:manifest-doc]", async ({}, testInfo) => {
   await testInfo.attach("prenursing-allied-coverage-manifest.json", {
     body: Buffer.from(JSON.stringify(PRENURSING_ALLIED_COVERAGE_MANIFEST, null, 2), "utf-8"),
     contentType: "application/json",
@@ -137,18 +184,13 @@ async function attachPrenursingAlliedFailure(
 }
 
 for (const row of PRENURSING_ALLIED_PATHWAY_MATRIX) {
-  test(`${row.label}`, async ({ page, baseURL, request }, testInfo) => {
+  test(`${row.label} [prenursing-allied-row:${row.key}]`, async ({ page, baseURL, request }, testInfo) => {
     const creds = resolvePrenursingAlliedCredentials(row.credentialPrefixes);
+    recordRowCredentialsResolved(row.key, !!creds);
     const hint = row.credentialPrefixes.map((p) => `${p}_EMAIL + ${p}_PASSWORD`).join(", ");
     test.skip(!creds, `Set ${hint}, or generic QA_PAID_EMAIL + QA_PAID_PASSWORD (session tier/country/profession must match the row).`);
 
-    const envCheck = await runEnvironmentPreflight({
-      request,
-      baseURL,
-      credentialPrefixes: row.credentialPrefixes,
-    });
-    await attachPrenursingAlliedEnvironmentCheck(testInfo, envCheck);
-    assertEnvironmentAllowsSuite(envCheck);
+    const envCheck = await runPreflightSuiteGate(request, baseURL, row.credentialPrefixes, testInfo);
 
     const slowMs: { url: string; ms: number }[] = [];
     const disposeSlow = attachSlowRequestTap(page, baseOriginFrom(page, baseURL), slowMs, 3000);
@@ -158,8 +200,10 @@ for (const row of PRENURSING_ALLIED_PATHWAY_MATRIX) {
 
     try {
       await test.step("Login", async () => {
+        recordLoginAttempted();
         try {
           await loginWithCredentials(page, creds!.email, creds!.password);
+          recordLoginSucceeded();
           await expectOnPaidSubscriberApp(page);
           expect(page.url()).not.toMatch(/\/login/i);
         } catch (e) {
@@ -305,18 +349,17 @@ for (const row of PRENURSING_ALLIED_PATHWAY_MATRIX) {
 }
 
 test.describe("Secondary: allied profession marketing lesson hubs", () => {
-  test("each registry professionKey resolves a lesson index (signed-in)", async ({ page, baseURL, request }, testInfo) => {
+  test("each registry professionKey resolves a lesson index (signed-in) [prenursing-allied-row:marketing-hubs]", async ({
+    page,
+    baseURL,
+    request,
+  }, testInfo) => {
     const creds = resolvePrenursingAlliedCredentials(["QA_ALLIED_US", "QA_ALLIED", "QA_PAID_ALLIED", "QA_PAID"]);
+    recordRowCredentialsResolved("marketing-hubs", !!creds);
     test.skip(!creds, "Set QA_ALLIED_US_EMAIL + QA_ALLIED_US_PASSWORD (or QA_ALLIED_* / QA_PAID_* with US allied entitlements).");
 
     const prefixes = ["QA_ALLIED_US", "QA_ALLIED", "QA_PAID_ALLIED", "QA_PAID"];
-    const envCheck = await runEnvironmentPreflight({
-      request,
-      baseURL,
-      credentialPrefixes: prefixes,
-    });
-    await attachPrenursingAlliedEnvironmentCheck(testInfo, envCheck);
-    assertEnvironmentAllowsSuite(envCheck);
+    const envCheck = await runPreflightSuiteGate(request, baseURL, prefixes, testInfo);
 
     const slowMs: { url: string; ms: number }[] = [];
     const disposeSlow = attachSlowRequestTap(page, baseOriginFrom(page, baseURL), slowMs, 3000);
@@ -324,7 +367,9 @@ test.describe("Secondary: allied profession marketing lesson hubs", () => {
 
     try {
       try {
+        recordLoginAttempted();
         await loginWithCredentials(page, creds!.email, creds!.password);
+        recordLoginSucceeded();
         await expectOnPaidSubscriberApp(page);
       } catch (e) {
         const m = e instanceof Error ? e.message : String(e);
@@ -417,5 +462,13 @@ test.describe("Secondary: allied profession marketing lesson hubs", () => {
       disposeSlow();
       observers.dispose();
     }
+  });
+});
+
+test("suite: execution summary [prenursing-allied-row:summary]", async ({}, testInfo) => {
+  const artifact = buildPrenursingAlliedSuiteResultArtifact();
+  await testInfo.attach("prenursing-allied-suite-result.json", {
+    body: Buffer.from(JSON.stringify(artifact, null, 2), "utf-8"),
+    contentType: "application/json",
   });
 });

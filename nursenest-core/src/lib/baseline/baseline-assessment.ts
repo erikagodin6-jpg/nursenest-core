@@ -6,9 +6,9 @@ import {
   excludeQuestionIdsSql,
   profileTierExamQuestionWhereSql,
 } from "@/lib/questions/exam-question-access-sql";
+import { BASELINE_QUESTION_COUNT } from "@/lib/baseline/baseline-assessment-constants";
 
-/** Short baseline set (spec: 5–15). */
-export const BASELINE_QUESTION_COUNT = 10;
+export { BASELINE_QUESTION_COUNT } from "@/lib/baseline/baseline-assessment-constants";
 
 function shuffleInPlace<T>(arr: T[]): T[] {
   for (let i = arr.length - 1; i > 0; i--) {

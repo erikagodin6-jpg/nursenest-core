@@ -10,8 +10,9 @@ region: tor
 services:
   - name: web
     environment_slug: node-js
-    # CPU-only autoscaling (App Platform). No custom metrics — unexpected scale-ups come only from CPU.
-    # min=2: never a single instance; max=3: hard cost cap (do not raise without budget review).
+    # CPU-only autoscaling (App Platform). No memory/RPS/custom metrics — scale-ups follow CPU only.
+    # min=2: never a single instance; max=3: HARD CAP — do not raise without budget review.
+    # Scale-down uses platform defaults (gradual; health_check failure_threshold avoids flapping).
     autoscaling:
       min_instance_count: 2
       max_instance_count: 3

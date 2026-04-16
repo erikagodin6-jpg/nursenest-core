@@ -7,6 +7,8 @@ import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/pos
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { recordCheckoutFailure } from "@/lib/observability/production-signal-metrics";
+import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { publicAppOriginForBilling } from "@/lib/env/public-app-origin";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
@@ -55,6 +57,12 @@ function sessionUserId(session: { user?: unknown } | null): string | undefined {
 export async function POST(req: Request) {
   return runWithApiTelemetry(req, "POST /api/subscriptions/checkout", "billing", async () => {
   try {
+    emitStructuredLog("checkout_started", "info", {
+      correlationId: correlationIdFromRequest(req),
+      route: "/api/subscriptions/checkout",
+      method: "POST",
+      flow: "billing",
+    });
     safeServerLog("stripe_checkout", "checkout_route_entered", { route: "/api/subscriptions/checkout" });
 
     const session = await auth();

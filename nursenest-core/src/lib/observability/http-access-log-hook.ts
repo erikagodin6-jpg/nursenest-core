@@ -1,6 +1,11 @@
 /**
- * Optional Node HTTP `request`/`finish` logging for structured ops metrics (DigitalOcean log drains).
+ * Node HTTP `request`/`finish` logging for horizontal scaling / log drains (DigitalOcean, Axiom, etc.).
  * Enable with `ACCESS_LOG_STRUCTURED=true` (default on in production unless `ACCESS_LOG_STRUCTURED=false`).
+ *
+ * Emits one line per request (excluding static asset paths) with:
+ * `responseTimeMs`, `statusCode`, `route`, CPU delta (`cpuUsageUserUs` / `cpuUsageSystemUs`),
+ * `memoryUsageHeapMb`, `memoryUsageRssMb`. Slow threshold: **> 1000ms** → `slow_request`.
+ * 5xx responses also emit `request_error_response` for alert routing (no bodies / PII).
  */
 import http from "node:http";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -13,6 +18,16 @@ function shouldEmitAccessLog(): boolean {
   return process.env.NODE_ENV === "production";
 }
 
+/** Skip high-volume static chunks so logs stay actionable under load tests. */
+function shouldSkipPathForAccessLog(rawUrl: string): boolean {
+  const pathOnly = rawUrl.split("?")[0] ?? "";
+  if (pathOnly.startsWith("/_next/static/") || pathOnly.startsWith("/_next/image")) return true;
+  if (pathOnly === "/favicon.ico" || pathOnly === "/robots.txt") return true;
+  const leaf = pathOnly.split("/").pop() ?? "";
+  if (/\.(ico|png|jpe?g|gif|webp|svg|woff2?|ttf|eot|map|css|js)$/i.test(leaf)) return true;
+  return false;
+}
+
 export function installHttpAccessLogHook(): void {
   if (installed || !shouldEmitAccessLog()) return;
   installed = true;
@@ -23,7 +38,7 @@ export function installHttpAccessLogHook(): void {
       const req = args[0] as http.IncomingMessage;
       const res = args[1] as http.ServerResponse;
       const rawUrl = req.url ?? "";
-      if (rawUrl.startsWith("/api/") || rawUrl === "/healthz" || rawUrl.startsWith("/healthz?")) {
+      if (!shouldSkipPathForAccessLog(rawUrl)) {
         const started = Date.now();
         const cpu0 = process.cpuUsage();
         res.on("finish", () => {
@@ -32,21 +47,40 @@ export function installHttpAccessLogHook(): void {
             const route = rawUrl.split("?")[0]?.slice(0, 160) ?? "";
             const mem = process.memoryUsage();
             const cpu = process.cpuUsage(cpu0);
-            safeServerLog("http", "request_complete", {
+            const memoryUsageHeapMb = Math.round(mem.heapUsed / 1024 / 1024);
+            const memoryUsageRssMb = Math.round(mem.rss / 1024 / 1024);
+            const statusCode = res.statusCode ?? 0;
+            const baseMeta = {
+              schema: "nn.http_access.v1",
               route,
               method: req.method ?? "GET",
-              statusCode: res.statusCode ?? 0,
+              statusCode,
               responseTimeMs,
+              cpuUsageUserUs: cpu.user,
+              cpuUsageSystemUs: cpu.system,
+              memoryUsageHeapMb,
+              memoryUsageRssMb,
+            };
+            safeServerLog("http", "request_complete", {
+              ...baseMeta,
               cpuUserUs: cpu.user,
               cpuSystemUs: cpu.system,
-              heapUsedMb: Math.round(mem.heapUsed / 1024 / 1024),
-              rssMb: Math.round(mem.rss / 1024 / 1024),
+              heapUsedMb: memoryUsageHeapMb,
+              rssMb: memoryUsageRssMb,
             });
             if (responseTimeMs > 1000) {
               safeServerLog("http", "slow_request", {
+                ...baseMeta,
+                thresholdMs: 1000,
+              });
+            }
+            if (statusCode >= 500) {
+              safeServerLog("http", "request_error_response", {
+                schema: "nn.http_access.v1",
                 route,
+                method: req.method ?? "GET",
+                statusCode,
                 responseTimeMs,
-                statusCode: res.statusCode ?? 0,
               });
             }
           } catch {

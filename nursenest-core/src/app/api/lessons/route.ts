@@ -27,6 +27,9 @@ import {
   parseBoundedPageSize,
   parseListPage,
 } from "@/lib/api/api-pagination-limits";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
+import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { jsonResponseGuarded } from "@/lib/server/response-guard";
 import { API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC } from "@/lib/server/api-route-constants";
@@ -41,6 +44,7 @@ function wantsCursorMode(req: NextRequest): boolean {
 }
 
 export async function GET(req: NextRequest) {
+  return runWithApiTelemetry(req, "GET /api/lessons", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) {
@@ -224,6 +228,15 @@ export async function GET(req: NextRequest) {
       logLargeApiResponse("/api/lessons", estimateJsonUtf8Bytes(subscriberBody));
       return jsonResponseGuarded("/api/lessons", subscriberBody);
     } catch (e) {
+      emitStructuredLog("lesson_load_failed", "error", {
+        correlationId: correlationIdFromRequest(req),
+        route: "/api/lessons",
+        method: "GET",
+        flow: "content",
+        httpStatus: 503,
+        errorClass: e instanceof Error ? e.name : "unknown",
+        message: "subscriber lesson list failure",
+      });
       safeServerLogCritical("api_lessons", "prisma_find_failed", { page }, e);
       return NextResponse.json({ error: "Unable to load lessons. Try again shortly." }, { status: 503 });
     }
@@ -243,6 +256,15 @@ export async function GET(req: NextRequest) {
       select: { country: true, tier: true, freeLessonOpens: true },
     });
   } catch (e) {
+    emitStructuredLog("lesson_load_failed", "error", {
+      correlationId: correlationIdFromRequest(req),
+      route: "/api/lessons",
+      method: "GET",
+      flow: "content",
+      httpStatus: 503,
+      errorClass: e instanceof Error ? e.name : "unknown",
+      message: "freemium user lookup failure",
+    });
     safeServerLogCritical("api_lessons", "user_lookup_failed_freemium", { userId: userId.slice(0, 8) }, e);
     return NextResponse.json({ error: "Unable to load profile. Try again shortly." }, { status: 503 });
   }
@@ -308,7 +330,17 @@ export async function GET(req: NextRequest) {
     logLargeApiResponse("/api/lessons", estimateJsonUtf8Bytes(freemiumBody));
     return jsonResponseGuarded("/api/lessons", freemiumBody);
   } catch (e) {
+    emitStructuredLog("lesson_load_failed", "error", {
+      correlationId: correlationIdFromRequest(req),
+      route: "/api/lessons",
+      method: "GET",
+      flow: "content",
+      httpStatus: 503,
+      errorClass: e instanceof Error ? e.name : "unknown",
+      message: "lesson list prisma failure",
+    });
     safeServerLogCritical("api_lessons", "prisma_find_failed_freemium", { page }, e);
     return NextResponse.json({ error: "Unable to load lessons. Try again shortly." }, { status: 503 });
   }
+  });
 }

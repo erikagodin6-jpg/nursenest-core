@@ -7,6 +7,7 @@ import type { Page, Response } from "@playwright/test";
 import { parseCredentialsCallbackPayload } from "./auth-credentials-login";
 import { describeAuthFailureSurface } from "./auth-diagnostics";
 import { isLearnerShell, PLAYWRIGHT_AUTH_NAV_TIMEOUT_MS } from "./learner-shell";
+import { resolveRnFullContentBaseUrl } from "./rn-full-content-environment";
 
 export {
   currentPathname,
@@ -31,7 +32,8 @@ function isCredentialsPostResponse(res: Response): boolean {
  * `error=` in `url` (often `CredentialsSignin`) — we parse that to avoid a long wait on `/login`.
  */
 export async function loginWithCredentials(page: Page, email: string, password: string): Promise<void> {
-  const baseURL = process.env.BASE_URL ?? "http://localhost:3000";
+  /** Align with Playwright `use.baseURL` / `resolveRnFullContentBaseUrl` — avoid localhost vs 127.0.0.1 drift in errors. */
+  const baseURL = resolveRnFullContentBaseUrl(process.env.BASE_URL);
 
   await page.goto("/login", { waitUntil: "domcontentloaded" });
   await page.locator("#login-identifier").waitFor({ state: "visible", timeout: 25_000 });

@@ -29,6 +29,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { readMarketingRegionFromDocument } from "@/lib/observability/learner-analytics-context.client";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { emitClientStructuredLog } from "@/lib/observability/structured-client-log";
 import { QuestionChoiceLetter } from "@/components/student/question-choice-letter";
 import { QuestionSessionStudyLoopPanel } from "@/components/student/question-session-study-loop-panel";
 import { ExamProgressBar, ExamSessionShell, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
@@ -398,6 +399,14 @@ export function QuestionBankPracticeClient({
           /* non-JSON body */
         }
         if (!res.ok) {
+          emitClientStructuredLog("question_load_failed", {
+            route: "/api/questions",
+            method: "GET",
+            httpStatus: res.status,
+            errorClass: typeof data.code === "string" ? data.code : `http_${res.status}`,
+            message: "question list request not ok",
+            locale: pathname?.split("/").filter(Boolean)[0]?.slice(0, 12),
+          });
           setPhase("error");
           setEmptyCopy(null);
           setError(t(questionsApiFailureKey(res.status, data.code)));
@@ -483,6 +492,13 @@ export function QuestionBankPracticeClient({
 
         setPhase("ready");
       } catch {
+        emitClientStructuredLog("question_load_failed", {
+          route: "/api/questions",
+          method: "GET",
+          errorClass: "network",
+          message: "question list fetch threw",
+          locale: pathname?.split("/").filter(Boolean)[0]?.slice(0, 12),
+        });
         setPhase("error");
         setEmptyCopy(null);
         setError(t("learner.qbank.networkError"));
@@ -505,6 +521,7 @@ export function QuestionBankPracticeClient({
       includeIdsFromUrl,
       examShell,
       selectedExamContext,
+      pathname,
       t,
     ],
   );
@@ -589,6 +606,14 @@ export function QuestionBankPracticeClient({
           } catch {
             /* ignore */
           }
+          emitClientStructuredLog("question_load_failed", {
+            route: "/api/questions/discovery",
+            method: "GET",
+            httpStatus: res.status,
+            errorClass: typeof code === "string" ? code : `http_${res.status}`,
+            message: "discovery request not ok",
+            locale: pathname?.split("/").filter(Boolean)[0]?.slice(0, 12),
+          });
           if (!cancelled) {
             setTopicMenuTruncationNotice(null);
             setDiscoveryNotice(t(discoveryFailureKey(res.status, code)));
@@ -608,13 +633,19 @@ export function QuestionBankPracticeClient({
           setTopicMenuTruncationNotice(null);
         }
       } catch {
-        /* optional */
+        emitClientStructuredLog("question_load_failed", {
+          route: "/api/questions/discovery",
+          method: "GET",
+          errorClass: "network",
+          message: "discovery fetch threw",
+          locale: pathname?.split("/").filter(Boolean)[0]?.slice(0, 12),
+        });
       }
     })();
     return () => {
       cancelled = true;
     };
-  }, [selectedExamContext, t]);
+  }, [selectedExamContext, pathname, t]);
 
   useEffect(() => {
     if (!pathwayMixedReady) return;
@@ -1727,6 +1758,14 @@ export function QuestionBankPracticeClient({
           contextId={current.id}
           topic={current.topic}
           sourceLabel={`Question ${current.id.slice(0, 8)}…${current.topic ? ` · ${current.topic}` : ""}`}
+          userLabel={userLabel}
+          flags={protectionFlags}
+        />
+      </div>
+    </div>
+  );
+}
+`}
           userLabel={userLabel}
           flags={protectionFlags}
         />

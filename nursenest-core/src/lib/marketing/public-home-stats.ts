@@ -11,6 +11,7 @@ import {
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
+import { recordPaywallProofNeutral } from "@/lib/observability/production-signal-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { safePrismaCount, withPrismaReadFallback } from "@/lib/prisma/safe-reads";
 
@@ -44,6 +45,7 @@ export function getDegradedPublicHomeStatsFallback(
 ): PublicHomeStatsPayload {
   if (!opts?.silent) {
     safeServerLog("marketing", "public_home_stats_degraded", { reason: reason.slice(0, 120) });
+    recordPaywallProofNeutral("fallback");
   }
   return {
     totalLessons: 0,
@@ -214,6 +216,9 @@ async function computePublicHomeStats(t0: number): Promise<PublicHomeStatsPayloa
   const hasNumericProof =
     questionsR.value > 0 || totalLessons > 0 || learnersR.value > 0;
   const proofDisplay: "neutral" | undefined = degraded && !hasNumericProof ? "neutral" : undefined;
+  if (proofDisplay === "neutral") {
+    recordPaywallProofNeutral("partial_stats");
+  }
 
   return {
     totalLessons,

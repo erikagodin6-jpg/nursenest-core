@@ -4,8 +4,14 @@
  * Implements {@link RateLimitStore} for multi-instance consistency via `AppRateLimitBucket`.
  */
 import { createHash } from "node:crypto";
-import { prisma } from "@/lib/db";
+import type { PrismaClient } from "@prisma/client";
 import type { RateLimitCheckResult, RateLimitStore, RateLimitWindowOpts } from "@/lib/http/rate-limit-store";
+
+/** Dynamic import keeps Prisma (and this module) out of Edge/middleware static graphs. */
+async function getPrisma(): Promise<PrismaClient> {
+  const { prisma } = await import("@/lib/db");
+  return prisma;
+}
 
 function hashKey(key: string): string {
   return createHash("sha256").update(key, "utf8").digest("hex");
@@ -54,6 +60,7 @@ export function createPostgresRateLimitStore(): RateLimitStore {
       if (cost <= 0) {
         return { ok: true, remaining: opts.max };
       }
+      const prisma = await getPrisma();
       const id = hashKey(key);
       return prisma.$transaction(
         async (tx) => {

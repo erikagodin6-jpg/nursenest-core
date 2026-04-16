@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { FREEMIUM_LESSON_LIST_PAGE_SIZE } from "@/lib/conversion/constants";
+import { emitClientStructuredLog } from "@/lib/observability/structured-client-log";
 
 type Row = { id: string; title: string; summary: string; slug: string };
 
@@ -18,6 +19,13 @@ export function FreemiumLessonPeek() {
         const res = await fetch(`/api/lessons?pageSize=${FREEMIUM_LESSON_LIST_PAGE_SIZE}`, { signal: ac.signal });
         const data = await res.json();
         if (!res.ok) {
+          emitClientStructuredLog("lesson_load_failed", {
+            route: "/api/lessons",
+            method: "GET",
+            httpStatus: res.status,
+            errorClass: typeof data.code === "string" ? data.code : `http_${res.status}`,
+            message: "freemium lesson preview not ok",
+          });
           if (!cancelled) setError(data.message ?? "Preview unavailable.");
           return;
         }
@@ -26,6 +34,12 @@ export function FreemiumLessonPeek() {
           setRemaining(typeof data.freemiumRemainingAfterBatch === "number" ? data.freemiumRemainingAfterBatch : null);
         }
       } catch {
+        emitClientStructuredLog("lesson_load_failed", {
+          route: "/api/lessons",
+          method: "GET",
+          errorClass: "network",
+          message: "freemium lesson preview fetch threw",
+        });
         if (!cancelled) setError("Could not load preview.");
       }
     })();

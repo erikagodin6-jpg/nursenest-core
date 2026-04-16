@@ -38,10 +38,12 @@ import {
 import { dismissFlashcardResumeIfPresent } from "../helpers/paid-user-suite";
 import {
   buildEnvironmentCheckArtifact,
+  isRnFullContentPlaywrightWebServerExpected,
   loginUrlForBase,
   probeRnFullContentReachability,
   resolveRnFullContentBaseUrl,
 } from "../helpers/rn-full-content-environment";
+import { buildRnFullContentBlockingReport } from "../helpers/rn-full-content-blocking-report";
 
 test.use({ storageState: { cookies: [], origins: [] } });
 
@@ -49,7 +51,8 @@ const MAIN_MIN_CHARS = 80;
 const CAT_START_TEST = "[data-nn-qa-practice-hub-start-test]";
 
 const REQUIRED_CREDENTIALS_MSG =
-  "[rn-full-content] PAID CREDENTIALS REQUIRED. Set QA_PAID_EMAIL + QA_PAID_PASSWORD " +
+  "[rn-full-content] PAID CREDENTIALS REQUIRED (environment OK: GET / and GET /login succeeded — this is not a connectivity failure). " +
+  "Set QA_PAID_EMAIL + QA_PAID_PASSWORD " +
   "(or E2E_PAID_EMAIL + E2E_PAID_PASSWORD, or PLAYWRIGHT_TEST_EMAIL + PLAYWRIGHT_TEST_PASSWORD). " +
   "Skipped runs are not valid — this suite must authenticate to verify production behavior.";
 
@@ -225,6 +228,17 @@ async function answerOneCatItem(page: Page): Promise<void> {
   await expect(next).toBeEnabled({ timeout: 30_000 });
   await next.click();
   await page.waitForLoadState("networkidle", { timeout: 30_000 }).catch(() => {});
+}
+
+async function attachRnBlockingReport(
+  testInfo: import("@playwright/test").TestInfo,
+  args: Parameters<typeof buildRnFullContentBlockingReport>[0],
+): Promise<void> {
+  const rep = buildRnFullContentBlockingReport(args);
+  await testInfo.attach("rn-full-content-blocking-report.json", {
+    body: Buffer.from(JSON.stringify(rep, null, 2), "utf-8"),
+    contentType: "application/json",
+  });
 }
 
 async function attachFailureDiagnostics(
@@ -518,6 +532,7 @@ test.describe("RN full content access (paid)", () => {
     let probe: Awaited<ReturnType<typeof probeRnFullContentReachability>>;
     let envCheck: ReturnType<typeof buildEnvironmentCheckArtifact>;
     let resolvedCreds: ReturnType<typeof resolveQaPaidCredentialsWithSource>;
+    let authAttempted = false;
 
     await test.step("Phase — Environment & readiness (pre-login)", async () => {
       probe = await probeRnFullContentReachability(page.request, resolvedBase);
@@ -525,6 +540,7 @@ test.describe("RN full content access (paid)", () => {
       envCheck = buildEnvironmentCheckArtifact({
         baseUrl: resolvedBase,
         skipWebServer,
+        webServerExpectedToStart: isRnFullContentPlaywrightWebServerExpected(resolvedBase),
         credentialSource: resolvedCreds?.source ?? null,
         credentialsResolved: !!resolvedCreds,
         probe,
@@ -565,6 +581,24 @@ test.describe("RN full content access (paid)", () => {
         body: Buffer.from(JSON.stringify(failedConn, null, 2), "utf-8"),
         contentType: "application/json",
       });
+      await attachRnBlockingReport(testInfo, {
+        baseUrl: resolvedBase,
+        loginUrl: loginUrlResolved,
+        skipWebServer,
+        envCheck,
+        credentialsResolved: !!resolvedCreds,
+        authAttempted: false,
+        loginSucceeded: false,
+        discoverySucceeded: false,
+        inventoryCount: 0,
+        lessonsVisited: 0,
+        substantiveLessons: 0,
+        lessonsFailed: 0,
+        flashcardsStatus: "not_run",
+        questionBankStatus: "not_run",
+        catStatus: "not_run",
+        lastError: envCheck!.blockingReason,
+      });
       throw new Error(envCheck!.blockingReason ?? "[rn-full-content] ENVIRONMENT: origin or /login unreachable");
     }
 
@@ -586,6 +620,24 @@ test.describe("RN full content access (paid)", () => {
       await testInfo.attach("rn-full-content-suite-results.json", {
         body: Buffer.from(JSON.stringify(failedCreds, null, 2), "utf-8"),
         contentType: "application/json",
+      });
+      await attachRnBlockingReport(testInfo, {
+        baseUrl: resolvedBase,
+        loginUrl: loginUrlResolved,
+        skipWebServer,
+        envCheck,
+        credentialsResolved: false,
+        authAttempted: false,
+        loginSucceeded: false,
+        discoverySucceeded: false,
+        inventoryCount: 0,
+        lessonsVisited: 0,
+        substantiveLessons: 0,
+        lessonsFailed: 0,
+        flashcardsStatus: "not_run",
+        questionBankStatus: "not_run",
+        catStatus: "not_run",
+        lastError: REQUIRED_CREDENTIALS_MSG,
       });
       throw new Error(REQUIRED_CREDENTIALS_MSG);
     }
@@ -612,6 +664,7 @@ test.describe("RN full content access (paid)", () => {
 
     try {
       await test.step("Phase 0 — Login (required)", async () => {
+        authAttempted = true;
         try {
           await loginWithCredentials(page, resolved.email, resolved.password);
           await expectOnPaidSubscriberApp(page);
@@ -836,6 +889,24 @@ test.describe("RN full content access (paid)", () => {
         },
         String(e),
       );
+      await attachRnBlockingReport(testInfo, {
+        baseUrl: resolvedBase,
+        loginUrl: loginUrlResolved,
+        skipWebServer,
+        envCheck,
+        credentialsResolved: !!resultsPayload.credentialsResolved,
+        authAttempted,
+        loginSucceeded: !!resultsPayload.loginSucceeded,
+        discoverySucceeded: !!resultsPayload.discoverySucceeded,
+        inventoryCount: resultsPayload.inventoryCount ?? 0,
+        lessonsVisited: resultsPayload.lessonsVisited ?? 0,
+        substantiveLessons: resultsPayload.substantiveLessons ?? 0,
+        lessonsFailed: resultsPayload.lessonsFailed ?? 0,
+        flashcardsStatus: resultsPayload.flashcardsStatus ?? "not_run",
+        questionBankStatus: resultsPayload.questionBankStatus ?? "not_run",
+        catStatus: resultsPayload.catStatus ?? "not_run",
+        lastError: String(e),
+      });
       await attachFailureDiagnostics(testInfo, page, observers, slowMs);
       throw e;
     } finally {

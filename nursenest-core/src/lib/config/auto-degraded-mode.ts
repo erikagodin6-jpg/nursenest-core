@@ -47,6 +47,9 @@ function maybeEnableAutoDegraded(reason: string, condition: boolean): void {
     void import("@/lib/observability/safe-server-log").then(({ safeServerLog }) => {
       safeServerLog("resilience", "auto_degraded_mode_enabled", { reason: reason.slice(0, 80) });
     });
+    void import("@/lib/observability/production-signal-metrics").then(({ recordAutoDegradedEngaged }) => {
+      recordAutoDegradedEngaged(reason);
+    });
   }
 }
 

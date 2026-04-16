@@ -1,71 +1,12 @@
 import * as Sentry from "@sentry/nextjs";
-import "@/lib/db/env-bootstrap";
-import { logDatabaseEnvOnce } from "@/lib/db/database-env";
-import { validateProductionDatabaseEnv } from "@/lib/db/validate-production-db-env";
-import {
-  assertNextPublicSurfaceHasNoSecrets,
-  warnIfStripeLiveKeyOutsideProduction,
-} from "@/lib/env/central-env-validation";
-import { runProductionEnvGuard } from "@/lib/env/production-env-guard";
-import { logStartupContext } from "@/lib/env/server-env";
-import { logHighMemory, logMemoryPressureSample } from "@/lib/observability/perf-log";
-import {
-  logStripeCheckoutEnvStartupStatus,
-  logStripeProductionPricingMisconfiguration,
-} from "@/lib/stripe/pricing-map";
-import { assertPinnedAuthBasePath } from "@/lib/auth/auth-base-path";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
-    logStartupContext();
-    assertNextPublicSurfaceHasNoSecrets();
-    warnIfStripeLiveKeyOutsideProduction();
-    logDatabaseEnvOnce();
-    validateProductionDatabaseEnv();
-    runProductionEnvGuard();
-    console.error(
-      `[nursenest-core] instrumentation: nodejs runtime registered PORT=${process.env.PORT ?? "(unset)"}`,
-    );
-    assertPinnedAuthBasePath();
-    void import("@/lib/observability/http-access-log-hook").then((m) => {
-      m.installHttpAccessLogHook();
-    });
-    logStripeCheckoutEnvStartupStatus();
-    logStripeProductionPricingMisconfiguration();
+    const { registerNodeInstrumentation } = await import("@/instrumentation/register-node");
+    await registerNodeInstrumentation();
     if (process.env.SENTRY_ENABLED === "true") {
       await import("./sentry.server.config");
-    }
-    process.on("unhandledRejection", (reason) => {
-      const msg = reason instanceof Error ? reason.message : String(reason);
-      console.error(`[nursenest-core] process_unhandledRejection ${msg}`);
-    });
-    process.on("uncaughtException", (err) => {
-      console.error(`[nursenest-core] process_uncaughtException ${err?.message ?? err}`);
-    });
-
-    const rawMemInterval = process.env.PERF_MEMORY_LOG_INTERVAL_MS;
-    const memIntervalMs =
-      rawMemInterval !== undefined && rawMemInterval !== ""
-        ? Number(rawMemInterval)
-        : process.env.NODE_ENV === "production"
-          ? 600_000
-          : 0;
-    if (process.env.NODE_ENV === "production" && Number.isFinite(memIntervalMs) && memIntervalMs >= 60_000) {
-      const id = setInterval(() => {
-        try {
-          logMemoryPressureSample("process_interval");
-          const heap = typeof process.memoryUsage === "function" ? process.memoryUsage().heapUsed : 0;
-          if (heap >= 512 * 1024 * 1024) {
-            logHighMemory("process_interval");
-          }
-        } catch {
-          /* ignore — Edge / constrained runtimes */
-        }
-      }, memIntervalMs);
-      if (typeof (id as ReturnType<typeof setInterval>).unref === "function") {
-        (id as ReturnType<typeof setInterval> & { unref: () => void }).unref();
-      }
     }
   }
   if (process.env.NEXT_RUNTIME === "edge") {

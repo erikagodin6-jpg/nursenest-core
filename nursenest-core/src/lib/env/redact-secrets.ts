@@ -14,6 +14,10 @@ const SENSITIVE_KEY_SUBSTRINGS = [
   "api_key",
   "bearer",
   "credential",
+  "stripe",
+  "payment",
+  "cardnumber",
+  "card_number",
 ] as const;
 
 /** True if key looks like it may hold a secret (shallow key scan). */

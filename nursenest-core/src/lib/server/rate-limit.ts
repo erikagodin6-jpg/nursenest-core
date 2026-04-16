@@ -33,6 +33,10 @@ const LEARNER_PREFIXES = [
   "/api/auth/sync-session",
 ] as const;
 
+/** Anonymous access to heavy content list APIs — tighter than generic `/api/*` (protects Prisma + DB). */
+const LEARNER_ANON_CONTENT_WINDOW_MS = 60_000;
+const LEARNER_ANON_CONTENT_MAX = 28;
+
 /** Billing / newsletter — expensive or spam-prone; separate bucket from generic public API. */
 const BILLING_RATE_PATH_PREFIXES = ["/api/subscriptions/checkout", "/api/subscribe"] as const;
 
@@ -200,6 +204,16 @@ export function isAiExpensiveRateLimitPath(pathname: string): boolean {
 /** Public marketing JSON routes — separate bucket from generic anonymous `/api/*`. */
 export function isPublicJsonRateLimitPath(pathname: string): boolean {
   return pathname.startsWith("/api/public/");
+}
+
+/** `/api/questions` and `/api/lessons` without a session — per-IP cap before generic public bucket. */
+export function isLearnerContentAnonymousApiPath(pathname: string): boolean {
+  return (
+    pathname === "/api/questions" ||
+    pathname.startsWith("/api/questions/") ||
+    pathname === "/api/lessons" ||
+    pathname.startsWith("/api/lessons/")
+  );
 }
 
 function isExemptPath(pathname: string): boolean {
@@ -400,6 +414,22 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "subscriptions_api", path: pathname.slice(0, 96) });
+      return json429WithBackoff(ip);
+    }
+    return null;
+  }
+
+  if (isLearnerContentAnonymousApiPath(pathname) && !userId) {
+    const key = `ratelimit:learner_anon_content:ip:${ip}`;
+    const { ok } = await checkRateLimitUnified(key, {
+      windowMs: LEARNER_ANON_CONTENT_WINDOW_MS,
+      max: LEARNER_ANON_CONTENT_MAX,
+    });
+    if (!ok) {
+      safeServerLog("security", "rate_limit_exceeded", {
+        kind: "learner_anon_content",
+        path: pathname.slice(0, 96),
+      });
       return json429WithBackoff(ip);
     }
     return null;

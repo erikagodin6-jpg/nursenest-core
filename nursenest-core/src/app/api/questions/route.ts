@@ -5,6 +5,8 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
+import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
@@ -510,6 +512,16 @@ export async function GET(req: NextRequest) {
         });
         return NextResponse.json(stale, { headers: { "X-NurseNest-Content-Fallback": "1" } });
       }
+      emitStructuredLog("question_load_failed", "error", {
+        correlationId: correlationIdFromRequest(req),
+        route: "/api/questions",
+        method: "GET",
+        flow: "content",
+        httpStatus: 503,
+        degraded: false,
+        errorClass: e instanceof Error ? e.name : "unknown",
+        message: "subscriber question list failure",
+      });
       safeServerLogCritical("api_questions", "prisma_find_failed", { page }, e, { flow: "questions_load" });
       return NextResponse.json(
         { error: "Unable to load questions. Try again shortly.", code: "service_unavailable" },
@@ -640,6 +652,15 @@ export async function GET(req: NextRequest) {
     logLargeApiResponse("/api/questions", estimateJsonUtf8Bytes(freemiumBody));
     return jsonResponseGuarded("/api/questions", freemiumBody);
   } catch (e) {
+    emitStructuredLog("question_load_failed", "error", {
+      correlationId: correlationIdFromRequest(req),
+      route: "/api/questions",
+      method: "GET",
+      flow: "content",
+      httpStatus: 503,
+      errorClass: e instanceof Error ? e.name : "unknown",
+      message: "freemium question list failure",
+    });
     safeServerLogCritical("api_questions", "prisma_find_failed_freemium", { page }, e, { flow: "questions_load" });
     return NextResponse.json(
       { error: "Unable to load questions. Try again shortly.", code: "service_unavailable" },

@@ -10,6 +10,7 @@ import {
   isAuthStrictPath,
   isBillingRateLimitPath,
   isHomeStatsRateLimitPath,
+  isLearnerContentAnonymousApiPath,
   isPricingRateLimitPath,
   isPublicJsonRateLimitPath,
   retryAfterSecondsFrom429Streak,
@@ -33,6 +34,14 @@ describe("enforceApiRateLimit path classification", () => {
     assert.equal(isPricingRateLimitPath("/api/pricing"), true);
     assert.equal(isPricingRateLimitPath("/api/pricing/options"), true);
     assert.equal(isPricingRateLimitPath("/api/pricing-matrix"), false);
+  });
+
+  it("marks anonymous questions/lessons API paths for stricter per-IP bucket", () => {
+    assert.equal(isLearnerContentAnonymousApiPath("/api/questions"), true);
+    assert.equal(isLearnerContentAnonymousApiPath("/api/questions/discovery"), true);
+    assert.equal(isLearnerContentAnonymousApiPath("/api/lessons"), true);
+    assert.equal(isLearnerContentAnonymousApiPath("/api/lessons/foo"), true);
+    assert.equal(isLearnerContentAnonymousApiPath("/api/public/home-stats"), false);
   });
 
   it("marks AI-heavy routes", () => {

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { BASELINE_QUESTION_COUNT } from "@/lib/baseline/baseline-assessment";
+import { BASELINE_QUESTION_COUNT } from "@/lib/baseline/baseline-assessment-constants";
 
 type Q = {
   id: string;

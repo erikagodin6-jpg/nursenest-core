@@ -52,6 +52,17 @@ function localDevWebServer() {
       /** Client session fetch uses absolute origin; unset values cause ClientFetchError in Playwright. */
       AUTH_URL: origin.origin,
       NEXTAUTH_URL: origin.origin,
+      /**
+       * When running paid E2E with a shell-provided DB (e.g. `test:e2e:paid-local-green`), forward the same
+       * URLs into `next dev`. Otherwise `.env.local` may still contain a placeholder `DATABASE_URL` while the
+       * preflight script connected with a working URL — Auth would keep using the broken value.
+       */
+      ...(process.env.DATABASE_URL?.trim()
+        ? { DATABASE_URL: process.env.DATABASE_URL.trim() }
+        : {}),
+      ...(process.env.DATABASE_DIRECT_URL?.trim()
+        ? { DATABASE_DIRECT_URL: process.env.DATABASE_DIRECT_URL.trim() }
+        : {}),
       /** When `E2E_LEARNER_DEGRADED=1`, start Next with learner degraded mode (paid degraded-mode spec). */
       ...(process.env.E2E_LEARNER_DEGRADED === "1"
         ? { NN_DEGRADED_MODE: "1", NEXT_PUBLIC_NN_DEGRADED_MODE: "1" }

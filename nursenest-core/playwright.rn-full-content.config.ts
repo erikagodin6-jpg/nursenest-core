@@ -8,7 +8,24 @@
 import "./playwright.env";
 import { defineConfig, devices } from "@playwright/test";
 
-const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
+/** Keep in sync with `tests/e2e/helpers/rn-full-content-environment.ts` (tests excluded from root tsconfig). */
+const RN_FULL_CONTENT_DEFAULT_BASE_URL = "http://127.0.0.1:3000";
+
+function normalizeRnFullContentBaseUrlEnv(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return RN_FULL_CONTENT_DEFAULT_BASE_URL;
+  try {
+    const u = new URL(trimmed.includes("://") ? trimmed : `http://${trimmed}`);
+    if (u.hostname === "localhost" || u.hostname === "[::1]") {
+      u.hostname = "127.0.0.1";
+    }
+    return u.origin;
+  } catch {
+    return RN_FULL_CONTENT_DEFAULT_BASE_URL;
+  }
+}
+
+const baseURL = normalizeRnFullContentBaseUrlEnv(process.env.BASE_URL ?? RN_FULL_CONTENT_DEFAULT_BASE_URL);
 
 function localDevWebServer() {
   if (process.env.PLAYWRIGHT_SKIP_WEB_SERVER === "1") return undefined;
@@ -26,10 +43,13 @@ function localDevWebServer() {
     command: `npm run dev -- --hostname 127.0.0.1 --port ${port}`,
     url: origin.origin,
     reuseExistingServer: !process.env.CI,
-    timeout: 180_000,
+    /** Cold Turbopack + large app: 3m is often insufficient on network/slow disks — align with probe budgets. */
+    timeout: 420_000,
     env: {
       RUN_HEAVY_BUILD_TASKS: "false",
       NEXTAUTH_SECRET: secret,
+      /** Overrides dotenv `localhost` so Auth.js callbacks match `--hostname 127.0.0.1` and Playwright `use.baseURL`. */
+      BASE_URL: origin.origin,
       AUTH_URL: origin.origin,
       NEXTAUTH_URL: origin.origin,
     },

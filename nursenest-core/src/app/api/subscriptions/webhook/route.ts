@@ -2,10 +2,12 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
 import { productEvent } from "@/lib/observability/product-events";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+import { recordStripeWebhookFailure } from "@/lib/observability/production-signal-metrics";
 import { applyStripeWebhookEvent } from "@/lib/stripe/apply-stripe-webhook-event";
 import { recordStripeWebhookEventProcessed } from "@/lib/stripe/stripe-webhook-idempotency";
 import { constructStripeWebhookEvent } from "@/lib/stripe/stripe-webhook-verify";
@@ -79,9 +81,18 @@ export async function POST(req: Request) {
     severity: "info",
   });
 
+  emitStructuredLog("webhook_received", "info", {
+    correlationId: correlation || undefined,
+    route: "/api/subscriptions/webhook",
+    method: "POST",
+    flow: "webhook",
+    message: `stripe type=${event.type.slice(0, 64)} idPrefix=${event.id.slice(0, 12)}`,
+  });
+
   try {
     await applyStripeWebhookEvent(stripe, event, { correlation });
   } catch (e) {
+    recordStripeWebhookFailure("handler", event.type);
     productEvent("stripe_webhook_failed", { eventType: event.type });
     safeServerLogCritical(
       "stripe_webhook",
@@ -112,6 +123,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true, duplicate: true });
     }
   } catch (e) {
+    recordStripeWebhookFailure("dedupe", event.type);
     safeServerLogCritical(
       "stripe_webhook",
       "dedupe_record_failed",

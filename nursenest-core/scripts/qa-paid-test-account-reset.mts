@@ -9,13 +9,19 @@
  *   - `DATABASE_URL`
  *   - `ALLOW_QA_PAID_TEST_RESET=1` (any non-dry-run run; prevents accidental execution)
  *
- * Password (first match):
+ * Password (first match — **same precedence as Playwright `resolveQaPaidCredentialsWithSource`, plus legacy TEST name**):
+ *   - `QA_PAID_PASSWORD`
  *   - `QA_PAID_TEST_PASSWORD`
+ *   - `E2E_PAID_PASSWORD`
+ *   - `PLAYWRIGHT_TEST_PASSWORD`
  *   - stdin one line
  *
  * Email (first match):
  *   - `--email user@example.com`
- *   - `QA_PAID_TEST_EMAIL`
+ *   - `QA_PAID_EMAIL` (same as RN full-content / smoke E2E)
+ *   - `QA_PAID_TEST_EMAIL` (legacy)
+ *   - `E2E_PAID_EMAIL`
+ *   - `PLAYWRIGHT_TEST_EMAIL`
  *
  * Optional:
  *   - `QA_PAID_TEST_NAME` — display name (default: "QA Paid E2E")
@@ -127,14 +133,37 @@ function syntheticStripeSubscriptionId(userId: string): string {
   return `${SYNTHETIC_STRIPE_SUB_PREFIX}${userId}`;
 }
 
+function resolveResetEmail(cliEmail: string | undefined): string | undefined {
+  const fromCli = cliEmail?.trim().toLowerCase();
+  if (fromCli?.includes("@")) return fromCli;
+  const fromEnv =
+    process.env.QA_PAID_EMAIL?.trim().toLowerCase() ||
+    process.env.QA_PAID_TEST_EMAIL?.trim().toLowerCase() ||
+    process.env.E2E_PAID_EMAIL?.trim().toLowerCase() ||
+    process.env.PLAYWRIGHT_TEST_EMAIL?.trim().toLowerCase();
+  return fromEnv?.includes("@") ? fromEnv : undefined;
+}
+
+function resolveResetPasswordFromEnv(): string | undefined {
+  const candidates = [
+    process.env.QA_PAID_PASSWORD,
+    process.env.QA_PAID_TEST_PASSWORD,
+    process.env.E2E_PAID_PASSWORD,
+    process.env.PLAYWRIGHT_TEST_PASSWORD,
+  ];
+  for (const p of candidates) {
+    if (p !== undefined && String(p).trim().length > 0) return String(p).trim();
+  }
+  return undefined;
+}
+
 async function main(): Promise<void> {
   const { email: emailArg, dryRun } = parseArgs();
-  const email =
-    emailArg?.trim().toLowerCase() ||
-    process.env.QA_PAID_TEST_EMAIL?.trim().toLowerCase();
+  const email = resolveResetEmail(emailArg);
   if (!email?.includes("@")) {
     console.error(
-      "Usage: QA_PAID_TEST_EMAIL=... QA_PAID_TEST_PASSWORD=... ALLOW_QA_PAID_TEST_RESET=1 npx tsx scripts/qa-paid-test-account-reset.mts [--email you@example.com] [--dry-run]",
+      "Usage: set QA_PAID_EMAIL + QA_PAID_PASSWORD (or E2E_* / PLAYWRIGHT_TEST_*), or QA_PAID_TEST_*, or pass --email. " +
+        "Example: ALLOW_QA_PAID_TEST_RESET=1 QA_PAID_EMAIL=... QA_PAID_PASSWORD=... npx tsx scripts/qa-paid-test-account-reset.mts [--dry-run]",
     );
     process.exit(1);
   }
@@ -144,11 +173,11 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  let plain = process.env.QA_PAID_TEST_PASSWORD?.trim();
+  let plain = resolveResetPasswordFromEnv();
   if (!plain && !dryRun) plain = (await readPasswordFromStdin()).trim();
   if (!dryRun) {
     if (!plain) {
-      console.error("Set QA_PAID_TEST_PASSWORD or pipe one line on stdin.");
+      console.error("Set QA_PAID_PASSWORD (or QA_PAID_TEST_PASSWORD / E2E_PAID_PASSWORD / PLAYWRIGHT_TEST_PASSWORD) or pipe one line on stdin.");
       process.exit(1);
     }
     const parsed = strongPasswordSchema.safeParse(plain);
@@ -322,7 +351,9 @@ async function main(): Promise<void> {
   console.log(`OK — QA paid test account ready for ${email} (user id ${userId.slice(0, 8)}…).`);
   console.log("Premium: ACTIVE subscription row (synthetic Stripe id), planTier/planCountry set.");
   console.log(`Onboarding: completed; learnerPath=${learnerPathDefault} (matches /app dashboard + pathway hubs).`);
-  console.log("Sign in at /login with email + password; Playwright: E2E_PAID_EMAIL / E2E_PAID_PASSWORD.");
+  console.log(
+    "Sign in at /login with email + password; Playwright: QA_PAID_EMAIL / QA_PAID_PASSWORD (or E2E_* / PLAYWRIGHT_TEST_*).",
+  );
 }
 
 main()

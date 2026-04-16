@@ -35,6 +35,8 @@ import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-s
 import { PINNED_AUTH_BASE_PATH } from "@/lib/auth/auth-base-path";
 import { logAuthIncidentLine } from "@/lib/auth/auth-incident-log";
 import { recordCredentialsLoginFailure } from "@/lib/observability/production-signal-metrics";
+import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { emitStructuredLog } from "@/lib/observability/structured-log";
 
 if (process.env.NODE_ENV === "production") {
   const hasSecret = Boolean(
@@ -125,6 +127,13 @@ function logAuthDebugStartupConfigOnce(): void {
 
 logAuthDebugStartupConfigOnce();
 
+/** Dev-only: set `NN_TRACE_CREDENTIALS_LOGIN=1` (non-production) to log safe authorize milestones (no secrets). */
+function traceCredentialsAuthorizeDev(label: string, data: Record<string, unknown>): void {
+  if (process.env.NODE_ENV === "production") return;
+  if (process.env.NN_TRACE_CREDENTIALS_LOGIN !== "1") return;
+  safeServerLog("auth", "credentials_authorize_dev_trace", { label, ...data });
+}
+
 export const authConfig: NextAuthConfig = {
   /**
    * No Prisma adapter: schema has no Account/Session/VerificationToken models required by
@@ -204,7 +213,7 @@ export const authConfig: NextAuthConfig = {
             finalFailureReason: "unknown_auth_failure",
             ip: ip.slice(0, 64),
           });
-          recordCredentialsLoginFailure("rate_limited");
+          recordCredentialsLoginFailure("rate_limited", request);
           return null;
         }
 
@@ -242,7 +251,7 @@ export const authConfig: NextAuthConfig = {
             ip: ip.slice(0, 64),
             authMode,
           });
-          recordCredentialsLoginFailure("missing_fields");
+          recordCredentialsLoginFailure("missing_fields", request);
           return null;
         }
 
@@ -278,7 +287,7 @@ export const authConfig: NextAuthConfig = {
             idHash,
             authMode,
           });
-          recordCredentialsLoginFailure("locked_out");
+          recordCredentialsLoginFailure("locked_out", request);
           return null;
         }
 
@@ -347,7 +356,7 @@ export const authConfig: NextAuthConfig = {
                 idHash,
                 ip: ip.slice(0, 64),
               });
-              recordCredentialsLoginFailure("duplicate_user_match");
+              recordCredentialsLoginFailure("duplicate_user_match", request);
               return null;
             }
 
@@ -424,7 +433,7 @@ export const authConfig: NextAuthConfig = {
                 idHash,
                 ip: ip.slice(0, 64),
               });
-              recordCredentialsLoginFailure("duplicate_user_match");
+              recordCredentialsLoginFailure("duplicate_user_match", request);
               return null;
             }
             user = await prisma.user.findFirst({
@@ -435,12 +444,16 @@ export const authConfig: NextAuthConfig = {
           }
         } catch (e) {
           const detail = e instanceof Error ? e.message.slice(0, 800) : String(e).slice(0, 800);
+          const postgresUrlAuthFailed =
+            /password authentication failed|FATAL:\s*password authentication failed/i.test(detail);
+          const finalFailureReason = postgresUrlAuthFailed ? "database_url_rejected" : "db_error";
           safeServerLogCritical("auth", "user_lookup_failed", { surface: "credentials", detail }, e);
           safeServerLog("auth", "login_failed", {
-            reason: "db_error",
+            reason: postgresUrlAuthFailed ? "database_url_invalid" : "db_error",
             authMode,
             idHash,
             ip: ip.slice(0, 64),
+            postgresUrlAuthFailed,
           });
           logAuthIncidentLine({
             event: "credentials_login",
@@ -463,13 +476,17 @@ export const authConfig: NextAuthConfig = {
             accountLockedOut: false,
             passwordCompareOk: false,
             sessionIssued: false,
-            finalFailureReason: "db_error",
+            finalFailureReason,
             dbDetail: detail.slice(0, 400),
             ip: ip.slice(0, 64),
             idHash,
             authMode,
           });
-          recordCredentialsLoginFailure("db_error");
+          recordCredentialsLoginFailure("db_error", request);
+          traceCredentialsAuthorizeDev("reject", {
+            reason: postgresUrlAuthFailed ? "database_url_rejected" : "db_error",
+            detail: detail.slice(0, 120),
+          });
           return null;
         }
 
@@ -506,6 +523,12 @@ export const authConfig: NextAuthConfig = {
           lookupStrategy: lookupStrategy ?? "none",
           authMode,
         });
+        traceCredentialsAuthorizeDev("lookup_complete", {
+          userFound: Boolean(user),
+          lookupStrategy: lookupStrategy ?? "none",
+          authMode,
+          hasPasswordHash: Boolean(user?.passwordHash),
+        });
 
         if (!user) {
           await recordLoginFailure(lockKey);
@@ -541,7 +564,8 @@ export const authConfig: NextAuthConfig = {
             gmailNormalizedLookupTried:
               isEmailLikeIdentifier(enteredEmailLower) && isGmailLikeAddress(enteredEmailLower) ? "yes" : "no",
           });
-          recordCredentialsLoginFailure("not_found");
+          recordCredentialsLoginFailure("not_found", request);
+          traceCredentialsAuthorizeDev("reject", { reason: "user_not_found", authMode });
           return null;
         }
 
@@ -563,7 +587,8 @@ export const authConfig: NextAuthConfig = {
             ip: ip.slice(0, 64),
             hasPasswordHash: false,
           });
-          recordCredentialsLoginFailure("no_password_hash");
+          recordCredentialsLoginFailure("no_password_hash", request);
+          traceCredentialsAuthorizeDev("reject", { reason: "missing_password_hash", userIdPrefix: user.id.slice(0, 8) });
           return null;
         }
 
@@ -594,11 +619,16 @@ export const authConfig: NextAuthConfig = {
             ip: ip.slice(0, 64),
             detail,
           });
-          recordCredentialsLoginFailure("system_error");
+          recordCredentialsLoginFailure("system_error", request);
+          traceCredentialsAuthorizeDev("reject", { reason: "bcrypt_compare_error", userIdPrefix: user.id.slice(0, 8) });
           return null;
         }
 
         safeServerLog("auth", "credentials_authorize_password", {
+          passwordMatch: passwordOk,
+          userIdPrefix: user.id.slice(0, 8),
+        });
+        traceCredentialsAuthorizeDev("password_compare", {
           passwordMatch: passwordOk,
           userIdPrefix: user.id.slice(0, 8),
         });
@@ -620,7 +650,8 @@ export const authConfig: NextAuthConfig = {
             failureCount: await getFailureCount(lockKey),
             passwordCompareOk: false,
           });
-          recordCredentialsLoginFailure("bad_password");
+          recordCredentialsLoginFailure("bad_password", request);
+          traceCredentialsAuthorizeDev("reject", { reason: "password_mismatch", userIdPrefix: user.id.slice(0, 8) });
           return null;
         }
 
@@ -694,6 +725,22 @@ export const authConfig: NextAuthConfig = {
             /* DB unavailable — session still usable; entitlements resolve server-side */
           }
         }
+
+        let loginRoutePath: string;
+        try {
+          loginRoutePath = new URL(request.url).pathname.slice(0, 200);
+        } catch {
+          loginRoutePath = `${PINNED_AUTH_BASE_PATH}/callback/credentials`;
+        }
+        emitStructuredLog("auth_login_succeeded", "info", {
+          correlationId: correlationIdFromRequest(request),
+          route: loginRoutePath,
+          method: request.method,
+          userRole: String(user.role),
+          userState: subscriptionStatus,
+          country: user.country != null ? String(user.country) : undefined,
+          entitlementState: subscriptionStatus,
+        });
 
         return {
           id: user.id,

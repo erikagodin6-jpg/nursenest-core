@@ -9,6 +9,9 @@ import {
   DISCOVERY_SQL_TOPIC_LIMIT,
   loadSubscriberDiscoveryAggregates,
 } from "@/lib/questions/subscriber-discovery-aggregates";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
+import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
@@ -24,6 +27,7 @@ const DISCOVERY_EXAM_BUCKET_CAP = DISCOVERY_SQL_EXAM_LIMIT;
  * Aggregates use SQL LIMITs so the database never materializes unbounded distinct groups for the app.
  */
 export async function GET(req: NextRequest) {
+  return runWithApiTelemetry(req, "GET /api/questions/discovery", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
   const requestedPathwayId = req.nextUrl.searchParams.get("pathwayId");
@@ -117,10 +121,20 @@ export async function GET(req: NextRequest) {
     logLargeApiResponse("/api/questions/discovery", estimateJsonUtf8Bytes(discoveryBody));
     return NextResponse.json(discoveryBody);
   } catch (e) {
+    emitStructuredLog("question_load_failed", "error", {
+      correlationId: correlationIdFromRequest(req),
+      route: "/api/questions/discovery",
+      method: "GET",
+      flow: "content",
+      httpStatus: 503,
+      errorClass: e instanceof Error ? e.name : "unknown",
+      message: "question discovery aggregate failure",
+    });
     safeServerLogCritical("api_questions_discovery", "failed", {}, e);
     return NextResponse.json(
       { error: "Unable to load discovery", code: "service_unavailable" },
       { status: 503 },
     );
   }
+  });
 }

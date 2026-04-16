@@ -12,6 +12,7 @@ import { generatePasswordResetRawToken, hashPasswordResetToken } from "@/lib/pas
 import { PASSWORD_RESET_TOKEN_TTL_MS } from "@/lib/auth/password-reset-constants";
 import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import {
   buildPasswordResetUrl,
@@ -124,6 +125,14 @@ async function runForgotPasswordFlow(
     severity: "info",
   });
 
+  emitStructuredLog("password_reset_requested", "info", {
+    correlationId: correlation || undefined,
+    route: "/api/auth/forgot-password",
+    method: "POST",
+    flow: "auth",
+    message: "password reset token issued; email delivery attempted",
+  });
+
   const resetUrl = buildPasswordResetUrl(rawToken);
   const sendResult = await sendPasswordResetEmail({ toEmail: user.email, resetUrl });
   captureServerEvent(analyticsDistinctId(user.id), "password_reset_requested", {}).catch(() => {});
@@ -152,6 +161,14 @@ export async function POST(req: Request) {
   const correlation = correlationIdFromRequest(req) ?? "";
   const isProd = process.env.NODE_ENV === "production";
   if (isProd && !isPasswordResetEmailConfigured()) {
+    emitStructuredLog("password_reset_failed", "error", {
+      correlationId: correlation || undefined,
+      route: "/api/auth/forgot-password",
+      method: "POST",
+      flow: "auth",
+      errorClass: "email_unconfigured",
+      message: "password reset email provider not configured",
+    });
     safeServerLogCritical(
       "auth",
       "password_reset_email_unavailable",
@@ -196,6 +213,14 @@ export async function POST(req: Request) {
         ...(devResetUrl ? { _devResetUrl: devResetUrl } : {}),
       });
     } catch (e) {
+      emitStructuredLog("password_reset_failed", "error", {
+        correlationId: correlation || undefined,
+        route: "/api/auth/forgot-password",
+        method: "POST",
+        flow: "auth",
+        errorClass: "flow_exception",
+        message: "forgot password flow threw",
+      });
       safeServerLogCritical("auth", "forgot_password_failed", { surface: "api", correlation, severity: "error" }, e);
       return NextResponse.json(
         { ok: false, error: "Unable to process request. Try again shortly." },
@@ -212,6 +237,14 @@ export async function POST(req: Request) {
   try {
     await runForgotPasswordFlow(email, ip, correlation);
   } catch (e) {
+    emitStructuredLog("password_reset_failed", "error", {
+      correlationId: correlation || undefined,
+      route: "/api/auth/forgot-password",
+      method: "POST",
+      flow: "auth",
+      errorClass: "flow_exception",
+      message: "forgot password flow threw",
+    });
     safeServerLogCritical("auth", "forgot_password_failed", { surface: "api", correlation, severity: "error" }, e);
     return NextResponse.json(
       { ok: false, error: "Unable to process request. Try again shortly." },

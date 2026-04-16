@@ -1,7 +1,7 @@
 import "./db/env-bootstrap";
 import { PrismaClient } from "@prisma/client";
 import { createDbQuerySemaphore } from "@/lib/server/db-query-semaphore";
-import { logSlowPrismaQuery } from "@/lib/observability/perf-log";
+import { logSlowPrismaQuery } from "@/lib/observability/perf-log-core";
 import { recordPrismaClientQueryError } from "@/lib/observability/production-signal-metrics";
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
