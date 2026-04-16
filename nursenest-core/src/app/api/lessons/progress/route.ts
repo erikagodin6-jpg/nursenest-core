@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
@@ -22,6 +23,7 @@ const bodySchema = z.object({
 });
 
 export async function POST(req: Request) {
+  return runWithApiTelemetry(req, "POST /api/lessons/progress", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id;
   if (!userId) {
@@ -124,4 +126,5 @@ export async function POST(req: Request) {
     country: String(gate.entitlement.country ?? ""),
   });
   return notSubscribedResponse();
+  });
 }

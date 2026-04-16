@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
 import { normalizeEmailForDedup } from "@/lib/auth/email-address-normalization";
@@ -157,6 +158,7 @@ async function runForgotPasswordFlow(
  * waiting on Postgres or Resend.
  */
 export async function POST(req: Request) {
+  return runWithApiTelemetry(req, "POST /api/auth/forgot-password", "auth", async () => {
   const ip = clientIp(req);
   const correlation = correlationIdFromRequest(req) ?? "";
   const isProd = process.env.NODE_ENV === "production";
@@ -253,4 +255,5 @@ export async function POST(req: Request) {
   }
 
   return NextResponse.json(successPayload);
+  });
 }

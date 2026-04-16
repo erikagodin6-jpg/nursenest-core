@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { auth } from "@/lib/auth";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { userCanAccessDeckForStudy } from "@/lib/flashcards/flashcard-access";
@@ -23,6 +24,7 @@ type Props = { params: Promise<{ deckRef: string }> };
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest, { params }: Props) {
+  return runWithApiTelemetry(req, "GET /api/flashcards/decks/[deckRef]", "content", async () => {
   const { deckRef } = await params;
   const educationalLocale = getMarketingLocaleFromRequestCookie(req);
   const session = await auth();
@@ -72,5 +74,6 @@ export async function GET(req: NextRequest, { params }: Props) {
       fullStudy: Boolean(entitlement.hasAccess || deck.visibility === "PUBLIC_PREVIEW"),
       subscriber: Boolean(entitlement.hasAccess),
     },
+  });
   });
 }

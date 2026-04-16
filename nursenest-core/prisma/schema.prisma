@@ -796,6 +796,8 @@ model PathwayLesson {
   seoDescription       String        @map("seo_description")
   /// * Array of { id, heading, kind, body } — normalized to five canonical sections at read time.
   sections             Json
+  /// * Denormalized from {@link evaluatePathwayLessonStructuralGate} at write/import/backfill — list surfaces can filter without loading `sections` JSON.
+  structuralPublicComplete Boolean @default(false) @map("structural_public_complete")
   /// * Optional row-level filter; null means “follow pathway registry” (country implied by pathway).
   countryCode          CountryCode?  @map("country_code")
   tierCode             TierCode?     @map("tier_code")

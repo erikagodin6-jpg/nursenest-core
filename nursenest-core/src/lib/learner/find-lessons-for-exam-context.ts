@@ -16,7 +16,6 @@ import {
 import { pathwayRationaleContextFromId } from "@/lib/learner/lesson-question-rationale/pathway-context";
 import type { QuestionRationaleSignals } from "@/lib/learner/lesson-question-rationale/types";
 import type { RationaleLessonLinkKind } from "@/lib/learner/lesson-question-rationale/types";
-import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 
 export type ExamContextLessonHit = {
   id: string;
@@ -70,11 +69,12 @@ export async function findLessonsForExamContext(
   }
 
   const pathwayCtx = pathwayRationaleContextFromId(pathwayId);
-  const rows = await prisma.pathwayLesson.findMany({
+  const completeRows = await prisma.pathwayLesson.findMany({
     where: {
       ...pathwayLessonWhere(examContext),
       topicSlug,
       status: ContentStatus.PUBLISHED,
+      structuralPublicComplete: true,
     },
     select: {
       id: true,
@@ -84,18 +84,8 @@ export async function findLessonsForExamContext(
       topicSlug: true,
       bodySystem: true,
       countryCode: true,
-      previewSectionCount: true,
-      seoTitle: true,
-      seoDescription: true,
-      sections: true,
-      locale: true,
-      pathwayId: true,
     },
   });
-
-  const completeRows = rows.filter((row) =>
-    normalizeLesson(pathwayLessonRowToInput(row), pathwayId).structuralQuality?.publicComplete,
-  );
 
   if (completeRows.length === 0) {
     return { pathwayId, topicSlug, primary: null, related: [], suppressedReason: "no_published_rows" };

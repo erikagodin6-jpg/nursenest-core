@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { compare, hash } from "bcryptjs";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
@@ -34,6 +35,7 @@ function clientIp(req: Request): string {
 }
 
 export async function POST(req: Request) {
+  return runWithApiTelemetry(req, "POST /api/auth/change-password", "auth", async () => {
   const correlation = correlationIdFromRequest(req) ?? "";
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
@@ -121,4 +123,5 @@ export async function POST(req: Request) {
     safeServerLogCritical("auth", "change_password_failed", { surface: "api", correlation, severity: "error" }, e);
     return NextResponse.json({ ok: false, error: "Unable to change password. Try again shortly." }, { status: 503 });
   }
+  });
 }

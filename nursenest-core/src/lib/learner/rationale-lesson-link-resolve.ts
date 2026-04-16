@@ -23,7 +23,6 @@ import { pickTopicClusterSlugForPathway } from "@/lib/lessons/lesson-topic-clust
 import { listTopicClusters } from "@/lib/lessons/pathway-lesson-loader";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import { SCOPED_GOLD_PROVIDERS } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
-import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 
 const SLUG_TO_TOPIC_SLUG = new Map<string, string>(
   SCOPED_GOLD_PROVIDERS.map((p) => [p.slug, p.topicSlug] as const),
@@ -77,24 +76,15 @@ async function resolveSlugHrefBatch(
       ...pathwayLessonWhere(examContext),
       slug: { in: unique },
       status: ContentStatus.PUBLISHED,
+      structuralPublicComplete: true,
     },
     select: {
       id: true,
       slug: true,
       title: true,
-      topic: true,
-      topicSlug: true,
-      bodySystem: true,
-      previewSectionCount: true,
-      seoTitle: true,
-      seoDescription: true,
-      sections: true,
-      locale: true,
-      pathwayId: true,
     },
   });
   for (const r of rows) {
-    if (!normalizeLesson(pathwayLessonRowToInput(r), pathwayId).structuralQuality?.publicComplete) continue;
     out.set(r.slug, { href: `/app/lessons/${r.id}`, title: r.title, hrefSource: "app" });
   }
 
@@ -158,11 +148,12 @@ export async function resolveRationaleLessonLinksForQuestion(
     kind: RationaleLessonLinkKind;
   }> = [];
   if (topicCodeDerived && pathwayCtx) {
-    const rows = await prisma.pathwayLesson.findMany({
+    const completeRows = await prisma.pathwayLesson.findMany({
       where: {
         ...pathwayLessonWhere(examContext),
         topicSlug: topicCodeDerived,
         status: ContentStatus.PUBLISHED,
+        structuralPublicComplete: true,
       },
       select: {
         id: true,
@@ -172,17 +163,8 @@ export async function resolveRationaleLessonLinksForQuestion(
         topicSlug: true,
         bodySystem: true,
         countryCode: true,
-        previewSectionCount: true,
-        seoTitle: true,
-        seoDescription: true,
-        sections: true,
-        locale: true,
-        pathwayId: true,
       },
     });
-    const completeRows = rows.filter((row) =>
-      normalizeLesson(pathwayLessonRowToInput(row), pathwayId).structuralQuality?.publicComplete,
-    );
     dbRanked = rankPathwayLessonRowsForQuestion(
       {
         topic: args.topic,
@@ -276,24 +258,20 @@ export async function resolveRationaleLessonLinksForQuestion(
   });
   if (topicCode) {
     const legacy = await prisma.pathwayLesson.findFirst({
-      where: { ...pathwayLessonWhere(examContext), topicSlug: topicCode, status: ContentStatus.PUBLISHED },
+      where: {
+        ...pathwayLessonWhere(examContext),
+        topicSlug: topicCode,
+        status: ContentStatus.PUBLISHED,
+        structuralPublicComplete: true,
+      },
       orderBy: { sortOrder: "asc" },
       select: {
         id: true,
         title: true,
         slug: true,
-        topic: true,
-        topicSlug: true,
-        bodySystem: true,
-        previewSectionCount: true,
-        seoTitle: true,
-        seoDescription: true,
-        sections: true,
-        locale: true,
-        pathwayId: true,
       },
     });
-    if (legacy && normalizeLesson(pathwayLessonRowToInput(legacy), pathwayId).structuralQuality?.publicComplete) {
+    if (legacy) {
       return [
         {
           kind: "disease_process",

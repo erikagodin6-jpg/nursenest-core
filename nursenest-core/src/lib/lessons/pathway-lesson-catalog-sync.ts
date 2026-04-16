@@ -730,5 +730,15 @@ export function pathwayLessonRowToInput(row: {
   } as LessonInput;
 }
 
+/**
+ * Persists the same boolean as `normalizeLesson(pathwayLessonRowToInput(row), pathwayId).structuralQuality?.publicComplete`
+ * without requiring callers to duplicate gate logic.
+ */
+export function computeStructuralPublicCompleteFromDbRow(
+  row: Parameters<typeof pathwayLessonRowToInput>[0] & { pathwayId: string },
+): boolean {
+  return Boolean(normalizeLesson(pathwayLessonRowToInput(row), row.pathwayId).structuralQuality?.publicComplete);
+}
+
 /** @deprecated Prefer {@link normalizeLesson} */
 export const normalizePathwayLessonInput = normalizeLesson;

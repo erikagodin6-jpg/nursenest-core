@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { createAndSendVerificationEmail } from "@/lib/auth/email-verification";
@@ -21,6 +22,7 @@ function clientIp(req: Request): string {
 }
 
 export async function POST(req: Request) {
+  return runWithApiTelemetry(req, "POST /api/auth/resend-verification", "auth", async () => {
   const ip = clientIp(req);
   const rl = await checkRateLimitUnified(`resend-verify:${ip}`, { windowMs: 60_000, max: 4 });
   if (!rl.ok) {
@@ -66,5 +68,6 @@ export async function POST(req: Request) {
   return NextResponse.json({
     ok: true,
     message: "If an account exists, a verification email has been sent.",
+  });
   });
 }

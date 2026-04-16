@@ -1,6 +1,7 @@
 import "server-only";
 
 import { prisma } from "@/lib/db";
+import { computeStructuralPublicCompleteFromDbRow } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type {
   ContentBatchInput,
@@ -228,9 +229,22 @@ export async function runContentBatch(
  */
 export function lessonToPrismaCreateInput(
   lesson: GeneratedPathwayLesson,
-): Omit<GeneratedPathwayLesson, "_meta"> {
+): Omit<GeneratedPathwayLesson, "_meta"> & { structuralPublicComplete: boolean } {
   const { _meta: _, ...rest } = lesson;
-  return rest;
+  const structuralPublicComplete = computeStructuralPublicCompleteFromDbRow({
+    pathwayId: rest.pathwayId,
+    slug: rest.slug,
+    title: rest.title,
+    topic: rest.topic,
+    topicSlug: rest.topicSlug,
+    bodySystem: rest.bodySystem,
+    previewSectionCount: rest.previewSectionCount,
+    seoTitle: rest.seoTitle,
+    seoDescription: rest.seoDescription,
+    sections: rest.sections,
+    locale: rest.locale,
+  });
+  return { ...rest, structuralPublicComplete };
 }
 
 /**

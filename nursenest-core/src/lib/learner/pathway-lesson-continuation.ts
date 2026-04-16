@@ -9,7 +9,6 @@ import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 import { resolveNextIncompleteMarketingPathwayLesson } from "@/lib/learner/resolve-pathway-next-lesson";
 import { loadPathwayHubProgressBatch, type PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
-import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 
 /**
  * Most recently touched pathway lesson for this user — derived from `Progress.updatedAt`
@@ -34,18 +33,10 @@ export async function getLastTouchedPathwayLesson(
     select: {
       title: true,
       slug: true,
-      topic: true,
-      topicSlug: true,
-      bodySystem: true,
-      previewSectionCount: true,
-      seoTitle: true,
-      seoDescription: true,
-      sections: true,
-      locale: true,
-      pathwayId: true,
+      structuralPublicComplete: true,
     },
   });
-  if (!lesson || !normalizeLesson(pathwayLessonRowToInput(lesson), pathwayId).structuralQuality?.publicComplete) {
+  if (!lesson?.structuralPublicComplete) {
     return null;
   }
   const title = lesson.title?.trim() || slug;
@@ -100,22 +91,11 @@ export async function loadPathwayHubSubscriberData(
       where: { pathwayId: pathway.id, slug: batch.lastForResume.slug, status: "PUBLISHED" },
       select: {
         title: true,
-        slug: true,
-        topic: true,
-        topicSlug: true,
-        bodySystem: true,
-        previewSectionCount: true,
-        seoTitle: true,
-        seoDescription: true,
-        sections: true,
-        locale: true,
+        structuralPublicComplete: true,
       },
     });
     const title =
-      titleRow &&
-      normalizeLesson(pathwayLessonRowToInput(titleRow), pathway.id).structuralQuality?.publicComplete
-        ? (titleRow.title?.trim() ?? batch.lastForResume.slug)
-        : null;
+      titleRow?.structuralPublicComplete === true ? (titleRow.title?.trim() ?? batch.lastForResume.slug) : null;
     if (!title) {
       return { resume: emptyResume, progressMap: batch.progressMap };
     }

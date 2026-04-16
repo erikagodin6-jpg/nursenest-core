@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { auth } from "@/lib/auth";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
@@ -29,6 +30,7 @@ export const maxDuration = 60;
  * Subscriber-only flashcard list (backend-enforced; no freemium bypass of full backs).
  */
 export async function GET(req: NextRequest) {
+  return runWithApiTelemetry(req, "GET /api/flashcards", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) {
@@ -144,4 +146,5 @@ export async function GET(req: NextRequest) {
     safeServerLogCritical("api_flashcards", "find_failed", { page }, e);
     return NextResponse.json({ error: "Unable to load flashcards" }, { status: 503 });
   }
+  });
 }

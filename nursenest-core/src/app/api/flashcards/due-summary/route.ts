@@ -1,4 +1,6 @@
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { prisma } from "@/lib/db";
@@ -17,7 +19,8 @@ function utcDayBounds(d: Date): { start: Date; end: Date } {
 /**
  * Scoped SRS snapshot: due within UTC today, overdue before UTC today, “learning” (low repetition ladder).
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
+  return runWithApiTelemetry(req, "GET /api/flashcards/due-summary", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -73,4 +76,5 @@ export async function GET() {
     safeServerLogCritical("api_flashcards_due_summary", "query_failed", {}, e);
     return NextResponse.json({ error: "Unable to load due summary" }, { status: 503 });
   }
+  });
 }

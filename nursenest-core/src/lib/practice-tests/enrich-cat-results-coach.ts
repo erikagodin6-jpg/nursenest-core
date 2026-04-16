@@ -14,7 +14,6 @@ import {
   computeLessonContentSignal,
   type LessonContentSignal,
 } from "@/lib/lessons/lesson-content-readiness";
-import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 
 const STEM_PREVIEW = 240;
 
@@ -29,8 +28,8 @@ const LESSON_QUALITY_SAMPLE_LIMIT = 150;
 async function loadLessonContentSignal(pathwayId: string | null | undefined): Promise<LessonContentSignal | null> {
   if (!pathwayId?.trim()) return null;
   try {
-    const rows = await prisma.pathwayLesson.findMany({
-      where: { pathwayId, status: { not: "DRAFT" } },
+    const completeRows = await prisma.pathwayLesson.findMany({
+      where: { pathwayId, status: { not: "DRAFT" }, structuralPublicComplete: true },
       select: {
         id: true,
         title: true,
@@ -47,9 +46,6 @@ async function loadLessonContentSignal(pathwayId: string | null | undefined): Pr
       },
       take: LESSON_QUALITY_SAMPLE_LIMIT,
     });
-    const completeRows = rows.filter((row) =>
-      normalizeLesson(pathwayLessonRowToInput(row), pathwayId).structuralQuality?.publicComplete,
-    );
     return computeLessonContentSignal(completeRows as Array<{ sections: unknown }>);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);

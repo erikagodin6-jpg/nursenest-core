@@ -87,6 +87,8 @@ export function mapAuthCallbackCodeToPrimary(code: string | null | undefined): R
       return "AUTH_SYSTEM_ERROR";
     case "missing_credentials":
       return "QA_CREDENTIALS_MISSING";
+    case "credentials":
+      return "AUTH_CALLBACK_REJECTED";
     default:
       return "AUTH_CALLBACK_REJECTED";
   }

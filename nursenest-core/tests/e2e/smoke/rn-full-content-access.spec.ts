@@ -7,9 +7,20 @@
  * Run:
  *   cd nursenest-core && npm run qa:rn-full-content
  */
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
 import { attachPageObservers, type PageObservers } from "../helpers/attach-observers";
-import { loginWithCredentials } from "../helpers/learner-login";
+import { loginWithCredentials, RnFullContentLoginError } from "../helpers/learner-login";
+import {
+  fetchRnDatabaseHealthSnapshot,
+  fetchRnE2eAccountProbeSnapshot,
+  probeDatabaseUrlFromEnv,
+} from "../helpers/rn-full-content-database-preflight";
+import type { RnDatabaseHealthSnapshot, RnDatabasePreflightResult } from "../helpers/rn-full-content-database-preflight";
+import {
+  buildRnLoginFailureArtifacts,
+  mapRnLoginPrimaryToPhase0,
+} from "../helpers/rn-full-content-login-classification";
+import { humanReadableOperatorHint, type RnPhase0PrimaryClassification } from "../helpers/rn-full-content-phase0-classification";
 import {
   discoverAllRnLessonLinksFromHub,
   inventoryToSerializable,
@@ -101,6 +112,7 @@ type FinalVerdict = "STABLE" | "NOT_STABLE";
 type PhaseOutcome = "passed" | "failed" | "not_run";
 
 type RnFullContentSuiteResults = {
+  artifactKind: "rn_full_content_suite_verdict_v1";
   pathwayId: string;
   baseUrl: string;
   loginUrl: string;
@@ -111,6 +123,12 @@ type RnFullContentSuiteResults = {
   credentialsResolved: boolean;
   /** True when origin and /login HTTP probes succeed (connectivity — not auth). */
   environmentReady: boolean;
+  /** Node `pg` DATABASE_URL probe from the Playwright process (see environment+database artifact). */
+  databasePreflight?: RnDatabasePreflightResult | null;
+  /** GET /api/health/ready from the running app (see environment+database artifact). */
+  databaseHealthFromApp?: RnDatabaseHealthSnapshot | null;
+  phase0PrimaryClassification: RnPhase0PrimaryClassification | null;
+  operatorSummaryOneLine: string | null;
   loginSucceeded: boolean;
   discoverySucceeded: boolean;
   inventoryCount: number;
@@ -140,6 +158,7 @@ function credentialEnvHint(source: PaidCredentialSource | null): string {
 
 function buildSuiteResults(partial: Partial<RnFullContentSuiteResults> & { phases: SuitePhaseSummary }): RnFullContentSuiteResults {
   const r: RnFullContentSuiteResults = {
+    artifactKind: "rn_full_content_suite_verdict_v1",
     pathwayId: PAID_E2E_DEFAULT_PATHWAY_ID,
     baseUrl: partial.baseUrl ?? "",
     loginUrl: partial.loginUrl ?? "",
@@ -149,6 +168,10 @@ function buildSuiteResults(partial: Partial<RnFullContentSuiteResults> & { phase
     credentialResolutionOrder: partial.credentialResolutionOrder ?? "QA_PAID_EMAIL → E2E_PAID_EMAIL → PLAYWRIGHT_TEST_EMAIL",
     credentialsResolved: partial.credentialsResolved ?? false,
     environmentReady: partial.environmentReady ?? false,
+    databasePreflight: partial.databasePreflight ?? null,
+    databaseHealthFromApp: partial.databaseHealthFromApp ?? null,
+    phase0PrimaryClassification: partial.phase0PrimaryClassification ?? null,
+    operatorSummaryOneLine: partial.operatorSummaryOneLine ?? null,
     loginSucceeded: partial.loginSucceeded ?? false,
     discoverySucceeded: partial.discoverySucceeded ?? false,
     inventoryCount: partial.inventoryCount ?? 0,
@@ -176,13 +199,25 @@ function deriveFailureReason(r: RnFullContentSuiteResults): string | undefined {
   if (!r.environmentReady) {
     return (
       "Environment not ready: BASE_URL origin or /login is unreachable (connectivity — not an auth issue). " +
-      "See rn-full-content-environment-check.json."
+      "See rn-full-content-environment-and-database.json."
     );
   }
   if (!r.credentialsResolved) {
     return "Missing paid credentials — configure QA_PAID_EMAIL + QA_PAID_PASSWORD (or E2E_PAID_* or PLAYWRIGHT_TEST_*).";
   }
-  if (!r.loginSucceeded) return "Login did not complete or paid subscriber shell not confirmed — see rn-full-content-login-failure.json.";
+  if (
+    r.phase0PrimaryClassification === "DB_AUTH_FAILURE" ||
+    r.databasePreflight?.classification === "DB_AUTH_FAILURE" ||
+    r.databaseHealthFromApp?.classification === "DB_AUTH_FAILURE"
+  ) {
+    return "DB_AUTH_FAILURE: Postgres rejected DATABASE_URL (operator must fix database credentials / URL — not the QA web login password). See rn-full-content-environment-and-database.json.";
+  }
+  if (!r.loginSucceeded) {
+    return (
+      r.operatorSummaryOneLine ??
+      "Login did not complete or paid learner shell not confirmed — see rn-full-content-login-and-auth.json."
+    );
+  }
   if (!r.discoverySucceeded || r.inventoryCount < 1) {
     return "Discovery did not collect at least one RN lesson from the hub — see rn-lesson-inventory.json.";
   }
@@ -275,29 +310,70 @@ async function readLoginPageErrorSnippet(page: Page): Promise<string | undefined
   return undefined;
 }
 
-async function attachLoginFailure(
+async function attachLoginAndAuthArtifact(
   testInfo: import("@playwright/test").TestInfo,
+  request: APIRequestContext,
+  resolvedBase: string,
   page: Page,
   observers: PageObservers,
   resolved: { email: string; source: PaidCredentialSource },
   err: unknown,
-): Promise<void> {
+  databasePreflight: RnDatabasePreflightResult | null | undefined,
+  databaseHealthBefore: RnDatabaseHealthSnapshot | null,
+): Promise<{ resolvedPrimary: RnPhase0PrimaryClassification; operatorSummary: string }> {
   const visibleErrorText = await readLoginPageErrorSnippet(page).catch(() => undefined);
   const bodySnippet = (await page.locator("body").innerText().catch(() => "")).slice(0, 4000);
-  await testInfo.attach("rn-full-content-login-failure.json", {
+  const rn = err instanceof RnFullContentLoginError ? err.phase0 : null;
+  const errMsg = err instanceof Error ? err.message : String(err);
+
+  const databaseHealthAfter = await fetchRnDatabaseHealthSnapshot(request, resolvedBase);
+  const accountProbe = await fetchRnE2eAccountProbeSnapshot(request, resolvedBase, resolved.email);
+  const layered = buildRnLoginFailureArtifacts({
+    errorMessage: errMsg,
+    databaseHealthBefore,
+    databaseHealthAfter,
+    accountProbe,
+  });
+
+  const mappedLayered = mapRnLoginPrimaryToPhase0(layered.primaryClassification);
+  const layeredAmbiguous =
+    layered.primaryClassification === "CREDENTIALS_SIGNIN_REJECTED_UNKNOWN" ||
+    layered.primaryClassification === "LOGIN_PAGE_OR_NETWORK_FAILURE";
+
+  const resolvedPrimary: RnPhase0PrimaryClassification = layeredAmbiguous && rn
+    ? rn.primaryClassification
+    : mappedLayered;
+
+  const operatorSummary = layeredAmbiguous && rn ? rn.operatorHint : layered.operatorSummary;
+
+  await testInfo.attach("rn-full-content-login-and-auth.json", {
     body: Buffer.from(
       JSON.stringify(
         {
-          phase: "login",
+          artifactKind: "rn_full_content_login_and_auth_v1",
+          phase: "phase0_login_and_learner_shell",
           credentialSource: resolved.source,
           envVarsUsed: credentialEnvHint(resolved.source),
           emailMasked: maskEmailForReport(resolved.email),
           finalUrl: page.url(),
           visibleErrorText: visibleErrorText ?? null,
           bodySnippet,
-          error: err instanceof Error ? err.message : String(err),
+          error: errMsg,
           consoleErrors: observers.consoleErrors,
           failedRequests: observers.failedRequests,
+          databasePreflight: databasePreflight ?? null,
+          databaseHealthBefore,
+          databaseHealthAfter,
+          accountProbe,
+          layeredClassification: layered.primaryClassification,
+          layeredOperatorSummary: layered.operatorSummary,
+          layeredSecondaryHints: layered.secondaryHints,
+          authJsPrimaryClassification: rn?.primaryClassification ?? null,
+          primaryClassification: resolvedPrimary,
+          authCallbackCode: rn?.authCallbackCode ?? null,
+          authErrorParam: rn?.authErrorParam ?? null,
+          operatorHint: operatorSummary,
+          callbackHttpStatus: rn?.callbackHttpStatus ?? null,
         },
         null,
         2,
@@ -306,6 +382,7 @@ async function attachLoginFailure(
     ),
     contentType: "application/json",
   });
+  return { resolvedPrimary, operatorSummary };
 }
 
 function groupKeyForLesson(row: HubLessonLinkRow): string {
@@ -533,19 +610,25 @@ test.describe("RN full content access (paid)", () => {
     let envCheck: ReturnType<typeof buildEnvironmentCheckArtifact>;
     let resolvedCreds: ReturnType<typeof resolveQaPaidCredentialsWithSource>;
     let authAttempted = false;
+    let databasePreflightResult: RnDatabasePreflightResult | undefined;
+    let databaseHealthFromApp: RnDatabaseHealthSnapshot | undefined;
 
     await test.step("Phase — Environment & readiness (pre-login)", async () => {
       probe = await probeRnFullContentReachability(page.request, resolvedBase);
       resolvedCreds = resolveQaPaidCredentialsWithSource();
+      databasePreflightResult = await probeDatabaseUrlFromEnv();
+      databaseHealthFromApp = await fetchRnDatabaseHealthSnapshot(page.request, resolvedBase);
       envCheck = buildEnvironmentCheckArtifact({
         baseUrl: resolvedBase,
         skipWebServer,
         webServerExpectedToStart: isRnFullContentPlaywrightWebServerExpected(resolvedBase),
         credentialSource: resolvedCreds?.source ?? null,
         credentialsResolved: !!resolvedCreds,
+        databasePreflight: databasePreflightResult,
+        databaseHealthFromApp,
         probe,
       });
-      await testInfo.attach("rn-full-content-environment-check.json", {
+      await testInfo.attach("rn-full-content-environment-and-database.json", {
         body: Buffer.from(JSON.stringify(envCheck, null, 2), "utf-8"),
         contentType: "application/json",
       });
@@ -560,6 +643,8 @@ test.describe("RN full content access (paid)", () => {
       credentialsResolved: !!resolvedCreds,
       credentialSource: resolvedCreds?.source ?? null,
       credentialsUsed: resolvedCreds ? maskEmailForReport(resolvedCreds.email) : null,
+      databasePreflight: databasePreflightResult ?? null,
+      databaseHealthFromApp: databaseHealthFromApp ?? null,
     };
 
     if (!probe!.originReachable || !probe!.loginReachable) {
@@ -567,6 +652,8 @@ test.describe("RN full content access (paid)", () => {
         ...resultsPayload,
         phases: suite,
         loginSucceeded: false,
+        phase0PrimaryClassification: "ENVIRONMENT_UNREACHABLE",
+        operatorSummaryOneLine: humanReadableOperatorHint("ENVIRONMENT_UNREACHABLE"),
         discoverySucceeded: false,
         inventoryCount: 0,
         lessonsVisited: 0,
@@ -577,8 +664,13 @@ test.describe("RN full content access (paid)", () => {
         catStatus: "not_run",
         failureReason: envCheck!.blockingReason,
       });
+      const connBody = Buffer.from(JSON.stringify(failedConn, null, 2), "utf-8");
       await testInfo.attach("rn-full-content-suite-results.json", {
-        body: Buffer.from(JSON.stringify(failedConn, null, 2), "utf-8"),
+        body: connBody,
+        contentType: "application/json",
+      });
+      await testInfo.attach("rn-full-content-suite-verdict.json", {
+        body: connBody,
         contentType: "application/json",
       });
       await attachRnBlockingReport(testInfo, {
@@ -607,6 +699,8 @@ test.describe("RN full content access (paid)", () => {
         ...resultsPayload,
         phases: suite,
         loginSucceeded: false,
+        phase0PrimaryClassification: "QA_CREDENTIALS_MISSING",
+        operatorSummaryOneLine: humanReadableOperatorHint("QA_CREDENTIALS_MISSING"),
         discoverySucceeded: false,
         inventoryCount: 0,
         lessonsVisited: 0,
@@ -617,8 +711,13 @@ test.describe("RN full content access (paid)", () => {
         catStatus: "not_run",
         failureReason: REQUIRED_CREDENTIALS_MSG,
       });
+      const credBody = Buffer.from(JSON.stringify(failedCreds, null, 2), "utf-8");
       await testInfo.attach("rn-full-content-suite-results.json", {
-        body: Buffer.from(JSON.stringify(failedCreds, null, 2), "utf-8"),
+        body: credBody,
+        contentType: "application/json",
+      });
+      await testInfo.attach("rn-full-content-suite-verdict.json", {
+        body: credBody,
         contentType: "application/json",
       });
       await attachRnBlockingReport(testInfo, {
@@ -644,6 +743,85 @@ test.describe("RN full content access (paid)", () => {
 
     const resolved = resolvedCreds;
 
+    const appReportsDbAuthFailure = databaseHealthFromApp?.classification === "DB_AUTH_FAILURE";
+    const pgReportsDbAuthFailure =
+      databasePreflightResult?.connectAttempted && databasePreflightResult.classification === "DB_AUTH_FAILURE";
+
+    if (pgReportsDbAuthFailure || appReportsDbAuthFailure) {
+      const op = humanReadableOperatorHint("DB_AUTH_FAILURE");
+      resultsPayload.loginSucceeded = false;
+      resultsPayload.phase0PrimaryClassification = "DB_AUTH_FAILURE";
+      resultsPayload.operatorSummaryOneLine = op;
+      const failedDb = buildSuiteResults({
+        ...resultsPayload,
+        phases: suite,
+        loginSucceeded: false,
+        discoverySucceeded: false,
+        inventoryCount: 0,
+        lessonsVisited: 0,
+        substantiveLessons: 0,
+        lessonsFailed: 0,
+        flashcardsStatus: "not_run",
+        questionBankStatus: "not_run",
+        catStatus: "not_run",
+        failureReason:
+          "[rn-full-content] DB_AUTH_FAILURE: DATABASE_URL rejected by Postgres before browser login (not a QA web password issue).",
+      });
+      await testInfo.attach("rn-full-content-suite-results.json", {
+        body: Buffer.from(JSON.stringify(failedDb, null, 2), "utf-8"),
+        contentType: "application/json",
+      });
+      await testInfo.attach("rn-full-content-suite-verdict.json", {
+        body: Buffer.from(JSON.stringify(failedDb, null, 2), "utf-8"),
+        contentType: "application/json",
+      });
+      await attachRnBlockingReport(testInfo, {
+        baseUrl: resolvedBase,
+        loginUrl: loginUrlResolved,
+        skipWebServer,
+        envCheck,
+        credentialsResolved: true,
+        authAttempted: false,
+        loginSucceeded: false,
+        phase0PrimaryClassification: "DB_AUTH_FAILURE",
+        phase0OperatorHint: op,
+        discoverySucceeded: false,
+        inventoryCount: 0,
+        lessonsVisited: 0,
+        substantiveLessons: 0,
+        lessonsFailed: 0,
+        flashcardsStatus: "not_run",
+        questionBankStatus: "not_run",
+        catStatus: "not_run",
+        lastError: "DB_AUTH_FAILURE: DATABASE_URL rejected by Postgres.",
+      });
+      await testInfo.attach("rn-full-content-login-and-auth.json", {
+        body: Buffer.from(
+          JSON.stringify(
+            {
+              artifactKind: "rn_full_content_login_and_auth_v1",
+              outcome: "login_skipped",
+              reason: "db_auth_failure_before_browser_login",
+              signals: {
+                nodePgProbeDbAuthFailure: pgReportsDbAuthFailure,
+                apiHealthReadyDbAuthFailure: appReportsDbAuthFailure,
+              },
+              databasePreflight: databasePreflightResult ?? null,
+              databaseHealthFromApp: databaseHealthFromApp ?? null,
+              operatorHint: op,
+            },
+            null,
+            2,
+          ),
+          "utf-8",
+        ),
+        contentType: "application/json",
+      });
+      throw new Error(
+        "[rn-full-content] DB_AUTH_FAILURE: Postgres rejected DATABASE_URL — fix database credentials. This is not a QA web login password failure. See rn-full-content-environment-and-database.json.",
+      );
+    }
+
     const slowMs: { url: string; ms: number }[] = [];
     const origin = resolvedBase;
     const disposeSlow = attachSlowRequestTap(page, origin, slowMs, 3000);
@@ -656,8 +834,13 @@ test.describe("RN full content access (paid)", () => {
         phases: suite,
         thrown,
       } as Parameters<typeof buildSuiteResults>[0]);
+      const body = Buffer.from(JSON.stringify(merged, null, 2), "utf-8");
       await testInfo.attach("rn-full-content-suite-results.json", {
-        body: Buffer.from(JSON.stringify(merged, null, 2), "utf-8"),
+        body,
+        contentType: "application/json",
+      });
+      await testInfo.attach("rn-full-content-suite-verdict.json", {
+        body,
         contentType: "application/json",
       });
     };
@@ -670,10 +853,49 @@ test.describe("RN full content access (paid)", () => {
           await expectOnPaidSubscriberApp(page);
           expect(page.url(), "not stuck on /login").not.toMatch(/\/login/i);
           resultsPayload.loginSucceeded = true;
+          resultsPayload.phase0PrimaryClassification = null;
+          resultsPayload.operatorSummaryOneLine = "Phase 0 passed: credentials accepted and learner shell confirmed.";
+          await testInfo.attach("rn-full-content-login-and-auth.json", {
+            body: Buffer.from(
+              JSON.stringify(
+                {
+                  artifactKind: "rn_full_content_login_and_auth_v1",
+                  outcome: "passed",
+                  databasePreflight: databasePreflightResult ?? null,
+                  databaseHealthFromApp: databaseHealthFromApp ?? null,
+                  operatorSummary: resultsPayload.operatorSummaryOneLine,
+                },
+                null,
+                2,
+              ),
+              "utf-8",
+            ),
+            contentType: "application/json",
+          });
         } catch (e) {
           resultsPayload.loginSucceeded = false;
-          await attachLoginFailure(testInfo, page, observers, resolved, e);
-          await attachSuiteJson({ loginSucceeded: false, failureReason: "Login failed — see rn-full-content-login-failure.json" }, String(e));
+          const merged = await attachLoginAndAuthArtifact(
+            testInfo,
+            page.request,
+            resolvedBase,
+            page,
+            observers,
+            resolved,
+            e,
+            databasePreflightResult,
+            databaseHealthFromApp ?? null,
+          );
+          resultsPayload.phase0PrimaryClassification = merged.resolvedPrimary;
+          resultsPayload.operatorSummaryOneLine = merged.operatorSummary;
+          await attachSuiteJson(
+            {
+              loginSucceeded: false,
+              phase0PrimaryClassification: merged.resolvedPrimary,
+              operatorSummaryOneLine: merged.operatorSummary,
+              failureReason: merged.operatorSummary ?? "Login failed — see rn-full-content-login-and-auth.json",
+            },
+            String(e),
+          );
           throw e;
         }
       });
@@ -897,6 +1119,8 @@ test.describe("RN full content access (paid)", () => {
         credentialsResolved: !!resultsPayload.credentialsResolved,
         authAttempted,
         loginSucceeded: !!resultsPayload.loginSucceeded,
+        phase0PrimaryClassification: resultsPayload.phase0PrimaryClassification ?? null,
+        phase0OperatorHint: resultsPayload.operatorSummaryOneLine ?? null,
         discoverySucceeded: !!resultsPayload.discoverySucceeded,
         inventoryCount: resultsPayload.inventoryCount ?? 0,
         lessonsVisited: resultsPayload.lessonsVisited ?? 0,

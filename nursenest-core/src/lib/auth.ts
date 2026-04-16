@@ -316,7 +316,7 @@ export const authConfig: NextAuthConfig = {
             authMode,
           });
           recordCredentialsLoginFailure("locked_out", request);
-          return null;
+          return rejectCredentialsOrNull("account_locked");
         }
 
         const gmailLike = isGmailLikeAddress(enteredEmailLower);
@@ -385,7 +385,7 @@ export const authConfig: NextAuthConfig = {
                 ip: ip.slice(0, 64),
               });
               recordCredentialsLoginFailure("duplicate_user_match", request);
-              return null;
+              return rejectCredentialsOrNull("duplicate_user");
             }
 
             user = await prisma.user.findFirst({
@@ -462,7 +462,7 @@ export const authConfig: NextAuthConfig = {
                 ip: ip.slice(0, 64),
               });
               recordCredentialsLoginFailure("duplicate_user_match", request);
-              return null;
+              return rejectCredentialsOrNull("duplicate_user");
             }
             user = await prisma.user.findFirst({
               where: { username: { equals: enteredEmailLower, mode: "insensitive" } },
@@ -515,7 +515,7 @@ export const authConfig: NextAuthConfig = {
             reason: postgresUrlAuthFailed ? "database_url_rejected" : "db_error",
             detail: detail.slice(0, 120),
           });
-          return null;
+          return rejectCredentialsOrNull(postgresUrlAuthFailed ? "db_url_auth" : "db_lookup");
         }
 
         const lookupStrategyTried =
@@ -594,7 +594,7 @@ export const authConfig: NextAuthConfig = {
           });
           recordCredentialsLoginFailure("not_found", request);
           traceCredentialsAuthorizeDev("reject", { reason: "user_not_found", authMode });
-          return null;
+          return rejectCredentialsOrNull("user_missing");
         }
 
         const storedPasswordHash = normalizeStoredPasswordHash(user.passwordHash);
@@ -617,7 +617,7 @@ export const authConfig: NextAuthConfig = {
           });
           recordCredentialsLoginFailure("no_password_hash", request);
           traceCredentialsAuthorizeDev("reject", { reason: "missing_password_hash", userIdPrefix: user.id.slice(0, 8) });
-          return null;
+          return rejectCredentialsOrNull("no_password_hash");
         }
 
         let passwordOk = false;
@@ -649,7 +649,7 @@ export const authConfig: NextAuthConfig = {
           });
           recordCredentialsLoginFailure("system_error", request);
           traceCredentialsAuthorizeDev("reject", { reason: "bcrypt_compare_error", userIdPrefix: user.id.slice(0, 8) });
-          return null;
+          return rejectCredentialsOrNull("system_error");
         }
 
         safeServerLog("auth", "credentials_authorize_password", {
@@ -680,7 +680,7 @@ export const authConfig: NextAuthConfig = {
           });
           recordCredentialsLoginFailure("bad_password", request);
           traceCredentialsAuthorizeDev("reject", { reason: "password_mismatch", userIdPrefix: user.id.slice(0, 8) });
-          return null;
+          return rejectCredentialsOrNull("password_invalid");
         }
 
         await clearLoginFailures(lockKey);

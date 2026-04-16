@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import type { Prisma } from "@prisma/client";
 import { ExamSessionStatus } from "@prisma/client";
 import { z } from "zod";
@@ -46,6 +47,7 @@ const schema = z
   });
 
 export async function POST(req: Request) {
+  return runWithApiTelemetry(req, "POST /api/exams/submit", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -268,4 +270,5 @@ export async function POST(req: Request) {
     safeServerLogCritical("api_exams_submit", "attempt_create_failed", {}, e);
     return NextResponse.json({ error: "Unable to save results. Try again shortly." }, { status: 503 });
   }
+  });
 }

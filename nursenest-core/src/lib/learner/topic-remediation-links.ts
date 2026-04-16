@@ -5,7 +5,7 @@ import { prisma } from "@/lib/db";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
-import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
+import { PATHWAY_LESSON_METADATA_LIST_SELECT } from "@/lib/lessons/pathway-lesson-metadata-select";
 
 function appendTopicCodeToDrillHref(href: string, topicCode: string): string {
   if (!topicCode || href.includes("topicCode=")) return href;
@@ -49,23 +49,11 @@ export async function resolveTopicRemediationLinks(
               topicSlug: code,
               status: ContentStatus.PUBLISHED,
               locale: "en",
+              structuralPublicComplete: true,
             },
           ],
         },
-        select: {
-          id: true,
-          pathwayId: true,
-          title: true,
-          slug: true,
-          topic: true,
-          topicSlug: true,
-          bodySystem: true,
-          previewSectionCount: true,
-          seoTitle: true,
-          seoDescription: true,
-          sections: true,
-          locale: true,
-        },
+        select: PATHWAY_LESSON_METADATA_LIST_SELECT,
         orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
         take: 24,
       }),
@@ -77,10 +65,7 @@ export async function resolveTopicRemediationLinks(
         orderBy: { updatedAt: "desc" },
       }),
     ]);
-    const pathwayLesson =
-      pathwayLessonRows.find((row) =>
-        normalizeLesson(pathwayLessonRowToInput(row), row.pathwayId).structuralQuality?.publicComplete,
-      ) ?? null;
+    const pathwayLesson = pathwayLessonRows[0] ?? null;
     if (pathwayLesson) lessonHref = `/app/lessons/${pathwayLesson.id}`;
     else if (contentLesson) lessonHref = `/app/lessons/${contentLesson.id}`;
   }

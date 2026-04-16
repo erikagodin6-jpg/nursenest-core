@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { loadExamAttemptDetailForSubscriber } from "@/lib/exams/load-exam-attempt-detail";
 import { enforceExamAttemptDetailProtection } from "@/lib/http/api-protection";
@@ -35,5 +36,6 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     },
     review: payload.review,
     studyNext: payload.studyNext,
+  });
   });
 }

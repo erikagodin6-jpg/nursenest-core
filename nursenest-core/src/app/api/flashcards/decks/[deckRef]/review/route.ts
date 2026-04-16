@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
@@ -49,6 +50,7 @@ type Props = { params: Promise<{ deckRef: string }> };
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest, { params }: Props) {
+  return runWithApiTelemetry(req, "POST /api/flashcards/decks/[deckRef]/review", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -196,4 +198,5 @@ export async function POST(req: NextRequest, { params }: Props) {
     safeServerLogCritical("api_flashcards_review", "transaction_failed", { flashcardId: flashcardId.slice(0, 12) }, e);
     return NextResponse.json({ error: "Unable to save progress" }, { status: 503 });
   }
+  });
 }

@@ -1,5 +1,4 @@
 import { TierCode } from "@prisma/client";
-import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
@@ -24,6 +23,7 @@ import {
 } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { PATHWAY_LESSON_METADATA_LIST_SELECT } from "@/lib/lessons/pathway-lesson-metadata-select";
 
 export type ContinueLesson = {
   title: string;
@@ -78,6 +78,7 @@ export type PathwayLessonDashboardRow = {
   seoTitle: string;
   seoDescription: string;
   locale: string;
+  structuralPublicComplete: boolean;
 };
 
 export type LearnerDashboardPreload = {
@@ -94,31 +95,16 @@ export type PathwayStudySummariesPreload = {
   pathwayProgress: { lessonId: string; completed: boolean }[];
 };
 
-/** Metadata-only — avoids multi‑MB `sections` JSON per row on learner dashboard / bundle paths. */
-const PATHWAY_LESSON_DASHBOARD_METADATA_SELECT: Prisma.PathwayLessonSelect = {
-  id: true,
-  pathwayId: true,
-  slug: true,
-  title: true,
-  topic: true,
-  topicSlug: true,
-  bodySystem: true,
-  previewSectionCount: true,
-  seoTitle: true,
-  seoDescription: true,
-  locale: true,
-};
-
 /**
  * Single pathway-lesson list for learner dashboard scope (bounded, same cap as catalog hub math).
  * Loads **metadata only** (no `sections` JSON) so RN full-content runs do not materialize huge lesson bodies.
  */
 export async function fetchPathwayLessonRowsForDashboard(
-  where: Prisma.PathwayLessonWhereInput,
+  where: import("@prisma/client").Prisma.PathwayLessonWhereInput,
 ): Promise<PathwayLessonDashboardRow[]> {
   const rows = await prisma.pathwayLesson.findMany({
     where,
-    select: PATHWAY_LESSON_DASHBOARD_METADATA_SELECT,
+    select: PATHWAY_LESSON_METADATA_LIST_SELECT,
     take: PATHWAY_CATALOG_LIST_HARD_CAP,
   });
   return rows as PathwayLessonDashboardRow[];
@@ -175,6 +161,14 @@ export async function loadPathwayLessonProgressBundle(
     pathwayLessonRows: pathwayLessonRows.length,
     progressRows: pathwayProgressScoped.length,
   });
+  if (process.env.PATHWAY_LESSON_METADATA_DIAGNOSTIC === "1") {
+    const n = pathwayLessonRows.length;
+    safeServerLog("learner_dashboard", "pathway_metadata_payload_diag", {
+      metadataRows: n,
+      approxMetadataBytesPerRow: 900,
+      approxSectionsJsonAvoidedBytes: n * 48_000,
+    });
+  }
 
   return {
     user: {

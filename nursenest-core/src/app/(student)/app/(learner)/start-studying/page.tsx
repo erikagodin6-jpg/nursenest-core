@@ -13,7 +13,6 @@ import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-serve
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 
 export const dynamic = "force-dynamic";
 
@@ -81,17 +80,13 @@ export default async function StartStudyingPage() {
             previewSectionCount: true,
             seoTitle: true,
             seoDescription: true,
-            sections: true,
             locale: true,
+            structuralPublicComplete: true,
           },
         })
       : null;
   let firstLesson = firstLessonRaw;
-  if (
-    firstLessonRaw &&
-    pathwayId != null &&
-    !normalizeLesson(pathwayLessonRowToInput(firstLessonRaw), pathwayId).structuralQuality?.publicComplete
-  ) {
+  if (firstLessonRaw && pathwayId != null && !firstLessonRaw.structuralPublicComplete) {
     firstLesson = null;
   }
   if (!firstLesson && pathwayId != null && lessonLocale !== "en") {
@@ -108,14 +103,11 @@ export default async function StartStudyingPage() {
         previewSectionCount: true,
         seoTitle: true,
         seoDescription: true,
-        sections: true,
         locale: true,
+        structuralPublicComplete: true,
       },
     });
-    if (
-      fallbackRaw &&
-      normalizeLesson(pathwayLessonRowToInput(fallbackRaw), pathwayId).structuralQuality?.publicComplete
-    ) {
+    if (fallbackRaw?.structuralPublicComplete) {
       firstLesson = fallbackRaw;
     }
   }

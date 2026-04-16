@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import type { DatabaseHealthClassification } from "@/lib/db/db-error-classification";
 import { checkDatabaseReadiness } from "@/lib/db/prisma-readiness";
 import { recordHealthReadyDatabaseFailure } from "@/lib/observability/production-signal-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -32,6 +33,7 @@ export async function GET() {
         {
           ok: true,
           database: "not_configured",
+          classification: "DATABASE_URL_NOT_CONFIGURED" satisfies DatabaseHealthClassification,
           service: "nursenest-core",
           readinessTimeoutMs,
           timestamp: new Date().toISOString(),
@@ -44,6 +46,7 @@ export async function GET() {
         {
           ok: true,
           database: "ok",
+          classification: "OK" satisfies DatabaseHealthClassification,
           latencyMs: r.latencyMs,
           readinessTimeoutMs,
           service: "nursenest-core",
@@ -54,12 +57,16 @@ export async function GET() {
     }
     if (!r.ok) {
       const detail = (r.error ?? "unknown").slice(0, 120);
-      safeServerLog("health", "ready_database_failed", { detail });
+      safeServerLog("health", "ready_database_failed", {
+        detail,
+        classification: r.classification,
+      });
       recordHealthReadyDatabaseFailure();
       return NextResponse.json(
         {
           ok: false,
           database: "error",
+          classification: r.classification,
           service: "nursenest-core",
           readinessTimeoutMs,
           timestamp: new Date().toISOString(),
@@ -86,6 +93,7 @@ export async function GET() {
       {
         ok: false,
         database: "error",
+        classification: "DB_OTHER" satisfies DatabaseHealthClassification,
         service: "nursenest-core",
         readinessTimeoutMs,
         timestamp: new Date().toISOString(),

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { ExamSessionStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { filterSessionQuestionIdsInScope, questionIdWhereIfAllowed } from "@/lib/entitlements/assert-question-access";
@@ -18,6 +19,7 @@ import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale
  * Fetch a single exam question by session + index (avoids loading full pool in one response).
  */
 export async function GET(req: NextRequest) {
+  return runWithApiTelemetry(req, "GET /api/exams/session/question", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -112,4 +114,5 @@ export async function GET(req: NextRequest) {
     safeServerLogCritical("api_exams_session_question", "failed", {}, e);
     return NextResponse.json({ error: "Unable to load question" }, { status: 503 });
   }
+  });
 }

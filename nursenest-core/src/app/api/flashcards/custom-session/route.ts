@@ -1,5 +1,6 @@
 import { ContentStatus, type Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
@@ -63,6 +64,7 @@ function shuffled<T>(rows: T[], seed: string): T[] {
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
+  return runWithApiTelemetry(req, "GET /api/flashcards/custom-session", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) {
@@ -223,5 +225,6 @@ export async function GET(req: NextRequest) {
     },
     categoryOptions: applyCountsToBuilderCategories(pathwayId, categoryCounts),
     cards: cardsForSession,
+  });
   });
 }

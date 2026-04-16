@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { ContentStatus, FlashcardDeckVisibility } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
@@ -48,6 +49,7 @@ type Props = { params: Promise<{ deckRef: string }> };
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest, { params }: Props) {
+  return runWithApiTelemetry(req, "GET /api/flashcards/decks/[deckRef]/study", "content", async () => {
   const { deckRef } = await params;
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
@@ -332,4 +334,5 @@ export async function GET(req: NextRequest, { params }: Props) {
     safeServerLogCritical("api_flashcards_study", "query_failed", { deckRef }, e);
     return NextResponse.json({ error: "Unable to load study batch" }, { status: 503 });
   }
+  });
 }

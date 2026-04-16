@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { ExamSessionStatus } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
@@ -32,6 +33,7 @@ const patchSchema = z.object({
 
 /** Resume in-progress session (questions + progress). */
 export async function GET(req: NextRequest) {
+  return runWithApiTelemetry(req, "GET /api/exams/session", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -188,10 +190,12 @@ export async function GET(req: NextRequest) {
     safeServerLogCritical("api_exams_session", "get_failed", {}, e);
     return NextResponse.json({ error: "Unable to load session" }, { status: 503 });
   }
+  });
 }
 
 /** Save progress after each question (idempotent upsert by session id). */
 export async function PATCH(req: Request) {
+  return runWithApiTelemetry(req, "PATCH /api/exams/session", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -235,4 +239,5 @@ export async function PATCH(req: Request) {
     safeServerLogCritical("api_exams_session", "patch_failed", {}, e);
     return NextResponse.json({ error: "Unable to save progress" }, { status: 503 });
   }
+  });
 }

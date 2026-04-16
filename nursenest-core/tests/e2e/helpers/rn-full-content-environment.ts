@@ -1,5 +1,7 @@
 import type { APIRequestContext } from "@playwright/test";
 import type { PaidCredentialSource } from "./smoke-credentials";
+import type { RnDatabaseHealthSnapshot } from "./rn-full-content-database-preflight";
+import type { RnDatabasePreflightResult } from "./rn-full-content-database-preflight";
 
 /**
  * Default Playwright `baseURL` for RN full-content — **must match** `playwright.rn-full-content.config.ts`.
@@ -54,6 +56,7 @@ export function isRnFullContentPlaywrightWebServerExpected(resolvedBaseUrl: stri
 }
 
 export type RnFullContentEnvironmentCheck = {
+  artifactKind: "rn_full_content_environment_and_database_v1";
   baseUrl: string;
   loginUrl: string;
   skipWebServer: boolean;
@@ -75,6 +78,10 @@ export type RnFullContentEnvironmentCheck = {
   loginProbeAttempts?: number;
   originTimeoutMs?: number;
   loginTimeoutMs?: number;
+  /** Node `pg` probe using Playwright process `DATABASE_URL` (must match app server for accurate DB vs QA login triage). */
+  databasePreflight?: RnDatabasePreflightResult;
+  /** App server view: GET /api/health/ready (Prisma readiness — same secrets as the running dev server). */
+  databaseHealthFromApp?: RnDatabaseHealthSnapshot | null;
 };
 
 /** Root `/` — should respond once the dev server is listening. */
@@ -150,6 +157,32 @@ function buildOperatorNextSteps(input: {
     steps.push(
       "Set QA_PAID_EMAIL + QA_PAID_PASSWORD (or E2E_PAID_* or PLAYWRIGHT_TEST_*) in the environment or .env.playwright.local.",
     );
+  }
+  return steps;
+}
+
+function mergedDatabaseOperatorSteps(
+  pg: RnDatabasePreflightResult | undefined,
+  app: RnDatabaseHealthSnapshot | null | undefined,
+): string[] {
+  const steps: string[] = [];
+  if (pg?.classification === "DB_AUTH_FAILURE") {
+    steps.push(
+      "Node `pg` probe (Playwright process DATABASE_URL): DB_AUTH_FAILURE — Postgres rejected that URL’s DB user/password (not the QA web login password). Align DATABASE_URL with the dev server.",
+    );
+  }
+  if (pg?.classification === "SKIPPED_NO_DATABASE_URL") {
+    steps.push(
+      "DATABASE_URL was not set in the Playwright worker — node-side DB probe was skipped. Set DATABASE_URL in the same environment as `npm run qa:rn-full-content` to compare worker vs app DB connectivity.",
+    );
+  }
+  if (app?.classification === "DB_AUTH_FAILURE") {
+    steps.push(
+      "GET /api/health/ready: classification=DB_AUTH_FAILURE — the **running app** cannot authenticate to Postgres (invalid DATABASE_URL for the dev server). This is not a wrong QA_PAID_PASSWORD.",
+    );
+  }
+  if (app?.classification === "DATABASE_URL_NOT_CONFIGURED") {
+    steps.push("GET /api/health/ready: DATABASE_URL is not configured for the app process.");
   }
   return steps;
 }
@@ -269,6 +302,8 @@ export function buildEnvironmentCheckArtifact(input: {
   webServerExpectedToStart: boolean;
   credentialSource: PaidCredentialSource | null;
   credentialsResolved: boolean;
+  databasePreflight?: RnDatabasePreflightResult;
+  databaseHealthFromApp?: RnDatabaseHealthSnapshot | null;
   probe: Pick<
     RnFullContentEnvironmentCheck,
     | "originReachable"
@@ -287,14 +322,17 @@ export function buildEnvironmentCheckArtifact(input: {
   const envOk = input.probe.originReachable && input.probe.loginReachable;
   const suiteCanProceed = envOk && input.credentialsResolved;
 
-  const operatorNextSteps = buildOperatorNextSteps({
-    skipWebServer: input.skipWebServer,
-    originReachable: input.probe.originReachable,
-    loginReachable: input.probe.loginReachable,
-    originCategory: input.probe.originFailureCategory,
-    loginCategory: input.probe.loginFailureCategory,
-    credentialsResolved: input.credentialsResolved,
-  });
+  const operatorNextSteps = [
+    ...buildOperatorNextSteps({
+      skipWebServer: input.skipWebServer,
+      originReachable: input.probe.originReachable,
+      loginReachable: input.probe.loginReachable,
+      originCategory: input.probe.originFailureCategory,
+      loginCategory: input.probe.loginFailureCategory,
+      credentialsResolved: input.credentialsResolved,
+    }),
+    ...mergedDatabaseOperatorSteps(input.databasePreflight, input.databaseHealthFromApp ?? null),
+  ];
 
   let blockingReason: string | undefined;
   if (!input.probe.originReachable || !input.probe.loginReachable) {
@@ -311,6 +349,7 @@ export function buildEnvironmentCheckArtifact(input: {
   }
 
   return {
+    artifactKind: "rn_full_content_environment_and_database_v1",
     baseUrl: input.baseUrl,
     loginUrl,
     skipWebServer: input.skipWebServer,
@@ -331,5 +370,7 @@ export function buildEnvironmentCheckArtifact(input: {
     loginProbeAttempts: input.probe.loginProbeAttempts,
     originTimeoutMs: input.probe.originTimeoutMs,
     loginTimeoutMs: input.probe.loginTimeoutMs,
+    databasePreflight: input.databasePreflight,
+    databaseHealthFromApp: input.databaseHealthFromApp ?? null,
   };
 }

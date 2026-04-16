@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { questionIdWhereIfAllowed } from "@/lib/entitlements/assert-question-access";
 import { prisma } from "@/lib/db";
@@ -41,6 +42,7 @@ function effectivePathwayIdForGrade(
 }
 
 export async function POST(req: Request) {
+  return runWithApiTelemetry(req, "POST /api/questions/grade", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -228,4 +230,5 @@ export async function POST(req: Request) {
     safeServerLogCritical("api_questions_grade", "failed", { questionId }, e);
     return NextResponse.json({ error: "Unable to grade. Try again shortly." }, { status: 503 });
   }
+  });
 }

@@ -52,6 +52,10 @@ function localDevWebServer() {
       BASE_URL: origin.origin,
       AUTH_URL: origin.origin,
       NEXTAUTH_URL: origin.origin,
+      /** Enables opaque `code=` on credentials callback redirects for RN full-content triage (non-production default in auth). */
+      PLAYWRIGHT_DIAGNOSTIC_AUTH_CODES: "1",
+      /** POST /api/health/e2e-account-probe — distinguishes missing QA user vs lockout vs subscription (no secrets). */
+      NN_E2E_ACCOUNT_PROBE: "1",
     },
   } as const;
 }

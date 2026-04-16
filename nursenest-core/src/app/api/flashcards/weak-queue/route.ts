@@ -1,4 +1,6 @@
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { loadWeakAreaFlashcardsForUser } from "@/lib/flashcards/load-weak-flashcards";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
@@ -7,7 +9,8 @@ import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 export const dynamic = "force-dynamic";
 
 /** Subscriber-only: cards aligned to weak topics from question/practice stats (virtual “weak deck”). */
-export async function GET() {
+export async function GET(req: NextRequest) {
+  return runWithApiTelemetry(req, "GET /api/flashcards/weak-queue", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -34,4 +37,5 @@ export async function GET() {
     safeServerLogCritical("api_flashcards_weak_queue", "load_failed", {}, e);
     return NextResponse.json({ error: "Unable to build weak-area set" }, { status: 503 });
   }
+  });
 }

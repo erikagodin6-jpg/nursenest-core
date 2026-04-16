@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { hash } from "bcryptjs";
 import { z } from "zod";
 import { strongPasswordSchema } from "@/lib/auth/password-policy";
@@ -27,6 +28,7 @@ const bodySchema = z.object({
 });
 
 export async function POST(req: Request) {
+  return runWithApiTelemetry(req, "POST /api/auth/reset-password", "auth", async () => {
   const ip = clientIp(req);
   const correlation = correlationIdFromRequest(req) ?? "";
   const rl = await checkRateLimitUnified(`reset-password:${ip}`, { windowMs: 60_000, max: 10 });
@@ -120,4 +122,5 @@ export async function POST(req: Request) {
       { status: 503 },
     );
   }
+  });
 }

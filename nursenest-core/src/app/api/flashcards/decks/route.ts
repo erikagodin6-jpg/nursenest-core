@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { auth } from "@/lib/auth";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { prismaDeckListWhere } from "@/lib/flashcards/flashcard-access";
@@ -200,4 +201,5 @@ export async function GET(req: NextRequest) {
     safeServerLogCritical("api_flashcards_decks", "query_failed", { page }, e);
     return NextResponse.json({ error: "Unable to load decks" }, { status: 503 });
   }
+  });
 }

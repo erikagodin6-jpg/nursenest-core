@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { auth } from "@/lib/auth";
 import { freemiumQuestionWhereForProfile } from "@/lib/entitlements/content-access-scope";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
@@ -12,6 +13,7 @@ import type { CountryCode, TierCode } from "@prisma/client";
 import { enforceQuestionGradeProtection } from "@/lib/http/api-protection";
 import { gradeMatches, normalizeCorrect } from "@/lib/questions/grade-answer-match";
 export async function POST(req: NextRequest) {
+  return runWithApiTelemetry(req, "POST /api/questions/freemium-grade", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) {
@@ -118,4 +120,5 @@ export async function POST(req: NextRequest) {
     safeServerLogCritical("api_questions_freemium_grade", "failed", { questionId }, e);
     return NextResponse.json({ error: "Unable to grade. Try again shortly.", code: "service_unavailable" }, { status: 503 });
   }
+  });
 }

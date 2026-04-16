@@ -307,7 +307,6 @@ export default async function LessonsPage({ searchParams }: Props) {
           topicSlug: true,
           previewSectionCount: true,
           seoTitle: true,
-          sections: true,
           locale: true,
         },
         orderBy: { updatedAt: "desc" },

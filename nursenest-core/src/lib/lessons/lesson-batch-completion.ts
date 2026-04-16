@@ -2,7 +2,11 @@ import { ContentStatus, type Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { resolveLessonContextForPathwayId } from "@/lib/lessons/lesson-region-exam";
 import { examRowToLessonBankItem, type LessonBankQuizItem } from "@/lib/lessons/exam-question-to-lesson-quiz-item";
-import { sanitizeQuizItems, unwrapPathwayLessonDbSections } from "@/lib/lessons/pathway-lesson-catalog-sync";
+import {
+  computeStructuralPublicCompleteFromDbRow,
+  sanitizeQuizItems,
+  unwrapPathwayLessonDbSections,
+} from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { PREMIUM_SECTION_HEADINGS } from "@/lib/lessons/pathway-lesson-premium";
 import type {
   PathwayLessonFigure,
@@ -132,7 +136,17 @@ type BatchInput = {
   includeSlugs?: string[];
 };
 
-type LessonRow = LessonCompletionLessonRow;
+type LessonRow = LessonCompletionLessonRow & {
+  previewSectionCount: number;
+  seoTitle: string;
+  seoDescription: string;
+  locale: string;
+  pathwayId: string;
+  exams: string[];
+  examMeta: Prisma.JsonValue;
+  countries: string[];
+  priority: string;
+};
 
 const CORE_SYSTEM_KEYS = ["cardio", "cardiovascular", "respir", "renal", "kidney", "endocr", "neuro"];
 const HIGH_YIELD_KEYS = ["pharm", "medication", "priorit", "triage", "delegat", "safety", "infection"];
@@ -919,7 +933,16 @@ export async function runLessonCompletionBatch(input: BatchInput): Promise<Lesso
       topic: true,
       topicSlug: true,
       bodySystem: true,
+      previewSectionCount: true,
+      seoTitle: true,
+      seoDescription: true,
+      locale: true,
+      pathwayId: true,
       sections: true,
+      exams: true,
+      examMeta: true,
+      countries: true,
+      priority: true,
     },
     orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
     take: 2000,
@@ -1046,10 +1069,16 @@ export async function runLessonCompletionBatch(input: BatchInput): Promise<Lesso
     const updated = JSON.stringify(pick.row.sections) !== JSON.stringify(nextPayload);
 
     if (write && updated) {
+      const structuralPublicComplete = computeStructuralPublicCompleteFromDbRow({
+        ...pick.row,
+        pathwayId: pick.row.pathwayId,
+        sections: nextPayload,
+      });
       await prisma.pathwayLesson.update({
         where: { id: pick.row.id },
         data: {
           sections: nextPayload,
+          structuralPublicComplete,
         },
       });
     }

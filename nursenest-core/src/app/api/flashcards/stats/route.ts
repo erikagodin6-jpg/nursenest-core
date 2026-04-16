@@ -1,4 +1,6 @@
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -54,4 +56,5 @@ export async function GET() {
       { status: 200 },
     );
   }
+  });
 }

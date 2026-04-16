@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
@@ -27,6 +28,7 @@ const bodySchema = z
   });
 
 export async function POST(req: Request) {
+  return runWithApiTelemetry(req, "POST /api/lessons/pathway-progress", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) {
@@ -181,4 +183,5 @@ export async function POST(req: Request) {
   } catch {
     return NextResponse.json({ error: "Unable to save progress" }, { status: 503 });
   }
+  });
 }
