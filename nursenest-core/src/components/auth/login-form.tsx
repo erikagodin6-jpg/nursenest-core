@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { safeCallbackPath } from "@/lib/auth/safe-callback-path";
 import { resolveLoginSubmitOutcome } from "@/components/auth/login-form-result";
+import { isLikelyNetworkFailure } from "@/components/auth/auth-client-error-handling";
 
 export function LoginForm({
   forgotPasswordHref = "/forgot-password",
@@ -17,7 +18,7 @@ export function LoginForm({
   forgotPasswordHref?: string;
   termsHref?: string;
   privacyHref?: string;
-  /** Help link when sign-in fails for non-credential reasons (e.g. outage). */
+  /** Unused: kept for API compatibility with marketing pages. */
   contactHref?: string;
 } = {}) {
   const { t } = useMarketingI18n();
@@ -26,7 +27,6 @@ export function LoginForm({
   const { status } = useSession();
   const [error, setError] = useState<string | null>(null);
   const [errorHelp, setErrorHelp] = useState<string | null>(null);
-  const [showContactLink, setShowContactLink] = useState(false);
   const [pending, setPending] = useState(false);
   const redirectTarget = useMemo(() => {
     const fromQuery = safeCallbackPath(searchParams.get("callbackUrl"));
@@ -42,13 +42,12 @@ export function LoginForm({
   async function onSubmit(formData: FormData) {
     setError(null);
     setErrorHelp(null);
-    setShowContactLink(false);
     const email = String(formData.get("email") ?? "").trim();
     const password = String(formData.get("password") ?? "");
     if (!email || !password) {
       setError(t("pages.login.errorInvalid"));
-      setErrorHelp(t("pages.login.errorInvalidGuidance"));
-      setShowContactLink(false);
+      const g = t("pages.login.errorInvalidGuidance")?.trim();
+      setErrorHelp(g || null);
       return;
     }
     if (status === "authenticated") {
@@ -57,6 +56,7 @@ export function LoginForm({
     }
 
     setPending(true);
+    let keepSpinnerUntilRedirect = false;
     try {
       const rememberMe =
         formData.get("rememberMe") === "on" ||
@@ -72,9 +72,8 @@ export function LoginForm({
         });
       } catch (e) {
         console.error("[login] signIn threw", e);
-        setError(t("pages.login.errorGeneric"));
-        setErrorHelp(t("pages.login.errorGenericGuidance"));
-        setShowContactLink(true);
+        setError(isLikelyNetworkFailure(e) ? t("pages.login.errorNetwork") : t("pages.login.errorGeneric"));
+        setErrorHelp(null);
         return;
       }
 
@@ -87,20 +86,23 @@ export function LoginForm({
       if (outcome !== "success") {
         if (outcome === "invalid_credentials") {
           setError(t("pages.login.errorInvalid"));
-          setErrorHelp(t("pages.login.errorInvalidGuidance"));
-          setShowContactLink(false);
+          const g = t("pages.login.errorInvalidGuidance")?.trim();
+          setErrorHelp(g || null);
         } else {
           setError(t("pages.login.errorGeneric"));
-          setErrorHelp(t("pages.login.errorGenericGuidance"));
-          setShowContactLink(true);
+          const g = t("pages.login.errorGenericGuidance")?.trim();
+          setErrorHelp(g || null);
         }
         return;
       }
 
-      router.refresh();
+      keepSpinnerUntilRedirect = true;
+      await router.refresh();
       router.push(redirectTarget);
     } finally {
-      setPending(false);
+      if (!keepSpinnerUntilRedirect) {
+        setPending(false);
+      }
     }
   }
 
@@ -185,14 +187,6 @@ export function LoginForm({
         >
           {error ? <p className="text-sm font-medium">{error}</p> : null}
           {errorHelp ? <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{errorHelp}</p> : null}
-          {showContactLink ? (
-            <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">
-              <Link href={contactHref} className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline">
-                {t("pages.login.errorContactLink")}
-              </Link>
-              {t("pages.login.errorContactSuffix")}
-            </p>
-          ) : null}
         </div>
       ) : null}
       <p className="text-xs leading-relaxed text-muted-foreground">
@@ -211,7 +205,7 @@ export function LoginForm({
         type="submit"
         disabled={pending}
       >
-        {pending ? `${t("pages.login.submit")}…` : t("pages.login.submit")}
+        {pending ? t("pages.login.signingIn") : t("pages.login.submit")}
       </button>
     </form>
   );
