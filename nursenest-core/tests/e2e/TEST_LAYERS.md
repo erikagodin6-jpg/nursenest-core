@@ -1,20 +1,27 @@
 # Playwright test layering (confidence model)
 
-Tests are grouped by **deployment risk**, not by folder structure alone. **Do not demote a test without updating this doc and getting review.**
+Tests are grouped by **deployment risk**, not by folder structure alone. **Do not demote a test without updating this doc and [`docs/RELEASE_QA.md`](../docs/RELEASE_QA.md) and getting review.**
 
 ## Layer A — deploy blockers (must pass before promote)
 
+**Canonical list:** [`docs/RELEASE_QA.md`](../docs/RELEASE_QA.md) section *Release-blocking tests*.
+
 | Area | Files / entrypoints |
 |------|---------------------|
+| Learner shell contract | `npm run test:e2e:learner-shell-contract` |
+| Health APIs | `release/release-health-apis.spec.ts` |
 | Paid auth seed | `setup/auth.setup.ts` (`setup-paid-auth` project) |
-| Fast sanity gate | `paid-user/paid-user-00-fast-sanity.spec.ts` |
-| Core entitlements | `paid-user/paid-user-entitlements.spec.ts` |
-| API health (paid) | `paid-user/paid-user-api-health.spec.ts` |
-| Login flow (explicit) | `paid-user/paid-user-login-flow.spec.ts` |
+| Fast sanity | `paid-user/paid-user-00-fast-sanity.spec.ts` |
+| Entitlements | `paid-user/paid-user-entitlements.spec.ts` |
+| API health (paid surfaces) | `paid-user/paid-user-api-health.spec.ts` |
+| CAT smoke | `paid-user/paid-user-cat-smoke.spec.ts` |
+| Account overview | `release/release-account-billing-smoke.spec.ts` |
 
-**Playwright projects:** `setup-paid-auth` → `chromium-paid` (see `playwright.config.ts` `testMatch` for exact file list).
+**Single command:** `npm run qa:release-gate` (uses `playwright.release-gate.config.ts`).
 
-**npm:** `test:e2e:paid-fast-sanity` and CI “master” paid bundles (see `package.json`).
+**Broader paid project:** `setup-paid-auth` → `chromium-paid` (see `playwright.config.ts` `testMatch`).
+
+**npm shortcuts:** `test:e2e:paid-fast-sanity`, `test:e2e:ci-master` (see `package.json`).
 
 ## Layer B — important regression (fix before release; may not block every hotfix)
 

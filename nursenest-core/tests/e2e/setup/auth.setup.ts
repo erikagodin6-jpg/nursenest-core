@@ -31,7 +31,7 @@ setup("authenticate paid test account and save storage state", async ({ page }) 
     const msg = e instanceof Error ? e.message : String(e);
     const diag = await describeAuthFailureSurface(page).catch(() => "");
     throw new Error(
-      `Paid E2E login failed for ${creds.email}: ${msg}. Check BASE_URL, account exists, and password. Seeded paid account must reach a learner shell after Sign In. ${diag}`,
+      `Paid auth setup failed: login did not reach learner shell after submit. email=${creds.email} ${msg}. category=auth Check BASE_URL, credentials, and account state. ${diag}`,
     );
   }
 

@@ -41,6 +41,7 @@ import {
 } from "./paid-session-network-monitor";
 import { expectNoSubscriptionPaywall, expectOnLearnerApp } from "./paid-surface-assertions";
 import { logObserverFailureSummary } from "./log-observer-failure-summary";
+import { releaseGateBlockingSnippet, releaseGateUrlContext } from "./release-gate-failure";
 
 export const PLACEHOLDER_COPY_RE = /\b(TBD|null|undefined)\b/i;
 
@@ -53,8 +54,14 @@ export function isAuthFetchNoiseConsoleLine(line: string): boolean {
 }
 
 export function expectNotLoginUrl(page: Page, context?: string): void {
-  assertSyncNotOnboardingBlocking(page, context ?? "expectNotLoginUrl");
-  expect(page.url(), `${context ?? "page"}: unexpected /login`).not.toMatch(/\/login/i);
+  const label = context ?? "expectNotLoginUrl";
+  assertSyncNotOnboardingBlocking(page, label);
+  const { line } = releaseGateUrlContext(page);
+  const hint = releaseGateBlockingSnippet(page);
+  expect(
+    page.url(),
+    `${label}: expected authenticated learner route; landed on login (session missing, bad seed, or redirect). category=auth ${line}. ${hint} Re-run setup-paid-auth if storageState is stale.`,
+  ).not.toMatch(/\/login/i);
 }
 
 export function assertNoMissingI18nDomTokens(page: Page): Promise<void> {

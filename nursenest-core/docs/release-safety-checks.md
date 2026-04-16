@@ -2,6 +2,8 @@
 
 Commands and scripts that catch config drift, broken marketing routes, and unsafe data shapes **before** production deploys. They do not change product URLs, CAT math, or scoring.
 
+**Runtime E2E / health / paid-access gate:** see **[`RELEASE_QA.md`](./RELEASE_QA.md)** (`npm run qa:release-gate`).
+
 ## Recommended pre-push / pre-deploy
 
 ```bash
