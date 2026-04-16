@@ -4,8 +4,88 @@
  * - `required-user-ui-i18n-keys` (CI: every locale bundle)
  * - `tests/e2e/helpers/observer-error-taxonomy` (Playwright production bundle probe)
  * - `scripts/validate-production-chrome-i18n.mts` (prebuild: English + parity)
+ *
+ * This module intentionally has **no imports**: prebuild scripts run under Node ESM/tsx and must not
+ * pull the `@/` graph (which can fail to resolve or evaluate incompletely in some CI environments).
+ * Hero/nav keys duplicated from `marketing-hero-nav-critical-keys.ts` — keep lists in sync when those change.
  */
-import { MARKETING_HERO_NAV_CRITICAL_KEYS } from "@/lib/marketing/marketing-hero-nav-critical-keys";
+/**
+ * Snapshot of `MARKETING_HERO_NAV_CRITICAL_KEYS` (see `marketing-hero-nav-critical-keys.ts`).
+ * Duplicated here so validators do not import that module.
+ */
+const MARKETING_HERO_NAV_CRITICAL_KEYS_SNAPSHOT = [
+  "components.homeHeroCarousel.slide01.title",
+  "components.homeHeroCarousel.slide01.caption",
+  "components.homeHeroCarousel.slide02.title",
+  "components.homeHeroCarousel.slide02.caption",
+  "components.homeHeroCarousel.slide03.title",
+  "components.homeHeroCarousel.slide03.caption",
+  "components.homeHeroCarousel.slide04.title",
+  "components.homeHeroCarousel.slide04.caption",
+  "components.homeHeroCarousel.slide05.title",
+  "components.homeHeroCarousel.slide05.caption",
+  "components.homeHeroCarousel.slide06.title",
+  "components.homeHeroCarousel.slide06.caption",
+  "components.homeHeroCarousel.slide07.title",
+  "components.homeHeroCarousel.slide07.caption",
+  "components.homeHeroCarousel.slide08.title",
+  "components.homeHeroCarousel.slide08.caption",
+  "components.homeHeroCarousel.slide09.title",
+  "components.homeHeroCarousel.slide09.caption",
+  "components.homeHeroCarousel.slide10.title",
+  "components.homeHeroCarousel.slide10.caption",
+  "components.homeHeroCarousel.slide11.title",
+  "components.homeHeroCarousel.slide11.caption",
+  "components.homeHeroCarousel.slide12.title",
+  "components.homeHeroCarousel.slide12.caption",
+  "components.homeHeroCarousel.slide13.title",
+  "components.homeHeroCarousel.slide13.caption",
+  "components.homeHeroCarousel.slide14.title",
+  "components.homeHeroCarousel.slide14.caption",
+  "components.homeHeroCarousel.slide15.title",
+  "components.homeHeroCarousel.slide15.caption",
+  "nav.pathwayHubsAria",
+  "nav.examStrip.rn",
+  "nav.examStrip.pnUS",
+  "nav.examStrip.pnCA",
+  "nav.examStrip.npUS",
+  "nav.examStrip.npCA",
+  "nav.examStrip.alliedUS",
+  "nav.examStrip.alliedCA",
+  "nav.preNursing",
+  "nav.tools",
+  "footer.faq",
+  "brand.homeAriaLabel",
+  "nav.marketingExplore",
+  "nav.admin",
+  "nav.openMenu",
+  "nav.theme",
+  "nav.themeGroupLight",
+  "nav.themeGroupDark",
+  "nav.closeMenu",
+  "nav.more",
+  "nav.regionLabel",
+  "home.region.us",
+  "home.region.ca",
+  "home.region.usDesc",
+  "home.region.caDesc",
+  "nav.language",
+  "nav.marketingFlow.learn",
+  "nav.marketingFlow.practice",
+  "nav.marketingFlow.track",
+  "nav.examTracks.more",
+  "nav.marketingMore",
+  "nav.mega.startHere",
+  "nav.mega.openHub",
+  "nav.mega.examHubSuffix",
+  "nav.logIn",
+  "nav.account",
+  "account.idPrefix",
+  "account.role.admin",
+  "account.role.administrator",
+  "nav.learnerApp",
+  "nav.signout",
+] as const;
 
 /** Homepage hero, final CTA, metadata, audience, sample question, blog strip. */
 export const PRODUCTION_HOME_KEYS = [
@@ -218,7 +298,7 @@ export const PRODUCTION_LEARNER_SHELL_KEYS = [
 /** Merged, deduplicated production chrome keys (Set iteration order). */
 export const PRODUCTION_CHROME_I18N_KEYS = [
   ...new Set<string>([
-    ...MARKETING_HERO_NAV_CRITICAL_KEYS,
+    ...MARKETING_HERO_NAV_CRITICAL_KEYS_SNAPSHOT,
     ...PRODUCTION_HOME_KEYS,
     ...PRODUCTION_PAYWALL_KEYS,
     ...PRODUCTION_NAV_CHROME_KEYS,
