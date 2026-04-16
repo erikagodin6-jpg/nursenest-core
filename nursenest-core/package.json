@@ -155,6 +155,7 @@
     "qa:smoke": "node scripts/run-smoke.mjs",
     "qa:smoke:extended": "playwright test -c playwright.smoke-extended.config.ts",
     "qa:pathways": "node scripts/check-pathway-e2e-credentials.cjs && playwright test -c playwright.pathways.config.ts",
+    "qa:pathways:prenursing-allied": "node scripts/check-prenursing-allied-e2e-credentials.cjs && playwright test -c playwright.pathways-prenursing-allied.config.ts",
     "qa:verify:production": "node scripts/verify-production-release.mjs",
     "qa:verify:production:core": "PLAYWRIGHT_SKIP_WEB_SERVER=1 playwright test -c playwright.verify-production.config.ts",
     "qa:smoke:emergency": "playwright test -c playwright.emergency.config.ts",

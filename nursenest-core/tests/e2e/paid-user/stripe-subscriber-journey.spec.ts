@@ -27,6 +27,7 @@ import { attachPageObservers } from "../helpers/attach-observers";
 import { assertSafeSubscriberJourneyBaseUrl } from "../helpers/e2e-safety-guards";
 import { LESSON_HUB_CARD_LINKS } from "../helpers/paid-content-discovery";
 import { isLearnerNavInternalHref, loginWithCredentials } from "../helpers/learner-login";
+import { isLearnerShell } from "../helpers/learner-shell";
 import { logObserverFailureSummary } from "../helpers/log-observer-failure-summary";
 import { completeStripeHostedCheckoutTestCard } from "../helpers/stripe-hosted-checkout";
 import { waitUntilLessonsNotPaywalled } from "../helpers/wait-for-subscriber-access";
@@ -227,7 +228,18 @@ test.describe("Stripe test-mode subscriber journey (opt-in)", () => {
       if (steps.checkoutStart === "pass") {
         try {
           await completeStripeHostedCheckoutTestCard(page, { customerEmail: email });
-          await expect(page).toHaveURL(/\/app/, { timeout: 180_000 });
+          await expect
+            .poll(
+              () => {
+                try {
+                  return isLearnerShell(new URL(page.url()).pathname);
+                } catch {
+                  return false;
+                }
+              },
+              { timeout: 180_000 },
+            )
+            .toBe(true);
           expect(page.url()).toMatch(/checkout=success/);
           steps.stripeHostedCheckout = "pass";
         } catch (e) {

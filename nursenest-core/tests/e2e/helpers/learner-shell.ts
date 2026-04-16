@@ -1,5 +1,5 @@
 /**
- * Playwright helpers for learner URLs — **predicate is** {@link isLearnerShell} from `@/lib/navigation/learner-shell` only.
+ * Playwright helpers for learner URLs — **predicate is** {@link isLearnerShell} from `src/lib/navigation/learner-shell.ts` only.
  *
  * Browser callbacks (`waitForFunction` in `learner-login.ts`) must mirror that logic **inline** — they cannot import this module.
  */

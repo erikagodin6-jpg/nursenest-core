@@ -3,7 +3,8 @@
  */
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { isLearnerNavInternalHref, isLearnerShell } from "./learner-shell";
+import { isLearnerShell } from "../../../src/lib/navigation/learner-shell";
+import { isLearnerNavInternalHref } from "./learner-shell";
 
 describe("isLearnerShell", () => {
   it("accepts /app dashboard and nested learner routes", () => {

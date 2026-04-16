@@ -1,9 +1,7 @@
 /**
- * Extended smoke — all legacy specs under `tests/e2e/smoke` (localized, auth variants, etc.).
+ * Pre-nursing + allied pathway access (`pathway-prenursing-allied-access.spec.ts`).
  *
- *   npm run qa:smoke:extended
- *
- * For deploy verification, prefer `npm run qa:smoke` (minimal 4-group suite).
+ *   npm run qa:pathways:prenursing-allied
  */
 import "./playwright.env";
 import { defineConfig, devices } from "@playwright/test";
@@ -41,14 +39,12 @@ const e2eWebServer = localDevWebServer();
 export default defineConfig({
   ...(e2eWebServer ? { webServer: e2eWebServer } : {}),
   testDir: "tests/e2e/smoke",
-  testMatch: /.*\.spec\.ts$/,
-  /** Long pathway suites use dedicated configs (`npm run qa:pathways*`). */
-  testIgnore: [/pathway-content-access\.spec\.ts$/, /pathway-prenursing-allied-access\.spec\.ts$/],
+  testMatch: /pathway-prenursing-allied-access\.spec\.ts$/,
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   workers: 1,
-  timeout: 180_000,
+  timeout: 900_000,
   expect: { timeout: 45_000 },
   reporter: [["list"]],
   use: {
@@ -56,6 +52,6 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "off",
+    ...devices["Desktop Chrome"],
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
 });
