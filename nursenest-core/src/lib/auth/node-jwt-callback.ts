@@ -2,7 +2,7 @@ import "server-only";
 
 import type { JWT } from "next-auth/jwt";
 import type { NextAuthConfig } from "next-auth";
-import { authCallbacks } from "@/lib/auth/auth-callbacks";
+import { authCallbacks } from "@/lib/auth-callbacks";
 import { getSessionIdentityPayload } from "@/lib/auth/session-identity-from-db";
 import { prisma } from "@/lib/db";
 

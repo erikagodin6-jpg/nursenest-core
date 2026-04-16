@@ -1,6 +1,10 @@
 /**
  * Playwright E2E — authenticated session reuse
  *
+ * **CWD:** Run Playwright from this package directory (where this file lives). A parent monorepo folder
+ * without `playwright.config.ts` will not load these projects — `setup-paid-auth` / `chromium-paid`
+ * will appear missing in `--list`.
+ *
  * **Test layering (deploy blockers vs extended):** see `tests/e2e/TEST_LAYERS.md` and `docs/RELEASE_QA.md`.
  *
  * Login happens **once** in setup projects, not per test:
@@ -50,31 +54,19 @@ function localDevWebServer() {
   } as const;
 }
 
-/** Paid projects: require credentials so we never point `storageState` at a missing file. */
+/**
+ * When `E2E_PAID_*` / `PLAYWRIGHT_TEST_*` are set: real `auth.setup.ts` + full paid spec set + `storageState`.
+ * Otherwise: no-op stub setup + skipped placeholder spec — projects **still appear** in `--list`.
+ */
 const paidAuthEnabled = hasPaidTestCredentials();
 
 const freeAuthEnabled = Boolean(
   process.env.E2E_FREE_EMAIL?.trim() && process.env.E2E_FREE_PASSWORD,
 );
 
-const paidProjects = paidAuthEnabled
-  ? [
-      {
-        name: "setup-paid-auth",
-        testMatch: /tests\/e2e\/setup\/auth\.setup\.ts$/,
-      },
-      {
-        name: "chromium-paid",
-        testMatch:
-          /paid-user-(00-fast-sanity|degraded-mode|data-load|performance|stress|login-flow|journey|entitlements|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke)\.spec\.ts$|paid-subscriber-audit\.spec\.ts$|production-i18n-bundle\.spec\.ts$/,
-        dependencies: ["setup-paid-auth"],
-        use: {
-          ...devices["Desktop Chrome"],
-          storageState: PAID_USER_AUTH_FILE,
-        },
-      },
-    ]
-  : [];
+/** Full paid-user slice (must stay aligned with `chromium` testIgnore below). */
+const CHROMIUM_PAID_SPEC_MATCH =
+  /paid-user-(00-fast-sanity|degraded-mode|data-load|performance|stress|login-flow|journey|entitlements|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke)\.spec\.ts$|paid-subscriber-audit\.spec\.ts$|production-i18n-bundle\.spec\.ts$/;
 
 const freeProjects = freeAuthEnabled
   ? [
@@ -115,7 +107,25 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
   projects: [
-    ...paidProjects,
+    // --- Paid (always defined; do not remove — VM/CI expect these project names in `npx playwright test --list`)
+    {
+      name: "setup-paid-auth",
+      testMatch: paidAuthEnabled
+        ? /tests\/e2e\/setup\/auth\.setup\.ts$/
+        : /tests\/e2e\/setup\/paid-auth-stub\.setup\.ts$/,
+    },
+    {
+      name: "chromium-paid",
+      testMatch: paidAuthEnabled
+        ? CHROMIUM_PAID_SPEC_MATCH
+        : /tests\/e2e\/paid-user\/paid-e2e-requires-env\.spec\.ts$/,
+      dependencies: ["setup-paid-auth"],
+      use: {
+        ...devices["Desktop Chrome"],
+        ...(paidAuthEnabled ? { storageState: PAID_USER_AUTH_FILE } : {}),
+      },
+    },
+    // --- Free (optional env)
     ...freeProjects,
     {
       name: "chromium-stripe-journey",
@@ -129,6 +139,8 @@ export default defineConfig({
         /lesson-flows\.mobile\.spec\.ts$/,
         /paid-user-(00-fast-sanity|degraded-mode|data-load|login-flow|journey|entitlements|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke)\.spec\.ts$/,
         /paid-subscriber-audit\.spec\.ts$/,
+        /** Only `chromium-paid` should run this placeholder (or it duplicates when creds are missing). */
+        /paid-e2e-requires-env\.spec\.ts$/,
         /stripe-subscriber-journey\.spec\.ts$/,
         /freemium-paywall\.spec\.ts$/,
         /^\.next[\\/]/,

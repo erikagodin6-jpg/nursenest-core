@@ -45,6 +45,31 @@ const paidAuthEnabled = hasPaidTestCredentials();
 const releaseBlockingPaidMatch =
   /tests\/e2e\/(paid-user\/(paid-user-00-fast-sanity|paid-user-entitlements|paid-user-api-health|paid-user-cat-smoke)\.spec\.ts|release\/release-account-billing-smoke\.spec\.ts)$/;
 
+/**
+ * Same visibility rule as `playwright.config.ts`: `setup-paid-auth` and the paid slice always
+ * exist in `--list`. Without credentials, setup is a no-op stub and the paid project only runs
+ * `paid-e2e-requires-env.spec.ts` (skipped) so CI/docs can reference stable project names.
+ */
+const releasePaidProjects = [
+  {
+    name: "setup-paid-auth",
+    testMatch: paidAuthEnabled
+      ? /tests\/e2e\/setup\/auth\.setup\.ts$/
+      : /tests\/e2e\/setup\/paid-auth-stub\.setup\.ts$/,
+  },
+  {
+    name: "release-blocking-paid",
+    testMatch: paidAuthEnabled
+      ? releaseBlockingPaidMatch
+      : /tests\/e2e\/paid-user\/paid-e2e-requires-env\.spec\.ts$/,
+    dependencies: ["setup-paid-auth"],
+    use: {
+      ...devices["Desktop Chrome"],
+      ...(paidAuthEnabled ? { storageState: PAID_USER_AUTH_FILE } : {}),
+    },
+  },
+];
+
 const e2eWebServer = localDevWebServer();
 
 export default defineConfig({
@@ -70,22 +95,6 @@ export default defineConfig({
       testMatch: /tests\/e2e\/release\/release-health-apis\.spec\.ts$/,
       use: { ...devices["Desktop Chrome"] },
     },
-    ...(paidAuthEnabled
-      ? [
-          {
-            name: "setup-paid-auth",
-            testMatch: /tests\/e2e\/setup\/auth\.setup\.ts$/,
-          },
-          {
-            name: "release-blocking-paid",
-            testMatch: releaseBlockingPaidMatch,
-            dependencies: ["setup-paid-auth"],
-            use: {
-              ...devices["Desktop Chrome"],
-              storageState: PAID_USER_AUTH_FILE,
-            },
-          },
-        ]
-      : []),
+    ...releasePaidProjects,
   ],
 });

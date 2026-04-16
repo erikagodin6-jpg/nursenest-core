@@ -1,6 +1,6 @@
 # NurseNest Playwright E2E
 
-Production-oriented browser tests under `tests/e2e/`. The Playwright config lives at `playwright.config.ts` (package root).
+Production-oriented browser tests under `tests/e2e/`. The Playwright config lives at `playwright.config.ts` **in the Next.js app package root** (`nursenest-core/` — same directory as `package.json`). Run all `npx playwright test` commands from there; the monorepo parent directory has no Playwright config, so projects like `setup-paid-auth` / `chromium-paid` will not appear.
 
 ## Prerequisites
 
@@ -52,7 +52,7 @@ npx playwright test --project=chromium-paid
 
 - **`chromium`** — Default desktop Chrome; runs all `*.spec.ts` except files ignored per project (see config).
 - **`mobile`** — iPhone 12 viewport; runs `lesson-flows.mobile.spec.ts` only.
-- **`setup-paid-auth` + `chromium-paid`** — Registered when paid credentials exist: `E2E_PAID_EMAIL` + `E2E_PAID_PASSWORD`, or `PLAYWRIGHT_TEST_EMAIL` + `PLAYWRIGHT_TEST_PASSWORD` (see `helpers/paid-test-credentials.ts`). `auth.setup.ts` logs in once, asserts premium on `/app/lessons`, then saves `tests/e2e/.auth/paid-user.json` (override path with `PLAYWRIGHT_PAID_AUTH_STATE`).
+- **`setup-paid-auth` + `chromium-paid`** — **Always** listed in `npx playwright test --list`. With paid credentials (`E2E_PAID_EMAIL` + `E2E_PAID_PASSWORD`, or `PLAYWRIGHT_TEST_EMAIL` + `PLAYWRIGHT_TEST_PASSWORD` — see `helpers/paid-test-credentials.ts`), `setup-paid-auth` runs `auth.setup.ts`, writes `tests/e2e/.auth/paid-user.json` (`PLAYWRIGHT_PAID_AUTH_STATE`), and `chromium-paid` runs the paid-user specs with `storageState`. Without credentials, setup runs a no-op stub and `chromium-paid` runs a skipped placeholder spec so project names stay stable in CI.
 - **`setup-free-auth` + `chromium-free`** — Same pattern for free tier with `E2E_FREE_EMAIL` / `E2E_FREE_PASSWORD` and `tests/e2e/.auth/free-user.json` (`PLAYWRIGHT_FREE_AUTH_STATE`).
 
 Screenshots on failure and traces on first retry are enabled globally in config.

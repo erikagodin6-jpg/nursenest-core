@@ -20,7 +20,7 @@ setup("authenticate paid test account and save storage state", async ({ page }) 
       [
         "Paid E2E credentials missing.",
         "Set E2E_PAID_EMAIL and E2E_PAID_PASSWORD, or PLAYWRIGHT_TEST_EMAIL and PLAYWRIGHT_TEST_PASSWORD.",
-        "(playwright.config gates paid projects when these are unset.)",
+        "(This file should only run when those are set — see playwright.config.ts testMatch for setup-paid-auth.)",
       ].join(" "),
     );
   }

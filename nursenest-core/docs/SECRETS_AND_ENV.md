@@ -26,6 +26,7 @@ This document tells contributors **what must never be committed** and **where se
 2. **Logging** — Use `safeServerLog` / `redactMetaForLog` from `src/lib/env/redact-secrets.ts`. Do not `console.log` raw `Authorization`, cookies, tokens, or full `DATABASE_URL`.
 3. **Database URLs in logs** — Use `maskDatabaseUrl` / `logDatabaseEnvOnce` patterns; effective URLs are masked in production logs.
 4. **Production env** — `runProductionEnvGuard` (see `src/lib/env/production-env-guard.ts`) and `NN_STRICT_PRODUCTION_ENV=1` for strict startup failure on critical gaps.
+5. **Droplet / App Platform checks** — Use `docs/operations-droplet-runtime-handoff.md` for process/port verification without pasting secrets.
 
 ## Local setup
 

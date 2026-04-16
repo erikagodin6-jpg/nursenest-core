@@ -10,7 +10,7 @@ Tests are grouped by **deployment risk**, not by folder structure alone. **Do no
 |------|---------------------|
 | Learner shell contract | `npm run test:e2e:learner-shell-contract` |
 | Health APIs | `release/release-health-apis.spec.ts` |
-| Paid auth seed | `setup/auth.setup.ts` (`setup-paid-auth` project) |
+| Paid auth seed | `setup/auth.setup.ts` when `E2E_PAID_*` / `PLAYWRIGHT_TEST_*` are set; else `setup/paid-auth-stub.setup.ts` (no-op) — `setup-paid-auth` is **always** listed (`playwright.config.ts`) |
 | Fast sanity | `paid-user/paid-user-00-fast-sanity.spec.ts` |
 | Entitlements | `paid-user/paid-user-entitlements.spec.ts` |
 | API health (paid surfaces) | `paid-user/paid-user-api-health.spec.ts` |
@@ -19,7 +19,7 @@ Tests are grouped by **deployment risk**, not by folder structure alone. **Do no
 
 **Single command:** `npm run qa:release-gate` (uses `playwright.release-gate.config.ts`).
 
-**Broader paid project:** `setup-paid-auth` → `chromium-paid` (see `playwright.config.ts` `testMatch`).
+**Broader paid project:** `setup-paid-auth` → `chromium-paid` (see `playwright.config.ts`). If credentials are missing, `chromium-paid` only runs `paid-user/paid-e2e-requires-env.spec.ts` (skipped) so projects stay visible in `npx playwright test --list`.
 
 **npm shortcuts:** `test:e2e:paid-fast-sanity`, `test:e2e:ci-master` (see `package.json`).
 
