@@ -10,3 +10,18 @@ export function getErrorMessage(error: unknown): string {
   }
   return "Something went wrong";
 }
+
+/**
+ * First line only, truncated — avoids showing stack traces in dev-only UI even when
+ * `error.message` contains embedded newlines.
+ */
+export function getErrorMessageDevLine(error: unknown, maxLen = 280): string {
+  const raw = getErrorMessage(error).split(/\r?\n/)[0]?.trim() ?? "";
+  if (raw.length <= maxLen) return raw;
+  return `${raw.slice(0, maxLen)}…`;
+}
+
+/** Whether `error.tsx` surfaces may show technical detail (never in production). */
+export function shouldShowErrorBoundaryDevDetail(): boolean {
+  return process.env.NODE_ENV === "development";
+}

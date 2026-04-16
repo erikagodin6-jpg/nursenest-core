@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
+import { useErrorBoundaryAutoRetry } from "@/lib/runtime/use-error-boundary-auto-retry";
 
 export type ProductErrorSeverity = "default" | "caution";
 
@@ -14,6 +15,10 @@ export type ProductErrorStateProps = {
   referenceLabel?: string;
   /** Dev-only technical detail */
   detail?: string | null;
+  /** One automatic retry after this delay (ms), deduped per {@link reference} in session storage. */
+  autoRetryAfterMs?: number;
+  /** Shown while an automatic retry is scheduled (optional). */
+  autoRetryNotice?: string;
   onRetry?: () => void;
   retryLabel?: string;
   secondaryHref?: string;
@@ -36,6 +41,8 @@ export function ProductErrorState({
   reference,
   referenceLabel = "Reference",
   detail,
+  autoRetryAfterMs,
+  autoRetryNotice = "Retrying automatically…",
   onRetry,
   retryLabel = "Try again",
   secondaryHref,
@@ -46,6 +53,12 @@ export function ProductErrorState({
   severity = "default",
   className = "",
 }: ProductErrorStateProps) {
+  const autoRetry = useErrorBoundaryAutoRetry(onRetry ?? (() => {}), {
+    errorKey: reference,
+    delayMs: autoRetryAfterMs ?? 0,
+    enabled: Boolean(onRetry && autoRetryAfterMs && autoRetryAfterMs > 0),
+  });
+
   const surface =
     severity === "caution"
       ? "border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_06%,var(--semantic-surface))]"
@@ -66,6 +79,11 @@ export function ProductErrorState({
         <div className="min-w-0 flex-1 text-center sm:text-left">
           <h2 className="text-lg font-semibold text-[var(--semantic-text-primary)]">{title}</h2>
           <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{description}</p>
+          {autoRetry.status === "scheduled" ? (
+            <p className="mt-2 text-xs text-[var(--semantic-text-muted)]" aria-live="polite">
+              {autoRetryNotice}
+            </p>
+          ) : null}
           {reference ? (
             <p className="mt-2 text-xs text-[var(--semantic-text-muted)]" suppressHydrationWarning>
               {referenceLabel} {reference}

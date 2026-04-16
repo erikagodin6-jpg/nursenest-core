@@ -2519,3 +2519,14 @@ enum EducationalTranslationStatus {
   REVIEWED
   PUBLISHED
 }
+
+/// * Fixed-window rate limit counters stored in Postgres — shared across horizontally scaled instances (replaces per-process Maps for those paths).
+/// * Keys are SHA-256 hashes of logical limiter keys; rows expire by `expiresAt` and may be pruned periodically.
+model AppRateLimitBucket {
+  id        String   @id @db.VarChar(128)
+  count     Int
+  expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
+
+  @@index([expiresAt])
+  @@map("app_rate_limit_bucket")
+}

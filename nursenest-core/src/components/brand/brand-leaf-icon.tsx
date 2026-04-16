@@ -1,6 +1,8 @@
+import { NURSENEST_DEFAULT_LEAF_MARK_URL } from "@/lib/branding/resolve-theme-logo";
+
 /**
- * Static NurseNest leaf mark for empty states, inline hints, and success accents.
- * Theme tokens only; safe for Server Components.
+ * NurseNest leaf raster (CDN) for empty states, inline hints, and error surfaces.
+ * Uses the same approved leaf assets as {@link SiteBrandLogoMark}, not geometric placeholder shapes.
  */
 export type BrandLeafTone = "brand" | "success" | "muted";
 
@@ -11,30 +13,36 @@ type Props = {
   className?: string;
 };
 
-function fillForTone(tone: BrandLeafTone): string {
-  if (tone === "success") return "var(--semantic-success, var(--theme-primary))";
-  if (tone === "muted") {
-    return "color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-text-muted))";
-  }
-  return "var(--semantic-brand, var(--theme-primary))";
+function toneClass(tone: BrandLeafTone): string {
+  if (tone === "success") return "opacity-95 [filter:saturate(1.12)_hue-rotate(48deg)]";
+  if (tone === "muted") return "opacity-[0.72]";
+  return "opacity-100";
 }
 
 export function BrandLeafIcon({ tone = "brand", size = 28, className = "" }: Props) {
   const h = Math.round(size * 0.64);
-  const outer = fillForTone(tone);
-  const inner = "var(--theme-card-bg, var(--semantic-surface))";
+  const src = NURSENEST_DEFAULT_LEAF_MARK_URL;
+
+  if (!src) {
+    return (
+      <span
+        className={`inline-block font-semibold text-[var(--semantic-brand)] ${className}`.trim()}
+        style={{ fontSize: `${Math.max(10, Math.round(size * 0.42))}px` }}
+        aria-hidden
+      >
+        NN
+      </span>
+    );
+  }
 
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 50 32"
+    <img
+      src={src}
+      alt=""
       width={size}
       height={h}
-      className={className}
+      className={`object-contain ${toneClass(tone)} ${className}`.trim()}
       aria-hidden
-    >
-      <path d="M6 28 C6 17 14.5 9 25 9 S44 17 44 28 Z" fill={outer} />
-      <path d="M11 28 C11 20.5 17 15 25 15 S39 20.5 39 28 Z" fill={inner} />
-    </svg>
+    />
   );
 }

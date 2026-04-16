@@ -7,7 +7,7 @@
 import { getToken } from "next-auth/jwt";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
+import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import { getTrustedClientIp } from "@/lib/http/client-ip";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -34,6 +34,11 @@ const LEARNER_PREFIXES = [
 
 /** Billing / newsletter — expensive or spam-prone; separate bucket from generic public API. */
 const BILLING_RATE_PATH_PREFIXES = ["/api/subscriptions/checkout", "/api/subscribe"] as const;
+
+/** Subscription APIs (portal, status) — tighter per-IP cap than generic `/api/*` (webhook exempt in {@link isExemptPath}). */
+const SUBSCRIPTION_API_STRICT_PREFIX = "/api/subscriptions/";
+const SUBSCRIPTION_STRICT_WINDOW_MS = 60_000;
+const SUBSCRIPTION_STRICT_MAX = 40;
 
 /** LLM / heavy AI routes — per-IP cap in addition to per-route user limits. */
 const AI_EXPENSIVE_PREFIXES = ["/api/coach", "/api/ai"] as const;
@@ -228,7 +233,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
 
   if (pathname === "/api/signup" || pathname.startsWith("/api/signup/")) {
     const key = `ratelimit:signup:ip:${ip}`;
-    const { ok } = checkRateLimit(key, { windowMs: SIGNUP_WINDOW_MS, max: SIGNUP_MAX });
+    const { ok } = await checkRateLimitUnified(key, { windowMs: SIGNUP_WINDOW_MS, max: SIGNUP_MAX });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "signup", path: pathname.slice(0, 96) });
       return json429WithBackoff(ip);
@@ -238,7 +243,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
 
   if (isBillingRateLimitPath(pathname)) {
     const key = `ratelimit:billing:ip:${ip}`;
-    const { ok } = checkRateLimit(key, { windowMs: BILLING_WINDOW_MS, max: BILLING_MAX });
+    const { ok } = await checkRateLimitUnified(key, { windowMs: BILLING_WINDOW_MS, max: BILLING_MAX });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "billing", path: pathname.slice(0, 96) });
       return json429WithBackoff(ip);
@@ -248,7 +253,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
 
   if (isAiExpensiveRateLimitPath(pathname)) {
     const key = `ratelimit:ai_expensive:ip:${ip}`;
-    const { ok } = checkRateLimit(key, { windowMs: AI_EXPENSIVE_WINDOW_MS, max: AI_EXPENSIVE_MAX });
+    const { ok } = await checkRateLimitUnified(key, { windowMs: AI_EXPENSIVE_WINDOW_MS, max: AI_EXPENSIVE_MAX });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "ai_expensive", path: pathname.slice(0, 96) });
       return json429WithBackoff(ip);
@@ -260,7 +265,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   if (isHomeStatsRateLimitPath(pathname)) {
     const cap = publicCapForIp(ip, HOME_STATS_MAX);
     const key = `ratelimit:public_home_stats:ip:${ip}`;
-    const { ok } = checkRateLimit(key, { windowMs: HOME_STATS_WINDOW_MS, max: cap });
+    const { ok } = await checkRateLimitUnified(key, { windowMs: HOME_STATS_WINDOW_MS, max: cap });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "public_home_stats", path: pathname.slice(0, 96) });
       const res = json429WithBackoff(ip);
@@ -276,7 +281,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     const kind = authRouteKind(pathname);
     const limits = AUTH_KIND_LIMITS[kind] ?? AUTH_KIND_LIMITS.auth_other;
     const key = `ratelimit:auth:${kind}:ip:${ip}`;
-    const { ok } = checkRateLimit(key, { windowMs: limits.windowMs, max: limits.max });
+    const { ok } = await checkRateLimitUnified(key, { windowMs: limits.windowMs, max: limits.max });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", {
         kind: "auth_kind",

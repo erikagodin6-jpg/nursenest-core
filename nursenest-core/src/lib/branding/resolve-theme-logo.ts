@@ -124,6 +124,10 @@ export const THEME_LOGO_CDN_BY_THEME_ID: Readonly<Record<string, string>> = {
   "violet-night": CDN_LEAF_URLS["violet-night"],
 } as const;
 
+/** Single CDN leaf used for small inline marks (errors, empty states) when theme hook is unavailable. */
+export const NURSENEST_DEFAULT_LEAF_MARK_URL: string =
+  THEME_LOGO_CDN_BY_THEME_ID[NURSENEST_DEFAULT_THEME] ?? "";
+
 function objectKeyFromCdnUrl(url: string): string | null {
   const marker = "/Logos/";
   const idx = url.indexOf(marker);

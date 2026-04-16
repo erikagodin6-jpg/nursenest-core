@@ -14,7 +14,12 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminGroupLayout({ children }: { children: React.ReactNode }) {
-  const messages = await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, ADMIN_UI_MESSAGE_SHARDS);
+  let messages: Awaited<ReturnType<typeof loadMarketingMessageShards>> = {};
+  try {
+    messages = await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, ADMIN_LAYOUT_MESSAGE_SHARDS);
+  } catch (e) {
+    console.error("[AdminGroupLayout] loadMarketingMessageShards", e);
+  }
   return (
     <MarketingI18nProvider key={DEFAULT_MARKETING_LOCALE} locale={DEFAULT_MARKETING_LOCALE} messages={messages}>
       <MarketingFeedbackShell>

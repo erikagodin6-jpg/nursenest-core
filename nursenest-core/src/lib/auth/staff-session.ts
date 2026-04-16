@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { UserRole } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
@@ -20,7 +21,7 @@ function adminAccessDebug(): boolean {
  * Database is source of truth for staff role (JWT may lag after promotion).
  * Resolves `userId` from `session.user.id`, or from email when id is missing (legacy / partial JWT).
  */
-export async function getStaffSession(): Promise<StaffSession | null> {
+async function loadStaffSession(): Promise<StaffSession | null> {
   const session = await auth();
   const su = session?.user as { id?: string; email?: string | null } | undefined;
   let userId = typeof su?.id === "string" && su.id.trim().length > 0 ? su.id.trim() : undefined;
@@ -81,3 +82,6 @@ export async function getStaffSession(): Promise<StaffSession | null> {
     return null;
   }
 }
+
+/** One Prisma read per request when `requireAdmin` + admin pages both need staff tier. */
+export const getStaffSession = cache(loadStaffSession);

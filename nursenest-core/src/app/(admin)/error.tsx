@@ -1,7 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
+import * as Sentry from "@sentry/nextjs";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
-import { getErrorMessage } from "@/lib/runtime/error-message";
+import { ProductErrorState } from "@/components/ui/product-error-state";
+import { getErrorMessageDevLine, shouldShowErrorBoundaryDevDetail } from "@/lib/runtime/error-message";
 
 export default function AdminError({
   error,
@@ -10,22 +13,31 @@ export default function AdminError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  useEffect(() => {
+    Sentry.captureException(error, { tags: { route: "admin_error", feature: "react_error_boundary" } });
+  }, [error]);
+
+  const digest = error.digest;
+  const showDetail = shouldShowErrorBoundaryDevDetail();
+
   return (
-    <main className="mx-auto max-w-lg px-6 py-16 text-center">
+    <main className="mx-auto max-w-xl px-6 py-16">
       <a href="/" className="mb-6 inline-flex justify-center bg-transparent" aria-label="NurseNest home">
         <SiteBrandLogoMark variant="auth" logoVariant="leaf" />
       </a>
-      <h1 className="text-xl font-semibold text-foreground">Admin area unavailable</h1>
-      <p className="mt-2 text-sm text-muted">
-        {getErrorMessage(error) || "Something went wrong loading this page."}
-      </p>
-      <button
-        type="button"
-        className="mt-6 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-        onClick={() => reset()}
-      >
-        Try again
-      </button>
+      <ProductErrorState
+        title="Just a moment"
+        description="We couldn’t finish loading the admin view. This is usually temporary — try again in a moment, or return home."
+        reference={digest}
+        detail={showDetail ? getErrorMessageDevLine(error) : null}
+        autoRetryAfterMs={2200}
+        onRetry={() => reset()}
+        retryLabel="Try again"
+        homeHref="/"
+        homeLabel="Home"
+        showLeaf
+        severity="default"
+      />
     </main>
   );
 }

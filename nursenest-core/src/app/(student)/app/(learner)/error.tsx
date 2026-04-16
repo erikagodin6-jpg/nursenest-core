@@ -6,7 +6,7 @@ import * as Sentry from "@sentry/nextjs";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { ProductErrorState } from "@/components/ui/product-error-state";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { getErrorMessage } from "@/lib/runtime/error-message";
+import { getErrorMessageDevLine, shouldShowErrorBoundaryDevDetail } from "@/lib/runtime/error-message";
 
 export default function LearnerError({
   error,
@@ -22,7 +22,7 @@ export default function LearnerError({
   }, [error]);
 
   const digest = error.digest;
-  const showDetail = process.env.NODE_ENV === "development";
+  const showDetail = shouldShowErrorBoundaryDevDetail();
 
   return (
     <main className="space-y-6">
@@ -34,7 +34,8 @@ export default function LearnerError({
         description={t("learner.error.section.description")}
         reference={digest}
         referenceLabel={t("learner.error.section.referenceLabel")}
-        detail={showDetail ? getErrorMessage(error) : null}
+        detail={showDetail ? getErrorMessageDevLine(error) : null}
+        autoRetryAfterMs={2200}
         onRetry={() => reset()}
         retryLabel={t("learner.error.section.tryAgain")}
         homeHref="/app"

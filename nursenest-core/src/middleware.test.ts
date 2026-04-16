@@ -29,6 +29,7 @@ test("proxy matcher includes /app, /admin, and exam hub roots; auth-middleware u
 test("proxy sets x-nn-admin-path for /admin and /api/admin (RBAC header for guards)", () => {
   const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
   assert.match(proxySrc, /x-nn-admin-path/);
+  assert.match(proxySrc, /x-nn-request-pathname/);
   assert.match(proxySrc, /startsWith\("\/admin"\)/);
 });
 
@@ -60,7 +61,7 @@ test("marketing header: staff see Admin link to /admin; learners use Dashboard t
   assert.match(header, /const ADMIN_DASHBOARD_ROUTE = "\/admin"/);
   assert.match(header, /href=\{ADMIN_DASHBOARD_ROUTE\}/);
   assert.match(header, /isAdminAuthenticated.*isStaffRole/);
-  assert.match(header, /isLearnerAuthenticated/);
+  assert.match(header, /isLearnerRole/);
   assert.match(header, /<Link href="\/app"/);
 });
 

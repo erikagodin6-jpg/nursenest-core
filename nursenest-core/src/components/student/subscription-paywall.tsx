@@ -28,8 +28,8 @@ const FEATURE_KEYS = [
 
 const LOSE_KEYS = [`lose0`, `lose1`, `lose2`] as const;
 
-/** Objection Q&A blocks rendered above the pricing CTA (order = conversion flow). */
-const PAYWALL_OBJECTION_IDS = ["worthIt", "different", "passExam", "ifStayFree", "upToDate"] as const;
+/** Objection Q&A blocks rendered above the pricing CTA (order = conversion flow: pass → difference → value → loss → trust). */
+const PAYWALL_OBJECTION_IDS = ["passExam", "different", "worthIt", "ifStayFree", "upToDate"] as const;
 
 const PREVIEW_CHOICE_KEYS = [
   "pages.home.sampleQuestion.choiceA",
@@ -361,6 +361,16 @@ export function SubscriptionPaywall({
       >
         {formatSentenceCase(t("paywall.ctaDecisionLine"), locale)}
       </p>
+
+      <div
+        className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--semantic-surface))] px-3 py-2.5"
+        aria-live="polite"
+        data-testid="paywall-pre-cta-micro"
+      >
+        <p className="text-sm font-medium leading-snug text-[var(--semantic-text-primary)]">{t("paywall.preCta.microLine1")}</p>
+        <p className="mt-1.5 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{t("paywall.preCta.microLine2")}</p>
+        <p className="mt-1.5 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{t("paywall.preCta.microLine3")}</p>
+      </div>
 
       <div className="flex flex-wrap gap-3">
         <Link
