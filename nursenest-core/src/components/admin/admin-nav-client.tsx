@@ -39,6 +39,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
+import { SignOutButton } from "@/components/auth/sign-out-button";
 import type { StaffTier } from "@/lib/auth/staff-roles";
 
 type Item = { href: string; label: string; icon: React.ElementType };
@@ -168,7 +169,7 @@ export function AdminNavClient({ staffTier = "super" }: { staffTier?: StaffTier 
   }, [mobileOpen, close]);
 
   const NavBody = (
-    <div className="flex h-full flex-col overflow-y-auto px-3 py-4">
+    <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-3 py-4">
       <Link
         href="/admin"
         className="mb-4 flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-bold text-[var(--theme-heading-text)] hover:bg-muted/80"
@@ -243,12 +244,18 @@ export function AdminNavClient({ staffTier = "super" }: { staffTier?: StaffTier 
       ) : null}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-[min(18rem,92vw)] border-r border-border/80 bg-[var(--theme-card-bg)] shadow-xl transition-transform duration-200 lg:static lg:z-0 lg:w-56 lg:shrink-0 lg:shadow-none ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-[min(18rem,92vw)] flex-col border-r border-border/80 bg-[var(--theme-card-bg)] shadow-xl transition-transform duration-200 lg:sticky lg:top-0 lg:max-h-screen lg:min-h-0 lg:w-56 lg:shrink-0 lg:self-start lg:shadow-none ${
           mobileOpen ? "translate-x-0" : "-translate-full lg:translate-x-0"
         }`}
         aria-label="Admin navigation"
       >
         {NavBody}
+        <div className="shrink-0 border-t border-border/80 bg-[var(--theme-card-bg)] px-3 py-3 lg:pb-4">
+          <SignOutButton
+            className="flex w-full min-h-[48px] items-center justify-center rounded-xl border border-border bg-muted/25 px-3 py-2.5 text-sm font-semibold text-foreground hover:bg-muted/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
+            onBeforeSignOut={close}
+          />
+        </div>
       </aside>
     </>
   );

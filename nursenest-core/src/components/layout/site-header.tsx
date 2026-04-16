@@ -20,6 +20,7 @@ import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/mark
 import { HeaderBrandLockup } from "@/components/brand/header-brand-lockup";
 import { ThemePicker } from "@/components/theme/theme-picker";
 import { Button } from "@/components/ui/button";
+import { SignOutButton } from "@/components/auth/sign-out-button";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { GlobalContextBar } from "@/components/layout/global-context-bar";
@@ -596,6 +597,10 @@ export function SiteHeader() {
                   <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
                     {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
+                  <SignOutButton
+                    className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 px-2.5 text-xs font-semibold sm:text-sm`}
+                    redirectTo={withMarketingLocale(locale, "/login")}
+                  />
                 </div>
               ) : isAdminAuthenticated ? (
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
@@ -609,6 +614,10 @@ export function SiteHeader() {
                   <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
                     {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
+                  <SignOutButton
+                    className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 px-2.5 text-xs font-semibold sm:text-sm`}
+                    redirectTo={withMarketingLocale(locale, "/login")}
+                  />
                 </div>
               ) : (
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
@@ -622,6 +631,10 @@ export function SiteHeader() {
                   <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
                     {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
+                  <SignOutButton
+                    className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 px-2.5 text-xs font-semibold sm:text-sm`}
+                    redirectTo={withMarketingLocale(locale, "/login")}
+                  />
                 </div>
               )}
             </div>
@@ -765,6 +778,10 @@ export function SiteHeader() {
                     <User className="h-4 w-4 shrink-0 opacity-90" aria-hidden />
                     <span className="hidden xl:inline">{formatTitleCase(t("nav.account"), locale)}</span>
                   </Link>
+                  <SignOutButton
+                    className={`${HEADER_SECONDARY_ACTION_CLASS} hidden min-h-0 shrink-0 px-3 py-2 sm:inline-flex`}
+                    redirectTo={withMarketingLocale(locale, "/login")}
+                  />
                 </div>
               ) : isAdminAuthenticated ? (
                 <div className="flex shrink-0 items-center gap-2">
@@ -778,6 +795,10 @@ export function SiteHeader() {
                   <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
                     {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
+                  <SignOutButton
+                    className={`${HEADER_SECONDARY_ACTION_CLASS} hidden min-h-0 sm:inline-flex`}
+                    redirectTo={withMarketingLocale(locale, "/login")}
+                  />
                 </div>
               ) : (
                 <div className="flex shrink-0 items-center gap-2">
@@ -791,6 +812,10 @@ export function SiteHeader() {
                   <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
                     {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
+                  <SignOutButton
+                    className={`${HEADER_SECONDARY_ACTION_CLASS} hidden min-h-0 sm:inline-flex`}
+                    redirectTo={withMarketingLocale(locale, "/login")}
+                  />
                 </div>
               )}
             </div>
@@ -1305,6 +1330,11 @@ export function SiteHeader() {
                     <Link href="/app/account/overview" className={HEADER_SECONDARY_ACTION_CLASS} onClick={() => setMobileOpen(false)}>
                       {formatTitleCase(t("nav.account"), locale)}
                     </Link>
+                    <SignOutButton
+                      className="mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
+                      onBeforeSignOut={() => setMobileOpen(false)}
+                      redirectTo={withMarketingLocale(locale, "/login")}
+                    />
                   </>
                 ) : isAdminAuthenticated ? (
                   <>
@@ -1332,6 +1362,11 @@ export function SiteHeader() {
                     >
                       {formatTitleCase(t("nav.account"), locale)}
                     </Link>
+                    <SignOutButton
+                      className="mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
+                      onBeforeSignOut={() => setMobileOpen(false)}
+                      redirectTo={withMarketingLocale(locale, "/login")}
+                    />
                   </>
                 ) : (
                   <>
@@ -1359,6 +1394,11 @@ export function SiteHeader() {
                     >
                       {formatTitleCase(t("nav.account"), locale)}
                     </Link>
+                    <SignOutButton
+                      className="mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
+                      onBeforeSignOut={() => setMobileOpen(false)}
+                      redirectTo={withMarketingLocale(locale, "/login")}
+                    />
                   </>
                 )}
               </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, User } from "lucide-react";
@@ -13,6 +13,7 @@ import { isStaffRole } from "@/lib/auth/staff-roles";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { getNavChromeStyle } from "@/lib/theme/nav-chrome";
 import { UserFeedbackAccountMenuItem } from "@/components/feedback/user-feedback-account-menu-item";
+import { SignOutButton } from "@/components/auth/sign-out-button";
 
 const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
 
@@ -144,14 +145,12 @@ export function MarketingHeaderAuthDesktop() {
             onActivate={() => setOpen(false)}
             className="block w-full border-t border-[var(--nav-border)] px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
           />
-          <button
-            type="button"
-            className="block w-full border-t border-[var(--nav-border)] px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+          <SignOutButton
             role="menuitem"
-            onClick={() => void signOut({ redirectTo: "/" })}
-          >
-            {formatTitleCase(t("nav.signout"), locale)}
-          </button>
+            className="block w-full border-t border-[var(--nav-border)] px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:ring-inset"
+            onBeforeSignOut={() => setOpen(false)}
+            redirectTo={localizeHref("/login")}
+          />
         </div>
       ) : null}
     </div>
@@ -227,13 +226,11 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
         onActivate={onNavigate}
         className="w-full rounded-xl border border-[var(--nav-border)] px-3 py-2.5 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
       />
-      <button
-        type="button"
-        className="w-full rounded-xl border border-[var(--nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
-        onClick={() => void signOut({ redirectTo: "/" })}
-      >
-        {formatTitleCase(t("nav.signout"), locale)}
-      </button>
+      <SignOutButton
+        className="w-full rounded-xl border border-[var(--nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
+        onBeforeSignOut={onNavigate}
+        redirectTo={localizeHref("/login")}
+      />
     </div>
   );
 }

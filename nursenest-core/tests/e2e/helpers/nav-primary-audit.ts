@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page } from "@playwright/test";
+import { learnerShellStudyNavigation } from "./learner-shell-locators";
 import { expectNotPageNotFound } from "./navigation-e2e";
 
 /** Console lines that indicate a hydration / SSR mismatch (fail the audit). */
@@ -111,7 +112,7 @@ export function learnerHeaderNav(page: Page): Locator {
 }
 
 export function learnerShellPrimaryNav(page: Page): Locator {
-  return page.locator('nav[aria-label="Learner primary actions"]');
+  return learnerShellStudyNavigation(page);
 }
 
 /** First scrollable drawer block: eyebrow + study links (entitled learner). */
@@ -121,5 +122,5 @@ export function learnerMobileDrawerStudyLinks(page: Page): Locator {
 }
 
 export function learnerBottomNavLinks(page: Page): Locator {
-  return page.locator('nav[aria-label="Learner bottom navigation"]').getByRole("link");
+  return page.getByRole("navigation", { name: "Learner bottom navigation" }).getByRole("link");
 }

@@ -1,12 +1,14 @@
 "use client";
 
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { ChevronDown, User } from "lucide-react";
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
-import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { useMarketingI18n, useMarketingLocale } from "@/lib/marketing-i18n";
 import { isStaffRole } from "@/lib/auth/staff-roles";
 import { UserFeedbackAccountMenuItem } from "@/components/feedback/user-feedback-account-menu-item";
+import { SignOutButton } from "@/components/auth/sign-out-button";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 
 const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
 
@@ -57,6 +59,7 @@ function countryDisplayKey(country: string): string {
 
 export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShortLabel?: string | null }) {
   const { t } = useMarketingI18n();
+  const locale = useMarketingLocale();
   const { data: session, status } = useSession();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -211,14 +214,12 @@ export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShort
               onActivate={close}
               className={`${linkClass} mb-1.5 w-full border-0 text-left text-foreground`}
             />
-            <button
-              type="button"
-              className="w-full touch-manipulation rounded-xl px-3 py-2.5 text-left text-sm font-medium text-foreground transition-colors hover:bg-[var(--surface-interactive-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
+            <SignOutButton
               role="menuitem"
-              onClick={() => void signOut({ redirectTo: "/" })}
-            >
-              {t("nav.signout")}
-            </button>
+              className="w-full touch-manipulation rounded-xl px-3 py-2.5 text-left text-sm font-medium text-foreground transition-colors hover:bg-[var(--surface-interactive-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
+              onBeforeSignOut={close}
+              redirectTo={withMarketingLocale(locale, "/login")}
+            />
           </div>
         </div>
       ) : null}

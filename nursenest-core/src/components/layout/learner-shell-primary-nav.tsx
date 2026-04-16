@@ -12,21 +12,14 @@ import {
   buildLearnerPrimaryNavItems,
   isLearnerPrimaryNavKey,
   learnerPrimaryNavLabelKey,
-  type LearnerPrimaryNavItem,
 } from "@/lib/navigation/learner-primary-nav";
+import { SignOutButton } from "@/components/auth/sign-out-button";
 
 export type LearnerShellNavProps = {
   pathwayPillLabel: string | null;
   pathwayId: string | null;
   pathwayHubHref: string | null;
   examsLabel: "CAT Exams" | "Exams";
-};
-
-type NavItem = {
-  id: LearnerPrimaryNavItem["key"];
-  label: string;
-  href: string;
-  matchPrefix: string;
 };
 
 function useLearnerNavItems({
@@ -190,6 +183,7 @@ export function LearnerShellMobileBottomNav({
             </Link>
           );
         })}
+        <SignOutButton className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-full border border-[var(--semantic-danger)]/35 bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--bg-card))] px-2 text-[11px] font-semibold leading-tight text-[var(--semantic-danger)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 sm:px-2.5 sm:text-xs" />
       </div>
     </nav>
   );

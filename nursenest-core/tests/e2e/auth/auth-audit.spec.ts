@@ -244,11 +244,18 @@ test("valid login, callback URL, logout, guest redirect (needs credentials)", as
     expect(mainText.trim().length).toBeGreaterThan(20);
     pass("authenticated-app-loads", `main length ${mainText.trim().length}`, nav.getChain());
 
-    /* 3) Logout */
-    await page.locator('button[aria-haspopup="menu"]').first().click({ timeout: 30_000 });
-    await page.getByRole("menuitem", { name: /sign out|log out/i }).click({ timeout: 15_000 });
-    await expect(page).toHaveURL(/\//, { timeout: 30_000 });
-    pass("logout-redirect-home", `After signOut: ${page.url()}`, nav.getChain());
+    /* 2b) Authenticated surfaces expose a real Sign out control (NextAuth) */
+    await expect(page.getByRole("button", { name: /^Sign out$/i }).first()).toBeVisible({ timeout: 20_000 });
+    pass("sign-out-visible-when-authenticated", "At least one Sign out button visible on learner shell", nav.getChain());
+
+    /* 3) Logout from mobile bottom nav (ensures Sign out is not menu-only on small screens) */
+    await page.setViewportSize({ width: 390, height: 844 });
+    const bottomNav = page.getByRole("navigation", { name: "Learner bottom navigation" });
+    await expect(bottomNav.getByRole("button", { name: /^Sign out$/i })).toBeVisible({ timeout: 20_000 });
+    pass("mobile-bottom-nav-sign-out-visible", "Learner bottom nav exposes Sign out", nav.getChain());
+    await bottomNav.getByRole("button", { name: /^Sign out$/i }).click();
+    await expect(page).toHaveURL(/\/login/i, { timeout: 45_000 });
+    pass("logout-redirect-login", `After signOut: ${page.url()}`, nav.getChain());
 
     /* 4) Guest cannot open /app (must run before callback login re-authenticates) */
     nav.clear();
