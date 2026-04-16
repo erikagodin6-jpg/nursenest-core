@@ -11,6 +11,7 @@ import { remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import { loadMistakeNotebook } from "@/lib/mistakes/mistake-store";
 import { loadUnifiedReviewData } from "@/lib/study/unified-review-engine";
 import { stripToPlainText } from "@/lib/content-quality/plain-text";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 
 const NOTE_TAKE = 48;
 const MISTAKE_TAKE = 14;
@@ -22,7 +23,8 @@ function snippet(text: string | null | undefined, max: number): string {
 }
 
 /** GET /api/learner/command-center — aggregated study hub payload (subscriber). */
-export async function GET() {
+export async function GET(req: Request) {
+  return runWithApiTelemetry(req, "GET /api/learner/command-center", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -143,4 +145,5 @@ export async function GET() {
   } catch {
     return NextResponse.json({ error: "Unable to load command center" }, { status: 503 });
   }
+  });
 }

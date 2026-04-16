@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import type { NextRequest } from "next/server";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { upsertMistakeTag, deleteMistakeTag } from "@/lib/mistakes/mistake-store";
 import { MISTAKE_REASONS, type MistakeReason } from "@/lib/mistakes/mistake-types";
 
@@ -14,6 +15,7 @@ const tagSchema = z.object({
 
 /** POST /api/learner/mistakes — upsert a reason tag + note for a missed question */
 export async function POST(req: NextRequest) {
+  return runWithApiTelemetry(req, "POST /api/learner/mistakes", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -45,4 +47,5 @@ export async function POST(req: NextRequest) {
   );
 
   return NextResponse.json({ ok: true, action: "upserted" });
+  });
 }

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { buildAdaptiveTeachingLoopFromPerformance } from "@/lib/learner/adaptive-teaching-loop";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 
 const eventSchema = z.object({
   v: z.literal(1),
@@ -21,6 +22,7 @@ const bodySchema = z.object({
 });
 
 export async function POST(req: Request) {
+  return runWithApiTelemetry(req, "POST /api/learner/adaptive-loop", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -36,5 +38,6 @@ export async function POST(req: Request) {
   });
 
   return NextResponse.json(loop);
+  });
 }
 

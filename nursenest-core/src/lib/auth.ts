@@ -1,5 +1,6 @@
 import "./auth-trust-env";
 import { Auth } from "@auth/core";
+import { CredentialsSignin } from "@auth/core/errors";
 import { compare } from "bcryptjs";
 import NextAuth, { type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
@@ -135,6 +136,32 @@ function traceCredentialsAuthorizeDev(label: string, data: Record<string, unknow
   safeServerLog("auth", "credentials_authorize_dev_trace", { label, ...data });
 }
 
+/**
+ * When enabled, Auth.js includes `code=` on the credentials callback redirect for RN full-content / QA diagnostics.
+ * Disabled in production unless PLAYWRIGHT_DIAGNOSTIC_AUTH_CODES=1 (opaque codes — no secrets).
+ */
+function authCredentialDiagnosticCodesEnabled(): boolean {
+  return (
+    process.env.PLAYWRIGHT_DIAGNOSTIC_AUTH_CODES === "1" ||
+    process.env.CI === "true" ||
+    process.env.NODE_ENV !== "production"
+  );
+}
+
+function rejectCredentialsWithDiagnosticCode(code: string): never {
+  const err = new CredentialsSignin();
+  err.code = code;
+  throw err;
+}
+
+/** Prefer diagnostic redirect codes when enabled; otherwise preserve legacy `return null` behavior. */
+function rejectCredentialsOrNull(code: string): null {
+  if (authCredentialDiagnosticCodesEnabled()) {
+    rejectCredentialsWithDiagnosticCode(code);
+  }
+  return null;
+}
+
 export const authConfig: NextAuthConfig = {
   /**
    * No Prisma adapter: schema has no Account/Session/VerificationToken models required by
@@ -215,7 +242,7 @@ export const authConfig: NextAuthConfig = {
             ip: ip.slice(0, 64),
           });
           recordCredentialsLoginFailure("rate_limited", request);
-          return null;
+          return rejectCredentialsOrNull("rate_limited");
         }
 
         const password = String(credentials.password ?? "");
@@ -253,7 +280,7 @@ export const authConfig: NextAuthConfig = {
             authMode,
           });
           recordCredentialsLoginFailure("missing_fields", request);
-          return null;
+          return rejectCredentialsOrNull("missing_credentials");
         }
 
         const lockStatus = await isLoginLocked(lockKey);

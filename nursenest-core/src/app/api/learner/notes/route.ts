@@ -4,6 +4,7 @@ import { z } from "zod";
 import type { NextRequest } from "next/server";
 import { prisma } from "@/lib/db";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { enforceLearnerNotesProtection } from "@/lib/http/api-protection";
 import { recordLearnerNoteMutationRollup } from "@/lib/premium-protection/telemetry-db";
@@ -20,6 +21,7 @@ const upsertSchema = z.object({
 });
 
 export async function GET(req: NextRequest) {
+  return runWithApiTelemetry(req, "GET /api/learner/notes", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -51,9 +53,11 @@ export async function GET(req: NextRequest) {
   } catch {
     return NextResponse.json({ error: "Unable to load notes" }, { status: 503 });
   }
+  });
 }
 
 export async function POST(req: NextRequest) {
+  return runWithApiTelemetry(req, "POST /api/learner/notes", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -105,9 +109,11 @@ export async function POST(req: NextRequest) {
   } catch {
     return NextResponse.json({ error: "Unable to save notes" }, { status: 503 });
   }
+  });
 }
 
 export async function DELETE(req: NextRequest) {
+  return runWithApiTelemetry(req, "DELETE /api/learner/notes", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -135,4 +141,5 @@ export async function DELETE(req: NextRequest) {
   } catch {
     return NextResponse.json({ error: "Unable to delete" }, { status: 503 });
   }
+  });
 }

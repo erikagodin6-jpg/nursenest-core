@@ -9,6 +9,7 @@ import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
 import { formatTopicLabelForDisplay } from "@/lib/learner/topic-normalize";
 import { normalizeTopicLabel } from "@/lib/learner/weak-topics-from-sessions";
 import { withRetry } from "@/lib/resilience/with-retry";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { JSON_BODY_BASELINE_SUBMIT, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 
@@ -34,6 +35,7 @@ function gradeMatches(questionType: string, correct: string[], userAnswer: unkno
 }
 
 export async function POST(req: Request) {
+  return runWithApiTelemetry(req, "POST /api/learner/baseline-assessment/submit", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id;
   if (!userId || !isDatabaseUrlConfigured()) {
@@ -151,4 +153,5 @@ export async function POST(req: Request) {
     safeServerLogCritical("baseline_submit", "failed", { attemptId }, e);
     return NextResponse.json({ error: "Unable to save baseline. Try again." }, { status: 503 });
   }
+  });
 }

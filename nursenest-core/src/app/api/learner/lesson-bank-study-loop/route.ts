@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import {
   loadLatestLessonBankStudyRecord,
@@ -25,6 +26,7 @@ const postSchema = z.object({
 });
 
 export async function GET(req: NextRequest) {
+  return runWithApiTelemetry(req, "GET /api/learner/lesson-bank-study-loop", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -45,9 +47,11 @@ export async function GET(req: NextRequest) {
   } catch {
     return NextResponse.json({ error: "load_failed" }, { status: 500 });
   }
+  });
 }
 
 export async function POST(req: NextRequest) {
+  return runWithApiTelemetry(req, "POST /api/learner/lesson-bank-study-loop", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -89,4 +93,5 @@ export async function POST(req: NextRequest) {
   } catch {
     return NextResponse.json({ error: "record_failed" }, { status: 500 });
   }
+  });
 }

@@ -12,6 +12,7 @@ import {
   listPathwayPicksForProfile,
   subscriptionLocksProfileRegionAndTier,
 } from "@/lib/learner/personal-profile-policy";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
@@ -41,6 +42,7 @@ function clientIp(req: Request): string {
 }
 
 export async function GET(req: Request) {
+  return runWithApiTelemetry(req, "GET /api/learner/personal-profile", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) {
@@ -67,9 +69,11 @@ export async function GET(req: Request) {
     safeServerLogCritical("learner_personal_profile", "get_failed", { userIdPrefix: userId.slice(0, 8) }, e);
     return NextResponse.json({ error: "Unable to load profile." }, { status: 503 });
   }
+  });
 }
 
 export async function PATCH(req: Request) {
+  return runWithApiTelemetry(req, "PATCH /api/learner/personal-profile", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) {
@@ -182,4 +186,5 @@ export async function PATCH(req: Request) {
     safeServerLogCritical("learner_personal_profile", "patch_failed", { userIdPrefix: userId.slice(0, 8) }, e);
     return NextResponse.json({ error: "Unable to save profile." }, { status: 503 });
   }
+  });
 }

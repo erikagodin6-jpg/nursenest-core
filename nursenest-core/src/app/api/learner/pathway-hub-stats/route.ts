@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
 export const dynamic = "force-dynamic";
@@ -15,6 +16,7 @@ export const dynamic = "force-dynamic";
  * catalogue total, which is passed from the server as `pathwayLessonCount`).
  */
 export async function GET(req: Request) {
+  return runWithApiTelemetry(req, "GET /api/learner/pathway-hub-stats", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) {
@@ -60,4 +62,5 @@ export async function GET(req: Request) {
   } catch {
     return NextResponse.json({ completed: 0, total: 0 });
   }
+  });
 }

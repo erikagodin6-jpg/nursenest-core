@@ -69,6 +69,13 @@ export default async function LearnerShellLayout({ children }: { children: React
   const skipNonCritical = shouldSkipNonCriticalLearnerWork();
   const coreOnlyEmergency = isCoreOnlyEmergencyMode();
 
+  if (skipNonCritical && entitlement !== "error" && entitlement.hasAccess) {
+    safeServerLog("learner_shell", "optional_shell_work_skipped", {
+      surface: "study_next_strip_analytics",
+      reason: "durability_degraded_or_core_only",
+    });
+  }
+
   const cachedNav =
     entitlement !== "error" ? getLearnerFallback(userId, entitlement, isLearnerPathwayNavMetadata) : null;
 

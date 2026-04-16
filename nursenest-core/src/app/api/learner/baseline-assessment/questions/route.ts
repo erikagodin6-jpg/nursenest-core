@@ -10,10 +10,12 @@ import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-s
 import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(req: Request) {
+  return runWithApiTelemetry(req, "GET /api/learner/baseline-assessment/questions", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id;
   if (!userId || !isDatabaseUrlConfigured()) {
@@ -88,5 +90,6 @@ export async function GET() {
     attemptId: attempt.id,
     questions: localized,
     total: questions.length,
+  });
   });
 }

@@ -1141,6 +1141,8 @@ model Progress {
 
   @@unique([userId, lessonId])
   @@index([userId, updatedAt])
+  /// * Learner shell: latest incomplete lesson (`userId`, `completed=false`, `updatedAt DESC`) without scanning all rows.
+  @@index([userId, completed, updatedAt(sort: Desc)])
 }
 
 model BackgroundJob {

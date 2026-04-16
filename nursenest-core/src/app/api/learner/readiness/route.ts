@@ -3,6 +3,7 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { loadLearnerDashboard } from "@/lib/learner/load-learner-dashboard";
 import { remediationLessonsTopicHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import type { ReadinessBand } from "@/lib/learner/readiness-score";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
 /**
@@ -52,47 +53,49 @@ function passLikelihoodFromReadiness(
  * - **Weak content areas** (topic-level): `contentAreas` with lesson + question drill links
  * - **Recency**: practice factor uses last completed sessions (see `recency` + session grading summary)
  */
-export async function GET() {
-  const gate = await requireSubscriberSession();
-  if (!gate.ok) return gate.response;
+export async function GET(req: Request) {
+  return runWithApiTelemetry(req, "GET /api/learner/readiness", "content", async () => {
+    const gate = await requireSubscriberSession();
+    if (!gate.ok) return gate.response;
 
-  setSentryServerContext({ route: "/api/learner/readiness", feature: SERVER_FEATURE.api, userId: gate.userId });
+    setSentryServerContext({ route: "/api/learner/readiness", feature: SERVER_FEATURE.api, userId: gate.userId });
 
-  const dashboard = await loadLearnerDashboard(gate.userId, gate.entitlement);
-  if (!dashboard) {
-    return NextResponse.json({ error: "Dashboard unavailable", code: "dashboard_unavailable" }, { status: 503 });
-  }
+    const dashboard = await loadLearnerDashboard(gate.userId, gate.entitlement);
+    if (!dashboard) {
+      return NextResponse.json({ error: "Dashboard unavailable", code: "dashboard_unavailable" }, { status: 503 });
+    }
 
-  const pathwayId = dashboard.learnerPath;
-  const contentAreas = dashboard.weakTopics.slice(0, 12).map((w) => ({
-    topic: w.topic,
-    normalizedTopic: w.normalizedTopic ?? null,
-    missRate: w.missRate,
-    attempted: w.attempted,
-    missed: w.missed,
-    strength: w.strength ?? null,
-    lessonHref: remediationLessonsTopicHref(w.topic, w.normalizedTopic ?? null, pathwayId),
-    practiceHref: remediationTopicDrillHref(w.topic, pathwayId),
-  }));
+    const pathwayId = dashboard.learnerPath;
+    const contentAreas = dashboard.weakTopics.slice(0, 12).map((w) => ({
+      topic: w.topic,
+      normalizedTopic: w.normalizedTopic ?? null,
+      missRate: w.missRate,
+      attempted: w.attempted,
+      missed: w.missed,
+      strength: w.strength ?? null,
+      lessonHref: remediationLessonsTopicHref(w.topic, w.normalizedTopic ?? null, pathwayId),
+      practiceHref: remediationTopicDrillHref(w.topic, pathwayId),
+    }));
 
-  const passLikelihood = passLikelihoodFromReadiness(dashboard.readiness.score, dashboard.readiness.band);
+    const passLikelihood = passLikelihoodFromReadiness(dashboard.readiness.score, dashboard.readiness.band);
 
-  return NextResponse.json({
-    generatedAt: new Date().toISOString(),
-    scope: dashboard.scope,
-    passLikelihood,
-    readiness: dashboard.readiness,
-    contentAreas,
-    sessionGrading: {
-      correct: dashboard.sessionGrading.correct,
-      total: dashboard.sessionGrading.total,
-      sessionCount: dashboard.sessionGrading.sessionCount,
-    },
-    recency: {
-      practiceSource: "last_completed_sessions",
-      practiceSessionsCap: 8,
-      note: "Practice accuracy in readiness uses your most recent completed in-app question sessions (capped for performance).",
-    },
-    recommendedQuizTopic: dashboard.recommendedQuizTopic,
+    return NextResponse.json({
+      generatedAt: new Date().toISOString(),
+      scope: dashboard.scope,
+      passLikelihood,
+      readiness: dashboard.readiness,
+      contentAreas,
+      sessionGrading: {
+        correct: dashboard.sessionGrading.correct,
+        total: dashboard.sessionGrading.total,
+        sessionCount: dashboard.sessionGrading.sessionCount,
+      },
+      recency: {
+        practiceSource: "last_completed_sessions",
+        practiceSessionsCap: 8,
+        note: "Practice accuracy in readiness uses your most recent completed in-app question sessions (capped for performance).",
+      },
+      recommendedQuizTopic: dashboard.recommendedQuizTopic,
+    });
   });
 }

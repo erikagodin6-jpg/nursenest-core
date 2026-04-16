@@ -24,7 +24,6 @@ import {
 } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 
 export type ContinueLesson = {
   title: string;
@@ -63,7 +62,10 @@ export type LearnerDashboardModel = {
   sessionGrading: SessionGradingAggregate;
 };
 
-/** Row shape for dashboard + pathway summaries (full `sections` JSON — required for structural gate). */
+/**
+ * Row shape for dashboard + pathway summaries.
+ * **Does not include `sections` JSON** — inventory uses metadata only to keep learner loads bounded (see fetch).
+ */
 export type PathwayLessonDashboardRow = {
   id: string;
   pathwayId: string;
@@ -75,13 +77,11 @@ export type PathwayLessonDashboardRow = {
   previewSectionCount: number;
   seoTitle: string;
   seoDescription: string;
-  sections: unknown;
   locale: string;
 };
 
 export type LearnerDashboardPreload = {
-  pathwayLessonRows: PathwayLessonDashboardRow[];
-  /** When provided with pathway rows, avoids a duplicate `user` query. */
+  /** When provided, avoids a duplicate `user` query for learnerPath / tier. */
   userProfile?: {
     learnerPath: string | null;
     tier: TierCode | null;
@@ -94,7 +94,8 @@ export type PathwayStudySummariesPreload = {
   pathwayProgress: { lessonId: string; completed: boolean }[];
 };
 
-const PATHWAY_LESSON_SELECT: Prisma.PathwayLessonSelect = {
+/** Metadata-only — avoids multi‑MB `sections` JSON per row on learner dashboard / bundle paths. */
+const PATHWAY_LESSON_DASHBOARD_METADATA_SELECT: Prisma.PathwayLessonSelect = {
   id: true,
   pathwayId: true,
   slug: true,
@@ -105,19 +106,19 @@ const PATHWAY_LESSON_SELECT: Prisma.PathwayLessonSelect = {
   previewSectionCount: true,
   seoTitle: true,
   seoDescription: true,
-  sections: true,
   locale: true,
 };
 
 /**
  * Single pathway-lesson list for learner dashboard scope (bounded, same cap as catalog hub math).
+ * Loads **metadata only** (no `sections` JSON) so RN full-content runs do not materialize huge lesson bodies.
  */
 export async function fetchPathwayLessonRowsForDashboard(
   where: Prisma.PathwayLessonWhereInput,
 ): Promise<PathwayLessonDashboardRow[]> {
   const rows = await prisma.pathwayLesson.findMany({
     where,
-    select: PATHWAY_LESSON_SELECT,
+    select: PATHWAY_LESSON_DASHBOARD_METADATA_SELECT,
     take: PATHWAY_CATALOG_LIST_HARD_CAP,
   });
   return rows as PathwayLessonDashboardRow[];
@@ -126,16 +127,24 @@ export async function fetchPathwayLessonRowsForDashboard(
 /**
  * Progress rows only for synthetic ids present in the current pathway lesson inventory (not unbounded `pathway:%`).
  */
+const PROGRESS_IN_CHUNK = 350;
+
 export async function fetchProgressForPathwayLessonRows(
   userId: string,
   rows: Pick<PathwayLessonDashboardRow, "pathwayId" | "slug">[],
 ): Promise<{ lessonId: string; completed: boolean }[]> {
   if (rows.length === 0) return [];
   const ids = rows.map((r) => syntheticPathwayLessonId(r.pathwayId, r.slug));
-  return prisma.progress.findMany({
-    where: { userId, lessonId: { in: ids } },
-    select: { lessonId: true, completed: true },
-  });
+  const out: { lessonId: string; completed: boolean }[] = [];
+  for (let i = 0; i < ids.length; i += PROGRESS_IN_CHUNK) {
+    const chunk = ids.slice(i, i + PROGRESS_IN_CHUNK);
+    const part = await prisma.progress.findMany({
+      where: { userId, lessonId: { in: chunk } },
+      select: { lessonId: true, completed: true },
+    });
+    out.push(...part);
+  }
+  return out;
 }
 
 /**
@@ -162,6 +171,10 @@ export async function loadPathwayLessonProgressBundle(
   const pathwayWhere = pathwayLessonsAppListWhere(entitlement, user?.learnerPath ?? null);
   const pathwayLessonRows = await fetchPathwayLessonRowsForDashboard(pathwayWhere);
   const pathwayProgressScoped = await fetchProgressForPathwayLessonRows(userId, pathwayLessonRows);
+  safeServerLog("learner_dashboard", "pathway_bundle_loaded", {
+    pathwayLessonRows: pathwayLessonRows.length,
+    progressRows: pathwayProgressScoped.length,
+  });
 
   return {
     user: {
@@ -196,13 +209,12 @@ export async function loadLearnerDashboard(
 
   const lessonWhere = lessonAccessWhere(entitlement);
 
-  const pathwayLessonRows =
-    preload?.pathwayLessonRows ??
-    (await fetchPathwayLessonRowsForDashboard(pathwayLessonsAppListWhere(entitlement, learnerPath)));
+  const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
 
-  const [contentLessonTotal, lessonsCompleted, incompleteProgress, exam14dSum, recentMocksRaw] =
+  const [contentLessonTotal, pathwayLessonPublishedCount, lessonsCompleted, incompleteProgress, exam14dSum, recentMocksRaw] =
     await Promise.all([
       prisma.contentItem.count({ where: { ...lessonWhere, type: "lesson" } }),
+      prisma.pathwayLesson.count({ where: pathwayWhere }),
       prisma.progress.count({ where: { userId, completed: true } }),
       prisma.progress.findFirst({
         where: { userId, completed: false },
@@ -230,10 +242,8 @@ export async function loadLearnerDashboard(
       }),
     ]);
 
-  const pathwayLessonTotal = pathwayLessonRows.filter((row) =>
-    normalizeLesson(pathwayLessonRowToInput(row), row.pathwayId).structuralQuality?.publicComplete,
-  ).length;
-  const lessonsAvailable = contentLessonTotal + pathwayLessonTotal;
+  /** Matches published in-scope pathway rows (same filter as hub); avoids per-row structural JSON parsing. */
+  const lessonsAvailable = contentLessonTotal + pathwayLessonPublishedCount;
 
   const questionsInMocksLast14d = exam14dSum._sum.total ?? 0;
 
@@ -359,34 +369,45 @@ export async function loadPathwayStudySummaries(
   const pathways = listPathwaysCompatibleWithSubscription(entitlement);
   if (pathways.length === 0) return [];
 
-  let lessonRows: PathwayLessonDashboardRow[];
-  let allPathwayProgress: { lessonId: string; completed: boolean }[];
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { learnerPath: true },
+  });
+  const learnerPath = user?.learnerPath ?? null;
+  const baseWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
 
-  if (preload?.lessonRows && preload.pathwayProgress) {
-    lessonRows = preload.lessonRows;
-    allPathwayProgress = preload.pathwayProgress;
-  } else {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { learnerPath: true },
-    });
-    const learnerPath = user?.learnerPath ?? null;
-    const baseWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
-    lessonRows = await fetchPathwayLessonRowsForDashboard(baseWhere).catch(
-      () => [] as PathwayLessonDashboardRow[],
-    );
-    allPathwayProgress = await fetchProgressForPathwayLessonRows(userId, lessonRows).catch(
-      () => [] as { lessonId: string; completed: boolean }[],
-    );
-  }
+  const [counts, allPathwayProgress] = await Promise.all([
+    prisma.pathwayLesson
+      .groupBy({
+        by: ["pathwayId"],
+        where: baseWhere,
+        _count: { _all: true },
+      })
+      .catch(() => [] as { pathwayId: string; _count: { _all: number } }[]),
+    (async (): Promise<{ lessonId: string; completed: boolean }[]> => {
+      if (preload?.lessonRows && preload.pathwayProgress) {
+        return preload.pathwayProgress;
+      }
+      const slugRows = preload?.lessonRows
+        ? preload.lessonRows.map((r) => ({ pathwayId: r.pathwayId, slug: r.slug }))
+        : await prisma.pathwayLesson
+            .findMany({
+              where: baseWhere,
+              select: { pathwayId: true, slug: true },
+              take: PATHWAY_CATALOG_LIST_HARD_CAP,
+            })
+            .catch(() => [] as { pathwayId: string; slug: string }[]);
+      safeServerLog("learner_dashboard", "pathway_study_summaries_progress_keys", {
+        slugRows: slugRows.length,
+        fromPreloadLessonRows: Boolean(preload?.lessonRows),
+      });
+      return fetchProgressForPathwayLessonRows(userId, slugRows).catch(
+        () => [] as { lessonId: string; completed: boolean }[],
+      );
+    })(),
+  ]);
 
-  const totalsByPathway = new Map<string, number>();
-  for (const row of lessonRows) {
-    if (!normalizeLesson(pathwayLessonRowToInput(row), row.pathwayId).structuralQuality?.publicComplete) {
-      continue;
-    }
-    totalsByPathway.set(row.pathwayId, (totalsByPathway.get(row.pathwayId) ?? 0) + 1);
-  }
+  const totalsByPathway = new Map(counts.map((c) => [c.pathwayId, c._count._all]));
 
   const progressByPathway = new Map<string, { completed: number; inProgress: number }>();
   for (const r of allPathwayProgress) {

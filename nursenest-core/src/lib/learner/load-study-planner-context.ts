@@ -27,7 +27,6 @@ export async function loadStudyPlannerContext(
 
   const [dashboard, pathways, user] = await Promise.all([
     loadLearnerDashboard(userId, entitlement, {
-      pathwayLessonRows: bundle.pathwayLessonRows,
       userProfile: bundle.user,
     }),
     loadPathwayStudySummaries(userId, entitlement, {

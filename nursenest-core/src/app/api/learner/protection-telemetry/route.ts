@@ -3,6 +3,7 @@ import { z } from "zod";
 import type { NextRequest } from "next/server";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { enforceProtectionTelemetryPost } from "@/lib/http/api-protection";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { isClientProtectionMetricKey, recordPremiumProtectionClientBatch } from "@/lib/premium-protection/telemetry-db";
 
@@ -28,6 +29,7 @@ const bodySchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  return runWithApiTelemetry(req, "POST /api/learner/protection-telemetry", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -55,4 +57,5 @@ export async function POST(req: NextRequest) {
 
   await recordPremiumProtectionClientBatch({ userId: gate.userId, items });
   return NextResponse.json({ ok: true, accepted: items.length });
+  });
 }

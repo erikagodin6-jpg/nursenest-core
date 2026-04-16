@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/db";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { pathwayLessonsAppListWhere, visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
-import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { syntheticPathwayLessonId } from "@/lib/lessons/pathway-lesson-progress";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
@@ -64,7 +63,6 @@ export async function resolvePathwayNextLesson(
           previewSectionCount: true,
           seoTitle: true,
           seoDescription: true,
-          sections: true,
           locale: true,
         },
       }),
@@ -78,9 +76,8 @@ export async function resolvePathwayNextLesson(
       }),
     ]);
 
-    const lessons = lessonsRaw.filter((row) =>
-      normalizeLesson(pathwayLessonRowToInput(row), pathwayId).structuralQuality?.publicComplete,
-    );
+    /** `pathwayWhere` already requires PUBLISHED + entitlement scope — avoid loading multi‑MB `sections` JSON per row. */
+    const lessons = lessonsRaw;
     if (lessons.length === 0) continue;
 
     for (let i = 0; i < lessons.length; i += NEXT_LESSON_CHUNK) {
@@ -148,13 +145,10 @@ export async function resolveNextIncompleteMarketingPathwayLesson(
       previewSectionCount: true,
       seoTitle: true,
       seoDescription: true,
-      sections: true,
       locale: true,
     },
   });
-  const lessons = lessonsRaw.filter((row) =>
-    normalizeLesson(pathwayLessonRowToInput(row), pathwayId).structuralQuality?.publicComplete,
-  );
+  const lessons = lessonsRaw;
   if (lessons.length === 0) return null;
 
   for (let i = 0; i < lessons.length; i += NEXT_LESSON_CHUNK) {
@@ -212,13 +206,10 @@ export async function resolvePathwayLessonForWeakTopic(
         previewSectionCount: true,
         seoTitle: true,
         seoDescription: true,
-        sections: true,
         locale: true,
       },
     });
-    const rows = rowsRaw.filter((row) =>
-      normalizeLesson(pathwayLessonRowToInput(row), pathwayId).structuralQuality?.publicComplete,
-    );
+    const rows = rowsRaw;
 
     for (const r of rows) {
       const fromTopic = normalizeTopicKey(r.topic);

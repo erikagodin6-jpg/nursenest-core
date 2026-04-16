@@ -45,6 +45,7 @@ import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { LearnerStudyHomeDurabilityMinimal } from "@/components/student/learner-study-home-durability-minimal";
 
 /** Match learner shell: CAT entry for nursing exam tracks; generic exams hub otherwise. */
@@ -157,6 +158,10 @@ export default async function LearnerDashboardPage() {
   }
 
   if (entitlement.hasAccess && shouldSkipNonCriticalLearnerWork()) {
+    safeServerLog("learner_dashboard", "optional_home_ui_skipped", {
+      surface: "full_dashboard",
+      reason: "durability_degraded",
+    });
     const identity = resolveDashboardIdentity({
       tier: session?.user?.tier,
       learnerPathId: userLearnerPath,

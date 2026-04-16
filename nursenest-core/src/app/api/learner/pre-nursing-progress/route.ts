@@ -13,6 +13,7 @@ import { nextPreNursingModuleSlug, preNursingCompletionFraction } from "@/lib/pr
 import { HARD_CAP_FIND_MANY } from "@/lib/api/safe-query-take";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
 const bodySchema = z.object({
@@ -27,7 +28,8 @@ function isValidModuleSlug(slug: string): boolean {
 /** At most one progress row per module; cap matches registry size (bounded by {@link HARD_CAP_FIND_MANY}). */
 const PRE_NURSING_PROGRESS_LIST_TAKE = Math.min(HARD_CAP_FIND_MANY, PRE_NURSING_MODULE_REGISTRY.length);
 
-export async function GET() {
+export async function GET(req: Request) {
+  return runWithApiTelemetry(req, "GET /api/learner/pre-nursing-progress", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id;
   if (!userId || !isDatabaseUrlConfigured()) {
@@ -70,12 +72,14 @@ export async function GET() {
   } catch {
     return NextResponse.json({ error: "Unable to load progress." }, { status: 503 });
   }
+  });
 }
 
 /**
  * Free Pre-Nursing: any logged-in learner can record module completion (no paid subscription required).
  */
 export async function POST(req: Request) {
+  return runWithApiTelemetry(req, "POST /api/learner/pre-nursing-progress", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id;
   if (!userId) {
@@ -145,4 +149,5 @@ export async function POST(req: Request) {
   } catch {
     return NextResponse.json({ error: "Unable to save progress." }, { status: 503 });
   }
+  });
 }

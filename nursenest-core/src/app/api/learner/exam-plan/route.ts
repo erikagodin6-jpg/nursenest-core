@@ -4,6 +4,7 @@ import { ALLIED_PROFESSION_KEYS, listAlliedProfessionsSorted } from "@/lib/allie
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { prisma } from "@/lib/db";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
 const CADENCE = new Set(["light", "steady", "intensive"]);
@@ -42,7 +43,8 @@ function serializeExamPlan(user: {
   };
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  return runWithApiTelemetry(req, "GET /api/learner/exam-plan", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -84,9 +86,11 @@ export async function GET() {
   } catch {
     return NextResponse.json({ error: "Unable to load exam plan." }, { status: 503 });
   }
+  });
 }
 
 export async function PATCH(req: Request) {
+  return runWithApiTelemetry(req, "PATCH /api/learner/exam-plan", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
@@ -242,4 +246,5 @@ export async function PATCH(req: Request) {
   } catch {
     return NextResponse.json({ error: "Unable to save exam plan." }, { status: 503 });
   }
+  });
 }

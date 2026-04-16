@@ -9,6 +9,7 @@ import {
   studySettingsToPersistenceInput,
   studySettingsUserSelect,
 } from "@/lib/learner/study-settings";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 
 const patchSchema = z.object({
   enableAdaptivePlan: z.boolean().optional(),
@@ -27,7 +28,8 @@ const patchSchema = z.object({
     .optional(),
 });
 
-export async function GET() {
+export async function GET(req: Request) {
+  return runWithApiTelemetry(req, "GET /api/learner/study-settings", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) {
@@ -43,9 +45,11 @@ export async function GET() {
   } catch {
     return NextResponse.json({ error: "Unable to load study settings." }, { status: 503 });
   }
+  });
 }
 
 export async function PATCH(req: Request) {
+  return runWithApiTelemetry(req, "PATCH /api/learner/study-settings", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) {
@@ -75,4 +79,5 @@ export async function PATCH(req: Request) {
   } catch {
     return NextResponse.json({ error: "Unable to save study settings." }, { status: 503 });
   }
+  });
 }

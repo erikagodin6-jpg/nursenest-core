@@ -3,10 +3,12 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { BaselineAssessmentAttemptStatus } from "@prisma/client";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 
 export const dynamic = "force-dynamic";
 
-export async function POST() {
+export async function POST(req: Request) {
+  return runWithApiTelemetry(req, "POST /api/learner/baseline-assessment/skip", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id;
   if (!userId || !isDatabaseUrlConfigured()) {
@@ -25,4 +27,5 @@ export async function POST() {
   ]);
 
   return NextResponse.json({ ok: true });
+  });
 }

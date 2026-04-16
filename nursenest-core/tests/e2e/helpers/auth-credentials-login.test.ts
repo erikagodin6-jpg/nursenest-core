@@ -14,5 +14,12 @@ describe("parseCredentialsCallbackPayload", () => {
     });
     assert.equal(r.ok, false);
     assert.equal(r.errorParam, "CredentialsSignin");
+    assert.equal(r.credentialsCode, "credentials");
+  });
+  it("reads diagnostic callback code", () => {
+    const r = parseCredentialsCallbackPayload({
+      url: "/login?error=CredentialsSignin&code=db_url_auth",
+    });
+    assert.equal(r.credentialsCode, "db_url_auth");
   });
 });

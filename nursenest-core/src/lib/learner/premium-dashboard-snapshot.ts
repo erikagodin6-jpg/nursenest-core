@@ -1,6 +1,7 @@
-import { ContentStatus, FlashcardDeckVisibility, PracticeTestStatus } from "@prisma/client";
+import { ContentStatus, FlashcardDeckVisibility, Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { buildLearnerInsightSnapshot } from "@/lib/insights/learner-insight-engine";
 import type { LearnerInsightSnapshot } from "@/lib/insights/types";
@@ -53,27 +54,29 @@ export async function loadStudyStreakDays(userId: string, lookbackDays = 90): Pr
   if (!userId || !isDatabaseUrlConfigured()) return 0;
   const since = new Date(Date.now() - lookbackDays * 86400000);
   try {
-    const [attempts, progressRows, practiceDone] = await Promise.all([
-      prisma.examAttempt.findMany({
-        where: { userId, createdAt: { gte: since } },
-        select: { createdAt: true },
-      }),
-      prisma.progress.findMany({
-        where: { userId, updatedAt: { gte: since } },
-        select: { updatedAt: true },
-      }),
-      prisma.practiceTest.findMany({
-        where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null, gte: since } },
-        select: { completedAt: true },
-      }),
-    ]);
+    /** One round-trip: distinct UTC calendar days with activity (replaces three unbounded findMany scans). */
+    const dayRows = await prisma.$queryRaw<Array<{ day: string }>>(Prisma.sql`
+      SELECT DISTINCT to_char(d, 'YYYY-MM-DD') AS day
+      FROM (
+        SELECT ("createdAt" AT TIME ZONE 'UTC')::date AS d FROM "ExamAttempt"
+        WHERE "userId" = ${userId} AND "createdAt" >= ${since}
+        UNION ALL
+        SELECT ("updatedAt" AT TIME ZONE 'UTC')::date AS d FROM "Progress"
+        WHERE "userId" = ${userId} AND "updatedAt" >= ${since}
+        UNION ALL
+        SELECT ("completedAt" AT TIME ZONE 'UTC')::date AS d FROM "practice_tests"
+        WHERE "userId" = ${userId}
+          AND "status" = 'COMPLETED'::"PracticeTestStatus"
+          AND "completedAt" IS NOT NULL
+          AND "completedAt" >= ${since}
+      ) u
+    `);
 
-    const dates = new Set<string>();
-    for (const a of attempts) dates.add(ymd(a.createdAt));
-    for (const p of progressRows) dates.add(ymd(p.updatedAt));
-    for (const p of practiceDone) {
-      if (p.completedAt) dates.add(ymd(p.completedAt));
-    }
+    const dates = new Set<string>(dayRows.map((r) => r.day));
+    safeServerLog("learner_dashboard", "study_streak_activity_days_sql", {
+      distinctDayCount: dates.size,
+      lookbackDays,
+    });
 
     const today = ymd(new Date());
     let cursor = dates.has(today) ? today : addDaysYmd(today, -1);
@@ -250,7 +253,6 @@ export async function loadPremiumDashboardSnapshot(
   if (!bundle) return null;
 
   const dash = await loadLearnerDashboard(userId, entitlement, {
-    pathwayLessonRows: bundle.pathwayLessonRows,
     userProfile: bundle.user,
   });
   if (!dash) return null;

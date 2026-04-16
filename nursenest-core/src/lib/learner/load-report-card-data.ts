@@ -207,7 +207,6 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
   if (!bundle) return null;
 
   const dash = await loadLearnerDashboard(userId, entitlement, {
-    pathwayLessonRows: bundle.pathwayLessonRows,
     userProfile: bundle.user,
   });
   if (!dash) return null;

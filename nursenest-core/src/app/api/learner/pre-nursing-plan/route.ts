@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import type { PreNursingFuturePathwayHint } from "@/lib/pre-nursing/pre-nursing-conversion-links";
 
@@ -37,7 +38,8 @@ function serialize(user: {
   };
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  return runWithApiTelemetry(req, "GET /api/learner/pre-nursing-plan", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id;
   if (!userId) {
@@ -75,9 +77,11 @@ export async function GET() {
   } catch {
     return NextResponse.json({ error: "Unable to load plan." }, { status: 503 });
   }
+  });
 }
 
 export async function PATCH(req: Request) {
+  return runWithApiTelemetry(req, "PATCH /api/learner/pre-nursing-plan", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id;
   if (!userId) {
@@ -196,4 +200,5 @@ export async function PATCH(req: Request) {
   } catch {
     return NextResponse.json({ error: "Unable to save plan." }, { status: 503 });
   }
+  });
 }
