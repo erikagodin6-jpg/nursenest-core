@@ -42,6 +42,7 @@
  *
  * Or set `PLAYWRIGHT_TEST_EMAIL` / `PLAYWRIGHT_TEST_PASSWORD` (same as `paid-test-credentials.ts`).
  */
+import "./load-dotenv-for-cli.mts";
 import { createInterface } from "node:readline";
 import bcrypt from "bcryptjs";
 import {

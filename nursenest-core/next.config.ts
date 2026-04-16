@@ -14,6 +14,14 @@
 import { fileURLToPath } from "url";
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
+import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "./src/lib/exam-pathways/programmatic-slug-redirects";
+import { buildPathwayLessonSlugRedirectsForNextConfig } from "./src/lib/lessons/pathway-lesson-slug-redirects";
+import { CORE_HOSTED_MARKETING_LOCALES } from "./src/lib/i18n/marketing-locale-policy";
+import {
+  buildLegacyProgrammaticSeoRedirectsToPathwayHubs,
+  LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT,
+} from "./src/lib/marketing/canonical-pathway-hubs";
+import { getAllProgrammaticSlugs } from "./src/lib/seo/programmatic-registry";
 
 /** Parent of `nursenest-core/` (repo root); avoids `path` in config bundle (fixes ESM load). */
 const monorepoRoot = fileURLToPath(new URL("..", import.meta.url));
@@ -93,20 +101,6 @@ const nextConfig: NextConfig = {
     if (!runHeavyBuildTasks) {
       return [legacyMedMathRedirect];
     }
-    const [
-      { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH },
-      { buildPathwayLessonSlugRedirectsForNextConfig },
-      { CORE_HOSTED_MARKETING_LOCALES },
-      { buildLegacyProgrammaticSeoRedirectsToPathwayHubs, LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT },
-      { getAllProgrammaticSlugs },
-    ] = await Promise.all([
-      import("./src/lib/exam-pathways/programmatic-slug-redirects"),
-      import("./src/lib/lessons/pathway-lesson-slug-redirects"),
-      import("./src/lib/i18n/marketing-locale-policy"),
-      import("./src/lib/marketing/canonical-pathway-hubs"),
-      import("./src/lib/seo/programmatic-registry"),
-    ]);
-
     const seoCanonicalRedirects = getAllProgrammaticSlugs()
       .filter((slug) => !LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT.has(slug))
       .map((slug) => ({
@@ -152,13 +146,6 @@ const nextConfig: NextConfig = {
     if (!runHeavyBuildTasks) {
       return { beforeFiles: [] };
     }
-    const [{ getAllProgrammaticSlugs }, { LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT }, { CORE_HOSTED_MARKETING_LOCALES }] =
-      await Promise.all([
-        import("./src/lib/seo/programmatic-registry"),
-        import("./src/lib/marketing/canonical-pathway-hubs"),
-        import("./src/lib/i18n/marketing-locale-policy"),
-      ]);
-
     const programmaticSeoRewrites = getAllProgrammaticSlugs()
       .filter((slug) => !LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT.has(slug))
       .map((slug) => ({

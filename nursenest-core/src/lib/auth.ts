@@ -493,6 +493,13 @@ export const authConfig: NextAuthConfig = {
           authMode,
         };
 
+        safeServerLog("auth", "credentials_authorize_lookup", {
+          userFound: Boolean(user),
+          userIdPrefix: user?.id ? user.id.slice(0, 8) : null,
+          lookupStrategy: lookupStrategy ?? "none",
+          authMode,
+        });
+
         if (!user) {
           await recordLoginFailure(lockKey);
           let finalFailureReason:
@@ -557,6 +564,11 @@ export const authConfig: NextAuthConfig = {
         } catch (e) {
           await recordLoginFailure(lockKey);
           const detail = e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200);
+          safeServerLog("auth", "credentials_authorize_password", {
+            passwordMatch: false,
+            userIdPrefix: user.id.slice(0, 8),
+            reason: "bcrypt_compare_error",
+          });
           logAuthIncidentLine({
             ...incidentBase,
             outcome: "failure",
@@ -575,6 +587,11 @@ export const authConfig: NextAuthConfig = {
           });
           return null;
         }
+
+        safeServerLog("auth", "credentials_authorize_password", {
+          passwordMatch: passwordOk,
+          userIdPrefix: user.id.slice(0, 8),
+        });
 
         if (!passwordOk) {
           await recordLoginFailure(lockKey);
