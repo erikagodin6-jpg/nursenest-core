@@ -1,3 +1,7 @@
+/**
+ * Admin-only diagnostics. Reads/writes under `reports/i18n-status.json` relative to the monorepo root.
+ * Uses per-instance ephemeral filesystem on App Platform — cache may differ between instances; not shared state for product traffic.
+ */
 import { readFileSync, writeFileSync, mkdirSync, existsSync, statSync } from "fs";
 import path from "path";
 import { NextResponse } from "next/server";

@@ -1,3 +1,6 @@
+/**
+ * Super-admin batch ops. Reads `data/materialized/**` JSON from the container filesystem — per-instance ephemeral on App Platform; do not assume cross-instance file parity.
+ */
 import { readFileSync } from "fs";
 import path from "path";
 import { NextResponse } from "next/server";

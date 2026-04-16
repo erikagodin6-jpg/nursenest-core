@@ -6,7 +6,7 @@ import { buildQuestionBankCoverageAnalysis } from "@/lib/questions/build-questio
  * Full pathway coverage + canonical topic distribution + quality flags (published rows only).
  * Heavy aggregate — admin-only; suitable for ops / nightly jobs.
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 

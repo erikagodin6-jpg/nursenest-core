@@ -1,3 +1,6 @@
+/**
+ * Writes refreshed i18n diagnostics JSON to local disk when allowed. Per-instance ephemeral FS on App Platform — not durable shared storage.
+ */
 import { mkdirSync, writeFileSync } from "fs";
 import path from "path";
 import { type NextRequest, NextResponse } from "next/server";

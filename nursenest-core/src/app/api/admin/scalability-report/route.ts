@@ -6,7 +6,7 @@ import { buildContentScalabilityReport } from "@/lib/scalability/build-content-s
  * Bounded content / scale diagnostics for ops (counts + pathway source matrix only).
  * No raw lesson bodies, question stems, or unbounded arrays beyond registry pathways (~10–50 rows).
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
