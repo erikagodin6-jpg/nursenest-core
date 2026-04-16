@@ -5,7 +5,7 @@
  * Used by CI tests and `scripts/audit/run-i18n-completeness-audit.mts` — keep in sync.
  */
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
-import { PRODUCTION_CHROME_I18N_KEYS } from "@/lib/i18n/production-chrome-i18n-keys";
+import { PRODUCTION_CHROME_I18N_KEYS } from "@/lib/i18n/production-chrome-i18n-keys.ts";
 
 /** Auth / signup / password flows — minimal strings so routes are not half-English. */
 export const REQUIRED_AUTH_AND_ACCOUNT_FLOW_KEYS = [

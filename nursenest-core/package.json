@@ -302,7 +302,7 @@
     "test:lesson-routes": "tsx --test src/lib/lessons/lesson-routes.test.ts src/lib/learner/study-loop-recommendations.test.ts",
     "test:content-quality": "tsx --test src/lib/content-quality/plain-text.test.ts",
     "test:question-bank": "tsx --test src/lib/questions/question-bank-taxonomy.test.ts src/lib/questions/adaptive-question-selection.test.ts",
-    "test:middleware": "tsx --test src/middleware.test.ts src/lib/auth/auth-base-path.test.ts",
+    "test:middleware": "tsx --test src/middleware.test.ts src/proxy-regional-matcher-alignment.test.ts src/lib/auth/auth-base-path.test.ts",
     "test:auth-base-path": "tsx --test src/lib/auth/auth-base-path.test.ts",
     "test:admin-access": "tsx --test src/lib/auth/admin-path-policy.test.ts src/middleware.test.ts",
     "test:server-features": "tsx --test src/lib/observability/server-feature-tags.test.ts",
