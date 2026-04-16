@@ -2,25 +2,33 @@
  * **Manual / CI diagnostic** — admin dashboard health (login → /admin).
  *
  * Env (see `playwright.env.ts` + `.env.playwright.local`):
- * - `E2E_ADMIN_EMAIL`
- * - `E2E_ADMIN_PASSWORD`
+ * - `E2E_ADMIN_EMAIL` / `E2E_ADMIN_PASSWORD` (full flow; optional)
  * - `BASE_URL` (Playwright `baseURL`; defaults in config to http://127.0.0.1:3000)
+ *
+ * Provision a **dedicated QA staff user** with DB scripts — see `../helpers/admin-e2e-credentials.ts`.
  *
  * ```
  * npx playwright test tests/e2e/admin/admin-dashboard-diagnostic.spec.ts --project=chromium
  * ```
  *
- * Does **not** use saved `storageState`; performs a fresh credentials login each run.
+ * Does **not** use saved `storageState`; performs a fresh credentials login when creds are set.
  */
-import { test, type Page } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { attachPageObservers, type PageObservers } from "../helpers/attach-observers";
+import { getAdminE2eCredentials, hasAdminE2eCredentials } from "../helpers/admin-e2e-credentials";
 
 const LOGIN_TIMEOUT_MS = 120_000;
 const NAV_TIMEOUT_MS = 60_000;
 
 type ApiHit = { url: string; status: number; method: string };
 
-function attachResponseTap(page: Page, baseOrigin: string, out: ApiHit[], errorStatuses: ApiHit[]) {
+function attachResponseTap(
+  page: Page,
+  baseOrigin: string,
+  out: ApiHit[],
+  errorStatuses: ApiHit[],
+  adminApiHits: ApiHit[],
+) {
   const onResponse = (response: import("@playwright/test").Response) => {
     const req = response.request();
     const rt = req.resourceType();
@@ -36,9 +44,28 @@ function attachResponseTap(page: Page, baseOrigin: string, out: ApiHit[], errorS
     const row: ApiHit = { url: response.url(), status, method: req.method() };
     out.push(row);
     if (status >= 400 || status === 0) errorStatuses.push(row);
+    if (u.pathname.startsWith("/api/admin")) adminApiHits.push(row);
   };
   page.on("response", onResponse);
   return () => page.off("response", onResponse);
+}
+
+/** Same-origin requests where total time from start to response end exceeds threshold (ms). */
+function attachSlowRequestTap(page: Page, baseOrigin: string, slow: { url: string; ms: number }[], thresholdMs: number) {
+  const onFinished = (request: import("@playwright/test").Request) => {
+    let u: URL;
+    try {
+      u = new URL(request.url());
+    } catch {
+      return;
+    }
+    if (u.origin !== baseOrigin) return;
+    const timing = request.timing();
+    const total = timing.responseEnd - timing.startTime;
+    if (total >= thresholdMs) slow.push({ url: request.url(), ms: Math.round(total) });
+  };
+  page.on("requestfinished", onFinished);
+  return () => page.off("requestfinished", onFinished);
 }
 
 async function screenshotAttach(page: Page, testInfo: import("@playwright/test").TestInfo, name: string) {
@@ -48,16 +75,49 @@ async function screenshotAttach(page: Page, testInfo: import("@playwright/test")
   }
 }
 
-test.describe("Admin — dashboard diagnostic", () => {
-  test("login, /admin, network + console + headings + clicks", async ({ page, baseURL }, testInfo) => {
-    test.setTimeout(180_000);
+/** Redacted session summary for attachments (no tokens). */
+function summarizeSessionJson(raw: unknown): Record<string, unknown> {
+  if (!raw || typeof raw !== "object") return { ok: false, reason: "not_json_object" };
+  const o = raw as Record<string, unknown>;
+  const user = o.user as Record<string, unknown> | undefined;
+  if (!user) return { hasUser: false };
+  return {
+    hasUser: true,
+    role: typeof user.role === "string" ? user.role : undefined,
+    idPrefix: typeof user.id === "string" ? `${(user.id as string).slice(0, 8)}…` : undefined,
+    email: typeof user.email === "string" ? `${(user.email as string).slice(0, 3)}…@${(user.email as string).split("@")[1] ?? ""}` : undefined,
+  };
+}
 
-    const email = process.env.E2E_ADMIN_EMAIL?.trim();
-    const password = process.env.E2E_ADMIN_PASSWORD?.trim();
-    if (!email || !password) {
-      test.skip(true, "Set E2E_ADMIN_EMAIL and E2E_ADMIN_PASSWORD (and BASE_URL if not default).");
-      return;
-    }
+test.describe("Admin — dashboard diagnostic", () => {
+  test("unauthenticated GET /admin redirects to login (real middleware)", async ({ page, baseURL }, testInfo) => {
+    const origin = (() => {
+      try {
+        return new URL(baseURL ?? "http://127.0.0.1:3000").origin;
+      } catch {
+        return "http://127.0.0.1:3000";
+      }
+    })();
+
+    await page.goto(`${origin}/admin`, { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT_MS });
+
+    const url = page.url();
+    expect(url, "expect redirect to /login for guests").toMatch(/\/login/i);
+    expect(url, "callback preserves admin intent").toMatch(/callbackUrl=.*%2Fadmin|callbackUrl=.*\/admin/i);
+
+    await screenshotAttach(page, testInfo, "admin-unauth-redirect.png");
+    await testInfo.attach("unauth-redirect-url.txt", {
+      body: Buffer.from(url, "utf-8"),
+      contentType: "text/plain",
+    });
+  });
+
+  test("login, /admin, network + console + headings + clicks", async ({ page, baseURL }, testInfo) => {
+    test.skip(!hasAdminE2eCredentials(), "Set E2E_ADMIN_EMAIL and E2E_ADMIN_PASSWORD (see admin-e2e-credentials.ts).");
+    const creds = getAdminE2eCredentials();
+    if (!creds) return;
+
+    test.setTimeout(180_000);
 
     const origin = (() => {
       try {
@@ -69,7 +129,10 @@ test.describe("Admin — dashboard diagnostic", () => {
 
     const apiHits: ApiHit[] = [];
     const apiErrors: ApiHit[] = [];
-    const detachResponse = attachResponseTap(page, origin, apiHits, apiErrors);
+    const adminApiHits: ApiHit[] = [];
+    const slowRequests: { url: string; ms: number }[] = [];
+    const detachResponse = attachResponseTap(page, origin, apiHits, apiErrors, adminApiHits);
+    const detachSlow = attachSlowRequestTap(page, origin, slowRequests, 4000);
 
     const observers: PageObservers = attachPageObservers(page, {
       profile: "app",
@@ -79,8 +142,8 @@ test.describe("Admin — dashboard diagnostic", () => {
 
     try {
       await page.goto("/login", { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT_MS });
-      await page.locator("#login-identifier").fill(email);
-      await page.locator("#login-password").fill(password);
+      await page.locator("#login-identifier").fill(creds.email);
+      await page.locator("#login-password").fill(creds.password);
       await page.getByRole("button", { name: /^Sign In$/i }).click();
 
       await page
@@ -97,6 +160,21 @@ test.describe("Admin — dashboard diagnostic", () => {
         pathnameAfterLogin = "";
       }
       const windowPathAfterLogin = await page.evaluate(() => window.location.pathname).catch(() => "");
+
+      let sessionProbe: Record<string, unknown> = { skipped: true };
+      try {
+        const raw = await page.evaluate(async () => {
+          const r = await fetch("/api/auth/session", { credentials: "include" });
+          return r.json() as Promise<unknown>;
+        });
+        sessionProbe = summarizeSessionJson(raw);
+        await testInfo.attach("session-probe-summary.json", {
+          body: Buffer.from(JSON.stringify(sessionProbe, null, 2), "utf-8"),
+          contentType: "application/json",
+        });
+      } catch (e) {
+        sessionProbe = { error: e instanceof Error ? e.message : String(e) };
+      }
 
       await screenshotAttach(page, testInfo, "01-after-login.png");
 
@@ -118,7 +196,10 @@ test.describe("Admin — dashboard diagnostic", () => {
       const hasAdminHeading =
         (await page.getByRole("heading", { name: /Admin Dashboard/i }).count().catch(() => 0)) > 0;
       const adminDashboardLoads =
-        adminPath.startsWith("/admin") && !adminPath.includes("/login") && hasAdminHeading && bodyLen > 200;
+        adminPath.startsWith("/admin") &&
+        !adminPath.includes("/login") &&
+        (hasAdminHeading || headings.some((h) => /admin dashboard/i.test(h))) &&
+        bodyLen > 200;
 
       /** Try a few safe nav links inside admin chrome (in-activity order). */
       const tryLinks = ["/admin/access", "/admin/users", "/admin/system-status"] as const;
@@ -137,7 +218,6 @@ test.describe("Admin — dashboard diagnostic", () => {
         await page.goBack({ waitUntil: "domcontentloaded" }).catch(() => {});
       }
 
-      /** One generic button probe (menu / UI) — skip if none. */
       const menuBtn = page.getByRole("button", { name: /^Menu$/i }).first();
       if (await menuBtn.isVisible().catch(() => false)) {
         await menuBtn.click().catch(() => {});
@@ -159,7 +239,7 @@ test.describe("Admin — dashboard diagnostic", () => {
         rootCause =
           "still_on_login — credentials rejected, AUTH_URL mismatch, or sign-in did not complete (check server logs).";
       } else if (!adminPath.startsWith("/admin")) {
-        rootCause = `post_login_redirect_away_from_admin — landed on ${adminPath} (expected /admin/* for staff).`;
+        rootCause = `post_login_redirect_away_from_admin — landed on ${adminPath} (expected /admin/* for staff; JWT role may still be LEARNER — re-sign-in after DB promotion).`;
       } else if (adminPath.includes("/login")) {
         rootCause = "admin_route_redirect_to_login — session not accepted for /admin (staff role / cookie).";
       } else if (!hasAdminHeading && bodyLen < 200) {
@@ -170,6 +250,8 @@ test.describe("Admin — dashboard diagnostic", () => {
         rootCause = "client_or_rsc_staff_gate — console suggests staff session / RBAC issue.";
       } else if (consoleErrors.length > 0) {
         rootCause = "console_errors_present — see console list (may include hydration or data fetch).";
+      } else if (slowRequests.length > 0) {
+        rootCause = "slow_requests — dashboard may be waiting on heavy server queries (see slowRequestsMs).";
       } else {
         rootCause = "no_single_obvious_failure — compare screenshots and API rows.";
       }
@@ -181,10 +263,14 @@ test.describe("Admin — dashboard diagnostic", () => {
         adminUrlAfterGoto: adminUrl,
         adminPath,
         adminDashboardLoads,
+        sessionProbeSummary: sessionProbe,
         consoleErrors,
+        consoleErrorContext: observers.consoleErrorContext,
         failedNetworkRequests: failedNetwork,
         authSessionProbes: authHttp,
         apiErrorResponses: apiErrors.slice(-40),
+        adminApiResponses: adminApiHits.slice(-40),
+        slowRequestsMs: slowRequests.slice(-25),
         headingsSample: headings.slice(0, 25),
         bodyTextLength: bodyLen,
         clickProbe: clickResults,
@@ -196,16 +282,21 @@ test.describe("Admin — dashboard diagnostic", () => {
         contentType: "application/json",
       });
 
-      // Single copy-paste block for operators (requested “return only” fields).
-      // eslint-disable-next-line no-console -- diagnostic output
+      // eslint-disable-next-line no-console -- diagnostic operator output
       console.log(
         "\n--- ADMIN DIAGNOSTIC SUMMARY ---\n" +
           `final URL after login: ${finalUrlAfterLogin}\n` +
           `admin dashboard loads (heuristic): ${adminDashboardLoads}\n` +
+          `session probe: ${JSON.stringify(sessionProbe)}\n` +
+          `slow requests (>=4s): ${slowRequests.length}\n` +
           `console errors (${consoleErrors.length}):\n${consoleErrors.map((c) => `  - ${c}`).join("\n") || "  (none)"}\n` +
           `failed API / network (${failedNetwork.length}):\n${failedNetwork.map((f) => `  - ${f}`).join("\n") || "  (none)"}\n` +
           `API responses with status >= 400 (sample):\n${apiErrors
             .slice(-15)
+            .map((a) => `  - ${a.status} ${a.method} ${a.url}`)
+            .join("\n") || "  (none)"}\n` +
+          `admin API responses (sample):\n${adminApiHits
+            .slice(-12)
             .map((a) => `  - ${a.status} ${a.method} ${a.url}`)
             .join("\n") || "  (none)"}\n` +
           `root cause (inferred): ${rootCause}\n` +
@@ -213,6 +304,7 @@ test.describe("Admin — dashboard diagnostic", () => {
       );
     } finally {
       detachResponse();
+      detachSlow();
       observers.dispose();
     }
   });
