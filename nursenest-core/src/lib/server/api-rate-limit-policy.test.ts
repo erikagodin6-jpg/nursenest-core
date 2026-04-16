@@ -4,10 +4,13 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  authRouteKind,
   isAiExpensiveRateLimitPath,
   isAuthStrictPath,
   isBillingRateLimitPath,
+  isHomeStatsRateLimitPath,
   isPublicJsonRateLimitPath,
+  retryAfterSecondsFrom429Streak,
 } from "@/lib/server/rate-limit";
 
 describe("enforceApiRateLimit path classification", () => {
@@ -33,5 +36,26 @@ describe("enforceApiRateLimit path classification", () => {
     assert.equal(isPublicJsonRateLimitPath("/api/public/home-stats"), true);
     assert.equal(isPublicJsonRateLimitPath("/api/public/foo/bar"), true);
     assert.equal(isPublicJsonRateLimitPath("/api/questions"), false);
+  });
+
+  it("isolates home-stats for tighter cap than generic public_json", () => {
+    assert.equal(isHomeStatsRateLimitPath("/api/public/home-stats"), true);
+    assert.equal(isHomeStatsRateLimitPath("/api/public/flashcard-tags"), false);
+  });
+
+  it("splits auth kinds for per-route buckets", () => {
+    assert.equal(authRouteKind("/api/auth/signin"), "signin");
+    assert.equal(authRouteKind("/api/auth/signin/credentials"), "signin");
+    assert.equal(authRouteKind("/api/auth/callback/google"), "callback");
+    assert.equal(authRouteKind("/api/auth/forgot-password"), "forgot");
+    assert.equal(authRouteKind("/api/auth/reset-password"), "reset");
+    assert.equal(authRouteKind("/api/auth/csrf"), "csrf");
+  });
+
+  it("exponential Retry-After from streak (capped)", () => {
+    assert.equal(retryAfterSecondsFrom429Streak(1), 10);
+    assert.equal(retryAfterSecondsFrom429Streak(2), 20);
+    assert.equal(retryAfterSecondsFrom429Streak(3), 40);
+    assert.equal(retryAfterSecondsFrom429Streak(10), 300);
   });
 });

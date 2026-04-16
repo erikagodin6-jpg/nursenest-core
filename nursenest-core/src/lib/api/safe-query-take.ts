@@ -3,10 +3,12 @@
  * Prefer route-level {@link parseBoundedPageSize} and domain constants (e.g. {@link LESSON_API_OFFSET_LIMIT}) first;
  * use these when a query needs a simple numeric ceiling.
  */
+import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
+
 export const DEFAULT_LIST_TAKE = 20;
 
 /** Aligns with list API max page sizes (questions/lessons/decks). */
-export const HARD_CAP_FIND_MANY = 100;
+export const HARD_CAP_FIND_MANY = API_LIST_PAGE_SIZE_HARD_MAX;
 
 /**
  * Clamps a requested page size to `[1, HARD_CAP_FIND_MANY]`, with a default when missing/invalid.

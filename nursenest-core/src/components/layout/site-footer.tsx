@@ -86,14 +86,33 @@ export function SiteFooter() {
           <EmailSignupBanner />
         </div>
 
-        <div className="mb-8 rounded-2xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_4%,var(--footer-bg))] px-5 py-6 sm:px-6 sm:py-7">
-          <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-4">
-            <div className="space-y-4">
+        <div className="relative mb-8 overflow-hidden rounded-2xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_4%,var(--footer-bg))] px-5 py-6 sm:px-6 sm:py-7">
+          <div
+            className="pointer-events-none absolute inset-0 z-0 select-none overflow-hidden"
+            aria-hidden="true"
+          >
+            <span
+              className="absolute left-[8%] top-1/2 -translate-y-1/2 whitespace-nowrap font-semibold tracking-tight text-[var(--footer-fg)] opacity-[0.028] sm:left-[12%] sm:opacity-[0.042] md:opacity-[0.048]"
+              style={{ fontSize: "clamp(2.75rem, 14vw, 9.5rem)" }}
+            >
+              {t("brand.nurseNest")}
+            </span>
+          </div>
+
+          <div className="relative z-[1] space-y-6">
+            <div className="border-b border-[color-mix(in_srgb,var(--footer-fg)_10%,transparent)] pb-4">
+              <p className="text-lg font-semibold tracking-[0.14em] text-[color-mix(in_srgb,var(--footer-fg)_92%,transparent)] sm:text-xl">
+                {t("brand.nurseNest")}
+              </p>
+            </div>
+
+            <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-4">
+              <div className="space-y-4">
               <div className="flex items-center bg-transparent">
                 <SiteBrandLogoMark variant="footer" logoVariant="leaf" />
               </div>
               <p className="max-w-xs text-sm leading-relaxed text-[var(--footer-muted)]">
-                Exam-focused prep for RN, {pnRoleLabel}, NP, and Allied Health learners across the United States and Canada.
+                Exam-focused prep for RN, {pnRoleLabel}, NP, and Allied Health learners worldwide.
               </p>
             </div>
 
@@ -160,9 +179,13 @@ export function SiteFooter() {
                       </Link>
                     </li>
                     <li>
+                      <FLink href="/contact">Contact Support</FLink>
+                    </li>
+                    <SiteFooterFeedbackTrigger />
+                    <li className="pt-1">
                       <Link
                         href={learnerContinueHref}
-                        className="nn-nav-cta inline-flex min-h-[40px] items-center justify-center rounded-xl px-4 py-2 text-sm font-medium"
+                        className="nn-nav-cta inline-flex min-h-[40px] w-full max-w-[16rem] items-center justify-center rounded-xl px-4 py-2 text-sm font-medium sm:w-fit"
                       >
                         {formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                       </Link>
@@ -174,20 +197,21 @@ export function SiteFooter() {
                       <FLink href={learnerSignInHref}>Login</FLink>
                     </li>
                     <li>
+                      <FLink href="/contact">Contact Support</FLink>
+                    </li>
+                    <SiteFooterFeedbackTrigger />
+                    <li className="pt-1">
                       <Link
                         href={startPracticingHref}
-                        className="nn-nav-cta inline-flex min-h-[40px] items-center justify-center rounded-xl px-4 py-2 text-sm font-medium"
+                        className="nn-nav-cta inline-flex min-h-[40px] w-full max-w-[16rem] items-center justify-center rounded-xl px-4 py-2 text-sm font-medium sm:w-fit"
                       >
                         {formatTitleCase(PRIMARY_CTA, locale)}
                       </Link>
                     </li>
                   </>
                 )}
-                <li>
-                  <FLink href="/contact">Contact Support</FLink>
-                </li>
-                <SiteFooterFeedbackTrigger />
               </ul>
+            </div>
             </div>
           </div>
         </div>

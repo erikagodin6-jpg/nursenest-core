@@ -13,6 +13,7 @@ import {
   examFamilyToExamColumn,
   tierCodeToExamDbTier,
 } from "@/lib/prisma/exam-question-maps";
+import { ADMIN_API_LIST_PAGE, parseBoundedPageSize, parseListPage } from "@/lib/api/api-pagination-limits";
 
 const tierEnum = z.enum(["RPN", "LVN_LPN", "RN", "NP", "ALLIED"]);
 const qTypeEnum = z.enum(["MCQ", "SATA", "NGN_CASE", "ORDERING", "FIB_NUMERIC"]);
@@ -46,8 +47,23 @@ export async function GET(req: NextRequest) {
   if (!gate.ok) return gate.response;
 
   const sp = req.nextUrl.searchParams;
-  const page = Math.max(1, Number(sp.get("page") ?? "1"));
-  const pageSize = Math.min(100, Math.max(10, Number(sp.get("pageSize") ?? "50")));
+  const pageParsed = parseListPage(sp.get("page"));
+  if (!pageParsed.ok) {
+    return NextResponse.json({ error: pageParsed.error, code: "invalid_page" }, { status: 400 });
+  }
+  const page = pageParsed.page;
+  const sizeParsed = parseBoundedPageSize(sp.get("pageSize"), ADMIN_API_LIST_PAGE);
+  if (!sizeParsed.ok) {
+    return NextResponse.json(
+      {
+        error: sizeParsed.error.message,
+        code: sizeParsed.error.code,
+        ...(sizeParsed.error.maxPageSize !== undefined ? { maxPageSize: sizeParsed.error.maxPageSize } : {}),
+      },
+      { status: 400 },
+    );
+  }
+  const pageSize = sizeParsed.pageSize;
   const statusParam = sp.get("status") as ContentStatus | null;
   const topicFilter = sp.get("topic");
 

@@ -5,8 +5,9 @@ import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-marketing-messages";
 import { loadMergedMarketingMessagesFromNextPublicDir } from "@/lib/i18n/merge-next-public-i18n-shards";
+import { getTranslationCacheGeneration } from "@/lib/i18n/i18n-translation-cache";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { I18N_SHARD_FILENAMES } from "@shared/i18n-shard-policy";
+import { PUBLIC_I18N_SHARD_FILENAMES } from "@shared/i18n-shard-policy";
 
 /**
  * Canonical Next.js bundles live under `public/i18n/{locale}/{domain}.json` (built by

@@ -14,7 +14,7 @@ export function SiteFooterFeedbackTrigger() {
         onClick={fb.open}
         className="nn-footer-link break-words text-left leading-snug [overflow-wrap:anywhere]"
       >
-        Send feedback
+        Send Feedback
       </button>
     </li>
   );

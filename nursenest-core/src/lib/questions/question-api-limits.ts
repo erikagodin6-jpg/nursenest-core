@@ -1,5 +1,7 @@
-/** Hard cap for list endpoints — enforced with HTTP 400 when exceeded. */
-export const MAX_QUESTION_PAGE_SIZE = 50;
+import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
+
+/** Hard cap for list endpoints — enforced with HTTP 400 when exceeded (same as {@link API_LIST_PAGE_SIZE_HARD_MAX}). */
+export const MAX_QUESTION_PAGE_SIZE = API_LIST_PAGE_SIZE_HARD_MAX;
 
 /** Deep list offset cap: see `MAX_LIST_SKIP_ROWS_DEFAULT` in `@/lib/api/api-pagination-limits` (lessons/flashcards align). */
 

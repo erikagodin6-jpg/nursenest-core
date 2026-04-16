@@ -1,10 +1,10 @@
 import "server-only";
-import { existsSync, readFileSync, statSync } from "fs";
+import { existsSync, statSync } from "fs";
 import path from "path";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
-import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-marketing-messages";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { I18nShardFilename } from "@shared/i18n-shard-policy";
+import { readCachedI18nJsonFile } from "@/lib/i18n/i18n-translation-cache";
 
 /** Two cwd candidates — matches `load-marketing-messages.ts`. */
 function resolveNextI18nPublicDir(): string | null {
@@ -34,40 +34,20 @@ function readShardFile(i18nDir: string, locale: string, shard: I18nShardFilename
   if (shard === "admin") {
     const adminRoot = resolveAdminOnlyI18nDir();
     if (!adminRoot) return null;
-    const fp = path.join(adminRoot, locale, "admin.json");
+    const fp = path.resolve(path.join(adminRoot, locale, "admin.json"));
     if (!existsSync(fp)) return null;
-    try {
-      const parsed: unknown = JSON.parse(readFileSync(fp, "utf8"));
-      const normalized = normalizeMarketingMessagesRecord(parsed);
-      return Object.keys(normalized).length > 0 ? normalized : null;
-    } catch {
-      safeServerLog("i18n", "shard_json_invalid", { locale, shard: "admin" });
-      return null;
-    }
+    return readCachedI18nJsonFile(fp, { locale, shard: "admin" });
   }
-  const fp = path.join(i18nDir, locale, `${shard}.json`);
+  const fp = path.resolve(path.join(i18nDir, locale, `${shard}.json`));
   if (!existsSync(fp)) return null;
-  try {
-    const parsed: unknown = JSON.parse(readFileSync(fp, "utf8"));
-    const normalized = normalizeMarketingMessagesRecord(parsed);
-    return Object.keys(normalized).length > 0 ? normalized : null;
-  } catch {
-    safeServerLog("i18n", "shard_json_invalid", { locale, shard });
-    return null;
-  }
+  return readCachedI18nJsonFile(fp, { locale, shard });
 }
 
 /** Legacy monolithic `{locale}.json` (pre-shard deployments). */
 function tryReadLegacyLocaleBundle(i18nDir: string, locale: string): MarketingMessages | null {
-  const fp = path.join(i18nDir, `${locale}.json`);
+  const fp = path.resolve(path.join(i18nDir, `${locale}.json`));
   if (!existsSync(fp)) return null;
-  try {
-    const parsed: unknown = JSON.parse(readFileSync(fp, "utf8"));
-    const normalized = normalizeMarketingMessagesRecord(parsed);
-    return Object.keys(normalized).length > 0 ? normalized : null;
-  } catch {
-    return null;
-  }
+  return readCachedI18nJsonFile(fp, { locale, shard: "legacy" });
 }
 
 function mergeShardMaps(

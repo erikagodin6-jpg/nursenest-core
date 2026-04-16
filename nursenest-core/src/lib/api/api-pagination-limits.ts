@@ -3,6 +3,9 @@
  * Prevents unbounded skip scans and keeps payloads predictable.
  */
 
+/** Hard ceiling for REST list `pageSize` / `take` (subscriber APIs, admin JSON lists, defense-in-depth). */
+export const API_LIST_PAGE_SIZE_HARD_MAX = 50;
+
 /** Align with {@link MAX_QUESTION_LIST_SKIP_ROWS} in `/api/questions` (deep pagination abuse). */
 export const MAX_LIST_SKIP_ROWS_DEFAULT = 4_000;
 
@@ -12,10 +15,10 @@ export const LESSON_PAGE = {
   default: 12,
 } as const;
 
-/** GET `/api/lessons` offset mode: `limit` or `pageSize` (default 20, max 100). */
+/** GET `/api/lessons` offset mode: `limit` or `pageSize` (reject above max with 400). */
 export const LESSON_API_OFFSET_LIMIT = {
   min: 1,
-  max: 100,
+  max: API_LIST_PAGE_SIZE_HARD_MAX,
   default: 20,
 } as const;
 
@@ -33,11 +36,18 @@ export const FLASHCARD_PAGE = {
   default: 12,
 } as const;
 
-/** Deck list API: default 20, max 100 (aligned with {@link MAX_PAGE_LIMIT}). */
+/** Deck list API: default 20, capped at {@link API_LIST_PAGE_SIZE_HARD_MAX}. */
 export const FLASHCARD_DECK_PAGE = {
   min: 6,
-  max: 100,
+  max: API_LIST_PAGE_SIZE_HARD_MAX,
   default: 20,
+} as const;
+
+/** Admin GET list endpoints (`/api/admin/questions`, `/api/admin/lessons`, …) — same hard max as public list APIs. */
+export const ADMIN_API_LIST_PAGE = {
+  min: 10,
+  max: API_LIST_PAGE_SIZE_HARD_MAX,
+  default: 25,
 } as const;
 
 export type PageSizeParseError = {

@@ -1,10 +1,10 @@
-import { existsSync, readFileSync } from "fs";
+import { existsSync } from "fs";
 import path from "path";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
-import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-marketing-messages";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { PUBLIC_I18N_SHARD_FILENAMES } from "@shared/i18n-shard-policy";
 import { stripStaffKeysFromPublicMergedBundle } from "@/lib/i18n/strip-staff-i18n-keys";
+import { readCachedI18nJsonFile } from "@/lib/i18n/i18n-translation-cache";
 
 function resolveAdminOnlyI18nDir(): string | null {
   const candidates = [
@@ -25,16 +25,10 @@ function mergeShardJsonFiles(
   locale: string,
 ): void {
   for (const name of shardNames) {
-    const fp = path.join(localeDir, `${name}.json`);
+    const fp = path.resolve(path.join(localeDir, `${name}.json`));
     if (!existsSync(fp)) continue;
-    let parsed: unknown;
-    try {
-      parsed = JSON.parse(readFileSync(fp, "utf8"));
-    } catch {
-      safeServerLog("i18n", "shard_json_invalid", { locale, shard: name });
-      continue;
-    }
-    const part = normalizeMarketingMessagesRecord(parsed);
+    const part = readCachedI18nJsonFile(fp, { locale, shard: name });
+    if (!part) continue;
     for (const [k, v] of Object.entries(part)) {
       if (k in merged) {
         safeServerLog("i18n", "shard_duplicate_key_last_wins", {
@@ -68,19 +62,14 @@ export function loadMergedMarketingMessagesFromNextPublicDir(
 ): MarketingMessages | null {
   const includeStaffShards = options?.includeStaffShards === true;
 
-  const legacy = path.join(i18nDir, `${locale}.json`);
+  const legacy = path.resolve(path.join(i18nDir, `${locale}.json`));
   if (existsSync(legacy)) {
-    try {
-      const parsed: unknown = JSON.parse(readFileSync(legacy, "utf8"));
-      const normalized = normalizeMarketingMessagesRecord(parsed);
-      if (Object.keys(normalized).length === 0) return null;
-      if (!includeStaffShards) {
-        return stripStaffKeysFromPublicMergedBundle(normalized);
-      }
-      return normalized;
-    } catch {
-      return null;
+    const normalized = readCachedI18nJsonFile(legacy, { locale, shard: "legacy" });
+    if (!normalized || Object.keys(normalized).length === 0) return null;
+    if (!includeStaffShards) {
+      return stripStaffKeysFromPublicMergedBundle(normalized);
     }
+    return normalized;
   }
   const localeDir = path.join(i18nDir, locale);
   if (!existsSync(localeDir)) return null;

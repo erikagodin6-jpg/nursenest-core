@@ -1,7 +1,8 @@
 /**
- * Global API rate limits (Edge-safe). Uses in-memory buckets per isolate — tune Redis/KV for multi-instance parity.
+ * Global API rate limits (Edge-safe). In-memory buckets per isolate — use Redis/KV for multi-instance parity.
  *
- * Priority: paid learner traffic gets a higher per-user ceiling; auth-sensitive endpoints are tight per IP.
+ * Priority: authenticated learner traffic gets a higher per-user ceiling; auth + public scraping get tight per-IP caps.
+ * Repeated 429s from an IP increase `Retry-After` (exponential backoff) to protect real users from bot floods.
  */
 import { getToken } from "next-auth/jwt";
 import type { NextRequest } from "next/server";
@@ -38,33 +39,84 @@ const BILLING_RATE_PATH_PREFIXES = ["/api/subscriptions/checkout", "/api/subscri
 const AI_EXPENSIVE_PREFIXES = ["/api/coach", "/api/ai"] as const;
 
 const BILLING_WINDOW_MS = 60_000;
-const BILLING_MAX = 28;
+const BILLING_MAX = 24;
 
 const AI_EXPENSIVE_WINDOW_MS = 60_000;
-const AI_EXPENSIVE_MAX = 42;
+const AI_EXPENSIVE_MAX = 36;
 
 /** Webhooks, health, and admin APIs (own RBAC / tooling) skip global buckets. */
 const EXEMPT_PREFIXES = ["/api/subscriptions/webhook", "/api/health", "/api/admin"] as const;
 
-const AUTH_STRICT_WINDOW_MS = 10_000;
-const AUTH_STRICT_MAX = 5;
+/** Signup — per IP (stricter than generic public; bots target this). */
+const SIGNUP_WINDOW_MS = 60_000;
+const SIGNUP_MAX = 5;
+
+/** Per auth *kind* so login throttles don’t consume forgot-password quota (and vice versa). */
+const AUTH_KIND_LIMITS: Record<string, { windowMs: number; max: number }> = {
+  signin: { windowMs: 60_000, max: 10 },
+  callback: { windowMs: 60_000, max: 24 },
+  csrf: { windowMs: 60_000, max: 45 },
+  providers: { windowMs: 60_000, max: 28 },
+  forgot: { windowMs: 60_000, max: 5 },
+  reset: { windowMs: 60_000, max: 5 },
+  change: { windowMs: 60_000, max: 5 },
+  register: { windowMs: 60_000, max: 8 },
+  error: { windowMs: 60_000, max: 18 },
+  auth_other: { windowMs: 60_000, max: 10 },
+};
 
 const PUBLIC_WINDOW_MS = 60_000;
-const PUBLIC_MAX = 60;
+const PUBLIC_MAX = 48;
 
-/** Marketing / public JSON under `/api/public/*` (cached counts, etc.) — tighter than generic `/api/*` to blunt scanners. */
+/** Marketing / public JSON under `/api/public/*` (cached counts, tags) — scanners love these. */
 const PUBLIC_JSON_WINDOW_MS = 60_000;
-const PUBLIC_JSON_MAX = 45;
+const PUBLIC_JSON_MAX = 28;
+
+/** Hot stats endpoint — hammered by bots + homepage; tight per IP before generic public_json. */
+const HOME_STATS_WINDOW_MS = 60_000;
+const HOME_STATS_MAX = 20;
 
 const LEARNER_WINDOW_MS = 60_000;
 const LEARNER_MAX = 120;
 
 /** After many 429s, temporarily tighten public IP bucket (abuse signal only). */
 const ABUSE_STRIKE_WINDOW_MS = 120_000;
-const ABUSE_STRIKE_MAX = 40;
-const TIGHT_PUBLIC_MAX = 30;
+const ABUSE_STRIKE_MAX = 32;
+const TIGHT_PUBLIC_MAX = 24;
 
 const strikeBuckets = new Map<string, { count: number; resetAt: number }>();
+
+/** Rolling window of 429s per IP — drives exponential Retry-After. */
+const STREAK_WINDOW_MS = 600_000;
+const STREAK_MAX_KEYS = 4000;
+const streakBuckets = new Map<string, { count: number; resetAt: number }>();
+
+function pruneStreakBuckets(): void {
+  if (streakBuckets.size <= STREAK_MAX_KEYS) return;
+  const now = Date.now();
+  for (const [k, s] of streakBuckets) {
+    if (s.resetAt < now) streakBuckets.delete(k);
+    if (streakBuckets.size <= STREAK_MAX_KEYS * 0.75) break;
+  }
+}
+
+function bump429Streak(ip: string): number {
+  pruneStreakBuckets();
+  const now = Date.now();
+  let s = streakBuckets.get(ip);
+  if (!s || s.resetAt <= now) {
+    s = { count: 1, resetAt: now + STREAK_WINDOW_MS };
+  } else {
+    s.count += 1;
+  }
+  streakBuckets.set(ip, s);
+  return s.count;
+}
+
+/** Exported for unit tests — 10s → 20s → … capped at 300s. */
+export function retryAfterSecondsFrom429Streak(streak: number): number {
+  return Math.min(300, Math.floor(10 * Math.pow(2, Math.min(Math.max(0, streak - 1), 5))));
+}
 
 function recordStrikeAndTighten(ip: string): boolean {
   const now = Date.now();
@@ -80,6 +132,28 @@ function recordStrikeAndTighten(ip: string): boolean {
 /** Exported for unit tests — auth-sensitive paths get stricter per-IP limits. */
 export function isAuthStrictPath(pathname: string): boolean {
   return AUTH_STRICT_SUBSTRINGS.some((s) => pathname.startsWith(s));
+}
+
+/**
+ * NextAuth route “kind” for isolated buckets (login vs forgot-password vs callback, …).
+ * Exported for policy tests.
+ */
+export function authRouteKind(pathname: string): string {
+  if (pathname.includes("/forgot-password")) return "forgot";
+  if (pathname.includes("/reset-password")) return "reset";
+  if (pathname.includes("/change-password")) return "change";
+  if (pathname.includes("/signin")) return "signin";
+  if (pathname.includes("/callback")) return "callback";
+  if (pathname.includes("/csrf")) return "csrf";
+  if (pathname.includes("/providers")) return "providers";
+  if (pathname.includes("/register")) return "register";
+  if (pathname.includes("/error")) return "error";
+  return "auth_other";
+}
+
+/** Dedicated stats endpoint — tighter than generic `/api/public/*`. */
+export function isHomeStatsRateLimitPath(pathname: string): boolean {
+  return pathname === "/api/public/home-stats";
 }
 
 function isLearnerPath(pathname: string): boolean {
@@ -113,6 +187,29 @@ function publicCapForIp(ip: string, base: number): number {
   return base;
 }
 
+function json429WithBackoff(ip: string): NextResponse {
+  const streak = bump429Streak(ip);
+  const sec = retryAfterSecondsFrom429Streak(streak);
+  return NextResponse.json(
+    { error: "Too many requests", code: "rate_limit_exceeded" },
+    {
+      status: 429,
+      headers: { "Retry-After": String(sec) },
+    },
+  );
+}
+
+/** Subscriber learner bucket: fixed Retry-After (no exponential on user id — avoids punishing shared devices unfairly). */
+function json429LearnerFixed(): NextResponse {
+  return NextResponse.json(
+    { error: "Too many requests", code: "rate_limit_exceeded" },
+    {
+      status: 429,
+      headers: { "Retry-After": "60" },
+    },
+  );
+}
+
 /**
  * Returns a 429 response when over limit; otherwise `null` (caller continues).
  */
@@ -131,10 +228,10 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
 
   if (pathname === "/api/signup" || pathname.startsWith("/api/signup/")) {
     const key = `ratelimit:signup:ip:${ip}`;
-    const { ok } = checkRateLimit(key, { windowMs: AUTH_STRICT_WINDOW_MS, max: AUTH_STRICT_MAX });
+    const { ok } = checkRateLimit(key, { windowMs: SIGNUP_WINDOW_MS, max: SIGNUP_MAX });
     if (!ok) {
-      safeServerLog("security", "rate_limit_exceeded", { kind: "auth_strict", path: pathname.slice(0, 96) });
-      return json429(10);
+      safeServerLog("security", "rate_limit_exceeded", { kind: "signup", path: pathname.slice(0, 96) });
+      return json429WithBackoff(ip);
     }
     return null;
   }
@@ -144,7 +241,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     const { ok } = checkRateLimit(key, { windowMs: BILLING_WINDOW_MS, max: BILLING_MAX });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "billing", path: pathname.slice(0, 96) });
-      return json429(60);
+      return json429WithBackoff(ip);
     }
     return null;
   }
@@ -154,29 +251,50 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     const { ok } = checkRateLimit(key, { windowMs: AI_EXPENSIVE_WINDOW_MS, max: AI_EXPENSIVE_MAX });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "ai_expensive", path: pathname.slice(0, 96) });
-      return json429(60);
+      return json429WithBackoff(ip);
+    }
+    return null;
+  }
+
+  /** Stats — scanned heavily; limit before generic public_json. */
+  if (isHomeStatsRateLimitPath(pathname)) {
+    const cap = publicCapForIp(ip, HOME_STATS_MAX);
+    const key = `ratelimit:public_home_stats:ip:${ip}`;
+    const { ok } = checkRateLimit(key, { windowMs: HOME_STATS_WINDOW_MS, max: cap });
+    if (!ok) {
+      safeServerLog("security", "rate_limit_exceeded", { kind: "public_home_stats", path: pathname.slice(0, 96) });
+      const res = json429WithBackoff(ip);
+      if (recordStrikeAndTighten(ip)) {
+        safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ip) });
+      }
+      return res;
     }
     return null;
   }
 
   if (isAuthStrictPath(pathname)) {
-    const key = `ratelimit:auth_strict:ip:${ip}`;
-    const { ok } = checkRateLimit(key, { windowMs: AUTH_STRICT_WINDOW_MS, max: AUTH_STRICT_MAX });
+    const kind = authRouteKind(pathname);
+    const limits = AUTH_KIND_LIMITS[kind] ?? AUTH_KIND_LIMITS.auth_other;
+    const key = `ratelimit:auth:${kind}:ip:${ip}`;
+    const { ok } = checkRateLimit(key, { windowMs: limits.windowMs, max: limits.max });
     if (!ok) {
-      safeServerLog("security", "rate_limit_exceeded", { kind: "auth_strict", path: pathname.slice(0, 96) });
-      return json429(10);
+      safeServerLog("security", "rate_limit_exceeded", {
+        kind: "auth_kind",
+        authKind: kind,
+        path: pathname.slice(0, 96),
+      });
+      return json429WithBackoff(ip);
     }
     return null;
   }
 
   if (pathname.startsWith("/api/auth/session")) {
-    /** Session polling can be chatty; stay below learner tier but above generic public. */
     const cap = publicCapForIp(ip, 120);
     const key = `ratelimit:auth_session:ip:${ip}`;
     const { ok } = checkRateLimit(key, { windowMs: PUBLIC_WINDOW_MS, max: cap });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "auth_session", path: "/api/auth/session" });
-      const res = json429(60);
+      const res = json429WithBackoff(ip);
       if (recordStrikeAndTighten(ip)) {
         safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ip) });
       }
@@ -190,7 +308,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     const { ok } = checkRateLimit(key, { windowMs: LEARNER_WINDOW_MS, max: LEARNER_MAX });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "learner", path: pathname.slice(0, 96) });
-      return json429(60);
+      return json429LearnerFixed();
     }
     return null;
   }
@@ -201,7 +319,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     const { ok } = checkRateLimit(key, { windowMs: PUBLIC_JSON_WINDOW_MS, max: cap });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "public_json", path: pathname.slice(0, 96) });
-      const res = json429(60);
+      const res = json429WithBackoff(ip);
       if (recordStrikeAndTighten(ip)) {
         safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ip) });
       }
@@ -215,7 +333,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   const { ok } = checkRateLimit(key, { windowMs: PUBLIC_WINDOW_MS, max: cap });
   if (!ok) {
     safeServerLog("security", "rate_limit_exceeded", { kind: "public", path: pathname.slice(0, 96) });
-    const res = json429(60);
+    const res = json429WithBackoff(ip);
     if (recordStrikeAndTighten(ip)) {
       safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ip) });
     }
@@ -228,14 +346,4 @@ function hashIp(ip: string): string {
   let h = 0;
   for (let i = 0; i < ip.length; i++) h = (h * 31 + ip.charCodeAt(i)) | 0;
   return String(h >>> 0);
-}
-
-function json429(retryAfterSec: number): NextResponse {
-  return NextResponse.json(
-    { error: "Too many requests", code: "rate_limit_exceeded" },
-    {
-      status: 429,
-      headers: { "Retry-After": String(retryAfterSec) },
-    },
-  );
 }
