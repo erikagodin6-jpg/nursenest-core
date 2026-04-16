@@ -78,6 +78,31 @@ function safeArgvJoin(): string {
   }
 }
 
+function safeArgvArray(): string[] {
+  try {
+    const g = globalThis as unknown as { process?: { argv?: readonly string[] } };
+    const argv = g.process?.argv;
+    return Array.isArray(argv) ? [...argv] : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * True for `tsx scripts/…`, `node scripts/…`, Prisma CLI, etc.
+ * Used to skip libpq `options=-c statement_timeout=…` — DigitalOcean Postgres / some poolers reject it
+ * (`FATAL: unsupported startup parameter in options: statement_timeout`).
+ */
+export function isDatabaseScriptOrMigrationsProcess(): boolean {
+  const argv = safeArgvArray();
+  const joined = argv.join(" ");
+  if (joined.includes("/scripts/") || joined.includes("\\scripts\\")) return true;
+  if (/[\\/]scripts[\\/].*\.(mts?|tsx|jsx|js|cjs|mjs)(\s|$)/i.test(joined)) return true;
+  if (joined.includes("prisma migrate") || joined.includes("prisma db ")) return true;
+  if (joined.includes("tsx scripts/")) return true;
+  return argv.some((a) => typeof a === "string" && /[\\/]scripts[\\/]/.test(a));
+}
+
 /**
  * @param role `pooled` = app queries (may add `pgbouncer=true` when `PRISMA_USE_PGBOUNCER` is set).
  *   `direct` = Prisma Migrate / introspection — never adds `pgbouncer=true`; strips it if present.
@@ -86,7 +111,7 @@ function tuneDatabaseUrlForProcess(rawUrl: string, role: "pooled" | "direct" = "
   const argv = safeArgvJoin();
   const lifecycle = process.env.npm_lifecycle_event ?? "";
   const isBuildProcess = lifecycle === "build" || argv.includes("next build");
-  const isScriptProcess = argv.includes("/scripts/") || argv.includes("tsx scripts/");
+  const isScriptProcess = isDatabaseScriptOrMigrationsProcess();
 
   let working = role === "direct" ? stripPgbouncerFromUrl(rawUrl) : rawUrl;
 
@@ -108,7 +133,11 @@ function tuneDatabaseUrlForProcess(rawUrl: string, role: "pooled" | "direct" = "
   tuned = withDefaultQueryParam(tuned, "connection_limit", connectionLimit);
   tuned = withDefaultQueryParam(tuned, "pool_timeout", poolTimeout);
   tuned = withDefaultQueryParam(tuned, "connect_timeout", connectTimeoutSec);
-  tuned = withDefaultStatementTimeout(tuned);
+  // Script / migrate CLIs: skip statement_timeout in `options` — DO managed PG often rejects that startup param.
+  // Elsewhere: cap runaway queries via libpq options (override with PRISMA_STATEMENT_TIMEOUT_MS=0).
+  if (!isScriptProcess) {
+    tuned = withDefaultStatementTimeout(tuned);
+  }
   if (usePoolerFlag) {
     tuned = withDefaultQueryParam(tuned, "pgbouncer", "true");
   }
