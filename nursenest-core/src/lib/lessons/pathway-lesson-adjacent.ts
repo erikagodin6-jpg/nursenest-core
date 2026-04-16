@@ -10,7 +10,7 @@ export type PathwayLessonAdjacentSlugs = {
 
 /**
  * Neighbors in the published pathway lesson sequence (`sort_order`, then `slug`).
- * Mirrors the monolith lesson hub order used for prev/next in `client/src/pages/lesson-detail.tsx`.
+ * Uses bounded lookups (current row + prev/next) instead of loading the full pathway into memory.
  */
 export async function loadPathwayLessonAdjacent(
   pathwayId: string,
@@ -19,15 +19,41 @@ export async function loadPathwayLessonAdjacent(
 ): Promise<PathwayLessonAdjacentSlugs> {
   if (!isDatabaseUrlConfigured()) return { prev: null, next: null };
   try {
-    const rows = await prisma.pathwayLesson.findMany({
-      where: { pathwayId, locale, status: ContentStatus.PUBLISHED },
-      orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
-      select: { slug: true, title: true },
+    const current = await prisma.pathwayLesson.findFirst({
+      where: { pathwayId, locale, status: ContentStatus.PUBLISHED, slug: lessonSlug },
+      select: { sortOrder: true },
     });
-    const idx = rows.findIndex((r) => r.slug === lessonSlug);
-    if (idx < 0) return { prev: null, next: null };
-    const prev = idx > 0 ? rows[idx - 1]! : null;
-    const next = idx < rows.length - 1 ? rows[idx + 1]! : null;
+    if (!current) return { prev: null, next: null };
+
+    const [prev, next] = await Promise.all([
+      prisma.pathwayLesson.findFirst({
+        where: {
+          pathwayId,
+          locale,
+          status: ContentStatus.PUBLISHED,
+          OR: [
+            { sortOrder: { lt: current.sortOrder } },
+            { AND: [{ sortOrder: current.sortOrder }, { slug: { lt: lessonSlug } }] },
+          ],
+        },
+        orderBy: [{ sortOrder: "desc" }, { slug: "desc" }],
+        select: { slug: true, title: true },
+      }),
+      prisma.pathwayLesson.findFirst({
+        where: {
+          pathwayId,
+          locale,
+          status: ContentStatus.PUBLISHED,
+          OR: [
+            { sortOrder: { gt: current.sortOrder } },
+            { AND: [{ sortOrder: current.sortOrder }, { slug: { gt: lessonSlug } }] },
+          ],
+        },
+        orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
+        select: { slug: true, title: true },
+      }),
+    ]);
+
     return {
       prev: prev ? { slug: prev.slug, title: prev.title } : null,
       next: next ? { slug: next.slug, title: next.title } : null,

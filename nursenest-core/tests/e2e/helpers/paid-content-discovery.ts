@@ -7,6 +7,13 @@ import { PAID_E2E_DEFAULT_PATHWAY_ID } from "./paid-learner-shell";
  */
 export const LESSON_HUB_CARD_LINKS = 'a[href^="/app/lessons/"], a[href^="/lessons/"]';
 
+/**
+ * Subscriber lesson **detail** pathname: `/app/lessons/:id` (see `app/(learner)/lessons/[id]/page.tsx`; hub cards use
+ * `href={/app/lessons/${lesson.id}}` in `learner-lessons-virtual-list`). Used by RN hub inventory DOM matching — pass
+ * `.source`/`.flags` into `page.evaluate` (do not close over this RegExp in the browser).
+ */
+export const RN_LEARNER_APP_LESSON_DETAIL_PATHNAME_RE = /^\/app\/lessons\/[^/]+$/;
+
 /** Stable hub URLs — align with `scripts/qa-paid-test-account-reset.mts` default pathway. */
 export function paidLessonsHubUrl(pathwayId: string = PAID_E2E_DEFAULT_PATHWAY_ID): string {
   return `/app/lessons?pathwayId=${encodeURIComponent(pathwayId)}`;

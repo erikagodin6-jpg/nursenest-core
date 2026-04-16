@@ -11,7 +11,9 @@ import { REGION_CONFIG } from "@/lib/i18n/global-regions";
 import {
   getProfessionsForRegion,
   getExamsForRegionProfession,
+  getRegionFlag,
 } from "@/lib/navigation/context-switch-helpers";
+import { isPublicCountrySwitcherReady } from "@/lib/navigation/market-readiness";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -78,44 +80,24 @@ export type CountryChoice = {
 };
 
 /**
- * Country choices for step 2, prioritizing underserved markets.
+ * Country choices for step 2 — **fully published markets only** (same gate as the marketing country switcher).
+ * Ordering: US, Canada, then any additional ready regions alphabetically.
  */
 export function getCountryChoices(): CountryChoice[] {
-  const priority: GlobalRegionSlug[] = [
-    "philippines", "india", "nigeria", "kenya", "pakistan",
-    "bangladesh", "south-africa", "canada", "us", "uk", "aus",
-  ];
+  const ready = (Object.keys(REGION_CONFIG) as GlobalRegionSlug[]).filter(isPublicCountrySwitcherReady);
+  const rank = (slug: GlobalRegionSlug) => (slug === "us" ? 0 : slug === "canada" ? 1 : 2);
+  ready.sort((a, b) => {
+    const d = rank(a) - rank(b);
+    if (d !== 0) return d;
+    return REGION_CONFIG[a].displayName.localeCompare(REGION_CONFIG[b].displayName, "en", { sensitivity: "base" });
+  });
 
-  const more: GlobalRegionSlug[] = [
-    "uae", "saudi-arabia", "singapore", "jamaica", "trinidad",
-    "ireland", "new-zealand",
-  ];
-
-  const toChoice = (slug: GlobalRegionSlug, group: "priority" | "more"): CountryChoice => {
-    const cfg = REGION_CONFIG[slug];
-    const flags: Record<string, string> = {
-      philippines: "\u{1F1F5}\u{1F1ED}", india: "\u{1F1EE}\u{1F1F3}",
-      nigeria: "\u{1F1F3}\u{1F1EC}", kenya: "\u{1F1F0}\u{1F1EA}",
-      pakistan: "\u{1F1F5}\u{1F1F0}", bangladesh: "\u{1F1E7}\u{1F1E9}",
-      "south-africa": "\u{1F1FF}\u{1F1E6}", canada: "\u{1F1E8}\u{1F1E6}",
-      us: "\u{1F1FA}\u{1F1F8}", uk: "\u{1F1EC}\u{1F1E7}", aus: "\u{1F1E6}\u{1F1FA}",
-      uae: "\u{1F1E6}\u{1F1EA}", "saudi-arabia": "\u{1F1F8}\u{1F1E6}",
-      singapore: "\u{1F1F8}\u{1F1EC}", jamaica: "\u{1F1EF}\u{1F1F2}",
-      trinidad: "\u{1F1F9}\u{1F1F9}", ireland: "\u{1F1EE}\u{1F1EA}",
-      "new-zealand": "\u{1F1F3}\u{1F1FF}",
-    };
-    return {
-      slug,
-      displayName: cfg.displayName,
-      flag: flags[slug] ?? "\u{1F30D}",
-      group,
-    };
-  };
-
-  return [
-    ...priority.map((s) => toChoice(s, "priority")),
-    ...more.map((s) => toChoice(s, "more")),
-  ];
+  return ready.map((slug) => ({
+    slug,
+    displayName: REGION_CONFIG[slug].displayName,
+    flag: getRegionFlag(slug),
+    group: "priority",
+  }));
 }
 
 /**

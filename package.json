@@ -39,6 +39,8 @@
     "i18n:validate:production": "npx tsx script/i18n-validate.ts --strict",
     "i18n:audit-payload": "npx tsx script/i18n-payload-audit.ts",
     "i18n:check-drift": "npx tsx script/i18n-check-drift.ts",
+    "i18n:check-sync": "npx tsx script/i18n-check-sync.ts",
+    "i18n:precommit-check": "bash script/i18n-precommit-check.sh",
     "i18n:report-placeholder-fallbacks": "npx tsx script/i18n-report-placeholder-fallbacks.ts",
     "i18n:ci": "npm run i18n:compile && npm run i18n:validate:production && npm run i18n:check-drift && npm run i18n:report-placeholder-fallbacks",
     "i18n:repair-marketing": "npm run i18n:compile && cd nursenest-core && npm run i18n:sync-audited-to-marketing-en && cd .. && npm run i18n:compile && cd nursenest-core && npm run i18n:fill-marketing-nav-footer-overlays && cd .. && npm run i18n:compile && npm run i18n:validate && npm run i18n:check-drift && cd nursenest-core && npm run i18n:validate-nav",

@@ -365,6 +365,7 @@ export function SiteHeader() {
               onSelect={handleDesktopRegionSelect}
               onClose={() => setDesktopCountryOpen(false)}
               variant="popover"
+              includeUnpublishedRegions={isAdminAuthenticated}
             />
           </div>
         ) : null}
@@ -951,6 +952,7 @@ export function SiteHeader() {
         locale={globalLocale}
         profession={activeProfession}
         exam={activeExam}
+        countrySelectorIncludeUnpublished={isAdminAuthenticated}
         onRegionChange={async (newRegion) => {
           await applyGlobalRegionSelection(newRegion, {
             marketingLocale: globalLocale,

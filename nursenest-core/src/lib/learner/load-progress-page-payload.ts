@@ -11,6 +11,12 @@ import {
   loadPathwayLessonProgressBundle,
   loadPathwayStudySummaries,
 } from "@/lib/learner/load-learner-dashboard";
+import {
+  buildVisibleLessonScopeForLearner,
+  countProgressInProgressForLessonIds,
+  countScopedLessonsCompleted,
+  findLatestIncompleteProgressLessonId,
+} from "@/lib/learner/learner-visible-lesson-scope";
 import type { RecentMock } from "@/lib/learner/load-learner-dashboard";
 import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
@@ -112,6 +118,9 @@ function sortPathways(a: PathwayProgressCardModel, b: PathwayProgressCardModel):
 
 /**
  * Focused aggregates for the Progress page — avoids full learner dashboard (readiness, topic perf, etc.).
+ *
+ * **Pathway catalog:** one {@link loadPathwayLessonProgressBundle} per request; pathway summaries reuse that bundle
+ * via `loadPathwayStudySummaries` preload (same entitlement scope as dashboard).
  */
 export async function loadProgressPagePayload(userId: string, entitlement: AccessScope): Promise<ProgressPagePayload | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
@@ -122,9 +131,12 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
   const learnerPath = bundle.user.learnerPath ?? null;
   const lessonWhere = lessonAccessWhere(entitlement);
 
+  const visibleLessonScope = await buildVisibleLessonScopeForLearner(entitlement, bundle.pathwayLessonRows);
+
   const pathwaySummaries = await loadPathwayStudySummaries(userId, entitlement, {
     lessonRows: bundle.pathwayLessonRows,
     pathwayProgress: bundle.pathwayProgressScoped,
+    learnerPath: bundle.user.learnerPath,
   });
 
   const [
@@ -140,8 +152,8 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
     incompleteProgress,
   ] = await Promise.all([
     prisma.contentItem.count({ where: { ...lessonWhere, type: "lesson" } }),
-    prisma.progress.count({ where: { userId, completed: true } }),
-    prisma.progress.count({ where: { userId, completed: false } }),
+    countScopedLessonsCompleted(userId, entitlement, visibleLessonScope, bundle.pathwayLessonRows),
+    countProgressInProgressForLessonIds(userId, visibleLessonScope.lessonIds),
     prisma.userTopicStat
       .aggregate({
         where: { userId },
@@ -171,11 +183,7 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
         select: { id: true, title: true, completedAt: true, config: true, results: true },
       })
       .catch(() => []),
-    prisma.progress.findFirst({
-      where: { userId, completed: false },
-      orderBy: { updatedAt: "desc" },
-      select: { lessonId: true },
-    }),
+    findLatestIncompleteProgressLessonId(userId, visibleLessonScope.lessonIds),
   ]);
 
   const pathwayLessonTotal = pathwaySummaries.reduce((sum, row) => sum + row.lessonsTotal, 0);

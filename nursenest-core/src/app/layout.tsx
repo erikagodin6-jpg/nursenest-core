@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
+import { AdminGlobalCommandPalette } from "@/components/admin/admin-global-command-palette";
 import { AnalyticsProvider } from "@/components/providers/analytics-provider";
 import { AppThemeProvider } from "@/components/theme/app-theme-provider";
 import { marketingOpenGraphImageUrl } from "@/lib/marketing-assets";
@@ -92,7 +93,10 @@ export default function RootLayout({
         </Script>
         <AppThemeProvider>
           <AuthSessionProvider>
-            <AnalyticsProvider>{children}</AnalyticsProvider>
+            <AnalyticsProvider>
+              {children}
+              <AdminGlobalCommandPalette />
+            </AnalyticsProvider>
           </AuthSessionProvider>
         </AppThemeProvider>
       </body>

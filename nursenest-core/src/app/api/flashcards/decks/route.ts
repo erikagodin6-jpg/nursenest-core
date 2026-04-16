@@ -32,6 +32,7 @@ function flashcardDeckListStaleKey(userId: string, req: NextRequest): string {
 }
 
 export async function GET(req: NextRequest) {
+  return runWithApiTelemetry(req, "GET /api/flashcards/decks", "content", async () => {
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
 

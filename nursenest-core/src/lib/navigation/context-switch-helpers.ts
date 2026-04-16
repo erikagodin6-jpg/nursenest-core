@@ -22,6 +22,7 @@ import {
   buildExamPathwayPath,
   type ExamPathwayDefinition,
 } from "@/lib/exam-pathways";
+import { isPublicCountrySwitcherReady } from "@/lib/navigation/market-readiness";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -347,13 +348,32 @@ export type RegionGroup = {
   regions: Array<{ slug: GlobalRegionSlug; displayName: string; flag: string }>;
 };
 
-export function getRegionGroups(): RegionGroup[] {
+export type RegionGroupOptions = {
+  /**
+   * When true, list every region in {@link REGION_CONFIG} (for admin tools).
+   * Default false: only {@link isPublicCountrySwitcherReady} regions (live site).
+   */
+  includeUnpublishedRegions?: boolean;
+};
+
+/**
+ * Country groups for the marketing header / mobile drawer.
+ * By default, only **fully published** markets (US/CA today) — no draft or “coming soon” rows.
+ */
+export function getRegionGroups(opts?: RegionGroupOptions): RegionGroup[] {
+  const includeAll = opts?.includeUnpublishedRegions === true;
+
+  const usCanadaSlugs = (["us", "canada"] as const).filter((slug) =>
+    includeAll ? true : isPublicCountrySwitcherReady(slug),
+  );
+
   const usCanada: RegionGroup = {
     label: "United States & Canada",
-    regions: [
-      { slug: "us", displayName: "United States", flag: REGION_FLAG.us },
-      { slug: "canada", displayName: "Canada", flag: REGION_FLAG.canada },
-    ],
+    regions: usCanadaSlugs.map((slug) => ({
+      slug,
+      displayName: REGION_CONFIG[slug].displayName,
+      flag: REGION_FLAG[slug],
+    })),
   };
 
   const internationalSlugs = (Object.keys(REGION_CONFIG) as GlobalRegionSlug[]).filter(
@@ -363,14 +383,21 @@ export function getRegionGroups(): RegionGroup[] {
     REGION_CONFIG[a].displayName.localeCompare(REGION_CONFIG[b].displayName, "en", { sensitivity: "base" }),
   );
 
+  const filteredInternational = includeAll
+    ? internationalSlugs
+    : internationalSlugs.filter((slug) => isPublicCountrySwitcherReady(slug));
+
   const international: RegionGroup = {
     label: "International",
-    regions: internationalSlugs.map((slug) => ({
+    regions: filteredInternational.map((slug) => ({
       slug,
       displayName: REGION_CONFIG[slug].displayName,
       flag: REGION_FLAG[slug],
     })),
   };
 
-  return [usCanada, international];
+  const out: RegionGroup[] = [];
+  if (usCanada.regions.length > 0) out.push(usCanada);
+  if (international.regions.length > 0) out.push(international);
+  return out;
 }

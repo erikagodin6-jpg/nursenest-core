@@ -11,7 +11,7 @@
  * temporary switches via the context bar.
  */
 
-import { useCallback, useState, useTransition } from "react";
+import { useCallback, useMemo, useState, useTransition } from "react";
 import { Check, Globe, Languages, Stethoscope, GraduationCap, Palette } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -28,7 +28,10 @@ import {
   getProfessionsForRegion,
   getExamsForRegionProfession,
 } from "@/lib/navigation/context-switch-helpers";
-import { marketSupportLabel } from "@/lib/navigation/market-readiness";
+import {
+  coerceToPublicCountrySwitcherRegion,
+  isPublicCountrySwitcherReady,
+} from "@/lib/navigation/market-readiness";
 import { saveContextPreferences } from "@/app/actions/save-context-preferences";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { CONTEXT_EVENTS } from "@/lib/navigation/context-analytics";
@@ -54,7 +57,14 @@ export function LearnerContextSettingsPanel({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const [region, setRegion] = useState<GlobalRegionSlug>(initialRegion);
+  const selectableRegionSlugs = useMemo(
+    () => GLOBAL_REGION_SLUGS.filter((slug) => isPublicCountrySwitcherReady(slug)),
+    [],
+  );
+
+  const [region, setRegion] = useState<GlobalRegionSlug>(() =>
+    coerceToPublicCountrySwitcherRegion(initialRegion),
+  );
   const [locale, setLocale] = useState<GlobalLocaleCode>(initialLocale);
   const [profession, setProfession] = useState<string | null>(initialProfession);
   const [exam, setExam] = useState<string | null>(initialExam);
@@ -124,11 +134,10 @@ export function LearnerContextSettingsPanel({
         description="Your preferred country determines pricing, exam pathways, and content localization."
       >
         <div className="grid gap-1.5 sm:grid-cols-2 lg:grid-cols-3">
-          {GLOBAL_REGION_SLUGS.map((slug) => {
+          {selectableRegionSlugs.map((slug) => {
             const cfg = REGION_CONFIG[slug];
             const flag = getRegionFlag(slug);
             const isActive = slug === region;
-            const supportLabel = marketSupportLabel(slug);
 
             return (
               <button
@@ -144,9 +153,6 @@ export function LearnerContextSettingsPanel({
                 <span className="text-base leading-none">{flag}</span>
                 <div className="min-w-0 flex-1">
                   <span className="block truncate">{cfg.displayName}</span>
-                  <span className="block text-[10px] text-[var(--theme-muted-text)]">
-                    {supportLabel}
-                  </span>
                 </div>
                 {isActive && <Check className="h-4 w-4 shrink-0 text-[var(--text-accent)]" />}
               </button>

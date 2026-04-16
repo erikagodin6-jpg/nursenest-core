@@ -24,9 +24,14 @@ export default async function AdminProductAvailabilityPage() {
             Stripe tier mapping, and learner-facing eligibility. Change the registry + deploy to adjust offers—keep billing env keys aligned.
           </p>
         </div>
-        <Link href="/admin/inventory" className="text-sm font-semibold text-primary underline">
-          Inventory →
-        </Link>
+        <div className="flex flex-wrap gap-3 text-sm font-semibold">
+          <Link href="/admin/country-exam-readiness" className="text-primary underline">
+            Country / exam readiness →
+          </Link>
+          <Link href="/admin/inventory" className="text-primary underline">
+            Inventory →
+          </Link>
+        </div>
       </div>
 
       <section className="mt-8 nn-card overflow-hidden p-0">

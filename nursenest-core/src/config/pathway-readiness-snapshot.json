@@ -1,0 +1,19 @@
+{
+  "_meta": {
+    "note": "Committed counts gate public launch checks. Regenerate with: npm run readiness:emit-snapshot",
+    "updatedAt": "2026-04-16T00:00:00.000Z"
+  },
+  "ca-rpn-rex-pn": { "lessons": 180, "questions": 350 },
+  "ca-rn-nclex-rn": { "lessons": 190, "questions": 420 },
+  "ca-np-cnple": { "lessons": 0, "questions": 0 },
+  "us-lpn-nclex-pn": { "lessons": 175, "questions": 380 },
+  "us-rn-nclex-rn": { "lessons": 200, "questions": 480 },
+  "us-rn-new-grad-transition": { "lessons": 40, "questions": 120 },
+  "us-np-fnp": { "lessons": 120, "questions": 280 },
+  "us-np-agpcnp": { "lessons": 110, "questions": 260 },
+  "us-np-pmhnp": { "lessons": 105, "questions": 250 },
+  "us-np-whnp": { "lessons": 100, "questions": 240 },
+  "us-np-pnp-pc": { "lessons": 95, "questions": 230 },
+  "ca-allied-core": { "lessons": 60, "questions": 150 },
+  "us-allied-core": { "lessons": 65, "questions": 160 }
+}

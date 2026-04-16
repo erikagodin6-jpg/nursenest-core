@@ -9,7 +9,8 @@ import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  return runWithApiTelemetry(req, "GET /api/flashcards/stats", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
   const { userId } = gate;

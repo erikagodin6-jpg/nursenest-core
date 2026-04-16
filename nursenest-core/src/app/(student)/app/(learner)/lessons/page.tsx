@@ -13,7 +13,6 @@ import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
 import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import {
-  pathwayLessonsAppListWhere,
   pathwayLessonsAppListWhereWithTopicFilter,
   visiblePathwayIdsForAppLessons,
 } from "@/lib/lessons/app-pathway-lesson-list-scope";

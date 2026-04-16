@@ -25,8 +25,7 @@ import {
   type ProfessionOption,
   type ExamOption,
 } from "@/lib/navigation/context-switch-helpers";
-import { marketSupportLabel, type MarketSupportTier } from "@/lib/navigation/market-readiness";
-import { MARKET_READINESS } from "@/lib/navigation/market-readiness";
+import { isPublicCountrySwitcherReady } from "@/lib/navigation/market-readiness";
 
 // ── Country Selector ─────────────────────────────────────────────────────────
 
@@ -36,6 +35,10 @@ type CountrySelectorProps = {
   onClose?: () => void;
   /** Render as inline list (mobile drawer) vs floating popover (desktop). */
   variant?: "popover" | "inline";
+  /**
+   * Admin/internal: list all regions with draft status. Default false — only fully published markets.
+   */
+  includeUnpublishedRegions?: boolean;
 };
 
 export function CountrySelector({
@@ -43,10 +46,13 @@ export function CountrySelector({
   onSelect,
   onClose,
   variant = "popover",
+  includeUnpublishedRegions = false,
 }: CountrySelectorProps) {
   const [search, setSearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const groups = getRegionGroups();
+  const groups = getRegionGroups({ includeUnpublishedRegions });
+  const highlightRegion =
+    includeUnpublishedRegions || isPublicCountrySwitcherReady(currentRegion) ? currentRegion : null;
 
   useEffect(() => {
     if (variant === "popover") inputRef.current?.focus();
@@ -100,7 +106,7 @@ export function CountrySelector({
               {group.label}
             </p>
             {group.regions.map((r) => {
-              const isActive = r.slug === currentRegion;
+              const isActive = highlightRegion !== null && r.slug === highlightRegion;
               return (
                 <button
                   key={r.slug}
@@ -122,11 +128,6 @@ export function CountrySelector({
                   <span className="text-sm leading-none">{r.flag}</span>
                   <div className="min-w-0 flex-1">
                     <span className="block truncate">{r.displayName}</span>
-                    {MARKET_READINESS[r.slug]?.supportTier !== "full" && (
-                      <span className="block text-[9px] text-[var(--theme-muted-text)]">
-                        {marketSupportLabel(r.slug)}
-                      </span>
-                    )}
                   </div>
                   {isActive && <Check className="h-3.5 w-3.5 shrink-0 text-[var(--text-accent)]" aria-hidden />}
                 </button>

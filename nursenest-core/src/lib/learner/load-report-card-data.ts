@@ -9,6 +9,7 @@ import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { answerMatches } from "@/lib/exams/score-session-answers";
 import { sanitizeSessionQuestionIds } from "@/lib/exams/exam-session-bounds";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
+import { buildVisibleLessonScopeForLearner } from "@/lib/learner/learner-visible-lesson-scope";
 import {
   loadLearnerDashboard,
   loadPathwayLessonProgressBundle,
@@ -199,6 +200,9 @@ function gradeSessionAgainstMap(
 /**
  * Aggregates learner performance for the premium Report Card (bank sessions, mocks, topics, pathways).
  * Omits or nulls metrics when underlying counts are zero — callers should show honest empty states.
+ *
+ * **Pathway catalog:** one {@link loadPathwayLessonProgressBundle} per request; `loadPathwayStudySummaries` and
+ * `loadLearnerDashboard` use preloads derived from that bundle (no duplicate pathway inventory User read).
  */
 export async function loadReportCardData(userId: string, entitlement: AccessScope): Promise<ReportCardData | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
@@ -206,8 +210,12 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
   const bundle = await loadPathwayLessonProgressBundle(userId, entitlement);
   if (!bundle) return null;
 
+  const visibleLessonScope = await buildVisibleLessonScopeForLearner(entitlement, bundle.pathwayLessonRows);
+
   const dash = await loadLearnerDashboard(userId, entitlement, {
     userProfile: bundle.user,
+    visibleLessonScope,
+    pathwayRowsForScope: bundle.pathwayLessonRows,
   });
   if (!dash) return null;
 
@@ -218,6 +226,7 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     loadPathwayStudySummaries(userId, entitlement, {
       lessonRows: bundle.pathwayLessonRows,
       pathwayProgress: bundle.pathwayProgressScoped,
+      learnerPath: bundle.user.learnerPath,
     }),
     prisma.examSession.findMany({
       where: { userId, status: ExamSessionStatus.COMPLETED },

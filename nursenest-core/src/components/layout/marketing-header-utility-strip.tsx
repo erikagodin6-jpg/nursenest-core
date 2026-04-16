@@ -16,6 +16,7 @@ import { useClientGlobalRegionCookie } from "@/lib/region/use-client-global-regi
 import { effectiveMarketingHeaderGlobalRegion } from "@/lib/marketing/marketing-header-global-region";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { isStaffRole } from "@/lib/auth/staff-roles";
 
 /**
  * Desktop-only preferences rail.
@@ -73,6 +74,10 @@ export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?
     [strippedPath, clientGlobalRegion, region, user?.country],
   );
 
+  const countrySelectorIncludeUnpublished = Boolean(
+    user?.role && isStaffRole(user.role),
+  );
+
   const buildLocalizedMarketingPath = useCallback(
     (localeCode: string, path: string) => {
       const mapped = mapLegacyMarketingHref(path);
@@ -111,6 +116,7 @@ export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?
                 onSelect={handleCountrySelect}
                 onClose={() => setCountryOpen(false)}
                 variant="popover"
+                includeUnpublishedRegions={countrySelectorIncludeUnpublished}
               />
             </div>
           )}

@@ -13,381 +13,18 @@
  *   - Blog generator (gates claims about product support)
  *   - SEO helpers (controls which country pages get indexed)
  *   - Pricing pages (controls which markets show pricing)
+ *
+ * **Public country/exam launch** also requires {@link evaluateGlobalRegionLaunchReadiness} — see
+ * `country-exam-launch-readiness.ts` (pathway inventory + editorial approval).
  */
 
+export type { MarketSupportTier, MarketReadinessConfig, SubRegionConfig } from "./market-readiness-data";
+export { MARKET_READINESS } from "./market-readiness-data";
+
+import { MARKET_READINESS } from "./market-readiness-data";
+import type { MarketReadinessConfig } from "./market-readiness-data";
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
-
-// ── Types ────────────────────────────────────────────────────────────────────
-
-export type MarketSupportTier = "full" | "partial" | "marketing" | "planned";
-
-export type MarketReadinessConfig = {
-  region: GlobalRegionSlug;
-  supportTier: MarketSupportTier;
-  /** Questions are adapted and approved for this market. */
-  questionsAdapted: boolean;
-  /** At least some content is translated into the region's non-English locale. */
-  hasTranslatedContent: boolean;
-  /** Region-specific pricing is configured in Stripe. */
-  pricingConfigured: boolean;
-  /** Full conversion funnel (signup → checkout → onboarding) works for this market. */
-  conversionFunnelReady: boolean;
-  /** SEO pages may be published for this market. */
-  seoEnabled: boolean;
-  /** Blog content may reference this market. */
-  blogEnabled: boolean;
-  /**
-   * Sub-regions that share this config but may need distinct SEO treatment.
-   * E.g., UK → Scotland, Wales, England, Northern Ireland.
-   */
-  subRegions?: SubRegionConfig[];
-  /** Human-readable notes for admin dashboards. */
-  notes?: string;
-};
-
-export type SubRegionConfig = {
-  slug: string;
-  displayName: string;
-  /** When true, this sub-region gets its own SEO landing pages. */
-  distinctSeo: boolean;
-  /** Country codes that map to this sub-region (for geo detection). */
-  countryCodes?: readonly string[];
-};
-
-// ── Config ───────────────────────────────────────────────────────────────────
-
-export const MARKET_READINESS: Record<GlobalRegionSlug, MarketReadinessConfig> = {
-  // ── Full support ─────────────────────────────────────────────────────────
-  us: {
-    region: "us",
-    supportTier: "full",
-    questionsAdapted: true,
-    hasTranslatedContent: false,
-    pricingConfigured: true,
-    conversionFunnelReady: true,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  canada: {
-    region: "canada",
-    supportTier: "full",
-    questionsAdapted: true,
-    hasTranslatedContent: true,
-    pricingConfigured: true,
-    conversionFunnelReady: true,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-
-  // ── Partial support ──────────────────────────────────────────────────────
-  philippines: {
-    region: "philippines",
-    supportTier: "partial",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-    notes: "High priority. NCLEX-RN questions broadly applicable. Needs pricing + Tagalog overlays.",
-  },
-  india: {
-    region: "india",
-    supportTier: "partial",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-    notes: "High priority. Needs INR pricing + Hindi overlays.",
-  },
-
-  // ── Marketing only ───────────────────────────────────────────────────────
-  nigeria: {
-    region: "nigeria",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  kenya: {
-    region: "kenya",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  "south-africa": {
-    region: "south-africa",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  uk: {
-    region: "uk",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-    subRegions: [
-      { slug: "england", displayName: "England", distinctSeo: true },
-      { slug: "scotland", displayName: "Scotland", distinctSeo: true, countryCodes: ["GB-SCT"] },
-      { slug: "wales", displayName: "Wales", distinctSeo: true, countryCodes: ["GB-WLS"] },
-      { slug: "northern-ireland", displayName: "Northern Ireland", distinctSeo: false },
-    ],
-    notes: "NMC exam pathway differs significantly from NCLEX. Needs dedicated question adaptation.",
-  },
-  ireland: {
-    region: "ireland",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-    notes: "NMBI registration. Distinct from UK system.",
-  },
-  aus: {
-    region: "aus",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-    notes: "AHPRA/NMBA registration. Needs adapted exam framing.",
-  },
-  "new-zealand": {
-    region: "new-zealand",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  japan: {
-    region: "japan",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  china: {
-    region: "china",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-    notes:
-      "NNQE-aligned marketing hub. Content is based on NurseNest's own lesson and question inventory; not a proprietary national item bank.",
-  },
-  "south-korea": {
-    region: "south-korea",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  indonesia: {
-    region: "indonesia",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  vietnam: {
-    region: "vietnam",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  thailand: {
-    region: "thailand",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  italy: {
-    region: "italy",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  greece: {
-    region: "greece",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  hungary: {
-    region: "hungary",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  portugal: {
-    region: "portugal",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  mexico: {
-    region: "mexico",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  germany: {
-    region: "germany",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  france: {
-    region: "france",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  singapore: {
-    region: "singapore",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  uae: {
-    region: "uae",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  "saudi-arabia": {
-    region: "saudi-arabia",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  jamaica: {
-    region: "jamaica",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-  trinidad: {
-    region: "trinidad",
-    supportTier: "marketing",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: true,
-    blogEnabled: true,
-  },
-
-  // ── Planned ──────────────────────────────────────────────────────────────
-  pakistan: {
-    region: "pakistan",
-    supportTier: "planned",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: false,
-    blogEnabled: true,
-  },
-  bangladesh: {
-    region: "bangladesh",
-    supportTier: "planned",
-    questionsAdapted: false,
-    hasTranslatedContent: false,
-    pricingConfigured: false,
-    conversionFunnelReady: false,
-    seoEnabled: false,
-    blogEnabled: true,
-  },
-};
+import { evaluateGlobalRegionLaunchReadiness } from "./country-exam-launch-readiness";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -397,6 +34,22 @@ export function getMarketReadiness(region: GlobalRegionSlug): MarketReadinessCon
 
 export function isMarketFullySupported(region: GlobalRegionSlug): boolean {
   return MARKET_READINESS[region].supportTier === "full";
+}
+
+/**
+ * **Public marketing / learner UI gate:** regions that appear in the country switcher, onboarding,
+ * and account region lists for non-staff users. Requires market prep **and** pathway launch readiness
+ * (committed snapshot + required NCLEX hubs + editorial approval). See `country-exam-launch-readiness.ts`.
+ */
+export function isPublicCountrySwitcherReady(region: GlobalRegionSlug): boolean {
+  return evaluateGlobalRegionLaunchReadiness(region).status === "published";
+}
+
+/** Default when a legacy cookie/path points at a non-published market — keeps dropdown selection valid. */
+export const DEFAULT_PUBLIC_GLOBAL_REGION: GlobalRegionSlug = "us";
+
+export function coerceToPublicCountrySwitcherRegion(region: GlobalRegionSlug): GlobalRegionSlug {
+  return isPublicCountrySwitcherReady(region) ? region : DEFAULT_PUBLIC_GLOBAL_REGION;
 }
 
 export function canShowPricing(region: GlobalRegionSlug): boolean {
@@ -422,18 +75,23 @@ export function regionsWithSeoEnabled(): GlobalRegionSlug[] {
 }
 
 /**
- * User-facing label for the support level (used in context switcher messaging).
+ * Internal / admin label for market support tier (draft, SEO-only, etc.).
+ * **Do not use in public marketing chrome** — use {@link isPublicCountrySwitcherReady} to hide
+ * incomplete regions instead of showing "coming soon" in the live dropdown.
  */
-export function marketSupportLabel(region: GlobalRegionSlug): string {
+export function marketAdminSupportLabel(region: GlobalRegionSlug): string {
   const tier = MARKET_READINESS[region].supportTier;
   switch (tier) {
     case "full":
-      return "Full exam prep available";
+      return "Full exam prep";
     case "partial":
-      return "Study content available";
+      return "Partial / in development";
     case "marketing":
-      return "Coming soon";
+      return "Marketing & SEO only";
     case "planned":
-      return "In development";
+      return "Planned — not launched";
   }
 }
+
+/** @deprecated Use {@link marketAdminSupportLabel}; kept for admin panels still importing the old name. */
+export const marketSupportLabel = marketAdminSupportLabel;

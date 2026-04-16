@@ -33,3 +33,23 @@ export function isCoreOnlyEmergencyMode(): boolean {
 export function shouldSkipNonCriticalLearnerWork(): boolean {
   return isDurabilityDegradedMode() || isCoreOnlyEmergencyMode();
 }
+
+/**
+ * Safe, structured durability context for learner perf logs (no PII).
+ * Greppable keys: `envNnDegradedMode`, `autoDegradedActive`, `skipNonCriticalLearnerWork`, etc.
+ */
+export function getLearnerDurabilityObservabilityFields(): {
+  envNnDegradedMode: boolean;
+  publicNnDegradedMode: boolean;
+  coreOnlyEmergency: boolean;
+  autoDegradedActive: boolean;
+  skipNonCriticalLearnerWork: boolean;
+} {
+  return {
+    envNnDegradedMode: truthyEnv(process.env.NN_DEGRADED_MODE),
+    publicNnDegradedMode: truthyEnv(process.env.NEXT_PUBLIC_NN_DEGRADED_MODE),
+    coreOnlyEmergency: isCoreOnlyEmergencyMode(),
+    autoDegradedActive: isAutoDegradedActive(),
+    skipNonCriticalLearnerWork: shouldSkipNonCriticalLearnerWork(),
+  };
+}

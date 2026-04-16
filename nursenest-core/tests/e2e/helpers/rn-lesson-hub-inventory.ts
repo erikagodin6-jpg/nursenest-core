@@ -1,4 +1,5 @@
 import { expect, type Page } from "@playwright/test";
+import { RN_LEARNER_APP_LESSON_DETAIL_PATHNAME_RE } from "./paid-content-discovery";
 import { learnerAppMainLandmark, waitForAuthenticatedLearnerShell } from "./paid-learner-shell";
 
 /** Matches {@link LESSON_API_OFFSET_LIMIT.max} — fewer hub round-trips for full inventory. */
@@ -18,26 +19,23 @@ export const RN_HUB_VIRTUAL_LIST_STABLE_ROUNDS_REQUIRED = 4;
 /** If unique count fails to increase this many times in a row (while not yet stable), abort with diagnostics. */
 export const RN_HUB_VIRTUAL_LIST_MAX_NO_GROWTH_ITERATIONS = 40;
 
-/** Single source of truth for `/app/lessons/:slug` pathname shape (Node + browser evaluate). */
-const LESSON_DETAIL_PATH = /^\/app\/lessons\/[^/]+$/;
-
 function assertLessonDetailPathPattern(): void {
-  const src = LESSON_DETAIL_PATH.source?.trim();
+  const src = RN_LEARNER_APP_LESSON_DETAIL_PATHNAME_RE.source?.trim();
   if (!src) {
     throw new Error(
-      "[rn-lesson-hub] LESSON_DETAIL_PATH must be a non-empty RegExp — cannot run DOM lesson link queries",
+      "[rn-lesson-hub] RN_LEARNER_APP_LESSON_DETAIL_PATHNAME_RE must be a non-empty RegExp — cannot run DOM lesson link queries",
     );
   }
 }
 
 /**
- * Count unique lesson detail links in `#nn-learner-main` matching {@link LESSON_DETAIL_PATH}.
+ * Count unique lesson detail links in `#nn-learner-main` matching {@link RN_LEARNER_APP_LESSON_DETAIL_PATHNAME_RE}.
  * Pattern is passed into the browser explicitly (no closure over Node RegExp).
  */
 async function countLessonLinksInDom(page: Page): Promise<number> {
   assertLessonDetailPathPattern();
-  const patternSource = LESSON_DETAIL_PATH.source;
-  const patternFlags = LESSON_DETAIL_PATH.flags;
+  const patternSource = RN_LEARNER_APP_LESSON_DETAIL_PATHNAME_RE.source;
+  const patternFlags = RN_LEARNER_APP_LESSON_DETAIL_PATHNAME_RE.flags;
   return page.evaluate(
     (args: { patternSource: string; patternFlags: string }) => {
       const pathRe = new RegExp(args.patternSource, args.patternFlags);
@@ -232,8 +230,8 @@ export async function scrollVirtualListAndCollectLessonRows(
   },
   {
     hubPageNum: hubPage,
-    patternSource: LESSON_DETAIL_PATH.source,
-    patternFlags: LESSON_DETAIL_PATH.flags,
+    patternSource: RN_LEARNER_APP_LESSON_DETAIL_PATHNAME_RE.source,
+    patternFlags: RN_LEARNER_APP_LESSON_DETAIL_PATHNAME_RE.flags,
   },
   );
 

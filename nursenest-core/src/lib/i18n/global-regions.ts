@@ -49,6 +49,7 @@ export function isGlobalLocaleCode(v: string): v is GlobalLocaleCode {
 
 // ── Region slugs (registry / geo priority: underserved first) ────────────────
 // The marketing header country dropdown orders options via `getRegionGroups()` (US/CA, then International).
+// Live site lists only regions that pass `isPublicCountrySwitcherReady` (see `market-readiness.ts`).
 
 export const GLOBAL_REGION_SLUGS = [
   // High priority — underserved, high volume

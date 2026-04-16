@@ -9,6 +9,7 @@ import {
   loadLessonContinuationRows,
   type LessonContinuationRow,
 } from "@/lib/learner/pathway-lesson-continuation";
+import { buildVisibleLessonScopeForLearner } from "@/lib/learner/learner-visible-lesson-scope";
 import {
   loadLearnerDashboard,
   loadPathwayLessonProgressBundle,
@@ -252,8 +253,12 @@ export async function loadPremiumDashboardSnapshot(
   const bundle = await loadPathwayLessonProgressBundle(userId, entitlement);
   if (!bundle) return null;
 
+  const visibleLessonScope = await buildVisibleLessonScopeForLearner(entitlement, bundle.pathwayLessonRows);
+
   const dash = await loadLearnerDashboard(userId, entitlement, {
     userProfile: bundle.user,
+    visibleLessonScope,
+    pathwayRowsForScope: bundle.pathwayLessonRows,
   });
   if (!dash) return null;
 
@@ -261,16 +266,21 @@ export async function loadPremiumDashboardSnapshot(
     loadPathwayStudySummaries(userId, entitlement, {
       lessonRows: bundle.pathwayLessonRows,
       pathwayProgress: bundle.pathwayProgressScoped,
+      learnerPath: bundle.user.learnerPath,
     }),
     loadStudyStreakDays(userId),
     topStrongTopicFromLedger(userId),
     prisma.user.findUnique({
       where: { id: userId },
-      select: { examDate: true, examDatePlanType: true, learnerPath: true },
+      select: { examDate: true, examDatePlanType: true },
     }),
   ]);
 
-  const lessonContinuations = await loadLessonContinuationRows(userId, entitlement, userRow?.learnerPath ?? null);
+  const lessonContinuations = await loadLessonContinuationRows(
+    userId,
+    entitlement,
+    bundle.user.learnerPath ?? null,
+  );
 
   const pathways: PathwayProgressRow[] = pathwayRaw.map((p) => {
     const pct = p.lessonsTotal > 0 ? Math.round((p.lessonsCompleted / p.lessonsTotal) * 100) : 0;
@@ -353,7 +363,7 @@ export async function loadPremiumDashboardSnapshot(
   }
 
   return {
-    learnerPath: userRow?.learnerPath?.trim() || null,
+    learnerPath: bundle.user.learnerPath?.trim() || null,
     pathways,
     overallLessons: {
       completed: dash.lessonsCompleted,

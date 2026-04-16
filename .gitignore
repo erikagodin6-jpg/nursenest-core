@@ -69,6 +69,16 @@ nursenest-core/tests/e2e/.auth/
 .id_rsa
 *.key
 
+# -----------------------------------------------------------------------------
+# i18n — tracked bundles (never add broad ignore rules for these)
+# - client/public/i18n/*.json — merged monolith + marketing (Vite)
+# - tools/i18n/marketing/ — canonical marketing-en.json + locale overlays
+# - tools/i18n/source/i18n-*.ts — monolith translation sources
+# - nursenest-core/public/i18n/{locale}/*.json — Next.js shards
+# - nursenest-core/src/lib/i18n/marketing-message-keys.generated.ts — key list from merge
+# - tools/i18n/reports/placeholder-fallbacks.json — placeholder parity audit from compile
+# -----------------------------------------------------------------------------
+
 # Generated i18n diagnostics (large; regenerate with npm run i18n:status or dashboard refresh)
 reports/i18n-status.json
 

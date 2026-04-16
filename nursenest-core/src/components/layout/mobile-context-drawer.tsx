@@ -50,6 +50,8 @@ type MobileContextDrawerProps = {
   onProfessionChange: (profession: string) => void;
   onExamChange: (exam: string) => void;
   themeLabels: ThemePickerLabels;
+  /** Staff-only: list draft/incomplete regions in the country listbox. */
+  countrySelectorIncludeUnpublished?: boolean;
 };
 
 // ── Component ────────────────────────────────────────────────────────────────
@@ -66,6 +68,7 @@ export function MobileContextDrawer({
   onProfessionChange,
   onExamChange,
   themeLabels,
+  countrySelectorIncludeUnpublished = false,
 }: MobileContextDrawerProps) {
   if (!open) return null;
 
@@ -136,6 +139,7 @@ export function MobileContextDrawer({
                 onClose();
               }}
               variant="inline"
+              includeUnpublishedRegions={countrySelectorIncludeUnpublished}
             />
           </section>
 

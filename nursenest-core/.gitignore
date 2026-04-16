@@ -98,3 +98,7 @@ dist/
 
 # Sentry / build telemetry dumps
 .sentry-native/
+
+# -----------------------------------------------------------------------------
+# i18n — same tracked paths as repo root .gitignore (do not ignore bundles under client/ or public/i18n)
+# -----------------------------------------------------------------------------
