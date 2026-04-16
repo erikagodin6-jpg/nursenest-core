@@ -19,7 +19,7 @@ type RouteContext = { params: Promise<{ id: string }> };
  * Safe retries: draft-batch FAILED rows (reset + process one chunk), or legacy simple AI draft (FAILED only) using stored payload.
  */
 export async function POST(_req: Request, ctx: RouteContext) {
-  const gate = await requireAdmin(req);
+  const gate = await requireAdmin(_req);
   if (!gate.ok) return gate.response;
 
   const { id: logId } = await ctx.params;

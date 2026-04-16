@@ -31,7 +31,7 @@ async function uniqueBlogSlug(base: string): Promise<string> {
  * Clone a post into a new DRAFT row (new slug). Admin-only.
  */
 export async function POST(_req: Request, { params }: Props) {
-  const gate = await requireAdmin(req);
+  const gate = await requireAdmin(_req);
   if (!gate.ok) return gate.response;
 
   const { id } = await params;

@@ -36,7 +36,7 @@ const patchSchema = z
   .strict();
 
 export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
-  const gate = await requireAdmin(req);
+  const gate = await requireAdmin(_req);
   if (!gate.ok) return gate.response;
   const { id } = await ctx.params;
   const q = await prisma.examQuestion.findUnique({ where: { id } });
@@ -139,7 +139,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
 }
 
 export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string }> }) {
-  const gate = await requireAdmin(req);
+  const gate = await requireAdmin(_req);
   if (!gate.ok) return gate.response;
   const { id } = await ctx.params;
   try {

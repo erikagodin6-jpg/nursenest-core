@@ -136,7 +136,13 @@ export function SignupForm({
 
       if (!res.ok) {
         setError(signupErrorMessage(data));
-        setErrorHelp(null);
+        const code = data.code;
+        if (code === "db" || code === "missing_table") {
+          const h = t("pages.signup.errorServerHelp")?.trim();
+          setErrorHelp(h || null);
+        } else {
+          setErrorHelp(null);
+        }
         return;
       }
 

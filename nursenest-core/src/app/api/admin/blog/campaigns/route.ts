@@ -1,5 +1,5 @@
 import { BlogCampaignStatus, BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
@@ -24,7 +24,7 @@ const createCampaignSchema = z.object({
   requireReferences: z.boolean().optional(),
 });
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 

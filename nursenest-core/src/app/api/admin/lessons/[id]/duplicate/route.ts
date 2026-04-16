@@ -10,7 +10,7 @@ type RouteContext = { params: Promise<{ id: string }> };
 
 /** Deep copy lesson as DRAFT with a new slug (ContentItem). */
 export async function POST(_req: Request, ctx: RouteContext) {
-  const gate = await requireAdmin(req);
+  const gate = await requireAdmin(_req);
   if (!gate.ok) return gate.response;
   const { id } = await ctx.params;
 

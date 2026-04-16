@@ -1,12 +1,12 @@
 import { revalidatePath } from "next/cache";
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { processDueBlogBatchScheduleItems } from "@/lib/blog/blog-batch-schedule";
 
 /**
  * Process due batch schedule items once (admin manual run). Same logic as cron.
  */
-export async function POST() {
+export async function POST(req: NextRequest) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
