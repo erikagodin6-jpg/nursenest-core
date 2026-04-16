@@ -12,6 +12,7 @@ import {
   isHomeStatsRateLimitPath,
   isLearnerContentAnonymousApiPath,
   isPricingRateLimitPath,
+  isPublicFlashcardTagsRateLimitPath,
   isPublicJsonRateLimitPath,
   retryAfterSecondsFrom429Streak,
 } from "@/lib/server/rate-limit";
@@ -65,6 +66,12 @@ describe("enforceApiRateLimit path classification", () => {
   it("isolates home-stats for tighter cap than generic public_json", () => {
     assert.equal(isHomeStatsRateLimitPath("/api/public/home-stats"), true);
     assert.equal(isHomeStatsRateLimitPath("/api/public/flashcard-tags"), false);
+  });
+
+  it("isolates flashcard-tags for stricter cap than generic public_json", () => {
+    assert.equal(isPublicFlashcardTagsRateLimitPath("/api/public/flashcard-tags"), true);
+    assert.equal(isPublicFlashcardTagsRateLimitPath("/api/public/home-stats"), false);
+    assert.equal(isPublicJsonRateLimitPath("/api/public/flashcard-tags"), true);
   });
 
   it("splits auth kinds for per-route buckets", () => {

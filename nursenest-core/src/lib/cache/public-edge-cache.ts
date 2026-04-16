@@ -27,6 +27,9 @@ export const CACHE_HEADER_HOME_STATS: HeadersInit = {
     "public, max-age=120, s-maxage=600, stale-while-revalidate=1800, stale-if-error=86400",
 };
 
+/** Aligns with {@link getCachedPublicFlashcardTags} revalidate + `GET /api/public/flashcard-tags` CDN TTL. */
+export const PUBLIC_FLASHCARD_TAGS_CACHE_REVALIDATE_SEC = 120;
+
 /** Lighter public lists (e.g. flashcard tags) — shorter edge TTL. */
 export const CACHE_HEADER_PUBLIC_LIST: HeadersInit = {
   "Cache-Control": "public, max-age=60, s-maxage=120, stale-while-revalidate=600, stale-if-error=3600",

@@ -103,6 +103,10 @@ const PUBLIC_JSON_MAX = 16;
 const HOME_STATS_WINDOW_MS = 60_000;
 const HOME_STATS_MAX = 10;
 
+/** Flashcard tag list — DB join; tighter than generic `/api/public/*` now that route is cache-backed. */
+const FLASHCARD_TAGS_WINDOW_MS = 60_000;
+const FLASHCARD_TAGS_MAX = 8;
+
 const LEARNER_WINDOW_MS = 60_000;
 const LEARNER_MAX = 120;
 
@@ -181,6 +185,11 @@ export function authRouteKind(pathname: string): string {
 /** Dedicated stats endpoint — tighter than generic `/api/public/*`. */
 export function isHomeStatsRateLimitPath(pathname: string): boolean {
   return pathname === "/api/public/home-stats";
+}
+
+/** Public flashcard tags — expensive list query; stricter than generic public JSON. */
+export function isPublicFlashcardTagsRateLimitPath(pathname: string): boolean {
+  return pathname === "/api/public/flashcard-tags";
 }
 
 function isLearnerPath(pathname: string): boolean {
@@ -384,6 +393,17 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
         safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ip) });
       }
       return res;
+    }
+    return null;
+  }
+
+  if (isPublicFlashcardTagsRateLimitPath(pathname)) {
+    const cap = publicCapForIp(ip, tightenPublicCap(FLASHCARD_TAGS_MAX));
+    const key = `ratelimit:public_flashcard_tags:ip:${ip}`;
+    const { ok } = await checkRateLimitUnified(key, { windowMs: FLASHCARD_TAGS_WINDOW_MS, max: cap });
+    if (!ok) {
+      safeServerLog("security", "rate_limit_exceeded", { kind: "public_flashcard_tags", path: pathname.slice(0, 96) });
+      return json429WithBackoff(ip);
     }
     return null;
   }
