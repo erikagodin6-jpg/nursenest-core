@@ -14,8 +14,8 @@ export default function BlogPostError({
       error={error}
       reset={reset}
       surface="marketing_blog_post"
-      title="Could not load this article"
-      description="Try again in a moment. If the problem continues, return to the blog list."
+      title="Just a moment"
+      description="We’re loading this article. Try again in a moment — or browse the blog from the link below."
       primaryAction={{ label: "Blog", href: "/blog" }}
       secondaryAction={{ label: "Home", href: "/" }}
     />

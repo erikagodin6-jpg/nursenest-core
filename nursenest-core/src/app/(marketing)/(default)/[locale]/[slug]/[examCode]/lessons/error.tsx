@@ -18,8 +18,8 @@ export default function ExamPathwayLessonsSegmentError({
       error={error}
       reset={reset}
       surface="exam_pathway_lessons"
-      title="Lessons unavailable"
-      description="We couldn't load this lessons page. Try again, or go back to your exam hub."
+      title="Just a moment"
+      description="We are loading this lessons page. Try again in a moment, or open home or the pathways list below."
       primaryAction={{ label: "Go home", href: "/" }}
       secondaryAction={{ label: "Browse exam pathways", href: "/lessons" }}
     />

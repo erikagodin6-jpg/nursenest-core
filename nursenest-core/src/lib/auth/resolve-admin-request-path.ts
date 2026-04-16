@@ -20,7 +20,7 @@ function normalizeToPathname(raw: string): string | null {
 
 /**
  * Path for RBAC checks on admin UI + `/api/admin/*`.
- * Prefer `x-nn-admin-path` from `src/proxy.ts` (set before NextAuth middleware runs).
+ * Prefer `x-nn-admin-path` / `x-nn-request-pathname` from `src/proxy.ts` (set before NextAuth middleware runs).
  * Falls back to other same-request URL headers (never `Referer` — it can point at the previous page).
  */
 export async function resolveAdminRequestPath(): Promise<string> {

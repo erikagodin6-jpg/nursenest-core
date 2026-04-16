@@ -46,31 +46,31 @@ function checkDeviceMismatch(req: NextRequest, route: string, userId: string, ip
 }
 
 /** GET /api/questions — IP + per-user + bulk row volume (10m window). */
-export function enforceQuestionsListProtection(
+export async function enforceQuestionsListProtection(
   req: NextRequest,
   userId: string,
   pageSize: number,
-): NextResponse | null {
+): Promise<NextResponse | null> {
   const ip = getTrustedClientIp(req);
   const route = "questions_list";
   checkDeviceMismatch(req, route, userId, ip);
 
   const ipKey = ipRateLimitKey(ip, route);
-  const ipLim = checkRateLimit(ipKey, { windowMs: 60_000, max: 420 });
+  const ipLim = await checkRateLimitUnified(ipKey, { windowMs: 60_000, max: 420 });
   if (!ipLim.ok) {
     logAbuse("ip_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
   const userKey = `api:user:${userId}:${route}`;
-  const userLim = checkRateLimit(userKey, { windowMs: 60_000, max: 96 });
+  const userLim = await checkRateLimitUnified(userKey, { windowMs: 60_000, max: 96 });
   if (!userLim.ok) {
     logAbuse("user_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
   const volKey = `api:vol:qlist:${userId}`;
-  const vol = consumeRateLimit(volKey, pageSize, { windowMs: 600_000, max: 360 });
+  const vol = await consumeRateLimitUnified(volKey, pageSize, { windowMs: 600_000, max: 360 });
   if (!vol.ok) {
     logAbuse("bulk_question_fetch", route, userId, ip, { pageSize });
     return tooMany("bulk_limit", 600, "Question list volume limit exceeded. Try again later.");
@@ -80,19 +80,19 @@ export function enforceQuestionsListProtection(
 }
 
 /** GET /api/questions/[id] — high churn of IDs (scraping). */
-export function enforceQuestionByIdProtection(req: NextRequest, userId: string): NextResponse | null {
+export async function enforceQuestionByIdProtection(req: NextRequest, userId: string): Promise<NextResponse | null> {
   const ip = getTrustedClientIp(req);
   const route = "question_by_id";
   checkDeviceMismatch(req, route, userId, ip);
 
   const ipKey = ipRateLimitKey(ip, route);
-  if (!checkRateLimit(ipKey, { windowMs: 60_000, max: 540 }).ok) {
+  if (!(await checkRateLimitUnified(ipKey, { windowMs: 60_000, max: 540 })).ok) {
     logAbuse("ip_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
   const userKey = `api:user:${userId}:${route}`;
-  if (!checkRateLimit(userKey, { windowMs: 60_000, max: 200 }).ok) {
+  if (!(await checkRateLimitUnified(userKey, { windowMs: 60_000, max: 200 })).ok) {
     logAbuse("user_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
@@ -101,17 +101,17 @@ export function enforceQuestionByIdProtection(req: NextRequest, userId: string):
 }
 
 /** GET /api/questions/discovery — expensive aggregates. */
-export function enforceDiscoveryProtection(req: NextRequest, userId: string): NextResponse | null {
+export async function enforceDiscoveryProtection(req: NextRequest, userId: string): Promise<NextResponse | null> {
   const ip = getTrustedClientIp(req);
   const route = "questions_discovery";
   checkDeviceMismatch(req, route, userId, ip);
 
-  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 36 }).ok) {
+  if (!(await checkRateLimitUnified(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 36 })).ok) {
     logAbuse("ip_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
-  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 8 }).ok) {
+  if (!(await checkRateLimitUnified(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 8 })).ok) {
     logAbuse("user_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 120);
   }
@@ -120,26 +120,26 @@ export function enforceDiscoveryProtection(req: NextRequest, userId: string): Ne
 }
 
 /** GET /api/lessons — IP + user + row volume. */
-export function enforceLessonsListProtection(
+export async function enforceLessonsListProtection(
   req: NextRequest,
   userId: string,
   pageSize: number,
-): NextResponse | null {
+): Promise<NextResponse | null> {
   const ip = getTrustedClientIp(req);
   const route = "lessons_list";
   checkDeviceMismatch(req, route, userId, ip);
 
-  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 480 }).ok) {
+  if (!(await checkRateLimitUnified(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 480 })).ok) {
     logAbuse("ip_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
-  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 120 }).ok) {
+  if (!(await checkRateLimitUnified(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 120 })).ok) {
     logAbuse("user_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
 
-  const vol = consumeRateLimit(`api:vol:lessons:${userId}`, pageSize, { windowMs: 600_000, max: 480 });
+  const vol = await consumeRateLimitUnified(`api:vol:lessons:${userId}`, pageSize, { windowMs: 600_000, max: 480 });
   if (!vol.ok) {
     logAbuse("bulk_list_fetch", route, userId, ip, { pageSize });
     return tooMany("bulk_limit", 600);
