@@ -31,7 +31,11 @@ export function SignupForm({
   const searchParams = useSearchParams();
   const loginAfterSignupHref = useMemo(() => {
     const target = safeCallbackPath(searchParams.get("callbackUrl")) ?? "/app";
-    return `${withMarketingLocale(locale, "/login")}?callbackUrl=${encodeURIComponent(target)}`;
+    const loginBase = withMarketingLocale(locale, "/login");
+    const params = new URLSearchParams();
+    params.set("callbackUrl", target);
+    params.set("registered", "1");
+    return `${loginBase}?${params.toString()}`;
   }, [searchParams, locale]);
   const [error, setError] = useState<string | null>(null);
   const [errorHelp, setErrorHelp] = useState<string | null>(null);

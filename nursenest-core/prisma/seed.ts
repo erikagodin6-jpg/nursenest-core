@@ -1,3 +1,4 @@
+import "../scripts/load-dotenv-for-cli.mts";
 import "../src/lib/db/env-bootstrap";
 import { hash } from "bcryptjs";
 import { ContentStatus } from "@prisma/client";

@@ -105,7 +105,11 @@ export function LoginForm({
   }
 
   if (status === "authenticated") {
-    return <p className="mt-6 text-sm text-muted-foreground">You are already signed in. Redirecting...</p>;
+    return (
+      <p className="mt-6 text-sm text-muted-foreground" role="status">
+        {t("pages.login.alreadySignedIn")}
+      </p>
+    );
   }
 
   return (
@@ -130,7 +134,11 @@ export function LoginForm({
           placeholder={t("pages.login.placeholderIdentifier")}
           required
           autoComplete="username"
+          aria-describedby="login-identifier-hint"
         />
+        <p id="login-identifier-hint" className="text-xs leading-relaxed text-muted-foreground">
+          {t("pages.login.identifierHint")}
+        </p>
       </div>
       <div className="space-y-1.5">
         <div className="flex items-center justify-between gap-2">

@@ -43,6 +43,7 @@ import { LearnerSilentSectionBoundary } from "@/components/learner/learner-silen
 import { PaywallHomeStatsProvider } from "@/components/student/paywall-home-stats-context";
 import { loadPaywallHomeStatsForShell } from "@/lib/marketing/load-paywall-home-stats-for-shell";
 import { LearnerDegradedModeBanner } from "@/components/student/learner-degraded-mode-banner";
+import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
 
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
@@ -138,6 +139,7 @@ export default async function LearnerShellLayout({ children }: { children: React
           <LearnerExamChromeGate>
             <LearnerFeedbackShell pathwayId={pathwayId}>
             <div className="nn-learner-app mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+5rem+env(safe-area-inset-bottom,0px))] sm:px-6 md:pb-[var(--nn-rhythm-shell-y)]">
+              <LearnerMainLandmarkAudit />
               <PathwayLessonProgressRefreshListener />
               <LearnerDegradedModeBanner
                 serverDegraded={isDegradedMode()}

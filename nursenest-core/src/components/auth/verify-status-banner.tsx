@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { CheckCircle2, AlertCircle, Clock } from "lucide-react";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 const statusConfig: Record<string, { icon: typeof CheckCircle2; className: string; message: string }> = {
   success: {
@@ -28,16 +29,29 @@ const statusConfig: Record<string, { icon: typeof CheckCircle2; className: strin
 
 export function VerifyStatusBanner() {
   const params = useSearchParams();
+  const { t } = useMarketingI18n();
   const status = params.get("verify");
-  if (!status || !statusConfig[status]) return null;
+  const registered = params.get("registered") === "1";
 
-  const config = statusConfig[status];
-  const Icon = config.icon;
+  if (status && statusConfig[status]) {
+    const config = statusConfig[status];
+    const Icon = config.icon;
+    return (
+      <div className={`nn-verify-status ${config.className}`}>
+        <Icon className="h-4 w-4 flex-shrink-0" aria-hidden />
+        <p>{config.message}</p>
+      </div>
+    );
+  }
 
-  return (
-    <div className={`nn-verify-status ${config.className}`}>
-      <Icon className="h-4 w-4 flex-shrink-0" aria-hidden />
-      <p>{config.message}</p>
-    </div>
-  );
+  if (registered) {
+    return (
+      <div className="nn-verify-status nn-verify-status--success mb-4">
+        <CheckCircle2 className="h-4 w-4 flex-shrink-0" aria-hidden />
+        <p>{t("pages.login.postSignupBanner")}</p>
+      </div>
+    );
+  }
+
+  return null;
 }

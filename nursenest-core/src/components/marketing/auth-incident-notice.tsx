@@ -6,10 +6,14 @@ type Props = {
 };
 
 /**
- * Temporary incident banner for sign-in / password reset flows.
- * Copy is English-only for operational speed; keep calm and avoid account-existence hints.
+ * Optional incident banner for sign-in / password reset (e.g. provider outage).
+ * **Off by default** so it never crowds out normal recovery (Forgot password, etc.).
+ * Enable with `NEXT_PUBLIC_AUTH_INCIDENT_NOTICE=1` at build time.
  */
 export function AuthIncidentNotice({ contactHref }: Props) {
+  if (process.env.NEXT_PUBLIC_AUTH_INCIDENT_NOTICE !== "1") {
+    return null;
+  }
   const email = supportEmail();
   return (
     <aside

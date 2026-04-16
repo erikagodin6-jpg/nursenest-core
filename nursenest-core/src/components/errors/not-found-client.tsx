@@ -52,7 +52,11 @@ export function NotFoundClient({
   const secondaryHref = isAuthenticated ? "/app/lessons" : BROWSE_LESSONS_HREF;
 
   return (
-    <main className="relative min-h-[min(100vh,880px)] px-4 py-16 sm:px-6 sm:py-20">
+    <div
+      className="relative min-h-[min(100vh,880px)] px-4 py-16 sm:px-6 sm:py-20"
+      role="region"
+      aria-label="Page not found"
+    >
       <div
         className="pointer-events-none absolute inset-0 -z-10 opacity-[0.45] motion-reduce:opacity-35"
         aria-hidden
@@ -112,6 +116,6 @@ export function NotFoundClient({
           </div>
         ) : null}
       </div>
-    </main>
+    </div>
   );
 }

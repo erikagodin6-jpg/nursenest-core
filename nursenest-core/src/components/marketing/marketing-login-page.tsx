@@ -39,17 +39,26 @@ export async function MarketingLoginPage({ locale }: { locale: string }) {
               contactHref={withMarketingLocale(locale, "/contact")}
             />
           </Suspense>
-          <div className="nn-account-recovery-hint">
-            <p>{m["pages.login.cantFindAccount"]}</p>
-            <p className="mt-2">
-              <Link
-                href={withMarketingLocale(locale, "/contact")}
-                className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
-              >
-                {m["pages.login.recoveryContactLink"]}
-              </Link>
-              {m["pages.login.recoveryContactSuffix"]}
-            </p>
+          <div className="nn-account-recovery-hint space-y-3 border-t border-[var(--semantic-border-soft)] pt-5">
+            <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{m["pages.login.recoveryHeading"]}</p>
+            <ol className="list-decimal space-y-2 pl-5 text-sm leading-relaxed text-muted-foreground">
+              <li>
+                <Link href={forgotHref} className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline">
+                  {m["pages.login.forgotPasswordLink"]}
+                </Link>
+                <span className="text-muted-foreground"> — {m["pages.login.recoveryForgotHint"]}</span>
+              </li>
+              <li>{m["pages.login.cantFindAccount"]}</li>
+              <li>
+                <Link
+                  href={withMarketingLocale(locale, "/contact")}
+                  className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+                >
+                  {m["pages.login.recoveryContactLink"]}
+                </Link>
+                {m["pages.login.recoveryContactSuffix"]}
+              </li>
+            </ol>
           </div>
         </div>
       </div>

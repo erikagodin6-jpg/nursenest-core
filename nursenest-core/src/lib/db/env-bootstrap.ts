@@ -12,7 +12,8 @@
  * - **PgBouncer / DO pooler**: set `PRISMA_USE_PGBOUNCER=true` to append `pgbouncer=true` (or add it to the URL). Set `DATABASE_DIRECT_URL` to the
  *   provider’s **direct** Postgres URI (non-pooler port) — required when the pooled URL uses `pgbouncer=true` (Prisma Migrate cannot use transaction pooling).
  *
- * If `DATABASE_URL` is unset and `PROD_DATABASE_URL` is set, copy prod → `DATABASE_URL` (legacy alias).
+ * If `DATABASE_URL` is unset and `PROD_DATABASE_URL` is set, copy prod → `DATABASE_URL` (**deprecated alias** —
+ * use `DATABASE_URL` everywhere; see `docs/database-environment.md`).
  * `schema.prisma` uses `DATABASE_URL` + `DATABASE_DIRECT_URL` (see `applyDirectDatabaseUrlFromEnv`).
  */
 export type DatabaseUrlSource = "prod_override" | "database_url" | "missing";
@@ -189,6 +190,13 @@ export function applyDatabaseUrlFromEnv(): void {
   if (direct) {
     process.env.DATABASE_URL = tuneDatabaseUrlForProcess(direct, "pooled");
     databaseUrlSource = "database_url";
+  } else if (prod) {
+    console.warn(
+      "[nursenest-core] DEPRECATED: DATABASE_URL is unset but PROD_DATABASE_URL is set. Copying to DATABASE_URL. " +
+        "Set DATABASE_URL in nursenest-core/.env.local (or your shell) and remove PROD_DATABASE_URL — see docs/database-environment.md.",
+    );
+    process.env.DATABASE_URL = tuneDatabaseUrlForProcess(prod, "pooled");
+    databaseUrlSource = "prod_override";
   } else {
     databaseUrlSource = "missing";
   }
