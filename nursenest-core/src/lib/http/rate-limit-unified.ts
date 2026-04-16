@@ -11,12 +11,14 @@
  *
  * @see RateLimitStore — abstraction for future Redis/KV backends
  */
+import { peekRateLimitWindow } from "@/lib/http/rate-limit-in-memory";
 import {
   getInMemoryRateLimitStoreSingleton,
   getPostgresRateLimitStore,
   logRateLimitPgUnavailableOnce,
   shouldUsePostgresRateLimitStore,
 } from "@/lib/http/rate-limit-store-resolve";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export {
   shouldUsePostgresRateLimitStore,
@@ -49,6 +51,46 @@ export async function checkRateLimitUnified(
       return { ok: false, remaining: 0 };
     }
     return getInMemoryRateLimitStoreSingleton().check(key, opts);
+  }
+}
+
+/**
+ * Read current window usage for `key` without mutating. Used for distributed abuse metadata (strike counts).
+ * When Postgres is required but unavailable in production, returns **fail-closed** `count: opts.max` so callers
+ * can treat anonymous caps as fully tightened.
+ */
+export async function readRateLimitWindowCountUnified(
+  key: string,
+  opts: { windowMs: number; max: number },
+): Promise<{ count: number }> {
+  if (!shouldUsePostgresRateLimitStore()) {
+    return { count: peekRateLimitWindow(key, opts).count };
+  }
+  const pg = await getPostgresRateLimitStore();
+  if (!pg) {
+    if (process.env.NODE_ENV === "production") {
+      logRateLimitPgUnavailableOnce();
+      safeServerLog("security", "rate_limit_meta_read_degraded", {
+        action: "fail_closed_count_max",
+        keyPrefix: key.slice(0, 48),
+      });
+      return { count: opts.max };
+    }
+    return { count: peekRateLimitWindow(key, opts).count };
+  }
+  try {
+    const { readPostgresRateLimitWindowCount } = await import("@/lib/http/rate-limit-distributed");
+    return await readPostgresRateLimitWindowCount(key);
+  } catch {
+    if (process.env.NODE_ENV === "production") {
+      logRateLimitPgUnavailableOnce();
+      safeServerLog("security", "rate_limit_meta_read_degraded", {
+        action: "fail_closed_count_max",
+        keyPrefix: key.slice(0, 48),
+      });
+      return { count: opts.max };
+    }
+    return { count: peekRateLimitWindow(key, opts).count };
   }
 }
 

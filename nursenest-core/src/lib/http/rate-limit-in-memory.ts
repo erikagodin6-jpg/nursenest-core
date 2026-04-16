@@ -39,6 +39,20 @@ export function checkRateLimit(
 }
 
 /** Increment bucket by `cost` (e.g. page size) against a shared max in the window. */
+/** Read current window fill without mutating (same key space as {@link checkRateLimit}). */
+export function peekRateLimitWindow(
+  key: string,
+  opts: { windowMs: number; max: number },
+): { count: number; resetAt: number } {
+  pruneIfNeeded();
+  const now = Date.now();
+  let b = buckets.get(key);
+  if (!b || b.resetAt <= now) {
+    return { count: 0, resetAt: now + opts.windowMs };
+  }
+  return { count: b.count, resetAt: b.resetAt };
+}
+
 export function consumeRateLimit(
   key: string,
   cost: number,

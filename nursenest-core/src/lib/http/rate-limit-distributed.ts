@@ -24,6 +24,7 @@ function remainingFromCount(count: number, max: number): number {
 export function createPostgresRateLimitStore(): RateLimitStore {
   return {
     async check(key: string, opts: RateLimitWindowOpts): Promise<RateLimitCheckResult> {
+      const prisma = await getPrisma();
       const id = hashKey(key);
       return prisma.$transaction(
         async (tx) => {
@@ -94,4 +95,17 @@ export function createPostgresRateLimitStore(): RateLimitStore {
       );
     },
   };
+}
+
+/**
+ * Read current window count without mutating (shared across instances).
+ * Used for abuse-strike tightening metadata — must match the same logical `key` as consume/check.
+ */
+export async function readPostgresRateLimitWindowCount(key: string): Promise<{ count: number }> {
+  const prisma = await getPrisma();
+  const id = hashKey(key);
+  const row = await prisma.appRateLimitBucket.findUnique({ where: { id } });
+  const now = new Date();
+  if (!row || row.expiresAt < now) return { count: 0 };
+  return { count: row.count };
 }

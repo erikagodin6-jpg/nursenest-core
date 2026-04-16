@@ -45,7 +45,7 @@ function createPrismaClient(): PrismaClient {
  * Per-instance concurrency is capped by `createDbQuerySemaphore` (`NN_DB_MAX_CONCURRENT_QUERIES`).
  * Hot API routes wrap reads with `withRetry` from `@/lib/resilience/with-retry` (transient errors only).
  *
- * Slow queries over 500ms emit `slow_query_detected` (warn) and legacy `slow_prisma_query` (see {@link logSlowPrismaQuery}); over 1000ms uses severity `critical`. When the handler runs inside {@link runWithApiTelemetry} or {@link runWithPrismaQueryContextFromRequest}, logs include `route` and `correlationId`.
+ * Slow queries over 500ms emit `slow_query_detected` (warn) and legacy `slow_prisma_query` (see `logSlowPrismaQuery`); over 1000ms uses severity `critical`. API routes wrapped with `runWithApiTelemetry` (or `runWithPrismaQueryContextFromRequest`) attach `route` and `correlationId` to those lines.
  *
  * **Horizontal scale:** one Prisma client per process avoids duplicate pools. Size `connection_limit` × concurrent
  * instances against Postgres `max_connections`. See `docs/backend-scale-architecture.md`.

@@ -3,7 +3,17 @@
  */
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { checkRateLimit, consumeRateLimit } from "@/lib/http/rate-limit-in-memory";
+import { checkRateLimit, consumeRateLimit, peekRateLimitWindow } from "@/lib/http/rate-limit-in-memory";
+
+describe("peekRateLimitWindow", () => {
+  it("returns count without mutating", () => {
+    const key = `peek-${Date.now()}`;
+    const opts = { windowMs: 60_000, max: 10 };
+    consumeRateLimit(key, 3, opts);
+    assert.deepEqual(peekRateLimitWindow(key, opts).count, 3);
+    assert.deepEqual(peekRateLimitWindow(key, opts).count, 3);
+  });
+});
 
 describe("checkRateLimit", () => {
   it("allows up to max calls per window then denies", () => {
