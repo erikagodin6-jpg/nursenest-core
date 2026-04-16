@@ -76,21 +76,6 @@ export function SignupForm({
     }
   }
 
-  /**
-   * Secondary line under the primary error — only when we have explicit extra context.
-   */
-  function signupErrorHelp(data: { error?: string; code?: string }): string | null {
-    switch (data.code) {
-      case "db":
-      case "missing_table": {
-        const h = t("pages.signup.errorServerHelp")?.trim();
-        return h || null;
-      }
-      default:
-        return null;
-    }
-  }
-
   async function onSubmit(formData: FormData) {
     const myGeneration = ++submitGeneration.current;
     setError(null);
@@ -151,7 +136,7 @@ export function SignupForm({
 
       if (!res.ok) {
         setError(signupErrorMessage(data));
-        setErrorHelp(signupErrorHelp(data));
+        setErrorHelp(null);
         return;
       }
 

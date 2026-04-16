@@ -90,8 +90,7 @@ export function LoginForm({
           setErrorHelp(g || null);
         } else {
           setError(t("pages.login.errorGeneric"));
-          const g = t("pages.login.errorGenericGuidance")?.trim();
-          setErrorHelp(g || null);
+          setErrorHelp(null);
         }
         return;
       }
