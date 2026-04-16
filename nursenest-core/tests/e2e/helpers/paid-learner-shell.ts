@@ -67,7 +67,13 @@ export type PaidSurfaceDebug = {
 export async function collectPaidSurfaceDebug(page: Page, step: string): Promise<PaidSurfaceDebug> {
   const url = page.url();
   const title = await page.title().catch(() => "");
-  const onboardingRoute = /\/app\/onboarding/i.test(url);
+  let onboardingPath = "";
+  try {
+    onboardingPath = new URL(url).pathname;
+  } catch {
+    onboardingPath = "";
+  }
+  const onboardingRoute = onboardingPath.includes("/app/onboarding");
   const subscriptionRequiredHeadingCount = await page
     .getByRole("heading", { name: "Subscription required" })
     .count()

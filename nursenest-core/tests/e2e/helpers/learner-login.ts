@@ -6,17 +6,11 @@
  */
 import type { Page } from "@playwright/test";
 import { describeAuthFailureSurface } from "./auth-diagnostics";
-import {
-  isAppOnboardingPath,
-  isLearnerShell,
-  LEARNER_SHELL_PATH_EXPECTATION,
-  PLAYWRIGHT_AUTH_NAV_TIMEOUT_MS,
-  formatLearnerShellMismatch,
-} from "./learner-shell";
+import { isLearnerShell, PLAYWRIGHT_AUTH_NAV_TIMEOUT_MS, formatLearnerShellMismatch } from "./learner-shell";
 
 export {
   currentPathname,
-  isAppOnboardingPath,
+  isLearnerAppShellPath,
   isLearnerNavInternalHref,
   isLearnerShell,
   LEARNER_SHELL_PATH_EXPECTATION,
@@ -70,11 +64,9 @@ export async function loginWithCredentials(page: Page, email: string, password: 
       `Login rejected — check email/password and BASE_URL. ${formatLearnerShellMismatch(atUrl, pathname)} ${diag}`,
     );
   }
-  if (isAppOnboardingPath(pathname)) {
+  if (pathname.includes("/app/onboarding")) {
     const diag = await describeAuthFailureSurface(page).catch(() => "");
-    throw new Error(
-      `On /app/onboarding — complete onboarding or reset QA account (onboardingCompletedAt). url=${atUrl} pathname=${pathname}. Expected: ${LEARNER_SHELL_PATH_EXPECTATION} ${diag}`,
-    );
+    throw new Error(`On /app/onboarding — complete onboarding... ${formatLearnerShellMismatch(atUrl, pathname)} ${diag}`);
   }
   if (!isLearnerShell(pathname)) {
     const diag = await describeAuthFailureSurface(page).catch(() => "");

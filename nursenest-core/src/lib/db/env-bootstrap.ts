@@ -31,6 +31,23 @@ function withDefaultQueryParam(urlString: string, key: string, value: string): s
   }
 }
 
+/** Prisma + transaction-pooling PgBouncer: prepared statements are incompatible unless `pgbouncer=true` is set on the pooled URL. */
+function isPrismaPgbouncerMode(): boolean {
+  const v = process.env.PRISMA_USE_PGBOUNCER?.trim().toLowerCase();
+  return v === "true" || v === "1";
+}
+
+/** Remove `pgbouncer` query flag — use for `DATABASE_DIRECT_URL` (migrations / introspection must not use pooler mode). */
+function stripPgbouncerFromUrl(urlString: string): string {
+  try {
+    const url = new URL(urlString);
+    url.searchParams.delete("pgbouncer");
+    return url.toString();
+  } catch {
+    return urlString;
+  }
+}
+
 /**
  * Sets PostgreSQL `statement_timeout` for the session via libpq `options` when not already present.
  * Skips if the URL already has an `options` param (caller manages) or `PRISMA_STATEMENT_TIMEOUT_MS=0`.
@@ -61,25 +78,59 @@ function safeArgvJoin(): string {
   }
 }
 
-function tuneDatabaseUrlForProcess(rawUrl: string): string {
+/**
+ * @param role `pooled` = app queries (may add `pgbouncer=true` when `PRISMA_USE_PGBOUNCER` is set).
+ *   `direct` = Prisma Migrate / introspection — never adds `pgbouncer=true`; strips it if present.
+ */
+function tuneDatabaseUrlForProcess(rawUrl: string, role: "pooled" | "direct" = "pooled"): string {
   const argv = safeArgvJoin();
   const lifecycle = process.env.npm_lifecycle_event ?? "";
   const isBuildProcess = lifecycle === "build" || argv.includes("next build");
   const isScriptProcess = argv.includes("/scripts/") || argv.includes("tsx scripts/");
 
-  // Allow explicit override from env; otherwise pick conservative defaults by process type.
+  let working = role === "direct" ? stripPgbouncerFromUrl(rawUrl) : rawUrl;
+
+  const usePoolerFlag = role === "pooled" && isPrismaPgbouncerMode();
+  // External pooler: avoid double-pooling — one Prisma connection per server worker is typical (override with PRISMA_CONNECTION_LIMIT).
   const connectionLimit =
     process.env.PRISMA_CONNECTION_LIMIT ??
-    (isBuildProcess || isScriptProcess ? "2" : process.env.NODE_ENV === "production" ? "5" : "8");
+    (usePoolerFlag
+      ? "1"
+      : isBuildProcess || isScriptProcess
+        ? "2"
+        : process.env.NODE_ENV === "production"
+          ? "5"
+          : "8");
   const poolTimeout = process.env.PRISMA_POOL_TIMEOUT ?? (isBuildProcess ? "25" : "15");
   const connectTimeoutSec = process.env.PRISMA_CONNECT_TIMEOUT_SEC?.trim() ?? "10";
 
-  let tuned = rawUrl;
+  let tuned = working;
   tuned = withDefaultQueryParam(tuned, "connection_limit", connectionLimit);
   tuned = withDefaultQueryParam(tuned, "pool_timeout", poolTimeout);
   tuned = withDefaultQueryParam(tuned, "connect_timeout", connectTimeoutSec);
   tuned = withDefaultStatementTimeout(tuned);
+  if (usePoolerFlag) {
+    tuned = withDefaultQueryParam(tuned, "pgbouncer", "true");
+  }
   return tuned;
+}
+
+/**
+ * Sets `DATABASE_DIRECT_URL` for `schema.prisma` `directUrl` (migrations). If unset, mirrors the pooled
+ * URL with `pgbouncer` stripped — fine for single-instance Postgres; **with DigitalOcean pooler you should
+ * set `DATABASE_DIRECT_URL` to the provider’s direct (non-pooler) connection string** for `prisma migrate`.
+ */
+export function applyDirectDatabaseUrlFromEnv(): void {
+  const pooled = process.env.DATABASE_URL?.trim();
+  const rawDirect = process.env.DATABASE_DIRECT_URL?.trim();
+
+  if (rawDirect) {
+    process.env.DATABASE_DIRECT_URL = tuneDatabaseUrlForProcess(rawDirect, "direct");
+    return;
+  }
+  if (pooled) {
+    process.env.DATABASE_DIRECT_URL = tuneDatabaseUrlForProcess(stripPgbouncerFromUrl(pooled), "direct");
+  }
 }
 
 export function applyDatabaseUrlFromEnv(): void {
@@ -93,12 +144,12 @@ export function applyDatabaseUrlFromEnv(): void {
       );
     }
     if (direct) {
-      process.env.DATABASE_URL = tuneDatabaseUrlForProcess(direct);
+      process.env.DATABASE_URL = tuneDatabaseUrlForProcess(direct, "pooled");
       databaseUrlSource = "database_url";
       return;
     }
     if (prod) {
-      process.env.DATABASE_URL = tuneDatabaseUrlForProcess(prod);
+      process.env.DATABASE_URL = tuneDatabaseUrlForProcess(prod, "pooled");
       databaseUrlSource = "prod_override";
       return;
     }
@@ -107,7 +158,7 @@ export function applyDatabaseUrlFromEnv(): void {
   }
 
   if (direct) {
-    process.env.DATABASE_URL = tuneDatabaseUrlForProcess(direct);
+    process.env.DATABASE_URL = tuneDatabaseUrlForProcess(direct, "pooled");
     databaseUrlSource = "database_url";
   } else {
     databaseUrlSource = "missing";
@@ -115,3 +166,4 @@ export function applyDatabaseUrlFromEnv(): void {
 }
 
 applyDatabaseUrlFromEnv();
+applyDirectDatabaseUrlFromEnv();

@@ -30,8 +30,8 @@ export async function collectAuthFailureSurface(page: Page): Promise<AuthFailure
   } catch {
     pathname = "(invalid-url)";
   }
-  const appearsOnboarding = /\/app\/onboarding/i.test(url);
-  const appearsLogin = /\/login/i.test(url);
+  const appearsOnboarding = pathname.includes("/app/onboarding");
+  const appearsLogin = pathname.includes("/login");
   const subscriptionRequiredHeadingCount = await page
     .getByRole("heading", { name: "Subscription required" })
     .count()

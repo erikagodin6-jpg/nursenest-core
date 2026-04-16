@@ -30,9 +30,9 @@ export function releaseGateUrlContext(page: Page): { url: string; pathname: stri
  */
 export function releaseGateBlockingSnippet(page: Page): string {
   try {
-    const u = page.url();
-    if (/\/login/i.test(u)) return "visible=surface looks like login";
-    if (/\/app\/onboarding/i.test(u)) return "visible=surface looks like onboarding wizard";
+    const p = new URL(page.url()).pathname;
+    if (p.includes("/login")) return "visible=surface looks like login";
+    if (p.includes("/app/onboarding")) return "visible=surface looks like onboarding wizard";
   } catch {
     /* ignore */
   }

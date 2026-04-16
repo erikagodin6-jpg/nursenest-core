@@ -1,11 +1,7 @@
 import type { Page } from "@playwright/test";
 import { describeAuthFailureSurface } from "./auth-diagnostics";
 import { assertSyncNotOnboardingBlocking } from "./paid-durability";
-import {
-  formatLearnerShellMismatch,
-  isLearnerShell,
-  LEARNER_SHELL_PATH_EXPECTATION,
-} from "./learner-shell";
+import { formatLearnerShellMismatch, isLearnerShell } from "./learner-shell";
 
 /** Premium learner surfaces should not render the freemium subscription gate heading. */
 export async function expectNoSubscriptionPaywall(page: Page, context: string): Promise<void> {
@@ -39,20 +35,11 @@ export async function expectOnLearnerApp(page: Page): Promise<void> {
     path = new URL(url).pathname;
   } catch {
     const diag = await describeAuthFailureSurface(page).catch(() => "");
-    throw new Error(
-      `Invalid page URL for learner shell check. url=${url} pathname=(unparsed). Expected: ${LEARNER_SHELL_PATH_EXPECTATION} ${diag}`,
-    );
-  }
-
-  if (path.includes("/login")) {
-    const diag = await describeAuthFailureSurface(page).catch(() => "");
-    throw new Error(
-      `Not on learner shell. url=${url} pathname=${path}. Expected: ${LEARNER_SHELL_PATH_EXPECTATION} Landed on login. If storageState is missing, re-run setup-paid-auth. ${diag}`,
-    );
+    throw new Error(`Invalid page URL for learner shell check. url=${url} ${diag}`);
   }
 
   if (!isLearnerShell(path)) {
     const diag = await describeAuthFailureSurface(page).catch(() => "");
-    throw new Error(`Not on learner shell. ${formatLearnerShellMismatch(url, path)} ${diag}`);
+    throw new Error(`${formatLearnerShellMismatch(url, path)} ${diag}`);
   }
 }

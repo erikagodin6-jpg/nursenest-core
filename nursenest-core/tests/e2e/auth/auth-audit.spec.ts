@@ -146,7 +146,10 @@ test("invalid credentials show error (no success redirect)", async ({ page }, te
       /invalid|incorrect|unable|sign in|credentials/i,
       { timeout: 25_000 },
     );
-    expect(page.url()).not.toMatch(/\/app(\/|$)/);
+    expect(
+      isLearnerShell(new URL(page.url()).pathname),
+      "invalid login must not reach learner shell",
+    ).toBe(false);
     const d = await logObserverDiagnostics(o, "auth-audit-invalid-login");
     expect(d.consoleErrors).toEqual([]);
     expect(d.failedRequests).toEqual([]);

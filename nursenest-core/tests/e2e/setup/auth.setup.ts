@@ -39,10 +39,16 @@ setup("authenticate paid test account and save storage state", async ({ page }) 
   // redirects incomplete users from /app → /app/onboarding. Hit /app here so storage state is only
   // saved when onboarding is complete (otherwise downstream specs fail after goto("/app")).
   await page.goto("/app", { waitUntil: "domcontentloaded" });
-  await expect(page, "E2E user must complete onboarding (DB onboardingCompletedAt). Run scripts/qa-paid-test-account-reset.mts with production DATABASE_URL.").not.toHaveURL(
-    /\/app\/onboarding(\/|$)/,
-    { timeout: 30_000 },
-  );
+  await expect
+    .poll(
+      () => new URL(page.url()).pathname.includes("/app/onboarding"),
+      {
+        timeout: 30_000,
+        message:
+          "E2E user must complete onboarding (DB onboardingCompletedAt). Run scripts/qa-paid-test-account-reset.mts with production DATABASE_URL.",
+      },
+    )
+    .toBe(false);
 
   // Confirm premium path without going through Stripe (lessons hub must not be paywalled).
   await page.goto("/app/lessons", { waitUntil: "domcontentloaded" });

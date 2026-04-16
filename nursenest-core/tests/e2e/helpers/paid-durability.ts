@@ -3,7 +3,6 @@
  * and core learner shell health assertions.
  */
 import { expect, type Page, type Response } from "@playwright/test";
-import { isAppOnboardingPath } from "./learner-shell";
 
 export type DurabilityPageState = {
   shellReady: boolean;
@@ -142,7 +141,7 @@ export function assertSyncNotOnboardingBlocking(
   } catch {
     return;
   }
-  if (isAppOnboardingPath(path)) {
+  if (path.includes("/app/onboarding")) {
     throw new OnboardingBlockingFlowError({
       url: page.url(),
       context,
