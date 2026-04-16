@@ -28,33 +28,6 @@ export async function GET() {
   const readinessTimeoutMs = readinessDbTimeoutMs();
   try {
     const r = await checkDatabaseReadiness(readinessTimeoutMs);
-    if ("skipped" in r && r.skipped) {
-      return NextResponse.json(
-        {
-          ok: true,
-          database: "not_configured",
-          classification: "DATABASE_URL_NOT_CONFIGURED" satisfies DatabaseHealthClassification,
-          service: "nursenest-core",
-          readinessTimeoutMs,
-          timestamp: new Date().toISOString(),
-        },
-        { status: 200, headers: NO_STORE },
-      );
-    }
-    if (r.ok && "latencyMs" in r) {
-      return NextResponse.json(
-        {
-          ok: true,
-          database: "ok",
-          classification: "OK" satisfies DatabaseHealthClassification,
-          latencyMs: r.latencyMs,
-          readinessTimeoutMs,
-          service: "nursenest-core",
-          timestamp: new Date().toISOString(),
-        },
-        { status: 200, headers: NO_STORE },
-      );
-    }
     if (!r.ok) {
       const detail = (r.error ?? "unknown").slice(0, 120);
       safeServerLog("health", "ready_database_failed", {
@@ -74,16 +47,30 @@ export async function GET() {
         { status: 503, headers: NO_STORE },
       );
     }
-    const _exhaustive: never = r;
+    if ("latencyMs" in r) {
+      return NextResponse.json(
+        {
+          ok: true,
+          database: "ok",
+          classification: "OK" satisfies DatabaseHealthClassification,
+          latencyMs: r.latencyMs,
+          readinessTimeoutMs,
+          service: "nursenest-core",
+          timestamp: new Date().toISOString(),
+        },
+        { status: 200, headers: NO_STORE },
+      );
+    }
     return NextResponse.json(
       {
-        ok: false,
-        database: "unexpected",
-        detail: String(_exhaustive),
+        ok: true,
+        database: "not_configured",
+        classification: "DATABASE_URL_NOT_CONFIGURED" satisfies DatabaseHealthClassification,
         service: "nursenest-core",
+        readinessTimeoutMs,
         timestamp: new Date().toISOString(),
       },
-      { status: 500, headers: NO_STORE },
+      { status: 200, headers: NO_STORE },
     );
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);

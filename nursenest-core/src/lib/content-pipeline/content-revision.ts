@@ -1,5 +1,7 @@
 import "server-only";
 
+import { randomUUID } from "node:crypto";
+
 import type { ContentEntityKind, ExamQuestion, Prisma, PrismaClient } from "@prisma/client";
 
 import { contentIntegritySha256 } from "@/lib/content-pipeline/content-integrity";
@@ -27,17 +29,18 @@ export async function archiveExamQuestionRevision(
   const snapshot = examQuestionToSnapshot(row);
   const snapshotSha256 = contentIntegritySha256(snapshot);
 
-  const rev = await prisma.contentEntityRevision.create({
+  const rev = await prisma.content_entity_revisions.create({
     data: {
-      entityKind: "EXAM_QUESTION",
-      entityId: row.id,
+      id: randomUUID(),
+      entity_kind: "EXAM_QUESTION",
+      entity_id: row.id,
       version: row.sourceVersion,
       snapshot: snapshot as Prisma.InputJsonValue,
-      snapshotSha256,
+      snapshot_sha256: snapshotSha256,
       reason: params.reason,
-      previousVersion: row.sourceVersion > 1 ? row.sourceVersion - 1 : null,
-      importRunId: params.importRunId ?? undefined,
-      createdByUserId: params.createdByUserId ?? undefined,
+      previous_version: row.sourceVersion > 1 ? row.sourceVersion - 1 : null,
+      import_run_id: params.importRunId ?? null,
+      created_by_user_id: params.createdByUserId ?? null,
     },
   });
 
@@ -58,10 +61,10 @@ export async function rollbackExamQuestionToArchivedVersion(
     reason?: string;
   },
 ): Promise<{ newSourceVersion: number }> {
-  const target = await prisma.contentEntityRevision.findFirst({
+  const target = await prisma.content_entity_revisions.findFirst({
     where: {
-      entityKind: "EXAM_QUESTION",
-      entityId: params.questionId,
+      entity_kind: "EXAM_QUESTION",
+      entity_id: params.questionId,
       version: params.targetArchivedVersion,
     },
   });
@@ -115,21 +118,22 @@ export async function archivePathwayLessonRevision(
   const snapshot = JSON.parse(JSON.stringify(row)) as PathwayLessonSnapshot;
   const snapshotSha256 = contentIntegritySha256(snapshot);
 
-  const rev = await prisma.contentEntityRevision.create({
+  const rev = await prisma.content_entity_revisions.create({
     data: {
-      entityKind: "PATHWAY_LESSON" satisfies ContentEntityKind,
-      entityId: row.id,
-      version: row.contentVersion,
+      id: randomUUID(),
+      entity_kind: "PATHWAY_LESSON" satisfies ContentEntityKind,
+      entity_id: row.id,
+      version: row.content_version,
       snapshot: snapshot as Prisma.InputJsonValue,
-      snapshotSha256,
+      snapshot_sha256: snapshotSha256,
       reason: params.reason,
-      previousVersion: row.contentVersion > 1 ? row.contentVersion - 1 : null,
-      importRunId: params.importRunId ?? undefined,
-      createdByUserId: params.createdByUserId ?? undefined,
+      previous_version: row.content_version > 1 ? row.content_version - 1 : null,
+      import_run_id: params.importRunId ?? null,
+      created_by_user_id: params.createdByUserId ?? null,
     },
   });
 
-  return { archivedVersion: row.contentVersion, revisionId: rev.id };
+  return { archivedVersion: row.content_version, revisionId: rev.id };
 }
 
 export async function archiveContentItemRevision(
@@ -147,17 +151,18 @@ export async function archiveContentItemRevision(
   const snapshot = JSON.parse(JSON.stringify(row)) as Record<string, unknown>;
   const snapshotSha256 = contentIntegritySha256(snapshot);
 
-  const rev = await prisma.contentEntityRevision.create({
+  const rev = await prisma.content_entity_revisions.create({
     data: {
-      entityKind: "CONTENT_ITEM" satisfies ContentEntityKind,
-      entityId: row.id,
+      id: randomUUID(),
+      entity_kind: "CONTENT_ITEM" satisfies ContentEntityKind,
+      entity_id: row.id,
       version: row.sourceVersion,
       snapshot: snapshot as Prisma.InputJsonValue,
-      snapshotSha256,
+      snapshot_sha256: snapshotSha256,
       reason: params.reason,
-      previousVersion: row.sourceVersion > 1 ? row.sourceVersion - 1 : null,
-      importRunId: params.importRunId ?? undefined,
-      createdByUserId: params.createdByUserId ?? undefined,
+      previous_version: row.sourceVersion > 1 ? row.sourceVersion - 1 : null,
+      import_run_id: params.importRunId ?? null,
+      created_by_user_id: params.createdByUserId ?? null,
     },
   });
 

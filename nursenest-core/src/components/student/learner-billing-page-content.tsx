@@ -194,7 +194,6 @@ export function LearnerBillingPageContent({
   const accessWhy = billingAccessWhyLine(entitlement, accessOk, t);
   const pastDueGraceAccess =
     accessOk &&
-    entitlement !== "error" &&
     entitlement.reason === "past_due_grace" &&
     subscription?.status === SubscriptionStatus.PAST_DUE;
 

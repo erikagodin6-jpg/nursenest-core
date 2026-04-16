@@ -399,7 +399,7 @@ export async function applyStripeWebhookEvent(
         void captureServerEvent(analyticsDistinctId(userId), PH.learnerConversionSubscribed, {
           actor: "authenticated",
           funnel_step: "paid_subscription_active",
-          country: plan?.country,
+          country: plan?.country != null ? String(plan.country) : undefined,
           tier: plan?.tier ? String(plan.tier) : undefined,
           source: "stripe_checkout_session_completed",
         });

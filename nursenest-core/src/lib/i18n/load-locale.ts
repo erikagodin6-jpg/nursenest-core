@@ -11,7 +11,8 @@
  */
 import "server-only";
 
-import { loadMarketingMessages, type MarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 
 export type { MarketingMessages };
 

@@ -15,6 +15,17 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { withRetry } from "@/lib/resilience/with-retry";
 
 export type { AccessScope, SubscriptionPlanStatus, UserAccess } from "./user-access-types";
+
+/** Attach JWT sync fields from the loaded `User` row (see {@link UserAccess.sessionJwt}). */
+function withSessionJwt(
+  partial: Omit<UserAccess, "sessionJwt">,
+  user: { role: UserRole; credentialVersion: number },
+): UserAccess {
+  return {
+    ...partial,
+    sessionJwt: { role: user.role, credentialVersion: user.credentialVersion },
+  };
+}
 export { subscriptionStatusForSession, type SessionSubscriptionStatus } from "./subscription-session-status";
 
 function mapSubscriptionPlanStatus(status: SubscriptionStatus | undefined | null): SubscriptionPlanStatus {

@@ -13,6 +13,7 @@ import {
   loadPathwayLessonProgressBundle,
   loadPathwayStudySummaries,
   mapExamAttemptRowsToRecentMocks,
+  type RecentMock,
 } from "@/lib/learner/load-learner-dashboard";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { ReadinessResult } from "@/lib/learner/readiness-score";

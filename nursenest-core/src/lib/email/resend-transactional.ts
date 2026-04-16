@@ -30,7 +30,7 @@ export async function sendTransactionalEmailHtml(params: {
   }
 
   try {
-    return await runWithCircuitBreaker(
+    return await runWithCircuitBreaker<SendTransactionalEmailResult>(
       "email",
       async () => {
         const res = await fetch("https://api.resend.com/emails", {

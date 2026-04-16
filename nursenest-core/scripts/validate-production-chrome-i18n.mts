@@ -10,7 +10,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { PRODUCTION_CHROME_I18N_KEYS } from "../src/lib/i18n/production-chrome-i18n-keys";
+import { PRODUCTION_CHROME_I18N_KEYS } from "../src/lib/i18n/production-chrome-i18n-keys.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** Repo root: nursenest-core/scripts → ../.. */

@@ -363,7 +363,7 @@ export function CompactCountryTrigger({ region, onClick, className }: CompactCou
     >
       <Globe className="h-3 w-3 shrink-0 opacity-60" aria-hidden />
       <span className="hidden min-[900px]:inline text-[10px] font-normal opacity-75">
-        {t("nav.countryExam", undefined, t("nav.selectCountry"))}
+        {t("nav.selectCountry")}
       </span>
       <span className="hidden sm:inline">{flag}</span>
       <span className="max-w-[80px] truncate">{regionCfg.displayName}</span>

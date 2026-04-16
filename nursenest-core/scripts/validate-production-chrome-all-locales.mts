@@ -10,7 +10,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { MARKETING_LOCALE_CODES } from "../src/lib/i18n/marketing-locale-policy";
-import { PRODUCTION_CHROME_I18N_KEYS } from "../src/lib/i18n/production-chrome-i18n-keys";
+import { PRODUCTION_CHROME_I18N_KEYS } from "../src/lib/i18n/production-chrome-i18n-keys.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = path.join(__dirname, "..");

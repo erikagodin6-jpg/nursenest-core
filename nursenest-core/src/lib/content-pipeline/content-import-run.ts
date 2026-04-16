@@ -1,5 +1,7 @@
 import "server-only";
 
+import { randomUUID } from "node:crypto";
+
 import type { ContentImportRunStatus, Prisma, PrismaClient } from "@prisma/client";
 
 export type StartContentImportRunInput = {
@@ -19,15 +21,16 @@ export async function startContentImportRun(
   prisma: PrismaClient,
   input: StartContentImportRunInput,
 ): Promise<{ id: string }> {
-  const row = await prisma.contentImportRun.create({
+  const row = await prisma.content_import_runs.create({
     data: {
-      sourceKind: input.sourceKind,
-      label: input.label,
+      id: randomUUID(),
+      source_kind: input.sourceKind,
+      label: input.label ?? undefined,
       manifest: (input.manifest ?? {}) as Prisma.InputJsonValue,
-      triggeredByUserId: input.triggeredByUserId ?? undefined,
-      gitCommitSha: input.gitCommitSha ?? undefined,
+      triggered_by_user_id: input.triggeredByUserId ?? undefined,
+      git_commit_sha: input.gitCommitSha ?? undefined,
       environment: input.environment ?? undefined,
-      inputSha256: input.inputSha256 ?? undefined,
+      input_sha256: input.inputSha256 ?? undefined,
       status: "STARTED",
     },
   });
@@ -46,14 +49,14 @@ export async function finishContentImportRun(
   id: string,
   input: FinishContentImportRunInput,
 ): Promise<void> {
-  await prisma.contentImportRun.update({
+  await prisma.content_import_runs.update({
     where: { id },
     data: {
       status: input.status,
-      finishedAt: new Date(),
+      finished_at: new Date(),
       report: (input.report ?? {}) as Prisma.InputJsonValue,
       stats: (input.stats ?? {}) as Prisma.InputJsonValue,
-      errorMessage: input.errorMessage ?? undefined,
+      error_message: input.errorMessage ?? undefined,
     },
   });
 }

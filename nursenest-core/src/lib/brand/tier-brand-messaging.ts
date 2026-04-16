@@ -1,3 +1,4 @@
+import type { TierCode } from "@prisma/client";
 import {
   ALLIED,
   NP,
@@ -10,7 +11,7 @@ import {
 } from "@/lib/marketing/marketing-entry-routes";
 
 /** Tier on session JWT; undefined while loading or for edge cases. */
-export type BrandingSessionTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED" | undefined;
+export type BrandingSessionTier = TierCode | undefined;
 
 export function paywallTierLineI18nKey(tier: BrandingSessionTier): string {
   if (tier === "RN" || tier === "LVN_LPN" || tier === "RPN" || tier === "NP" || tier === "ALLIED") {

@@ -154,6 +154,11 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
   const forwarded = withPathnameHeader(req);
   const res = await runAuthMiddleware(forwarded, event);
   const outCid = forwarded.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
+  if (res == null) {
+    const next = NextResponse.next({ request: { headers: forwarded.headers } });
+    next.headers.set(NN_CORRELATION_HEADER, outCid.slice(0, 128));
+    return next;
+  }
   const merged = mergeAuthContinueWithForwardedRequest(res, forwarded, outCid);
   if (merged !== res) {
     return merged;

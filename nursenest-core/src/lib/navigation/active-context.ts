@@ -3,6 +3,7 @@
  * All nav rendering should derive from {@link ActiveContext} (no scattered auth/tier checks).
  */
 
+import type { TierCode } from "@prisma/client";
 import type { SessionUserRole } from "@/types/next-auth";
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import type { NursenestRegion } from "@/lib/region/use-nursenest-region";
@@ -32,7 +33,7 @@ export type ActiveContext = {
   /** Marketing / learner locale (e.g. en, fr, tl) */
   language: string;
   /** Raw session tier when signed in */
-  sessionTier: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED" | null;
+  sessionTier: TierCode | null;
   /** Single primary pathway for pills + mega-menu emphasis */
   primaryPathway: PrimaryPathwayNav;
   entitlement: ActiveEntitlement;
@@ -75,14 +76,13 @@ export function resolveNavMode(_args: {
 /**
  * Primary pathway: NP > RN > PN (PN folds RPN/LVN_LPN); ALLIED separate.
  */
-export function resolvePrimaryPathwayNav(
-  tier: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED" | null | undefined,
-): PrimaryPathwayNav {
+export function resolvePrimaryPathwayNav(tier: TierCode | null | undefined): PrimaryPathwayNav {
   if (!tier) return null;
   if (tier === "NP") return "NP";
   if (tier === "RN") return "RN";
   if (tier === "RPN" || tier === "LVN_LPN") return "PN";
   if (tier === "ALLIED") return "ALLIED";
+  /** Includes `PRE_NURSING` and `NEW_GRAD` — no single collapsed pathway pill. */
   return null;
 }
 

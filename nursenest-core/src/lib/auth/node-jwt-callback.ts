@@ -1,12 +1,12 @@
 import "server-only";
 
 import type { JWT } from "next-auth/jwt";
-import type { NextAuthConfig } from "next-auth";
 import { authCallbacks } from "@/lib/auth-callbacks";
 import { getSessionIdentityPayload } from "@/lib/auth/session-identity-from-db";
 import { prisma } from "@/lib/db";
 
-type JwtParams = Parameters<NonNullable<NextAuthConfig["callbacks"]>["jwt"]>[0];
+/** Derive from the concrete callback — `NextAuthConfig["callbacks"]["jwt"]` is optional in typings. */
+type JwtParams = Parameters<NonNullable<typeof authCallbacks.jwt>>[0];
 
 /** Throttle DB reads on hot paths (session polling) while still invalidating stale JWTs quickly after password change. */
 const CREDENTIAL_CHECK_THROTTLE_MS = 120_000;

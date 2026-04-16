@@ -116,10 +116,11 @@ export function captureUxFailure(opts: CaptureUxFailureOpts): void {
   }
 
   const ctx = getUxTrackingContext();
+  const level: "error" | "warning" = opts.level === "error" ? "error" : "warning";
   const crumb = {
     category: "ux",
     message: `${opts.kind}: ${opts.message.slice(0, 200)}`,
-    level: (opts.level === "error" ? "error" : "warning") as const,
+    level,
     data: {
       kind: opts.kind,
       fallbackShown: opts.fallbackShown,

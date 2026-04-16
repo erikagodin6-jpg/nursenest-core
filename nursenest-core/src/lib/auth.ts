@@ -547,7 +547,7 @@ export const authConfig: NextAuthConfig = {
 
         safeServerLog("auth", "credentials_authorize_lookup", {
           userFound: Boolean(user),
-          userIdPrefix: user?.id ? user.id.slice(0, 8) : null,
+          userIdPrefix: user?.id ? user.id.slice(0, 8) : undefined,
           lookupStrategy: lookupStrategy ?? "none",
           authMode,
         });
