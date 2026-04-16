@@ -36,28 +36,28 @@ export default async function ExamAttemptReportPage({ params }: Props) {
   const userId = (session?.user as { id?: string })?.id ?? "";
   if (!userId) {
     return (
-      <main>
+      <div>
         <p className="text-sm text-muted-foreground">{t("examAttempt.signInPrompt")}</p>
-      </main>
+      </div>
     );
   }
 
   const entitlement = await resolveEntitlementForPage(userId);
   if (entitlement === "error") {
     return (
-      <main>
+      <div>
         <p className="text-sm text-muted-foreground">{t("examAttempt.accessError")}</p>
-      </main>
+      </div>
     );
   }
   if (!entitlement.hasAccess) {
     return (
-      <main>
+      <div>
         <p className="text-sm text-muted-foreground">{t("examAttempt.subscriberOnly")}</p>
         <Link href="/pricing" className="mt-2 inline-block text-sm font-semibold text-primary underline">
           {t("examAttempt.viewPlansCta")}
         </Link>
-      </main>
+      </div>
     );
   }
 
@@ -74,7 +74,7 @@ export default async function ExamAttemptReportPage({ params }: Props) {
   const pct = r?.accuracyPct != null ? String(r.accuracyPct) : null;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
       <div>
         <p className="text-sm text-muted-foreground">{data.attempt.examTitle}</p>
@@ -144,6 +144,6 @@ export default async function ExamAttemptReportPage({ params }: Props) {
           {t("examAttempt.openQuestionBank")}
         </Link>
       </div>
-    </main>
+    </div>
   );
 }

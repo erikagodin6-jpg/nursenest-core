@@ -22,7 +22,7 @@ export default function AppError({
   const showDetail = shouldShowErrorBoundaryDevDetail();
 
   return (
-    <main className="mx-auto mt-16 w-full max-w-xl px-6">
+    <div className="mx-auto mt-16 w-full max-w-xl px-6">
       <Link
         href="/"
         className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_07%,var(--semantic-surface))]"
@@ -42,6 +42,6 @@ export default function AppError({
         showLeaf
         severity="default"
       />
-    </main>
+    </div>
   );
 }
