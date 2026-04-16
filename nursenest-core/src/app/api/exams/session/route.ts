@@ -139,6 +139,7 @@ export async function GET(req: NextRequest) {
         const part = await prisma.examQuestion.findMany({
           where: { AND: [{ id: { in: chunk } }, accessWhere] },
           select: { id: true, stem: true, options: true, questionType: true },
+          take: chunk.length,
         });
         acc.push(...part);
       }

@@ -25,6 +25,7 @@ import {
 import { normalizeGeneratedStemForNearDupList } from "@/lib/content/generated-question-auto-validation";
 import { stemHash } from "@/lib/content/stem-hash";
 import { prisma } from "@/lib/db";
+import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 
 export const runtime = "nodejs";
 export const maxDuration = 120;
@@ -111,6 +112,7 @@ export async function POST(req: Request) {
     const rows = await prisma.contentItem.findMany({
       where: { id: { in: targetIds }, type: "lesson" },
       select: { id: true, title: true, slug: true },
+      take: takeForIdIn(targetIds),
     });
     lessonHints = rows.map((r) => ({ id: r.id, title: r.title, slug: r.slug }));
   }

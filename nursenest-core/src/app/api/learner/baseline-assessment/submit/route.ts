@@ -3,6 +3,7 @@ import type { Prisma } from "@prisma/client";
 import { BaselineAssessmentAttemptStatus } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
 import { formatTopicLabelForDisplay } from "@/lib/learner/topic-normalize";
@@ -76,6 +77,7 @@ export async function POST(req: Request) {
     const rows = await withRetry(() =>
       prisma.examQuestion.findMany({
         where: { id: { in: ids } },
+        take: takeForIdIn(ids),
         select: {
           id: true,
           questionType: true,

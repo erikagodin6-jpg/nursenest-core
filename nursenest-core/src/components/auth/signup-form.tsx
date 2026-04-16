@@ -40,6 +40,8 @@ export function SignupForm({
   const [country, setCountry] = useState<"CA" | "US">("CA");
   const [examFocus, setExamFocus] = useState<SignupExamFocusValue>("nclex_rn");
   const onCaptcha = useCallback((tok: string | null) => setCaptchaToken(tok), []);
+  /** When the widget is shown, `/api/signup` may require a token (see `isTurnstileEnforced`). */
+  const turnstileGateActive = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim());
 
   const examOptions = useMemo(() => signupExamFocusOptions(country, t), [country, t]);
 
@@ -63,25 +65,18 @@ export function SignupForm({
     }
   }
 
+  /**
+   * Secondary line under the primary error. Do not pair API `error` strings with a generic "server"
+   * help blurb — that hid specific failures (e.g. duplicate email) behind misleading copy.
+   * Most codes are self-explanatory with the links below; keep this null unless we add real strings.
+   */
   function signupErrorHelp(data: { error?: string; code?: string }): string | null {
-    if (typeof data.error === "string" && data.error.length > 0) {
-      return t("pages.signup.errorServerMessageHelp");
-    }
     switch (data.code) {
-      case "duplicate_email":
-        return t("pages.signup.errorDuplicateEmailHelp");
-      case "duplicate_username":
-        return t("pages.signup.errorDuplicateUsernameHelp");
-      case "captcha":
-        return t("pages.signup.errorCaptchaHelp");
-      case "validation":
-      case "invalid_username":
-        return t("pages.signup.errorValidationHelp");
       case "db":
       case "missing_table":
         return t("pages.signup.errorServerHelp");
       default:
-        return t("pages.signup.errorGenericHelp");
+        return null;
     }
   }
 
@@ -114,6 +109,12 @@ export function SignupForm({
       learnerPath: learnerPathRaw || undefined,
       ...(captchaToken ? { captchaToken } : {}),
     };
+
+    if (turnstileGateActive && !captchaToken?.trim()) {
+      setError(t("pages.signup.errorCaptcha"));
+      setErrorHelp(null);
+      return;
+    }
 
     setPending(true);
     try {
@@ -298,7 +299,7 @@ export function SignupForm({
       <button
         className="nn-btn-primary w-full px-4 py-3 text-base font-semibold disabled:pointer-events-none disabled:opacity-60"
         type="submit"
-        disabled={pending}
+        disabled={pending || (turnstileGateActive && !captchaToken?.trim())}
       >
         {pending ? `${t("pages.signup.createAccount")}…` : t("pages.signup.createAccount")}
       </button>
