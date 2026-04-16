@@ -39,8 +39,7 @@ export async function expectOnLearnerApp(page: Page): Promise<void> {
   }
 
   if (!isLearnerShell(pathname)) {
-    const diag = await describeAuthFailureSurface(page).catch(() => "");
-    throw new Error(`Not on learner shell. url=${url} pathname=${pathname} ${diag}`);
+    throw new Error(`Not on learner shell. url=${url} pathname=${pathname}`);
   }
 }
 
@@ -58,7 +57,6 @@ export async function expectOnPaidSubscriberApp(page: Page): Promise<void> {
     throw new Error(`Invalid page URL for paid learner shell. url=${url} ${diag}`);
   }
   if (!isLearnerShell(pathname)) {
-    const diag = await describeAuthFailureSurface(page).catch(() => "");
-    throw new Error(`Not on learner shell. url=${url} pathname=${pathname} ${diag}`);
+    throw new Error(`Not on learner shell. url=${url} pathname=${pathname}`);
   }
 }

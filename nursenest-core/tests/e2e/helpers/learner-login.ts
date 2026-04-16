@@ -5,7 +5,7 @@
  */
 import type { Page } from "@playwright/test";
 import { describeAuthFailureSurface } from "./auth-diagnostics";
-import { isLearnerShell, PLAYWRIGHT_AUTH_NAV_TIMEOUT_MS, formatLearnerShellMismatch } from "./learner-shell";
+import { isLearnerShell, PLAYWRIGHT_AUTH_NAV_TIMEOUT_MS } from "./learner-shell";
 
 export {
   currentPathname,
@@ -13,7 +13,6 @@ export {
   isLearnerNavInternalHref,
   isLearnerShell,
   LEARNER_SHELL_PATH_EXPECTATION,
-  formatLearnerShellMismatch,
   PLAYWRIGHT_AUTH_NAV_TIMEOUT_MS,
 } from "./learner-shell";
 
@@ -61,15 +60,13 @@ export async function loginWithCredentials(page: Page, email: string, password: 
   if (/Unable to sign in|Invalid email, username, or password|Invalid credentials|incorrect password/i.test(body)) {
     const diag = await describeAuthFailureSurface(page).catch(() => "");
     throw new Error(
-      `Login rejected — check email/password and BASE_URL. ${formatLearnerShellMismatch(atUrl, pathname)} ${diag}`,
+      `Login rejected — check email/password and BASE_URL. Not on learner shell. url=${atUrl} pathname=${pathname} ${diag}`,
     );
   }
   if (pathname.includes("/app/onboarding")) {
-    const diag = await describeAuthFailureSurface(page).catch(() => "");
-    throw new Error(`On /app/onboarding — complete onboarding... ${formatLearnerShellMismatch(atUrl, pathname)} ${diag}`);
+    throw new Error("On /app/onboarding — complete onboarding...");
   }
   if (!isLearnerShell(pathname)) {
-    const diag = await describeAuthFailureSurface(page).catch(() => "");
-    throw new Error(`${formatLearnerShellMismatch(atUrl, pathname)} ${diag}`);
+    throw new Error(`Not on learner shell. url=${atUrl} pathname=${pathname}`);
   }
 }
