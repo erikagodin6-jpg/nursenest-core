@@ -39,6 +39,21 @@ export async function parseHubLessonTotal(page: Page): Promise<number | null> {
   return Number.isFinite(n) ? n : null;
 }
 
+/** When total text is missing, derive max page from pagination number links (preserves `page=` query). */
+export async function parseHubPageCountFromNav(page: Page): Promise<number | null> {
+  const nav = page.getByRole("navigation", { name: "Lesson list pages" });
+  if ((await nav.count()) === 0) return null;
+  let max = 1;
+  const links = nav.locator('a[href*="page="]');
+  const n = await links.count();
+  for (let i = 0; i < n; i++) {
+    const h = await links.nth(i).getAttribute("href");
+    const m = h?.match(/[?&]page=(\d+)/);
+    if (m) max = Math.max(max, Number(m[1]));
+  }
+  return Number.isFinite(max) ? max : null;
+}
+
 /**
  * Scroll the virtualized lesson list until href count stabilizes, then collect unique lesson detail links + optional category chips.
  */
@@ -150,7 +165,7 @@ export async function discoverAllRnLessonLinksFromHub(
 
   const total = await parseHubLessonTotal(page);
   const pageCount =
-    total != null ? Math.max(1, Math.ceil(total / limit)) : 1;
+    total != null ? Math.max(1, Math.ceil(total / limit)) : (await parseHubPageCountFromNav(page)) ?? 1;
 
   const mergeRows = (rows: HubLessonLinkRow[]) => {
     for (const row of rows) {

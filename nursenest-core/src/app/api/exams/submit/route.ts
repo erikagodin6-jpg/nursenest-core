@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { Prisma } from "@prisma/client";
 import { ExamSessionStatus } from "@prisma/client";
 import { z } from "zod";
+import { JSON_BODY_EXAM_SUBMIT, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { prisma } from "@/lib/db";
 import { userCanAccessExam } from "@/lib/entitlements/content-access-scope";
 import { logPaywallDeny } from "@/lib/entitlements/assert-question-access";
@@ -36,6 +37,12 @@ const schema = z
         message: "Provide score and total, or sessionId with answers for server grading",
       });
     }
+    if (data.answers && typeof data.answers === "object" && data.answers !== null) {
+      const n = Object.keys(data.answers as object).length;
+      if (n > 2_500) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: "answers map too large" });
+      }
+    }
   });
 
 export async function POST(req: Request) {
@@ -44,14 +51,10 @@ export async function POST(req: Request) {
 
   setSentryServerContext({ route: "/api/exams/submit", feature: SERVER_FEATURE.exam, userId: gate.userId });
 
-  let body: unknown;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
-  }
+  const rawParsed = await parseJsonBodyWithLimit(req, JSON_BODY_EXAM_SUBMIT);
+  if (!rawParsed.ok) return rawParsed.response;
 
-  const parsed = schema.safeParse(body);
+  const parsed = schema.safeParse(rawParsed.value);
   if (!parsed.success) return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
 
   let score: number;

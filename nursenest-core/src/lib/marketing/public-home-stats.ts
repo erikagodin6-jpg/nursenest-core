@@ -1,5 +1,6 @@
 import { ContentStatus, UserRole } from "@prisma/client";
 import { unstable_cache } from "next/cache";
+import { PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC } from "@/lib/cache/public-edge-cache";
 import {
   DB_PUBLISHED,
   publicMarketingExamQuestionWhere,
@@ -231,15 +232,15 @@ async function computePublicHomeStats(t0: number): Promise<PublicHomeStatsPayloa
   };
 }
 
-/**
- * Short shared TTL for homepage SSR, `/api/public/home-stats`, and learner paywall (same `unstable_cache` key).
- * Bumps the cache key when this value changes so deploys don’t reuse stale windows unexpectedly.
- */
-export const PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC = 300;
+/** Re-export for pages importing from `@/lib/marketing/public-home-stats`. */
+export { PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC } from "@/lib/cache/public-edge-cache";
 
 /** Cached — single source for marketing homepage + public API + paywall layout (no duplicate DB fanout). */
 export const getCachedPublicHomeStats = unstable_cache(
   async () => getPublicHomeStats(),
-  ["public-home-stats-v2", String(PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC)],
-  { revalidate: PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC },
+  ["public-home-stats-v3", String(PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC)],
+  {
+    revalidate: PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC,
+    tags: ["marketing:public-home-stats"],
+  },
 );

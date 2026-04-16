@@ -10,6 +10,7 @@ import { formatTopicLabelForDisplay } from "@/lib/learner/topic-normalize";
 import { normalizeTopicLabel } from "@/lib/learner/weak-topics-from-sessions";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { JSON_BODY_BASELINE_SUBMIT, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -39,17 +40,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  let body: { attemptId?: string; answers?: Record<string, unknown> };
-  try {
-    body = (await req.json()) as { attemptId?: string; answers?: Record<string, unknown> };
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const rawParsed = await parseJsonBodyWithLimit(req, JSON_BODY_BASELINE_SUBMIT);
+  if (!rawParsed.ok) return rawParsed.response;
+
+  const body = rawParsed.value as { attemptId?: string; answers?: Record<string, unknown> };
 
   const attemptId = typeof body.attemptId === "string" && body.attemptId.length > 4 ? body.attemptId : null;
   const answers = body.answers && typeof body.answers === "object" ? body.answers : null;
   if (!attemptId || !answers) {
     return NextResponse.json({ error: "attemptId and answers required" }, { status: 400 });
+  }
+  if (Object.keys(answers).length > 400) {
+    return NextResponse.json({ error: "Too many answer entries", code: "answers_too_large" }, { status: 400 });
   }
 
   const attempt = await prisma.baselineAssessmentAttempt.findFirst({

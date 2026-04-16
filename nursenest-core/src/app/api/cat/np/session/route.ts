@@ -17,6 +17,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { JSON_BODY_LEARNER_CAT, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { prisma } from "@/lib/db";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import {
@@ -54,10 +55,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   if (!session.ok) return session.response;
   const { userId } = session;
 
+  const rawParsed = await parseJsonBodyWithLimit(req, JSON_BODY_LEARNER_CAT);
+  if (!rawParsed.ok) return rawParsed.response;
+
   let body: z.infer<typeof bodySchema>;
   try {
-    const raw = await req.json();
-    body = bodySchema.parse(raw);
+    body = bodySchema.parse(rawParsed.value);
   } catch {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }

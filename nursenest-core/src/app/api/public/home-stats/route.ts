@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { CACHE_HEADER_HOME_STATS } from "@/lib/cache/public-edge-cache";
 import {
   getCachedPublicHomeStats,
   getDegradedPublicHomeStatsFallback,
@@ -14,7 +15,7 @@ export async function GET() {
   return safeJsonRoute("GET /api/public/home-stats", async () => {
     try {
       const data = await getCachedPublicHomeStats();
-      return NextResponse.json(data);
+      return NextResponse.json(data, { headers: CACHE_HEADER_HOME_STATS });
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       safeServerLog("api", "public_home_stats_route_failed", { message: msg.slice(0, 200) });

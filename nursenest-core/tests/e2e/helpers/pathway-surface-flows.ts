@@ -36,7 +36,7 @@ export async function answerOneCatItem(page: Page): Promise<void> {
   await page.waitForLoadState("networkidle", { timeout: 30_000 }).catch(() => {});
 }
 
-function assertCleanObservers(observers: PageObservers, label: string): void {
+export function assertCleanObservers(observers: PageObservers, label: string): void {
   expect(observers.consoleErrors, `[${label}] console: ${observers.consoleErrors.join(" | ")}`).toEqual([]);
   expect(observers.failedRequests, `[${label}] network: ${observers.failedRequests.join(" | ")}`).toEqual([]);
 }
@@ -157,6 +157,52 @@ export async function pathwayQuestionBankSurface(args: {
 
   await expect(main).toBeVisible({ timeout: 60_000 });
   assertCleanObservers(observers, `${surfaceTag}-questions`);
+}
+
+/**
+ * Linear (random/topic) practice exam — matches allied **SIMULATION** readiness
+ * (`pathway-readiness-config.ts`: `us-allied-core` / `ca-allied-core` use `engineType: "SIMULATION"`).
+ * Do **not** use this to claim NCLEX CAT coverage for allied pathways.
+ */
+export async function pathwayLinearPracticeExamSurface(args: {
+  page: Page;
+  pathwayId: string;
+  surfaceTag: string;
+  observers: PageObservers;
+}): Promise<void> {
+  const { page, pathwayId, surfaceTag, observers } = args;
+  await page.goto(`/app/practice-tests?pathwayId=${encodeURIComponent(pathwayId)}`, {
+    waitUntil: "domcontentloaded",
+  });
+  await waitForAuthenticatedLearnerShell(page);
+  await expectNoSubscriptionPaywall(page, `${surfaceTag} practice-tests hub (linear)`);
+
+  const main = learnerAppMainLandmark(page);
+  await expect(main).toBeVisible({ timeout: 120_000 });
+
+  await page.locator("[data-nn-qa-practice-hub-start-test]").click();
+  await page.locator('[data-testid="button-exam-customize-begin"]').click({ timeout: 30_000 });
+  await page.waitForURL(/\/app\/practice-tests\/[a-zA-Z0-9_-]+/, { timeout: 120_000 });
+
+  await expect(page.locator(".nn-question-stem").first()).toBeVisible({ timeout: 120_000 });
+
+  const list = page.locator(".nn-qopt-list").first();
+  await expect(list).toBeVisible({ timeout: 60_000 });
+  const mcBtn = list.locator("button").first();
+  const sataBox = list.locator('input[type="checkbox"]').first();
+  if ((await mcBtn.count()) > 0) {
+    await mcBtn.click();
+  } else if ((await sataBox.count()) > 0) {
+    await sataBox.click();
+  } else {
+    throw new Error("No MC buttons or SATA checkboxes found on practice exam surface.");
+  }
+
+  const next = page.locator(".nn-question-nav-actions__next").first();
+  await expect(next).toBeVisible({ timeout: 30_000 });
+  await next.click();
+
+  assertCleanObservers(observers, `${surfaceTag}-linear-practice`);
 }
 
 export async function pathwayCatSurface(args: {

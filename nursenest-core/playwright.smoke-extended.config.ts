@@ -48,7 +48,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   workers: 1,
-  timeout: 180_000,
+  /** Full RN lesson crawl (`rn-full-content-access.spec.ts`) can run 30–60+ minutes against production-like data. */
+  timeout: 3_600_000,
   expect: { timeout: 45_000 },
   reporter: [["list"]],
   use: {

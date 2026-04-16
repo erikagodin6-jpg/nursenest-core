@@ -14,17 +14,20 @@ export async function boundedSelectOne(
   timeoutMs: number,
 ): Promise<{ ok: true; latencyMs: number } | { ok: false; error: string }> {
   const started = Date.now();
+  let timer: ReturnType<typeof setTimeout> | undefined;
   try {
     await Promise.race([
       prisma.$queryRaw`SELECT 1`,
       new Promise<never>((_, rej) => {
-        setTimeout(() => rej(new Error("database_probe_timeout")), timeoutMs);
+        timer = setTimeout(() => rej(new Error("database_probe_timeout")), timeoutMs);
       }),
     ]);
     return { ok: true, latencyMs: Date.now() - started };
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     return { ok: false, error: msg.slice(0, 240) };
+  } finally {
+    if (timer) clearTimeout(timer);
   }
 }
 

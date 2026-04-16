@@ -17,6 +17,18 @@ export const JSON_BODY_CHECKOUT = 16_384;
 /** Signup wizard — profile fields + captcha token. */
 export const JSON_BODY_SIGNUP = 65_536;
 
+/** Small structured learner POSTs (CAT step, session start) — prevents huge JSON.parse allocations. */
+export const JSON_BODY_LEARNER_CAT = 24_576;
+
+/**
+ * Exam submit / large answer maps — bounded below typical LB body limits; still caps worst-case parse size.
+ * Malicious multi‑MB JSON can OOM the Node heap before zod runs.
+ */
+export const JSON_BODY_EXAM_SUBMIT = 786_432;
+
+/** Baseline assessment submit (`answers` record) — one entry per question id. */
+export const JSON_BODY_BASELINE_SUBMIT = 524_288;
+
 export async function readTextBodyWithByteLimit(
   req: Request,
   maxBytes: number,

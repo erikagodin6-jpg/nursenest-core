@@ -188,6 +188,19 @@ const nextConfig: NextConfig = {
         headers: [{ key: "Cache-Control", value: STATIC_ASSET_CACHE_CONTROL }],
       },
       /**
+       * Anonymous public JSON (`/api/public/*`) — CDN may cache; handlers also set `Cache-Control`.
+       * Must be **before** the `/api/:path*` catch-all so public routes are not forced `no-store`.
+       */
+      {
+        source: "/api/public/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=60, s-maxage=120, stale-while-revalidate=600",
+          },
+        ],
+      },
+      /**
        * Subscriber shell: avoid shared CDN/edge caches serving personalized HTML from one session to another.
        * Complements `dynamic = "force-dynamic"` on `/app` layouts; does not apply to public marketing routes.
        */
@@ -202,19 +215,6 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/app/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "private, no-cache, no-store, must-revalidate",
-          },
-        ],
-      },
-      /**
-       * Authenticated API responses must not be cached by shared proxies/CDNs.
-       * Route handlers still set per-response headers where needed; this is a baseline.
-       */
-      {
-        source: "/api/:path*",
         headers: [
           {
             key: "Cache-Control",

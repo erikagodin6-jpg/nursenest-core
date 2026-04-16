@@ -1,6 +1,7 @@
 /**
  * Defense-in-depth caps for {@link PrismaClient} `findMany` — every list read should set `take`
  * (or use chunked `take` with `id: { in: chunk }`) so a bug or hostile input cannot scan the full table.
+ * For in-memory batching helpers see {@link chunkArray} in `@/lib/server/memory-chunk`.
  *
  * @see nn-db-final-003
  */

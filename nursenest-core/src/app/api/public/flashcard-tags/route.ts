@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { CACHE_HEADER_PUBLIC_LIST } from "@/lib/cache/public-edge-cache";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { publicMarketingFlashcardDeckWhere } from "@/lib/entitlements/content-access-scope";
@@ -23,9 +24,9 @@ export async function GET() {
             take: 80,
             select: { slug: true, name: true },
           });
-          return NextResponse.json({ tags });
+          return NextResponse.json({ tags }, { headers: CACHE_HEADER_PUBLIC_LIST });
         },
-        NextResponse.json({ tags: [] }),
+        NextResponse.json({ tags: [] }, { headers: CACHE_HEADER_PUBLIC_LIST }),
         TAG_QUERY_TIMEOUT_MS,
         { scope: "api_public", label: "flashcard_tags" },
       ),
