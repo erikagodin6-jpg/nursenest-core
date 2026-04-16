@@ -23,7 +23,7 @@ export default function LearnerLessonDetailError({
   const showDetail = shouldShowErrorBoundaryDevDetail();
 
   return (
-    <main className="px-4 py-8">
+    <div className="px-4 py-8">
       <ProductErrorState
         title={t("learner.error.section.title")}
         description={t("learner.error.section.description")}
@@ -42,6 +42,6 @@ export default function LearnerLessonDetailError({
           {t("learner.error.section.dashboard")}
         </Link>
       </p>
-    </main>
+    </div>
   );
 }

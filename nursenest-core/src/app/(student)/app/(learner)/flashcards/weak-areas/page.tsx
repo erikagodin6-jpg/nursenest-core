@@ -20,10 +20,10 @@ export default async function FlashcardWeakAreasPage() {
   }
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-4">
+      <div className="space-y-4">
         <h1 className="text-2xl font-bold">{t("learner.flashcards.weakAreas.heading")}</h1>
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
 

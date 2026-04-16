@@ -39,12 +39,12 @@ export default async function PracticeTestRunPage({ params }: Props) {
 
   if (entitlement === "error") {
     return (
-      <main>
+      <div>
         <div className="mb-4">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
         <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
-      </main>
+      </div>
     );
   }
 
@@ -56,7 +56,7 @@ export default async function PracticeTestRunPage({ params }: Props) {
   if (!entitlement.hasAccess) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
     return (
-      <main>
+      <div>
         <div className="mb-4">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
@@ -65,12 +65,12 @@ export default async function PracticeTestRunPage({ params }: Props) {
         <div className="mt-6">
           <SubscriptionPaywall context="questions" freemiumRemainingQuestions={snap?.questionRemaining ?? 0} />
         </div>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="pt-2 md:pt-4">
+    <div className="pt-2 md:pt-4">
       <ExamSessionErrorBoundary surface="practice_test">
         <PracticeTestRunnerClient
           testId={id}
@@ -80,6 +80,6 @@ export default async function PracticeTestRunPage({ params }: Props) {
           studySettings={studySettings}
         />
       </ExamSessionErrorBoundary>
-    </main>
+    </div>
   );
 }

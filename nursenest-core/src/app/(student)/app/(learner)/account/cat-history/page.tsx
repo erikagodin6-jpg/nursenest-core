@@ -36,7 +36,7 @@ export default async function AccountCatHistoryPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.catHistory.title")}
@@ -47,13 +47,13 @@ export default async function AccountCatHistoryPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.catHistory.title")}
@@ -64,27 +64,27 @@ export default async function AccountCatHistoryPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <div>
           <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.catHistory.title")}</h1>
           <p className="mt-2 text-sm text-muted-foreground">{t("learner.account.catHistory.lockedBody")}</p>
         </div>
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
 
   const rows = await loadLearnerCatHistory(userId);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.catHistory.title")}</h1>
@@ -141,6 +141,6 @@ export default async function AccountCatHistoryPage() {
           </div>
         </section>
       )}
-    </main>
+    </div>
   );
 }

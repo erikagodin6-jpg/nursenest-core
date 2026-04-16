@@ -1,5 +1,6 @@
 import { expect, type Page } from "@playwright/test";
 import type { PageObservers } from "./attach-observers";
+import { learnerShellStudyNavigation } from "./learner-shell-locators";
 import {
   assertNoAuthSessionBlockingBeforeShell,
   assertSyncNotOnboardingBlocking,
@@ -24,9 +25,7 @@ export async function waitForAuthenticatedLearnerShell(
   const ms = opts?.timeoutMs ?? 120_000;
   assertSyncNotOnboardingBlocking(page, "waitForAuthenticatedLearnerShell");
   await expect(page.locator("main")).toBeVisible({ timeout: ms });
-  const primary = page.locator('nav[aria-label="Learner primary actions"]');
-  const bottom = page.locator('nav[aria-label="Learner bottom navigation"]');
-  await expect(primary.or(bottom).first()).toBeVisible({ timeout: Math.min(ms, 90_000) });
+  await expect(learnerShellStudyNavigation(page)).toBeVisible({ timeout: Math.min(ms, 90_000) });
   assertNoAuthSessionBlockingBeforeShell(page);
   markLearnerShellReady(page);
 }
@@ -46,13 +45,13 @@ export async function expectPaidLearnerShellReady(
   await waitForAuthenticatedLearnerShell(page, opts);
 }
 
-/** Stable selector: nav labels come from i18n; href + aria-label on nav is stable. */
+/** Stable: same study links appear in desktop primary nav or mobile bottom nav (exactly one visible). */
 export function learnerPrimaryNavLinkToHref(page: Page, hrefPart: string) {
-  return page.locator(`nav[aria-label="Learner primary actions"] a[href*="${hrefPart}"]`).first();
+  return learnerShellStudyNavigation(page).locator(`a[href*="${hrefPart}"]`).first();
 }
 
 export function learnerBottomNavLinkToHref(page: Page, hrefPart: string) {
-  return page.locator(`nav[aria-label="Learner bottom navigation"] a[href*="${hrefPart}"]`).first();
+  return learnerPrimaryNavLinkToHref(page, hrefPart);
 }
 
 export type PaidSurfaceDebug = {

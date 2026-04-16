@@ -56,7 +56,7 @@ export default function CatInsightsPage() {
     outlooks.length >= 2 && latest != null ? latest - (items[1]?.passOutlookPercent ?? latest) : null;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <div className="mb-4">
         <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
       </div>
@@ -151,6 +151,6 @@ export default function CatInsightsPage() {
           Back to practice tests
         </Link>
       </p>
-    </main>
+    </div>
   );
 }

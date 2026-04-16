@@ -34,7 +34,7 @@ export default async function AccountBillingPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.billing.title")}
@@ -45,14 +45,14 @@ export default async function AccountBillingPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   const payload = await loadBillingPagePayload(userId);
   if (!payload) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.billing.title")}
@@ -63,12 +63,12 @@ export default async function AccountBillingPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
       <BillingPortalReturnBanner />
       <div>
@@ -78,6 +78,6 @@ export default async function AccountBillingPage() {
       <LearnerBillingPageContent payload={payload} t={t} localeTag={localeTag} />
 
       <LearnerAccountCrossLinks variant="billing" t={t} />
-    </main>
+    </div>
   );
 }

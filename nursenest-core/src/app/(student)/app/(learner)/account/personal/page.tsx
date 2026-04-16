@@ -33,7 +33,7 @@ export default async function AccountPersonalPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.personal.title")}
@@ -44,14 +44,14 @@ export default async function AccountPersonalPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   const profile = await loadPersonalProfilePayload(userId);
   if (!profile) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.personal.title")}
@@ -62,12 +62,12 @@ export default async function AccountPersonalPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.personal.title")}</h1>
@@ -77,6 +77,6 @@ export default async function AccountPersonalPage() {
       <LearnerPersonalInfoForm initial={profile} t={t} localeTag={localeTag} />
 
       <LearnerAccountCrossLinks variant="settings" t={t} />
-    </main>
+    </div>
   );
 }

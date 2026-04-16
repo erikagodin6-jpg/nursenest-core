@@ -50,7 +50,7 @@ export default async function GuidedStudyPage() {
 
   if (!isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Guided Study Mode"
@@ -64,7 +64,7 @@ export default async function GuidedStudyPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -73,7 +73,7 @@ export default async function GuidedStudyPage() {
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Guided Study Mode"
@@ -84,16 +84,16 @@ export default async function GuidedStudyPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
 
@@ -101,7 +101,7 @@ export default async function GuidedStudyPage() {
   const payload = await loadGuidedStudyPayload(userId);
 
   return (
-    <main className="space-y-8">
+    <div className="space-y-8">
       <BreadcrumbTrail items={crumbs} />
 
       {/* 1. Hero — surface-emphasis */}
@@ -138,7 +138,7 @@ export default async function GuidedStudyPage() {
       {payload.weakAreas.length > 0 && (
         <WeakAreaContext weakAreas={payload.weakAreas} />
       )}
-    </main>
+    </div>
   );
 }
 

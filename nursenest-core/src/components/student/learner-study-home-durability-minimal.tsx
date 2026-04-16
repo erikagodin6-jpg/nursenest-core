@@ -34,7 +34,7 @@ export function LearnerStudyHomeDurabilityMinimal({
       : "We could not load your full dashboard. Your lessons, practice bank, and flashcards are still available.";
 
   return (
-    <main className="nn-dash nn-dash--learner-home min-w-0 overflow-x-hidden">
+    <div className="nn-dash nn-dash--learner-home min-w-0 overflow-x-hidden">
       <BreadcrumbTrail items={crumbs} />
 
       <header className="nn-dash-page-header nn-dash-page-header--compact nn-dash-page-header--learner-hub">
@@ -84,6 +84,6 @@ export function LearnerStudyHomeDurabilityMinimal({
       >
         <LearnerCoreStudyShortcuts pathwayId={pathwayId} examsLabel={examsNavLabel} t={t} locale={locale} />
       </LearnerStudySurfaceSection>
-    </main>
+    </div>
   );
 }

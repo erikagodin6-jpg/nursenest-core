@@ -32,7 +32,7 @@ export default async function MistakeNotebookPage() {
   // ── Auth guard ──────────────────────────────────────────────────────────────
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Mistake Notebook"
@@ -46,7 +46,7 @@ export default async function MistakeNotebookPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -54,10 +54,10 @@ export default async function MistakeNotebookPage() {
   const entitlement = await resolveEntitlementForPage(userId);
   if (entitlement === "error" || !entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <SubscriptionPaywall context="lessons" />
-      </main>
+      </div>
     );
   }
 
@@ -65,7 +65,7 @@ export default async function MistakeNotebookPage() {
   const data = await loadMistakeNotebookAction(userId);
 
   return (
-    <main className="space-y-8">
+    <div className="space-y-8">
       <BreadcrumbTrail items={crumbs} />
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
@@ -124,6 +124,6 @@ export default async function MistakeNotebookPage() {
         initialData={data}
         drillHrefForTopic={remediationTopicDrillHref}
       />
-    </main>
+    </div>
   );
 }

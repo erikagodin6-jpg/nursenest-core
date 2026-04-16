@@ -95,7 +95,7 @@ export default async function LearnerDashboardPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.dashboard.signedOutTitle")}
@@ -106,7 +106,7 @@ export default async function LearnerDashboardPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -141,7 +141,7 @@ export default async function LearnerDashboardPage() {
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.dashboard.title")}
@@ -152,7 +152,7 @@ export default async function LearnerDashboardPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -183,7 +183,7 @@ export default async function LearnerDashboardPage() {
       alliedProfessionKey: userAlliedProfessionKey,
     });
     return (
-      <main className="nn-dash">
+      <div className="nn-dash">
         <BreadcrumbTrail items={crumbs} />
 
         {/* Page header */}
@@ -213,7 +213,7 @@ export default async function LearnerDashboardPage() {
 
         {/* Full locked dashboard with feature grid + conversion CTAs */}
         <LockedDashboardOverlay />
-      </main>
+      </div>
     );
   }
 

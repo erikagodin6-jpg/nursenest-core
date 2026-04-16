@@ -179,7 +179,7 @@ export function LearnerStudyHome({
     (showCoach && weakTopicTitles.length > 0);
 
   return (
-    <main className="nn-dash nn-dash--learner-home min-w-0 overflow-x-hidden">
+    <div className="nn-dash nn-dash--learner-home min-w-0 overflow-x-hidden">
       <BreadcrumbTrail items={crumbs} />
 
       <header className="nn-dash-page-header nn-dash-page-header--compact nn-dash-page-header--learner-hub">
@@ -431,6 +431,6 @@ export function LearnerStudyHome({
           </LearnerSurface>
         </div>
       </LearnerStudySurfaceSection>
-    </main>
+    </div>
   );
 }

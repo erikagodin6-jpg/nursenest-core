@@ -23,7 +23,7 @@ export default function PracticeTestRunSegmentError({
   const showDetail = process.env.NODE_ENV === "development";
 
   return (
-    <main className="px-4 py-6">
+    <div className="px-4 py-6">
       <ProductErrorState
         title={t("learner.practiceTests.run.loadFailedTitle")}
         description={t("learner.error.section.description")}
@@ -41,6 +41,6 @@ export default function PracticeTestRunSegmentError({
           {t("learner.error.section.dashboard")}
         </Link>
       </p>
-    </main>
+    </div>
   );
 }

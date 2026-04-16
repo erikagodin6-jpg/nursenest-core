@@ -43,7 +43,7 @@ export default async function AccountReadinessPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.readiness.title")}
@@ -54,7 +54,7 @@ export default async function AccountReadinessPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -62,7 +62,7 @@ export default async function AccountReadinessPage() {
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.readiness.title")}
@@ -73,13 +73,13 @@ export default async function AccountReadinessPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.readiness.title")}
@@ -93,7 +93,7 @@ export default async function AccountReadinessPage() {
         />
         <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
 
@@ -101,7 +101,7 @@ export default async function AccountReadinessPage() {
 
   if (!payload) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.readiness.title")}
@@ -112,7 +112,7 @@ export default async function AccountReadinessPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -142,7 +142,7 @@ export default async function AccountReadinessPage() {
       : practice.accuracyPct ?? null;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
 
       {/* Page heading */}
@@ -311,6 +311,6 @@ export default async function AccountReadinessPage() {
 
       {/* ─── Cross-links ─── */}
       <LearnerAccountCrossLinks variant="readiness" t={t} />
-    </main>
+    </div>
   );
 }

@@ -36,7 +36,7 @@ export default async function AccountStudyHistoryPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.studyHistory.title")}
@@ -47,13 +47,13 @@ export default async function AccountStudyHistoryPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.studyHistory.title")}
@@ -64,20 +64,20 @@ export default async function AccountStudyHistoryPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <div>
           <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.studyHistory.title")}</h1>
           <p className="mt-2 text-sm text-muted-foreground">{t("learner.account.studyHistory.lockedBody")}</p>
         </div>
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
 
@@ -91,7 +91,7 @@ export default async function AccountStudyHistoryPage() {
     activity.mocks.length + activity.practiceTests.length + activity.lessons.length;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.studyHistory.title")}</h1>
@@ -185,6 +185,6 @@ export default async function AccountStudyHistoryPage() {
       </div>
 
       <p className="text-center text-xs text-muted-foreground">{t("learner.account.studyHistory.footerNote")}</p>
-    </main>
+    </div>
   );
 }

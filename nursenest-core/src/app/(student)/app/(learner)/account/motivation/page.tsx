@@ -38,7 +38,7 @@ export default async function AccountMotivationPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Progress & Motivation"
@@ -52,7 +52,7 @@ export default async function AccountMotivationPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -60,7 +60,7 @@ export default async function AccountMotivationPage() {
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Progress & Motivation"
@@ -71,13 +71,13 @@ export default async function AccountMotivationPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Progress & Motivation"
@@ -89,7 +89,7 @@ export default async function AccountMotivationPage() {
           ctaLayout="stack"
         />
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
 
@@ -97,7 +97,7 @@ export default async function AccountMotivationPage() {
   const payload = await loadMotivationPayload(userId);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
 
       {/* Page header */}
@@ -176,6 +176,6 @@ export default async function AccountMotivationPage() {
           </a>
         ))}
       </div>
-    </main>
+    </div>
   );
 }

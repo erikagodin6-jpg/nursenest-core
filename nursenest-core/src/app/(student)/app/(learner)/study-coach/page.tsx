@@ -57,7 +57,7 @@ export default async function StudyCoachPage() {
   // ── Auth / DB guard ────────────────────────────────────────────────────────
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Adaptive Study Coach"
@@ -71,7 +71,7 @@ export default async function StudyCoachPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -79,7 +79,7 @@ export default async function StudyCoachPage() {
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Adaptive Study Coach"
@@ -90,13 +90,13 @@ export default async function StudyCoachPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Adaptive Study Coach"
@@ -111,7 +111,7 @@ export default async function StudyCoachPage() {
           ctaLayout="stack"
         />
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
 
@@ -120,7 +120,7 @@ export default async function StudyCoachPage() {
 
   if (!data) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <div className="nn-learner-page-hero">
           <h1 className="text-2xl font-bold" style={{ color: "var(--semantic-text-primary)" }}>
@@ -159,7 +159,7 @@ export default async function StudyCoachPage() {
             </a>
           </div>
         </div>
-      </main>
+      </div>
     );
   }
 
@@ -196,7 +196,7 @@ export default async function StudyCoachPage() {
   const secondaryAction = adaptive.secondary[0] ?? null;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
 
       {/* Page title */}
@@ -284,6 +284,6 @@ export default async function StudyCoachPage() {
           </a>
         ))}
       </div>
-    </main>
+    </div>
   );
 }

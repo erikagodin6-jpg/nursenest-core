@@ -28,10 +28,10 @@ export default async function FlashcardDeckStudyPage({ params, searchParams }: P
   }
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-4">
+      <div className="space-y-4">
         <h1 className="text-2xl font-bold">{t("learner.flashcards.study.heading")}</h1>
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
 

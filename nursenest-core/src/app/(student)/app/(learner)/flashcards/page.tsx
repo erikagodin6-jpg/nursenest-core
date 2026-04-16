@@ -20,11 +20,11 @@ export default async function FlashcardsPage() {
   }
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-4">
+      <div className="space-y-4">
         <h1 className="text-3xl font-bold">{t("learner.flashcards.page.title")}</h1>
         <p className="text-sm text-muted-foreground">{t("learner.flashcards.page.subtitle.locked")}</p>
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
   const pathwayOptions = EXAM_PATHWAYS.map((p) => ({ id: p.id, label: p.displayName }));

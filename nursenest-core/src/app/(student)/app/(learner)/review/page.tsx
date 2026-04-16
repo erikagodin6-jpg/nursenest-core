@@ -64,12 +64,12 @@ export default async function ReviewQueuePage() {
 
   if (!isEntitled) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <div className="mx-auto max-w-2xl">
           <ContextualPaywallCard context="smart_review" />
         </div>
-      </main>
+      </div>
     );
   }
 
@@ -101,7 +101,7 @@ export default async function ReviewQueuePage() {
   ].filter((i) => i.kind === "flashcard");
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
       <h1 className="sr-only">Smart Review Queue</h1>
 
@@ -228,6 +228,6 @@ export default async function ReviewQueuePage() {
           Mistake notebook
         </Link>
       </div>
-    </main>
+    </div>
   );
 }

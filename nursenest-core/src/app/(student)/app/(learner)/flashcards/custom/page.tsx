@@ -12,10 +12,10 @@ export default async function FlashcardCustomPage() {
   }
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-4">
+      <div className="space-y-4">
         <h1 className="text-2xl font-bold">Custom Flashcards Session</h1>
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
   return <FlashcardCustomStudyClient />;

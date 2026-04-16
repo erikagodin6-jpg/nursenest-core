@@ -39,7 +39,7 @@ export default async function AccountReportCardPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.reportCard.title")}
@@ -50,13 +50,13 @@ export default async function AccountReportCardPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.reportCard.title")}
@@ -67,13 +67,13 @@ export default async function AccountReportCardPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.reportCard.title")}
@@ -86,7 +86,7 @@ export default async function AccountReportCardPage() {
           ctaLayout="stack"
         />
         <SubscriptionPaywall context="exams" />
-      </main>
+      </div>
     );
   }
 
@@ -94,7 +94,7 @@ export default async function AccountReportCardPage() {
 
   if (!report) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.reportCard.title")}
@@ -105,7 +105,7 @@ export default async function AccountReportCardPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -124,7 +124,7 @@ export default async function AccountReportCardPage() {
   });
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
       <div className="nn-learner-page-hero">
         <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.account.reportCard.title")}</h1>
@@ -136,6 +136,6 @@ export default async function AccountReportCardPage() {
       <LearnerReportCardPremium data={report} t={t} localeTag={localeTag} />
 
       <LearnerAccountCrossLinks variant="report-card" t={t} weakTopicKey={weakTopicKey} pathwayId={preferredPathwayId} />
-    </main>
+    </div>
   );
 }

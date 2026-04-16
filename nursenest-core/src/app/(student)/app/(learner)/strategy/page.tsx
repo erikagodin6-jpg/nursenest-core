@@ -21,7 +21,7 @@ export default async function StrategyHubPage() {
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <div className="nn-learner-page-hero">
           <h1 className="text-3xl font-bold" style={{ color: "var(--semantic-text-primary)" }}>
             Strategy Trainer
@@ -31,7 +31,7 @@ export default async function StrategyHubPage() {
           </p>
         </div>
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
 
@@ -40,7 +40,7 @@ export default async function StrategyHubPage() {
   const totalQuestions = Object.values(counts).reduce<number>((s, n) => s + (n ?? 0), 0);
 
   return (
-    <main className="mx-auto max-w-4xl space-y-8 px-4 py-6">
+    <div className="mx-auto max-w-4xl space-y-8 px-4 py-6">
       {/* Hero overview */}
       <Suspense fallback={null}>
         <StrategyOverviewSection
@@ -65,6 +65,6 @@ export default async function StrategyHubPage() {
         </div>
         <StrategyPracticeCards counts={counts} />
       </section>
-    </main>
+    </div>
   );
 }

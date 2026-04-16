@@ -30,7 +30,7 @@ export default async function AccountNotesPage() {
   // ── Auth guard ──────────────────────────────────────────────────────────────
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Notes & Highlights"
@@ -44,7 +44,7 @@ export default async function AccountNotesPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -53,7 +53,7 @@ export default async function AccountNotesPage() {
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Notes & Highlights"
@@ -64,16 +64,16 @@ export default async function AccountNotesPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
 
@@ -81,7 +81,7 @@ export default async function AccountNotesPage() {
   const payload = await loadNotesPagePayload(userId);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
@@ -154,7 +154,7 @@ export default async function AccountNotesPage() {
 
       {/* ── Interactive notes list (client component) ─────────────────────── */}
       <NotesIndexClient payload={payload} userId={userId} />
-    </main>
+    </div>
   );
 }
 

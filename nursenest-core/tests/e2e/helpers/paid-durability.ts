@@ -3,6 +3,7 @@
  * and core learner shell health assertions.
  */
 import { expect, type Page, type Response } from "@playwright/test";
+import { learnerShellStudyNavigation } from "./learner-shell-locators";
 
 export type DurabilityPageState = {
   shellReady: boolean;
@@ -174,11 +175,8 @@ export async function assertCoreLearnerDurability(page: Page, step: string): Pro
     throw new Error(`stuckLoadingState: main still marked loading at step "${step}" url=${page.url()}`);
   }
 
-  const primary = page.locator('nav[aria-label="Learner primary actions"]');
-  const bottom = page.locator('nav[aria-label="Learner bottom navigation"]');
-  const nav = primary.or(bottom).first();
   try {
-    await expect(nav).toBeVisible({ timeout: 12_000 });
+    await expect(learnerShellStudyNavigation(page)).toBeVisible({ timeout: 12_000 });
   } catch {
     throw new Error(`shellNotInteractive: learner nav not visible at step "${step}" url=${page.url()}`);
   }

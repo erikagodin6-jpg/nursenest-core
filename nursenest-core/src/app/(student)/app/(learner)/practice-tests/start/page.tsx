@@ -35,19 +35,19 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
 
   if (entitlement === "error") {
     return (
-      <main>
+      <div>
         <div className="mb-4">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
         <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
     return (
-      <main>
+      <div>
         <div className="mb-4">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
@@ -61,7 +61,7 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
           />
         </div>
         <FreemiumPreviewExhaustedSurface kind="cat" />
-      </main>
+      </div>
     );
   }
 
@@ -102,7 +102,7 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
   );
 
   return (
-    <main>
+    <div>
       <div className="mb-4">
         <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
       </div>
@@ -135,6 +135,6 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
           fallbackLessonsByPathway={lessonsByPathway}
         />
       </div>
-    </main>
+    </div>
   );
 }

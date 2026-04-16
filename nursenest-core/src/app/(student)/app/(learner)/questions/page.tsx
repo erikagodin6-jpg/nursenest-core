@@ -25,9 +25,9 @@ export default async function QuestionBankPage() {
 
   if (entitlement === "error") {
     return (
-      <main>
+      <div>
         <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
-      </main>
+      </div>
     );
   }
 
@@ -58,7 +58,7 @@ export default async function QuestionBankPage() {
   if (!entitlement.hasAccess) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <div className="nn-learner-page-hero">
           <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.questions.title")}</h1>
           <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.questions.subtitle.locked")}</p>
@@ -79,7 +79,7 @@ export default async function QuestionBankPage() {
           <FreemiumCrossTrackNudge variant="lessons_exhausted" />
         ) : null}
         {userId && snap && freemiumQuestionsExhausted(snap) ? <FreemiumPreviewExhaustedSurface kind="questions" /> : null}
-      </main>
+      </div>
     );
   }
 
@@ -89,7 +89,7 @@ export default async function QuestionBankPage() {
   const studySettings = userId ? await loadStudySettings(userId) : null;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       {userId ? (
         <Suspense fallback={<p className="text-sm text-muted">{t("learner.loading.questionBank")}</p>}>
           <QuestionBankPracticeSetupClient pathwayId={defaultPathwayId} />
@@ -127,6 +127,6 @@ export default async function QuestionBankPage() {
           </Suspense>
         </section>
       ) : null}
-    </main>
+    </div>
   );
 }

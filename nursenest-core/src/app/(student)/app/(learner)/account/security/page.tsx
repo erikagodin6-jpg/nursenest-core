@@ -33,7 +33,7 @@ export default async function AccountSecurityPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.security.title")}
@@ -44,7 +44,7 @@ export default async function AccountSecurityPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -53,7 +53,7 @@ export default async function AccountSecurityPage() {
   const sessionMaxDays = Math.max(1, Math.round(JWT_SESSION_MAX_AGE_SEC / 86400));
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.security.title")}</h1>
@@ -62,6 +62,6 @@ export default async function AccountSecurityPage() {
       <LearnerSecurityHub hasPassword={hasPassword} sessionMaxDays={sessionMaxDays} />
 
       <LearnerAccountCrossLinks variant="settings" t={t} />
-    </main>
+    </div>
   );
 }

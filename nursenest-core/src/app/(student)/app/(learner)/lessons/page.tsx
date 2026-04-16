@@ -148,7 +148,7 @@ export default async function LessonsPage({ searchParams }: Props) {
   if (!entitlement.hasAccess) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
     return (
-      <main>
+      <div>
         <h1 className="text-3xl font-bold">{t("learner.lessons.list.title")}</h1>
         <p className="mt-2 text-sm text-muted">
           {t("learner.lessons.list.freemiumLead")}{" "}
@@ -173,7 +173,7 @@ export default async function LessonsPage({ searchParams }: Props) {
           <FreemiumCrossTrackNudge variant="questions_exhausted" />
         ) : null}
         {userId && snap && freemiumLessonsExhausted(snap) ? <FreemiumPreviewExhaustedSurface kind="lessons" /> : null}
-      </main>
+      </div>
     );
   }
 
@@ -403,7 +403,7 @@ export default async function LessonsPage({ searchParams }: Props) {
   }
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <div className="nn-learner-page-hero">
         <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)] sm:text-[1.7rem]">
           {t("learner.lessons.list.title")}
@@ -490,6 +490,6 @@ export default async function LessonsPage({ searchParams }: Props) {
         </Link>
         {t("learner.lessons.list.paginationEnd")}
       </p>
-    </main>
+    </div>
   );
 }

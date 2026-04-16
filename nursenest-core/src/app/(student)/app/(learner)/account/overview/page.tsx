@@ -63,7 +63,7 @@ export default async function LearnerAccountOverviewPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.profile.signedOutTitle")}
@@ -74,7 +74,7 @@ export default async function LearnerAccountOverviewPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -198,7 +198,7 @@ export default async function LearnerAccountOverviewPage() {
   });
 
   return (
-    <main className="space-y-7">
+    <div className="space-y-7">
       <BreadcrumbTrail items={crumbs} />
       <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.profile.kicker")}</p>
@@ -633,6 +633,6 @@ export default async function LearnerAccountOverviewPage() {
           </div>
         </section>
       ) : null}
-    </main>
+    </div>
   );
 }

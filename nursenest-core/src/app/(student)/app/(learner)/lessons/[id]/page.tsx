@@ -175,21 +175,21 @@ export default async function LessonDetailPage({ params }: Props) {
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-4">
+      <div className="space-y-4">
         <p className="text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
         <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
           {t("learner.lessons.detail.backToLessons")}
         </Link>
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-4">
+      <div className="space-y-4">
         <p className="text-sm text-muted">{t("learner.lessons.detail.subscriberRequired")}</p>
         <SubscriptionPaywall context="lessons" />
-      </main>
+      </div>
     );
   }
 
@@ -296,12 +296,12 @@ export default async function LessonDetailPage({ params }: Props) {
       });
     }
     return (
-      <main className="space-y-4">
+      <div className="space-y-4">
         <p className="text-sm text-muted">{t("learner.lessons.detail.outOfPlan")}</p>
         <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
           {t("learner.lessons.detail.backToLessons")}
         </Link>
-      </main>
+      </div>
     );
   }
 
@@ -322,7 +322,7 @@ export default async function LessonDetailPage({ params }: Props) {
       }
     }
     return (
-      <main className="nn-lesson-page">
+      <div className="nn-lesson-page">
         <header className="nn-lesson-page-header">
           <Link
             href="/app/lessons"
@@ -370,7 +370,7 @@ export default async function LessonDetailPage({ params }: Props) {
             </Link>
           </div>
         </div>
-      </main>
+      </div>
     );
   }
 
@@ -686,7 +686,7 @@ export default async function LessonDetailPage({ params }: Props) {
     );
 
     return (
-      <main className="nn-lesson-page">
+      <div className="nn-lesson-page">
         {/* ── Premium lesson header ──────────────────────────────────────── */}
         <LessonPageHeader
           title={displayTitle}
@@ -745,7 +745,7 @@ export default async function LessonDetailPage({ params }: Props) {
           {/* ── Sticky section nav sidebar (desktop only) ─────────────── */}
           <LessonSectionNav sections={navSections} />
         </div>
-      </main>
+      </div>
     );
   }
 
@@ -782,7 +782,7 @@ export default async function LessonDetailPage({ params }: Props) {
       })();
 
   return (
-    <main className="nn-lesson-page">
+    <div className="nn-lesson-page">
       <header className="nn-lesson-page-header">
         <Link
           href="/app/lessons"
@@ -839,6 +839,6 @@ export default async function LessonDetailPage({ params }: Props) {
           </Link>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

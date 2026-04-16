@@ -33,14 +33,14 @@ export default async function StrategySessionPage({ params }: Props) {
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <div className="nn-learner-page-hero">
           <h1 className="text-3xl font-bold" style={{ color: "var(--semantic-text-primary)" }}>
             Strategy Practice
           </h1>
         </div>
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
 
@@ -62,7 +62,7 @@ export default async function StrategySessionPage({ params }: Props) {
   ]);
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-6">
+    <div className="mx-auto max-w-5xl px-4 py-6">
       {/* Session header */}
       <div className="mb-6">
         <div className="mb-2 flex items-center gap-2">
@@ -144,6 +144,6 @@ export default async function StrategySessionPage({ params }: Props) {
       ) : (
         <StrategySessionClient initialBatch={initialBatch} counts={counts} />
       )}
-    </main>
+    </div>
   );
 }

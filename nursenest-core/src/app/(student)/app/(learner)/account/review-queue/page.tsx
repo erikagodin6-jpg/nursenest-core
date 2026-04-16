@@ -36,7 +36,7 @@ export default async function AccountReviewQueuePage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.reviewQueue.title")}
@@ -47,13 +47,13 @@ export default async function AccountReviewQueuePage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.reviewQueue.title")}
@@ -64,13 +64,13 @@ export default async function AccountReviewQueuePage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.reviewQueue.title")}
@@ -83,7 +83,7 @@ export default async function AccountReviewQueuePage() {
           ctaLayout="stack"
         />
         <SubscriptionPaywall context="questions" />
-      </main>
+      </div>
     );
   }
 
@@ -91,7 +91,7 @@ export default async function AccountReviewQueuePage() {
   const reviewTopics = topicPerf.weakTopics.slice(0, 8);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.reviewQueue.title")}</h1>
@@ -158,6 +158,6 @@ export default async function AccountReviewQueuePage() {
           {t("learner.account.nav.focusAreas")}
         </Link>
       </div>
-    </main>
+    </div>
   );
 }

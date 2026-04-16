@@ -36,7 +36,7 @@ export default async function StudyPlanPage({ searchParams }: Props) {
   }
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.studyPlan.kicker")}</p>
           <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">{t("learner.studyPlan.title")}</h1>
@@ -44,7 +44,7 @@ export default async function StudyPlanPage({ searchParams }: Props) {
         </div>
         <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
 
@@ -118,7 +118,7 @@ export default async function StudyPlanPage({ searchParams }: Props) {
   }
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.studyPlan.kicker")}</p>
         <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">{t("learner.studyPlan.title")}</h1>
@@ -141,6 +141,6 @@ export default async function StudyPlanPage({ searchParams }: Props) {
       {insightSnapshot ? <LearnerInsightEnginePanel insights={insightSnapshot} /> : null}
 
       <StudyPlanToolGateway />
-    </main>
+    </div>
   );
 }

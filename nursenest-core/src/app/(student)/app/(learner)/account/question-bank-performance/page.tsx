@@ -37,7 +37,7 @@ export default async function AccountQuestionBankPerformancePage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.questionBankPerf.title")}
@@ -48,13 +48,13 @@ export default async function AccountQuestionBankPerformancePage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.questionBankPerf.title")}
@@ -65,20 +65,20 @@ export default async function AccountQuestionBankPerformancePage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <div>
           <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.questionBankPerf.title")}</h1>
           <p className="mt-2 text-sm text-muted-foreground">{t("learner.account.questionBankPerf.lockedBody")}</p>
         </div>
         <SubscriptionPaywall context="questions" />
-      </main>
+      </div>
     );
   }
 
@@ -99,7 +99,7 @@ export default async function AccountQuestionBankPerformancePage() {
   const thinData = !practice || practice.gradedTotal === 0;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.questionBankPerf.title")}</h1>
@@ -185,6 +185,6 @@ export default async function AccountQuestionBankPerformancePage() {
           {t("learner.account.nav.reportCard")}
         </Link>
       </div>
-    </main>
+    </div>
   );
 }

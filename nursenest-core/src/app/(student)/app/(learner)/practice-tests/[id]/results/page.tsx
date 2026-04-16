@@ -53,19 +53,19 @@ export default async function PracticeTestResultsPage({ params }: Props) {
 
   if (entitlement === "error") {
     return (
-      <main>
+      <div>
         <div className="mb-4">
           <BreadcrumbTrail items={RESULTS_CRUMBS} />
         </div>
         <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
     return (
-      <main>
+      <div>
         <div className="mb-4">
           <BreadcrumbTrail items={RESULTS_CRUMBS} />
         </div>
@@ -74,7 +74,7 @@ export default async function PracticeTestResultsPage({ params }: Props) {
         <div className="mt-6">
           <SubscriptionPaywall context="questions" freemiumRemainingQuestions={snap?.questionRemaining ?? 0} />
         </div>
-      </main>
+      </div>
     );
   }
 
@@ -97,7 +97,7 @@ export default async function PracticeTestResultsPage({ params }: Props) {
 
   if (row.status === PracticeTestStatus.ABANDONED) {
     return (
-      <main>
+      <div>
         <div className="mb-4">
           <BreadcrumbTrail items={RESULTS_CRUMBS} />
         </div>
@@ -106,14 +106,14 @@ export default async function PracticeTestResultsPage({ params }: Props) {
         <Link href="/app/practice-tests" className="mt-6 inline-block text-sm font-semibold text-primary underline">
           Back to practice tests
         </Link>
-      </main>
+      </div>
     );
   }
 
   const results = row.results as PracticeTestResultsJson | null;
   if (!results) {
     return (
-      <main>
+      <div>
         <div className="mb-4">
           <BreadcrumbTrail items={RESULTS_CRUMBS} />
         </div>
@@ -123,7 +123,7 @@ export default async function PracticeTestResultsPage({ params }: Props) {
         <Link href={`/app/practice-tests/${id}`} className="mt-4 inline-block text-sm font-semibold text-primary underline">
           Open test
         </Link>
-      </main>
+      </div>
     );
   }
 
@@ -193,7 +193,7 @@ export default async function PracticeTestResultsPage({ params }: Props) {
   }
 
   return (
-    <main>
+    <div>
       <div className="mb-4">
         <BreadcrumbTrail items={RESULTS_CRUMBS} />
       </div>
@@ -221,6 +221,6 @@ export default async function PracticeTestResultsPage({ params }: Props) {
           benchmarkResult={benchmarkResult}
         />
       </div>
-    </main>
+    </div>
   );
 }

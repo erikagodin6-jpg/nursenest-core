@@ -38,7 +38,7 @@ export default async function AccountStudyPreferencesPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.studyPreferences.title")}
@@ -49,7 +49,7 @@ export default async function AccountStudyPreferencesPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -73,7 +73,7 @@ export default async function AccountStudyPreferencesPage() {
   const studySettings = await loadStudySettings(userId);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.studyPreferences.title")}</h1>
@@ -120,6 +120,6 @@ export default async function AccountStudyPreferencesPage() {
       ) : null}
 
       <LearnerAccountCrossLinks variant="settings" t={t} />
-    </main>
+    </div>
   );
 }

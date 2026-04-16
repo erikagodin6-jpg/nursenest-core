@@ -37,7 +37,7 @@ export default async function AccountFocusAreasPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.focusAreas.title")}
@@ -48,13 +48,13 @@ export default async function AccountFocusAreasPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.focusAreas.title")}
@@ -65,20 +65,20 @@ export default async function AccountFocusAreasPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <div>
           <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.focusAreas.title")}</h1>
           <p className="mt-2 text-sm text-muted-foreground">{t("learner.account.focusAreas.lockedBody")}</p>
         </div>
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
 
@@ -89,7 +89,7 @@ export default async function AccountFocusAreasPage() {
   const empty = weak.length === 0 && strong.length === 0;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.focusAreas.title")}</h1>
@@ -183,6 +183,6 @@ export default async function AccountFocusAreasPage() {
           {t("learner.profile.quickLinks.questionBank")}
         </Link>
       </div>
-    </main>
+    </div>
   );
 }

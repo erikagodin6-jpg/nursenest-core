@@ -43,30 +43,30 @@ export default async function LearnerCommandCenterPage() {
   const entitlement = await resolveEntitlementForPage(userId);
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <h1 className="text-2xl font-bold">{t("learner.commandCenter.title")}</h1>
         <p className="mt-2 text-sm text-muted">{t("learner.commandCenter.subtitleLocked")}</p>
         <div className="mt-6">
           <SubscriptionPaywall context="lessons" />
         </div>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
       <LearnerCommandCenterClient />
-    </main>
+    </div>
   );
 }

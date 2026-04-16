@@ -57,7 +57,7 @@ export default async function CoachPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Adaptive Study Coach"
@@ -71,7 +71,7 @@ export default async function CoachPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -79,7 +79,7 @@ export default async function CoachPage() {
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Adaptive Study Coach"
@@ -90,13 +90,13 @@ export default async function CoachPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Adaptive Study Coach"
@@ -111,7 +111,7 @@ export default async function CoachPage() {
           ctaLayout="stack"
         />
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
 
@@ -120,7 +120,7 @@ export default async function CoachPage() {
 
   if (!coachData) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
 
         <div className="nn-learner-page-hero">
@@ -154,14 +154,14 @@ export default async function CoachPage() {
             </a>
           </div>
         </div>
-      </main>
+      </div>
     );
   }
 
   const { readiness, adaptive, passReadiness, benchmark, daysUntilExam, examDatePlanType, streakDays, overallAccuracyPct } = coachData;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
 
       {/* Page header */}
@@ -261,6 +261,6 @@ export default async function CoachPage() {
           </a>
         ))}
       </div>
-    </main>
+    </div>
   );
 }

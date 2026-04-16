@@ -98,7 +98,7 @@ export default async function ExamPlanPage() {
   // ── Not signed in ─────────────────────────────────────────────────────────
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={CRUMBS} />
         <PremiumEmptyState
           headline="My Exam Plan"
@@ -108,14 +108,14 @@ export default async function ExamPlanPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   // ── Entitlement error ─────────────────────────────────────────────────────
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={CRUMBS} />
         <PremiumEmptyState
           headline="My Exam Plan"
@@ -125,7 +125,7 @@ export default async function ExamPlanPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -133,7 +133,7 @@ export default async function ExamPlanPage() {
   if (!entitlement.hasAccess) {
     const snap = await getFreemiumSnapshot(userId);
     return (
-      <main className="space-y-8">
+      <div className="space-y-8">
         <BreadcrumbTrail items={CRUMBS} />
         <div
           className="rounded-2xl p-6 sm:p-8"
@@ -160,7 +160,7 @@ export default async function ExamPlanPage() {
           freemiumRemainingQuestions={snap?.questionRemaining ?? 0}
         />
         <PremiumExamPlanUpgradeCard />
-      </main>
+      </div>
     );
   }
 
@@ -170,7 +170,7 @@ export default async function ExamPlanPage() {
   // No data yet (new user, no practice history)
   if (!data) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={CRUMBS} />
         <PremiumEmptyState
           headline="My Exam Plan"
@@ -183,7 +183,7 @@ export default async function ExamPlanPage() {
           visualLayout="stack"
           ctaLayout="wrap"
         />
-      </main>
+      </div>
     );
   }
 
@@ -233,7 +233,7 @@ export default async function ExamPlanPage() {
   const trendPoints = await loadExamPlanTrendAction().catch(() => []);
 
   return (
-    <main className="space-y-10 pb-16">
+    <div className="space-y-10 pb-16">
       <BreadcrumbTrail items={CRUMBS} />
 
       {/* 1. Hero ──────────────────────────────────────────────────────────── */}
@@ -376,6 +376,6 @@ export default async function ExamPlanPage() {
           </a>
         ))}
       </nav>
-    </main>
+    </div>
   );
 }

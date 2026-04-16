@@ -37,7 +37,7 @@ export default async function AccountAnalyticsPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Analytics"
@@ -51,7 +51,7 @@ export default async function AccountAnalyticsPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -59,7 +59,7 @@ export default async function AccountAnalyticsPage() {
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Analytics"
@@ -70,13 +70,13 @@ export default async function AccountAnalyticsPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline="Analytics"
@@ -88,7 +88,7 @@ export default async function AccountAnalyticsPage() {
           ctaLayout="stack"
         />
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
 
@@ -111,7 +111,7 @@ export default async function AccountAnalyticsPage() {
   const analyticsIntro = emptyStateCopy.noAnalyticsYet();
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
 
       {/* Page header */}
@@ -169,6 +169,6 @@ export default async function AccountAnalyticsPage() {
         initialTopicRows={initialTopicRows}
         confidenceScatterPoints={confidenceScatterPoints}
       />
-    </main>
+    </div>
   );
 }

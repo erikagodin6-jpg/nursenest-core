@@ -27,19 +27,19 @@ export default async function PracticeTestsPage() {
 
   if (entitlement === "error") {
     return (
-      <main>
+      <div>
         <div className="mb-4">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
         <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <div className="mb-4">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
@@ -55,7 +55,7 @@ export default async function PracticeTestsPage() {
           />
         </div>
         <FreemiumPreviewExhaustedSurface kind="cat" />
-      </main>
+      </div>
     );
   }
 
@@ -82,7 +82,7 @@ export default async function PracticeTestsPage() {
   });
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <div className="mb-4">
         <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
       </div>
@@ -105,6 +105,6 @@ export default async function PracticeTestsPage() {
           examSimulationEnabled={isCatExamSimulationFeatureEnabled()}
         />
       </Suspense>
-    </main>
+    </div>
   );
 }

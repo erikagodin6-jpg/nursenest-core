@@ -12,7 +12,7 @@ export function OnboardingPageClient({ userId }: { userId: string }) {
   }, [router]);
 
   return (
-    <main className="flex min-h-[70vh] flex-col items-center justify-center px-4 py-12">
+    <div className="flex min-h-[70vh] flex-col items-center justify-center px-4 py-12">
       <div className="mb-8 text-center">
         <p
           className="mb-2 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider"
@@ -36,6 +36,6 @@ export function OnboardingPageClient({ userId }: { userId: string }) {
         userId={userId}
         onComplete={() => router.replace("/app/start-studying")}
       />
-    </main>
+    </div>
   );
 }

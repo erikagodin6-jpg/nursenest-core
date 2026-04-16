@@ -25,7 +25,7 @@ export default function LessonsError({
   const showDetail = shouldShowErrorBoundaryDevDetail();
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <Link href="/app" className="inline-flex bg-transparent" aria-label={t("brand.homeAriaLabel")}>
         <SiteBrandLogoMark variant="auth" logoVariant="leaf" />
       </Link>
@@ -43,6 +43,6 @@ export default function LessonsError({
         showLeaf
         severity="default"
       />
-    </main>
+    </div>
   );
 }

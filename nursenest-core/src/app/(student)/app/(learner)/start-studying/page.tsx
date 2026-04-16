@@ -131,7 +131,7 @@ export default async function StartStudyingPage() {
   ];
 
   return (
-    <main className="space-y-8">
+    <div className="space-y-8">
       <BreadcrumbTrail items={crumbs} />
 
       <header className="nn-learner-page-hero">
@@ -216,6 +216,6 @@ export default async function StartStudyingPage() {
           </Link>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

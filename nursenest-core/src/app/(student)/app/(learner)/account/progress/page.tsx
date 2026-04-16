@@ -37,7 +37,7 @@ export default async function AccountProgressPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.progress.title")}
@@ -48,7 +48,7 @@ export default async function AccountProgressPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
@@ -56,7 +56,7 @@ export default async function AccountProgressPage() {
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.progress.title")}
@@ -67,13 +67,13 @@ export default async function AccountProgressPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.progress.title")}
@@ -87,7 +87,7 @@ export default async function AccountProgressPage() {
         />
         <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
         <SubscriptionPaywall context="dashboard" />
-      </main>
+      </div>
     );
   }
 
@@ -95,7 +95,7 @@ export default async function AccountProgressPage() {
 
   if (!payload) {
     return (
-      <main className="space-y-6">
+      <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <PremiumEmptyState
           headline={t("learner.account.progress.title")}
@@ -106,12 +106,12 @@ export default async function AccountProgressPage() {
           visualLayout="stack"
           ctaLayout="stack"
         />
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.progress.title")}</h1>
@@ -120,6 +120,6 @@ export default async function AccountProgressPage() {
       <LearnerProgressPageContent data={payload} t={t} localeTag={localeTag} />
 
       <LearnerAccountCrossLinks variant="progress" t={t} continueLesson={payload.continueLesson} />
-    </main>
+    </div>
   );
 }
