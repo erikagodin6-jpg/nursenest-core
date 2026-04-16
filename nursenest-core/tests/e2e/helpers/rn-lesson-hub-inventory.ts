@@ -18,7 +18,47 @@ export const RN_HUB_VIRTUAL_LIST_STABLE_ROUNDS_REQUIRED = 4;
 /** If unique count fails to increase this many times in a row (while not yet stable), abort with diagnostics. */
 export const RN_HUB_VIRTUAL_LIST_MAX_NO_GROWTH_ITERATIONS = 40;
 
+/** Single source of truth for `/app/lessons/:slug` pathname shape (Node + browser evaluate). */
 const LESSON_DETAIL_PATH = /^\/app\/lessons\/[^/]+$/;
+
+function assertLessonDetailPathPattern(): void {
+  const src = LESSON_DETAIL_PATH.source?.trim();
+  if (!src) {
+    throw new Error(
+      "[rn-lesson-hub] LESSON_DETAIL_PATH must be a non-empty RegExp — cannot run DOM lesson link queries",
+    );
+  }
+}
+
+/**
+ * Count unique lesson detail links in `#nn-learner-main` matching {@link LESSON_DETAIL_PATH}.
+ * Pattern is passed into the browser explicitly (no closure over Node RegExp).
+ */
+async function countLessonLinksInDom(page: Page): Promise<number> {
+  assertLessonDetailPathPattern();
+  const patternSource = LESSON_DETAIL_PATH.source;
+  const patternFlags = LESSON_DETAIL_PATH.flags;
+  return page.evaluate(
+    (args: { patternSource: string; patternFlags: string }) => {
+      const pathRe = new RegExp(args.patternSource, args.patternFlags);
+      const seen = new Set<string>();
+      for (const a of document.querySelectorAll('#nn-learner-main a[href^="/app/lessons/"]')) {
+        const href = a.getAttribute("href");
+        if (!href) continue;
+        let path = "";
+        try {
+          path = new URL(href, window.location.origin).pathname;
+        } catch {
+          continue;
+        }
+        if (!pathRe.test(path)) continue;
+        seen.add(path);
+      }
+      return seen.size;
+    },
+    { patternSource, patternFlags },
+  );
+}
 
 export type HubLessonLinkRow = {
   pathname: string;
@@ -77,23 +117,6 @@ export async function parseHubPageCountFromNav(page: Page): Promise<number | nul
   return Number.isFinite(max) ? max : null;
 }
 
-function countLessonLinksInDom(): number {
-  const seen = new Set<string>();
-  for (const a of document.querySelectorAll('#nn-learner-main a[href^="/app/lessons/"]')) {
-    const href = a.getAttribute("href");
-    if (!href) continue;
-    let path = "";
-    try {
-      path = new URL(href, window.location.origin).pathname;
-    } catch {
-      continue;
-    }
-    if (!LESSON_DETAIL_PATH.test(path)) continue;
-    seen.add(path);
-  }
-  return seen.size;
-}
-
 /**
  * Scroll the virtualized lesson list until href count stabilizes, then collect unique lesson detail links + optional category chips.
  */
@@ -119,7 +142,7 @@ export async function scrollVirtualListAndCollectLessonRows(
       el.scrollTop = el.scrollHeight;
     });
     await page.waitForTimeout(80);
-    const n = await page.evaluate(countLessonLinksInDom);
+    const n = await countLessonLinksInDom(page);
 
     if (n === lastSize) {
       stable += 1;
@@ -150,7 +173,7 @@ export async function scrollVirtualListAndCollectLessonRows(
     abortedReason = "max_iterations";
   }
 
-  const finalDomUnique = await page.evaluate(countLessonLinksInDom);
+  const finalDomUnique = await countLessonLinksInDom(page);
   const stabilized =
     stable >= RN_HUB_VIRTUAL_LIST_STABLE_ROUNDS_REQUIRED && finalDomUnique > 0 && abortedReason == null;
 
@@ -161,7 +184,10 @@ export async function scrollVirtualListAndCollectLessonRows(
     );
   }
 
-  const collect = await page.evaluate((hubPageNum) => {
+  assertLessonDetailPathPattern();
+  const collect = await page.evaluate(
+    (args: { hubPageNum: number; patternSource: string; patternFlags: string }) => {
+    const pathRe = new RegExp(args.patternSource, args.patternFlags);
     const out: { pathname: string; href: string; categoryLabel: string | null; hubPage: number }[] = [];
     const seen = new Set<string>();
     let domDuplicateHints = 0;
@@ -174,7 +200,7 @@ export async function scrollVirtualListAndCollectLessonRows(
       } catch {
         continue;
       }
-      if (!/^\/app\/lessons\/[^/]+$/.test(path)) continue;
+      if (!pathRe.test(path)) continue;
       if (seen.has(path)) {
         domDuplicateHints += 1;
         continue;
@@ -199,11 +225,17 @@ export async function scrollVirtualListAndCollectLessonRows(
         pathname: path,
         href: path,
         categoryLabel,
-        hubPage: hubPageNum,
+        hubPage: args.hubPageNum,
       });
     }
     return { rows: out, domDuplicateHints };
-  }, hubPage);
+  },
+  {
+    hubPageNum: hubPage,
+    patternSource: LESSON_DETAIL_PATH.source,
+    patternFlags: LESSON_DETAIL_PATH.flags,
+  },
+  );
 
   return {
     rows: collect.rows,

@@ -191,7 +191,7 @@ const nextConfig: NextConfig = {
       },
       /**
        * Anonymous public JSON (`/api/public/*`) — CDN may cache; handlers also set `Cache-Control`.
-       * Must be **before** the `/api/:path*` catch-all so public routes are not forced `no-store`.
+       * Listed explicitly (no blanket `/api/*` Cache-Control rule) so this policy is not overridden.
        */
       {
         source: "/api/public/:path*",

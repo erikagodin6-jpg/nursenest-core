@@ -9,6 +9,7 @@ import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { recordEntitlementResolveFailureSignal } from "@/lib/observability/production-signal-metrics";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
@@ -44,8 +45,10 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   try {
     entitlement = await resolveEntitlement(userId);
   } catch (e) {
+    const correlationId = correlationIdFromRequest(req);
+    recordEntitlementResolveFailureSignal("api_questions_id", correlationId);
     emitStructuredLog("entitlement_resolve_failed", "error", {
-      correlationId: correlationIdFromRequest(req),
+      correlationId,
       route: "/api/questions/[id]",
       method: "GET",
       flow: "content",

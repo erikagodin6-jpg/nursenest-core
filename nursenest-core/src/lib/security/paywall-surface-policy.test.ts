@@ -54,13 +54,62 @@ describe("paywall surface policy (static checks)", () => {
     assert.match(resolve, /getUserAccess/);
   });
 
-  it("production next.config sets no-cache no-store for /api to avoid shared cache leaks", () => {
+  it("production next.config does not blanket no-store all /api/* (allows /api/public edge cache); sets explicit /api/public policy", () => {
     const nextConfig = readFileSync(join(nursenestCoreRoot, "next.config.ts"), "utf8");
-    assert.match(nextConfig, /source:\s*"\/api\/:path\*"/);
-    assert.match(nextConfig, /private,\s*no-cache,\s*no-store,\s*must-revalidate/);
+    assert.match(nextConfig, /do not set a blanket `no-store` on all `\/api\/\*`/);
+    assert.match(nextConfig, /source:\s*"\/api\/public\/:path\*"/);
+    assert.match(
+      nextConfig,
+      /public,\s*max-age=60,\s*s-maxage=120,\s*stale-while-revalidate=600/,
+    );
+    assert.match(nextConfig, /no blanket `\/api\/\*` Cache-Control rule/);
   });
 
-  it("marketing pathway lesson page gates teaching supplements with fullAccess (ExamTakeaways / memory / traps)", () => {
+  it("marketing pathway lesson server body gates teaching supplements with fullAccess (ExamTakeaways / memory / traps)", () => {
+    const body = readFileSync(
+      join(
+        nursenestCoreRoot,
+        "src",
+        "app",
+        "(marketing)",
+        "(default)",
+        "[locale]",
+        "[slug]",
+        "[examCode]",
+        "lessons",
+        "[lessonSlug]",
+        "pathway-lesson-detail-page-body.tsx",
+      ),
+      "utf8",
+    );
+    assert.match(body, /fullAccess\s*&&\s*lessonHasExamTakeaways/);
+    assert.match(body, /fullAccess\s*&&\s*lesson\.memoryAnchor/);
+    assert.match(body, /fullAccess\s*&&\s*lesson\.studyCommonTraps/);
+  });
+
+  it("marketing pathway lesson server body uses thin client/deferred helpers (no full record across boundaries)", () => {
+    const body = readFileSync(
+      join(
+        nursenestCoreRoot,
+        "src",
+        "app",
+        "(marketing)",
+        "(default)",
+        "[locale]",
+        "[slug]",
+        "[examCode]",
+        "lessons",
+        "[lessonSlug]",
+        "pathway-lesson-detail-page-body.tsx",
+      ),
+      "utf8",
+    );
+    assert.match(body, /toPathwayLessonDeferredServerSnapshot\(/);
+    assert.match(body, /pickPathwayLessonMarketingRecordChipsSource\(/);
+    assert.match(body, /<PathwayLessonQuickReview\s+quickReviewLines=/);
+  });
+
+  it("marketing pathway lesson page.tsx stays a thin shell (body owns paywall render tree)", () => {
     const page = readFileSync(
       join(
         nursenestCoreRoot,
@@ -77,31 +126,8 @@ describe("paywall surface policy (static checks)", () => {
       ),
       "utf8",
     );
-    assert.match(page, /fullAccess\s*&&\s*lessonHasExamTakeaways/);
-    assert.match(page, /fullAccess\s*&&\s*lesson\.memoryAnchor/);
-    assert.match(page, /fullAccess\s*&&\s*lesson\.studyCommonTraps/);
-  });
-
-  it("marketing pathway lesson page uses thin client/deferred helpers (no full record across boundaries)", () => {
-    const page = readFileSync(
-      join(
-        nursenestCoreRoot,
-        "src",
-        "app",
-        "(marketing)",
-        "(default)",
-        "[locale]",
-        "[slug]",
-        "[examCode]",
-        "lessons",
-        "[lessonSlug]",
-        "page.tsx",
-      ),
-      "utf8",
-    );
-    assert.match(page, /toPathwayLessonDeferredServerSnapshot\(/);
-    assert.match(page, /pickPathwayLessonMarketingRecordChipsSource\(/);
-    assert.match(page, /<PathwayLessonQuickReview\s+quickReviewLines=/);
+    assert.match(page, /PathwayLessonDetailPageBody/);
+    assert.match(page, /Subscriber-only supplements/);
   });
 });
 

@@ -12,6 +12,7 @@ This app emits **Sentry Metrics** (when `SENTRY_ENABLED=true`), **structured JSO
 | **DB slow queries** | Sentry: `db.query.slow` (`severity`: `warn` \| `critical`), `db.query.duration_ms`; structured: `scope=db`, `event=slow_query` | `logSlowPrismaQuery` / `production-signal-metrics.ts` (warn > 500 ms, critical > 1000 ms). |
 | **Auth (credential) failures** | Sentry: `auth.login.failure` (`bucket`: `bad_password`, `not_found`, `locked_out`, …); structured: `scope=auth`, `event=credentials_login_failure` | `recordCredentialsLoginFailure` in `src/lib/auth.ts`. |
 | **Checkout failures** | Sentry: `billing.checkout.failure` (`reason`: `unauthorized`, `session_failed`, …); structured: `scope=billing`, `event=checkout_failure` | `recordCheckoutFailure` in `subscriptions/checkout/route.ts`. |
+| **Entitlement resolve failures** | Sentry: `entitlement.resolve.failure` (`surface`: `page` \| `api_questions_id`); structured: `event=entitlement_resolve_failed`, `scope=entitlement` `event=resolve_failed` | `recordEntitlementResolveFailureSignal` in `production-signal-metrics.ts`; thrown `getUserAccess` path. |
 | **Readiness / DB down** | Sentry: `health.ready.failure` (`kind=database`); structured: `scope=health`, `event=ready_database_unavailable` | `GET /api/health/ready` when DB check fails (`health/ready/route.ts`). |
 | **Unhandled errors** | Sentry Issues + performance traces | `@sentry/nextjs` (`sentry.server.config.ts`, `instrumentation.ts`). |
 

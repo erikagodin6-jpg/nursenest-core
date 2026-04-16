@@ -27,6 +27,12 @@ export const ALERT_THRESHOLDS = {
     dbOrSystemFailureCount5m: 5,
   },
 
+  /** `entitlement.resolve.failure` — pairs with structured `entitlement_resolve_failed` (`recordEntitlementResolveFailureSignal`). */
+  entitlement: {
+    /** HIGH: DB/subscription read path failing for signed-in users (trust + paywall surfaces). */
+    resolveFailureCount15m: 15,
+  },
+
   /** `billing.webhook.failure` or log `stripe_webhook` `handler_failed`. */
   billing: {
     /** HIGH: Stripe side effects not applied. */
@@ -57,6 +63,21 @@ export const ALERT_THRESHOLDS = {
   rateLimit: {
     /** MEDIUM: possible attack or misconfigured client. */
     elevated429Count5m: 120,
+  },
+
+  /**
+   * Log-drain alerts: query JSON where `scope === "structured"` and `event` matches `StructuredLogEventName`
+   * (`structured-log.ts`). Tune vs traffic; correlate with `request_end` / `api.route.count` for false positives.
+   */
+  structuredLogDrain: {
+    /** HIGH: sustained 5xx from handlers wrapped with `recordApiRouteTelemetry`. */
+    requestFailedCount5m: 20,
+    /** CRITICAL / HIGH: handler approached platform limits (`NN_ROUTE_TIMEOUT_LOG_MS`, default 45s). */
+    routeTimeoutCount5m: 5,
+    /** MEDIUM: slow handlers (`NN_SLOW_API_ROUTE_MS`) or many `route_degraded` from resilience. */
+    routeDegradedCount15m: 50,
+    /** HIGH: content API / DB issues on questions or lessons routes. */
+    questionOrLessonLoadFailedCount15m: 30,
   },
 
   /** Browser: Sentry issues tagged `feature:unhandledrejection` or high-volume distinct fingerprints. */

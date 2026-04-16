@@ -2,6 +2,8 @@
 
 **Step-by-step incident playbooks:** [`production-incident-runbooks.md`](./production-incident-runbooks.md).
 
+**Signal → severity → metric names:** [`operations-alert-signal-map.md`](./operations-alert-signal-map.md).
+
 Threshold constants live in `src/lib/observability/alert-thresholds.ts` (`ALERT_THRESHOLDS`). Implement alert rules in **Sentry** (metrics + issues), **log drains** (JSON `nn.observability.v1`), or **Vercel** (cron synthetic failures), using the same names below.
 
 **Default owner:** `platform-engineering` — replace with your PagerDuty/Opsgenie rotation in each rule.
@@ -52,6 +54,7 @@ Threshold constants live in `src/lib/observability/alert-thresholds.ts` (`ALERT_
 | --- | --- | --- | --- | --- | --- | --- |
 | Paywall proof unavailable | `marketing.paywall.proof_neutral` ≥ **30** | 15m | `marketing.paywall.proof_neutral` `{ surface }` | platform-engineering | 1) Check `public_home_stats` payload `proofDisplay`. 2) Inspect DB optional read warnings in logs (`home_stats_optional_read_failed`). 3) Fix content counts or DB read path. | [Proof](#proof-runbook) |
 | Question / lesson load errors | `api.route.count` `5xx` `flow:content` ≥ **8** OR sustained 503 on `/api/lessons` / `/api/questions/discovery` | 5m | `api.route.count`, routes `GET /api/lessons`, `GET /api/questions/discovery` | platform-engineering | 1) Sentry stack for route. 2) Prisma errors → [DB](#db-runbook). 3) Check entitlements middleware. | [Content](#content-runbook) |
+| Entitlement resolve failures | `entitlement.resolve.failure` ≥ **15** OR structured `entitlement_resolve_failed` spike | 15m | `entitlement.resolve.failure` `{ surface }` | platform-engineering | 1) Stripe/DB subscription reads (`getUserAccess`). 2) Compare with `db.client.error`. 3) Users see “verify access” / 503 on content. | [Entitlements](#entitlements-runbook) |
 | Auth failure spike | `auth.login.failure` ≥ **40** (filter: exclude only `bad_password` if desired) OR `db_error`/`system_error` ≥ **5** | 5m | `auth.login.failure` `{ bucket }` | platform-engineering | 1) Rate-limit abuse? 2) DB up? 3) Credential provider logs. 4) Lockout false positives. | [Auth](#auth-runbook) |
 | Webhook failures | `billing.webhook.failure` ≥ **3** | 15m | `billing.webhook.failure` `{ phase }` | platform-engineering | 1) Stripe webhook logs + secret. 2) Fix handler; replay events from Stripe dashboard. 3) Verify idempotency table. | [Webhooks](#webhooks-runbook) |
 | Degraded-mode spike | `resilience.auto_degraded.engaged` ≥ **4** | 15m | `resilience.auto_degraded.engaged` | platform-engineering | 1) Read `auto_degraded_mode_enabled` logs (reason). 2) Slow queries / circuit breaker deps. 3) Reduce load; fix DB. | [Degraded](#degraded-runbook) |
@@ -63,6 +66,11 @@ Threshold constants live in `src/lib/observability/alert-thresholds.ts` (`ALERT_
 ### Content runbook
 
 - Lesson list uses `flow:content` telemetry.
+
+### Entitlements runbook
+
+- Surfaces: `page` (RSC `resolveEntitlementForPage`), `api_questions_id` (single-question API).
+- Structured: `entitlement_resolve_failed`; monitoring: `scope: entitlement`, `event: resolve_failed`.
 
 ### Auth runbook
 

@@ -1,5 +1,6 @@
 import { resolveEntitlement, type AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { correlationIdFromHeaders } from "@/lib/observability/request-correlation-headers";
+import { recordEntitlementResolveFailureSignal } from "@/lib/observability/production-signal-metrics";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { productEvent } from "@/lib/observability/product-events";
@@ -16,9 +17,11 @@ export async function resolveEntitlementForPage(userId: string): Promise<PageEnt
   try {
     return await resolveEntitlement(userId);
   } catch (e) {
+    const correlationId = await correlationIdFromHeaders();
     productEvent("entitlement_resolve_failed", { surface: "page" });
+    recordEntitlementResolveFailureSignal("page", correlationId);
     emitStructuredLog("entitlement_resolve_failed", "error", {
-      correlationId: await correlationIdFromHeaders(),
+      correlationId,
       route: "rsc:resolveEntitlementForPage",
       method: "GET",
       flow: "content",

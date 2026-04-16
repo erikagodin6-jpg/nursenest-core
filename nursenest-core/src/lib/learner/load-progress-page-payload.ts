@@ -7,10 +7,12 @@ import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { RoleTrackSlug } from "@/lib/exam-pathways/types";
-import { loadPathwayStudySummaries } from "@/lib/learner/load-learner-dashboard";
+import {
+  loadPathwayLessonProgressBundle,
+  loadPathwayStudySummaries,
+} from "@/lib/learner/load-learner-dashboard";
 import type { RecentMock } from "@/lib/learner/load-learner-dashboard";
 import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
-import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { loadSessionGradingAggregate } from "@/lib/learner/session-grading-aggregate";
 import { loadPathwayTopicCoverageBatch } from "@/lib/lessons/pathway-topic-coverage";
@@ -114,16 +116,18 @@ function sortPathways(a: PathwayProgressCardModel, b: PathwayProgressCardModel):
 export async function loadProgressPagePayload(userId: string, entitlement: AccessScope): Promise<ProgressPagePayload | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { learnerPath: true },
-  });
-  const learnerPath = user?.learnerPath ?? null;
+  const bundle = await loadPathwayLessonProgressBundle(userId, entitlement);
+  if (!bundle) return null;
+
+  const learnerPath = bundle.user.learnerPath ?? null;
   const lessonWhere = lessonAccessWhere(entitlement);
-  const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
+
+  const pathwaySummaries = await loadPathwayStudySummaries(userId, entitlement, {
+    lessonRows: bundle.pathwayLessonRows,
+    pathwayProgress: bundle.pathwayProgressScoped,
+  });
 
   const [
-    pathwayRows,
     contentLessonTotal,
     lessonsCompleted,
     lessonsInProgressCount,
@@ -135,7 +139,6 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
     practiceRecent,
     incompleteProgress,
   ] = await Promise.all([
-    loadPathwayStudySummaries(userId, entitlement),
     prisma.contentItem.count({ where: { ...lessonWhere, type: "lesson" } }),
     prisma.progress.count({ where: { userId, completed: true } }),
     prisma.progress.count({ where: { userId, completed: false } }),
@@ -175,7 +178,7 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
     }),
   ]);
 
-  const pathwayLessonTotal = pathwayRows.reduce((sum, row) => sum + row.lessonsTotal, 0);
+  const pathwayLessonTotal = pathwaySummaries.reduce((sum, row) => sum + row.lessonsTotal, 0);
   const lessonsAvailable = contentLessonTotal + pathwayLessonTotal;
   const notStartedPool = Math.max(0, lessonsAvailable - lessonsCompleted - lessonsInProgressCount);
 
@@ -227,10 +230,10 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
     }
   }
 
-  const pathwayIdList = pathwayRows.map((p) => p.pathwayId);
+  const pathwayIdList = pathwaySummaries.map((p) => p.pathwayId);
   const topicCoverageMap = await loadPathwayTopicCoverageBatch(userId, pathwayIdList);
 
-  const pathways: PathwayProgressCardModel[] = pathwayRows.map((p) => {
+  const pathways: PathwayProgressCardModel[] = pathwaySummaries.map((p) => {
     const def = getExamPathwayById(p.pathwayId);
     const notStarted = Math.max(0, p.lessonsTotal - p.lessonsCompleted - p.lessonsInProgress);
     const pct = p.lessonsTotal > 0 ? Math.round((p.lessonsCompleted / p.lessonsTotal) * 100) : 0;

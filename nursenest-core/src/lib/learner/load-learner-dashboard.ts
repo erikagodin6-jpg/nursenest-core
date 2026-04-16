@@ -1,11 +1,15 @@
 import { TierCode } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import { syntheticPathwayLessonId } from "@/lib/lessons/pathway-lesson-progress";
 import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
+import { PATHWAY_CATALOG_LIST_HARD_CAP } from "@/lib/lessons/pathway-lesson-scale";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import {
   filterTopicRowsForAlliedProfession,
@@ -19,6 +23,7 @@ import {
   type TopicTrendRow,
 } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { normalizeLesson, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-loader";
 
 export type ContinueLesson = {
@@ -58,9 +63,121 @@ export type LearnerDashboardModel = {
   sessionGrading: SessionGradingAggregate;
 };
 
+/** Row shape for dashboard + pathway summaries (full `sections` JSON — required for structural gate). */
+export type PathwayLessonDashboardRow = {
+  id: string;
+  pathwayId: string;
+  slug: string;
+  title: string;
+  topic: string;
+  topicSlug: string;
+  bodySystem: string;
+  previewSectionCount: number;
+  seoTitle: string;
+  seoDescription: string;
+  sections: unknown;
+  locale: string;
+};
+
+export type LearnerDashboardPreload = {
+  pathwayLessonRows: PathwayLessonDashboardRow[];
+  /** When provided with pathway rows, avoids a duplicate `user` query. */
+  userProfile?: {
+    learnerPath: string | null;
+    tier: TierCode | null;
+    alliedProfessionKey: string | null;
+  };
+};
+
+export type PathwayStudySummariesPreload = {
+  lessonRows: PathwayLessonDashboardRow[];
+  pathwayProgress: { lessonId: string; completed: boolean }[];
+};
+
+const PATHWAY_LESSON_SELECT: Prisma.PathwayLessonSelect = {
+  id: true,
+  pathwayId: true,
+  slug: true,
+  title: true,
+  topic: true,
+  topicSlug: true,
+  bodySystem: true,
+  previewSectionCount: true,
+  seoTitle: true,
+  seoDescription: true,
+  sections: true,
+  locale: true,
+};
+
+/**
+ * Single pathway-lesson list for learner dashboard scope (bounded, same cap as catalog hub math).
+ */
+export async function fetchPathwayLessonRowsForDashboard(
+  where: Prisma.PathwayLessonWhereInput,
+): Promise<PathwayLessonDashboardRow[]> {
+  const rows = await prisma.pathwayLesson.findMany({
+    where,
+    select: PATHWAY_LESSON_SELECT,
+    take: PATHWAY_CATALOG_LIST_HARD_CAP,
+  });
+  return rows as PathwayLessonDashboardRow[];
+}
+
+/**
+ * Progress rows only for synthetic ids present in the current pathway lesson inventory (not unbounded `pathway:%`).
+ */
+export async function fetchProgressForPathwayLessonRows(
+  userId: string,
+  rows: Pick<PathwayLessonDashboardRow, "pathwayId" | "slug">[],
+): Promise<{ lessonId: string; completed: boolean }[]> {
+  if (rows.length === 0) return [];
+  const ids = rows.map((r) => syntheticPathwayLessonId(r.pathwayId, r.slug));
+  return prisma.progress.findMany({
+    where: { userId, lessonId: { in: ids } },
+    select: { lessonId: true, completed: true },
+  });
+}
+
+/**
+ * One user read + pathway inventory + scoped progress — reuse across dashboard + summaries to avoid duplicate heavy queries.
+ */
+export async function loadPathwayLessonProgressBundle(
+  userId: string,
+  entitlement: AccessScope,
+): Promise<{
+  user: {
+    learnerPath: string | null;
+    tier: TierCode | null;
+    alliedProfessionKey: string | null;
+  };
+  pathwayLessonRows: PathwayLessonDashboardRow[];
+  pathwayProgressScoped: { lessonId: string; completed: boolean }[];
+} | null> {
+  if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { learnerPath: true, tier: true, alliedProfessionKey: true },
+  });
+  const pathwayWhere = pathwayLessonsAppListWhere(entitlement, user?.learnerPath ?? null);
+  const pathwayLessonRows = await fetchPathwayLessonRowsForDashboard(pathwayWhere);
+  const pathwayProgressScoped = await fetchProgressForPathwayLessonRows(userId, pathwayLessonRows);
+
+  return {
+    user: {
+      learnerPath: user?.learnerPath ?? null,
+      tier: user?.tier ?? null,
+      alliedProfessionKey: user?.alliedProfessionKey ?? null,
+    },
+    pathwayLessonRows,
+    pathwayProgressScoped,
+  };
+}
+
 export async function loadLearnerDashboard(
   userId: string,
   entitlement: AccessScope,
+  preload?: LearnerDashboardPreload | null,
 ): Promise<LearnerDashboardModel | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) {
     return null;
@@ -69,67 +186,56 @@ export async function loadLearnerDashboard(
   const tier = String(entitlement.tier ?? "");
   const country = String(entitlement.country ?? "");
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { learnerPath: true, tier: true, alliedProfessionKey: true },
-  });
+  const user =
+    preload?.userProfile ??
+    (await prisma.user.findUnique({
+      where: { id: userId },
+      select: { learnerPath: true, tier: true, alliedProfessionKey: true },
+    }));
   const learnerPath = user?.learnerPath ?? null;
 
   const lessonWhere = lessonAccessWhere(entitlement);
-  const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
 
-  const [contentLessonTotal, pathwayLessonRows, lessonsCompleted, incompleteProgress] = await Promise.all([
-    prisma.contentItem.count({ where: { ...lessonWhere, type: "lesson" } }),
-    prisma.pathwayLesson.findMany({
-      where: pathwayWhere,
-      select: {
-        id: true,
-        pathwayId: true,
-        slug: true,
-        title: true,
-        topic: true,
-        topicSlug: true,
-        bodySystem: true,
-        previewSectionCount: true,
-        seoTitle: true,
-        seoDescription: true,
-        sections: true,
-        locale: true,
-      },
-      take: 2000,
-    }),
-    prisma.progress.count({ where: { userId, completed: true } }),
-    prisma.progress.findFirst({
-      where: { userId, completed: false },
-      orderBy: { updatedAt: "desc" },
-      select: { lessonId: true },
-    }),
-  ]);
+  const pathwayLessonRows =
+    preload?.pathwayLessonRows ??
+    (await fetchPathwayLessonRowsForDashboard(pathwayLessonsAppListWhere(entitlement, learnerPath)));
+
+  const [contentLessonTotal, lessonsCompleted, incompleteProgress, exam14dSum, recentMocksRaw] =
+    await Promise.all([
+      prisma.contentItem.count({ where: { ...lessonWhere, type: "lesson" } }),
+      prisma.progress.count({ where: { userId, completed: true } }),
+      prisma.progress.findFirst({
+        where: { userId, completed: false },
+        orderBy: { updatedAt: "desc" },
+        select: { lessonId: true },
+      }),
+      prisma.examAttempt.aggregate({
+        where: {
+          userId,
+          createdAt: { gte: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000) },
+        },
+        _sum: { total: true },
+      }),
+      prisma.examAttempt.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        take: 5,
+        select: {
+          id: true,
+          score: true,
+          total: true,
+          createdAt: true,
+          exam: { select: { title: true } },
+        },
+      }),
+    ]);
 
   const pathwayLessonTotal = pathwayLessonRows.filter((row) =>
     normalizeLesson(pathwayLessonRowToInput(row), row.pathwayId).structuralQuality?.publicComplete,
   ).length;
   const lessonsAvailable = contentLessonTotal + pathwayLessonTotal;
 
-  const since = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
-  const recentAttempts = await prisma.examAttempt.findMany({
-    where: { userId, createdAt: { gte: since } },
-    select: { total: true },
-  });
-  const questionsInMocksLast14d = recentAttempts.reduce((sum, a) => sum + a.total, 0);
-
-  const recentMocksRaw = await prisma.examAttempt.findMany({
-    where: { userId },
-    orderBy: { createdAt: "desc" },
-    take: 5,
-    select: {
-      id: true,
-      score: true,
-      total: true,
-      createdAt: true,
-      exam: { select: { title: true } },
-    },
-  });
+  const questionsInMocksLast14d = exam14dSum._sum.total ?? 0;
 
   const recentMocks: RecentMock[] = recentMocksRaw.map((a) => ({
     id: a.id,
@@ -140,46 +246,56 @@ export async function loadLearnerDashboard(
     at: a.createdAt.toISOString(),
   }));
 
+  const skipHeavy = shouldSkipNonCriticalLearnerWork();
+
   let weakTopics: WeakTopicRow[] = [];
   let strongTopics: WeakTopicRow[] = [];
   let topicTrends: TopicTrendRow[] = [];
   let topicPerformance: TopicPerformanceSnapshot | null = null;
   let recommendedQuizTopic: string | null = null;
   let practiceAgg = { correct: 0, total: 0, sessionCount: 0 };
-  try {
-    const perf = await loadUnifiedTopicPerformance(userId, entitlement, 8);
-    topicPerformance = perf;
-    weakTopics = perf.weakTopics;
-    strongTopics = perf.strongTopics;
-    topicTrends = perf.trends;
-    recommendedQuizTopic = perf.recommendedQuizTopic ?? perf.weakTopics[0]?.topic ?? null;
-  } catch {
-    weakTopics = [];
-    strongTopics = [];
-    topicTrends = [];
-    topicPerformance = null;
-    recommendedQuizTopic = null;
-  }
 
-  if (user?.tier === TierCode.ALLIED && user.alliedProfessionKey) {
-    const ap = getAlliedProfessionByProfessionKey(user.alliedProfessionKey);
-    weakTopics = filterWeakTopicsForAlliedProfession(weakTopics, ap);
-    strongTopics = filterWeakTopicsForAlliedProfession(strongTopics, ap);
-    topicTrends = filterTopicRowsForAlliedProfession(topicTrends, ap);
-    recommendedQuizTopic = weakTopics[0]?.topic ?? null;
-    if (topicPerformance) {
-      topicPerformance = {
-        ...topicPerformance,
-        weakTopics,
-        strongTopics,
-        trends: topicTrends,
-      };
+  if (skipHeavy) {
+    safeServerLog("learner_dashboard", "optional_aggregates_skipped", {
+      reason: "durability_degraded",
+      surface: "topic_performance_and_session_grading",
+    });
+  } else {
+    try {
+      const perf = await loadUnifiedTopicPerformance(userId, entitlement, 8);
+      topicPerformance = perf;
+      weakTopics = perf.weakTopics;
+      strongTopics = perf.strongTopics;
+      topicTrends = perf.trends;
+      recommendedQuizTopic = perf.recommendedQuizTopic ?? perf.weakTopics[0]?.topic ?? null;
+    } catch {
+      weakTopics = [];
+      strongTopics = [];
+      topicTrends = [];
+      topicPerformance = null;
+      recommendedQuizTopic = null;
     }
-  }
-  try {
-    practiceAgg = await loadSessionGradingAggregate(userId, entitlement, 8);
-  } catch {
-    practiceAgg = { correct: 0, total: 0, sessionCount: 0 };
+
+    if (user?.tier === TierCode.ALLIED && user.alliedProfessionKey) {
+      const ap = getAlliedProfessionByProfessionKey(user.alliedProfessionKey);
+      weakTopics = filterWeakTopicsForAlliedProfession(weakTopics, ap);
+      strongTopics = filterWeakTopicsForAlliedProfession(strongTopics, ap);
+      topicTrends = filterTopicRowsForAlliedProfession(topicTrends, ap);
+      recommendedQuizTopic = weakTopics[0]?.topic ?? null;
+      if (topicPerformance) {
+        topicPerformance = {
+          ...topicPerformance,
+          weakTopics,
+          strongTopics,
+          trends: topicTrends,
+        };
+      }
+    }
+    try {
+      practiceAgg = await loadSessionGradingAggregate(userId, entitlement, 8);
+    } catch {
+      practiceAgg = { correct: 0, total: 0, sessionCount: 0 };
+    }
   }
 
   let continueLesson: ContinueLesson | null = null;
@@ -227,6 +343,7 @@ export async function loadLearnerDashboard(
 export async function loadPathwayStudySummaries(
   userId: string,
   entitlement: AccessScope,
+  preload?: PathwayStudySummariesPreload | null,
 ): Promise<
   {
     pathwayId: string;
@@ -239,55 +356,29 @@ export async function loadPathwayStudySummaries(
 > {
   if (!entitlement.hasAccess || !isDatabaseUrlConfigured()) return [];
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { learnerPath: true },
-  });
-  const learnerPath = user?.learnerPath ?? null;
-
   const pathways = listPathwaysCompatibleWithSubscription(entitlement);
   if (pathways.length === 0) return [];
 
-  // `baseWhere` already includes `pathwayId: { in: [...] }` so the groupBy is pathway-scoped.
-  const baseWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
+  let lessonRows: PathwayLessonDashboardRow[];
+  let allPathwayProgress: { lessonId: string; completed: boolean }[];
 
-  // Two queries regardless of pathway count (was 3N sequential).
-  const [lessonRows, allPathwayProgress] = await Promise.all([
-    prisma.pathwayLesson.findMany({
-      where: baseWhere,
-      select: {
-        pathwayId: true,
-        slug: true,
-        title: true,
-        topic: true,
-        topicSlug: true,
-        bodySystem: true,
-        previewSectionCount: true,
-        seoTitle: true,
-        seoDescription: true,
-        sections: true,
-        locale: true,
-      },
-      take: 2500,
-    }).catch(() => [] as Array<{
-      pathwayId: string;
-      slug: string;
-      title: string;
-      topic: string;
-      topicSlug: string;
-      bodySystem: string;
-      previewSectionCount: number;
-      seoTitle: string;
-      seoDescription: string;
-      sections: unknown;
-      locale: string;
-    }>),
-    // Batch: all completed/in-progress pathway lessons for this user, aggregated in memory.
-    prisma.progress.findMany({
-      where: { userId, lessonId: { startsWith: "pathway:" } },
-      select: { lessonId: true, completed: true },
-    }).catch(() => [] as { lessonId: string; completed: boolean }[]),
-  ]);
+  if (preload?.lessonRows && preload.pathwayProgress) {
+    lessonRows = preload.lessonRows;
+    allPathwayProgress = preload.pathwayProgress;
+  } else {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { learnerPath: true },
+    });
+    const learnerPath = user?.learnerPath ?? null;
+    const baseWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
+    lessonRows = await fetchPathwayLessonRowsForDashboard(baseWhere).catch(
+      () => [] as PathwayLessonDashboardRow[],
+    );
+    allPathwayProgress = await fetchProgressForPathwayLessonRows(userId, lessonRows).catch(
+      () => [] as { lessonId: string; completed: boolean }[],
+    );
+  }
 
   const totalsByPathway = new Map<string, number>();
   for (const row of lessonRows) {
@@ -297,7 +388,6 @@ export async function loadPathwayStudySummaries(
     totalsByPathway.set(row.pathwayId, (totalsByPathway.get(row.pathwayId) ?? 0) + 1);
   }
 
-  // Parse "pathway:{pathwayId}:{slug}" and tally per pathwayId.
   const progressByPathway = new Map<string, { completed: number; inProgress: number }>();
   for (const r of allPathwayProgress) {
     const rest = r.lessonId.slice("pathway:".length);

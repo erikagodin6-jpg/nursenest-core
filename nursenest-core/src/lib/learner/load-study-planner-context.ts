@@ -3,6 +3,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import {
   loadLearnerDashboard,
+  loadPathwayLessonProgressBundle,
   loadPathwayStudySummaries,
   type LearnerDashboardModel,
 } from "@/lib/learner/load-learner-dashboard";
@@ -21,9 +22,18 @@ export async function loadStudyPlannerContext(
 ): Promise<StudyPlannerContext | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
 
+  const bundle = await loadPathwayLessonProgressBundle(userId, entitlement);
+  if (!bundle) return null;
+
   const [dashboard, pathways, user] = await Promise.all([
-    loadLearnerDashboard(userId, entitlement),
-    loadPathwayStudySummaries(userId, entitlement),
+    loadLearnerDashboard(userId, entitlement, {
+      pathwayLessonRows: bundle.pathwayLessonRows,
+      userProfile: bundle.user,
+    }),
+    loadPathwayStudySummaries(userId, entitlement, {
+      lessonRows: bundle.pathwayLessonRows,
+      pathwayProgress: bundle.pathwayProgressScoped,
+    }),
     prisma.user.findUnique({
       where: { id: userId },
       select: { dailyStudyMinutes: true, examFocus: true, studyGoal: true },

@@ -65,6 +65,36 @@ describe("security regression (source contracts)", () => {
     assert.match(src, /getInMemoryRateLimitStoreSingleton\(\)\.check/);
   });
 
+  it("unified meta read fails closed in production when Postgres is unavailable", () => {
+    const src = readFileSync(
+      join(nursenestCoreRoot, "src", "lib", "http", "rate-limit-unified.ts"),
+      "utf8",
+    );
+    assert.match(src, /readRateLimitWindowCountUnified/);
+    assert.match(src, /rate_limit_meta_read_degraded/);
+    assert.match(src, /fail_closed_count_max/);
+  });
+
+  it("Postgres RL check() binds prisma before $transaction", () => {
+    const src = readFileSync(
+      join(nursenestCoreRoot, "src", "lib", "http", "rate-limit-distributed.ts"),
+      "utf8",
+    );
+    const checkIdx = src.indexOf("async check(");
+    assert.ok(checkIdx >= 0);
+    const checkBlock = src.slice(checkIdx, checkIdx + 400);
+    assert.match(checkBlock, /const prisma = await getPrisma\(\)/);
+    assert.match(checkBlock, /\$transaction/);
+  });
+
+  it("global API RL uses shared store for 429 streak + abuse strike (not process-local Maps)", () => {
+    const src = readFileSync(join(nursenestCoreRoot, "src", "lib", "server", "rate-limit.ts"), "utf8");
+    assert.match(src, /consumeRateLimitUnified\(/);
+    assert.match(src, /readRateLimitWindowCountUnified\(/);
+    assert.match(src, /ratelimit:meta:429_streak:ip:/);
+    assert.match(src, /ratelimit:meta:abuse_strike:ip:/);
+  });
+
   it("admin/debug API routes do not use requireAdmin(_req)", () => {
     const out = execSync(
       `cd "${nursenestCoreRoot}" && (rg -l 'requireAdmin\\(_req\\)' src/app/api/admin src/app/api/debug 2>/dev/null || true)`,

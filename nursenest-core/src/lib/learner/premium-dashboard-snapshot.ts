@@ -8,7 +8,12 @@ import {
   loadLessonContinuationRows,
   type LessonContinuationRow,
 } from "@/lib/learner/pathway-lesson-continuation";
-import { loadLearnerDashboard, loadPathwayStudySummaries, type RecentMock } from "@/lib/learner/load-learner-dashboard";
+import {
+  loadLearnerDashboard,
+  loadPathwayLessonProgressBundle,
+  loadPathwayStudySummaries,
+  type RecentMock,
+} from "@/lib/learner/load-learner-dashboard";
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
 
 export type PathwayProgressRow = {
@@ -241,11 +246,20 @@ export async function loadPremiumDashboardSnapshot(
 ): Promise<PremiumDashboardSnapshot | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
 
-  const dash = await loadLearnerDashboard(userId, entitlement);
+  const bundle = await loadPathwayLessonProgressBundle(userId, entitlement);
+  if (!bundle) return null;
+
+  const dash = await loadLearnerDashboard(userId, entitlement, {
+    pathwayLessonRows: bundle.pathwayLessonRows,
+    userProfile: bundle.user,
+  });
   if (!dash) return null;
 
   const [pathwayRaw, streakDays, topStrongTopic, userRow] = await Promise.all([
-    loadPathwayStudySummaries(userId, entitlement),
+    loadPathwayStudySummaries(userId, entitlement, {
+      lessonRows: bundle.pathwayLessonRows,
+      pathwayProgress: bundle.pathwayProgressScoped,
+    }),
     loadStudyStreakDays(userId),
     topStrongTopicFromLedger(userId),
     prisma.user.findUnique({

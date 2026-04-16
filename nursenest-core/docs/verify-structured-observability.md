@@ -69,3 +69,5 @@
 | Signup / password | `signup_failed`, `password_reset_failed` | Auth flows. |
 
 **Wrapped routes** (emit `request_end`, `route_degraded`, `route_timeout`): include `GET /api/lessons`, `GET /api/questions`, `GET /api/questions/discovery`, `GET /api/questions/[id]`, `POST /api/exams/start`, `POST /api/subscriptions/checkout`, `POST /api/subscriptions/webhook`, `GET /api/public/home-stats`, synthetic cron — not every `/api/*` route.
+
+**Alert thresholds:** Numeric defaults for drains + Sentry are in `src/lib/observability/alert-thresholds.ts`. Operator-facing map: `docs/operations-alert-signal-map.md`.

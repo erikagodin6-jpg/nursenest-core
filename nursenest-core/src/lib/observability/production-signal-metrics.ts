@@ -219,6 +219,24 @@ export function recordPaywallProofNeutral(surface: "fallback" | "safe_mode" | "p
   });
 }
 
+/**
+ * DB-backed entitlement read threw after auth — user sees fallback / 503; alert on spike vs traffic.
+ * Structured `entitlement_resolve_failed` is emitted at call sites; this adds Sentry Metrics + `nn.observability.v1` for dashboards.
+ */
+export function recordEntitlementResolveFailureSignal(
+  surface: "page" | "api_questions_id",
+  correlationId?: string,
+): void {
+  sentryCount("entitlement.resolve.failure", 1, { surface });
+  emitMonitoringRecord({
+    scope: "entitlement",
+    event: "resolve_failed",
+    severity: "error",
+    correlationId,
+    meta: { surface },
+  });
+}
+
 /** Auto-degraded mode engaged (slow-query / circuit burst) — skips Tier-2 learner work. */
 export function recordAutoDegradedEngaged(reasonPrefix: string): void {
   const reason = reasonPrefix.slice(0, 48);

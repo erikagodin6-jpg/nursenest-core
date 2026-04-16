@@ -9,7 +9,12 @@ import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { answerMatches } from "@/lib/exams/score-session-answers";
 import { sanitizeSessionQuestionIds } from "@/lib/exams/exam-session-bounds";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
-import { loadLearnerDashboard, loadPathwayStudySummaries, type RecentMock } from "@/lib/learner/load-learner-dashboard";
+import {
+  loadLearnerDashboard,
+  loadPathwayLessonProgressBundle,
+  loadPathwayStudySummaries,
+  type RecentMock,
+} from "@/lib/learner/load-learner-dashboard";
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
 import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
@@ -198,14 +203,23 @@ function gradeSessionAgainstMap(
 export async function loadReportCardData(userId: string, entitlement: AccessScope): Promise<ReportCardData | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
 
-  const dash = await loadLearnerDashboard(userId, entitlement);
+  const bundle = await loadPathwayLessonProgressBundle(userId, entitlement);
+  if (!bundle) return null;
+
+  const dash = await loadLearnerDashboard(userId, entitlement, {
+    pathwayLessonRows: bundle.pathwayLessonRows,
+    userProfile: bundle.user,
+  });
   if (!dash) return null;
 
   const pathwayOptions = listPathwaysCompatibleWithSubscription(entitlement);
   const pathwayLabelById = new Map(pathwayOptions.map((p) => [p.id, p.shortName || p.displayName]));
 
   const [pathwayRaw, sessions, mockAttempts, practiceRows] = await Promise.all([
-    loadPathwayStudySummaries(userId, entitlement),
+    loadPathwayStudySummaries(userId, entitlement, {
+      lessonRows: bundle.pathwayLessonRows,
+      pathwayProgress: bundle.pathwayProgressScoped,
+    }),
     prisma.examSession.findMany({
       where: { userId, status: ExamSessionStatus.COMPLETED },
       orderBy: { updatedAt: "desc" },
