@@ -96,8 +96,8 @@ export { defaultNursingExamMarketingHub, HUB, CANONICAL_LEARNER_ROUTES };
 export { buildLearnerPrimaryNavItems, learnerPrimaryNavLabelKey, type LearnerExamsSurfaceLabel };
 
 /**
- * Ordered learner study links for footer “Explore” when `navMode === "learner"` — same hrefs as
- * {@link buildLearnerPrimaryNavItems} (header + learner shell).
+ * Ordered learner study links — same hrefs as {@link buildLearnerPrimaryNavItems} (learner shell).
+ * Marketing chrome keeps public “Explore” links; these remain for in-app / learner surfaces.
  */
 export function learnerPrimaryStudyDestinations(
   pathwayId: string | null,

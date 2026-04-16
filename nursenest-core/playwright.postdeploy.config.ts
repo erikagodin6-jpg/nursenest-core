@@ -4,6 +4,7 @@
  *   BASE_URL=https://www.example.com npm run qa:postdeploy
  *
  * @see docs/RELEASE_QA.md
+ * @see docs/release-verification.md
  */
 import "./playwright.env";
 import { defineConfig, devices } from "@playwright/test";

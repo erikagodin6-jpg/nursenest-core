@@ -24,8 +24,8 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   return NextResponse.json({ exam });
 }
 
-export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string }> }) {
-  const gate = await requireAdmin(_req);
+export async function DELETE(req: Request, ctx: { params: Promise<{ id: string }> }) {
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
   const { id } = await ctx.params;
   await prisma.exam.delete({ where: { id } });

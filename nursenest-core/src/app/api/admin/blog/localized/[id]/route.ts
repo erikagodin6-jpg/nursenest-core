@@ -100,8 +100,8 @@ const adminFullSelect = {
   updatedAt: true,
 } as const;
 
-export async function GET(_req: Request, { params }: Props) {
-  const gate = await requireAdmin(_req);
+export async function GET(req: Request, { params }: Props) {
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { id } = await params;
@@ -247,8 +247,8 @@ export async function PATCH(req: NextRequest, { params }: Props) {
   return NextResponse.json({ article: updated });
 }
 
-export async function DELETE(_req: Request, { params }: Props) {
-  const gate = await requireAdmin(_req);
+export async function DELETE(req: Request, { params }: Props) {
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { id } = await params;

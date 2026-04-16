@@ -3,6 +3,7 @@
  * Complements behavioral tests in pathway-entitlements, json-body-limit, stripe policy, etc.
  */
 import assert from "node:assert/strict";
+import { execSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -51,6 +52,25 @@ describe("security regression (source contracts)", () => {
       "utf8",
     );
     assert.match(src, /requireAdmin\(req\)/);
+  });
+
+  it("unified rate limit fails closed in production when Postgres path throws", () => {
+    const src = readFileSync(
+      join(nursenestCoreRoot, "src", "lib", "http", "rate-limit-unified.ts"),
+      "utf8",
+    );
+    assert.match(src, /NODE_ENV === "production"/);
+    assert.match(src, /logRateLimitPgUnavailableOnce/);
+    assert.match(src, /return \{ ok: false, remaining: 0 \}/);
+    assert.match(src, /checkRateLimit\(key, opts\)/);
+  });
+
+  it("admin/debug API routes do not use requireAdmin(_req)", () => {
+    const out = execSync(
+      `cd "${nursenestCoreRoot}" && (rg -l 'requireAdmin\\(_req\\)' src/app/api/admin src/app/api/debug 2>/dev/null || true)`,
+      { encoding: "utf8" },
+    ).trim();
+    assert.equal(out, "", "use requireAdmin(req) so RBAC sees the invoked URL");
   });
 
   it("questions list enforces pageSize cap and skip ceiling", () => {

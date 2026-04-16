@@ -92,6 +92,16 @@ npm run qa:post-deploy-smoke
 npm run qa:postdeploy
 ```
 
+### Post-deploy — full verification (health + core user journeys)
+
+Runs minimal health/home, then the curated smoke bundle (auth, pricing, mobile, paid/free/admin when creds are set). See **`docs/release-verification.md`**.
+
+```bash
+cd nursenest-core
+export BASE_URL="https://www.nursenest.ca"
+npm run qa:verify:production
+```
+
 ### Local emergency smoke (fastest signal)
 
 ```bash
@@ -122,6 +132,10 @@ npm run test:e2e:paid-fast-sanity
 | `npm run qa:important-regression` | CI master paid bundle + public pre-deploy |
 | `npm run qa:post-deploy-smoke` | Post-deploy health + home (`playwright.postdeploy.config.ts`) |
 | `npm run qa:postdeploy` | Same as `qa:post-deploy-smoke` |
+| `npm run qa:verify:production` | Post-deploy smoke **+** core journey bundle (`scripts/verify-production-release.mjs`) |
+| `npm run qa:verify:production:core` | Core journey bundle only (`playwright.verify-production.config.ts`) |
+| `npm run qa:smoke` | Minimal four-group smoke (`tests/e2e/smoke-production`) |
+| `npm run qa:smoke:extended` | Legacy broad `tests/e2e/smoke` suite |
 | `npm run qa:smoke:emergency` | Health APIs + paid fast sanity when creds exist (`playwright.emergency.config.ts`) |
 
 ---
@@ -158,7 +172,7 @@ Route expectations for paid users are documented in `tests/e2e/helpers/learner-s
 
 ## 8. Admin
 
-There is **no** dedicated safe admin E2E in this repo. Admin remains **manual** or tool-based until a read-only admin smoke exists. Do not add destructive admin mutations for CI convenience.
+**`tests/e2e/smoke/admin-dashboard.spec.ts`** — optional smoke: staff login, `/admin` shell, non-401 admin API probes. Requires `E2E_ADMIN_EMAIL` / `E2E_ADMIN_PASSWORD` (see `tests/e2e/helpers/admin-e2e-credentials.ts`). Skips when unset. Do not add destructive admin mutations for CI convenience.
 
 ---
 
@@ -184,11 +198,13 @@ Minimum:
 
 1. `npm run validate:release` (or your CI equivalent: typecheck + content + i18n + release-safety tests) — see `package.json` `validate:release`.
 2. `npm run qa:release-gate` on the **same build** deployed to production (candidate/staging URL with production-like DB).
-3. After promote: `npm run qa:post-deploy-smoke` against **production** `BASE_URL`.
+3. After promote: `npm run qa:verify:production` (or at minimum `npm run qa:post-deploy-smoke`) against **production** `BASE_URL`.
 
 ---
 
 ## Related
 
+- `docs/release-verification.md` — critical journeys, monitoring checklist, QA account matrix
+- `docs/release-deploy-checklist.md` — human deploy checklist
 - `tests/e2e/TEST_LAYERS.md` — layer overview
 - `docs/release-safety-checks.md` — static / registry checks

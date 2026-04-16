@@ -61,16 +61,15 @@ export function resolveEntitlementFromSubscriptionStatus(
 }
 
 /**
- * `navMode = learner` only for entitled non-staff learners. Everyone else stays in public marketing IA.
+ * Marketing chrome (`SiteHeader` / `SiteFooter`) always uses the public marketing information architecture,
+ * including for entitled signed-in learners. Study shortcuts belong in auth CTAs and `/app`, not a
+ * separate header mode that replaces mega-menus and marketing nav on `/` and other marketing routes.
  */
-export function resolveNavMode(args: {
+export function resolveNavMode(_args: {
   entitlement: ActiveEntitlement;
   role: SessionUserRole | undefined;
 }): ActiveNavMode {
-  const { entitlement, role } = args;
-  if (entitlement !== "entitled") return "public";
-  if (!role || role !== "LEARNER") return "public";
-  return "learner";
+  return "public";
 }
 
 /**

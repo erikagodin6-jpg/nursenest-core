@@ -13,11 +13,10 @@ import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import {
   learnerMarketingPathwayIdFromSession,
-  learnerPrimaryNavLabelKey,
-  learnerPrimaryStudyDestinations,
   publicExamPrepHubDestinations,
   publicMarketingExploreDestinations,
 } from "@/lib/navigation/canonical-destinations";
+import { isStaffRole } from "@/lib/auth/staff-roles";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { CONTINUE_STUDYING_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { formatTitleCase } from "@/lib/format/text-case";
@@ -66,9 +65,12 @@ export function SiteFooter() {
   const examHubs = publicExamPrepHubDestinations(region);
   const explore = publicMarketingExploreDestinations(region);
   const pnRoleLabel = getNursingRoleLabel({ country: region, role: "PN" });
+  const user = session?.user;
+  const isSignedIn = Boolean(user);
+  const isAdmin = Boolean(user?.role && isStaffRole(user.role));
+  const isEntitledLearner =
+    Boolean(user?.role && !isStaffRole(user.role)) && activeNav.entitlement === "entitled";
   const learnerPathwayId = learnerMarketingPathwayIdFromSession(session?.user ?? null);
-  const isLearnerNav = activeNav.navMode === "learner";
-  const learnerExploreItems = isLearnerNav ? learnerPrimaryStudyDestinations(learnerPathwayId) : [];
   const learnerSignInHref = withMarketingLocale(locale, loginWithCallback("/app"));
   const startPracticingHref = withMarketingLocale(locale, "/signup?callbackUrl=%2Fapp");
   const learnerContinueHref =
@@ -137,38 +139,69 @@ export function SiteFooter() {
               <div>
                 <h3 className="mb-3 text-sm font-medium text-[var(--footer-fg)]">{formatTitleCase("Explore", locale)}</h3>
                 <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
-                  {isLearnerNav && learnerExploreItems.length > 0
-                    ? learnerExploreItems.map((item) => (
-                        <li key={item.key}>
-                          <FLink href={item.href}>{formatTitleCase(t(learnerPrimaryNavLabelKey(item.key)), locale)}</FLink>
-                        </li>
-                      ))
-                    : (
-                        <>
-                          <li>
-                            <FLink href={explore.pricing}>Pricing</FLink>
-                          </li>
-                          <li>
-                            <FLink href={explore.lessons}>Lessons</FLink>
-                          </li>
-                          <li>
-                            <FLink href={explore.practiceQuestions}>Practice Questions</FLink>
-                          </li>
-                          <li>
-                            <FLink href={explore.blog}>Blog</FLink>
-                          </li>
-                          <li>
-                            <FLink href={explore.tools}>Tools</FLink>
-                          </li>
-                        </>
-                      )}
+                  <li>
+                    <FLink href={explore.pricing}>Pricing</FLink>
+                  </li>
+                  <li>
+                    <FLink href={explore.lessons}>Lessons</FLink>
+                  </li>
+                  <li>
+                    <FLink href={explore.practiceQuestions}>Practice Questions</FLink>
+                  </li>
+                  <li>
+                    <FLink href={explore.blog}>Blog</FLink>
+                  </li>
+                  <li>
+                    <FLink href={explore.tools}>Tools</FLink>
+                  </li>
                 </ul>
               </div>
 
               <div>
                 <h3 className="mb-3 text-sm font-medium text-[var(--footer-fg)]">{formatTitleCase("Account", locale)}</h3>
                 <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
-                  {isLearnerNav ? (
+                  {!isSignedIn ? (
+                    <>
+                      <li>
+                        <FLink href={learnerSignInHref}>Login</FLink>
+                      </li>
+                      <li>
+                        <FLink href="/contact">Contact Support</FLink>
+                      </li>
+                      <SiteFooterFeedbackTrigger />
+                      <li className="pt-1">
+                        <Link
+                          href={startPracticingHref}
+                          className="nn-nav-cta inline-flex min-h-[40px] w-full max-w-[16rem] items-center justify-center rounded-xl px-4 py-2 text-sm font-medium sm:w-fit"
+                        >
+                          {formatTitleCase(PRIMARY_CTA, locale)}
+                        </Link>
+                      </li>
+                    </>
+                  ) : isAdmin ? (
+                    <>
+                      <li>
+                        <Link
+                          href="/admin"
+                          className="nn-footer-link break-words text-sm leading-relaxed [overflow-wrap:anywhere]"
+                        >
+                          {formatTitleCase("Admin", locale)}
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/app"
+                          className="nn-footer-link break-words text-sm leading-relaxed [overflow-wrap:anywhere]"
+                        >
+                          {formatTitleCase("Dashboard", locale)}
+                        </Link>
+                      </li>
+                      <li>
+                        <FLink href="/contact">Contact Support</FLink>
+                      </li>
+                      <SiteFooterFeedbackTrigger />
+                    </>
+                  ) : isEntitledLearner ? (
                     <>
                       <li>
                         <Link
@@ -176,6 +209,14 @@ export function SiteFooter() {
                           className="nn-footer-link break-words text-sm leading-relaxed [overflow-wrap:anywhere]"
                         >
                           {formatTitleCase("Dashboard", locale)}
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/app/account/overview"
+                          className="nn-footer-link break-words text-sm leading-relaxed [overflow-wrap:anywhere]"
+                        >
+                          {formatTitleCase("Account", locale)}
                         </Link>
                       </li>
                       <li>
@@ -194,7 +235,15 @@ export function SiteFooter() {
                   ) : (
                     <>
                       <li>
-                        <FLink href={learnerSignInHref}>Login</FLink>
+                        <Link
+                          href="/app"
+                          className="nn-footer-link break-words text-sm leading-relaxed [overflow-wrap:anywhere]"
+                        >
+                          {formatTitleCase("Dashboard", locale)}
+                        </Link>
+                      </li>
+                      <li>
+                        <FLink href={explore.pricing}>{formatTitleCase("Pricing", locale)}</FLink>
                       </li>
                       <li>
                         <FLink href="/contact">Contact Support</FLink>

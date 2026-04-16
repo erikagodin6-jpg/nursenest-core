@@ -17,8 +17,8 @@ import { prisma } from "@/lib/db";
 
 type Props = { params: Promise<{ jobId: string }> };
 
-export async function GET(_req: Request, ctx: Props) {
-  const gate = await requireAdmin(_req);
+export async function GET(req: Request, ctx: Props) {
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { jobId } = await ctx.params;

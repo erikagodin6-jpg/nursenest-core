@@ -1,3 +1,15 @@
+/**
+ * Unified rate limiting for horizontal scale:
+ *
+ * - **Node + `DATABASE_URL` (non-test):** Postgres-backed buckets — shared across instances (consistent).
+ * - **Edge runtime:** Prisma is unavailable — in-memory only (per region/instance; unavoidable).
+ * - **Dev / tests / no DB:** in-memory (acceptable; not production multi-instance).
+ *
+ * **Production Node with Postgres:** if the distributed check throws (DB down, migration missing, etc.),
+ * we **fail closed** (`ok: false` → callers typically map to HTTP 429). We do **not** fall back to
+ * in-memory there — that would diverge per instance. Non-production still falls back to in-memory
+ * so local dev keeps working when Postgres is stopped.
+ */
 import { checkRateLimit, consumeRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";

@@ -14,7 +14,8 @@ if (fs.existsSync(LOCAL_ENV_PATH)) {
  * **Do not commit real credentials.** Provide via environment variables:
  *
  * 1. **Preferred:** `E2E_PAID_EMAIL` and `E2E_PAID_PASSWORD`
- * 2. **Alternative:** `PLAYWRIGHT_TEST_EMAIL` and `PLAYWRIGHT_TEST_PASSWORD` (same semantics)
+ * 2. **QA / smoke alias:** `QA_PAID_EMAIL` and `QA_PAID_PASSWORD` (same semantics)
+ * 3. **Alternative:** `PLAYWRIGHT_TEST_EMAIL` and `PLAYWRIGHT_TEST_PASSWORD` (same semantics)
  *
  * Optional: `PLAYWRIGHT_PAID_AUTH_STATE` overrides the saved storage JSON path (see `auth-state-paths.ts`).
  * Session file is written once per run by `tests/e2e/setup/auth.setup.ts` and reused via `chromium-paid` `storageState`.
@@ -24,6 +25,11 @@ if (fs.existsSync(LOCAL_ENV_PATH)) {
 export type PaidTestCredentials = { email: string; password: string };
 
 export function getPaidTestCredentials(): PaidTestCredentials | null {
+  const qa = process.env.QA_PAID_EMAIL?.trim();
+  const qb = process.env.QA_PAID_PASSWORD;
+  if (qa && qb !== undefined && String(qb).length > 0) {
+    return { email: qa, password: String(qb) };
+  }
   const a = process.env.E2E_PAID_EMAIL?.trim();
   const b = process.env.E2E_PAID_PASSWORD;
   if (a && b) {

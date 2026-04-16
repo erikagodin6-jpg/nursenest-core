@@ -4,8 +4,8 @@ import { prisma } from "@/lib/db";
 
 type Props = { params: Promise<{ id: string }> };
 
-export async function GET(_req: Request, ctx: Props) {
-  const gate = await requireAdmin(_req);
+export async function GET(req: Request, ctx: Props) {
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { id } = await ctx.params;

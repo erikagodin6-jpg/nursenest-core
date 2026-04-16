@@ -93,7 +93,14 @@ export default defineConfig({
   testDir: ".",
   testMatch: ["tests/e2e/**/*.spec.ts"],
   // Exclude Next build output (would duplicate every spec under `.next/standalone/.../tests/e2e/`).
-  testIgnore: [/^\.next[\\/]/, /[\\/]\.next[\\/]/, /[\\/]node_modules[\\/]/, /[\\/]dist[\\/]/],
+  testIgnore: [
+    /^\.next[\\/]/,
+    /[\\/]\.next[\\/]/,
+    /[\\/]node_modules[\\/]/,
+    /[\\/]dist[\\/]/,
+    /** Dedicated `playwright.smoke.config.ts` + `npm run qa:smoke` — keep out of default E2E projects. */
+    /[\\/]tests[\\/]e2e[\\/]smoke[\\/]/,
+  ],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
@@ -143,6 +150,8 @@ export default defineConfig({
         /paid-e2e-requires-env\.spec\.ts$/,
         /stripe-subscriber-journey\.spec\.ts$/,
         /freemium-paywall\.spec\.ts$/,
+        /[\\/]tests[\\/]e2e[\\/]smoke[\\/]/,
+        /[\\/]tests[\\/]e2e[\\/]i18n[\\/]/,
         /^\.next[\\/]/,
         /[\\/]\.next[\\/]/,
         /[\\/]node_modules[\\/]/,

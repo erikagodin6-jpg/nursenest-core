@@ -11,9 +11,9 @@ const patchSchema = z.object({
 
 type RouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_req: NextRequest, context: RouteContext) {
+export async function GET(req: NextRequest, context: RouteContext) {
   const { params } = context;
-  const gate = await requireAdmin(_req);
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
   const { id } = await params;
 

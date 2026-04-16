@@ -5,8 +5,8 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-export async function POST(_req: Request, ctx: { params: Promise<{ id: string }> }) {
-  const gate = await requireAdmin(_req);
+export async function POST(req: Request, ctx: { params: Promise<{ id: string }> }) {
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { id } = await ctx.params;

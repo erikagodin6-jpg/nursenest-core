@@ -14,8 +14,8 @@ test("resolveEntitlementFromSubscriptionStatus: none is unpaid when user exists"
   assert.equal(resolveEntitlementFromSubscriptionStatus("none"), "unpaid");
 });
 
-test("resolveNavMode: learner only when entitled + LEARNER role", () => {
-  assert.equal(resolveNavMode({ entitlement: "entitled", role: "LEARNER" }), "learner");
+test("resolveNavMode: marketing chrome is always public (signed-in learners keep marketing IA)", () => {
+  assert.equal(resolveNavMode({ entitlement: "entitled", role: "LEARNER" }), "public");
   assert.equal(resolveNavMode({ entitlement: "entitled", role: "ADMIN" }), "public");
   assert.equal(resolveNavMode({ entitlement: "unpaid", role: "LEARNER" }), "public");
   assert.equal(resolveNavMode({ entitlement: "none", role: undefined }), "public");

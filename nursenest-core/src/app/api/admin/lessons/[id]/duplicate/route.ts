@@ -9,8 +9,8 @@ import { contentStatusToDb } from "@/lib/prisma/content-status";
 type RouteContext = { params: Promise<{ id: string }> };
 
 /** Deep copy lesson as DRAFT with a new slug (ContentItem). */
-export async function POST(_req: Request, ctx: RouteContext) {
-  const gate = await requireAdmin(_req);
+export async function POST(req: Request, ctx: RouteContext) {
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
   const { id } = await ctx.params;
 

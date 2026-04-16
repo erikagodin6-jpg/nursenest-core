@@ -166,8 +166,8 @@ function partialPrePublishFromPatch(d: z.infer<typeof patchSchema>): Partial<Pre
   return p;
 }
 
-export async function GET(_req: Request, { params }: Props) {
-  const gate = await requireAdmin(_req);
+export async function GET(req: Request, { params }: Props) {
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { id } = await params;
@@ -498,8 +498,8 @@ export async function PATCH(req: Request, { params }: Props) {
   return NextResponse.json({ post: updated });
 }
 
-export async function DELETE(_req: Request, { params }: Props) {
-  const gate = await requireAdmin(_req);
+export async function DELETE(req: Request, { params }: Props) {
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { id } = await params;
