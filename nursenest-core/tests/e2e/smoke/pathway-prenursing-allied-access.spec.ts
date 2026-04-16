@@ -1,11 +1,15 @@
 /**
  * Pre-nursing tier + allied health — **learner** surfaces vs secondary marketing hubs.
  *
- * - **Pre-nursing:** canonical `/pre-nursing/*` routes (see `pathway-prenursing-allied-matrix.ts`). Not
- *   `us-rn-nclex-rn` app lessons unless you add a separate RN pathway test elsewhere.
- * - **Allied:** `/app/*` scoped to `us-allied-core` / `ca-allied-core`; readiness is **SIMULATION** per
- *   `pathway-readiness-config.ts` (linear practice exam flow, not NCLEX CAT).
- * - **Marketing:** `/allied-health/{professionKey}/lessons` — secondary coverage only.
+ * **Proven product choices (do not overclaim in reports):**
+ * - Pre-nursing is **not** backed by an `EXAM_PATHWAYS` row — canonical routes are `/pre-nursing/*` (see
+ *   `pathway-prenursing-allied-coverage-manifest.ts` + `pathway-prenursing-allied-matrix.ts`).
+ * - Primary bounded interactive assessment for pre-nursing subscribers: `/pre-nursing/mini-cat` (not NCLEX CAT).
+ * - Allied practice uses **linear** `/app/practice-tests` start — `pathway-readiness-config.ts` marks allied as
+ *   SIMULATION, not NCLEX CAT (`pathwayLinearPracticeExamSurface` vs `pathwayCatSurface`).
+ * - Profession does **not** change `/api/lessons` / `/api/questions` query shapes (no `alliedProfessionKey` in
+ *   those routes); weak-topic/dashboard filtering may use profession only when `topicSlugsIn` is set on registry
+ *   entries (currently omitted → no-op filter). Session + `/api/learner/exam-plan` assert profile wiring for allied rows.
  *
  * Run: `npm run qa:pathways:prenursing-allied` (from `nursenest-core/`).
  */
@@ -14,6 +18,12 @@ import { attachPageObservers, type PageObservers } from "../helpers/attach-obser
 import { ALLIED_LEARNER_PROFESSION_KEYS } from "../helpers/allied-profession-keys";
 import { loginWithCredentials } from "../helpers/learner-login";
 import { readLearnerSessionSnapshot } from "../helpers/learner-session";
+import {
+  assertAlliedLearnerProfessionInvariant,
+  fetchExamPlanJson,
+  formatTierMismatchFailure,
+} from "../helpers/pathway-prenursing-allied-assertions";
+import { PRENURSING_ALLIED_COVERAGE_MANIFEST } from "../helpers/pathway-prenursing-allied-coverage-manifest";
 import { PRENURSING_ALLIED_PATHWAY_MATRIX } from "../helpers/pathway-prenursing-allied-matrix";
 import { resolvePrenursingAlliedCredentials } from "../helpers/pathway-prenursing-allied-credentials";
 import { expectOnPaidSubscriberApp } from "../helpers/paid-surface-assertions";
@@ -38,6 +48,13 @@ import {
 test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe.configure({ timeout: 900_000 });
+
+test("suite: coverage manifest (documentation only)", async ({}, testInfo) => {
+  await testInfo.attach("prenursing-allied-coverage-manifest.json", {
+    body: Buffer.from(JSON.stringify(PRENURSING_ALLIED_COVERAGE_MANIFEST, null, 2), "utf-8"),
+    contentType: "application/json",
+  });
+});
 
 function baseOriginFrom(page: Page, baseURL: string | undefined): string {
   if (baseURL) {
@@ -70,6 +87,8 @@ type FailureExtra = {
   pathwayKey: string;
   surface?: string;
   credentialSource?: string;
+  matchedPrefix?: string | null;
+  usedGenericFallback?: boolean;
   session?: Awaited<ReturnType<typeof readLearnerSessionSnapshot>>;
 };
 
@@ -80,7 +99,7 @@ async function attachPrenursingAlliedFailure(
   slowMs: { url: string; ms: number }[],
   extra: FailureExtra,
 ): Promise<void> {
-  const { pathwayKey, surface = "flow", credentialSource, session } = extra;
+  const { pathwayKey, surface = "flow", credentialSource, matchedPrefix, usedGenericFallback, session } = extra;
   await attachSmokeFailureScreenshot(page, testInfo, `prenursing-allied-fail-${pathwayKey}-${surface}.png`);
   const hints = await visibleErrorHints(page).catch(() => []);
   await testInfo.attach(`prenursing-allied-fail-${pathwayKey}.json`, {
@@ -90,6 +109,8 @@ async function attachPrenursingAlliedFailure(
           pathwayKey,
           surface,
           credentialSource: credentialSource ?? null,
+          matchedPrefix: matchedPrefix ?? null,
+          usedGenericFallback: usedGenericFallback ?? null,
           session: session ?? null,
           currentUrl: page.url(),
           visibleErrorHints: hints,
@@ -110,11 +131,13 @@ for (const row of PRENURSING_ALLIED_PATHWAY_MATRIX) {
   test(`${row.label}`, async ({ page, baseURL }, testInfo) => {
     const creds = resolvePrenursingAlliedCredentials(row.credentialPrefixes);
     const hint = row.credentialPrefixes.map((p) => `${p}_EMAIL + ${p}_PASSWORD`).join(", ");
-    test.skip(!creds, `Set ${hint}, or generic QA_PAID_EMAIL + QA_PAID_PASSWORD (session tier/country must match the row).`);
+    test.skip(!creds, `Set ${hint}, or generic QA_PAID_EMAIL + QA_PAID_PASSWORD (session tier/country/profession must match the row).`);
 
     const slowMs: { url: string; ms: number }[] = [];
     const disposeSlow = attachSlowRequestTap(page, baseOriginFrom(page, baseURL), slowMs, 3000);
     const observers = attachPageObservers(page, { profile: "app", probeAuthApi: true });
+
+    let examPlanJson: Awaited<ReturnType<typeof fetchExamPlanJson>> | null = null;
 
     try {
       await test.step("Login", async () => {
@@ -126,12 +149,9 @@ for (const row of PRENURSING_ALLIED_PATHWAY_MATRIX) {
       const session = await readLearnerSessionSnapshot(page);
 
       if (row.coverage === "learnerPreNursingCanonical") {
-        expect(
-          session?.tier,
-          `Pre-nursing row requires session tier PRE_NURSING (got ${session?.tier ?? "null"}). ` +
-            `Credential source: ${creds!.sourceLabel}. Set QA_PRENURSING_EMAIL+PASSWORD or QA_PAID_PRE_NURSING_*; ` +
-            `do not rely on a generic RN-only QA_PAID account for this canonical /pre-nursing/* suite.`,
-        ).toBe("PRE_NURSING");
+        expect(session?.tier, formatTierMismatchFailure(creds!, "PRE_NURSING", session?.tier ?? null)).toBe(
+          "PRE_NURSING",
+        );
 
         const tag = `${row.key}-pre-nursing`;
 
@@ -143,16 +163,12 @@ for (const row of PRENURSING_ALLIED_PATHWAY_MATRIX) {
           await preNursingAppFlashcardsSurface({ page, surfaceTag: tag, observers });
         });
 
-        await test.step("/pre-nursing/mini-cat (mini adaptive — not NCLEX CAT)", async () => {
+        await test.step("/pre-nursing/mini-cat (primary interactive assessment — not /app/questions pathway hub)", async () => {
           await preNursingMiniCatSurface({ page, surfaceTag: tag, observers });
         });
       } else {
-        expect(
-          session?.country,
-          `Allied ${row.pathwayId} requires session country ${row.requiredSessionCountry} (got ${session?.country ?? "null"}). ` +
-            `Credential source: ${creds!.sourceLabel}. Use ${row.key === "allied-ca" ? "QA_ALLIED_CA_* or QA_PAID_ALLIED_CA_*" : "QA_ALLIED_US_* or QA_ALLIED_*"} ` +
-            `— do not silently reuse a US account for Canada rows (or vice versa).`,
-        ).toBe(row.requiredSessionCountry);
+        examPlanJson = await fetchExamPlanJson(page, baseURL);
+        assertAlliedLearnerProfessionInvariant({ row, session, examPlan: examPlanJson, creds: creds! });
 
         const tag = `${row.key}-${row.pathwayId}`;
 
@@ -177,6 +193,12 @@ for (const row of PRENURSING_ALLIED_PATHWAY_MATRIX) {
         slowRequestsMs: slowMs,
       });
       await attachSmokeCapture(testInfo, `prenursing-allied-${row.key}`, capture);
+
+      await testInfo.attach("prenursing-allied-coverage-manifest.json", {
+        body: Buffer.from(JSON.stringify(PRENURSING_ALLIED_COVERAGE_MANIFEST, null, 2), "utf-8"),
+        contentType: "application/json",
+      });
+
       await testInfo.attach(`prenursing-allied-${row.key}-meta.json`, {
         body: Buffer.from(
           JSON.stringify(
@@ -185,9 +207,19 @@ for (const row of PRENURSING_ALLIED_PATHWAY_MATRIX) {
                   pathwayKey: row.key,
                   pathwayId: null,
                   credentialSource: creds!.sourceLabel,
+                  matchedPrefix: creds!.matchedPrefix,
+                  usedGenericFallback: creds!.usedGenericFallback,
                   session,
                   routingNote: row.routingNote,
                   coverage: row.coverage,
+                  coverageLayers: {
+                    canonicalLearner: ["/pre-nursing/lessons", "/pre-nursing/mini-cat", "/app/flashcards"],
+                    professionContextLearner: [],
+                    marketingOnly: [],
+                    intentionallyNotConfigured: [
+                      "/app/questions hub as primary PRE_NURSING bank (no PRE_NURSING pathway in EXAM_PATHWAYS — see manifest)",
+                    ],
+                  },
                 }
               : {
                   pathwayKey: row.key,
@@ -196,10 +228,28 @@ for (const row of PRENURSING_ALLIED_PATHWAY_MATRIX) {
                   requiredSessionCountry: row.requiredSessionCountry,
                   readinessEngineType: row.readinessEngineType,
                   credentialSource: creds!.sourceLabel,
+                  matchedPrefix: creds!.matchedPrefix,
+                  usedGenericFallback: creds!.usedGenericFallback,
                   session,
+                  examPlanAlliedProfessionKey: examPlanJson?.alliedProfessionKey ?? null,
                   routingNote: row.routingNote,
                   professionScopingNote: row.professionScopingNote,
                   coverage: row.coverage,
+                  coverageLayers: {
+                    canonicalLearner: [
+                      `/app/lessons?pathwayId=${row.pathwayId}`,
+                      `/app/flashcards?pathwayId=${row.pathwayId}`,
+                      `/app/questions?pathwayId=${row.pathwayId}`,
+                      `/app/practice-tests?pathwayId=${row.pathwayId} (linear start)`,
+                    ],
+                    professionContextLearner: [
+                      "session.alliedProfessionKey + GET /api/learner/exam-plan (registry key validated; not per-profession pathwayId)",
+                    ],
+                    marketingOnly: [],
+                    provenProductLimitations: [
+                      "No topicSlugsIn on ALLIED_PROFESSIONS entries → allied-weak-topic-filter.ts is currently a no-op for weak-topic narrowing",
+                    ],
+                  },
                 },
             null,
             2,
@@ -212,6 +262,8 @@ for (const row of PRENURSING_ALLIED_PATHWAY_MATRIX) {
       await attachPrenursingAlliedFailure(testInfo, page, observers, slowMs, {
         pathwayKey: row.key,
         credentialSource: creds?.sourceLabel,
+        matchedPrefix: creds?.matchedPrefix,
+        usedGenericFallback: creds?.usedGenericFallback,
         session: await readLearnerSessionSnapshot(page).catch(() => null),
       });
       throw e;
@@ -238,8 +290,15 @@ test.describe("Secondary: allied profession marketing lesson hubs", () => {
       const session = await readLearnerSessionSnapshot(page);
       expect(
         session?.country,
-        `Marketing hub sweep expects a US session (got ${session?.country ?? "null"}). Credential source: ${creds!.sourceLabel}.`,
+        `Marketing hub sweep expects a US session (got ${session?.country ?? "null"}). Credential: ${creds!.sourceLabel} (matchedPrefix=${creds!.matchedPrefix ?? "none"}).`,
       ).toBe("US");
+
+      if (session?.tier === "ALLIED") {
+        expect(
+          session.alliedProfessionKey,
+          `When tier is ALLIED, set User.alliedProfessionKey for profession context (${creds!.sourceLabel}).`,
+        ).toBeTruthy();
+      }
 
       for (const professionKey of ALLIED_LEARNER_PROFESSION_KEYS) {
         await test.step(`marketing /allied-health/${professionKey}/lessons`, async () => {
@@ -263,11 +322,18 @@ test.describe("Secondary: allied profession marketing lesson hubs", () => {
         "prenursing-allied-profession-hubs",
         buildCaptureFromObservers(page, observers, { slowRequestsMs: slowMs }),
       );
+      await testInfo.attach("prenursing-allied-coverage-manifest.json", {
+        body: Buffer.from(JSON.stringify(PRENURSING_ALLIED_COVERAGE_MANIFEST, null, 2), "utf-8"),
+        contentType: "application/json",
+      });
       await testInfo.attach("prenursing-allied-marketing-meta.json", {
         body: Buffer.from(
           JSON.stringify({
-            note: "Marketing-only; not a substitute for /app/lessons?pathwayId=us-allied-core checks.",
+            layer: "marketing_only",
+            note: "Public/marketing lesson index routes; not entitled /app/lessons pathway proof per profession.",
             credentialSource: creds.sourceLabel,
+            matchedPrefix: creds.matchedPrefix,
+            usedGenericFallback: creds.usedGenericFallback,
             session,
           }),
           null,
@@ -287,6 +353,8 @@ test.describe("Secondary: allied profession marketing lesson hubs", () => {
             failedRequests: observers.failedRequests,
             slowRequestsOver3s: slowMs,
             credentialSource: creds?.sourceLabel,
+            matchedPrefix: creds?.matchedPrefix,
+            usedGenericFallback: creds?.usedGenericFallback,
           }),
           null,
           2,

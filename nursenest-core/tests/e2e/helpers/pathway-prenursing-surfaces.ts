@@ -4,7 +4,9 @@
  * Source of truth: `EXAM_PATHWAYS` has **no** `PRE_NURSING` stripe-tier row; pre-nursing study lives under
  * `PRE_NURSING_LESSONS_INDEX_PATH` (`src/lib/lessons/lesson-routes.ts`) and `PRE_NURSING_MODULE_REGISTRY`
  * (`src/content/pre-nursing/pre-nursing-registry.ts`). Mini adaptive exam: `/pre-nursing/mini-cat`
- * (`PreNursingMiniCatRunner`).
+ * (`PreNursingMiniCatRunner` + `pre-nursing-exam-engine.ts`) — the **primary bounded interactive assessment** for this
+ * tier in the suite. `/app/questions` is pathway-scoped to `EXAM_PATHWAYS` rows; there is no PRE_NURSING catalog pathway,
+ * so that hub is not treated here as the canonical pre-nursing question surface (see coverage manifest).
  */
 import { expect, type Page } from "@playwright/test";
 import type { PageObservers } from "./attach-observers";

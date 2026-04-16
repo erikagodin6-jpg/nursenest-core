@@ -65,5 +65,6 @@ export function formatAuthFailureSurface(d: AuthFailureSurface): string {
     `subscriptionRequiredHeadings=${d.subscriptionRequiredHeadingCount}`,
   ];
   if (d.visibleAuthErrorLine) parts.push(`authErrorSnippet=${d.visibleAuthErrorLine}`);
+  if (d.alertText) parts.push(`alertText=${d.alertText.replace(/\s+/g, " ").slice(0, 280)}`);
   return parts.join(" ");
 }

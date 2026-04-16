@@ -7,7 +7,7 @@ import {
   type PricedCombination,
 } from "@/lib/pricing/display-catalog";
 import type { BillingDuration } from "@/lib/pricing/billing-types";
-import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 export type { BillingDuration } from "@/lib/pricing/billing-types";
 
@@ -63,21 +63,6 @@ export function listMissingStripePriceEnvKeys(): string[] {
 
 export function isStripePricingFullyConfigured(): boolean {
   return listMissingStripePriceEnvKeys().length === 0;
-}
-
-let loggedPricingGaps = false;
-
-export function logStripePricingConfigurationGaps(): void {
-  if (loggedPricingGaps) return;
-  loggedPricingGaps = true;
-  const missing = listMissingStripePriceEnvKeys();
-  if (missing.length === 0) return;
-  const hasSecret = Boolean(process.env.STRIPE_SECRET_KEY?.trim());
-  safeServerLog("stripe_pricing", "missing_price_env_keys", {
-    missingCount: missing.length,
-    hasStripeSecret: hasSecret ? 1 : 0,
-    keysPreview: missing.slice(0, 12).join(",").slice(0, 480),
-  });
 }
 
 export function logStripeProductionPricingMisconfiguration(): void {

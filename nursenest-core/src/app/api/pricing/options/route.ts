@@ -18,7 +18,7 @@ import {
   STRIPE_TRIAL_DAYS,
   type AlliedCareerKey,
 } from "@/lib/pricing/display-catalog";
-import { findPriceEntry, findAlliedPriceEntry, logStripePricingConfigurationGaps } from "@/lib/stripe/pricing-map";
+import { findPriceEntry, findAlliedPriceEntry } from "@/lib/stripe/pricing-map";
 
 export const dynamic = "force-dynamic";
 
@@ -53,7 +53,6 @@ type AlliedPlanRow = {
 
 export async function GET(req: NextRequest) {
   const startedAt = performance.now();
-  logStripePricingConfigurationGaps();
 
   const nursingPlans: NursingPlanRow[] = [];
   for (const combo of eachNursingPricedCombination()) {

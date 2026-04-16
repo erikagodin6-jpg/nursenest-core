@@ -36,21 +36,21 @@ export function captureStudyProgressFunnelAfterUpsert(
     try {
       const totalAfter = await prisma.progress.count({ where: { userId } });
       if (before.progressCount === 0 && totalAfter >= 1) {
-        await captureServerEvent(analyticsDistinctId(userId), PH.funnelFirstStudyProgress, {
+        void captureServerEvent(analyticsDistinctId(userId), PH.funnelFirstStudyProgress, {
           actor: "authenticated",
           country: scope.country ? String(scope.country) : undefined,
           tier: scope.tier ? String(scope.tier) : undefined,
-        });
+        }).catch(() => {});
       }
 
       const daysAfter = await distinctUtcProgressDays(userId);
       if (before.utcDistinctDays < 2 && daysAfter >= 2) {
-        await captureServerEvent(analyticsDistinctId(userId), PH.funnelRepeatStudyDay, {
+        void captureServerEvent(analyticsDistinctId(userId), PH.funnelRepeatStudyDay, {
           actor: "authenticated",
           distinct_study_days_utc: daysAfter,
           country: scope.country ? String(scope.country) : undefined,
           tier: scope.tier ? String(scope.tier) : undefined,
-        });
+        }).catch(() => {});
       }
     } catch {
       // never block API

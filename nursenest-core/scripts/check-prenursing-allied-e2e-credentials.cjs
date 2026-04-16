@@ -26,14 +26,23 @@ const PREFIXES = [
   "QA_PAID_ALLIED_CA",
 ];
 
-let ok = GENERIC.some(([e, p]) => pairOk(e, p));
-if (!ok) ok = PREFIXES.some((prefix) => pairOk(`${prefix}_EMAIL`, `${prefix}_PASSWORD`));
+const genericOk = GENERIC.some(([e, p]) => pairOk(e, p));
+const pathwayHits = PREFIXES.filter((prefix) => pairOk(`${prefix}_EMAIL`, `${prefix}_PASSWORD`));
+let ok = genericOk || pathwayHits.length > 0;
 
 if (!ok) {
   console.error(
     "qa:pathways:prenursing-allied requires QA_PAID_EMAIL+QA_PAID_PASSWORD (or E2E_PAID_* / PLAYWRIGHT_TEST_*), " +
       "or pathway-specific pairs (QA_PRENURSING_*, QA_ALLIED_US_*, QA_ALLIED_CA_*, QA_PAID_PRE_NURSING_*, …) — " +
-      "see tests/e2e/helpers/pathway-prenursing-allied-matrix.ts. The suite asserts session tier/country per row.",
+      "see tests/e2e/helpers/pathway-prenursing-allied-matrix.ts. The suite asserts session tier/country/profession per row.",
   );
   process.exit(1);
+}
+
+if (process.env.PW_PRENURSING_CREDENTIALS_VERBOSE === "1") {
+  console.log(
+    "[check-prenursing-allied-e2e-credentials]",
+    genericOk ? "generic paid pair: yes" : "generic paid pair: no",
+    pathwayHits.length > 0 ? `pathway prefixes: ${pathwayHits.join(", ")}` : "pathway prefixes: (none)",
+  );
 }
