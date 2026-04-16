@@ -2,7 +2,7 @@
   "fr": {
     "name": "French",
     "totalKeys": 17832,
-    "missingKeys": 538,
+    "missingKeys": 539,
     "untranslatedKeys": 3508,
     "mixedKeys": 1309,
     "coverage": 77.5,
@@ -44,11 +44,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 1127,
-        "missing": 64,
+        "missing": 65,
         "untranslated": 38,
-        "coverage": 91.7,
+        "coverage": 91.6,
         "threshold": 100,
         "passed": false
       },
@@ -65,6 +65,7 @@
     "missing": [
       "careerGuide.viewFullGuide",
       "clinicalCalculators.heading",
+      "dashboard.nextStepMockExams",
       "examHub.contentHubDesc",
       "examHub.contentHubTitle",
       "footer.studyInYourLanguage",
@@ -81,8 +82,7 @@
       "home.hero.benefitsHeading",
       "home.hero.builtForAlliedHealth",
       "home.hero.builtForLabel",
-      "home.hero.builtForMicrocopy",
-      "home.hero.builtForNursePractitioners"
+      "home.hero.builtForMicrocopy"
     ],
     "untranslated": [
       "allied.alliedAdmin.accepted",
@@ -132,7 +132,7 @@
   "tl": {
     "name": "Filipino",
     "totalKeys": 17951,
-    "missingKeys": 0,
+    "missingKeys": 1,
     "untranslatedKeys": 2490,
     "mixedKeys": 116,
     "coverage": 86.1,
@@ -174,9 +174,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 1216,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 13,
         "coverage": 98.9,
         "threshold": 100,
@@ -192,7 +192,9 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
     "untranslated": [
       "allied.alliedDiagnostic.alliedHealthDiagnosticAssessment",
       "allied.alliedHome.alliedHealthCareersCertificationExam",
@@ -241,7 +243,7 @@
   "hi": {
     "name": "Hindi",
     "totalKeys": 17951,
-    "missingKeys": 0,
+    "missingKeys": 1,
     "untranslatedKeys": 14118,
     "mixedKeys": 11,
     "coverage": 21.4,
@@ -283,11 +285,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 591,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 638,
-        "coverage": 48.1,
+        "coverage": 48,
         "threshold": 100,
         "passed": false
       },
@@ -301,7 +303,9 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
       "allied.alliedAdmin.accepted",
@@ -341,17 +345,17 @@
   "es": {
     "name": "Spanish",
     "totalKeys": 17951,
-    "missingKeys": 0,
-    "untranslatedKeys": 12911,
+    "missingKeys": 1,
+    "untranslatedKeys": 12910,
     "mixedKeys": 88,
     "coverage": 28.1,
     "byContentType": {
       "optional": {
         "total": 14497,
-        "translated": 1906,
+        "translated": 1907,
         "missing": 0,
-        "untranslated": 12591,
-        "coverage": 13.1,
+        "untranslated": 12590,
+        "coverage": 13.2,
         "threshold": 90,
         "passed": false
       },
@@ -383,9 +387,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 1061,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 168,
         "coverage": 86.3,
         "threshold": 100,
@@ -401,7 +405,9 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
     "untranslated": [
       "allied.alliedAdmin.active",
       "allied.alliedAdmin.active2",
@@ -450,7 +456,7 @@
   "zh": {
     "name": "Chinese (Simplified)",
     "totalKeys": 17951,
-    "missingKeys": 0,
+    "missingKeys": 1,
     "untranslatedKeys": 13901,
     "mixedKeys": 3,
     "coverage": 22.6,
@@ -492,11 +498,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 812,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 417,
-        "coverage": 66.1,
+        "coverage": 66,
         "threshold": 100,
         "passed": false
       },
@@ -510,7 +516,9 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
       "allied.alliedAdmin.accepted",
@@ -542,7 +550,7 @@
   "zh-tw": {
     "name": "Chinese (Traditional)",
     "totalKeys": 17951,
-    "missingKeys": 0,
+    "missingKeys": 1,
     "untranslatedKeys": 14560,
     "mixedKeys": 6,
     "coverage": 18.9,
@@ -584,9 +592,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 681,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 548,
         "coverage": 55.4,
         "threshold": 100,
@@ -602,7 +610,9 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
       "allied.alliedAdmin.accepted",
@@ -637,7 +647,7 @@
   "ar": {
     "name": "Arabic",
     "totalKeys": 17951,
-    "missingKeys": 0,
+    "missingKeys": 1,
     "untranslatedKeys": 3567,
     "mixedKeys": 5,
     "coverage": 80.1,
@@ -679,11 +689,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 1089,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 140,
-        "coverage": 88.6,
+        "coverage": 88.5,
         "threshold": 100,
         "passed": false
       },
@@ -697,7 +707,9 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
     "untranslated": [
       "allied.alliedInstitutions.nameschooledu",
       "allied.alliedPricing.nursenestAlliedVsGenericTest",
@@ -731,7 +743,7 @@
   "ko": {
     "name": "Korean",
     "totalKeys": 4238,
-    "missingKeys": 14093,
+    "missingKeys": 14094,
     "untranslatedKeys": 48,
     "mixedKeys": 13,
     "coverage": 21.2,
@@ -773,11 +785,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 1003,
-        "missing": 196,
+        "missing": 197,
         "untranslated": 30,
-        "coverage": 81.6,
+        "coverage": 81.5,
         "threshold": 100,
         "passed": false
       },
@@ -854,17 +866,17 @@
   "pt": {
     "name": "Portuguese",
     "totalKeys": 17951,
-    "missingKeys": 0,
-    "untranslatedKeys": 13756,
+    "missingKeys": 1,
+    "untranslatedKeys": 13755,
     "mixedKeys": 86,
     "coverage": 23.4,
     "byContentType": {
       "optional": {
         "total": 14497,
-        "translated": 1297,
+        "translated": 1298,
         "missing": 0,
-        "untranslated": 13200,
-        "coverage": 8.9,
+        "untranslated": 13199,
+        "coverage": 9,
         "threshold": 90,
         "passed": false
       },
@@ -896,9 +908,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 835,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 394,
         "coverage": 67.9,
         "threshold": 100,
@@ -914,7 +926,9 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
       "allied.alliedAdmin.accepted",
@@ -963,7 +977,7 @@
   "pa": {
     "name": "Punjabi",
     "totalKeys": 17951,
-    "missingKeys": 0,
+    "missingKeys": 1,
     "untranslatedKeys": 14029,
     "mixedKeys": 13,
     "coverage": 21.8,
@@ -1005,11 +1019,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 683,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 546,
-        "coverage": 55.6,
+        "coverage": 55.5,
         "threshold": 100,
         "passed": false
       },
@@ -1023,7 +1037,9 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
       "allied.alliedAdmin.accepted",
@@ -1065,16 +1081,16 @@
   "vi": {
     "name": "Vietnamese",
     "totalKeys": 17951,
-    "missingKeys": 0,
-    "untranslatedKeys": 13873,
+    "missingKeys": 1,
+    "untranslatedKeys": 13872,
     "mixedKeys": 83,
     "coverage": 22.7,
     "byContentType": {
       "optional": {
         "total": 14497,
-        "translated": 1296,
+        "translated": 1297,
         "missing": 0,
-        "untranslated": 13201,
+        "untranslated": 13200,
         "coverage": 8.9,
         "threshold": 90,
         "passed": false
@@ -1107,9 +1123,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 707,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 522,
         "coverage": 57.5,
         "threshold": 100,
@@ -1125,7 +1141,9 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
       "allied.alliedAdmin.accepted",
@@ -1174,7 +1192,7 @@
   "ht": {
     "name": "Haitian Creole",
     "totalKeys": 4238,
-    "missingKeys": 14093,
+    "missingKeys": 14094,
     "untranslatedKeys": 4,
     "mixedKeys": 3,
     "coverage": 21.5,
@@ -1216,11 +1234,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 1030,
-        "missing": 196,
+        "missing": 197,
         "untranslated": 3,
-        "coverage": 83.8,
+        "coverage": 83.7,
         "threshold": 100,
         "passed": false
       },
@@ -1271,7 +1289,7 @@
   "ur": {
     "name": "Urdu",
     "totalKeys": 17951,
-    "missingKeys": 0,
+    "missingKeys": 1,
     "untranslatedKeys": 14033,
     "mixedKeys": 7,
     "coverage": 21.8,
@@ -1313,11 +1331,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 682,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 547,
-        "coverage": 55.5,
+        "coverage": 55.4,
         "threshold": 100,
         "passed": false
       },
@@ -1331,7 +1349,9 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
       "allied.alliedAdmin.accepted",
@@ -1367,7 +1387,7 @@
   "ja": {
     "name": "Japanese",
     "totalKeys": 17951,
-    "missingKeys": 0,
+    "missingKeys": 1,
     "untranslatedKeys": 14033,
     "mixedKeys": 2,
     "coverage": 21.8,
@@ -1409,9 +1429,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 681,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 548,
         "coverage": 55.4,
         "threshold": 100,
@@ -1427,7 +1447,9 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
       "allied.alliedAdmin.accepted",
@@ -1458,7 +1480,7 @@
   "fa": {
     "name": "Farsi",
     "totalKeys": 4238,
-    "missingKeys": 14093,
+    "missingKeys": 14094,
     "untranslatedKeys": 41,
     "mixedKeys": 0,
     "coverage": 21.3,
@@ -1500,11 +1522,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 1005,
-        "missing": 196,
+        "missing": 197,
         "untranslated": 28,
-        "coverage": 81.8,
+        "coverage": 81.7,
         "threshold": 100,
         "passed": false
       },
@@ -1567,16 +1589,16 @@
   "de": {
     "name": "German",
     "totalKeys": 17951,
-    "missingKeys": 0,
-    "untranslatedKeys": 14414,
+    "missingKeys": 1,
+    "untranslatedKeys": 14413,
     "mixedKeys": 93,
     "coverage": 19.7,
     "byContentType": {
       "optional": {
         "total": 14497,
-        "translated": 786,
+        "translated": 787,
         "missing": 0,
-        "untranslated": 13711,
+        "untranslated": 13710,
         "coverage": 5.4,
         "threshold": 90,
         "passed": false
@@ -1609,11 +1631,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 705,
-        "missing": 0,
+        "missing": 1,
         "untranslated": 524,
-        "coverage": 57.4,
+        "coverage": 57.3,
         "threshold": 100,
         "passed": false
       },
@@ -1627,7 +1649,9 @@
         "passed": false
       }
     },
-    "missing": [],
+    "missing": [
+      "dashboard.nextStepMockExams"
+    ],
     "untranslated": [
       "allied.alliedAdmin.5layerProductionSystem",
       "allied.alliedAdmin.accepted",
@@ -1676,7 +1700,7 @@
   "th": {
     "name": "Thai",
     "totalKeys": 3791,
-    "missingKeys": 14632,
+    "missingKeys": 14633,
     "untranslatedKeys": 54,
     "mixedKeys": 25,
     "coverage": 18.2,
@@ -1718,9 +1742,9 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 1008,
-        "missing": 194,
+        "missing": 195,
         "untranslated": 27,
         "coverage": 82,
         "threshold": 100,
@@ -1806,7 +1830,7 @@
   "tr": {
     "name": "Turkish",
     "totalKeys": 3317,
-    "missingKeys": 14634,
+    "missingKeys": 14635,
     "untranslatedKeys": 61,
     "mixedKeys": 21,
     "coverage": 18.1,
@@ -1848,11 +1872,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 1004,
-        "missing": 196,
+        "missing": 197,
         "untranslated": 29,
-        "coverage": 81.7,
+        "coverage": 81.6,
         "threshold": 100,
         "passed": false
       },
@@ -1936,7 +1960,7 @@
   "id": {
     "name": "Indonesian",
     "totalKeys": 3317,
-    "missingKeys": 14634,
+    "missingKeys": 14635,
     "untranslatedKeys": 2,
     "mixedKeys": 1,
     "coverage": 18.5,
@@ -1978,11 +2002,11 @@
         "passed": false
       },
       "ui": {
-        "total": 1229,
+        "total": 1230,
         "translated": 1031,
-        "missing": 196,
+        "missing": 197,
         "untranslated": 2,
-        "coverage": 83.9,
+        "coverage": 83.8,
         "threshold": 100,
         "passed": false
       },
