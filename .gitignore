@@ -1,7 +1,22 @@
-node_modules
+# -----------------------------------------------------------------------------
+# Canonical patterns (deploy hygiene — keep nursenest-core/.gitignore aligned)
+# -----------------------------------------------------------------------------
+node_modules/
+.next/
+.next/cache/
+.env
+.env.local
+.env.*.local
+*.log
+external/
+*.zip
+*.tgz
+*.tar
+*.gz
+.DS_Store
+# -----------------------------------------------------------------------------
 dist
 build
-.DS_Store
 server/public
 vite.config.ts.*
 *.tar.gz
