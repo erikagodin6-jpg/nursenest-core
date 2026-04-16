@@ -48,6 +48,8 @@ export function isSafeForDefaultAudit(ctrl: {
     try {
       const u = new URL(ctrl.href, "http://local.invalid");
       if (u.protocol === "mailto:" || u.protocol === "tel:" || u.protocol === "javascript:") return false;
+      const path = u.pathname.toLowerCase();
+      if (path.includes("/logout") || path.includes("sign-out")) return false;
     } catch {
       return false;
     }

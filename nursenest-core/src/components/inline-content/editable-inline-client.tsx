@@ -180,6 +180,15 @@ function useInlineEditModal(contentKey: string, kind: InlineContentKind, initial
   };
 }
 
+function plainTextKeyHandlers(open: () => void) {
+  return (e: KeyboardEvent<HTMLElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      open();
+    }
+  };
+}
+
 export function EditableTextClient(
   props: BaseProps & {
     as?: PlainAs;
@@ -192,16 +201,50 @@ export function EditableTextClient(
     return <Tag className={className}>{resolvedText}</Tag>;
   }
 
+  const open = () => modal.openModal();
+  const triggerClass = `max-w-full cursor-pointer rounded-sm ${hoverRing}`;
+  const a11y = { "aria-label": `Edit text: ${contentKey}` as const };
+
+  if (Tag === "span") {
+    return (
+      <>
+        <span
+          className={`inline ${triggerClass} ${className}`}
+          tabIndex={0}
+          onClick={open}
+          onKeyDown={plainTextKeyHandlers(open)}
+          {...a11y}
+        >
+          {resolvedText}
+        </span>
+        <InlineEditModal
+          open={modal.open}
+          title="Edit text"
+          contentKey={contentKey}
+          value={modal.draft}
+          onChange={modal.setDraft}
+          onClose={modal.closeModal}
+          onSave={modal.save}
+          saving={modal.saving}
+          error={modal.error}
+        />
+      </>
+    );
+  }
+
   return (
     <>
-      <button
-        type="button"
-        className={`block w-full max-w-full cursor-pointer rounded-md border-0 bg-transparent p-0 text-left ${hoverRing} ${className}`}
-        onClick={() => modal.openModal()}
-        aria-label={`Edit content ${contentKey}`}
-      >
-        {resolvedText}
-      </button>
+      <Tag className={className}>
+        <span
+          className={`inline ${triggerClass}`}
+          tabIndex={0}
+          onClick={open}
+          onKeyDown={plainTextKeyHandlers(open)}
+          {...a11y}
+        >
+          {resolvedText}
+        </span>
+      </Tag>
       <InlineEditModal
         open={modal.open}
         title="Edit text"
@@ -238,14 +281,13 @@ export function EditableHeadingClient(
           className: `cursor-pointer rounded-md ${hoverRing} ${className}`,
           onClick: open,
           tabIndex: 0,
-          role: "button",
           onKeyDown: (e: KeyboardEvent<HTMLElement>) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
               open();
             }
           },
-          "aria-label": `Edit heading ${contentKey}`,
+          "aria-label": `Edit heading: ${contentKey}`,
         } as HTMLAttributes<HTMLElement>,
         resolvedText,
       )}
@@ -268,13 +310,16 @@ export function EditableRichTextClient(props: BaseProps) {
   const { contentKey, resolvedText, kind, isAdmin, className = "" } = props;
   const modal = useInlineEditModal(contentKey, kind, resolvedText, isAdmin);
 
+  if (!isAdmin) {
+    return <div className={className} dangerouslySetInnerHTML={{ __html: resolvedText }} />;
+  }
+
   const open = () => modal.openModal();
   return (
     <>
       <div
-        role="button"
         tabIndex={0}
-        className={`cursor-pointer rounded-md ${hoverRing} ${className}`}
+        className={`cursor-pointer rounded-md ${hoverRing}`}
         onClick={open}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
@@ -282,9 +327,10 @@ export function EditableRichTextClient(props: BaseProps) {
             open();
           }
         }}
-        aria-label={`Edit rich text ${contentKey}`}
-        dangerouslySetInnerHTML={{ __html: resolvedText }}
-      />
+        aria-label={`Edit rich text: ${contentKey}`}
+      >
+        <div className={className} dangerouslySetInnerHTML={{ __html: resolvedText }} />
+      </div>
       <InlineEditModal
         open={modal.open}
         title="Edit HTML"

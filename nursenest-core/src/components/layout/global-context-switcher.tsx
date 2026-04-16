@@ -341,23 +341,30 @@ export function ExamSelector({
 type CompactCountryTriggerProps = {
   region: GlobalRegionSlug;
   onClick: () => void;
+  /** e.g. white pill on dark chrome bar (`HEADER_LIGHT_UTILITY_TRIGGER_CLASS`) */
+  className?: string;
 };
 
-export function CompactCountryTrigger({ region, onClick }: CompactCountryTriggerProps) {
+export function CompactCountryTrigger({ region, onClick, className }: CompactCountryTriggerProps) {
   const { t } = useMarketingI18n();
   const flag = getRegionFlag(region);
   const regionCfg = REGION_CONFIG[region];
+
+  const defaultTriggerClass =
+    "flex items-center gap-1 rounded-full bg-transparent px-2 py-0.5 text-[11px] font-normal tracking-wide text-[var(--header-utility-text)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)]";
 
   return (
     <button
       type="button"
       onClick={onClick}
-      className="flex items-center gap-1 rounded-full bg-transparent px-2 py-0.5 text-[11px] font-normal tracking-wide text-[var(--header-utility-text)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)]"
+      className={className?.trim() ? className : defaultTriggerClass}
       aria-label={`${t("nav.selectCountry")}: ${regionCfg.displayName}`}
       title={`${t("nav.selectCountry")} — ${regionCfg.displayName}`}
     >
       <Globe className="h-3 w-3 shrink-0 opacity-60" aria-hidden />
-      <span className="hidden min-[900px]:inline text-[10px] font-medium opacity-75">{t("nav.selectCountry")}</span>
+      <span className="hidden min-[900px]:inline text-[10px] font-normal opacity-75">
+        {t("nav.countryExam", undefined, t("nav.selectCountry"))}
+      </span>
       <span className="hidden sm:inline">{flag}</span>
       <span className="max-w-[80px] truncate">{regionCfg.displayName}</span>
       <ChevronDown className="h-3 w-3 shrink-0 opacity-50" aria-hidden />

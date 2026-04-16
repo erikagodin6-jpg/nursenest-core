@@ -24,7 +24,7 @@ export type MarketingHeroCarouselProps = {
   onMediaUnavailable?: () => void;
   /**
    * `hero` — tall, viewport-aware frame for the homepage column (fills beside long copy).
-   * `section` — screenshot strip under the hero (`max-w-[52rem]` in parent); sharp, lazy, no LCP priority.
+   * `section` — screenshot strip under the hero (`max-w-3xl` in parent); 4:3 frame, sharp, lazy, no LCP priority.
    * `default` — fixed 16:10 box (e.g. “Platform in Action”).
    */
   mediaFrame?: "default" | "hero" | "section";
@@ -53,9 +53,15 @@ export type MarketingHeroCarouselProps = {
 const heroMediaFrameClass =
   "relative aspect-[16/10] w-full min-h-[11rem] max-h-[min(28rem,62vh)] shrink-0 overflow-hidden sm:min-h-[12rem] sm:max-h-[min(30rem,65vh)] md:min-h-[13rem] md:max-h-[min(34rem,68vh)]";
 
-/** Below-hero screenshot strip: 16:10, width from parent; no max-height cap so previews read larger. */
-const sectionMediaFrameClass =
-  "relative aspect-[16/10] w-full min-h-[13rem] shrink-0 overflow-hidden sm:min-h-[16rem]";
+/** Below-hero screenshot strip: 4:3 for vertical presence; width from parent (max-w-3xl). */
+const sectionMediaFrameClass = "relative aspect-[4/3] w-full shrink-0 overflow-hidden";
+
+/** Section mode: minimal chrome — border only, flush with page (see {@link MARKETING_HOME_SCREENSHOT_SECTION_SIZES}). */
+const sectionFrameChromeClass =
+  "rounded-xl border border-[var(--border-subtle)] bg-[var(--page-bg)]";
+
+const defaultFrameChromeClass =
+  "rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] shadow-sm";
 
 export function MarketingHeroCarousel({
   slides,
@@ -228,19 +234,19 @@ export function MarketingHeroCarousel({
         : MARKETING_PHOTO_QUALITY;
 
   const isBelowFoldSection = mediaFrame === "section";
+  const frameChromeClass = isBelowFoldSection ? sectionFrameChromeClass : defaultFrameChromeClass;
+  const slideImageBgClass = isBelowFoldSection ? "bg-[var(--page-bg)]" : "bg-[var(--theme-muted-surface)]";
 
   if (validCount === 0) {
     return (
       <div className="relative w-full min-w-0" data-testid={fallbackWrapperTestId}>
-        <div
-          className={`${frameShell} overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] shadow-sm`}
-        >
+        <div className={`${frameShell} overflow-hidden ${frameChromeClass}`}>
           <Image
             src={MARKETING_HERO_LOCAL_FALLBACK}
             alt=""
             fill
             unoptimized
-            className="pointer-events-none object-contain bg-[var(--theme-muted-surface)]"
+            className={`pointer-events-none object-contain ${slideImageBgClass}`}
             sizes={carouselSizes}
           />
         </div>
@@ -258,7 +264,7 @@ export function MarketingHeroCarousel({
       data-testid={testIdPrefix}
     >
       <div
-        className={`${frameShell} relative overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] shadow-sm`}
+        className={`${frameShell} relative overflow-hidden ${frameChromeClass}`}
         style={{ overflowAnchor: "none" }}
         aria-busy={!hasLoaded && mediaOk}
       >
@@ -288,6 +294,9 @@ export function MarketingHeroCarousel({
           const active = index === current;
           const lcp = mediaFrame === "hero" && index === 0;
           const loadLazy = isBelowFoldSection ? index > 0 : !lcp && index > 0;
+          const slideMotionClass = isBelowFoldSection
+            ? "nn-carousel-slide-crossfade nn-carousel-slide-crossfade--depth"
+            : "nn-carousel-slide-crossfade";
           return (
             <Image
               key={`${slide.objectKey}-${index}-${tier}`}
@@ -300,8 +309,12 @@ export function MarketingHeroCarousel({
               loading={loadLazy ? "lazy" : undefined}
               fetchPriority={isBelowFoldSection && index === 0 ? "low" : undefined}
               unoptimized={marketingImageShouldUnoptimize(src)}
-              className={`pointer-events-none object-contain bg-[var(--theme-muted-surface)] nn-carousel-slide-crossfade ${
-                active ? "opacity-100 z-[1]" : "opacity-0 z-0"
+              className={`pointer-events-none object-contain ${slideImageBgClass} ${slideMotionClass} ${
+                active
+                  ? "z-[1] scale-100 opacity-100"
+                  : isBelowFoldSection
+                    ? "z-0 scale-[0.96] opacity-0"
+                    : "z-0 opacity-0"
               }`}
               data-testid={`img-${imgTestIdPrefix}-slide-${index}`}
               aria-hidden={!active}
@@ -338,13 +351,13 @@ export function MarketingHeroCarousel({
         <>
           {currentSlide && !captionOverlay ? (
             <div
-              className={`px-0 text-center ${isBelowFoldSection ? "mt-1.5 space-y-0.5" : "mt-2 space-y-1"}`}
+              className={`px-0 text-center ${isBelowFoldSection ? "mt-1 space-y-0" : "mt-2 space-y-1"}`}
               data-testid={captionTestId}
             >
               <p
                 className={
                   isBelowFoldSection
-                    ? "line-clamp-2 text-balance break-words text-sm font-semibold leading-snug text-[var(--palette-text-muted)]"
+                    ? "line-clamp-2 text-balance break-words text-sm font-medium leading-snug text-[var(--palette-text-muted)]"
                     : "nn-marketing-h4 text-balance break-words"
                 }
               >
@@ -363,7 +376,7 @@ export function MarketingHeroCarousel({
           ) : null}
           {extraSlidesMounted || slides.length <= 1 ? (
             <div
-              className={`flex flex-wrap justify-center ${isBelowFoldSection ? "mt-2 gap-1.5" : "mt-3 gap-2"}`}
+              className={`flex flex-wrap justify-center ${isBelowFoldSection ? "mt-1.5 gap-1.5" : "mt-3 gap-2"}`}
               data-testid={dotsTestId}
             >
               {slides.map((_, index) => (
@@ -374,8 +387,14 @@ export function MarketingHeroCarousel({
                   onClick={() => {
                     if (!failed.has(index)) setCurrent(index);
                   }}
-                  className={`h-2 rounded-full transition-all duration-[var(--brand-motion-normal)] ease-[var(--brand-motion-ease-luxury)] ${
-                    index === current ? "w-6 bg-role-cta" : "w-2 bg-[var(--theme-muted-text)]/35 hover:bg-[var(--theme-muted-text)]/55"
+                  className={`rounded-full transition-all duration-[var(--brand-motion-normal)] ease-[var(--brand-motion-ease-luxury)] ${
+                    isBelowFoldSection
+                      ? index === current
+                        ? "h-2 w-7 bg-role-cta opacity-100"
+                        : "h-1.5 w-1.5 bg-[var(--theme-muted-text)]/22 hover:bg-[var(--theme-muted-text)]/42"
+                      : index === current
+                        ? "h-2 w-6 bg-role-cta"
+                        : "h-2 w-2 bg-[var(--theme-muted-text)]/35 hover:bg-[var(--theme-muted-text)]/55"
                   } ${failed.has(index) ? "cursor-not-allowed opacity-40" : ""}`}
                   aria-label={t("components.marketingHeroCarousel.goToSlide", { n: index + 1 })}
                   data-testid={

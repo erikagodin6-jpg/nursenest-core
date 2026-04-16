@@ -18,7 +18,10 @@ import {
   filterWeakTopicsForAlliedProfession,
 } from "@/lib/allied/allied-weak-topic-filter";
 import { computeReadiness, type ReadinessResult } from "@/lib/learner/readiness-score";
-import { loadSessionGradingAggregate, type SessionGradingAggregate } from "@/lib/learner/session-grading-aggregate";
+import {
+  loadSessionGradingAggregate,
+  type SessionGradingAggregate,
+} from "@/lib/learner/session-grading-aggregate";
 import {
   loadUnifiedTopicPerformance,
   type TopicPerformanceSnapshot,
@@ -133,6 +136,11 @@ export type LearnerDashboardPreload = {
    * Callers that load a larger mock slice elsewhere (e.g. report card) should pass the first five here.
    */
   recentMocksPreload?: RecentMock[];
+  /**
+   * When set, skips {@link loadSessionGradingAggregate} (duplicate examSession + question fetch).
+   * Report card builds this from the same hydrated sessions as the bank panels (first 8 rows, `updatedAt` desc).
+   */
+  sessionGradingPreload?: SessionGradingAggregate;
   /**
    * Call-site id for `learner_dashboard_perf` logs (e.g. `loadPremiumDashboardSnapshot`, `api:GET:learner/readiness`).
    * Avoids PII; use stable builder/route identifiers only.
@@ -459,10 +467,14 @@ export async function loadLearnerDashboard(
         };
       }
     }
-    try {
-      practiceAgg = await loadSessionGradingAggregate(userId, entitlement, 8);
-    } catch {
-      practiceAgg = { correct: 0, total: 0, sessionCount: 0 };
+    if (preload?.sessionGradingPreload) {
+      practiceAgg = preload.sessionGradingPreload;
+    } else {
+      try {
+        practiceAgg = await loadSessionGradingAggregate(userId, entitlement, 8);
+      } catch {
+        practiceAgg = { correct: 0, total: 0, sessionCount: 0 };
+      }
     }
   }
 
@@ -506,6 +518,8 @@ export async function loadLearnerDashboard(
     pathwayMetadataRowCount: preload?.pathwayMetadataRowCount ?? 0,
     pathwayProgressRowCount: preload?.pathwayProgressRowCount ?? 0,
     pathwaySectionsJsonLoaded: false,
+    recentMocksFromPreload: preload?.recentMocksPreload !== undefined,
+    sessionGradingFromPreload: Boolean(preload?.sessionGradingPreload),
     optionalAggregatesSkipped: skipHeavy,
     ...getLearnerDurabilityObservabilityFields(),
   });

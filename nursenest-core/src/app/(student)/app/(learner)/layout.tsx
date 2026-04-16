@@ -10,8 +10,10 @@ import { LearnerAppSectionAnalytics } from "@/components/observability/learner-a
 import { SentryLearnerShell } from "@/components/observability/sentry-learner-shell";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadLearnerStudyNextBlock } from "@/lib/learner/load-learner-study-next-block";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import {
   DEFAULT_LEARNER_PATHWAY_NAV_METADATA,
+  formatPathwayContextBar,
   isLearnerPathwayNavMetadata,
   loadLearnerPathwayNavMetadata,
 } from "@/lib/learner/load-learner-shell-pathway-metadata";
@@ -26,6 +28,7 @@ import {
   LearnerShellPathwayPill,
 } from "@/components/layout/learner-shell-primary-nav";
 import { LearnerStudyPathStrip } from "@/components/student/learner-study-path-strip";
+import { LearnerPathwayContextBar } from "@/components/student/learner-pathway-context-bar";
 import { LearnerShellBrandHomeLink } from "@/components/student/learner-shell-brand-home-link";
 import { LearnerUnauthenticatedGate } from "@/components/student/learner-unauthenticated-gate";
 import {
@@ -102,7 +105,7 @@ export default async function LearnerShellLayout({ children }: { children: React
   );
 
   const { showBaselinePrompt, pathwayId, pathwayShortLabel } = pathwayNav;
-  let { pathwayHubHref, examsLabel } = pathwayNav;
+  let { pathwayHubHref, examsLabel, pathwayContextBar } = pathwayNav;
 
   if (!pathwayHubHref) {
     const tier = ((session?.user as { tier?: string | null })?.tier ?? "").toUpperCase();
@@ -119,6 +122,30 @@ export default async function LearnerShellLayout({ children }: { children: React
       pathwayHubHref = "/us/np/fnp";
       examsLabel = "CAT Exams";
     } else if (tier === "ALLIED") pathwayHubHref = "/us/allied/allied-health";
+  }
+
+  if (!pathwayContextBar && pathwayId) {
+    const p = getExamPathwayById(pathwayId);
+    if (p) pathwayContextBar = formatPathwayContextBar(p);
+  }
+  if (!pathwayContextBar && pathwayHubHref) {
+    const tier = ((session?.user as { tier?: string | null })?.tier ?? "").toUpperCase();
+    const fallbackPathwayId =
+      tier === "RN"
+        ? "us-rn-nclex-rn"
+        : tier === "RPN"
+          ? "ca-rpn-rex-pn"
+          : tier === "LVN_LPN"
+            ? "us-lpn-nclex-pn"
+            : tier === "NP"
+              ? "us-np-fnp"
+              : tier === "ALLIED"
+                ? "us-allied-core"
+                : null;
+    if (fallbackPathwayId) {
+      const p = getExamPathwayById(fallbackPathwayId);
+      if (p) pathwayContextBar = formatPathwayContextBar(p);
+    }
   }
 
   /** Tier 2 — study next (optional): skip entirely in degraded / emergency, else safeOptional. */
@@ -168,6 +195,9 @@ export default async function LearnerShellLayout({ children }: { children: React
                         <LearnerThemeControl />
                       </div>
                     </div>
+                    {pathwayContextBar && pathwayHubHref ? (
+                      <LearnerPathwayContextBar label={pathwayContextBar} hubHref={pathwayHubHref} />
+                    ) : null}
                   </div>
                   <div className="nn-learner-shell-nav-row rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-2 shadow-[0_1px_0_0_color-mix(in_srgb,var(--semantic-text-primary)_06%,transparent)] sm:px-3">
                     <LearnerShellDesktopStudyLinks pathwayId={pathwayId} examsLabel={examsLabel} />

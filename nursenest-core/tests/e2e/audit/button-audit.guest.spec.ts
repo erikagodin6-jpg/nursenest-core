@@ -10,7 +10,6 @@ import path from "node:path";
 import { expect, test } from "@playwright/test";
 import { attachButtonAuditObservers } from "../helpers/button-audit/observers";
 import { collectInteractiveInventory } from "../helpers/button-audit/inventory-collector";
-import { isLikelyDestructive } from "../helpers/button-audit/destructive-patterns";
 import type { InventoryControl, InventoryReport, SafeInteractionReport } from "../helpers/button-audit/types";
 import { writeInventoryReport, writeSafeInteractionReport, BUTTON_AUDIT_DIR } from "../helpers/button-audit/report-writer";
 import { GUEST_SEEDS, parseAllowlistEnv } from "../helpers/button-audit/page-seeds";
@@ -29,7 +28,7 @@ test.describe("Button audit — guest", () => {
     const allowOverride = parseAllowlistEnv();
     const paths = allowOverride ?? GUEST_SEEDS.paths;
     const pages: InventoryReport["pages"] = [];
-    const obs = attachButtonAuditObservers(page);
+    const obs = attachButtonAuditObservers(page, origin);
 
     try {
       for (const pathname of paths) {
@@ -55,9 +54,7 @@ test.describe("Button audit — guest", () => {
     }
 
     const destructiveHints = pages.flatMap((p) =>
-      p.controls
-        .filter((c) => isLikelyDestructive({ text: c.text, ariaLabel: c.ariaLabel, dataTestId: c.dataTestId }))
-        .map((c) => ({ pathname: p.pathname, text: c.text.slice(0, 120) })),
+      p.controls.filter((c) => c.destructiveHeuristic).map((c) => ({ pathname: p.pathname, text: c.text.slice(0, 120) })),
     );
 
     const report: InventoryReport = {
@@ -73,17 +70,24 @@ test.describe("Button audit — guest", () => {
     await writeFile(
       path.join(BUTTON_AUDIT_DIR, "meta", "guest-inventory-observers.json"),
       JSON.stringify(
-        { pageErrors: obs.pageErrors, documentHttpErrors: obs.documentHttpErrors, destructiveHints },
+        {
+          pageErrors: obs.pageErrors,
+          documentHttpErrors: obs.documentHttpErrors,
+          sameOriginApiErrors: obs.sameOriginApiErrors,
+          destructiveHints,
+        },
         null,
         2,
       ),
       "utf8",
     );
 
-    // eslint-disable-next-line no-console
     console.log(`[button-audit] inventory written: ${jsonPath}, ${mdPath}`);
     expect(obs.pageErrors, `page/console errors: ${obs.pageErrors.join(" | ")}`).toEqual([]);
     expect(obs.documentHttpErrors, `document HTTP errors: ${JSON.stringify(obs.documentHttpErrors)}`).toEqual([]);
+    if (process.env.E2E_BUTTON_AUDIT_TRACK_API === "1") {
+      expect(obs.sameOriginApiErrors, JSON.stringify(obs.sameOriginApiErrors)).toEqual([]);
+    }
   });
 
   test("safe interaction: non-destructive controls (capped)", async ({ page, baseURL }) => {
@@ -91,7 +95,7 @@ test.describe("Button audit — guest", () => {
     const origin = baseURL ?? getE2eBaseURL();
     const allowOverride = parseAllowlistEnv();
     const paths = (allowOverride ?? GUEST_SEEDS.paths).slice(0, 12);
-    const obs = attachButtonAuditObservers(page);
+    const obs = attachButtonAuditObservers(page, origin);
     const allResults: SafeInteractionReport["results"] = [];
 
     try {
@@ -123,11 +127,13 @@ test.describe("Button audit — guest", () => {
       failures,
     };
     const { jsonPath, mdPath } = await writeSafeInteractionReport(report);
-    // eslint-disable-next-line no-console
     console.log(`[button-audit] safe interaction written: ${jsonPath}, ${mdPath}; failures: ${failures.length}`);
 
     expect(obs.pageErrors, obs.pageErrors.join("\n")).toEqual([]);
     expect(obs.documentHttpErrors).toEqual([]);
+    if (process.env.E2E_BUTTON_AUDIT_TRACK_API === "1") {
+      expect(obs.sameOriginApiErrors, JSON.stringify(obs.sameOriginApiErrors)).toEqual([]);
+    }
     expect(failures, `safe interaction failures: ${JSON.stringify(failures, null, 2)}`).toEqual([]);
   });
 });

@@ -515,8 +515,9 @@
 }
 
 /*
- * Shared light-UI surfaces — every non-dark theme gets the same structure:
- * white page/cards (#fff), gray-50 section alt via --theme-surface-strong, theme hue on primary/links/CTAs only.
+ * Shared light-UI surfaces — every registry `group: light` theme gets the same structure:
+ * white page/cards, gray-50 section alt, dark text. Brand hue is concentrated in
+ * --theme-primary (buttons, links, rings, small accents) — not full-width tinted shells.
  *
  * SPECIFICITY vs :root — This :is() block has [0,1,0] specificity (attribute selector),
  * which WINS over :root's [0,0,0,1]. This is intentional — it lets [data-theme] override
@@ -529,63 +530,80 @@
  * blocks (those defining --theme-page-bg, --theme-heading-text, etc.) MUST therefore
  * appear AFTER this catch-all, or their explicit values get silently overridden.
  * Regression test: `tsx --test src/lib/theme/theme-palettes-order.test.ts`
+ *
+ * A second normalization block at the END of this file re-applies neutral secondary/accent
+ * borders + light topbar after complete identity blocks that set saturated tints.
  */
 :is(
-  [data-theme="lavender"],
-  [data-theme="mint"],
+  [data-theme="arctic-frost"],
+  [data-theme="berry"],
+  [data-theme="berry-bonbon"],
+  [data-theme="blueberry-sherbet"],
+  [data-theme="bluebird"],
   [data-theme="blush"],
-  [data-theme="slate"],
-  [data-theme="midnight"],
-  [data-theme="ocean"],
-  [data-theme="forest"],
   [data-theme="clinical-light"],
-  [data-theme="pastel-blush"],
-  [data-theme="pastel-lavender"],
-  [data-theme="pastel-mint"],
-  [data-theme="pastel-lilac"],
+  [data-theme="coral"],
+  [data-theme="coral-sunset"],
+  [data-theme="cotton-candy"],
+  [data-theme="dusty-rose"],
+  [data-theme="forest"],
+  [data-theme="golden-hour"],
+  [data-theme="graphite-blue"],
+  [data-theme="honey-cream"],
+  [data-theme="indigo"],
+  [data-theme="lavender"],
   [data-theme="lavender-dream"],
-  [data-theme="soft-sage"],
+  [data-theme="mint"],
+  [data-theme="mint-breeze"],
+  [data-theme="multi-pastel"],
   [data-theme="neutral-sand"],
   [data-theme="neutral-slate"],
-  [data-theme="rose-gold"],
-  [data-theme="coral"],
-  [data-theme="indigo"],
-  [data-theme="teal"],
-  [data-theme="berry"],
-  [data-theme="strawberry"],
-  [data-theme="multi-pastel"],
-  [data-theme="blueberry-sherbet"],
-  [data-theme="strawberry-cream"],
+  [data-theme="north-sea"],
+  [data-theme="ocean"],
   [data-theme="ocean-mist"],
-  [data-theme="mint-breeze"],
-  [data-theme="rose-quartz"],
-  [data-theme="golden-hour"],
-  [data-theme="sage-garden"],
-  [data-theme="coral-sunset"],
-  [data-theme="arctic-frost"],
+  [data-theme="pastel-blush"],
+  [data-theme="pastel-lavender"],
+  [data-theme="pastel-lilac"],
+  [data-theme="pastel-mint"],
+  [data-theme="pastel-party"],
+  [data-theme="petal-pop"],
+  [data-theme="pink-skies"],
+  [data-theme="plum-mist"],
   [data-theme="plum-velvet"],
-  [data-theme="honey-cream"],
-  [data-theme="dusty-rose"]
+  [data-theme="rainbow-sherbet"],
+  [data-theme="rose-gold"],
+  [data-theme="rose-quartz"],
+  [data-theme="sage-garden"],
+  [data-theme="sky-kiss"],
+  [data-theme="slate"],
+  [data-theme="soft-sage"],
+  [data-theme="strawberry"],
+  [data-theme="strawberry-cream"],
+  [data-theme="sunny-lilac"],
+  [data-theme="teal"],
+  [data-theme="violet-night"]
 ) {
+  /* Default CTA text on primary — pastel themes get dark foreground in a later block */
   --theme-primary-foreground: #ffffff;
-  --theme-topbar-bg: var(--theme-primary);
-  --theme-topbar-text: #ffffff;
+  /* Top bar: neutral shell; readable dark text (not white-on-brand) */
+  --theme-topbar-bg: #ffffff;
+  --theme-topbar-text: #111827;
   /*
    * Page + nav canvas: pure white. Theme identity shows in --theme-primary (buttons, links,
-   * focus rings, top bar), not full-width tinted backgrounds.
-   * Section rhythm uses --theme-surface-strong (Tailwind gray-50) via globals --bg-section-alt.
+   * focus rings), not full-width tinted backgrounds.
+   * Section rhythm uses --theme-surface-strong (gray-50) via globals --bg-section-alt.
    */
   --theme-page-bg: #ffffff;
   --theme-nav-bg: #ffffff;
   /* gray-50 — alternating sections / muted bands (no hue from --theme-primary) */
   --theme-surface-strong: #f9fafb;
   --theme-nav-text: #6b7280;
-  --theme-nav-border: color-mix(in srgb, var(--theme-primary) 10%, transparent);
+  --theme-nav-border: color-mix(in srgb, var(--theme-primary) 6%, #e5e7eb);
   --theme-menu-text: #374151;
   --theme-menu-hover-bg: color-mix(in srgb, var(--theme-primary) 8%, transparent);
   --theme-menu-hover-text: var(--theme-primary);
   --theme-menu-active-bg: color-mix(in srgb, var(--theme-primary) 12%, transparent);
-  /* Cards: pure white — theme appears on bubble/accent opt-in surfaces, not generic cards */
+  /* Cards: pure white — theme appears on CTAs / links / focus, not generic cards */
   --theme-card-bg: #ffffff;
   --theme-card-border: color-mix(in srgb, var(--theme-border) 60%, transparent);
   --theme-card-text: #374151;
@@ -1190,78 +1208,6 @@
   --logo-text: #5A3844;
 }
 
-
-/*
- * Per-theme topbar overrides — ensures sufficient contrast between topbar bg and white text.
- * Pale/pastel primaries can't be used as topbar backgrounds with white text (WCAG failure).
- */
-[data-theme="ocean"] { --theme-topbar-bg: #064273; }
-[data-theme="mint"]  { --theme-topbar-bg: #008080; }
-
-/* Pink topbars: deep rose so white text passes WCAG AA (≥4.5:1) */
-[data-theme="blush"] {
-  --theme-topbar-bg: #c4607d;
-  --theme-topbar-text: #ffffff;
-}
-[data-theme="pastel-blush"] {
-  --theme-topbar-bg: #c06878;
-  --theme-topbar-text: #ffffff;
-}
-[data-theme="strawberry"] {
-  --theme-topbar-bg: #b84063;
-  --theme-topbar-text: #ffffff;
-}
-
-/* Multi-pastel topbar: same deep blue as CTA */
-[data-theme="multi-pastel"] {
-  --theme-topbar-bg: #3a6e9e;
-  --theme-topbar-text: #ffffff;
-}
-
-/*
- * Extended topbar contrast overrides — WCAG AA (≥ 4.5:1 with white text).
- * Each override uses a darkened shade of the theme family so the topbar is recognisably
- * on-brand without failing the contrast ratio for white body text.
- *
- * Contrast targets (computed relative luminance vs white #ffffff):
- *   green/teal:   pastel-mint #4fd1a5 → 2.1:1 (FAIL) → #2a9c78 ~4.7:1 ✓
- *                 teal        #14b8a6 → 2.5:1 (FAIL) → #0c8a7a ~4.9:1 ✓
- *                 forest      #10b981 → 3.6:1 (FAIL) → #0a7755 ~5.1:1 ✓
- *                 soft-sage   #7da87d → 4.0:1        → #4a7a4a ~6.1:1 ✓
- *   lavender:     lavender    #9d82dd → 3.2:1 (FAIL) → #6d4daa ~5.0:1 ✓
- *                 pastel-lav  #a78bda → 3.0:1 (FAIL) → #7c5bb0 ~4.7:1 ✓
- *                 pastel-lil  #b48ed2 → 2.8:1 (FAIL) → #7a52a8 ~5.2:1 ✓
- *                 lav-dream   #8e7cc3 → 3.5:1        → #6a58a0 ~4.8:1 ✓
- *                 berry       #a855f7 → 4.0:1        → #7c2ec2 ~5.4:1 ✓
- *   warm:         rose-gold   #b76e79 → 3.8:1        → #8f3d4e ~5.5:1 ✓
- *                 coral       #ff6b6b → 2.8:1 (FAIL) → #cc3c3c ~4.6:1 ✓
- *   blue:         clinical-lt #3b82f6 → 4.0:1        → #1d5bcf ~5.3:1 ✓
- *   neutral:      slate/midnight/sand/neutral-slate all pass with their primaries.
- */
-
-/* Teal / Mint family */
-[data-theme="pastel-mint"] { --theme-topbar-bg: #2a9c78; --theme-topbar-text: #ffffff; }
-[data-theme="teal"]        { --theme-topbar-bg: #0c8a7a; --theme-topbar-text: #ffffff; }
-[data-theme="forest"]      { --theme-topbar-bg: #0a7755; --theme-topbar-text: #ffffff; }
-[data-theme="soft-sage"]   { --theme-topbar-bg: #4a7a4a; --theme-topbar-text: #ffffff; }
-
-/* Lavender / Purple family */
-[data-theme="lavender"]       { --theme-topbar-bg: #6d4daa; --theme-topbar-text: #ffffff; }
-[data-theme="pastel-lavender"] { --theme-topbar-bg: #7c5bb0; --theme-topbar-text: #ffffff; }
-[data-theme="pastel-lilac"]   { --theme-topbar-bg: #7a52a8; --theme-topbar-text: #ffffff; }
-[data-theme="berry"]          { --theme-topbar-bg: #7c2ec2; --theme-topbar-text: #ffffff; }
-
-/* Warm / Pink extended */
-[data-theme="rose-gold"] { --theme-topbar-bg: #8f3d4e; --theme-topbar-text: #ffffff; }
-[data-theme="coral"]     { --theme-topbar-bg: #c06060; --theme-topbar-text: #ffffff; }
-
-/* Blue */
-[data-theme="clinical-light"] { --theme-topbar-bg: #1d5bcf; --theme-topbar-text: #ffffff; }
-
-/* Named themes — topbar already set inline for blueberry-sherbet, ocean-mist, midnight-indigo */
-[data-theme="strawberry-cream"] { --theme-topbar-bg: #B84063; --theme-topbar-text: #ffffff; }
-[data-theme="lavender-dream"]  { --theme-topbar-bg: #7A5C9E; --theme-topbar-text: #ffffff; }
-
 /*
  * Button / pill foreground contrast — light-primary themes need dark text.
  * Rule: if the primary colour has high luminance (pastels, light mid-tones),
@@ -1315,4 +1261,69 @@
 /* Cool neutrals — slate */
 [data-theme="neutral-slate"] {
   --theme-primary-foreground: #0e1620;
+}
+
+/*
+ * Light-theme neutral shell normalization — SOURCE ORDER MUST STAY LAST.
+ * Complete identity blocks above may set saturated --theme-secondary / --theme-accent /
+ * --theme-border and colored topbars. Re-apply one shared neutral UI so only
+ * --theme-primary (and focus/ring) carries the brand hue on light themes.
+ * Regression: `tsx --test src/lib/theme/theme-palettes-order.test.ts`
+ */
+:is(
+  [data-theme="arctic-frost"],
+  [data-theme="berry"],
+  [data-theme="berry-bonbon"],
+  [data-theme="blueberry-sherbet"],
+  [data-theme="bluebird"],
+  [data-theme="blush"],
+  [data-theme="clinical-light"],
+  [data-theme="coral"],
+  [data-theme="coral-sunset"],
+  [data-theme="cotton-candy"],
+  [data-theme="dusty-rose"],
+  [data-theme="forest"],
+  [data-theme="golden-hour"],
+  [data-theme="graphite-blue"],
+  [data-theme="honey-cream"],
+  [data-theme="indigo"],
+  [data-theme="lavender"],
+  [data-theme="lavender-dream"],
+  [data-theme="mint"],
+  [data-theme="mint-breeze"],
+  [data-theme="multi-pastel"],
+  [data-theme="neutral-sand"],
+  [data-theme="neutral-slate"],
+  [data-theme="north-sea"],
+  [data-theme="ocean"],
+  [data-theme="ocean-mist"],
+  [data-theme="pastel-blush"],
+  [data-theme="pastel-lavender"],
+  [data-theme="pastel-lilac"],
+  [data-theme="pastel-mint"],
+  [data-theme="pastel-party"],
+  [data-theme="petal-pop"],
+  [data-theme="pink-skies"],
+  [data-theme="plum-mist"],
+  [data-theme="plum-velvet"],
+  [data-theme="rainbow-sherbet"],
+  [data-theme="rose-gold"],
+  [data-theme="rose-quartz"],
+  [data-theme="sage-garden"],
+  [data-theme="sky-kiss"],
+  [data-theme="slate"],
+  [data-theme="soft-sage"],
+  [data-theme="strawberry"],
+  [data-theme="strawberry-cream"],
+  [data-theme="sunny-lilac"],
+  [data-theme="teal"],
+  [data-theme="violet-night"]
+) {
+  --theme-secondary: #f3f4f6;
+  --theme-secondary-foreground: #4b5563;
+  --theme-accent: #f9fafb;
+  --theme-accent-foreground: var(--theme-primary);
+  --theme-border: color-mix(in srgb, var(--theme-primary) 8%, #e5e7eb);
+  --theme-topbar-bg: #ffffff;
+  --theme-topbar-text: #111827;
 }

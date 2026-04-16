@@ -18,11 +18,12 @@ export async function writeInventoryReport(report: InventoryReport): Promise<{ j
     "",
     "## Summary",
     "",
-    `| Page | Controls | Truncated |`,
-    `|------|----------|-----------|`,
+    `| Page | Controls | Truncated | Destructive (heuristic) |`,
+    `|------|----------|-----------|-------------------------|`,
   ];
   for (const p of report.pages) {
-    lines.push(`| ${p.pathname} | ${p.controls.length} | ${p.truncated ? "yes" : "no"} |`);
+    const destructive = p.controls.filter((c) => c.destructiveHeuristic).length;
+    lines.push(`| ${p.pathname} | ${p.controls.length} | ${p.truncated ? "yes" : "no"} | ${destructive} |`);
   }
   lines.push("");
   const mdPath = path.join(BUTTON_AUDIT_DIR, `inventory-${report.role}.md`);

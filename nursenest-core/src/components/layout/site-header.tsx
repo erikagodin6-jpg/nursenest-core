@@ -36,21 +36,27 @@ import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { CountrySelector } from "@/components/layout/global-context-switcher";
 const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
 
-/** Keep desktop nav pills single-line and compact so the full global IA fits cleanly. */
+/** Keep desktop nav pills single-line and compact — font-normal reads more premium than heavy medium weights. */
 const NAV_LINK_CLASS =
-  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-9 items-center justify-center whitespace-nowrap px-2 text-center font-medium leading-none tracking-tight xl:px-2.5";
+  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-8 items-center justify-center whitespace-nowrap px-2 text-center font-normal leading-none tracking-tight xl:px-2.5";
 /** Muted Learn / Track in the public “Learn → Practice → Track” row. */
-const NAV_FLOW_SECONDARY_CLASS = `${NAV_LINK_CLASS} text-[var(--nav-muted)] font-normal`;
+const NAV_FLOW_SECONDARY_CLASS = `${NAV_LINK_CLASS} text-[var(--nav-muted)]`;
 /** Single primary action in that row — Practice (question bank). */
 const NAV_FLOW_PRACTICE_CLASS =
-  "nn-nav-cta nn-marketing-body-sm inline-flex h-9 min-h-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-1.5 font-semibold leading-none tracking-tight xl:px-3.5";
+  "nn-nav-cta nn-marketing-body-sm inline-flex h-8 min-h-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-1.5 font-semibold leading-none tracking-tight xl:px-3.5";
 const NAV_TIER_LINK_CLASS =
-  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-8 items-center justify-center whitespace-nowrap px-2 text-center font-medium leading-none tracking-tight xl:px-2.5";
+  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-7 items-center justify-center whitespace-nowrap px-2 text-center font-normal leading-none tracking-tight xl:px-2.5";
 const HEADER_SECONDARY_ACTION_CLASS =
-  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
-/** Country / language / theme triggers aligned with main nav height (sits in the primary header row, not a detached strip). */
+  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
+/** On dark chrome (e.g. non–light-theme header row): translucent trigger. */
 const HEADER_MAIN_NAV_MENU_TRIGGER_CLASS =
-  "nn-marketing-body-sm inline-flex h-9 max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--nav-fg)_14%,var(--nav-border))] bg-[color-mix(in_srgb,var(--nav-fg)_04%,transparent)] px-2 text-center font-medium leading-none tracking-tight text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)] xl:max-w-[13rem] xl:px-2.5";
+  "nn-marketing-body-sm inline-flex h-8 max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--nav-fg)_14%,var(--nav-border))] bg-[color-mix(in_srgb,var(--nav-fg)_04%,transparent)] px-2 text-center font-normal leading-none tracking-tight text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)] xl:max-w-[13rem] xl:px-2.5";
+/**
+ * Light-theme top brand strip: white filled controls + dark text for contrast (country / locale / theme).
+ * Keeps the bar visually lighter than ghost text on saturated chrome.
+ */
+const HEADER_LIGHT_UTILITY_TRIGGER_CLASS =
+  "nn-marketing-body-sm inline-flex h-8 max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--theme-heading-text,#0f172a)_14%,#cbd5e1)] bg-white px-2.5 text-center font-normal leading-none tracking-tight text-[var(--theme-heading-text)] shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-colors hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--theme-heading-text)_25%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-white xl:max-w-[13rem]";
 type LearnerTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
 type LearnerCountry = "CA" | "US";
 type HeaderResumeCta = { href: string; label: string } | null;
@@ -337,18 +343,26 @@ export function SiteHeader() {
     return `${inset}, 0 12px 36px -14px color-mix(in srgb, var(--theme-heading-text) 18%, transparent)`;
   }, [isScrolled]);
 
+  /** Light homepage: white pills on brand strip; dark unified header: translucent triggers. */
+  const headerUtilityMenuTriggerClass = isLightTheme
+    ? HEADER_LIGHT_UTILITY_TRIGGER_CLASS
+    : HEADER_MAIN_NAV_MENU_TRIGGER_CLASS;
+  const utilityThemePickerShellClass = isLightTheme
+    ? "text-[var(--theme-heading-text)] [&_button]:h-8 [&_button]:min-h-0 [&_button]:items-center [&_button]:gap-1.5 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] [&_button]:bg-white [&_button]:px-2.5 [&_button]:py-1.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:text-[var(--theme-heading-text)] [&_button]:shadow-[0_1px_2px_rgba(15,23,42,0.05)] [&_button]:hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))] [&_button]:hover:text-[var(--theme-heading-text)]"
+    : "text-[var(--nav-fg)] [&_button]:min-h-0 [&_button]:border-[var(--nav-border)] [&_button]:bg-transparent [&_button]:px-2.5 [&_button]:py-1.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:shadow-none [&_button]:hover:bg-[var(--nav-hover)] [&_button]:hover:text-[var(--nav-fg)]";
+
   const marketingDesktopUtilityControls = (
     <div className="flex min-w-0 items-center gap-1 xl:gap-1.5">
       <div className="relative" ref={desktopCountryRef}>
         <button
           type="button"
           onClick={() => setDesktopCountryOpen((open) => !open)}
-          className={HEADER_MAIN_NAV_MENU_TRIGGER_CLASS}
+          className={headerUtilityMenuTriggerClass}
           aria-expanded={desktopCountryOpen}
           aria-haspopup="listbox"
           aria-label={`${t("nav.regionLabel")}: ${REGION_CONFIG[effectiveGlobalRegion].displayName}. ${t("nav.openMenu")}`}
         >
-          <MapPin className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
+          <MapPin className={`h-3.5 w-3.5 shrink-0 ${isLightTheme ? "opacity-70" : "opacity-80"}`} aria-hidden />
           <span className="min-w-0 truncate">
             {effectiveGlobalRegion === "canada"
               ? formatTitleCase(t("home.region.ca"), locale)
@@ -374,7 +388,7 @@ export function SiteHeader() {
         <button
           type="button"
           onClick={() => setDesktopLangOpen((open) => !open)}
-          className={HEADER_MAIN_NAV_MENU_TRIGGER_CLASS}
+          className={headerUtilityMenuTriggerClass}
           aria-expanded={desktopLangOpen}
           aria-haspopup="listbox"
           aria-label={`${t("nav.language")}: ${locale.toUpperCase()}. Click to change.`}
@@ -383,7 +397,7 @@ export function SiteHeader() {
           <ChevronDown className={`h-3 w-3 shrink-0 opacity-60 transition-transform ${desktopLangOpen ? "rotate-180" : ""}`} aria-hidden />
         </button>
         {desktopLangOpen ? (
-          <div className="absolute end-0 z-[120] mt-2 max-h-56 w-52 overflow-y-auto rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] p-1 shadow-[var(--shadow-card-hover)]">
+          <div className="absolute end-0 z-[120] mt-2 max-h-56 w-52 overflow-y-auto rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-strong)] p-1 text-[var(--theme-heading-text)] shadow-[var(--shadow-card-hover)]">
             <MarketingLanguagePreferenceList
               onDone={() => setDesktopLangOpen(false)}
               renderItem={({ code, name, flag, disabled, onSelect }) => (
@@ -391,8 +405,8 @@ export function SiteHeader() {
                   type="button"
                   disabled={disabled}
                   onClick={onSelect}
-                  className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-xs hover:bg-[var(--nav-hover)] ${
-                    code === locale ? "bg-[var(--nav-active)] font-medium text-[var(--nav-fg)]" : "text-[var(--nav-muted)]"
+                  className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-xs hover:bg-[color-mix(in_srgb,var(--theme-heading-text)_06%,var(--surface-strong))] ${
+                    code === locale ? "bg-[var(--accent-surface-a)] font-medium text-[var(--text-accent)]" : "text-[var(--theme-heading-text)]"
                   }`}
                 >
                   <span>{flag}</span>
@@ -403,7 +417,7 @@ export function SiteHeader() {
           </div>
         ) : null}
       </div>
-      <div className="text-[var(--nav-fg)] [&_button]:min-h-0 [&_button]:border-[var(--nav-border)] [&_button]:bg-transparent [&_button]:px-2.5 [&_button]:py-1.5 [&_button]:text-[11px] [&_button]:font-medium [&_button]:shadow-none [&_button]:hover:bg-[var(--nav-hover)] [&_button]:hover:text-[var(--nav-fg)]">
+      <div className={`shrink-0 ${utilityThemePickerShellClass}`}>
         <ThemePicker
           className="shrink-0"
           labels={{
@@ -466,7 +480,7 @@ export function SiteHeader() {
     <div style={navChromeVars} className="sticky top-0 z-50 nn-header-animate-in" ref={headerRef}>
       {isLightTheme ? (
         <div className="nn-header-utility-dark hidden w-full border-b border-[var(--nn-nav-border)] md:block">
-          <div className="nn-section-shell flex min-h-9 items-center justify-end gap-2 py-1.5">
+          <div className="nn-section-shell flex min-h-8 items-center justify-end gap-1.5 py-1">
             {marketingDesktopUtilityControls}
           </div>
         </div>
@@ -675,7 +689,7 @@ export function SiteHeader() {
                         role="menuitem"
                         href={localizeHref(item.href)}
                         aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                        className="flex items-center px-3 py-2.5 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                        className="flex items-center px-3 py-2.5 text-sm font-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                         onClick={() => {
                           setDesktopMoreOpen(false);
                           trackClientEvent(PH.marketingNavClick, {
@@ -781,7 +795,7 @@ export function SiteHeader() {
           </div>{/* /nav-row */}
         </div>{/* /shell */}
         <div className="hidden w-full border-t border-[var(--nn-nav-border)] nn-header-nav-row md:block">
-          <div className="nn-section-shell flex min-h-11 flex-wrap items-center gap-x-1 gap-y-0.5 lg:gap-x-0.5">
+          <div className="nn-section-shell flex min-h-9 flex-wrap items-center gap-x-0.5 gap-y-0 py-0.5 lg:gap-x-0.5">
             <nav
               aria-label={t("nav.marketingExplore")}
               className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-0 xl:gap-0.5"
@@ -833,7 +847,7 @@ export function SiteHeader() {
                           key={menu.key}
                           type="button"
                           role="menuitem"
-                          className="flex w-full items-center px-3 py-2.5 text-left text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                          className="flex w-full items-center px-3 py-2.5 text-left text-sm font-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                           onClick={() => {
                             setOpenMegaMenu(menu.key);
                             setDesktopMoreTracksOpen(false);

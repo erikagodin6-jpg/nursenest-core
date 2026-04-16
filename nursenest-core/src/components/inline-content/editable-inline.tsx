@@ -5,9 +5,15 @@ import {
   preloadInlineContentMap,
   type InlineContentResolved,
 } from "@/lib/inline-content/load-inline-content";
+
 export type { InlineContentResolved };
 
 export { preloadInlineContentMap };
+
+/**
+ * Server components: resolve DB-backed copy by `contentKey`, then either render plain markup for
+ * visitors or dynamically import the tiny admin client editor (staff only — matches `/api/admin/inline-content` RBAC).
+ */
 
 type Preloaded = Record<string, InlineContentResolved>;
 

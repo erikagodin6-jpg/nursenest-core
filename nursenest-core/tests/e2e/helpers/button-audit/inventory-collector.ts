@@ -1,4 +1,5 @@
 import type { Page } from "@playwright/test";
+import { isLikelyDestructive } from "./destructive-patterns";
 import type { InventoryControl, PageInventory } from "./types";
 
 /**
@@ -31,6 +32,7 @@ export async function collectInteractiveInventory(
       '[role="button"]',
       'input[type="button"]',
       'input[type="submit"]',
+      'details summary',
       "a[role=\"button\"]",
       "a[data-testid]",
       "a[data-nn-qa-primary-lesson]",
@@ -97,7 +99,14 @@ export async function collectInteractiveInventory(
     return { rows: out, truncated };
   }, maxControls);
 
-  const controls: InventoryControl[] = raw.rows;
+  const controls: InventoryControl[] = raw.rows.map((row) => ({
+    ...row,
+    destructiveHeuristic: isLikelyDestructive({
+      text: row.text,
+      ariaLabel: row.ariaLabel,
+      dataTestId: row.dataTestId,
+    }),
+  }));
 
   return {
     pathname: opts.pathname,

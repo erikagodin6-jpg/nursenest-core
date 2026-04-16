@@ -30,9 +30,9 @@ const HomeHeroScreenshotSection = dynamic(
         className="border-b border-[var(--header-nav-border)] bg-[var(--page-bg)]"
         aria-hidden
       >
-        <div className="nn-section-shell py-4 sm:py-5 md:py-6">
-          {/* Reserve 16:10 space to match {@link MarketingHeroCarousel} section frame — avoids CLS while the chunk loads */}
-          <div className="mx-auto aspect-[16/10] w-full max-w-[52rem] rounded-2xl border border-[var(--border-subtle)] bg-[var(--semantic-panel-muted)] shadow-sm" />
+        <div className="nn-section-shell py-3 sm:py-4 md:py-5">
+          {/* Reserve 4:3 space to match {@link MarketingHeroCarousel} section frame — avoids CLS while the chunk loads */}
+          <div className="mx-auto aspect-[4/3] w-full max-w-3xl rounded-xl border border-[var(--border-subtle)] bg-[var(--semantic-panel-muted)]" />
         </div>
       </div>
     ),

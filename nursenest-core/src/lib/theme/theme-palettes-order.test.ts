@@ -67,7 +67,10 @@ function findBlockEnd(startLine: number): number {
 
 const catchAllStart = firstLine(/^:is\(/);
 const catchAllEnd = catchAllStart >= 0 ? findBlockEnd(catchAllStart) : -1;
-const topbarOverridesComment = firstLine(/Per-theme topbar overrides/);
+/** Must stay after complete named blocks — final neutral shell overrides identity tints. */
+const lightThemeNeutralShellComment = firstLine(
+  /Light-theme neutral shell normalization/,
+);
 
 /**
  * Light themes with complete identity-token blocks that MUST appear after
@@ -124,10 +127,10 @@ describe("theme-palettes.css source order", () => {
     });
   }
 
-  it("per-theme topbar/foreground overrides section is after all complete named blocks", () => {
+  it("light-theme neutral shell normalization is after all complete named blocks", () => {
     assert.ok(
-      topbarOverridesComment >= 0,
-      "Topbar overrides comment section not found",
+      lightThemeNeutralShellComment >= 0,
+      "Light-theme neutral shell normalization comment not found",
     );
     const lastCompleteEnd = Math.max(
       ...EXPECTED_COMPLETE_LIGHT_THEMES.map((id) => {
@@ -136,8 +139,8 @@ describe("theme-palettes.css source order", () => {
       }),
     );
     assert.ok(
-      topbarOverridesComment > lastCompleteEnd,
-      `Topbar overrides (line ${topbarOverridesComment + 1}) must appear after the ` +
+      lightThemeNeutralShellComment > lastCompleteEnd,
+      `Neutral shell block (line ${lightThemeNeutralShellComment + 1}) must appear after the ` +
         `last complete named block (ends line ${lastCompleteEnd + 1}).`,
     );
   });

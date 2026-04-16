@@ -1,13 +1,10 @@
 import "server-only";
 
-import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
+import { getLearnerDurabilityObservabilityFields, shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import { ExamSessionStatus, PracticeTestStatus } from "@prisma/client";
-import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
-import { answerMatches } from "@/lib/exams/score-session-answers";
 import { sanitizeSessionQuestionIds } from "@/lib/exams/exam-session-bounds";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { buildVisibleLessonScopeForLearner } from "@/lib/learner/learner-visible-lesson-scope";
@@ -16,12 +13,19 @@ import {
   loadPathwayLessonProgressBundle,
   loadPathwayStudySummaries,
   mapExamAttemptRowsToRecentMocks,
-  type RecentMock,
 } from "@/lib/learner/load-learner-dashboard";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
 import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import {
+  aggregateSessionGradingFromHydratedSessions,
+  gradeBankSessionWithTierBreakdown,
+  loadBatchedBankGradingQuestionMap,
+  type BankGradingQuestionRow,
+  type SessionGradingAggregate,
+} from "@/lib/learner/session-grading-aggregate";
 import {
   computePeerComparison,
   bestReportCardComparisonArgs,
@@ -111,8 +115,12 @@ export type ReportCardData = {
   peerBenchmark: PeerComparisonResult | null;
 };
 
-const MOCK_ATTEMPT_LIMIT = 80;
-const SESSION_LIMIT = 18;
+/** Enough recent mocks for tier splits, weekly trend (~10w), and mock log — single bounded query. */
+const MOCK_ATTEMPT_LIMIT = 60;
+/** Graded bank sessions for tier breakdown + recent list; one batched question map shared with dashboard readiness. */
+const SESSION_LIMIT = 12;
+/** Matches {@link loadSessionGradingAggregate} default — first N rows feed dashboard preload (no duplicate session fetch). */
+const DASHBOARD_SESSION_GRADING_LIMIT = 8;
 const TREND_WEEKS = 10;
 
 export function reportCardTierDisplayLabel(tier: string): string {
@@ -146,59 +154,6 @@ function weekStartMondayUtc(d: Date): string {
   return ymd(x);
 }
 
-type QRow = {
-  id: string;
-  tier: string;
-  questionType: string;
-  correctAnswer: Prisma.JsonValue;
-};
-
-async function loadQuestionMap(ids: string[], entitlement: AccessScope): Promise<Map<string, QRow>> {
-  const baseWhere = questionAccessWhere(entitlement);
-  const uniq = [...new Set(ids)].filter(Boolean);
-  if (uniq.length === 0) return new Map();
-  const CHUNK = 400;
-  const map = new Map<string, QRow>();
-  for (let i = 0; i < uniq.length; i += CHUNK) {
-    const chunk = uniq.slice(i, i + CHUNK);
-    const rows = await prisma.examQuestion.findMany({
-      where: { AND: [{ id: { in: chunk } }, baseWhere] },
-      select: { id: true, tier: true, questionType: true, correctAnswer: true },
-    });
-    for (const r of rows) map.set(r.id, r);
-  }
-  return map;
-}
-
-function gradeSessionAgainstMap(
-  questionIds: unknown,
-  answers: unknown,
-  qById: Map<string, QRow>,
-): { correct: number; total: number; byTier: Map<string, { c: number; t: number }> } {
-  const sanitized = sanitizeSessionQuestionIds(questionIds);
-  const ids = sanitized.ids;
-  const ans =
-    typeof answers === "object" && answers !== null && !Array.isArray(answers)
-      ? (answers as Record<string, unknown>)
-      : {};
-  let correct = 0;
-  let total = 0;
-  const byTier = new Map<string, { c: number; t: number }>();
-  for (const id of ids) {
-    const q = qById.get(id);
-    if (!q) continue;
-    total += 1;
-    const ok = answerMatches(q.questionType, q.correctAnswer, ans[id]);
-    if (ok) correct += 1;
-    const tier = q.tier?.trim() || "UNKNOWN";
-    const cur = byTier.get(tier) ?? { c: 0, t: 0 };
-    cur.t += 1;
-    if (ok) cur.c += 1;
-    byTier.set(tier, cur);
-  }
-  return { correct, total, byTier };
-}
-
 /**
  * Aggregates learner performance for the premium Report Card (bank sessions, mocks, topics, pathways).
  * Omits or nulls metrics when underlying counts are zero — callers should show honest empty states.
@@ -209,78 +164,113 @@ function gradeSessionAgainstMap(
 export async function loadReportCardData(userId: string, entitlement: AccessScope): Promise<ReportCardData | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
 
+  const skipHeavy = shouldSkipNonCriticalLearnerWork();
+
   const bundle = await loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadReportCardData" });
   if (!bundle) return null;
 
-  const visibleLessonScope = await buildVisibleLessonScopeForLearner(entitlement, bundle.pathwayLessonRows);
-
-  /** One graded-mock query for both dashboard “recent five” and report analytics (avoids duplicate findMany). */
-  const mockAttempts = await prisma.examAttempt.findMany({
-    where: { userId },
-    orderBy: { createdAt: "desc" },
-    take: MOCK_ATTEMPT_LIMIT,
-    select: {
-      id: true,
-      score: true,
-      total: true,
-      createdAt: true,
-      exam: { select: { tier: true, title: true } },
-    },
-  });
-
-  const dash = await loadLearnerDashboard(userId, entitlement, {
-    source: "loadReportCardData",
-    userProfile: bundle.user,
-    visibleLessonScope,
-    pathwayRowsForScope: bundle.pathwayLessonRows,
-    pathwayMetadataRowCount: bundle.pathwayLessonRows.length,
-    pathwayProgressRowCount: bundle.pathwayProgressScoped.length,
-    recentMocksPreload: mapExamAttemptRowsToRecentMocks(mockAttempts.slice(0, 5)),
-  });
-  if (!dash) return null;
-
-  const pathwayOptions = listPathwaysCompatibleWithSubscription(entitlement);
-  const pathwayLabelById = new Map(pathwayOptions.map((p) => [p.id, p.shortName || p.displayName]));
-
-  const [pathwayRaw, sessions, practiceRows] = await Promise.all([
-    loadPathwayStudySummaries(userId, entitlement, {
-      lessonRows: bundle.pathwayLessonRows,
-      pathwayProgress: bundle.pathwayProgressScoped,
-      learnerPath: bundle.user.learnerPath,
-    }),
-    prisma.examSession.findMany({
-      where: { userId, status: ExamSessionStatus.COMPLETED },
-      orderBy: { updatedAt: "desc" },
-      take: SESSION_LIMIT,
+  /** Parallel: visible scope (CPU) + bounded mock attempts (single Prisma round-trip). */
+  const [visibleLessonScope, mockAttempts] = await Promise.all([
+    buildVisibleLessonScopeForLearner(entitlement, bundle.pathwayLessonRows),
+    prisma.examAttempt.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      take: MOCK_ATTEMPT_LIMIT,
       select: {
         id: true,
-        questionIds: true,
-        answers: true,
-        updatedAt: true,
-        examMode: true,
-        exam: { select: { title: true } },
+        score: true,
+        total: true,
+        createdAt: true,
+        exam: { select: { tier: true, title: true } },
       },
     }),
-    prisma.practiceTest.findMany({
-      where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
-      orderBy: { completedAt: "desc" },
-      take: 8,
-      select: { id: true, title: true, completedAt: true, results: true, config: true },
-    }),
   ]);
+
+  /**
+   * Hydrate bank sessions + practice tests before the dashboard so we can (a) batch-load questions once,
+   * (b) feed {@link loadLearnerDashboard} with `sessionGradingPreload` and avoid a duplicate examSession fetch
+   * for readiness grading, and (c) keep degraded mode free of this work entirely.
+   */
+  const [sessions, practiceRows] = skipHeavy
+    ? [[], []] as const
+    : await Promise.all([
+        prisma.examSession.findMany({
+          where: { userId, status: ExamSessionStatus.COMPLETED },
+          orderBy: { updatedAt: "desc" },
+          take: SESSION_LIMIT,
+          select: {
+            id: true,
+            questionIds: true,
+            answers: true,
+            updatedAt: true,
+            examMode: true,
+            exam: { select: { title: true } },
+          },
+        }),
+        prisma.practiceTest.findMany({
+          where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
+          orderBy: { completedAt: "desc" },
+          take: 8,
+          select: { id: true, title: true, completedAt: true, results: true, config: true },
+        }),
+      ]);
+
+  if (skipHeavy) {
+    safeServerLog("learner_report_card", "heavy_hydration_skipped", {
+      reason: "durability_degraded",
+      userIdPrefix: userId.slice(0, 8),
+      ...getLearnerDurabilityObservabilityFields(),
+    });
+  }
 
   const allSessionIds: string[] = [];
   for (const s of sessions) {
     const { ids } = sanitizeSessionQuestionIds(s.questionIds);
     allSessionIds.push(...ids);
   }
-  const qById = await loadQuestionMap(allSessionIds, entitlement);
+  const qById: Map<string, BankGradingQuestionRow> = skipHeavy
+    ? new Map()
+    : await loadBatchedBankGradingQuestionMap(allSessionIds, entitlement);
+
+  let sessionGradingPreload: SessionGradingAggregate | undefined;
+  if (!skipHeavy && sessions.length > 0) {
+    sessionGradingPreload = aggregateSessionGradingFromHydratedSessions(
+      sessions.slice(0, DASHBOARD_SESSION_GRADING_LIMIT),
+      qById,
+    );
+  }
+
+  const [dash, pathwayRaw] = await Promise.all([
+    loadLearnerDashboard(userId, entitlement, {
+      source: "loadReportCardData",
+      userProfile: bundle.user,
+      visibleLessonScope,
+      pathwayRowsForScope: bundle.pathwayLessonRows,
+      pathwayMetadataRowCount: bundle.pathwayLessonRows.length,
+      pathwayProgressRowCount: bundle.pathwayProgressScoped.length,
+      recentMocksPreload: mapExamAttemptRowsToRecentMocks(mockAttempts.slice(0, 5)),
+      sessionGradingPreload,
+    }),
+    loadPathwayStudySummaries(userId, entitlement, {
+      lessonRows: bundle.pathwayLessonRows,
+      pathwayProgress: bundle.pathwayProgressScoped,
+      learnerPath: bundle.user.learnerPath,
+    }),
+  ]);
+  if (!dash) return null;
+
+  const pathwayOptions = listPathwaysCompatibleWithSubscription(entitlement);
+  const pathwayLabelById = new Map(pathwayOptions.map((p) => [p.id, p.shortName || p.displayName]));
 
   const tierTotals = new Map<string, { c: number; t: number }>();
   const recentBankSessions: RecentBankSessionRow[] = [];
+  let bankCorrect = 0;
+  let bankTotal = 0;
 
   for (const s of sessions) {
-    const { correct, total, byTier } = gradeSessionAgainstMap(s.questionIds, s.answers, qById);
+    const { correct, total, byTier } = gradeBankSessionWithTierBreakdown(s.questionIds, s.answers, qById);
+    bankCorrect += correct;
+    bankTotal += total;
     for (const [tier, v] of byTier) {
       const cur = tierTotals.get(tier) ?? { c: 0, t: 0 };
       cur.c += v.c;
@@ -297,6 +287,14 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
       accuracyPct: total > 0 ? Math.round((correct / total) * 100) : null,
     });
   }
+
+  /** Same SESSION_LIMIT window as tier + recent list — avoids mismatch with dashboard sessionGrading (8). */
+  const bankGraded = {
+    correct: bankCorrect,
+    total: bankTotal,
+    sessionCount: sessions.length,
+    accuracyPct: bankTotal > 0 ? Math.round((bankCorrect / bankTotal) * 100) : null,
+  };
 
   const byQuestionTier: TierAccuracyBucket[] = [...tierTotals.entries()]
     .map(([tierKey, v]) => ({
@@ -372,14 +370,6 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     lessonsPct: p.lessonsTotal > 0 ? Math.round((p.lessonsCompleted / p.lessonsTotal) * 100) : 0,
   }));
 
-  const sg = dash.sessionGrading;
-  const bankGraded = {
-    correct: sg.correct,
-    total: sg.total,
-    sessionCount: sg.sessionCount,
-    accuracyPct: sg.total > 0 ? Math.round((sg.correct / sg.total) * 100) : null,
-  };
-
   const mockAggregate = {
     sumScore: mockSumScore,
     sumTotal: mockSumTotal,
@@ -424,7 +414,15 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     };
   });
 
-  const recentPracticeTests: RecentPracticeTestRow[] = enrichedPracticeTests;
+  const recentPracticeTests: RecentPracticeTestRow[] = enrichedPracticeTests.map((row) => ({
+    id: row.id,
+    title: row.title,
+    completedAt: row.completedAt,
+    accuracyPct: row.accuracyPct,
+    scoreTotal: row.scoreTotal,
+    isCat: row.isCat,
+    pathwayLabel: row.pathwayLabel,
+  }));
 
   // Peer benchmark: best available comparison context (CAT → practice → overall)
   const preferredPathwayId =
@@ -435,9 +433,7 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     overallAccuracyPct: bankGraded.accuracyPct,
     preferredPathwayId,
   });
-  const peerBenchmark = shouldSkipNonCriticalLearnerWork()
-    ? null
-    : await computePeerComparison(peerComparisonArgs).catch(() => null);
+  const peerBenchmark = skipHeavy ? null : await computePeerComparison(peerComparisonArgs).catch(() => null);
 
   return {
     scopeTier: dash.scope.tier,

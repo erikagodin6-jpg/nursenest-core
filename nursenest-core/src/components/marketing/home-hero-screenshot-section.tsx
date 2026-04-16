@@ -29,9 +29,9 @@ export function HomeHeroScreenshotSection() {
       aria-label={t("components.homeConversionSections.platformCarouselHeading")}
       data-testid="home-hero-screenshot-section"
     >
-      {/* Tight vertical rhythm: screenshots sit immediately under hero copy; horizontal padding matches section shell */}
-      <div className="nn-section-shell py-4 sm:py-5 md:py-6">
-        <div className="mx-auto w-full max-w-[52rem]">
+      {/* Narrow column: screenshot dominates; padding matches section shell */}
+      <div className="nn-section-shell py-3 sm:py-4 md:py-5">
+        <div className="mx-auto w-full max-w-3xl">
           <MarketingHeroCarousel
             slides={slides}
             mediaFrame="section"

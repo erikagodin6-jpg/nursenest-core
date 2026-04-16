@@ -22,7 +22,7 @@ test("admin: login and inventory /admin (no destructive clicks)", async ({ page,
   if (!creds) return;
 
   const origin = baseURL ?? getE2eBaseURL();
-  const obs = attachButtonAuditObservers(page);
+  const obs = attachButtonAuditObservers(page, origin);
   try {
     await page.goto("/login", { waitUntil: "domcontentloaded", timeout: 120_000 });
     await page.locator("#login-identifier").fill(creds.email);
@@ -49,7 +49,6 @@ test("admin: login and inventory /admin (no destructive clicks)", async ({ page,
     };
 
     const p = await writePathwayReport(payload, "inventory-admin.json");
-    // eslint-disable-next-line no-console
     console.log(`[button-audit] admin inventory: ${p}`);
 
     expect(obs.pageErrors).toEqual([]);

@@ -16,6 +16,8 @@ export type InventoryControl = {
   disabled: boolean;
   visible: boolean;
   interactionHint: InteractionHint;
+  /** Heuristic: matches destructive-patterns (delete, billing, etc.) — never auto-clicked in default audit. */
+  destructiveHeuristic: boolean;
   /** Bounding box for debugging / screenshots */
   rect: { top: number; left: number; width: number; height: number };
 };
