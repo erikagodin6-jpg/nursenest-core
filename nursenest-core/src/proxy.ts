@@ -20,10 +20,7 @@ import { enforceApiRateLimit } from "@/lib/server/rate-limit";
 import {
   REGIONAL_EXAM_MARKETING_FALLBACK_PATH,
 } from "@/lib/marketing/expansion-exams-path-gate";
-import {
-  REGIONAL_MARKETING_LOCALE_PREFIX_MATCHERS,
-  globalRegionSlugFromRegionalMarketingPublicPath,
-} from "@/lib/marketing/regional-marketing-public-gate";
+import { globalRegionSlugFromRegionalMarketingPublicPath } from "@/lib/marketing/regional-marketing-public-gate";
 import { EXAM_HUB_PREVIEW_COOKIE } from "@/lib/admin/exam-hub-preview-cookie";
 import { isRegionPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 
@@ -195,7 +192,31 @@ export const config = {
     "/:locale/canada/:path*",
     "/:locale/exams",
     "/:locale/exams/:path*",
-    ...REGIONAL_MARKETING_LOCALE_PREFIX_MATCHERS,
+    // Must match REGIONAL_MARKETING_LOCALE_PREFIX_MATCHERS in regional-marketing-public-gate.ts (inlined for Next static matcher analysis).
+    "/:locale/japan",
+    "/:locale/japan/:path*",
+    "/:locale/india",
+    "/:locale/india/:path*",
+    "/:locale/china",
+    "/:locale/china/:path*",
+    "/:locale/korea",
+    "/:locale/korea/:path*",
+    "/:locale/germany",
+    "/:locale/germany/:path*",
+    "/:locale/france",
+    "/:locale/france/:path*",
+    "/:locale/italy",
+    "/:locale/italy/:path*",
+    "/:locale/hungary",
+    "/:locale/hungary/:path*",
+    "/:locale/portugal",
+    "/:locale/portugal/:path*",
+    "/:locale/mexico",
+    "/:locale/mexico/:path*",
+    "/:locale/australia",
+    "/:locale/australia/:path*",
+    "/:locale/middle-east",
+    "/:locale/middle-east/:path*",
     "/japan",
     "/japan/:path*",
     "/india",

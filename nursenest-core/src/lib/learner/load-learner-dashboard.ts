@@ -57,6 +57,17 @@ import {
  *
  * Helpers that resolve a **single** lesson or adaptive row (`resolvePathwayNextLesson`, remediation,
  * etc.) are allowed to query `pathwayLesson` directly; they are not part of the dashboard catalog bundle.
+ *
+ * ## Dashboard load graph (core vs optional)
+ *
+ * | Layer | Functions | What it does | Cost drivers |
+ * |------|-----------|--------------|----------------|
+ * | **Core** | `loadLearnerDashboardCore` | Scope counts, 14d mock question aggregate, lesson completion, continue-lesson, recent mock cards (from preload or bounded fetch). No topic JSON, no bank session hydration. | `contentItem.count` + `pathwayLesson.count` + scoped progress resolution + `examAttempt` aggregate + optional `examAttempt`×5 |
+ * | **Analytics** | `loadLearnerDashboardAnalytics` | `loadUnifiedTopicPerformance` (weak/strong/trends, recommended quiz). | Topic perf queries + transforms |
+ * | **Practice details (grading)** | `loadLearnerDashboardPracticeDetails` | `loadSessionGradingAggregate` unless preloaded — recent **completed** exam sessions + question rows for grading. | Session + question fetch (bounded) |
+ * | **Pathway summaries** | `loadPathwayStudySummaries` / `buildPathwayStudySummariesFromLessonInventory` | Per-pathway lesson totals + completion; when bundle preloads are present, **in-memory tally** avoids `groupBy`. | DB path: `groupBy` + progress; fast path: CPU only |
+ *
+ * Report card adds its own **practice hydration** (bank sessions + `loadBatchedBankGradingQuestionMap`) in `load-report-card-data.ts` — optional when durability skips non-critical work.
  */
 function timedLearnerCatalogPhase<T>(event: string, detail: Record<string, unknown>, run: () => Promise<T>): Promise<T> {
   const t0 = performance.now();
@@ -206,6 +217,302 @@ export type PathwayStudySummariesPreload = {
   learnerPath?: string | null;
 };
 
+/** One row per entitled pathway — shared by {@link loadPathwayStudySummaries} and bundle-fast-path builders. */
+export type PathwayStudySummariesRow = {
+  pathwayId: string;
+  label: string;
+  shortLabel: string;
+  lessonsTotal: number;
+  lessonsCompleted: number;
+  lessonsInProgress: number;
+};
+
+/**
+ * Pathway completion table from **already-loaded** capped inventory + progress (e.g. pathway bundle).
+ * Avoids an extra `pathwayLesson.groupBy` round-trip when totals can be derived from the same rows used for progress keys.
+ */
+export function buildPathwayStudySummariesFromLessonInventory(
+  entitlement: AccessScope,
+  lessonRows: PathwayLessonDashboardRow[],
+  pathwayProgress: { lessonId: string; completed: boolean }[],
+): PathwayStudySummariesRow[] {
+  const pathways = listPathwaysCompatibleWithSubscription(entitlement);
+  if (pathways.length === 0) return [];
+
+  const totalsByPathway = new Map<string, number>();
+  for (const r of lessonRows) {
+    totalsByPathway.set(r.pathwayId, (totalsByPathway.get(r.pathwayId) ?? 0) + 1);
+  }
+
+  const progressByPathway = new Map<string, { completed: number; inProgress: number }>();
+  for (const r of pathwayProgress) {
+    const rest = r.lessonId.slice("pathway:".length);
+    const colonIdx = rest.indexOf(":");
+    if (colonIdx < 0) continue;
+    const pid = rest.slice(0, colonIdx);
+    if (!progressByPathway.has(pid)) progressByPathway.set(pid, { completed: 0, inProgress: 0 });
+    const entry = progressByPathway.get(pid)!;
+    if (r.completed) entry.completed++;
+    else entry.inProgress++;
+  }
+
+  return pathways.map((p) => ({
+    pathwayId: p.id,
+    label: p.displayName,
+    shortLabel: p.shortName || p.displayName,
+    lessonsTotal: totalsByPathway.get(p.id) ?? 0,
+    lessonsCompleted: progressByPathway.get(p.id)?.completed ?? 0,
+    lessonsInProgress: progressByPathway.get(p.id)?.inProgress ?? 0,
+  }));
+}
+
+/**
+ * Lowest-cost dashboard slice: counts, continue-lesson, recent mock cards — no topic perf and no bank grading aggregate.
+ * See module header “Dashboard load graph”.
+ */
+export type LearnerDashboardCoreModel = {
+  scope: { tier: string; country: string };
+  learnerPath: string | null;
+  userTier: TierCode | null;
+  alliedProfessionKey: string | null;
+  lessonsCompleted: number;
+  lessonsAvailable: number;
+  questionsInMocksLast14d: number;
+  recentMocks: RecentMock[];
+  continueLesson: ContinueLesson | null;
+  coreParallelBatchMs: number;
+  exam14dAggregateMs: number;
+};
+
+export async function loadLearnerDashboardCore(
+  userId: string,
+  entitlement: AccessScope,
+  preload?: LearnerDashboardPreload | null,
+): Promise<LearnerDashboardCoreModel | null> {
+  if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) {
+    return null;
+  }
+
+  const t0 = performance.now();
+  const source = preload?.source?.trim() || "unspecified";
+
+  const tier = String(entitlement.tier ?? "");
+  const country = String(entitlement.country ?? "");
+
+  const user =
+    preload?.userProfile ??
+    (await prisma.user.findUnique({
+      where: { id: userId },
+      select: { learnerPath: true, tier: true, alliedProfessionKey: true },
+    }));
+  const learnerPath = user?.learnerPath ?? null;
+
+  const lessonWhere = lessonAccessWhere(entitlement);
+
+  const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
+
+  const exam14dWindowStart = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
+  const exam14dTimed = (async () => {
+    const t = performance.now();
+    const sum = await prisma.examAttempt.aggregate({
+      where: {
+        userId,
+        createdAt: { gte: exam14dWindowStart },
+      },
+      _sum: { total: true },
+    });
+    return { sum, durationMs: Math.round(performance.now() - t) };
+  })();
+
+  let visibleLessonScope = preload?.visibleLessonScope;
+  let pathwayRowsForScope = preload?.pathwayRowsForScope;
+  if (!visibleLessonScope) {
+    const pathwayKeys = await prisma.pathwayLesson.findMany({
+      where: pathwayWhere,
+      select: { pathwayId: true, slug: true },
+      take: PATHWAY_CATALOG_LIST_HARD_CAP,
+    });
+    visibleLessonScope = await buildVisibleLessonScopeForLearner(entitlement, pathwayKeys);
+    pathwayRowsForScope = pathwayKeys;
+  } else if (visibleLessonScope.contentTruncated && (!pathwayRowsForScope || pathwayRowsForScope.length === 0)) {
+    pathwayRowsForScope = await prisma.pathwayLesson.findMany({
+      where: pathwayWhere,
+      select: { pathwayId: true, slug: true },
+      take: PATHWAY_CATALOG_LIST_HARD_CAP,
+    });
+  }
+
+  const recentMocksPromise =
+    preload?.recentMocksPreload !== undefined
+      ? Promise.resolve(preload.recentMocksPreload.slice(0, 5))
+      : prisma.examAttempt
+          .findMany({
+            where: { userId },
+            orderBy: { createdAt: "desc" },
+            take: 5,
+            select: {
+              id: true,
+              score: true,
+              total: true,
+              createdAt: true,
+              exam: { select: { title: true } },
+            },
+          })
+          .then((raw) => mapExamAttemptRowsToRecentMocks(raw));
+
+  const tParallel = performance.now();
+  const [contentLessonTotal, pathwayLessonPublishedCount, lessonsCompleted, incompleteProgress, exam14dPacked, recentMocks] =
+    await Promise.all([
+      prisma.contentItem.count({ where: { ...lessonWhere, type: "lesson" } }),
+      prisma.pathwayLesson.count({ where: pathwayWhere }),
+      countScopedLessonsCompleted(userId, entitlement, visibleLessonScope, pathwayRowsForScope ?? []),
+      findLatestIncompleteProgressLessonId(userId, visibleLessonScope.lessonIds),
+      exam14dTimed,
+      recentMocksPromise,
+    ]);
+  const coreParallelBatchMs = Math.round(performance.now() - tParallel);
+  const exam14dAggregateMs = exam14dPacked.durationMs;
+  const exam14dSum = exam14dPacked.sum;
+
+  const lessonsAvailable = contentLessonTotal + pathwayLessonPublishedCount;
+
+  const questionsInMocksLast14d = exam14dSum._sum.total ?? 0;
+
+  let continueLesson: ContinueLesson | null = null;
+  if (incompleteProgress?.lessonId) {
+    try {
+      continueLesson = await resolveLessonRefFromProgressId({
+        lessonId: incompleteProgress.lessonId,
+        entitlement,
+        learnerPath,
+      });
+    } catch {
+      continueLesson = null;
+    }
+  }
+
+  const durationMsTotal = Math.round(performance.now() - t0);
+  safeServerLog("learner_dashboard_perf", "dashboard_core_complete", {
+    source,
+    userIdPrefix: userId.slice(0, 8),
+    durationMsTotal,
+    durationMsCoreParallelBatch: coreParallelBatchMs,
+    exam14dAggregateDurationMs: exam14dAggregateMs,
+    userPreload: Boolean(preload?.userProfile),
+    visibleScopeFromPreload: Boolean(preload?.visibleLessonScope),
+    recentMocksFromPreload: preload?.recentMocksPreload !== undefined,
+    pathwayMetadataRowCount: preload?.pathwayMetadataRowCount ?? 0,
+    pathwayProgressRowCount: preload?.pathwayProgressRowCount ?? 0,
+    pathwaySectionsJsonLoaded: false,
+    ...getLearnerDurabilityObservabilityFields(),
+  });
+
+  return {
+    scope: { tier, country },
+    learnerPath,
+    userTier: user?.tier ?? null,
+    alliedProfessionKey: user?.alliedProfessionKey ?? null,
+    lessonsCompleted,
+    lessonsAvailable,
+    questionsInMocksLast14d,
+    recentMocks,
+    continueLesson,
+    coreParallelBatchMs,
+    exam14dAggregateMs,
+  };
+}
+
+export async function loadLearnerDashboardAnalytics(
+  userId: string,
+  entitlement: AccessScope,
+  user: { tier: TierCode | null; alliedProfessionKey: string | null } | null | undefined,
+): Promise<{
+  weakTopics: WeakTopicRow[];
+  strongTopics: WeakTopicRow[];
+  topicTrends: TopicTrendRow[];
+  topicPerformance: TopicPerformanceSnapshot | null;
+  recommendedQuizTopic: string | null;
+}> {
+  const t0 = performance.now();
+  let weakTopics: WeakTopicRow[] = [];
+  let strongTopics: WeakTopicRow[] = [];
+  let topicTrends: TopicTrendRow[] = [];
+  let topicPerformance: TopicPerformanceSnapshot | null = null;
+  let recommendedQuizTopic: string | null = null;
+  try {
+    const perf = await loadUnifiedTopicPerformance(userId, entitlement, 8);
+    topicPerformance = perf;
+    weakTopics = perf.weakTopics;
+    strongTopics = perf.strongTopics;
+    topicTrends = perf.trends;
+    recommendedQuizTopic = perf.recommendedQuizTopic ?? perf.weakTopics[0]?.topic ?? null;
+  } catch {
+    weakTopics = [];
+    strongTopics = [];
+    topicTrends = [];
+    topicPerformance = null;
+    recommendedQuizTopic = null;
+  }
+
+  if (user?.tier === TierCode.ALLIED && user.alliedProfessionKey) {
+    const ap = getAlliedProfessionByProfessionKey(user.alliedProfessionKey);
+    weakTopics = filterWeakTopicsForAlliedProfession(weakTopics, ap);
+    strongTopics = filterWeakTopicsForAlliedProfession(strongTopics, ap);
+    topicTrends = filterTopicRowsForAlliedProfession(topicTrends, ap);
+    recommendedQuizTopic = weakTopics[0]?.topic ?? null;
+    if (topicPerformance) {
+      topicPerformance = {
+        ...topicPerformance,
+        weakTopics,
+        strongTopics,
+        trends: topicTrends,
+      };
+    }
+  }
+
+  safeServerLog("learner_dashboard_perf", "dashboard_analytics_complete", {
+    userIdPrefix: userId.slice(0, 8),
+    durationMs: Math.round(performance.now() - t0),
+    weakTopicCount: weakTopics.length,
+    ...getLearnerDurabilityObservabilityFields(),
+  });
+
+  return { weakTopics, strongTopics, topicTrends, topicPerformance, recommendedQuizTopic };
+}
+
+/**
+ * Bank/exam-session grading aggregate for readiness + premium snapshot — bounded session/question read unless preloaded.
+ */
+export async function loadLearnerDashboardPracticeDetails(
+  userId: string,
+  entitlement: AccessScope,
+  preload?: SessionGradingAggregate | null,
+): Promise<SessionGradingAggregate> {
+  const t0 = performance.now();
+  if (preload) {
+    return preload;
+  }
+  try {
+    const practiceAgg = await loadSessionGradingAggregate(userId, entitlement, 8);
+    safeServerLog("learner_dashboard_perf", "dashboard_practice_grading_complete", {
+      userIdPrefix: userId.slice(0, 8),
+      durationMs: Math.round(performance.now() - t0),
+      sessionGradingFromPreload: false,
+      ...getLearnerDurabilityObservabilityFields(),
+    });
+    return practiceAgg;
+  } catch {
+    safeServerLog("learner_dashboard_perf", "dashboard_practice_grading_complete", {
+      userIdPrefix: userId.slice(0, 8),
+      durationMs: Math.round(performance.now() - t0),
+      sessionGradingFromPreload: false,
+      failed: true,
+      ...getLearnerDurabilityObservabilityFields(),
+    });
+    return { correct: 0, total: 0, sessionCount: 0 };
+  }
+}
+
 /**
  * Single pathway-lesson list for learner dashboard scope (bounded, same cap as catalog hub math).
  * Loads **metadata only** (no `sections` JSON) so RN full-content runs do not materialize huge lesson bodies.
@@ -336,96 +643,12 @@ export async function loadLearnerDashboard(
   entitlement: AccessScope,
   preload?: LearnerDashboardPreload | null,
 ): Promise<LearnerDashboardModel | null> {
-  if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) {
-    return null;
-  }
-
   const tDashboard = performance.now();
   const source = preload?.source?.trim() || "unspecified";
   const userPreload = Boolean(preload?.userProfile);
 
-  const tier = String(entitlement.tier ?? "");
-  const country = String(entitlement.country ?? "");
-
-  const user =
-    preload?.userProfile ??
-    (await prisma.user.findUnique({
-      where: { id: userId },
-      select: { learnerPath: true, tier: true, alliedProfessionKey: true },
-    }));
-  const learnerPath = user?.learnerPath ?? null;
-
-  const lessonWhere = lessonAccessWhere(entitlement);
-
-  const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
-
-  const exam14dWindowStart = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
-  const exam14dTimed = (async () => {
-    const t = performance.now();
-    const sum = await prisma.examAttempt.aggregate({
-      where: {
-        userId,
-        createdAt: { gte: exam14dWindowStart },
-      },
-      _sum: { total: true },
-    });
-    return { sum, durationMs: Math.round(performance.now() - t) };
-  })();
-
-  let visibleLessonScope = preload?.visibleLessonScope;
-  let pathwayRowsForScope = preload?.pathwayRowsForScope;
-  if (!visibleLessonScope) {
-    const pathwayKeys = await prisma.pathwayLesson.findMany({
-      where: pathwayWhere,
-      select: { pathwayId: true, slug: true },
-      take: PATHWAY_CATALOG_LIST_HARD_CAP,
-    });
-    visibleLessonScope = await buildVisibleLessonScopeForLearner(entitlement, pathwayKeys);
-    pathwayRowsForScope = pathwayKeys;
-  } else if (visibleLessonScope.contentTruncated && (!pathwayRowsForScope || pathwayRowsForScope.length === 0)) {
-    pathwayRowsForScope = await prisma.pathwayLesson.findMany({
-      where: pathwayWhere,
-      select: { pathwayId: true, slug: true },
-      take: PATHWAY_CATALOG_LIST_HARD_CAP,
-    });
-  }
-
-  const recentMocksPromise =
-    preload?.recentMocksPreload !== undefined
-      ? Promise.resolve(preload.recentMocksPreload.slice(0, 5))
-      : prisma.examAttempt
-          .findMany({
-            where: { userId },
-            orderBy: { createdAt: "desc" },
-            take: 5,
-            select: {
-              id: true,
-              score: true,
-              total: true,
-              createdAt: true,
-              exam: { select: { title: true } },
-            },
-          })
-          .then((raw) => mapExamAttemptRowsToRecentMocks(raw));
-
-  const tParallel = performance.now();
-  const [contentLessonTotal, pathwayLessonPublishedCount, lessonsCompleted, incompleteProgress, exam14dPacked, recentMocks] =
-    await Promise.all([
-      prisma.contentItem.count({ where: { ...lessonWhere, type: "lesson" } }),
-      prisma.pathwayLesson.count({ where: pathwayWhere }),
-      countScopedLessonsCompleted(userId, entitlement, visibleLessonScope, pathwayRowsForScope ?? []),
-      findLatestIncompleteProgressLessonId(userId, visibleLessonScope.lessonIds),
-      exam14dTimed,
-      recentMocksPromise,
-    ]);
-  const durationMsCoreParallelBatch = Math.round(performance.now() - tParallel);
-  const exam14dSum = exam14dPacked.sum;
-  const exam14dAggregateDurationMs = exam14dPacked.durationMs;
-
-  /** Matches published in-scope pathway rows (same filter as hub); avoids per-row structural JSON parsing. */
-  const lessonsAvailable = contentLessonTotal + pathwayLessonPublishedCount;
-
-  const questionsInMocksLast14d = exam14dSum._sum.total ?? 0;
+  const core = await loadLearnerDashboardCore(userId, entitlement, preload);
+  if (!core) return null;
 
   const skipHeavy = shouldSkipNonCriticalLearnerWork();
 
@@ -434,82 +657,45 @@ export async function loadLearnerDashboard(
   let topicTrends: TopicTrendRow[] = [];
   let topicPerformance: TopicPerformanceSnapshot | null = null;
   let recommendedQuizTopic: string | null = null;
-  let practiceAgg = { correct: 0, total: 0, sessionCount: 0 };
+  let practiceAgg: SessionGradingAggregate = { correct: 0, total: 0, sessionCount: 0 };
 
   if (!skipHeavy) {
-    try {
-      const perf = await loadUnifiedTopicPerformance(userId, entitlement, 8);
-      topicPerformance = perf;
-      weakTopics = perf.weakTopics;
-      strongTopics = perf.strongTopics;
-      topicTrends = perf.trends;
-      recommendedQuizTopic = perf.recommendedQuizTopic ?? perf.weakTopics[0]?.topic ?? null;
-    } catch {
-      weakTopics = [];
-      strongTopics = [];
-      topicTrends = [];
-      topicPerformance = null;
-      recommendedQuizTopic = null;
-    }
-
-    if (user?.tier === TierCode.ALLIED && user.alliedProfessionKey) {
-      const ap = getAlliedProfessionByProfessionKey(user.alliedProfessionKey);
-      weakTopics = filterWeakTopicsForAlliedProfession(weakTopics, ap);
-      strongTopics = filterWeakTopicsForAlliedProfession(strongTopics, ap);
-      topicTrends = filterTopicRowsForAlliedProfession(topicTrends, ap);
-      recommendedQuizTopic = weakTopics[0]?.topic ?? null;
-      if (topicPerformance) {
-        topicPerformance = {
-          ...topicPerformance,
-          weakTopics,
-          strongTopics,
-          trends: topicTrends,
-        };
-      }
-    }
-    if (preload?.sessionGradingPreload) {
-      practiceAgg = preload.sessionGradingPreload;
-    } else {
-      try {
-        practiceAgg = await loadSessionGradingAggregate(userId, entitlement, 8);
-      } catch {
-        practiceAgg = { correct: 0, total: 0, sessionCount: 0 };
-      }
-    }
-  }
-
-  let continueLesson: ContinueLesson | null = null;
-  if (incompleteProgress?.lessonId) {
-    try {
-      continueLesson = await resolveLessonRefFromProgressId({
-        lessonId: incompleteProgress.lessonId,
-        entitlement,
-        learnerPath,
-      });
-    } catch {
-      continueLesson = null;
-    }
+    const [analytics, grading] = await Promise.all([
+      loadLearnerDashboardAnalytics(userId, entitlement, {
+        tier: core.userTier,
+        alliedProfessionKey: core.alliedProfessionKey,
+      }),
+      loadLearnerDashboardPracticeDetails(userId, entitlement, preload?.sessionGradingPreload ?? null),
+    ]);
+    weakTopics = analytics.weakTopics;
+    strongTopics = analytics.strongTopics;
+    topicTrends = analytics.topicTrends;
+    topicPerformance = analytics.topicPerformance;
+    recommendedQuizTopic = analytics.recommendedQuizTopic;
+    practiceAgg = grading;
+  } else if (preload?.sessionGradingPreload) {
+    practiceAgg = preload.sessionGradingPreload;
   }
 
   const readiness = computeReadiness({
     practiceCorrect: practiceAgg.correct,
     practiceTotal: practiceAgg.total,
-    recentMocks: recentMocks.map((m) => ({ score: m.score, total: m.total })),
+    recentMocks: core.recentMocks.map((m) => ({ score: m.score, total: m.total })),
     weakTopics,
-    lessonsCompleted,
-    lessonsAvailable,
-    scope: { tier, country },
+    lessonsCompleted: core.lessonsCompleted,
+    lessonsAvailable: core.lessonsAvailable,
+    scope: core.scope,
   });
 
   const durationMsTotal = Math.round(performance.now() - tDashboard);
   safeServerLog("learner_dashboard_perf", "dashboard_load_complete", {
     source,
     userIdPrefix: userId.slice(0, 8),
-    tier,
-    country,
+    tier: core.scope.tier,
+    country: core.scope.country,
     durationMsTotal,
-    durationMsCoreParallelBatch,
-    exam14dAggregateDurationMs,
+    durationMsCoreParallelBatch: core.coreParallelBatchMs,
+    exam14dAggregateDurationMs: core.exam14dAggregateMs,
     userPreload,
     pathwayCountsFromPreload: Boolean(
       preload?.pathwayMetadataRowCount != null || preload?.pathwayProgressRowCount != null,
@@ -525,17 +711,17 @@ export async function loadLearnerDashboard(
   });
 
   return {
-    scope: { tier, country },
-    learnerPath,
-    lessonsCompleted,
-    lessonsAvailable,
-    questionsInMocksLast14d,
-    recentMocks,
+    scope: core.scope,
+    learnerPath: core.learnerPath,
+    lessonsCompleted: core.lessonsCompleted,
+    lessonsAvailable: core.lessonsAvailable,
+    questionsInMocksLast14d: core.questionsInMocksLast14d,
+    recentMocks: core.recentMocks,
     weakTopics,
     strongTopics,
     topicTrends,
     topicPerformance,
-    continueLesson,
+    continueLesson: core.continueLesson,
     recommendedQuizTopic,
     readiness,
     sessionGrading: practiceAgg,
@@ -547,20 +733,28 @@ export async function loadPathwayStudySummaries(
   userId: string,
   entitlement: AccessScope,
   preload?: PathwayStudySummariesPreload | null,
-): Promise<
-  {
-    pathwayId: string;
-    label: string;
-    shortLabel: string;
-    lessonsTotal: number;
-    lessonsCompleted: number;
-    lessonsInProgress: number;
-  }[]
-> {
+): Promise<PathwayStudySummariesRow[]> {
   if (!entitlement.hasAccess || !isDatabaseUrlConfigured()) return [];
 
   const pathways = listPathwaysCompatibleWithSubscription(entitlement);
   if (pathways.length === 0) return [];
+
+  if (preload?.lessonRows?.length && preload.pathwayProgress) {
+    const t0 = performance.now();
+    const rows = buildPathwayStudySummariesFromLessonInventory(
+      entitlement,
+      preload.lessonRows,
+      preload.pathwayProgress,
+    );
+    safeServerLog("learner_dashboard_perf", "pathway_study_summaries_inventory_only", {
+      userIdPrefix: userId.slice(0, 8),
+      pathwayCount: rows.length,
+      lessonInventoryRows: preload.lessonRows.length,
+      durationMs: Math.round(performance.now() - t0),
+      ...getLearnerDurabilityObservabilityFields(),
+    });
+    return rows;
+  }
 
   const usedLearnerPathPreload = preload?.learnerPath !== undefined;
   const learnerPath = usedLearnerPathPreload

@@ -7,8 +7,6 @@
   --theme-accent-foreground: #66b2b2;
   --theme-border: #b2d8d8;
   --theme-ring: #66b2b2;
-  --theme-topbar-bg: #008080;
-  --theme-topbar-text: #ffffff;
 }
 
 [data-theme="blush"] {
@@ -20,8 +18,6 @@
   --theme-accent-foreground: #e899b0;
   --theme-border: #f3c8d5;
   --theme-ring: #e899b0;
-  --theme-topbar-bg: var(--theme-primary);
-  --theme-topbar-text: #ffffff;
 }
 
 [data-theme="slate"] {
@@ -42,8 +38,6 @@
   --theme-accent-foreground: #1e293b;
   --theme-border: #cbd5e1;
   --theme-ring: #1e293b;
-  --theme-topbar-bg: var(--theme-primary);
-  --theme-topbar-text: #ffffff;
 }
 
 [data-theme="ocean"] {
@@ -55,8 +49,6 @@
   --theme-accent-foreground: #1da2d8;
   --theme-border: #7fcdff;
   --theme-ring: #1da2d8;
-  --theme-topbar-bg: #064273;
-  --theme-topbar-text: #ffffff;
 }
 
 [data-theme="forest"] {
@@ -67,8 +59,6 @@
   --theme-accent-foreground: #10b981;
   --theme-border: #a7f3d0;
   --theme-ring: #10b981;
-  --theme-topbar-bg: var(--theme-primary);
-  --theme-topbar-text: #ffffff;
 }
 
 [data-theme="clinical-light"] {
@@ -80,8 +70,6 @@
   --theme-accent-foreground: #3b82f6;
   --theme-border: #bfdbfe;
   --theme-ring: #3b82f6;
-  --theme-topbar-bg: var(--theme-primary);
-  --theme-topbar-text: #ffffff;
 }
 
 [data-theme="dark-clinical"] {
@@ -361,8 +349,6 @@
   --theme-accent-foreground: #fd9cb3;
   --theme-border: #fec4d1;
   --theme-ring: #fd9cb3;
-  --theme-topbar-bg: var(--theme-primary);
-  --theme-topbar-text: #ffffff;
 }
 
 /* Multi-Pastel — Cozy pastels (#c8e6f7 / #c8f7f0 / #c8cef7 / #f7c8ce / #e6f7c8) */
@@ -375,8 +361,6 @@
   --theme-accent-foreground: #b04458;
   --theme-border: #c8cef7;
   --theme-ring: #90b4d4;
-  --theme-topbar-bg: var(--theme-primary);
-  --theme-topbar-text: #ffffff;
 }
 
 /* ── 15. Deep Twilight (dark) ── */
@@ -531,8 +515,9 @@
  * appear AFTER this catch-all, or their explicit values get silently overridden.
  * Regression test: `tsx --test src/lib/theme/theme-palettes-order.test.ts`
  *
- * A second normalization block at the END of this file re-applies neutral secondary/accent
- * borders + light topbar after complete identity blocks that set saturated tints.
+ * A final normalization block at the END of this file (after complete identity blocks)
+ * re-applies neutral secondary/accent/border + fixed light topbar. The selector list is
+ * duplicated there on purpose — source order requires this second pass.
  */
 :is(
   [data-theme="arctic-frost"],
@@ -585,9 +570,6 @@
 ) {
   /* Default CTA text on primary — pastel themes get dark foreground in a later block */
   --theme-primary-foreground: #ffffff;
-  /* Top bar: neutral shell; readable dark text (not white-on-brand) */
-  --theme-topbar-bg: #ffffff;
-  --theme-topbar-text: #111827;
   /*
    * Page + nav canvas: pure white. Theme identity shows in --theme-primary (buttons, links,
    * focus rings), not full-width tinted backgrounds.
@@ -650,33 +632,8 @@
 [data-theme="lavender"] {
   --theme-primary: #9d82dd;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #f3efff;
-  --theme-secondary-foreground: #9d82dd;
-  --theme-accent: #faf8ff;
-  --theme-accent-foreground: #9d82dd;
-  --theme-border: #e9e2ff;
   --theme-ring: #d4c7f7;
-
   --theme-page-bg: #ffffff;
-  --theme-nav-bg: #ffffff;
-  --theme-nav-text: #6b7280;
-  --theme-nav-border: color-mix(in srgb, var(--theme-primary) 10%, transparent);
-  --theme-topbar-bg: var(--theme-primary);
-  --theme-topbar-text: #ffffff;
-  --theme-menu-text: #374151;
-  --theme-menu-hover-bg: color-mix(in srgb, var(--theme-primary) 8%, transparent);
-  --theme-menu-hover-text: var(--theme-primary);
-  --theme-menu-active-bg: color-mix(in srgb, var(--theme-primary) 12%, transparent);
-  --theme-card-bg: #ffffff;
-  --theme-card-border: color-mix(in srgb, var(--theme-border) 60%, transparent);
-  --theme-card-text: #6b7280;
-  --theme-input-bg: #ffffff;
-  --theme-input-border: #e5e7eb;
-  --theme-heading-text: #111827;
-  --theme-body-text: #6b7280;
-  --theme-muted-text: #9ca3af;
-  --theme-focus-ring: var(--theme-primary);
-  --theme-separator: #f3f4f6;
 }
 
 [data-theme="lavender-dream"] {
@@ -692,7 +649,6 @@
   --theme-heading-text: #5A4878;
   --theme-body-text: #6C5A8C;
   --theme-muted-text: #6C5A8C;
-  --theme-card-bg: #ffffff;
 
   --lesson-summary: #EFE7F7;
   --lesson-key-concepts: #E6DBF2;
@@ -732,9 +688,6 @@
   --theme-heading-text: #30405E;
   --theme-body-text: #6070A0;
   --theme-muted-text: #6070A0;
-  --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #3A50A4;
-  --theme-topbar-text: #ffffff;
 
   --lesson-summary: #E7ECFF;
   --lesson-key-concepts: #E2DEF6;
@@ -772,9 +725,6 @@
   --theme-heading-text: #644040;
   --theme-body-text: #8A6060;
   --theme-muted-text: #8A6060;
-  --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #B84063;
-  --theme-topbar-text: #ffffff;
 
   --lesson-summary: #FDE9E8;
   --lesson-key-concepts: #F2DEE6;
@@ -812,9 +762,6 @@
   --theme-heading-text: #1E4050;
   --theme-body-text: #4A6875;
   --theme-muted-text: #4A6875;
-  --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #144050;
-  --theme-topbar-text: #ffffff;
 
   --lesson-summary: #E6F2F3;
   --lesson-key-concepts: #D9EBEE;
@@ -853,9 +800,6 @@
   --theme-heading-text: #2A4A44;
   --theme-body-text: #4E7A6E;
   --theme-muted-text: #4E7A6E;
-  --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #287068;
-  --theme-topbar-text: #ffffff;
 
   --lesson-summary: #E2F5F0;
   --lesson-key-concepts: #DCE8E0;
@@ -894,9 +838,6 @@
   --theme-heading-text: #604A58;
   --theme-body-text: #7A5A66;
   --theme-muted-text: #7A5A66;
-  --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #8E4A5E;
-  --theme-topbar-text: #ffffff;
 
   --lesson-summary: #F5E6EA;
   --lesson-key-concepts: #EED9DF;
@@ -935,9 +876,6 @@
   --theme-heading-text: #5A4420;
   --theme-body-text: #8A7540;
   --theme-muted-text: #8A7540;
-  --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #8A6810;
-  --theme-topbar-text: #ffffff;
 
   --lesson-summary: #F5EDDA;
   --lesson-key-concepts: #EDE2D8;
@@ -976,9 +914,6 @@
   --theme-heading-text: #3A5038;
   --theme-body-text: #5A6E58;
   --theme-muted-text: #5A6E58;
-  --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #4A6A4A;
-  --theme-topbar-text: #ffffff;
 
   --lesson-summary: #E6EEE4;
   --lesson-key-concepts: #E0E4D6;
@@ -1017,9 +952,6 @@
   --theme-heading-text: #62382A;
   --theme-body-text: #8A6458;
   --theme-muted-text: #8A6458;
-  --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #B05840;
-  --theme-topbar-text: #ffffff;
 
   --lesson-summary: #FDE8E2;
   --lesson-key-concepts: #F2DDE0;
@@ -1058,9 +990,6 @@
   --theme-heading-text: #2A3E54;
   --theme-body-text: #4E6A7E;
   --theme-muted-text: #4E6A7E;
-  --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #345A74;
-  --theme-topbar-text: #ffffff;
 
   --lesson-summary: #E4F0F6;
   --lesson-key-concepts: #DEE4EE;
@@ -1099,9 +1028,6 @@
   --theme-heading-text: #583A72;
   --theme-body-text: #785888;
   --theme-muted-text: #785888;
-  --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #6A4080;
-  --theme-topbar-text: #ffffff;
 
   --lesson-summary: #F0E6F4;
   --lesson-key-concepts: #E6DEE8;
@@ -1140,9 +1066,6 @@
   --theme-heading-text: #584220;
   --theme-body-text: #8A7450;
   --theme-muted-text: #8A7450;
-  --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #785830;
-  --theme-topbar-text: #ffffff;
 
   --lesson-summary: #F4ECE0;
   --lesson-key-concepts: #ECE2DA;
@@ -1181,9 +1104,6 @@
   --theme-heading-text: #5A3844;
   --theme-body-text: #7A5A64;
   --theme-muted-text: #7A5A64;
-  --theme-card-bg: #ffffff;
-  --theme-topbar-bg: #8A5868;
-  --theme-topbar-text: #ffffff;
 
   --lesson-summary: #F2E4E4;
   --lesson-key-concepts: #EADEE4;
@@ -1265,10 +1185,9 @@
 
 /*
  * Light-theme neutral shell normalization — SOURCE ORDER MUST STAY LAST.
- * Complete identity blocks above may set saturated --theme-secondary / --theme-accent /
- * --theme-border and colored topbars. Re-apply one shared neutral UI so only
- * --theme-primary (and focus/ring) carries the brand hue on light themes.
- * Regression: `tsx --test src/lib/theme/theme-palettes-order.test.ts`
+ * Identity blocks above may still declare saturated secondary/accent/border tokens; this pass
+ * enforces shared neutral secondary/accent/border, a single light topbar, and keeps brand hue
+ * in --theme-primary (plus rings / focus). Regression: `tsx --test src/lib/theme/theme-palettes-order.test.ts`
  */
 :is(
   [data-theme="arctic-frost"],

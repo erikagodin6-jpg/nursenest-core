@@ -8,8 +8,11 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { sanitizeSessionQuestionIds } from "@/lib/exams/exam-session-bounds";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { buildVisibleLessonScopeForLearner } from "@/lib/learner/learner-visible-lesson-scope";
+import { computeReadiness } from "@/lib/learner/readiness-score";
 import {
+  buildPathwayStudySummariesFromLessonInventory,
   loadLearnerDashboard,
+  loadLearnerDashboardCore,
   loadPathwayLessonProgressBundle,
   loadPathwayStudySummaries,
   mapExamAttemptRowsToRecentMocks,
@@ -155,159 +158,22 @@ function weekStartMondayUtc(d: Date): string {
   return ymd(x);
 }
 
-/**
- * Aggregates learner performance for the premium Report Card (bank sessions, mocks, topics, pathways).
- * Omits or nulls metrics when underlying counts are zero — callers should show honest empty states.
- *
- * **Pathway catalog:** one {@link loadPathwayLessonProgressBundle} per request; `loadPathwayStudySummaries` and
- * `loadLearnerDashboard` use preloads derived from that bundle (no duplicate pathway inventory User read).
- */
-export async function loadReportCardData(userId: string, entitlement: AccessScope): Promise<ReportCardData | null> {
-  if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
+type MockAttemptSelect = {
+  id: string;
+  score: number;
+  total: number;
+  createdAt: Date;
+  exam: { tier: string; title: string };
+};
 
-  const skipHeavy = shouldSkipNonCriticalLearnerWork();
-
-  const bundle = await loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadReportCardData" });
-  if (!bundle) return null;
-
-  /** Parallel: visible scope (CPU) + bounded mock attempts (single Prisma round-trip). */
-  const [visibleLessonScope, mockAttempts] = await Promise.all([
-    buildVisibleLessonScopeForLearner(entitlement, bundle.pathwayLessonRows),
-    prisma.examAttempt.findMany({
-      where: { userId },
-      orderBy: { createdAt: "desc" },
-      take: MOCK_ATTEMPT_LIMIT,
-      select: {
-        id: true,
-        score: true,
-        total: true,
-        createdAt: true,
-        exam: { select: { tier: true, title: true } },
-      },
-    }),
-  ]);
-
-  /**
-   * Hydrate bank sessions + practice tests before the dashboard so we can (a) batch-load questions once,
-   * (b) feed {@link loadLearnerDashboard} with `sessionGradingPreload` and avoid a duplicate examSession fetch
-   * for readiness grading, and (c) keep degraded mode free of this work entirely.
-   */
-  const [sessions, practiceRows] = skipHeavy
-    ? [[], []] as const
-    : await Promise.all([
-        prisma.examSession.findMany({
-          where: { userId, status: ExamSessionStatus.COMPLETED },
-          orderBy: { updatedAt: "desc" },
-          take: SESSION_LIMIT,
-          select: {
-            id: true,
-            questionIds: true,
-            answers: true,
-            updatedAt: true,
-            examMode: true,
-            exam: { select: { title: true } },
-          },
-        }),
-        prisma.practiceTest.findMany({
-          where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
-          orderBy: { completedAt: "desc" },
-          take: 8,
-          select: { id: true, title: true, completedAt: true, results: true, config: true },
-        }),
-      ]);
-
-  if (skipHeavy) {
-    safeServerLog("learner_report_card", "heavy_hydration_skipped", {
-      reason: "durability_degraded",
-      userIdPrefix: userId.slice(0, 8),
-      ...getLearnerDurabilityObservabilityFields(),
-    });
-  }
-
-  const allSessionIds: string[] = [];
-  for (const s of sessions) {
-    const { ids } = sanitizeSessionQuestionIds(s.questionIds);
-    allSessionIds.push(...ids);
-  }
-  const qById: Map<string, BankGradingQuestionRow> = skipHeavy
-    ? new Map()
-    : await loadBatchedBankGradingQuestionMap(allSessionIds, entitlement);
-
-  let sessionGradingPreload: SessionGradingAggregate | undefined;
-  if (!skipHeavy && sessions.length > 0) {
-    sessionGradingPreload = aggregateSessionGradingFromHydratedSessions(
-      sessions.slice(0, DASHBOARD_SESSION_GRADING_LIMIT),
-      qById,
-    );
-  }
-
-  const [dash, pathwayRaw] = await Promise.all([
-    loadLearnerDashboard(userId, entitlement, {
-      source: "loadReportCardData",
-      userProfile: bundle.user,
-      visibleLessonScope,
-      pathwayRowsForScope: bundle.pathwayLessonRows,
-      pathwayMetadataRowCount: bundle.pathwayLessonRows.length,
-      pathwayProgressRowCount: bundle.pathwayProgressScoped.length,
-      recentMocksPreload: mapExamAttemptRowsToRecentMocks(mockAttempts.slice(0, 5)),
-      sessionGradingPreload,
-    }),
-    loadPathwayStudySummaries(userId, entitlement, {
-      lessonRows: bundle.pathwayLessonRows,
-      pathwayProgress: bundle.pathwayProgressScoped,
-      learnerPath: bundle.user.learnerPath,
-    }),
-  ]);
-  if (!dash) return null;
-
-  const pathwayOptions = listPathwaysCompatibleWithSubscription(entitlement);
-  const pathwayLabelById = new Map(pathwayOptions.map((p) => [p.id, p.shortName || p.displayName]));
-
-  const tierTotals = new Map<string, { c: number; t: number }>();
-  const recentBankSessions: RecentBankSessionRow[] = [];
-  let bankCorrect = 0;
-  let bankTotal = 0;
-
-  for (const s of sessions) {
-    const { correct, total, byTier } = gradeBankSessionWithTierBreakdown(s.questionIds, s.answers, qById);
-    bankCorrect += correct;
-    bankTotal += total;
-    for (const [tier, v] of byTier) {
-      const cur = tierTotals.get(tier) ?? { c: 0, t: 0 };
-      cur.c += v.c;
-      cur.t += v.t;
-      tierTotals.set(tier, cur);
-    }
-    recentBankSessions.push({
-      id: s.id,
-      updatedAt: s.updatedAt,
-      examMode: s.examMode,
-      examTitle: s.exam?.title ?? null,
-      correct,
-      total,
-      accuracyPct: total > 0 ? Math.round((correct / total) * 100) : null,
-    });
-  }
-
-  /** Same SESSION_LIMIT window as tier + recent list — avoids mismatch with dashboard sessionGrading (8). */
-  const bankGraded = {
-    correct: bankCorrect,
-    total: bankTotal,
-    sessionCount: sessions.length,
-    accuracyPct: bankTotal > 0 ? Math.round((bankCorrect / bankTotal) * 100) : null,
-  };
-
-  const byQuestionTier: TierAccuracyBucket[] = [...tierTotals.entries()]
-    .map(([tierKey, v]) => ({
-      tierKey,
-      displayLabel: reportCardTierDisplayLabel(tierKey),
-      correct: v.c,
-      total: v.t,
-      accuracyPct: v.t > 0 ? Math.round((v.c / v.t) * 100) : null,
-    }))
-    .filter((b) => b.total > 0)
-    .sort((a, b) => b.total - a.total);
-
+/** Shared mock-tier / weekly / log math from the bounded `examAttempt` query (core path + full path). */
+function buildMockReportSlices(mockAttempts: MockAttemptSelect[]): {
+  mockByExamTier: MockTierSummary[];
+  mockAggregate: ReportCardData["mockAggregate"];
+  mockLog: ReportCardData["mockLog"];
+  mockWeeklyTrend: MockWeeklyTrendPoint[];
+  trendEligible: boolean;
+} {
   const mockByTierMap = new Map<string, { sumScore: number; sumTotal: number; n: number }>();
   let mockSumScore = 0;
   let mockSumTotal = 0;
@@ -363,6 +229,254 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     }));
   const trendEligible = mockWeeklyTrend.filter((p) => p.attempts > 0).length >= 2;
 
+  const mockAggregate = {
+    sumScore: mockSumScore,
+    sumTotal: mockSumTotal,
+    attempts: mockAttempts.filter((a) => a.total > 0).length,
+    accuracyPct: mockSumTotal > 0 ? Math.round((mockSumScore / mockSumTotal) * 100) : null,
+  };
+
+  return { mockByExamTier, mockAggregate, mockLog, mockWeeklyTrend, trendEligible };
+}
+
+/**
+ * Aggregates learner performance for the premium Report Card (bank sessions, mocks, topics, pathways).
+ * Omits or nulls metrics when underlying counts are zero — callers should show honest empty states.
+ *
+ * **Load phases (see `load-learner-dashboard` module header):**
+ * - **Core:** pathway bundle + visible scope + bounded mock attempts + `loadLearnerDashboardCore` + pathway rows from inventory (degraded), or full dashboard + summaries (normal).
+ * - **Practice hydration (normal only):** exam sessions + practice tests + batched question map + session grading preload.
+ * - **Analytics (normal, inside dashboard):** topic performance + bank grading aggregate.
+ * - **Peer comparison (normal only):** optional benchmark from practice rows.
+ */
+export async function loadReportCardData(userId: string, entitlement: AccessScope): Promise<ReportCardData | null> {
+  if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
+
+  const skipHeavy = shouldSkipNonCriticalLearnerWork();
+  const tRoute = performance.now();
+
+  const bundle = await loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadReportCardData" });
+  if (!bundle) return null;
+
+  /** Parallel: visible scope (CPU) + bounded mock attempts (single Prisma round-trip). */
+  const tScopeMocks = performance.now();
+  const [visibleLessonScope, mockAttempts] = await Promise.all([
+    buildVisibleLessonScopeForLearner(entitlement, bundle.pathwayLessonRows),
+    prisma.examAttempt.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      take: MOCK_ATTEMPT_LIMIT,
+      select: {
+        id: true,
+        score: true,
+        total: true,
+        createdAt: true,
+        exam: { select: { tier: true, title: true } },
+      },
+    }),
+  ]);
+  const durationMsScopeAndMocks = Math.round(performance.now() - tScopeMocks);
+
+  const mockSlices = buildMockReportSlices(mockAttempts);
+
+  if (skipHeavy) {
+    const tCore = performance.now();
+    const core = await loadLearnerDashboardCore(userId, entitlement, {
+      source: "loadReportCardData",
+      userProfile: bundle.user,
+      visibleLessonScope,
+      pathwayRowsForScope: bundle.pathwayLessonRows,
+      pathwayMetadataRowCount: bundle.pathwayLessonRows.length,
+      pathwayProgressRowCount: bundle.pathwayProgressScoped.length,
+      recentMocksPreload: mapExamAttemptRowsToRecentMocks(mockAttempts.slice(0, 5)),
+    });
+    const durationMsDashboardCore = Math.round(performance.now() - tCore);
+    if (!core) return null;
+
+    const tPath = performance.now();
+    const pathwayRaw = buildPathwayStudySummariesFromLessonInventory(
+      entitlement,
+      bundle.pathwayLessonRows,
+      bundle.pathwayProgressScoped,
+    );
+    const durationMsPathwaySummaries = Math.round(performance.now() - tPath);
+
+    const readiness = computeReadiness({
+      practiceCorrect: 0,
+      practiceTotal: 0,
+      recentMocks: core.recentMocks.map((m) => ({ score: m.score, total: m.total })),
+      weakTopics: [],
+      lessonsCompleted: core.lessonsCompleted,
+      lessonsAvailable: core.lessonsAvailable,
+      scope: core.scope,
+    });
+
+    const pathways: PathwayLessonSummary[] = pathwayRaw.map((p) => ({
+      pathwayId: p.pathwayId,
+      shortLabel: p.shortLabel,
+      lessonsTotal: p.lessonsTotal,
+      lessonsCompleted: p.lessonsCompleted,
+      lessonsPct: p.lessonsTotal > 0 ? Math.round((p.lessonsCompleted / p.lessonsTotal) * 100) : 0,
+    }));
+
+    safeServerLog("learner_report_card", "report_card_load_phases", {
+      userIdPrefix: userId.slice(0, 8),
+      degraded: true,
+      durationMsTotal: Math.round(performance.now() - tRoute),
+      durationMsScopeAndMocks,
+      durationMsDashboardCore,
+      durationMsPathwaySummaries,
+      skippedAnalytics: true,
+      skippedPracticeHydration: true,
+      skippedPeerComparison: true,
+      skippedFullDashboardLoader: true,
+      ...getLearnerDurabilityObservabilityFields(),
+    });
+
+    return {
+      scopeTier: core.scope.tier,
+      scopeCountry: core.scope.country,
+      readiness,
+      bankGraded: { correct: 0, total: 0, sessionCount: 0, accuracyPct: null },
+      mockAggregate: mockSlices.mockAggregate,
+      byQuestionTier: [],
+      mockByExamTier: mockSlices.mockByExamTier,
+      pathways,
+      weakTopics: [],
+      strongTopics: [],
+      topicTrends: [],
+      recentBankSessions: [],
+      recentMocks: core.recentMocks,
+      recentPracticeTests: [],
+      mockWeeklyTrend: mockSlices.mockWeeklyTrend,
+      trendEligible: mockSlices.trendEligible,
+      continueLesson: core.continueLesson ? { title: core.continueLesson.title, href: core.continueLesson.href } : null,
+      recommendedQuizTopic: null,
+      mockLog: mockSlices.mockLog,
+      peerBenchmark: null,
+    };
+  }
+
+  /**
+   * Normal: hydrate bank sessions + practice tests before the dashboard so we can (a) batch-load questions once,
+   * (b) feed {@link loadLearnerDashboard} with `sessionGradingPreload`, and (c) align readiness grading with bank panels.
+   */
+  const tHydration = performance.now();
+  const [sessions, practiceRows] = await Promise.all([
+    prisma.examSession.findMany({
+      where: { userId, status: ExamSessionStatus.COMPLETED },
+      orderBy: { updatedAt: "desc" },
+      take: SESSION_LIMIT,
+      select: {
+        id: true,
+        questionIds: true,
+        answers: true,
+        updatedAt: true,
+        examMode: true,
+        exam: { select: { title: true } },
+      },
+    }),
+    prisma.practiceTest.findMany({
+      where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
+      orderBy: { completedAt: "desc" },
+      take: 8,
+      select: { id: true, title: true, completedAt: true, results: true, config: true },
+    }),
+  ]);
+  const durationMsPracticeHydration = Math.round(performance.now() - tHydration);
+
+  const allSessionIds: string[] = [];
+  for (const s of sessions) {
+    const { ids } = sanitizeSessionQuestionIds(s.questionIds);
+    allSessionIds.push(...ids);
+  }
+  const qById: Map<string, BankGradingQuestionRow> = await loadBatchedBankGradingQuestionMap(allSessionIds, entitlement);
+
+  let sessionGradingPreload: SessionGradingAggregate | undefined;
+  if (sessions.length > 0) {
+    sessionGradingPreload = aggregateSessionGradingFromHydratedSessions(
+      sessions.slice(0, DASHBOARD_SESSION_GRADING_LIMIT),
+      qById,
+    );
+  }
+
+  const tDashPath = performance.now();
+  const [dash, pathwayRaw] = await Promise.all([
+    loadLearnerDashboard(userId, entitlement, {
+      source: "loadReportCardData",
+      userProfile: bundle.user,
+      visibleLessonScope,
+      pathwayRowsForScope: bundle.pathwayLessonRows,
+      pathwayMetadataRowCount: bundle.pathwayLessonRows.length,
+      pathwayProgressRowCount: bundle.pathwayProgressScoped.length,
+      recentMocksPreload: mapExamAttemptRowsToRecentMocks(mockAttempts.slice(0, 5)),
+      sessionGradingPreload,
+    }),
+    loadPathwayStudySummaries(userId, entitlement, {
+      lessonRows: bundle.pathwayLessonRows,
+      pathwayProgress: bundle.pathwayProgressScoped,
+      learnerPath: bundle.user.learnerPath,
+    }),
+  ]);
+  const durationMsDashboardAndPathways = Math.round(performance.now() - tDashPath);
+  if (!dash) return null;
+
+  const pathwayOptions = listPathwaysCompatibleWithSubscription(entitlement);
+  const pathwayLabelById = new Map(pathwayOptions.map((p) => [p.id, p.shortName || p.displayName]));
+
+  const tierTotals = new Map<string, { c: number; t: number }>();
+  const recentBankSessions: RecentBankSessionRow[] = [];
+  let bankCorrect = 0;
+  let bankTotal = 0;
+
+  for (const s of sessions) {
+    const { correct, total, byTier } = gradeBankSessionWithTierBreakdown(s.questionIds, s.answers, qById);
+    bankCorrect += correct;
+    bankTotal += total;
+    for (const [tier, v] of byTier) {
+      const cur = tierTotals.get(tier) ?? { c: 0, t: 0 };
+      cur.c += v.c;
+      cur.t += v.t;
+      tierTotals.set(tier, cur);
+    }
+    recentBankSessions.push({
+      id: s.id,
+      updatedAt: s.updatedAt,
+      examMode: s.examMode,
+      examTitle: s.exam?.title ?? null,
+      correct,
+      total,
+      accuracyPct: total > 0 ? Math.round((correct / total) * 100) : null,
+    });
+  }
+
+  /** Same SESSION_LIMIT window as tier + recent list — avoids mismatch with dashboard sessionGrading (8). */
+  const bankGraded = {
+    correct: bankCorrect,
+    total: bankTotal,
+    sessionCount: sessions.length,
+    accuracyPct: bankTotal > 0 ? Math.round((bankCorrect / bankTotal) * 100) : null,
+  };
+
+  const byQuestionTier: TierAccuracyBucket[] = [...tierTotals.entries()]
+    .map(([tierKey, v]) => ({
+      tierKey,
+      displayLabel: reportCardTierDisplayLabel(tierKey),
+      correct: v.c,
+      total: v.t,
+      accuracyPct: v.t > 0 ? Math.round((v.c / v.t) * 100) : null,
+    }))
+    .filter((b) => b.total > 0)
+    .sort((a, b) => b.total - a.total);
+
+  const {
+    mockByExamTier,
+    mockAggregate,
+    mockLog,
+    mockWeeklyTrend,
+    trendEligible,
+  } = mockSlices;
+
   const pathways: PathwayLessonSummary[] = pathwayRaw.map((p) => ({
     pathwayId: p.pathwayId,
     shortLabel: p.shortLabel,
@@ -370,13 +484,6 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     lessonsCompleted: p.lessonsCompleted,
     lessonsPct: p.lessonsTotal > 0 ? Math.round((p.lessonsCompleted / p.lessonsTotal) * 100) : 0,
   }));
-
-  const mockAggregate = {
-    sumScore: mockSumScore,
-    sumTotal: mockSumTotal,
-    attempts: mockAttempts.filter((a) => a.total > 0).length,
-    accuracyPct: mockSumTotal > 0 ? Math.round((mockSumScore / mockSumTotal) * 100) : null,
-  };
 
   // Enriched practice test rows — includes pathwayId, CAT readiness score, and exam config
   // for use by both the display list and the peer comparison service.
@@ -434,7 +541,17 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     overallAccuracyPct: bankGraded.accuracyPct,
     preferredPathwayId,
   });
-  const peerBenchmark = skipHeavy ? null : await computePeerComparison(peerComparisonArgs).catch(() => null);
+  const peerBenchmark = await computePeerComparison(peerComparisonArgs).catch(() => null);
+
+  safeServerLog("learner_report_card", "report_card_load_phases", {
+    userIdPrefix: userId.slice(0, 8),
+    degraded: false,
+    durationMsTotal: Math.round(performance.now() - tRoute),
+    durationMsScopeAndMocks,
+    durationMsPracticeHydration,
+    durationMsDashboardAndPathways,
+    ...getLearnerDurabilityObservabilityFields(),
+  });
 
   return {
     scopeTier: dash.scope.tier,
