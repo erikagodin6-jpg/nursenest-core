@@ -48,7 +48,7 @@ async function main(): Promise<void> {
 
   if (!isDatabaseUrlConfigured()) {
     baseMeta.queryFailed = true;
-    baseMeta.queryError = "DATABASE_URL (or PROD_DATABASE_URL in production) not set.";
+    baseMeta.queryError = "DATABASE_URL not set.";
     fs.writeFileSync(
       path.join(AUDIT_DIR, "blog-published-export.json"),
       JSON.stringify({ ...baseMeta, posts: [], counts: { blogPost: 0 } }, null, 2),

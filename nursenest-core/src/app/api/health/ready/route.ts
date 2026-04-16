@@ -7,7 +7,7 @@ export const runtime = "nodejs";
 const READINESS_TIMEOUT_MS = 3000;
 
 /**
- * Readiness: verifies Postgres when `DATABASE_URL` is set (or `PROD_DATABASE_URL` if `DATABASE_URL` is unset).
+ * Readiness: verifies Postgres when `DATABASE_URL` is set (after `env-bootstrap`).
  * Liveness stays on `/healthz` and `/api/health` (no DB).
  */
 export async function GET() {

@@ -7,16 +7,10 @@ import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
  * Skipping queries avoids Prisma client validation error logs; `withDatabaseFallback` also
  * swallows connection/query failures for read paths that should degrade gracefully.
  *
- * After `env-bootstrap`, production may populate `DATABASE_URL` from `PROD_DATABASE_URL` only when `DATABASE_URL` is unset.
+ * Only `DATABASE_URL` counts — `PROD_DATABASE_URL` is not used (see `env-bootstrap.ts`).
  */
 export function isDatabaseUrlConfigured(): boolean {
-  const direct = typeof process.env.DATABASE_URL === "string" && process.env.DATABASE_URL.trim().length > 0;
-  if (direct) return true;
-  return (
-    process.env.NODE_ENV === "production" &&
-    typeof process.env.PROD_DATABASE_URL === "string" &&
-    process.env.PROD_DATABASE_URL.trim().length > 0
-  );
+  return typeof process.env.DATABASE_URL === "string" && process.env.DATABASE_URL.trim().length > 0;
 }
 
 export async function withDatabaseFallback<T>(run: () => Promise<T>, fallback: T): Promise<T> {

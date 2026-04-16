@@ -1,5 +1,8 @@
 import "../scripts/load-dotenv-for-cli.mts";
 import "../src/lib/db/env-bootstrap";
+import { assertDatabaseUrlPresentOrExit } from "../scripts/lib/database-env-assert.mts";
+
+assertDatabaseUrlPresentOrExit("prisma/seed.ts requires DATABASE_URL.");
 import { hash } from "bcryptjs";
 import { ContentStatus } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";

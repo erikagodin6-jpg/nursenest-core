@@ -8,13 +8,7 @@
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
 function effectiveDatabaseUrl(): string | undefined {
-  const d = process.env.DATABASE_URL?.trim();
-  if (d) return d;
-  if (process.env.NODE_ENV === "production") {
-    const p = process.env.PROD_DATABASE_URL?.trim();
-    if (p) return p;
-  }
-  return undefined;
+  return process.env.DATABASE_URL?.trim();
 }
 
 function hasStatementTimeoutConfigured(raw: string): boolean {
@@ -44,7 +38,7 @@ export function validateProductionDatabaseEnv(): void {
 
   if (!isDatabaseUrlConfigured()) {
     console.error(
-      "[nursenest-core] database env: DATABASE_URL is missing (and PROD_DATABASE_URL is unset). Prisma will fail at query time — set DATABASE_URL to your Postgres connection string.",
+      "[nursenest-core] database env: DATABASE_URL is missing. Prisma will fail at query time — set DATABASE_URL to your Postgres connection string.",
     );
     return;
   }

@@ -4,7 +4,8 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
 import { LearnerProfileAccountActions } from "@/components/student/learner-profile-account-actions";
-import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { useMarketingI18n, useMarketingLocale } from "@/lib/marketing-i18n";
 
 export function LearnerSecurityHub({
   hasPassword,
@@ -14,6 +15,7 @@ export function LearnerSecurityHub({
   sessionMaxDays: number;
 }) {
   const { t } = useMarketingI18n();
+  const locale = useMarketingLocale();
   const [signingOut, setSigningOut] = useState(false);
 
   return (
@@ -57,7 +59,7 @@ export function LearnerSecurityHub({
             disabled={signingOut}
             onClick={() => {
               setSigningOut(true);
-              void signOut({ redirectTo: "/login" });
+              void signOut({ redirectTo: withMarketingLocale(locale, "/login") });
             }}
             className="inline-flex rounded-full bg-role-cta px-5 py-3 text-sm font-semibold text-role-cta-foreground disabled:opacity-50"
           >

@@ -1,7 +1,7 @@
 /**
  * Run Prisma CLI with the same env resolution as app code and QA scripts:
  * 1. Load `nursenest-core/.env.local` → `.env.playwright.local` → `.env` (see `load-dotenv-for-cli.mts`).
- * 2. Apply `src/lib/db/env-bootstrap.ts` (tuning + deprecated `PROD_DATABASE_URL` → `DATABASE_URL`).
+ * 2. Apply `src/lib/db/env-bootstrap.ts` (URL tuning; `DATABASE_URL` only).
  * 3. Run `npx prisma …` with `cwd` = the nursenest-core package root (works when the shell cwd is the monorepo root).
  *
  * Usage:
@@ -14,6 +14,7 @@ import { fileURLToPath } from "node:url";
 
 import "./load-dotenv-for-cli.mts";
 import "../src/lib/db/env-bootstrap";
+import { assertDatabaseUrlPresentOrExit } from "./lib/database-env-assert.mts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(__dirname, "..");
@@ -27,6 +28,8 @@ if (forwarded.length === 0) {
   );
   process.exit(1);
 }
+
+assertDatabaseUrlPresentOrExit("Prisma CLI requires DATABASE_URL (loaded from nursenest-core env files).");
 
 const result = spawnSync("npx", ["prisma", ...forwarded], {
   cwd: packageRoot,

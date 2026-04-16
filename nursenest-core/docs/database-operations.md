@@ -12,7 +12,7 @@ Prisma uses a single `DATABASE_URL` in `schema.prisma`. If you sit behind PgBoun
 
 ## Connection handling (this codebase)
 
-- `src/lib/db/env-bootstrap.ts` normalizes `DATABASE_URL`, merges legacy `PROD_DATABASE_URL` in production, and injects conservative `connection_limit` / `pool_timeout` defaults when not set explicitly.
+- `src/lib/db/env-bootstrap.ts` normalizes `DATABASE_URL` and injects conservative `connection_limit` / `pool_timeout` defaults when not set explicitly (`PROD_DATABASE_URL` is not used).
 - `src/lib/db.ts` wraps Prisma with a **concurrency semaphore** (`NN_DB_MAX_CONCURRENT_QUERIES`, default 22) and slow-query logging.
 - Prefer **server-side** `statement_timeout` on the connection string (e.g. `?statement_timeout=30000`) so runaway SQL fails predictably; `validateProductionDatabaseEnv` warns at startup if it is missing.
 - Tune `max_connections` on Postgres vs app `connection_limit` × instance count × platform.

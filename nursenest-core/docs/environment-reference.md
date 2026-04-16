@@ -12,7 +12,7 @@ Canonical validation: `src/lib/env/production-env-guard.ts` (startup) + `src/lib
 | Canonical | Legacy / alias | Notes |
 |-----------|----------------|--------|
 | `AUTH_SECRET` | `NEXTAUTH_SECRET` | Either works; prefer `AUTH_SECRET`. |
-| `DATABASE_URL` | `PROD_DATABASE_URL` | Bootstrap copies legacy → `DATABASE_URL` only when `DATABASE_URL` is unset in production. **Do not** point two different DBs; remove duplicate. |
+| `DATABASE_URL` | — | **Only** supported DB URL. `PROD_DATABASE_URL` is ignored — remove it. See `docs/database-environment.md`. |
 | `AUTH_URL` | `NEXTAUTH_URL` | Public origin only (no path). |
 
 Test/staging/production should use **different** secrets and DB URLs; never reuse production `AUTH_SECRET` or `DATABASE_URL` in local `.env` that could be committed.
@@ -31,8 +31,8 @@ Test/staging/production should use **different** secrets and DB URLs; never reus
 
 | Variable | Required (prod) | Purpose |
 |----------|------------------|---------|
-| `DATABASE_URL` | **Yes** | Prisma Postgres URL |
-| `PROD_DATABASE_URL` | Legacy fallback | Only when `DATABASE_URL` unset |
+| `DATABASE_URL` | **Yes** | Prisma Postgres URL (only variable; do not use `PROD_DATABASE_URL`) |
+| `DATABASE_DIRECT_URL` | Optional | Direct (non-pooler) URL for migrations; often derived by env-bootstrap |
 | `PRISMA_CONNECTION_LIMIT` | Optional | Pool size override |
 | `PRISMA_POOL_TIMEOUT` | Optional | Pool timeout override |
 | `NN_DB_MAX_CONCURRENT_QUERIES` | Optional | App-side query semaphore |

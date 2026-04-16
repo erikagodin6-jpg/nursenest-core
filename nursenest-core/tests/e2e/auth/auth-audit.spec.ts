@@ -248,6 +248,14 @@ test("valid login, callback URL, logout, guest redirect (needs credentials)", as
     await expect(page.getByRole("button", { name: /^Sign out$/i }).first()).toBeVisible({ timeout: 20_000 });
     pass("sign-out-visible-when-authenticated", "At least one Sign out button visible on learner shell", nav.getChain());
 
+    /* 2c) Desktop: account menu also exposes Sign out (not only bottom nav / compact strip) */
+    await page.setViewportSize({ width: 1280, height: 800 });
+    const accountMenuBtn = page.locator('button[aria-haspopup="menu"]').first();
+    await accountMenuBtn.click({ timeout: 20_000 });
+    await expect(page.getByRole("menuitem", { name: /^Sign out$/i })).toBeVisible({ timeout: 15_000 });
+    await page.keyboard.press("Escape");
+    pass("desktop-account-menu-sign-out", "User bar menu lists Sign out", nav.getChain());
+
     /* 3) Logout from mobile bottom nav (ensures Sign out is not menu-only on small screens) */
     await page.setViewportSize({ width: 390, height: 844 });
     const bottomNav = page.getByRole("navigation", { name: "Learner bottom navigation" });

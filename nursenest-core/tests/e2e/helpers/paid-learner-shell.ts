@@ -14,6 +14,100 @@ import { expectOnLearnerApp } from "./paid-surface-assertions";
  */
 export const PAID_E2E_DEFAULT_PATHWAY_ID = "us-rn-nclex-rn";
 
+/** Snapshot when `#nn-learner-main` is missing — auth redirect, onboarding, marketing guest hub, or auth gate. */
+export type LearnerShellMainMissingDiagnostics = {
+  pageUrl: string;
+  windowPathname: string;
+  pathnameFromPageUrl: string;
+  title: string;
+  nnLearnerMainCount: number;
+  authGateCount: number;
+  learnerStickyChromeCount: number;
+  marketingSurfaceCount: number;
+  loginPathOrQuery: boolean;
+  passwordInputCount: boolean;
+  signInButtonVisible: boolean;
+  onboardingUrl: boolean;
+  likelyMarketingLessonsHub: boolean;
+  inferredCause: string;
+};
+
+async function collectLearnerShellMainMissingDiagnostics(page: Page): Promise<LearnerShellMainMissingDiagnostics> {
+  const pageUrl = page.url();
+  let pathnameFromPageUrl = "";
+  try {
+    pathnameFromPageUrl = new URL(pageUrl).pathname;
+  } catch {
+    pathnameFromPageUrl = "";
+  }
+  let windowPathname = "";
+  try {
+    windowPathname = await page.evaluate(() => window.location.pathname);
+  } catch {
+    windowPathname = "";
+  }
+  const title = (await page.title().catch(() => "")).slice(0, 200);
+  const [
+    nnLearnerMainCount,
+    authGateCount,
+    learnerStickyChromeCount,
+    marketingSurfaceCount,
+    passwordInputs,
+    signInButtonVisible,
+  ] = await Promise.all([
+    page.locator("#nn-learner-main").count(),
+    page.locator("[data-nn-learner-auth-gate]").count(),
+    page.locator(".nn-learner-shell-sticky").count(),
+    page.locator(".nn-marketing-surface").count(),
+    page.locator('input[type="password"]').count(),
+    page.getByRole("button", { name: /^Sign In$/i }).isVisible().catch(() => false),
+  ]);
+  const onboardingUrl = pathnameFromPageUrl.includes("/app/onboarding");
+  const loginPathOrQuery = /\/login/i.test(pageUrl);
+  const likelyMarketingLessonsHub =
+    pathnameFromPageUrl === "/lessons" || /^\/lessons\//.test(pathnameFromPageUrl);
+
+  let inferredCause = "unknown";
+  if (onboardingUrl) {
+    inferredCause = "onboarding_route — complete onboarding or set User.onboardingCompletedAt (qa-paid-test-account-reset.mts)";
+  } else if (loginPathOrQuery) {
+    inferredCause = "login_url — session missing/invalid; re-run setup-paid-auth, check AUTH_SECRET matches dev server";
+  } else if (likelyMarketingLessonsHub && nnLearnerMainCount === 0) {
+    inferredCause =
+      "marketing_public_hub — guest redirect from /app/lessons (proxy) or navigated to /lessons; need signed-in session";
+  } else if (authGateCount > 0) {
+    inferredCause =
+      "unauthenticated_gate — layout rendered without userId (RSC auth empty); middleware should redirect to /login; check JWT/session cookie and AUTH_URL";
+  } else if (marketingSurfaceCount > 0 && learnerStickyChromeCount === 0) {
+    inferredCause = "marketing_chrome_without_learner_shell — likely off /app or session lost";
+  } else if (learnerStickyChromeCount > 0 && nnLearnerMainCount === 0) {
+    inferredCause = "partial_learner_chrome_without_main — unexpected DOM; check layout render path";
+  }
+
+  return {
+    pageUrl,
+    windowPathname,
+    pathnameFromPageUrl,
+    title,
+    nnLearnerMainCount,
+    authGateCount,
+    learnerStickyChromeCount,
+    marketingSurfaceCount,
+    loginPathOrQuery,
+    passwordInputCount: passwordInputs > 0,
+    signInButtonVisible,
+    onboardingUrl,
+    likelyMarketingLessonsHub,
+    inferredCause,
+  };
+}
+
+async function logLearnerShellMainMissingDiagnostics(page: Page, context: string): Promise<void> {
+  const d = await collectLearnerShellMainMissingDiagnostics(page);
+  // eslint-disable-next-line no-console -- paid E2E deploy-gate diagnostics
+  console.error(`[paid-e2e] #nn-learner-main missing (${context})`, JSON.stringify(d, null, 2));
+}
+
 async function logLearnerShellNavigationAudit(page: Page, context: string): Promise<void> {
   let pathname = "";
   try {
@@ -38,8 +132,9 @@ async function logLearnerShellNavigationAudit(page: Page, context: string): Prom
 }
 
 /**
- * Wait until the learner app chrome is interactive: `main` plus at least one of the
- * desktop primary nav or mobile bottom nav (viewport-dependent).
+ * Wait until the learner app chrome is interactive: `#nn-learner-main` (canonical `<main>` from
+ * `(learner)/layout`) plus at least one of the desktop primary nav or mobile bottom nav
+ * (viewport-dependent). Use the id so we do not depend on `document.querySelectorAll("main").length === 1`.
  */
 export async function waitForAuthenticatedLearnerShell(
   page: Page,
@@ -47,7 +142,29 @@ export async function waitForAuthenticatedLearnerShell(
 ): Promise<void> {
   const ms = opts?.timeoutMs ?? 120_000;
   assertSyncNotOnboardingBlocking(page, "waitForAuthenticatedLearnerShell");
-  await expect(page.locator("main")).toBeVisible({ timeout: ms });
+
+  const url = page.url();
+  let pathname = "";
+  try {
+    pathname = new URL(url).pathname;
+  } catch {
+    pathname = "";
+  }
+  // eslint-disable-next-line no-console -- required shell-wait debug (user request)
+  console.log("PATH:", pathname);
+  // eslint-disable-next-line no-console -- required shell-wait debug (user request)
+  console.log("URL:", url);
+
+  try {
+    await expect(page.locator("#nn-learner-main")).toBeVisible({ timeout: ms });
+  } catch (e) {
+    await logLearnerShellMainMissingDiagnostics(page, "waitForAuthenticatedLearnerShell");
+    const msg = e instanceof Error ? e.message : String(e);
+    throw new Error(
+      `#nn-learner-main not visible after ${ms}ms. See [paid-e2e] #nn-learner-main missing log above. Original: ${msg}`,
+      { cause: e },
+    );
+  }
   try {
     await expect(learnerShellStudyNavigation(page)).toBeVisible({ timeout: Math.min(ms, 90_000) });
   } catch (e) {
@@ -106,7 +223,7 @@ export async function collectPaidSurfaceDebug(page: Page, step: string): Promise
     .count()
     .catch(() => 0);
   const mainH1 =
-    (await page.locator("main h1").first().innerText().catch(() => null)) ??
+    (await page.locator("#nn-learner-main h1").first().innerText().catch(() => null)) ??
     (await page.getByRole("heading", { level: 1 }).first().innerText().catch(() => null));
   return {
     step,

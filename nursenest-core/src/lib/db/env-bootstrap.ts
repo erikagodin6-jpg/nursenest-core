@@ -1,9 +1,8 @@
 /**
  * Import this module before constructing `PrismaClient` (directly or via `@/lib/db`).
  *
- * Production (DigitalOcean, etc.): **`DATABASE_URL` wins** when set — use the **managed Postgres**
- * connection string from the DO dashboard (HA / standby failover is handled by the platform; the URI
- * stays stable). Pair with `sslmode=require` when the provider requires TLS.
+ * Production (DigitalOcean, etc.): use **`DATABASE_URL`** — the managed Postgres connection string.
+ * **`PROD_DATABASE_URL` is not read** (legacy; must not be used — set `DATABASE_URL` only).
  *
  * Tunables (defaults applied only when the URL omits the param — see `tuneDatabaseUrlForProcess`):
  * - `PRISMA_CONNECTION_LIMIT` / `PRISMA_POOL_TIMEOUT` — Prisma pool sizing vs `max_connections`
@@ -12,11 +11,9 @@
  * - **PgBouncer / DO pooler**: set `PRISMA_USE_PGBOUNCER=true` to append `pgbouncer=true` (or add it to the URL). Set `DATABASE_DIRECT_URL` to the
  *   provider’s **direct** Postgres URI (non-pooler port) — required when the pooled URL uses `pgbouncer=true` (Prisma Migrate cannot use transaction pooling).
  *
- * If `DATABASE_URL` is unset and `PROD_DATABASE_URL` is set, copy prod → `DATABASE_URL` (**deprecated alias** —
- * use `DATABASE_URL` everywhere; see `docs/database-environment.md`).
- * `schema.prisma` uses `DATABASE_URL` + `DATABASE_DIRECT_URL` (see `applyDirectDatabaseUrlFromEnv`).
+ * `schema.prisma` uses `url = env("DATABASE_URL")` and `directUrl = env("DATABASE_DIRECT_URL")` (see `applyDirectDatabaseUrlFromEnv`).
  */
-export type DatabaseUrlSource = "prod_override" | "database_url" | "missing";
+export type DatabaseUrlSource = "database_url" | "missing";
 
 export let databaseUrlSource: DatabaseUrlSource = "missing";
 
@@ -117,7 +114,6 @@ function tuneDatabaseUrlForProcess(rawUrl: string, role: "pooled" | "direct" = "
   let working = role === "direct" ? stripPgbouncerFromUrl(rawUrl) : rawUrl;
 
   const usePoolerFlag = role === "pooled" && isPrismaPgbouncerMode();
-  // External pooler: avoid double-pooling — one Prisma connection per server worker is typical (override with PRISMA_CONNECTION_LIMIT).
   const connectionLimit =
     process.env.PRISMA_CONNECTION_LIMIT ??
     (usePoolerFlag
@@ -134,8 +130,6 @@ function tuneDatabaseUrlForProcess(rawUrl: string, role: "pooled" | "direct" = "
   tuned = withDefaultQueryParam(tuned, "connection_limit", connectionLimit);
   tuned = withDefaultQueryParam(tuned, "pool_timeout", poolTimeout);
   tuned = withDefaultQueryParam(tuned, "connect_timeout", connectTimeoutSec);
-  // Script / migrate CLIs: skip statement_timeout in `options` — DO managed PG often rejects that startup param.
-  // Elsewhere: cap runaway queries via libpq options (override with PRISMA_STATEMENT_TIMEOUT_MS=0).
   if (!isScriptProcess) {
     tuned = withDefaultStatementTimeout(tuned);
   }
@@ -165,40 +159,24 @@ export function applyDirectDatabaseUrlFromEnv(): void {
 
 export function applyDatabaseUrlFromEnv(): void {
   const direct = process.env.DATABASE_URL?.trim();
-  const prod = process.env.PROD_DATABASE_URL?.trim();
-
-  if (process.env.NODE_ENV === "production") {
-    if (direct && prod && direct !== prod) {
-      console.error(
-        "[nursenest-core] DATABASE_URL and PROD_DATABASE_URL differ; using DATABASE_URL. Remove or align PROD_DATABASE_URL.",
-      );
-    }
-    if (direct) {
-      process.env.DATABASE_URL = tuneDatabaseUrlForProcess(direct, "pooled");
-      databaseUrlSource = "database_url";
-      return;
-    }
-    if (prod) {
-      process.env.DATABASE_URL = tuneDatabaseUrlForProcess(prod, "pooled");
-      databaseUrlSource = "prod_override";
-      return;
-    }
-    databaseUrlSource = "missing";
-    return;
-  }
+  const legacyProd = process.env.PROD_DATABASE_URL?.trim();
 
   if (direct) {
     process.env.DATABASE_URL = tuneDatabaseUrlForProcess(direct, "pooled");
     databaseUrlSource = "database_url";
-  } else if (prod) {
-    console.warn(
-      "[nursenest-core] DEPRECATED: DATABASE_URL is unset but PROD_DATABASE_URL is set. Copying to DATABASE_URL. " +
-        "Set DATABASE_URL in nursenest-core/.env.local (or your shell) and remove PROD_DATABASE_URL — see docs/database-environment.md.",
+    if (legacyProd && legacyProd !== direct) {
+      console.warn(
+        "[nursenest-core] PROD_DATABASE_URL is set but ignored — DATABASE_URL is the only source of truth. Remove PROD_DATABASE_URL.",
+      );
+    }
+    return;
+  }
+
+  databaseUrlSource = "missing";
+  if (legacyProd) {
+    console.error(
+      "[nursenest-core] DATABASE_URL is unset. PROD_DATABASE_URL is no longer merged — copy the connection string to DATABASE_URL (DigitalOcean app env, GitHub secret, or .env.local). See docs/database-environment.md",
     );
-    process.env.DATABASE_URL = tuneDatabaseUrlForProcess(prod, "pooled");
-    databaseUrlSource = "prod_override";
-  } else {
-    databaseUrlSource = "missing";
   }
 }
 

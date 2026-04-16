@@ -43,6 +43,7 @@
  * Or set `PLAYWRIGHT_TEST_EMAIL` / `PLAYWRIGHT_TEST_PASSWORD` (same as `paid-test-credentials.ts`).
  */
 import { cliDotenvTelemetry } from "./load-dotenv-for-cli.mts";
+import { assertDatabaseUrlPresentOrExit } from "./lib/database-env-assert.mts";
 import { createInterface } from "node:readline";
 import bcrypt from "bcryptjs";
 import {
@@ -70,19 +71,9 @@ function examGoalSlugForTier(tier: TierCode): "rn" | "rpn" | "np" | "allied" {
   return "rn";
 }
 
-if (!process.env.DATABASE_URL?.trim()) {
-  console.error("DATABASE_URL is not set.");
-  console.error(
-    [
-      "This CLI runs on your machine (Cursor / local terminal), not inside DigitalOcean’s runtime.",
-      "DO does not inject DATABASE_URL here — copy the Postgres URI into a gitignored file or export it:",
-      `  ${cliDotenvTelemetry.packageRoot}/.env.local   (recommended)`,
-      `  ${cliDotenvTelemetry.packageRoot}/.env         (fallback; see .env.example)`,
-      "Or: DATABASE_URL='postgresql://…' ALLOW_QA_PAID_TEST_RESET=1 npm run admin:qa-paid-test-reset",
-    ].join("\n"),
-  );
-  process.exit(1);
-}
+assertDatabaseUrlPresentOrExit(
+  "QA paid test reset requires DATABASE_URL (local CLI; load nursenest-core/.env.local — see docs/database-environment.md).",
+);
 
 {
   const raw = process.env.DATABASE_URL?.trim();

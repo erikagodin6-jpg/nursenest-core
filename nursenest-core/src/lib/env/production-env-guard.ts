@@ -2,8 +2,7 @@
  * Centralized production environment validation (Node instrumentation).
  * Use {@link NN_STRICT_PRODUCTION_ENV}=1 to exit the process on critical gaps (CI / strict deploys).
  *
- * Naming: prefer `AUTH_SECRET` over legacy `NEXTAUTH_SECRET`; `DATABASE_URL` is canonical
- * (`PROD_DATABASE_URL` is a legacy alias merged in `env-bootstrap` only when `DATABASE_URL` is unset).
+ * Naming: prefer `AUTH_SECRET` over legacy `NEXTAUTH_SECRET`; `DATABASE_URL` is the only database URL variable.
  */
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
@@ -53,7 +52,7 @@ export function collectProductionEnvIssues(): EnvIssue[] {
     issues.push({
       code: "database_url_missing",
       severity: "critical",
-      message: "DATABASE_URL (or legacy PROD_DATABASE_URL when DATABASE_URL is unset) must be set for Prisma.",
+      message: "DATABASE_URL must be set for Prisma.",
     });
   }
 

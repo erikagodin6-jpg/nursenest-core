@@ -1,8 +1,7 @@
 import { databaseUrlSource } from "@/lib/db/env-bootstrap";
 
 /**
- * Masked logging for operators. Effective URL follows `env-bootstrap` (production may copy
- * `PROD_DATABASE_URL` → `DATABASE_URL`).
+ * Masked logging for operators. Only `DATABASE_URL` is used (see `env-bootstrap.ts`).
  */
 
 export function maskDatabaseUrl(url: string): string {
@@ -26,15 +25,14 @@ export function logDatabaseEnvOnce(): void {
   if (process.env.NODE_ENV !== "production") return;
 
   const db = process.env.DATABASE_URL?.trim();
-  const prod = process.env.PROD_DATABASE_URL?.trim();
 
   console.error(
-    `[nursenest-core] prisma: effectiveConnection masked=${db ? maskDatabaseUrl(db) : "(MISSING)"} source=${databaseUrlSource} PROD_DATABASE_URL=${prod ? "set" : "unset"}`,
+    `[nursenest-core] prisma: effectiveConnection masked=${db ? maskDatabaseUrl(db) : "(MISSING)"} source=${databaseUrlSource}`,
   );
 
-  if (prod && db && prod !== db) {
+  if (process.env.PROD_DATABASE_URL?.trim()) {
     console.error(
-      "[nursenest-core] prisma: WARNING DATABASE_URL and PROD_DATABASE_URL differ — DATABASE_URL is used; unset PROD_DATABASE_URL.",
+      "[nursenest-core] prisma: PROD_DATABASE_URL is set but ignored — remove it and use DATABASE_URL only.",
     );
   }
 }

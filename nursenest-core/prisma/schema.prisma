@@ -3,10 +3,11 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  /// Pooled URL (e.g. DigitalOcean pooler / PgBouncer transaction mode): add `pgbouncer=true` — see `src/lib/db/env-bootstrap.ts`.
-  url       = env("DATABASE_URL")
-  /// Direct Postgres URL for Prisma Migrate and introspection (non-pooler). When not using a pooler, set equal to `DATABASE_URL`.
+  provider = "postgresql"
+  /// Primary app + Prisma data plane: **only** `DATABASE_URL` is supported (no `PROD_DATABASE_URL` or other aliases).
+  /// Pooled URL (e.g. DO pooler / PgBouncer): add `pgbouncer=true` — see `src/lib/db/env-bootstrap.ts`.
+  url = env("DATABASE_URL")
+  /// Same database, **direct** connection for migrate/introspect (non-pooler). Optional; derived from `DATABASE_URL` when unset.
   directUrl = env("DATABASE_DIRECT_URL")
 }
 

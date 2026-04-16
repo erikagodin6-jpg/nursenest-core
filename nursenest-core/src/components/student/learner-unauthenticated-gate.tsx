@@ -8,7 +8,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 export function LearnerUnauthenticatedGate() {
   const { t } = useMarketingI18n();
   return (
-    <div className="mx-auto w-full max-w-6xl px-6 py-8">
+    <div data-nn-learner-auth-gate className="mx-auto w-full max-w-6xl px-6 py-8">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <Link href="/" className="inline-flex overflow-visible bg-transparent" aria-label={t("brand.homeAriaLabel")}>
           <SiteBrandLogoMark variant="auth" />
