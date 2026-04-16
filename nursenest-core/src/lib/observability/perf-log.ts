@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import os from "node:os";
+import { recordSlowDbQuery } from "@/lib/observability/production-signal-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /** Log Prisma operations slower than this (ms). */
@@ -43,6 +44,7 @@ export function logSlowPrismaQuery(meta: { model: string; operation: string; dur
   if (meta.durationMs <= SLOW_PRISMA_QUERY_MS) return;
   const queryName = `${meta.model}.${meta.operation}`.slice(0, 120);
   const severity = meta.durationMs > SLOW_QUERY_CRITICAL_MS ? "critical" : "warn";
+  recordSlowDbQuery(meta.durationMs, severity);
   safeServerLog("perf", "slow_query_detected", {
     queryName,
     durationMs: meta.durationMs,

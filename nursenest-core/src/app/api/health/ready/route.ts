@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { checkDatabaseReadiness } from "@/lib/db/prisma-readiness";
+import { recordHealthReadyDatabaseFailure } from "@/lib/observability/production-signal-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const runtime = "nodejs";
@@ -54,6 +55,7 @@ export async function GET() {
     if (!r.ok) {
       const detail = (r.error ?? "unknown").slice(0, 120);
       safeServerLog("health", "ready_database_failed", { detail });
+      recordHealthReadyDatabaseFailure();
       return NextResponse.json(
         {
           ok: false,
@@ -79,6 +81,7 @@ export async function GET() {
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     safeServerLog("health", "ready_handler_error", { detail: msg.slice(0, 120) });
+    recordHealthReadyDatabaseFailure();
     return NextResponse.json(
       {
         ok: false,

@@ -39,6 +39,13 @@ import {
   preNursingMiniCatSurface,
 } from "../helpers/pathway-prenursing-surfaces";
 import {
+  attachPrenursingAlliedEnvironmentCheck,
+  assertEnvironmentAllowsSuite,
+  classifyPrenursingAlliedErrorMessage,
+  runEnvironmentPreflight,
+  type PrenursingAlliedEnvironmentCheck,
+} from "../helpers/prenursing-allied-environment";
+import {
   attachSmokeCapture,
   attachSmokeFailureScreenshot,
   attachSlowRequestTap,
@@ -90,6 +97,8 @@ type FailureExtra = {
   matchedPrefix?: string | null;
   usedGenericFallback?: boolean;
   session?: Awaited<ReturnType<typeof readLearnerSessionSnapshot>>;
+  environmentCheck?: PrenursingAlliedEnvironmentCheck | null;
+  failurePhase?: string;
 };
 
 async function attachPrenursingAlliedFailure(
@@ -128,10 +137,18 @@ async function attachPrenursingAlliedFailure(
 }
 
 for (const row of PRENURSING_ALLIED_PATHWAY_MATRIX) {
-  test(`${row.label}`, async ({ page, baseURL }, testInfo) => {
+  test(`${row.label}`, async ({ page, baseURL, request }, testInfo) => {
     const creds = resolvePrenursingAlliedCredentials(row.credentialPrefixes);
     const hint = row.credentialPrefixes.map((p) => `${p}_EMAIL + ${p}_PASSWORD`).join(", ");
     test.skip(!creds, `Set ${hint}, or generic QA_PAID_EMAIL + QA_PAID_PASSWORD (session tier/country/profession must match the row).`);
+
+    const envCheck = await runEnvironmentPreflight({
+      request,
+      baseURL,
+      credentialPrefixes: row.credentialPrefixes,
+    });
+    await attachPrenursingAlliedEnvironmentCheck(testInfo, envCheck);
+    assertEnvironmentAllowsSuite(envCheck);
 
     const slowMs: { url: string; ms: number }[] = [];
     const disposeSlow = attachSlowRequestTap(page, baseOriginFrom(page, baseURL), slowMs, 3000);
@@ -141,9 +158,18 @@ for (const row of PRENURSING_ALLIED_PATHWAY_MATRIX) {
 
     try {
       await test.step("Login", async () => {
-        await loginWithCredentials(page, creds!.email, creds!.password);
-        await expectOnPaidSubscriberApp(page);
-        expect(page.url()).not.toMatch(/\/login/i);
+        try {
+          await loginWithCredentials(page, creds!.email, creds!.password);
+          await expectOnPaidSubscriberApp(page);
+          expect(page.url()).not.toMatch(/\/login/i);
+        } catch (e) {
+          const m = e instanceof Error ? e.message : String(e);
+          const phase = classifyPrenursingAlliedErrorMessage(m);
+          throw new Error(
+            `[prenursing-allied:${phase}] ${m}\n` +
+              "(Environment preflight passed — /login was reachable; this is auth or learner-shell routing, not connection refused.)",
+          );
+        }
       });
 
       const session = await readLearnerSessionSnapshot(page);
@@ -259,12 +285,16 @@ for (const row of PRENURSING_ALLIED_PATHWAY_MATRIX) {
         contentType: "application/json",
       });
     } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      const phase = classifyPrenursingAlliedErrorMessage(msg);
       await attachPrenursingAlliedFailure(testInfo, page, observers, slowMs, {
         pathwayKey: row.key,
         credentialSource: creds?.sourceLabel,
         matchedPrefix: creds?.matchedPrefix,
         usedGenericFallback: creds?.usedGenericFallback,
         session: await readLearnerSessionSnapshot(page).catch(() => null),
+        environmentCheck: envCheck,
+        failurePhase: phase,
       });
       throw e;
     } finally {
@@ -275,17 +305,35 @@ for (const row of PRENURSING_ALLIED_PATHWAY_MATRIX) {
 }
 
 test.describe("Secondary: allied profession marketing lesson hubs", () => {
-  test("each registry professionKey resolves a lesson index (signed-in)", async ({ page, baseURL }, testInfo) => {
+  test("each registry professionKey resolves a lesson index (signed-in)", async ({ page, baseURL, request }, testInfo) => {
     const creds = resolvePrenursingAlliedCredentials(["QA_ALLIED_US", "QA_ALLIED", "QA_PAID_ALLIED", "QA_PAID"]);
     test.skip(!creds, "Set QA_ALLIED_US_EMAIL + QA_ALLIED_US_PASSWORD (or QA_ALLIED_* / QA_PAID_* with US allied entitlements).");
+
+    const prefixes = ["QA_ALLIED_US", "QA_ALLIED", "QA_PAID_ALLIED", "QA_PAID"];
+    const envCheck = await runEnvironmentPreflight({
+      request,
+      baseURL,
+      credentialPrefixes: prefixes,
+    });
+    await attachPrenursingAlliedEnvironmentCheck(testInfo, envCheck);
+    assertEnvironmentAllowsSuite(envCheck);
 
     const slowMs: { url: string; ms: number }[] = [];
     const disposeSlow = attachSlowRequestTap(page, baseOriginFrom(page, baseURL), slowMs, 3000);
     const observers = attachPageObservers(page, { profile: "app", probeAuthApi: true });
 
     try {
-      await loginWithCredentials(page, creds!.email, creds!.password);
-      await expectOnPaidSubscriberApp(page);
+      try {
+        await loginWithCredentials(page, creds!.email, creds!.password);
+        await expectOnPaidSubscriberApp(page);
+      } catch (e) {
+        const m = e instanceof Error ? e.message : String(e);
+        const phase = classifyPrenursingAlliedErrorMessage(m);
+        throw new Error(
+          `[prenursing-allied:${phase}] ${m}\n` +
+            "(Environment preflight passed — /login was reachable; this is auth or learner-shell routing.)",
+        );
+      }
 
       const session = await readLearnerSessionSnapshot(page);
       expect(
@@ -342,11 +390,13 @@ test.describe("Secondary: allied profession marketing lesson hubs", () => {
         contentType: "application/json",
       });
     } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
       await attachSmokeFailureScreenshot(page, testInfo, "prenursing-allied-professions-failure.png");
       const hints = await visibleErrorHints(page).catch(() => []);
       await testInfo.attach("prenursing-allied-professions-fail.json", {
         body: Buffer.from(
           JSON.stringify({
+            failurePhase: classifyPrenursingAlliedErrorMessage(msg),
             currentUrl: page.url(),
             visibleErrorHints: hints,
             consoleErrors: observers.consoleErrors,
@@ -355,6 +405,7 @@ test.describe("Secondary: allied profession marketing lesson hubs", () => {
             credentialSource: creds?.sourceLabel,
             matchedPrefix: creds?.matchedPrefix,
             usedGenericFallback: creds?.usedGenericFallback,
+            environmentCheck: envCheck,
           }),
           null,
           2,

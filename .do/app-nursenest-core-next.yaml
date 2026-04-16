@@ -34,7 +34,9 @@ services:
     http_port: 8080
     routes:
       - path: /
-    # Liveness: GET /healthz (no DB). Next cold start + first-route compile can exceed short delays.
+    # Liveness: GET /healthz (no DB). Traffic is not routed until checks pass (failure_threshold consecutive failures).
+    # Rollback: App Platform → Deployments → redeploy a previous successful deployment if a bad build ships.
+    # Post-deploy verification: BASE_URL=https://… npm run qa:verify:health (see nursenest-core/docs/deploy-safety.md).
     health_check:
       http_path: /healthz
       initial_delay_seconds: 120

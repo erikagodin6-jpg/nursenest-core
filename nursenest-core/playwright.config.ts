@@ -21,7 +21,11 @@ import { defineConfig, devices } from "@playwright/test";
 import { FREE_USER_AUTH_FILE, PAID_USER_AUTH_FILE } from "./tests/e2e/helpers/auth-state-paths";
 import { hasPaidTestCredentials } from "./tests/e2e/helpers/paid-test-credentials";
 
-const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
+/**
+ * Default local origin must match typical `.env.local` `AUTH_URL` / `NEXTAUTH_URL` (`http://localhost:3000`).
+ * Using `127.0.0.1` here while Auth.js builds redirects for `localhost` can break credentials CSRF/session.
+ */
+const baseURL = process.env.BASE_URL ?? "http://localhost:3000";
 
 function localDevWebServer() {
   if (process.env.PLAYWRIGHT_SKIP_WEB_SERVER === "1") return undefined;
@@ -35,8 +39,10 @@ function localDevWebServer() {
   if (host !== "127.0.0.1" && host !== "localhost") return undefined;
   const port = origin.port || "3000";
   const secret = process.env.NEXTAUTH_SECRET?.trim() || "playwright-e2e-local-secret";
+  /** Bind to the same hostname as `baseURL` so the browser, dev server, and Auth.js share one origin. */
+  const bindHost = host;
   return {
-    command: `npm run dev -- --hostname 127.0.0.1 --port ${port}`,
+    command: `npm run dev -- --hostname ${bindHost} --port ${port}`,
     url: origin.origin,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

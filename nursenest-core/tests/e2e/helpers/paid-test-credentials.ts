@@ -24,6 +24,45 @@ if (fs.existsSync(LOCAL_ENV_PATH)) {
  */
 export type PaidTestCredentials = { email: string; password: string };
 
+/** Which env pair `getPaidTestCredentials` resolved (no secret values). */
+export type PaidCredentialSource = "QA_PAID_*" | "E2E_PAID_*" | "PLAYWRIGHT_TEST_*" | "none";
+
+export function getPaidCredentialSource(): PaidCredentialSource {
+  const qa = process.env.QA_PAID_EMAIL?.trim();
+  const qb = process.env.QA_PAID_PASSWORD;
+  if (qa && qb !== undefined && String(qb).length > 0) return "QA_PAID_*";
+  const a = process.env.E2E_PAID_EMAIL?.trim();
+  const b = process.env.E2E_PAID_PASSWORD;
+  if (a && b) return "E2E_PAID_*";
+  const c = process.env.PLAYWRIGHT_TEST_EMAIL?.trim();
+  const d = process.env.PLAYWRIGHT_TEST_PASSWORD;
+  if (c && d) return "PLAYWRIGHT_TEST_*";
+  return "none";
+}
+
+/** Masks an email for logs (keeps domain). */
+export function maskEmailForDiagnostics(email: string): string {
+  const at = email.indexOf("@");
+  if (at <= 1) return email.length > 0 ? "***" : "";
+  return `${email[0]}***@${email.slice(at + 1)}`;
+}
+
+export function describePaidCredentialResolution(): {
+  source: PaidCredentialSource;
+  emailPresent: boolean;
+  passwordPresent: boolean;
+  maskedEmail: string | null;
+} {
+  const creds = getPaidTestCredentials();
+  const source = getPaidCredentialSource();
+  return {
+    source,
+    emailPresent: Boolean(creds?.email),
+    passwordPresent: Boolean(creds?.password && String(creds.password).length > 0),
+    maskedEmail: creds?.email ? maskEmailForDiagnostics(creds.email) : null,
+  };
+}
+
 export function getPaidTestCredentials(): PaidTestCredentials | null {
   const qa = process.env.QA_PAID_EMAIL?.trim();
   const qb = process.env.QA_PAID_PASSWORD;

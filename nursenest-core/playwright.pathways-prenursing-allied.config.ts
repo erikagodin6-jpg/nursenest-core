@@ -1,7 +1,22 @@
 /**
  * Pre-nursing + allied pathway access (`pathway-prenursing-allied-access.spec.ts`).
  *
- *   npm run qa:pathways:prenursing-allied
+ * ## Base URL
+ * - `use.baseURL` defaults to `process.env.BASE_URL ?? "http://127.0.0.1:3000"`.
+ * - For **remote/staging**, set `BASE_URL` to the full origin (e.g. `https://preview.example.com`).
+ *
+ * ## Local dev server (webServer)
+ * - When `BASE_URL` points at **127.0.0.1** or **localhost**, Playwright can start `npm run dev` automatically
+ *   (see `localDevWebServer()` below), unless you opt out.
+ * - **`PLAYWRIGHT_SKIP_WEB_SERVER=1`**: never start `webServer`. You must have an app listening at `BASE_URL`
+ *   (or the default `http://127.0.0.1:3000`) **before** tests run. The spec’s HTTP preflight fails fast with
+ *   `prenursing-allied-environment-check.json` when `/login` is unreachable (e.g. connection refused).
+ *
+ * ## CI
+ * - Either let Playwright start the dev server (localhost `BASE_URL`, do not set `PLAYWRIGHT_SKIP_WEB_SERVER`), or
+ * - Build/start the app in a prior step and use `PLAYWRIGHT_SKIP_WEB_SERVER=1` + reachable `BASE_URL`.
+ *
+ * Run: `npm run qa:pathways:prenursing-allied`
  */
 import "./playwright.env";
 import { defineConfig, devices } from "@playwright/test";

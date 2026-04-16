@@ -8,13 +8,17 @@ import fs from "fs";
 import path from "path";
 import { expect, test as setup } from "@playwright/test";
 import { PAID_USER_AUTH_FILE } from "../helpers/auth-state-paths";
+import { attachPageObservers } from "../helpers/attach-observers";
 import { describeAuthFailureSurface } from "../helpers/auth-diagnostics";
 import { loginWithCredentials } from "../helpers/learner-login";
-import { getPaidTestCredentials } from "../helpers/paid-test-credentials";
+import {
+  describePaidCredentialResolution,
+  getPaidTestCredentials,
+} from "../helpers/paid-test-credentials";
 import { learnerAppMainLandmark } from "../helpers/paid-learner-shell";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
 
-setup("authenticate paid test account and save storage state", async ({ page }) => {
+setup("authenticate paid test account and save storage state", async ({ page }, testInfo) => {
   const creds = getPaidTestCredentials();
   if (!creds) {
     throw new Error(
@@ -26,14 +30,52 @@ setup("authenticate paid test account and save storage state", async ({ page }) 
     );
   }
 
+  const credResolution = describePaidCredentialResolution();
+  const observers = attachPageObservers(page, { profile: "public", probeAuthApi: true, captureConsoleContext: true });
+
   try {
     await loginWithCredentials(page, creds.email, creds.password);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     const diag = await describeAuthFailureSurface(page).catch(() => "");
+    const shot = await page.screenshot({ fullPage: true }).catch(() => null);
+    if (shot) {
+      await testInfo.attach("setup-paid-auth-failure.png", { body: shot, contentType: "image/png" });
+    }
+    const artifact = {
+      category: "setup-paid-auth",
+      baseURL: process.env.BASE_URL ?? "http://localhost:3000",
+      credentialSource: credResolution.source,
+      credentialEmailPresent: credResolution.emailPresent,
+      credentialPasswordPresent: credResolution.passwordPresent,
+      maskedEmail: credResolution.maskedEmail,
+      finalUrl: page.url(),
+      thrownMessage: msg,
+      describeAuthFailureSurface: diag,
+      consoleErrors: observers.consoleErrors,
+      consoleErrorContext: observers.consoleErrorContext ?? [],
+      failedRequests: observers.failedRequests,
+      authHttp: observers.authHttp ?? [],
+    };
+    await testInfo.attach("setup-paid-auth-failure.json", {
+      body: Buffer.from(JSON.stringify(artifact, null, 2), "utf-8"),
+      contentType: "application/json",
+    });
     throw new Error(
-      `Paid auth setup failed: login did not reach learner shell after submit. email=${creds.email} ${msg}. category=auth Check BASE_URL, credentials, and account state. ${diag}`,
+      [
+        `Paid auth setup failed: login did not reach learner shell after submit. email=${creds.email}`,
+        msg,
+        "category=auth",
+        "Check BASE_URL, DATABASE_URL (user must exist for that DB), credentials, and account state.",
+        diag,
+        observers.consoleErrors.length ? `consoleErrors=${observers.consoleErrors.length}` : "",
+        observers.failedRequests.length ? `failedRequests=${observers.failedRequests.join(" | ")}` : "",
+      ]
+        .filter(Boolean)
+        .join(" "),
     );
+  } finally {
+    observers.dispose();
   }
 
   // loginWithCredentials can succeed on /app/lessons without ever hitting /app — but the dashboard

@@ -2,6 +2,7 @@ import "./db/env-bootstrap";
 import { PrismaClient } from "@prisma/client";
 import { createDbQuerySemaphore } from "@/lib/server/db-query-semaphore";
 import { logSlowPrismaQuery } from "@/lib/observability/perf-log";
+import { recordPrismaClientQueryError } from "@/lib/observability/production-signal-metrics";
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
@@ -20,6 +21,9 @@ function createPrismaClient(): PrismaClient {
           await dbQuerySemaphore.acquire();
           try {
             return await query(args);
+          } catch (e) {
+            recordPrismaClientQueryError(e);
+            throw e;
           } finally {
             dbQuerySemaphore.release();
             const durationMs = Math.round(performance.now() - start);

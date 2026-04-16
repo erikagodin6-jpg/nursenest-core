@@ -1,12 +1,19 @@
+# Required gate before merge: same checks as DigitalOcean App Platform build (source_dir nursenest-core)
+# and droplet `deploy:precheck` — Prisma generate + typecheck + Next production build.
 name: Verify Build
 
 on:
   push:
   pull_request:
 
+concurrency:
+  group: verify-build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: nursenest-core
@@ -24,11 +31,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Generate Prisma client
-        run: npm run db:generate
-
-      - name: Type check
-        run: npx tsc --noEmit
-
-      - name: Build
-        run: npm run build
+      - name: Deploy precheck (ci:verify — build must pass before deploy)
+        run: npm run ci:verify

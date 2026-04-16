@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Run post-deploy health + core Playwright smoke against an already-deployed URL.
+ * Run post-deploy checks: (1) HTTP /healthz + /api/health, (2) Playwright postdeploy, (3) core smoke.
  * Does not start the Next dev server.
  *
  * Usage:
@@ -27,6 +27,18 @@ const env = {
   PLAYWRIGHT_SKIP_WEB_SERVER: "1",
 };
 
+console.log("\n======== 1/3 HTTP health (/healthz, /api/health) ========\n");
+const h = spawnSync("node", ["scripts/verify-deploy-health.mjs"], {
+  cwd: pkgRoot,
+  env: { ...env },
+  stdio: "inherit",
+  shell: false,
+});
+if (h.status !== 0) {
+  console.error("verify-production-release: health check failed — fix deployment before E2E.");
+  process.exit(h.status ?? 1);
+}
+
 function run(label, args) {
   console.log(`\n======== ${label} ========\n`);
   const r = spawnSync("npx", ["playwright", "test", ...args], {
@@ -40,7 +52,7 @@ function run(label, args) {
   }
 }
 
-run("1/2 Post-deploy — health + marketing home", ["-c", "playwright.postdeploy.config.ts"]);
-run("2/2 Core journeys — smoke bundle", ["-c", "playwright.verify-production.config.ts"]);
+run("2/3 Post-deploy — health + marketing home", ["-c", "playwright.postdeploy.config.ts"]);
+run("3/3 Core journeys — smoke bundle", ["-c", "playwright.verify-production.config.ts"]);
 
 console.log("\n======== VERIFY OK ========\n");

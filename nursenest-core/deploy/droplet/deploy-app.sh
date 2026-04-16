@@ -43,8 +43,14 @@ else
   npm install
 fi
 
+echo "== Deploy precheck: Prisma client + typecheck (fail before migrate/build) =="
+npm run db:generate
+npm run typecheck
+
+echo "== Database migrations =="
 npx prisma migrate deploy
 
+echo "== Production build =="
 npm run build:deploy
 
 ECOSYSTEM="${APP_DIR}/deploy/droplet/ecosystem.config.cjs"
@@ -56,5 +62,31 @@ fi
 # PM2: pass through env from current shell (already sourced from .env.production)
 pm2 startOrReload "${ECOSYSTEM}" --update-env
 pm2 save
+
+echo "== Waiting for liveness (GET /healthz) =="
+ok=0
+for _ in $(seq 1 45); do
+  if curl -fsS "http://127.0.0.1:${PORT}/healthz" >/dev/null 2>&1; then
+    ok=1
+    break
+  fi
+  sleep 1
+done
+
+if [[ "${ok}" != "1" ]]; then
+  echo "" >&2
+  echo "DEPLOY FAILED: /healthz did not return 200 after PM2 reload." >&2
+  echo "  Inspect: pm2 logs nursenest-core --lines 100" >&2
+  echo "  Rollback: checkout the previous commit, re-run this script, or restore from backup." >&2
+  echo "  On DigitalOcean App Platform: redeploy the previous successful deployment from the UI." >&2
+  exit 1
+fi
+
+export BASE_URL="http://127.0.0.1:${PORT}"
+if ! node "${APP_DIR}/scripts/verify-deploy-health.mjs"; then
+  echo "" >&2
+  echo "DEPLOY FAILED: verify-deploy-health.mjs reported errors (see above)." >&2
+  exit 1
+fi
 
 echo "Deploy finished. Check: pm2 status && pm2 logs nursenest-core --lines 50"

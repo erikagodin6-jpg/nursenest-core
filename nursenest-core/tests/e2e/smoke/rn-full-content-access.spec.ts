@@ -36,6 +36,12 @@ import {
   type PaidCredentialSource,
 } from "../helpers/smoke-credentials";
 import { dismissFlashcardResumeIfPresent } from "../helpers/paid-user-suite";
+import {
+  buildEnvironmentCheckArtifact,
+  loginUrlForBase,
+  probeRnFullContentReachability,
+  resolveRnFullContentBaseUrl,
+} from "../helpers/rn-full-content-environment";
 
 test.use({ storageState: { cookies: [], origins: [] } });
 
@@ -88,22 +94,29 @@ type SuitePhaseSummary = {
 
 type FinalVerdict = "STABLE" | "NOT_STABLE";
 
+/** Flat outcome strings in rn-full-content-suite-results.json (matches gate checks). */
+type PhaseOutcome = "passed" | "failed" | "not_run";
+
 type RnFullContentSuiteResults = {
   pathwayId: string;
+  baseUrl: string;
+  loginUrl: string;
+  skipWebServer: boolean;
   credentialsUsed: string | null;
   credentialSource: PaidCredentialSource | null;
-  /** Which env vars take precedence (for support). */
   credentialResolutionOrder: string;
+  credentialsResolved: boolean;
+  /** True when origin and /login HTTP probes succeed (connectivity — not auth). */
+  environmentReady: boolean;
   loginSucceeded: boolean;
-  discoveryStatus: PhaseStatus;
+  discoverySucceeded: boolean;
+  inventoryCount: number;
   lessonsVisited: number;
-  lessonsPassed: number;
+  substantiveLessons: number;
   lessonsFailed: number;
-  /** Passed visits with main body strictly over MAIN_MIN_CHARS (real lesson content). */
-  lessonsWithSubstantiveContent: number;
-  flashcardsStatus: PhaseStatus;
-  questionsStatus: PhaseStatus;
-  catStatus: PhaseStatus;
+  flashcardsStatus: PhaseOutcome;
+  questionBankStatus: PhaseOutcome;
+  catStatus: PhaseOutcome;
   phases: SuitePhaseSummary;
   finalStatus: FinalVerdict;
   failureReason?: string;
@@ -113,21 +126,6 @@ type RnFullContentSuiteResults = {
 function lessonIdFromPathname(pathname: string): string {
   const m = pathname.match(/\/app\/lessons\/([^/]+)/);
   return m?.[1] ?? pathname;
-}
-
-function baseOriginFrom(page: Page, baseURL: string | undefined): string {
-  if (baseURL) {
-    try {
-      return new URL(baseURL).origin;
-    } catch {
-      /* fall through */
-    }
-  }
-  try {
-    return new URL(page.url()).origin;
-  } catch {
-    return "http://127.0.0.1:3000";
-  }
 }
 
 function credentialEnvHint(source: PaidCredentialSource | null): string {
@@ -140,17 +138,22 @@ function credentialEnvHint(source: PaidCredentialSource | null): string {
 function buildSuiteResults(partial: Partial<RnFullContentSuiteResults> & { phases: SuitePhaseSummary }): RnFullContentSuiteResults {
   const r: RnFullContentSuiteResults = {
     pathwayId: PAID_E2E_DEFAULT_PATHWAY_ID,
+    baseUrl: partial.baseUrl ?? "",
+    loginUrl: partial.loginUrl ?? "",
+    skipWebServer: partial.skipWebServer ?? false,
     credentialsUsed: partial.credentialsUsed ?? null,
     credentialSource: partial.credentialSource ?? null,
-    credentialResolutionOrder: partial.credentialResolutionOrder ?? "QA_PAID → E2E_PAID → PLAYWRIGHT_TEST",
+    credentialResolutionOrder: partial.credentialResolutionOrder ?? "QA_PAID_EMAIL → E2E_PAID_EMAIL → PLAYWRIGHT_TEST_EMAIL",
+    credentialsResolved: partial.credentialsResolved ?? false,
+    environmentReady: partial.environmentReady ?? false,
     loginSucceeded: partial.loginSucceeded ?? false,
-    discoveryStatus: partial.discoveryStatus ?? "not_run",
+    discoverySucceeded: partial.discoverySucceeded ?? false,
+    inventoryCount: partial.inventoryCount ?? 0,
     lessonsVisited: partial.lessonsVisited ?? 0,
-    lessonsPassed: partial.lessonsPassed ?? 0,
+    substantiveLessons: partial.substantiveLessons ?? 0,
     lessonsFailed: partial.lessonsFailed ?? 0,
-    lessonsWithSubstantiveContent: partial.lessonsWithSubstantiveContent ?? 0,
     flashcardsStatus: partial.flashcardsStatus ?? "not_run",
-    questionsStatus: partial.questionsStatus ?? "not_run",
+    questionBankStatus: partial.questionBankStatus ?? "not_run",
     catStatus: partial.catStatus ?? "not_run",
     phases: partial.phases,
     finalStatus: "NOT_STABLE",
@@ -167,28 +170,41 @@ function buildSuiteResults(partial: Partial<RnFullContentSuiteResults> & { phase
 }
 
 function deriveFailureReason(r: RnFullContentSuiteResults): string | undefined {
-  if (!r.credentialSource) return "Missing paid credentials (suite did not run authenticated).";
-  if (!r.loginSucceeded) return "Login did not complete or paid subscriber shell not confirmed.";
-  if (r.discoveryStatus !== "passed") return "Discovery phase did not complete successfully.";
-  if (r.lessonsVisited < 1) return "No lesson URLs were visited.";
-  if (r.lessonsWithSubstantiveContent < 1) return "No lesson passed with substantive main content (>80 chars).";
+  if (!r.environmentReady) {
+    return (
+      "Environment not ready: BASE_URL origin or /login is unreachable (connectivity — not an auth issue). " +
+      "See rn-full-content-environment-check.json."
+    );
+  }
+  if (!r.credentialsResolved) {
+    return "Missing paid credentials — configure QA_PAID_EMAIL + QA_PAID_PASSWORD (or E2E_PAID_* or PLAYWRIGHT_TEST_*).";
+  }
+  if (!r.loginSucceeded) return "Login did not complete or paid subscriber shell not confirmed — see rn-full-content-login-failure.json.";
+  if (!r.discoverySucceeded || r.inventoryCount < 1) {
+    return "Discovery did not collect at least one RN lesson from the hub — see rn-lesson-inventory.json.";
+  }
+  if (r.lessonsVisited < 1) return "No lesson detail URLs were visited.";
+  if (r.substantiveLessons < 1) return "No lesson passed with substantive main content (>80 chars).";
   if (r.lessonsFailed > 0) return `${r.lessonsFailed} lesson(s) failed audit — see rn-lesson-visit-results.json.`;
-  if (r.flashcardsStatus !== "passed") return "Flashcards phase did not pass (load + Reveal interaction).";
-  if (r.questionsStatus !== "passed") return "Question bank phase did not pass (stem + answer interaction).";
-  if (r.catStatus !== "passed") return "CAT phase did not pass.";
+  if (r.flashcardsStatus !== "passed") return "Flashcards phase did not pass (hub → deck → Reveal answer).";
+  if (r.questionBankStatus !== "passed") return "Question bank phase did not pass (stem → option → Check answer).";
+  if (r.catStatus !== "passed") return "CAT phase did not pass (start test → answer → next/submit).";
   return undefined;
 }
 
+/** STABLE only when every strict gate passes (verified end-to-end crawl + downstream surfaces). */
 function computeFinalVerdict(r: RnFullContentSuiteResults): FinalVerdict {
   const ok =
-    !!r.credentialSource &&
+    r.environmentReady &&
+    r.credentialsResolved &&
     r.loginSucceeded &&
-    r.discoveryStatus === "passed" &&
-    r.lessonsVisited >= 1 &&
+    r.discoverySucceeded &&
+    r.inventoryCount >= 1 &&
+    r.lessonsVisited > 0 &&
+    r.substantiveLessons > 0 &&
     r.lessonsFailed === 0 &&
-    r.lessonsWithSubstantiveContent >= 1 &&
     r.flashcardsStatus === "passed" &&
-    r.questionsStatus === "passed" &&
+    r.questionBankStatus === "passed" &&
     r.catStatus === "passed";
   return ok ? "STABLE" : "NOT_STABLE";
 }
@@ -495,35 +511,89 @@ test.describe("RN full content access (paid)", () => {
       credentialResolutionOrder: "QA_PAID_EMAIL → E2E_PAID_EMAIL → PLAYWRIGHT_TEST_EMAIL",
     };
 
-    const resolved = resolveQaPaidCredentialsWithSource();
-    if (!resolved) {
-      const failedEarly = buildSuiteResults({
+    const resolvedBase = resolveRnFullContentBaseUrl(baseURL);
+    const loginUrlResolved = loginUrlForBase(resolvedBase);
+    const skipWebServer = process.env.PLAYWRIGHT_SKIP_WEB_SERVER === "1";
+
+    let probe: Awaited<ReturnType<typeof probeRnFullContentReachability>>;
+    let envCheck: ReturnType<typeof buildEnvironmentCheckArtifact>;
+    let resolvedCreds: ReturnType<typeof resolveQaPaidCredentialsWithSource>;
+
+    await test.step("Phase — Environment & readiness (pre-login)", async () => {
+      probe = await probeRnFullContentReachability(page.request, resolvedBase);
+      resolvedCreds = resolveQaPaidCredentialsWithSource();
+      envCheck = buildEnvironmentCheckArtifact({
+        baseUrl: resolvedBase,
+        skipWebServer,
+        credentialSource: resolvedCreds?.source ?? null,
+        credentialsResolved: !!resolvedCreds,
+        probe,
+      });
+      await testInfo.attach("rn-full-content-environment-check.json", {
+        body: Buffer.from(JSON.stringify(envCheck, null, 2), "utf-8"),
+        contentType: "application/json",
+      });
+    });
+
+    resultsPayload = {
+      ...resultsPayload,
+      baseUrl: resolvedBase,
+      loginUrl: loginUrlResolved,
+      skipWebServer,
+      environmentReady: probe!.originReachable && probe!.loginReachable,
+      credentialsResolved: !!resolvedCreds,
+      credentialSource: resolvedCreds?.source ?? null,
+      credentialsUsed: resolvedCreds ? maskEmailForReport(resolvedCreds.email) : null,
+    };
+
+    if (!probe!.originReachable || !probe!.loginReachable) {
+      const failedConn = buildSuiteResults({
         ...resultsPayload,
-        credentialsUsed: null,
-        credentialSource: null,
-        loginSucceeded: false,
-        discoveryStatus: "not_run",
-        flashcardsStatus: "not_run",
-        questionsStatus: "not_run",
-        catStatus: "not_run",
         phases: suite,
+        loginSucceeded: false,
+        discoverySucceeded: false,
+        inventoryCount: 0,
+        lessonsVisited: 0,
+        substantiveLessons: 0,
+        lessonsFailed: 0,
+        flashcardsStatus: "not_run",
+        questionBankStatus: "not_run",
+        catStatus: "not_run",
+        failureReason: envCheck!.blockingReason,
+      });
+      await testInfo.attach("rn-full-content-suite-results.json", {
+        body: Buffer.from(JSON.stringify(failedConn, null, 2), "utf-8"),
+        contentType: "application/json",
+      });
+      throw new Error(envCheck!.blockingReason ?? "[rn-full-content] ENVIRONMENT: origin or /login unreachable");
+    }
+
+    if (!resolvedCreds) {
+      const failedCreds = buildSuiteResults({
+        ...resultsPayload,
+        phases: suite,
+        loginSucceeded: false,
+        discoverySucceeded: false,
+        inventoryCount: 0,
+        lessonsVisited: 0,
+        substantiveLessons: 0,
+        lessonsFailed: 0,
+        flashcardsStatus: "not_run",
+        questionBankStatus: "not_run",
+        catStatus: "not_run",
         failureReason: REQUIRED_CREDENTIALS_MSG,
       });
       await testInfo.attach("rn-full-content-suite-results.json", {
-        body: Buffer.from(JSON.stringify(failedEarly, null, 2), "utf-8"),
+        body: Buffer.from(JSON.stringify(failedCreds, null, 2), "utf-8"),
         contentType: "application/json",
       });
       throw new Error(REQUIRED_CREDENTIALS_MSG);
     }
 
-    resultsPayload = {
-      ...resultsPayload,
-      credentialsUsed: maskEmailForReport(resolved.email),
-      credentialSource: resolved.source,
-    };
+    const resolved = resolvedCreds;
 
     const slowMs: { url: string; ms: number }[] = [];
-    const origin = baseOriginFrom(page, baseURL);
+    const origin = resolvedBase;
     const disposeSlow = attachSlowRequestTap(page, origin, slowMs, 3000);
     const observers = attachPageObservers(page, { profile: "app", probeAuthApi: true });
 
@@ -573,7 +643,8 @@ test.describe("RN full content access (paid)", () => {
           status: "passed",
           detail: `unique=${serial.uniqueCount} totalReported=${serial.totalReported ?? "null"} pages=${serial.pageCountDetected}`,
         };
-        resultsPayload.discoveryStatus = "passed";
+        resultsPayload.discoverySucceeded = true;
+        resultsPayload.inventoryCount = serial.uniqueCount;
         return inv;
       });
 
@@ -615,9 +686,8 @@ test.describe("RN full content access (paid)", () => {
         };
 
         resultsPayload.lessonsVisited = serialResults.length;
-        resultsPayload.lessonsPassed = passed.length;
         resultsPayload.lessonsFailed = failed.length;
-        resultsPayload.lessonsWithSubstantiveContent = substantive.length;
+        resultsPayload.substantiveLessons = substantive.length;
 
         await testInfo.attach("rn-lesson-visit-results.json", {
           body: Buffer.from(
@@ -717,7 +787,7 @@ test.describe("RN full content access (paid)", () => {
         expect(observers.consoleErrors, `[questions] console: ${observers.consoleErrors.join(" | ")}`).toEqual([]);
         expect(observers.failedRequests, `[questions] network: ${observers.failedRequests.join(" | ")}`).toEqual([]);
         suite.questionBank = { status: "passed" };
-        resultsPayload.questionsStatus = "passed";
+        resultsPayload.questionBankStatus = "passed";
       });
 
       await test.step("Phase 5 — CAT exam (adaptive practice test)", async () => {
@@ -758,10 +828,11 @@ test.describe("RN full content access (paid)", () => {
       await attachSuiteJson(
         {
           loginSucceeded: resultsPayload.loginSucceeded,
-          discoveryStatus: resultsPayload.discoveryStatus,
+          discoverySucceeded: resultsPayload.discoverySucceeded,
+          inventoryCount: resultsPayload.inventoryCount,
           lessonsVisited: resultsPayload.lessonsVisited,
           lessonsFailed: resultsPayload.lessonsFailed,
-          lessonsWithSubstantiveContent: resultsPayload.lessonsWithSubstantiveContent,
+          substantiveLessons: resultsPayload.substantiveLessons,
         },
         String(e),
       );

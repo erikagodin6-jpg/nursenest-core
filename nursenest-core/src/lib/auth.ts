@@ -34,6 +34,7 @@ import * as Sentry from "@sentry/nextjs";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { PINNED_AUTH_BASE_PATH } from "@/lib/auth/auth-base-path";
 import { logAuthIncidentLine } from "@/lib/auth/auth-incident-log";
+import { recordCredentialsLoginFailure } from "@/lib/observability/production-signal-metrics";
 
 if (process.env.NODE_ENV === "production") {
   const hasSecret = Boolean(
@@ -203,6 +204,7 @@ export const authConfig: NextAuthConfig = {
             finalFailureReason: "unknown_auth_failure",
             ip: ip.slice(0, 64),
           });
+          recordCredentialsLoginFailure("rate_limited");
           return null;
         }
 
@@ -240,6 +242,7 @@ export const authConfig: NextAuthConfig = {
             ip: ip.slice(0, 64),
             authMode,
           });
+          recordCredentialsLoginFailure("missing_fields");
           return null;
         }
 
@@ -275,6 +278,7 @@ export const authConfig: NextAuthConfig = {
             idHash,
             authMode,
           });
+          recordCredentialsLoginFailure("locked_out");
           return null;
         }
 
@@ -343,6 +347,7 @@ export const authConfig: NextAuthConfig = {
                 idHash,
                 ip: ip.slice(0, 64),
               });
+              recordCredentialsLoginFailure("duplicate_user_match");
               return null;
             }
 
@@ -419,6 +424,7 @@ export const authConfig: NextAuthConfig = {
                 idHash,
                 ip: ip.slice(0, 64),
               });
+              recordCredentialsLoginFailure("duplicate_user_match");
               return null;
             }
             user = await prisma.user.findFirst({
@@ -463,6 +469,7 @@ export const authConfig: NextAuthConfig = {
             idHash,
             authMode,
           });
+          recordCredentialsLoginFailure("db_error");
           return null;
         }
 
@@ -534,6 +541,7 @@ export const authConfig: NextAuthConfig = {
             gmailNormalizedLookupTried:
               isEmailLikeIdentifier(enteredEmailLower) && isGmailLikeAddress(enteredEmailLower) ? "yes" : "no",
           });
+          recordCredentialsLoginFailure("not_found");
           return null;
         }
 
@@ -555,6 +563,7 @@ export const authConfig: NextAuthConfig = {
             ip: ip.slice(0, 64),
             hasPasswordHash: false,
           });
+          recordCredentialsLoginFailure("no_password_hash");
           return null;
         }
 
@@ -585,6 +594,7 @@ export const authConfig: NextAuthConfig = {
             ip: ip.slice(0, 64),
             detail,
           });
+          recordCredentialsLoginFailure("system_error");
           return null;
         }
 
@@ -610,6 +620,7 @@ export const authConfig: NextAuthConfig = {
             failureCount: await getFailureCount(lockKey),
             passwordCompareOk: false,
           });
+          recordCredentialsLoginFailure("bad_password");
           return null;
         }
 

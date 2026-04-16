@@ -69,6 +69,7 @@ export function recordApiRouteTelemetry(opts: ApiRouteTelemetryOpts): void {
   });
 
   if (durationMs >= slowMs) {
+    sentryCount("api.route.slow", 1, { flow });
     safeServerLog("api_perf", "slow_route", {
       route,
       durationMs,

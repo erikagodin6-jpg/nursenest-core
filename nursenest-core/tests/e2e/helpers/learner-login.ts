@@ -1,9 +1,10 @@
 /**
  * Credentials login → learner shell. Canonical shell rules: `src/lib/navigation/learner-shell.ts` ({@link isLearnerShell}).
  *
- * **Browser serialization:** `waitForFunction` must mirror {@link isLearnerShell} inline — Playwright runs the callback in the page context (no imports).
+ * **Browser serialization:** `waitForFunction` must mirror {@link isLearnerShell} inline — Playwright runs the callback in the browser context (no imports).
  */
-import type { Page } from "@playwright/test";
+import type { Page, Response } from "@playwright/test";
+import { parseCredentialsCallbackPayload } from "./auth-credentials-login";
 import { describeAuthFailureSurface } from "./auth-diagnostics";
 import { isLearnerShell, PLAYWRIGHT_AUTH_NAV_TIMEOUT_MS } from "./learner-shell";
 
@@ -16,16 +17,79 @@ export {
   PLAYWRIGHT_AUTH_NAV_TIMEOUT_MS,
 } from "./learner-shell";
 
+function isCredentialsPostResponse(res: Response): boolean {
+  if (res.request().method() !== "POST") return false;
+  return res.url().includes("/api/auth/callback/credentials");
+}
+
 /**
  * Credentials login on /login → learner shell.
  *
  * Waits for a **post-onboarding** learner route. `/app/onboarding` is treated as failure for paid regression seeds.
+ *
+ * **Auth.js:** the browser POSTs to `/api/auth/callback/credentials` and returns JSON `{ url }`. Failures embed
+ * `error=` in `url` (often `CredentialsSignin`) — we parse that to avoid a long wait on `/login`.
  */
 export async function loginWithCredentials(page: Page, email: string, password: string): Promise<void> {
+  const baseURL = process.env.BASE_URL ?? "http://localhost:3000";
+
   await page.goto("/login", { waitUntil: "domcontentloaded" });
+  await page.locator("#login-identifier").waitFor({ state: "visible", timeout: 25_000 });
+  await page.locator("#login-password").waitFor({ state: "visible", timeout: 25_000 });
+
   await page.locator("#login-identifier").fill(email);
   await page.locator("#login-password").fill(password);
-  await page.getByRole("button", { name: /^Sign In$/i }).click();
+
+  const submit = page
+    .locator("form")
+    .filter({ has: page.locator("#login-identifier") })
+    .locator('button[type="submit"]')
+    .first();
+
+  const authPostPromise = page.waitForResponse((res) => isCredentialsPostResponse(res), { timeout: 45_000 });
+
+  await submit.click();
+
+  let authRes: Response;
+  try {
+    authRes = await authPostPromise;
+  } catch {
+    const at = page.url();
+    const diag = await describeAuthFailureSurface(page).catch(() => "");
+    throw new Error(
+      [
+        "No POST response from /api/auth/callback/credentials within 45s — submit may not have run, or Auth.js route is unreachable.",
+        `baseURL=${baseURL} url=${at}`,
+        "Check browser console, network tab, AUTH_URL/NEXTAUTH_URL vs BASE_URL, and that the dev server is healthy.",
+        diag,
+      ].join(" "),
+    );
+  }
+
+  let payload: unknown;
+  try {
+    payload = await authRes.json();
+  } catch {
+    const text = await authRes.text().catch(() => "");
+    throw new Error(
+      `Credentials POST returned non-JSON (status=${authRes.status()}). First bytes: ${text.slice(0, 240)} baseURL=${baseURL}`,
+    );
+  }
+
+  const parsed = parseCredentialsCallbackPayload(payload);
+  if (!parsed.ok || parsed.errorParam) {
+    const diag = await describeAuthFailureSurface(page).catch(() => "");
+    throw new Error(
+      [
+        `Credentials sign-in rejected (Auth.js error=${parsed.errorParam ?? "unknown"}).`,
+        `callbackPayloadUrl=${parsed.redirectUrl.slice(0, 500)}`,
+        `httpStatus=${authRes.status()}`,
+        `baseURL=${baseURL}`,
+        "Typical causes: wrong password, user missing in DATABASE_URL, DB unreachable (authorize db_error), or account lockout.",
+        diag,
+      ].join(" "),
+    );
+  }
 
   await page.waitForFunction(
     () => {

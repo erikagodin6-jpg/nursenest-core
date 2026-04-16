@@ -1,6 +1,8 @@
 # Release deploy checklist
 
-Concise checklist for promoting a build. Pair with **`npm run validate:release`**, **`npm run qa:release-gate`** (pre-promote), and **`npm run qa:verify:production`** (post-deploy). See **[`release-verification.md`](./release-verification.md)** and **[`RELEASE_QA.md`](./RELEASE_QA.md)**.
+Concise checklist for promoting a build. **Deploy safety (precheck, health, rollback, verification):** **[`deploy-safety.md`](./deploy-safety.md)**.
+
+Pair with **`npm run validate:release`**, **`npm run qa:release-gate`** (pre-promote), and **`npm run qa:verify:production`** (post-deploy). See **[`release-verification.md`](./release-verification.md)** and **[`RELEASE_QA.md`](./RELEASE_QA.md)**.
 
 ---
 

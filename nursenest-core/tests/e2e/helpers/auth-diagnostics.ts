@@ -12,6 +12,8 @@ export type AuthFailureSurface = {
   subscriptionRequiredHeadingCount: number;
   bodySample: string;
   visibleAuthErrorLine: string | null;
+  /** First visible `[role=alert]` text (login form errors). */
+  alertText: string | null;
 };
 
 /** Truncate for logs — avoid dumping huge HTML. */
@@ -37,6 +39,15 @@ export async function collectAuthFailureSurface(page: Page): Promise<AuthFailure
     .count()
     .catch(() => 0);
   const body = (await page.locator("body").innerText().catch(() => "")).slice(0, SAMPLE);
+  const alertText = (
+    await page
+      .getByRole("alert")
+      .first()
+      .innerText()
+      .catch(() => "")
+  )
+    .trim()
+    .slice(0, 400);
   let visibleAuthErrorLine: string | null = null;
   const authLineMatch =
     /Unable to sign in|Invalid email|Invalid credentials|incorrect password|Sign in failed|Authentication failed/i.exec(
@@ -53,6 +64,7 @@ export async function collectAuthFailureSurface(page: Page): Promise<AuthFailure
     subscriptionRequiredHeadingCount,
     bodySample: body,
     visibleAuthErrorLine,
+    alertText: alertText.length > 0 ? alertText : null,
   };
 }
 
