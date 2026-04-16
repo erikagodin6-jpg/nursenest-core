@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
+  buildActiveContext,
   resolveEntitlementFromSubscriptionStatus,
   resolveNavMode,
   resolvePrimaryPathwayNav,
@@ -19,6 +20,28 @@ test("resolveNavMode: marketing chrome is always public (signed-in learners keep
   assert.equal(resolveNavMode({ entitlement: "entitled", role: "ADMIN" }), "public");
   assert.equal(resolveNavMode({ entitlement: "unpaid", role: "LEARNER" }), "public");
   assert.equal(resolveNavMode({ entitlement: "none", role: undefined }), "public");
+});
+
+test("buildActiveContext: entitled learner never gets learner navMode (marketing shell contract)", () => {
+  const ctx = buildActiveContext({
+    locale: "en",
+    examRegion: "US",
+    globalRegion: null,
+    session: {
+      expires: "2099-01-01",
+      user: {
+        id: "u1",
+        email: "paid@example.com",
+        name: "Paid",
+        role: "LEARNER",
+        country: "US",
+        tier: "RN",
+        subscriptionStatus: "active",
+      },
+    },
+  });
+  assert.equal(ctx.navMode, "public");
+  assert.equal(ctx.entitlement, "entitled");
 });
 
 test("resolvePrimaryPathwayNav: NP > RN > PN", () => {

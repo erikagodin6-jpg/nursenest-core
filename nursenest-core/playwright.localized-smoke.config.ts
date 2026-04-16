@@ -41,7 +41,8 @@ function localDevWebServer() {
 
 const e2eWebServer = localDevWebServer();
 
-const guestSpecs = /tests\/e2e\/smoke\/localized-(guest-homepage|auth-entrypoints)\.spec\.ts$/;
+const guestSpecs =
+  /tests\/e2e\/smoke\/localized-(guest-homepage|auth-entrypoints|untranslated-ui)\.spec\.ts$/;
 const loggedInSpec = /tests\/e2e\/smoke\/localized-logged-in-homepage-nav\.spec\.ts$/;
 
 export default defineConfig({

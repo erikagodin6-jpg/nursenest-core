@@ -15,7 +15,6 @@ import { PRODUCTION_CHROME_I18N_KEYS } from "../src/lib/i18n/production-chrome-i
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = path.join(__dirname, "..");
 const REPO_ROOT = path.join(PKG_ROOT, "..");
-const CLIENT_EN = path.join(REPO_ROOT, "client", "public", "i18n", "en.json");
 
 const COMPILED_LOCALES = new Set([
   "en",

@@ -8,6 +8,7 @@ import { recordLocalizedSmoke, seriousLocalizedGuestConsoleErrors } from "../hel
 import { dismissMarketingScrims } from "../helpers/marketing-smoke-scrims";
 import { scanMarketingChromeForUntranslatedSignals } from "../helpers/smoke-untranslated-heuristics";
 import {
+  DEFAULT_MARKETING_LOCALE,
   expectPathMatchesMarketingLocale,
   getSmokeMarketingLocaleMatrix,
 } from "../helpers/smoke-marketing-locales";
@@ -17,6 +18,10 @@ const locales = getSmokeMarketingLocaleMatrix();
 test.describe("Localized untranslated UI (heuristics)", () => {
   for (const { code, homePath } of locales) {
     test(`${code}: no obvious raw keys or placeholder tokens in chrome`, async ({ page }, testInfo) => {
+      test.skip(
+        code === DEFAULT_MARKETING_LOCALE,
+        "Untranslated heuristics target non-English locales; English is covered by guest homepage smoke.",
+      );
       test.setTimeout(120_000);
       const o = attachPageObservers(page, { profile: "public" });
       try {

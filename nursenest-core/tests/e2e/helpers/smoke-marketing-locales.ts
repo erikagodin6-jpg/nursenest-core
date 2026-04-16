@@ -10,19 +10,23 @@ import {
   isMarketingLocaleCode,
 } from "../../../src/lib/i18n/marketing-locale-policy";
 
+export { DEFAULT_MARKETING_LOCALE };
+
 export type SmokeMarketingLocale = { code: string; homePath: string };
 
-/** Default smoke matrix: English (unprefixed) + representative non-default locales (runtime-friendly). */
+/**
+ * Default smoke matrix: English + major non-default + Indic + RTL + CJK + Latin EU.
+ * Override with `E2E_SMOKE_MARKETING_LOCALES` for full matrix or CI experiments.
+ */
 const DEFAULT_SMOKE_LOCALE_CODES: readonly string[] = [
   DEFAULT_MARKETING_LOCALE,
   "fr",
   "es",
-  "tl",
   "hi",
+  "ja",
+  "ar",
   "zh-tw",
   "de",
-  "ar",
-  "ja",
 ];
 
 export function marketingHomePath(localeCode: string): string {

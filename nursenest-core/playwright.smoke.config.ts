@@ -1,5 +1,8 @@
 /**
- * Minimal deploy smoke — four groups: Guest, Free user, Paid user, Admin user.
+ * Minimal deploy smoke — `tests/e2e/smoke-production/**` (Guest, logged-in, Free, Paid, Admin).
+ *
+ * **Project name:** `chromium` — matches `playwright.config.ts` / CI habits (`--project=chromium`).
+ * Do not rename without updating callers.
  *
  *   PLAYWRIGHT_SKIP_WEB_SERVER=1 BASE_URL=https://www.example.com npm run qa:smoke
  *
@@ -41,6 +44,7 @@ const e2eWebServer = localDevWebServer();
 export default defineConfig({
   ...(e2eWebServer ? { webServer: e2eWebServer } : {}),
   testDir: "tests/e2e/smoke-production",
+  testMatch: /.*\.spec\.ts$/,
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
@@ -53,13 +57,11 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "off",
-    ...devices["Desktop Chrome"],
   },
   projects: [
-    { name: "Guest", testMatch: /guest-homepage\.spec\.ts$/ },
-    { name: "Logged-in homepage", testMatch: /logged-in-homepage-nav\.spec\.ts$/ },
-    { name: "Free user", testMatch: /free-user\.spec\.ts$/ },
-    { name: "Paid user", testMatch: /paid-user\.spec\.ts$/ },
-    { name: "Admin user", testMatch: /admin-user\.spec\.ts$/ },
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+    },
   ],
 });

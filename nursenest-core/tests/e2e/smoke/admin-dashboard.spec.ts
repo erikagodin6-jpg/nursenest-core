@@ -8,6 +8,7 @@ import {
   attachSmokeFailureScreenshot,
   buildCaptureFromObservers,
 } from "../helpers/smoke-evidence";
+import { waitForLoginToCompleteOrAttachFailure } from "../helpers/smoke-login-diagnostics";
 import { getAdminE2eCredentials, hasAdminE2eCredentials } from "../helpers/smoke-credentials";
 
 const LOGIN_TIMEOUT_MS = 120_000;
@@ -53,8 +54,9 @@ test.describe("Smoke — admin dashboard", () => {
       await page.locator("#login-password").fill(creds.password);
       await page.getByRole("button", { name: /^Sign In$/i }).click();
 
-      await page.waitForFunction(() => !window.location.pathname.includes("/login"), undefined, {
-        timeout: LOGIN_TIMEOUT_MS,
+      await waitForLoginToCompleteOrAttachFailure(page, testInfo, observers, {
+        label: "admin-dashboard",
+        timeoutMs: LOGIN_TIMEOUT_MS,
       });
 
       await page.goto(`${origin}/admin`, { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT_MS });

@@ -9,6 +9,7 @@ import {
   buildCaptureFromObservers,
 } from "../helpers/smoke-evidence";
 import { attachSmokeProductionFailure } from "../helpers/smoke-production-diagnostics";
+import { waitForLoginToCompleteOrAttachFailure } from "../helpers/smoke-login-diagnostics";
 import { getAdminE2eCredentials, hasAdminE2eCredentials } from "../helpers/smoke-credentials";
 
 test.use({ storageState: { cookies: [], origins: [] } });
@@ -34,8 +35,9 @@ test.describe("Admin user", () => {
       await page.locator("#login-password").fill(creds.password);
       await page.getByRole("button", { name: /^Sign In$/i }).click();
 
-      await page.waitForFunction(() => !window.location.pathname.includes("/login"), undefined, {
-        timeout: 120_000,
+      await waitForLoginToCompleteOrAttachFailure(page, testInfo, observers, {
+        label: "admin-user",
+        timeoutMs: 120_000,
       });
 
       await page.goto(`${origin}/admin`, { waitUntil: "domcontentloaded", timeout: 60_000 });
