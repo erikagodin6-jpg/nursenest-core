@@ -2,7 +2,7 @@ import type { Locator, Page } from "@playwright/test";
 
 /**
  * Responsive learner study chrome (`learner-shell-primary-nav.tsx`):
- * - Desktop/tablet: `nav[aria-label="Learner primary actions"]` (`hidden` below `md`, `md:block` at `md+`)
+ * - Desktop/tablet: `nav[aria-label="Learner primary actions"]` (`max-md:hidden` below `md`; default block at `md+`)
  * - Mobile: `nav[aria-label="Learner bottom navigation"]` (`md:hidden` at `md+`)
  *
  * Only one is visible at a time. CSS locators match **both** nodes in the DOM; `getByRole` follows the

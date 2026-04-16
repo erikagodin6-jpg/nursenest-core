@@ -14,6 +14,29 @@ import { expectOnLearnerApp } from "./paid-surface-assertions";
  */
 export const PAID_E2E_DEFAULT_PATHWAY_ID = "us-rn-nclex-rn";
 
+async function logLearnerShellNavigationAudit(page: Page, context: string): Promise<void> {
+  let pathname = "";
+  try {
+    pathname = new URL(page.url()).pathname;
+  } catch {
+    pathname = "";
+  }
+  const navigations = page.getByRole("navigation");
+  const count = await navigations.count();
+  const parts: string[] = [];
+  for (let i = 0; i < count; i++) {
+    const loc = navigations.nth(i);
+    const visible = await loc.isVisible().catch(() => false);
+    const label = (await loc.getAttribute("aria-label"))?.trim() || "(no aria-label)";
+    parts.push(`${visible ? "visible" : "hidden"}:${label}`);
+  }
+  // eslint-disable-next-line no-console -- temporary deploy-gate diagnostics for learner shell mismatches
+  console.error(
+    `[paid-e2e] learner shell nav audit (${context}) pathname=${pathname} navigationCount=${count}`,
+    parts.join(" | "),
+  );
+}
+
 /**
  * Wait until the learner app chrome is interactive: `main` plus at least one of the
  * desktop primary nav or mobile bottom nav (viewport-dependent).
@@ -25,7 +48,12 @@ export async function waitForAuthenticatedLearnerShell(
   const ms = opts?.timeoutMs ?? 120_000;
   assertSyncNotOnboardingBlocking(page, "waitForAuthenticatedLearnerShell");
   await expect(page.locator("main")).toBeVisible({ timeout: ms });
-  await expect(learnerShellStudyNavigation(page)).toBeVisible({ timeout: Math.min(ms, 90_000) });
+  try {
+    await expect(learnerShellStudyNavigation(page)).toBeVisible({ timeout: Math.min(ms, 90_000) });
+  } catch (e) {
+    await logLearnerShellNavigationAudit(page, "waitForAuthenticatedLearnerShell");
+    throw e;
+  }
   assertNoAuthSessionBlockingBeforeShell(page);
   markLearnerShellReady(page);
 }

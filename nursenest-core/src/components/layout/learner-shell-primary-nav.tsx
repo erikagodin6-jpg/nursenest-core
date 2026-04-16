@@ -83,8 +83,9 @@ export function LearnerShellDesktopStudyLinks({
   const pathname = usePathname();
   const items = useLearnerNavItems({ pathwayId, examsLabel });
 
+  // `max-md:hidden` — avoid Tailwind v4 `hidden` + `md:block` display ordering bugs (desktop nav stuck display:none).
   return (
-    <nav className="hidden w-full md:block" aria-label="Learner primary actions">
+    <nav className="w-full max-md:hidden" aria-label="Learner primary actions">
       <div className="flex w-full flex-wrap items-center justify-center gap-x-1.5 gap-y-2 sm:justify-start sm:gap-x-2 sm:gap-y-2 lg:gap-x-3">
         {items.map((item) => {
           const active = pathname.startsWith(item.matchPrefix);
