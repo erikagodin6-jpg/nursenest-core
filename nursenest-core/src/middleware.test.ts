@@ -33,6 +33,12 @@ test("proxy sets x-nn-admin-path for /admin and /api/admin (RBAC header for guar
   assert.match(proxySrc, /startsWith\("\/admin"\)/);
 });
 
+test("proxy forwards trusted pathname headers to RSC via NextResponse.next({ request }) (Auth.js omits this)", () => {
+  const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
+  assert.match(proxySrc, /mergeAuthContinueWithForwardedRequest/);
+  assert.match(proxySrc, /NextResponse\.next\(\s*\{\s*request:\s*\{\s*headers:\s*forwarded\.headers\s*\}/);
+});
+
 test("edge auth requires a session for /admin (unauthenticated → NextAuth sign-in redirect)", () => {
   const am = readFileSync(join(dir, "lib", "auth-middleware.ts"), "utf8");
   assert.match(am, /path\.startsWith\("\/admin"\)/);

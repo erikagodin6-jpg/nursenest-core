@@ -56,6 +56,36 @@ function withPathnameHeader(request: NextRequest): NextRequest {
   return new NextRequest(request.url, { headers: requestHeaders });
 }
 
+/**
+ * Auth.js middleware returns `NextResponse.next()` without `request` overrides, so headers set only on
+ * the cloned `NextRequest` are not forwarded to Server Components. Next.js only applies inbound
+ * request header overrides when `NextResponse.next({ request: { headers } })` is used (see
+ * `handleMiddlewareField` in `next/dist/server/web/spec-extension/response.js`).
+ *
+ * Re-wrap the "continue" response so `x-nn-request-pathname` / `x-nn-admin-path` reach `resolveAdminRequestPath`,
+ * while preserving session `Set-Cookie` from the auth middleware.
+ */
+function mergeAuthContinueWithForwardedRequest(res: Response, forwarded: NextRequest, correlationId: string): Response {
+  if (res.headers.get("x-middleware-next") !== "1") {
+    return res;
+  }
+  const next = NextResponse.next({
+    request: { headers: forwarded.headers },
+  });
+  const cookies =
+    typeof res.headers.getSetCookie === "function"
+      ? res.headers.getSetCookie()
+      : (() => {
+          const single = res.headers.get("set-cookie");
+          return single ? [single] : [];
+        })();
+  for (const c of cookies) {
+    if (c) next.headers.append("Set-Cookie", c);
+  }
+  next.headers.set(NN_CORRELATION_HEADER, correlationId.slice(0, 128));
+  return next;
+}
+
 export async function proxy(request: NextRequest, event: NextFetchEvent) {
   const req = ensureIncomingCorrelationId(request);
   const pathname = req.nextUrl.pathname;
@@ -89,6 +119,10 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
   const forwarded = withPathnameHeader(req);
   const res = await runAuthMiddleware(forwarded, event);
   const outCid = forwarded.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
+  const merged = mergeAuthContinueWithForwardedRequest(res, forwarded, outCid);
+  if (merged !== res) {
+    return merged;
+  }
   res.headers.set(NN_CORRELATION_HEADER, outCid.slice(0, 128));
   return res;
 }
