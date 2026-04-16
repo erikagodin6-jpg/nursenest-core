@@ -44,3 +44,44 @@ Create **Metric alerts** in Sentry (Settings → Alerts → Create Alert → Met
 | `SENTRY_ENABLED=true` | Enables Sentry SDK + metrics helpers. |
 | `NN_STRUCTURED_OBSERVABILITY=1` | Forces JSON monitoring lines even outside Vercel/production defaults. |
 | `NN_SLOW_API_ROUTE_MS` | Slow-route threshold for API route telemetry (ms). |
+| `NN_ROUTE_TIMEOUT_LOG_MS` | Threshold for `route_timeout` structured events (default 45s). |
+
+## 4) Structured log alerts (`nn.observability.v1`, `scope=structured`)
+
+Log drains (Datadog, Axiom, CloudWatch, etc.) should parse **JSON lines** on stderr. Filter on:
+
+- **Envelope:** `schema == "nn.observability.v1"` (or parse loose JSON with `service == "nursenest-core"`).
+- **Structured events:** `scope == "structured"` — `event` matches `StructuredLogEventName` in `structured-log.ts`.
+- **Full inventory:** `docs/structured-log-event-inventory.md`.
+
+Suggested **threshold alerts** (tune per environment):
+
+| Alert | Query / condition | Window | Notes |
+| --- | --- | --- | --- |
+| `request_failed` spike | `scope=structured` AND `event=request_failed` AND `severity=error` count | 5–15 min | Pair with Sentry metric `api.route.count` `5xx`. |
+| `route_timeout` spike | `event=route_timeout` | 5–15 min | Requires slow handler; check `NN_ROUTE_TIMEOUT_LOG_MS`. |
+| `route_degraded` spike | `event=route_degraded` | 15–60 min | Resilience auto-degrade engaged. |
+| `db_query_slow` spike | `event=db_query_slow` | 15 min | `meta.errorClass` warn vs critical. |
+| `db_query_failed` | `event=db_query_failed` AND `severity=error` count ≥ 1 | 5 min | DB instability; uses Prisma bucket in `meta.errorClass`. |
+| `auth_login_failed` spike | `event=auth_login_failed` | 15 min | Filter noisy buckets in dashboards; alert on `db_error`, `system_error`. |
+| `signup_failed` spike | `event=signup_failed` | 15 min | Abuse or validation breakage. |
+| `password_reset_failed` spike | `event=password_reset_failed` | 15 min | Email/provider issues. |
+| `checkout_failed` spike | `event=checkout_failed` | 5–15 min | Revenue-critical; check `meta.errorClass` / reason. |
+| `webhook_failed` | `event=webhook_failed` count ≥ 1 | 5 min | Billing integrity; Stripe handler/dedupe. |
+| `question_load_failed` spike | `event=question_load_failed` | 15 min | Content API health. |
+| `lesson_load_failed` spike | `event=lesson_load_failed` | 15 min | Same. |
+
+**Correlation:** Prefer alerts that group by `correlationId` for drill-down when present.
+
+**Verification (local):** `docs/verify-structured-observability.md` and `scripts/verify-structured-observability.sh`.
+
+## 5) Routes without `request_end` / `request_failed` (gap)
+
+Only handlers that call `runWithApiTelemetry` or `recordApiRouteTelemetry` emit `request_end` / `request_failed` / `route_timeout`. High-traffic examples **not** fully wrapped today include:
+
+- `GET/POST /api/questions` (learner question list — heavy route)
+- Most other `/api/*` routes (flashcards, learner progress, exams, admin, etc.)
+
+**Mitigation:** wrap additional routes incrementally, or rely on Sentry Issues + `request_start` (proxy) for coarse request presence without duration/status.
+
+See also: `docs/structured-log-event-inventory.md`.

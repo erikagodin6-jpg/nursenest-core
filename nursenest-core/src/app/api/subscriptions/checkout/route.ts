@@ -254,7 +254,7 @@ export async function POST(req: Request) {
     if (!appUrl) {
       const msg = "Billing URL is not configured. Set NEXT_PUBLIC_APP_URL to your public https origin.";
       safeServerLog("stripe_checkout", "checkout_app_origin_missing", {});
-      recordCheckoutFailure("app_origin");
+      recordCheckoutFailure("app_origin", req);
       return NextResponse.json(
         { code: CHECKOUT_APP_ORIGIN_MISCONFIGURED_CODE, message: msg, error: msg },
         { status: 503 },
@@ -357,7 +357,7 @@ export async function POST(req: Request) {
       { route: "/api/subscriptions/checkout" },
       e,
     );
-    recordCheckoutFailure("session_failed");
+    recordCheckoutFailure("session_failed", req);
     const msg = "Unable to start checkout. Try again shortly.";
     return NextResponse.json(
       { code: CHECKOUT_SESSION_FAILED_CODE, message: msg, error: msg },

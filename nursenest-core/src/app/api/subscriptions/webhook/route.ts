@@ -123,7 +123,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true, duplicate: true });
     }
   } catch (e) {
-    recordStripeWebhookFailure("dedupe", event.type);
+    recordStripeWebhookFailure("dedupe", event.type, req);
     safeServerLogCritical(
       "stripe_webhook",
       "dedupe_record_failed",
