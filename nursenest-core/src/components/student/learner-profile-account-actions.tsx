@@ -52,7 +52,7 @@ export function LearnerProfileAccountActions({
       setNewPassword("");
       setConfirmPassword("");
       if (data.signOutRecommended) {
-        await signOut({ redirectTo: "/login" });
+        await signOut({ redirectTo: withMarketingLocale(locale, "/login") });
         return;
       }
       setMessage(data.message ?? t("learner.security.passwordUpdatedFallback"));
