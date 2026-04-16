@@ -3,8 +3,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-lesson-content-locale-banner";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { ExamFamily } from "@prisma/client";
@@ -294,10 +293,7 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      <BreadcrumbJsonLd items={schemaItems} />
-      <div className="mb-6">
-        <BreadcrumbTrail items={crumbs} />
-      </div>
+      <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <Link href={base} className="text-sm font-medium text-primary hover:underline">
         ← All lessons ({examName})
       </Link>

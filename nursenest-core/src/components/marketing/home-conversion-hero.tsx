@@ -198,36 +198,31 @@ export function HomeConversionHero({
               </StaggerItem>
             </StaggerGroup>
 
-            <ScaleIn className="min-w-0" timing="hero" whenInView once viewMargin="-20px">
-            <div
-              className="relative rounded-[1.35rem] p-[2px] shadow-[0_28px_72px_-28px_color-mix(in_srgb,var(--palette-heading)_14%,transparent)]"
-              style={{
-                background:
-                  "linear-gradient(145deg, color-mix(in srgb, var(--semantic-brand) 28%, var(--border-subtle)), color-mix(in srgb, var(--semantic-info) 22%, var(--border-subtle)), color-mix(in srgb, var(--theme-primary) 20%, var(--border-subtle)))",
-              }}
+            <ScaleIn
+              className="flex min-w-0 w-full justify-center lg:justify-end"
+              timing="hero"
+              whenInView
+              once
+              viewMargin="-20px"
             >
-            <div
-              className="overflow-hidden rounded-[1.25rem] border bg-[var(--bg-card)] p-2 shadow-[var(--shadow-elevated)]"
-              style={{ borderColor: "color-mix(in srgb, var(--theme-primary) 16%, var(--border-subtle))" }}
-            >
-              <MarketingHeroCarousel
-                slides={slides}
-                mediaFrame="hero"
-                testIdPrefix="hero-platform-carousel"
-                imgTestIdPrefix="hero-platform"
-                captionOverlay
-                onActiveSlideAnalytics={(slide) => {
-                  trackProductEvent(PH.marketingHomeHeroCarouselTierImpression, {
-                    marketing_locale: locale,
-                    marketing_region: region,
-                    hero_screenshot_index: slide.index,
-                    hero_exam_track: getHomeHeroSlideExamTrackKey(slide.index),
-                    surface: "home_conversion_hero_carousel",
-                  });
-                }}
-              />
-            </div>
-            </div>
+              <div className="w-full max-w-4xl">
+                <MarketingHeroCarousel
+                  slides={slides}
+                  mediaFrame="hero"
+                  testIdPrefix="hero-platform-carousel"
+                  imgTestIdPrefix="hero-platform"
+                  captionOverlay={false}
+                  onActiveSlideAnalytics={(slide) => {
+                    trackProductEvent(PH.marketingHomeHeroCarouselTierImpression, {
+                      marketing_locale: locale,
+                      marketing_region: region,
+                      hero_screenshot_index: slide.index,
+                      hero_exam_track: getHomeHeroSlideExamTrackKey(slide.index),
+                      surface: "home_conversion_hero_carousel",
+                    });
+                  }}
+                />
+              </div>
             </ScaleIn>
           </div>
         </div>

@@ -5,7 +5,7 @@ import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shell";
 import { LessonsToolbar } from "@/components/pathway-lessons/lessons-toolbar";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { loadPathwayLessonsHubAggregates } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
@@ -120,7 +120,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   }
 
   const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
-  const { schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
+  const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
   const examName = pathwayRegionAwareExamName(pathway);
   const pageTitle = "Lessons";
   const headerDescription = `Browse lessons by clinical area for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`;
@@ -160,7 +160,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         toolbar={toolbar}
         backLink={{ label: `${examName} overview`, href: overviewHref }}
       >
-        <BreadcrumbJsonLd items={schemaItems} />
+        <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
         <div className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
           <p className="text-sm font-medium text-[var(--theme-heading-text)]">
             {qEffective ? `No lessons match "${qEffective}".` : "No lessons available yet for this topic."}
@@ -243,7 +243,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       toolbar={toolbar}
       backLink={{ label: `${examName} overview`, href: overviewHref }}
     >
-      <BreadcrumbJsonLd items={schemaItems} />
+      <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
 
       <section id="pathway-lesson-library" className="mt-4 scroll-mt-24" aria-labelledby="lesson-library-heading">
         {/* Section toolbar: heading + count badge */}

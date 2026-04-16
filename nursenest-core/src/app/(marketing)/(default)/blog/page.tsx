@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import {
   BLOG_LIST_PAGE_SIZE,
@@ -57,10 +56,7 @@ export default async function BlogIndexPage({ searchParams }: Props) {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      <BreadcrumbJsonLd items={schemaItems} />
-      <div className="mb-6">
-        <BreadcrumbTrail items={crumbs} />
-      </div>
+      <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
       <RegionalBlogDiscoveryHint />
       <header className="mb-10">
         <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">Clinical education blog</h1>

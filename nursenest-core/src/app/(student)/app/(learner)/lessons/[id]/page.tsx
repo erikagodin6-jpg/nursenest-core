@@ -20,7 +20,10 @@ import {
   legacyContentMapLessonTitle,
 } from "@/lib/lessons/legacy-content-map-lessons";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { localizeBreadcrumbCrumbs } from "@/lib/seo/breadcrumb-i18n";
+import { learnerPathwayLessonBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { getPathwayLesson } from "@/lib/lessons/pathway-lesson-loader";
 import { LegacyMonolithLessonBody } from "@/components/lessons/legacy-monolith-lesson-body";
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
@@ -170,7 +173,7 @@ export default async function LessonDetailPage({ params }: Props) {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
-  const { t } = await getLearnerMarketingBundle();
+  const { t, messages, fallbackMessages } = await getLearnerMarketingBundle();
   const studySettings = await loadStudySettings(userId);
 
   if (entitlement === "error") {
@@ -527,6 +530,17 @@ export default async function LessonDetailPage({ params }: Props) {
 
     const pathwayLessonMainColumn = (
       <>
+        {pathway ? (
+          <div className="min-h-9 mb-3">
+            <BreadcrumbTrail
+              items={localizeBreadcrumbCrumbs(
+                learnerPathwayLessonBreadcrumbs(pathway, displayTitle),
+                messages,
+                fallbackMessages,
+              )}
+            />
+          </div>
+        ) : null}
         {/* Top nav: back link */}
         <LessonNavButtons
           position="top"

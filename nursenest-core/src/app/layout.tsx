@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     template: "%s | NurseNest",
   },
   description:
-    "Stable, premium nursing exam prep for CA and US learners across RPN, LVN/LPN, RN, and NP pathways.",
+    "Premium NCLEX and global licensing prep for nurses worldwide—strongest pathways in the US and Canada (RPN, LVN/LPN, RN, NP), plus regional hubs across Asia and the Middle East.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     siteName: "NurseNest",
     title: "NurseNest | Healthcare Exam Prep",
     description:
-      "Stable, premium nursing exam prep for CA and US learners across RPN, LVN/LPN, RN, and NP pathways.",
+      "Premium NCLEX and global licensing prep for nurses worldwide—strongest pathways in the US and Canada (RPN, LVN/LPN, RN, NP), plus regional hubs across Asia and the Middle East.",
     images: [
       {
         url: marketingOpenGraphImageUrl(),
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "NurseNest | Healthcare Exam Prep",
     description:
-      "Stable, premium nursing exam prep for CA and US learners across RPN, LVN/LPN, RN, and NP pathways.",
+      "Premium NCLEX and global licensing prep for nurses worldwide—strongest pathways in the US and Canada (RPN, LVN/LPN, RN, NP), plus regional hubs across Asia and the Middle East.",
     images: [marketingOpenGraphImageUrl()],
   },
 };

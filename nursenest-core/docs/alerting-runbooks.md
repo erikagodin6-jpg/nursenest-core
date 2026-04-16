@@ -69,7 +69,7 @@ Threshold constants live in `src/lib/observability/alert-thresholds.ts` (`ALERT_
 
 ### Entitlements runbook
 
-- Surfaces: `page` (RSC `resolveEntitlementForPage`), `api_questions_id` (single-question API).
+- Surfaces: `page` (RSC `resolveEntitlementForPage`), `api_questions_id` (single-question API), `subscriber_api` (`requireSubscriberSession` when `getUserAccess` throws → 503).
 - Structured: `entitlement_resolve_failed`; monitoring: `scope: entitlement`, `event: resolve_failed`.
 
 ### Auth runbook

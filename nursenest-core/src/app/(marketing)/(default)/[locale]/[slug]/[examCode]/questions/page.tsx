@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BookOpen, ClipboardList, Layers, LineChart, Timer } from "lucide-react";
 import { NpQuestionsHubBoardLinks } from "@/components/exam-pathways/np-questions-hub-board-links";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
@@ -201,12 +200,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-7 lg:px-8 lg:py-8">
-      <BreadcrumbJsonLd items={schemaItems} />
-
-      {/* Breadcrumb trail */}
-      <div className="mb-4">
-        <BreadcrumbTrail items={crumbs} />
-      </div>
+      <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
 
       {/* 1. Hero */}
       <PathwayHero

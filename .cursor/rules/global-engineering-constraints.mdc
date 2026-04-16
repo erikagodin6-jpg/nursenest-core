@@ -1,0 +1,34 @@
+---
+description: Global engineering guardrails — data bounds, caching, APIs, SSR, navigation, admin RBAC.
+alwaysApply: true
+---
+
+# Global engineering constraints
+
+Apply to **all** changes unless a task explicitly overrides with a documented reason.
+
+## Data & performance
+
+- **No unbounded queries**: every `findMany` / list path must use `take` / cursor / pagination; avoid N+1 and unbounded `in` lists.
+- **No large JSON on the hot path**: do not select or serialize heavy `Json` / body fields unless the route or UI truly needs them.
+- **Client work stays light**: avoid long synchronous work, huge bundles, or logic that blocks first paint; prefer server data + small interactive islands.
+
+## HTTP & caching
+
+- **Preserve existing cache semantics** for learner `/app` surfaces: do not strip or weaken `private`, `no-store`, `must-revalidate` (and related) where they are already set for authenticated or dynamic routes.
+- **API responses stay bounded**: small JSON payloads; paginate or summarize; no unbounded arrays in responses.
+
+## Rendering & UI
+
+- **SSR / streaming**: new features must remain compatible with App Router RSC + streaming; avoid patterns that force full client-only trees without cause.
+- **Responsive**: new marketing and product UI must work from mobile to desktop (breakpoints, touch targets, overflow).
+- **Routing & navigation**: do not change URL structure, redirects, or nav wiring unless the task requires it; no broken deep links.
+
+## Security & admin
+
+- **Admin / staff features**: authorization must be enforced **on the server** (DB-backed staff session + `requireAdmin` / path RBAC where applicable). Never rely on hiding admin UI in CSS or client-only checks for security.
+
+## Related
+
+- Lesson list volume: `.cursor/rules/rn-lesson-library-safety.mdc`
+- i18n / shards: `.cursor/rules/i18n-translation-engineering.mdc`

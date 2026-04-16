@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { NursingTierHubPage } from "@/components/marketing/nursing-tier-hub-page";
 import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
@@ -9,6 +10,7 @@ import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway
 import { buildNursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
 import { examPathwayRegionalHreflang } from "@/lib/seo/exam-pathway-hub-alternates";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const dynamicParams = true;
@@ -60,9 +62,11 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
 
   const npPracticeSeo = getNpPracticeTestLandingCopy(locale, slug, examCode) ?? null;
   const content = buildNursingTierHubContent(pathway);
+  const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(pathway, { hubBasePath: pathname });
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+      <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <NursingTierHubPage
         pathway={pathway}
         hubPath={pathname}

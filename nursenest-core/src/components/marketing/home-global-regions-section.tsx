@@ -16,7 +16,7 @@ type RegionCard = {
   accentVar: string;
 };
 
-const REGION_CARDS: readonly RegionCard[] = [
+export const HOME_GLOBAL_REGION_CARDS: readonly RegionCard[] = [
   {
     id: "us",
     titleKey: "pages.home.globalRegions.us.title",
@@ -54,20 +54,26 @@ const REGION_CARDS: readonly RegionCard[] = [
   },
 ];
 
+export type HomeGlobalRegionsSectionProps = {
+  /** Server-filtered card ids so unpublished `/exams/…` hubs are never linked from the homepage. */
+  visibleCardIds: readonly string[];
+};
+
 /**
  * Highlights major regional licensing hubs while keeping US/Canada primary CTAs above the fold.
  */
-export function HomeGlobalRegionsSection() {
+export function HomeGlobalRegionsSection({ visibleCardIds }: HomeGlobalRegionsSectionProps) {
   const { locale, t } = useMarketingI18n();
   const cards = useMemo(() => {
     const l = (path: string) => withMarketingLocale(locale, path);
-    return REGION_CARDS.map((c) => ({
+    const source = HOME_GLOBAL_REGION_CARDS.filter((c) => visibleCardIds.includes(c.id));
+    return source.map((c) => ({
       ...c,
       href: l(c.path),
       title: t(c.titleKey),
       body: t(c.bodyKey),
     }));
-  }, [locale, t]);
+  }, [locale, t, visibleCardIds]);
 
   return (
     <section

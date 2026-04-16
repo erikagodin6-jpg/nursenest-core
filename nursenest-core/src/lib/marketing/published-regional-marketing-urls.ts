@@ -28,3 +28,19 @@ export function isRegionalMarketingUrlPublished(pathOrUrl: string): boolean {
     return true;
   }
 }
+
+/** Home “global regions” cards: expansion rows map to `/exams/…` paths (see `home-global-regions-section`). */
+const HOME_EXPANSION_CARD_ID_TO_PATH: Record<string, string> = {
+  ph: "/exams/philippines",
+  me: "/exams/middle-east",
+  cn: "/exams/china",
+};
+
+/** Card ids (`us`, `ca`, …) safe to show on the marketing homepage. */
+export function listPublishedHomeGlobalRegionCardIds(): string[] {
+  const out: string[] = ["us", "ca"];
+  for (const [id, p] of Object.entries(HOME_EXPANSION_CARD_ID_TO_PATH)) {
+    if (isRegionalMarketingUrlPublished(p)) out.push(id);
+  }
+  return out;
+}

@@ -1,5 +1,4 @@
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { NpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
@@ -75,11 +74,8 @@ export function ExamPathwayHub({
           examFamily={String(pathway.examFamily)}
         />
       ) : null}
-      <BreadcrumbJsonLd items={schemaItems} />
+      <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <FaqJsonLd items={pathwayHubFaqSchema(pathway)} />
-      <div className="mb-4">
-        <BreadcrumbTrail items={crumbs} />
-      </div>
       <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-primary)]">
         {countryLine} · {pathway.boardLabel ?? pathway.roleTrack.toUpperCase()}
       </p>

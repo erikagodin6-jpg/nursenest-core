@@ -17,6 +17,17 @@ export function countryLabelFromSlug(countrySlug: string): string {
 }
 
 /**
+ * Canonical marketing URL for the country context crumb (no extra data fetch).
+ * Aligns labels with real destinations — US uses the public practice-exams hub (region-aware copy).
+ */
+export function countryExamGuideHref(countrySlug: string): string {
+  const c = countrySlug.trim().toLowerCase();
+  if (c === "canada") return "/exams/canada";
+  if (c === "us") return "/practice-exams";
+  return "/";
+}
+
+/**
  * Short label for role track segment (matches URL segment; wording is country-aware where needed).
  * US practical/vocational nursing uses LPN / LVN; Canada PN track uses RPN.
  */

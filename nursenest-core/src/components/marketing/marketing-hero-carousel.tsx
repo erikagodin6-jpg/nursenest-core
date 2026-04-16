@@ -13,6 +13,7 @@ import {
   MARKETING_CAROUSEL_SIZES,
   MARKETING_HERO_LCP_SIZES,
   MARKETING_PHOTO_QUALITY,
+  MARKETING_PHOTO_QUALITY_HERO,
   marketingImageShouldUnoptimize,
 } from "@/lib/marketing-image-delivery";
 
@@ -45,9 +46,9 @@ export type MarketingHeroCarouselProps = {
  * autoplay with hover pause, dot navigation, skeleton until first load, full fallback if all slides fail.
  * Used by the hero and by “See the Platform in Action” with different `slides` only.
  */
-/** Hero column: bounded height (parent also caps with md:max-h-*); avoid flex-1 stretch filling the grid row. */
+/** Hero column: stable 16:10, larger than the compact carousel frame; height capped for fold balance. */
 const heroMediaFrameClass =
-  "relative aspect-[16/10] w-full max-h-[min(18rem,48vh)] min-h-[10rem] shrink-0 overflow-hidden sm:max-h-[min(19rem,50vh)] md:aspect-auto md:max-h-[min(20rem,56vh)] md:min-h-[12rem]";
+  "relative aspect-[16/10] w-full min-h-[11rem] max-h-[min(28rem,62vh)] shrink-0 overflow-hidden sm:min-h-[12rem] sm:max-h-[min(30rem,65vh)] md:min-h-[13rem] md:max-h-[min(34rem,68vh)]";
 
 export function MarketingHeroCarousel({
   slides,
@@ -205,12 +206,13 @@ export function MarketingHeroCarousel({
       : "relative aspect-[16/10] w-full max-h-[min(15rem,42vh)] min-h-[9rem] sm:min-h-[9.5rem]";
 
   const carouselSizes = mediaFrame === "hero" ? MARKETING_HERO_LCP_SIZES : MARKETING_CAROUSEL_SIZES;
+  const photoQuality = mediaFrame === "hero" ? MARKETING_PHOTO_QUALITY_HERO : MARKETING_PHOTO_QUALITY;
 
   if (validCount === 0) {
     return (
       <div className="relative w-full min-w-0" data-testid={fallbackWrapperTestId}>
         <div
-          className={`${frameShell} overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]`}
+          className={`${frameShell} overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] shadow-sm`}
         >
           <Image
             src={MARKETING_HERO_LOCAL_FALLBACK}
@@ -235,7 +237,7 @@ export function MarketingHeroCarousel({
       data-testid={testIdPrefix}
     >
       <div
-        className={`${frameShell} relative overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]`}
+        className={`${frameShell} relative overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] shadow-sm`}
         style={{ overflowAnchor: "none" }}
         aria-busy={!hasLoaded && mediaOk}
       >
@@ -265,7 +267,7 @@ export function MarketingHeroCarousel({
               alt={slide.alt}
               fill
               sizes={carouselSizes}
-              quality={MARKETING_PHOTO_QUALITY}
+              quality={photoQuality}
               priority={lcp}
               unoptimized={marketingImageShouldUnoptimize(src)}
               className={`pointer-events-none object-contain bg-[var(--theme-muted-surface)] nn-carousel-slide-crossfade will-change-[opacity] ${
@@ -291,7 +293,7 @@ export function MarketingHeroCarousel({
             data-testid={captionTestId}
             aria-hidden
           >
-            <div className="bg-gradient-to-t from-[color-mix(in_srgb,var(--palette-heading)_88%,transparent)] via-[color-mix(in_srgb,var(--palette-heading)_38%,transparent)] to-transparent px-3 pb-2.5 pt-8 sm:px-4 sm:pb-3 sm:pt-10">
+            <div className="bg-gradient-to-t from-[color-mix(in_srgb,var(--palette-heading)_55%,transparent)] via-[color-mix(in_srgb,var(--palette-heading)_22%,transparent)] to-transparent px-3 pb-2.5 pt-7 sm:px-4 sm:pb-3 sm:pt-9">
               <p className="line-clamp-4 text-left text-sm font-semibold leading-snug text-[var(--text-on-accent)] text-balance break-words drop-shadow-sm sm:text-base">
                 {currentSlide.title}
               </p>
@@ -305,7 +307,7 @@ export function MarketingHeroCarousel({
       {hasLoaded && mediaOk ? (
         <>
           {currentSlide && !captionOverlay ? (
-            <div className="mt-3 space-y-1 px-2 text-center sm:px-1" data-testid={captionTestId}>
+            <div className="mt-2 space-y-1 px-0 text-center" data-testid={captionTestId}>
               <p className="nn-marketing-h4 text-balance break-words">{currentSlide.title}</p>
               <p className="nn-marketing-caption text-balance break-words text-[var(--theme-body-text)]">{currentSlide.caption}</p>
             </div>

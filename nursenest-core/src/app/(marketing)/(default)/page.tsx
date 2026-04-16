@@ -17,6 +17,7 @@ import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketin
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { ExamSelectorGate } from "@/components/onboarding/exam-selector-gate";
 import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
+import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
 
 /** ISR: homepage shell — aligned with `getCachedPublicHomeStats` / `PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC` (600). */
 export const revalidate = 600;
@@ -53,9 +54,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [homeStatsRaw, m] = await Promise.all([
+  const [homeStatsRaw, m, publishedGlobalRegionCardIds] = await Promise.all([
     getCachedPublicHomeStats(),
     loadMarketingMessages(STATIC_LOCALE),
+    listPublishedHomeGlobalRegionCardIds(),
   ]);
   const homeMarketingStats = {
     questionCount: homeStatsRaw.questionCount,
@@ -87,7 +89,7 @@ export default async function HomePage() {
           <BreadcrumbTrail items={crumbs} />
         </div>
       ) : null}
-      <HomeRestoredClient homeMarketingStats={homeMarketingStats} />
+      <HomeRestoredClient homeMarketingStats={homeMarketingStats} publishedGlobalRegionCardIds={publishedGlobalRegionCardIds} />
       <section className="mx-auto mt-6 w-full max-w-7xl px-4 pb-2 sm:px-6 lg:px-8">
         <div className="nn-card border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-5">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">

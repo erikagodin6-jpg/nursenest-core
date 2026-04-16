@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BlogPostDistributionFooter } from "@/components/blog/blog-post-distribution-footer";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { applyAutoLinksToHtml } from "@/lib/blog/blog-auto-link-html";
 import { parseInternalLinkPlanJson, stripBrokenOrEmptyImagesFromHtml } from "@/lib/blog/blog-image-workflow";
 import {
@@ -109,10 +108,7 @@ export default async function BlogPostPage({ params }: Props) {
       {emitFaqJsonLd ? (
         <BlogFaqPageJsonLd items={faqItems.map((f) => ({ question: f.q, answer: f.a }))} />
       ) : null}
-      <BreadcrumbJsonLd items={schemaItems} />
-      <div className="mb-6">
-        <BreadcrumbTrail items={crumbs} />
-      </div>
+      <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
       <Link href="/blog" className="text-sm font-medium text-primary hover:underline">
         ← Blog
       </Link>

@@ -21,12 +21,18 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import type { HomeMarketingStats } from "@/components/marketing/home-marketing-stats";
 
+export type HomeRestoredClientProps = {
+  homeMarketingStats: HomeMarketingStats;
+  /** Homepage global region cards — must exclude unpublished expansion exam hubs. */
+  publishedGlobalRegionCardIds: readonly string[];
+};
+
 /**
  * Homepage: hero → sample proof → trust strip → trust Q&A → pathways → how it works → platform proof → differentiation → objection FAQ → final CTA.
  *
  * Stats are resolved on the server (`getCachedPublicHomeStats`) and passed in so the hero/trust sections paint real numbers on first paint—no client waterfall or 0→value jumps.
  */
-export default function HomeRestoredClient({ homeMarketingStats }: { homeMarketingStats: HomeMarketingStats }) {
+export default function HomeRestoredClient({ homeMarketingStats, publishedGlobalRegionCardIds }: HomeRestoredClientProps) {
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const marketingRegion = region === "US" ? "US" : "CA";
@@ -87,7 +93,7 @@ export default function HomeRestoredClient({ homeMarketingStats }: { homeMarketi
         {/* 2. PROOF — sample item + rationale */}
         <HomeSampleQuestionPreview />
         {/* 2b. Global regions — licensing hubs beyond US/Canada */}
-        <HomeGlobalRegionsSection />
+        <HomeGlobalRegionsSection visibleCardIds={publishedGlobalRegionCardIds} />
         {/* 3. TRUST — credibility + freshness (stats shown in hero; strip avoids repeating counts) */}
         <HomeTrustStripSection
           lessonCount={lessonCount}

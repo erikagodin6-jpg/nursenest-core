@@ -17,7 +17,7 @@
 | `billing.webhook.failure` | `phase` | Integrity | `billing.webhookFailureCount15m` |
 | `db.client.error` | `bucket`, `prismaCode` | DB instability | — |
 | `db.query.slow` | `severity` | Slow queries | `db.slowQueryCount10m` |
-| `entitlement.resolve.failure` | `surface`: `page` \| `api_questions_id` | Paywall / RSC trust loss | `entitlement.resolveFailureCount15m` |
+| `entitlement.resolve.failure` | `surface`: `page` \| `api_questions_id` \| `subscriber_api` | Paywall / RSC / subscriber APIs | `entitlement.resolveFailureCount15m` |
 | `health.ready.failure` | `kind` | DB down | — |
 | `marketing.paywall.proof_neutral` | `surface` | Stats degraded | `marketing.proofNeutralSpikeCount15m` |
 | `resilience.auto_degraded.engaged` | `reason` | Tier-2 skips | `resilience.autoDegradedEngagements15m` |
@@ -34,14 +34,14 @@ Use log drains (Axiom, Datadog, etc.) to count **`event`** per window. Spike thr
 | `request_failed` | Handler returned ≥500 | `api.route.count` 5xx |
 | `route_timeout` | Duration ≥ `NN_ROUTE_TIMEOUT_LOG_MS` (default 45s) | Infra / DB |
 | `route_degraded` | Slow handler (`api-route-telemetry`) **or** auto-degraded (`errorClass: auto_degraded`) | `route_degraded` + `meta.errorClass` |
-| `db_query_slow` / `db_query_failed` | Prisma | `db.client.error` |
+| `db_query_slow` / `db_query_failed` | Prisma (failed ops include **`route` + `correlationId`** when handler set Prisma ALS) | `db.client.error` |
 | `auth_login_failed` | Credential sign-in | `auth.login.failure` |
 | `signup_failed` | Signup validation / DB | — |
 | `password_reset_failed` | Resend / token issues | — |
 | `checkout_failed` | Stripe session / policy | `billing.checkout.failure` |
 | `webhook_failed` | After verified Stripe event | `billing.webhook.failure` |
 | `webhook_ignored` | Unhandled event type (often OK) | Do **not** page on spike alone |
-| `entitlement_resolve_failed` | `getUserAccess` path threw | `entitlement.resolve.failure` |
+| `entitlement_resolve_failed` | `getUserAccess` path threw (RSC, question route, **subscriber gate**) | `entitlement.resolve.failure` |
 | `question_load_failed` / `lesson_load_failed` | Content API | Route 5xx + Prisma |
 
 ---

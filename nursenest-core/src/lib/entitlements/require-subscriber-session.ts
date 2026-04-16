@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { accessScopeFromUserAccess, getUserAccess, type AccessScope, type UserAccess } from "@/lib/entitlements/get-user-access";
 import { correlationIdFromHeaders } from "@/lib/observability/request-correlation-headers";
+import { recordEntitlementResolveFailureSignal } from "@/lib/observability/production-signal-metrics";
+import { productEvent } from "@/lib/observability/product-events";
+import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
@@ -39,6 +42,16 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
   try {
     userAccess = await getUserAccess(userId);
   } catch (e) {
+    productEvent("entitlement_resolve_failed", { surface: "subscriber_api" });
+    recordEntitlementResolveFailureSignal("subscriber_api", correlation || undefined);
+    emitStructuredLog("entitlement_resolve_failed", "error", {
+      correlationId: correlation || undefined,
+      route: "api:requireSubscriberSession",
+      method: "GET",
+      flow: "content",
+      errorClass: e instanceof Error ? e.name : typeof e,
+      message: "getUserAccess failed in subscriber gate",
+    });
     safeServerLogCritical(
       "entitlement",
       "resolve_failed",

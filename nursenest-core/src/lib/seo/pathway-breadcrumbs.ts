@@ -3,8 +3,12 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry"
 import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { HUB } from "@/lib/navigation/canonical-destinations";
 import type { BreadcrumbCrumb, BreadcrumbSchemaItem } from "@/lib/seo/breadcrumb-types";
-import { toAbsoluteSiteUrl } from "@/lib/seo/breadcrumb-utils";
-import { getPathwayProgrammaticSeoLanding } from "@/lib/seo/pathway-programmatic-seo";
+import {
+  countryExamGuideHref,
+  countryLabelFromSlug,
+  formatRoleTrackLabel,
+  toAbsoluteSiteUrl,
+} from "@/lib/seo/breadcrumb-utils";
 
 export type { BreadcrumbCrumb, BreadcrumbSchemaItem } from "@/lib/seo/breadcrumb-types";
 
@@ -18,7 +22,6 @@ const HOME_ITEM: BreadcrumbSchemaItem = { name: "Home", item: "/", i18nKey: "bre
 
 /**
  * Public index of all exam-scoped lesson hubs. Label aligns with the public `/lessons` landing `h1` (i18n).
- * There is no standalone `/canada` (or other country) page — do not label a crumb “Canada” and link here.
  */
 export const EXAM_LESSONS_INDEX = {
   path: HUB.examLessons,
@@ -41,19 +44,6 @@ function examLessonsIndexSchema(): BreadcrumbSchemaItem {
   };
 }
 
-/** Second crumb: programmatic SEO landing when mapped, else lessons index (all pathways). */
-function pathwayProgrammaticParentCrumb(pathway: ExamPathwayDefinition, linked: boolean): BreadcrumbCrumb {
-  const land = getPathwayProgrammaticSeoLanding(pathway);
-  if (!land) return examLessonsIndexCrumb(linked);
-  return linked ? { name: land.label, href: land.path } : { name: land.label, href: undefined };
-}
-
-function pathwayProgrammaticParentSchema(pathway: ExamPathwayDefinition): BreadcrumbSchemaItem {
-  const land = getPathwayProgrammaticSeoLanding(pathway);
-  if (!land) return examLessonsIndexSchema();
-  return { name: land.label, item: toAbsoluteSiteUrl(land.path) };
-}
-
 function pathwayHubBase(pathway: ExamPathwayDefinition, hubBasePath?: string): string {
   return hubBasePath ?? buildExamPathwayPath(pathway);
 }
@@ -64,18 +54,44 @@ function pathwayHubChildPath(pathway: ExamPathwayDefinition, hubBasePath: string
   return tail ? `${base}/${tail}` : base;
 }
 
-function pathwayHubCrumb(pathway: ExamPathwayDefinition, linked: boolean, hubBasePath?: string): BreadcrumbCrumb {
-  const base = pathwayHubBase(pathway, hubBasePath);
+/**
+ * Home → Country → Role track (URL segment `[slug]`) → Pathway hub (`[examCode]`).
+ * Matches public marketing routes under `/[locale]/[slug]/[examCode]`.
+ */
+function examPathwaySurfacePrefix(
+  pathway: ExamPathwayDefinition,
+  opts?: PathwayMarketingHubBreadcrumbOpts,
+): {
+  hubBase: string;
+  countryCrumb: (linked: boolean) => BreadcrumbCrumb;
+  roleCrumb: (linked: boolean) => BreadcrumbCrumb;
+  hubCrumb: (linked: boolean) => BreadcrumbCrumb;
+  countrySchema: () => BreadcrumbSchemaItem;
+  roleSchema: () => BreadcrumbSchemaItem;
+  hubSchema: () => BreadcrumbSchemaItem;
+} {
+  const hubBase = pathwayHubBase(pathway, opts?.hubBasePath);
+  const countrySlug = pathway.countrySlug;
+  const rolePath = `/${countrySlug}/${pathway.roleTrack}`;
   const examName = pathwayRegionAwareExamName(pathway);
-  return linked ? { name: examName, href: base } : { name: examName, href: undefined };
+  const countryName = countryLabelFromSlug(countrySlug);
+  const roleLabel = formatRoleTrackLabel(pathway.roleTrack, countrySlug);
+  const countryHref = countryExamGuideHref(countrySlug);
+
+  return {
+    hubBase,
+    countryCrumb: (linked) => (linked ? { name: countryName, href: countryHref } : { name: countryName, href: undefined }),
+    roleCrumb: (linked) => (linked ? { name: roleLabel, href: rolePath } : { name: roleLabel, href: undefined }),
+    hubCrumb: (linked) => (linked ? { name: examName, href: hubBase } : { name: examName, href: undefined }),
+    countrySchema: () => ({ name: countryName, item: toAbsoluteSiteUrl(countryHref) }),
+    roleSchema: () => ({ name: roleLabel, item: toAbsoluteSiteUrl(rolePath) }),
+    hubSchema: () => ({ name: examName, item: toAbsoluteSiteUrl(hubBase) }),
+  };
 }
 
-function pathwayHubSchema(pathway: ExamPathwayDefinition, hubBasePath?: string): BreadcrumbSchemaItem {
-  const base = pathwayHubBase(pathway, hubBasePath);
-  return { name: pathwayRegionAwareExamName(pathway), item: toAbsoluteSiteUrl(base) };
-}
+const LESSONS_KEY = "breadcrumbs.lessons" as const;
 
-/** Exam pathway overview: Home → programmatic SEO (or lessons index) → pathway hub (current). */
+/** Exam pathway overview: Home → Country → Role track → Pathway hub (current). */
 export function pathwayOverviewBreadcrumbs(
   pathway: ExamPathwayDefinition,
   opts?: PathwayMarketingHubBreadcrumbOpts,
@@ -83,9 +99,9 @@ export function pathwayOverviewBreadcrumbs(
   crumbs: BreadcrumbCrumb[];
   schemaItems: BreadcrumbSchemaItem[];
 } {
-  const hub = opts?.hubBasePath;
-  const crumbs: BreadcrumbCrumb[] = [HOME, pathwayProgrammaticParentCrumb(pathway, true), pathwayHubCrumb(pathway, false, hub)];
-  const schemaItems: BreadcrumbSchemaItem[] = [HOME_ITEM, pathwayProgrammaticParentSchema(pathway), pathwayHubSchema(pathway, hub)];
+  const p = examPathwaySurfacePrefix(pathway, opts);
+  const crumbs: BreadcrumbCrumb[] = [HOME, p.countryCrumb(true), p.roleCrumb(true), p.hubCrumb(false)];
+  const schemaItems: BreadcrumbSchemaItem[] = [HOME_ITEM, p.countrySchema(), p.roleSchema(), p.hubSchema()];
   return { crumbs, schemaItems };
 }
 
@@ -98,19 +114,21 @@ export function pathwayLessonsHubBreadcrumbs(
   schemaItems: BreadcrumbSchemaItem[];
 } {
   const hub = opts?.hubBasePath;
-  const lessons = pathwayHubChildPath(pathway, hub, "lessons");
-  const lessonsKey = "breadcrumbs.lessons" as const;
+  const p = examPathwaySurfacePrefix(pathway, opts);
+  const lessonsPath = pathwayHubChildPath(pathway, hub, "lessons");
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
-    pathwayProgrammaticParentCrumb(pathway, true),
-    pathwayHubCrumb(pathway, true, hub),
-    { name: "Lessons", href: undefined, i18nKey: lessonsKey },
+    p.countryCrumb(true),
+    p.roleCrumb(true),
+    p.hubCrumb(true),
+    { name: "Lessons", href: undefined, i18nKey: LESSONS_KEY },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    pathwayProgrammaticParentSchema(pathway),
-    pathwayHubSchema(pathway, hub),
-    { name: "Lessons", item: toAbsoluteSiteUrl(lessons), i18nKey: lessonsKey },
+    p.countrySchema(),
+    p.roleSchema(),
+    p.hubSchema(),
+    { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath), i18nKey: LESSONS_KEY },
   ];
   return { crumbs, schemaItems };
 }
@@ -123,27 +141,29 @@ export function pathwayTopicClusterBreadcrumbs(
   opts?: PathwayMarketingHubBreadcrumbOpts,
 ): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
   const hub = opts?.hubBasePath;
+  const p = examPathwaySurfacePrefix(pathway, opts);
   const lessonsPath = pathwayHubChildPath(pathway, hub, "lessons");
   const topicPath = pathwayHubChildPath(pathway, hub, `lessons/topics/${topicSlug}`);
-  const lessonsKey = "breadcrumbs.lessons" as const;
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
-    pathwayProgrammaticParentCrumb(pathway, true),
-    pathwayHubCrumb(pathway, true, hub),
-    { name: "Lessons", href: lessonsPath, i18nKey: lessonsKey },
+    p.countryCrumb(true),
+    p.roleCrumb(true),
+    p.hubCrumb(true),
+    { name: "Lessons", href: lessonsPath, i18nKey: LESSONS_KEY },
     { name: topicLabel, href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    pathwayProgrammaticParentSchema(pathway),
-    pathwayHubSchema(pathway, hub),
-    { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath), i18nKey: lessonsKey },
+    p.countrySchema(),
+    p.roleSchema(),
+    p.hubSchema(),
+    { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath), i18nKey: LESSONS_KEY },
     { name: topicLabel, item: toAbsoluteSiteUrl(topicPath) },
   ];
   return { crumbs, schemaItems };
 }
 
-/** Single lesson page. */
+/** Single lesson page: Home → … → Lessons → lesson title (current). */
 export function pathwayLessonDetailBreadcrumbs(
   pathway: ExamPathwayDefinition,
   lessonSlug: string,
@@ -151,36 +171,40 @@ export function pathwayLessonDetailBreadcrumbs(
   opts?: PathwayMarketingHubBreadcrumbOpts,
 ): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
   const hub = opts?.hubBasePath;
+  const p = examPathwaySurfacePrefix(pathway, opts);
   const lessonsPath = pathwayHubChildPath(pathway, hub, "lessons");
   const lessonPath = pathwayHubChildPath(pathway, hub, `lessons/${lessonSlug}`);
-  const examName = pathwayRegionAwareExamName(pathway);
-  const lessonsLabel = `${examName} lessons`;
-  const lessonsHubKey = "breadcrumbs.pathwayLessonsHub" as const;
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
-    pathwayProgrammaticParentCrumb(pathway, true),
-    pathwayHubCrumb(pathway, true, hub),
-    {
-      name: lessonsLabel,
-      href: lessonsPath,
-      i18nKey: lessonsHubKey,
-      i18nParams: { shortName: examName },
-    },
+    p.countryCrumb(true),
+    p.roleCrumb(true),
+    p.hubCrumb(true),
+    { name: "Lessons", href: lessonsPath, i18nKey: LESSONS_KEY },
     { name: lessonTitle, href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    pathwayProgrammaticParentSchema(pathway),
-    pathwayHubSchema(pathway, hub),
-    {
-      name: lessonsLabel,
-      item: toAbsoluteSiteUrl(lessonsPath),
-      i18nKey: lessonsHubKey,
-      i18nParams: { shortName: examName },
-    },
+    p.countrySchema(),
+    p.roleSchema(),
+    p.hubSchema(),
+    { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath), i18nKey: LESSONS_KEY },
     { name: lessonTitle, item: toAbsoluteSiteUrl(lessonPath) },
   ];
   return { crumbs, schemaItems };
+}
+
+/** `/app` pathway lesson: visible trail only (no BreadcrumbList); links to public marketing URLs. */
+export function learnerPathwayLessonBreadcrumbs(pathway: ExamPathwayDefinition, lessonTitle: string): BreadcrumbCrumb[] {
+  const p = examPathwaySurfacePrefix(pathway);
+  const lessonsPath = pathwayHubChildPath(pathway, undefined, "lessons");
+  return [
+    HOME,
+    p.countryCrumb(true),
+    p.roleCrumb(true),
+    p.hubCrumb(true),
+    { name: "Lessons", href: lessonsPath, i18nKey: LESSONS_KEY },
+    { name: lessonTitle, href: undefined },
+  ];
 }
 
 /** Marketing question bank hub for a pathway. */
@@ -192,18 +216,21 @@ export function pathwayQuestionsHubBreadcrumbs(
   schemaItems: BreadcrumbSchemaItem[];
 } {
   const hub = opts?.hubBasePath;
+  const p = examPathwaySurfacePrefix(pathway, opts);
   const qPath = pathwayHubChildPath(pathway, hub, "questions");
   const qbKey = "breadcrumbs.questionBank" as const;
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
-    pathwayProgrammaticParentCrumb(pathway, true),
-    pathwayHubCrumb(pathway, true, hub),
+    p.countryCrumb(true),
+    p.roleCrumb(true),
+    p.hubCrumb(true),
     { name: "Question bank", href: undefined, i18nKey: qbKey },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    pathwayProgrammaticParentSchema(pathway),
-    pathwayHubSchema(pathway, hub),
+    p.countrySchema(),
+    p.roleSchema(),
+    p.hubSchema(),
     { name: "Question bank", item: toAbsoluteSiteUrl(qPath), i18nKey: qbKey },
   ];
   return { crumbs, schemaItems };
@@ -218,17 +245,20 @@ export function pathwayCatPracticeBreadcrumbs(
   schemaItems: BreadcrumbSchemaItem[];
 } {
   const hub = opts?.hubBasePath;
+  const p = examPathwaySurfacePrefix(pathway, opts);
   const catPath = pathwayHubChildPath(pathway, hub, "cat");
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
-    pathwayProgrammaticParentCrumb(pathway, true),
-    pathwayHubCrumb(pathway, true, hub),
+    p.countryCrumb(true),
+    p.roleCrumb(true),
+    p.hubCrumb(true),
     { name: "CAT practice", href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    pathwayProgrammaticParentSchema(pathway),
-    pathwayHubSchema(pathway, hub),
+    p.countrySchema(),
+    p.roleSchema(),
+    p.hubSchema(),
     { name: "CAT practice", item: toAbsoluteSiteUrl(catPath) },
   ];
   return { crumbs, schemaItems };
@@ -243,18 +273,21 @@ export function pathwayPricingBreadcrumbs(
   schemaItems: BreadcrumbSchemaItem[];
 } {
   const hub = opts?.hubBasePath;
+  const p = examPathwaySurfacePrefix(pathway, opts);
   const pricingPath = pathwayHubChildPath(pathway, hub, "pricing");
   const pricingKey = "breadcrumbs.pricing" as const;
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
-    pathwayProgrammaticParentCrumb(pathway, true),
-    pathwayHubCrumb(pathway, true, hub),
+    p.countryCrumb(true),
+    p.roleCrumb(true),
+    p.hubCrumb(true),
     { name: "Pricing", href: undefined, i18nKey: pricingKey },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    pathwayProgrammaticParentSchema(pathway),
-    pathwayHubSchema(pathway, hub),
+    p.countrySchema(),
+    p.roleSchema(),
+    p.hubSchema(),
     { name: "Pricing", item: toAbsoluteSiteUrl(pricingPath), i18nKey: pricingKey },
   ];
   return { crumbs, schemaItems };

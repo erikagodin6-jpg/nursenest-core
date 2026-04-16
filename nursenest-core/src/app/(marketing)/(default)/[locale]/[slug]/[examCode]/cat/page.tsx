@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
@@ -202,10 +201,7 @@ export default async function PathwayCatEntryPage({ params }: Props) {
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
       <MarketingPathwayCatViewBeacon pathway={pathway} hubPath={marketingCatPath} />
-      <BreadcrumbJsonLd items={schemaItems} />
-      <div className="mb-6">
-        <BreadcrumbTrail items={crumbs} />
-      </div>
+      <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <Link href={overviewHref} className="text-sm font-medium text-primary hover:underline">
         ← {pathway.shortName} overview
       </Link>

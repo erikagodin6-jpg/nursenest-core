@@ -570,14 +570,14 @@
   --theme-topbar-bg: var(--theme-primary);
   --theme-topbar-text: #ffffff;
   /*
-   * Page background: 4% primary tint on a neutral base — subtle but perceivable.
-   * Creates visible separation from the pure-white card surfaces (#ffffff = --theme-card-bg).
-   * Previously 2% which was invisible; 5% caused noticeable full-page hue shifts.
-   * Base is neutral cool-gray (#f2f4f7) not pure white so the tint is anchored.
+   * Page + nav canvas: pure white. Theme identity shows in --theme-primary (buttons, links,
+   * focus rings, top bar), not full-width tinted backgrounds.
+   * Section rhythm uses --theme-surface-strong (Tailwind gray-50) via globals --bg-section-alt.
    */
-  --theme-page-bg: color-mix(in srgb, var(--theme-primary) 4%, #f2f4f7);
-  /* Nav: matches page bg for light themes (theme shows in topbar + context bar chrome) */
-  --theme-nav-bg: color-mix(in srgb, var(--theme-primary) 4%, #f2f4f7);
+  --theme-page-bg: #ffffff;
+  --theme-nav-bg: #ffffff;
+  /* gray-50 — alternating sections / muted bands (no hue from --theme-primary) */
+  --theme-surface-strong: #f9fafb;
   --theme-nav-text: #6b7280;
   --theme-nav-border: color-mix(in srgb, var(--theme-primary) 10%, transparent);
   --theme-menu-text: #374151;
@@ -608,23 +608,11 @@
    * so that [0,1,0,0] specificity correctly beats :root's [0,0,0,1].
    * Without this, the header stays ocean-blue tinted regardless of active light theme.
    */
-  --theme-header-surface: color-mix(in srgb, var(--theme-nav-bg) 94%, var(--theme-primary));
-  --nn-aesthetic-hero-glow: radial-gradient(
-    ellipse 88% 68% at 50% -8%,
-    color-mix(in srgb, var(--theme-primary) 22%, transparent),
-    transparent 58%
-  );
-  --nn-aesthetic-hero-mesh: radial-gradient(
-    circle at 78% 18%,
-    color-mix(in srgb, var(--theme-primary) 11%, transparent),
-    transparent 42%
-  );
-  --nn-aesthetic-frame-shine: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--theme-primary) 22%, transparent),
-    transparent 42%,
-    color-mix(in srgb, var(--theme-secondary) 35%, transparent)
-  );
+  --theme-header-surface: #ffffff;
+  /* Hero / frame accents: flat — theme color reserved for CTAs and links */
+  --nn-aesthetic-hero-glow: none;
+  --nn-aesthetic-hero-mesh: none;
+  --nn-aesthetic-frame-shine: none;
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -650,7 +638,7 @@
   --theme-border: #e9e2ff;
   --theme-ring: #d4c7f7;
 
-  --theme-page-bg: #fdfcfa;
+  --theme-page-bg: #ffffff;
   --theme-nav-bg: #ffffff;
   --theme-nav-text: #6b7280;
   --theme-nav-border: color-mix(in srgb, var(--theme-primary) 10%, transparent);
@@ -681,7 +669,7 @@
   --theme-accent-foreground: #9B8EC7;
   --theme-border: #E0D6F0;
   --theme-ring: #BDA6CE;
-  --theme-page-bg: #FBF8FF;
+  --theme-page-bg: #ffffff;
   --theme-heading-text: #5A4878;
   --theme-body-text: #6C5A8C;
   --theme-muted-text: #6C5A8C;
@@ -721,7 +709,7 @@
   --theme-accent-foreground: #3A52A0;
   --theme-border: #C8D4F8;
   --theme-ring: #5068CC;
-  --theme-page-bg: #F6F8FF;
+  --theme-page-bg: #ffffff;
   --theme-heading-text: #30405E;
   --theme-body-text: #6070A0;
   --theme-muted-text: #6070A0;
@@ -761,7 +749,7 @@
   --theme-accent-foreground: #AA6060;
   --theme-border: #F8CECE;
   --theme-ring: #ECA0A0;
-  --theme-page-bg: #FFF8F8;
+  --theme-page-bg: #ffffff;
   --theme-heading-text: #644040;
   --theme-body-text: #8A6060;
   --theme-muted-text: #8A6060;
@@ -801,7 +789,7 @@
   --theme-accent-foreground: #1D546D;
   --theme-border: #D4E6E8;
   --theme-ring: #1D546D;
-  --theme-page-bg: #F7FBFC;
+  --theme-page-bg: #ffffff;
   --theme-heading-text: #1E4050;
   --theme-body-text: #4A6875;
   --theme-muted-text: #4A6875;
@@ -842,7 +830,7 @@
   --theme-accent-foreground: #3A9E8F;
   --theme-border: #C8E6DE;
   --theme-ring: #3A9E8F;
-  --theme-page-bg: #F6FCFA;
+  --theme-page-bg: #ffffff;
   --theme-heading-text: #2A4A44;
   --theme-body-text: #4E7A6E;
   --theme-muted-text: #4E7A6E;
@@ -883,7 +871,7 @@
   --theme-accent-foreground: #C4788A;
   --theme-border: #EACFD6;
   --theme-ring: #C4788A;
-  --theme-page-bg: #FDF8F9;
+  --theme-page-bg: #ffffff;
   --theme-heading-text: #604A58;
   --theme-body-text: #7A5A66;
   --theme-muted-text: #7A5A66;
@@ -924,7 +912,7 @@
   --theme-accent-foreground: #8A6810;
   --theme-border: #EAD8B0;
   --theme-ring: #C49A18;
-  --theme-page-bg: #FDFBF2;
+  --theme-page-bg: #ffffff;
   --theme-heading-text: #5A4420;
   --theme-body-text: #8A7540;
   --theme-muted-text: #8A7540;
@@ -965,7 +953,7 @@
   --theme-accent-foreground: #6B8E6B;
   --theme-border: #CCD8CA;
   --theme-ring: #6B8E6B;
-  --theme-page-bg: #F8FAF7;
+  --theme-page-bg: #ffffff;
   --theme-heading-text: #3A5038;
   --theme-body-text: #5A6E58;
   --theme-muted-text: #5A6E58;
@@ -1006,7 +994,7 @@
   --theme-accent-foreground: #A06050;
   --theme-border: #F4D4C4;
   --theme-ring: #E89878;
-  --theme-page-bg: #FFFAF6;
+  --theme-page-bg: #ffffff;
   --theme-heading-text: #62382A;
   --theme-body-text: #8A6458;
   --theme-muted-text: #8A6458;
@@ -1047,7 +1035,7 @@
   --theme-accent-foreground: #4A7A9B;
   --theme-border: #C8DDE8;
   --theme-ring: #4A7A9B;
-  --theme-page-bg: #F6FAFC;
+  --theme-page-bg: #ffffff;
   --theme-heading-text: #2A3E54;
   --theme-body-text: #4E6A7E;
   --theme-muted-text: #4E6A7E;
@@ -1088,7 +1076,7 @@
   --theme-accent-foreground: #724090;
   --theme-border: #DEC8E8;
   --theme-ring: #9668B0;
-  --theme-page-bg: #FBF8FC;
+  --theme-page-bg: #ffffff;
   --theme-heading-text: #583A72;
   --theme-body-text: #785888;
   --theme-muted-text: #785888;
@@ -1129,7 +1117,7 @@
   --theme-accent-foreground: #7A5828;
   --theme-border: #E4D4BE;
   --theme-ring: #A07840;
-  --theme-page-bg: #FDFAF4;
+  --theme-page-bg: #ffffff;
   --theme-heading-text: #584220;
   --theme-body-text: #8A7450;
   --theme-muted-text: #8A7450;
@@ -1170,7 +1158,7 @@
   --theme-accent-foreground: #8A5060;
   --theme-border: #E4CED0;
   --theme-ring: #B07080;
-  --theme-page-bg: #FCF8F6;
+  --theme-page-bg: #ffffff;
   --theme-heading-text: #5A3844;
   --theme-body-text: #7A5A64;
   --theme-muted-text: #7A5A64;

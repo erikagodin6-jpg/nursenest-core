@@ -49,6 +49,7 @@ export function CountrySelector({
   variant = "popover",
   includeUnpublishedRegions = false,
 }: CountrySelectorProps) {
+  const { t } = useMarketingI18n();
   const [search, setSearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const groups = getRegionGroups({ includeUnpublishedRegions });
@@ -79,7 +80,7 @@ export function CountrySelector({
       : "w-full";
 
   return (
-    <div className={containerClass} role="listbox" aria-label="Select country">
+    <div className={containerClass} role="listbox" aria-label={t("nav.selectCountry")}>
       {/* Search */}
       <div className={`flex items-center gap-2 border-b border-[var(--border-subtle)] px-3 py-2 ${variant === "inline" ? "rounded-xl border bg-[var(--surface)]" : ""}`}>
         <Search className="h-3.5 w-3.5 shrink-0 text-[var(--theme-muted-text)]" aria-hidden />
@@ -88,12 +89,12 @@ export function CountrySelector({
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search countries..."
+          placeholder={t("nav.searchCountriesPlaceholder")}
           className="min-w-0 flex-1 bg-transparent text-xs text-[var(--theme-heading-text)] placeholder:text-[var(--theme-muted-text)] outline-none"
-          aria-label="Search countries"
+          aria-label={t("nav.searchCountriesAria")}
         />
         {search && (
-          <button type="button" onClick={() => setSearch("")} className="text-[var(--theme-muted-text)] hover:text-[var(--theme-heading-text)]" aria-label="Clear search">
+          <button type="button" onClick={() => setSearch("")} className="text-[var(--theme-muted-text)] hover:text-[var(--theme-heading-text)]" aria-label={t("nav.clearCountrySearch")}>
             <X className="h-3 w-3" />
           </button>
         )}
@@ -138,7 +139,7 @@ export function CountrySelector({
         ))}
         {filteredGroups.length === 0 && (
           <p className="px-3 py-4 text-center text-xs text-[var(--theme-muted-text)]">
-            No countries found
+            {t("nav.noCountriesFound")}
           </p>
         )}
       </div>

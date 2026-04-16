@@ -318,12 +318,8 @@ body {
   --header-cta-text: var(--theme-primary-button-text, var(--nav-cta-fg));
   --footer-surface: var(--footer-bg);
 
-  /*
-   * Hero branded wash — used as hero section base background.
-   * Stronger than the neutral page bg so the top of every page
-   * has immediate visual identity when the theme is applied.
-   */
-  --hero-branded-wash: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 14%, var(--bg-page));
+  /* Hero wash: neutral band (gray-50) — theme identity stays in primary CTAs / links, not full-width tint */
+  --hero-branded-wash: var(--bg-section-alt);
 
   /*
    * Multi-role accent surfaces — structured palette for chips, callouts, trust panels,
@@ -367,16 +363,14 @@ body {
   --focus-halo: color-mix(in srgb, var(--palette-ring, var(--theme-ring)) 34%, transparent);
   --focus-halo-strong: color-mix(in srgb, var(--palette-ring, var(--theme-ring)) 52%, transparent);
 
-  /* Hero / large marketing panels — same hue, soft glow */
-  --hero-gradient-start: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 12%, transparent);
+  --hero-gradient-start: transparent;
   --hero-gradient-end: transparent;
   --background-primary: var(--bg-page);
   --background-surface: var(--bg-card);
   --background-gradient: var(--nn-aesthetic-gradient-primary);
   --gradient-overlay: linear-gradient(180deg, transparent, transparent);
 
-  /* Stripes / panels that sit on the page canvas */
-  --theme-muted-surface: color-mix(in srgb, var(--palette-surface-alt, var(--theme-secondary, var(--palette-primary-deep))) 42%, var(--bg-page));
+  --theme-muted-surface: var(--bg-section-alt);
 
   /*
    * Vertical rhythm: owns padding/margins between sections (not max-width).
@@ -393,12 +387,12 @@ body {
   --nn-rhythm-btn-group-gap: 0.75rem;
   --nn-rhythm-card-grid-gap: clamp(0.75rem, 1.6vw, 1.125rem);
   --nn-rhythm-mobile-section-y: clamp(1.35rem, 3.6vw, 2.125rem);
-  --nn-presentation-wash: color-mix(in srgb, var(--theme-primary) 5.5%, var(--theme-page-bg));
-  --nn-presentation-panel: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-card-bg));
-  --nn-presentation-badge: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-card-bg));
-  --nn-presentation-trust-band: color-mix(in srgb, var(--theme-primary) 6.5%, var(--bg-page));
-  --nn-presentation-ribbon: color-mix(in srgb, var(--theme-primary) 4.5%, var(--theme-card-bg));
-  --nn-presentation-divider: color-mix(in srgb, var(--theme-primary) 12%, var(--theme-border));
+  --nn-presentation-wash: var(--bg-section-alt);
+  --nn-presentation-panel: var(--theme-card-bg);
+  --nn-presentation-badge: var(--bg-section-alt);
+  --nn-presentation-trust-band: var(--bg-section-alt);
+  --nn-presentation-ribbon: var(--theme-card-bg);
+  --nn-presentation-divider: var(--border-subtle);
 
   /*
    * Lesson section role backgrounds — per-theme overrides in theme-palettes.css.
@@ -429,9 +423,9 @@ body {
    * Per-theme overrides can be added in theme-palettes.css for fine control.
    * Fallbacks compose from existing surface + border tokens so all themes work.
    */
-  --lesson-media-surface: color-mix(in srgb, var(--theme-primary) 3.5%, var(--bg-page, var(--theme-page-bg)));
+  --lesson-media-surface: var(--bg-section-alt);
   --lesson-media-frame: var(--bg-card, var(--theme-card-bg));
-  --lesson-media-caption-surface: color-mix(in srgb, var(--theme-primary) 2%, var(--bg-card, var(--theme-card-bg)));
+  --lesson-media-caption-surface: var(--bg-section-alt);
   --lesson-media-border: var(--border-subtle, var(--theme-border));
   --lesson-media-label-text: var(--theme-muted-text);
   --lesson-media-caption-text: var(--theme-muted-text);
@@ -460,23 +454,18 @@ body {
   --color-popover-base: var(--bg-elevated);
   --color-popover-fg-base: var(--theme-body-text);
 
-  /* Theme-tinted depth (still restrained for long study sessions) */
-  /* Restrained depth: neutral first, slight theme tint (reads premium, not “glow template”) */
+  /* Depth: neutral shadows only (no primary-hued elevation) */
   --shadow-card:
-    0 1px 0 color-mix(in srgb, var(--theme-heading-text) 4%, transparent),
-    0 1px 2px color-mix(in srgb, var(--theme-heading-text) 6%, transparent),
-    0 12px 32px -16px color-mix(in srgb, var(--theme-primary) 8%, transparent);
-  --shadow-card-hover:
     0 1px 0 color-mix(in srgb, var(--theme-heading-text) 5%, transparent),
-    0 4px 16px -6px color-mix(in srgb, var(--theme-heading-text) 8%, transparent),
-    0 14px 40px -18px color-mix(in srgb, var(--theme-primary) 12%, transparent);
+    0 1px 3px color-mix(in srgb, var(--theme-heading-text) 8%, transparent);
+  --shadow-card-hover:
+    0 1px 0 color-mix(in srgb, var(--theme-heading-text) 6%, transparent),
+    0 4px 14px -4px color-mix(in srgb, var(--theme-heading-text) 12%, transparent);
   --shadow-elevated:
-    0 8px 28px -10px color-mix(in srgb, var(--theme-heading-text) 10%, transparent),
-    0 20px 48px -20px color-mix(in srgb, var(--theme-primary) 14%, transparent);
+    0 8px 24px -8px color-mix(in srgb, var(--theme-heading-text) 14%, transparent);
   --shadow-nav:
     0 1px 2px color-mix(in srgb, var(--theme-heading-text) 6%, transparent),
-    0 4px 16px -4px color-mix(in srgb, var(--theme-heading-text) 8%, transparent),
-    0 12px 28px -12px color-mix(in srgb, var(--theme-primary) 10%, transparent);
+    0 4px 16px -4px color-mix(in srgb, var(--theme-heading-text) 10%, transparent);
   --elevation-rest: var(--shadow-card);
   --elevation-hover: var(--shadow-card-hover);
   --elevation-active:
@@ -498,28 +487,10 @@ body {
   --nn-aesthetic-border-soft: var(--border-subtle);
   --nn-aesthetic-shadow-soft: var(--shadow-card);
   --nn-aesthetic-shadow-soft-hover: var(--shadow-card-hover);
-  --nn-aesthetic-gradient-primary: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--theme-primary) 38%, var(--theme-page-bg)),
-    color-mix(in srgb, var(--theme-primary) 16%, var(--theme-card-bg)),
-    color-mix(in srgb, var(--theme-secondary) 45%, var(--theme-page-bg))
-  );
-  --nn-aesthetic-hero-glow: radial-gradient(
-    ellipse 88% 68% at 50% -8%,
-    color-mix(in srgb, var(--theme-primary) 22%, transparent),
-    transparent 58%
-  );
-  --nn-aesthetic-hero-mesh: radial-gradient(
-    circle at 78% 18%,
-    color-mix(in srgb, var(--theme-primary) 11%, transparent),
-    transparent 42%
-  );
-  --nn-aesthetic-frame-shine: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--theme-primary) 22%, transparent),
-    transparent 42%,
-    color-mix(in srgb, var(--theme-secondary) 35%, transparent)
-  );
+  --nn-aesthetic-gradient-primary: none;
+  --nn-aesthetic-hero-glow: none;
+  --nn-aesthetic-hero-mesh: none;
+  --nn-aesthetic-frame-shine: none;
 }
 
 /* Dark palettes: stronger separation (flat navy + same accent reads as one blob) */
@@ -901,7 +872,8 @@ a {
   background: var(--bg-card, var(--theme-card-bg));
   border: 1px solid var(--border-subtle, var(--theme-card-border));
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-card);
+  /* Border defines the card; avoid border + shadow double-stacking on default cards */
+  box-shadow: none;
 }
 
 /**
@@ -1441,12 +1413,12 @@ article .prose :where(pre) {
 /* Marketing shell: flat page + one soft top wash (no stacked band gradients) */
 html[data-theme] .nn-marketing-surface {
   background-color: var(--page-bg, var(--bg-page));
-  background-image: radial-gradient(100% 42% at 50% 0%, var(--hero-gradient-start), transparent 70%);
+  background-image: none;
 }
 
-/* Homepage hero: layered soft glows (theme tokens only) */
+/* Homepage hero: flat canvas — theme accents live in CTAs / links */
 .nn-hero-pastel-layers {
-  background-image: var(--nn-aesthetic-hero-glow), var(--nn-aesthetic-hero-mesh);
+  background-image: none;
 }
 
 /* Optional: full-width section band on page canvas */
@@ -4264,41 +4236,7 @@ html[data-theme="deep-twilight"] .nn-exam-session:not(.nn-exam-session--neutral)
   border-color: var(--border-medium);
 }
 
-/* Richer pastel CTA gradients for flagship light themes (overrides generic color-mix) */
-html[data-theme="ocean"],
-html[data-theme="clinical-light"] {
-  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #7fcdff, #def3f6, #e8f7fc);
-}
-
-html[data-theme="lavender"],
-html[data-theme="pastel-lavender"],
-html[data-theme="lavender-dream"] {
-  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #c4b5fd, #fbcfe8);
-}
-
-html[data-theme="mint"],
-html[data-theme="pastel-mint"],
-html[data-theme="teal"] {
-  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #66b2b2, #b2d8d8, #e0f0f0);
-}
-
-html[data-theme="blush"] {
-  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #f3b0c3, #fee1e8, #fcf2f3);
-}
-
-html[data-theme="pastel-blush"] {
-  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #ff93ac, #ffaaa5, #fff0f2);
-}
-
-html[data-theme="strawberry"] {
-  /* Airy 3-stop: soft coral → blush → near-white pink */
-  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #fdb0c2, #fed7e1, #fff5f8);
-}
-
-html[data-theme="multi-pastel"] {
-  /* 2-stop periwinkle-blue → soft lavender — curated, not rainbow */
-  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #c8e6f7, #c8cef7);
-}
+/* Light themes: --nn-aesthetic-gradient-primary stays none (see :where([data-theme]) — no full-width pastel gradients). */
 
 /* --- Learner UX: rationale segments, skeletons, calm card lift --- */
 .nn-rationale-segment {

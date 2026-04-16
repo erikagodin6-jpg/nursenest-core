@@ -119,12 +119,12 @@ export function defaultFlashcardsMetaDescription(region: MarketingRegionToggle):
 
 export function defaultHomeMetaTitle(region: MarketingRegionToggle): string {
   return region === "US"
-    ? "NurseNest | NCLEX-RN & NCLEX-PN (LPN / LVN) — practice questions & lessons"
-    : "NurseNest | NCLEX-RN & REx-PN (RPN) — practice questions & lessons";
+    ? "NurseNest | NCLEX & global licensing prep — US RN/PN pathways + worldwide hubs"
+    : "NurseNest | NCLEX & global licensing prep — Canada RN/PN pathways + worldwide hubs";
 }
 
 export function defaultHomeMetaDescription(region: MarketingRegionToggle): string {
   return region === "US"
-    ? "NurseNest: NCLEX-RN and NCLEX-PN (LPN / LVN) practice questions, clinical lessons, and mock exams for US nursing candidates—plus NP and allied tracks."
-    : "NurseNest: NCLEX-RN and REx-PN (RPN) practice questions, clinical lessons, and mock exams for Canadian nursing candidates—plus NP and allied tracks.";
+    ? "NurseNest: NCLEX and global licensing prep—practice questions, lessons, and mock exams for US nursing candidates (NCLEX-RN, NCLEX-PN, NP, allied), with dedicated regional hubs worldwide."
+    : "NurseNest: NCLEX and global licensing prep—practice questions, lessons, and mock exams for Canadian candidates (NCLEX-RN, REx-PN, NP, allied), with dedicated regional hubs worldwide.";
 }

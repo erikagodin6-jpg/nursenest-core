@@ -9,6 +9,7 @@ import { hashPasswordResetToken } from "@/lib/password-reset-crypto";
 import { PASSWORD_RESET_TOKEN_TTL_MS } from "@/lib/auth/password-reset-constants";
 import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 export const runtime = "nodejs";
@@ -109,6 +110,14 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ ok: true, message: "Password updated. You can sign in now." });
   } catch (e) {
+    emitStructuredLog("password_reset_failed", "error", {
+      correlationId: correlation || undefined,
+      route: "/api/auth/reset-password",
+      method: "POST",
+      flow: "auth",
+      errorClass: e instanceof Error ? e.name : typeof e,
+      message: "password reset transaction failed",
+    });
     safeServerLogCritical("auth", "reset_password_failed", { surface: "api", correlation, severity: "error" }, e);
     return NextResponse.json(
       { ok: false, error: "Unable to reset password. Try again shortly." },

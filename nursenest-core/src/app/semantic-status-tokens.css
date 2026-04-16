@@ -9,8 +9,8 @@
  */
 /* First-paint defaults mirror the ocean/clinical-blue default theme. [data-theme] layers override all. */
 :root {
-  --semantic-bg-base: #f2fbfe;
-  --semantic-bg-soft: #e8f7fc;
+  --semantic-bg-base: #ffffff;
+  --semantic-bg-soft: #f9fafb;
   --semantic-surface: #ffffff;
   --semantic-surface-elevated: #ffffff;
   --semantic-border-soft: #bae6fd;
@@ -43,13 +43,13 @@
   --semantic-chart-5: #f3b0c3;
   --decorative-1: color-mix(in srgb, var(--semantic-info) 42%, var(--semantic-brand));
   --decorative-2: color-mix(in srgb, var(--semantic-success) 38%, var(--semantic-warning));
-  --semantic-panel-muted: color-mix(in srgb, var(--semantic-brand) 9%, var(--semantic-surface));
+  --semantic-panel-muted: #f9fafb;
   --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface));
   --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface));
   --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 11%, var(--semantic-surface));
-  --hero-gradient-start: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface));
-  --hero-gradient-mid: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface));
-  --hero-gradient-end: color-mix(in srgb, var(--semantic-success) 11%, var(--semantic-surface));
+  --hero-gradient-start: transparent;
+  --hero-gradient-mid: transparent;
+  --hero-gradient-end: transparent;
 }
 
 :where([data-theme]) {
@@ -86,8 +86,8 @@
   --semantic-chart-3: var(--semantic-info);
   --semantic-chart-4: var(--semantic-warning);
   --semantic-chart-5: #a855f7;
-  /* Learner surfaces: tinted panels instead of flat muted gray */
-  --semantic-panel-muted: color-mix(in srgb, var(--theme-primary) 8%, var(--bg-card));
+  /* Muted panels: neutral gray-50 — theme hue stays on controls / links */
+  --semantic-panel-muted: var(--bg-section-alt, #f9fafb);
   --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 10%, var(--bg-card));
   --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 10%, var(--bg-card));
   --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 11%, var(--bg-card));
@@ -104,7 +104,7 @@
    * ----------------------------------------------------------------------- */
   --surface-base: var(--bg-page);
   --surface-elevated: var(--bg-elevated);
-  --surface-soft-a: color-mix(in srgb, var(--theme-primary) 3.5%, var(--bg-page));
+  --surface-soft-a: var(--bg-section-alt, #f9fafb);
   --surface-soft-b: color-mix(in srgb, var(--semantic-success) 5%, var(--bg-card));
   --surface-soft-c: color-mix(in srgb, var(--semantic-info) 5%, var(--bg-card));
   --surface-emphasis: color-mix(in srgb, var(--semantic-brand) 8%, var(--bg-card));

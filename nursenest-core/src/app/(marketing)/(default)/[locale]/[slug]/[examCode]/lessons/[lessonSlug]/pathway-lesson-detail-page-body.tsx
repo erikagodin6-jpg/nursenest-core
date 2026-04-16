@@ -29,8 +29,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
 import { EeatContentAttribution } from "@/components/seo/eeat-content-attribution";
 import { PathwayLessonMedicalEducationJsonLd } from "@/components/seo/seo-json-ld";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { pathwayLessonDetailBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { getPathwayLessonContentDates } from "@/lib/seo/pathway-lesson-content-dates";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
@@ -223,10 +222,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
           datePublished={contentDates?.datePublished ?? null}
           dateModified={contentDates?.dateModified ?? null}
         />
-        <BreadcrumbJsonLd items={schemaItems} />
-        <div className="mb-4">
-          <BreadcrumbTrail items={crumbs} />
-        </div>
+        <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
         <PathwayLessonSequenceNavBar adjacent={lessonAdjacentHrefs} className="mb-4 hidden md:grid" />
         <PathwayLessonProgressTracker
           pathwayId={pathway.id}

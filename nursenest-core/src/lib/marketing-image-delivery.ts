@@ -9,12 +9,15 @@ export const MARKETING_HERO_MAX_DISPLAY_WIDTH = 1200;
 /** JPEG/WebP quality passed to `next/image` — balances ~150KB-class payloads at 1200w for UI screenshots (LCP / above-fold). */
 export const MARKETING_PHOTO_QUALITY = 72;
 
+/** Slightly higher quality for the homepage hero product panel — crisper UI text on retina displays. */
+export const MARKETING_PHOTO_QUALITY_HERO = 78;
+
 /** Slightly lower quality for below-fold marketing stills; keeps layout identical, trims transfer on `/_next/image`. */
 export const MARKETING_PHOTO_QUALITY_BELOW_FOLD = 68;
 
 /** Homepage hero column (primary product still). Mobile: full-bleed column (`100vw`); md+: half of the marketing grid. */
 export const MARKETING_HERO_LCP_SIZES =
-  "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, min(600px, 50vw)";
+  "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, min(720px, 50vw)";
 
 /** Intrinsic 16:10 dimensions at max marketing width — pairs with `next/image` `fill` for aspect-ratio hints. */
 export const MARKETING_HERO_INTRINSIC_WIDTH = 1200;

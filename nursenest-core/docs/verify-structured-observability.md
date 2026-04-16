@@ -48,7 +48,7 @@
 - **Edge `proxy`** (`src/proxy.ts`): ensures `x-nn-correlation-id` on incoming requests; logs `request_start` for `/api/*`.  
 - **Route handlers**: `correlationIdFromRequest` reads `x-nn-correlation-id` first, then platform ids (`x-vercel-id`, `x-request-id`, …).  
 - **RSC / `headers()`**: `correlationIdFromHeaders()` (async) for server components such as entitlement resolution.  
-- **Prisma extension** (`src/lib/db.ts`): `db_query_failed` / `db_query_slow` run outside a single HTTP request; structured lines include **Prisma error bucket/code** and **optional `queryHint`** (`Model.operation`) for `db_query_slow`. Join to `request_end` by **time + worker** if needed, or alert on **rate** alone.
+- **Prisma extension** (`src/lib/db.ts`): `db_query_failed` / `db_query_slow` attach **`route` + `correlationId`** when the request ran inside `runWithPrismaQueryContextFromRequest` (most `runWithApiTelemetry` routes). `db_query_slow` also includes low-cardinality query hint in `message`. Background jobs without ALS: alert on **rate** alone or use `request_end` time proximity.
 
 ## Alert-ready signals (log drain / `scope: structured`)
 
@@ -65,7 +65,7 @@
 | Checkout failure | `checkout_failed` | `errorClass` = reason (`unauthorized`, `session_failed`, …). |
 | Question API failure | `question_load_failed` | List, discovery, and `GET /api/questions/[id]` (subscriber vs freemium in `userState`). |
 | Lesson list failure | `lesson_load_failed` | `GET /api/lessons`. |
-| Entitlement read failure | `entitlement_resolve_failed` | RSC `resolveEntitlementForPage` and `GET /api/questions/[id]` when entitlement throws. |
+| Entitlement read failure | `entitlement_resolve_failed` | RSC `resolveEntitlementForPage`, `GET /api/questions/[id]`, **`requireSubscriberSession`** when `getUserAccess` throws. |
 | Signup / password | `signup_failed`, `password_reset_failed` | Auth flows. |
 
 **Wrapped routes** (emit `request_end`, `route_degraded`, `route_timeout`): include `GET /api/lessons`, `GET /api/questions`, `GET /api/questions/discovery`, `GET /api/questions/[id]`, `POST /api/exams/start`, `POST /api/subscriptions/checkout`, `POST /api/subscriptions/webhook`, `GET /api/public/home-stats`, synthetic cron — not every `/api/*` route.

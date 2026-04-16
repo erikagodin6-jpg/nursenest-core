@@ -18,6 +18,7 @@ import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-ser
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
+import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
 
 /** Literal required for Next segment config static analysis — keep in sync with `PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC`. */
 export const revalidate = 600;
@@ -63,10 +64,11 @@ export default async function LocalizedHomePage({ params }: Props) {
   const { locale } = await params;
   const raw = marketingHomeSurfaceBreadcrumbs();
   const marketingRegion = await getMarketingRegionFromCookies();
-  const [homeStatsRaw, primary, en] = await Promise.all([
+  const [homeStatsRaw, primary, en, publishedGlobalRegionCardIds] = await Promise.all([
     getCachedPublicHomeStats(),
     loadMarketingMessages(locale),
     loadMarketingMessages(DEFAULT_MARKETING_LOCALE),
+    listPublishedHomeGlobalRegionCardIds(),
   ]);
   const homeMarketingStats = {
     questionCount: homeStatsRaw.questionCount,
@@ -99,7 +101,10 @@ export default async function LocalizedHomePage({ params }: Props) {
           <BreadcrumbTrail items={crumbs} />
         </div>
       ) : null}
-      <HomeRestoredClient homeMarketingStats={homeMarketingStats} />
+      <HomeRestoredClient
+        homeMarketingStats={homeMarketingStats}
+        publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
+      />
     </>
   );
 }

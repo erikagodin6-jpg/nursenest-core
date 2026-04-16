@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { pathwayPricingBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
@@ -48,10 +47,7 @@ export default async function ExamPathwayPricingPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      <BreadcrumbJsonLd items={schemaItems} />
-      <div className="mb-6">
-        <BreadcrumbTrail items={crumbs} />
-      </div>
+      <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <Link href={buildExamPathwayPath(pathway)} className="text-sm font-medium text-primary hover:underline">
         ← {pathway.shortName} overview
       </Link>

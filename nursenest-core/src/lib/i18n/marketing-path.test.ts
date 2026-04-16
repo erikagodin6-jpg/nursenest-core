@@ -6,6 +6,7 @@ import {
   isExpansionExamMarketingPath,
 } from "@/lib/i18n/exam-hub-path";
 import { globalRegionSlugFromExpansionExamsPathname } from "@/lib/marketing/expansion-exams-path-gate";
+import { globalRegionSlugFromRegionalMarketingPublicPath } from "@/lib/marketing/regional-marketing-public-gate";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 
 test("withMarketingLocale prefixes non-English marketing paths", () => {
@@ -54,6 +55,13 @@ test("globalRegionSlugFromExpansionExamsPathname maps /exams segments to GlobalR
   assert.equal(globalRegionSlugFromExpansionExamsPathname("/fr/exams/japan"), "japan");
   assert.equal(globalRegionSlugFromExpansionExamsPathname("/exams"), null);
   assert.equal(globalRegionSlugFromExpansionExamsPathname("/pricing"), null);
+});
+
+test("globalRegionSlugFromRegionalMarketingPublicPath covers /exams and country-topic trees", () => {
+  assert.equal(globalRegionSlugFromRegionalMarketingPublicPath("/exams/japan"), "japan");
+  assert.equal(globalRegionSlugFromRegionalMarketingPublicPath("/japan/nursing-exam"), "japan");
+  assert.equal(globalRegionSlugFromRegionalMarketingPublicPath("/fr/japan/nursing-exam"), "japan");
+  assert.equal(globalRegionSlugFromRegionalMarketingPublicPath("/pricing"), null);
 });
 
 test("canonicalExamHubPathFromPossiblyLocalizedPath strips non-English locale prefixes from exam hubs", () => {

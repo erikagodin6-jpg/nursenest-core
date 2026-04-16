@@ -8,6 +8,7 @@ import { emitMonitoringRecord } from "@/lib/observability/observability-record";
 import { correlationIdFromRequest } from "@/lib/observability/correlation-id";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { sentryCount, sentryDistribution } from "@/lib/observability/sentry-metrics";
+import { getPrismaQueryContext } from "@/lib/server/prisma-query-context";
 
 export type CredentialsLoginFailureBucket =
   | "rate_limited"
@@ -71,14 +72,19 @@ export function recordPrismaClientQueryError(err: unknown): void {
   const bucket = prismaClientErrorBucket(err);
   const prismaCode =
     err instanceof Prisma.PrismaClientKnownRequestError ? err.code : undefined;
+  const ctx = getPrismaQueryContext();
   sentryCount("db.client.error", 1, { bucket });
   emitMonitoringRecord({
     scope: "db",
     event: "prisma_client_error",
     severity: "error",
+    correlationId: ctx?.correlationId,
+    route: ctx?.route,
     meta: { bucket, ...(prismaCode ? { prismaCode } : {}) },
   });
   emitStructuredLog("db_query_failed", "error", {
+    correlationId: ctx?.correlationId,
+    route: ctx?.route,
     errorClass: prismaCode ? `${bucket}:${prismaCode}` : bucket,
     message: `prisma client error (${bucket})${prismaCode ? ` ${prismaCode}` : ""}`,
   });
@@ -224,7 +230,7 @@ export function recordPaywallProofNeutral(surface: "fallback" | "safe_mode" | "p
  * Structured `entitlement_resolve_failed` is emitted at call sites; this adds Sentry Metrics + `nn.observability.v1` for dashboards.
  */
 export function recordEntitlementResolveFailureSignal(
-  surface: "page" | "api_questions_id",
+  surface: "page" | "api_questions_id" | "subscriber_api",
   correlationId?: string,
 ): void {
   sentryCount("entitlement.resolve.failure", 1, { surface });

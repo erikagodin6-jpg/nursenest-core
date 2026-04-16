@@ -19,8 +19,8 @@ import { isRateLimitingEnabled } from "@/lib/config/production-safety-flags";
 import { enforceApiRateLimit } from "@/lib/server/rate-limit";
 import {
   REGIONAL_EXAM_MARKETING_FALLBACK_PATH,
-  globalRegionSlugFromExpansionExamsPathname,
 } from "@/lib/marketing/expansion-exams-path-gate";
+import { globalRegionSlugFromRegionalMarketingPublicPath } from "@/lib/marketing/regional-marketing-public-gate";
 import { EXAM_HUB_PREVIEW_COOKIE } from "@/lib/admin/exam-hub-preview-cookie";
 import { isRegionPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 
@@ -133,11 +133,11 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     return response;
   }
 
-  // Unpublished regional exam marketing hubs (`/exams/…`): redirect to a canonical public hub (no thin “placeholder” pages).
-  const expansionRegion = globalRegionSlugFromExpansionExamsPathname(pathname);
-  if (expansionRegion && !isRegionPublishedForPublicSite(expansionRegion)) {
+  // Unpublished regional marketing (`/exams/…` hubs + country-topic SEO trees): redirect to a published hub.
+  const gatedRegion = globalRegionSlugFromRegionalMarketingPublicPath(pathname);
+  if (gatedRegion && !isRegionPublishedForPublicSite(gatedRegion)) {
     const previewRegion = req.cookies.get(EXAM_HUB_PREVIEW_COOKIE)?.value ?? "";
-    const allowStaffPreview = previewRegion === expansionRegion;
+    const allowStaffPreview = previewRegion === gatedRegion;
     if (!allowStaffPreview) {
       const url = req.nextUrl.clone();
       url.pathname = REGIONAL_EXAM_MARKETING_FALLBACK_PATH;
@@ -187,5 +187,29 @@ export const config = {
     "/:locale/canada/:path*",
     "/:locale/exams",
     "/:locale/exams/:path*",
+    "/japan",
+    "/japan/:path*",
+    "/india",
+    "/india/:path*",
+    "/china",
+    "/china/:path*",
+    "/korea",
+    "/korea/:path*",
+    "/germany",
+    "/germany/:path*",
+    "/france",
+    "/france/:path*",
+    "/italy",
+    "/italy/:path*",
+    "/hungary",
+    "/hungary/:path*",
+    "/portugal",
+    "/portugal/:path*",
+    "/mexico",
+    "/mexico/:path*",
+    "/australia",
+    "/australia/:path*",
+    "/middle-east",
+    "/middle-east/:path*",
   ],
 };
