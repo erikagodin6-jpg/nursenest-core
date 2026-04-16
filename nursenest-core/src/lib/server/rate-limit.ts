@@ -36,6 +36,9 @@ const LEARNER_PREFIXES = [
 /** Billing / newsletter — expensive or spam-prone; separate bucket from generic public API. */
 const BILLING_RATE_PATH_PREFIXES = ["/api/subscriptions/checkout", "/api/subscribe"] as const;
 
+/** Public pricing matrix — scraped by bots; dedicated cap before generic `/api/*`. */
+const PRICING_PATH_PREFIX = "/api/pricing";
+
 /** Subscription APIs (portal, status) — tighter per-IP cap than generic `/api/*` (webhook exempt in {@link isExemptPath}). */
 const SUBSCRIPTION_API_STRICT_PREFIX = "/api/subscriptions/";
 const SUBSCRIPTION_STRICT_WINDOW_MS = 60_000;
@@ -45,7 +48,10 @@ const SUBSCRIPTION_STRICT_MAX = 40;
 const AI_EXPENSIVE_PREFIXES = ["/api/coach", "/api/ai"] as const;
 
 const BILLING_WINDOW_MS = 60_000;
-const BILLING_MAX = 24;
+const BILLING_MAX = 18;
+
+const PRICING_WINDOW_MS = 60_000;
+const PRICING_MAX = 20;
 
 const AI_EXPENSIVE_WINDOW_MS = 60_000;
 const AI_EXPENSIVE_MAX = 36;
@@ -65,32 +71,32 @@ const ADMIN_API_MAX_PER_IP_UNAUTH = 90;
 
 /** Signup — per IP (stricter than generic public; bots target this). */
 const SIGNUP_WINDOW_MS = 60_000;
-const SIGNUP_MAX = 5;
+const SIGNUP_MAX = 4;
 
 /** Per auth *kind* so login throttles don’t consume forgot-password quota (and vice versa). */
 const AUTH_KIND_LIMITS: Record<string, { windowMs: number; max: number }> = {
-  signin: { windowMs: 60_000, max: 10 },
-  callback: { windowMs: 60_000, max: 24 },
-  csrf: { windowMs: 60_000, max: 45 },
-  providers: { windowMs: 60_000, max: 28 },
-  forgot: { windowMs: 60_000, max: 5 },
-  reset: { windowMs: 60_000, max: 5 },
-  change: { windowMs: 60_000, max: 5 },
-  register: { windowMs: 60_000, max: 8 },
-  error: { windowMs: 60_000, max: 18 },
-  auth_other: { windowMs: 60_000, max: 10 },
+  signin: { windowMs: 60_000, max: 6 },
+  callback: { windowMs: 60_000, max: 20 },
+  csrf: { windowMs: 60_000, max: 40 },
+  providers: { windowMs: 60_000, max: 24 },
+  forgot: { windowMs: 60_000, max: 4 },
+  reset: { windowMs: 60_000, max: 4 },
+  change: { windowMs: 60_000, max: 4 },
+  register: { windowMs: 60_000, max: 6 },
+  error: { windowMs: 60_000, max: 16 },
+  auth_other: { windowMs: 60_000, max: 8 },
 };
 
 const PUBLIC_WINDOW_MS = 60_000;
-const PUBLIC_MAX = 48;
+const PUBLIC_MAX = 36;
 
 /** Marketing / public JSON under `/api/public/*` (cached counts, tags) — scanners love these. */
 const PUBLIC_JSON_WINDOW_MS = 60_000;
-const PUBLIC_JSON_MAX = 28;
+const PUBLIC_JSON_MAX = 16;
 
 /** Hot stats endpoint — hammered by bots + homepage; tight per IP before generic public_json. */
 const HOME_STATS_WINDOW_MS = 60_000;
-const HOME_STATS_MAX = 20;
+const HOME_STATS_MAX = 10;
 
 const LEARNER_WINDOW_MS = 60_000;
 const LEARNER_MAX = 120;
@@ -181,6 +187,11 @@ export function isBillingRateLimitPath(pathname: string): boolean {
   return BILLING_RATE_PATH_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 }
 
+/** Public pricing catalog JSON — scraped heavily; separate bucket before generic `/api/*`. */
+export function isPricingRateLimitPath(pathname: string): boolean {
+  return pathname === PRICING_PATH_PREFIX || pathname.startsWith(`${PRICING_PATH_PREFIX}/`);
+}
+
 /** Exported for policy tests — Study Coach + `/api/ai/*`. */
 export function isAiExpensiveRateLimitPath(pathname: string): boolean {
   return AI_EXPENSIVE_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
@@ -212,10 +223,13 @@ function json429WithBackoff(ip: string): NextResponse {
   const streak = bump429Streak(ip);
   const sec = retryAfterSecondsFrom429Streak(streak);
   return NextResponse.json(
-    { error: "Too many requests", code: "rate_limit_exceeded" },
+    { error: "Too many requests", code: "rate_limit_exceeded", retryAfterSec: sec },
     {
       status: 429,
-      headers: { "Retry-After": String(sec) },
+      headers: {
+        "Retry-After": String(sec),
+        "Cache-Control": "no-store",
+      },
     },
   );
 }
@@ -223,10 +237,10 @@ function json429WithBackoff(ip: string): NextResponse {
 /** Subscriber learner bucket: fixed Retry-After (no exponential on user id — avoids punishing shared devices unfairly). */
 function json429LearnerFixed(): NextResponse {
   return NextResponse.json(
-    { error: "Too many requests", code: "rate_limit_exceeded" },
+    { error: "Too many requests", code: "rate_limit_exceeded", retryAfterSec: 60 },
     {
       status: 429,
-      headers: { "Retry-After": "60" },
+      headers: { "Retry-After": "60", "Cache-Control": "no-store" },
     },
   );
 }
@@ -234,10 +248,10 @@ function json429LearnerFixed(): NextResponse {
 /** Admin API bucket — fixed Retry-After; per-user key resists stolen-session floods. */
 function json429AdminFixed(): NextResponse {
   return NextResponse.json(
-    { error: "Too many requests", code: "rate_limit_exceeded", scope: "admin_api" },
+    { error: "Too many requests", code: "rate_limit_exceeded", scope: "admin_api", retryAfterSec: 60 },
     {
       status: 429,
-      headers: { "Retry-After": "60" },
+      headers: { "Retry-After": "60", "Cache-Control": "no-store" },
     },
   );
 }
@@ -306,6 +320,16 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     const { ok } = await checkRateLimitUnified(key, { windowMs: BILLING_WINDOW_MS, max: BILLING_MAX });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "billing", path: pathname.slice(0, 96) });
+      return json429WithBackoff(ip);
+    }
+    return null;
+  }
+
+  if (isPricingRateLimitPath(pathname)) {
+    const key = `ratelimit:pricing:ip:${ip}`;
+    const { ok } = await checkRateLimitUnified(key, { windowMs: PRICING_WINDOW_MS, max: PRICING_MAX });
+    if (!ok) {
+      safeServerLog("security", "rate_limit_exceeded", { kind: "pricing", path: pathname.slice(0, 96) });
       return json429WithBackoff(ip);
     }
     return null;

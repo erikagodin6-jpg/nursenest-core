@@ -157,7 +157,6 @@ for (const row of PRENURSING_ALLIED_PATHWAY_MATRIX) {
         const tag = `${row.key}-${row.pathwayId}`;
 
         await test.step("Lessons hub + sample (entitled pathway)", async () => {
-          const { pathwayLessonsHubAndSample } = await import("../helpers/pathway-surface-flows");
           await pathwayLessonsHubAndSample({ page, pathwayId: row.pathwayId, surfaceTag: tag, observers });
         });
 

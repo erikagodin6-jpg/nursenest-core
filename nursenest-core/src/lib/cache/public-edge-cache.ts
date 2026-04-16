@@ -28,7 +28,3 @@ export const CACHE_HEADER_HOME_STATS: HeadersInit = {
 export const CACHE_HEADER_PUBLIC_LIST: HeadersInit = {
   "Cache-Control": "public, max-age=60, s-maxage=120, stale-while-revalidate=600, stale-if-error=3600",
 };
-
-export function mergePublicCacheHeaders(base: HeadersInit | undefined, extra: HeadersInit): HeadersInit {
-  return { ...Object.fromEntries(new Headers(base).entries()), ...Object.fromEntries(new Headers(extra).entries()) };
-}

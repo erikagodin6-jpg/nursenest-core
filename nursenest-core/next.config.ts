@@ -175,8 +175,10 @@ const nextConfig: NextConfig = {
     }
     return [
       /**
-       * Do not set Cache-Control on `/_next/static/*`: Next.js already applies fingerprinted immutable caching,
-       * and overriding it triggers framework warnings without improving behavior.
+       * Do not set Cache-Control on `/_next/static/*`: Next.js already applies fingerprinted immutable caching.
+       * DigitalOcean / CDN in front should pass through `/_next/static/*` and `/favicon.ico` with long TTL.
+       * We do not set a blanket `no-store` on all `/api/*` — it would override `/api/public/*` edge caching;
+       * authenticated routes rely on dynamic handlers + `no-store` where needed.
        */
       /** Public marketing fallbacks + static marks (`/marketing/*`). */
       {

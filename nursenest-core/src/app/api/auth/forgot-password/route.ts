@@ -7,7 +7,6 @@ import {
   sanitizeRawLoginIdentifier,
 } from "@/lib/auth/normalize-login-identifier";
 import { JSON_BODY_AUTH_FORM, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
-import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import { prisma } from "@/lib/db";
 import { generatePasswordResetRawToken, hashPasswordResetToken } from "@/lib/password-reset-crypto";
 import { PASSWORD_RESET_TOKEN_TTL_MS } from "@/lib/auth/password-reset-constants";
@@ -151,14 +150,6 @@ async function runForgotPasswordFlow(
 export async function POST(req: Request) {
   const ip = clientIp(req);
   const correlation = correlationIdFromRequest(req) ?? "";
-  const rl = await checkRateLimitUnified(`forgot-password:${ip}`, { windowMs: 60_000, max: 8 });
-  if (!rl.ok) {
-    return NextResponse.json(
-      { ok: false, error: "Too many requests. Try again shortly." },
-      { status: 429 },
-    );
-  }
-
   const isProd = process.env.NODE_ENV === "production";
   if (isProd && !isPasswordResetEmailConfigured()) {
     safeServerLogCritical(

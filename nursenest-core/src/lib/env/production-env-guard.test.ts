@@ -20,5 +20,9 @@ describe("collectProductionEnvIssues", () => {
     assert.match(src, /auth_secret_short/);
     assert.match(src, /cron_secret_missing/);
     assert.match(src, /process\.exit\(1\)/);
+    assert.match(src, /spaces_credentials_missing/);
+    assert.match(src, /database_url_invalid_scheme/);
+    assert.match(src, /auth_url_has_path/);
+    assert.match(src, /strictProductionEnvEnabled/);
   });
 });

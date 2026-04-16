@@ -10,6 +10,7 @@ import {
   isAuthStrictPath,
   isBillingRateLimitPath,
   isHomeStatsRateLimitPath,
+  isPricingRateLimitPath,
   isPublicJsonRateLimitPath,
   retryAfterSecondsFrom429Streak,
 } from "@/lib/server/rate-limit";
@@ -26,6 +27,12 @@ describe("enforceApiRateLimit path classification", () => {
     assert.equal(isBillingRateLimitPath("/api/subscriptions/checkout"), true);
     assert.equal(isBillingRateLimitPath("/api/subscribe"), true);
     assert.equal(isBillingRateLimitPath("/api/subscriptions/webhook"), false);
+  });
+
+  it("marks public pricing JSON for dedicated per-IP bucket", () => {
+    assert.equal(isPricingRateLimitPath("/api/pricing"), true);
+    assert.equal(isPricingRateLimitPath("/api/pricing/options"), true);
+    assert.equal(isPricingRateLimitPath("/api/pricing-matrix"), false);
   });
 
   it("marks AI-heavy routes", () => {

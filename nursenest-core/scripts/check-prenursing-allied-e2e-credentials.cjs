@@ -19,12 +19,11 @@ const GENERIC = [
 const PREFIXES = [
   "QA_PRENURSING",
   "QA_PAID_PRE_NURSING",
+  "QA_ALLIED_US",
   "QA_ALLIED",
   "QA_PAID_ALLIED",
   "QA_ALLIED_CA",
   "QA_PAID_ALLIED_CA",
-  "QA_ALLIED_US",
-  "QA_PAID_RN",
 ];
 
 let ok = GENERIC.some(([e, p]) => pairOk(e, p));
@@ -33,7 +32,8 @@ if (!ok) ok = PREFIXES.some((prefix) => pairOk(`${prefix}_EMAIL`, `${prefix}_PAS
 if (!ok) {
   console.error(
     "qa:pathways:prenursing-allied requires QA_PAID_EMAIL+QA_PAID_PASSWORD (or E2E_PAID_* / PLAYWRIGHT_TEST_*), " +
-      "or QA_PRENURSING_*, QA_ALLIED_*, QA_ALLIED_CA_* pairs — see pathway-prenursing-allied-matrix.ts.",
+      "or pathway-specific pairs (QA_PRENURSING_*, QA_ALLIED_US_*, QA_ALLIED_CA_*, QA_PAID_PRE_NURSING_*, …) — " +
+      "see tests/e2e/helpers/pathway-prenursing-allied-matrix.ts. The suite asserts session tier/country per row.",
   );
   process.exit(1);
 }
