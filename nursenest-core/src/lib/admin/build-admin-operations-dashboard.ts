@@ -17,6 +17,7 @@ import {
   type ContentScalabilityReport,
 } from "@/lib/scalability/build-content-scalability-report";
 import { ContentStatus } from "@prisma/client";
+import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
 
 const DASH_TIMEOUT_MS = 12_000;
 
@@ -82,7 +83,7 @@ function clampPageSize(n: number, max: number): number {
 function paginate<T>(arr: T[], page: number, pageSize: number): { items: T[]; page: number; pageSize: number; total: number } {
   const total = arr.length;
   const p = clampPage(page);
-  const ps = clampPageSize(pageSize, 100);
+  const ps = clampPageSize(pageSize, API_LIST_PAGE_SIZE_HARD_MAX);
   const start = (p - 1) * ps;
   return { items: arr.slice(start, start + ps), page: p, pageSize: ps, total };
 }
@@ -167,11 +168,11 @@ export async function buildAdminOperationsDashboard(
   raw: AdminOperationsDashboardQuery = {},
 ): Promise<AdminOperationsDashboard> {
   const pathwayPage = clampPage(raw.pathwayPage ?? 1);
-  const pathwayPageSize = clampPageSize(raw.pathwayPageSize ?? 12, 50);
+  const pathwayPageSize = clampPageSize(raw.pathwayPageSize ?? 12, API_LIST_PAGE_SIZE_HARD_MAX);
   const questionCrossTabPage = clampPage(raw.questionCrossTabPage ?? 1);
-  const questionCrossTabPageSize = clampPageSize(raw.questionCrossTabPageSize ?? 30, 60);
+  const questionCrossTabPageSize = clampPageSize(raw.questionCrossTabPageSize ?? 30, API_LIST_PAGE_SIZE_HARD_MAX);
   const topicTopPage = clampPage(raw.topicTopPage ?? 1);
-  const topicTopPageSize = clampPageSize(raw.topicTopPageSize ?? 25, 80);
+  const topicTopPageSize = clampPageSize(raw.topicTopPageSize ?? 25, API_LIST_PAGE_SIZE_HARD_MAX);
 
   const generatedAt = new Date().toISOString();
   const databaseConfigured = isDatabaseUrlConfigured();

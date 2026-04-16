@@ -69,16 +69,21 @@ This runs `script/compile-i18n.ts`, which:
 - **Legacy lesson JSON packs:** `client/src/lib/getI18n.ts` loads `/api/assets/translations/{lang}.json` for structured lesson overlays — distinct from global UI i18n.
 - **Pathway lesson file overlays:** `nursenest-core/public/i18n/educational-overlays/<locale>/lessons.json` plus optional `fragments/*.json` (sorted, deep-merged per lesson key at runtime in `educational-content-overlay.ts`).
 
+## Translation engineering policy
+
+Strict rules for shard sizes, content types, admin vs public bundles, and avoiding raw UI strings: **[docs/i18n-translation-engineering-policy.md](./i18n-translation-engineering-policy.md)**.
+
 ## Validation commands
 
 | Command | Purpose |
 |--------|---------|
 | `npm run i18n:compile` | Regenerate merged JSON for all locales |
-| `npm run i18n:validate` | Key parity, file presence, empty-value warnings |
+| `npm run i18n:validate` | Key parity, file presence, empty-value warnings, compiled shard / monolith size caps |
 | `npm run i18n:check-drift` | Ensures marketing keys are included in merged `en.json` |
 | `npm run i18n:repair-marketing` | Full marketing pipeline: compile → sync audited keys to `marketing-en.json` → fill nav/footer overlays → compile → validate + drift + nav checks |
 | `npm run i18n:status` | Writes `reports/i18n-status.json` (diagnostics snapshot) |
-| `npm run i18n:scan` / `i18n:scan:ci` | Hardcoded-string scan (see `i18n-scan.config.json`) |
+| `npm run i18n:scan` / `i18n:scan:ci` | Hardcoded-string scan — Vite `client/src` (see `i18n-scan.config.json`) |
+| `npm run i18n:scan:next` | Hardcoded-string scan — nursenest-core marketing + student + shared components |
 | `npm run i18n:audit-payload` | Size / duplicate / long-value report → `tools/i18n/reports/i18n-payload-audit.json` (run after compile) |
 
 ## Adding a new language

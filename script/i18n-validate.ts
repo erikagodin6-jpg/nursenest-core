@@ -8,12 +8,17 @@
  * - Each locale: every key from tools/i18n/source/i18n-{lang}.ts exists in merged JSON
  * - Marketing locale overlays: same key set as tools/i18n/marketing/marketing-en.json (en has no overlay file)
  * - Placeholder parity: for every key, {{mustache}} placeholder names match English merged bundle
+ * - Compiled file sizes: Next `public/i18n` per-shard and legacy monolith caps (i18n-translation-engineering-policy)
  *
  * Flags:
  * - `--strict` or `I18N_VALIDATE_STRICT=1` — empty string values are **errors** (not warnings).
  */
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "fs";
 import path from "path";
+import {
+  I18N_MAX_LEGACY_MONOLITH_FILE_BYTES,
+  I18N_MAX_SHARD_FILE_BYTES,
+} from "../shared/i18n-translation-engineering-policy";
 import { DEFAULT_ADMIN_ONLY_I18N_ROOT, readMergedBundleFromNextPublicI18n } from "./lib/next-public-i18n-bundle";
 import { I18N_LANGUAGES } from "./merge-marketing-i18n";
 import { REPO_ROOT } from "./repo-root";
@@ -69,6 +74,39 @@ function strictEmptyMode(): boolean {
   return process.argv.includes("--strict") || process.env.I18N_VALIDATE_STRICT === "1";
 }
 
+/** Enforce max shard / monolith file sizes (see shared/i18n-translation-engineering-policy.ts). */
+function validateCompiledTranslationFileSizes(nextI18nDir: string, errors: string[]): void {
+  if (!existsSync(nextI18nDir)) return;
+  for (const entry of readdirSync(nextI18nDir, { withFileTypes: true })) {
+    const full = path.join(nextI18nDir, entry.name);
+    if (entry.isFile() && entry.name.endsWith(".json")) {
+      const st = statSync(full);
+      if (st.size > I18N_MAX_LEGACY_MONOLITH_FILE_BYTES) {
+        errors.push(
+          `Translation file exceeds ${I18N_MAX_LEGACY_MONOLITH_FILE_BYTES} bytes (split shards or move content): ${path.relative(ROOT, full)}`,
+        );
+      }
+      continue;
+    }
+    if (!entry.isDirectory()) continue;
+    const locale = entry.name;
+    for (const shard of readdirSync(full)) {
+      if (!shard.endsWith(".json")) continue;
+      const fp = path.join(full, shard);
+      try {
+        const st = statSync(fp);
+        if (st.size > I18N_MAX_SHARD_FILE_BYTES) {
+          errors.push(
+            `[${locale}] shard file too large (${st.size} > ${I18N_MAX_SHARD_FILE_BYTES}): ${shard} — see docs/i18n-translation-engineering-policy.md`,
+          );
+        }
+      } catch {
+        errors.push(`[${locale}] unreadable shard: ${shard}`);
+      }
+    }
+  }
+}
+
 function main(): void {
   const errors: string[] = [];
   const warnings: string[] = [];
@@ -86,6 +124,8 @@ function main(): void {
     return;
   }
   const marketingCanonicalKeys = new Set(Object.keys(marketingEn).sort());
+
+  validateCompiledTranslationFileSizes(NEXT_I18N, errors);
 
   for (const lang of I18N_LANGUAGES) {
     if (lang !== "en") {

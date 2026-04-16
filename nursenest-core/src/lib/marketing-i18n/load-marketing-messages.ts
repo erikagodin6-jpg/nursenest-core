@@ -23,6 +23,10 @@ import { PUBLIC_I18N_SHARD_FILENAMES } from "@shared/i18n-shard-policy";
  * Optional: `MARKETING_I18N_CDN_BASE` loads bundles when files are not on disk. CDN payloads are
  * merged with on-disk English for any missing/empty keys so stale CDN objects cannot drop groups
  * like `home.landing.*`.
+ *
+ * **Caching:** On-disk JSON uses per-file mtime cache (`i18n-translation-cache.ts`). CDN responses
+ * are cached in-memory per `{cacheGeneration, locale, shard}`; generation comes from deploy id or
+ * `MARKETING_I18N_CDN_CACHE_REVISION` so new CDN blobs can invalidate without stale cross-locale reuse.
  */
 const MAX_MERGED_BUNDLE_BYTES = 12 * 1024 * 1024;
 
@@ -58,18 +62,12 @@ function marketingI18nCdnBase(): string | null {
   return b && /^https?:\/\//i.test(b) ? b.replace(/\/$/, "") : null;
 }
 
-/** In-flight dedupe for CDN fetches (locale key). */
+/** CDN: parsed JSON fragments and merged locale results (never mix locales — key includes locale). */
+const cdnFragmentCache = new Map<string, MarketingMessages>();
+const cdnLocaleMergedCache = new Map<string, MarketingMessages>();
 const cdnInflight = new Map<string, Promise<MarketingMessages | null>>();
-const cdnResolved = new Map<string, MarketingMessages>();
-
-/** Cached successful parse of on-disk English only (never cache empty/missing). */
-let englishDiskBundleCache: MarketingMessages | null = null;
-let englishDiskBundleLoadAttempted = false;
 
 function tryLoadEnglishDiskBundle(): MarketingMessages | null {
-  if (englishDiskBundleCache) return englishDiskBundleCache;
-  if (englishDiskBundleLoadAttempted) return null;
-  englishDiskBundleLoadAttempted = true;
   const dir = resolveNextI18nPublicDir();
   if (!dir) {
     safeServerLog("i18n", "merged_bundle_missing", { locale: DEFAULT_MARKETING_LOCALE });
@@ -81,7 +79,7 @@ function tryLoadEnglishDiskBundle(): MarketingMessages | null {
     if (existsSync(legacy)) {
       bytes = statSync(/* turbopackIgnore: true */ legacy).size;
     } else {
-      for (const name of I18N_SHARD_FILENAMES) {
+      for (const name of PUBLIC_I18N_SHARD_FILENAMES) {
         const fp = path.join(dir, DEFAULT_MARKETING_LOCALE, `${name}.json`);
         if (existsSync(fp)) bytes += statSync(/* turbopackIgnore: true */ fp).size;
       }
@@ -101,7 +99,6 @@ function tryLoadEnglishDiskBundle(): MarketingMessages | null {
       safeServerLog("i18n", "merged_bundle_read_failed", { locale: DEFAULT_MARKETING_LOCALE });
       return null;
     }
-    englishDiskBundleCache = parsed;
     return parsed;
   } catch {
     safeServerLog("i18n", "merged_bundle_read_failed", { locale: DEFAULT_MARKETING_LOCALE });
@@ -126,33 +123,79 @@ function loadFromDiskSync(locale: string): MarketingMessages | null {
   }
 }
 
+async function fetchCdnFragment(
+  cacheGen: string,
+  locale: string,
+  label: string,
+  url: string,
+): Promise<MarketingMessages | null> {
+  const fragmentKey = `${cacheGen}|${locale}|${label}`;
+  const hit = cdnFragmentCache.get(fragmentKey);
+  if (hit) return hit;
+
+  const inflightKey = `frag:${fragmentKey}`;
+  const pending = cdnInflight.get(inflightKey);
+  if (pending) return pending;
+
+  const work = (async () => {
+    try {
+      const res = await fetch(url, { cache: "force-cache" });
+      if (!res.ok) return null;
+      const part = normalizeMarketingMessagesRecord(await res.json());
+      if (Object.keys(part).length === 0) return null;
+      cdnFragmentCache.set(fragmentKey, part);
+      return part;
+    } catch {
+      return null;
+    } finally {
+      cdnInflight.delete(inflightKey);
+    }
+  })();
+
+  cdnInflight.set(inflightKey, work);
+  return work;
+}
+
 async function loadFromCdn(locale: string): Promise<MarketingMessages | null> {
   const base = marketingI18nCdnBase();
   if (!base) return null;
 
-  const hit = cdnResolved.get(locale);
-  if (hit) return hit;
+  const cacheGen = getTranslationCacheGeneration();
+  const mergedKey = `${cacheGen}|${locale}|merged`;
+  const mergedHit = cdnLocaleMergedCache.get(mergedKey);
+  if (mergedHit) return mergedHit;
 
-  const pending = cdnInflight.get(locale);
-  if (pending) return pending;
+  const mergedInflightKey = `merged:${mergedKey}`;
+  const pendingMerged = cdnInflight.get(mergedInflightKey);
+  if (pendingMerged) return pendingMerged;
 
-  const legacyUrl = `${base}/${encodeURIComponent(locale)}.json`;
   const work = (async () => {
     try {
-      let data: MarketingMessages | null = null;
+      const legacyUrl = `${base}/${encodeURIComponent(locale)}.json`;
       const legacyRes = await fetch(legacyUrl, { cache: "force-cache" });
+
+      let data: MarketingMessages | null = null;
       if (legacyRes.ok) {
-        data = normalizeMarketingMessagesRecord(await legacyRes.json());
+        const raw = normalizeMarketingMessagesRecord(await legacyRes.json());
+        if (Object.keys(raw).length === 0) {
+          safeServerLog("i18n", "cdn_bundle_fetch_failed", { locale, status: legacyRes.status });
+          return null;
+        }
+        cdnFragmentCache.set(`${cacheGen}|${locale}|legacy`, raw);
+        data = raw;
       } else {
         const merged: MarketingMessages = {};
-        for (const name of I18N_SHARD_FILENAMES) {
+        for (const name of PUBLIC_I18N_SHARD_FILENAMES) {
           const shardUrl = `${base}/${encodeURIComponent(locale)}/${encodeURIComponent(name)}.json`;
-          const res = await fetch(shardUrl, { cache: "force-cache" });
-          if (!res.ok) {
-            safeServerLog("i18n", "cdn_shard_fetch_failed", { locale, shard: name, status: res.status });
+          const part = await fetchCdnFragment(cacheGen, locale, `shard:${name}`, shardUrl);
+          if (!part) {
+            safeServerLog("i18n", "cdn_shard_fetch_failed", {
+              locale,
+              shard: name,
+              status: "missing",
+            });
             return null;
           }
-          const part = normalizeMarketingMessagesRecord(await res.json());
           for (const [k, v] of Object.entries(part)) {
             if (k in merged) {
               safeServerLog("i18n", "cdn_shard_duplicate_key_last_wins", {
@@ -166,26 +209,28 @@ async function loadFromCdn(locale: string): Promise<MarketingMessages | null> {
         }
         data = merged;
       }
+
       if (!data || Object.keys(data).length === 0) {
         safeServerLog("i18n", "cdn_bundle_fetch_failed", { locale, status: legacyRes.status });
         return null;
       }
+
       const enDisk = tryLoadEnglishDiskBundle();
       if (enDisk && Object.keys(enDisk).length > 0) {
         data = mergeMissingMessageKeys(data, enDisk);
       }
-      cdnResolved.set(locale, data);
+      cdnLocaleMergedCache.set(mergedKey, data);
       return data;
     } catch (e) {
       const detail = e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200);
       safeServerLog("i18n", "cdn_bundle_fetch_error", { locale, detail });
       return null;
     } finally {
-      cdnInflight.delete(locale);
+      cdnInflight.delete(mergedInflightKey);
     }
   })();
 
-  cdnInflight.set(locale, work);
+  cdnInflight.set(mergedInflightKey, work);
   return work;
 }
 

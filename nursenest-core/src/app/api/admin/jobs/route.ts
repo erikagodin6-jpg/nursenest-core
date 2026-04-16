@@ -5,9 +5,9 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { enqueueJob } from "@/lib/jobs/enqueue";
 import { prisma } from "@/lib/db";
+import { API_LIST_PAGE_SIZE_HARD_MAX, parseBoundedPageSize } from "@/lib/api/api-pagination-limits";
 
 const DEFAULT_TAKE = 50;
-const MAX_TAKE = 100;
 const MAX_OFFSET = 20_000;
 
 function parseJobStatus(raw: string | null): JobStatus | undefined {
@@ -19,7 +19,22 @@ export async function GET(req: NextRequest) {
   const gate = await requireAdmin();
   if (!gate.ok) return gate.response;
 
-  const take = Math.min(MAX_TAKE, Math.max(1, Number(req.nextUrl.searchParams.get("take") ?? String(DEFAULT_TAKE))));
+  const takeParsed = parseBoundedPageSize(req.nextUrl.searchParams.get("take"), {
+    min: 1,
+    max: API_LIST_PAGE_SIZE_HARD_MAX,
+    default: DEFAULT_TAKE,
+  }, "take");
+  if (!takeParsed.ok) {
+    return NextResponse.json(
+      {
+        error: takeParsed.error.message,
+        code: takeParsed.error.code,
+        ...(takeParsed.error.maxPageSize !== undefined ? { maxTake: takeParsed.error.maxPageSize } : {}),
+      },
+      { status: 400 },
+    );
+  }
+  const take = takeParsed.pageSize;
   const offset = Math.min(MAX_OFFSET, Math.max(0, Number(req.nextUrl.searchParams.get("offset") ?? "0")));
   const status = parseJobStatus(req.nextUrl.searchParams.get("status"));
   const typePrefix = req.nextUrl.searchParams.get("typePrefix")?.trim();
@@ -51,7 +66,7 @@ export async function GET(req: NextRequest) {
     jobs,
     take,
     offset,
-    maxTake: MAX_TAKE,
+    maxTake: API_LIST_PAGE_SIZE_HARD_MAX,
     maxOffset: MAX_OFFSET,
     filters: { status: status ?? null, typePrefix: typePrefix ?? null },
   });

@@ -15,6 +15,7 @@ import "server-only";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
 import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
+import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
 
 // ── Manual types (replace with Prisma imports after prisma generate) ─────────
 
@@ -178,7 +179,7 @@ export async function getPublishedLocalizedBlogPostsPage(params: {
   pageSize?: number;
 }): Promise<{ posts: LocalizedBlogIndexPost[]; total: number; page: number; pageSize: number }> {
   const safePage = Math.max(1, params.page);
-  const safeSize = Math.min(100, Math.max(1, Math.floor(params.pageSize ?? LOCALIZED_BLOG_LIST_PAGE_SIZE)));
+  const safeSize = Math.min(API_LIST_PAGE_SIZE_HARD_MAX, Math.max(1, Math.floor(params.pageSize ?? LOCALIZED_BLOG_LIST_PAGE_SIZE)));
   const now = new Date();
 
   const where = {
@@ -420,7 +421,7 @@ export async function getAdminLocalizedBlogList(params: {
   pageSize?: number;
 }): Promise<{ rows: LocalizedBlogAdminListRow[]; total: number }> {
   const safePage = Math.max(1, params.page ?? 1);
-  const safeSize = Math.min(100, Math.max(1, params.pageSize ?? 50));
+  const safeSize = Math.min(API_LIST_PAGE_SIZE_HARD_MAX, Math.max(1, params.pageSize ?? 50));
 
   const where: Record<string, unknown> = {};
   if (params.canonicalArticleId) where.canonicalArticleId = params.canonicalArticleId;

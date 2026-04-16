@@ -4,7 +4,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { MarketingI18nProvider } from "@/components/i18n/marketing-i18n-provider";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
-import { ADMIN_UI_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
+import { ADMIN_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
 
 export const dynamic = "force-dynamic";

@@ -13,6 +13,7 @@ import { prisma } from "@/lib/db";
 import { bodyStringToContentJson } from "@/lib/prisma/content-item-body";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import { tierCodeToContentItemTier } from "@/lib/prisma/exam-question-maps";
+import { ADMIN_API_LIST_PAGE, parseBoundedPageSize, parseListPage } from "@/lib/api/api-pagination-limits";
 
 const createSchema = z.object({
   title: z.string().min(4),
@@ -33,9 +34,7 @@ const createSchema = z.object({
   versionKey: z.string().max(200).nullable().optional(),
 });
 
-function parseListQuery(sp: URLSearchParams): AdminContentLessonListQuery {
-  const page = Math.max(1, Number(sp.get("page") ?? "1"));
-  const pageSize = Math.min(100, Math.max(10, Number(sp.get("pageSize") ?? "50")));
+function parseListQuery(sp: URLSearchParams, page: number, pageSize: number): AdminContentLessonListQuery {
   const statusRaw = sp.get("status");
   const status =
     statusRaw && Object.values(ContentStatus).includes(statusRaw as ContentStatus)
@@ -56,7 +55,23 @@ export async function GET(req: NextRequest) {
   const gate = await requireAdmin();
   if (!gate.ok) return gate.response;
 
-  const q = parseListQuery(req.nextUrl.searchParams);
+  const sp = req.nextUrl.searchParams;
+  const pageParsed = parseListPage(sp.get("page"));
+  if (!pageParsed.ok) {
+    return NextResponse.json({ error: pageParsed.error, code: "invalid_page" }, { status: 400 });
+  }
+  const sizeParsed = parseBoundedPageSize(sp.get("pageSize"), ADMIN_API_LIST_PAGE);
+  if (!sizeParsed.ok) {
+    return NextResponse.json(
+      {
+        error: sizeParsed.error.message,
+        code: sizeParsed.error.code,
+        ...(sizeParsed.error.maxPageSize !== undefined ? { maxPageSize: sizeParsed.error.maxPageSize } : {}),
+      },
+      { status: 400 },
+    );
+  }
+  const q = parseListQuery(sp, pageParsed.page, sizeParsed.pageSize);
   const where = buildContentLessonWhere(q);
   const skip = (q.page - 1) * q.pageSize;
 

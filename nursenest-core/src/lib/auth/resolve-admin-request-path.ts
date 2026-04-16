@@ -5,10 +5,12 @@ function normalizeToPathname(raw: string): string | null {
   const t = raw.trim();
   if (!t) return null;
   try {
-    const pathOnly = (t.includes("://") ? new URL(t).pathname : t.split("?")[0] ?? t).trim();
+    let pathOnly = (t.includes("://") ? new URL(t).pathname : t.split("?")[0] ?? t).trim();
     if (!pathOnly) return null;
+    if (!pathOnly.startsWith("/")) pathOnly = `/${pathOnly}`;
     if (pathOnly.startsWith("/admin") || pathOnly.startsWith("/api/admin")) {
-      return pathOnly.replace(/\/$/, "") || pathOnly;
+      const trimmed = pathOnly.replace(/\/$/, "");
+      return trimmed.length > 0 ? trimmed : pathOnly;
     }
   } catch {
     return null;
@@ -25,6 +27,7 @@ export async function resolveAdminRequestPath(): Promise<string> {
   const h = await headers();
   const headerCandidates = [
     h.get("x-nn-admin-path"),
+    h.get("x-nn-request-pathname"),
     h.get("x-invoke-path"),
     h.get("next-url"),
     h.get("x-forwarded-uri"),

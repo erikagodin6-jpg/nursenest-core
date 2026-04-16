@@ -68,17 +68,19 @@ export function parseListPage(raw: string | null): { ok: true; page: number } | 
 }
 
 /**
- * Parse bounded pageSize with explicit 400-ready errors (matches `/api/questions` behavior).
+ * Parse bounded pageSize (or similar list limit) with explicit 400-ready errors (matches `/api/questions` behavior).
+ * @param paramName — used in error messages (e.g. `"take"` for background jobs).
  */
 export function parseBoundedPageSize(
   raw: string | null,
   opts: { min: number; max: number; default: number },
+  paramName: string = "pageSize",
 ): { ok: true; pageSize: number } | { ok: false; error: PageSizeParseError } {
   const pageSizeParsed = raw === null || raw === "" ? opts.default : Number(raw);
   if (!Number.isFinite(pageSizeParsed) || !Number.isInteger(pageSizeParsed)) {
     return {
       ok: false,
-      error: { code: "invalid_page_size", message: "pageSize must be an integer" },
+      error: { code: "invalid_page_size", message: `${paramName} must be an integer` },
     };
   }
   if (pageSizeParsed < opts.min || pageSizeParsed > opts.max) {
@@ -86,7 +88,7 @@ export function parseBoundedPageSize(
       ok: false,
       error: {
         code: "page_size_limit",
-        message: `pageSize must be between ${opts.min} and ${opts.max}.`,
+        message: `${paramName} must be between ${opts.min} and ${opts.max}.`,
         maxPageSize: opts.max,
       },
     };

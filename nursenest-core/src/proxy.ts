@@ -22,10 +22,10 @@ function withPathnameHeader(request: NextRequest): NextRequest {
   const pathname = request.nextUrl.pathname;
   const requestHeaders = new Headers(request.headers);
 
-  if (
-    pathname.startsWith("/admin") ||
-    pathname.startsWith("/api/admin")
-  ) {
+  /** Trusted pathname for server RBAC + layouts (RSC must not rely on spoofable client headers). */
+  requestHeaders.set("x-nn-request-pathname", pathname);
+
+  if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
     requestHeaders.set("x-nn-admin-path", pathname);
   }
 
@@ -38,10 +38,7 @@ function withPathnameHeader(request: NextRequest): NextRequest {
     requestHeaders.set("x-nn-pathname", pathname);
   }
 
-  if (isExamHub || pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
-    return new NextRequest(request.url, { headers: requestHeaders });
-  }
-  return request;
+  return new NextRequest(request.url, { headers: requestHeaders });
 }
 
 export async function proxy(request: NextRequest, event: NextFetchEvent) {

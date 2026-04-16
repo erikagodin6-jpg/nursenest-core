@@ -2,6 +2,7 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
 import type { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { API_LIST_PAGE_SIZE_HARD_MAX, parseBoundedPageSize, parseListPage } from "@/lib/api/api-pagination-limits";
 
 export const runtime = "nodejs";
 
@@ -10,12 +11,32 @@ export async function GET(req: Request) {
   if (!gate.ok) return gate.response;
 
   const url = new URL(req.url);
-  const page = Math.max(1, Number(url.searchParams.get("page") || 1));
-  const pageSize = Math.min(80, Math.max(1, Number(url.searchParams.get("pageSize") || 24)));
-  const q = url.searchParams.get("q")?.trim() || "";
-  const type = url.searchParams.get("type")?.trim() || "all";
-  const tag = url.searchParams.get("tag")?.trim() || "";
-  const used = url.searchParams.get("used")?.trim() || "any";
+  const sp = url.searchParams;
+  const pageParsed = parseListPage(sp.get("page"));
+  if (!pageParsed.ok) {
+    return NextResponse.json({ error: pageParsed.error, code: "invalid_page" }, { status: 400 });
+  }
+  const sizeParsed = parseBoundedPageSize(sp.get("pageSize"), {
+    min: 1,
+    max: API_LIST_PAGE_SIZE_HARD_MAX,
+    default: 24,
+  });
+  if (!sizeParsed.ok) {
+    return NextResponse.json(
+      {
+        error: sizeParsed.error.message,
+        code: sizeParsed.error.code,
+        ...(sizeParsed.error.maxPageSize !== undefined ? { maxPageSize: sizeParsed.error.maxPageSize } : {}),
+      },
+      { status: 400 },
+    );
+  }
+  const page = pageParsed.page;
+  const pageSize = sizeParsed.pageSize;
+  const q = sp.get("q")?.trim() || "";
+  const type = sp.get("type")?.trim() || "all";
+  const tag = sp.get("tag")?.trim() || "";
+  const used = sp.get("used")?.trim() || "any";
 
   const and: Prisma.MediaAssetWhereInput[] = [];
 

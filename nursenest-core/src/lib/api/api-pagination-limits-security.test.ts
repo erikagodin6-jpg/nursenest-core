@@ -33,6 +33,13 @@ describe("parseBoundedPageSize", () => {
     if (!r.ok) throw new Error("expected ok");
     assert.equal(r.pageSize, MAX_QUESTION_PAGE_SIZE);
   });
+
+  it("uses custom param name in error messages", () => {
+    const r = parseBoundedPageSize("999", { min: 1, max: 50, default: 10 }, "take");
+    assert.equal(r.ok, false);
+    if (r.ok) throw new Error("expected failure");
+    assert.match(r.error.message, /take must be between/);
+  });
 });
 
 describe("deep pagination cap", () => {

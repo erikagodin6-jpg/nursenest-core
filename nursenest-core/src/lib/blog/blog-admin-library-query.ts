@@ -1,5 +1,6 @@
 import type { Prisma } from "@prisma/client";
 import { BlogPostStatus, CountryCode } from "@prisma/client";
+import { API_LIST_PAGE_SIZE_HARD_MAX, parseBoundedPageSize, parseListPage } from "@/lib/api/api-pagination-limits";
 
 /** Build Prisma where for admin blog list / library filters (query string). */
 export function buildAdminBlogListWhere(sp: URLSearchParams): Prisma.BlogPostWhereInput {
@@ -39,9 +40,26 @@ export function buildAdminBlogListWhere(sp: URLSearchParams): Prisma.BlogPostWhe
   return { AND: parts };
 }
 
-export function parseAdminBlogPagination(sp: URLSearchParams): { skip: number; take: number; page: number } {
-  const page = Math.max(1, Math.floor(Number(sp.get("page") ?? "1")) || 1);
-  const take = Math.min(100, Math.max(10, Math.floor(Number(sp.get("pageSize") ?? "40")) || 40));
-  const skip = (page - 1) * take;
-  return { page, take, skip };
+/** Admin blog list: same hard max as other list APIs; default page size 40. */
+export const ADMIN_BLOG_LIST_PAGE = {
+  min: 10,
+  max: API_LIST_PAGE_SIZE_HARD_MAX,
+  default: 40,
+} as const;
+
+export function parseAdminBlogPagination(
+  sp: URLSearchParams,
+):
+  | { ok: true; skip: number; take: number; page: number }
+  | { ok: false; error: string; code: string } {
+  const pageParsed = parseListPage(sp.get("page"));
+  if (!pageParsed.ok) {
+    return { ok: false, error: pageParsed.error, code: "invalid_page" };
+  }
+  const sizeParsed = parseBoundedPageSize(sp.get("pageSize"), ADMIN_BLOG_LIST_PAGE);
+  if (!sizeParsed.ok) {
+    return { ok: false, error: sizeParsed.error.message, code: sizeParsed.error.code };
+  }
+  const skip = (pageParsed.page - 1) * sizeParsed.pageSize;
+  return { ok: true, skip, take: sizeParsed.pageSize, page: pageParsed.page };
 }

@@ -7,6 +7,7 @@ import {
   getStaticBlogPost,
   listStaticBlogPostsForIndex,
 } from "@/lib/blog/static-blog-posts";
+import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
 
 /** @deprecated Use `isDatabaseUrlConfigured` from `@/lib/db/safe-database`. */
 export const isBlogDatabaseConfigured = isDatabaseUrlConfigured;
@@ -61,7 +62,7 @@ export async function getPublishedBlogPostsPage(
   scope?: BlogQueryScope,
 ): Promise<{ posts: BlogIndexPost[]; total: number; page: number; pageSize: number }> {
   const safePage = Math.max(1, page);
-  const safeSize = Math.min(100, Math.max(1, Math.floor(pageSize)));
+  const safeSize = Math.min(API_LIST_PAGE_SIZE_HARD_MAX, Math.max(1, Math.floor(pageSize)));
   const where = {
     AND: [
       { postStatus: BlogPostStatus.PUBLISHED },
@@ -324,7 +325,7 @@ export async function getPublishedBlogPostsByTagPage(
   pageSize: number,
 ): Promise<{ posts: BlogTagListPost[]; total: number; page: number; pageSize: number }> {
   const safePage = Math.max(1, page);
-  const safeSize = Math.min(100, Math.max(1, Math.floor(pageSize)));
+  const safeSize = Math.min(API_LIST_PAGE_SIZE_HARD_MAX, Math.max(1, Math.floor(pageSize)));
   const now = new Date();
   const where = { AND: [blogLiveWhere(now), { tags: { has: tag } }] };
   const [posts, total] = await Promise.all([

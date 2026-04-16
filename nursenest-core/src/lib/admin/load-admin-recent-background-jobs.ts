@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
+import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
 
 const DEFAULT_TAKE = 50;
 
@@ -19,7 +20,7 @@ export type AdminBackgroundJobRow = {
 export async function loadAdminRecentBackgroundJobs(
   take = DEFAULT_TAKE,
 ): Promise<{ jobs: AdminBackgroundJobRow[]; degraded: boolean }> {
-  const cap = Math.min(100, Math.max(1, Math.floor(take)));
+  const cap = Math.min(API_LIST_PAGE_SIZE_HARD_MAX, Math.max(1, Math.floor(take)));
   return withDatabaseFallback(
     async () => {
       const jobs = await prisma.backgroundJob.findMany({

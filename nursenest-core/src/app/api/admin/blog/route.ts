@@ -2,7 +2,12 @@ import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogP
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
-import { buildAdminBlogListWhere, parseAdminBlogPagination } from "@/lib/blog/blog-admin-library-query";
+import {
+  buildAdminBlogListWhere,
+  parseAdminBlogPagination,
+  ADMIN_BLOG_LIST_PAGE,
+} from "@/lib/blog/blog-admin-library-query";
+import { parseBoundedPageSize } from "@/lib/api/api-pagination-limits";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { prisma } from "@/lib/db";
 
@@ -67,16 +72,40 @@ export async function GET(req: NextRequest) {
 
   const sp = req.nextUrl.searchParams;
   const where = buildAdminBlogListWhere(sp);
-  const { skip, take, page } = parseAdminBlogPagination(sp);
-  /** Legacy: `take=80` without page — used by older callers */
-  const legacyTake = sp.get("page") == null && sp.get("pageSize") == null ? Math.min(200, Math.max(10, Number(sp.get("take") ?? "80"))) : null;
-  const effectiveTake = legacyTake ?? take;
-  const effectiveSkip = legacyTake != null ? 0 : skip;
+  /** Legacy: `take` without page/pageSize — older callers; capped at the same max as list APIs (50). */
+  const legacyMode = sp.get("page") == null && sp.get("pageSize") == null;
+  let effectiveTake: number;
+  let effectiveSkip: number;
+  let page: number;
+  if (legacyMode) {
+    const takeParsed = parseBoundedPageSize(sp.get("take"), ADMIN_BLOG_LIST_PAGE, "take");
+    if (!takeParsed.ok) {
+      return NextResponse.json(
+        {
+          error: takeParsed.error.message,
+          code: takeParsed.error.code,
+          ...(takeParsed.error.maxPageSize !== undefined ? { maxTake: takeParsed.error.maxPageSize } : {}),
+        },
+        { status: 400 },
+      );
+    }
+    effectiveTake = takeParsed.pageSize;
+    effectiveSkip = 0;
+    page = 1;
+  } else {
+    const parsed = parseAdminBlogPagination(sp);
+    if (!parsed.ok) {
+      return NextResponse.json({ error: parsed.error, code: parsed.code }, { status: 400 });
+    }
+    effectiveTake = parsed.take;
+    effectiveSkip = parsed.skip;
+    page = parsed.page;
+  }
 
   const [posts, total] = await Promise.all([
     prisma.blogPost.findMany({
       where,
-      orderBy: legacyTake != null ? [{ publishAt: "asc" }, { updatedAt: "desc" }] : { updatedAt: "desc" },
+      orderBy: legacyMode ? [{ publishAt: "asc" }, { updatedAt: "desc" }] : { updatedAt: "desc" },
       skip: effectiveSkip,
       take: effectiveTake,
       select: adminBlogListSelect,
@@ -125,7 +154,7 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({
     posts,
     total,
-    page: legacyTake != null ? 1 : page,
+    page: legacyMode ? 1 : page,
     pageSize: effectiveTake,
     counts: {
       draft: draftCount,

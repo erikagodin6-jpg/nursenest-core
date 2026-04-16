@@ -3,6 +3,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { createDemoUser } from "@/lib/demo-users/create-demo-user";
 import { prisma } from "@/lib/db";
+import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
 
 const postBodySchema = z.object({
   pathwayId: z.string().min(1),
@@ -18,7 +19,7 @@ export async function GET(req: Request) {
   const users = await prisma.user.findMany({
     where: { isDemoUser: true },
     orderBy: { createdAt: "desc" },
-    take: 100,
+    take: API_LIST_PAGE_SIZE_HARD_MAX,
     select: {
       id: true,
       email: true,

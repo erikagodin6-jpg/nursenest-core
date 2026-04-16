@@ -41,3 +41,12 @@ export const ADMIN_UI_MESSAGE_SHARDS = [
   ...LEARNER_APP_MESSAGE_SHARDS,
   ...ADMIN_ONLY_MESSAGE_SHARDS,
 ] as const satisfies readonly I18nShardFilename[];
+
+/**
+ * Admin shell header/footer only — omits heavy `pages` shard to keep `/admin` first paint fast.
+ * (Route bodies under `(admin)` load their own copy where needed.)
+ */
+export const ADMIN_LAYOUT_MESSAGE_SHARDS = [
+  ...MARKETING_CHROME_MESSAGE_SHARDS,
+  ...ADMIN_ONLY_MESSAGE_SHARDS,
+] as const satisfies readonly I18nShardFilename[];

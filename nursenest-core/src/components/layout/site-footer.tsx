@@ -108,110 +108,110 @@ export function SiteFooter() {
 
             <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-4">
               <div className="space-y-4">
-              <div className="flex items-center bg-transparent">
-                <SiteBrandLogoMark variant="footer" logoVariant="leaf" />
+                <div className="flex items-center bg-transparent">
+                  <SiteBrandLogoMark variant="footer" logoVariant="leaf" />
+                </div>
+                <p className="max-w-xs text-sm leading-relaxed text-[var(--footer-muted)]">
+                  Exam-focused prep for RN, LPN/LVN, NP, and Allied Health learners worldwide.
+                </p>
               </div>
-              <p className="max-w-xs text-sm leading-relaxed text-[var(--footer-muted)]">
-                Exam-focused prep for RN, {pnRoleLabel}, NP, and Allied Health learners worldwide.
-              </p>
-            </div>
 
-            <div>
-              <h3 className="mb-3 text-sm font-medium text-[var(--footer-fg)]">{formatTitleCase("Exam Pathways", locale)}</h3>
-              <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
-                <li>
-                  <FLink href={examHubs.rn}>RN</FLink>
-                </li>
-                <li>
-                  <FLink href={examHubs.pn}>{pnRoleLabel}</FLink>
-                </li>
-                <li>
-                  <FLink href={examHubs.np}>NP</FLink>
-                </li>
-                <li>
-                  <FLink href={examHubs.allied}>Allied Health</FLink>
-                </li>
-              </ul>
-            </div>
+              <div>
+                <h3 className="mb-3 text-sm font-medium text-[var(--footer-fg)]">{formatTitleCase("Exam Pathways", locale)}</h3>
+                <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
+                  <li>
+                    <FLink href={examHubs.rn}>RN</FLink>
+                  </li>
+                  <li>
+                    <FLink href={examHubs.pn}>{pnRoleLabel}</FLink>
+                  </li>
+                  <li>
+                    <FLink href={examHubs.np}>NP</FLink>
+                  </li>
+                  <li>
+                    <FLink href={examHubs.allied}>Allied Health</FLink>
+                  </li>
+                </ul>
+              </div>
 
-            <div>
-              <h3 className="mb-3 text-sm font-medium text-[var(--footer-fg)]">{formatTitleCase("Explore", locale)}</h3>
-              <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
-                {isLearnerNav && learnerExploreItems.length > 0
-                  ? learnerExploreItems.map((item) => (
-                      <li key={item.key}>
-                        <FLink href={item.href}>{formatTitleCase(t(learnerPrimaryNavLabelKey(item.key)), locale)}</FLink>
+              <div>
+                <h3 className="mb-3 text-sm font-medium text-[var(--footer-fg)]">{formatTitleCase("Explore", locale)}</h3>
+                <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
+                  {isLearnerNav && learnerExploreItems.length > 0
+                    ? learnerExploreItems.map((item) => (
+                        <li key={item.key}>
+                          <FLink href={item.href}>{formatTitleCase(t(learnerPrimaryNavLabelKey(item.key)), locale)}</FLink>
+                        </li>
+                      ))
+                    : (
+                        <>
+                          <li>
+                            <FLink href={explore.pricing}>Pricing</FLink>
+                          </li>
+                          <li>
+                            <FLink href={explore.lessons}>Lessons</FLink>
+                          </li>
+                          <li>
+                            <FLink href={explore.practiceQuestions}>Practice Questions</FLink>
+                          </li>
+                          <li>
+                            <FLink href={explore.blog}>Blog</FLink>
+                          </li>
+                          <li>
+                            <FLink href={explore.tools}>Tools</FLink>
+                          </li>
+                        </>
+                      )}
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="mb-3 text-sm font-medium text-[var(--footer-fg)]">{formatTitleCase("Account", locale)}</h3>
+                <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
+                  {isLearnerNav ? (
+                    <>
+                      <li>
+                        <Link
+                          href="/app"
+                          className="nn-footer-link break-words text-sm leading-relaxed [overflow-wrap:anywhere]"
+                        >
+                          {formatTitleCase("Dashboard", locale)}
+                        </Link>
                       </li>
-                    ))
-                  : (
-                      <>
-                        <li>
-                          <FLink href={explore.pricing}>Pricing</FLink>
-                        </li>
-                        <li>
-                          <FLink href={explore.lessons}>Lessons</FLink>
-                        </li>
-                        <li>
-                          <FLink href={explore.practiceQuestions}>Practice Questions</FLink>
-                        </li>
-                        <li>
-                          <FLink href={explore.blog}>Blog</FLink>
-                        </li>
-                        <li>
-                          <FLink href={explore.tools}>Tools</FLink>
-                        </li>
-                      </>
-                    )}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="mb-3 text-sm font-medium text-[var(--footer-fg)]">{formatTitleCase("Account", locale)}</h3>
-              <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
-                {isLearnerNav ? (
-                  <>
-                    <li>
-                      <Link
-                        href="/app"
-                        className="nn-footer-link break-words text-sm leading-relaxed [overflow-wrap:anywhere]"
-                      >
-                        {formatTitleCase("Dashboard", locale)}
-                      </Link>
-                    </li>
-                    <li>
-                      <FLink href="/contact">Contact Support</FLink>
-                    </li>
-                    <SiteFooterFeedbackTrigger />
-                    <li className="pt-1">
-                      <Link
-                        href={learnerContinueHref}
-                        className="nn-nav-cta inline-flex min-h-[40px] w-full max-w-[16rem] items-center justify-center rounded-xl px-4 py-2 text-sm font-medium sm:w-fit"
-                      >
-                        {formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
-                      </Link>
-                    </li>
-                  </>
-                ) : (
-                  <>
-                    <li>
-                      <FLink href={learnerSignInHref}>Login</FLink>
-                    </li>
-                    <li>
-                      <FLink href="/contact">Contact Support</FLink>
-                    </li>
-                    <SiteFooterFeedbackTrigger />
-                    <li className="pt-1">
-                      <Link
-                        href={startPracticingHref}
-                        className="nn-nav-cta inline-flex min-h-[40px] w-full max-w-[16rem] items-center justify-center rounded-xl px-4 py-2 text-sm font-medium sm:w-fit"
-                      >
-                        {formatTitleCase(PRIMARY_CTA, locale)}
-                      </Link>
-                    </li>
-                  </>
-                )}
-              </ul>
-            </div>
+                      <li>
+                        <FLink href="/contact">Contact Support</FLink>
+                      </li>
+                      <SiteFooterFeedbackTrigger />
+                      <li className="pt-1">
+                        <Link
+                          href={learnerContinueHref}
+                          className="nn-nav-cta inline-flex min-h-[40px] w-full max-w-[16rem] items-center justify-center rounded-xl px-4 py-2 text-sm font-medium sm:w-fit"
+                        >
+                          {formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
+                        </Link>
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li>
+                        <FLink href={learnerSignInHref}>Login</FLink>
+                      </li>
+                      <li>
+                        <FLink href="/contact">Contact Support</FLink>
+                      </li>
+                      <SiteFooterFeedbackTrigger />
+                      <li className="pt-1">
+                        <Link
+                          href={startPracticingHref}
+                          className="nn-nav-cta inline-flex min-h-[40px] w-full max-w-[16rem] items-center justify-center rounded-xl px-4 py-2 text-sm font-medium sm:w-fit"
+                        >
+                          {formatTitleCase(PRIMARY_CTA, locale)}
+                        </Link>
+                      </li>
+                    </>
+                  )}
+                </ul>
+              </div>
             </div>
           </div>
         </div>

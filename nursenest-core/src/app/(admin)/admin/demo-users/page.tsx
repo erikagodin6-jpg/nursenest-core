@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AdminDemoUsersPanel } from "@/components/admin/admin-demo-users-panel";
 import { listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
 import { prisma } from "@/lib/db";
+import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
 import { catPathwayRegionRoleLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 
 export const dynamic = "force-dynamic";
@@ -15,7 +16,7 @@ export default async function AdminDemoUsersPage() {
   const rows = await prisma.user.findMany({
     where: { isDemoUser: true },
     orderBy: { createdAt: "desc" },
-    take: 100,
+    take: API_LIST_PAGE_SIZE_HARD_MAX,
     select: {
       id: true,
       email: true,
