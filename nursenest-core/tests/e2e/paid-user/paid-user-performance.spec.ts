@@ -5,7 +5,7 @@
  */
 import { expect, test } from "@playwright/test";
 import { assertCoreLearnerDurability } from "../helpers/paid-durability";
-import { paidLessonsHubUrl } from "../helpers/paid-content-discovery";
+import { LESSON_HUB_CARD_LINKS, paidLessonsHubUrl } from "../helpers/paid-content-discovery";
 import { expectPaidLearnerShellReady } from "../helpers/paid-learner-shell";
 import {
   assertPaidUserGuardsClean,
@@ -62,7 +62,7 @@ test.describe("Paid user — slow optional APIs (shell stays up)", () => {
         expectNotLoginUrl(page);
         await expectPaidLearnerShellReady(page, "perf /app/lessons", { timeoutMs: 110_000 });
         await expectNoSubscriberPaywallSurface(page, "perf lessons hub");
-        const lessonLinks = page.locator('a[href^="/app/lessons/"]');
+        const lessonLinks = page.locator(LESSON_HUB_CARD_LINKS);
         await expect(lessonLinks.first()).toBeVisible({ timeout: 90_000 });
         await assertCoreLearnerDurability(page, "perf lessons hub");
       });

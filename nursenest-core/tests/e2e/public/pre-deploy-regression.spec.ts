@@ -19,6 +19,7 @@ import {
   requireOrigin,
   seedUsMarketingCookie,
 } from "../helpers/navigation-e2e";
+import { isLearnerNavInternalHref } from "../helpers/learner-shell";
 
 const usRn = LESSON_FLOW_PATHWAY_QA.find((x) => x.pathwayId === "us-rn-nclex-rn");
 if (!usRn) throw new Error("us-rn-nclex-rn missing from LESSON_FLOW_PATHWAY_QA");
@@ -158,12 +159,10 @@ test.describe("Pre-deploy regression — desktop", () => {
       [...new Set(els.map((a) => (a as HTMLAnchorElement).getAttribute("href") || ""))].filter(
         (h) =>
           h &&
-          !h.startsWith("/app") &&
+          !isLearnerNavInternalHref(h) &&
           h !== "/" &&
           !h.startsWith("/login?") &&
-          !h.startsWith("/signup?") &&
-          /** Full page navigation can exceed budget on heavy ISR routes; still validate with GET. */
-          h !== "/lessons",
+          !h.startsWith("/signup?"),
       ),
     );
     const sample = hrefs.slice(0, 8);

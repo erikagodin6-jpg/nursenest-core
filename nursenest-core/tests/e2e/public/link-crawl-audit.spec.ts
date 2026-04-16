@@ -20,6 +20,7 @@ import {
   type FetchHeadResult,
   type LinkCrawlRow,
 } from "../helpers/link-crawl-audit";
+import { isLearnerShell } from "../helpers/learner-shell";
 
 const base = getE2eBaseURL();
 
@@ -43,7 +44,7 @@ function resultForFetch(reqUrl: string, fr: FetchHeadResult): string {
   if (npReq !== npFin && fr.status < 400) {
     if (npReq.replace(/\/$/, "") === npFin.replace(/\/$/, "")) return "OK_REDIRECT_TRAILING_SLASH_ONLY";
     /** Unauthenticated `request.get` hits /app/* → /login — not a broken public link. */
-    if (npReq.startsWith("/app") && npFin.startsWith("/login")) return "OK_AUTH_REQUIRED_REDIRECT";
+    if (isLearnerShell(npReq) && npFin.startsWith("/login")) return "OK_AUTH_REQUIRED_REDIRECT";
     return `REDIRECT ${npReq} → ${npFin}`;
   }
   return "OK_200";

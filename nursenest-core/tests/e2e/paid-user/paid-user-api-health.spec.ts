@@ -13,6 +13,7 @@ import {
   PAID_CORE_SLOW_WARN_MS,
 } from "../helpers/paid-session-network-monitor";
 import {
+  LESSON_HUB_CARD_LINKS,
   paidFlashcardsHubUrl,
   paidLessonsHubUrl,
   paidQuestionsHubUrl,
@@ -83,7 +84,7 @@ test.describe("Paid user — API / network health (focused)", () => {
         await page.goto(paidLessonsHubUrl(), { waitUntil: "domcontentloaded" });
         assertNotLoginPage(page);
         await assertNoPaywallOrUpgradeCopy(page, "/app/lessons");
-        const first = page.locator('a[href^="/app/lessons/"]').first();
+        const first = page.locator(LESSON_HUB_CARD_LINKS).first();
         await expect(first).toBeVisible({ timeout: 120_000 });
         await first.click();
         await page.waitForLoadState("domcontentloaded");

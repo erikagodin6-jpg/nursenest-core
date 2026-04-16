@@ -20,6 +20,7 @@ import {
 } from "../helpers/auth-audit";
 import { attachPageObservers, logObserverDiagnostics } from "../helpers/attach-observers";
 import { getE2eBaseURL } from "../helpers/e2e-env";
+import { isLearnerShell } from "../helpers/learner-shell";
 
 const base = getE2eBaseURL();
 const scenarios: AuthAuditScenario[] = [];
@@ -230,7 +231,7 @@ test("valid login, callback URL, logout, guest redirect (needs credentials)", as
     await page.locator("#login-password").fill(creds.password);
     await clickSignInAndWaitForUrl(
       page,
-      (u) => u.pathname === "/app" || u.pathname.startsWith("/app/"),
+      (u) => isLearnerShell(u.pathname),
       "plain login → /app",
     );
     pass("valid-login-reaches-app", page.url(), nav.getChain());

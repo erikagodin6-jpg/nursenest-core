@@ -44,6 +44,7 @@ function pathnameUnderCanada(url: string): boolean {
 }
 
 async function waitForPathUnderRegion(page: Page, target: "us" | "canada"): Promise<void> {
+  /** Browser-only: `t` is the only closure value — do not reference Node helpers here. */
   await page.waitForFunction(
     (t) => {
       const p = new URL(window.location.href).pathname.replace(/\/$/, "") || "/";

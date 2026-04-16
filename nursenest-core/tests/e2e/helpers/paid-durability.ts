@@ -3,6 +3,7 @@
  * and core learner shell health assertions.
  */
 import { expect, type Page, type Response } from "@playwright/test";
+import { isAppOnboardingPath } from "./learner-shell";
 
 export type DurabilityPageState = {
   shellReady: boolean;
@@ -115,10 +116,16 @@ export class OnboardingBlockingFlowError extends Error {
   constructor(
     readonly detail: { url: string; context: string; lastNavigationStep?: string },
   ) {
+    let pathname = "";
+    try {
+      pathname = new URL(detail.url).pathname;
+    } catch {
+      pathname = "";
+    }
     super(
-      `onboardingBlockingFlow: blocked on /app/onboarding — url=${detail.url} context=${detail.context}${
+      `On /app/onboarding — complete onboarding or reset the paid QA seed (User.onboardingCompletedAt). onboardingBlockingFlow url=${detail.url} pathname=${pathname} context=${detail.context}${
         detail.lastNavigationStep ? ` lastStep=${detail.lastNavigationStep}` : ""
-      }. Fix: run scripts/qa-paid-test-account-reset.mts for paid E2E email (User.onboardingCompletedAt).`,
+      }. Fix: run scripts/qa-paid-test-account-reset.mts.`,
     );
     this.name = "OnboardingBlockingFlowError";
   }
@@ -135,7 +142,7 @@ export function assertSyncNotOnboardingBlocking(
   } catch {
     return;
   }
-  if (path === "/app/onboarding" || path.startsWith("/app/onboarding/")) {
+  if (isAppOnboardingPath(path)) {
     throw new OnboardingBlockingFlowError({
       url: page.url(),
       context,

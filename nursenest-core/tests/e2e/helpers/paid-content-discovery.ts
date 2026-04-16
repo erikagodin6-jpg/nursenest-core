@@ -1,6 +1,12 @@
 import { expect, type Page } from "@playwright/test";
 import { PAID_E2E_DEFAULT_PATHWAY_ID } from "./paid-learner-shell";
 
+/**
+ * Lesson cards on the hub may link to `/app/lessons/...` or top-level `/lessons/...` (same learner shell).
+ * Keep aligned with {@link ./learner-shell}.
+ */
+export const LESSON_HUB_CARD_LINKS = 'a[href^="/app/lessons/"], a[href^="/lessons/"]';
+
 /** Stable hub URLs — align with `scripts/qa-paid-test-account-reset.mts` default pathway. */
 export function paidLessonsHubUrl(pathwayId: string = PAID_E2E_DEFAULT_PATHWAY_ID): string {
   return `/app/lessons?pathwayId=${encodeURIComponent(pathwayId)}`;
@@ -36,13 +42,13 @@ export async function expectAtLeastOneLessonLink(
   page: Page,
   opts?: { timeoutMs?: number },
 ): Promise<void> {
-  const links = page.locator('a[href^="/app/lessons/"]');
+  const links = page.locator(LESSON_HUB_CARD_LINKS);
   try {
     await expect(links.first()).toBeVisible({ timeout: opts?.timeoutMs ?? 120_000 });
   } catch {
     throw new PaidContentDiscoveryError(
       "noLessonContentAvailable",
-      "No /app/lessons/* links found on hub within timeout — check pathway seed, catalog, or entitlement.",
+      "No lesson card links (/app/lessons/* or /lessons/*) found on hub within timeout — check pathway seed, catalog, or entitlement.",
     );
   }
 }

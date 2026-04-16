@@ -8,6 +8,7 @@ import {
   captureQuestionIdFromBankApi,
   expectAtLeastOneFlashcardLearnLink,
   expectAtLeastOneLessonLink,
+  LESSON_HUB_CARD_LINKS,
   paidFlashcardsHubUrl,
   paidLessonsHubUrl,
 } from "../helpers/paid-content-discovery";
@@ -46,7 +47,7 @@ test.describe("Paid entitlements vs anonymous downgrade", () => {
       await page.goto(paidLessonsHubUrl(), { waitUntil: "domcontentloaded" });
       await expectNoSubscriptionPaywall(page, "/app/lessons");
       await expectAtLeastOneLessonLink(page);
-      const href = await page.locator('a[href^="/app/lessons/"]').first().getAttribute("href");
+      const href = await page.locator(LESSON_HUB_CARD_LINKS).first().getAttribute("href");
       expect(href, "Expected at least one lesson link").toBeTruthy();
       const u = new URL(href!, origin);
       return `${u.pathname}${u.search}`;

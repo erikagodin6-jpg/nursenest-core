@@ -7,7 +7,7 @@
  */
 import { expect, test, type Page } from "@playwright/test";
 import { paidLessonsHubUrl, paidQuestionsHubUrl } from "../helpers/paid-content-discovery";
-import { isLearnerShell } from "../helpers/learner-login";
+import { isLearnerShell } from "../helpers/learner-shell";
 import { expectPaidLearnerShellReady } from "../helpers/paid-learner-shell";
 import {
   assertPaidUserGuardsClean,

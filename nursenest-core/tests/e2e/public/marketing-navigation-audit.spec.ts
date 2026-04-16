@@ -17,6 +17,7 @@ import {
 } from "../helpers/marketing-navigation-audit";
 import { HEADER_CHROME } from "../helpers/country-selector";
 import { getE2eBaseURL } from "../helpers/e2e-env";
+import { isLearnerNavInternalHref } from "../helpers/learner-shell";
 
 const baseURL = getE2eBaseURL();
 const origin = new URL(baseURL).origin;
@@ -307,7 +308,7 @@ test.describe("Marketing navigation audit", () => {
 
     for (let i = 0; i < max; i++) {
       const href = await anchors.nth(i).getAttribute("href");
-      if (!href || href.startsWith("/app")) continue;
+      if (!href || isLearnerNavInternalHref(href)) continue;
       const headUrl = new URL(href, baseURL).href;
       const res = await page.request.get(headUrl);
       const label = `footer[${i}]`;

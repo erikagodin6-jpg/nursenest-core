@@ -8,9 +8,10 @@ import fs from "fs";
 import path from "path";
 import { expect, test as setup } from "@playwright/test";
 import { PAID_USER_AUTH_FILE } from "../helpers/auth-state-paths";
+import { describeAuthFailureSurface } from "../helpers/auth-diagnostics";
 import { loginWithCredentials } from "../helpers/learner-login";
 import { getPaidTestCredentials } from "../helpers/paid-test-credentials";
-import { saveStorageStateToFile } from "../helpers/save-session-state";
+import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
 
 setup("authenticate paid test account and save storage state", async ({ page }) => {
   const creds = getPaidTestCredentials();
@@ -28,8 +29,9 @@ setup("authenticate paid test account and save storage state", async ({ page }) 
     await loginWithCredentials(page, creds.email, creds.password);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
+    const diag = await describeAuthFailureSurface(page).catch(() => "");
     throw new Error(
-      `Paid E2E login failed for ${creds.email}: ${msg}. Check BASE_URL, account exists, and password. Seeded paid account must reach /app after Sign In.`,
+      `Paid E2E login failed for ${creds.email}: ${msg}. Check BASE_URL, account exists, and password. Seeded paid account must reach a learner shell after Sign In. ${diag}`,
     );
   }
 
@@ -44,15 +46,7 @@ setup("authenticate paid test account and save storage state", async ({ page }) 
 
   // Confirm premium path without going through Stripe (lessons hub must not be paywalled).
   await page.goto("/app/lessons", { waitUntil: "domcontentloaded" });
-  try {
-    await expect(page.getByRole("heading", { name: "Subscription required" })).toHaveCount(0, {
-      timeout: 30_000,
-    });
-  } catch {
-    throw new Error(
-      "Paid E2E account signed in but /app/lessons still shows Subscription required — use a seeded account with active premium entitlements (not a free-tier user).",
-    );
-  }
+  await expectNoSubscriptionPaywall(page, "setup-paid-auth /app/lessons (premium seed required)");
 
   fs.mkdirSync(path.dirname(PAID_USER_AUTH_FILE), { recursive: true });
   await page.context().storageState({ path: PAID_USER_AUTH_FILE });

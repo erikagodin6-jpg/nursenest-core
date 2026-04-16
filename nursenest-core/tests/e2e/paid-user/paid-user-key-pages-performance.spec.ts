@@ -13,6 +13,7 @@
  * Requires `--project=chromium-paid`.
  */
 import { expect, test, type Page } from "@playwright/test";
+import { LESSON_HUB_CARD_LINKS } from "../helpers/paid-content-discovery";
 import {
   attachApiResponseTimeCollector,
   measureKeyLearnerPage,
@@ -24,7 +25,7 @@ import {
 function readyLocators(page: Page) {
   return {
     dashboard: page.locator('nav[aria-label="Learner primary actions"]'),
-    lessons: page.locator('a[href^="/app/lessons/"]').first(),
+    lessons: page.locator(LESSON_HUB_CARD_LINKS).first(),
     practice: page.getByRole("heading", { name: /^Question bank$/i }),
     flashcards: page.locator('a[href*="/app/flashcards/"]').first(),
   };

@@ -1,6 +1,8 @@
 /**
  * Playwright E2E — authenticated session reuse
  *
+ * **Test layering (deploy blockers vs extended):** see `tests/e2e/TEST_LAYERS.md`.
+ *
  * Login happens **once** in setup projects, not per test:
  * - `setup-paid-auth` → `tests/e2e/.auth/paid-user.json` → `chromium-paid` (`storageState` + `dependencies`)
  * - `setup-free-auth` → `tests/e2e/.auth/free-user.json` → `chromium-free`

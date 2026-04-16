@@ -25,7 +25,8 @@
 import { expect, test, type Page } from "@playwright/test";
 import { attachPageObservers } from "../helpers/attach-observers";
 import { assertSafeSubscriberJourneyBaseUrl } from "../helpers/e2e-safety-guards";
-import { loginWithCredentials } from "../helpers/learner-login";
+import { LESSON_HUB_CARD_LINKS } from "../helpers/paid-content-discovery";
+import { isLearnerNavInternalHref, loginWithCredentials } from "../helpers/learner-login";
 import { logObserverFailureSummary } from "../helpers/log-observer-failure-summary";
 import { completeStripeHostedCheckoutTestCard } from "../helpers/stripe-hosted-checkout";
 import { waitUntilLessonsNotPaywalled } from "../helpers/wait-for-subscriber-access";
@@ -257,7 +258,7 @@ test.describe("Stripe test-mode subscriber journey (opt-in)", () => {
         try {
           await page.goto("/app/lessons", { waitUntil: "domcontentloaded" });
           await expect(page.getByRole("heading", { name: "Subscription required" })).toHaveCount(0);
-          const lessonLinks = page.locator('a[href^="/app/lessons/"]');
+          const lessonLinks = page.locator(LESSON_HUB_CARD_LINKS);
           await expect(lessonLinks.first()).toBeVisible({ timeout: 120_000 });
           await lessonLinks.first().click();
           await page.waitForLoadState("domcontentloaded");
@@ -366,7 +367,7 @@ test.describe("Stripe test-mode subscriber journey (opt-in)", () => {
             const link = links.nth(i);
             const name = (await link.innerText().catch(() => "?")).trim().slice(0, 80);
             const href = await link.getAttribute("href");
-            if (!href?.startsWith("/app")) continue;
+            if (!isLearnerNavInternalHref(href)) continue;
             try {
               await link.click();
               await page.waitForLoadState("domcontentloaded");
@@ -383,7 +384,7 @@ test.describe("Stripe test-mode subscriber journey (opt-in)", () => {
             throw new Error(failedNav.join("; "));
           }
           if (clicked.length === 0) {
-            throw new Error("No /app nav links found to exercise.");
+            throw new Error("No learner-shell nav links found to exercise (expected /app, /lessons, /questions, or /flashcards).");
           }
           steps.subscriberButtons = "pass";
         } catch (e) {

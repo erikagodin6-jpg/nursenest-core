@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
 import type { APIRequestContext, Page, TestInfo } from "@playwright/test";
+import { isLearnerShell } from "./learner-shell";
 
 export type StabilitySeverity = "error" | "warn" | "info";
 
@@ -150,7 +151,8 @@ export async function checkInternalLinksSample(args: {
   let n = 0;
   for (const h of hrefs) {
     if (n >= maxChecks) break;
-    if (h.startsWith("/app")) continue;
+    const pn = h.split("?")[0] ?? "";
+    if (isLearnerShell(pn)) continue;
     n += 1;
     const url = new URL(h, baseURL).href;
     try {

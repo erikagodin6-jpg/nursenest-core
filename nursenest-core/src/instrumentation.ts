@@ -8,7 +8,7 @@ import {
 } from "@/lib/env/central-env-validation";
 import { runProductionEnvGuard } from "@/lib/env/production-env-guard";
 import { logStartupContext } from "@/lib/env/server-env";
-import { logHighMemory } from "@/lib/observability/perf-log";
+import { logHighMemory, logMemoryPressureSample } from "@/lib/observability/perf-log";
 import {
   logStripeCheckoutEnvStartupStatus,
   logStripeProductionPricingMisconfiguration,
@@ -44,10 +44,17 @@ export async function register() {
       console.error(`[nursenest-core] process_uncaughtException ${err?.message ?? err}`);
     });
 
-    const memIntervalMs = Number(process.env.PERF_MEMORY_LOG_INTERVAL_MS ?? "0");
-    if (process.env.NODE_ENV === "production" && Number.isFinite(memIntervalMs) && memIntervalMs >= 120_000) {
+    const rawMemInterval = process.env.PERF_MEMORY_LOG_INTERVAL_MS;
+    const memIntervalMs =
+      rawMemInterval !== undefined && rawMemInterval !== ""
+        ? Number(rawMemInterval)
+        : process.env.NODE_ENV === "production"
+          ? 600_000
+          : 0;
+    if (process.env.NODE_ENV === "production" && Number.isFinite(memIntervalMs) && memIntervalMs >= 60_000) {
       const id = setInterval(() => {
         try {
+          logMemoryPressureSample("process_interval");
           const heap = typeof process.memoryUsage === "function" ? process.memoryUsage().heapUsed : 0;
           if (heap >= 512 * 1024 * 1024) {
             logHighMemory("process_interval");

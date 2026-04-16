@@ -37,6 +37,7 @@ function pathnameIsCanadaMarketing(url: string): boolean {
 }
 
 async function waitForUsOrCanadaHubUrl(page: Page, target: "us" | "canada") {
+  /** Browser-only: argument `t` is serialized; no Node/imports in the callback. */
   await page.waitForFunction(
     (t) => {
       const p = new URL(window.location.href).pathname.replace(/\/$/, "") || "/";

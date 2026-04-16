@@ -11,6 +11,7 @@
  * Requires `--project=chromium-paid` (stored auth).
  */
 import { expect, test, type Locator, type Page } from "@playwright/test";
+import { LESSON_HUB_CARD_LINKS } from "../helpers/paid-content-discovery";
 
 /** Align with `devices['iPhone 12']` viewport for consistent mobile baselines. */
 const MOBILE_VIEWPORT = { width: 390, height: 844 } as const;
@@ -48,7 +49,7 @@ test.describe("Learner visual regression", () => {
   test("lesson page (desktop)", async ({ page }) => {
     await page.goto("/app/lessons", { waitUntil: "domcontentloaded" });
     expect(page.url()).not.toMatch(/\/login/i);
-    const firstLesson = page.locator('a[href^="/app/lessons/"]').first();
+    const firstLesson = page.locator(LESSON_HUB_CARD_LINKS).first();
     await firstLesson.waitFor({ state: "visible", timeout: 120_000 });
     const href = await firstLesson.getAttribute("href");
     expect(href).toBeTruthy();

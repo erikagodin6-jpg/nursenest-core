@@ -14,6 +14,8 @@ import { expect, test, type Page } from "@playwright/test";
 import { attachPageObservers } from "../helpers/attach-observers";
 import type { CategorizedObserverDiagnostics } from "../helpers/log-observer-failure-summary";
 import { logCategorizedObserverFailureSummary } from "../helpers/log-observer-failure-summary";
+import { LESSON_HUB_CARD_LINKS } from "../helpers/paid-content-discovery";
+import { isLearnerNavInternalHref } from "../helpers/learner-login";
 import { expectNoSubscriptionPaywall, expectOnLearnerApp } from "../helpers/paid-surface-assertions";
 import {
   fetchApiAssetsI18nEn,
@@ -183,7 +185,7 @@ test.describe("Paid subscriber audit (seeded session)", () => {
           });
           await waitForAuthenticatedLearnerShell(page);
           await expectNoSubscriptionPaywall(page, "/app/lessons");
-          const lessonLinks = page.locator('a[href^="/app/lessons/"]');
+          const lessonLinks = page.locator(LESSON_HUB_CARD_LINKS);
           await expect(lessonLinks.first()).toBeVisible({ timeout: 120_000 });
           const href1 = await lessonLinks.nth(0).getAttribute("href");
           const href2 = await lessonLinks.nth(1).getAttribute("href");
@@ -341,7 +343,7 @@ test.describe("Paid subscriber audit (seeded session)", () => {
             const link = page.locator('nav[aria-label="Learner primary actions"]').getByRole("link").nth(i);
             const name = (await link.innerText().catch(() => "?")).trim().slice(0, 64);
             const href = await link.getAttribute("href");
-            if (!href?.startsWith("/app")) continue;
+            if (!isLearnerNavInternalHref(href)) continue;
             await link.click();
             await page.waitForLoadState("domcontentloaded");
             if (/\/login/i.test(page.url())) {

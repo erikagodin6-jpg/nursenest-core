@@ -9,7 +9,7 @@
  */
 import { expect, test } from "@playwright/test";
 import { assertCoreLearnerDurability } from "../helpers/paid-durability";
-import { paidLessonsHubUrl } from "../helpers/paid-content-discovery";
+import { LESSON_HUB_CARD_LINKS, paidLessonsHubUrl } from "../helpers/paid-content-discovery";
 import { expectPaidLearnerShellReady } from "../helpers/paid-learner-shell";
 import {
   assertPaidUserGuardsClean,
@@ -50,7 +50,7 @@ test.describe("Paid user — degraded / crash-proof shell", () => {
         expectNotLoginUrl(page);
         await expectPaidLearnerShellReady(page, "degraded /app/lessons");
         await expectNoSubscriberPaywallSurface(page, "degraded lessons hub");
-        const lessonLinks = page.locator('a[href^="/app/lessons/"]');
+        const lessonLinks = page.locator(LESSON_HUB_CARD_LINKS);
         await expect(lessonLinks.first()).toBeVisible({ timeout: 90_000 });
         await assertCoreLearnerDurability(page, "degraded lessons hub");
       });

@@ -45,6 +45,5 @@ function createPrismaClient(): PrismaClient {
  */
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
-}
+/** Single PrismaClient per Node process (Next.js dev HMR + production workers). Avoids duplicate pools / RSS spikes. */
+globalForPrisma.prisma = prisma;

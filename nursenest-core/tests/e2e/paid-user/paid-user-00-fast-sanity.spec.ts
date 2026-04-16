@@ -17,7 +17,7 @@
  */
 import { expect, test } from "@playwright/test";
 import { assertCoreLearnerDurability } from "../helpers/paid-durability";
-import { paidLessonsHubUrl } from "../helpers/paid-content-discovery";
+import { LESSON_HUB_CARD_LINKS, paidLessonsHubUrl } from "../helpers/paid-content-discovery";
 import { expectPaidLearnerShellReady } from "../helpers/paid-learner-shell";
 import {
   assertPaidUserGuardsClean,
@@ -33,7 +33,7 @@ test.describe("Paid user — fast sanity (CI gate)", () => {
     const guards = attachPaidUserStandardGuards(page, appOrigin);
 
     try {
-      await test.step("/app — learner shell (not onboarding)", async () => {
+      await test.step("Learner shell: /app dashboard (not onboarding)", async () => {
         await page.goto("/app", { waitUntil: "domcontentloaded" });
         expectNotLoginUrl(page);
         await expectPaidLearnerShellReady(page, "fast-sanity /app");
@@ -46,7 +46,7 @@ test.describe("Paid user — fast sanity (CI gate)", () => {
         expectNotLoginUrl(page);
         await expectPaidLearnerShellReady(page, "fast-sanity /app/lessons");
         await expectNoSubscriberPaywallSurface(page, "fast-sanity lessons hub");
-        const lessonLinks = page.locator('a[href^="/app/lessons/"]');
+        const lessonLinks = page.locator(LESSON_HUB_CARD_LINKS);
         await expect(lessonLinks.first()).toBeVisible({ timeout: 20_000 });
         await assertCoreLearnerDurability(page, "fast-sanity lessons hub");
       });

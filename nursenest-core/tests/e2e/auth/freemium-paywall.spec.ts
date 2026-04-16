@@ -30,6 +30,7 @@ test.describe("Freemium paywalls & upgrade paths", () => {
     await expect(page.locator('a[href="/pricing"]').first()).toBeVisible();
 
     // Peek loads async (API); accept either interactive preview or empty-pool upgrade path
+    /** Browser-only: string checks on document.body — no imports. */
     await page.waitForFunction(
       () => {
         const t = document.body?.innerText ?? "";

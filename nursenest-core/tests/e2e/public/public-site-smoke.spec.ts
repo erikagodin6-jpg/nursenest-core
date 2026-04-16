@@ -11,6 +11,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { attachPageObservers, logObserverDiagnostics } from "../helpers/attach-observers";
 import { GLOBAL_REGION_COOKIE, HEADER_CHROME, getE2eBaseURL } from "../helpers/country-selector";
 import { LESSON_FLOW_PATHWAY_QA } from "../../../src/lib/qa/lesson-flow-pathways";
+import { isLearnerNavInternalHref } from "../helpers/learner-shell";
 
 const baseURL = getE2eBaseURL();
 
@@ -212,7 +213,7 @@ test.describe("Public site smoke", () => {
     const footer = page.locator("footer");
     const hrefs = await footer.locator('a[href^="/"]').evaluateAll((els) =>
       [...new Set(els.map((a) => (a as HTMLAnchorElement).getAttribute("href") || ""))].filter(
-        (h) => h && !h.startsWith("/app") && h !== "/",
+        (h) => h && !isLearnerNavInternalHref(h) && h !== "/",
       ),
     );
     const sample = hrefs.slice(0, 6);

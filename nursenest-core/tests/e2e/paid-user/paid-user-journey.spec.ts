@@ -8,6 +8,7 @@
  */
 import { expect, test } from "@playwright/test";
 import {
+  LESSON_HUB_CARD_LINKS,
   paidFlashcardsHubUrl,
   paidLessonsHubUrl,
   paidQuestionsHubUrl,
@@ -47,13 +48,13 @@ test.describe("Paid subscriber — full journey", () => {
         expectNotLoginUrl(page);
         await expectPaidLearnerShellReady(page, "journey /app/lessons");
         await expectNoSubscriberPaywallSurface(page, "/app/lessons");
-        const lessonLinks = page.locator('a[href^="/app/lessons/"]');
+        const lessonLinks = page.locator(LESSON_HUB_CARD_LINKS);
         await expect(lessonLinks.first()).toBeVisible({ timeout: 120_000 });
         await assertCoreLearnerDurability(page, "journey lessons hub");
       });
 
       await test.step("Premium lesson — full content (not preview-only)", async () => {
-        const first = page.locator('a[href^="/app/lessons/"]').first();
+        const first = page.locator(LESSON_HUB_CARD_LINKS).first();
         const href = await first.getAttribute("href");
         expect(href).toBeTruthy();
         await first.click();

@@ -1,13 +1,21 @@
 import type { Page } from "@playwright/test";
+import { describeAuthFailureSurface } from "./auth-diagnostics";
 import { assertSyncNotOnboardingBlocking } from "./paid-durability";
-import { isLearnerShell, LEARNER_SHELL_PATH_EXPECTATION } from "./learner-login";
+import {
+  formatLearnerShellMismatch,
+  isLearnerShell,
+  LEARNER_SHELL_PATH_EXPECTATION,
+} from "./learner-shell";
 
 /** Premium learner surfaces should not render the freemium subscription gate heading. */
 export async function expectNoSubscriptionPaywall(page: Page, context: string): Promise<void> {
   const paywall = page.getByRole("heading", { name: "Subscription required" });
   const count = await paywall.count();
   if (count > 0) {
-    throw new Error(`Entitlement mismatch on ${context}: expected premium access, found Subscription required paywall.`);
+    const diag = await describeAuthFailureSurface(page).catch(() => "");
+    throw new Error(
+      `Expected paid access but found paywall (Subscription required). context=${context} ${diag}`,
+    );
   }
 }
 
@@ -26,14 +34,25 @@ export async function expectNotOnAppOnboarding(page: Page, context: string): Pro
 export async function expectOnLearnerApp(page: Page): Promise<void> {
   assertSyncNotOnboardingBlocking(page, "expectOnLearnerApp");
   const url = page.url();
-  if (/\/login/i.test(url)) {
-    throw new Error("Redirected to /login — session missing or seeded paid credentials invalid for BASE_URL.");
+  let path = "";
+  try {
+    path = new URL(url).pathname;
+  } catch {
+    const diag = await describeAuthFailureSurface(page).catch(() => "");
+    throw new Error(
+      `Invalid page URL for learner shell check. url=${url} pathname=(unparsed). Expected: ${LEARNER_SHELL_PATH_EXPECTATION} ${diag}`,
+    );
   }
-  const path = new URL(url).pathname;
+
+  if (path.includes("/login")) {
+    const diag = await describeAuthFailureSurface(page).catch(() => "");
+    throw new Error(
+      `Not on learner shell. url=${url} pathname=${path}. Expected: ${LEARNER_SHELL_PATH_EXPECTATION} Landed on login. If storageState is missing, re-run setup-paid-auth. ${diag}`,
+    );
+  }
 
   if (!isLearnerShell(path)) {
-    throw new Error(
-      `Not on learner shell. url=${url} pathname=${path}. Expected: ${LEARNER_SHELL_PATH_EXPECTATION}`,
-    );
+    const diag = await describeAuthFailureSurface(page).catch(() => "");
+    throw new Error(`Not on learner shell. ${formatLearnerShellMismatch(url, path)} ${diag}`);
   }
 }

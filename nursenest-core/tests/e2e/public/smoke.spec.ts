@@ -10,6 +10,7 @@ import { expect, test, type Page, type TestInfo } from "@playwright/test";
 import { attachPageObservers, logObserverDiagnostics, type PageObservers } from "../helpers/attach-observers";
 import { logObserverFailureSummary } from "../helpers/log-observer-failure-summary";
 import { HEADER_CHROME } from "../helpers/country-selector";
+import { isLearnerNavInternalHref } from "../helpers/learner-shell";
 import { LESSON_FLOW_PATHWAY_QA } from "../../../src/lib/qa/lesson-flow-pathways";
 
 const usRn = LESSON_FLOW_PATHWAY_QA.find((x) => x.pathwayId === "us-rn-nclex-rn");
@@ -232,7 +233,7 @@ test.describe("Public smoke (core routes)", () => {
       await expect(footer).toBeVisible({ timeout: 15_000 });
       const hrefs = await footer.locator('a[href^="/"]').evaluateAll((els) =>
         [...new Set(els.map((a) => (a as HTMLAnchorElement).getAttribute("href") || ""))].filter(
-          (h) => h && !h.startsWith("/app") && h !== "/",
+          (h) => h && !isLearnerNavInternalHref(h) && h !== "/",
         ),
       );
       const sample = hrefs.slice(0, 8);

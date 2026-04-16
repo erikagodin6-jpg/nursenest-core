@@ -13,7 +13,7 @@
  *   provider’s **direct** Postgres URI (non-pooler port) — required when the pooled URL uses `pgbouncer=true` (Prisma Migrate cannot use transaction pooling).
  *
  * If `DATABASE_URL` is unset and `PROD_DATABASE_URL` is set, copy prod → `DATABASE_URL` (legacy alias).
- * `schema.prisma` references `env("DATABASE_URL")` only.
+ * `schema.prisma` uses `DATABASE_URL` + `DATABASE_DIRECT_URL` (see `applyDirectDatabaseUrlFromEnv`).
  */
 export type DatabaseUrlSource = "prod_override" | "database_url" | "missing";
 
