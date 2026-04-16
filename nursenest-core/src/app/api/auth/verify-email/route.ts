@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { consumeVerificationToken } from "@/lib/auth/email-verification";
-import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
+import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
   const base = req.nextUrl.origin;
 
   const ip = clientIp(req);
-  const rl = checkRateLimit(`verify-email:${ip}`, { windowMs: 60_000, max: 15 });
+  const rl = await checkRateLimitUnified(`verify-email:${ip}`, { windowMs: 60_000, max: 15 });
   if (!rl.ok) {
     return NextResponse.redirect(`${base}/login?verify=rate_limited`);
   }

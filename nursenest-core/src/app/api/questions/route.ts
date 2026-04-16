@@ -49,6 +49,7 @@ import {
 } from "@/lib/questions/exam-question-access-sql";
 import { getWeakTopicTargetsForPractice } from "@/lib/learner/topic-performance";
 import { API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC } from "@/lib/server/api-route-constants";
+import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 
 export const maxDuration = API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC;
 
@@ -396,6 +397,7 @@ export async function GET(req: NextRequest) {
             prisma.examQuestion.findMany({
               where: { id: { in: ids } },
               select: responseMode === "full" ? fullSelect : previewSelect,
+              take: takeForIdIn(ids),
             }),
           );
           const order = new Map(ids.map((id, i) => [id, i]));
@@ -584,6 +586,7 @@ export async function GET(req: NextRequest) {
       prisma.examQuestion.findMany({
         where: { id: { in: ids } },
         select: previewFreemiumSelect,
+        take: takeForIdIn(ids),
       }),
     );
     const order = new Map(ids.map((id, i) => [id, i]));

@@ -3,7 +3,7 @@ import { hash } from "bcryptjs";
 import { z } from "zod";
 import { strongPasswordSchema } from "@/lib/auth/password-policy";
 import { JSON_BODY_AUTH_FORM, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
-import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
+import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import { prisma } from "@/lib/db";
 import { hashPasswordResetToken } from "@/lib/password-reset-crypto";
 import { PASSWORD_RESET_TOKEN_TTL_MS } from "@/lib/auth/password-reset-constants";
@@ -29,7 +29,7 @@ const bodySchema = z.object({
 export async function POST(req: Request) {
   const ip = clientIp(req);
   const correlation = correlationIdFromRequest(req) ?? "";
-  const rl = checkRateLimit(`reset-password:${ip}`, { windowMs: 60_000, max: 10 });
+  const rl = await checkRateLimitUnified(`reset-password:${ip}`, { windowMs: 60_000, max: 10 });
   if (!rl.ok) {
     return NextResponse.json(
       { ok: false, error: "Too many requests. Try again shortly." },

@@ -128,6 +128,20 @@ export function localeRobotsOverride(localeCode: string): { index: false; follow
   return { index: false, follow: true };
 }
 
+/**
+ * When true, `robots.txt` should emit `Disallow: /{locale}/` for this locale.
+ *
+ * **Only** `incomplete` (disabled-switcher) tiers — **not** `partial` (noindex in metadata but
+ * still hreflang/sitemap eligible; bots must fetch pages to see `noindex` + alternates).
+ *
+ * Do **not** use `!isLocaleSeoIndexable` here — that is also false for partial locales and would
+ * incorrectly block crawling.
+ */
+export function isLocaleRobotsPathDisallowed(localeCode: string): boolean {
+  if (localeCode === DEFAULT_MARKETING_LOCALE) return false;
+  return getLanguageStatus(localeCode) === "disabled";
+}
+
 // ─── Promotion gate ───────────────────────────────────────────────────────────
 
 /**

@@ -4,12 +4,14 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const runtime = "nodejs";
 
+const READINESS_TIMEOUT_MS = 3000;
+
 /**
  * Readiness: verifies Postgres when `DATABASE_URL` is set (or `PROD_DATABASE_URL` if `DATABASE_URL` is unset).
  * Liveness stays on `/healthz` and `/api/health` (no DB).
  */
 export async function GET() {
-  const r = await checkDatabaseReadiness();
+  const r = await checkDatabaseReadiness(READINESS_TIMEOUT_MS);
   if ("skipped" in r && r.skipped) {
     return NextResponse.json(
       { ok: true, database: "not_configured", service: "nursenest-core", timestamp: new Date().toISOString() },
@@ -22,6 +24,7 @@ export async function GET() {
         ok: true,
         database: "ok",
         latencyMs: r.latencyMs,
+        readinessTimeoutMs: READINESS_TIMEOUT_MS,
         service: "nursenest-core",
         timestamp: new Date().toISOString(),
       },

@@ -6,7 +6,7 @@ import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { isStudyPlanAiEnabled } from "@/lib/ai/learner-ai-policy";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { JSON_BODY_STANDARD, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
-import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
+import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 
 const bodySchema = z.object({
   examTarget: z.enum(["NCLEX_RN", "NCLEX_PN", "REX_PN", "NP", "GENERIC"]),
@@ -15,7 +15,7 @@ const bodySchema = z.object({
   weakAreas: z.string().max(2000).optional(),
 });
 
-/** Per-user daily cap (in-process; tune for multi-instance later). */
+/** Per-user daily cap (Postgres-backed in production via {@link checkRateLimitUnified}). */
 const RATE = { windowMs: 86_400_000, max: 20 } as const;
 
 export async function POST(req: Request) {
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: keyCheck.message }, { status: 503 });
   }
 
-  const rl = checkRateLimit(`study-plan-ai:${userId}`, RATE);
+  const rl = await checkRateLimitUnified(`study-plan-ai:${userId}`, RATE);
   if (!rl.ok) {
     return NextResponse.json(
       { error: "Daily limit reached for study plan generation. Try again tomorrow.", code: "RATE_LIMIT" },

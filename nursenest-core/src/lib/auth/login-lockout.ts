@@ -3,10 +3,13 @@
  *
  * - **Distributed (production + DB):** rows in `AppLoginLockout` — shared across horizontally scaled instances.
  * - **In-memory:** per-process `Map` when distributed mode is off (local dev / tests).
+ *
+ * Prisma is loaded only via dynamic `import("@/lib/db")` on the PG path so unit tests can run
+ * without pulling the `server-only` DB module when distributed mode is off.
  */
 import { createHash } from "node:crypto";
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 const MAX_ATTEMPTS_BEFORE_LOCK = 5;
 const LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minutes
@@ -20,25 +23,61 @@ type LockState = {
 
 const lockMap = new Map<string, LockState>();
 
-setInterval(() => {
-  const now = Date.now();
-  for (const [key, state] of lockMap) {
-    if (now - state.lastFailure > LOCKOUT_DURATION_MS * 2) {
-      lockMap.delete(key);
-    }
-  }
-}, CLEANUP_INTERVAL_MS);
+let loginLockoutFalseIgnoredInProdLogged = false;
+let loginLockoutPgErrorLogged = false;
+
+function logLoginLockoutPgErrorOnce(context: string, err: unknown): void {
+  if (loginLockoutPgErrorLogged) return;
+  loginLockoutPgErrorLogged = true;
+  const msg = err instanceof Error ? err.message : String(err);
+  safeServerLogCritical(
+    "auth",
+    "login_lockout_pg_error",
+    { context, detail: msg.slice(0, 200) },
+    err instanceof Error ? err : new Error(msg),
+    { flow: "login_lockout" },
+  );
+}
 
 function hashKey(key: string): string {
   return createHash("sha256").update(key, "utf8").digest("hex");
 }
 
-/** Production default: on when DB is configured; set LOGIN_LOCKOUT_DISTRIBUTED=false to force in-memory (single-instance dev only). */
+/**
+ * Postgres-backed lockout when `DATABASE_URL` is set. In production, `LOGIN_LOCKOUT_DISTRIBUTED=false`
+ * cannot re-enable per-process memory.
+ */
 export function isDistributedLoginLockoutEnabled(): boolean {
-  if (process.env.LOGIN_LOCKOUT_DISTRIBUTED === "false") return false;
-  if (process.env.LOGIN_LOCKOUT_DISTRIBUTED === "true") return true;
+  if (!isDatabaseUrlConfigured()) return false;
   if (process.env.NODE_ENV === "test") return false;
-  return process.env.NODE_ENV === "production" && isDatabaseUrlConfigured();
+  if (process.env.LOGIN_LOCKOUT_DISTRIBUTED === "true") return true;
+  if (process.env.NODE_ENV !== "production") return false;
+  if (process.env.LOGIN_LOCKOUT_DISTRIBUTED === "false" && !loginLockoutFalseIgnoredInProdLogged) {
+    loginLockoutFalseIgnoredInProdLogged = true;
+    safeServerLogCritical(
+      "auth",
+      "login_lockout_distributed_false_ignored_in_production",
+      { hint: "Per-process lockout is disabled when DATABASE_URL is set." },
+      new Error("LOGIN_LOCKOUT_DISTRIBUTED=false ignored in production"),
+    );
+  }
+  return true;
+}
+
+function allowMemoryLoginLockout(): boolean {
+  if (process.env.NODE_ENV === "production") return false;
+  return !isDistributedLoginLockoutEnabled();
+}
+
+if (allowMemoryLoginLockout()) {
+  setInterval(() => {
+    const now = Date.now();
+    for (const [key, state] of lockMap) {
+      if (now - state.lastFailure > LOCKOUT_DURATION_MS * 2) {
+        lockMap.delete(key);
+      }
+    }
+  }, CLEANUP_INTERVAL_MS).unref();
 }
 
 function recordLoginFailureMemory(key: string): void {
@@ -64,6 +103,7 @@ function recordLoginFailureMemory(key: string): void {
 }
 
 async function recordLoginFailurePg(key: string): Promise<void> {
+  const { prisma } = await import("@/lib/db");
   const id = hashKey(key);
   const now = new Date();
   await prisma.$transaction(async (tx) => {
@@ -111,31 +151,38 @@ async function recordLoginFailurePg(key: string): Promise<void> {
 }
 
 export async function recordLoginFailure(key: string): Promise<void> {
-  if (!isDistributedLoginLockoutEnabled()) {
+  if (allowMemoryLoginLockout()) {
     recordLoginFailureMemory(key);
+    return;
+  }
+  if (!isDistributedLoginLockoutEnabled()) {
     return;
   }
   try {
     await recordLoginFailurePg(key);
-  } catch {
-    recordLoginFailureMemory(key);
+  } catch (e) {
+    logLoginLockoutPgErrorOnce("recordLoginFailure", e);
   }
 }
 
 export async function clearLoginFailures(key: string): Promise<void> {
-  if (!isDistributedLoginLockoutEnabled()) {
+  if (allowMemoryLoginLockout()) {
     lockMap.delete(key);
     return;
   }
+  if (!isDistributedLoginLockoutEnabled()) {
+    return;
+  }
   try {
+    const { prisma } = await import("@/lib/db");
     await prisma.appLoginLockout.deleteMany({ where: { id: hashKey(key) } });
-  } catch {
-    lockMap.delete(key);
+  } catch (e) {
+    logLoginLockoutPgErrorOnce("clearLoginFailures", e);
   }
 }
 
 export async function isLoginLocked(key: string): Promise<{ locked: boolean; remainingMs: number }> {
-  if (!isDistributedLoginLockoutEnabled()) {
+  if (allowMemoryLoginLockout()) {
     const state = lockMap.get(key);
     if (!state?.lockedUntil) return { locked: false, remainingMs: 0 };
     const now = Date.now();
@@ -145,7 +192,11 @@ export async function isLoginLocked(key: string): Promise<{ locked: boolean; rem
     }
     return { locked: true, remainingMs: state.lockedUntil - now };
   }
+  if (!isDistributedLoginLockoutEnabled()) {
+    return { locked: false, remainingMs: 0 };
+  }
   try {
+    const { prisma } = await import("@/lib/db");
     const row = await prisma.appLoginLockout.findUnique({ where: { id: hashKey(key) } });
     if (!row?.lockedUntil) return { locked: false, remainingMs: 0 };
     const now = new Date();
@@ -154,23 +205,21 @@ export async function isLoginLocked(key: string): Promise<{ locked: boolean; rem
       return { locked: false, remainingMs: 0 };
     }
     return { locked: true, remainingMs: row.lockedUntil.getTime() - now.getTime() };
-  } catch {
-    const state = lockMap.get(key);
-    if (!state?.lockedUntil) return { locked: false, remainingMs: 0 };
-    const now = Date.now();
-    if (now >= state.lockedUntil) {
-      lockMap.delete(key);
-      return { locked: false, remainingMs: 0 };
-    }
-    return { locked: true, remainingMs: state.lockedUntil - now };
+  } catch (e) {
+    logLoginLockoutPgErrorOnce("isLoginLocked", e);
+    return { locked: false, remainingMs: 0 };
   }
 }
 
 export async function getFailureCount(key: string): Promise<number> {
-  if (!isDistributedLoginLockoutEnabled()) {
+  if (allowMemoryLoginLockout()) {
     return lockMap.get(key)?.failures ?? 0;
   }
+  if (!isDistributedLoginLockoutEnabled()) {
+    return 0;
+  }
   try {
+    const { prisma } = await import("@/lib/db");
     const row = await prisma.appLoginLockout.findUnique({
       where: { id: hashKey(key) },
       select: { failures: true, lockedUntil: true },
@@ -179,8 +228,9 @@ export async function getFailureCount(key: string): Promise<number> {
     const now = new Date();
     if (row.lockedUntil && row.lockedUntil <= now) return row.failures;
     return row.failures;
-  } catch {
-    return lockMap.get(key)?.failures ?? 0;
+  } catch (e) {
+    logLoginLockoutPgErrorOnce("getFailureCount", e);
+    return 0;
   }
 }
 

@@ -1,5 +1,6 @@
 /**
- * Global API rate limits (Edge-safe). In-memory buckets per isolate — use Redis/KV for multi-instance parity.
+ * Global API rate limits (Edge-safe). Uses {@link checkRateLimitUnified}: Postgres-backed windows in production
+ * when `DATABASE_URL` is set; in-memory only in non-production unless `RATE_LIMIT_DISTRIBUTED=true`.
  *
  * Priority: authenticated learner traffic gets a higher per-user ceiling; auth + public scraping get tight per-IP caps.
  * Repeated 429s from an IP increase `Retry-After` (exponential backoff) to protect real users from bot floods.
@@ -49,8 +50,18 @@ const BILLING_MAX = 24;
 const AI_EXPENSIVE_WINDOW_MS = 60_000;
 const AI_EXPENSIVE_MAX = 36;
 
-/** Webhooks, health, and admin APIs (own RBAC / tooling) skip global buckets. */
-const EXEMPT_PREFIXES = ["/api/subscriptions/webhook", "/api/health", "/api/admin"] as const;
+/** Webhooks + health skip global buckets. Admin uses a dedicated high ceiling in {@link enforceApiRateLimit} (nn-db-final-002). */
+const EXEMPT_PREFIXES = ["/api/subscriptions/webhook", "/api/health"] as const;
+
+/**
+ * Stolen-session abuse protection: per-user cap above normal learner traffic ({@link LEARNER_MAX}),
+ * still bounded. Unauthenticated probes use a separate per-IP bucket.
+ */
+const ADMIN_API_WINDOW_MS = 60_000;
+/** ~5 req/s sustained — legitimate admin UIs; blocks hammering with a stolen cookie. */
+const ADMIN_API_MAX_PER_USER = 300;
+/** Stricter than {@link PUBLIC_MAX} — anonymous hits to `/api/admin/*` should be rare. */
+const ADMIN_API_MAX_PER_IP_UNAUTH = 90;
 
 /** Signup — per IP (stricter than generic public; bots target this). */
 const SIGNUP_WINDOW_MS = 60_000;
@@ -184,6 +195,11 @@ function isExemptPath(pathname: string): boolean {
   return EXEMPT_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 }
 
+/** `/api/admin` and nested routes — light global RL (see ADMIN_API_* constants). */
+export function isAdminApiRateLimitPath(pathname: string): boolean {
+  return pathname === "/api/admin" || pathname.startsWith("/api/admin/");
+}
+
 function publicCapForIp(ip: string, base: number): number {
   const b = strikeBuckets.get(ip);
   if (b && b.resetAt > Date.now() && b.count >= ABUSE_STRIKE_MAX) {
@@ -215,6 +231,17 @@ function json429LearnerFixed(): NextResponse {
   );
 }
 
+/** Admin API bucket — fixed Retry-After; per-user key resists stolen-session floods. */
+function json429AdminFixed(): NextResponse {
+  return NextResponse.json(
+    { error: "Too many requests", code: "rate_limit_exceeded", scope: "admin_api" },
+    {
+      status: 429,
+      headers: { "Retry-After": "60" },
+    },
+  );
+}
+
 /**
  * Returns a 429 response when over limit; otherwise `null` (caller continues).
  */
@@ -230,6 +257,39 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     (typeof token?.sub === "string" && token.sub) ||
     (token as { id?: string } | null)?.id ||
     null;
+
+  if (isAdminApiRateLimitPath(pathname)) {
+    if (userId) {
+      const key = `ratelimit:admin:user:${userId}`;
+      const { ok } = await checkRateLimitUnified(key, {
+        windowMs: ADMIN_API_WINDOW_MS,
+        max: ADMIN_API_MAX_PER_USER,
+      });
+      if (!ok) {
+        safeServerLog("security", "admin_api_rate_limit_exceeded", {
+          kind: "admin_api_user",
+          path: pathname.slice(0, 96),
+          ipHash: hashIp(ip),
+        });
+        return json429AdminFixed();
+      }
+    } else {
+      const key = `ratelimit:admin:ip_unauth:${ip}`;
+      const { ok } = await checkRateLimitUnified(key, {
+        windowMs: ADMIN_API_WINDOW_MS,
+        max: ADMIN_API_MAX_PER_IP_UNAUTH,
+      });
+      if (!ok) {
+        safeServerLog("security", "admin_api_rate_limit_exceeded", {
+          kind: "admin_api_ip",
+          path: pathname.slice(0, 96),
+          ipHash: hashIp(ip),
+        });
+        return json429WithBackoff(ip);
+      }
+    }
+    return null;
+  }
 
   if (pathname === "/api/signup" || pathname.startsWith("/api/signup/")) {
     const key = `ratelimit:signup:ip:${ip}`;

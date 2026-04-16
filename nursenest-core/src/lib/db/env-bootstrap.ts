@@ -1,7 +1,16 @@
 /**
  * Import this module before constructing `PrismaClient` (directly or via `@/lib/db`).
  *
- * Production (DigitalOcean, etc.): **`DATABASE_URL` wins** when set — use it for the managed Postgres URI.
+ * Production (DigitalOcean, etc.): **`DATABASE_URL` wins** when set — use the **managed Postgres**
+ * connection string from the DO dashboard (HA / standby failover is handled by the platform; the URI
+ * stays stable). Pair with `sslmode=require` when the provider requires TLS.
+ *
+ * Tunables (defaults applied only when the URL omits the param — see `tuneDatabaseUrlForProcess`):
+ * - `PRISMA_CONNECTION_LIMIT` / `PRISMA_POOL_TIMEOUT` — Prisma pool sizing vs `max_connections`
+ * - `PRISMA_CONNECT_TIMEOUT_SEC` — libpq connect timeout (fail fast during failover / network blips)
+ * - `PRISMA_STATEMENT_TIMEOUT_MS` — server-side `statement_timeout` (caps runaway queries); set `0` to skip injection
+ * - PgBouncer transaction mode: add `pgbouncer=true` to the URL yourself when using a pooler port
+ *
  * If `DATABASE_URL` is unset and `PROD_DATABASE_URL` is set, copy prod → `DATABASE_URL` (legacy alias).
  * `schema.prisma` references `env("DATABASE_URL")` only.
  */
@@ -15,6 +24,24 @@ function withDefaultQueryParam(urlString: string, key: string, value: string): s
     if (!url.searchParams.has(key)) {
       url.searchParams.set(key, value);
     }
+    return url.toString();
+  } catch {
+    return urlString;
+  }
+}
+
+/**
+ * Sets PostgreSQL `statement_timeout` for the session via libpq `options` when not already present.
+ * Skips if the URL already has an `options` param (caller manages) or `PRISMA_STATEMENT_TIMEOUT_MS=0`.
+ */
+function withDefaultStatementTimeout(urlString: string): string {
+  if (process.env.PRISMA_STATEMENT_TIMEOUT_MS === "0") return urlString;
+  try {
+    const url = new URL(urlString);
+    if (url.searchParams.has("options")) return urlString;
+    const ms = process.env.PRISMA_STATEMENT_TIMEOUT_MS?.trim() ?? "120000";
+    if (!/^\d+$/.test(ms)) return urlString;
+    url.searchParams.set("options", `-c statement_timeout=${ms}`);
     return url.toString();
   } catch {
     return urlString;
@@ -44,10 +71,13 @@ function tuneDatabaseUrlForProcess(rawUrl: string): string {
     process.env.PRISMA_CONNECTION_LIMIT ??
     (isBuildProcess || isScriptProcess ? "2" : process.env.NODE_ENV === "production" ? "5" : "8");
   const poolTimeout = process.env.PRISMA_POOL_TIMEOUT ?? (isBuildProcess ? "25" : "15");
+  const connectTimeoutSec = process.env.PRISMA_CONNECT_TIMEOUT_SEC?.trim() ?? "10";
 
   let tuned = rawUrl;
   tuned = withDefaultQueryParam(tuned, "connection_limit", connectionLimit);
   tuned = withDefaultQueryParam(tuned, "pool_timeout", poolTimeout);
+  tuned = withDefaultQueryParam(tuned, "connect_timeout", connectTimeoutSec);
+  tuned = withDefaultStatementTimeout(tuned);
   return tuned;
 }
 

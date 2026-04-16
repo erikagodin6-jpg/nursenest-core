@@ -173,7 +173,7 @@ export const authConfig: NextAuthConfig = {
           : "";
         const ip = clientIpFromRequest(request);
 
-        const rl = checkRateLimit(`login:${ip}`, { windowMs: 60_000, max: 40 });
+        const rl = await checkRateLimitUnified(`login:${ip}`, { windowMs: 60_000, max: 40 });
         if (!rl.ok) {
           safeServerLog("auth", "login_rate_limited", { ip: ip.slice(0, 64) });
           Sentry.captureMessage("login_rate_limited", {

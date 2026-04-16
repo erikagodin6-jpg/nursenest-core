@@ -8,8 +8,10 @@
 import "@/lib/auth-trust-env";
 import type { NextFetchEvent, NextMiddleware } from "next/server";
 import { NextRequest, NextResponse } from "next/server";
+import { randomUUID } from "node:crypto";
 import { getToken } from "next-auth/jwt";
 import { middlewareAuth } from "@/lib/auth-middleware";
+import { NN_CORRELATION_HEADER } from "@/lib/observability/request-correlation";
 import { canonicalExamHubPathFromPossiblyLocalizedPath } from "@/lib/i18n/exam-hub-path";
 import { MARKETING_LOCALE_COOKIE, MARKETING_LOCALE_COOKIE_MAX_AGE } from "@/lib/i18n/marketing-locale-cookie";
 import { isRateLimitingEnabled } from "@/lib/config/production-safety-flags";
@@ -18,9 +20,22 @@ import { enforceApiRateLimit } from "@/lib/server/rate-limit";
 /** NextAuth `auth` middleware typing does not always align with App Router `NextRequest` + `NextFetchEvent`. */
 const runAuthMiddleware = middlewareAuth as unknown as NextMiddleware;
 
+function ensureIncomingCorrelationId(request: NextRequest): NextRequest {
+  if (request.headers.get(NN_CORRELATION_HEADER)?.trim()) return request;
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set(NN_CORRELATION_HEADER, randomUUID().slice(0, 128));
+  return new NextRequest(request.url, { headers: requestHeaders });
+}
+
 function withPathnameHeader(request: NextRequest): NextRequest {
   const pathname = request.nextUrl.pathname;
   const requestHeaders = new Headers(request.headers);
+
+  const correlationId =
+    requestHeaders.get(NN_CORRELATION_HEADER)?.trim() ||
+    requestHeaders.get("x-request-id")?.trim() ||
+    randomUUID();
+  requestHeaders.set(NN_CORRELATION_HEADER, correlationId.slice(0, 128));
 
   /** Trusted pathname for server RBAC + layouts (RSC must not rely on spoofable client headers). */
   requestHeaders.set("x-nn-request-pathname", pathname);
@@ -42,19 +57,26 @@ function withPathnameHeader(request: NextRequest): NextRequest {
 }
 
 export async function proxy(request: NextRequest, event: NextFetchEvent) {
-  const pathname = request.nextUrl.pathname;
+  const req = ensureIncomingCorrelationId(request);
+  const pathname = req.nextUrl.pathname;
 
   if (pathname.startsWith("/api/") && isRateLimitingEnabled()) {
-    const limited = await enforceApiRateLimit(request);
-    if (limited) return limited;
+    const limited = await enforceApiRateLimit(req);
+    if (limited) {
+      const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
+      limited.headers.set(NN_CORRELATION_HEADER, cid.slice(0, 128));
+      return limited;
+    }
   }
 
   // ── Existing: locale-prefixed exam hub canonical redirect ──────────────────
   const canonicalExamHub = canonicalExamHubPathFromPossiblyLocalizedPath(pathname);
   if (canonicalExamHub) {
-    const url = request.nextUrl.clone();
+    const url = req.nextUrl.clone();
     url.pathname = canonicalExamHub.canonicalPath;
     const response = NextResponse.redirect(url);
+    const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
+    response.headers.set(NN_CORRELATION_HEADER, cid.slice(0, 128));
     response.cookies.set(MARKETING_LOCALE_COOKIE, canonicalExamHub.locale, {
       path: "/",
       maxAge: MARKETING_LOCALE_COOKIE_MAX_AGE,
@@ -67,13 +89,20 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
   // ── Existing: guest /app/lessons → /lessons ────────────────────────────────
   if (pathname === "/app/lessons") {
     const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
-    const token = secret ? await getToken({ req: request, secret }) : null;
+    const token = secret ? await getToken({ req, secret }) : null;
     if (!token) {
-      return NextResponse.redirect(new URL("/lessons", request.url));
+      const r = NextResponse.redirect(new URL("/lessons", req.url));
+      const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
+      r.headers.set(NN_CORRELATION_HEADER, cid.slice(0, 128));
+      return r;
     }
   }
 
-  return runAuthMiddleware(withPathnameHeader(request), event);
+  const forwarded = withPathnameHeader(req);
+  const res = await runAuthMiddleware(forwarded, event);
+  const outCid = forwarded.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
+  res.headers.set(NN_CORRELATION_HEADER, outCid.slice(0, 128));
+  return res;
 }
 
 /**

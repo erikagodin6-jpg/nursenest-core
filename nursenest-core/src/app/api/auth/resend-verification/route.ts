@@ -3,7 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { createAndSendVerificationEmail } from "@/lib/auth/email-verification";
 import { JSON_BODY_AUTH_FORM, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
-import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
+import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const runtime = "nodejs";
@@ -22,7 +22,7 @@ function clientIp(req: Request): string {
 
 export async function POST(req: Request) {
   const ip = clientIp(req);
-  const rl = checkRateLimit(`resend-verify:${ip}`, { windowMs: 60_000, max: 4 });
+  const rl = await checkRateLimitUnified(`resend-verify:${ip}`, { windowMs: 60_000, max: 4 });
   if (!rl.ok) {
     return NextResponse.json(
       { ok: false, error: "Too many requests. Try again shortly." },

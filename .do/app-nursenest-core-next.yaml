@@ -10,7 +10,14 @@ region: tor
 services:
   - name: web
     environment_slug: node-js
-    instance_count: 1
+    # CPU-only autoscaling (App Platform). No custom metrics — unexpected scale-ups come only from CPU.
+    # min=2: never a single instance; max=3: hard cost cap (do not raise without budget review).
+    autoscaling:
+      min_instance_count: 2
+      max_instance_count: 3
+      metrics:
+        cpu:
+          percent: 60
     instance_size_slug: basic-xs
     github:
       repo: erikagodin6-jpg/nursenest-core

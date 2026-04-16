@@ -11,6 +11,10 @@ import {
 import { findPublishedDeckByRef } from "@/lib/flashcards/resolve-deck";
 import { buildStudyQueueIds, shuffleIdsStableSeed } from "@/lib/flashcards/study-queue";
 import { prisma } from "@/lib/db";
+import {
+  PRISMA_FLASHCARD_DECK_INDEX_MAX,
+  takeForIdIn,
+} from "@/lib/db/prisma-find-many-bounds";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
 import {
@@ -178,6 +182,7 @@ export async function GET(req: NextRequest, { params }: Props) {
         where: cardWhere,
         select: { id: true, positionInDeck: true },
         orderBy: { positionInDeck: "asc" },
+        take: PRISMA_FLASHCARD_DECK_INDEX_MAX,
       }),
     );
 
@@ -197,14 +202,16 @@ export async function GET(req: NextRequest, { params }: Props) {
       });
     }
 
+    const deckIdList = deckCards.map((c) => c.id);
     const progressRows = await withRetry(() =>
       prisma.flashcardProgress.findMany({
-        where: { userId, flashcardId: { in: deckCards.map((c) => c.id) } },
+        where: { userId, flashcardId: { in: deckIdList } },
         select: {
           flashcardId: true,
           nextReviewAt: true,
           repetitions: true,
         },
+        take: takeForIdIn(deckIdList, PRISMA_FLASHCARD_DECK_INDEX_MAX),
       }),
     );
 
@@ -259,6 +266,7 @@ export async function GET(req: NextRequest, { params }: Props) {
           category: { select: { name: true, topicCode: true } },
           deck: { select: { pathwayId: true } },
         },
+        take: takeForIdIn(sliceIds, MAX_BATCH),
       }),
     );
     const byId = new Map(cardPayload.map((c) => [c.id, c]));

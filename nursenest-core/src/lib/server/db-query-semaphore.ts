@@ -17,7 +17,8 @@ export function createDbQuerySemaphore() {
   const cap = maxConcurrent();
   let active = 0;
   const queue: (() => void)[] = [];
-  let longWaitLogged = false;
+  /** Throttle repeated pressure logs (pool contention under concurrent users). */
+  let lastQueuePressureLog = 0;
 
   async function acquire(): Promise<void> {
     if (active < cap) {
@@ -29,9 +30,14 @@ export function createDbQuerySemaphore() {
       queue.push(resolve);
     });
     const waited = Date.now() - waitStart;
-    if (waited > 2000 && !longWaitLogged) {
-      longWaitLogged = true;
-      safeServerLog("resilience", "db_query_queue_wait", { waitedMs: waited, cap });
+    const now = Date.now();
+    if (waited > 2000 && now - lastQueuePressureLog > 30_000) {
+      lastQueuePressureLog = now;
+      safeServerLog("resilience", "db_query_queue_pressure", {
+        waitedMs: waited,
+        cap,
+        queueDepth: queue.length,
+      });
     }
     active++;
   }

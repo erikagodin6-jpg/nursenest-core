@@ -14,7 +14,7 @@ const nursenestCoreRoot = join(here, "..", "..", "..");
 describe("security regression (source contracts)", () => {
   it("credentials authorize uses per-IP rate limit and progressive lockout key", () => {
     const auth = readFileSync(join(nursenestCoreRoot, "src", "lib", "auth.ts"), "utf8");
-    assert.match(auth, /checkRateLimit\(`login:\$\{ip\}`/);
+    assert.match(auth, /checkRateLimitUnified\(`login:\$\{ip\}`/);
     assert.match(auth, /login-lock:/);
     assert.match(auth, /isLoginLocked\(/);
   });

@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { recordApiRouteTelemetry } from "@/lib/observability/api-route-telemetry";
 import type { TierCode } from "@prisma/client";
 import type { BillingDuration } from "@/lib/pricing/billing-types";
 import {
@@ -50,7 +51,8 @@ type AlliedPlanRow = {
   planCode: string;
 };
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const startedAt = performance.now();
   logStripePricingConfigurationGaps();
 
   const nursingPlans: NursingPlanRow[] = [];
@@ -121,7 +123,7 @@ export async function GET() {
     });
   }
 
-  return NextResponse.json({
+  const res = NextResponse.json({
     durations: BILLING_DURATION_ORDER,
     nursingTiers: NURSING_TIERS,
     alliedCareers: ALLIED_CAREER_KEYS,
@@ -130,4 +132,12 @@ export async function GET() {
     alliedPlans,
     trialDays: STRIPE_TRIAL_DAYS,
   });
+  recordApiRouteTelemetry({
+    req,
+    routeId: "GET /api/pricing/options",
+    startedAt,
+    response: res,
+    flow: "billing",
+  });
+  return res;
 }

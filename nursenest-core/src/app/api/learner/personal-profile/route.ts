@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
-import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
+import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import { loadPersonalProfilePayload } from "@/lib/learner/load-personal-profile";
 import {
   learnerPathIsAllowed,
@@ -77,7 +77,7 @@ export async function PATCH(req: Request) {
   }
 
   const ip = clientIp(req);
-  const rl = checkRateLimit(`personal-profile:${userId}:${ip}`, { windowMs: 60_000, max: 20 });
+  const rl = await checkRateLimitUnified(`personal-profile:${userId}:${ip}`, { windowMs: 60_000, max: 20 });
   if (!rl.ok) {
     return NextResponse.json({ error: "Too many updates. Try again shortly." }, { status: 429 });
   }

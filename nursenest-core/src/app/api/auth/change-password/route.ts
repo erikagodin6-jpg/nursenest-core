@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth";
 import { normalizeStoredPasswordHash } from "@/lib/auth/normalize-stored-password-hash";
 import { strongPasswordSchema } from "@/lib/auth/password-policy";
 import { JSON_BODY_AUTH_FORM, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
-import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
+import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
   void readStepUpHeader(req);
 
   const ip = clientIp(req);
-  const rl = checkRateLimit(`change-password:${userId}:${ip}`, { windowMs: 60_000, max: 8 });
+  const rl = await checkRateLimitUnified(`change-password:${userId}:${ip}`, { windowMs: 60_000, max: 8 });
   if (!rl.ok) {
     return NextResponse.json({ ok: false, error: "Too many attempts. Try again shortly." }, { status: 429 });
   }

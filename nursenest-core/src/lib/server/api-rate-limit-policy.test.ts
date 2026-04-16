@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   authRouteKind,
+  isAdminApiRateLimitPath,
   isAiExpensiveRateLimitPath,
   isAuthStrictPath,
   isBillingRateLimitPath,
@@ -14,6 +15,13 @@ import {
 } from "@/lib/server/rate-limit";
 
 describe("enforceApiRateLimit path classification", () => {
+  it("marks admin API subtree for dedicated RL (nn-db-final-002)", () => {
+    assert.equal(isAdminApiRateLimitPath("/api/admin"), true);
+    assert.equal(isAdminApiRateLimitPath("/api/admin/ops/run"), true);
+    assert.equal(isAdminApiRateLimitPath("/api/administration"), false);
+    assert.equal(isAdminApiRateLimitPath("/api/questions"), false);
+  });
+
   it("marks billing / checkout + subscribe", () => {
     assert.equal(isBillingRateLimitPath("/api/subscriptions/checkout"), true);
     assert.equal(isBillingRateLimitPath("/api/subscribe"), true);

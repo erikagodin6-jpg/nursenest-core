@@ -9,6 +9,7 @@ import { withRetry } from "@/lib/resilience/with-retry";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
+import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 
 export const dynamic = "force-dynamic";
 
@@ -60,6 +61,7 @@ export async function GET() {
   const rows = await withRetry(() =>
     prisma.examQuestion.findMany({
       where: { id: { in: ids } },
+      take: takeForIdIn(ids),
       select: {
         id: true,
         stem: true,

@@ -10,7 +10,7 @@ import { isTurnstileEnforced, verifyTurnstileToken } from "@/lib/captcha/verify-
 import { DEMO_USER_EMAIL_DOMAIN } from "@/lib/demo-users/create-demo-user";
 import { prisma } from "@/lib/db";
 import { JSON_BODY_SIGNUP, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
-import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
+import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { productEvent } from "@/lib/observability/product-events";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
@@ -48,7 +48,7 @@ const schema = z.object({
 export async function POST(req: Request) {
   setSentryServerContext({ route: "/api/signup", feature: SERVER_FEATURE.signup });
   const ip = clientIp(req);
-  const rl = checkRateLimit(`signup:${ip}`, { windowMs: 60_000, max: 10 });
+  const rl = await checkRateLimitUnified(`signup:${ip}`, { windowMs: 60_000, max: 10 });
   if (!rl.ok) {
     productEvent("signup_rate_limited", {});
     Sentry.captureMessage("signup_rate_limited", {

@@ -106,8 +106,10 @@ export async function getUserAccess(userId: string): Promise<UserAccess> {
   };
   try {
     const ua = await getUserAccessCore(userId, telemetry);
+    const durationMs = Math.round(performance.now() - t0);
     safeServerLog("entitlement", "get_user_access_timing", {
-      durationMs: Math.round(performance.now() - t0),
+      durationMs,
+      slowRead: durationMs >= 400 ? 1 : 0,
       userFound: telemetry.userFound,
       subscriptionRowsRead: telemetry.subscriptionRowsRead,
       subscriptionQueries: telemetry.subscriptionQueries,

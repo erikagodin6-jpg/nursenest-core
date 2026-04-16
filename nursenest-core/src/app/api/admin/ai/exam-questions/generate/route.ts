@@ -62,7 +62,7 @@ export async function POST(req: Request) {
   const keyCheck = assertOpenAiKeyConfigured();
   if (!keyCheck.ok) return NextResponse.json({ error: keyCheck.message }, { status: 503 });
 
-  const rl = checkAdminAiGenerateLimit(gate.admin.userId);
+  const rl = await checkAdminAiGenerateLimit(gate.admin.userId);
   if (!rl.ok) {
     return NextResponse.json({ error: "Rate limit exceeded. Try again later.", code: "RATE_LIMIT" }, { status: 429 });
   }

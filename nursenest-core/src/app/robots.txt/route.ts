@@ -1,6 +1,6 @@
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
 import { MARKETING_LANGUAGES } from "@/lib/i18n/marketing-languages";
-import { getLanguageStatus } from "@/lib/i18n/language-readiness";
+import { isLocaleRobotsPathDisallowed } from "@/lib/i18n/language-readiness";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 
 /**
@@ -29,9 +29,7 @@ function buildDisallowedLocaleLines(): string {
   const lines: string[] = [];
   for (const lang of MARKETING_LANGUAGES) {
     if (lang.code === DEFAULT_MARKETING_LOCALE) continue;
-    // Only incomplete (disabled) locales: partial-tier URLs stay crawlable so hreflang
-    // alternates and noindex directives remain discoverable (see language-readiness.ts).
-    if (getLanguageStatus(lang.code) === "disabled") {
+    if (isLocaleRobotsPathDisallowed(lang.code)) {
       lines.push(`Disallow: /${lang.code}/`);
     }
   }

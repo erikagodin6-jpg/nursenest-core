@@ -36,10 +36,10 @@ function createPrismaClient(): PrismaClient {
 }
 
 /**
- * Connection pool sizing: prefer `DATABASE_URL` query params, e.g.
- * `postgresql://...?connection_limit=15&pool_timeout=20&statement_timeout=30000` (values depend on host + traffic).
- * `statement_timeout` (ms) caps runaway queries at the server — pair with app-level retries/timeouts on hot paths.
- * Prisma does not set a universal default; tune alongside your Postgres max_connections.
+ * Pooling / resilience: `env-bootstrap` injects `connection_limit`, `pool_timeout`, `connect_timeout`, and
+ * (unless disabled) `options=-c statement_timeout=…` — override via `PRISMA_*` env vars in `./db/env-bootstrap`.
+ * Per-instance concurrency is capped by `createDbQuerySemaphore` (`NN_DB_MAX_CONCURRENT_QUERIES`).
+ * Hot API routes wrap reads with `withRetry` from `@/lib/resilience/with-retry` (transient errors only).
  *
  * Slow queries over 500ms emit `slow_query_detected` (warn) and legacy `slow_prisma_query` (see {@link logSlowPrismaQuery}); over 1000ms uses severity `critical`.
  */

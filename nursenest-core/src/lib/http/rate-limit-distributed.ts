@@ -1,20 +1,11 @@
 /**
- * Distributed rate limiting via Postgres — shared across app instances (DigitalOcean App Platform, etc.).
- * Use {@link ../rate-limit-unified} for automatic fallback to in-memory limits when distributed mode is off or DB errors occur.
+ * Postgres-backed fixed-window rate limits — Node-only (imported dynamically from {@link rate-limit-unified}).
  */
 import { createHash } from "node:crypto";
 import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
 function hashKey(key: string): string {
   return createHash("sha256").update(key, "utf8").digest("hex");
-}
-
-/** Production default: on when DB is configured; set RATE_LIMIT_DISTRIBUTED=false to force in-memory (single-instance dev only). */
-export function isDistributedRateLimitEnabled(): boolean {
-  if (process.env.RATE_LIMIT_DISTRIBUTED === "false") return false;
-  if (process.env.RATE_LIMIT_DISTRIBUTED === "true") return true;
-  return process.env.NODE_ENV === "production" && isDatabaseUrlConfigured();
 }
 
 export async function checkRateLimitDistributed(

@@ -1,7 +1,7 @@
 import { Prisma, TrialStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
+import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import { hashTrialDeviceFingerprint } from "@/lib/trial/trial-fingerprint";
 import { TRIAL_DURATION_MS } from "@/lib/trial/trial-constants";
 import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
@@ -47,12 +47,12 @@ export async function attemptStartTrial(args: {
     return { ok: false, code: "db_unavailable", message: "Service unavailable.", status: 503 };
   }
 
-  const ipRl = checkRateLimit(`trial-start:ip:${ip}`, { windowMs: 86_400_000, max: 20 });
+  const ipRl = await checkRateLimitUnified(`trial-start:ip:${ip}`, { windowMs: 86_400_000, max: 20 });
   if (!ipRl.ok) {
     return { ok: false, code: "rate_limit_ip", message: "Too many attempts from this network. Try again tomorrow.", status: 429 };
   }
 
-  const userRl = checkRateLimit(`trial-start:user:${userId}`, { windowMs: 3_600_000, max: 5 });
+  const userRl = await checkRateLimitUnified(`trial-start:user:${userId}`, { windowMs: 3_600_000, max: 5 });
   if (!userRl.ok) {
     return { ok: false, code: "rate_limit_user", message: "Too many attempts. Try again later.", status: 429 };
   }

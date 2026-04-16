@@ -5,7 +5,7 @@ import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { JSON_BODY_COACH, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
-import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
+import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import {
   buildCoachSystemPrompt,
   buildCoachUserPrompt,
@@ -82,7 +82,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const rl = checkRateLimit(`study-coach:${userId}`, RATE);
+  const rl = await checkRateLimitUnified(`study-coach:${userId}`, RATE);
   if (!rl.ok) {
     return NextResponse.json(
       {

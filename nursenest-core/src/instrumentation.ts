@@ -14,6 +14,7 @@ import {
   logStripeProductionPricingMisconfiguration,
 } from "@/lib/stripe/pricing-map";
 import { assertPinnedAuthBasePath } from "@/lib/auth/auth-base-path";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
@@ -27,6 +28,9 @@ export async function register() {
       `[nursenest-core] instrumentation: nodejs runtime registered PORT=${process.env.PORT ?? "(unset)"}`,
     );
     assertPinnedAuthBasePath();
+    void import("@/lib/observability/http-access-log-hook").then((m) => {
+      m.installHttpAccessLogHook();
+    });
     logStripeCheckoutEnvStartupStatus();
     logStripeProductionPricingMisconfiguration();
     if (process.env.SENTRY_ENABLED === "true") {
@@ -65,6 +69,14 @@ export async function register() {
 }
 
 export const onRequestError: typeof Sentry.captureRequestError = (...args) => {
+  const err = args[0];
+  const req = args[1] as { url?: string } | undefined;
+  const msg = err instanceof Error ? err.message : String(err);
+  safeServerLog("http", "request_error", {
+    route: typeof req?.url === "string" ? req.url.slice(0, 160) : "unknown",
+    errorName: err instanceof Error ? err.name : "non_error",
+    messageSample: msg.slice(0, 200),
+  });
   if (process.env.SENTRY_ENABLED !== "true") return;
   return Sentry.captureRequestError(...args);
 };
