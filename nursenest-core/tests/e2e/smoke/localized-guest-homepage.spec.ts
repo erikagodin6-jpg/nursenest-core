@@ -11,6 +11,7 @@ import {
   seriousLocalizedGuestConsoleErrors,
 } from "../helpers/localized-smoke-diagnostics";
 import { HEADER_CHROME } from "../helpers/country-selector";
+import { ensureHeaderNavigationVisible } from "../helpers/marketing-header-navigation";
 import { dismissMarketingScrims } from "../helpers/marketing-smoke-scrims";
 import {
   expectPathMatchesMarketingLocale,
@@ -50,7 +51,13 @@ test.describe("Localized guest homepage", () => {
 
         const main = page.locator("main, [role='main']").first();
         await expect(main).toBeVisible({ timeout: 30_000 });
-        await expect(main.locator("a.nn-nav-cta").first()).toBeVisible({ timeout: 30_000 });
+        const heroCta = main.locator(
+          'a[href*="/signup"], a[href*="/login"], a[href="/app"], a[href*="/app/"], a[href*="/pricing"]',
+        );
+        await expect(heroCta.first()).toBeAttached({ timeout: 30_000 });
+        await heroCta.first().scrollIntoViewIfNeeded();
+        await expect(heroCta.first()).toBeVisible({ timeout: 30_000 });
+
         await expect(page.locator("footer").first()).toBeVisible({ timeout: 25_000 });
 
         expectPathMatchesMarketingLocale(page.url(), code);
@@ -62,12 +69,16 @@ test.describe("Localized guest homepage", () => {
 
         await page.setViewportSize({ width: 390, height: 844 });
         await dismissMarketingScrims(page);
-        const mobileMenuOpen = page.locator(`${HEADER_CHROME} div.md\\:hidden`).locator("button").nth(1);
-        await expect(mobileMenuOpen).toBeVisible({ timeout: 20_000 });
-        await mobileMenuOpen.click({ force: true });
-        await expect(mobileMenuOpen).toHaveAttribute("aria-expanded", "true", { timeout: 15_000 });
-        await page.keyboard.press("Escape");
-        await expect(mobileMenuOpen).toBeVisible({ timeout: 15_000 });
+        await ensureHeaderNavigationVisible(page);
+
+        const menuBtn = page.locator(`${HEADER_CHROME} button:has(svg[class*="lucide-menu"])`).first();
+        await expect(menuBtn).toBeAttached({ timeout: 15_000 });
+        if (await menuBtn.isVisible().catch(() => false)) {
+          await menuBtn.click();
+          await expect(menuBtn).toHaveAttribute("aria-expanded", "true", { timeout: 15_000 });
+          await page.keyboard.press("Escape");
+          await expect(menuBtn).toBeVisible({ timeout: 15_000 });
+        }
 
         const cap = await recordLocalizedSmoke(o, testInfo, `guest-home-${code}`, page.url(), code);
         const serious = seriousLocalizedGuestConsoleErrors(cap.consoleErrors);

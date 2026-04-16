@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Runs `playwright.smoke.config.ts` (single project **`chromium`**, `tests/e2e/smoke-production/**`).
- * Legacy specs under `tests/e2e/smoke/`: `npm run qa:smoke:extended` (`playwright.smoke-extended.config.ts`, also `chromium`).
+ * Runs `playwright.smoke.config.ts` — named projects (Guest, Logged-in homepage, …) in `tests/e2e/smoke-production/**`.
+ * Legacy specs under `tests/e2e/smoke/`: `npm run qa:smoke:extended` (`playwright.smoke-extended.config.ts`).
  *
  * - Honors `BASE_URL` (defaults to http://127.0.0.1:3000 when unset).
  * - Sets `PLAYWRIGHT_SKIP_WEB_SERVER=1` when BASE_URL is not localhost (no dev server bootstrap).
@@ -36,7 +36,7 @@ console.log("");
 console.log("=== qa:smoke ===");
 console.log(`BASE_URL: ${baseUrl}`);
 console.log(`PLAYWRIGHT_SKIP_WEB_SERVER: ${process.env.PLAYWRIGHT_SKIP_WEB_SERVER ?? "(unset)"}`);
-console.log("Runner: project chromium → smoke-production specs (no mocks).");
+console.log("Runner: Guest | Logged-in homepage | Free | Paid | Admin (no mocks).");
 console.log("");
 
 const extraArgs = process.argv.slice(2);

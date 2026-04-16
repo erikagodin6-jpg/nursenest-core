@@ -29,6 +29,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import {
   CAT_QUESTION_SELECT,
@@ -97,9 +98,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   // ── Reload pool (minimal select) ─────────────────────────────────────────
 
+  const poolIds = sessionConfig.poolQuestionIds;
   const rows = await prisma.examQuestion.findMany({
-    where: { id: { in: sessionConfig.poolQuestionIds } },
+    where: { id: { in: poolIds } },
     select: CAT_QUESTION_SELECT,
+    take: takeForIdIn(poolIds),
   });
 
   const pool = dbRowsToCatQuestions(rows as unknown as DbQuestionRow[]);

@@ -2,6 +2,7 @@ import { ContentStatus, type Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import {
@@ -140,12 +141,14 @@ export async function GET(req: NextRequest) {
   }
 
   if (weakOnly || incorrectOnly) {
+    const scopedIds = scoped.map((c) => c.id);
     const progress = await prisma.flashcardProgress.findMany({
       where: {
         userId,
-        flashcardId: { in: scoped.map((c) => c.id) },
+        flashcardId: { in: scopedIds },
       },
       select: { flashcardId: true, lastQuality: true, repetitions: true },
+      take: takeForIdIn(scopedIds, 5000),
     });
     const map = new Map(progress.map((p) => [p.flashcardId, p]));
     if (weakOnly) {

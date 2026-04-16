@@ -5,6 +5,7 @@ import { normalizeEmailForDedup } from "@/lib/auth/email-address-normalization";
 import { normalizeLoginIdentifier } from "@/lib/auth/normalize-login-identifier";
 import { isStaffRole } from "@/lib/auth/staff-roles";
 import { prisma } from "@/lib/db";
+import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 
 export const dynamic = "force-dynamic";
 
@@ -55,11 +56,13 @@ export async function GET(req: Request) {
     ),
   ]);
 
+  const idList = [...new Set(trimmedIds.map((r) => r.id))];
   const trimmedUsers =
     trimmedIds.length > 0
       ? await prisma.user.findMany({
-          where: { id: { in: [...new Set(trimmedIds.map((r) => r.id))] } },
+          where: { id: { in: idList } },
           select: userDiagSelect,
+          take: takeForIdIn(idList, DIAG_CAP),
         })
       : [];
 

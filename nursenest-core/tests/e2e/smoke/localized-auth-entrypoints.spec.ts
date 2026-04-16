@@ -9,6 +9,7 @@ import {
   seriousLocalizedGuestConsoleErrors,
 } from "../helpers/localized-smoke-diagnostics";
 import { HEADER_CHROME } from "../helpers/country-selector";
+import { ensureHeaderNavigationVisible } from "../helpers/marketing-header-navigation";
 import { dismissMarketingScrims } from "../helpers/marketing-smoke-scrims";
 import {
   DEFAULT_MARKETING_LOCALE,
@@ -17,9 +18,6 @@ import {
 } from "../helpers/smoke-marketing-locales";
 
 const locales = getSmokeMarketingLocaleMatrix();
-
-const LOGIN_ARIA = "Log in to your NurseNest account";
-const SIGNUP_ARIA = "Start free account — nursing and healthcare exam prep";
 
 async function assertHeaderDoesNotLocalePrefixAppAdmin(page: Page, localeCode: string) {
   const hrefs = await page.locator(`${HEADER_CHROME} a[href]`).evaluateAll((els) =>
@@ -85,8 +83,10 @@ test.describe("Localized auth entrypoints (guest)", () => {
         expectPathMatchesMarketingLocale(page.url(), code);
         await assertHeaderDoesNotLocalePrefixAppAdmin(page, code);
 
-        const loginLink = page.locator(`${HEADER_CHROME} a[aria-label="${LOGIN_ARIA}"]`).first();
-        await expect(loginLink).toBeVisible({ timeout: 30_000 });
+        const loginLink = page.locator(`${HEADER_CHROME} a[href*="/login"]`).first();
+        await expect(loginLink).toBeAttached({ timeout: 30_000 });
+        await ensureHeaderNavigationVisible(page);
+        await expect(loginLink).toBeVisible({ timeout: 15_000 });
         const loginHref = await loginLink.getAttribute("href");
         expect(loginHref).toBeTruthy();
         await loginLink.evaluate((el: HTMLElement) => (el as HTMLAnchorElement).click());
@@ -95,8 +95,10 @@ test.describe("Localized auth entrypoints (guest)", () => {
         await expect(page.locator("main, [role='main']").first()).toBeVisible({ timeout: 30_000 });
 
         await gotoAndPrep(page, homePath);
-        const signupLink = page.locator(`${HEADER_CHROME} a[aria-label="${SIGNUP_ARIA}"]`).first();
-        await expect(signupLink).toBeVisible({ timeout: 30_000 });
+        const signupLink = page.locator(`${HEADER_CHROME} a[href*="/signup"]`).first();
+        await expect(signupLink).toBeAttached({ timeout: 30_000 });
+        await ensureHeaderNavigationVisible(page);
+        await expect(signupLink).toBeVisible({ timeout: 15_000 });
         await signupLink.evaluate((el: HTMLElement) => (el as HTMLAnchorElement).click());
         await page.waitForLoadState("domcontentloaded");
         expectSignupPath(new URL(page.url()).pathname, code);
