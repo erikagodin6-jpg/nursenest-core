@@ -10,7 +10,7 @@ import {
  * GET ?limit=30&status=COMPLETED|ALL|IN_PROGRESS&completedOnly=0|1&pathwayId=&catExamConfigId=&lowQualityOnly=1&format=json|csv
  */
 export async function GET(req: NextRequest) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const sp = req.nextUrl.searchParams;

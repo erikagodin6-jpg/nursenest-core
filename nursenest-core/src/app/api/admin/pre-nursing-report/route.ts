@@ -3,7 +3,7 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { loadPreNursingAnalyticsReport } from "@/lib/admin/load-pre-nursing-report";
 
 export async function GET() {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
   try {
     const report = await loadPreNursingAnalyticsReport();

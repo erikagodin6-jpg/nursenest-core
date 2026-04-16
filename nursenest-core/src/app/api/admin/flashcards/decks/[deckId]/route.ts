@@ -18,7 +18,7 @@ type Props = { params: Promise<{ deckId: string }> };
 export const dynamic = "force-dynamic";
 
 export async function PATCH(req: Request, { params }: Props) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { deckId } = await params;

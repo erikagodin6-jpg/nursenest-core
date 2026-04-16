@@ -3,7 +3,7 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { refreshContentQualityCorpusSnapshot } from "@/lib/admin/content-quality-corpus-refresh";
 
 export async function POST() {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   try {

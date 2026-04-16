@@ -6,7 +6,7 @@ import { buildQuestionBankCoverageReport } from "@/lib/questions/build-question-
  * Bounded coverage report: counts and capped groupings only (no stems).
  */
 export async function GET() {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   try {

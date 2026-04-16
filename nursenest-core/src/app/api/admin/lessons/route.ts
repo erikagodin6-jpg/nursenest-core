@@ -52,7 +52,7 @@ function parseListQuery(sp: URLSearchParams, page: number, pageSize: number): Ad
 }
 
 export async function GET(req: NextRequest) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const sp = req.nextUrl.searchParams;
@@ -169,7 +169,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const parsed = createSchema.safeParse(await req.json());

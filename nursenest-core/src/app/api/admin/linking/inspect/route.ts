@@ -32,7 +32,7 @@ import type { LinkContext, LinkSurface, LinkTargetKind, ResolvedLinks } from "@/
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { searchParams } = req.nextUrl;
@@ -118,7 +118,7 @@ export async function GET(req: NextRequest) {
  * (supports topicHints, excludeHrefs, full pathway).
  */
 export async function POST(req: NextRequest) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   let body: Partial<LinkContext> = {};

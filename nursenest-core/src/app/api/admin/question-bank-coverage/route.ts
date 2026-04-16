@@ -7,7 +7,7 @@ import { buildQuestionBankCoverageAnalysis } from "@/lib/questions/build-questio
  * Heavy aggregate — admin-only; suitable for ops / nightly jobs.
  */
 export async function GET() {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   try {

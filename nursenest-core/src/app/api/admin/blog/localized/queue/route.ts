@@ -31,7 +31,7 @@ const queueSchema = z.object({
  * /api/admin/blog/localized/generate for each item.
  */
 export async function POST(req: NextRequest) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const body = await req.json();

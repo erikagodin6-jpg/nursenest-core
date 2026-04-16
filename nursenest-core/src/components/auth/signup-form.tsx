@@ -1,9 +1,12 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { getSession, signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { TurnstileSignup } from "@/components/auth/turnstile-signup";
+import { resolveLoginSubmitOutcome } from "@/components/auth/login-form-result";
+import { isLikelyNetworkFailure } from "@/components/auth/auth-client-error-handling";
 import {
   reconcileExamFocusForCountry,
   signupExamFocusOptions,
@@ -29,14 +32,18 @@ export function SignupForm({
   const { t, locale } = useMarketingI18n();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const submitGeneration = useRef(0);
+
+  const redirectTarget = useMemo(() => safeCallbackPath(searchParams.get("callbackUrl")) ?? "/app", [searchParams]);
+
   const loginAfterSignupHref = useMemo(() => {
-    const target = safeCallbackPath(searchParams.get("callbackUrl")) ?? "/app";
     const loginBase = withMarketingLocale(locale, "/login");
     const params = new URLSearchParams();
-    params.set("callbackUrl", target);
+    params.set("callbackUrl", redirectTarget);
     params.set("registered", "1");
     return `${loginBase}?${params.toString()}`;
-  }, [searchParams, locale]);
+  }, [locale, redirectTarget]);
+
   const [error, setError] = useState<string | null>(null);
   const [errorHelp, setErrorHelp] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -65,26 +72,27 @@ export function SignupForm({
       case "missing_table":
         return t("pages.signup.errorServer");
       default:
-        return t("pages.signup.errorGeneric");
+        return t("pages.signup.errorServer");
     }
   }
 
   /**
-   * Secondary line under the primary error. Do not pair API `error` strings with a generic "server"
-   * help blurb — that hid specific failures (e.g. duplicate email) behind misleading copy.
-   * Most codes are self-explanatory with the links below; keep this null unless we add real strings.
+   * Secondary line under the primary error — only when we have explicit extra context.
    */
   function signupErrorHelp(data: { error?: string; code?: string }): string | null {
     switch (data.code) {
       case "db":
-      case "missing_table":
-        return t("pages.signup.errorServerHelp");
+      case "missing_table": {
+        const h = t("pages.signup.errorServerHelp")?.trim();
+        return h || null;
+      }
       default:
         return null;
     }
   }
 
   async function onSubmit(formData: FormData) {
+    const myGeneration = ++submitGeneration.current;
     setError(null);
     setErrorHelp(null);
     trackProductEvent(PH.signupSubmitAttempt, {
@@ -121,12 +129,23 @@ export function SignupForm({
     }
 
     setPending(true);
+    let keepSpinnerUntilRedirect = false;
     try {
-      const res = await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      let res: Response;
+      try {
+        res = await fetch("/api/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } catch (e) {
+        if (myGeneration !== submitGeneration.current) return;
+        setError(isLikelyNetworkFailure(e) ? t("pages.signup.errorNetwork") : t("pages.signup.errorServer"));
+        setErrorHelp(null);
+        return;
+      }
+
+      if (myGeneration !== submitGeneration.current) return;
 
       const data = (await res.json().catch(() => ({}))) as { error?: string; code?: string };
 
@@ -135,6 +154,7 @@ export function SignupForm({
         setErrorHelp(signupErrorHelp(data));
         return;
       }
+
       trackProductEvent(PH.signupSuccessClient, {
         actor: "anonymous",
         funnel_step: "account_created",
@@ -142,9 +162,45 @@ export function SignupForm({
         signup_country: country,
         exam_focus: examFocus,
       });
+
+      let signInResult: Awaited<ReturnType<typeof signIn>>;
+      try {
+        signInResult = await signIn("credentials", {
+          email: payload.email,
+          password: payload.password,
+          rememberMe: "true",
+          redirect: false,
+          redirectTo: redirectTarget,
+        });
+      } catch (e) {
+        if (myGeneration !== submitGeneration.current) return;
+        console.error("[signup] post-register signIn threw", e);
+        keepSpinnerUntilRedirect = true;
+        router.push(loginAfterSignupHref);
+        return;
+      }
+
+      if (myGeneration !== submitGeneration.current) return;
+
+      let outcome = resolveLoginSubmitOutcome(signInResult, false);
+      if (outcome !== "success") {
+        const session = await getSession().catch(() => null);
+        outcome = resolveLoginSubmitOutcome(signInResult, Boolean(session?.user));
+      }
+
+      if (outcome === "success") {
+        keepSpinnerUntilRedirect = true;
+        await router.refresh();
+        router.push(redirectTarget);
+        return;
+      }
+
+      keepSpinnerUntilRedirect = true;
       router.push(loginAfterSignupHref);
     } finally {
-      setPending(false);
+      if (!keepSpinnerUntilRedirect) {
+        setPending(false);
+      }
     }
   }
 
@@ -305,7 +361,7 @@ export function SignupForm({
         type="submit"
         disabled={pending || (turnstileGateActive && !captchaToken?.trim())}
       >
-        {pending ? `${t("pages.signup.createAccount")}…` : t("pages.signup.createAccount")}
+        {pending ? t("pages.signup.creatingAccount") : t("pages.signup.createAccount")}
       </button>
       <p className="text-center text-sm text-muted-foreground">
         <Link href={loginAfterSignupHref} className="font-semibold text-primary underline-offset-2 hover:underline">

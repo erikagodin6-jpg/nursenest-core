@@ -4,7 +4,7 @@ import { buildPathwayLessonTranslationGapReport } from "@/lib/lessons/pathway-le
 
 /** Bounded translation coverage matrix (counts / slug samples only). */
 export async function GET() {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   try {

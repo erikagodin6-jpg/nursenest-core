@@ -167,7 +167,7 @@ function partialPrePublishFromPatch(d: z.infer<typeof patchSchema>): Partial<Pre
 }
 
 export async function GET(_req: Request, { params }: Props) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { id } = await params;
@@ -200,7 +200,7 @@ function contentFieldsTouched(d: z.infer<typeof patchSchema>): boolean {
 }
 
 export async function PATCH(req: Request, { params }: Props) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { id } = await params;
@@ -499,7 +499,7 @@ export async function PATCH(req: Request, { params }: Props) {
 }
 
 export async function DELETE(_req: Request, { params }: Props) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { id } = await params;

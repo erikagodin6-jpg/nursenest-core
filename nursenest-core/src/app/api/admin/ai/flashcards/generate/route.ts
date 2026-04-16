@@ -29,7 +29,7 @@ const bodySchema = z.object({
 const TOOL = "FLASHCARD_BATCH";
 
 export async function POST(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   if (!isAdminAiGenerationEnabled()) {

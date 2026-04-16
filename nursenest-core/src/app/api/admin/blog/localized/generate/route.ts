@@ -44,7 +44,7 @@ const generateSchema = z.object({
  * Set `promptOnly=true` to return prompts without making an AI call.
  */
 export async function POST(req: NextRequest) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   let body: unknown;

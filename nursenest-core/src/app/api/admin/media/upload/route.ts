@@ -21,7 +21,7 @@ function parseTags(raw: string | null): string[] {
 }
 
 export async function POST(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   if (!isSpacesUploadConfigured()) {

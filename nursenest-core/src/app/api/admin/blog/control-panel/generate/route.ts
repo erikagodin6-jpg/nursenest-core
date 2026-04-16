@@ -43,7 +43,7 @@ const bodySchema = z.object({
  * Full control-panel pipeline: structured editorial JSON plan → HTML article → persisted DRAFT BlogPost.
  */
 export async function POST(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   if (!isAdminAiGenerationEnabled()) {

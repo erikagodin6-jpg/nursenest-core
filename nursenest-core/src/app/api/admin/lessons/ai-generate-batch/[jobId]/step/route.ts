@@ -34,7 +34,7 @@ const stepBodySchema = z.object({
 });
 
 export async function POST(req: Request, ctx: Props) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   if (!isAdminAiGenerationEnabled()) {

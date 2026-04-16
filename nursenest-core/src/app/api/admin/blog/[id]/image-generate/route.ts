@@ -15,7 +15,7 @@ type Props = { params: Promise<{ id: string }> };
  * Non-blocking by design so campaigns do not fail on image provider latency.
  */
 export async function POST(req: Request, { params }: Props) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
   const { id } = await params;
   const post = await prisma.blogPost.findUnique({

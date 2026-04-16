@@ -15,7 +15,7 @@ function parseEnumValue<T extends string>(raw: string | null, allowed: readonly 
  * Optional: `hours` (1–2160) filters createdAt; `search` matches summary/error/topic (min 2 chars); `id` for one row.
  */
 export async function GET(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { searchParams } = new URL(req.url);

@@ -16,7 +16,7 @@ type RouteContext = { params: Promise<{ id: string }> };
  * Processes up to `limit` pending items (default 4). Idempotent; safe to retry. Chunk to avoid timeouts.
  */
 export async function POST(req: Request, ctx: RouteContext) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   if (!isAdminAiGenerationEnabled()) {

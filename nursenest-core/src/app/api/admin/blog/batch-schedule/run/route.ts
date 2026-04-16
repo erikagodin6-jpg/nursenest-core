@@ -7,7 +7,7 @@ import { processDueBlogBatchScheduleItems } from "@/lib/blog/blog-batch-schedule
  * Process due batch schedule items once (admin manual run). Same logic as cron.
  */
 export async function POST() {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const result = await processDueBlogBatchScheduleItems();

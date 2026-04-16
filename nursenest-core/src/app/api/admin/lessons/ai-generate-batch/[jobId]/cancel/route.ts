@@ -15,7 +15,7 @@ export const runtime = "nodejs";
 type Props = { params: Promise<{ jobId: string }> };
 
 export async function POST(_req: Request, ctx: Props) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { jobId } = await ctx.params;

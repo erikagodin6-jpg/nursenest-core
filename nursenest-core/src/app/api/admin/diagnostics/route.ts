@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
  * JSON snapshot for the admin diagnostics dashboard (safe when optional tables are missing).
  */
 export async function GET() {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   try {

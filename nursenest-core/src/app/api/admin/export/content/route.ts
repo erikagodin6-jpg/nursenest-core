@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 
 /** Paginated JSON export for backups / migrations (admin only). */
 export async function GET(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const url = new URL(req.url);

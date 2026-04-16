@@ -10,7 +10,7 @@ const TTL_MS = 60_000;
  * Aggregated platform metrics (admin-only). Short TTL reduces DB load; refresh may lag up to 60s.
  */
 export async function GET() {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const cached = ttlGet<Awaited<ReturnType<typeof loadAdminDashboardStats>>>(CACHE_KEY);

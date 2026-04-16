@@ -6,7 +6,7 @@ const MAX_PAGE_SIZE = 500;
 const MAX_PAGE = 200;
 
 export async function GET(req: NextRequest) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const page = Math.max(1, Math.min(MAX_PAGE, Number(req.nextUrl.searchParams.get("page") ?? "1")));

@@ -38,7 +38,8 @@ export async function requireAdmin() {
   const u = session?.user as { id?: string; email?: string | null } | undefined;
   /** Set by `src/proxy.ts` as `x-nn-admin-path` / `x-nn-request-pathname` for RBAC. */
   const path = await resolveAdminRequestPath();
-  const callbackPath = path && path.length > 0 ? path : "/admin";
+  /** Unresolved path is `"/"` — do not send users to login with callback `/` (use `/admin`). */
+  const callbackPath = path && path.length > 0 && path !== "/" ? path : "/admin";
 
   if (!session?.user || (!u?.id && !u?.email)) {
     redirect(loginRedirectWithCallback(callbackPath));

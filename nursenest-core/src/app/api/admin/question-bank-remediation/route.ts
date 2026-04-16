@@ -3,7 +3,7 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { loadQuestionBankRemediationIntelligence } from "@/lib/questions/load-question-bank-remediation-intelligence";
 
 export async function GET() {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const intel = await loadQuestionBankRemediationIntelligence();

@@ -3,6 +3,12 @@ import { logAdminApiGate } from "@/lib/admin/admin-audit-log";
 import type { AdminSession } from "@/lib/admin/admin-types";
 import { isPathAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
 import { resolveAdminRequestPath } from "@/lib/auth/resolve-admin-request-path";
+
+/** Never pass empty string to RBAC — unresolved headers resolve to "/" in {@link resolveAdminRequestPath}. */
+function normalizeAdminRbacPath(path: string): string {
+  const t = path.trim();
+  return t.length > 0 ? t : "/";
+}
 import { getStaffSession } from "@/lib/auth/staff-session";
 
 export type { AdminSession } from "@/lib/admin/admin-types";
@@ -18,8 +24,8 @@ export function forbidden(): NextResponse {
 }
 
 /**
- * Prefer the request URL for RBAC (always correct for Route Handlers). Falls back to
- * `x-nn-admin-path` / invoke headers from `src/proxy.ts` when `req` is omitted (rare).
+ * Prefer `req.url` for RBAC (always correct for Route Handlers). Header-based resolution from
+ * `src/proxy.ts` is fallback only when `req` is omitted or URL is not an admin/debug path.
  */
 async function resolveAdminAuthPath(req?: Request): Promise<string> {
   if (req) {
@@ -30,13 +36,13 @@ async function resolveAdminAuthPath(req?: Request): Promise<string> {
         pathname.startsWith("/admin") ||
         pathname.startsWith("/api/debug")
       ) {
-        return pathname.replace(/\/$/, "") || pathname;
+        return normalizeAdminRbacPath(pathname.replace(/\/$/, "") || pathname);
       }
     } catch {
       /* ignore */
     }
   }
-  return resolveAdminRequestPath();
+  return normalizeAdminRbacPath(await resolveAdminRequestPath());
 }
 
 function shouldAuditSuccessfulMutation(req?: Request): boolean {
@@ -51,7 +57,7 @@ function shouldAuditSuccessfulRead(req?: Request): boolean {
 
 /**
  * Admin API guard: DB-backed staff roles + path-based RBAC.
- * Always pass `req` from Route Handlers so path checks match the invoked route.
+ * Always pass `req` from `/api/admin/*` Route Handlers so path checks use the invoked URL first.
  */
 export async function requireAdmin(req?: Request) {
   const path = await resolveAdminAuthPath(req);

@@ -4,7 +4,7 @@ import { ADMIN_AI_LESSON_GENERATOR_TOOL } from "@/lib/lessons/admin-ai-lesson-pi
 import { prisma } from "@/lib/db";
 
 export async function GET(req: NextRequest) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const sp = req.nextUrl.searchParams;

@@ -9,7 +9,7 @@ type RouteContext = { params: Promise<{ id: string }> };
  * Re-queue a FAILED background job (cron worker). Does not run the job inline.
  */
 export async function POST(_req: Request, ctx: RouteContext) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { id } = await ctx.params;

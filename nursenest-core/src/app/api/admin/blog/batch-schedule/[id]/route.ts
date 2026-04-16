@@ -13,7 +13,7 @@ type RouteContext = { params: Promise<{ id: string }> };
 
 export async function GET(_req: NextRequest, context: RouteContext) {
   const { params } = context;
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
   const { id } = await params;
 
@@ -47,7 +47,7 @@ export async function GET(_req: NextRequest, context: RouteContext) {
 
 export async function PATCH(req: NextRequest, context: RouteContext) {
   const { params } = context;
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
   const { id } = await params;
 

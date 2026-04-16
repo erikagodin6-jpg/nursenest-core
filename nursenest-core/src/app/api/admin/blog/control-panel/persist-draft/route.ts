@@ -47,7 +47,7 @@ const bodySchema = z.object({
  * Persist a control-panel draft without re-running LLM (e.g. after citation gate blocked full generate).
  */
 export async function POST(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const parsed = bodySchema.safeParse(await req.json());

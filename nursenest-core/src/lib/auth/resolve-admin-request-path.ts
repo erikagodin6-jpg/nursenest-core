@@ -1,5 +1,14 @@
 import "server-only";
 import { headers } from "next/headers";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+
+let adminPathUnresolvedLogged = false;
+
+function logAdminPathUnresolvedOnce(): void {
+  if (adminPathUnresolvedLogged) return;
+  adminPathUnresolvedLogged = true;
+  safeServerLog("admin_access", "admin_request_path_unresolved", { fallback: "/" });
+}
 
 function normalizeToPathname(raw: string): string | null {
   const t = raw.trim();
@@ -22,6 +31,7 @@ function normalizeToPathname(raw: string): string | null {
  * Path for RBAC checks on admin UI + `/api/admin/*`.
  * Prefer `x-nn-admin-path` / `x-nn-request-pathname` from `src/proxy.ts` (set before NextAuth middleware runs).
  * Falls back to other same-request URL headers (never `Referer` — it can point at the previous page).
+ * Never returns empty string: unresolved → `"/"` (denied for non-super in {@link isPathAllowedForStaffTier}).
  */
 export async function resolveAdminRequestPath(): Promise<string> {
   const h = await headers();
@@ -38,5 +48,6 @@ export async function resolveAdminRequestPath(): Promise<string> {
     const p = c ? normalizeToPathname(c) : null;
     if (p) return p;
   }
-  return "";
+  logAdminPathUnresolvedOnce();
+  return "/";
 }

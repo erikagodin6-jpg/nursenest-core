@@ -31,7 +31,7 @@ const patchSchema = z
   .strict();
 
 export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
   const { id } = await ctx.params;
 
@@ -80,7 +80,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
 }
 
 export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
   const { id } = await ctx.params;
 
@@ -143,7 +143,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
 }
 
 export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string }> }) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
   const { id } = await ctx.params;
   await prisma.contentItem.delete({ where: { id } });

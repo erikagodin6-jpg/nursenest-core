@@ -7,7 +7,7 @@ import { buildHighEndCompletenessAudit } from "@/lib/content-audit/high-end-comp
  * Admin-only JSON report used by ops, planning, and release gates.
  */
 export async function GET(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   try {

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { isLikelyNetworkFailure } from "@/components/auth/auth-client-error-handling";
 
 type Props = {
   backToLoginHref: string;
@@ -11,7 +12,12 @@ type Props = {
   successMessage: string;
   /** Shown under the main success line — e.g. check spam, contact support (no account-existence hints). */
   successDetail?: string;
+  /** Fallback when the server returns an error without a safe `error` string. */
   errorMessage: string;
+  /** Prefer over `errorMessage` for likely offline / failed-fetch cases. */
+  errorNetwork?: string;
+  /** Prefer over `errorMessage` for server-side failures (5xx / opaque errors). */
+  errorServer?: string;
   notEmailMessage?: string;
   emailPlaceholder: string;
 };
@@ -24,6 +30,8 @@ export function ForgotPasswordForm({
   successMessage,
   successDetail,
   errorMessage,
+  errorNetwork,
+  errorServer,
   notEmailMessage = "Password reset uses the email on your account. Please enter your email address, not your username.",
   emailPlaceholder,
 }: Props) {
@@ -32,7 +40,11 @@ export function ForgotPasswordForm({
   const [error, setError] = useState<string | null>(null);
   const [devUrl, setDevUrl] = useState<string | null>(null);
 
+  const networkCopy = errorNetwork ?? errorMessage;
+  const serverCopy = errorServer ?? errorMessage;
+
   async function submitForgotPassword(formData: FormData) {
+    if (loading) return;
     setError(null);
     setDevUrl(null);
     setLoading(true);
@@ -40,7 +52,6 @@ export function ForgotPasswordForm({
       const email = String(formData.get("email") ?? "").trim();
       if (email.length > 0 && !email.includes("@")) {
         setError(notEmailMessage);
-        setLoading(false);
         return;
       }
       const url =
@@ -68,11 +79,8 @@ export function ForgotPasswordForm({
         }
       }
       if (!res.ok) {
-        const msg =
-          typeof data.error === "string" && data.error.length > 0
-            ? data.error
-            : `Request failed (${res.status}). ${errorMessage}`;
-        setError(msg);
+        const fromApi = typeof data.error === "string" && data.error.trim().length > 0 ? data.error.trim() : null;
+        setError(fromApi ?? serverCopy);
         return;
       }
       setDone(true);
@@ -83,7 +91,11 @@ export function ForgotPasswordForm({
       const aborted =
         (e instanceof DOMException && e.name === "AbortError") ||
         (e instanceof Error && (e.name === "AbortError" || /aborted/i.test(e.message)));
-      setError(aborted ? "Request timed out. Your network or the server may be slow — try again in a moment." : errorMessage);
+      if (aborted) {
+        setError(networkCopy);
+        return;
+      }
+      setError(isLikelyNetworkFailure(e) ? networkCopy : serverCopy);
     } finally {
       setLoading(false);
     }
@@ -114,6 +126,7 @@ export function ForgotPasswordForm({
       className="mt-6 space-y-4"
       onSubmit={(e) => {
         e.preventDefault();
+        if (loading) return;
         void submitForgotPassword(new FormData(e.currentTarget));
       }}
     >

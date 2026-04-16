@@ -18,7 +18,7 @@ const bodySchema = z.object({
  * Client loops: increment `cursor` by `processed` until `done`.
  */
 export async function POST(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const parsed = bodySchema.safeParse(await req.json());

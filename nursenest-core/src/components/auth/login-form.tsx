@@ -13,12 +13,12 @@ export function LoginForm({
   forgotPasswordHref = "/forgot-password",
   termsHref = "/terms",
   privacyHref = "/privacy",
-  contactHref = "/contact",
+  contactHref: _contactHref = "/contact",
 }: {
   forgotPasswordHref?: string;
   termsHref?: string;
   privacyHref?: string;
-  /** Unused: kept for API compatibility with marketing pages. */
+  /** Kept for API compatibility with marketing pages. */
   contactHref?: string;
 } = {}) {
   const { t } = useMarketingI18n();

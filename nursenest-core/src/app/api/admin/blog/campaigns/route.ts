@@ -25,7 +25,7 @@ const createCampaignSchema = z.object({
 });
 
 export async function GET() {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const campaigns = await prisma.blogCampaign.findMany({
@@ -63,7 +63,7 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const parsed = createCampaignSchema.safeParse(await req.json());

@@ -4,7 +4,7 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
 
 export async function GET(req: NextRequest) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const status = req.nextUrl.searchParams.get("status") as DraftReviewStatus | null;

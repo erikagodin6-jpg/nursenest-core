@@ -8,7 +8,7 @@ import { NextResponse, type NextRequest } from "next/server";
 export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const sp = Object.fromEntries(req.nextUrl.searchParams.entries());

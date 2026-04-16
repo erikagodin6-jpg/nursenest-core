@@ -1,21 +1,15 @@
 import { checkRateLimit, consumeRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
-let distributedFallbackLogged = false;
 let rateLimitFalseIgnoredInProdLogged = false;
+/** One-shot: Postgres unavailable for distributed rate limits (production fail-closed). */
+let rateLimitPgUnavailableLogged = false;
 
-function logDistributedFallbackOnce(err: unknown): void {
-  if (distributedFallbackLogged) return;
-  distributedFallbackLogged = true;
-  const msg = err instanceof Error ? err.message : String(err);
-  safeServerLogCritical(
-    "security",
-    "rate_limit_unified_pg_fallback",
-    { detail: msg.slice(0, 200) },
-    err instanceof Error ? err : new Error(msg),
-    { flow: "rate_limit" },
-  );
+function logRateLimitPgUnavailableOnce(): void {
+  if (rateLimitPgUnavailableLogged) return;
+  rateLimitPgUnavailableLogged = true;
+  safeServerLog("security", "rate_limit_unified_pg_unavailable", { action: "fail_closed" });
 }
 
 /**
@@ -43,7 +37,9 @@ export function isDistributedRateLimitEnabled(): boolean {
 /**
  * Fixed-window limiter: Postgres when {@link isDistributedRateLimitEnabled}; otherwise in-memory (dev/tests only).
  * Dynamic-imports the distributed module so Edge bundles never load Prisma.
- * If Postgres is unavailable, falls back to per-process in-memory limits (not cross-instance consistent; better than fail-open).
+ *
+ * Production must not fall back to in-memory rate limiting because it breaks consistency across instances.
+ * If Postgres fails in production, returns `ok: false` (same deny on every instance — fail closed).
  */
 export async function checkRateLimitUnified(
   key: string,
@@ -56,8 +52,11 @@ export async function checkRateLimitUnified(
     const { checkRateLimitDistributed } = await import("@/lib/http/rate-limit-distributed");
     const r = await checkRateLimitDistributed(key, opts);
     return { ok: r.ok, remaining: r.ok ? opts.max : 0 };
-  } catch (e) {
-    logDistributedFallbackOnce(e);
+  } catch {
+    if (process.env.NODE_ENV === "production") {
+      logRateLimitPgUnavailableOnce();
+      return { ok: false, remaining: 0 };
+    }
     return checkRateLimit(key, opts);
   }
 }
@@ -74,8 +73,11 @@ export async function consumeRateLimitUnified(
     const { consumeRateLimitDistributed } = await import("@/lib/http/rate-limit-distributed");
     const r = await consumeRateLimitDistributed(key, cost, opts);
     return { ok: r.ok, remaining: r.ok ? 0 : 0 };
-  } catch (e) {
-    logDistributedFallbackOnce(e);
+  } catch {
+    if (process.env.NODE_ENV === "production") {
+      logRateLimitPgUnavailableOnce();
+      return { ok: false, remaining: 0 };
+    }
     return consumeRateLimit(key, cost, opts);
   }
 }

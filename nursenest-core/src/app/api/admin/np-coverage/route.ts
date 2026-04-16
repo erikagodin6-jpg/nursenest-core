@@ -6,7 +6,7 @@ import { buildNpCanadaCoverageReport } from "@/lib/np/build-np-canada-coverage-r
  * GET /api/admin/np-coverage — Canadian NP question-bank depth vs product thresholds (admin only).
  */
 export async function GET() {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   try {

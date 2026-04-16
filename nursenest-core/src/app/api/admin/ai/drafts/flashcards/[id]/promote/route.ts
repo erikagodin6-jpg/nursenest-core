@@ -13,7 +13,7 @@ const bodySchema = z.object({
 type Props = { params: Promise<{ id: string }> };
 
 export async function POST(req: Request, ctx: Props) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { id } = await ctx.params;

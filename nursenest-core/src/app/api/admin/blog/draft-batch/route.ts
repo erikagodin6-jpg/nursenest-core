@@ -25,7 +25,7 @@ const createSchema = z.object({
 
 /** Create a persisted draft-generation batch from a newline-separated topic list. */
 export async function POST(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const parsed = createSchema.safeParse(await req.json());
@@ -92,7 +92,7 @@ export async function POST(req: Request) {
 
 /** Recent draft batches (newest first). */
 export async function GET(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { searchParams } = new URL(req.url);

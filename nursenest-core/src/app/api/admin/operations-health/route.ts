@@ -6,7 +6,7 @@ import { loadAdminOperationsHealth } from "@/lib/admin/load-admin-operations-hea
  * Aggregated operational health for admin dashboard (DB jobs, automation logs, AI, billing signals).
  */
 export async function GET() {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   try {

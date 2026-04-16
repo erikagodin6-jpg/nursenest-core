@@ -4,7 +4,7 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 
 /** Quality control summary for content ops (no full table scans on huge DBs — uses limits). */
 export async function GET() {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const issues = await loadAdminQaIssueSnapshot();

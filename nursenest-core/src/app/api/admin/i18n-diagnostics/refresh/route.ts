@@ -9,7 +9,7 @@ import { buildI18nDiagnosticsReport } from "../../../../../../../server/i18n-dia
 const REPORT_REL = path.join("reports", "i18n-status.json");
 
 export async function POST() {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const root = getMonorepoRoot();

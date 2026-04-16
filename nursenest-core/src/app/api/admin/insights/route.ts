@@ -9,7 +9,7 @@ const CACHE_KEY = "admin:insights:v2";
 const TTL_MS = 60_000;
 
 export async function GET() {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const cached = ttlGet<Record<string, unknown>>(CACHE_KEY);

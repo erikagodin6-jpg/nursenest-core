@@ -26,7 +26,7 @@ const SUPER_ONLY_PREFIXES = [
   "/api/admin/export",
   /** Temporary auth diagnostics — PII-adjacent user lookup (super admin only). */
   "/api/debug/auth-user",
-  /** In-memory login lockout clear for the running instance (super admin only). */
+  /** Clears login lockout via Postgres in production when distributed lockout is enabled (super admin only). */
   "/api/debug/clear-login-lock",
 ];
 

@@ -24,7 +24,7 @@ function writeReportArtifact(root: string, report: I18nDiagnosticsReport): void 
 }
 
 export async function GET(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const root = getMonorepoRoot();

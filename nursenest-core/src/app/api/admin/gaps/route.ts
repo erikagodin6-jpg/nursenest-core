@@ -85,7 +85,7 @@ async function getGapsPayload() {
 
 /** Coverage gaps: topic buckets with few published questions (production `exam_questions` has no Category FK). */
 export async function GET() {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   return withDatabaseFallback(

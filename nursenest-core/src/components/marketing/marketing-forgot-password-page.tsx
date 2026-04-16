@@ -36,7 +36,9 @@ export async function MarketingForgotPasswordPage({ locale }: { locale: string }
               m["pages.forgotPassword.successDetail"] ??
               "Delivery can take a few minutes. Check your spam or promotions folder. If nothing arrives, use Contact support above so we can help you restore access."
             }
-            errorMessage={m["pages.forgotPassword.errorMessage"] ?? "Something went wrong. Please try again."}
+            errorMessage={m["pages.forgotPassword.errorMessage"] ?? "Unable to complete request. Try again."}
+            errorNetwork={m["pages.forgotPassword.errorNetwork"]}
+            errorServer={m["pages.forgotPassword.errorServer"]}
             notEmailMessage={
               m["pages.forgotPassword.notEmailMessage"] ??
               "Password reset uses the email on your account. Please enter your email address, not your username."

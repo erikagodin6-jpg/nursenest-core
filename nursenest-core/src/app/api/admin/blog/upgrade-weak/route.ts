@@ -24,7 +24,7 @@ function headingCountFromHtml(html: string): number {
  * Weak criteria: <800 words OR fewer than 3 headings.
  */
 export async function POST(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   if (!isAdminAiGenerationEnabled()) {

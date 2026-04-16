@@ -15,7 +15,7 @@ export const runtime = "nodejs";
 const KINDS = new Set(["metadata", "slugs", "linking", "broken", "opportunities", "all"]);
 
 export async function GET(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const url = new URL(req.url);

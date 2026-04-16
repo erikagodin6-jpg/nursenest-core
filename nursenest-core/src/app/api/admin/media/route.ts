@@ -7,7 +7,7 @@ import { API_LIST_PAGE_SIZE_HARD_MAX, parseBoundedPageSize, parseListPage } from
 export const runtime = "nodejs";
 
 export async function GET(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const url = new URL(req.url);

@@ -22,7 +22,7 @@ type RouteContext = { params: Promise<{ id: string }> };
  * New row is always DRAFT for editorial review.
  */
 export async function POST(req: Request, ctx: RouteContext) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
   const { id } = await ctx.params;
 

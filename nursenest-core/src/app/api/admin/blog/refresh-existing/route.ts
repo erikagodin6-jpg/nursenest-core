@@ -16,7 +16,7 @@ const requestSchema = z.object({
  * - keeps slug/URL unchanged
  */
 export async function POST(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const parsed = requestSchema.safeParse(await req.json().catch(() => ({})));

@@ -15,7 +15,7 @@ const patchSchema = z
   .strict();
 
 export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
   const { id } = await ctx.params;
   const parsed = patchSchema.safeParse(await req.json());
@@ -25,7 +25,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
 }
 
 export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string }> }) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
   const { id } = await ctx.params;
   await prisma.exam.delete({ where: { id } });

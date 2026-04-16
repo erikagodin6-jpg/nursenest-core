@@ -9,7 +9,7 @@ import { buildAdminOperationsDashboard } from "@/lib/admin/build-admin-operation
  * - topicTopPage, topicTopPageSize (default 1 / 25, max 80)
  */
 export async function GET(req: NextRequest) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const sp = req.nextUrl.searchParams;

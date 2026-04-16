@@ -17,7 +17,7 @@ import { prisma } from "@/lib/db";
  * Supports one topic or up to 3 topics per request (cost control).
  */
 export async function POST(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   if (!isAdminAiGenerationEnabled()) {

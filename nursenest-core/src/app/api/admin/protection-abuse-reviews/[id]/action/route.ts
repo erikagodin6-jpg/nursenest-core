@@ -20,7 +20,7 @@ function normalizeNote(s: string | undefined): string | null {
 }
 
 export async function POST(req: Request, ctx: { params: Promise<{ id: string }> }) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
   if (!isDatabaseUrlConfigured()) {
     return NextResponse.json({ error: "Database unavailable" }, { status: 503 });

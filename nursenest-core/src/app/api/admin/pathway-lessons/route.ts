@@ -9,7 +9,7 @@ import { ADMIN_API_LIST_PAGE, parseBoundedPageSize, parseListPage } from "@/lib/
  * Editing remains script/ops-heavy; this surface is for visibility, filters, and deep links.
  */
 export async function GET(req: NextRequest) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const sp = req.nextUrl.searchParams;

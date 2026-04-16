@@ -16,7 +16,7 @@ function parseJobStatus(raw: string | null): JobStatus | undefined {
 }
 
 export async function GET(req: NextRequest) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const takeParsed = parseBoundedPageSize(req.nextUrl.searchParams.get("take"), {
@@ -78,7 +78,7 @@ const enqueueSchema = z.object({
 });
 
 export async function POST(req: Request) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const parsed = enqueueSchema.safeParse(await req.json());

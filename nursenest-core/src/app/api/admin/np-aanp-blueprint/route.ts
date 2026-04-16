@@ -14,7 +14,7 @@ import { ContentStatus } from "@prisma/client";
  * GET ?missingOnly=1&limit=200&format=csv|json — export queue for content ops (ids missing valid AANP tag).
  */
 export async function GET(req: NextRequest) {
-  const gate = await requireAdmin();
+  const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const sp = req.nextUrl.searchParams;
