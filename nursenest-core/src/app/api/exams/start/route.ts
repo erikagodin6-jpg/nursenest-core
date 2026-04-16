@@ -31,6 +31,7 @@ import {
   NP_CLINICAL_2026_QUESTION_TARGET,
 } from "@/lib/exams/practice-exam-presets";
 import { seedMinimalQuestionBankIfEmpty } from "@/lib/exams/seed-minimal-question-bank";
+import { allowRuntimeMinimalQuestionBankSeed } from "@/lib/jobs/runtime-heavy-work-policy";
 import { diagnoseExamStartEmpty } from "@/lib/questions/exam-start-empty-diagnostics";
 import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
@@ -38,6 +39,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
+import { JSON_BODY_STANDARD, readTextBodyWithByteLimit } from "@/lib/http/json-body-limit";
 
 const DEFAULT_POOL_LIMIT = Math.min(20, MAX_SESSION_QUESTION_IDS);
 /** Large enough to shuffle 75-Q full exams from tagged pools without starving draws. */
@@ -109,7 +111,9 @@ export async function POST(req: NextRequest) {
 
   setSentryServerContext({ route: "/api/exams/start", feature: SERVER_FEATURE.exam, userId: gate.userId });
 
-  await seedMinimalQuestionBankIfEmpty();
+  if (allowRuntimeMinimalQuestionBankSeed()) {
+    await seedMinimalQuestionBankIfEmpty();
+  }
 
   const educationalLocale = getMarketingLocaleFromRequestCookie(req);
   const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
@@ -130,24 +134,31 @@ export async function POST(req: NextRequest) {
   let timedMode = false;
   let timeLimitSec: number | null = null;
   try {
-    const b = (await req.json()) as {
-      examId?: string;
-      hydrate?: string;
-      questionTag?: string;
-      timedMode?: boolean;
-      timeLimitSec?: number | null;
-    };
-    examId = typeof b?.examId === "string" && b.examId.length > 4 ? b.examId : null;
-    if (b?.hydrate === "full") hydrate = "full";
-    if (typeof b?.questionTag === "string" && b.questionTag.trim().length > 2) {
-      questionTag = b.questionTag.trim();
+    const raw = await readTextBodyWithByteLimit(req, JSON_BODY_STANDARD);
+    if (!raw.ok) {
+      return NextResponse.json({ error: "Payload too large", code: "payload_too_large" }, { status: 413 });
     }
-    if (typeof b?.timedMode === "boolean") timedMode = b.timedMode;
-    if (typeof b?.timeLimitSec === "number" && Number.isFinite(b.timeLimitSec)) {
-      timeLimitSec = Math.min(Math.max(60, Math.floor(b.timeLimitSec)), 28_800);
+    const text = raw.text.trim();
+    if (text.length > 0) {
+      const b = JSON.parse(text) as {
+        examId?: string;
+        hydrate?: string;
+        questionTag?: string;
+        timedMode?: boolean;
+        timeLimitSec?: number | null;
+      };
+      examId = typeof b?.examId === "string" && b.examId.length > 4 ? b.examId : null;
+      if (b?.hydrate === "full") hydrate = "full";
+      if (typeof b?.questionTag === "string" && b.questionTag.trim().length > 2) {
+        questionTag = b.questionTag.trim();
+      }
+      if (typeof b?.timedMode === "boolean") timedMode = b.timedMode;
+      if (typeof b?.timeLimitSec === "number" && Number.isFinite(b.timeLimitSec)) {
+        timeLimitSec = Math.min(Math.max(60, Math.floor(b.timeLimitSec)), 28_800);
+      }
     }
   } catch {
-    /* optional body */
+    /* optional / invalid JSON — keep defaults */
   }
 
   if (timedMode && timeLimitSec == null) {

@@ -132,6 +132,8 @@ model User {
   abuseReviewsDismissed         ProtectionAbuseReview[]     @relation("ProtectionAbuseReviewDismissedBy")
   protectionAbuseReviews        ProtectionAbuseReview[]
 
+  /// * Marketing home-stats: `COUNT(*)` for `role = LEARNER` (hot path).
+  @@index([role])
   @@index([alliedProfessionKey])
   @@index([normalizedEmail])
   @@index([isDemoUser])
@@ -337,8 +339,8 @@ model Subscription {
   user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-/// * Records Stripe webhook `evt_…` ids **after** handlers succeed (`/api/subscriptions/webhook`).
-/// * Retries remain safe: handlers are idempotent-ish (upserts); duplicate insert = concurrent/replay delivery.
+/// * **Claim** row inserted **before** webhook handlers run — prevents concurrent double-apply across instances.
+/// * Deleted on handler failure so Stripe retries are not permanently skipped.
 model StripeWebhookEvent {
   id        String   @id
   createdAt DateTime @default(now())

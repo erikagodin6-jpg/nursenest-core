@@ -1,6 +1,7 @@
 /**
  * Process-local last-known-good cache for **content payloads only** (never entitlements).
- * Used after server-side access checks succeed; on primary read failure, serve stale if present.
+ * Not shared across instances — a given user may miss a stale fallback if rerouted to another instance;
+ * correctness does not depend on this cache (only resilience / fewer errors during partial outages).
  */
 
 type StaleEntry<T> = { value: T; storedAt: number };

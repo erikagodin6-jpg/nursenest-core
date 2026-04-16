@@ -2,6 +2,7 @@ import { BlogImageStatus, JobStatus } from "@prisma/client";
 import { stemHash } from "@/lib/content/stem-hash";
 import { CronAdvisoryLock } from "@/lib/cron/cron-advisory-lock";
 import { prisma } from "@/lib/db";
+import { seedMinimalQuestionBankIfEmpty } from "@/lib/exams/seed-minimal-question-bank";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { productEvent } from "@/lib/observability/product-events";
 
@@ -63,6 +64,12 @@ async function handleJob(type: string, payload: unknown): Promise<void> {
   switch (type) {
     case "analytics.recompute_stub":
       return;
+    case "content.seed_minimal_question_bank_if_empty": {
+      safeServerLog("jobs", "minimal_bank_seed_job_start", {});
+      const { seeded } = await seedMinimalQuestionBankIfEmpty();
+      safeServerLog("jobs", "minimal_bank_seed_job_done", { seeded });
+      return;
+    }
     case "content.recompute_stem_hashes": {
       const rows = await prisma.examQuestion.findMany({
         where: { stemHash: null },

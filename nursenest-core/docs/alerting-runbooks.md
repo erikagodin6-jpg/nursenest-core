@@ -1,5 +1,7 @@
 # Alerting runbooks
 
+**Step-by-step incident playbooks:** [`production-incident-runbooks.md`](./production-incident-runbooks.md).
+
 Threshold constants live in `src/lib/observability/alert-thresholds.ts` (`ALERT_THRESHOLDS`). Implement alert rules in **Sentry** (metrics + issues), **log drains** (JSON `nn.observability.v1`), or **Vercel** (cron synthetic failures), using the same names below.
 
 **Default owner:** `platform-engineering` — replace with your PagerDuty/Opsgenie rotation in each rule.

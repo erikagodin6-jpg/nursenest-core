@@ -25,8 +25,11 @@ export async function GET(req: Request, ctx: Props) {
     return NextResponse.json({ error: "Not a question batch job" }, { status: 400 });
   }
 
+  /** Stale-item revive mutates the job row — use `?repair=1` when loading after `/step` or resuming a stuck batch. */
+  const wantsRepair = new URL(req.url).searchParams.get("repair") === "1";
+
   let summary = parseQuestionBatchSummary(job.resultSummary);
-  if (summary) {
+  if (summary && wantsRepair) {
     const { summary: revived, mutated } = reviveStaleQuestionBatchItems(summary);
     if (mutated) {
       const allDone = revived.items.every((i) => isTerminalQuestionBatchStatus(i.status));

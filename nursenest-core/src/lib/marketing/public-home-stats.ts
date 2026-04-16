@@ -1,5 +1,7 @@
 import { ContentStatus, UserRole } from "@prisma/client";
 import { unstable_cache } from "next/cache";
+import { cacheDeploymentRevision } from "@/lib/cache/cache-revision";
+import { CACHE_TAG_MARKETING_PUBLIC_HOME_STATS } from "@/lib/cache/cache-tags";
 import { PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC } from "@/lib/cache/public-edge-cache";
 import {
   DB_PUBLISHED,
@@ -13,7 +15,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 import { recordPaywallProofNeutral } from "@/lib/observability/production-signal-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { safePrismaCount, withPrismaReadFallback } from "@/lib/prisma/safe-reads";
+import { safePrismaCount, withPrismaReadDeadline, withPrismaReadFallback } from "@/lib/prisma/safe-reads";
 
 /** Full payload returned by `GET /api/public/home-stats` — shared with the marketing homepage (SSR). */
 export type PublicHomeStatsPayload = {
@@ -90,7 +92,12 @@ export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
 
   const t0 = Date.now();
   try {
-    return await computePublicHomeStats(t0);
+    return await withPrismaReadDeadline(
+      "public_home_stats_compute",
+      () => computePublicHomeStats(t0),
+      getDegradedPublicHomeStatsFallback("deadline_exceeded"),
+      14_000,
+    );
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     safeServerLog("prisma", "home_stats_threw", { message: msg.slice(0, 300) });
@@ -100,58 +107,68 @@ export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
 
 
 async function computePublicHomeStats(t0: number): Promise<PublicHomeStatsPayload> {
-  const lessonsR = await safePrismaCount("home_stats.content_items", () =>
-    prisma.contentItem.count({ where: publicMarketingLessonWhere() }),
-  );
-  const pathwayLessonsR = await safePrismaCount("home_stats.pathway_lessons", () =>
-    prisma.pathwayLesson.count({
-      where: { status: ContentStatus.PUBLISHED, locale: "en" },
-    }),
-  );
-  const flashcardsR = await safePrismaCount("home_stats.flashcards", () =>
-    prisma.flashcard.count({ where: publicMarketingFlashcardWhere() }),
-  );
-  const decksR = await safePrismaCount("home_stats.flashcard_decks", () =>
-    prisma.flashcardDeck.count({ where: publicMarketingFlashcardDeckWhere() }),
-  );
-  const learnersR = await safePrismaCount("home_stats.users", () =>
-    prisma.user.count({ where: { role: UserRole.LEARNER } }),
-  );
-  const questionsR = await safePrismaCount("home_stats.exam_questions", () =>
-    prisma.examQuestion.count({ where: publicMarketingExamQuestionWhere() }),
-  );
-
-  const tierAgg = await withPrismaReadFallback(
-    "home_stats.exam_questions_by_tier",
-    () =>
-      prisma.examQuestion.groupBy({
-        by: ["tier"],
-        where: { status: DB_PUBLISHED },
-        _count: { _all: true },
+  /** Parallelize independent counts/aggregates to cut wall time under concurrent load (semaphore may still serialize). */
+  const [
+    lessonsR,
+    pathwayLessonsR,
+    flashcardsR,
+    decksR,
+    learnersR,
+    questionsR,
+    tierAgg,
+    scenariosR,
+    topicGroupsR,
+  ] = await Promise.all([
+    safePrismaCount("home_stats.content_items", () =>
+      prisma.contentItem.count({ where: publicMarketingLessonWhere() }),
+    ),
+    safePrismaCount("home_stats.pathway_lessons", () =>
+      prisma.pathwayLesson.count({
+        where: { status: ContentStatus.PUBLISHED, locale: "en" },
       }),
-    [],
-  );
-
-  const scenariosR = await safePrismaCount("home_stats.exam_questions_scenarios", () =>
-    prisma.examQuestion.count({
-      where: { status: DB_PUBLISHED, isScenario: true },
-    }),
-  );
-
-  const topicGroupsR = await withPrismaReadFallback(
-    "home_stats.exam_questions_topics_distinct",
-    () =>
-      prisma.examQuestion.groupBy({
-        by: ["topic"],
-        where: {
-          ...publicMarketingExamQuestionWhere(),
-          topic: { not: null },
-          NOT: { topic: "" },
-        },
-        _count: { _all: true },
+    ),
+    safePrismaCount("home_stats.flashcards", () =>
+      prisma.flashcard.count({ where: publicMarketingFlashcardWhere() }),
+    ),
+    safePrismaCount("home_stats.flashcard_decks", () =>
+      prisma.flashcardDeck.count({ where: publicMarketingFlashcardDeckWhere() }),
+    ),
+    safePrismaCount("home_stats.users", () =>
+      prisma.user.count({ where: { role: UserRole.LEARNER } }),
+    ),
+    safePrismaCount("home_stats.exam_questions", () =>
+      prisma.examQuestion.count({ where: publicMarketingExamQuestionWhere() }),
+    ),
+    withPrismaReadFallback(
+      "home_stats.exam_questions_by_tier",
+      () =>
+        prisma.examQuestion.groupBy({
+          by: ["tier"],
+          where: { status: DB_PUBLISHED },
+          _count: { _all: true },
+        }),
+      [],
+    ),
+    safePrismaCount("home_stats.exam_questions_scenarios", () =>
+      prisma.examQuestion.count({
+        where: { status: DB_PUBLISHED, isScenario: true },
       }),
-    [],
-  );
+    ),
+    withPrismaReadFallback(
+      "home_stats.exam_questions_topics_distinct",
+      () =>
+        prisma.examQuestion.groupBy({
+          by: ["topic"],
+          where: {
+            ...publicMarketingExamQuestionWhere(),
+            topic: { not: null },
+            NOT: { topic: "" },
+          },
+          _count: { _all: true },
+        }),
+      [],
+    ),
+  ]);
 
   if (lessonsR.warning) {
     safeServerLog("prisma", "home_stats_optional_read_failed", { target: "content_items" });
@@ -243,9 +260,16 @@ export { PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC } from "@/lib/cache/public-edge-
 /** Cached — single source for marketing homepage + public API + paywall layout (no duplicate DB fanout). */
 export const getCachedPublicHomeStats = unstable_cache(
   async () => getPublicHomeStats(),
-  ["public-home-stats-v3", String(PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC)],
+  [
+    "public-home-stats",
+    "v5",
+    "region:global",
+    "locale:neutral",
+    `rev:${cacheDeploymentRevision()}`,
+    String(PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC),
+  ],
   {
     revalidate: PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC,
-    tags: ["marketing:public-home-stats"],
+    tags: [CACHE_TAG_MARKETING_PUBLIC_HOME_STATS],
   },
 );

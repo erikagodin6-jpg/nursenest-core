@@ -81,8 +81,9 @@ export function AdminLessonBatchGeneratorClient() {
     setCategoriesLoaded(true);
   }, [categoriesLoaded]);
 
-  const refreshJob = useCallback(async (id: string) => {
-    const res = await fetch(`/api/admin/lessons/ai-generate-batch/${id}`);
+  const refreshJob = useCallback(async (id: string, repair?: boolean) => {
+    const q = repair ? "?repair=1" : "";
+    const res = await fetch(`/api/admin/lessons/ai-generate-batch/${id}${q}`);
     const j = (await res.json()) as {
       error?: string;
       summary?: LessonBatchResultSummaryV1;
@@ -130,7 +131,7 @@ export function AdminLessonBatchGeneratorClient() {
       }
       if (j.jobId) {
         setJobId(j.jobId);
-        await refreshJob(j.jobId);
+        await refreshJob(j.jobId, true);
       }
       if (j.summary) setSummary(j.summary);
     } catch {
@@ -144,7 +145,7 @@ export function AdminLessonBatchGeneratorClient() {
     if (id.length < 8) return;
     setErr(null);
     setJobId(id);
-    await refreshJob(id);
+    await refreshJob(id, true);
   }
 
   async function cancelBatch() {
@@ -159,7 +160,7 @@ export function AdminLessonBatchGeneratorClient() {
       }
       if (j.summary) setSummary(j.summary);
       if (j.derived) setDerived(j.derived);
-      await refreshJob(jobId);
+      await refreshJob(jobId, true);
       setLastMessage("Batch canceled — no new items will be claimed. In-flight generation may still finish.");
     } catch {
       setErr("Network error");
@@ -197,7 +198,7 @@ export function AdminLessonBatchGeneratorClient() {
         }
         if (j.summary) setSummary(j.summary);
         if (j.derived !== undefined) setDerived(j.derived);
-        await refreshJob(jobId);
+        await refreshJob(jobId, true);
         if (j.stopped && j.reason === "canceled") {
           setLastMessage("Batch was canceled — stopping.");
           done = true;

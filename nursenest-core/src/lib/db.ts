@@ -46,6 +46,9 @@ function createPrismaClient(): PrismaClient {
  * Hot API routes wrap reads with `withRetry` from `@/lib/resilience/with-retry` (transient errors only).
  *
  * Slow queries over 500ms emit `slow_query_detected` (warn) and legacy `slow_prisma_query` (see {@link logSlowPrismaQuery}); over 1000ms uses severity `critical`.
+ *
+ * **Horizontal scale:** one Prisma client per process avoids duplicate pools. Size `connection_limit` × concurrent
+ * instances against Postgres `max_connections`. See `docs/backend-scale-architecture.md`.
  */
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 

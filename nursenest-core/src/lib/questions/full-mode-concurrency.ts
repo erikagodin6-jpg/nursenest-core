@@ -1,6 +1,7 @@
 /**
- * Best-effort per-process limiter for expensive `mode=full` question list fetches.
- * In serverless multi-instance deployments each instance has its own counter; still caps per-instance spikes.
+ * Best-effort **per-process** limiter for expensive `mode=full` question list fetches.
+ * With N instances, effective cap is roughly `N × MAX_CONCURRENT_FULL_MODE` per user — acceptable as a
+ * abuse brake; for a strict global cap use a shared store (e.g. Redis) later.
  */
 const activeByUser = new Map<string, number>();
 

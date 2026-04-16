@@ -45,8 +45,9 @@ export function ExamQuestionsBatchClient() {
   const [running, setRunning] = useState(false);
   const [lastMessage, setLastMessage] = useState<string | null>(null);
 
-  const refreshJob = useCallback(async (id: string) => {
-    const res = await fetch(`/api/admin/ai/exam-questions/generate-batch/${id}`, { credentials: "include" });
+  const refreshJob = useCallback(async (id: string, repair?: boolean) => {
+    const q = repair ? "?repair=1" : "";
+    const res = await fetch(`/api/admin/ai/exam-questions/generate-batch/${id}${q}`, { credentials: "include" });
     const j = (await res.json()) as { error?: string; summary?: QuestionBatchResultSummaryV1 };
     if (!res.ok) {
       setErr(j.error ?? String(res.status));
@@ -101,7 +102,7 @@ export function ExamQuestionsBatchClient() {
     if (id.length < 8) return;
     setErr(null);
     setJobId(id);
-    await refreshJob(id);
+    await refreshJob(id, true);
   }
 
   async function runSteps() {

@@ -93,13 +93,13 @@ describe("security regression (source contracts)", () => {
     assert.match(src, /duplicate/);
   });
 
-  it("Stripe webhook route applies handlers before recording dedupe id", () => {
+  it("Stripe webhook route claims dedupe id before applyStripeWebhookEvent", () => {
     const route = readFileSync(
       join(nursenestCoreRoot, "src", "app", "api", "subscriptions", "webhook", "route.ts"),
       "utf8",
     );
-    const idxApply = route.indexOf("applyStripeWebhookEvent");
-    const idxRecord = route.indexOf("recordStripeWebhookEventProcessed");
-    assert.ok(idxApply > 0 && idxRecord > idxApply);
+    const idxClaim = route.indexOf("await claimStripeWebhookEventOrDuplicate");
+    const idxApply = route.indexOf("await applyStripeWebhookEvent");
+    assert.ok(idxClaim > 0 && idxApply > idxClaim);
   });
 });

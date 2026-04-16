@@ -3,6 +3,7 @@
  */
 
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /** Prisma / Postgres signals for optional tables or drifted schema (P2010, P2021, etc.). */
 export function isNonFatalPrismaSchemaError(e: unknown): boolean {
@@ -49,5 +50,35 @@ export async function withPrismaReadFallback<T>(
       value: fallback,
       warning: `[${label}] ${isNonFatalPrismaSchemaError(e) ? "schema_or_table" : "read"}: ${msg.slice(0, 280)}`,
     };
+  }
+}
+
+const DEADLINE_ERROR = "prisma_read_deadline";
+
+/**
+ * Application-level deadline for a **single** read (or small composed read). On timeout returns `fallback`
+ * without rethrowing. Other errors propagate — callers must handle.
+ *
+ * Does not cancel the underlying Prisma work (Postgres `statement_timeout` is the hard cap); use for UX
+ * degradation when aggregations exceed SLA. Pair with parallelized sub-queries to reduce wall time.
+ */
+export async function withPrismaReadDeadline<T>(label: string, run: () => Promise<T>, fallback: T, timeoutMs: number): Promise<T> {
+  if (isRuntimeSafeMode()) return fallback;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      run(),
+      new Promise<T>((_, reject) => {
+        timer = setTimeout(() => reject(new Error(DEADLINE_ERROR)), timeoutMs);
+      }),
+    ]);
+  } catch (e) {
+    if (e instanceof Error && e.message === DEADLINE_ERROR) {
+      safeServerLog("prisma", "read_deadline_exceeded", { label, timeoutMs });
+      return fallback;
+    }
+    throw e;
+  } finally {
+    if (timer) clearTimeout(timer);
   }
 }

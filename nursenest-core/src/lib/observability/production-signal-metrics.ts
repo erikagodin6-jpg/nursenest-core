@@ -143,9 +143,9 @@ export function recordSlowDbQuery(durationMs: number, severity: "warn" | "critic
   });
 }
 
-/** Stripe webhook handler or dedupe persistence failed after verified event (alert: HIGH). */
+/** Stripe webhook handler, idempotency claim insert, or related persistence failed after verified event (alert: HIGH). */
 export function recordStripeWebhookFailure(
-  phase: "handler" | "dedupe",
+  phase: "handler" | "dedupe" | "claim",
   eventType: string,
   request?: Request,
 ): void {

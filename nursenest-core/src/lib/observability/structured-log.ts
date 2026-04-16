@@ -25,6 +25,7 @@ export type StructuredLogEventName =
   | "checkout_started"
   | "checkout_failed"
   | "webhook_received"
+  | "webhook_ignored"
   | "webhook_failed"
   | "question_load_failed"
   | "lesson_load_failed";

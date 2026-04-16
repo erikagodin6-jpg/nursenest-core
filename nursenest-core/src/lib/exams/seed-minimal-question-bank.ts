@@ -170,6 +170,9 @@ const QUESTION_SEEDS: QSeed[] = [
 /**
  * If the bank is empty, insert minimal published exams + questions (idempotent).
  * Safe on repeated calls; skips when published questions already exist.
+ *
+ * **Production:** do not call from learner routes — use {@link allowRuntimeMinimalQuestionBankSeed}
+ * or enqueue `content.seed_minimal_question_bank_if_empty` via `POST /api/cron/jobs` (see `processPendingJobs`).
  */
 export async function seedMinimalQuestionBankIfEmpty(): Promise<{ seeded: boolean }> {
   if (!isDatabaseUrlConfigured()) return { seeded: false };

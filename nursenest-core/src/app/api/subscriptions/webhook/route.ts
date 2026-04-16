@@ -9,8 +9,15 @@ import { productEvent } from "@/lib/observability/product-events";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { recordStripeWebhookFailure } from "@/lib/observability/production-signal-metrics";
 import { applyStripeWebhookEvent } from "@/lib/stripe/apply-stripe-webhook-event";
-import { recordStripeWebhookEventProcessed } from "@/lib/stripe/stripe-webhook-idempotency";
+import { isStripeWebhookEventTypeHandled } from "@/lib/stripe/stripe-webhook-event-policy";
+import {
+  claimStripeWebhookEventOrDuplicate,
+  releaseStripeWebhookEventClaim,
+} from "@/lib/stripe/stripe-webhook-idempotency";
 import { constructStripeWebhookEvent } from "@/lib/stripe/stripe-webhook-verify";
+
+/** Reject oversized bodies before signature parse (DoS / accidental huge payloads). */
+const MAX_STRIPE_WEBHOOK_BODY_BYTES = 512 * 1024;
 
 function warnIfStripeKeyModeMismatch(): void {
   const key = process.env.STRIPE_SECRET_KEY?.trim() ?? "";
@@ -29,8 +36,9 @@ function warnIfStripeKeyModeMismatch(): void {
 }
 
 /**
- * Stripe webhooks: signature verification → apply billing side effects → **then** persist `evt_` id for deduplication.
- * Entitlements are read from DB elsewhere (`getUserAccess`); checkout success UI only calls `sync-session` to refresh JWT.
+ * Stripe webhooks: verify → **claim** `evt_` (insert) → apply side effects → claim kept on success.
+ * Claim-first prevents duplicate concurrent workers from double-applying; `releaseStripeWebhookEventClaim` on failure
+ * allows Stripe retries. Entitlements are read from DB elsewhere (`getUserAccess`).
  */
 export async function POST(req: Request) {
   warnIfStripeKeyModeMismatch();
@@ -55,6 +63,14 @@ export async function POST(req: Request) {
   }
 
   const body = await req.text();
+  if (body.length > MAX_STRIPE_WEBHOOK_BODY_BYTES) {
+    safeServerLog("stripe_webhook", "payload_too_large", {
+      length: body.length,
+      correlation,
+      severity: "warning",
+    });
+    return NextResponse.json({ error: "Payload too large" }, { status: 413 });
+  }
   let event: import("stripe").Stripe.Event;
   try {
     event = constructStripeWebhookEvent(stripe, body, signature, webhookSecret);
@@ -89,9 +105,56 @@ export async function POST(req: Request) {
     message: `stripe type=${event.type.slice(0, 64)} idPrefix=${event.id.slice(0, 12)}`,
   });
 
+  let claim: Awaited<ReturnType<typeof claimStripeWebhookEventOrDuplicate>>;
+  try {
+    claim = await claimStripeWebhookEventOrDuplicate(event.id);
+  } catch (e) {
+    recordStripeWebhookFailure("claim", event.type, req);
+    safeServerLogCritical(
+      "stripe_webhook",
+      "claim_failed",
+      { type: event.type, correlation, severity: "error" },
+      e,
+    );
+    Sentry.captureException(e, {
+      level: "error",
+      tags: { flow: "stripe_webhook_claim", stripe_event_type: event.type },
+      fingerprint: ["stripe_webhook_claim", event.id],
+    });
+    return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
+  }
+
+  if (claim === "duplicate") {
+    safeServerLog("stripe_webhook", "duplicate_delivery_skipped", {
+      eventIdPrefix: event.id.slice(0, 12),
+      correlation,
+      severity: "info",
+    });
+    return NextResponse.json({ ok: true, duplicate: true });
+  }
+
+  if (!isStripeWebhookEventTypeHandled(event.type)) {
+    safeServerLog("stripe_webhook", "event_type_not_handled_acknowledged", {
+      type: event.type,
+      eventIdPrefix: event.id.slice(0, 12),
+      correlation,
+      severity: "info",
+    });
+    emitStructuredLog("webhook_ignored", "info", {
+      correlationId: correlation || undefined,
+      route: "/api/subscriptions/webhook",
+      method: "POST",
+      flow: "webhook",
+      errorClass: "unhandled_event_type",
+      message: `stripe ignored type=${event.type.slice(0, 64)} idPrefix=${event.id.slice(0, 12)}`,
+    });
+    return NextResponse.json({ ok: true, ignored: true, eventType: event.type });
+  }
+
   try {
     await applyStripeWebhookEvent(stripe, event, { correlation });
   } catch (e) {
+    await releaseStripeWebhookEventClaim(event.id);
     recordStripeWebhookFailure("handler", event.type, req);
     productEvent("stripe_webhook_failed", { eventType: event.type });
     safeServerLogCritical(
@@ -108,32 +171,6 @@ export async function POST(req: Request) {
         stripe_key_mode: keyMode,
       },
       fingerprint: ["stripe_webhook", event.type, event.id],
-    });
-    return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
-  }
-
-  try {
-    const dedupe = await recordStripeWebhookEventProcessed(event.id);
-    if (dedupe === "duplicate") {
-      safeServerLog("stripe_webhook", "dedupe_after_success", {
-        eventIdPrefix: event.id.slice(0, 12),
-        correlation,
-        severity: "info",
-      });
-      return NextResponse.json({ ok: true, duplicate: true });
-    }
-  } catch (e) {
-    recordStripeWebhookFailure("dedupe", event.type, req);
-    safeServerLogCritical(
-      "stripe_webhook",
-      "dedupe_record_failed",
-      { type: event.type, correlation, severity: "error" },
-      e,
-    );
-    Sentry.captureException(e, {
-      level: "error",
-      tags: { flow: "stripe_webhook_dedupe", stripe_event_type: event.type },
-      fingerprint: ["stripe_webhook_dedupe", event.id],
     });
     return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
   }

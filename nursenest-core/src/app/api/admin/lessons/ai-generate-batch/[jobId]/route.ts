@@ -31,15 +31,18 @@ export async function GET(req: Request, ctx: Props) {
     return NextResponse.json({ error: "Not a lesson batch job" }, { status: 400 });
   }
 
+  /** Heavy DB reconciliation — only when `?repair=1` (e.g. after `/step`); plain GET is read-only. */
+  const wantsRepair = new URL(req.url).searchParams.get("repair") === "1";
+
   const hasQueue = await prisma.lessonBatchQueueItem.count({ where: { jobId } });
-  if (hasQueue > 0) {
+  if (hasQueue > 0 && wantsRepair) {
     await reviveStaleLessonBatchQueueItems(prisma, jobId);
     const reconciled = await reconcileGeneratingItemsWithDrafts(prisma, jobId);
     if (reconciled) {
       await syncJobResultSummaryJson(prisma, jobId);
     }
     job = (await prisma.aiGenerationJob.findUnique({ where: { id: jobId } })) ?? job;
-  } else {
+  } else if (hasQueue === 0 && wantsRepair) {
     let summary = parseBatchSummary(job.resultSummary);
     if (summary) {
       const { summary: revived, mutated } = reviveStaleGeneratingItems(summary);

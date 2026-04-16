@@ -11,14 +11,15 @@ const here = dirname(fileURLToPath(import.meta.url));
 const nursenestCoreRoot = join(here, "..", "..", "..");
 
 describe("stripe webhook policy (static)", () => {
-  it("route applies handlers before recording StripeWebhookEvent (replay-safe)", () => {
+  it("route claims StripeWebhookEvent before applyStripeWebhookEvent (multi-instance safe)", () => {
     const route = readFileSync(
       join(nursenestCoreRoot, "src", "app", "api", "subscriptions", "webhook", "route.ts"),
       "utf8",
     );
-    const idxApply = route.indexOf("applyStripeWebhookEvent");
-    const idxRecord = route.indexOf("recordStripeWebhookEventProcessed");
-    assert.ok(idxApply > 0 && idxRecord > idxApply, "apply must run before dedupe insert");
+    const idxClaim = route.indexOf("await claimStripeWebhookEventOrDuplicate");
+    const idxApply = route.indexOf("await applyStripeWebhookEvent");
+    assert.ok(idxClaim > 0 && idxApply > idxClaim, "claim insert must run before apply");
+    assert.match(route, /releaseStripeWebhookEventClaim/);
   });
 
   it("signature verification uses constructStripeWebhookEvent helper", () => {
@@ -30,10 +31,11 @@ describe("stripe webhook policy (static)", () => {
     assert.ok(!route.includes("constructEvent(body, signature"), "use shared verify helper");
   });
 
-  it("handler module covers checkout, subscription updated/deleted, invoice succeeded/failed", () => {
+  it("handler module covers checkout, subscription created/updated/deleted, invoice succeeded/failed", () => {
     const src = readFileSync(join(nursenestCoreRoot, "src", "lib", "stripe", "apply-stripe-webhook-event.ts"), "utf8");
     for (const t of [
       "checkout.session.completed",
+      "customer.subscription.created",
       "customer.subscription.updated",
       "customer.subscription.deleted",
       "invoice.payment_succeeded",
@@ -41,6 +43,15 @@ describe("stripe webhook policy (static)", () => {
     ]) {
       assert.match(src, new RegExp(`"${t}"`), `missing ${t}`);
     }
+  });
+
+  it("route returns 200 ignored for verified but unhandled event types (allowlist)", () => {
+    const route = readFileSync(
+      join(nursenestCoreRoot, "src", "app", "api", "subscriptions", "webhook", "route.ts"),
+      "utf8",
+    );
+    assert.match(route, /isStripeWebhookEventTypeHandled/);
+    assert.match(route, /ignored:\s*true/);
   });
 
   it("checkout API uses server session userId for metadata, not client-supplied user id alone", () => {

@@ -30,7 +30,10 @@ function tooMany(
     { error: "Too many requests", code, ...(detail ? { detail } : {}) },
     {
       status: 429,
-      headers: { "Retry-After": String(retryAfterSec) },
+      headers: {
+        "Retry-After": String(retryAfterSec),
+        "Cache-Control": "no-store",
+      },
     },
   );
 }

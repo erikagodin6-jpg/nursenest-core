@@ -2,12 +2,15 @@ import { ContentStatus, type TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { accessibleTiersForUserTier } from "@/lib/entitlements/content-access-scope";
 import { seedMinimalQuestionBankIfEmpty } from "@/lib/exams/seed-minimal-question-bank";
+import { allowRuntimeMinimalQuestionBankSeed } from "@/lib/jobs/runtime-heavy-work-policy";
 
 /** Best published Exam row for practice + scored attempts for this learner profile. */
 export async function resolveDefaultExamForUser(
   userId: string,
 ): Promise<{ id: string; title: string } | null> {
-  await seedMinimalQuestionBankIfEmpty();
+  if (allowRuntimeMinimalQuestionBankSeed()) {
+    await seedMinimalQuestionBankIfEmpty();
+  }
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { country: true, tier: true },

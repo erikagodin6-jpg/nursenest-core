@@ -18,6 +18,8 @@ export function isRateLimitingEnabled(): boolean {
   return envBool(process.env.NN_ENABLE_RATE_LIMITING, true);
 }
 
+export { isPublicRateLimitStrictMode } from "@/lib/config/rate-limit-tightening";
+
 /** Circuit breaker for optional dependencies (e.g. email). Default: on. */
 export function isCircuitBreakerEnabled(): boolean {
   return envBool(process.env.NN_ENABLE_CIRCUIT_BREAKER, true);

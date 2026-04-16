@@ -15,6 +15,7 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
 import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements";
 import { seedMinimalQuestionBankIfEmpty } from "@/lib/exams/seed-minimal-question-bank";
+import { allowRuntimeMinimalQuestionBankSeed } from "@/lib/jobs/runtime-heavy-work-policy";
 import { acquireQuestionFullModeSlot, releaseQuestionFullModeSlot } from "@/lib/questions/full-mode-concurrency";
 import {
   MAX_QUESTION_PAGE_SIZE,
@@ -237,7 +238,9 @@ export async function GET(req: NextRequest) {
     const rateLimited = await enforceQuestionsListProtection(req, gate.userId, pageSize);
     if (rateLimited) return rateLimited;
 
-    await seedMinimalQuestionBankIfEmpty();
+    if (allowRuntimeMinimalQuestionBankSeed()) {
+      await seedMinimalQuestionBankIfEmpty();
+    }
 
     if (responseMode === "full" && !acquireQuestionFullModeSlot(gate.userId)) {
       safeServerLog("api_questions", "full_mode_concurrency_limit", { userId: gate.userId });
@@ -554,7 +557,9 @@ export async function GET(req: NextRequest) {
 
   setSentryServerContext({ route: "/api/questions", feature: SERVER_FEATURE.question, userId });
 
-  await seedMinimalQuestionBankIfEmpty();
+  if (allowRuntimeMinimalQuestionBankSeed()) {
+    await seedMinimalQuestionBankIfEmpty();
+  }
 
   const snap = await getFreemiumSnapshot(userId);
   if (!snap || snap.questionRemaining <= 0) {
