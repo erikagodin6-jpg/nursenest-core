@@ -54,7 +54,8 @@ import {
   TrialStatus,
 } from "@prisma/client";
 
-import "../src/lib/db/env-bootstrap";
+import { databaseUrlSource } from "../src/lib/db/env-bootstrap";
+import { parsePostgresUrlTargetSafe } from "./cli-db-url-snapshot.mts";
 import { normalizeEmailForDedup } from "../src/lib/auth/email-address-normalization";
 import { isStaffRole } from "../src/lib/auth/staff-roles";
 import { strongPasswordSchema } from "../src/lib/auth/password-policy";
@@ -72,6 +73,19 @@ function examGoalSlugForTier(tier: TierCode): "rn" | "rpn" | "np" | "allied" {
 if (!process.env.DATABASE_URL?.trim()) {
   console.error("DATABASE_URL is not set.");
   process.exit(1);
+}
+
+{
+  const raw = process.env.DATABASE_URL?.trim();
+  const t = raw ? parsePostgresUrlTargetSafe(raw) : null;
+  console.log(`[qa-cli-env] after_env_bootstrap: databaseUrlSource=${databaseUrlSource}`);
+  if (t) {
+    console.log(
+      `[qa-cli-env] effective_DATABASE_URL_for_Prisma (tuned; no secrets): host=${t.hostname} port=${t.port} database=${t.database}`,
+    );
+  } else {
+    console.log("[qa-cli-env] effective_DATABASE_URL_for_Prisma: could_not_parse_host_port_db (non-fatal)");
+  }
 }
 
 const prisma = new PrismaClient();
@@ -312,7 +326,11 @@ async function main(): Promise<void> {
 }
 
 main()
-  .catch((e) => {
+  .catch((e: unknown) => {
+    const msg = e instanceof Error ? e.message : String(e);
+    if (/password authentication failed|FATAL:.*password/i.test(msg)) {
+      console.error("[qa-cli-env] postgres_auth: failed (password mismatch or stale credential in chosen env source — rotate DB password in DO dashboard and align the same variable the script used, without committing secrets)");
+    }
     console.error(e);
     process.exit(1);
   })
