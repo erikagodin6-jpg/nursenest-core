@@ -45,7 +45,7 @@ export function logSlowPrismaQuery(meta: { model: string; operation: string; dur
   if (meta.durationMs <= SLOW_PRISMA_QUERY_MS) return;
   const queryName = `${meta.model}.${meta.operation}`.slice(0, 120);
   const severity = meta.durationMs > SLOW_QUERY_CRITICAL_MS ? "critical" : "warn";
-  recordSlowDbQuery(meta.durationMs, severity);
+  recordSlowDbQuery(meta.durationMs, severity, queryName);
   safeServerLog("perf", "slow_query_detected", {
     queryName,
     durationMs: meta.durationMs,

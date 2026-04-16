@@ -47,4 +47,25 @@
 
 - **Edge `proxy`** (`src/proxy.ts`): ensures `x-nn-correlation-id` on incoming requests; logs `request_start` for `/api/*`.  
 - **Route handlers**: `correlationIdFromRequest` reads `x-nn-correlation-id` first, then platform ids (`x-vercel-id`, `x-request-id`, …).  
-- **Gaps**: Prisma-layer `db_query_failed` / `db_query_slow` have **no** request context unless Async Local Storage is added later.
+- **RSC / `headers()`**: `correlationIdFromHeaders()` (async) for server components such as entitlement resolution.  
+- **Prisma extension** (`src/lib/db.ts`): `db_query_failed` / `db_query_slow` run outside a single HTTP request; structured lines include **Prisma error bucket/code** and **optional `queryHint`** (`Model.operation`) for `db_query_slow`. Join to `request_end` by **time + worker** if needed, or alert on **rate** alone.
+
+## Alert-ready signals (log drain / `scope: structured`)
+
+| Spike or failure | Structured `event` / key | Notes |
+|------------------|--------------------------|--------|
+| Auth failure spike | `auth_login_failed` | `errorClass` = bucket (`bad_password`, `db_error`, …). |
+| DB failure spike | `db_query_failed` | `errorClass` includes Prisma code when known (e.g. `connection:P1001`). |
+| Slow DB | `db_query_slow` | `message` includes low-cardinality `queryHint`; critical tier when &gt; 1s op. |
+| Route slow / platform risk | `route_degraded` | From `api-route-telemetry` (slow handler) or `recordAutoDegradedEngaged` (resilience). |
+| Route extremely slow | `route_timeout` | Handler duration ≥ `NN_ROUTE_TIMEOUT_LOG_MS` (default 45s). |
+| Degraded learner mode | `route_degraded` + `errorClass: auto_degraded` | From slow-query / circuit burst (`production-signal-metrics`). |
+| Webhook processing failure | `webhook_failed` | After verified event; `errorClass` = `handler` \| `claim`. |
+| Stripe webhook visibility | `webhook_received`, `webhook_ignored` | Ignored = unhandled event type (ok). |
+| Checkout failure | `checkout_failed` | `errorClass` = reason (`unauthorized`, `session_failed`, …). |
+| Question API failure | `question_load_failed` | List, discovery, and `GET /api/questions/[id]` (subscriber vs freemium in `userState`). |
+| Lesson list failure | `lesson_load_failed` | `GET /api/lessons`. |
+| Entitlement read failure | `entitlement_resolve_failed` | RSC `resolveEntitlementForPage` and `GET /api/questions/[id]` when entitlement throws. |
+| Signup / password | `signup_failed`, `password_reset_failed` | Auth flows. |
+
+**Wrapped routes** (emit `request_end`, `route_degraded`, `route_timeout`): include `GET /api/lessons`, `GET /api/questions`, `GET /api/questions/discovery`, `GET /api/questions/[id]`, `POST /api/exams/start`, `POST /api/subscriptions/checkout`, `POST /api/subscriptions/webhook`, `GET /api/public/home-stats`, synthetic cron — not every `/api/*` route.

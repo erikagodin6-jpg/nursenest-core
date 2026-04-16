@@ -30,7 +30,9 @@ export type StructuredLogEventName =
   | "webhook_ignored"
   | "webhook_failed"
   | "question_load_failed"
-  | "lesson_load_failed";
+  | "lesson_load_failed"
+  /** Entitlement read failed after auth — user may see fallback / 503; alert on spike vs traffic. */
+  | "entitlement_resolve_failed";
 
 export type StructuredLogFields = {
   correlationId?: string;

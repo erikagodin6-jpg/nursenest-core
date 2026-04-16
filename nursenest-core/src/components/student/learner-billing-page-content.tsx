@@ -270,10 +270,8 @@ export function LearnerBillingPageContent({
         className="scroll-mt-24 overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] shadow-sm"
       >
         <div className="border-b border-[var(--semantic-border-soft)] bg-gradient-to-r from-[var(--semantic-panel-cool)] to-transparent px-5 py-4">
-          <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">Manage Billing</h2>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Update your payment method, view invoices, or change your subscription through Stripe's secure portal.
-          </p>
+          <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.billingPage.managePortalSectionTitle")}</h2>
+          <p className="mt-1 text-xs text-muted-foreground">{t("learner.billingPage.managePortalSectionSub")}</p>
         </div>
 
         {showBillingPortal ? (
@@ -282,29 +280,29 @@ export function LearnerBillingPageContent({
               <li className="flex items-start gap-3">
                 <CreditCard className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
                 <div>
-                  <p className="text-sm font-medium text-foreground">Update Payment Method</p>
-                  <p className="mt-0.5 text-xs text-muted-foreground">Change or replace your card on file</p>
+                  <p className="text-sm font-medium text-foreground">{t("learner.billingPage.managePortalFeature.paymentTitle")}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{t("learner.billingPage.managePortalFeature.paymentSub")}</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
                 <FileText className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
                 <div>
-                  <p className="text-sm font-medium text-foreground">View Billing History</p>
-                  <p className="mt-0.5 text-xs text-muted-foreground">Download past invoices and receipts</p>
+                  <p className="text-sm font-medium text-foreground">{t("learner.billingPage.managePortalFeature.invoicesTitle")}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{t("learner.billingPage.managePortalFeature.invoicesSub")}</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
                 <RefreshCw className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
                 <div>
-                  <p className="text-sm font-medium text-foreground">Change Subscription</p>
-                  <p className="mt-0.5 text-xs text-muted-foreground">Cancel, pause, or update your plan</p>
+                  <p className="text-sm font-medium text-foreground">{t("learner.billingPage.managePortalFeature.subscriptionTitle")}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{t("learner.billingPage.managePortalFeature.subscriptionSub")}</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
                 <Settings className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
                 <div>
-                  <p className="text-sm font-medium text-foreground">Billing Details</p>
-                  <p className="mt-0.5 text-xs text-muted-foreground">Update name, address, or tax information</p>
+                  <p className="text-sm font-medium text-foreground">{t("learner.billingPage.managePortalFeature.detailsTitle")}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{t("learner.billingPage.managePortalFeature.detailsSub")}</p>
                 </div>
               </li>
             </ul>
@@ -314,9 +312,7 @@ export function LearnerBillingPageContent({
                 busyLabel={t("learner.billingPage.ctaPortalBusy")}
                 errorFallback={t("learner.billingPage.portalError")}
               />
-              <p className="text-xs text-muted-foreground">
-                You will be redirected to Stripe's secure portal and returned here when finished.
-              </p>
+              <p className="text-xs text-muted-foreground">{t("learner.billingPage.managePortalReturnBlurb")}</p>
             </div>
           </div>
         ) : (

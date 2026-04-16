@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
@@ -41,6 +42,7 @@ function warnIfStripeKeyModeMismatch(): void {
  * allows Stripe retries. Entitlements are read from DB elsewhere (`getUserAccess`).
  */
 export async function POST(req: Request) {
+  return runWithApiTelemetry(req, "POST /api/subscriptions/webhook", "webhook", async () => {
   warnIfStripeKeyModeMismatch();
 
   const correlation = correlationIdFromRequest(req) ?? "";
@@ -176,4 +178,5 @@ export async function POST(req: Request) {
   }
 
   return NextResponse.json({ ok: true });
+  });
 }

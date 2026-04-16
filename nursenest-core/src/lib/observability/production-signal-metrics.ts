@@ -69,16 +69,18 @@ export function prismaClientErrorBucket(err: unknown): string {
 /** After a failed Prisma operation (before rethrow). */
 export function recordPrismaClientQueryError(err: unknown): void {
   const bucket = prismaClientErrorBucket(err);
+  const prismaCode =
+    err instanceof Prisma.PrismaClientKnownRequestError ? err.code : undefined;
   sentryCount("db.client.error", 1, { bucket });
   emitMonitoringRecord({
     scope: "db",
     event: "prisma_client_error",
     severity: "error",
-    meta: { bucket },
+    meta: { bucket, ...(prismaCode ? { prismaCode } : {}) },
   });
   emitStructuredLog("db_query_failed", "error", {
-    errorClass: bucket,
-    message: `prisma client error (${bucket})`,
+    errorClass: prismaCode ? `${bucket}:${prismaCode}` : bucket,
+    message: `prisma client error (${bucket})${prismaCode ? ` ${prismaCode}` : ""}`,
   });
 }
 
@@ -124,8 +126,13 @@ export function recordHealthReadyDatabaseFailure(): void {
   });
 }
 
-/** Slow Prisma query — paired with `perf` logs in {@link logSlowPrismaQuery}. */
-export function recordSlowDbQuery(durationMs: number, severity: "warn" | "critical"): void {
+/** Slow Prisma query — paired with `perf` logs in {@link logSlowPrismaQuery}. `queryHint` is low-cardinality (e.g. `User.findMany`). */
+export function recordSlowDbQuery(
+  durationMs: number,
+  severity: "warn" | "critical",
+  queryHint?: string,
+): void {
+  const hint = queryHint?.trim().slice(0, 120);
   sentryDistribution("db.query.duration_ms", durationMs, { severity });
   sentryCount("db.query.slow", 1, { severity });
   emitMonitoringRecord({
@@ -133,13 +140,15 @@ export function recordSlowDbQuery(durationMs: number, severity: "warn" | "critic
     event: "slow_query",
     severity: severity === "critical" ? "error" : "warn",
     durationMs,
-    meta: { severity },
+    meta: { severity, ...(hint ? { queryHint: hint } : {}) },
   });
   emitStructuredLog("db_query_slow", severity === "critical" ? "error" : "warn", {
     durationMs,
     degraded: severity === "critical",
     errorClass: severity === "critical" ? "slow_query_critical" : "slow_query_warn",
-    message: `slow prisma query ${durationMs}ms`,
+    message: hint
+      ? `slow prisma query ${durationMs}ms (${hint})`
+      : `slow prisma query ${durationMs}ms`,
   });
 }
 

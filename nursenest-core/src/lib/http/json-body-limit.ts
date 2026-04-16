@@ -38,6 +38,12 @@ export async function readTextBodyWithByteLimit(
   if (cl) {
     const n = parseInt(cl, 10);
     if (Number.isFinite(n) && n > maxBytes) {
+      safeServerLog("api", "request_body_too_large", {
+        phase: "content_length",
+        maxBytes,
+        contentLength: n,
+        severity: "warning",
+      });
       return { ok: false, status: 413 };
     }
   }

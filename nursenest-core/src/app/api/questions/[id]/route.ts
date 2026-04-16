@@ -7,6 +7,9 @@ import { logBlockedAccess, logEntitlementMismatch } from "@/lib/entitlements/ent
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
+import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
@@ -22,6 +25,7 @@ import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale
 
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
+  return runWithApiTelemetry(req, "GET /api/questions/[id]", "content", async () => {
   if (!id || id.length < 5) {
     return NextResponse.json({ error: "Invalid id" }, { status: 400 });
   }
@@ -40,6 +44,14 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   try {
     entitlement = await resolveEntitlement(userId);
   } catch (e) {
+    emitStructuredLog("entitlement_resolve_failed", "error", {
+      correlationId: correlationIdFromRequest(req),
+      route: "/api/questions/[id]",
+      method: "GET",
+      flow: "content",
+      errorClass: e instanceof Error ? e.name : "unknown",
+      message: "entitlement resolve failed before single question load",
+    }, e);
     safeServerLogCritical("api_questions_id", "entitlement_resolve_failed", {}, e);
     return NextResponse.json({ error: "Unable to verify access. Try again shortly." }, { status: 503 });
   }
@@ -122,6 +134,14 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       logLargeApiResponse("/api/questions/[id]", approxPayloadBytes);
       return NextResponse.json(body);
     } catch (e) {
+      emitStructuredLog("question_load_failed", "error", {
+        correlationId: correlationIdFromRequest(req),
+        route: "/api/questions/[id]",
+        method: "GET",
+        flow: "content",
+        userState: "subscriber",
+        message: "single question fetch failed (subscriber)",
+      }, e);
       safeServerLogCritical("api_questions_id", "fetch_failed", {}, e);
       return NextResponse.json({ error: "Unable to load question" }, { status: 503 });
     }
@@ -189,7 +209,16 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     logLargeApiResponse("/api/questions/[id]", estimateJsonUtf8Bytes(freemiumBody));
     return NextResponse.json(freemiumBody);
   } catch (e) {
+    emitStructuredLog("question_load_failed", "error", {
+      correlationId: correlationIdFromRequest(req),
+      route: "/api/questions/[id]",
+      method: "GET",
+      flow: "content",
+      userState: "freemium",
+      message: "single question fetch failed (freemium)",
+    }, e);
     safeServerLogCritical("api_questions_id", "fetch_failed_freemium", {}, e);
     return NextResponse.json({ error: "Unable to load question" }, { status: 503 });
   }
+  });
 }
