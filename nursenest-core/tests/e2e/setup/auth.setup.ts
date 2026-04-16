@@ -11,6 +11,7 @@ import { PAID_USER_AUTH_FILE } from "../helpers/auth-state-paths";
 import { describeAuthFailureSurface } from "../helpers/auth-diagnostics";
 import { loginWithCredentials } from "../helpers/learner-login";
 import { getPaidTestCredentials } from "../helpers/paid-test-credentials";
+import { learnerAppMainLandmark } from "../helpers/paid-learner-shell";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
 
 setup("authenticate paid test account and save storage state", async ({ page }) => {
@@ -49,6 +50,12 @@ setup("authenticate paid test account and save storage state", async ({ page }) 
       },
     )
     .toBe(false);
+
+  await expect(learnerAppMainLandmark(page)).toBeVisible({
+    timeout: 30_000,
+    message:
+      "Learner shell main landmark missing on /app — session invalid, auth gate, or layout error. See waitForAuthenticatedLearnerShell diagnostics in paid-learner-shell.ts.",
+  });
 
   // Confirm premium path without going through Stripe (lessons hub must not be paywalled).
   await page.goto("/app/lessons", { waitUntil: "domcontentloaded" });

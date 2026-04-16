@@ -343,7 +343,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
           sectionAnchors={displaySections.map((s) => ({ id: s.id, label: s.heading }))}
         >
           <LessonRecallProvider>
-            <main className="mt-5 sm:mt-6">
+            <div className="mt-5 sm:mt-6">
               <div className="mx-auto mb-2 flex max-w-5xl justify-end px-0">
                 <LessonRecallToggle />
               </div>
@@ -395,7 +395,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
                   <PathwayLessonCommonTrapsStrip items={lesson.studyCommonTraps} />
                 </div>
               ) : null}
-            </main>
+            </div>
             {fullAccess && lessonHasExamTakeaways(lesson.studyTakeaways) ? (
               <div className="mx-auto mt-6 max-w-5xl">
                 <ExamTakeawaysBlock pathway={pathway} items={lesson.studyTakeaways} position="bottom" />

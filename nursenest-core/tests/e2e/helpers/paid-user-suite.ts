@@ -39,6 +39,7 @@ import {
   attachPaidSessionNetworkMonitor,
   type PaidSessionNetworkMonitor,
 } from "./paid-session-network-monitor";
+import { learnerAppMainLandmark } from "./paid-learner-shell";
 import { expectNoSubscriptionPaywall, expectOnLearnerApp } from "./paid-surface-assertions";
 import { logObserverFailureSummary } from "./log-observer-failure-summary";
 import { releaseGateBlockingSnippet, releaseGateUrlContext } from "./release-gate-failure";
@@ -70,7 +71,7 @@ export function assertNoMissingI18nDomTokens(page: Page): Promise<void> {
 
 export async function expectNoSubscriberPaywallSurface(page: Page, context: string): Promise<void> {
   await expectNoSubscriptionPaywall(page, context);
-  const main = page.locator("main");
+  const main = learnerAppMainLandmark(page);
   await expect(main.getByRole("heading", { name: /subscription required/i })).toHaveCount(0);
   await expect(main.getByRole("button", { name: /^Upgrade$/i })).toHaveCount(0);
   await expect(main.getByRole("link", { name: /^Upgrade to unlock/i })).toHaveCount(0);

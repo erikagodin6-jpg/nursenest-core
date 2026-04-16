@@ -2,11 +2,10 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import "./exam-shell.css";
-import { LearnerFeedbackShell } from "@/components/feedback/learner-feedback-shell";
 
 /**
- * Isolated exam surface: no learner nav row; theme tokens locked for readability.
- * Locale + i18n: `app/(student)/app/layout.tsx`.
+ * Exam attempt surface under the learner shell (`(learner)/layout.tsx`).
+ * Theme tokens + narrow column for focus; primary nav comes from the parent layout.
  */
 export const dynamic = "force-dynamic";
 
@@ -22,7 +21,6 @@ export default async function ExamShellLayout({ children }: { children: React.Re
     console.error("[exam-shell-layout] failed to load session or i18n bundle", {
       error: e instanceof Error ? e.message : String(e),
     });
-    // Fallback t() returns the key — exam shell renders with raw keys rather than crashing.
   }
 
   const userId = (session?.user as { id?: string } | null)?.id ?? "";
@@ -41,15 +39,6 @@ export default async function ExamShellLayout({ children }: { children: React.Re
   }
 
   return (
-    <LearnerFeedbackShell pathwayId={null}>
-      <div className="nn-exam-surface mx-auto w-full max-w-4xl px-6 py-8">
-        <nav className="mb-6 text-sm">
-          <Link href="/app" className="font-medium text-primary hover:underline">
-            {t("learner.exams.shell.backToDashboard")}
-          </Link>
-        </nav>
-        {children}
-      </div>
-    </LearnerFeedbackShell>
+    <div className="nn-exam-surface mx-auto w-full max-w-4xl px-6 py-8">{children}</div>
   );
 }

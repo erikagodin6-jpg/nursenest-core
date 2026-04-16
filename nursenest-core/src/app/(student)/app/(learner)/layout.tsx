@@ -198,7 +198,12 @@ export default async function LearnerShellLayout({ children }: { children: React
                 {/**
                  * Single document landmark for learner routes — inner pages/components use `<div>`, not nested `<main>`.
                  */}
-                <main id="nn-learner-main" className="min-w-0 outline-none" tabIndex={-1}>
+                <main
+                  id="nn-learner-main"
+                  data-nn-learner-main=""
+                  className="min-w-0 outline-none"
+                  tabIndex={-1}
+                >
                   <LearnerSilentSectionBoundary name="route_body">{children}</LearnerSilentSectionBoundary>
                 </main>
               </PageTransitionShell>

@@ -28,7 +28,8 @@ import {
 
 test.describe("Paid user — fast sanity (CI gate)", () => {
   test("shell + lessons hub + no paywall + API/console contract", async ({ page, baseURL }, testInfo) => {
-    test.setTimeout(45_000);
+    /** Shell waits default to 120s; keep test budget above that so production cold paths surface diagnostics. */
+    test.setTimeout(150_000);
     const appOrigin = new URL(baseURL ?? "http://127.0.0.1:3000").origin;
     const guards = attachPaidUserStandardGuards(page, appOrigin);
 

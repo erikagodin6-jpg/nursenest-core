@@ -85,7 +85,11 @@ export function LearnerShellDesktopStudyLinks({
 
   // `max-md:hidden` — avoid Tailwind v4 `hidden` + `md:block` display ordering bugs (desktop nav stuck display:none).
   return (
-    <nav className="w-full max-md:hidden" aria-label="Learner primary actions">
+    <nav
+      className="w-full max-md:hidden"
+      aria-label="Learner primary actions"
+      data-nn-learner-shell-study-nav=""
+    >
       <div className="flex w-full flex-wrap items-center justify-center gap-x-1.5 gap-y-2 sm:justify-start sm:gap-x-2 sm:gap-y-2 lg:gap-x-3">
         {items.map((item) => {
           const active = pathname.startsWith(item.matchPrefix);
@@ -136,6 +140,7 @@ export function LearnerShellMobileBottomNav({
     <nav
       className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-1 pb-[max(0.35rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-6px_20px_-10px_color-mix(in_srgb,var(--semantic-text-primary)_10%,transparent)] md:hidden"
       aria-label="Learner bottom navigation"
+      data-nn-learner-shell-study-nav=""
     >
       <div className="mx-auto flex max-w-6xl flex-wrap justify-center gap-1">
         <Link

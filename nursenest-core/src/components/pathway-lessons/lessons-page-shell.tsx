@@ -21,10 +21,13 @@ type Props = {
 /**
  * Page shell for lessons hub pages.
  * Delegates to the shared PathwayHero so the lessons and questions hubs stay visually unified.
+ *
+ * Uses a `<div>` (not `<main>`): marketing layouts already expose a single document `<main>`;
+ * learner `(learner)/layout` uses `#nn-learner-main` — nested `<main>` breaks landmark audits and E2E.
  */
 export function LessonsPageShell({ title, subtitle, toolbar, ctas, backLink, children }: Props) {
   return (
-    <main className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
       <PathwayHero
         title={title}
         subtitle={subtitle}
@@ -33,6 +36,6 @@ export function LessonsPageShell({ title, subtitle, toolbar, ctas, backLink, chi
         backLink={backLink}
       />
       <div className="mt-3">{children}</div>
-    </main>
+    </div>
   );
 }

@@ -14,6 +14,11 @@ export function withMarketingLocale(locale: string, href: string): string {
   if (href.startsWith("http://") || href.startsWith("https://")) return href;
   if (locale === DEFAULT_MARKETING_LOCALE) return href.startsWith("/") ? href : `/${href}`;
   const path = href.startsWith("/") ? href : `/${href}`;
+  /**
+   * Subscriber app + staff admin live outside `(marketing)/[locale]…`. Prefixing breaks routes:
+   * `/app/lessons` → `/fr/app/lessons` matches marketing `[locale]/[slug]/…` (wrong layout / 404), not `(student)/app/(learner)`.
+   */
+  if (path.startsWith("/app") || path.startsWith("/admin")) return path;
   if (isExamHubMarketingPath(path) || isExpansionExamMarketingPath(path)) return path;
   if (path === "/") return `/${locale}`;
   return `/${locale}${path}`;

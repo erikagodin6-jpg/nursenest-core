@@ -43,3 +43,29 @@ export async function expectOnLearnerApp(page: Page): Promise<void> {
     throw new Error(`${formatLearnerShellMismatch(url, path)} ${diag}`);
   }
 }
+
+/**
+ * Paid subscriber E2E: must be on the in-app shell (`/app`, `/app/*`), not the public marketing lesson hub
+ * (`/lessons` after guest redirect from `/app/lessons`) or other top-level marketing routes.
+ */
+export async function expectOnPaidSubscriberApp(page: Page): Promise<void> {
+  assertSyncNotOnboardingBlocking(page, "expectOnPaidSubscriberApp");
+  const url = page.url();
+  let path = "";
+  try {
+    path = new URL(url).pathname;
+  } catch {
+    const diag = await describeAuthFailureSurface(page).catch(() => "");
+    throw new Error(`Invalid page URL for paid learner shell. url=${url} ${diag}`);
+  }
+  if (path.includes("/app/onboarding")) {
+    const diag = await describeAuthFailureSurface(page).catch(() => "");
+    throw new Error(`On onboarding route — not subscriber shell. url=${url} ${diag}`);
+  }
+  if (path !== "/app" && !path.startsWith("/app/")) {
+    const diag = await describeAuthFailureSurface(page).catch(() => "");
+    throw new Error(
+      `Expected /app subscriber surface; got pathname=${path}. Often a guest redirect from /app/lessons to /lessons (session missing). url=${url} ${diag}`,
+    );
+  }
+}

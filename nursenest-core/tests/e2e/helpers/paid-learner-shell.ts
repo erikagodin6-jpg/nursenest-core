@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test";
+import { expect, type Locator, type Page } from "@playwright/test";
 import type { PageObservers } from "./attach-observers";
 import { learnerShellStudyNavigation } from "./learner-shell-locators";
 import {
@@ -6,7 +6,7 @@ import {
   assertSyncNotOnboardingBlocking,
   markLearnerShellReady,
 } from "./paid-durability";
-import { expectOnLearnerApp } from "./paid-surface-assertions";
+import { expectOnPaidSubscriberApp } from "./paid-surface-assertions";
 
 /**
  * Default pathway for US RN paid E2E — align with `scripts/qa-paid-test-account-reset.mts`
@@ -14,25 +14,41 @@ import { expectOnLearnerApp } from "./paid-surface-assertions";
  */
 export const PAID_E2E_DEFAULT_PATHWAY_ID = "us-rn-nclex-rn";
 
+/**
+ * Canonical learner `<main>` from `(learner)/layout` — prefer `#nn-learner-main`, then `data-nn-learner-main`,
+ * then the single `main` under `.nn-learner-app` (covers older deploys where `id` was missing from SSR HTML).
+ */
+export function learnerAppMainLandmark(page: Page): Locator {
+  return page
+    .locator("#nn-learner-main")
+    .or(page.locator("[data-nn-learner-main]"))
+    .or(page.locator(".nn-learner-app main").first());
+}
+
 /** Snapshot when `#nn-learner-main` is missing — auth redirect, onboarding, marketing guest hub, or auth gate. */
 export type LearnerShellMainMissingDiagnostics = {
   pageUrl: string;
   windowPathname: string;
   pathnameFromPageUrl: string;
   title: string;
+  /** Total `<main>` in document (nested marketing + learner mains break generic `main` locators). */
+  documentMainCount: number;
   nnLearnerMainCount: number;
   authGateCount: number;
   learnerStickyChromeCount: number;
   marketingSurfaceCount: number;
   loginPathOrQuery: boolean;
-  passwordInputCount: boolean;
+  /** True if any password field exists in the DOM (login form). */
+  hasPasswordInput: boolean;
   signInButtonVisible: boolean;
   onboardingUrl: boolean;
   likelyMarketingLessonsHub: boolean;
   inferredCause: string;
 };
 
-async function collectLearnerShellMainMissingDiagnostics(page: Page): Promise<LearnerShellMainMissingDiagnostics> {
+export async function collectLearnerShellMainMissingDiagnostics(
+  page: Page,
+): Promise<LearnerShellMainMissingDiagnostics> {
   const pageUrl = page.url();
   let pathnameFromPageUrl = "";
   try {
@@ -48,6 +64,7 @@ async function collectLearnerShellMainMissingDiagnostics(page: Page): Promise<Le
   }
   const title = (await page.title().catch(() => "")).slice(0, 200);
   const [
+    documentMainCount,
     nnLearnerMainCount,
     authGateCount,
     learnerStickyChromeCount,
@@ -55,7 +72,8 @@ async function collectLearnerShellMainMissingDiagnostics(page: Page): Promise<Le
     passwordInputs,
     signInButtonVisible,
   ] = await Promise.all([
-    page.locator("#nn-learner-main").count(),
+    page.locator("main").count(),
+    learnerAppMainLandmark(page).count(),
     page.locator("[data-nn-learner-auth-gate]").count(),
     page.locator(".nn-learner-shell-sticky").count(),
     page.locator(".nn-marketing-surface").count(),
@@ -89,12 +107,13 @@ async function collectLearnerShellMainMissingDiagnostics(page: Page): Promise<Le
     windowPathname,
     pathnameFromPageUrl,
     title,
+    documentMainCount,
     nnLearnerMainCount,
     authGateCount,
     learnerStickyChromeCount,
     marketingSurfaceCount,
     loginPathOrQuery,
-    passwordInputCount: passwordInputs > 0,
+    hasPasswordInput: passwordInputs > 0,
     signInButtonVisible,
     onboardingUrl,
     likelyMarketingLessonsHub,
@@ -102,32 +121,73 @@ async function collectLearnerShellMainMissingDiagnostics(page: Page): Promise<Le
   };
 }
 
-async function logLearnerShellMainMissingDiagnostics(page: Page, context: string): Promise<void> {
-  const d = await collectLearnerShellMainMissingDiagnostics(page);
-  // eslint-disable-next-line no-console -- paid E2E deploy-gate diagnostics
-  console.error(`[paid-e2e] #nn-learner-main missing (${context})`, JSON.stringify(d, null, 2));
-}
-
-async function logLearnerShellNavigationAudit(page: Page, context: string): Promise<void> {
+/** Full contract snapshot when learner shell wait fails (URL, pathname, main landmark, study nav, role=navigation audit, inferred cause). */
+async function logLearnerShellContractFailure(page: Page, context: string): Promise<void> {
+  let pageUrl = "";
   let pathname = "";
   try {
-    pathname = new URL(page.url()).pathname;
+    pageUrl = page.url();
+    pathname = new URL(pageUrl).pathname;
   } catch {
-    pathname = "";
+    pageUrl = "";
   }
-  const navigations = page.getByRole("navigation");
-  const count = await navigations.count();
-  const parts: string[] = [];
-  for (let i = 0; i < count; i++) {
-    const loc = navigations.nth(i);
-    const visible = await loc.isVisible().catch(() => false);
-    const label = (await loc.getAttribute("aria-label"))?.trim() || "(no aria-label)";
-    parts.push(`${visible ? "visible" : "hidden"}:${label}`);
+
+  let nnLearnerMainCount = 0;
+  let nnLearnerMainVisible = false;
+  let documentMainCount = 0;
+  let studyNavMarkedTotal = 0;
+  let studyNavVisibleCount = 0;
+  try {
+    const mainLoc = learnerAppMainLandmark(page);
+    nnLearnerMainCount = await mainLoc.count();
+    nnLearnerMainVisible =
+      nnLearnerMainCount > 0 ? await mainLoc.first().isVisible().catch(() => false) : false;
+    [documentMainCount, studyNavMarkedTotal, studyNavVisibleCount] = await Promise.all([
+      page.locator("main").count(),
+      page.locator("[data-nn-learner-shell-study-nav]").count(),
+      page.locator("[data-nn-learner-shell-study-nav]").filter({ visible: true }).count(),
+    ]);
+  } catch {
+    /* page may be closed */
   }
-  // eslint-disable-next-line no-console -- temporary deploy-gate diagnostics for learner shell mismatches
+
+  const navigationLandmarks: string[] = [];
+  try {
+    const navigations = page.getByRole("navigation");
+    const count = await navigations.count();
+    for (let i = 0; i < count; i++) {
+      const loc = navigations.nth(i);
+      const visible = await loc.isVisible().catch(() => false);
+      const label = (await loc.getAttribute("aria-label"))?.trim() || "(no aria-label)";
+      navigationLandmarks.push(`${visible ? "visible" : "hidden"}:aria-label=${label}`);
+    }
+  } catch (e) {
+    navigationLandmarks.push(
+      `(navigation enumeration failed: ${e instanceof Error ? e.message : String(e)})`,
+    );
+  }
+
+  const inferred = await collectLearnerShellMainMissingDiagnostics(page);
+
+  // eslint-disable-next-line no-console -- paid E2E deploy-gate diagnostics
   console.error(
-    `[paid-e2e] learner shell nav audit (${context}) pathname=${pathname} navigationCount=${count}`,
-    parts.join(" | "),
+    `[paid-e2e] learner shell contract failure (${context})`,
+    JSON.stringify(
+      {
+        pageUrl,
+        pathname,
+        nnLearnerMainExists: nnLearnerMainCount > 0,
+        nnLearnerMainVisible,
+        nnLearnerMainCount,
+        documentMainCount,
+        studyNavMarkedTotal,
+        studyNavVisibleCount,
+        navigationLandmarks,
+        inferred,
+      },
+      null,
+      2,
+    ),
   );
 }
 
@@ -143,32 +203,20 @@ export async function waitForAuthenticatedLearnerShell(
   const ms = opts?.timeoutMs ?? 120_000;
   assertSyncNotOnboardingBlocking(page, "waitForAuthenticatedLearnerShell");
 
-  const url = page.url();
-  let pathname = "";
   try {
-    pathname = new URL(url).pathname;
-  } catch {
-    pathname = "";
-  }
-  // eslint-disable-next-line no-console -- required shell-wait debug (user request)
-  console.log("PATH:", pathname);
-  // eslint-disable-next-line no-console -- required shell-wait debug (user request)
-  console.log("URL:", url);
-
-  try {
-    await expect(page.locator("#nn-learner-main")).toBeVisible({ timeout: ms });
+    await expect(learnerAppMainLandmark(page)).toBeVisible({ timeout: ms });
   } catch (e) {
-    await logLearnerShellMainMissingDiagnostics(page, "waitForAuthenticatedLearnerShell");
+    await logLearnerShellContractFailure(page, "waitForAuthenticatedLearnerShell#main");
     const msg = e instanceof Error ? e.message : String(e);
     throw new Error(
-      `#nn-learner-main not visible after ${ms}ms. See [paid-e2e] #nn-learner-main missing log above. Original: ${msg}`,
+      `Learner app main landmark not visible after ${ms}ms (#nn-learner-main, [data-nn-learner-main], or .nn-learner-app main). See [paid-e2e] learner shell contract failure log above. Original: ${msg}`,
       { cause: e },
     );
   }
   try {
     await expect(learnerShellStudyNavigation(page)).toBeVisible({ timeout: Math.min(ms, 90_000) });
   } catch (e) {
-    await logLearnerShellNavigationAudit(page, "waitForAuthenticatedLearnerShell");
+    await logLearnerShellContractFailure(page, "waitForAuthenticatedLearnerShell#nav");
     throw e;
   }
   assertNoAuthSessionBlockingBeforeShell(page);
@@ -185,7 +233,7 @@ export async function expectPaidLearnerShellReady(
   opts?: { timeoutMs?: number },
 ): Promise<void> {
   assertSyncNotOnboardingBlocking(page, context);
-  await expectOnLearnerApp(page);
+  await expectOnPaidSubscriberApp(page);
   assertSyncNotOnboardingBlocking(page, context);
   await waitForAuthenticatedLearnerShell(page, opts);
 }
@@ -223,7 +271,7 @@ export async function collectPaidSurfaceDebug(page: Page, step: string): Promise
     .count()
     .catch(() => 0);
   const mainH1 =
-    (await page.locator("#nn-learner-main h1").first().innerText().catch(() => null)) ??
+    (await learnerAppMainLandmark(page).locator("h1").first().innerText().catch(() => null)) ??
     (await page.getByRole("heading", { level: 1 }).first().innerText().catch(() => null));
   return {
     step,
