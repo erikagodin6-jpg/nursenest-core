@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { ContentStatus } from "@prisma/client";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
@@ -84,7 +84,7 @@ async function getGapsPayload() {
 }
 
 /** Coverage gaps: topic buckets with few published questions (production `exam_questions` has no Category FK). */
-export async function GET() {
+export async function GET(req: NextRequest) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 

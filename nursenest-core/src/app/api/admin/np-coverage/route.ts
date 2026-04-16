@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { buildNpCanadaCoverageReport } from "@/lib/np/build-np-canada-coverage-report";
 
 /**
  * GET /api/admin/np-coverage — Canadian NP question-bank depth vs product thresholds (admin only).
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 

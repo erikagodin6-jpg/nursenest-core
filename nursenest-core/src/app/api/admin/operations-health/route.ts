@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { loadAdminOperationsHealth } from "@/lib/admin/load-admin-operations-health";
 
 /**
  * Aggregated operational health for admin dashboard (DB jobs, automation logs, AI, billing signals).
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 

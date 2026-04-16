@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { buildAdminDiagnosticsOperationsLayer } from "@/lib/admin/build-admin-diagnostics-operations-layer";
 import { readPriorReadinessScore, writePriorReadinessScore } from "@/lib/admin/readiness-prior-score-cache";
@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 /**
  * JSON snapshot for the admin diagnostics dashboard (safe when optional tables are missing).
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 

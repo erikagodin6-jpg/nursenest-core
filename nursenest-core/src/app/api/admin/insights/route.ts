@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { ContentStatus, SubscriptionStatus, TierCode } from "@prisma/client";
 import { safePrismaCount } from "@/lib/admin/resilient-counts";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
@@ -8,7 +8,7 @@ import { prisma } from "@/lib/db";
 const CACHE_KEY = "admin:insights:v2";
 const TTL_MS = 60_000;
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 

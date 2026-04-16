@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { buildQuestionBankCoverageReport } from "@/lib/questions/build-question-bank-diagnostics";
 

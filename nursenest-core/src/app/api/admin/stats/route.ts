@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { loadAdminDashboardStats } from "@/lib/admin/load-admin-dashboard-stats";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { ttlGet, ttlSet } from "@/lib/cache/memory-cache";
