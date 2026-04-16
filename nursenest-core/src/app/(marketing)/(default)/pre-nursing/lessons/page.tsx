@@ -13,8 +13,19 @@ import { PRE_NURSING_LESSON_HUB_PAGE_SIZE } from "@/lib/pre-nursing/pre-nursing-
 import { preNursingLessonsHubBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import {
+  EditableHeading,
+  EditableText,
+  preloadInlineContentMap,
+} from "@/components/inline-content";
 
 const dict = strings as Record<string, string>;
+
+const PRE_NURSING_LESSONS_INLINE_KEYS = [
+  "inline.marketing.preNursing.lessons.kicker",
+  "inline.marketing.preNursing.lessons.h1",
+  "inline.marketing.preNursing.lessons.intro",
+] as const;
 
 export const dynamic = "force-dynamic";
 export const revalidate = 86400;
@@ -61,6 +72,7 @@ export default async function PreNursingLessonsHubPage({ searchParams }: Props) 
   const slice = all.slice(skip, skip + pageSize);
 
   const { crumbs, schemaItems } = preNursingLessonsHubBreadcrumbs(page);
+  const preNursingLessonsInlinePreloaded = await preloadInlineContentMap([...PRE_NURSING_LESSONS_INLINE_KEYS]);
 
   return (
     <div className="nn-marketing-surface">
@@ -72,13 +84,27 @@ export default async function PreNursingLessonsHubPage({ searchParams }: Props) 
         </div>
 
         <header className="mb-6">
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Pre-Nursing</p>
-          <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-[var(--theme-heading-text)] sm:text-3xl">
-            Lesson Library
-          </h1>
-          <p className="mt-2 max-w-2xl text-[var(--theme-body-text)]">
-            Review concepts by topic. Open any lesson to study, then move into flashcards, practice questions, and exams.
-          </p>
+          <EditableText
+            as="p"
+            className="text-xs font-semibold uppercase tracking-wide text-primary"
+            contentKey="inline.marketing.preNursing.lessons.kicker"
+            defaultText="Pre-Nursing"
+            preloaded={preNursingLessonsInlinePreloaded}
+          />
+          <EditableHeading
+            as="h1"
+            className="mt-2 text-2xl font-extrabold tracking-tight text-[var(--theme-heading-text)] sm:text-3xl"
+            contentKey="inline.marketing.preNursing.lessons.h1"
+            defaultText="Lesson Library"
+            preloaded={preNursingLessonsInlinePreloaded}
+          />
+          <EditableText
+            as="p"
+            className="mt-2 max-w-2xl text-[var(--theme-body-text)]"
+            contentKey="inline.marketing.preNursing.lessons.intro"
+            defaultText="Review concepts by topic. Open any lesson to study, then move into flashcards, practice questions, and exams."
+            preloaded={preNursingLessonsInlinePreloaded}
+          />
           <div className="mt-3 flex flex-wrap gap-3 text-sm">
             <Link href="/pre-nursing" className="font-semibold text-primary hover:underline">
               ← Pre-Nursing overview

@@ -21,7 +21,10 @@ test("proxy matcher includes /app, /admin, and exam hub roots; auth-middleware u
   assert.match(proxySrc, /\/:locale\/canada",/);
   assert.match(proxySrc, /\/exams",/);
   assert.match(proxySrc, /\/:locale\/exams",/);
-  assert.match(proxySrc, /REGIONAL_MARKETING_LOCALE_PREFIX_MATCHERS/);
+  // Matcher list is inlined (not spread from REGIONAL_MARKETING_LOCALE_PREFIX_MATCHERS) for Next static analysis — keep in sync with regional-marketing-public-gate.ts.
+  assert.match(proxySrc, /regional-marketing-public-gate\.ts/);
+  assert.match(proxySrc, /\/:locale\/japan",/);
+  assert.match(proxySrc, /\/:locale\/middle-east\/:path\*"/);
   assert.match(proxySrc, /\/japan\/:path\*"/);
   assert.match(proxySrc, /matcher/);
 

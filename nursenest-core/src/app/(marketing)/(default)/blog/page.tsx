@@ -10,6 +10,18 @@ import { blogIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { RegionalBlogDiscoveryHint } from "@/components/marketing/regional-blog-discovery-hint";
+import {
+  EditableHeading,
+  EditableRichText,
+  EditableText,
+  preloadInlineContentMap,
+} from "@/components/inline-content";
+
+const BLOG_INLINE_KEYS = [
+  "inline.marketing.blog.index.h1",
+  "inline.marketing.blog.index.lead",
+  "inline.marketing.blog.index.emptyState",
+] as const;
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -53,20 +65,36 @@ export default async function BlogIndexPage({ searchParams }: Props) {
   const { posts, total, pageSize } = await getPublishedBlogPostsPage(page, BLOG_LIST_PAGE_SIZE);
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const { crumbs, schemaItems } = blogIndexBreadcrumbs();
+  const blogInlinePreloaded = await preloadInlineContentMap([...BLOG_INLINE_KEYS]);
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
       <RegionalBlogDiscoveryHint />
       <header className="mb-10">
-        <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">Clinical education blog</h1>
-        <p className="mt-2 text-[var(--theme-muted-text)]">Scholarly articles for nursing and allied health exam preparation.</p>
+        <EditableHeading
+          as="h1"
+          className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]"
+          contentKey="inline.marketing.blog.index.h1"
+          defaultText="Clinical education blog"
+          preloaded={blogInlinePreloaded}
+        />
+        <EditableRichText
+          contentKey="inline.marketing.blog.index.lead"
+          defaultHtml="<p>Scholarly articles for nursing and allied health exam preparation.</p>"
+          className="mt-2 text-[var(--theme-muted-text)] [&_p]:m-0"
+          preloaded={blogInlinePreloaded}
+        />
       </header>
       {posts.length === 0 ? (
         <>
-          <p className="text-sm text-[var(--theme-muted-text)]">
-            New clinical articles are added regularly. Check back soon, or explore lessons and the question bank in your account.
-          </p>
+          <EditableText
+            as="p"
+            className="text-sm text-[var(--theme-muted-text)]"
+            contentKey="inline.marketing.blog.index.emptyState"
+            defaultText="New clinical articles are added regularly. Check back soon, or explore lessons and the question bank in your account."
+            preloaded={blogInlinePreloaded}
+          />
           <MarketingStudyCrossLinks className="mt-10" />
         </>
       ) : (

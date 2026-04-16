@@ -95,6 +95,19 @@ const EXPECTED_COMPLETE_LIGHT_THEMES = [
   "plum-velvet",
   "honey-cream",
   "dusty-rose",
+  "petal-pop",
+  "cotton-candy",
+  "pink-skies",
+  "berry-bonbon",
+  "pastel-party",
+  "rainbow-sherbet",
+  "sunny-lilac",
+  "sky-kiss",
+  "bluebird",
+  "violet-night",
+  "plum-mist",
+  "graphite-blue",
+  "north-sea",
 ];
 
 // ── 1. CSS source-order tests ─────────────────────────────────────────────
