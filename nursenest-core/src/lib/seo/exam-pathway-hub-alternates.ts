@@ -1,6 +1,7 @@
 import { buildExamPathwayPath, EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
+import { getPathwayTopicProgrammaticRow } from "@/lib/seo/pathway-topic-programmatic-registry";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 /**
@@ -32,5 +33,43 @@ export function examPathwayRegionalHreflang(pathway: ExamPathwayDefinition): Rec
   }
   const selfUrl = absoluteUrl(buildExamPathwayPath(pathway));
   out["x-default"] = us ? out["en-US"]! : ca ? out["en-CA"]! : selfUrl;
+  return out;
+}
+
+/**
+ * Regional hreflang for pathway long-tail programmatic pages (`/{us|canada}/…/{topicSlug}`).
+ *
+ * **Not** the global marketing-locale cluster (`/fr/…`, `/es/…`): those URLs are not routed for this
+ * tree and would 404 — see `collectLocaleMarketingUrls` / `stripForbiddenLocalePrefixedPathwayTopics`.
+ *
+ * Emits `en-US` / `en-CA` only when the same `topicSegment` exists in the pathway-topic registry for
+ * that sibling hub; `x-default` prefers US when both exist (matches {@link examPathwayRegionalHreflang}).
+ */
+export function examPathwayTopicRegionalHreflang(
+  pathway: ExamPathwayDefinition,
+  topicSegment: string,
+): Record<string, string> {
+  const siblings = EXAM_PATHWAYS.filter(
+    (p) =>
+      p.roleTrack === pathway.roleTrack &&
+      p.examCode === pathway.examCode &&
+      p.status !== "hidden" &&
+      isPathwayPublishedForPublicSite(p.id),
+  );
+  const out: Record<string, string> = {};
+  const us = siblings.find((p) => p.countrySlug === "us");
+  const ca = siblings.find((p) => p.countrySlug === "canada");
+  if (us && getPathwayTopicProgrammaticRow(us.id, topicSegment)) {
+    out["en-US"] = absoluteUrl(buildExamPathwayPath(us, topicSegment));
+  }
+  if (ca && getPathwayTopicProgrammaticRow(ca.id, topicSegment)) {
+    out["en-CA"] = absoluteUrl(buildExamPathwayPath(ca, topicSegment));
+  }
+  const selfUrl = absoluteUrl(buildExamPathwayPath(pathway, topicSegment));
+  out["x-default"] = us && getPathwayTopicProgrammaticRow(us.id, topicSegment)
+    ? out["en-US"]!
+    : ca && getPathwayTopicProgrammaticRow(ca.id, topicSegment)
+      ? out["en-CA"]!
+      : selfUrl;
   return out;
 }

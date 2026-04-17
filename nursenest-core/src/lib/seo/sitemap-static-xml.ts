@@ -54,7 +54,7 @@ import {
   listPublishedExpansionExamMarketingPaths,
 } from "@/lib/marketing/published-regional-marketing-urls";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
-import { assertLocaleMarketingUrlsExcludePrefixedPathwayTopics } from "@/lib/seo/sitemap-locale-prefixed-path-guard";
+import { stripForbiddenLocalePrefixedPathwayTopics } from "@/lib/seo/sitemap-locale-prefixed-path-guard";
 
 /** Locales included in merged urlset tooling (full + partial tier); sorted for deterministic URL lists. */
 const SORTED_SITEMAP_LOCALES = [...getSitemapIncludedLocales()].sort();
@@ -378,8 +378,14 @@ export function collectLocaleMarketingUrls(origin: string, locale: string): stri
   // produced five-segment URLs like `/fr/us/np/fnp/...` that do not match any page (404 in GSC).
   // Canonical URLs for those pages are already emitted in `collectCoreUrls` via
   // `collectPathwayTopicProgrammaticUrls`.
-  assertLocaleMarketingUrlsExcludePrefixedPathwayTopics(urls, o, locale);
-  return urls;
+  const stripped = stripForbiddenLocalePrefixedPathwayTopics(urls, o, locale);
+  if (stripped.removed > 0) {
+    safeServerLog("seo", "sitemap_locale_strip_prefixed_pathway_topics", {
+      locale,
+      removed: stripped.removed,
+    });
+  }
+  return stripped.urls;
 }
 
 export function collectToolsUrls(origin: string): string[] {

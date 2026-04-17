@@ -1,9 +1,15 @@
 /**
  * Prisma / API perf logging without Node `fs`/`os` — safe to import from `db.ts` (avoids Edge bundling `node:fs`).
  */
+import {
+  ALERT_API_PAYLOAD_BYTES,
+  LARGE_API_RESPONSE_BYTES,
+} from "@/lib/observability/api-response-size-constants";
 import { recordSlowDbQuery } from "@/lib/observability/production-signal-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { getPrismaQueryContext } from "@/lib/server/prisma-query-context";
+
+export { ALERT_API_PAYLOAD_BYTES, LARGE_API_RESPONSE_BYTES };
 
 /** Log Prisma operations slower than this (ms). */
 export const SLOW_PRISMA_QUERY_MS = 500;
@@ -13,12 +19,6 @@ export const SLOW_QUERY_WARN_MS = 500;
 
 /** `slow_query_detected` — critical tier (ms). */
 export const SLOW_QUERY_CRITICAL_MS = 1000;
-
-/** Log JSON API bodies estimated above this (UTF-8 bytes). */
-export const LARGE_API_RESPONSE_BYTES = 500_000;
-
-/** Earlier warning threshold (still below `LARGE_API_RESPONSE_BYTES`) for noisy routes. */
-export const ALERT_API_PAYLOAD_BYTES = 250_000;
 
 /** When heap exceeds this during a slow query or interval sample, emit high_memory. */
 export const HIGH_HEAP_BYTES = 768 * 1024 * 1024;

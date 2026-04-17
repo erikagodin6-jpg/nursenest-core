@@ -34,8 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       if (!pathway) return {};
       const row = getPathwayTopicProgrammaticRow(pathway.id, exam);
       if (!row) return {};
-      const enPath = buildExamPathwayPath(pathway, exam);
-      return buildPathwayTopicProgrammaticMetadata(row.page, enPath);
+      return buildPathwayTopicProgrammaticMetadata(row.page, pathway, exam);
     },
     { pathname, routeGroup: "marketing.exam_hub.pathway_topic_programmatic" },
   );

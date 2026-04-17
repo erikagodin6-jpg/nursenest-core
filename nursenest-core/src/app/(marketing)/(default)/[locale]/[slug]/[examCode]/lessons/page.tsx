@@ -63,13 +63,14 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
       if (!pathway) return {};
       const path = buildExamPathwayPath(pathway, "lessons");
       const canonical = absoluteUrl(path);
+      const canonicalWithPage = page > 1 ? `${canonical}?page=${page}` : canonical;
       const title = pathwayLessonHubMetaTitle(pathway);
       const description = pathwayLessonHubMetaDescription(pathway);
       return {
         title,
         description,
-        alternates: { canonical: page > 1 ? `${canonical}?page=${page}` : canonical },
-        openGraph: { title, description, url: canonical, type: "website" },
+        alternates: { canonical: canonicalWithPage },
+        openGraph: { title, description, url: canonicalWithPage, type: "website" },
         ...(q ? { robots: { index: false, follow: true } } : {}),
       };
     },

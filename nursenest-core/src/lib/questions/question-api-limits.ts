@@ -9,7 +9,7 @@ export const MAX_QUESTION_PAGE_SIZE = API_LIST_PAGE_SIZE_HARD_MAX;
 export const QUESTION_PAYLOAD_WARN_BYTES = 150_000;
 
 /** Hard log threshold for oversized API JSON (see {@link logLargeApiResponse} in perf-log). */
-export { LARGE_API_RESPONSE_BYTES } from "@/lib/observability/perf-log";
+export { LARGE_API_RESPONSE_BYTES } from "@/lib/observability/api-response-size-constants";
 
 /** Legacy: log “large list” diagnostics above this threshold (subscriber list). */
 export const QUESTION_LIST_PAYLOAD_LOG_MIN_BYTES = 96_000;

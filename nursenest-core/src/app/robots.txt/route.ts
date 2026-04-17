@@ -1,4 +1,5 @@
 import { CANONICAL_PRODUCTION_ORIGIN } from "@/lib/seo/canonical-site";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { MARKETING_LANGUAGES } from "@/lib/i18n/marketing-languages";
 import { isLocaleRobotsPathDisallowed } from "@/lib/i18n/language-readiness";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -64,7 +65,9 @@ export async function GET() {
     ].join("\n");
 
     return new Response(body, { status: 200, headers: ROBOTS_HEADERS });
-  } catch {
+  } catch (e) {
+    const detail = e instanceof Error ? e.message : String(e);
+    safeServerLog("seo", "robots_txt_fallback", { detail: detail.slice(0, 200) });
     return new Response(FALLBACK_BODY, { status: 200, headers: ROBOTS_HEADERS });
   }
 }
