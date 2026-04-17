@@ -1,4 +1,8 @@
-import { isExamHubMarketingPath } from "@/lib/i18n/exam-hub-path";
+import {
+  expansionExamPathSupportsLocalizedMarketingShell,
+  isExamHubMarketingPath,
+  isExpansionExamMarketingPath,
+} from "@/lib/i18n/exam-hub-path";
 import { getHreflangEligibleLocales } from "@/lib/i18n/language-readiness";
 import { stripMarketingLocalePrefix } from "@/lib/i18n/marketing-path";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -32,6 +36,10 @@ export function marketingCanonicalPathForLocale(locale: string, enPath: string):
   if (isExamHubMarketingPath(path)) {
     return path;
   }
+  /** Default-only `/exams/:country` shells have no `/{lang}/exams/...` route — never prefix (matches `withMarketingLocale`). */
+  if (isExpansionExamMarketingPath(path) && !expansionExamPathSupportsLocalizedMarketingShell(path)) {
+    return path;
+  }
   if (locale === DEFAULT_MARKETING_LOCALE) {
     return path;
   }
@@ -61,6 +69,13 @@ export function marketingHreflangLanguagesForEnPath(enPath: string): Record<stri
   const enUrl = absoluteUrl(path === "/" ? "/" : path);
   /** US/CA exam product URLs: only one indexable URL shape; regional hreflang is handled per-page (en-US/en-CA). */
   if (isExamHubMarketingPath(path)) {
+    return filterPublicHreflangRecord({ "x-default": enUrl, en: enUrl }, "seo", "marketing_hreflang_rejected");
+  }
+  /**
+   * Expansion hubs: many countries have `(marketing)/[locale]/exams/:country` — emit full hreflang.
+   * Default-only hubs (e.g. philippines, canada, uk) must not list `/{lang}/exams/...` alternates (404).
+   */
+  if (isExpansionExamMarketingPath(path) && !expansionExamPathSupportsLocalizedMarketingShell(path)) {
     return filterPublicHreflangRecord({ "x-default": enUrl, en: enUrl }, "seo", "marketing_hreflang_rejected");
   }
   const out: Record<string, string> = {

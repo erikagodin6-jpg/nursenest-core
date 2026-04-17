@@ -20,3 +20,10 @@ test("isDisallowedMarketingSeoPathname rejects locale-first paths with 5+ segmen
   assert.equal(isDisallowedMarketingSeoPathname("/fr/a/b/c/d"), true);
   assert.equal(isDisallowedMarketingSeoPathname("/fr/pre-nursing/lessons/slug"), false);
 });
+
+test("isDisallowedMarketingSeoPathname rejects locale-prefixed default-only /exams/:country URLs", () => {
+  assert.equal(isDisallowedMarketingSeoPathname("/fr/exams/philippines"), true);
+  assert.equal(isDisallowedMarketingSeoPathname("/fr/exams/canada"), true);
+  assert.equal(isDisallowedMarketingSeoPathname("/fr/exams/india"), false);
+  assert.equal(isDisallowedMarketingSeoPathname("/exams/philippines"), false);
+});

@@ -29,6 +29,12 @@ test("isValidPublicUrl rejects locale + exam country pattern", () => {
   if (!r.ok) assert.equal(r.code, "disallowed_locale_regional_shape");
 });
 
+test("isValidPublicUrl rejects locale + default-only expansion exam hub", () => {
+  const r = isValidPublicUrl(`${origin}/fr/exams/philippines`, { origin });
+  assert.equal(r.ok, false);
+  if (!r.ok) assert.equal(r.code, "disallowed_locale_regional_shape");
+});
+
 test("filterIndexablePublicUrls drops bad URLs", () => {
   const out = filterIndexablePublicUrls(
     [`${origin}/pricing`, `${origin}/login`, `${origin}/blog`],

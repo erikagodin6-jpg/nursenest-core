@@ -20,9 +20,17 @@ test("marketingHreflangLanguagesForEnPath strips a mistaken /fr prefix before de
   assert.ok(!langs.fr?.includes("/fr/us/"));
 });
 
-test("marketingHreflangLanguagesForEnPath still emits localized alternates for /exams/…", () => {
-  const langs = marketingHreflangLanguagesForEnPath("/exams/india");
-  assert.ok(langs.fr?.includes("/fr/exams/india"));
+test("marketingHreflangLanguagesForEnPath emits localized alternates only when a localized /exams shell exists", () => {
+  const india = marketingHreflangLanguagesForEnPath("/exams/india");
+  assert.ok(india.fr?.includes("/fr/exams/india"));
+
+  const philippines = marketingHreflangLanguagesForEnPath("/exams/philippines");
+  assert.equal(Object.keys(philippines).length, 2);
+  assert.ok(philippines["x-default"]?.includes("/exams/philippines"));
+  assert.equal(philippines.fr, undefined);
+
+  const canada = marketingHreflangLanguagesForEnPath("/exams/canada");
+  assert.equal(canada.fr, undefined);
 });
 
 test("marketingCanonicalPathForLocale never prefixes exam hub paths with locale", () => {
@@ -31,4 +39,9 @@ test("marketingCanonicalPathForLocale never prefixes exam hub paths with locale"
 
 test("marketingCanonicalPathForLocale prefixes normal marketing paths", () => {
   assert.equal(marketingCanonicalPathForLocale("fr", "/pricing"), "/fr/pricing");
+});
+
+test("marketingCanonicalPathForLocale does not prefix default-only expansion exam hubs", () => {
+  assert.equal(marketingCanonicalPathForLocale("fr", "/exams/philippines"), "/exams/philippines");
+  assert.equal(marketingCanonicalPathForLocale("fr", "/exams/india"), "/fr/exams/india");
 });

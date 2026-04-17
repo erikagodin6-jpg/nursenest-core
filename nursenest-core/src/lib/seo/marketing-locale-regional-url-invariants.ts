@@ -1,4 +1,4 @@
-import { isExamPathwayCountrySlug } from "@/lib/i18n/exam-hub-path";
+import { isExamPathwayCountrySlug, isLocalePrefixedDefaultOnlyExpansionExamPath } from "@/lib/i18n/exam-hub-path";
 import { DEFAULT_MARKETING_LOCALE, isCoreHostedNonDefaultLocale, isMarketingLocaleCode } from "@/lib/i18n/marketing-locale-policy";
 
 /** Path segments after splitting on `/` (no empty strings). */
@@ -38,6 +38,7 @@ export function localeFirstPathExceedsSegmentBudget(pathname: string, maxSegment
 /** Sitemap + metadata guard: drop paths that cannot correspond to a real marketing route. */
 export function isDisallowedMarketingSeoPathname(pathname: string): boolean {
   if (pathnameHasLocalePrefixBeforeExamCountry(pathname)) return true;
+  if (isLocalePrefixedDefaultOnlyExpansionExamPath(pathname)) return true;
   if (localeFirstPathExceedsSegmentBudget(pathname)) return true;
   return false;
 }
