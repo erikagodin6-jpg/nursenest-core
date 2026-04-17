@@ -12,6 +12,7 @@ import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-s
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
+import { withCrawlSurfacePageRender } from "@/lib/observability/crawl-surface-observability";
 import { PathwayLessonDetailPageBody } from "./pathway-lesson-detail-page-body";
 
 /**
@@ -103,12 +104,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PathwayLessonDetailPage({ params }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode, lessonSlug } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}/lessons/${lessonSlug}`;
-  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
-  if (!pathway) notFound();
+  return withCrawlSurfacePageRender("marketing.pathway_lesson", pathname, async () => {
+    const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
+    if (!pathway) notFound();
 
-  return (
-    <Suspense fallback={<PathwayLessonDetailPageLoadingFallback pathway={pathway} />}>
-      <PathwayLessonDetailPageBody pathway={pathway} pathname={pathname} lessonSlug={lessonSlug} />
-    </Suspense>
-  );
+    return (
+      <Suspense fallback={<PathwayLessonDetailPageLoadingFallback pathway={pathway} />}>
+        <PathwayLessonDetailPageBody pathway={pathway} pathname={pathname} lessonSlug={lessonSlug} />
+      </Suspense>
+    );
+  });
 }

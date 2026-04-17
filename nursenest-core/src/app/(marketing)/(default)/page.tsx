@@ -19,7 +19,7 @@ import { ExamSelectorGate } from "@/components/onboarding/exam-selector-gate";
 import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
 import { loadHomeBlogTeaserPostsSafe } from "@/lib/blog/home-blog-teaser";
 import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { logCrawlSurfaceEvent } from "@/lib/observability/crawl-surface-observability";
 
 /** ISR: homepage shell — aligned with `getCachedPublicHomeStats` / `PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC` (600). */
 export const revalidate = 600;
@@ -67,7 +67,14 @@ export default async function HomePage() {
   ]);
   const wallMs = Date.now() - t0;
   if (wallMs > MARKETING_HOME_SLOW_MS) {
-    safeServerLog("crawl_surface", "marketing_home_data_slow", { ms: wallMs });
+    logCrawlSurfaceEvent({
+      routeType: "marketing.home",
+      pathname: "/",
+      durationMs: wallMs,
+      outcome: "ok_slow",
+      httpStatus: 200,
+      slow: true,
+    });
   }
   const homeMarketingStats = {
     questionCount: homeStatsRaw.questionCount,

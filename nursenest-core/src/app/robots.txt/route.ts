@@ -1,5 +1,5 @@
+import { crawlSurfaceErrorCode, logCrawlSurfaceEvent } from "@/lib/observability/crawl-surface-observability";
 import { CANONICAL_PRODUCTION_ORIGIN } from "@/lib/seo/canonical-site";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { MARKETING_LANGUAGES } from "@/lib/i18n/marketing-languages";
 import { isLocaleRobotsPathDisallowed } from "@/lib/i18n/language-readiness";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -51,7 +51,10 @@ const FALLBACK_BODY = [
   `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap.xml`,
 ].join("\n");
 
+const ROBOTS_PATHNAME = "/robots.txt";
+
 export async function GET() {
+  const t0 = Date.now();
   try {
     const disallowedLocales = buildDisallowedLocaleLines();
 
@@ -69,8 +72,15 @@ export async function GET() {
 
     return new Response(body, { status: 200, headers: ROBOTS_HEADERS });
   } catch (e) {
-    const detail = e instanceof Error ? e.message : String(e);
-    safeServerLog("seo", "robots_txt_fallback", { detail: detail.slice(0, 200) });
+    logCrawlSurfaceEvent({
+      routeType: "marketing.robots_txt",
+      pathname: ROBOTS_PATHNAME,
+      durationMs: Date.now() - t0,
+      outcome: "fallback",
+      httpStatus: 200,
+      fallback: true,
+      errorCode: crawlSurfaceErrorCode(e),
+    });
     return new Response(FALLBACK_BODY, { status: 200, headers: ROBOTS_HEADERS });
   }
 }

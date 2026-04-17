@@ -11,6 +11,7 @@ import { buildNursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-con
 import { examPathwayRegionalHreflang } from "@/lib/seo/exam-pathway-hub-alternates";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { withCrawlSurfacePageRender } from "@/lib/observability/crawl-surface-observability";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const dynamicParams = true;
@@ -57,40 +58,42 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ExamPathwayOverviewPage({ params }: Props) {
   const { locale, slug, examCode } = await params;
   const pathname = `/${locale}/${slug}/${examCode}`;
-  const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
-  if (!pathway) notFound();
+  return withCrawlSurfacePageRender("marketing.exam_hub", pathname, async () => {
+    const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
+    if (!pathway) notFound();
 
-  const npPracticeSeo = getNpPracticeTestLandingCopy(locale, slug, examCode) ?? null;
-  const content = buildNursingTierHubContent(pathway);
-  const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(pathway, { hubBasePath: pathname });
+    const npPracticeSeo = getNpPracticeTestLandingCopy(locale, slug, examCode) ?? null;
+    const content = buildNursingTierHubContent(pathway);
+    const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(pathway, { hubBasePath: pathname });
 
-  return (
-    <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
-      <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
-      <NursingTierHubPage
-        pathway={pathway}
-        hubPath={pathname}
-        content={content}
-        heroTitle={npPracticeSeo?.heroTitle}
-        npSeoAliasSegment={npPracticeSeo ? examCode : undefined}
-      />
-      <section className="mt-6">
-        <div className="nn-card border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-4 sm:p-5">
-          <h2 className="nn-marketing-h4">Recommended blog reading</h2>
-          <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">
-            Explore exam-focused blog posts to reinforce lessons and question practice.
-          </p>
-          <div className="mt-3 flex flex-wrap gap-3 text-sm">
-            <Link href={buildExamPathwayPath(pathway, "blog")} className="font-semibold text-primary hover:underline">
-              Open {pathway.shortName} blog hub
-            </Link>
-            <Link href="/blog" className="font-medium text-primary hover:underline">
-              All blog posts
-            </Link>
+    return (
+      <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+        <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
+        <NursingTierHubPage
+          pathway={pathway}
+          hubPath={pathname}
+          content={content}
+          heroTitle={npPracticeSeo?.heroTitle}
+          npSeoAliasSegment={npPracticeSeo ? examCode : undefined}
+        />
+        <section className="mt-6">
+          <div className="nn-card border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-4 sm:p-5">
+            <h2 className="nn-marketing-h4">Recommended blog reading</h2>
+            <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">
+              Explore exam-focused blog posts to reinforce lessons and question practice.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-3 text-sm">
+              <Link href={buildExamPathwayPath(pathway, "blog")} className="font-semibold text-primary hover:underline">
+                Open {pathway.shortName} blog hub
+              </Link>
+              <Link href="/blog" className="font-medium text-primary hover:underline">
+                All blog posts
+              </Link>
+            </div>
+            <MarketingBlogLatestLinks take={3} className="mt-4 border-t border-[var(--border-subtle)] pt-4" heading="New on the blog" />
           </div>
-          <MarketingBlogLatestLinks take={3} className="mt-4 border-t border-[var(--border-subtle)] pt-4" heading="New on the blog" />
-        </div>
-      </section>
-    </div>
-  );
+        </section>
+      </div>
+    );
+  });
 }

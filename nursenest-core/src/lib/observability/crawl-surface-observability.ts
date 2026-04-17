@@ -54,6 +54,8 @@ export type CrawlSurfaceEvent = {
   pathname: string;
   durationMs: number;
   outcome: CrawlSurfaceOutcome;
+  /** Next.js segment / `routeGroup` from `safeGenerateMetadata` (no PII). */
+  routeGroup?: string;
   httpStatus?: number;
   errorCode?: string;
   fallback?: boolean;
@@ -61,6 +63,8 @@ export type CrawlSurfaceEvent = {
   redirect?: boolean;
   /** Set when work succeeded but exceeded `slowMs` threshold (HTML/data phases). */
   slow?: boolean;
+  /** Response body length hint (e.g. XML byte estimate) — bounded, non-PII. */
+  approxResponseLen?: number;
 };
 
 function toMeta(e: CrawlSurfaceEvent): SafeLogMeta {
@@ -72,6 +76,10 @@ function toMeta(e: CrawlSurfaceEvent): SafeLogMeta {
     duration_bucket: durationBucketMs(e.durationMs),
     outcome: e.outcome,
   };
+  if (e.routeGroup) out.route_group = e.routeGroup.slice(0, 80);
+  if (e.approxResponseLen !== undefined) {
+    out.approx_response_len = Math.min(Math.max(0, Math.floor(e.approxResponseLen)), 50_000_000);
+  }
   if (e.httpStatus !== undefined) out.http_status = e.httpStatus;
   if (e.errorCode) out.error_code = e.errorCode.slice(0, 120);
   if (e.fallback === true) out.fallback = true;

@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
+import {
+  crawlSurfaceErrorCode,
+  logCrawlSurfaceEvent,
+} from "@/lib/observability/crawl-surface-observability";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { localeRobotsOverride } from "@/lib/i18n/language-readiness";
+
+const METADATA_SLOW_MS = 2000;
 
 export const FALLBACK_SITE_METADATA: Metadata = {
   title: "NurseNest | Nursing exam prep",
@@ -38,9 +44,20 @@ export async function safeGenerateMetadata(
   run: () => Promise<Metadata>,
   ctx: SafeMetadataContext = {},
 ): Promise<Metadata> {
+  const t0 = Date.now();
   try {
     const m = await run();
+    const durationMs = Date.now() - t0;
     if (m == null || typeof m !== "object") {
+      logCrawlSurfaceEvent({
+        routeType: "metadata.generation",
+        pathname: ctx.pathname ?? "",
+        durationMs,
+        outcome: "fallback",
+        routeGroup: ctx.routeGroup,
+        fallback: true,
+        errorCode: "metadata_null_or_non_object",
+      });
       return FALLBACK_SITE_METADATA;
     }
     // Preserve intentional `{}` so layouts/parent metadata can apply (e.g. unresolved pathway before notFound).
@@ -49,22 +66,43 @@ export async function safeGenerateMetadata(
     }
     const normalized = { ...m, title: stripDuplicateBrandSuffix(m.title) };
     const isExamPathwayRoute = ctx.routeGroup?.startsWith("marketing.exam_hub") ?? false;
+    let result: Metadata = normalized;
     // Enforce noindex for non-indexable **marketing i18n** locales only — not pathway country segments.
     if (ctx.locale && !isExamPathwayRoute) {
       const robotsOverride = localeRobotsOverride(ctx.locale);
       if (robotsOverride) {
-        return { ...normalized, robots: robotsOverride };
+        result = { ...normalized, robots: robotsOverride };
       }
     }
-    return normalized;
+    if (durationMs >= METADATA_SLOW_MS && ctx.routeGroup) {
+      logCrawlSurfaceEvent({
+        routeType: "metadata.generation",
+        pathname: ctx.pathname ?? "",
+        durationMs,
+        outcome: "ok_slow",
+        routeGroup: ctx.routeGroup,
+        slow: true,
+      });
+    }
+    return result;
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
+    const durationMs = Date.now() - t0;
     safeServerLog("metadata", "metadata_generation_failed", {
       event: "metadata_generation_failed",
       pathname: ctx.pathname,
       route_group: ctx.routeGroup,
       locale: ctx.locale,
       detail: message.slice(0, 400),
+    });
+    logCrawlSurfaceEvent({
+      routeType: "metadata.generation",
+      pathname: ctx.pathname ?? "",
+      durationMs,
+      outcome: "fallback",
+      routeGroup: ctx.routeGroup,
+      fallback: true,
+      errorCode: crawlSurfaceErrorCode(e),
     });
     return FALLBACK_SITE_METADATA;
   }
