@@ -248,7 +248,7 @@ export async function loadAdminUserSupportDetail(userId: string): Promise<AdminU
         prisma.examAttempt.findMany({
           where: { userId: user.id },
           orderBy: { createdAt: "desc" },
-          take: 10,
+          take: 60,
           select: {
             id: true,
             createdAt: true,
@@ -259,8 +259,8 @@ export async function loadAdminUserSupportDetail(userId: string): Promise<AdminU
         }),
         prisma.practiceTest.findMany({
           where: { userId: user.id },
-          orderBy: { updatedAt: "desc" },
-          take: 10,
+          orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
+          take: 12,
           select: {
             id: true,
             title: true,
@@ -272,7 +272,7 @@ export async function loadAdminUserSupportDetail(userId: string): Promise<AdminU
         prisma.examSession.findMany({
           where: { userId: user.id },
           orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
-          take: 10,
+          take: 12,
           select: {
             id: true,
             status: true,
@@ -406,21 +406,21 @@ export async function loadAdminUserSupportDetail(userId: string): Promise<AdminU
           lastAttemptAt: t.lastAttemptAt?.toISOString() ?? null,
         })),
         recent: {
-          examAttempts: recentAttempts.map((a) => ({
+          examAttempts: recentAttempts.slice(0, 10).map((a) => ({
             id: a.id,
             createdAt: a.createdAt.toISOString(),
             score: a.score,
             total: a.total,
             examTitle: a.exam?.title ?? "(exam removed)",
           })),
-          practiceTests: recentPractice.map((p) => ({
+          practiceTests: recentPractice.slice(0, 10).map((p) => ({
             id: p.id,
             title: p.title,
             status: p.status,
             updatedAt: p.updatedAt.toISOString(),
             hasAdaptiveState: p.adaptiveState != null,
           })),
-          examSessions: recentSessions.map((s) => ({
+          examSessions: recentSessions.slice(0, 10).map((s) => ({
             id: s.id,
             status: s.status,
             examMode: s.examMode,

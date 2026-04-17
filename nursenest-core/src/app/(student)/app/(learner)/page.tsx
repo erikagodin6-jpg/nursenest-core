@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { LockedDashboardOverlay } from "@/components/student/dashboard/locked-dashboard-overlay";
 import { WeaknessHeatmap, type HeatmapTopic } from "@/components/student/dashboard/weakness-heatmap";
@@ -30,7 +29,6 @@ import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-serve
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 import { buildDashboardModel } from "@/lib/learner/next-best-action";
 import { buildCountdownCopy, daysUntilExamUtc } from "@/lib/learner/exam-timeline";
 import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
@@ -48,6 +46,7 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { LearnerStudyHomeDurabilityMinimal } from "@/components/student/learner-study-home-durability-minimal";
+import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
 
 /** Match learner shell: CAT entry for nursing exam tracks; generic exams hub otherwise. */
 function examsNavLabelFromLearnerContext(
@@ -88,27 +87,9 @@ export async function generateMetadata(): Promise<Metadata> {
   );
 }
 
-function LearnerDashboardShellFallback({
-  t,
-  crumbs,
-}: {
-  t: LearnerMarketingT;
-  crumbs: ReturnType<typeof appShellBreadcrumbs>;
-}) {
+function LearnerDashboardBodyFallback() {
   return (
-    <div className="nn-dash nn-dash--learner-home min-w-0 overflow-x-hidden" data-testid="learner-dashboard-shell">
-      <BreadcrumbTrail items={crumbs} />
-      <header className="nn-dash-page-header nn-dash-page-header--compact nn-dash-page-header--learner-hub">
-        <div className="nn-dash-page-header__top">
-          <div className="nn-dash-page-header__titles min-w-0">
-            <div className="nn-dash-page-header__title-row">
-              <h1 className="nn-dash-page-header__title">{t("learner.dashboard.title")}</h1>
-            </div>
-            <p className="nn-dash-page-header__subtitle">{t("learner.studyHome.pageSubtitle")}</p>
-          </div>
-        </div>
-      </header>
-
+    <>
       <section className="nn-dash-band" aria-hidden>
         <div className="grid gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)]">
           <div className="min-h-[13rem] animate-pulse rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]" />
@@ -119,177 +100,71 @@ function LearnerDashboardShellFallback({
       <section className="nn-dash-band" aria-hidden>
         <div className="min-h-[8rem] animate-pulse rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]" />
       </section>
-    </div>
+    </>
   );
 }
 
-async function LearnerDashboardDeferredContent({
+function LearnerDashboardShellFallback({
+  t,
+  crumbs,
+}: {
+  t: LearnerMarketingT;
+  crumbs: ReturnType<typeof appShellBreadcrumbs>;
+}) {
+  return (
+    <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={t("learner.dashboard.title")}>
+      <LearnerDashboardBodyFallback />
+    </LearnerDashboardPageShell>
+  );
+}
+
+async function LearnerDashboardHeavyContent({
   t,
   locale,
   crumbs,
+  session,
+  userId,
+  entitlement,
+  userDisplayName,
+  userLearnerPath,
+  userAlliedProfessionKey,
 }: {
   t: LearnerMarketingT;
   locale: string;
   crumbs: ReturnType<typeof appShellBreadcrumbs>;
+  session: Awaited<ReturnType<typeof auth>>;
+  userId: string;
+  entitlement: Exclude<Awaited<ReturnType<typeof resolveEntitlementForPage>>, "error">;
+  userDisplayName: string | null;
+  userLearnerPath: string | null;
+  userAlliedProfessionKey: string | null;
 }) {
-  const session = await auth();
-  const userId = (session?.user as { id?: string })?.id ?? "";
-  const entitlement = await resolveEntitlementForPage(userId);
-
-  if (!userId || !isDatabaseUrlConfigured()) {
-    return (
-      <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
-        <PremiumEmptyState
-          headline={t("learner.dashboard.signedOutTitle")}
-          body={t("learner.dashboard.signedOutHint")}
-          hint={t("learner.profile.signedOutHint")}
-          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback("/app"), variant: "primary" }}
-          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
-          visualLayout="stack"
-          ctaLayout="stack"
-        />
-      </div>
-    );
-  }
-
-  let userDisplayName: string | null = null;
-  let userLearnerPath: string | null = null;
-  let userAlliedProfessionKey: string | null = null;
-
-  // Redirect to onboarding if user hasn't completed it yet
-  try {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        onboardingCompletedAt: true,
-        firstName: true,
-        displayName: true,
-        name: true,
-        learnerPath: true,
-        alliedProfessionKey: true,
-      },
-    });
-    if (user && !user.onboardingCompletedAt) {
-      redirect("/app/onboarding");
-    }
-    userDisplayName = user ? resolveDisplayName(user) : null;
-    userLearnerPath = user?.learnerPath ?? null;
-    userAlliedProfessionKey = user?.alliedProfessionKey ?? null;
-  } catch (e) {
-    // redirect() throws a NEXT_REDIRECT error; re-throw it
-    if (e && typeof e === "object" && "digest" in e) throw e;
-    // DB errors: continue to dashboard rather than blocking
-  }
-
-  if (entitlement === "error") {
-    return (
-      <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
-        <PremiumEmptyState
-          headline={t("learner.dashboard.title")}
-          body={t("learner.entitlement.verifyFailed")}
-          tone="default"
-          primaryCta={{ label: t("learner.dashboard.openAccountHub"), href: "/app/account/overview", variant: "primary" }}
-          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
-          visualLayout="stack"
-          ctaLayout="stack"
-        />
-      </div>
-    );
-  }
-
-  if (entitlement.hasAccess && shouldSkipNonCriticalLearnerWork()) {
-    safeServerLog("learner_dashboard", "optional_home_ui_skipped", {
-      surface: "full_dashboard",
-      reason: "durability_degraded",
-    });
-    const identity = resolveDashboardIdentity({
-      tier: session?.user?.tier,
-      learnerPathId: userLearnerPath,
-      alliedProfessionKey: userAlliedProfessionKey,
-    });
-    return (
-      <LearnerStudyHomeDurabilityMinimal
-        crumbs={crumbs}
-        t={t}
-        locale={locale}
-        examsNavLabel={examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier)}
-        identity={identity}
-        heroHeading={userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
-        pathwayId={userLearnerPath}
-        banner="degraded"
-      />
-    );
-  }
-
-  if (!entitlement.hasAccess) {
-    const lockedIdentity = resolveDashboardIdentity({
-      tier: session?.user?.tier,
-      learnerPathId: userLearnerPath,
-      alliedProfessionKey: userAlliedProfessionKey,
-    });
-    return (
-      <div className="nn-dash">
-        <BreadcrumbTrail items={crumbs} />
-
-        {/* Page header */}
-        <section className="nn-dash-section">
-          <div className="nn-learner-page-hero">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))] px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-brand)]">
-                {lockedIdentity.pill}
-              </span>
-              <p className="text-[0.6875rem] font-medium text-[var(--semantic-text-secondary)]">{lockedIdentity.subtitle}</p>
-            </div>
-            <h1 className="mt-1.5 text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">{t("learner.dashboard.title")}</h1>
-            <p className="mt-2.5 max-w-2xl text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">
-              {t("learner.dashboard.lockedTeaserBody")}
-            </p>
-          </div>
-        </section>
-
-        {/* Locked readiness + benchmark previews */}
-        <section className="nn-dash-section">
-          <ReadinessLockedCard />
-          <BenchmarkLockedCard />
-        </section>
-
-        {/* Blurred preview of adaptive study recommendations */}
-        <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
-
-        {/* Full locked dashboard with feature grid + conversion CTAs */}
-        <LockedDashboardOverlay />
-      </div>
-    );
-  }
-
   let snapshot: PremiumDashboardSnapshot | null = null;
   let studySnap: Awaited<ReturnType<typeof buildLearnerStudySnapshot>> = null;
   let weakTopicTitles: string[] = [];
   let benchmark: BenchmarkData | null = null;
   const studySettings = await loadStudySettings(userId);
   const skipNonCriticalHome = shouldSkipNonCriticalLearnerWork();
+
   try {
     const snap = await loadPremiumDashboardSnapshot(userId, entitlement);
-    const [nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs, daysSinceLastActivity] =
-      await Promise.all([
-        buildLearnerStudySnapshot(userId, entitlement, undefined, {
-          topicPerformance: snap?.topicPerformance,
-          studyBootstrap: snap
-            ? {
-                alliedProfessionKey: snap.studyBootstrap.alliedProfessionKey,
-                tier: snap.studyBootstrap.tier,
-                learnerPath: snap.studyBootstrap.learnerPath,
-              }
-            : undefined,
-        }),
-        loadRecentLearnerNotesSummary(userId),
-        loadTodayGoalProgress(userId),
-        loadDailyQuestionGoalProgress(userId),
-        loadLearnerRetentionPreferences(userId),
-        skipNonCriticalHome ? Promise.resolve(null) : loadDaysSinceLastActivity(userId),
-      ]);
+    const [nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs, daysSinceLastActivity] = await Promise.all([
+      buildLearnerStudySnapshot(userId, entitlement, undefined, {
+        topicPerformance: snap?.topicPerformance,
+        studyBootstrap: snap
+          ? {
+              alliedProfessionKey: snap.studyBootstrap.alliedProfessionKey,
+              tier: snap.studyBootstrap.tier,
+              learnerPath: snap.studyBootstrap.learnerPath,
+            }
+          : undefined,
+      }),
+      loadRecentLearnerNotesSummary(userId),
+      loadTodayGoalProgress(userId),
+      loadDailyQuestionGoalProgress(userId),
+      loadLearnerRetentionPreferences(userId),
+      skipNonCriticalHome ? Promise.resolve(null) : loadDaysSinceLastActivity(userId),
+    ]);
     snapshot = snap;
     studySnap = nextSnap;
     weakTopicTitles = studySnap?.weakTopics.map((w) => w.topic) ?? [];
@@ -404,6 +279,7 @@ async function LearnerDashboardDeferredContent({
               ? "learner.studyHome.sectionPriorityEyebrowNew"
               : "learner.studyHome.sectionPriorityEyebrow"
           }
+          showShell={false}
         />
       );
     }
@@ -426,7 +302,153 @@ async function LearnerDashboardDeferredContent({
       heroHeading={userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
       pathwayId={userLearnerPath}
       banner="error_fallback"
+      showShell={false}
     />
+  );
+}
+
+async function LearnerDashboardDeferredContent({
+  t,
+  locale,
+  crumbs,
+}: {
+  t: LearnerMarketingT;
+  locale: string;
+  crumbs: ReturnType<typeof appShellBreadcrumbs>;
+}) {
+  const session = await auth();
+  const userId = (session?.user as { id?: string })?.id ?? "";
+  const entitlement = await resolveEntitlementForPage(userId);
+
+  if (!userId || !isDatabaseUrlConfigured()) {
+    return (
+      <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={t("learner.dashboard.title")}>
+        <PremiumEmptyState
+          headline={t("learner.dashboard.signedOutTitle")}
+          body={t("learner.dashboard.signedOutHint")}
+          hint={t("learner.profile.signedOutHint")}
+          primaryCta={{ label: t("learner.gate.signIn"), href: loginWithCallback("/app"), variant: "primary" }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
+      </LearnerDashboardPageShell>
+    );
+  }
+
+  let userDisplayName: string | null = null;
+  let userLearnerPath: string | null = null;
+  let userAlliedProfessionKey: string | null = null;
+
+  // Redirect to onboarding if user hasn't completed it yet
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        onboardingCompletedAt: true,
+        firstName: true,
+        displayName: true,
+        name: true,
+        learnerPath: true,
+        alliedProfessionKey: true,
+      },
+    });
+    if (user && !user.onboardingCompletedAt) {
+      redirect("/app/onboarding");
+    }
+    userDisplayName = user ? resolveDisplayName(user) : null;
+    userLearnerPath = user?.learnerPath ?? null;
+    userAlliedProfessionKey = user?.alliedProfessionKey ?? null;
+  } catch (e) {
+    // redirect() throws a NEXT_REDIRECT error; re-throw it
+    if (e && typeof e === "object" && "digest" in e) throw e;
+    // DB errors: continue to dashboard rather than blocking
+  }
+
+  const identity = resolveDashboardIdentity({
+    tier: session?.user?.tier,
+    learnerPathId: userLearnerPath,
+    alliedProfessionKey: userAlliedProfessionKey,
+  });
+  const heroHeading = userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title");
+  const examsNavLabel = examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier);
+
+  if (entitlement === "error") {
+    return (
+      <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={heroHeading} identity={identity}>
+        <PremiumEmptyState
+          headline={t("learner.dashboard.title")}
+          body={t("learner.entitlement.verifyFailed")}
+          tone="default"
+          primaryCta={{ label: t("learner.dashboard.openAccountHub"), href: "/app/account/overview", variant: "primary" }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
+      </LearnerDashboardPageShell>
+    );
+  }
+
+  if (entitlement.hasAccess && shouldSkipNonCriticalLearnerWork()) {
+    safeServerLog("learner_dashboard", "optional_home_ui_skipped", {
+      surface: "full_dashboard",
+      reason: "durability_degraded",
+    });
+    return (
+      <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={heroHeading} identity={identity}>
+        <LearnerStudyHomeDurabilityMinimal
+          crumbs={crumbs}
+          t={t}
+          locale={locale}
+          examsNavLabel={examsNavLabel}
+          identity={identity}
+          heroHeading={heroHeading}
+          pathwayId={userLearnerPath}
+          banner="degraded"
+          showShell={false}
+        />
+      </LearnerDashboardPageShell>
+    );
+  }
+
+  if (!entitlement.hasAccess) {
+    return (
+      <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={heroHeading} identity={identity}>
+        <section className="nn-dash-section">
+          <div className="nn-learner-page-hero">
+            <p className="mt-2.5 max-w-2xl text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">
+              {t("learner.dashboard.lockedTeaserBody")}
+            </p>
+          </div>
+        </section>
+
+        <section className="nn-dash-section">
+          <ReadinessLockedCard />
+          <BenchmarkLockedCard />
+        </section>
+
+        <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
+        <LockedDashboardOverlay />
+      </LearnerDashboardPageShell>
+    );
+  }
+
+  return (
+    <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={heroHeading} identity={identity}>
+      <Suspense fallback={<LearnerDashboardBodyFallback />}>
+        <LearnerDashboardHeavyContent
+          t={t}
+          locale={locale}
+          crumbs={crumbs}
+          session={session}
+          userId={userId}
+          entitlement={entitlement}
+          userDisplayName={userDisplayName}
+          userLearnerPath={userLearnerPath}
+          userAlliedProfessionKey={userAlliedProfessionKey}
+        />
+      </Suspense>
+    </LearnerDashboardPageShell>
   );
 }
 

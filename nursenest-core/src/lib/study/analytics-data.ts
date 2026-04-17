@@ -266,7 +266,7 @@ export async function loadReadinessTrend(
       prisma.practiceTest.findMany({
         where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
         orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
-        take: limit + 1,
+        take: 12,
         select: { id: true, results: true, completedAt: true },
       }),
     );
@@ -315,7 +315,7 @@ export async function loadMoreReadinessTrend(
         orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
         cursor: { id: afterId },
         skip: 1,
-        take: limit + 1,
+        take: 12,
         select: { id: true, results: true, completedAt: true },
       }),
     );
@@ -367,14 +367,15 @@ export async function loadConfidenceScatterPoints(
   if (!userId || !isDatabaseUrlConfigured()) return [];
 
   try {
-    const sessions = await withRetry(() =>
+    const recentSessions = await withRetry(() =>
       prisma.examAttempt.findMany({
         where: { userId },
         orderBy: { createdAt: "desc" },
-        take: sessionLimit,
+        take: 60,
         select: { id: true, results: true },
       }),
     );
+    const sessions = recentSessions.slice(0, sessionLimit);
 
     const out: ConfidenceScatterPoint[] = [];
     for (const session of sessions) {
@@ -419,14 +420,15 @@ export async function loadConfidencePatterns(
   if (!userId || !isDatabaseUrlConfigured()) return empty;
 
   try {
-    const sessions = await withRetry(() =>
+    const recentSessions = await withRetry(() =>
       prisma.examAttempt.findMany({
         where: { userId },
         orderBy: { createdAt: "desc" },
-        take: sessionLimit,
+        take: 60,
         select: { results: true },
       }),
     );
+    const sessions = recentSessions.slice(0, sessionLimit);
 
     let overconfidentErrors = 0;
     let uncertainCorrect = 0;
@@ -483,7 +485,7 @@ export async function loadTimeMetrics(
   if (!userId || !isDatabaseUrlConfigured()) return empty;
 
   try {
-    const sessions = await withRetry(() =>
+    const recentSessions = await withRetry(() =>
       prisma.practiceTest.findMany({
         where: {
           userId,
@@ -491,10 +493,11 @@ export async function loadTimeMetrics(
           elapsedMs: { not: null },
         },
         orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
-        take: sessionLimit,
+        take: 12,
         select: { elapsedMs: true, results: true },
       }),
     );
+    const sessions = recentSessions.slice(0, sessionLimit);
 
     if (sessions.length === 0) return empty;
 
@@ -588,14 +591,15 @@ export async function loadQuestionTypeBreakdown(
   if (!userId || !isDatabaseUrlConfigured()) return [];
 
   try {
-    const sessions = await withRetry(() =>
+    const recentSessions = await withRetry(() =>
       prisma.examAttempt.findMany({
         where: { userId },
         orderBy: { createdAt: "desc" },
-        take: sessionLimit,
+        take: 60,
         select: { results: true },
       }),
     );
+    const sessions = recentSessions.slice(0, sessionLimit);
 
     type Item = { qid: string; isCorrect: boolean };
     const allItems: Item[] = [];

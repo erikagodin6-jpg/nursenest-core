@@ -119,20 +119,17 @@ export type ReportCardData = {
 
 /** Enough recent mocks for tier splits, weekly trend (~10w), and mock log — single bounded query. */
 const MOCK_ATTEMPT_LIMIT_FULL = 60;
-/**
- * Degraded: smaller slice so mock hydration + in-memory trend math stay light; still enough for aggregates + a short log.
- */
-const MOCK_ATTEMPT_LIMIT_DEGRADED = 28;
 /** Graded bank sessions for tier breakdown + recent list; one batched question map shared with dashboard readiness. */
 const SESSION_LIMIT = 12;
 /** Matches {@link loadSessionGradingAggregate} default — first N rows feed dashboard preload (no duplicate session fetch). */
 const DASHBOARD_SESSION_GRADING_LIMIT = 8;
 /** Recent bank rows rendered in the report card UI (session list is capped; totals use {@link SESSION_LIMIT}). */
 const RECENT_BANK_SESSIONS_UI = 8;
+const RECENT_PRACTICE_TESTS_UI = 8;
 const TREND_WEEKS = 10;
 
-function mockAttemptTakeForReportCard(degraded: boolean): number {
-  return degraded ? MOCK_ATTEMPT_LIMIT_DEGRADED : MOCK_ATTEMPT_LIMIT_FULL;
+function mockAttemptTakeForReportCard(_degraded: boolean): number {
+  return MOCK_ATTEMPT_LIMIT_FULL;
 }
 
 /** Ops / incidents: skip cohort SQL while keeping the rest of the report card. */
@@ -422,7 +419,7 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     prisma.practiceTest.findMany({
       where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
       orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
-      take: 8,
+      take: SESSION_LIMIT,
       select: { id: true, title: true, completedAt: true, results: true, config: true },
     }),
   ]);
@@ -572,7 +569,7 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     };
   });
 
-  const recentPracticeTests: RecentPracticeTestRow[] = enrichedPracticeTests.map((row) => ({
+  const recentPracticeTests: RecentPracticeTestRow[] = enrichedPracticeTests.slice(0, RECENT_PRACTICE_TESTS_UI).map((row) => ({
     id: row.id,
     title: row.title,
     completedAt: row.completedAt,

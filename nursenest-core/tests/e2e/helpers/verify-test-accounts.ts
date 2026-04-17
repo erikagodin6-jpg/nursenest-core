@@ -14,14 +14,30 @@ function resolveOrigin(baseURL?: string): string {
   }
 }
 
-async function loginThroughMarketingForm(page: Page, origin: string, email: string, password: string): Promise<void> {
+async function loginThroughMarketingForm(
+  page: Page,
+  origin: string,
+  email: string,
+  password: string,
+  accountLabel: "admin" | "free",
+): Promise<void> {
   await page.goto(`${origin}/login`, { waitUntil: "domcontentloaded", timeout: 60_000 });
   await page.locator("#login-identifier").fill(email);
   await page.locator("#login-password").fill(password);
   await marketingLoginSubmitButton(page).click();
-  await page.waitForFunction(() => !window.location.pathname.includes("/login"), undefined, {
-    timeout: LOGIN_TIMEOUT_MS,
-  });
+  await Promise.race([
+    page.waitForFunction(() => !window.location.pathname.includes("/login"), undefined, {
+      timeout: LOGIN_TIMEOUT_MS,
+    }),
+    page
+      .getByText(/Invalid email, username, or password\./i)
+      .waitFor({ state: "visible", timeout: LOGIN_TIMEOUT_MS })
+      .then(() => {
+        throw new Error(
+          `${accountLabel} Playwright credentials were rejected by /login. Check .env.playwright.local and the account password.`,
+        );
+      }),
+  ]);
 }
 
 async function debugMeSnapshot(page: Page, origin: string): Promise<{ role: string | null; isAdmin: boolean } | null> {
@@ -45,7 +61,7 @@ export async function verifyTestAccounts(browser: Browser, baseURL?: string): Pr
   const adminContext = await browser.newContext({ storageState: { cookies: [], origins: [] } });
   try {
     const adminPage = await adminContext.newPage();
-    await loginThroughMarketingForm(adminPage, origin, admin.email, admin.password);
+    await loginThroughMarketingForm(adminPage, origin, admin.email, admin.password, "admin");
     const adminDebug = await debugMeSnapshot(adminPage, origin);
     if (adminDebug) {
       expect(adminDebug.isAdmin, `expected ${admin.email} to be admin in /api/debug/me`).toBe(true);
@@ -63,7 +79,7 @@ export async function verifyTestAccounts(browser: Browser, baseURL?: string): Pr
   const freeContext = await browser.newContext({ storageState: { cookies: [], origins: [] } });
   try {
     const freePage = await freeContext.newPage();
-    await loginThroughMarketingForm(freePage, origin, free.email, free.password);
+    await loginThroughMarketingForm(freePage, origin, free.email, free.password, "free");
     const freeDebug = await debugMeSnapshot(freePage, origin);
     if (freeDebug) {
       expect(freeDebug.isAdmin, `expected ${free.email} to be non-admin in /api/debug/me`).toBe(false);

@@ -25,6 +25,8 @@ import { loadPathwayTopicCoverageBatch } from "@/lib/lessons/pathway-topic-cover
 
 const PRACTICE_RECENT_LIMIT = 6;
 const MOCK_RECENT_LIMIT = 5;
+const PRACTICE_RECENT_QUERY_LIMIT = 12;
+const MOCK_RECENT_QUERY_LIMIT = 60;
 
 export type LessonsPoolProgress = {
   /** Content + pathway lessons available in plan scope (same basis as dashboard). */
@@ -168,7 +170,7 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
     prisma.examAttempt.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
-      take: MOCK_RECENT_LIMIT,
+      take: MOCK_RECENT_QUERY_LIMIT,
       select: {
         id: true,
         score: true,
@@ -181,8 +183,8 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
     prisma.practiceTest
       .findMany({
         where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
-        orderBy: { completedAt: "desc" },
-        take: PRACTICE_RECENT_LIMIT,
+        orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
+        take: PRACTICE_RECENT_QUERY_LIMIT,
         select: { id: true, title: true, completedAt: true, config: true, results: true },
       })
       .catch(() => []),
@@ -199,7 +201,7 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
   const ledgerAccuracyPct =
     ledgerAttempted > 0 ? Math.round((correctSum / ledgerAttempted) * 100) : null;
 
-  const recentMocks: RecentMock[] = mocksRaw.map((a) => ({
+  const recentMocks: RecentMock[] = mocksRaw.slice(0, MOCK_RECENT_LIMIT).map((a) => ({
     id: a.id,
     examTitle: a.exam.title,
     score: a.score,
@@ -208,7 +210,7 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
     at: a.createdAt.toISOString(),
   }));
 
-  const recentPracticeTests = practiceRecent.map((row) => {
+  const recentPracticeTests = practiceRecent.slice(0, PRACTICE_RECENT_LIMIT).map((row) => {
     const cfg = row.config as PracticeTestConfigJson | null;
     const res = row.results as PracticeTestResultsJson | null;
     const isCat = cfg?.selectionMode === "cat";

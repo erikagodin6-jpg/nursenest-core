@@ -1,5 +1,6 @@
-import { Suspense } from "react";
+import { Suspense, type ReactNode } from "react";
 import Link from "next/link";
+import { requireAdmin } from "@/lib/auth/guards";
 import { getStaffSession } from "@/lib/auth/staff-session";
 import type { StaffTier } from "@/lib/auth/staff-roles";
 import { loadAdminCommandCenter } from "@/lib/admin/load-admin-command-center";
@@ -9,6 +10,20 @@ import { AdminDashboardOverview } from "@/components/admin/admin-dashboard-overv
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
+
+function AdminPageShell({ children }: { children: ReactNode }) {
+  return (
+    <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8" data-testid="admin-dashboard-shell">
+      <header className="mb-8 space-y-2">
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] md:text-3xl">Admin Dashboard</h1>
+        <p className="max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
+          Operations, content, and platform health for authenticated staff.
+        </p>
+      </header>
+      {children}
+    </main>
+  );
+}
 
 function AdminOverviewFallback() {
   return (
@@ -100,15 +115,10 @@ async function AdminCommandCenterSection() {
   );
 }
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  await requireAdmin();
   return (
-    <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8" data-testid="admin-dashboard-shell">
-      <header className="mb-8 space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] md:text-3xl">Admin Dashboard</h1>
-        <p className="max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
-          Operations, content, and platform health for authenticated staff.
-        </p>
-      </header>
+    <AdminPageShell>
       <Suspense fallback={<AdminOverviewFallback />}>
         <AdminOverviewSection />
       </Suspense>
@@ -116,6 +126,6 @@ export default function AdminPage() {
       <Suspense fallback={<AdminCommandCenterFallback />}>
         <AdminCommandCenterSection />
       </Suspense>
-    </main>
+    </AdminPageShell>
   );
 }

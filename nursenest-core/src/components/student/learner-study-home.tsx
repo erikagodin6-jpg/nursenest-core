@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { PrimaryActionCard } from "@/components/student/dashboard/primary-action-card";
 import { ExamCountdownCard } from "@/components/student/dashboard/exam-countdown-card";
 import { ReadinessScoreCard } from "@/components/student/dashboard/readiness-score-card";
@@ -39,6 +38,7 @@ import type { StudySettings } from "@/lib/learner/study-settings";
 import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
 import { LearnerStudySurfaceSection, LearnerSurface } from "@/components/learner-ui";
 import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
+import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
 function RecentGainsBlock({
   trends,
   strongTopics,
@@ -127,6 +127,7 @@ export type LearnerStudyHomeProps = {
   studySettings: StudySettings;
   /** Eyebrow for the priority band — new learners vs returning. */
   priorityEyebrowKey?: string;
+  showShell?: boolean;
 };
 
 export function LearnerStudyHome({
@@ -159,6 +160,7 @@ export function LearnerStudyHome({
   coachSummary,
   studySettings,
   priorityEyebrowKey = "learner.studyHome.sectionPriorityEyebrow",
+  showShell = true,
 }: LearnerStudyHomeProps) {
   const trends = studySnap?.topicTrends ?? [];
   const strongHighlight = studySnap?.strongTopicsHighlight ?? [];
@@ -179,32 +181,8 @@ export function LearnerStudyHome({
     (showHeatmap && heatmapTopics.length > 0) ||
     (showCoach && weakTopicTitles.length > 0);
 
-  return (
-    <div className="nn-dash nn-dash--learner-home min-w-0 overflow-x-hidden">
-      <BreadcrumbTrail items={crumbs} />
-
-      <header className="nn-dash-page-header nn-dash-page-header--compact nn-dash-page-header--learner-hub">
-        <div className="nn-dash-page-header__top">
-          <div className="nn-dash-page-header__titles min-w-0">
-            <p className="sr-only">{t("learner.studyHome.pageEyebrow")}</p>
-            <div className="nn-dash-page-header__title-row">
-              <h1 className="nn-dash-page-header__title">{heroHeading}</h1>
-              <div className="nn-dash-page-header__identity nn-dash-page-header__identity--inline">
-                <span className="nn-dash-page-header__pill">{identity.pill}</span>
-                <span className="nn-dash-page-header__meta">{identity.subtitle}</span>
-              </div>
-            </div>
-            <p className="nn-dash-page-header__subtitle">{t("learner.studyHome.pageSubtitle")}</p>
-            {focusHint || contextualLine ? (
-              <p className="nn-dash-page-header__context">
-                {focusHint ? <span className="font-medium text-[var(--semantic-text-primary)]">{focusHint}. </span> : null}
-                {contextualLine ? <span>{contextualLine}</span> : null}
-              </p>
-            ) : null}
-          </div>
-        </div>
-      </header>
-
+  const content = (
+    <>
       {/* Continue + exam pacing (legacy: `continue_where_left_off` + exam context) */}
       <LearnerStudySurfaceSection
         id="study-priority"
@@ -436,6 +414,28 @@ export function LearnerStudyHome({
           </LearnerSurface>
         </div>
       </LearnerStudySurfaceSection>
-    </div>
+  );
+
+  if (!showShell) {
+    return content;
+  }
+
+  return (
+    <LearnerDashboardPageShell
+      crumbs={crumbs}
+      t={t}
+      heroHeading={heroHeading}
+      identity={identity}
+      context={
+        focusHint || contextualLine ? (
+          <>
+            {focusHint ? <span className="font-medium text-[var(--semantic-text-primary)]">{focusHint}. </span> : null}
+            {contextualLine ? <span>{contextualLine}</span> : null}
+          </>
+        ) : undefined
+      }
+    >
+      {content}
+    </LearnerDashboardPageShell>
   );
 }

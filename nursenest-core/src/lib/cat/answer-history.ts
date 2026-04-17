@@ -47,14 +47,14 @@ export async function loadAnswerHistory(
       status: "COMPLETED",
       startedAt: { gte: new Date(cutoff) },
     },
-    orderBy: { startedAt: "asc" },
+    orderBy: [{ startedAt: "desc" }, { createdAt: "desc" }],
     take: MAX_HISTORY_SESSIONS,
     select: { adaptiveState: true, startedAt: true },
   });
 
   const allAnswers: AnswerRecord[] = [];
 
-  for (const session of sessions) {
+  for (const session of [...sessions].reverse()) {
     const state = session.adaptiveState as unknown as NpCatAdaptiveState | null;
     if (!state || state._v !== 1) continue;
     if (!Array.isArray(state.sessionAnswers)) continue;
@@ -65,8 +65,8 @@ export async function loadAnswerHistory(
     }
   }
 
-  // Already chronological from the `orderBy: { startedAt: "asc" }` query +
-  // the session answers being recorded in order within each session.
+  // We fetch the most recent bounded window, then restore chronological order
+  // for downstream recency weighting.
   return allAnswers;
 }
 
@@ -107,7 +107,7 @@ export async function loadNpCatEngagementSummary(
 }> {
   const sessions = await prisma.practiceTest.findMany({
     where: { userId, status: "COMPLETED" },
-    orderBy: { completedAt: "desc" },
+    orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
     take: MAX_HISTORY_SESSIONS,
     select: { completedAt: true, cursorIndex: true, results: true, config: true },
   });
@@ -177,7 +177,7 @@ export async function recentlyAnsweredIds(
       startedAt: { gte: new Date(cutoff) },
     },
     take: 5,
-    orderBy: { startedAt: "desc" },
+    orderBy: [{ startedAt: "desc" }, { createdAt: "desc" }],
     select: { adaptiveState: true },
   });
 

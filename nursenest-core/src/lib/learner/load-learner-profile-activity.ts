@@ -54,13 +54,15 @@ export async function loadLearnerProfileActivity(
   const mockTake = limits?.mocks ?? 5;
   const testTake = limits?.practiceTests ?? 5;
   const lessonTake = limits?.lessons ?? 8;
+  const mockQueryTake = 60;
+  const practiceTestQueryTake = 12;
 
   try {
     const [attempts, tests, progressRows] = await Promise.all([
       prisma.examAttempt.findMany({
         where: { userId },
         orderBy: { createdAt: "desc" },
-        take: mockTake,
+        take: mockQueryTake,
         select: {
           id: true,
           score: true,
@@ -71,8 +73,8 @@ export async function loadLearnerProfileActivity(
       }),
       prisma.practiceTest.findMany({
         where: { userId },
-        orderBy: { updatedAt: "desc" },
-        take: testTake,
+        orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
+        take: practiceTestQueryTake,
         select: {
           id: true,
           title: true,
@@ -89,7 +91,7 @@ export async function loadLearnerProfileActivity(
       }),
     ]);
 
-    const mocks: ProfileActivityMock[] = attempts.map((a) => {
+    const mocks: ProfileActivityMock[] = attempts.slice(0, mockTake).map((a) => {
       const pct = a.total > 0 ? Math.round((a.score / a.total) * 100) : 0;
       return {
         kind: "mock" as const,
@@ -103,7 +105,7 @@ export async function loadLearnerProfileActivity(
       };
     });
 
-    const practiceTests: ProfileActivityPracticeTest[] = tests.map((t) => {
+    const practiceTests: ProfileActivityPracticeTest[] = tests.slice(0, testTake).map((t) => {
       const res = t.results as { accuracyPct?: number } | null;
       return {
         kind: "practice_test" as const,

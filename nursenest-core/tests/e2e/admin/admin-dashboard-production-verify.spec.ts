@@ -18,7 +18,11 @@ const TIMEOUT = 120_000;
 const FORBIDDEN_IMG_SRC_SUBSTR = ["full-mark", "brand-arch", "arch-transparent", "logo-full", "wordmark-full"];
 
 test.beforeAll(async ({ browser, baseURL }) => {
-  if (!hasAdminE2eCredentials() || !getQaFreeCredentials()) return;
+  if (!hasAdminE2eCredentials() || !getQaFreeCredentials()) {
+    throw new Error(
+      "admin-dashboard-production-verify requires both E2E_ADMIN_EMAIL/E2E_ADMIN_PASSWORD and E2E_FREE_EMAIL/E2E_FREE_PASSWORD (or QA_FREE_*).",
+    );
+  }
   await verifyTestAccounts(browser, baseURL);
 });
 
