@@ -34,6 +34,10 @@ export const REQUIRED_PUBLIC_INDEX_NAMES = [
   "exam_questions_exam_topic_idx",
   "exam_questions_exam_difficulty_idx",
   "flashcard_decks_examFamily_pathway_id_idx",
+  // 20260417163333_add_bounded_read_history_indexes — bounded learner history reads.
+  "ExamSession_userId_updatedAt_createdAt_idx",
+  "practice_tests_userId_updatedAt_idx",
+  "practice_tests_userId_status_completedAt_idx",
 ] as const;
 
 /** Optional: absent if `Progress` model not migrated in a fork. */

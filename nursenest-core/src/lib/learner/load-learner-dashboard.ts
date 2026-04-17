@@ -299,18 +299,6 @@ export async function loadLearnerDashboardCore(
   const tier = String(entitlement.tier ?? "");
   const country = String(entitlement.country ?? "");
 
-  const user =
-    preload?.userProfile ??
-    (await prisma.user.findUnique({
-      where: { id: userId },
-      select: { learnerPath: true, tier: true, alliedProfessionKey: true },
-    }));
-  const learnerPath = user?.learnerPath ?? null;
-
-  const lessonWhere = lessonAccessWhere(entitlement);
-
-  const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
-
   const exam14dWindowStart = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
   const exam14dTimed = (async () => {
     const t = performance.now();
@@ -324,18 +312,24 @@ export async function loadLearnerDashboardCore(
     return { sum, durationMs: Math.round(performance.now() - t) };
   })();
 
+  const userPromise =
+    preload?.userProfile !== undefined
+      ? Promise.resolve(preload.userProfile)
+      : prisma.user.findUnique({
+          where: { id: userId },
+          select: { learnerPath: true, tier: true, alliedProfessionKey: true },
+        });
+
+  const user = await userPromise;
+  const learnerPath = user?.learnerPath ?? null;
+
+  const lessonWhere = lessonAccessWhere(entitlement);
+  const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
+
   let visibleLessonScope = preload?.visibleLessonScope;
   let pathwayRowsForScope = preload?.pathwayRowsForScope ?? preload?.visibleLessonScope?.pathwayLessonRows;
-  if (!visibleLessonScope) {
-    visibleLessonScope = await buildVisibleLessonScopeForLearner(userId, entitlement, {
-      learnerPath,
-      pathwayLessonRows: pathwayRowsForScope,
-    });
-    pathwayRowsForScope = visibleLessonScope.pathwayLessonRows;
-  } else if (!pathwayRowsForScope || pathwayRowsForScope.length === 0) {
-    pathwayRowsForScope = visibleLessonScope.pathwayLessonRows;
-  }
-
+  const contentLessonTotalPromise = prisma.contentItem.count({ where: { ...lessonWhere, type: "lesson" } });
+  const pathwayLessonPublishedCountPromise = prisma.pathwayLesson.count({ where: pathwayWhere });
   const recentMocksPromise =
     preload?.recentMocksPreload !== undefined
       ? Promise.resolve(preload.recentMocksPreload.slice(0, 5))
@@ -354,11 +348,21 @@ export async function loadLearnerDashboardCore(
           })
           .then((raw) => mapExamAttemptRowsToRecentMocks(raw));
 
+  if (!visibleLessonScope) {
+    visibleLessonScope = await buildVisibleLessonScopeForLearner(userId, entitlement, {
+      learnerPath,
+      pathwayLessonRows: pathwayRowsForScope,
+    });
+    pathwayRowsForScope = visibleLessonScope.pathwayLessonRows;
+  } else if (!pathwayRowsForScope || pathwayRowsForScope.length === 0) {
+    pathwayRowsForScope = visibleLessonScope.pathwayLessonRows;
+  }
+
   const tParallel = performance.now();
   const [contentLessonTotal, pathwayLessonPublishedCount, lessonsCompleted, incompleteProgress, exam14dPacked, recentMocks] =
     await Promise.all([
-      prisma.contentItem.count({ where: { ...lessonWhere, type: "lesson" } }),
-      prisma.pathwayLesson.count({ where: pathwayWhere }),
+      contentLessonTotalPromise,
+      pathwayLessonPublishedCountPromise,
       countScopedLessonsCompleted(userId, entitlement, visibleLessonScope, pathwayRowsForScope ?? []),
       findLatestIncompleteProgressLessonId(userId, visibleLessonScope.lessonIds),
       exam14dTimed,

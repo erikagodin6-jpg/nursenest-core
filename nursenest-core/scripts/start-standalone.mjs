@@ -11,6 +11,7 @@ import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
+const watchdogPreload = join(pkgRoot, "scripts", "standalone-startup-watchdog-preload.cjs");
 const candidates = [
   join(pkgRoot, ".next", "standalone", "nursenest-core", "server.js"),
   join(pkgRoot, ".next", "standalone", "server.js"),
@@ -38,7 +39,15 @@ const withHeap = base.includes("--max-old-space-size")
   : `${base} --max-old-space-size=${memMb}`.trim();
 process.env.NODE_OPTIONS = withHeap;
 
-const child = spawn(process.execPath, [entry], {
+console.error(
+  `[nursenest-core] startup_watchdog standalone_spawn ${JSON.stringify({
+    entry,
+    preload: watchdogPreload,
+    pid: process.pid,
+  })}`,
+);
+
+const child = spawn(process.execPath, ["--require", watchdogPreload, entry], {
   stdio: "inherit",
   cwd: pkgRoot,
   env: process.env,

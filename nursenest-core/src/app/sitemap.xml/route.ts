@@ -13,7 +13,7 @@ import { sitemapXmlResponse } from "@/lib/seo/sitemap-xml-http";
  * Single sitemap urlset at `/sitemap.xml` (canonical crawler entrypoint).
  */
 export const runtime = "nodejs";
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 /** Log when generation crosses this — sitemap work includes optional Prisma (blog + pathway URLs). */
 const SITEMAP_SLOW_MS = 1500;

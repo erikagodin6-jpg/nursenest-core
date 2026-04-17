@@ -40,10 +40,16 @@ services:
     #
     # Next.js 16 standalone: the process prints "Ready in …" when the HTTP socket listens, but
     # `getRequestHandlers()` still runs afterward — every request (including /healthz) awaits that
-    # init. On basic-xs that can exceed 2 minutes; probes that start too early see "timeout awaiting
-    # headers" until init finishes. Keep initial_delay high enough for worst-case cold start.
-    # `/healthz` is an Edge route (minimal handler) — it does not fix framework init ordering, but
-    # avoids Node-only work on the liveness path once handlers are ready.
+    # init. On basic-xs that can exceed multiple minutes; probes that start too early see "timeout
+    # awaiting headers" until handlers are actually ready. The startup watchdog in
+    # `scripts/start-standalone.mjs` now logs:
+    # - `startup_watchdog server_listening`
+    # - Next's own `Ready in …`
+    # - `startup_watchdog handlers_ready`
+    # `/healthz` is a minimal Node.js route (no DB/auth) — it keeps the liveness handler cheap once
+    # request handlers are ready, but it does not change Next standalone init ordering.
+    # Recommendation: move production off `basic-xs`; the observed failure mode is pre-handler startup
+    # stall under weak CPU headroom, not route-body work.
     #
     # Rollback: App Platform → Deployments → redeploy a previous successful deployment if a bad build ships.
     # Post-deploy verification: BASE_URL=https://… npm run qa:verify:health (see nursenest-core/docs/deploy-safety.md).

@@ -11,7 +11,7 @@ Goals: **no broken build reaches production**, **no traffic until liveness passe
 | 1. **Precheck** | CI + local | `npm run deploy:precheck` (= `ci:verify`: Prisma client, `tsc`, `next build`). Same as GitHub **Verify Build** on every push/PR. |
 | 2. **Migrations** | Before or with deploy | Managed Postgres: run **Prisma migrate** (`.github/workflows/prisma-migrate.yml` workflow_dispatch, or droplet `prisma migrate deploy` before/at deploy). Use the **same** `DATABASE_URL` as the running app. |
 | 3. **Build & run** | App Platform / Droplet | App Platform: `build_command` / `run_command` in `.do/app-nursenest-core-next.yaml`. Droplet: `deploy/droplet/deploy-app.sh` (build → PM2 reload). |
-| 4. **Health before trusting traffic** | Platform | **DigitalOcean:** `health_check` on `GET /healthz` (see app spec) — load balancer waits for success before routing. **Droplet:** script waits for `GET /healthz`, then runs `scripts/verify-deploy-health.mjs` for `/healthz` + `/api/health`. |
+| 4. **Health before trusting traffic** | Platform | **DigitalOcean:** `health_check` on `GET /healthz` (see app spec) — load balancer waits for success before routing. The standalone startup watchdog now logs `startup_watchdog server_listening`, Next's `Ready in …`, and `startup_watchdog handlers_ready` so pre-handler stalls are visible in platform logs. **Droplet:** script waits for `GET /healthz`, then runs `scripts/verify-deploy-health.mjs` for `/healthz` + `/api/health`. |
 | 5. **Verification** | After DNS/live | `BASE_URL=https://your-domain npm run qa:verify:production` (HTTP health first, then Playwright). Or `npm run qa:verify:health` only for a quick ping. |
 
 Optional DB readiness on the public URL: `VERIFY_READINESS=1 npm run qa:verify:health` (adds `GET /api/health/ready`; returns **503** if Postgres is down — use for staged canaries, not as the only liveness probe).
@@ -36,6 +36,14 @@ Optional DB readiness on the public URL: `VERIFY_READINESS=1 npm run qa:verify:h
 | Routing traffic to a dead process | DO **health_check** on `/healthz`; droplet **curl + verify-deploy-health** after PM2. |
 | Silent broken deploy | Deploy script **exits non-zero** if health fails; post-deploy **`qa:verify:production`** fails fast on bad HTTP. |
 | No rollback story | Documented **App Platform previous deployment** + **git checkout** on droplet. |
+
+---
+
+## 3.1 App Platform sizing note
+
+`/healthz` is intentionally minimal and does not hit Prisma, auth, or remote services. If App Platform still reports `timeout awaiting headers` on `/healthz`, the likely failure mode is **pre-handler startup stall** inside Next standalone, where the process is listening but request handlers are not ready yet.
+
+For this repo's current workload, **`basic-xs` is not recommended for production**. The safest first infra response is to move off `basic-xs` before attempting broader application refactors, because weak shared CPU headroom can stretch the standalone handler-initialization window enough to fail health checks even when the `/healthz` route body itself is cheap.
 
 ---
 

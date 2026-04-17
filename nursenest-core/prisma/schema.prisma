@@ -1100,6 +1100,7 @@ model ExamSession {
   user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, status])
+  @@index([userId, updatedAt(sort: Desc), createdAt(sort: Desc)])
   @@index([examId])
 }
 
@@ -1127,6 +1128,8 @@ model PracticeTest {
   user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, status, updatedAt])
+  @@index([userId, updatedAt(sort: Desc)])
+  @@index([userId, status, completedAt(sort: Desc)])
   @@map("practice_tests")
 }
 

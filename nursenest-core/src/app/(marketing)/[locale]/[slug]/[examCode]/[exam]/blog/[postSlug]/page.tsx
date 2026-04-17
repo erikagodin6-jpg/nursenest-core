@@ -31,7 +31,7 @@ type Props = {
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 
-export const revalidate = 120;
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, region, profession, exam, postSlug } = normalizeBlogPostParams(await params);

@@ -289,7 +289,21 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
   const mockAttemptCap = mockAttemptTakeForReportCard(skipHeavy);
   const tRoute = performance.now();
 
-  const bundle = await loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadReportCardData" });
+  const bundlePromise = loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadReportCardData" });
+  const mockAttemptsPromise = prisma.examAttempt.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+    take: 60,
+    select: {
+      id: true,
+      score: true,
+      total: true,
+      createdAt: true,
+      exam: { select: { tier: true, title: true } },
+    },
+  });
+
+  const bundle = await bundlePromise;
   if (!bundle) return null;
 
   /** Parallel: visible scope (CPU) + bounded mock attempts (single Prisma round-trip). */
@@ -299,18 +313,7 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
       learnerPath: bundle.user.learnerPath,
       pathwayLessonRows: bundle.pathwayLessonRows,
     }),
-    prisma.examAttempt.findMany({
-      where: { userId },
-      orderBy: { createdAt: "desc" },
-      take: 60,
-      select: {
-        id: true,
-        score: true,
-        total: true,
-        createdAt: true,
-        exam: { select: { tier: true, title: true } },
-      },
-    }),
+    mockAttemptsPromise,
   ]);
   const durationMsScopeAndMocks = Math.round(performance.now() - tScopeMocks);
 
@@ -321,25 +324,35 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
 
   if (skipHeavy) {
     const tCore = performance.now();
-    const core = await loadLearnerDashboardCore(userId, entitlement, {
-      source: "loadReportCardData",
-      userProfile: bundle.user,
-      visibleLessonScope,
-      pathwayRowsForScope: bundle.pathwayLessonRows,
-      pathwayMetadataRowCount: bundle.pathwayLessonRows.length,
-      pathwayProgressRowCount: bundle.pathwayProgressScoped.length,
-      recentMocksPreload: mapExamAttemptRowsToRecentMocks(mockAttempts.slice(0, 5)),
-    });
+    const pathwaySummariesTimed = (() => {
+      const tPath = performance.now();
+      const rows = buildPathwayStudySummariesFromLessonInventory(
+        entitlement,
+        bundle.pathwayLessonRows,
+        bundle.pathwayProgressScoped,
+      );
+      return Promise.resolve({
+        rows,
+        durationMs: Math.round(performance.now() - tPath),
+      });
+    })();
+    const [core, pathwaySummaryResult] = await Promise.all([
+      loadLearnerDashboardCore(userId, entitlement, {
+        source: "loadReportCardData",
+        userProfile: bundle.user,
+        visibleLessonScope,
+        pathwayRowsForScope: bundle.pathwayLessonRows,
+        pathwayMetadataRowCount: bundle.pathwayLessonRows.length,
+        pathwayProgressRowCount: bundle.pathwayProgressScoped.length,
+        recentMocksPreload: mapExamAttemptRowsToRecentMocks(mockAttempts.slice(0, 5)),
+      }),
+      pathwaySummariesTimed,
+    ]);
     const durationMsDashboardCore = Math.round(performance.now() - tCore);
     if (!core) return null;
 
-    const tPath = performance.now();
-    const pathwayRaw = buildPathwayStudySummariesFromLessonInventory(
-      entitlement,
-      bundle.pathwayLessonRows,
-      bundle.pathwayProgressScoped,
-    );
-    const durationMsPathwaySummaries = Math.round(performance.now() - tPath);
+    const pathwayRaw = pathwaySummaryResult.rows;
+    const durationMsPathwaySummaries = pathwaySummaryResult.durationMs;
 
     const readiness = computeReadiness({
       practiceCorrect: 0,
@@ -432,14 +445,16 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
     const { ids } = sanitizeSessionQuestionIds(s.questionIds);
     allSessionIds.push(...ids);
   }
-  const qById: Map<string, BankGradingQuestionRow> = await loadBatchedBankGradingQuestionMap(allSessionIds, entitlement);
-
-  /** Pathway table rows: same inventory math as {@link loadPathwayStudySummaries} with bundle preloads (no extra Prisma). */
-  const pathwayRaw = buildPathwayStudySummariesFromLessonInventory(
-    entitlement,
-    bundle.pathwayLessonRows,
-    bundle.pathwayProgressScoped,
-  );
+  const [qById, pathwayRaw] = await Promise.all([
+    loadBatchedBankGradingQuestionMap(allSessionIds, entitlement),
+    Promise.resolve(
+      buildPathwayStudySummariesFromLessonInventory(
+        entitlement,
+        bundle.pathwayLessonRows,
+        bundle.pathwayProgressScoped,
+      ),
+    ),
+  ]);
 
   const tierTotals = new Map<string, { c: number; t: number }>();
   const recentBankSessions: RecentBankSessionRow[] = [];

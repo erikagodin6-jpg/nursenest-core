@@ -14,7 +14,7 @@ type Props = {
   searchParams: Promise<{ page?: string }>;
 };
 
-export const revalidate = 120;
+export const revalidate = 3600;
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { slug } = await params;

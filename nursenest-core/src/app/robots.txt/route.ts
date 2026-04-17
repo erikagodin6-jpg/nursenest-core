@@ -28,10 +28,11 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
  */
 export const runtime = "nodejs";
 export const dynamic = "force-static";
+export const revalidate = 3600;
 
 const ROBOTS_HEADERS = {
   "Content-Type": "text/plain; charset=utf-8",
-  "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=604800",
+  "Cache-Control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
 } as const;
 
 function buildDisallowedLocaleLines(): string {

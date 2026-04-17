@@ -7,7 +7,7 @@ import {
   learnerPrivateReadSurfaceTag,
   learnerPrivateReadUserTag,
   shouldBypassLearnerPrivateReadCache,
-} from "./learner-private-read-cache";
+} from "./learner-private-read-cache-keying";
 
 test("learner private read cache keys include stable serialized params", () => {
   const keyParts = buildLearnerPrivateReadCacheKeyParts("report-card", "user_123", [
