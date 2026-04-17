@@ -43,6 +43,7 @@ import { PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-loca
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { logSeoEmittedUrlBatch } from "@/lib/seo/seo-url-emission-audit";
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
+import { shouldSkipDbBackedSitemapUrlsForBuild } from "@/lib/seo/sitemap-build-skip";
 import { getSitemapIncludedLocales } from "@/lib/i18n/language-readiness";
 import {
   getAllProgrammaticSlugs,
@@ -137,6 +138,12 @@ export function collectPreNursingSeoUrls(origin: string): string[] {
 /** Pathway lesson hubs, topic clusters, and lesson detail pages (DB-first loader). */
 export async function collectPathwayLessonSeoUrls(origin: string): Promise<string[]> {
   const o = normalizeOrigin(origin);
+  if (shouldSkipDbBackedSitemapUrlsForBuild()) {
+    safeServerLog("seo", "sitemap_pathway_urls_skipped_for_build", {
+      reason: "build_time_db_skip",
+    });
+    return [`${o}/lessons`];
+  }
   const urls: string[] = [];
   let pathwayDerived = 0;
   const push = (loc: string): boolean => {

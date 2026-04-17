@@ -3,6 +3,7 @@ import "server-only";
 import { listBlogSitemapEntriesSafe } from "@/lib/seo/sitemap-blog-xml";
 import { listLocalizedBlogSitemapEntriesSafe } from "@/lib/seo/sitemap-localized-blog-xml";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { shouldSkipDbBackedSitemapUrlsForBuild } from "@/lib/seo/sitemap-build-skip";
 import {
   buildSitemapUrlsetFromAbsoluteUrls,
   collectCoreUrls,
@@ -37,6 +38,7 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
     const origin = normalizeOrigin(resolveSitemapOrigin());
     const allStatic = new Set<string>();
     const blogEntries = new Map<string, string | undefined>();
+    const skipDbBackedEntries = shouldSkipDbBackedSitemapUrlsForBuild();
 
     const pushStatic = (url: string) => {
       const r = isValidPublicUrl(url, { origin });
@@ -64,8 +66,8 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
 
     const [coreUrls, blogSitemapEntries, localizedBlogSitemapEntries] = await Promise.all([
       collectCoreUrls(origin),
-      listBlogSitemapEntriesSafe(),
-      listLocalizedBlogSitemapEntriesSafe(),
+      skipDbBackedEntries ? Promise.resolve<SitemapUrlEntry[]>([]) : listBlogSitemapEntriesSafe(),
+      skipDbBackedEntries ? Promise.resolve<SitemapUrlEntry[]>([]) : listLocalizedBlogSitemapEntriesSafe(),
     ]);
 
     for (const url of coreUrls) {
@@ -142,6 +144,7 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
     logSeoEmittedUrlBatch("sitemap_merged", merged.map((m) => m.loc), {
       staticCount: String(allStatic.size),
       mergedTotal: String(merged.length),
+      dbBackedEntriesSkipped: skipDbBackedEntries ? "1" : "0",
     });
 
     if (isSeoHttpValidationEnabled()) {
