@@ -11,8 +11,10 @@
 
 import "server-only";
 
+import { localizedBlogPath } from "@/lib/blog/blog-slug-localized";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { getSitemapLocalizedBlogRows } from "@/lib/blog/safe-localized-blog-queries";
+import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { isLocaleSitemapIncluded } from "@/lib/i18n/language-readiness";
 import {
   buildSitemapUrlsetFromAbsoluteUrls,
@@ -34,6 +36,7 @@ export async function listLocalizedBlogSitemapEntriesSafe(): Promise<SitemapUrlE
   try {
     const rows = await getSitemapLocalizedBlogRows();
     let excluded = 0;
+    let excludedIncompletePath = 0;
 
     for (const r of rows) {
       // Skip locales that are not sitemap-eligible (incomplete tier).
@@ -42,20 +45,32 @@ export async function listLocalizedBlogSitemapEntriesSafe(): Promise<SitemapUrlE
         continue;
       }
 
-      const parts = [r.locale, r.region];
-      if (r.profession) parts.push(r.profession);
-      if (r.exam) parts.push(r.exam);
-      parts.push("blog", r.localizedSlug);
+      const profession = r.profession?.trim() ?? "";
+      const exam = r.exam?.trim() ?? "";
+      // Public localized blog routes always use four segments before `/blog/:slug` (see `localizedBlogPath`).
+      if (!profession || !exam) {
+        excludedIncompletePath++;
+        continue;
+      }
 
-      const path = parts.map(encodeURIComponent).join("/");
+      const path = localizedBlogPath({
+        locale: r.locale as GlobalLocaleCode,
+        region: r.region as GlobalRegionSlug,
+        profession,
+        exam,
+        slug: r.localizedSlug,
+      });
       entries.push({
-        loc: `${origin}/${path}`,
+        loc: `${origin}${path}`,
         lastmod: r.updatedAt.toISOString(),
       });
     }
 
     if (excluded > 0) {
       safeServerLog("seo", "sitemap_localized_blog_locale_excluded", { excluded });
+    }
+    if (excludedIncompletePath > 0) {
+      safeServerLog("seo", "sitemap_localized_blog_incomplete_path_excluded", { excluded: excludedIncompletePath });
     }
 
     if (rows.length >= 50_000) {

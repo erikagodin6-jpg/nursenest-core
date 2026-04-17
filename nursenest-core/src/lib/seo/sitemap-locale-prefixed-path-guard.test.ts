@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { listNpPracticeTestSegmentPaths } from "@/lib/exam-pathways/np-practice-test-segments";
 import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
 import {
   assertLocaleMarketingUrlsExcludePrefixedPathwayTopics,
@@ -37,4 +38,17 @@ test("assertLocaleMarketingUrlsExcludePrefixedPathwayTopics passes for typical l
     ORIGIN,
     "fr",
   );
+});
+
+test("stripForbiddenLocalePrefixedPathwayTopics removes locale-prefixed NP practice-test alias hubs", () => {
+  const first = listNpPracticeTestSegmentPaths()[0];
+  assert.ok(first, "NP practice segment list should be non-empty");
+  const poison = `${ORIGIN}/fr/${first.countrySlug}/${first.roleTrack}/${first.segment}`;
+  const { urls, removed } = stripForbiddenLocalePrefixedPathwayTopics(
+    [poison, `${ORIGIN}/fr/pricing`],
+    ORIGIN,
+    "fr",
+  );
+  assert.equal(removed, 1);
+  assert.deepEqual(urls, [`${ORIGIN}/fr/pricing`]);
 });

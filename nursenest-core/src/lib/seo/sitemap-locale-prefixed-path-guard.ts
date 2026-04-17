@@ -1,3 +1,4 @@
+import { listNpPracticeTestSegmentPaths } from "@/lib/exam-pathways/np-practice-test-segments";
 import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
 
 /**
@@ -21,6 +22,10 @@ export function stripForbiddenLocalePrefixedPathwayTopics(
   for (const p of collectPathwayTopicProgrammaticPublicPaths()) {
     const path = p.startsWith("/") ? p : `/${p}`;
     forbidden.add(`${o}/${locale}${path}`);
+  }
+  // NP keyword alias hubs (`/us/np/aanp-practice-test`, …) are not routed under `/{locale}/…` — same 404 class as above.
+  for (const { countrySlug, roleTrack, segment } of listNpPracticeTestSegmentPaths()) {
+    forbidden.add(`${o}/${locale}/${countrySlug}/${roleTrack}/${segment}`);
   }
   const out: string[] = [];
   let removed = 0;

@@ -26,6 +26,7 @@ import {
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import { getPreNursingOverlaySlugsForLocale } from "@/lib/i18n/pre-nursing-content-overlay";
 import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "@/lib/exam-pathways/programmatic-slug-redirects";
+import { LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT } from "@/lib/marketing/canonical-pathway-hubs";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import {
   isPathwayPublishedForPublicSite,
@@ -325,6 +326,7 @@ export function collectSeoPagesUrls(origin: string): string[] {
   const o = normalizeOrigin(origin);
   return getProgrammaticSlugsForSitemap()
     .filter((slug) => !(slug in PROGRAMMATIC_SLUG_TO_PATHWAY_PATH))
+    .filter((slug) => !LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT.has(slug))
     .map((slug) => `${o}/${slug}`);
 }
 
@@ -366,6 +368,7 @@ export function collectLocaleMarketingUrls(origin: string, locale: string): stri
   urls.push(add(`/${locale}/contact`));
   for (const slug of getProgrammaticSlugsForSitemap()) {
     if (slug in PROGRAMMATIC_SLUG_TO_PATHWAY_PATH) continue;
+    if (LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT.has(slug)) continue;
     urls.push(add(`/${locale}/${slug}`));
   }
   // Exam-hub long-tail programmatic pages (`/{country}/{role}/{examCode}/{seoSlug}`) live only on the

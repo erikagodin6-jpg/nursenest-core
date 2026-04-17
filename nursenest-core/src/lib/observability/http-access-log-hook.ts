@@ -22,7 +22,7 @@ function shouldEmitAccessLog(): boolean {
 function shouldSkipPathForAccessLog(rawUrl: string): boolean {
   const pathOnly = rawUrl.split("?")[0] ?? "";
   if (pathOnly.startsWith("/_next/static/") || pathOnly.startsWith("/_next/image")) return true;
-  if (pathOnly === "/favicon.ico" || pathOnly === "/robots.txt") return true;
+  if (pathOnly === "/favicon.ico" || pathOnly === "/robots.txt" || pathOnly === "/healthz") return true;
   const leaf = pathOnly.split("/").pop() ?? "";
   if (/\.(ico|png|jpe?g|gif|webp|svg|woff2?|ttf|eot|map|css|js)$/i.test(leaf)) return true;
   return false;
