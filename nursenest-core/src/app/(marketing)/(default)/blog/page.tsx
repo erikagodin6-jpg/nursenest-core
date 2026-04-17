@@ -23,7 +23,6 @@ const BLOG_INLINE_KEYS = [
   "inline.marketing.blog.index.emptyState",
 ] as const;
 
-export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 
 export async function generateMetadata({
@@ -53,8 +52,8 @@ export async function generateMetadata({
   );
 }
 
-/** ISR: list is bounded (page size); new posts visible within a few minutes without full dynamic SSR. */
-export const revalidate = 120;
+/** ISR: list is bounded (page size); cache publicly for one hour and revalidate in the background. */
+export const revalidate = 3600;
 
 type Props = { searchParams: Promise<{ page?: string }> };
 

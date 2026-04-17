@@ -22,9 +22,9 @@ export const MARKETING_PHOTO_QUALITY_BELOW_FOLD = 68;
 export const MARKETING_HERO_LCP_SIZES =
   "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, min(720px, 50vw)";
 
-/** Screenshot section under homepage hero — container is `max-w-3xl` / 48rem (768px). */
+/** Screenshot section under homepage hero — container is `max-w-2xl` / 42rem (672px). */
 export const MARKETING_HOME_SCREENSHOT_SECTION_SIZES =
-  "(max-width: 640px) calc(100vw - 2rem), (max-width: 1024px) min(768px, 100vw - 3rem), 768px";
+  "(max-width: 640px) calc(100vw - 2rem), (max-width: 1024px) min(672px, 100vw - 3rem), 672px";
 
 /** Intrinsic 16:10 dimensions at max marketing width — pairs with `next/image` `fill` for aspect-ratio hints. */
 export const MARKETING_HERO_INTRINSIC_WIDTH = 1200;

@@ -1,5 +1,6 @@
-import { NextResponse, type NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { CACHE_HEADER_HOME_STATS } from "@/lib/cache/public-edge-cache";
+import { buildPublicResponseEtag, requestMatchesEtag } from "@/lib/http/public-response-cache";
 import {
   getCachedPublicHomeStats,
   getDegradedPublicHomeStatsFallback,
@@ -17,14 +18,27 @@ export async function GET(req: NextRequest) {
     return safeJsonRoute("GET /api/public/home-stats", async () => {
       try {
         const data = await getCachedPublicHomeStats();
-        return NextResponse.json(data, { headers: CACHE_HEADER_HOME_STATS });
+        const body = JSON.stringify(data);
+        const etag = buildPublicResponseEtag(body);
+        const headers = new Headers(CACHE_HEADER_HOME_STATS);
+        headers.set("Content-Type", "application/json; charset=utf-8");
+        headers.set("ETag", etag);
+        if (requestMatchesEtag(req, etag)) {
+          return new Response(null, { status: 304, headers });
+        }
+        return new Response(body, { status: 200, headers });
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
         safeServerLog("api", "public_home_stats_route_failed", { message: msg.slice(0, 200) });
-        return NextResponse.json(getDegradedPublicHomeStatsFallback("route_uncaught"), {
-          status: 200,
-          headers: { "Cache-Control": "no-store" },
-        });
+        const degradedBody = JSON.stringify(getDegradedPublicHomeStatsFallback("route_uncaught"));
+        const etag = buildPublicResponseEtag(degradedBody);
+        const headers = new Headers(CACHE_HEADER_HOME_STATS);
+        headers.set("Content-Type", "application/json; charset=utf-8");
+        headers.set("ETag", etag);
+        if (requestMatchesEtag(req, etag)) {
+          return new Response(null, { status: 304, headers });
+        }
+        return new Response(degradedBody, { status: 200, headers });
       }
     });
   });

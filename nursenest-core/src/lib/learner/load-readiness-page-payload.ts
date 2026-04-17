@@ -35,8 +35,8 @@ async function loadCatSignal(userId: string): Promise<CatReadinessSignal | null>
   try {
     const rows = await prisma.practiceTest.findMany({
       where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
-      orderBy: { completedAt: "desc" },
-      take: 15,
+      orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
+      take: 12,
       select: { config: true, results: true, completedAt: true },
     });
     const catRows = rows.filter((r) => {

@@ -31,11 +31,10 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 
-/** ISR: slug pages are public; revalidate balances freshness vs load. */
-export const revalidate = 120;
+/** ISR: slug pages are public; cache publicly for one hour and revalidate in the background. */
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

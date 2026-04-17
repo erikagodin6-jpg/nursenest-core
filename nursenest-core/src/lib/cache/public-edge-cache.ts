@@ -13,7 +13,7 @@ import "server-only";
  */
 
 /** Next.js Data Cache + origin: homepage / paywall / `GET /api/public/home-stats` (same `unstable_cache`). */
-export const PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC = 600;
+export const PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC = 3600;
 
 /** Must match {@link CACHE_HEADER_PRICING_OPTIONS} `s-maxage` and `getCachedPricingOptionsPayload` revalidate. */
 export const PRICING_OPTIONS_DATA_REVALIDATE_SEC = 300;
@@ -23,8 +23,7 @@ export const PRICING_OPTIONS_DATA_REVALIDATE_SEC = 300;
  * CDN (s-maxage) holds aligned with data cache; stale-while-revalidate absorbs traffic spikes.
  */
 export const CACHE_HEADER_HOME_STATS: HeadersInit = {
-  "Cache-Control":
-    "public, max-age=120, s-maxage=600, stale-while-revalidate=1800, stale-if-error=86400",
+  "Cache-Control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
 };
 
 /** Aligns with {@link getCachedPublicFlashcardTags} revalidate + `GET /api/public/flashcard-tags` CDN TTL. */

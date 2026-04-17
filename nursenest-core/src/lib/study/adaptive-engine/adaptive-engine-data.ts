@@ -70,7 +70,7 @@ export async function loadAdaptiveEngineData(
       // Speed data from recent completed practice tests (bounded at 12)
       prisma.practiceTest.findMany({
         where: { userId, status: "COMPLETED", elapsedMs: { not: null } },
-        orderBy: { completedAt: "desc" },
+        orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
         take: 12,
         select: { questionIds: true, elapsedMs: true, results: true, completedAt: true },
       }),

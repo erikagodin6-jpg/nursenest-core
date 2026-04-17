@@ -131,7 +131,10 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
   const learnerPath = bundle.user.learnerPath ?? null;
   const lessonWhere = lessonAccessWhere(entitlement);
 
-  const visibleLessonScope = await buildVisibleLessonScopeForLearner(entitlement, bundle.pathwayLessonRows);
+  const visibleLessonScope = await buildVisibleLessonScopeForLearner(userId, entitlement, {
+    learnerPath: bundle.user.learnerPath,
+    pathwayLessonRows: bundle.pathwayLessonRows,
+  });
 
   const pathwaySummaries = await loadPathwayStudySummaries(userId, entitlement, {
     lessonRows: bundle.pathwayLessonRows,

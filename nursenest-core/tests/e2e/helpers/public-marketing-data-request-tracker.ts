@@ -13,7 +13,14 @@ export type PublicDataResponseEntry = {
   key: string;
   status: number;
   resourceType: string;
+  cacheControl: string | null;
+  etag: string | null;
+  age: string | null;
+  lastModified: string | null;
+  classification: PublicDataResponseClassification;
 };
+
+export type PublicDataResponseClassification = "cache_hit" | "revalidated" | "full_fetch";
 
 const EXACT_API_SKIP = new Set([
   "/api/health",
@@ -53,6 +60,43 @@ export function shouldTrackPublicDataGet(url: URL, method: string): boolean {
   return false;
 }
 
+export function parseCacheControlDirectives(cacheControl: string | null | undefined): Record<string, string | boolean> {
+  if (!cacheControl) return {};
+  const directives: Record<string, string | boolean> = {};
+  for (const rawPart of cacheControl.split(",")) {
+    const part = rawPart.trim();
+    if (!part) continue;
+    const eqIdx = part.indexOf("=");
+    if (eqIdx === -1) {
+      directives[part.toLowerCase()] = true;
+      continue;
+    }
+    const key = part.slice(0, eqIdx).trim().toLowerCase();
+    const value = part.slice(eqIdx + 1).trim();
+    directives[key] = value;
+  }
+  return directives;
+}
+
+function readHeader(headers: Record<string, string>, name: string): string | null {
+  const value = headers[name];
+  if (!value) return null;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : null;
+}
+
+function parseAgeSeconds(age: string | null): number | null {
+  if (!age) return null;
+  const parsed = Number(age);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
+}
+
+export function classifyPublicDataResponseEntry(entry: Pick<PublicDataResponseEntry, "status" | "age">): PublicDataResponseClassification {
+  if (entry.status === 304) return "revalidated";
+  if (entry.status === 200 && (parseAgeSeconds(entry.age) ?? 0) > 0) return "cache_hit";
+  return "full_fetch";
+}
+
 /**
  * Records responses for tracked data endpoints. Set `currentLoadIndex` before each navigation / reload.
  */
@@ -73,14 +117,22 @@ export function attachPublicMarketingDataResponseTracker(page: Page, appOrigin: 
     if (!shouldTrackPublicDataGet(u, req.method())) return;
     const status = response.status();
     if (status === 0) return;
-    entries.push({
+    const headers = response.headers();
+    const entry: PublicDataResponseEntry = {
       loadIndex: currentLoadIndex,
       method: req.method(),
       url: response.url(),
       key: stableDataEndpointKey(u),
       status,
       resourceType: req.resourceType(),
-    });
+      cacheControl: readHeader(headers, "cache-control"),
+      etag: readHeader(headers, "etag"),
+      age: readHeader(headers, "age"),
+      lastModified: readHeader(headers, "last-modified"),
+      classification: "full_fetch",
+    };
+    entry.classification = classifyPublicDataResponseEntry(entry);
+    entries.push(entry);
   };
 
   page.on("response", onResponse);
@@ -105,12 +157,38 @@ export function findReloadFullFetchViolations(entries: PublicDataResponseEntry[]
   for (const e of entries) {
     if (e.loadIndex < 1) continue;
     if (e.status !== 200) continue;
+    if (e.classification !== "full_fetch") continue;
     const k = `${e.method}\t${e.key}`;
     reload200Counts.set(k, (reload200Counts.get(k) ?? 0) + 1);
   }
   const violations: string[] = [];
   for (const [k, n] of reload200Counts) {
-    if (n >= 2) violations.push(`${k} — ${n} full 200 response(s) across reload navigations (expected ≤1; prefer 304, disk cache, or no refetch)`);
+    if (n >= 2) violations.push(`${k} — ${n} full fetch 200 response(s) across reload navigations (expected ≤1; prefer 304, disk cache, or no refetch)`);
+  }
+  return violations;
+}
+
+export function findMissingCachingHeaderViolations(entries: PublicDataResponseEntry[]): string[] {
+  const violations: string[] = [];
+  for (const entry of entries) {
+    const reasons: string[] = [];
+    const directives = parseCacheControlDirectives(entry.cacheControl);
+    if (!entry.cacheControl) {
+      reasons.push("missing Cache-Control");
+    } else {
+      const sMaxAge = directives["s-maxage"];
+      const parsedSMaxAge = typeof sMaxAge === "string" ? Number(sMaxAge) : NaN;
+      if (!Number.isFinite(parsedSMaxAge) || parsedSMaxAge <= 0) {
+        reasons.push("missing positive s-maxage");
+      }
+    }
+    if (!entry.etag && !entry.lastModified) {
+      reasons.push("missing ETag or Last-Modified");
+    }
+    if (reasons.length === 0) continue;
+    violations.push(
+      `load ${entry.loadIndex}: ${entry.method}\t${entry.url} — ${reasons.join("; ")}`,
+    );
   }
   return violations;
 }

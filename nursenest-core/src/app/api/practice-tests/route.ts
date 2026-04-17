@@ -118,7 +118,7 @@ export async function GET(req: NextRequest) {
 
   const rows = await prisma.practiceTest.findMany({
     where: { userId: gate.userId },
-    orderBy: { updatedAt: "desc" },
+    orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
     take: 40,
     select: {
       id: true,
@@ -477,7 +477,7 @@ export async function POST(req: Request) {
       status: PracticeTestStatus.IN_PROGRESS,
     },
     select: { id: true, config: true },
-    orderBy: { updatedAt: "desc" },
+    orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
     take: 20,
   });
   const resumeLinear = existingLinearInProgress.find((candidate) => {

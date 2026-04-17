@@ -100,6 +100,55 @@ async function expectNotBlankMain(page: Page): Promise<void> {
   expect(txt.trim().length, "main should not be blank").toBeGreaterThan(40);
 }
 
+/**
+ * After navigation: document is not 404, main has a heading, and main is not effectively blank.
+ * Use for learner `/app` flows and marketing pages with a single `<main>`.
+ */
+export async function assertLearnerRouteHealthy(page: Page, context: string): Promise<void> {
+  await expectMainHeadingVisible(page, context);
+  await expectNotBlankMain(page);
+  await expectNotPageNotFound(page);
+}
+
+const MAIN_LINK_SKIP_RE =
+  /\/api\/|\/logout|sign-?out|mailto:|^javascript:|^#|\.(png|jpe?g|gif|webp|svg|ico|woff2?)(\?|$)/i;
+
+/**
+ * HEAD/GET same-origin navigational links inside `<main>` (bounded) — catches obvious 404s in content.
+ */
+export async function assertNoObviousBrokenLinksInMain(page: Page, baseURL: string): Promise<void> {
+  const origin = baseURL.replace(/\/$/, "");
+  const paths = await page
+    .locator("main")
+    .locator("a[href]")
+    .evaluateAll((els) => {
+      const out: string[] = [];
+      const seen = new Set<string>();
+      for (const el of els) {
+        const raw = (el as HTMLAnchorElement).getAttribute("href")?.trim() ?? "";
+        if (!raw || raw === "#" || raw.startsWith("mailto:") || raw.startsWith("javascript:")) continue;
+        let path: string;
+        try {
+          const u = new URL(raw, window.location.origin);
+          if (u.origin !== window.location.origin) continue;
+          path = u.pathname + u.search;
+        } catch {
+          continue;
+        }
+        if (seen.has(path)) continue;
+        seen.add(path);
+        out.push(path);
+      }
+      return out;
+    });
+  const filtered = paths.filter((p) => !MAIN_LINK_SKIP_RE.test(p)).slice(0, 40);
+  for (const path of filtered) {
+    const url = `${origin}${path}`;
+    const res = await page.request.get(url, { maxRedirects: 15, timeout: 30_000 });
+    expect(res.ok(), `same-origin link broken: GET ${url} → HTTP ${res.status()}`).toBeTruthy();
+  }
+}
+
 export async function openMobileNavMenu(page: Page): Promise<void> {
   const open = page.getByRole("button", { name: /open menu/i });
   await expect(open).toBeVisible({ timeout: 30_000 });

@@ -268,7 +268,10 @@ export async function loadPremiumDashboardSnapshot(
   const bundle = await loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadPremiumDashboardSnapshot" });
   if (!bundle) return null;
 
-  const visibleLessonScope = await buildVisibleLessonScopeForLearner(entitlement, bundle.pathwayLessonRows);
+  const visibleLessonScope = await buildVisibleLessonScopeForLearner(userId, entitlement, {
+    learnerPath: bundle.user.learnerPath,
+    pathwayLessonRows: bundle.pathwayLessonRows,
+  });
 
   const dash = await loadLearnerDashboard(userId, entitlement, {
     source: "loadPremiumDashboardSnapshot",

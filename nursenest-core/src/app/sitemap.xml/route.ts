@@ -2,6 +2,7 @@ import {
   crawlSurfaceErrorCode,
   logCrawlSurfaceEvent,
 } from "@/lib/observability/crawl-surface-observability";
+import { buildPublicResponseEtag, requestMatchesEtag } from "@/lib/http/public-response-cache";
 import { buildSingleSitemapXmlSafe } from "@/lib/seo/sitemap-all-xml";
 import { minimalUrlsetSingleHome } from "@/lib/seo/sitemap-static-xml";
 import { SeoHttpValidationStrictError } from "@/lib/seo/seo-http-emit-validation";
@@ -12,14 +13,25 @@ import { sitemapXmlResponse } from "@/lib/seo/sitemap-xml-http";
  * Single sitemap urlset at `/sitemap.xml` (canonical crawler entrypoint).
  */
 export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 /** Log when generation crosses this — sitemap work includes optional Prisma (blog + pathway URLs). */
 const SITEMAP_SLOW_MS = 1500;
 
 const SITEMAP_PATHNAME = "/sitemap.xml";
 
-export async function GET() {
+function cachedSitemapXmlResponse(req: Request, xml: string): Response {
+  const response = sitemapXmlResponse(xml);
+  const headers = new Headers(response.headers);
+  const etag = buildPublicResponseEtag(xml);
+  headers.set("ETag", etag);
+  if (requestMatchesEtag(req, etag)) {
+    return new Response(null, { status: 304, headers });
+  }
+  return new Response(xml, { status: 200, headers });
+}
+
+export async function GET(req: Request) {
   const t0 = Date.now();
   try {
     const xml = await buildSingleSitemapXmlSafe();
@@ -47,9 +59,9 @@ export async function GET() {
         approxResponseLen: approxLen,
         errorCode: "sitemap_degenerate_body",
       });
-      return sitemapXmlResponse(minimalUrlsetSingleHome());
+      return cachedSitemapXmlResponse(req, minimalUrlsetSingleHome());
     }
-    return sitemapXmlResponse(xml);
+    return cachedSitemapXmlResponse(req, xml);
   } catch (e) {
     if (e instanceof SeoHttpValidationStrictError) {
       const ms = Date.now() - t0;
@@ -83,7 +95,7 @@ export async function GET() {
       errorCode: crawlSurfaceErrorCode(e),
     });
     try {
-      return sitemapXmlResponse(minimalUrlsetSingleHome());
+      return cachedSitemapXmlResponse(req, minimalUrlsetSingleHome());
     } catch (inner) {
       logCrawlSurfaceEvent({
         routeType: "marketing.sitemap_xml",
@@ -94,7 +106,8 @@ export async function GET() {
         fallback: true,
         errorCode: crawlSurfaceErrorCode(inner),
       });
-      return sitemapXmlResponse(
+      return cachedSitemapXmlResponse(
+        req,
         `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://www.nursenest.ca/</loc></url></urlset>`,
       );
     }

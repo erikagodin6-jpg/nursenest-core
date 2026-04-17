@@ -31,8 +31,8 @@ const HomeHeroScreenshotSection = dynamic(
         aria-hidden
       >
         <div className="nn-section-shell py-3 sm:py-4 md:py-5">
-          {/* Reserve 4:3 space to match {@link MarketingHeroCarousel} section frame — avoids CLS while the chunk loads */}
-          <div className="mx-auto aspect-[4/3] w-full max-w-3xl rounded-xl border border-[var(--border-subtle)] bg-[var(--semantic-panel-muted)]" />
+          {/* Reserve the compact 4:3 product-card footprint to avoid CLS while the chunk loads. */}
+          <div className="mx-auto aspect-[4/3] w-full max-w-2xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--semantic-panel-muted)]" />
         </div>
       </div>
     ),

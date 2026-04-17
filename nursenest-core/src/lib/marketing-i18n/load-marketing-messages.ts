@@ -1,6 +1,7 @@
 import "server-only";
 import { existsSync, statSync } from "fs";
 import path from "path";
+import { cache } from "react";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-marketing-messages";
@@ -249,7 +250,7 @@ export function loadMarketingMessagesSync(locale: string): MarketingMessages {
 }
 
 /** Server / Node: merged monolith + marketing strings. Tries disk first, then optional CDN, then English. */
-export async function loadMarketingMessages(locale: string): Promise<MarketingMessages> {
+export const loadMarketingMessages = cache(async function loadMarketingMessages(locale: string): Promise<MarketingMessages> {
   const disk = loadFromDiskSync(locale);
   if (disk) return disk;
 
@@ -261,4 +262,4 @@ export async function loadMarketingMessages(locale: string): Promise<MarketingMe
     return loadEnglishBundleFromDisk();
   }
   return {} as MarketingMessages;
-}
+});

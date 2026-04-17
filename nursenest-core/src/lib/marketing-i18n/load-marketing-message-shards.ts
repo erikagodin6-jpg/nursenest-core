@@ -1,6 +1,7 @@
 import "server-only";
 import { existsSync, statSync } from "fs";
 import path from "path";
+import { cache } from "react";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { I18nShardFilename } from "@shared/i18n-shard-policy";
@@ -95,9 +96,9 @@ export function loadMarketingMessageShardsSync(
   return mergeShardMaps(dir, locale, shards);
 }
 
-export async function loadMarketingMessageShards(
+export const loadMarketingMessageShards = cache(async function loadMarketingMessageShards(
   locale: string,
   shards: readonly I18nShardFilename[],
 ): Promise<MarketingMessages> {
   return loadMarketingMessageShardsSync(locale, shards);
-}
+});

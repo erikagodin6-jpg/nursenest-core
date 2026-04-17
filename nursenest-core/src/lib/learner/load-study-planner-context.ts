@@ -28,7 +28,10 @@ export async function loadStudyPlannerContext(
   const bundle = await loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadStudyPlannerContext" });
   if (!bundle) return null;
 
-  const visibleLessonScope = await buildVisibleLessonScopeForLearner(entitlement, bundle.pathwayLessonRows);
+  const visibleLessonScope = await buildVisibleLessonScopeForLearner(userId, entitlement, {
+    learnerPath: bundle.user.learnerPath,
+    pathwayLessonRows: bundle.pathwayLessonRows,
+  });
 
   const [dashboard, pathways] = await Promise.all([
     loadLearnerDashboard(userId, entitlement, {

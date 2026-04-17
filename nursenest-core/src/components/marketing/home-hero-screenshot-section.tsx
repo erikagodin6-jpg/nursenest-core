@@ -13,7 +13,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackProductEvent } from "@/lib/observability/product-analytics";
 
 /**
- * Product screenshot carousel directly under the conversion hero — constrained width, sharp stills, lazy secondary slides.
+ * Product screenshot carousel directly under the conversion hero — compact card width, sharp stills, lazy secondary slides.
  */
 export function HomeHeroScreenshotSection() {
   const { locale, t } = useMarketingI18n();
@@ -29,9 +29,9 @@ export function HomeHeroScreenshotSection() {
       aria-label={t("components.homeConversionSections.platformCarouselHeading")}
       data-testid="home-hero-screenshot-section"
     >
-      {/* Narrow column: screenshot dominates; padding matches section shell */}
+      {/* Compact proof card: screenshot stays dominant without reading like a banner. */}
       <div className="nn-section-shell py-3 sm:py-4 md:py-5">
-        <div className="mx-auto w-full max-w-3xl">
+        <div className="mx-auto w-full max-w-2xl">
           <MarketingHeroCarousel
             slides={slides}
             mediaFrame="section"

@@ -296,7 +296,10 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
   /** Parallel: visible scope (CPU) + bounded mock attempts (single Prisma round-trip). */
   const tScopeMocks = performance.now();
   const [visibleLessonScope, mockAttempts] = await Promise.all([
-    buildVisibleLessonScopeForLearner(entitlement, bundle.pathwayLessonRows),
+    buildVisibleLessonScopeForLearner(userId, entitlement, {
+      learnerPath: bundle.user.learnerPath,
+      pathwayLessonRows: bundle.pathwayLessonRows,
+    }),
     prisma.examAttempt.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
@@ -405,7 +408,7 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
   const [sessions, practiceRows] = await Promise.all([
     prisma.examSession.findMany({
       where: { userId, status: ExamSessionStatus.COMPLETED },
-      orderBy: { updatedAt: "desc" },
+      orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
       take: SESSION_LIMIT,
       select: {
         id: true,
@@ -418,7 +421,7 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     }),
     prisma.practiceTest.findMany({
       where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
-      orderBy: { completedAt: "desc" },
+      orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
       take: 8,
       select: { id: true, title: true, completedAt: true, results: true, config: true },
     }),

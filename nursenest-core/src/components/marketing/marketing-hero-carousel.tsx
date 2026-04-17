@@ -36,8 +36,8 @@ export type MarketingHeroCarouselProps = {
   imgTestIdPrefix?: string;
   autoplayIntervalMs?: number;
   /**
-   * When true, title and caption render as a lightweight bottom gradient strip over the image
-   * (homepage platform preview). When false, copy sits below the frame (legacy layout).
+   * When true, title and caption render as a lightweight bottom gradient strip over the image.
+   * Section screenshots still force copy below the frame to keep the product proof unobstructed.
    */
   captionOverlay?: boolean;
   /** Fires when the visible slide changes (autoplay, dots, or swipe) — for conversion analytics. */
@@ -53,12 +53,12 @@ export type MarketingHeroCarouselProps = {
 const heroMediaFrameClass =
   "relative aspect-[16/10] w-full min-h-[11rem] max-h-[min(28rem,62vh)] shrink-0 overflow-hidden sm:min-h-[12rem] sm:max-h-[min(30rem,65vh)] md:min-h-[13rem] md:max-h-[min(34rem,68vh)]";
 
-/** Below-hero screenshot strip: 4:3 for vertical presence; width from parent (max-w-3xl). */
+/** Below-hero screenshot strip: 4:3 for a compact product-card feel; width comes from the parent shell. */
 const sectionMediaFrameClass = "relative aspect-[4/3] w-full shrink-0 overflow-hidden";
 
-/** Section mode: minimal chrome — border only, flush with page (see {@link MARKETING_HOME_SCREENSHOT_SECTION_SIZES}). */
+/** Section mode: subtle frame only so the screenshot stays dominant. */
 const sectionFrameChromeClass =
-  "rounded-xl border border-[var(--border-subtle)] bg-[var(--page-bg)]";
+  "rounded-2xl border border-[color-mix(in_srgb,var(--border-subtle)_82%,white)] bg-[var(--page-bg)] shadow-[0_12px_32px_-24px_color-mix(in_srgb,var(--palette-heading)_40%,transparent)]";
 
 const defaultFrameChromeClass =
   "rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] shadow-sm";
@@ -234,6 +234,7 @@ export function MarketingHeroCarousel({
         : MARKETING_PHOTO_QUALITY;
 
   const isBelowFoldSection = mediaFrame === "section";
+  const shouldOverlayCaption = captionOverlay && !isBelowFoldSection;
   const frameChromeClass = isBelowFoldSection ? sectionFrameChromeClass : defaultFrameChromeClass;
   const slideImageBgClass = isBelowFoldSection ? "bg-[var(--page-bg)]" : "bg-[var(--theme-muted-surface)]";
 
@@ -330,7 +331,7 @@ export function MarketingHeroCarousel({
             />
           );
         })}
-        {hasLoaded && mediaOk && captionOverlay && currentSlide ? (
+        {hasLoaded && mediaOk && shouldOverlayCaption && currentSlide ? (
           <div
             className="pointer-events-none absolute inset-x-0 bottom-0 z-10"
             data-testid={captionTestId}
@@ -349,34 +350,9 @@ export function MarketingHeroCarousel({
       </div>
       {hasLoaded && mediaOk ? (
         <>
-          {currentSlide && !captionOverlay ? (
-            <div
-              className={`px-0 text-center ${isBelowFoldSection ? "mt-1 space-y-0" : "mt-2 space-y-1"}`}
-              data-testid={captionTestId}
-            >
-              <p
-                className={
-                  isBelowFoldSection
-                    ? "line-clamp-2 text-balance break-words text-sm font-medium leading-snug text-[var(--palette-text-muted)]"
-                    : "nn-marketing-h4 text-balance break-words"
-                }
-              >
-                {currentSlide.title}
-              </p>
-              <p
-                className={
-                  isBelowFoldSection
-                    ? "line-clamp-3 text-balance break-words text-xs leading-snug text-[var(--palette-text-muted)] sm:line-clamp-4 sm:text-[0.8125rem]"
-                    : "nn-marketing-caption text-balance break-words text-[var(--theme-body-text)]"
-                }
-              >
-                {currentSlide.caption}
-              </p>
-            </div>
-          ) : null}
           {extraSlidesMounted || slides.length <= 1 ? (
             <div
-              className={`flex flex-wrap justify-center ${isBelowFoldSection ? "mt-1.5 gap-1.5" : "mt-3 gap-2"}`}
+              className={`flex flex-wrap justify-center ${isBelowFoldSection ? "mt-2 gap-2" : "mt-3 gap-2"}`}
               data-testid={dotsTestId}
             >
               {slides.map((_, index) => (
@@ -390,8 +366,8 @@ export function MarketingHeroCarousel({
                   className={`rounded-full transition-all duration-[var(--brand-motion-normal)] ease-[var(--brand-motion-ease-luxury)] ${
                     isBelowFoldSection
                       ? index === current
-                        ? "h-2 w-7 bg-role-cta opacity-100"
-                        : "h-1.5 w-1.5 bg-[var(--theme-muted-text)]/22 hover:bg-[var(--theme-muted-text)]/42"
+                        ? "h-1.5 w-5 bg-role-cta opacity-100"
+                        : "h-1.5 w-1.5 bg-[var(--theme-muted-text)]/28 hover:bg-[var(--theme-muted-text)]/45"
                       : index === current
                         ? "h-2 w-6 bg-role-cta"
                         : "h-2 w-2 bg-[var(--theme-muted-text)]/35 hover:bg-[var(--theme-muted-text)]/55"
@@ -402,6 +378,31 @@ export function MarketingHeroCarousel({
                   }
                 />
               ))}
+            </div>
+          ) : null}
+          {currentSlide && !shouldOverlayCaption ? (
+            <div
+              className={`px-0 text-center ${isBelowFoldSection ? "mt-2 space-y-1" : "mt-2 space-y-1"}`}
+              data-testid={captionTestId}
+            >
+              <p
+                className={
+                  isBelowFoldSection
+                    ? "line-clamp-1 text-balance break-words text-sm font-semibold leading-snug text-[var(--palette-heading)] sm:line-clamp-2"
+                    : "nn-marketing-h4 text-balance break-words"
+                }
+              >
+                {currentSlide.title}
+              </p>
+              <p
+                className={
+                  isBelowFoldSection
+                    ? "mx-auto max-w-xl line-clamp-2 text-balance break-words text-xs leading-snug text-[var(--palette-text-muted)] sm:text-[0.8125rem]"
+                    : "nn-marketing-caption text-balance break-words text-[var(--theme-body-text)]"
+                }
+              >
+                {currentSlide.caption}
+              </p>
             </div>
           ) : null}
         </>

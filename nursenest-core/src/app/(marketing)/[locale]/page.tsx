@@ -21,7 +21,7 @@ import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-js
 import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
 
 /** Literal required for Next segment config static analysis — keep in sync with `PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC`. */
-export const revalidate = 600;
+export const revalidate = 3600;
 
 type Props = { params: Promise<{ locale: string }> };
 

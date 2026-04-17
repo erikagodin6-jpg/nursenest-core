@@ -12,8 +12,6 @@ import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-rout
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
 
-export const dynamic = "force-dynamic";
-
 export default async function MarketingDefaultLocaleLayout({ children }: { children: React.ReactNode }) {
   const resolvedLocale: string = DEFAULT_MARKETING_LOCALE;
   const serverRegion: MarketingRegionToggle = "US";

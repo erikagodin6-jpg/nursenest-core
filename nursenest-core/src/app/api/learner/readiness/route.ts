@@ -72,7 +72,10 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Dashboard unavailable", code: "dashboard_unavailable" }, { status: 503 });
     }
 
-    const visibleLessonScope = await buildVisibleLessonScopeForLearner(gate.entitlement, bundle.pathwayLessonRows);
+    const visibleLessonScope = await buildVisibleLessonScopeForLearner(gate.userId, gate.entitlement, {
+      learnerPath: bundle.user.learnerPath,
+      pathwayLessonRows: bundle.pathwayLessonRows,
+    });
 
     const dashboard = await loadLearnerDashboard(gate.userId, gate.entitlement, {
       source: "api:GET:learner/readiness",

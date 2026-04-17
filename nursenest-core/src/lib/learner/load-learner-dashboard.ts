@@ -325,21 +325,15 @@ export async function loadLearnerDashboardCore(
   })();
 
   let visibleLessonScope = preload?.visibleLessonScope;
-  let pathwayRowsForScope = preload?.pathwayRowsForScope;
+  let pathwayRowsForScope = preload?.pathwayRowsForScope ?? preload?.visibleLessonScope?.pathwayLessonRows;
   if (!visibleLessonScope) {
-    const pathwayKeys = await prisma.pathwayLesson.findMany({
-      where: pathwayWhere,
-      select: { pathwayId: true, slug: true },
-      take: PATHWAY_CATALOG_LIST_HARD_CAP,
+    visibleLessonScope = await buildVisibleLessonScopeForLearner(userId, entitlement, {
+      learnerPath,
+      pathwayLessonRows: pathwayRowsForScope,
     });
-    visibleLessonScope = await buildVisibleLessonScopeForLearner(entitlement, pathwayKeys);
-    pathwayRowsForScope = pathwayKeys;
-  } else if (visibleLessonScope.contentTruncated && (!pathwayRowsForScope || pathwayRowsForScope.length === 0)) {
-    pathwayRowsForScope = await prisma.pathwayLesson.findMany({
-      where: pathwayWhere,
-      select: { pathwayId: true, slug: true },
-      take: PATHWAY_CATALOG_LIST_HARD_CAP,
-    });
+    pathwayRowsForScope = visibleLessonScope.pathwayLessonRows;
+  } else if (!pathwayRowsForScope || pathwayRowsForScope.length === 0) {
+    pathwayRowsForScope = visibleLessonScope.pathwayLessonRows;
   }
 
   const recentMocksPromise =
@@ -757,16 +751,20 @@ export async function loadPathwayStudySummaries(
   }
 
   const usedLearnerPathPreload = preload?.learnerPath !== undefined;
-  const learnerPath = usedLearnerPathPreload
-    ? preload!.learnerPath ?? null
-    : (
-        await timedLearnerCatalogPhase(
-          "pathway_study_summaries_user",
-          { userIdPrefix: userId.slice(0, 8) },
-          () => prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } }),
-        )
-      )?.learnerPath ?? null;
-  const baseWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
+  const scopeForSummaries = await timedLearnerCatalogPhase(
+    "pathway_study_summaries_scope",
+    {
+      userIdPrefix: userId.slice(0, 8),
+      usedLearnerPathPreload,
+      usedLessonRowsPreload: Boolean(preload?.lessonRows),
+    },
+    () =>
+      buildVisibleLessonScopeForLearner(userId, entitlement, {
+        learnerPath: preload?.learnerPath,
+        pathwayLessonRows: preload?.lessonRows?.map((r) => ({ pathwayId: r.pathwayId, slug: r.slug })),
+      }),
+  );
+  const baseWhere = pathwayLessonsAppListWhere(entitlement, scopeForSummaries.learnerPath);
 
   const [counts, allPathwayProgress] = await timedLearnerCatalogPhase(
     "pathway_study_summaries_parallel",
@@ -788,20 +786,11 @@ export async function loadPathwayStudySummaries(
           if (preload?.lessonRows && preload.pathwayProgress) {
             return preload.pathwayProgress;
           }
-          const slugRows = preload?.lessonRows
-            ? preload.lessonRows.map((r) => ({ pathwayId: r.pathwayId, slug: r.slug }))
-            : await prisma.pathwayLesson
-                .findMany({
-                  where: baseWhere,
-                  select: { pathwayId: true, slug: true },
-                  take: PATHWAY_CATALOG_LIST_HARD_CAP,
-                })
-                .catch(() => [] as { pathwayId: string; slug: string }[]);
           safeServerLog("learner_dashboard", "pathway_study_summaries_progress_keys", {
-            slugRows: slugRows.length,
+            slugRows: scopeForSummaries.pathwayLessonRows.length,
             fromPreloadLessonRows: Boolean(preload?.lessonRows),
           });
-          return fetchProgressForPathwayLessonRows(userId, slugRows).catch(
+          return fetchProgressForPathwayLessonRows(userId, scopeForSummaries.pathwayLessonRows).catch(
             () => [] as { lessonId: string; completed: boolean }[],
           );
         })(),

@@ -4,7 +4,9 @@ import { prisma } from "@/lib/db";
 import { contentItemTiersForUserTier, lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { syntheticPathwayLessonId } from "@/lib/lessons/pathway-lesson-progress";
+import { PATHWAY_CATALOG_LIST_HARD_CAP } from "@/lib/lessons/pathway-lesson-scale";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /** Minimal row shape for synthetic pathway lesson ids (matches {@link PathwayLessonDashboardRow} picks). */
@@ -137,16 +139,32 @@ async function countContentCompletedViaJoin(userId: string, entitlement: AccessS
 export type VisibleLessonScope = {
   lessonIds: string[];
   contentTruncated: boolean;
+  learnerPath: string | null;
+  pathwayLessonRows: PathwayLessonKeyRow[];
 };
 
 /**
- * Union of content lesson ids (tier/region scoped) + synthetic pathway ids from the capped pathway catalog list.
+ * Shared return contract for learner-visible lesson scope loaders.
  */
-export async function buildVisibleLessonScopeForLearner(
+export function buildVisibleLessonScopeResult(args: {
+  learnerPath: string | null;
+  contentLessonIds: string[];
+  contentTruncated: boolean;
+  pathwayLessonRows: PathwayLessonKeyRow[];
+}): VisibleLessonScope {
+  return {
+    lessonIds: [...args.contentLessonIds, ...pathwaySyntheticIdsFromRows(args.pathwayLessonRows)],
+    contentTruncated: args.contentTruncated,
+    learnerPath: args.learnerPath,
+    pathwayLessonRows: [...args.pathwayLessonRows],
+  };
+}
+
+async function buildVisibleLessonScopeFromPathwayRows(
   entitlement: AccessScope,
-  pathwayRows: PathwayLessonKeyRow[],
+  learnerPath: string | null,
+  pathwayLessonRows: PathwayLessonKeyRow[],
 ): Promise<VisibleLessonScope> {
-  const pathwayIds = pathwaySyntheticIdsFromRows(pathwayRows);
   const { ids: contentIds, totalInScope, truncated } = await loadContentLessonIdsScoped(entitlement);
 
   if (truncated) {
@@ -156,8 +174,45 @@ export async function buildVisibleLessonScopeForLearner(
     });
   }
 
-  const lessonIds = [...contentIds, ...pathwayIds];
-  return { lessonIds, contentTruncated: truncated };
+  return buildVisibleLessonScopeResult({
+    learnerPath,
+    contentLessonIds: contentIds,
+    contentTruncated: truncated,
+    pathwayLessonRows,
+  });
+}
+
+/**
+ * Shared learner loader: fetch scoped pathway rows once, normalize synthetic ids + metadata, and return
+ * the lesson-id scope used by dashboard/report-card aggregates.
+ */
+export async function buildVisibleLessonScopeForLearner(
+  userId: string,
+  entitlement: AccessScope,
+  options?: {
+    learnerPath?: string | null;
+    pathwayLessonRows?: PathwayLessonKeyRow[];
+  },
+): Promise<VisibleLessonScope> {
+  const learnerPath =
+    options?.learnerPath !== undefined
+      ? options.learnerPath ?? null
+      : (
+          await prisma.user.findUnique({
+            where: { id: userId },
+            select: { learnerPath: true },
+          })
+        )?.learnerPath ?? null;
+
+  const pathwayLessonRows =
+    options?.pathwayLessonRows ??
+    (await prisma.pathwayLesson.findMany({
+      where: pathwayLessonsAppListWhere(entitlement, learnerPath),
+      select: { pathwayId: true, slug: true },
+      take: PATHWAY_CATALOG_LIST_HARD_CAP,
+    }));
+
+  return buildVisibleLessonScopeFromPathwayRows(entitlement, learnerPath, pathwayLessonRows);
 }
 
 /**

@@ -21,8 +21,8 @@ import { loadHomeBlogTeaserPostsSafe } from "@/lib/blog/home-blog-teaser";
 import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
 import { logCrawlSurfaceEvent } from "@/lib/observability/crawl-surface-observability";
 
-/** ISR: homepage shell — aligned with `getCachedPublicHomeStats` / `PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC` (600). */
-export const revalidate = 600;
+/** ISR: homepage shell — aligned with `getCachedPublicHomeStats` / `PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC` (3600). */
+export const revalidate = 3600;
 
 const MARKETING_HOME_SLOW_MS = 2500;
 
