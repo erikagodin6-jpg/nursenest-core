@@ -49,7 +49,7 @@ Tests are grouped by **deployment risk**, not by folder structure alone. **Do no
 |-------|--------|
 | Public smoke | `public/smoke.spec.ts`, `public/pre-deploy-regression.spec.ts` — product-dependent |
 | Freemium | `auth/freemium-paywall.spec.ts` (`chromium-free`) |
-| Marketing / crawl | `public/link-crawl-audit.spec.ts`, `navigation/country-selector.spec.ts` — longer, env-sensitive |
+| Marketing / crawl | `public/link-crawl-audit.spec.ts`, `navigation/country-selector.spec.ts`, `crawl-health/public-crawl-regression.spec.ts` (`npm run qa:crawl-health`) — longer, env-sensitive |
 
 ## Helpers (canonical)
 

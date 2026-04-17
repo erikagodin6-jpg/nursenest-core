@@ -48,18 +48,18 @@ const NAV_FLOW_SECONDARY_CLASS = `${NAV_LINK_CLASS} text-[var(--nav-muted)]`;
 const NAV_FLOW_PRACTICE_CLASS =
   `${HEADER_NAV_PRIMARY_CTA} nn-marketing-body-sm inline-flex h-8 min-h-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-1.5 font-semibold leading-none tracking-[0.01em] xl:px-3.5`;
 const NAV_TIER_LINK_CLASS =
-  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-7 items-center justify-center whitespace-nowrap px-2 text-center font-normal leading-none tracking-[0.01em] xl:px-2.5";
+  "nn-marketing-body-sm nn-marketing-nav-link inline-flex items-center justify-center whitespace-nowrap text-center font-normal leading-[1.2] tracking-[0.01em]";
 const HEADER_SECONDARY_ACTION_CLASS =
   "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
 /** On dark chrome (e.g. non–light-theme header row): translucent trigger. */
 const HEADER_MAIN_NAV_MENU_TRIGGER_CLASS =
-  "nn-marketing-body-sm inline-flex h-8 max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--nav-fg)_14%,var(--nav-border))] bg-[color-mix(in_srgb,var(--nav-fg)_04%,transparent)] px-2 text-center font-normal leading-none tracking-tight text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)] xl:max-w-[13rem] xl:px-2.5";
+  "nn-marketing-body-sm inline-flex h-[30px] max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--nav-fg)_14%,var(--nav-border))] bg-[color-mix(in_srgb,var(--nav-fg)_04%,transparent)] px-2 text-center font-normal leading-tight tracking-tight text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)] xl:max-w-[13rem] xl:px-2.5";
 /**
  * Light-theme top brand strip: white filled controls + dark text for contrast (country / locale / theme).
  * Keeps the bar visually lighter than ghost text on saturated chrome.
  */
 const HEADER_LIGHT_UTILITY_TRIGGER_CLASS =
-  "nn-marketing-body-sm inline-flex h-8 max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--theme-heading-text,#0f172a)_14%,#cbd5e1)] bg-white px-2.5 text-center font-normal leading-none tracking-tight text-[var(--theme-heading-text)] shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-colors hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--theme-heading-text)_25%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-white xl:max-w-[13rem]";
+  "nn-marketing-body-sm inline-flex h-[30px] max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--theme-heading-text,#0f172a)_14%,#cbd5e1)] bg-white px-2.5 text-center font-normal leading-tight tracking-tight text-[var(--theme-heading-text)] shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-colors hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--theme-heading-text)_25%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-white xl:max-w-[13rem]";
 type LearnerTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
 type LearnerCountry = "CA" | "US";
 type HeaderResumeCta = { href: string; label: string } | null;
@@ -351,7 +351,7 @@ export function SiteHeader() {
     ? HEADER_LIGHT_UTILITY_TRIGGER_CLASS
     : HEADER_MAIN_NAV_MENU_TRIGGER_CLASS;
   const utilityThemePickerShellClass = isLightTheme
-    ? "text-[var(--theme-heading-text)] [&_button]:h-8 [&_button]:min-h-0 [&_button]:items-center [&_button]:gap-1.5 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] [&_button]:bg-white [&_button]:px-2.5 [&_button]:py-1.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:text-[var(--theme-heading-text)] [&_button]:shadow-[0_1px_2px_rgba(15,23,42,0.05)] [&_button]:hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))] [&_button]:hover:text-[var(--theme-heading-text)]"
+    ? "text-[var(--theme-heading-text)] [&_button]:h-[30px] [&_button]:min-h-0 [&_button]:items-center [&_button]:gap-1.5 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] [&_button]:bg-white [&_button]:px-2.5 [&_button]:py-1 [&_button]:text-[11px] [&_button]:font-normal [&_button]:leading-tight [&_button]:text-[var(--theme-heading-text)] [&_button]:shadow-[0_1px_2px_rgba(15,23,42,0.05)] [&_button]:hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))] [&_button]:hover:text-[var(--theme-heading-text)]"
     : "text-[var(--nav-fg)] [&_button]:min-h-0 [&_button]:border-[var(--nav-border)] [&_button]:bg-transparent [&_button]:px-2.5 [&_button]:py-1.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:shadow-none [&_button]:hover:bg-[var(--nav-hover)] [&_button]:hover:text-[var(--nav-fg)]";
 
   const marketingDesktopUtilityControls = (
@@ -483,7 +483,7 @@ export function SiteHeader() {
     <div style={navChromeVars} className="sticky top-0 z-50 nn-header-animate-in" ref={headerRef}>
       {isLightTheme ? (
         <div className="nn-header-utility-dark hidden w-full border-b border-[var(--nn-nav-border)] md:block">
-          <div className="nn-section-shell flex min-h-8 items-center justify-end gap-1.5 py-1">
+          <div className="nn-section-shell flex min-h-[36px] items-center justify-end gap-1.5 py-[3px] md:min-h-[40px] md:py-1">
             {marketingDesktopUtilityControls}
           </div>
         </div>
@@ -798,7 +798,7 @@ export function SiteHeader() {
           </div>{/* /nav-row */}
         </div>{/* /shell */}
         <div className="hidden w-full border-t border-[var(--nn-nav-border)] nn-header-nav-row md:block">
-          <div className="nn-section-shell flex min-h-9 flex-wrap items-center gap-x-0.5 gap-y-0 py-0.5 lg:gap-x-0.5">
+          <div className="nn-section-shell flex min-h-[36px] flex-wrap items-center gap-x-0.5 gap-y-0 py-0 md:min-h-[40px] md:py-0.5 lg:gap-x-0.5">
             <nav
               aria-label={t("nav.marketingExplore")}
               className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-0 xl:gap-0.5"
@@ -929,7 +929,7 @@ export function SiteHeader() {
                                 <Link
                                   href={localizeHref(link.href)}
                                   aria-current={isActivePath(strippedPath, link.href) ? "page" : undefined}
-                                  className={`flex w-full items-center justify-start gap-1.5 rounded-lg px-2 py-2 text-left text-sm transition-[background-color,color,transform] duration-100 ease-[var(--motion-ease)] focus-visible:outline-2 focus-visible:outline-[var(--ring)] ${isActivePath(strippedPath, link.href) ? "bg-[var(--nav-active)] font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--theme-heading-text)] hover:translate-x-0.5 hover:bg-[var(--nav-hover)] hover:text-[var(--nav-link-hover)]"}`}
+                                  className={`flex w-full items-center justify-start gap-1.5 rounded-lg px-2 py-2 text-left text-sm tracking-[0.01em] transition-[background-color,color,transform] duration-100 ease-[var(--motion-ease)] focus-visible:outline-2 focus-visible:outline-[var(--ring)] ${isActivePath(strippedPath, link.href) ? "bg-[var(--nav-active)] font-semibold text-[var(--nav-link-active)]" : "font-normal text-[var(--theme-heading-text)] hover:translate-x-0.5 hover:bg-[var(--nav-hover)] hover:text-[var(--nav-link-hover)]"}`}
                                   onClick={() => {
                                     setOpenMegaMenu(null);
                                     trackClientEvent(PH.marketingNavClick, {

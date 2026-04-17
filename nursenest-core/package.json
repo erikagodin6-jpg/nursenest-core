@@ -175,6 +175,8 @@
     "qa:pathways:prenursing-allied": "node scripts/check-prenursing-allied-e2e-credentials.cjs && playwright test -c playwright.pathways-prenursing-allied.config.ts",
     "qa:verify:production": "node scripts/verify-production-release.mjs",
     "qa:verify:production:core": "PLAYWRIGHT_SKIP_WEB_SERVER=1 playwright test -c playwright.verify-production.config.ts",
+    "qa:crawl-health": "playwright test -c playwright.crawl-health.config.ts",
+    "qa:crawl-health:remote": "PLAYWRIGHT_SKIP_WEB_SERVER=1 playwright test -c playwright.crawl-health.config.ts",
     "qa:smoke:emergency": "playwright test -c playwright.emergency.config.ts",
     "qa:paid-smoke:browser": "node scripts/check-paid-e2e-credentials.cjs && node scripts/check-e2e-database-connect.cjs && playwright test --project=chromium-paid",
     "qa:paid-audit:browser": "node scripts/check-paid-e2e-credentials.cjs && node scripts/check-e2e-database-connect.cjs && playwright test --project=chromium-paid paid-subscriber-audit",

@@ -102,13 +102,13 @@ export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?
 
   const chromeTrigger =
     variant === "dark-bar"
-      ? "inline-flex h-8 max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] bg-white px-2.5 text-[11px] font-normal tracking-tight text-[var(--theme-heading-text)] shadow-[0_1px_2px_rgba(15,23,42,0.05)] hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))]"
+      ? "inline-flex h-[30px] max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] bg-white px-2.5 text-[11px] font-normal leading-tight tracking-tight text-[var(--theme-heading-text)] shadow-[0_1px_2px_rgba(15,23,42,0.05)] hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))]"
       : undefined;
 
   return (
     <div className={`${variant === "dark-bar" ? "nn-header-utility-dark" : "nn-header-utility"} hidden md:block`}>
       <div
-        className={`nn-section-shell flex items-center justify-end gap-1.5 lg:gap-2 ${variant === "dark-bar" ? "min-h-8 py-1" : "h-9 gap-2"}`}
+        className={`nn-section-shell flex items-center justify-end gap-1.5 lg:gap-2 ${variant === "dark-bar" ? "min-h-[36px] py-[3px] md:min-h-[40px] md:py-1" : "h-9 gap-2"}`}
       >
         {/* Country selector — replaces old US/CA toggle with global selector */}
         <div className="relative" ref={countryRef}>
@@ -136,7 +136,7 @@ export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?
             onClick={() => setLangOpen((o) => !o)}
             className={
               variant === "dark-bar"
-                ? "inline-flex h-7 items-center gap-0.5 rounded-lg border border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] bg-white px-2.5 text-[11px] font-normal tracking-tight text-[var(--theme-heading-text)] shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-colors hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))]"
+                ? "inline-flex h-[30px] items-center gap-0.5 rounded-lg border border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] bg-white px-2.5 text-[11px] font-normal tracking-tight text-[var(--theme-heading-text)] shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-colors hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))]"
                 : "flex items-center gap-0.5 rounded-full bg-transparent px-2 py-0.5 text-[11px] font-normal tracking-wide text-[var(--header-utility-text)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)]"
             }
             aria-expanded={langOpen}
@@ -169,7 +169,7 @@ export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?
         <div
           className={
             variant === "dark-bar"
-              ? "text-[var(--theme-heading-text)] [&_button]:h-7 [&_button]:min-h-0 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] [&_button]:bg-white [&_button]:px-2 [&_button]:py-1 [&_button]:text-[11px] [&_button]:font-normal [&_button]:text-[var(--theme-heading-text)] [&_button]:shadow-[0_1px_2px_rgba(15,23,42,0.05)] [&_button]:hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))]"
+              ? "text-[var(--theme-heading-text)] [&_button]:h-[30px] [&_button]:min-h-0 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] [&_button]:bg-white [&_button]:px-2 [&_button]:py-1 [&_button]:text-[11px] [&_button]:font-normal [&_button]:text-[var(--theme-heading-text)] [&_button]:shadow-[0_1px_2px_rgba(15,23,42,0.05)] [&_button]:hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))]"
               : "text-[var(--header-utility-text)] [&_button]:min-h-0 [&_button]:border-[var(--header-utility-border)] [&_button]:bg-transparent [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:shadow-none [&_button]:hover:bg-[var(--nav-hover)] [&_button]:hover:text-[var(--nav-fg)]"
           }
         >

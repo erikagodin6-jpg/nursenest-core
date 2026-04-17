@@ -2038,6 +2038,20 @@ html[data-theme] .nn-marketing-surface {
   --header-border:   color-mix(in srgb, #ffffff 20%, transparent);
 }
 
+/* Exam-tier strip only: denser pills + stable hover (no float) so the bar stays thin. */
+.nn-header-nav-row .nn-marketing-nav-link {
+  min-height: 1.75rem;
+  padding: 0.125rem 0.625rem;
+  line-height: 1.2;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nn-header-nav-row .nn-marketing-nav-link:hover {
+    transform: none;
+    opacity: 1;
+  }
+}
+
 /* Bottom accent strip separating logo row from page content (light themes) */
 .nn-header-accent-bar {
   height: 2px;

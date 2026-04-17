@@ -17,10 +17,14 @@ import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketin
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { ExamSelectorGate } from "@/components/onboarding/exam-selector-gate";
 import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
+import { loadHomeBlogTeaserPostsSafe } from "@/lib/blog/home-blog-teaser";
 import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /** ISR: homepage shell — aligned with `getCachedPublicHomeStats` / `PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC` (600). */
 export const revalidate = 600;
+
+const MARKETING_HOME_SLOW_MS = 2500;
 
 const STATIC_LOCALE = DEFAULT_MARKETING_LOCALE;
 const STATIC_REGION = "US" as const;
@@ -54,11 +58,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [homeStatsRaw, m, publishedGlobalRegionCardIds] = await Promise.all([
+  const t0 = Date.now();
+  const [homeStatsRaw, m, publishedGlobalRegionCardIds, blogTeaserPosts] = await Promise.all([
     getCachedPublicHomeStats(),
     loadMarketingMessages(STATIC_LOCALE),
-    listPublishedHomeGlobalRegionCardIds(),
+    Promise.resolve(listPublishedHomeGlobalRegionCardIds()),
+    loadHomeBlogTeaserPostsSafe(3),
   ]);
+  const wallMs = Date.now() - t0;
+  if (wallMs > MARKETING_HOME_SLOW_MS) {
+    safeServerLog("crawl_surface", "marketing_home_data_slow", { ms: wallMs });
+  }
   const homeMarketingStats = {
     questionCount: homeStatsRaw.questionCount,
     registeredLearners: homeStatsRaw.registeredLearners,
@@ -107,6 +117,7 @@ export default async function HomePage() {
           </div>
           <MarketingBlogLatestLinks
             take={3}
+            posts={blogTeaserPosts}
             className="mt-4 border-t border-[var(--border-subtle)] pt-4"
             heading={resolveMarketingCopy(m, "pages.home.blogTeaser.latestHeading", undefined, "")}
           />

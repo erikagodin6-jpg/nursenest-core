@@ -36,16 +36,31 @@ services:
     http_port: 8080
     routes:
       - path: /
-    # Liveness: GET /healthz (no DB). Traffic is not routed until checks pass (failure_threshold consecutive failures).
+    # GET /healthz (no DB). Traffic is not routed until checks pass.
+    #
+    # Next.js 16 standalone: the process prints "Ready in …" when the HTTP socket listens, but
+    # `getRequestHandlers()` still runs afterward — every request (including /healthz) awaits that
+    # init. On basic-xs that can exceed 2 minutes; probes that start too early see "timeout awaiting
+    # headers" until init finishes. Keep initial_delay high enough for worst-case cold start.
+    #
     # Rollback: App Platform → Deployments → redeploy a previous successful deployment if a bad build ships.
     # Post-deploy verification: BASE_URL=https://… npm run qa:verify:health (see nursenest-core/docs/deploy-safety.md).
     health_check:
       http_path: /healthz
-      initial_delay_seconds: 120
-      period_seconds: 10
-      timeout_seconds: 10
+      port: 8080
+      initial_delay_seconds: 240
+      period_seconds: 15
+      timeout_seconds: 15
       success_threshold: 1
-      failure_threshold: 9
+      failure_threshold: 12
+    liveness_health_check:
+      http_path: /healthz
+      port: 8080
+      initial_delay_seconds: 240
+      period_seconds: 15
+      timeout_seconds: 15
+      success_threshold: 1
+      failure_threshold: 12
     envs:
       - key: NODE_ENV
         value: production

@@ -37,6 +37,9 @@ const legacyMedMathRedirect = {
 /** Matches `/api/marketing-assets/*` success responses and recommended DO Spaces CDN object metadata (see marketing-cdn.catalog.json). */
 const STATIC_ASSET_CACHE_CONTROL = "public, max-age=31536000, immutable" as const;
 
+/** HTTP-level indexability — complements `<meta name="robots">` and `/robots.txt` (defense in depth for crawlers that execute JS or ignore one signal). */
+const X_ROBOTS_NOINDEX_NOFOLLOW = "noindex, nofollow" as const;
+
 const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
@@ -210,6 +213,23 @@ const nextConfig: NextConfig = {
         ],
       },
       /**
+       * APIs are not HTML landing pages; keep them out of the index even if discovered outside `robots.txt`.
+       * (`Disallow: /api/` is still emitted in `/robots.txt`.)
+       */
+      {
+        source: "/api/:path*",
+        headers: [{ key: "X-Robots-Tag", value: X_ROBOTS_NOINDEX_NOFOLLOW }],
+      },
+      /** Staff UI — matches `(admin)/layout.tsx` metadata `robots: noindex`. */
+      {
+        source: "/admin",
+        headers: [{ key: "X-Robots-Tag", value: X_ROBOTS_NOINDEX_NOFOLLOW }],
+      },
+      {
+        source: "/admin/:path*",
+        headers: [{ key: "X-Robots-Tag", value: X_ROBOTS_NOINDEX_NOFOLLOW }],
+      },
+      /**
        * Subscriber shell: avoid shared CDN/edge caches serving personalized HTML from one session to another.
        * Complements `dynamic = "force-dynamic"` on `/app` layouts; does not apply to public marketing routes.
        */
@@ -220,6 +240,7 @@ const nextConfig: NextConfig = {
             key: "Cache-Control",
             value: "private, no-cache, no-store, must-revalidate",
           },
+          { key: "X-Robots-Tag", value: X_ROBOTS_NOINDEX_NOFOLLOW },
         ],
       },
       {
@@ -229,6 +250,7 @@ const nextConfig: NextConfig = {
             key: "Cache-Control",
             value: "private, no-cache, no-store, must-revalidate",
           },
+          { key: "X-Robots-Tag", value: X_ROBOTS_NOINDEX_NOFOLLOW },
         ],
       },
     ];

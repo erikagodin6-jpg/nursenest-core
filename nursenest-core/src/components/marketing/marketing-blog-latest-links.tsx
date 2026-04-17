@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { BlogIndexPost } from "@/lib/blog/safe-blog-queries";
 import { getPublishedBlogPostsPage } from "@/lib/blog/safe-blog-queries";
 
 type Props = {
@@ -7,15 +8,23 @@ type Props = {
   className?: string;
   /** Optional heading; omit for compact list-only strip. */
   heading?: string;
+  /**
+   * When set (e.g. homepage), avoids a second DB round-trip and lets parents use
+   * {@link loadHomeBlogTeaserPostsSafe} so failures do not fail the whole page.
+   */
+  posts?: BlogIndexPost[];
 };
 
 /**
  * Crawl-friendly internal links to the newest published blog posts.
  * Used on high-authority marketing surfaces (home, lessons, pathway hubs).
  */
-export async function MarketingBlogLatestLinks({ take = 3, className, heading }: Props) {
+export async function MarketingBlogLatestLinks({ take = 3, className, heading, posts: postsProp }: Props) {
   const safeTake = Math.min(6, Math.max(1, Math.floor(take)));
-  const { posts } = await getPublishedBlogPostsPage(1, safeTake);
+  const posts =
+    postsProp !== undefined
+      ? postsProp.slice(0, safeTake)
+      : (await getPublishedBlogPostsPage(1, safeTake)).posts;
   if (posts.length === 0) return null;
 
   return (

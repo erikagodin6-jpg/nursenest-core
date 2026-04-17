@@ -17,9 +17,12 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
  *
  * Internal `/seo/*` rewrite targets are disallowed to avoid duplicate indexing
  * with the public `/{slug}` URLs they back.
+ *
+ * **Static:** body depends only on shipped locale tier config — no per-request data. Serving as
+ * static reduces cold-start variance for crawlers vs `force-dynamic`.
  */
 export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 
 const ROBOTS_HEADERS = {
   "Content-Type": "text/plain; charset=utf-8",
