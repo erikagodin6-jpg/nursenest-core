@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import test from "node:test";
 
 import {
@@ -18,7 +19,10 @@ test("learner private read cache keys include stable serialized params", () => {
 
   assert.equal(keyParts[0], "learner-private-read");
   assert.equal(keyParts[1], "report-card");
-  assert.equal(keyParts[2], "user_123");
+  assert.equal(
+    keyParts[2],
+    createHash("sha256").update("user_123").digest("hex").slice(0, 32),
+  );
   assert.equal(
     keyParts[3],
     '{"alliedCareer":null,"country":"CA","reason":"active_subscription","tier":"RN"}',
@@ -44,11 +48,21 @@ test("learner private read access scope key stays narrow", () => {
 });
 
 test("learner private read tags are user and surface scoped", () => {
-  assert.equal(learnerPrivateReadUserTag("user_123"), "learner-private:user_123");
+  const hashedUser = createHash("sha256").update("user_123").digest("hex").slice(0, 32);
+  assert.equal(learnerPrivateReadUserTag("user_123"), `learner-private:${hashedUser}`);
   assert.equal(
     learnerPrivateReadSurfaceTag("user_123", "progress-page"),
-    "learner-private:user_123:progress-page",
+    `learner-private:${hashedUser}:progress-page`,
   );
+});
+
+test("learner private read cache user segments do not collide after normalization", () => {
+  const slashTag = learnerPrivateReadUserTag("user/a");
+  const questionTag = learnerPrivateReadUserTag("user?a");
+
+  assert.notEqual(slashTag, questionTag);
+  assert.match(slashTag, /^learner-private:[0-9a-f]{32}$/);
+  assert.match(questionTag, /^learner-private:[0-9a-f]{32}$/);
 });
 
 test("learner private read cache bypasses in debug and test contexts", () => {

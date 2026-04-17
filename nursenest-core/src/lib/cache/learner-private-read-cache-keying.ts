@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 
 export type LearnerPrivateReadCacheSurface =
@@ -48,8 +50,8 @@ function stableSerialize(value: unknown): string {
   return JSON.stringify(String(value));
 }
 
-function sanitizeUserIdForTag(userId: string): string {
-  return userId.trim().replace(/[^a-zA-Z0-9:_-]/g, "_").slice(0, 96) || "unknown";
+function hashUserIdForCacheSegment(userId: string): string {
+  return createHash("sha256").update(userId).digest("hex").slice(0, 32);
 }
 
 export function learnerPrivateReadAccessScopeKey(entitlement: AccessScope): string {
@@ -63,7 +65,7 @@ export function learnerPrivateReadAccessScopeKey(entitlement: AccessScope): stri
 }
 
 export function learnerPrivateReadUserTag(userId: string): string {
-  return `${LEARNER_PRIVATE_TAG_PREFIX}:${sanitizeUserIdForTag(userId)}`;
+  return `${LEARNER_PRIVATE_TAG_PREFIX}:${hashUserIdForCacheSegment(userId)}`;
 }
 
 export function learnerPrivateReadSurfaceTag(userId: string, surface: LearnerPrivateReadCacheSurface): string {
@@ -78,7 +80,7 @@ export function buildLearnerPrivateReadCacheKeyParts(
   return [
     LEARNER_PRIVATE_READ_CACHE_PREFIX,
     surface,
-    sanitizeUserIdForTag(userId),
+    hashUserIdForCacheSegment(userId),
     ...keyParts.map((part) => stableSerialize(part)),
     cacheDeploymentRevision(),
   ];
