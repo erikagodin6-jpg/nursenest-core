@@ -34,8 +34,6 @@ export async function POST(req: Request) {
   revalidatePath("/blog");
   revalidatePath("/blog", "layout");
   revalidatePath("/sitemap.xml");
-  revalidatePath("/sitemaps/blog.xml");
-  revalidatePath("/sitemaps/localized-blog.xml");
 
   return NextResponse.json({
     ok: true,

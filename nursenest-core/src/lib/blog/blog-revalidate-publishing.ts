@@ -9,6 +9,4 @@ export function revalidateBlogPublishingSurfaces() {
   revalidatePath("/");
   revalidatePath("/lessons");
   revalidatePath("/sitemap.xml");
-  revalidatePath("/sitemaps/blog.xml");
-  revalidatePath("/sitemaps/localized-blog.xml");
 }

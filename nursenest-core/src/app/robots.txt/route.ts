@@ -1,4 +1,4 @@
-import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
+import { CANONICAL_PRODUCTION_ORIGIN } from "@/lib/seo/canonical-site";
 import { MARKETING_LANGUAGES } from "@/lib/i18n/marketing-languages";
 import { isLocaleRobotsPathDisallowed } from "@/lib/i18n/language-readiness";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -44,12 +44,11 @@ const FALLBACK_BODY = [
   "Disallow: /api/",
   "Disallow: /seo/",
   "",
-  "Sitemap: https://www.nursenest.ca/sitemap.xml",
+  `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap.xml`,
 ].join("\n");
 
 export async function GET() {
   try {
-    const origin = resolveCanonicalSiteOrigin();
     const disallowedLocales = buildDisallowedLocaleLines();
 
     const body = [
@@ -61,7 +60,7 @@ export async function GET() {
       "Disallow: /seo/",
       ...(disallowedLocales ? [disallowedLocales] : []),
       "",
-      `Sitemap: ${origin}/sitemap.xml`,
+      `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap.xml`,
     ].join("\n");
 
     return new Response(body, { status: 200, headers: ROBOTS_HEADERS });

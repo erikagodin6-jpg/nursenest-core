@@ -36,8 +36,6 @@ export async function POST(req: Request) {
     revalidatePath("/blog");
     revalidatePath("/blog", "layout");
     revalidatePath("/sitemap.xml");
-    revalidatePath("/sitemaps/blog.xml");
-    revalidatePath("/sitemaps/localized-blog.xml");
     safeServerLog("cron", "blog_batch_schedule_complete", {
       durationMs: Date.now() - started,
       promoted: promoted.count,

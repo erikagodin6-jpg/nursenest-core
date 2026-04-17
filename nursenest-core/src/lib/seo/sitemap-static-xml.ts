@@ -1,25 +1,18 @@
 /**
  * Mostly synchronous sitemap URL lists (no filesystem i18n, no network).
  * Pathway lesson URLs may query Postgres via the shared loader (DB-first, catalog fallback).
- * Split into index + child sitemaps by route family for GSC reliability.
  *
- * ## When to split `core.xml` further (implementation plan — not urgent until thresholds hit)
+ * **Public surface:** a single merged urlset is served at `/sitemap.xml` (see `sitemap-all-xml.ts`).
  *
- * **Trigger:** Combined URL count in a *single* urlset approaches **50,000** (search engine limit) or XML generation
+ * ## When URL volume forces a split (not urgent until thresholds hit)
+ *
+ * **Trigger:** Combined URL count in the single urlset approaches **50,000** (search engine limit) or XML generation
  * routinely exceeds **~20–30s** / memory spikes in production.
  *
- * **Current mitigations:** `MAX_PATHWAY_DERIVED_SITEMAP_URLS` caps pathway-derived URLs; blog uses `take` cap;
- * child sitemaps already separate core / seo-pages / blog / tools / per-locale.
+ * **Mitigations today:** `MAX_PATHWAY_DERIVED_SITEMAP_URLS` caps pathway-derived URLs; blog uses `take` cap.
  *
- * **Planned steps when needed:**
- * 1. Add `sitemaps/core-pathway-lessons-0.xml`, `…-1.xml`, … each emitting ≤45k `<url>` entries, chunked by pathway id
- *    or by batched slug ranges from `listPathwayLessonSlugBatch`.
- * 2. Extend `getChildSitemapLocs()` to register each chunk (or a small index of chunk URLs).
- * 3. Keep `collectCoreUrls` for the non-lesson slice only, or rename and compose: static core + N lesson chunk routes.
- * 4. Preserve stable ordering within chunks for diff-friendly regeneration.
- * 5. Load-test: cold request latency and peak RSS on the Node process generating the largest chunk.
- *
- * Export below is for monitoring / future routing only (no behavior change today).
+ * **If splitting becomes necessary:** introduce additional **sitemap index + chunk urlsets** only if required by size
+ * or timeouts; keep `/sitemap.xml` as the one crawler entry in `robots.txt` and GSC.
  */
 export const SITEMAP_SINGLE_URLSET_SOFT_WARN_URLS = 45_000;
 
@@ -61,11 +54,9 @@ import {
   listPublishedExpansionExamMarketingPaths,
 } from "@/lib/marketing/published-regional-marketing-urls";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
+import { assertLocaleMarketingUrlsExcludePrefixedPathwayTopics } from "@/lib/seo/sitemap-locale-prefixed-path-guard";
 
-/**
- * Locales included in the sitemap index (full + partial tier only).
- * Incomplete locales are excluded — they are mostly-English and not worth indexing.
- */
+/** Locales included in merged urlset tooling (full + partial tier); sorted for deterministic URL lists. */
 const SORTED_SITEMAP_LOCALES = [...getSitemapIncludedLocales()].sort();
 
 /** Hard cap for pathway lesson + topic URLs in core sitemap (prevents multi‑GB XML / OOM). */
@@ -176,7 +167,9 @@ export async function collectPathwayLessonSeoUrls(origin: string): Promise<strin
     }
     let skip = 0;
     for (;;) {
-      const batch = await listPathwayLessonSlugBatch(pid, skip, PATHWAY_LESSON_SITEMAP_BATCH, PATHWAY_LESSON_SITEMAP_LOCALE);
+      const batch = await listPathwayLessonSlugBatch(pid, skip, PATHWAY_LESSON_SITEMAP_BATCH, PATHWAY_LESSON_SITEMAP_LOCALE, {
+        restrictToPublicMarketingSurface: true,
+      });
       if (batch.length === 0) break;
       for (const l of batch) {
         if (!push(`${o}${buildExamPathwayPath(p, `lessons/${l.slug}`)}`)) {
@@ -189,21 +182,6 @@ export async function collectPathwayLessonSeoUrls(origin: string): Promise<strin
     }
   }
   return urls;
-}
-
-/** Child sitemap `<loc>` entries (stable order for deterministic index). */
-export function getChildSitemapLocs(origin: string): string[] {
-  const o = normalizeOrigin(origin);
-  const children: string[] = [
-    `${o}/sitemaps/core.xml`,
-    `${o}/sitemaps/seo-pages.xml`,
-    `${o}/sitemaps/blog.xml`,
-    `${o}/sitemaps/tools.xml`,
-  ];
-  for (const code of SORTED_SITEMAP_LOCALES) {
-    children.push(`${o}/sitemaps/locale-${code}.xml`);
-  }
-  return children;
 }
 
 function safeLastmodDate(): string {
@@ -252,30 +230,8 @@ ${body}
 `;
 }
 
-/** Sitemap index document. */
-export function buildSitemapIndexXml(): string {
-  const origin = normalizeOrigin(resolveSitemapOrigin());
-  const lastmod = safeLastmodDate();
-  const locs = getChildSitemapLocs(origin);
-  const body = locs
-    .map((loc) => {
-      const escaped = escapeXml(loc);
-      return `  <sitemap>
-    <loc>${escaped}</loc>
-    <lastmod>${lastmod}</lastmod>
-  </sitemap>`;
-    })
-    .join("\n");
-
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${body}
-</sitemapindex>
-`;
-}
-
 /**
- * core.xml — Default-locale marketing shell only (no locale prefix, no programmatic slugs).
+ * Default-locale “core” slice (merged into `/sitemap.xml` via `collectCoreUrls`).
  */
 export async function collectCoreUrls(origin: string): Promise<string[]> {
   const o = normalizeOrigin(origin);
@@ -417,9 +373,12 @@ export function collectLocaleMarketingUrls(origin: string, locale: string): stri
     if (slug in PROGRAMMATIC_SLUG_TO_PATHWAY_PATH) continue;
     urls.push(add(`/${locale}/${slug}`));
   }
-  for (const p of collectPathwayTopicProgrammaticPublicPaths()) {
-    urls.push(add(`/${locale}${p}`));
-  }
+  // Exam-hub long-tail programmatic pages (`/{country}/{role}/{examCode}/{seoSlug}`) live only on the
+  // default marketing shell — there is no `/{lang}/…` duplicate route. Prefixing `/${locale}` here
+  // produced five-segment URLs like `/fr/us/np/fnp/...` that do not match any page (404 in GSC).
+  // Canonical URLs for those pages are already emitted in `collectCoreUrls` via
+  // `collectPathwayTopicProgrammaticUrls`.
+  assertLocaleMarketingUrlsExcludePrefixedPathwayTopics(urls, o, locale);
   return urls;
 }
 
@@ -443,49 +402,6 @@ export function collectToolsUrls(origin: string): string[] {
   return urls;
 }
 
-export async function buildCoreSitemapXml(): Promise<string> {
-  try {
-    const urls = await collectCoreUrls(resolveSitemapOrigin());
-    return buildSitemapUrlsetFromAbsoluteUrls(urls);
-  } catch {
-    return minimalUrlsetSingleHome();
-  }
-}
-
-export function buildSeoPagesSitemapXml(): string {
-  try {
-    const urls = collectSeoPagesUrls(resolveSitemapOrigin());
-    if (urls.length === 0) return minimalUrlsetSingleHome();
-    return buildSitemapUrlsetFromAbsoluteUrls(urls);
-  } catch {
-    return minimalUrlsetSingleHome();
-  }
-}
-
-export function buildToolsSitemapXml(): string {
-  try {
-    return buildSitemapUrlsetFromAbsoluteUrls(collectToolsUrls(resolveSitemapOrigin()));
-  } catch {
-    return minimalUrlsetSingleHome();
-  }
-}
-
-export function buildLocaleSitemapXml(locale: string): string {
-  try {
-    return buildSitemapUrlsetFromAbsoluteUrls(collectLocaleMarketingUrls(resolveSitemapOrigin(), locale));
-  } catch {
-    return minimalUrlsetSingleHome();
-  }
-}
-
-export function buildSitemapIndexXmlSafe(): string {
-  try {
-    return buildSitemapIndexXml();
-  } catch {
-    return minimalSitemapIndexXml();
-  }
-}
-
 export function minimalUrlsetSingleHome(): string {
   const base = normalizeOrigin(resolveSitemapOrigin());
   const loc = escapeXml(`${base}/`);
@@ -497,20 +413,6 @@ export function minimalUrlsetSingleHome(): string {
     <lastmod>${lastmod}</lastmod>
   </url>
 </urlset>
-`;
-}
-
-export function minimalSitemapIndexXml(): string {
-  const origin = normalizeOrigin(resolveSitemapOrigin());
-  const lastmod = safeLastmodDate();
-  const loc = escapeXml(`${origin}/sitemaps/core.xml`);
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <sitemap>
-    <loc>${loc}</loc>
-    <lastmod>${lastmod}</lastmod>
-  </sitemap>
-</sitemapindex>
 `;
 }
 

@@ -2,6 +2,9 @@
  * Pathway-scoped programmatic SEO pages served at
  * `/{country}/{role}/{examCode}/{seoSlug}` (marketing hub + long-tail slug).
  *
+ * **Sitemap:** list these only in the default (non-`/{lang}`) urlset (`collectPathwayTopicProgrammaticUrls`).
+ * Do not prefix marketing locale codes (`/fr/`, `/es/`, …) — those URLs are not routed and return 404.
+ *
  * Content is registry-backed (no DB reads). Sitemap emission is bounded; see
  * `MAX_PATHWAY_TOPIC_PROGRAMMATIC_SITEMAP_URLS`.
  */

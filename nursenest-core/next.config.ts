@@ -125,6 +125,18 @@ const nextConfig: NextConfig = {
       /** Older Next split-sitemap routes → unified `/sitemap.xml` for GSC + bookmarks. */
       { source: "/sitemap/0.xml", destination: "/sitemap.xml", permanent: true },
       { source: "/sitemap/1.xml", destination: "/sitemap.xml", permanent: true },
+      /** Legacy child sitemap URLs → single merged `/sitemap.xml` (one GSC entry point). */
+      { source: "/sitemaps/core.xml", destination: "/sitemap.xml", permanent: true },
+      { source: "/sitemaps/blog.xml", destination: "/sitemap.xml", permanent: true },
+      { source: "/sitemaps/seo-pages.xml", destination: "/sitemap.xml", permanent: true },
+      { source: "/sitemaps/tools.xml", destination: "/sitemap.xml", permanent: true },
+      { source: "/sitemaps/localized-blog.xml", destination: "/sitemap.xml", permanent: true },
+      ...CORE_HOSTED_MARKETING_LOCALES.map((locale) => ({
+        source: `/sitemaps/locale-${locale}.xml`,
+        destination: "/sitemap.xml",
+        permanent: true,
+      })),
+      { source: "/sitemaps/locales/:locale", destination: "/sitemap.xml", permanent: true },
       ...seoCanonicalRedirects,
       /** Institutional pricing: canonical path `/for-institutions` (footer + marketing). */
       { source: "/institutional-pricing", destination: "/for-institutions", permanent: true },
@@ -153,10 +165,6 @@ const nextConfig: NextConfig = {
         destination: `/seo/${slug}`,
       }));
 
-    const localeSitemapRewrites = CORE_HOSTED_MARKETING_LOCALES.map((locale) => ({
-      source: `/sitemaps/locale-${locale}.xml`,
-      destination: `/sitemaps/locales/${locale}`,
-    }));
     return {
       beforeFiles: [
         /**
@@ -165,7 +173,6 @@ const nextConfig: NextConfig = {
          */
         { source: "/i18n/:file", destination: "/api/assets/i18n/:file" },
         ...programmaticSeoRewrites,
-        ...localeSitemapRewrites,
       ],
     };
   },

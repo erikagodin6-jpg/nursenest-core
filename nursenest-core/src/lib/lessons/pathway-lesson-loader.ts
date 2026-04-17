@@ -1379,16 +1379,27 @@ export const listTopicClusters = cache(listTopicClustersWithDataCache);
 
 export type PathwayLessonSlugRow = { slug: string; topicSlug: string };
 
+export type ListPathwayLessonSlugBatchOptions = {
+  /**
+   * When true, only lessons that pass {@link pathwayLessonEligibleForPublicMarketingSurface}
+   * (DB: `structural_public_complete`) are returned. Required for `/sitemap.xml` so URLs match
+   * marketing lesson routes that `notFound()` when the lesson is not publicly complete.
+   */
+  restrictToPublicMarketingSurface?: boolean;
+};
+
 /** Batched slug/topic reads for sitemaps — caller iterates until batch shorter than `batchSize`. */
 export async function listPathwayLessonSlugBatch(
   pathwayId: string,
   skip: number,
   batchSize: number = PATHWAY_LESSON_SITEMAP_BATCH,
   contentLocale: string = PATHWAY_LESSON_SITEMAP_LOCALE,
+  opts?: ListPathwayLessonSlugBatchOptions,
 ): Promise<PathwayLessonSlugRow[]> {
   const take = Math.min(2000, Math.max(1, Math.floor(batchSize)));
   const sk = Math.max(0, Math.floor(skip));
   const loc = normalizePathwayLessonLocale(contentLocale);
+  const surfaceOnly = Boolean(opts?.restrictToPublicMarketingSurface);
 
   const dbHas = await pathwayHasPublishedDbLessons(pathwayId);
   if (sk === 0) {
@@ -1397,6 +1408,7 @@ export async function listPathwayLessonSlugBatch(
       pathwayId,
       locale: loc,
       pathwayLessonRuntimeSource: dbHas ? "database" : catN > 0 ? "catalog" : "none",
+      restrictToPublicMarketingSurface: surfaceOnly,
     });
   }
 
@@ -1406,7 +1418,12 @@ export async function listPathwayLessonSlugBatch(
     const rows = await dbCall(
       () =>
         prisma.pathwayLesson.findMany({
-          where: { pathwayId, status: ContentStatus.PUBLISHED, locale: loc },
+          where: {
+            pathwayId,
+            status: ContentStatus.PUBLISHED,
+            locale: loc,
+            ...(surfaceOnly ? { structuralPublicComplete: true } : {}),
+          },
           select: PATHWAY_LESSON_HUB_LIST_SELECT_WITH_SECTIONS,
           orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
           skip: sk,
@@ -1427,23 +1444,23 @@ export async function listPathwayLessonSlugBatch(
       .map((l) => ({ slug: l.slug, topicSlug: l.topicSlug }));
   }
 
-  const raw = getCatalogLessonsRaw(pathwayId).slice(sk, sk + take);
   const metaCat = lessonLocaleMeta(
     undefined,
     PATHWAY_LESSON_CANONICAL_DB_LOCALE,
     loc !== PATHWAY_LESSON_CANONICAL_DB_LOCALE,
     true,
   );
-  return raw
-    .map((hit) =>
-      applyOverlayAndStructural(
-        withLocaleMeta(normalizeLesson(hit, pathwayId), metaCat),
-        undefined,
-        pathwayId,
-        lessonDbOverlays,
-      ),
-    )
-    .map((l) => ({ slug: l.slug, topicSlug: l.topicSlug }));
+  const rawFull = getCatalogLessonsRaw(pathwayId).map((hit) =>
+    applyOverlayAndStructural(
+      withLocaleMeta(normalizeLesson(hit, pathwayId), metaCat),
+      undefined,
+      pathwayId,
+      lessonDbOverlays,
+    ),
+  );
+  const catalogForPaging = surfaceOnly ? rawFull.filter(pathwayLessonEligibleForPublicMarketingSurface) : rawFull;
+  const raw = catalogForPaging.slice(sk, sk + take);
+  return raw.map((l) => ({ slug: l.slug, topicSlug: l.topicSlug }));
 }
 
 /** Total lessons for pathway — count/sum only (audit, metrics). */

@@ -159,5 +159,5 @@ export const LANGUAGE_PROMOTION_CHECKLIST = [
   "Routing: /{locale} → 200, /{locale}/pricing → 200 (smoke test)",
   "hreflang: validate with Google Search Console or a tag inspector tool",
   "Canonical: /{locale} canonical resolves correctly; no conflict with English /",
-  "Sitemap: locale appears in /sitemaps/locale-{code}.xml with correct URLs",
+  "Sitemap: locale marketing URLs appear in merged /sitemap.xml with correct paths",
 ] as const;
