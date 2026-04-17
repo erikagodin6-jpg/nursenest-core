@@ -29,15 +29,12 @@
  * Or in dev:           npx prisma migrate dev
  */
 
-import "../src/lib/db/env-bootstrap";
-
-import { PrismaClient, CountryCode, TierCode, ExamFamily, ContentStatus } from "@prisma/client";
+import { CountryCode, TierCode, ExamFamily, ContentStatus } from "@prisma/client";
 import {
   generateCardsFromExamQuestions,
   type GeneratedFlashcardInput,
 } from "../src/lib/flashcards/flashcard-generation";
-
-const prisma = new PrismaClient();
+import { prisma } from "./lib/prisma-script-client";
 
 // ── Argument parsing ──────────────────────────────────────────────────────────
 

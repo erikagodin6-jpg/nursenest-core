@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
+import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
@@ -95,6 +96,23 @@ export default async function AccountMotivationPage() {
 
   // Server-side: load all motivation data (bounded queries)
   const payload = await loadMotivationPayload(userId);
+
+  if (payload.degraded?.active) {
+    return (
+      <div className="space-y-6">
+        <BreadcrumbTrail items={crumbs} />
+        <div className="nn-learner-page-hero">
+          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">
+            Progress
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
+            Track your consistency, topic mastery, and readiness evolution over time.
+          </p>
+        </div>
+        <LearnerSilentSectionDegradedFallback surfaceName="motivation" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

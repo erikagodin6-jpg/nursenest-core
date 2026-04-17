@@ -21,15 +21,14 @@ import path from "node:path";
 import crypto from "node:crypto";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
-import { BlogPostStatus, PrismaClient } from "@prisma/client";
+import { BlogPostStatus } from "@prisma/client";
 import { streamJsonArray } from "../../scripts/lib/stream-json-array";
-import "../src/lib/db/env-bootstrap";
+import { prisma } from "./lib/prisma-script-client";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 loadEnv({ path: path.join(__dirname, "../.env") });
 loadEnv({ path: path.join(__dirname, "../../.env") });
 
-const prisma = new PrismaClient();
 /** Safe default per user batching rules (20–25 posts per run). Override with `--batch-size`. */
 const BATCH_MAX_DEFAULT = 25;
 const BATCH_MIN = 10;

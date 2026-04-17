@@ -1,6 +1,7 @@
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 
 export type LearnerPrivateReadCacheSurface =
+  | "premium-dashboard-snapshot"
   | "report-card"
   | "readiness-page"
   | "readiness-dashboard"
@@ -13,6 +14,7 @@ export const LEARNER_PRIVATE_READ_CACHE_PREFIX = "learner-private-read";
 export const LEARNER_PRIVATE_TAG_PREFIX = "learner-private";
 
 export const ALL_LEARNER_PRIVATE_READ_SURFACES: LearnerPrivateReadCacheSurface[] = [
+  "premium-dashboard-snapshot",
   "report-card",
   "readiness-page",
   "readiness-dashboard",

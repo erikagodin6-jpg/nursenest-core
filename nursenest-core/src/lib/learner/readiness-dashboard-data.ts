@@ -30,6 +30,8 @@ import {
   loadReadinessPagePayload,
   type ReadinessPagePayload,
 } from "@/lib/learner/load-readiness-page-payload";
+import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
+import { learnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
 import { computeBenchmarkData, type BenchmarkData } from "@/lib/learner/benchmark-engine";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
@@ -271,17 +273,47 @@ async function loadReadinessDashboardDataUncached(
 ): Promise<ReadinessDashboardPayload | null> {
   if (!userId || !isDatabaseUrlConfigured()) return null;
   try {
+    const skipHeavy = shouldSkipNonCriticalLearnerWork();
     // Load base payload first (required) then augment concurrently
     const base = await loadReadinessPagePayload(userId, entitlement);
     if (!base) return null;
 
-    const [dimensions, catTrend, benchmark] = await Promise.all([
-      loadDimensionBreakdown(userId),
-      loadCatTrend(userId),
-      loadBenchmark(userId, base),
+    const [dimensionsResult, catTrendResult, benchmarkResult] = await Promise.all([
+      skipHeavy
+        ? Promise.resolve({
+            value: { byBodySystem: [], byCognitiveLevel: [], byQuestionType: [] } as DimensionBreakdown,
+            degradedPanels: ["dimension_breakdown"],
+          })
+        : loadDimensionBreakdown(userId).then((value) => ({ value, degradedPanels: [] as string[] })),
+      skipHeavy
+        ? Promise.resolve({ value: [] as CatTrendPoint[], degradedPanels: ["cat_trend"] })
+        : loadCatTrend(userId).then((value) => ({ value, degradedPanels: [] as string[] })),
+      skipHeavy
+        ? Promise.resolve({ value: null as BenchmarkData | null, degradedPanels: ["benchmark"] })
+        : loadBenchmark(userId, base).then((value) => ({ value, degradedPanels: [] as string[] })),
     ]);
 
-    return { ...base, dimensions, catTrend, benchmark };
+    const degradedPanels = [
+      ...(base.degraded?.panels ?? []),
+      ...dimensionsResult.degradedPanels,
+      ...catTrendResult.degradedPanels,
+      ...benchmarkResult.degradedPanels,
+    ];
+
+    return {
+      ...base,
+      dimensions: dimensionsResult.value,
+      catTrend: catTrendResult.value,
+      benchmark: benchmarkResult.value,
+      degraded: degradedPanels.length > 0
+        ? learnerAggregateDegradedState(
+            skipHeavy || base.degraded?.reason === "durability_degraded"
+              ? "durability_degraded"
+              : "temporarily_unavailable",
+            degradedPanels,
+          )
+        : undefined,
+    };
   } catch {
     safeServerLog("learner_readiness", "dashboard_payload_load_failed", {
       userIdPrefix: userId.slice(0, 8),

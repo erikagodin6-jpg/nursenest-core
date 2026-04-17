@@ -21,6 +21,9 @@ import { PracticeTestStatus } from "@prisma/client";
 import { loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
+import type { LearnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
+import { learnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
 import { loadStudyStreakDays } from "@/lib/learner/premium-dashboard-snapshot";
 import { getReadinessBand } from "@/components/study/cat-readiness-hero";
 import type { ReadinessBand } from "@/components/study/cat-readiness-hero";
@@ -74,6 +77,7 @@ export type MotivationPayload = {
   overallAccuracyPct: number | null;
   totalQuestionsAnswered: number;
   mockCount: number;
+  degraded?: LearnerAggregateDegradedState;
 };
 
 // ── Internal helpers ──────────────────────────────────────────────────────────
@@ -361,22 +365,49 @@ async function loadOverallAccuracy(userId: string): Promise<{
 
 async function loadMotivationPayloadUncached(userId: string): Promise<MotivationPayload> {
   if (!isDatabaseUrlConfigured()) return buildEmptyPayload();
+  if (shouldSkipNonCriticalLearnerWork()) {
+    return buildEmptyPayload(
+      learnerAggregateDegradedState("durability_degraded", [
+        "study_streak",
+        "topic_progress",
+        "recent_readiness",
+        "milestones",
+      ]),
+    );
+  }
 
   const [
-    streakDays,
-    weeklyData,
-    topicData,
-    recentReadiness,
-    accuracy,
-    mockCount,
-  ] = await Promise.all([
-    loadStudyStreakDays(userId, 30).catch(() => 0),
-    loadWeeklyActivity(userId).catch(() => ({ days: buildEmptyWeek(), lastActiveDaysAgo: null })),
-    loadTopicProgressPage(userId, 0).catch(() => ({ rows: [] as TopicProgressRow[], total: 0 })),
-    loadRecentReadiness(userId, 5).catch(() => [] as RecentReadinessPoint[]),
-    loadOverallAccuracy(userId).catch(() => ({ pct: null, total: 0 })),
-    prisma.practiceTest.count({ where: { userId, status: PracticeTestStatus.COMPLETED } }).catch(() => 0),
+    streakDaysResult,
+    weeklyDataResult,
+    topicDataResult,
+    recentReadinessResult,
+    accuracyResult,
+    mockCountResult,
+  ] = await Promise.allSettled([
+    loadStudyStreakDays(userId, 30),
+    loadWeeklyActivity(userId),
+    loadTopicProgressPage(userId, 0),
+    loadRecentReadiness(userId, 5),
+    loadOverallAccuracy(userId),
+    prisma.practiceTest.count({ where: { userId, status: PracticeTestStatus.COMPLETED } }),
   ]);
+  const degradedPanels: string[] = [];
+  const streakDays = streakDaysResult.status === "fulfilled" ? streakDaysResult.value : (degradedPanels.push("study_streak"), 0);
+  const weeklyData = weeklyDataResult.status === "fulfilled"
+    ? weeklyDataResult.value
+    : (degradedPanels.push("study_streak"), { days: buildEmptyWeek(), lastActiveDaysAgo: null });
+  const topicData = topicDataResult.status === "fulfilled"
+    ? topicDataResult.value
+    : (degradedPanels.push("topic_progress"), { rows: [] as TopicProgressRow[], total: 0 });
+  const recentReadiness = recentReadinessResult.status === "fulfilled"
+    ? recentReadinessResult.value
+    : (degradedPanels.push("recent_readiness"), [] as RecentReadinessPoint[]);
+  const accuracy = accuracyResult.status === "fulfilled"
+    ? accuracyResult.value
+    : (degradedPanels.push("overall_accuracy"), { pct: null, total: 0 });
+  const mockCount = mockCountResult.status === "fulfilled"
+    ? mockCountResult.value
+    : (degradedPanels.push("milestones"), 0);
 
   const milestones = deriveMilestones({
     streakDays,
@@ -398,6 +429,9 @@ async function loadMotivationPayloadUncached(userId: string): Promise<Motivation
     overallAccuracyPct: accuracy.pct,
     totalQuestionsAnswered: accuracy.total,
     mockCount,
+    degraded: degradedPanels.length > 0
+      ? learnerAggregateDegradedState("temporarily_unavailable", degradedPanels)
+      : undefined,
   };
 }
 
@@ -463,7 +497,7 @@ function buildEmptyWeek(): WeeklyActivityDay[] {
   });
 }
 
-function buildEmptyPayload(): MotivationPayload {
+function buildEmptyPayload(degraded?: LearnerAggregateDegradedState): MotivationPayload {
   return {
     streakDays: 0,
     lastActiveDaysAgo: null,
@@ -480,5 +514,6 @@ function buildEmptyPayload(): MotivationPayload {
     overallAccuracyPct: null,
     totalQuestionsAnswered: 0,
     mockCount: 0,
+    degraded,
   };
 }

@@ -5,6 +5,7 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
 import { LearnerInsightEnginePanel } from "@/components/student/learner-insight-engine-panel";
 import { LearnerAccountToolGrid } from "@/components/student/learner-account-tool-grid";
+import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import { LearnerProfileAccountActions } from "@/components/student/learner-profile-account-actions";
 import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
@@ -568,6 +569,7 @@ export default async function LearnerAccountOverviewPage() {
         <section className="nn-card nn-student-card-lift p-6">
           <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.activity.heading")}</h2>
           <p className="mt-1 text-sm text-muted-foreground">{t("learner.profile.activity.subtitle")}</p>
+          {activity.degraded?.active ? <div className="mt-4"><LearnerSilentSectionDegradedFallback surfaceName="profile-activity" /></div> : null}
           <div className="mt-4 grid gap-6 lg:grid-cols-3">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("learner.profile.activity.mocks")}</p>

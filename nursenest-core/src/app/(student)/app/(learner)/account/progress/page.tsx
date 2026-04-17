@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
+import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import { LearnerProgressPageContent } from "@/components/student/learner-progress-page-content";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -92,20 +93,16 @@ export default async function AccountProgressPage() {
   }
 
   const payload = await loadProgressPagePayload(userId, entitlement);
-
-  if (!payload) {
+  if (!payload || payload.degraded?.active) {
     return (
       <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <PremiumEmptyState
-          headline={t("learner.account.progress.title")}
-          body={t("learner.account.loadFailed")}
-          tone="default"
-          primaryCta={{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "primary" }}
-          secondaryCtas={[{ label: t("learner.account.nav.overview"), href: "/app/account/overview", variant: "secondary" }]}
-          visualLayout="stack"
-          ctaLayout="stack"
-        />
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.progress.title")}</h1>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.progress.intro")}</p>
+        </div>
+        <LearnerSilentSectionDegradedFallback surfaceName="progress-page" />
+        <LearnerAccountCrossLinks variant="progress" t={t} continueLesson={payload?.continueLesson ?? null} />
       </div>
     );
   }

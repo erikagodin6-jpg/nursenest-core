@@ -1,6 +1,9 @@
 import { loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
+import type { LearnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
+import { learnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
 import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
 
 export type ProfileActivityMock = {
@@ -37,6 +40,7 @@ export type LearnerProfileActivity = {
   mocks: ProfileActivityMock[];
   practiceTests: ProfileActivityPracticeTest[];
   lessons: ProfileActivityLesson[];
+  degraded?: LearnerAggregateDegradedState;
 };
 
 export type LearnerProfileActivityLimits = {
@@ -51,13 +55,23 @@ async function loadLearnerProfileActivityUncached(
 ): Promise<LearnerProfileActivity> {
   const empty: LearnerProfileActivity = { mocks: [], practiceTests: [], lessons: [] };
   if (!userId || !isDatabaseUrlConfigured()) return empty;
+  if (shouldSkipNonCriticalLearnerWork()) {
+    return {
+      ...empty,
+      degraded: learnerAggregateDegradedState("durability_degraded", [
+        "mocks",
+        "practice_tests",
+        "lessons",
+      ]),
+    };
+  }
 
   const mockTake = limits?.mocks ?? 5;
   const testTake = limits?.practiceTests ?? 5;
   const lessonTake = limits?.lessons ?? 8;
 
   try {
-    const [attempts, tests, progressRows] = await Promise.all([
+    const [attemptsResult, testsResult, progressResult] = await Promise.allSettled([
       prisma.examAttempt.findMany({
         where: { userId },
         orderBy: { createdAt: "desc" },
@@ -72,7 +86,7 @@ async function loadLearnerProfileActivityUncached(
       }),
       prisma.practiceTest.findMany({
         where: { userId },
-        orderBy: { updatedAt: "desc" },
+        orderBy: [{ updatedAt: "desc" }],
         take: 12,
         select: {
           id: true,
@@ -89,6 +103,10 @@ async function loadLearnerProfileActivityUncached(
         select: { lessonId: true, completed: true, updatedAt: true },
       }),
     ]);
+    const degradedPanels: string[] = [];
+    const attempts = attemptsResult.status === "fulfilled" ? attemptsResult.value : (degradedPanels.push("mocks"), []);
+    const tests = testsResult.status === "fulfilled" ? testsResult.value : (degradedPanels.push("practice_tests"), []);
+    const progressRows = progressResult.status === "fulfilled" ? progressResult.value : (degradedPanels.push("lessons"), []);
 
     const mocks: ProfileActivityMock[] = attempts.slice(0, mockTake).map((a) => {
       const pct = a.total > 0 ? Math.round((a.score / a.total) * 100) : 0;
@@ -117,25 +135,48 @@ async function loadLearnerProfileActivityUncached(
       };
     });
 
-    const lessonActivity: ProfileActivityLesson[] = (
-      await Promise.all(
-        progressRows.map(async (p) => {
-          const resolved = await resolveLessonRefFromProgressId({ lessonId: p.lessonId });
-          return {
-            kind: "lesson" as const,
-            lessonId: p.lessonId,
-            title: resolved?.title ?? "Lesson",
-            completed: p.completed,
-            updatedAt: p.updatedAt.toISOString(),
-            href: resolved?.href ?? `/app/lessons/${encodeURIComponent(p.lessonId)}`,
-          };
-        }),
-      )
-    ).slice(0, Math.min(lessonTake, 50));
+    const lessonActivity: ProfileActivityLesson[] = [];
+    for (const p of progressRows.slice(0, Math.min(lessonTake, 50))) {
+      try {
+        const resolved = await resolveLessonRefFromProgressId({ lessonId: p.lessonId });
+        lessonActivity.push({
+          kind: "lesson",
+          lessonId: p.lessonId,
+          title: resolved?.title ?? "Lesson",
+          completed: p.completed,
+          updatedAt: p.updatedAt.toISOString(),
+          href: resolved?.href ?? `/app/lessons/${encodeURIComponent(p.lessonId)}`,
+        });
+      } catch {
+        degradedPanels.push("lessons");
+        lessonActivity.push({
+          kind: "lesson",
+          lessonId: p.lessonId,
+          title: "Lesson",
+          completed: p.completed,
+          updatedAt: p.updatedAt.toISOString(),
+          href: `/app/lessons/${encodeURIComponent(p.lessonId)}`,
+        });
+      }
+    }
 
-    return { mocks, practiceTests, lessons: lessonActivity };
+    return {
+      mocks,
+      practiceTests,
+      lessons: lessonActivity,
+      degraded: degradedPanels.length > 0
+        ? learnerAggregateDegradedState("temporarily_unavailable", degradedPanels)
+        : undefined,
+    };
   } catch {
-    return empty;
+    return {
+      ...empty,
+      degraded: learnerAggregateDegradedState("temporarily_unavailable", [
+        "mocks",
+        "practice_tests",
+        "lessons",
+      ]),
+    };
   }
 }
 

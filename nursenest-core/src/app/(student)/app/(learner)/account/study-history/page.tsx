@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountEmptyState } from "@/components/student/learner-account-empty-state";
+import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -98,7 +99,9 @@ export default async function AccountStudyHistoryPage() {
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.studyHistory.intro")}</p>
       </div>
 
-      {total === 0 ? (
+      {activity.degraded?.active ? <LearnerSilentSectionDegradedFallback surfaceName="profile-activity" /> : null}
+
+      {total === 0 && !activity.degraded?.active ? (
         (() => {
           return (
         <LearnerAccountEmptyState

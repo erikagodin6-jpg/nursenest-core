@@ -4,6 +4,7 @@ import { PracticeTestStatus } from "@prisma/client";
 import { learnerPrivateReadAccessScopeKey, loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
@@ -20,6 +21,8 @@ import {
 } from "@/lib/learner/learner-visible-lesson-scope";
 import type { RecentMock } from "@/lib/learner/load-learner-dashboard";
 import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
+import type { LearnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
+import { learnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { loadSessionGradingAggregate } from "@/lib/learner/session-grading-aggregate";
 import { loadPathwayTopicCoverageBatch } from "@/lib/lessons/pathway-topic-coverage";
@@ -88,6 +91,7 @@ export type ProgressPagePayload = {
   questionBank: QuestionBankProgress;
   exams: PracticeExamProgress;
   continueLesson: { title: string; href: string } | null;
+  degraded?: LearnerAggregateDegradedState;
 };
 
 const TRACK_ORDER: RoleTrackSlug[] = ["rn", "rpn", "lpn", "np", "allied"];
@@ -125,6 +129,31 @@ function sortPathways(a: PathwayProgressCardModel, b: PathwayProgressCardModel):
  */
 async function loadProgressPagePayloadUncached(userId: string, entitlement: AccessScope): Promise<ProgressPagePayload | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
+  if (shouldSkipNonCriticalLearnerWork()) {
+    return {
+      lessonsPool: { available: 0, completed: 0, inProgress: 0, notStarted: 0 },
+      pathways: [],
+      questionBank: {
+        ledgerAttempted: 0,
+        ledgerAccuracyPct: null,
+        topicsPracticed: 0,
+        recentGraded: { correct: 0, total: 0, sessionCount: 0, accuracyPct: null },
+      },
+      exams: {
+        completedPracticeTests: 0,
+        recentPracticeTests: [],
+        recentMocks: [],
+      },
+      continueLesson: null,
+      degraded: learnerAggregateDegradedState("durability_degraded", [
+        "lessons_pool",
+        "pathways",
+        "question_bank",
+        "recent_exams",
+      ]),
+    };
+  }
+  try {
 
   const bundle = await loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadProgressPagePayload" });
   if (!bundle) return null;
@@ -291,7 +320,11 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
       recentMocks,
     },
     continueLesson,
+    degraded: undefined,
   };
+  } catch {
+    return null;
+  }
 }
 
 export async function loadProgressPagePayload(userId: string, entitlement: AccessScope): Promise<ProgressPagePayload | null> {

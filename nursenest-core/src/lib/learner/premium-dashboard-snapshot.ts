@@ -1,4 +1,5 @@
 import { ContentStatus, ExamDatePlanType, FlashcardDeckVisibility, Prisma, TierCode } from "@prisma/client";
+import { learnerPrivateReadAccessScopeKey, loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
@@ -19,6 +20,8 @@ import {
 } from "@/lib/learner/load-learner-dashboard";
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
 import type { TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
+import type { LearnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
+import { learnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
 
 export type PathwayProgressRow = {
   pathwayId: string;
@@ -257,9 +260,10 @@ export type PremiumDashboardSnapshot = {
     examDate: Date | null;
     examDatePlanType: ExamDatePlanType | null;
   };
+  degraded?: LearnerAggregateDegradedState;
 };
 
-export async function loadPremiumDashboardSnapshot(
+async function loadPremiumDashboardSnapshotUncached(
   userId: string,
   entitlement: AccessScope,
 ): Promise<PremiumDashboardSnapshot | null> {
@@ -413,6 +417,15 @@ export async function loadPremiumDashboardSnapshot(
         examDate: bundle.user.examDate ?? null,
         examDatePlanType: bundle.user.examDatePlanType ?? null,
       },
+      degraded: skipOptional
+        ? learnerAggregateDegradedState("durability_degraded", [
+            "study_streak",
+            "strong_topic",
+            "lesson_continuations",
+            "flashcards",
+            "insights",
+          ])
+        : undefined,
     };
   } catch {
     safeServerLog("learner_dashboard", "premium_snapshot_load_failed", {
@@ -420,4 +433,23 @@ export async function loadPremiumDashboardSnapshot(
     });
     return null;
   }
+}
+
+export async function loadPremiumDashboardSnapshot(
+  userId: string,
+  entitlement: AccessScope,
+): Promise<PremiumDashboardSnapshot | null> {
+  return loadWithLearnerPrivateReadCache(
+    {
+      surface: "premium-dashboard-snapshot",
+      userId,
+      ttlSeconds: 45,
+      keyParts: [
+        learnerPrivateReadAccessScopeKey(entitlement),
+        { degraded: shouldSkipNonCriticalLearnerWork() },
+      ],
+      bypass: !entitlement.hasAccess || entitlement.reason === "admin_override",
+    },
+    () => loadPremiumDashboardSnapshotUncached(userId, entitlement),
+  );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
+import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -98,20 +99,33 @@ export default async function AccountReadinessPage() {
   }
 
   const payload = await loadReadinessDashboardData(userId, entitlement);
+  const preferredPathwayId =
+    payload?.snapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
+    payload?.snapshot.pathways[0]?.pathwayId ??
+    null;
 
-  if (!payload) {
+  const catHref = resolveStudyLoopCatHref({
+    authState: "signed_in",
+    pathwayId: preferredPathwayId,
+    availablePathwayIds: payload?.snapshot.pathways.map((p) => p.pathwayId),
+    intent: "start",
+  });
+
+  if (!payload || payload.degraded?.active) {
     return (
       <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <PremiumEmptyState
-          headline={t("learner.account.readiness.title")}
-          body={t("learner.account.loadFailed")}
-          tone="default"
-          primaryCta={{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "primary" }}
-          secondaryCtas={[{ label: t("learner.account.nav.overview"), href: "/app/account/overview", variant: "secondary" }]}
-          visualLayout="stack"
-          ctaLayout="stack"
-        />
+        <div className="nn-learner-page-hero">
+          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">
+            {t("learner.account.readiness.title")}
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
+            {t("learner.account.readiness.intro")}
+          </p>
+        </div>
+        <LearnerStudyQuickLinksCard t={t} id="readiness-study-quick-links" catHref={catHref} />
+        <LearnerSilentSectionDegradedFallback surfaceName="readiness-dashboard" />
+        <LearnerAccountCrossLinks variant="readiness" t={t} />
       </div>
     );
   }
@@ -122,18 +136,6 @@ export default async function AccountReadinessPage() {
   const weakTopics = topicPerf?.weakTopics ?? [];
   const strongTopics = topicPerf?.strongTopics ?? [];
   const trends = topicPerf?.trends ?? [];
-
-  const preferredPathwayId =
-    snapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
-    snapshot.pathways[0]?.pathwayId ??
-    null;
-
-  const catHref = resolveStudyLoopCatHref({
-    authState: "signed_in",
-    pathwayId: preferredPathwayId,
-    availablePathwayIds: snapshot.pathways.map((p) => p.pathwayId),
-    intent: "start",
-  });
 
   // Overall accuracy from UserTopicStat aggregated via practice stats
   const overallAccuracyPct =

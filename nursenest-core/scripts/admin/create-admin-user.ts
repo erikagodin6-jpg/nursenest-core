@@ -4,16 +4,13 @@
  * Usage (from nursenest-core directory):
  *   npx tsx scripts/admin/create-admin-user.ts user@example.com
  */
-import { PrismaClient, UserRole } from "@prisma/client";
-
-import "../../src/lib/db/env-bootstrap";
+import { UserRole } from "@prisma/client";
+import { prisma } from "../lib/prisma-script-client";
 
 if (!process.env.DATABASE_URL?.trim()) {
   console.error("DATABASE_URL is not set. Configure Postgres and retry.");
   process.exit(1);
 }
-
-const prisma = new PrismaClient();
 
 async function main(): Promise<void> {
   const emailRaw = process.argv[2]?.trim();

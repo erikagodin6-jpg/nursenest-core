@@ -4,7 +4,10 @@ import { PracticeTestStatus } from "@prisma/client";
 import { learnerPrivateReadAccessScopeKey, loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import type { LearnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
+import { learnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
 import { loadPremiumDashboardSnapshot, type PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import { loadUnifiedTopicPerformance, type TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -20,6 +23,7 @@ export type ReadinessPagePayload = {
   snapshot: PremiumDashboardSnapshot;
   topicPerf: TopicPerformanceSnapshot | null;
   catSignal: CatReadinessSignal | null;
+  degraded?: LearnerAggregateDegradedState;
 };
 
 function parseCatAccuracy(res: PracticeTestResultsJson | null): number | null {
@@ -72,15 +76,24 @@ async function loadCatSignal(userId: string): Promise<CatReadinessSignal | null>
 async function loadReadinessPagePayloadUncached(userId: string, entitlement: AccessScope): Promise<ReadinessPagePayload | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
   try {
-    const [snapshot, topicPerf, catSignal] = await Promise.all([
+    const skipHeavy = shouldSkipNonCriticalLearnerWork();
+    const [snapshot, topicPerfResult, catSignalResult] = await Promise.all([
       loadPremiumDashboardSnapshot(userId, entitlement),
-      loadUnifiedTopicPerformance(userId, entitlement, 12).catch(() => {
-        safeServerLog("learner_readiness", "topic_performance_block_failed", {
-          userIdPrefix: userId.slice(0, 8),
-        });
-        return null;
-      }),
-      loadCatSignal(userId),
+      skipHeavy
+        ? Promise.resolve({ value: null as TopicPerformanceSnapshot | null, degradedPanels: ["topic_performance"] })
+        : loadUnifiedTopicPerformance(userId, entitlement, 12)
+            .then((value) => ({ value, degradedPanels: [] as string[] }))
+            .catch(() => {
+              safeServerLog("learner_readiness", "topic_performance_block_failed", {
+                userIdPrefix: userId.slice(0, 8),
+              });
+              return { value: null as TopicPerformanceSnapshot | null, degradedPanels: ["topic_performance"] };
+            }),
+      skipHeavy
+        ? Promise.resolve({ value: null as CatReadinessSignal | null, degradedPanels: ["cat_signal"] })
+        : loadCatSignal(userId)
+            .then((value) => ({ value, degradedPanels: [] as string[] }))
+            .catch(() => ({ value: null as CatReadinessSignal | null, degradedPanels: ["cat_signal"] })),
     ]);
 
     if (!snapshot) {
@@ -90,7 +103,25 @@ async function loadReadinessPagePayloadUncached(userId: string, entitlement: Acc
       return null;
     }
 
-    return { snapshot, topicPerf, catSignal };
+    const degradedPanels = [
+      ...(snapshot.degraded?.panels ?? []),
+      ...topicPerfResult.degradedPanels,
+      ...catSignalResult.degradedPanels,
+    ];
+
+    return {
+      snapshot,
+      topicPerf: topicPerfResult.value,
+      catSignal: catSignalResult.value,
+      degraded: degradedPanels.length > 0
+        ? learnerAggregateDegradedState(
+            skipHeavy || snapshot.degraded?.reason === "durability_degraded"
+              ? "durability_degraded"
+              : "temporarily_unavailable",
+            degradedPanels,
+          )
+        : undefined,
+    };
   } catch {
     safeServerLog("learner_readiness", "payload_load_failed", {
       userIdPrefix: userId.slice(0, 8),

@@ -17,6 +17,9 @@
 import { prisma } from "@/lib/db";
 import { loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
+import type { LearnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
+import { learnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
 import {
   buildReviewQueue,
   buildReviewQueueSummary,
@@ -126,6 +129,7 @@ export interface ReviewQueueInitialData {
    * Only the paginated slices above are sent.
    * Further pages are fetched via server actions.
    */
+  degraded?: LearnerAggregateDegradedState;
 }
 
 function emptyInitialData(): ReviewQueueInitialData {
@@ -155,6 +159,12 @@ async function loadReviewQueueInitialDataUncached(
   userId: string,
 ): Promise<ReviewQueueInitialData> {
   if (!userId || !isDatabaseUrlConfigured()) return emptyInitialData();
+  if (shouldSkipNonCriticalLearnerWork()) {
+    return {
+      ...emptyInitialData(),
+      degraded: learnerAggregateDegradedState("durability_degraded", ["question_review_queue"]),
+    };
+  }
 
   const since = new Date(Date.now() - HISTORY_DAYS * 24 * 60 * 60 * 1000);
 
@@ -175,7 +185,10 @@ async function loadReviewQueueInitialDataUncached(
     });
   } catch {
     // DB errors must not break the page — return empty queue
-    return emptyInitialData();
+    return {
+      ...emptyInitialData(),
+      degraded: learnerAggregateDegradedState("temporarily_unavailable", ["question_review_queue"]),
+    };
   }
   const rawAttempts = recentAttempts.slice(0, MAX_SESSIONS);
 
@@ -222,7 +235,7 @@ export async function loadReviewQueuePage(
   priority: ReviewPriority,
   page: number,
 ): Promise<{ items: ScoredReviewItem[]; total: number; hasMore: boolean }> {
-  if (!userId || !isDatabaseUrlConfigured()) {
+  if (!userId || !isDatabaseUrlConfigured() || shouldSkipNonCriticalLearnerWork()) {
     return { items: [], total: 0, hasMore: false };
   }
 

@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerReportCardPremium } from "@/components/student/learner-report-card-premium";
+import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
@@ -91,37 +92,34 @@ export default async function AccountReportCardPage() {
   }
 
   const report = await loadReportCardData(userId, entitlement);
-
-  if (!report) {
-    return (
-      <div className="space-y-6">
-        <BreadcrumbTrail items={crumbs} />
-        <PremiumEmptyState
-          headline={t("learner.account.reportCard.title")}
-          body={t("learner.reportCard.loadFailed")}
-          tone="default"
-          primaryCta={{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "primary" }}
-          secondaryCtas={[{ label: t("learner.account.nav.overview"), href: "/app/account/overview", variant: "secondary" }]}
-          visualLayout="stack"
-          ctaLayout="stack"
-        />
-      </div>
-    );
-  }
-
   const weakTopicKey =
-    report.weakTopics[0]?.normalizedTopic?.trim() ||
-    report.weakTopics[0]?.topic?.trim() ||
-    report.recommendedQuizTopic?.trim() ||
+    report?.weakTopics[0]?.normalizedTopic?.trim() ||
+    report?.weakTopics[0]?.topic?.trim() ||
+    report?.recommendedQuizTopic?.trim() ||
     undefined;
   const preferredPathwayId =
-    report.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? report.pathways[0]?.pathwayId ?? null;
+    report?.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? report?.pathways[0]?.pathwayId ?? null;
   const catHref = resolveStudyLoopCatHref({
     authState: "signed_in",
     pathwayId: preferredPathwayId,
-    availablePathwayIds: report.pathways.map((p) => p.pathwayId),
+    availablePathwayIds: report?.pathways.map((p) => p.pathwayId),
     intent: "start",
   });
+
+  if (!report || report.degraded?.active) {
+    return (
+      <div className="space-y-6">
+        <BreadcrumbTrail items={crumbs} />
+        <div className="nn-learner-page-hero">
+          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.account.reportCard.title")}</h1>
+          <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">{t("learner.account.reportCard.intro")}</p>
+        </div>
+        <LearnerStudyQuickLinksCard t={t} id="report-card-study-quick-links" catHref={catHref} />
+        <LearnerSilentSectionDegradedFallback surfaceName="report-card" />
+        <LearnerAccountCrossLinks variant="report-card" t={t} weakTopicKey={weakTopicKey} pathwayId={preferredPathwayId} />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

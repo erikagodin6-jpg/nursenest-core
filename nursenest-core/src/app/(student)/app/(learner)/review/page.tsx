@@ -17,6 +17,7 @@ import { FlashcardReviewSection } from "@/components/study/flashcard-review-sect
 import { MasteredRecentlySection } from "@/components/study/mastered-recently-section";
 import { ReviewQueueClient } from "@/app/(student)/app/(learner)/review/review-queue-client";
 import { ContextualPaywallCard } from "@/components/study/premium-gate";
+import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import type { UnifiedReviewData } from "@/lib/study/unified-review-types";
 import { BROWSE_LESSONS_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
 
@@ -109,7 +110,11 @@ export default async function ReviewQueuePage() {
       <UnifiedReviewHero summary={unified.summary} />
 
       {/* ── Focused session launch cards (question-tier based) ─────────────── */}
-      <ReviewStartCards summary={legacyQueues.summary} />
+      {legacyQueues.degraded?.active ? (
+        <LearnerSilentSectionDegradedFallback surfaceName="review-queue" />
+      ) : (
+        <ReviewStartCards summary={legacyQueues.summary} />
+      )}
 
       {/* ── Flashcard decks due (SM-2 scheduled) ──────────────────────────── */}
       <FlashcardReviewSection items={allFlashcardItems} />
@@ -118,7 +123,7 @@ export default async function ReviewQueuePage() {
       <ConceptRiskSection items={unified.highRisk} />
 
       {/* ── Question review queue (all tiers, paginated) ──────────────────── */}
-      {legacyQueues.summary.total > 0 ? (
+      {!legacyQueues.degraded?.active && legacyQueues.summary.total > 0 ? (
         <section aria-label="Question review queue">
           <h2
             className="mb-3 text-sm font-bold"

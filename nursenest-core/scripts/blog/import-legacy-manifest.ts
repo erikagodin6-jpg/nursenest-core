@@ -10,7 +10,6 @@
  *
  * Writes: data/audit/blog-deduplication-from-legacy.json
  */
-import "../../src/lib/db/env-bootstrap";
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
@@ -21,16 +20,15 @@ import {
   BlogPostTemplate,
   BlogWorkflowStatus,
   Prisma,
-  PrismaClient,
 } from "@prisma/client";
 import { isDatabaseUrlConfigured } from "../../src/lib/db/safe-database";
+import { prisma } from "../lib/prisma-script-client";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.join(__dirname, "..", "..", "..");
 const DEFAULT_MANIFEST = path.join(REPO_ROOT, "data/blog-manifest/batch-01/batch-01-import-ready.json");
 const DEDUPE_OUT = path.join(REPO_ROOT, "data/audit/blog-deduplication-from-legacy.json");
 
-const prisma = new PrismaClient();
 const MIN_BODY_CHARS = 200;
 const LEGACY_SOURCE = "legacy-manifest:batch-01-import-ready.json";
 

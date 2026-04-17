@@ -9,6 +9,8 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { sanitizeSessionQuestionIds } from "@/lib/exams/exam-session-bounds";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { buildVisibleLessonScopeForLearner } from "@/lib/learner/learner-visible-lesson-scope";
+import type { LearnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
+import { learnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
 import { computeReadiness } from "@/lib/learner/readiness-score";
 import {
   buildPathwayStudySummariesFromLessonInventory,
@@ -116,6 +118,7 @@ export type ReportCardData = {
    * Null when DB not configured or no score is available to compare.
    */
   peerBenchmark: PeerComparisonResult | null;
+  degraded?: LearnerAggregateDegradedState;
 };
 
 /** Enough recent mocks for tier splits, weekly trend (~10w), and mock log — single bounded query. */
@@ -409,6 +412,13 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
       recommendedQuizTopic: null,
       mockLog: mockSlices.mockLog,
       peerBenchmark: null,
+      degraded: learnerAggregateDegradedState("durability_degraded", [
+        "bank_sessions",
+        "question_tier_breakdown",
+        "topic_performance",
+        "practice_tests",
+        "peer_benchmark",
+      ]),
     };
   }
 
@@ -644,6 +654,7 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
       recommendedQuizTopic: dash.recommendedQuizTopic,
       mockLog,
       peerBenchmark: peerBenchmark ?? null,
+      degraded: undefined,
     };
   } catch {
     safeServerLog("learner_report_card", "report_card_load_failed", {
