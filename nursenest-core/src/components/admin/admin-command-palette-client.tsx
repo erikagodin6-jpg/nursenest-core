@@ -1,8 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useId, useRef } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Database, LayoutDashboard, Pencil } from "lucide-react";
+import { Pencil } from "lucide-react";
+import {
+  ADMIN_COMMAND_PALETTE_ACTIONS,
+  type AdminCommandPaletteAction,
+} from "@/components/admin/admin-command-palette-actions";
+import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
+import type { StaffTier } from "@/lib/auth/staff-roles";
 
 function lessonAdminEditHref(pathname: string): string | null {
   const m = /^\/app\/lessons\/([^/]+)\/?$/.exec(pathname);
@@ -15,7 +21,26 @@ function isAppleLikePlatform(): boolean {
   return /Mac|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
-export function AdminCommandPaletteClient() {
+const hoverByAccent: Record<AdminCommandPaletteAction["accent"], string> = {
+  brand: "hover:bg-[color-mix(in_srgb,var(--semantic-info)_12%,transparent)]",
+  success: "hover:bg-[color-mix(in_srgb,var(--semantic-success)_10%,transparent)]",
+  warning: "hover:bg-[color-mix(in_srgb,var(--semantic-warning)_10%,transparent)]",
+  info: "hover:bg-[color-mix(in_srgb,var(--semantic-chart-3)_10%,transparent)]",
+};
+
+const iconByAccent: Record<AdminCommandPaletteAction["accent"], string> = {
+  brand: "text-[var(--semantic-brand)]",
+  success: "text-[var(--semantic-success)]",
+  warning: "text-[var(--semantic-warning)]",
+  info: "text-[var(--semantic-chart-3)]",
+};
+
+const focusRing =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]";
+
+type Props = { staffTier: StaffTier };
+
+export function AdminCommandPaletteClient({ staffTier }: Props) {
   const router = useRouter();
   const pathname = usePathname() ?? "";
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -23,6 +48,21 @@ export function AdminCommandPaletteClient() {
   const descId = useId();
 
   const lessonEditHref = lessonAdminEditHref(pathname);
+
+  const filteredActions = useMemo(
+    () => ADMIN_COMMAND_PALETTE_ACTIONS.filter((a) => isNavHrefAllowedForStaffTier(staffTier, a.href)),
+    [staffTier],
+  );
+
+  const lessonRow = useMemo(() => {
+    if (lessonEditHref && isNavHrefAllowedForStaffTier(staffTier, lessonEditHref)) {
+      return { href: lessonEditHref, mode: "edit" as const };
+    }
+    if (isNavHrefAllowedForStaffTier(staffTier, "/admin/lessons")) {
+      return { href: "/admin/lessons", mode: "browse" as const };
+    }
+    return null;
+  }, [lessonEditHref, staffTier]);
 
   const close = useCallback(() => {
     dialogRef.current?.close();
@@ -74,7 +114,7 @@ export function AdminCommandPaletteClient() {
       <button
         type="button"
         tabIndex={-1}
-        aria-label="Open staff command palette"
+        aria-label="Open admin command palette"
         title=""
         className="pointer-events-auto fixed top-0 right-0 z-[560] h-14 w-14 cursor-default border-0 bg-transparent p-0 opacity-0"
         onClick={(e) => {
@@ -99,67 +139,53 @@ export function AdminCommandPaletteClient() {
       >
         <div className="border-b px-4 py-3" style={{ borderColor: "var(--semantic-border-soft)" }}>
           <p id={titleId} className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-            Staff
+            Admin
           </p>
           <p id={descId} className="mt-0.5 text-sm text-[var(--semantic-text-secondary)]">
-            Quick navigation
+            Quick navigation (role-scoped)
           </p>
         </div>
-        <div className="flex flex-col gap-1 p-2">
-          <button
-            type="button"
-            className="flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_12%,transparent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
-            onClick={() => go("/admin")}
-          >
-            <LayoutDashboard
-              className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-brand)]"
-              aria-hidden
-            />
-            <span>
-              <span className="block font-semibold">Admin dashboard</span>
-              <span className="block text-xs text-[var(--semantic-text-muted)]">Open /admin overview</span>
-            </span>
-          </button>
-
-          {lessonEditHref ? (
+        <div className="flex max-h-[min(70vh,28rem)] flex-col gap-1 overflow-y-auto p-2">
+          {lessonRow ? (
             <button
               type="button"
-              className="flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-success)_10%,transparent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
-              onClick={() => go(lessonEditHref)}
+              className={`flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition ${hoverByAccent.success} ${focusRing}`}
+              onClick={() => go(lessonRow.href)}
             >
-              <Pencil className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+              <Pencil className={`mt-0.5 h-4 w-4 shrink-0 ${iconByAccent.success}`} aria-hidden />
               <span>
-                <span className="block font-semibold">Edit this lesson</span>
-                <span className="block text-xs text-[var(--semantic-text-muted)]">Pathway / content lesson in admin</span>
+                <span className="block font-semibold">
+                  {lessonRow.mode === "edit" ? "Edit this lesson" : "Lessons library"}
+                </span>
+                <span className="block text-xs text-[var(--semantic-text-muted)]">
+                  {lessonRow.mode === "edit" ? "Open this lesson in admin" : "Browse and edit lessons"}
+                </span>
               </span>
             </button>
-          ) : (
-            <button
-              type="button"
-              className="flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-success)_10%,transparent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
-              onClick={() => go("/admin/lessons")}
-            >
-              <Pencil className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
-              <span>
-                <span className="block font-semibold">Lessons library</span>
-                <span className="block text-xs text-[var(--semantic-text-muted)]">Browse and edit lessons</span>
-              </span>
-            </button>
-          )}
+          ) : null}
 
-          <button
-            type="button"
-            className="flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-warning)_10%,transparent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
-            onClick={() => go("/admin/content")}
-          >
-            <Database className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-warning)]" aria-hidden />
-            <span>
-              <span className="block font-semibold">Content &amp; coverage</span>
-              <span className="block text-xs text-[var(--semantic-text-muted)]">Metrics and pathway snapshot</span>
-            </span>
-          </button>
+          {filteredActions.map((a) => {
+            const Icon = a.Icon;
+            return (
+              <button
+                key={a.id}
+                type="button"
+                className={`flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition ${hoverByAccent[a.accent]} ${focusRing}`}
+                onClick={() => go(a.href)}
+              >
+                <Icon className={`mt-0.5 h-4 w-4 shrink-0 ${iconByAccent[a.accent]}`} aria-hidden />
+                <span>
+                  <span className="block font-semibold">{a.title}</span>
+                  <span className="block text-xs text-[var(--semantic-text-muted)]">{a.subtitle}</span>
+                </span>
+              </button>
+            );
+          })}
         </div>
-        <div className="border-t px-4 py-2 text-[11px] text-[var(--semantic-text-muted)]" style={{ borderColor: "var(--semantic-border-soft)" }}>
+        <div
+          className="border-t px-4 py-2 text-[11px] text-[var(--semantic-text-muted)]"
+          style={{ borderColor: "var(--semantic-border-soft)" }}
+        >
           <kbd className="rounded border px-1 py-0.5 font-mono text-[10px]" style={{ borderColor: "var(--semantic-border-soft)" }}>
             {isAppleLikePlatform() ? "⌘" : "Ctrl"}+K
           </kbd>{" "}

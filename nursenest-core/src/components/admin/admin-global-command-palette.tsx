@@ -4,11 +4,11 @@ import { getStaffSession } from "@/lib/auth/staff-session";
 import { AdminGlobalCommandPaletteUi } from "@/components/admin/admin-global-command-palette-ui";
 
 /**
- * Staff-only command palette entry (keyboard + invisible hotspot). Rendered only when
- * {@link getStaffSession} resolves — no markup or client bundle for learners.
+ * Database-backed staff only (Cmd/Ctrl+K). No client chunk for learners. Passes tier so quick links
+ * match {@link isNavHrefAllowedForStaffTier} (same rules as admin nav).
  */
 export async function AdminGlobalCommandPalette() {
   const staff = await getStaffSession();
   if (!staff) return null;
-  return <AdminGlobalCommandPaletteUi />;
+  return <AdminGlobalCommandPaletteUi staffTier={staff.tier} />;
 }

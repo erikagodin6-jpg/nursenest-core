@@ -1,4 +1,5 @@
 import { createElement } from "react";
+import { isPathAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
 import { getStaffSession } from "@/lib/auth/staff-session";
 import {
   getInlineContentResolved,
@@ -10,9 +11,12 @@ export type { InlineContentResolved };
 
 export { preloadInlineContentMap };
 
+/** RBAC path aligned with PATCH `/api/admin/inline-content`. */
+const INLINE_CONTENT_API_PATH = "/api/admin/inline-content";
+
 /**
  * Server components: resolve DB-backed copy by `contentKey`, then either render plain markup for
- * visitors or dynamically import the tiny admin client editor (staff only — matches `/api/admin/inline-content` RBAC).
+ * visitors or dynamically import the client editor only when staff may call the inline-content API.
  */
 
 type Preloaded = Record<string, InlineContentResolved>;
@@ -28,7 +32,7 @@ export async function EditableText(props: {
   const { contentKey, defaultText, preloaded, className, as: Tag = "p" } = props;
   const staff = await getStaffSession();
   const { text, kind } = await getInlineContentResolved(contentKey, defaultText, "PLAIN", preloaded);
-  if (!staff) {
+  if (!staff || !isPathAllowedForStaffTier(staff.tier, INLINE_CONTENT_API_PATH)) {
     return <Tag className={className}>{text}</Tag>;
   }
   const { EditableTextClient } = await import("@/components/inline-content/editable-inline-client");
@@ -55,7 +59,7 @@ export async function EditableHeading(props: {
   const { contentKey, defaultText, preloaded, className, as: Tag = "h2" } = props;
   const staff = await getStaffSession();
   const { text, kind } = await getInlineContentResolved(contentKey, defaultText, "PLAIN", preloaded);
-  if (!staff) {
+  if (!staff || !isPathAllowedForStaffTier(staff.tier, INLINE_CONTENT_API_PATH)) {
     return createElement(Tag, { className }, text);
   }
   const { EditableHeadingClient } = await import("@/components/inline-content/editable-inline-client");
@@ -81,7 +85,7 @@ export async function EditableRichText(props: {
   const { contentKey, defaultHtml, preloaded, className } = props;
   const staff = await getStaffSession();
   const { text, kind } = await getInlineContentResolved(contentKey, defaultHtml, "RICH_HTML", preloaded);
-  if (!staff) {
+  if (!staff || !isPathAllowedForStaffTier(staff.tier, INLINE_CONTENT_API_PATH)) {
     return <div className={className} dangerouslySetInnerHTML={{ __html: text }} />;
   }
   const { EditableRichTextClient } = await import("@/components/inline-content/editable-inline-client");
