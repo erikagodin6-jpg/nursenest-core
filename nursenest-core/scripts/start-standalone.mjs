@@ -38,7 +38,8 @@ if (process.env.NODE_ENV !== "production") {
 const publicPort = Number.parseInt(process.env.PORT ?? "3000", 10) || 3000;
 const publicHost = process.env.HOSTNAME || "0.0.0.0";
 const internalHost = "127.0.0.1";
-const readinessProbePath = "/_nn_bootstrap_ready_check__";
+/** Internal child readiness probe: use a real lightweight route so readiness never falls through locale routing. */
+const readinessProbePath = "/api/health";
 const bootstrapReadyTimeoutMs = Number.parseInt(process.env.NN_BOOTSTRAP_READY_TIMEOUT_MS ?? "900000", 10) || 900000;
 const bootstrapTestDelayMs = Number.parseInt(process.env.NN_BOOTSTRAP_TEST_DELAY_MS ?? "0", 10) || 0;
 const memMb = process.env.NODE_MAX_OLD_SPACE_SIZE_MB ?? "512";
@@ -98,7 +99,7 @@ function waitForChildReadiness({ internalPort, state }) {
               hostname: internalHost,
               port: internalPort,
               path: readinessProbePath,
-              method: "HEAD",
+              method: "GET",
               timeout: 1000,
             },
             (res) => {
