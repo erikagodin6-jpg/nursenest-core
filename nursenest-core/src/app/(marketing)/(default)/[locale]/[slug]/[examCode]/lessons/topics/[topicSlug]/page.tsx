@@ -14,7 +14,7 @@ import {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   getLessonsForTopicPage,
   getPathwayLessonsPage,
-  listTopicClusters,
+  listTopicClustersForPublicNavigation,
 } from "@/lib/lessons/pathway-lesson-loader";
 import {
   pathwayLessonTopicClusterMetaDescription,
@@ -136,7 +136,7 @@ export async function generateMetadata({ params }: Pick<Props, "params">): Promi
       const canonical = absoluteUrl(canonicalPath);
       const loc = await getMarketingLocaleForDefaultRoute();
       try {
-        const topicClusters = await listTopicClusters(pathway.id, loc);
+        const topicClusters = await listTopicClustersForPublicNavigation(pathway.id, loc);
         const label =
           topicClusters.find((t) => t.topicSlug === topicSlug)?.label ?? topicSlug.replace(/-/g, " ");
         const title = pathwayLessonTopicClusterMetaTitle(pathway, label);
@@ -262,9 +262,9 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
     redirect(pageResult.page > 1 ? `${topicBase}?page=${pageResult.page}` : topicBase);
   }
 
-  let topicClusters: Awaited<ReturnType<typeof listTopicClusters>> = [];
+  let topicClusters: Awaited<ReturnType<typeof listTopicClustersForPublicNavigation>> = [];
   try {
-    topicClusters = await listTopicClusters(pathway.id, lessonContentLocale);
+    topicClusters = await listTopicClustersForPublicNavigation(pathway.id, lessonContentLocale);
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
     safeServerLog("exam_pathway_hub", "hub_data_load_failed", {

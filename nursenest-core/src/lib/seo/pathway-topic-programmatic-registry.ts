@@ -534,7 +534,14 @@ function buildRegistryMaps(): {
   for (const pathway of listPublishedExamPathwaysForPublicSite()) {
     for (const row of expandRowsForPathway(pathway)) {
       const k = registryKey(row.pathwayId, row.seoSlug);
-      if (byKey.has(k)) continue;
+      if (row.page.slug !== row.seoSlug) {
+        throw new Error(
+          `Pathway topic programmatic registry drift: page.slug (${row.page.slug}) !== seoSlug (${row.seoSlug}) for ${row.pathwayId}`,
+        );
+      }
+      if (byKey.has(k)) {
+        throw new Error(`Duplicate pathway topic programmatic seoSlug for ${row.pathwayId}: ${row.seoSlug}`);
+      }
       byKey.set(k, row);
       rows.push(row);
     }

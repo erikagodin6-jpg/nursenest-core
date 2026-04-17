@@ -10,7 +10,7 @@ import {
   countPathwayLessonsPublic,
   getPathwayLessonsPage,
   getPathwayLessonsPageFresh,
-  listTopicClusters,
+  listTopicClustersForPublicNavigation,
   resolvePathwayLaunchBundle,
   type PathwayLessonsPageResult,
   type ResolvedPathwayLaunchBundle,
@@ -189,7 +189,7 @@ export async function loadPathwayLessonsHubAggregates(
       run: () =>
         skipLaunchBundle ? Promise.resolve(null) : resolvePathwayLaunchBundle(pathway.id, lessonContentLocale),
     },
-    { name: "topic_clusters", run: () => listTopicClusters(pathway.id, lessonContentLocale) },
+    { name: "topic_clusters", run: () => listTopicClustersForPublicNavigation(pathway.id, lessonContentLocale) },
   ];
 
   const settled = await Promise.allSettled(tasks.map((t) => runHubOptionalTask(t.run())));

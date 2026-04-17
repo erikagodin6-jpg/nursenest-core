@@ -1,16 +1,16 @@
 /**
- * Pure sitemap gate for pathway topic cluster URLs: keep only slugs where an async check reports
+ * Pure gate for public pathway topic links: keep only slugs where an async check reports
  * at least one visible topic-page lesson (typically {@link getLessonsForTopicPage} with pageSize 1).
  * No server/DB imports — unit-testable.
  */
-export type TopicClusterSitemapCandidate = { topicSlug: string };
+export type TopicClusterPublicCandidate = { topicSlug: string };
 
 export type TopicPageTotalCheck = (topicSlug: string) => Promise<{ total: number }>;
 
 /**
  * Preserves input order. Drops empty/whitespace slugs and clusters whose check returns `total <= 0`.
  */
-export async function filterTopicClustersForSitemapByTopicPageTotal<T extends TopicClusterSitemapCandidate>(
+export async function filterTopicClustersForPublicNavigationByTopicPageTotal<T extends TopicClusterPublicCandidate>(
   clusters: readonly T[],
   check: TopicPageTotalCheck,
 ): Promise<T[]> {
