@@ -2,10 +2,9 @@ import "server-only";
 import { cache } from "react";
 import { UserRole } from "@prisma/client";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { loadUserRoleFromDbIdentity } from "@/lib/auth/admin-role-source";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { isStaffRole, staffTierFromRole, type StaffTier } from "@/lib/auth/staff-roles";
+import type { StaffTier } from "@/lib/auth/staff-roles";
 
 export type StaffSession = {
   userId: string;
@@ -27,21 +26,6 @@ async function loadStaffSession(): Promise<StaffSession | null> {
   let userId = typeof su?.id === "string" && su.id.trim().length > 0 ? su.id.trim() : undefined;
   const emailRaw = typeof su?.email === "string" && su.email.trim().length > 0 ? su.email.trim() : null;
 
-  if (!userId && emailRaw && isDatabaseUrlConfigured()) {
-    try {
-      const byEmail = await prisma.user.findFirst({
-        where: { email: { equals: emailRaw, mode: "insensitive" } },
-        select: { id: true },
-      });
-      userId = byEmail?.id;
-      if (adminAccessDebug() && userId) {
-        safeServerLog("admin_access", "staff_session_id_from_email", { userIdPrefix: userId.slice(0, 8) });
-      }
-    } catch {
-      /* ignore */
-    }
-  }
-
   if (!userId) {
     if (adminAccessDebug()) {
       safeServerLog("admin_access", "staff_session_no_user_id", {
@@ -50,14 +34,10 @@ async function loadStaffSession(): Promise<StaffSession | null> {
     }
     return null;
   }
-  if (!isDatabaseUrlConfigured()) return null;
 
   try {
-    const row = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { role: true },
-    });
-    if (!row || !isStaffRole(row.role)) {
+    const row = await loadUserRoleFromDbIdentity({ userId, email: emailRaw });
+    if (!row?.isAdmin || !row.tier) {
       if (adminAccessDebug()) {
         safeServerLog("admin_access", "staff_session_not_staff", {
           userIdPrefix: userId.slice(0, 8),
@@ -70,13 +50,13 @@ async function loadStaffSession(): Promise<StaffSession | null> {
       safeServerLog("admin_access", "staff_session_ok", {
         userIdPrefix: userId.slice(0, 8),
         role: row.role,
-        tier: staffTierFromRole(row.role),
+        tier: row.tier,
       });
     }
     return {
-      userId,
+      userId: row.userId,
       role: row.role,
-      tier: staffTierFromRole(row.role),
+      tier: row.tier,
     };
   } catch {
     return null;

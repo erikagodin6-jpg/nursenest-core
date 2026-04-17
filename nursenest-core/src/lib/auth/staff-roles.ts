@@ -4,18 +4,20 @@ import { UserRole } from "@prisma/client";
 export type StaffTier = "super" | "content" | "support";
 
 /** String keys only — avoids Prisma enum object identity issues in `Set.has`. */
-const STAFF_ROLE_STRINGS = new Set([
+const ADMIN_ROLE_STRINGS = new Set([
   "ADMIN",
   "SUPER_ADMIN",
   "CONTENT_ADMIN",
   "SUPPORT_ADMIN",
 ]);
 
-export function isStaffRole(role: UserRole | string | null | undefined): boolean {
+export function isAdminRole(role: UserRole | string | null | undefined): boolean {
   if (role == null || role === "") return false;
   const normalized = String(role).trim().toUpperCase();
-  return STAFF_ROLE_STRINGS.has(normalized);
+  return ADMIN_ROLE_STRINGS.has(normalized);
 }
+
+export const isStaffRole = isAdminRole;
 
 export function staffTierFromRole(role: UserRole): StaffTier {
   switch (role) {

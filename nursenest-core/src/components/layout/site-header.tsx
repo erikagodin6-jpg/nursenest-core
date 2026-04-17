@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { getNavChromeStyle, getNavChromeVars } from "@/lib/theme/nav-chrome";
 import { ChevronDown, ChevronRight, MapPin, Menu, Settings, User, X } from "lucide-react";
@@ -25,12 +25,11 @@ import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { MobileContextDrawer } from "@/components/layout/mobile-context-drawer";
 import { REGION_CONFIG, type GlobalRegionSlug, type GlobalLocaleCode } from "@/lib/i18n/global-regions";
-import type { CountryExamOfferingId } from "@/lib/marketing/country-exam-offerings";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import { useActiveNavContext } from "@/lib/navigation/use-active-nav-context";
 import { buildMarketingMegaMenus, type ExamMenuKey } from "@/lib/navigation/marketing-mega-menu";
-import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
+import { formatEyebrow, formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { CountrySelector } from "@/components/layout/global-context-switcher";
@@ -41,25 +40,22 @@ const HEADER_NAV_PRIMARY_CTA = "nn-nav-cta text-white";
 
 /** Match legacy header rhythm: compact sizing with medium-weight copy, not extra-light pills. */
 const NAV_LINK_CLASS =
-  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-8 items-center justify-center whitespace-nowrap px-2 text-center font-medium leading-none tracking-normal xl:px-2.5";
+  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-8 shrink-0 items-center justify-center whitespace-nowrap px-2 text-center font-medium leading-none tracking-normal xl:px-2.5";
 /** Muted Learn / Track in the public “Learn → Practice → Track” row. */
 const NAV_FLOW_SECONDARY_CLASS = `${NAV_LINK_CLASS} text-[var(--nav-muted)]`;
-/** Single primary action in that row — Practice (question bank). */
-const NAV_FLOW_PRACTICE_CLASS =
-  `${HEADER_NAV_PRIMARY_CTA} nn-marketing-body-sm inline-flex h-8 min-h-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-1.5 font-semibold leading-none tracking-[0.01em] xl:px-3.5`;
 const NAV_TIER_LINK_CLASS =
   "nn-marketing-body-sm nn-marketing-nav-link inline-flex items-center justify-center whitespace-nowrap text-center font-medium leading-[1.2] tracking-normal";
 const HEADER_SECONDARY_ACTION_CLASS =
   "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
 /** On dark chrome (e.g. non–light-theme header row): translucent trigger. */
 const HEADER_MAIN_NAV_MENU_TRIGGER_CLASS =
-  "nn-marketing-body-sm inline-flex h-[30px] max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--nav-fg)_14%,var(--nav-border))] bg-[color-mix(in_srgb,var(--nav-fg)_04%,transparent)] px-2 text-center font-medium leading-tight tracking-normal text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)] xl:max-w-[13rem] xl:px-2.5";
+  "nn-marketing-body-sm inline-flex h-[30px] shrink-0 items-center gap-1 whitespace-nowrap rounded-lg border border-[color-mix(in_srgb,var(--nav-fg)_14%,var(--nav-border))] bg-[color-mix(in_srgb,var(--nav-fg)_04%,transparent)] px-2.5 text-center font-medium leading-tight tracking-normal text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]";
 /**
  * Light-theme top brand strip: white filled controls + dark text for contrast (country / locale / theme).
  * Keeps the bar visually lighter than ghost text on saturated chrome.
  */
 const HEADER_LIGHT_UTILITY_TRIGGER_CLASS =
-  "nn-marketing-body-sm inline-flex h-[30px] max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--theme-heading-text,#0f172a)_14%,#cbd5e1)] bg-white px-2.5 text-center font-medium leading-tight tracking-normal text-[var(--theme-heading-text)] shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-colors hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--theme-heading-text)_25%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-white xl:max-w-[13rem]";
+  "nn-marketing-body-sm inline-flex h-[30px] shrink-0 items-center gap-1 whitespace-nowrap rounded-lg border border-[color-mix(in_srgb,var(--theme-heading-text,#0f172a)_14%,#cbd5e1)] bg-white px-2.5 text-center font-medium leading-tight tracking-normal text-[var(--theme-heading-text)] shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-colors hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--theme-heading-text)_25%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-white";
 type LearnerTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
 type LearnerCountry = "CA" | "US";
 type HeaderResumeCta = { href: string; label: string } | null;
@@ -250,13 +246,15 @@ export function SiteHeader() {
   }, []);
 
   useEffect(() => {
-    setOpenMegaMenu(null);
-    setMobileExpandedMega(null);
-    setDesktopCountryOpen(false);
-    setDesktopLangOpen(false);
-    setDesktopMoreOpen(false);
-    setDesktopMoreTracksOpen(false);
-    setMobileLangOpen(false);
+    queueMicrotask(() => {
+      setOpenMegaMenu(null);
+      setMobileExpandedMega(null);
+      setDesktopCountryOpen(false);
+      setDesktopLangOpen(false);
+      setDesktopMoreOpen(false);
+      setDesktopMoreTracksOpen(false);
+      setMobileLangOpen(false);
+    });
   }, [pathname, locale, region]);
 
   useEffect(
@@ -333,6 +331,17 @@ export function SiteHeader() {
     ],
     [t, locale],
   );
+  const marketingDesktopPrimaryLinks: HeaderNavLink[] = useMemo(
+    () =>
+      marketingMoreLinks.filter(
+        (item) => item.key === "pricing" || item.key === "blog" || item.key === "faq",
+      ),
+    [marketingMoreLinks],
+  );
+  const marketingDesktopOverflowLinks: HeaderNavLink[] = useMemo(
+    () => marketingMoreLinks.filter((item) => item.key === "pre-nursing" || item.key === "tools"),
+    [marketingMoreLinks],
+  );
   const primaryMegaMenus = useMemo(() => megaMenus.filter((m) => m.key === "rn" || m.key === "pn" || m.key === "np"), [megaMenus]);
   const secondaryMegaMenus = useMemo(
     () => megaMenus.filter((m) => m.key === "newgrad" || m.key === "allied"),
@@ -351,12 +360,12 @@ export function SiteHeader() {
     ? HEADER_LIGHT_UTILITY_TRIGGER_CLASS
     : HEADER_MAIN_NAV_MENU_TRIGGER_CLASS;
   const utilityThemePickerShellClass = isLightTheme
-    ? "text-[var(--theme-heading-text)] [&_button]:h-[30px] [&_button]:min-h-0 [&_button]:items-center [&_button]:gap-1.5 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] [&_button]:bg-white [&_button]:px-2.5 [&_button]:py-1 [&_button]:text-[11px] [&_button]:font-normal [&_button]:leading-tight [&_button]:text-[var(--theme-heading-text)] [&_button]:shadow-[0_1px_2px_rgba(15,23,42,0.05)] [&_button]:hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))] [&_button]:hover:text-[var(--theme-heading-text)]"
-    : "text-[var(--nav-fg)] [&_button]:min-h-0 [&_button]:border-[var(--nav-border)] [&_button]:bg-transparent [&_button]:px-2.5 [&_button]:py-1.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:shadow-none [&_button]:hover:bg-[var(--nav-hover)] [&_button]:hover:text-[var(--nav-fg)]";
+    ? "text-[var(--theme-heading-text)] [&_button]:h-[30px] [&_button]:min-h-0 [&_button]:shrink-0 [&_button]:items-center [&_button]:gap-1.5 [&_button]:whitespace-nowrap [&_button]:rounded-lg [&_button]:border [&_button]:border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] [&_button]:bg-white [&_button]:px-2.5 [&_button]:py-1 [&_button]:text-[11px] [&_button]:font-normal [&_button]:leading-tight [&_button]:text-[var(--theme-heading-text)] [&_button]:shadow-[0_1px_2px_rgba(15,23,42,0.05)] [&_button]:hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))] [&_button]:hover:text-[var(--theme-heading-text)]"
+    : "text-[var(--nav-fg)] [&_button]:min-h-0 [&_button]:shrink-0 [&_button]:whitespace-nowrap [&_button]:border-[var(--nav-border)] [&_button]:bg-transparent [&_button]:px-2.5 [&_button]:py-1.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:shadow-none [&_button]:hover:bg-[var(--nav-hover)] [&_button]:hover:text-[var(--nav-fg)]";
 
   const marketingDesktopUtilityControls = (
-    <div className="flex min-w-0 items-center gap-1 xl:gap-1.5">
-      <div className="relative" ref={desktopCountryRef}>
+    <div className="flex shrink-0 items-center gap-1.5 xl:gap-2">
+      <div className="relative shrink-0" ref={desktopCountryRef}>
         <button
           type="button"
           onClick={() => setDesktopCountryOpen((open) => !open)}
@@ -366,7 +375,7 @@ export function SiteHeader() {
           aria-label={`${t("nav.regionLabel")}: ${REGION_CONFIG[effectiveGlobalRegion].displayName}. ${t("nav.openMenu")}`}
         >
           <MapPin className={`h-3.5 w-3.5 shrink-0 ${isLightTheme ? "opacity-70" : "opacity-80"}`} aria-hidden />
-          <span className="min-w-0 truncate">
+          <span className="whitespace-nowrap">
             {effectiveGlobalRegion === "canada"
               ? formatTitleCase(t("home.region.ca"), locale)
               : effectiveGlobalRegion === "us"
@@ -387,7 +396,7 @@ export function SiteHeader() {
           </div>
         ) : null}
       </div>
-      <div className="relative" ref={desktopLangRef}>
+      <div className="relative shrink-0" ref={desktopLangRef}>
         <button
           type="button"
           onClick={() => setDesktopLangOpen((open) => !open)}
@@ -396,7 +405,7 @@ export function SiteHeader() {
           aria-haspopup="listbox"
           aria-label={`${t("nav.language")}: ${locale.toUpperCase()}. Click to change.`}
         >
-          <span className="truncate">{locale.toUpperCase()}</span>
+          <span className="whitespace-nowrap">{locale.toUpperCase()}</span>
           <ChevronDown className={`h-3 w-3 shrink-0 opacity-60 transition-transform ${desktopLangOpen ? "rotate-180" : ""}`} aria-hidden />
         </button>
         {desktopLangOpen ? (
@@ -420,7 +429,7 @@ export function SiteHeader() {
           </div>
         ) : null}
       </div>
-      <div className={`shrink-0 ${utilityThemePickerShellClass}`}>
+      <div className={`shrink-0 whitespace-nowrap ${utilityThemePickerShellClass}`}>
         <ThemePicker
           className="shrink-0"
           labels={{
@@ -445,7 +454,7 @@ export function SiteHeader() {
 
   useEffect(() => {
     if (!isMarketingEntitledLearner) {
-      setResumeStudyingCta(null);
+      queueMicrotask(() => setResumeStudyingCta(null));
       return;
     }
     const controller = new AbortController();
@@ -481,13 +490,6 @@ export function SiteHeader() {
 
   return (
     <div style={navChromeVars} className="sticky top-0 z-50 nn-header-animate-in" ref={headerRef}>
-      {isLightTheme ? (
-        <div className="nn-header-utility-dark hidden w-full border-b border-[var(--nn-nav-border)] md:block">
-          <div className="nn-section-shell flex min-h-[36px] items-center justify-end gap-1.5 py-[3px] md:min-h-[40px] md:py-1">
-            {marketingDesktopUtilityControls}
-          </div>
-        </div>
-      ) : null}
       <header
         data-nn-nav-mode="public"
         style={isLightTheme ? undefined : { ...navChromeStyle, boxShadow: darkHeaderShadow }}
@@ -501,7 +503,7 @@ export function SiteHeader() {
       >
         <div className="nn-section-shell flex flex-col overflow-visible">
           {/* ── Mobile brand row ── */}
-          <div className="flex min-h-[4.5rem] items-center gap-2 overflow-visible border-b border-[var(--header-border)] pt-[env(safe-area-inset-top,0px)] sm:gap-4 md:hidden">
+          <div className="flex min-h-[4.5rem] items-center gap-2 overflow-visible border-b border-[var(--header-border)] pt-[env(safe-area-inset-top,0px)] sm:gap-4 xl:hidden">
             <div className="flex min-w-0 shrink items-center gap-2 overflow-hidden">
               <Link
                 href={localizeHref("/")}
@@ -551,11 +553,11 @@ export function SiteHeader() {
               </div>
             ) : null}
             {/* Mobile controls — only below `md` (tablet+ uses desktop chrome) */}
-            <div className={`flex shrink-0 items-center gap-2 md:hidden ${isAuthenticated ? "ml-auto" : ""}`}>
+            <div className={`flex shrink-0 items-center gap-2 xl:hidden ${isAuthenticated ? "ml-auto" : ""}`}>
               <button
                 type="button"
                 onClick={() => setMobileContextOpen(true)}
-                className="md:hidden inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--nn-nav-border)] bg-transparent p-0 text-[var(--nn-nav-fg)] transition-colors hover:bg-[var(--nn-nav-hover-bg)]"
+                className="xl:hidden inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--nn-nav-border)] bg-transparent p-0 text-[var(--nn-nav-fg)] transition-colors hover:bg-[var(--nn-nav-hover-bg)]"
                 aria-label="Region and language settings"
                 aria-expanded={mobileContextOpen}
               >
@@ -576,7 +578,7 @@ export function SiteHeader() {
 
           {/* Mobile/tablet: signed-in CTAs (learners/staff) — guests use the top row above */}
           {isAuthenticated ? (
-            <div className="relative z-[130] flex items-center justify-end gap-2 border-b border-[var(--header-border)] bg-[var(--nav-bg)] px-4 py-2.5 md:hidden">
+            <div className="relative z-[130] flex items-center justify-end gap-2 border-b border-[var(--header-border)] bg-[var(--nav-bg)] px-4 py-2.5 xl:hidden">
               {isMarketingEntitledLearner ? (
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
@@ -631,12 +633,12 @@ export function SiteHeader() {
             </div>
           ) : null}
 
-          {/* ── Desktop main header row: brand + tier | primary links | utilities + auth ── */}
+          {/* ── Desktop main header row: left logo | center core public links | right utilities + auth ── */}
           <div className="nn-header-desktop-grid overflow-visible">
-            <div className="flex min-w-0 max-w-full items-center gap-2.5">
+            <div className="flex shrink-0 items-center gap-2.5">
               <Link
                 href={localizeHref("/")}
-                className="nn-header-logo-link group flex min-w-0 flex-none items-center overflow-visible bg-transparent"
+                className="nn-header-logo-link group flex shrink-0 items-center overflow-visible bg-transparent"
                 aria-label={t("brand.homeAriaLabel")}
               >
                 <HeaderBrandLockup />
@@ -650,14 +652,14 @@ export function SiteHeader() {
 
             <nav
               aria-label={t("nav.marketingExplore")}
-              className="flex min-w-0 items-center justify-center gap-0.5 overflow-x-auto [scrollbar-width:none] xl:gap-1 [&::-webkit-scrollbar]:hidden"
+              className="flex min-w-0 flex-1 items-center justify-center gap-0.5 xl:gap-1"
             >
-              {marketingFlowLinks.map((item) => (
+              {marketingDesktopPrimaryLinks.map((item) => (
                 <Link
                   key={item.key}
                   href={localizeHref(item.href)}
                   aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                  className={item.key === "flow-practice" ? NAV_FLOW_PRACTICE_CLASS : NAV_FLOW_SECONDARY_CLASS}
+                  className={NAV_FLOW_SECONDARY_CLASS}
                   onClick={() =>
                     trackClientEvent(PH.marketingNavClick, {
                       actor: navActor,
@@ -670,10 +672,10 @@ export function SiteHeader() {
                   {item.label}
                 </Link>
               ))}
-              <div className="relative" ref={desktopMoreRef}>
+              <div className="relative shrink-0" ref={desktopMoreRef}>
                 <button
                   type="button"
-                  className={`${NAV_LINK_CLASS} inline-flex items-center gap-0.5`}
+                  className={`${NAV_LINK_CLASS} inline-flex items-center gap-0.5 whitespace-nowrap`}
                   aria-expanded={desktopMoreOpen}
                   aria-haspopup="menu"
                   onClick={() => setDesktopMoreOpen((o) => !o)}
@@ -686,7 +688,7 @@ export function SiteHeader() {
                     role="menu"
                     className="absolute end-0 z-[130] mt-2 min-w-[12rem] rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] py-1 shadow-[var(--shadow-card-hover)]"
                   >
-                    {marketingMoreLinks.map((item) => (
+                    {marketingDesktopOverflowLinks.map((item) => (
                       <Link
                         key={item.key}
                         role="menuitem"
@@ -711,8 +713,8 @@ export function SiteHeader() {
               </div>
             </nav>
 
-            <div className="relative z-[130] flex min-w-0 max-w-full items-center justify-end gap-2">
-              {!isLightTheme ? marketingDesktopUtilityControls : null}
+            <div className="relative z-[130] flex shrink-0 items-center justify-end gap-2 xl:gap-2.5">
+              {marketingDesktopUtilityControls}
               {isSessionPending ? (
                 <div className="flex shrink-0 items-center gap-2" aria-busy="true" aria-label={t("nav.logIn")}>
                   <div className="h-10 w-20 animate-pulse rounded-xl bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))]" />
@@ -722,7 +724,7 @@ export function SiteHeader() {
                 <div className="flex shrink-0 items-center gap-2">
                   <Link
                     href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)}
-                    className={HEADER_SECONDARY_ACTION_CLASS}
+                    className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}
                     onClick={closeMegaBeforeAuthNav}
                     aria-label="Log in to your NurseNest account"
                   >
@@ -730,7 +732,7 @@ export function SiteHeader() {
                   </Link>
                   <Link
                     href={guestMarketingSignupHref}
-                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium`}
+                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
                     onClick={closeMegaBeforeAuthNav}
                     aria-label="Start free account — nursing and healthcare exam prep"
                     title="Start free — no credit card required"
@@ -742,7 +744,7 @@ export function SiteHeader() {
                 <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
                   <Link
                     href={resumeStudyingCta?.href ?? "/app"}
-                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium sm:px-4`}
+                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium sm:px-4`}
                   >
                     {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                   </Link>
@@ -752,10 +754,10 @@ export function SiteHeader() {
                     aria-label={formatTitleCase(t("nav.account"), locale)}
                   >
                     <User className="h-4 w-4 shrink-0 opacity-90" aria-hidden />
-                    <span className="hidden xl:inline">{formatTitleCase(t("nav.account"), locale)}</span>
+                    <span className="hidden 2xl:inline whitespace-nowrap">{formatTitleCase(t("nav.account"), locale)}</span>
                   </Link>
                   <SignOutButton
-                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 px-3 py-2`}
+                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
                     redirectTo={withMarketingLocale(locale, "/login")}
                   />
                 </div>
@@ -763,16 +765,16 @@ export function SiteHeader() {
                 <div className="flex shrink-0 items-center gap-2">
                   <Link
                     href={ADMIN_DASHBOARD_ROUTE}
-                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium`}
+                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
                     onClick={closeMegaBeforeAuthNav}
                   >
                     {formatTitleCase(t("nav.admin"), locale)}
                   </Link>
-                  <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
+                  <Link href="/app" className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}>
                     {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
                   <SignOutButton
-                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 px-3 py-2`}
+                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
                     redirectTo={withMarketingLocale(locale, "/login")}
                   />
                 </div>
@@ -780,16 +782,16 @@ export function SiteHeader() {
                 <div className="flex shrink-0 items-center gap-2">
                   <Link
                     href={localizeHref(HUB.pricing)}
-                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium`}
+                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
                     onClick={closeMegaBeforeAuthNav}
                   >
                     {formatTitleCase(t("nav.pricing"), locale)}
                   </Link>
-                  <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
+                  <Link href="/app" className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}>
                     {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
                   <SignOutButton
-                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 px-3 py-2`}
+                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
                     redirectTo={withMarketingLocale(locale, "/login")}
                   />
                 </div>
@@ -797,7 +799,7 @@ export function SiteHeader() {
             </div>
           </div>{/* /nav-row */}
         </div>{/* /shell */}
-        <div className="hidden w-full border-t border-[var(--nn-nav-border)] nn-header-nav-row md:block">
+        <div className="hidden w-full border-t border-[var(--nn-nav-border)] nn-header-nav-row xl:block">
           <div className="nn-section-shell flex min-h-[36px] flex-wrap items-center gap-x-0.5 gap-y-0 py-0 md:min-h-[40px] md:py-0.5 lg:gap-x-0.5">
             <nav
               aria-label={t("nav.marketingExplore")}
@@ -877,7 +879,7 @@ export function SiteHeader() {
             id={`mega-menu-${openMega.key}`}
             role="dialog"
             aria-label={`${openMega.label} menu`}
-            className="absolute inset-x-0 top-full z-[120] hidden md:block animate-[nn-mega-panel-enter_var(--brand-motion-normal)_var(--brand-motion-ease-luxury)_both]"
+            className="absolute inset-x-0 top-full z-[120] hidden xl:block animate-[nn-mega-panel-enter_var(--brand-motion-normal)_var(--brand-motion-ease-luxury)_both]"
           >
             <div className="nn-section-shell pb-5 pt-1.5">
               <div className="overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-strong)] shadow-[var(--shadow-elevated)] ring-1 ring-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border-subtle))]">
@@ -996,7 +998,7 @@ export function SiteHeader() {
       />
 
       {mobileOpen ? (
-        <div className="fixed inset-0 z-[200] md:hidden animate-[nn-overlay-enter_0.24s_ease_both]">
+        <div className="fixed inset-0 z-[200] xl:hidden animate-[nn-overlay-enter_0.24s_ease_both]">
           <button type="button" className="absolute inset-0 bg-black/56" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)} />
           <div className="absolute inset-x-0 top-0 flex h-[100dvh] max-h-[100dvh] flex-col border-b border-[var(--nav-border)] bg-[var(--nav-bg)] text-[var(--nav-fg)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-in_0.28s_cubic-bezier(0.25,0.1,0.25,1)_both]">
             <div className="flex h-16 shrink-0 items-center justify-between border-b border-[var(--header-border)] px-4 pt-[max(0.5rem,env(safe-area-inset-top))]">

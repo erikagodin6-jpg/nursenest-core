@@ -62,7 +62,9 @@ function AdminCommandCenterFallback() {
   );
 }
 
-async function AdminCommandCenterSection({ staffTier }: { staffTier: StaffTier }) {
+async function AdminCommandCenterSection() {
+  const staff = await getStaffSession().catch(() => null);
+  const staffTier: StaffTier = staff?.tier ?? "super";
   const commandCenter = await loadAdminCommandCenter().catch((e) => {
     console.error("[AdminPage] loadAdminCommandCenter", e);
     safeServerLog("admin_dashboard", "command_center_load_failed", {
@@ -98,10 +100,7 @@ async function AdminCommandCenterSection({ staffTier }: { staffTier: StaffTier }
   );
 }
 
-export default async function AdminPage() {
-  const staff = await getStaffSession();
-  const staffTier: StaffTier = staff?.tier ?? "super";
-
+export default function AdminPage() {
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8" data-testid="admin-dashboard-shell">
       <header className="mb-8 space-y-2">
@@ -115,7 +114,7 @@ export default async function AdminPage() {
       </Suspense>
 
       <Suspense fallback={<AdminCommandCenterFallback />}>
-        <AdminCommandCenterSection staffTier={staffTier} />
+        <AdminCommandCenterSection />
       </Suspense>
     </main>
   );

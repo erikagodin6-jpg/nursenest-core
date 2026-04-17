@@ -163,6 +163,7 @@
     "qa:smoke:localized": "node -e \"console.log('[qa:smoke:localized] Tip: run npm run qa:i18n:check first for static locale parity vs en.');\" && playwright test -c playwright.localized-smoke.config.ts",
     "qa:i18n:visible-audit": "playwright test -c playwright.i18n-audit.config.ts",
     "qa:button-audit": "playwright test -c playwright.button-audit.config.ts",
+    "qa:a11y": "playwright test tests/e2e/public/public-accessibility.spec.ts tests/e2e/paid-user/paid-user-accessibility.spec.ts tests/e2e/admin/admin-accessibility.spec.ts --project=chromium --project=chromium-paid",
     "qa:button-audit:guest": "playwright test -c playwright.button-audit.config.ts --project=audit-guest",
     "qa:button-audit:paid": "node scripts/check-paid-e2e-credentials.cjs && node scripts/check-e2e-database-connect.cjs && playwright test -c playwright.button-audit.config.ts --project=audit-paid",
     "qa:button-audit:admin": "playwright test -c playwright.button-audit.config.ts --project=audit-admin",

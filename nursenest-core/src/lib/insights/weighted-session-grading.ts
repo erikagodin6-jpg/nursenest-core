@@ -27,8 +27,8 @@ export async function loadRecencyWeightedSessionGrading(
 
   const sessions = await prisma.examSession.findMany({
     where: { userId, status: ExamSessionStatus.COMPLETED },
-    orderBy: { updatedAt: "desc" },
-    take: limitSessions,
+    orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
+    take: Math.min(limitSessions, 12),
     select: { questionIds: true, answers: true, updatedAt: true },
   });
 

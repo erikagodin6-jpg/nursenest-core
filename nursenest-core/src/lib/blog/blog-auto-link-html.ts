@@ -24,6 +24,10 @@ export function buildAutoLinkRules(ctx: BlogAutoLinkContext): LinkRule[] {
   const rules: LinkRule[] = [];
   const hub = defaultPracticeHubForExam(ctx.exam ?? null, ctx.countryTarget ?? null);
   const catHub = marketingStudyHubsForBlogExam(ctx.exam ?? "", blogCountryFromPrismaTarget(ctx.countryTarget)).practiceExamsHub;
+  const lessonsHub = marketingStudyHubsForBlogExam(
+    ctx.exam ?? "",
+    blogCountryFromPrismaTarget(ctx.countryTarget),
+  ).lessonsHub;
 
   for (const raw of ctx.relatedLessonPaths ?? []) {
     const path = raw.trim();
@@ -55,7 +59,8 @@ export function buildAutoLinkRules(ctx: BlogAutoLinkContext): LinkRule[] {
     { pattern: /\b(question bank)\b/gi, href: hub },
     { pattern: /\b(CAT exam|adaptive practice exam|computerized adaptive test)\b/gi, href: catHub },
     { pattern: /\b(practice exam)\b/gi, href: catHub },
-    { pattern: /\b(study plan)\b/gi, href: "/app/study-plan" },
+    // Keep auto-linked study-plan phrases on crawlable marketing hubs, not disallowed app routes.
+    { pattern: /\b(study plan)\b/gi, href: lessonsHub },
   );
 
   rules.sort((a, b) => {

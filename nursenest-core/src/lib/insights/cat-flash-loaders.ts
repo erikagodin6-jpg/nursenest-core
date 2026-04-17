@@ -5,9 +5,14 @@ import type { CatInsightSummary, FlashcardInsight } from "@/lib/insights/types";
 export async function loadCatInsightSummary(userId: string): Promise<CatInsightSummary> {
   try {
     const rows = await prisma.practiceTest.findMany({
-      where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
+      where: {
+        userId,
+        status: PracticeTestStatus.COMPLETED,
+        completedAt: { not: null },
+        config: { path: ["selectionMode"], equals: "cat" },
+      },
       orderBy: { completedAt: "desc" },
-      take: 15,
+      take: 12,
       select: { adaptiveState: true, config: true },
     });
     const row = rows.find((r) => {

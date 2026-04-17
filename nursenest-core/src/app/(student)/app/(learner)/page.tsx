@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
@@ -87,12 +88,53 @@ export async function generateMetadata(): Promise<Metadata> {
   );
 }
 
-export default async function LearnerDashboardPage() {
-  const { t, locale } = await getLearnerMarketingBundle();
+function LearnerDashboardShellFallback({
+  t,
+  crumbs,
+}: {
+  t: LearnerMarketingT;
+  crumbs: ReturnType<typeof appShellBreadcrumbs>;
+}) {
+  return (
+    <div className="nn-dash nn-dash--learner-home min-w-0 overflow-x-hidden" data-testid="learner-dashboard-shell">
+      <BreadcrumbTrail items={crumbs} />
+      <header className="nn-dash-page-header nn-dash-page-header--compact nn-dash-page-header--learner-hub">
+        <div className="nn-dash-page-header__top">
+          <div className="nn-dash-page-header__titles min-w-0">
+            <div className="nn-dash-page-header__title-row">
+              <h1 className="nn-dash-page-header__title">{t("learner.dashboard.title")}</h1>
+            </div>
+            <p className="nn-dash-page-header__subtitle">{t("learner.studyHome.pageSubtitle")}</p>
+          </div>
+        </div>
+      </header>
+
+      <section className="nn-dash-band" aria-hidden>
+        <div className="grid gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)]">
+          <div className="min-h-[13rem] animate-pulse rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]" />
+          <div className="min-h-[13rem] animate-pulse rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]" />
+        </div>
+      </section>
+
+      <section className="nn-dash-band" aria-hidden>
+        <div className="min-h-[8rem] animate-pulse rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]" />
+      </section>
+    </div>
+  );
+}
+
+async function LearnerDashboardDeferredContent({
+  t,
+  locale,
+  crumbs,
+}: {
+  t: LearnerMarketingT;
+  locale: string;
+  crumbs: ReturnType<typeof appShellBreadcrumbs>;
+}) {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
-  const crumbs = appShellBreadcrumbs("dashboard");
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
@@ -385,5 +427,16 @@ export default async function LearnerDashboardPage() {
       pathwayId={userLearnerPath}
       banner="error_fallback"
     />
+  );
+}
+
+export default async function LearnerDashboardPage() {
+  const { t, locale } = await getLearnerMarketingBundle();
+  const crumbs = appShellBreadcrumbs("dashboard");
+
+  return (
+    <Suspense fallback={<LearnerDashboardShellFallback t={t} crumbs={crumbs} />}>
+      <LearnerDashboardDeferredContent t={t} locale={locale} crumbs={crumbs} />
+    </Suspense>
   );
 }

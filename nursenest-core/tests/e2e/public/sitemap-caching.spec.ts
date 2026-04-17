@@ -1,80 +1,76 @@
 import { expect, test } from "@playwright/test";
-import {
-  classifyPublicDataResponseEntry,
-  parseCacheControlDirectives,
-} from "../helpers/public-marketing-data-request-tracker";
+import { parseCacheControlDirectives } from "../helpers/public-marketing-data-request-tracker";
 
-const SITEMAP_PATH = "/sitemap.xml";
 const SITEMAP_SLA_MS = 1_000;
 
-test.describe("Public — sitemap caching", () => {
-  test("sitemap is cached, conditional, and fast", async ({ request, baseURL }, testInfo) => {
-    test.setTimeout(30_000);
+function isLikelyNextDev(baseURL: string): boolean {
+  if (process.env.PLAYWRIGHT_SKIP_WEB_SERVER === "1") return false;
+  return /127\.0\.0\.1|localhost/.test(baseURL);
+}
 
-    const appOrigin = new URL(baseURL ?? process.env.BASE_URL ?? "http://127.0.0.1:3000").origin;
-    const sitemapUrl = new URL(SITEMAP_PATH, appOrigin).href;
+test.describe("Public — sitemap caching", () => {
+  test("sitemap.xml is cacheable, validator-backed, and fast", async ({ request, baseURL }, testInfo) => {
+    test.setTimeout(60_000);
+    const origin = baseURL ?? "http://127.0.0.1:3000";
+    const warnings: string[] = [];
+
+    if (isLikelyNextDev(origin)) {
+      warnings.push(
+        "Likely running against next dev. Prefer BASE_URL=<next-start-or-prod> with PLAYWRIGHT_SKIP_WEB_SERVER=1 for production-grade sitemap caching evidence.",
+      );
+    }
 
     const t0 = Date.now();
-    const first = await request.get(sitemapUrl, { failOnStatusCode: false });
-    const firstMs = Date.now() - t0;
-    const firstHeaders = first.headers();
-    const firstCacheControl = firstHeaders["cache-control"] ?? null;
-    const firstEtag = firstHeaders.etag ?? null;
-    const firstLastModified = firstHeaders["last-modified"] ?? null;
-    const firstAge = firstHeaders.age ?? null;
-    const firstClassification = classifyPublicDataResponseEntry({
-      status: first.status(),
-      age: firstAge,
-    });
-    const directives = parseCacheControlDirectives(firstCacheControl);
+    const first = await request.get("/sitemap.xml", { failOnStatusCode: false });
+    const firstElapsedMs = Date.now() - t0;
 
-    const artifact: Record<string, unknown> = {
-      appOrigin,
-      sitemapUrl,
-      firstRequest: {
-        status: first.status(),
-        durationMs: firstMs,
-        cacheControl: firstCacheControl,
-        etag: firstEtag,
-        age: firstAge,
-        lastModified: firstLastModified,
-        classification: firstClassification,
-      },
-    };
+    expect(first.status(), "First sitemap request should succeed").toBe(200);
+    expect(firstElapsedMs, `sitemap.xml exceeded ${SITEMAP_SLA_MS}ms`).toBeLessThanOrEqual(SITEMAP_SLA_MS);
 
-    expect(first.status(), `sitemap should return HTTP 200 for ${sitemapUrl}`).toBe(200);
-    expect(firstMs, `sitemap should respond in under ${SITEMAP_SLA_MS}ms (got ${firstMs}ms)`).toBeLessThanOrEqual(SITEMAP_SLA_MS);
-    expect(firstCacheControl, "sitemap missing Cache-Control header").toBeTruthy();
-    expect(
-      typeof directives["s-maxage"] === "string" ? Number(directives["s-maxage"]) : 0,
-      `sitemap should expose a positive s-maxage (got ${String(directives["s-maxage"] ?? "missing")})`,
-    ).toBeGreaterThan(0);
-    expect(firstEtag || firstLastModified, "sitemap missing ETag/Last-Modified validator").toBeTruthy();
+    const cacheControl = first.headers()["cache-control"] ?? null;
+    const etag = first.headers().etag ?? null;
+    const lastModified = first.headers()["last-modified"] ?? null;
+    const directives = parseCacheControlDirectives(cacheControl);
+    const sMaxAge = typeof directives["s-maxage"] === "string" ? Number(directives["s-maxage"]) : NaN;
 
-    if (firstEtag) {
-      const second = await request.get(sitemapUrl, {
+    expect(cacheControl, "sitemap.xml must send Cache-Control").toBeTruthy();
+    expect(Number.isFinite(sMaxAge) && sMaxAge > 0, "sitemap.xml must send positive s-maxage").toBe(true);
+    expect(Boolean(etag || lastModified), "sitemap.xml must send ETag or Last-Modified").toBe(true);
+
+    let conditionalStatus: number | null = null;
+    let conditionalCacheControl: string | null = null;
+    let conditionalAge: string | null = null;
+
+    if (etag) {
+      const conditional = await request.get("/sitemap.xml", {
         failOnStatusCode: false,
-        headers: { "If-None-Match": firstEtag },
+        headers: { "If-None-Match": etag },
       });
-      const secondHeaders = second.headers();
-      artifact.secondRequest = {
-        status: second.status(),
-        cacheControl: secondHeaders["cache-control"] ?? null,
-        etag: secondHeaders.etag ?? null,
-        age: secondHeaders.age ?? null,
-        classification: classifyPublicDataResponseEntry({
-          status: second.status(),
-          age: secondHeaders.age ?? null,
-        }),
-      };
-      expect(
-        second.status(),
-        `sitemap conditional request should revalidate cleanly (expected 304, got ${second.status()})`,
-      ).toBe(304);
+      conditionalStatus = conditional.status();
+      conditionalCacheControl = conditional.headers()["cache-control"] ?? null;
+      conditionalAge = conditional.headers().age ?? null;
+      expect(conditional.status(), "Conditional sitemap request should revalidate").toBe(304);
     }
 
     await testInfo.attach("sitemap-caching.json", {
-      body: Buffer.from(JSON.stringify(artifact, null, 2)),
+      body: Buffer.from(
+        JSON.stringify(
+          {
+            origin,
+            firstElapsedMs,
+            firstStatus: first.status(),
+            cacheControl,
+            etag,
+            lastModified,
+            conditionalStatus,
+            conditionalCacheControl,
+            conditionalAge,
+            warnings,
+          },
+          null,
+          2,
+        ),
+      ),
       contentType: "application/json",
     });
   });

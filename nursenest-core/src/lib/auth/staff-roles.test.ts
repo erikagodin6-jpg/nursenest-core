@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { UserRole } from "@prisma/client";
 import {
+  isAdminRole,
   isLearnerEntitlementAdminOverrideRole,
   isLearnerEntitlementStaffBypassRole,
   isStaffRole,
@@ -16,6 +17,11 @@ test("isStaffRole: all operational staff roles", () => {
   assert.equal(isStaffRole(UserRole.SUPER_ADMIN), true);
   assert.equal(isStaffRole(UserRole.CONTENT_ADMIN), true);
   assert.equal(isStaffRole(UserRole.SUPPORT_ADMIN), true);
+});
+
+test("isAdminRole mirrors staff-role admin allowlist", () => {
+  assert.equal(isAdminRole(UserRole.ADMIN), true);
+  assert.equal(isAdminRole(UserRole.LEARNER), false);
 });
 
 test("learner entitlement staff bypass matches isStaffRole (incl. support)", () => {

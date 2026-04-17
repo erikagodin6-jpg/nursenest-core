@@ -196,7 +196,7 @@ export async function loadAnalyticsSummary(userId: string): Promise<AnalyticsSum
       withRetry(() =>
         prisma.practiceTest.findFirst({
           where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
-          orderBy: { completedAt: "desc" },
+          orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
           select: { id: true, results: true, elapsedMs: true },
         }),
       ),
@@ -265,7 +265,7 @@ export async function loadReadinessTrend(
     const rows = await withRetry(() =>
       prisma.practiceTest.findMany({
         where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
-        orderBy: { completedAt: "desc" },
+        orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
         take: limit + 1,
         select: { id: true, results: true, completedAt: true },
       }),
@@ -312,7 +312,7 @@ export async function loadMoreReadinessTrend(
     const rows = await withRetry(() =>
       prisma.practiceTest.findMany({
         where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
-        orderBy: { completedAt: "desc" },
+        orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
         cursor: { id: afterId },
         skip: 1,
         take: limit + 1,
@@ -490,7 +490,7 @@ export async function loadTimeMetrics(
           status: PracticeTestStatus.COMPLETED,
           elapsedMs: { not: null },
         },
-        orderBy: { completedAt: "desc" },
+        orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
         take: sessionLimit,
         select: { elapsedMs: true, results: true },
       }),

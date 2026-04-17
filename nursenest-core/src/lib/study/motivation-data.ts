@@ -129,6 +129,8 @@ async function loadWeeklyActivity(userId: string): Promise<{
   const [attempts, practiceDone] = await Promise.all([
     prisma.examAttempt.findMany({
       where: { userId, createdAt: { gte: since } },
+      orderBy: { createdAt: "desc" },
+      take: 60,
       select: { createdAt: true },
     }),
     prisma.practiceTest.findMany({
@@ -137,6 +139,8 @@ async function loadWeeklyActivity(userId: string): Promise<{
         status: PracticeTestStatus.COMPLETED,
         completedAt: { not: null, gte: since },
       },
+      orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
+      take: 12,
       select: { completedAt: true },
     }),
   ]);
@@ -234,8 +238,8 @@ async function loadTopicProgressPage(
 async function loadRecentReadiness(userId: string, limit = 5): Promise<RecentReadinessPoint[]> {
   const rows = await prisma.practiceTest.findMany({
     where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
-    orderBy: { completedAt: "desc" },
-    take: limit,
+    orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
+    take: Math.min(limit, 12),
     select: { id: true, results: true, completedAt: true },
   });
 

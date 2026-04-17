@@ -8,6 +8,7 @@ import { expect, test } from "@playwright/test";
 import { getAdminE2eCredentials, hasAdminE2eCredentials } from "../helpers/admin-e2e-credentials";
 import { getQaFreeCredentials } from "../helpers/smoke-credentials";
 import { marketingLoginSubmitButton } from "../helpers/marketing-login-locators";
+import { verifyTestAccounts } from "../helpers/verify-test-accounts";
 
 test.use({ storageState: { cookies: [], origins: [] } });
 
@@ -15,6 +16,11 @@ const TIMEOUT = 120_000;
 
 /** Decorative / full-mark CDN patterns we do not want on admin shells (leaf-only policy on errors). */
 const FORBIDDEN_IMG_SRC_SUBSTR = ["full-mark", "brand-arch", "arch-transparent", "logo-full", "wordmark-full"];
+
+test.beforeAll(async ({ browser, baseURL }) => {
+  if (!hasAdminE2eCredentials() || !getQaFreeCredentials()) return;
+  await verifyTestAccounts(browser, baseURL);
+});
 
 test("1–5 Admin: login, header, /admin, dashboard shell, no forbidden mark assets", async ({
   page,
@@ -104,8 +110,10 @@ test("6 Non-admin: cannot stay on /admin", async ({ page, baseURL }, testInfo) =
     await page.goto(`${origin}/admin`, { waitUntil: "domcontentloaded", timeout: 60_000 });
     await page.waitForTimeout(2000);
     const path = await page.evaluate(() => window.location.pathname);
-    expect(path.startsWith("/admin"), `expected redirect off /admin for learner; still on ${page.url()}`).toBe(
-      false,
+    expect(page.url()).not.toContain("/admin");
+    expect(path.startsWith("/admin"), `expected redirect off /admin for learner; still on ${page.url()}`).toBe(false);
+    expect(path === "/" || path === "/app" || path.startsWith("/app/"), `unexpected non-admin redirect target: ${path}`).toBe(
+      true,
     );
   } catch (e) {
     const buf = await page.screenshot({ fullPage: true }).catch(() => null);

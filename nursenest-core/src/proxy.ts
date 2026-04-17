@@ -7,10 +7,14 @@
  * that the same middleware resolves, incorrectly sending paying subscribers to the public `/lessons` hub.
  */
 import "@/lib/auth-trust-env";
+import { getToken } from "next-auth/jwt";
 import type { NextFetchEvent, NextMiddleware } from "next/server";
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { middlewareAuth } from "@/lib/auth-middleware";
+import { loadUserRoleFromDbIdentity } from "@/lib/auth/admin-role-source";
+import { isPathAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { canonicalExamHubPathFromPossiblyLocalizedPath } from "@/lib/i18n/exam-hub-path";
@@ -68,6 +72,99 @@ function withPathnameHeader(request: NextRequest): NextRequest {
   return new NextRequest(request.url, { headers: requestHeaders });
 }
 
+function adminAccessDebug(): boolean {
+  return process.env.ADMIN_ACCESS_DEBUG === "1" || process.env.ADMIN_ACCESS_DEBUG === "true";
+}
+
+function copySetCookies(from: Response, to: NextResponse): NextResponse {
+  const cookies =
+    typeof from.headers.getSetCookie === "function"
+      ? from.headers.getSetCookie()
+      : (() => {
+          const single = from.headers.get("set-cookie");
+          return single ? [single] : [];
+        })();
+  for (const c of cookies) {
+    if (c) to.headers.append("Set-Cookie", c);
+  }
+  return to;
+}
+
+function redirectWithCorrelation(request: NextRequest, pathname: string, correlationId: string): NextResponse {
+  const url = request.nextUrl.clone();
+  url.pathname = pathname;
+  const response = NextResponse.redirect(url);
+  response.headers.set(NN_CORRELATION_HEADER, correlationId.slice(0, 128));
+  return response;
+}
+
+async function enforceAdminProxyRoute(request: NextRequest): Promise<NextResponse | null> {
+  const pathname = request.nextUrl.pathname;
+  if (!pathname.startsWith("/admin")) return null;
+
+  const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
+  const token = secret ? await getToken({ req: request, secret }) : null;
+  const userId =
+    (typeof token?.sub === "string" && token.sub.trim()) ||
+    (token as { id?: string } | null)?.id?.trim() ||
+    null;
+  const email = typeof token?.email === "string" && token.email.trim().length > 0 ? token.email.trim() : null;
+  const correlationId = request.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
+
+  if (!userId && !email) {
+    if (adminAccessDebug()) {
+      safeServerLog("admin_access", "proxy_admin_gate", {
+        pathAttempted: pathname,
+        email: email ?? undefined,
+        role: "missing_token_identity",
+        result: "redirect_login",
+      });
+    }
+    const loginUrl = request.nextUrl.clone();
+    loginUrl.pathname = "/login";
+    loginUrl.searchParams.set("callbackUrl", pathname);
+    const response = NextResponse.redirect(loginUrl);
+    response.headers.set(NN_CORRELATION_HEADER, correlationId.slice(0, 128));
+    return response;
+  }
+
+  const roleRecord = await loadUserRoleFromDbIdentity({ userId, email });
+  if (!roleRecord?.isAdmin) {
+    if (adminAccessDebug()) {
+      safeServerLog("admin_access", "proxy_admin_gate", {
+        pathAttempted: pathname,
+        email: email ?? undefined,
+        role: roleRecord?.role ?? "missing",
+        result: "redirect_non_admin",
+      });
+    }
+    return redirectWithCorrelation(request, "/app", correlationId);
+  }
+
+  if (!isPathAllowedForStaffTier(roleRecord.tier, pathname)) {
+    if (adminAccessDebug()) {
+      safeServerLog("admin_access", "proxy_admin_gate", {
+        pathAttempted: pathname,
+        email: email ?? undefined,
+        role: roleRecord.role,
+        result: "redirect_rbac",
+      });
+    }
+    return redirectWithCorrelation(request, "/admin", correlationId);
+  }
+
+  if (adminAccessDebug()) {
+    safeServerLog("admin_access", "proxy_admin_gate", {
+      pathAttempted: pathname,
+      email: email ?? undefined,
+      role: roleRecord.role,
+      result: "allow",
+    });
+  }
+
+  return null;
+}
+
 /**
  * Auth.js middleware returns `NextResponse.next()` without `request` overrides, so headers set only on
  * the cloned `NextRequest` are not forwarded to Server Components. Next.js only applies inbound
@@ -84,16 +181,7 @@ function mergeAuthContinueWithForwardedRequest(res: Response, forwarded: NextReq
   const next = NextResponse.next({
     request: { headers: forwarded.headers },
   });
-  const cookies =
-    typeof res.headers.getSetCookie === "function"
-      ? res.headers.getSetCookie()
-      : (() => {
-          const single = res.headers.get("set-cookie");
-          return single ? [single] : [];
-        })();
-  for (const c of cookies) {
-    if (c) next.headers.append("Set-Cookie", c);
-  }
+  copySetCookies(res, next);
   next.headers.set(NN_CORRELATION_HEADER, correlationId.slice(0, 128));
   return next;
 }
@@ -157,12 +245,20 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
   const res = await runAuthMiddleware(forwarded, event);
   const outCid = forwarded.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
   if (res == null) {
+    const adminRedirect = await enforceAdminProxyRoute(forwarded);
+    if (adminRedirect) {
+      return adminRedirect;
+    }
     const next = NextResponse.next({ request: { headers: forwarded.headers } });
     next.headers.set(NN_CORRELATION_HEADER, outCid.slice(0, 128));
     return next;
   }
   const merged = mergeAuthContinueWithForwardedRequest(res, forwarded, outCid);
   if (merged !== res) {
+    const adminRedirect = await enforceAdminProxyRoute(forwarded);
+    if (adminRedirect) {
+      return copySetCookies(res, adminRedirect);
+    }
     return merged;
   }
   res.headers.set(NN_CORRELATION_HEADER, outCid.slice(0, 128));

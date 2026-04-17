@@ -34,25 +34,26 @@ function parseCatAccuracy(res: PracticeTestResultsJson | null): number | null {
 async function loadCatSignal(userId: string): Promise<CatReadinessSignal | null> {
   try {
     const rows = await prisma.practiceTest.findMany({
-      where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
-      orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
+      where: {
+        userId,
+        status: PracticeTestStatus.COMPLETED,
+        completedAt: { not: null },
+        config: { path: ["selectionMode"], equals: "cat" },
+      },
+      orderBy: { completedAt: "desc" },
       take: 12,
       select: { config: true, results: true, completedAt: true },
     });
-    const catRows = rows.filter((r) => {
-      const cfg = r.config as PracticeTestConfigJson | null;
-      return cfg?.selectionMode === "cat";
-    });
-    if (catRows.length === 0) return null;
+    if (rows.length === 0) return null;
     const pcts: number[] = [];
-    for (const r of catRows) {
+    for (const r of rows) {
       const pct = parseCatAccuracy(r.results as PracticeTestResultsJson | null);
       if (pct != null) pcts.push(pct);
     }
     return {
-      completedCount: catRows.length,
+      completedCount: rows.length,
       avgAccuracyPct: pcts.length > 0 ? Math.round(pcts.reduce((a, b) => a + b, 0) / pcts.length) : null,
-      lastCompletedAt: catRows[0]!.completedAt,
+      lastCompletedAt: rows[0]!.completedAt,
     };
   } catch {
     return null;

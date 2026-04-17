@@ -1,0 +1,17 @@
+---
+description: NurseNest production governance — surgical diffs, auth safety, UI stability, focused verification
+alwaysApply: true
+---
+
+# NurseNest Production Governance
+
+- Keep edits surgical. Do not rewrite unrelated files.
+- No schema, migration, or response-shape changes unless explicitly requested.
+- Preserve learner route behavior: Lessons, Flashcards, Questions, CAT, dashboard, paywall, and entitlements must keep working.
+- Admin and staff access stay server-enforced. DB role state is the source of truth; do not trust JWT alone.
+- Do not invent parallel auth systems or move security-sensitive logic client-side.
+- Preserve locale, i18n, SEO, sitemap, robots, and canonical behavior.
+- Header, nav, and footer changes must not clip labels, wrap mid-label, or hide critical controls.
+- Do not reintroduce the arch graphic.
+- Do not add heavy libraries, touch env/secrets, or silently change app-wide copy unless explicitly asked.
+- After auth, dashboard, nav, lesson, or paywall edits, run focused validation and report what you verified.

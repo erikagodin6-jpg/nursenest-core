@@ -71,7 +71,7 @@ export async function loadLearnerProfileActivity(
       }),
       prisma.practiceTest.findMany({
         where: { userId },
-        orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
+        orderBy: { updatedAt: "desc" },
         take: testTake,
         select: {
           id: true,

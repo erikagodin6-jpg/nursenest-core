@@ -212,20 +212,16 @@ async function loadCatTrend(userId: string): Promise<CatTrendPoint[]> {
         userId,
         status: PracticeTestStatus.COMPLETED,
         completedAt: { not: null },
+        config: { path: ["selectionMode"], equals: "cat" },
       },
-      orderBy: { completedAt: "asc" },
+      orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
       select: { id: true, config: true, results: true, completedAt: true },
-      take: 50,
-    });
-
-    const catRows = rows.filter((r) => {
-      const cfg = r.config as PracticeTestConfigJson | null;
-      return cfg?.selectionMode === "cat";
+      take: 12,
     });
 
     const trend: CatTrendPoint[] = [];
     let sessionNum = 1;
-    for (const row of catRows.slice(-MAX_CAT_TREND)) {
+    for (const row of [...rows].reverse().slice(-MAX_CAT_TREND)) {
       const score = parseReadinessScore(row.results as PracticeTestResultsJson | null);
       if (score === null) { sessionNum++; continue; }
       trend.push({

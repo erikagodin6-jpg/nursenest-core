@@ -40,8 +40,8 @@ export async function loadLearnerCatHistory(userId: string, take = 40): Promise<
         userId,
         config: { path: ["selectionMode"], equals: "cat" },
       },
-      orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
-      take: Math.min(take, 12),
+      orderBy: { updatedAt: "desc" },
+      take,
       select: {
         id: true,
         title: true,

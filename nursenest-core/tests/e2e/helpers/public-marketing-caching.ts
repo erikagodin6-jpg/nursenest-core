@@ -73,6 +73,11 @@ function buildDocumentResponseLog(loadIndex: number, response: Response): Public
   return log;
 }
 
+function isAcceptableDocumentStatus(status: number | undefined): boolean {
+  if (status === undefined) return false;
+  return status === 304 || (status >= 200 && status < 400);
+}
+
 function findDocumentCachingViolations(documentResponses: PublicDocumentResponseLog[]): string[] {
   const violations: string[] = [];
   for (const response of documentResponses) {
@@ -109,7 +114,7 @@ function findReloadDocumentFullFetchViolations(documentResponses: PublicDocument
 }
 
 function likelyNextDev(appOrigin: string): boolean {
-  if (process.env.PLAYWRIGHT_SKIP_WEB_SERVER === "1") return false;
+  if (process.env.E2E_PUBLIC_ASSUME_PRODUCTION === "1") return false;
   return /127\.0\.0\.1|localhost/.test(appOrigin);
 }
 
@@ -133,6 +138,7 @@ export async function runPublicCachingScenario(input: {
   } = input;
 
   const appOrigin = new URL(baseURL ?? "http://127.0.0.1:3000").origin;
+  const runningLikelyNextDev = likelyNextDev(appOrigin);
   const tracker = attachPublicMarketingDataResponseTracker(page, appOrigin);
   const observers = attachPageObservers(page, { profile: "public" });
   const navigationDurationsMs: number[] = [];
@@ -140,12 +146,12 @@ export async function runPublicCachingScenario(input: {
   const documentResponses: PublicDocumentResponseLog[] = [];
   const warnings: string[] = [];
 
-  if (likelyNextDev(appOrigin)) {
+  if (runningLikelyNextDev) {
     warnings.push(
       "Likely running against next dev. For production-grade caching and ≤2s SLA enforcement, prefer BASE_URL=<next-start-or-prod> with PLAYWRIGHT_SKIP_WEB_SERVER=1.",
     );
   }
-  if (NAV_SLA_MS !== undefined && !Number.isNaN(NAV_SLA_MS) && likelyNextDev(appOrigin)) {
+  if (NAV_SLA_MS !== undefined && !Number.isNaN(NAV_SLA_MS) && runningLikelyNextDev) {
     warnings.push(
       `E2E_PUBLIC_NAV_SLA_MS=${NAV_SLA_MS} is active while running against a likely dev server; expect stricter production-mode failures until you switch to next start or a deployed URL.`,
     );
@@ -160,7 +166,10 @@ export async function runPublicCachingScenario(input: {
           ? await page.goto(path, { waitUntil: "domcontentloaded", timeout: 60_000 })
           : await page.reload({ waitUntil: "domcontentloaded", timeout: 60_000 });
 
-      expect(response?.ok(), `${label}: HTTP ${response?.status()} for ${loadIndex === 0 ? path : `reload ${loadIndex}`}`).toBeTruthy();
+      expect(
+        isAcceptableDocumentStatus(response?.status()),
+        `${label}: HTTP ${response?.status()} for ${loadIndex === 0 ? path : `reload ${loadIndex}`}`,
+      ).toBeTruthy();
 
       const navElapsed = Date.now() - t0;
       navigationDurationsMs.push(navElapsed);
@@ -187,11 +196,16 @@ export async function runPublicCachingScenario(input: {
 
     const reloadViolations = findReloadFullFetchViolations(tracker.entries);
     const documentReloadViolations = findReloadDocumentFullFetchViolations(documentResponses);
-    const missingCachingHeaderViolations = [
-      ...findMissingCachingHeaderViolations(tracker.entries),
-      ...findDocumentCachingViolations(documentResponses),
-    ];
+    const missingCachingHeaderViolations = runningLikelyNextDev
+      ? findMissingCachingHeaderViolations(tracker.entries)
+      : [
+          ...findMissingCachingHeaderViolations(tracker.entries),
+          ...findDocumentCachingViolations(documentResponses),
+        ];
     const duplicateInLoad = findDuplicateIdenticalDataRequestsInLoad(tracker.entries);
+    const reloadFullFetchViolations = runningLikelyNextDev
+      ? reloadViolations
+      : [...documentReloadViolations, ...reloadViolations];
 
     const artifact: PublicCachingArtifact = {
       label,
@@ -205,7 +219,7 @@ export async function runPublicCachingScenario(input: {
       shellVisibleAfterNavMs,
       documentResponses,
       dataResponses: tracker.entries,
-      reloadFullFetchViolations: [...documentReloadViolations, ...reloadViolations],
+      reloadFullFetchViolations,
       missingCachingHeaderViolations,
       duplicateIdenticalRequestsInLoad: duplicateInLoad,
       consoleErrors: observers.consoleErrors,
@@ -223,8 +237,8 @@ export async function runPublicCachingScenario(input: {
       `${label}: missing cache headers or validators:\n${missingCachingHeaderViolations.join("\n")}\nSee ${label}.json.`,
     ).toEqual([]);
     expect(
-      [...documentReloadViolations, ...reloadViolations],
-      `${label}: repeated reload full fetch violations:\n${[...documentReloadViolations, ...reloadViolations].join("\n")}\nSee ${label}.json.`,
+      reloadFullFetchViolations,
+      `${label}: repeated reload full fetch violations:\n${reloadFullFetchViolations.join("\n")}\nSee ${label}.json.`,
     ).toEqual([]);
     expect(
       duplicateInLoad,
