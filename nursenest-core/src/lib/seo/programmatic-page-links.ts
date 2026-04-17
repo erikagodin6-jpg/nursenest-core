@@ -16,6 +16,7 @@ import type { SeoCluster, SeoPageDefinition } from "@/lib/seo/programmatic-regis
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { isValidPublicUrl } from "@/lib/seo/public-url-validator";
 import { clusterQuestionBankHref } from "@/lib/seo/programmatic-seo-cluster-links";
+import { logSeoEmittedUrlBatch } from "@/lib/seo/seo-url-emission-audit";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export type ProgrammaticProductLinks = {
@@ -111,6 +112,14 @@ function finalizeProgrammaticProductLinks(links: ProgrammaticProductLinks, pageS
       });
     }
   });
+  logSeoEmittedUrlBatch(
+    "programmatic_product_links",
+    (Object.keys(links) as (keyof ProgrammaticProductLinks)[]).map((key) => {
+      const href = links[key];
+      return href.startsWith("http://") || href.startsWith("https://") ? href : absoluteUrl(href);
+    }),
+    { pageSlug },
+  );
   return links;
 }
 

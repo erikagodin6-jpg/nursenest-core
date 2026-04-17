@@ -143,7 +143,16 @@ export function adminRouteGateDecision(
 ): { allow: true } | { allow: false; redirectTo: "/app" | "/admin" } {
   if (!staff) return { allow: false, redirectTo: "/app" };
   const raw = (adminPathHeader ?? "").trim();
-  const pathForRbac = raw.length > 0 ? raw : "/";
+  let pathForRbac = raw.length > 0 ? raw : "/";
+  /**
+   * RSC sometimes lacks proxy-forwarded pathname headers; we resolve to `/` (see `resolveAdminRequestPath`).
+   * Treat that as the admin home RBAC target — not `"/"` (which fails closed for non-super and caused
+   * `redirect("/admin")` while already rendering `/admin`).
+   * API routes use `req.url` in `ensure-admin.ts` and are not gated with this ambiguous path.
+   */
+  if (pathForRbac === "/") {
+    pathForRbac = "/admin";
+  }
   if (!isPathAllowedForStaffTier(staff.tier, pathForRbac)) {
     return { allow: false, redirectTo: "/admin" };
   }

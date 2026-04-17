@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { BlogIndexPost } from "@/lib/blog/safe-blog-queries";
 import { getPublishedBlogPostsPage } from "@/lib/blog/safe-blog-queries";
+import { logBlogLatestLinkHrefs } from "@/lib/seo/seo-url-emission-audit";
 
 type Props = {
   /** How many recent posts to surface (keep small for crawl budget + layout). */
@@ -26,6 +27,8 @@ export async function MarketingBlogLatestLinks({ take = 3, className, heading, p
       ? postsProp.slice(0, safeTake)
       : (await getPublishedBlogPostsPage(1, safeTake)).posts;
   if (posts.length === 0) return null;
+
+  logBlogLatestLinkHrefs(posts.map((p) => `/blog/${encodeURIComponent(p.slug)}`));
 
   return (
     <div className={className}>

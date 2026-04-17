@@ -68,16 +68,11 @@ test("adminRouteGateDecision: content staff allowed on eeat-editorial", () => {
   assert.deepEqual(adminRouteGateDecision({ tier: "content" }, "/admin/eeat-editorial"), { allow: true });
 });
 
-test("adminRouteGateDecision: empty admin path fails closed for non-super", () => {
-  assert.deepEqual(adminRouteGateDecision({ tier: "support" }, ""), {
-    allow: false,
-    redirectTo: "/admin",
-  });
-  assert.deepEqual(adminRouteGateDecision({ tier: "content" }, ""), {
-    allow: false,
-    redirectTo: "/admin",
-  });
+test("adminRouteGateDecision: empty or unresolved / path defaults to /admin for staff (RSC header gaps)", () => {
+  assert.deepEqual(adminRouteGateDecision({ tier: "support" }, ""), { allow: true });
+  assert.deepEqual(adminRouteGateDecision({ tier: "content" }, ""), { allow: true });
   assert.deepEqual(adminRouteGateDecision({ tier: "super" }, ""), { allow: true });
+  assert.deepEqual(adminRouteGateDecision({ tier: "support" }, "/"), { allow: true });
 });
 
 test("content cannot access super-only ops or export APIs", () => {

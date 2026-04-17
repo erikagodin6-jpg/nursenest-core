@@ -16,6 +16,7 @@ import {
 } from "@/lib/seo/sitemap-static-xml";
 import { getSitemapIncludedLocales } from "@/lib/i18n/language-readiness";
 import { isValidPublicUrl } from "@/lib/seo/public-url-validator";
+import { logSeoEmittedUrlBatch } from "@/lib/seo/seo-url-emission-audit";
 
 /**
  * Single sitemap urlset used by `/sitemap.xml`.
@@ -93,6 +94,10 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
       if (allStatic.has(loc)) continue;
       merged.push(lastmod ? { loc, lastmod } : { loc });
     }
+    logSeoEmittedUrlBatch("sitemap_merged", merged.map((m) => m.loc), {
+      staticCount: String(allStatic.size),
+      mergedTotal: String(merged.length),
+    });
     return buildSitemapUrlsetFromAbsoluteUrls(merged);
   } catch (e) {
     const detail = e instanceof Error ? e.message : String(e);

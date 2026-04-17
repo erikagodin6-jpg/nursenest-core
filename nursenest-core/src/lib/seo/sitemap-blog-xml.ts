@@ -9,6 +9,7 @@ import {
   resolveSitemapOrigin,
   type SitemapUrlEntry,
 } from "@/lib/seo/sitemap-static-xml";
+import { logSeoEmittedUrlBatch } from "@/lib/seo/seo-url-emission-audit";
 
 /**
  * Blog sitemap: `/blog` plus published post URLs when Prisma is available.
@@ -44,6 +45,9 @@ export async function listBlogSitemapEntriesSafe(): Promise<SitemapUrlEntry[]> {
     });
   }
 
+  logSeoEmittedUrlBatch("sitemap_blog", entries.map((e) => e.loc), {
+    entryCount: String(entries.length),
+  });
   return entries;
 }
 

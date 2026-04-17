@@ -41,6 +41,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-loader";
 import { PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { logSeoEmittedUrlBatch } from "@/lib/seo/seo-url-emission-audit";
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
 import { getSitemapIncludedLocales } from "@/lib/i18n/language-readiness";
 import {
@@ -182,6 +183,7 @@ export async function collectPathwayLessonSeoUrls(origin: string): Promise<strin
       if (batch.length < PATHWAY_LESSON_SITEMAP_BATCH) break;
     }
   }
+  logSeoEmittedUrlBatch("sitemap_pathway_lesson_urls", urls);
   return urls;
 }
 

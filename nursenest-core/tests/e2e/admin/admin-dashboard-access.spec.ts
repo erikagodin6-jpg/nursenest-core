@@ -87,6 +87,17 @@ test.describe("Admin — dashboard access", () => {
         expect(adminPath.includes("/login"), "admin should not bounce to login for staff").toBe(false);
       });
 
+      await test.step("Header Admin link → /admin (marketing shell)", async () => {
+        await page.goto(`${origin}/`, { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT_MS });
+        const adminCta = page.getByRole("link", { name: /Admin dashboard/i }).first();
+        await expect(adminCta, "site header should expose /admin for staff").toBeVisible({ timeout: 20_000 });
+        await expect(adminCta).toHaveAttribute("href", "/admin");
+        await adminCta.click();
+        await page.waitForURL((url) => url.pathname.startsWith("/admin"), { timeout: 45_000 });
+        await expect(page.getByRole("heading", { name: /Admin Dashboard/i })).toBeVisible({ timeout: 90_000 });
+        await expect(page.getByRole("heading", { name: /^Just a moment$/i })).toHaveCount(0);
+      });
+
       await test.step("Dashboard content", async () => {
         const headings = await page
           .locator("h1, h2")

@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
-import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { ProductErrorState } from "@/components/ui/product-error-state";
 import { getErrorMessageDevLine, shouldShowErrorBoundaryDevDetail } from "@/lib/runtime/error-message";
 
@@ -22,9 +21,6 @@ export default function AdminError({
 
   return (
     <main className="mx-auto max-w-xl px-6 py-16">
-      <a href="/" className="mb-6 inline-flex justify-center bg-transparent" aria-label="NurseNest home">
-        <SiteBrandLogoMark variant="auth" logoVariant="leaf" />
-      </a>
       <ProductErrorState
         title="Just a moment"
         description="We couldn’t finish loading the admin view. This is usually temporary — try again in a moment, or return home."

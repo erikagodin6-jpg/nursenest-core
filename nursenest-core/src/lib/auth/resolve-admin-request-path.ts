@@ -51,6 +51,7 @@ export async function resolveAdminRequestPath(): Promise<string> {
     h.get("x-nn-request-pathname"),
     h.get("x-nn-request-url"),
     h.get("x-invoke-path"),
+    h.get("x-nextjs-matched-path"),
     h.get("next-url"),
     h.get("x-forwarded-uri"),
     h.get("x-original-uri"),
