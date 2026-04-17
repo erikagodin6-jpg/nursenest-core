@@ -1,5 +1,12 @@
+const path = require("node:path");
+
 function formatStartupWatchdogLine(event, meta) {
   return `[nursenest-core] startup_watchdog ${event} ${JSON.stringify(meta)}`;
+}
+
+function resolveStandaloneNextModulePath(entryScript, moduleRelativePath) {
+  if (typeof entryScript !== "string" || entryScript.length === 0) return null;
+  return path.join(path.dirname(entryScript), "node_modules", "next", moduleRelativePath);
 }
 
 function createStartupWatchdogLogger({
@@ -51,4 +58,5 @@ function createStartupWatchdogLogger({
 module.exports = {
   createStartupWatchdogLogger,
   formatStartupWatchdogLine,
+  resolveStandaloneNextModulePath,
 };

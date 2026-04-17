@@ -4,6 +4,7 @@ const test = require("node:test");
 const {
   createStartupWatchdogLogger,
   formatStartupWatchdogLine,
+  resolveStandaloneNextModulePath,
 } = require("./standalone-startup-watchdog-shared.cjs");
 
 test("formats startup watchdog lines consistently", () => {
@@ -53,4 +54,16 @@ test("records handler init failures with timing", () => {
   assert.match(lines[1], /startup_watchdog handlers_init_failed/);
   assert.match(lines[1], /"msSinceListening":800/);
   assert.match(lines[1], /"error":"boom"/);
+});
+
+test("resolves standalone next internals from the traced server entry", () => {
+  const resolved = resolveStandaloneNextModulePath(
+    "/workspace/nursenest-core/.next/standalone/nursenest-core/server.js",
+    "dist/server/lib/app-info-log",
+  );
+
+  assert.equal(
+    resolved,
+    "/workspace/nursenest-core/.next/standalone/nursenest-core/node_modules/next/dist/server/lib/app-info-log",
+  );
 });
