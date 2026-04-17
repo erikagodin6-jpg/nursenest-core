@@ -7,6 +7,9 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 /**
  * Explicit `text/plain` robots.txt — no DB; always 200 for crawlers.
  *
+ * **Sitemap:** exactly one `Sitemap:` line pointing at `${CANONICAL_PRODUCTION_ORIGIN}/sitemap.xml`
+ * (single GSC / crawler entry; no sitemap index or child sitemap URLs here).
+ *
  * SEO indexing policy per language status:
  * - active (full tier): allowed — Google indexes the locale pages normally.
  * - partial (partial tier): pages are served with `noindex` meta (injected by
@@ -40,6 +43,8 @@ function buildDisallowedLocaleLines(): string {
   return lines.join("\n");
 }
 
+const CANONICAL_SITEMAP_LINE = `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap.xml` as const;
+
 const FALLBACK_BODY = [
   "User-agent: *",
   "Allow: /",
@@ -48,10 +53,22 @@ const FALLBACK_BODY = [
   "Disallow: /api/",
   "Disallow: /seo/",
   "",
-  `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap.xml`,
+  CANONICAL_SITEMAP_LINE,
 ].join("\n");
 
 const ROBOTS_PATHNAME = "/robots.txt";
+
+function assertSingleCanonicalSitemapDirective(body: string): void {
+  const lines = body.split(/\r?\n/);
+  const sitemapLines = lines.filter((l) => /^\s*Sitemap:\s*/i.test(l));
+  if (sitemapLines.length !== 1) {
+    throw new Error(`robots.txt must contain exactly one Sitemap directive, got ${sitemapLines.length}`);
+  }
+  const expected = CANONICAL_SITEMAP_LINE.trim();
+  if (sitemapLines[0].trim() !== expected) {
+    throw new Error(`robots.txt Sitemap must be exactly: ${expected}`);
+  }
+}
 
 export async function GET() {
   const t0 = Date.now();
@@ -67,8 +84,10 @@ export async function GET() {
       "Disallow: /seo/",
       ...(disallowedLocales ? [disallowedLocales] : []),
       "",
-      `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap.xml`,
+      CANONICAL_SITEMAP_LINE,
     ].join("\n");
+
+    assertSingleCanonicalSitemapDirective(body);
 
     return new Response(body, { status: 200, headers: ROBOTS_HEADERS });
   } catch (e) {

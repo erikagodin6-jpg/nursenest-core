@@ -128,18 +128,12 @@ const nextConfig: NextConfig = {
       /** Older Next split-sitemap routes → unified `/sitemap.xml` for GSC + bookmarks. */
       { source: "/sitemap/0.xml", destination: "/sitemap.xml", permanent: true },
       { source: "/sitemap/1.xml", destination: "/sitemap.xml", permanent: true },
-      /** Legacy child sitemap URLs → single merged `/sitemap.xml` (one GSC entry point). */
-      { source: "/sitemaps/core.xml", destination: "/sitemap.xml", permanent: true },
-      { source: "/sitemaps/blog.xml", destination: "/sitemap.xml", permanent: true },
-      { source: "/sitemaps/seo-pages.xml", destination: "/sitemap.xml", permanent: true },
-      { source: "/sitemaps/tools.xml", destination: "/sitemap.xml", permanent: true },
-      { source: "/sitemaps/localized-blog.xml", destination: "/sitemap.xml", permanent: true },
-      ...CORE_HOSTED_MARKETING_LOCALES.map((locale) => ({
-        source: `/sitemaps/locale-${locale}.xml`,
-        destination: "/sitemap.xml",
-        permanent: true,
-      })),
-      { source: "/sitemaps/locales/:locale", destination: "/sitemap.xml", permanent: true },
+      /**
+       * Legacy child sitemap URLs (`/sitemaps/core.xml`, `/sitemaps/blog.xml`, `/sitemaps/locale-*.xml`, …)
+       * → single merged `/sitemap.xml`. One catch-all avoids maintaining parallel lists; crawlers should only
+       * use `/sitemap.xml` (see `robots.txt`).
+       */
+      { source: "/sitemaps/:path*", destination: "/sitemap.xml", permanent: true },
       ...seoCanonicalRedirects,
       /** Institutional pricing: canonical path `/for-institutions` (footer + marketing). */
       { source: "/institutional-pricing", destination: "/for-institutions", permanent: true },
