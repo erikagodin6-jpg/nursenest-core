@@ -130,18 +130,21 @@ export async function buildQuestionBankCoverageReport(): Promise<QuestionBankCov
 
       const pathwayPublishedMatch: QuestionBankCoverageReport["pathwayPublishedMatch"] = [];
       for (const batch of chunk(EXAM_PATHWAYS, 4)) {
-        for (const p of batch) {
-          const keys = [...new Set(p.contentExamKeys)];
-          const publishedCount = await prisma.examQuestion.count({
-            where: { status: DB_PUBLISHED, exam: { in: keys } },
-          });
-          pathwayPublishedMatch.push({
-            pathwayId: p.id,
-            displayName: p.displayName,
-            contentExamKeys: keys,
-            publishedCount,
-          });
-        }
+        const rows = await Promise.all(
+          batch.map(async (p) => {
+            const keys = [...new Set(p.contentExamKeys)];
+            const publishedCount = await prisma.examQuestion.count({
+              where: { status: DB_PUBLISHED, exam: { in: keys } },
+            });
+            return {
+              pathwayId: p.id,
+              displayName: p.displayName,
+              contentExamKeys: keys,
+              publishedCount,
+            };
+          }),
+        );
+        pathwayPublishedMatch.push(...rows);
       }
 
       const zeros = pathwayPublishedMatch.filter((r) => r.publishedCount === 0).map((r) => r.pathwayId);

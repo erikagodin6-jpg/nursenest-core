@@ -31,7 +31,7 @@ export function HeaderBrandLockup() {
       </span>
       <span
         className="relative z-[21] text-[1.125rem] font-medium tracking-[-0.01em] leading-none text-[var(--nav-fg)] sm:text-[1.2rem] lg:text-[1.3125rem]"
-        style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
+        style={{ fontFamily: "var(--font-sans)" }}
       >
         NurseNest
       </span>

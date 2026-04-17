@@ -14,19 +14,50 @@
 import { fileURLToPath } from "url";
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
-import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "./src/lib/exam-pathways/programmatic-slug-redirects";
-import { buildPathwayLessonSlugRedirectsForNextConfig } from "./src/lib/lessons/pathway-lesson-slug-redirects";
-import { CORE_HOSTED_MARKETING_LOCALES } from "./src/lib/i18n/marketing-locale-policy";
-import {
-  buildLegacyProgrammaticSeoRedirectsToPathwayHubs,
-  LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT,
-} from "./src/lib/marketing/canonical-pathway-hubs";
-import { getAllProgrammaticSlugs } from "./src/lib/seo/programmatic-registry";
 
 /** Parent of `nursenest-core/` (repo root); avoids `path` in config bundle (fixes ESM load). */
 const monorepoRoot = fileURLToPath(new URL("..", import.meta.url));
 
 const runHeavyBuildTasks = process.env.RUN_HEAVY_BUILD_TASKS !== "false";
+
+type HeavyRoutingDeps = {
+  CORE_HOSTED_MARKETING_LOCALES: typeof import("./src/lib/i18n/marketing-locale-policy").CORE_HOSTED_MARKETING_LOCALES;
+  PROGRAMMATIC_SLUG_TO_PATHWAY_PATH: typeof import("./src/lib/exam-pathways/programmatic-slug-redirects").PROGRAMMATIC_SLUG_TO_PATHWAY_PATH;
+  LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT: typeof import("./src/lib/marketing/canonical-pathway-hubs").LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT;
+  buildLegacyProgrammaticSeoRedirectsToPathwayHubs: typeof import("./src/lib/marketing/canonical-pathway-hubs").buildLegacyProgrammaticSeoRedirectsToPathwayHubs;
+  buildPathwayLessonSlugRedirectsForNextConfig: typeof import("./src/lib/lessons/pathway-lesson-slug-redirects").buildPathwayLessonSlugRedirectsForNextConfig;
+  getAllProgrammaticSlugs: typeof import("./src/lib/seo/programmatic-registry").getAllProgrammaticSlugs;
+};
+
+let heavyRoutingDepsPromise: Promise<HeavyRoutingDeps> | null = null;
+let heavyProgrammaticSlugsPromise: Promise<readonly string[]> | null = null;
+
+function loadHeavyRoutingDeps(): Promise<HeavyRoutingDeps> {
+  if (!heavyRoutingDepsPromise) {
+    heavyRoutingDepsPromise = Promise.all([
+      import("./src/lib/i18n/marketing-locale-policy"),
+      import("./src/lib/exam-pathways/programmatic-slug-redirects"),
+      import("./src/lib/marketing/canonical-pathway-hubs"),
+      import("./src/lib/lessons/pathway-lesson-slug-redirects"),
+      import("./src/lib/seo/programmatic-registry"),
+    ]).then(([i18n, pathways, canonical, lessons, seo]) => ({
+      CORE_HOSTED_MARKETING_LOCALES: i18n.CORE_HOSTED_MARKETING_LOCALES,
+      PROGRAMMATIC_SLUG_TO_PATHWAY_PATH: pathways.PROGRAMMATIC_SLUG_TO_PATHWAY_PATH,
+      LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT: canonical.LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT,
+      buildLegacyProgrammaticSeoRedirectsToPathwayHubs: canonical.buildLegacyProgrammaticSeoRedirectsToPathwayHubs,
+      buildPathwayLessonSlugRedirectsForNextConfig: lessons.buildPathwayLessonSlugRedirectsForNextConfig,
+      getAllProgrammaticSlugs: seo.getAllProgrammaticSlugs,
+    }));
+  }
+  return heavyRoutingDepsPromise;
+}
+
+async function loadHeavyProgrammaticSlugs(): Promise<readonly string[]> {
+  if (!heavyProgrammaticSlugsPromise) {
+    heavyProgrammaticSlugsPromise = loadHeavyRoutingDeps().then(({ getAllProgrammaticSlugs }) => getAllProgrammaticSlugs());
+  }
+  return heavyProgrammaticSlugsPromise;
+}
 
 const legacyMedMathRedirect = {
   source: "/med-math",
@@ -104,7 +135,15 @@ const nextConfig: NextConfig = {
     if (!runHeavyBuildTasks) {
       return [legacyMedMathRedirect];
     }
-    const seoCanonicalRedirects = getAllProgrammaticSlugs()
+    const {
+      CORE_HOSTED_MARKETING_LOCALES,
+      PROGRAMMATIC_SLUG_TO_PATHWAY_PATH,
+      LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT,
+      buildLegacyProgrammaticSeoRedirectsToPathwayHubs,
+      buildPathwayLessonSlugRedirectsForNextConfig,
+    } = await loadHeavyRoutingDeps();
+    const programmaticSlugs = await loadHeavyProgrammaticSlugs();
+    const seoCanonicalRedirects = programmaticSlugs
       .filter((slug) => !LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT.has(slug))
       .map((slug) => ({
         source: `/seo/${slug}`,
@@ -155,7 +194,9 @@ const nextConfig: NextConfig = {
     if (!runHeavyBuildTasks) {
       return { beforeFiles: [] };
     }
-    const programmaticSeoRewrites = getAllProgrammaticSlugs()
+    const { LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT } = await loadHeavyRoutingDeps();
+    const programmaticSlugs = await loadHeavyProgrammaticSlugs();
+    const programmaticSeoRewrites = programmaticSlugs
       .filter((slug) => !LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT.has(slug))
       .map((slug) => ({
         source: `/${slug}`,

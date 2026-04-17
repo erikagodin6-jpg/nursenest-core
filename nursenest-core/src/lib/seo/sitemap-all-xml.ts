@@ -62,7 +62,13 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
       allStatic.add(url);
     };
 
-    for (const url of await collectCoreUrls(origin)) {
+    const [coreUrls, blogSitemapEntries, localizedBlogSitemapEntries] = await Promise.all([
+      collectCoreUrls(origin),
+      listBlogSitemapEntriesSafe(),
+      listLocalizedBlogSitemapEntriesSafe(),
+    ]);
+
+    for (const url of coreUrls) {
       pushStatic(url);
     }
 
@@ -80,7 +86,7 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
       }
     }
 
-    for (const entry of await listBlogSitemapEntriesSafe()) {
+    for (const entry of blogSitemapEntries) {
       const r = isValidPublicUrl(entry.loc, { origin });
       if (!r.ok) {
         safeServerLog("seo", "sitemap_blog_url_rejected", {
@@ -101,7 +107,7 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
       blogEntries.set(entry.loc, entry.lastmod);
     }
 
-    for (const entry of await listLocalizedBlogSitemapEntriesSafe()) {
+    for (const entry of localizedBlogSitemapEntries) {
       const r = isValidPublicUrl(entry.loc, { origin });
       if (!r.ok) {
         safeServerLog("seo", "sitemap_localized_blog_url_rejected", {

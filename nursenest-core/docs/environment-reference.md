@@ -32,7 +32,7 @@ Test/staging/production should use **different** secrets and DB URLs; never reus
 | Variable | Required (prod) | Purpose |
 |----------|------------------|---------|
 | `DATABASE_URL` | **Yes** | Prisma Postgres URL (only variable; do not use `PROD_DATABASE_URL`) |
-| `DATABASE_DIRECT_URL` | Optional | Direct (non-pooler) URL for migrations; often derived by env-bootstrap |
+| `DIRECT_URL` | Optional | Direct (non-pooler) URL for migrations; often derived by env-bootstrap (`DATABASE_DIRECT_URL` is a legacy alias) |
 | `PRISMA_CONNECTION_LIMIT` | Optional | Pool size override |
 | `PRISMA_POOL_TIMEOUT` | Optional | Pool timeout override |
 | `NN_DB_MAX_CONCURRENT_QUERIES` | Optional | App-side query semaphore |

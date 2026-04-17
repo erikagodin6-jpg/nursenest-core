@@ -171,10 +171,23 @@ export async function loadPathwayLessonsHubAggregates(
     listOpts: { q?: string } | undefined;
     qEffective: string;
     skipLaunchBundle: boolean;
+    includeLessonCount?: boolean;
+    includeLaunchBundle?: boolean;
+    includeTopics?: boolean;
   },
   ctx: MarketingHubDataLoadContext,
 ): Promise<PathwayLessonsHubAggregates> {
-  const { pageRequested, pageSizeRequested, lessonContentLocale, listOpts, qEffective, skipLaunchBundle } = args;
+  const {
+    pageRequested,
+    pageSizeRequested,
+    lessonContentLocale,
+    listOpts,
+    qEffective,
+    skipLaunchBundle,
+    includeLessonCount = true,
+    includeLaunchBundle = true,
+    includeTopics = true,
+  } = args;
 
   const tasks: { name: string; run: () => Promise<unknown> }[] = [
     {
@@ -183,13 +196,16 @@ export async function loadPathwayLessonsHubAggregates(
         getPathwayLessonsPageFresh(pathway.id, pageRequested, pageSizeRequested, lessonContentLocale, listOpts),
     },
     { name: "question_snapshot", run: () => loadPathwayQuestionBankSnapshot(pathway.id) },
-    { name: "lesson_count", run: () => countPathwayLessonsPublic(pathway.id) },
+    { name: "lesson_count", run: () => (includeLessonCount ? countPathwayLessonsPublic(pathway.id) : Promise.resolve(ZERO_LESSON_COUNT)) },
     {
       name: "launch_bundle",
       run: () =>
-        skipLaunchBundle ? Promise.resolve(null) : resolvePathwayLaunchBundle(pathway.id, lessonContentLocale),
+        !includeLaunchBundle || skipLaunchBundle ? Promise.resolve(null) : resolvePathwayLaunchBundle(pathway.id, lessonContentLocale),
     },
-    { name: "topic_clusters", run: () => listTopicClustersForPublicNavigation(pathway.id, lessonContentLocale) },
+    {
+      name: "topic_clusters",
+      run: () => (includeTopics ? listTopicClustersForPublicNavigation(pathway.id, lessonContentLocale) : Promise.resolve([])),
+    },
   ];
 
   const settled = await Promise.allSettled(tasks.map((t) => runHubOptionalTask(t.run())));
@@ -241,7 +257,7 @@ export async function loadPathwayLessonsHubAggregates(
   const lessonCountRejected = settled.some(
     (result, i) => tasks[i]!.name === "lesson_count" && result.status === "rejected",
   );
-  if (lessonCountRejected) {
+  if (includeLessonCount && lessonCountRejected) {
     recordRouteRenderFallback({
       fallbackType: "zero_lesson_count_fallback",
       pathname: ctx.pathname,
@@ -253,7 +269,7 @@ export async function loadPathwayLessonsHubAggregates(
   const topicClusterRejected = settled.some(
     (result, i) => tasks[i]!.name === "topic_clusters" && result.status === "rejected",
   );
-  if (topicClusterRejected) {
+  if (includeTopics && topicClusterRejected) {
     recordRouteRenderFallback({
       fallbackType: "topic_cluster_ui_degraded",
       pathname: ctx.pathname,

@@ -39,9 +39,11 @@ function localDevWebServer() {
       AUTH_URL: origin.origin,
       NEXTAUTH_URL: origin.origin,
       ...(process.env.DATABASE_URL?.trim() ? { DATABASE_URL: process.env.DATABASE_URL.trim() } : {}),
-      ...(process.env.DATABASE_DIRECT_URL?.trim()
-        ? { DATABASE_DIRECT_URL: process.env.DATABASE_DIRECT_URL.trim() }
-        : {}),
+      ...(function directUrlForPlaywright() {
+        const d =
+          process.env.DIRECT_URL?.trim() ?? process.env.DATABASE_DIRECT_URL?.trim();
+        return d ? { DIRECT_URL: d } : {};
+      })(),
     },
   } as const;
 }

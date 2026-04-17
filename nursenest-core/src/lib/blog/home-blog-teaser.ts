@@ -14,7 +14,7 @@ export async function loadHomeBlogTeaserPostsSafe(take: number): Promise<BlogInd
   const t0 = Date.now();
   const safeTake = Math.min(6, Math.max(1, Math.floor(take)));
   try {
-    const { posts } = await getPublishedBlogPostsPage(1, safeTake);
+    const { posts } = await getPublishedBlogPostsPage(1, safeTake, undefined, { includeTotal: false });
     const ms = Date.now() - t0;
     if (ms > HOME_BLOG_TEASER_SLOW_MS) {
       safeServerLog("crawl_surface", "home_blog_teaser_slow", { ms, count: posts.length });

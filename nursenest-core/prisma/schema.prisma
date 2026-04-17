@@ -5,7 +5,7 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  directUrl = env("DATABASE_DIRECT_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 /// Same database, **direct** connection for migrate/introspect (non-pooler). Optional; derived from `DATABASE_URL` when unset.

@@ -906,7 +906,7 @@ export const getLessonsForTopicPage = cache(getLessonsForTopicPageWithDataCache)
  * one visible lesson for the current content locale. This prevents sidebars / topic chips from linking
  * into the empty topic fallback while preserving the existing ordering and labels from `listTopicClusters`.
  */
-export async function listTopicClustersForPublicNavigation(
+async function listTopicClustersForPublicNavigationImpl(
   pathwayId: string,
   marketingLocale?: string,
 ): Promise<TopicCluster[]> {
@@ -916,6 +916,8 @@ export async function listTopicClustersForPublicNavigation(
     getLessonsForTopicPage(pathwayId, topicSlug, 1, 1, effectiveLocale),
   );
 }
+
+export const listTopicClustersForPublicNavigation = cache(listTopicClustersForPublicNavigationImpl);
 
 /**
  * Topic clusters for `/sitemap.xml` only: keeps slugs where {@link getLessonsForTopicPage} would list

@@ -3,10 +3,10 @@
 **Single source of truth:** `DATABASE_URL` is the only Postgres connection string the app and Prisma use.
 
 - **`DATABASE_URL`** — required. Pooled URI is normal for the running app on DigitalOcean.
-- **`DATABASE_DIRECT_URL`** — optional. Same cluster, **direct** (non-pooler) URI for `prisma migrate` / introspection. If unset, `src/lib/db/env-bootstrap.ts` derives one by stripping `pgbouncer=true` from `DATABASE_URL` when possible.
+- **`DIRECT_URL`** — optional. Same cluster, **direct** (non-pooler) URI for `prisma migrate` / introspection. If unset, `src/lib/db/env-bootstrap.ts` derives one by stripping `pgbouncer=true` from `DATABASE_URL` when possible. Legacy alias **`DATABASE_DIRECT_URL`** is still read when `DIRECT_URL` is unset.
 - **`PROD_DATABASE_URL`** — **not supported**. It is never merged into `DATABASE_URL`. Remove it from env files and secret stores to avoid confusion.
 
-`schema.prisma` uses `url = env("DATABASE_URL")` and `directUrl = env("DATABASE_DIRECT_URL")`.
+`schema.prisma` uses `url = env("DATABASE_URL")` and `directUrl = env("DIRECT_URL")`.
 
 There is **no** `NEXT_PUBLIC_*` database secret.
 

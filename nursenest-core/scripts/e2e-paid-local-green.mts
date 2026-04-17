@@ -105,7 +105,7 @@ async function main(): Promise<void> {
   const dbEnv: NodeJS.ProcessEnv = {
     ...process.env,
     DATABASE_URL: LOCAL_DATABASE_URL,
-    DATABASE_DIRECT_URL: LOCAL_DATABASE_URL,
+    DIRECT_URL: LOCAL_DATABASE_URL,
   };
 
   /**

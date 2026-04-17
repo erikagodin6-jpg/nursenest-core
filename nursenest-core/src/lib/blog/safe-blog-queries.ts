@@ -60,9 +60,11 @@ export async function getPublishedBlogPostsPage(
   page: number,
   pageSize: number,
   scope?: BlogQueryScope,
+  options?: { includeTotal?: boolean },
 ): Promise<{ posts: BlogIndexPost[]; total: number; page: number; pageSize: number }> {
   const safePage = Math.max(1, page);
   const safeSize = Math.min(API_LIST_PAGE_SIZE_HARD_MAX, Math.max(1, Math.floor(pageSize)));
+  const includeTotal = options?.includeTotal !== false;
   const where = {
     AND: [
       { postStatus: BlogPostStatus.PUBLISHED },
@@ -83,7 +85,7 @@ export async function getPublishedBlogPostsPage(
         }),
       [],
     ),
-    withBlogFallback(() => prisma.blogPost.count({ where }), 0),
+    includeTotal ? withBlogFallback(() => prisma.blogPost.count({ where }), 0) : Promise.resolve(0),
   ]);
   if (
     scope?.locale &&
@@ -112,7 +114,7 @@ export async function getPublishedBlogPostsPage(
           }),
         [],
       ),
-      withBlogFallback(() => prisma.blogPost.count({ where: sourceWhere }), 0),
+      includeTotal ? withBlogFallback(() => prisma.blogPost.count({ where: sourceWhere }), 0) : Promise.resolve(0),
     ]);
     return { posts: sourcePosts, total: sourceTotal, page: safePage, pageSize: safeSize };
   }

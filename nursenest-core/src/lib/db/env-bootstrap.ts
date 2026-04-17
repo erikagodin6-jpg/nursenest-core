@@ -8,10 +8,11 @@
  * - `PRISMA_CONNECTION_LIMIT` / `PRISMA_POOL_TIMEOUT` — Prisma pool sizing vs `max_connections`
  * - `PRISMA_CONNECT_TIMEOUT_SEC` — libpq connect timeout (fail fast during failover / network blips)
  * - `PRISMA_STATEMENT_TIMEOUT_MS` — server-side `statement_timeout` (caps runaway queries); set `0` to skip injection. Injection is **skipped** automatically for common poolers (e.g. DigitalOcean `*.db.ondigitalocean.com:25061`, `pgbouncer=true`, port 6432) — those reject `options=-c statement_timeout=…`.
- * - **PgBouncer / DO pooler**: set `PRISMA_USE_PGBOUNCER=true` to append `pgbouncer=true` (or add it to the URL). Set `DATABASE_DIRECT_URL` to the
+ * - **PgBouncer / DO pooler**: set `PRISMA_USE_PGBOUNCER=true` to append `pgbouncer=true` (or add it to the URL). Set `DIRECT_URL` to the
  *   provider’s **direct** Postgres URI (non-pooler port) — required when the pooled URL uses `pgbouncer=true` (Prisma Migrate cannot use transaction pooling).
+ *   Legacy: `DATABASE_DIRECT_URL` is still read and mapped to `DIRECT_URL` when `DIRECT_URL` is unset.
  *
- * `schema.prisma` uses `url = env("DATABASE_URL")` and `directUrl = env("DATABASE_DIRECT_URL")` (see `applyDirectDatabaseUrlFromEnv`).
+ * `schema.prisma` uses `url = env("DATABASE_URL")` and `directUrl = env("DIRECT_URL")` (see `applyDirectDatabaseUrlFromEnv`).
  */
 export type DatabaseUrlSource = "database_url" | "missing";
 
@@ -35,7 +36,7 @@ function isPrismaPgbouncerMode(): boolean {
   return v === "true" || v === "1";
 }
 
-/** Remove `pgbouncer` query flag — use for `DATABASE_DIRECT_URL` (migrations / introspection must not use pooler mode). */
+/** Remove `pgbouncer` query flag — use for `DIRECT_URL` (migrations / introspection must not use pooler mode). */
 function stripPgbouncerFromUrl(urlString: string): string {
   try {
     const url = new URL(urlString);
@@ -161,20 +162,22 @@ function tuneDatabaseUrlForProcess(rawUrl: string, role: "pooled" | "direct" = "
 }
 
 /**
- * Sets `DATABASE_DIRECT_URL` for `schema.prisma` `directUrl` (migrations). If unset, mirrors the pooled
+ * Sets `DIRECT_URL` for `schema.prisma` `directUrl` (migrations). If unset, mirrors the pooled
  * URL with `pgbouncer` stripped — fine for single-instance Postgres; **with DigitalOcean pooler you should
- * set `DATABASE_DIRECT_URL` to the provider’s direct (non-pooler) connection string** for `prisma migrate`.
+ * set `DIRECT_URL` to the provider’s direct (non-pooler) connection string** for `prisma migrate`.
+ * When only `DATABASE_DIRECT_URL` is set (legacy), it is used as the raw direct URL.
  */
 export function applyDirectDatabaseUrlFromEnv(): void {
   const pooled = process.env.DATABASE_URL?.trim();
-  const rawDirect = process.env.DATABASE_DIRECT_URL?.trim();
+  const rawDirect =
+    process.env.DIRECT_URL?.trim() ?? process.env.DATABASE_DIRECT_URL?.trim();
 
   if (rawDirect) {
-    process.env.DATABASE_DIRECT_URL = tuneDatabaseUrlForProcess(rawDirect, "direct");
+    process.env.DIRECT_URL = tuneDatabaseUrlForProcess(rawDirect, "direct");
     return;
   }
   if (pooled) {
-    process.env.DATABASE_DIRECT_URL = tuneDatabaseUrlForProcess(stripPgbouncerFromUrl(pooled), "direct");
+    process.env.DIRECT_URL = tuneDatabaseUrlForProcess(stripPgbouncerFromUrl(pooled), "direct");
   }
 }
 

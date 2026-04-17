@@ -102,6 +102,9 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       listOpts,
       qEffective: qEffective ?? "",
       skipLaunchBundle: Boolean(qEffective),
+      includeLessonCount: false,
+      includeLaunchBundle: false,
+      includeTopics: false,
     },
     {
       pathname: `${pathname}/lessons`,

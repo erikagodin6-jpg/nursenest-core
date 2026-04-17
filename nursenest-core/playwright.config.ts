@@ -61,9 +61,11 @@ function localDevWebServer() {
       ...(process.env.DATABASE_URL?.trim()
         ? { DATABASE_URL: process.env.DATABASE_URL.trim() }
         : {}),
-      ...(process.env.DATABASE_DIRECT_URL?.trim()
-        ? { DATABASE_DIRECT_URL: process.env.DATABASE_DIRECT_URL.trim() }
-        : {}),
+      ...(function directUrlForPlaywright() {
+        const d =
+          process.env.DIRECT_URL?.trim() ?? process.env.DATABASE_DIRECT_URL?.trim();
+        return d ? { DIRECT_URL: d } : {};
+      })(),
       /** When `E2E_LEARNER_DEGRADED=1`, start Next with learner degraded mode (paid degraded-mode spec). */
       ...(process.env.E2E_LEARNER_DEGRADED === "1"
         ? { NN_DEGRADED_MODE: "1", NEXT_PUBLIC_NN_DEGRADED_MODE: "1" }

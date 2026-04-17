@@ -52,40 +52,53 @@ if (envFound) {
 const afterDotenv: DbEnvPresence = dbEnvPresence();
 
 const prismaCliUseDirect = process.env.PRISMA_CLI_USE_DIRECT_URL === "1";
-const directTrimmed = process.env.DATABASE_DIRECT_URL?.trim();
-let effectiveDbVariable: "DATABASE_URL" | "DATABASE_DIRECT_URL_as_DATABASE_URL" = "DATABASE_URL";
+const directTrimmed =
+  process.env.DIRECT_URL?.trim() ?? process.env.DATABASE_DIRECT_URL?.trim();
+let effectiveDbVariable: "DATABASE_URL" | "DIRECT_URL_as_DATABASE_URL" = "DATABASE_URL";
 
 if (prismaCliUseDirect && directTrimmed) {
   process.env.DATABASE_URL = directTrimmed;
-  effectiveDbVariable = "DATABASE_DIRECT_URL_as_DATABASE_URL";
+  effectiveDbVariable = "DIRECT_URL_as_DATABASE_URL";
 } else if (prismaCliUseDirect && !directTrimmed) {
   // Flag set but nothing to copy — Prisma still uses DATABASE_URL as-is
   effectiveDbVariable = "DATABASE_URL";
 }
 
+function envFileDeclaresDirectUrlSync(filePath: string): boolean {
+  return (
+    envFileDeclaresKeySync(filePath, "DIRECT_URL") ||
+    envFileDeclaresKeySync(filePath, "DATABASE_DIRECT_URL")
+  );
+}
+
 function inferSource(
-  key: "DATABASE_URL" | "DATABASE_DIRECT_URL",
+  key: "DATABASE_URL" | "DIRECT_URL",
   pre: DbEnvPresence,
   afterL: DbEnvPresence,
   afterP: DbEnvPresence,
   afterE: DbEnvPresence,
 ): string {
-  const preSet = key === "DATABASE_URL" ? pre.DATABASE_URL : pre.DATABASE_DIRECT_URL;
-  const afterLSet = key === "DATABASE_URL" ? afterL.DATABASE_URL : afterL.DATABASE_DIRECT_URL;
-  const afterPSet = key === "DATABASE_URL" ? afterP.DATABASE_URL : afterP.DATABASE_DIRECT_URL;
-  const afterESet = key === "DATABASE_URL" ? afterE.DATABASE_URL : afterE.DATABASE_DIRECT_URL;
+  const preSet = key === "DATABASE_URL" ? pre.DATABASE_URL : pre.DIRECT_URL;
+  const afterLSet = key === "DATABASE_URL" ? afterL.DATABASE_URL : afterL.DIRECT_URL;
+  const afterPSet = key === "DATABASE_URL" ? afterP.DATABASE_URL : afterP.DIRECT_URL;
+  const afterESet = key === "DATABASE_URL" ? afterE.DATABASE_URL : afterE.DIRECT_URL;
+
+  const fileDeclares =
+    key === "DATABASE_URL"
+      ? (p: string) => envFileDeclaresKeySync(p, "DATABASE_URL")
+      : envFileDeclaresDirectUrlSync;
 
   if (preSet) return "shell (already in process.env before dotenv files)";
-  if (afterLSet && envFileDeclaresKeySync(envLocalPath, key)) {
+  if (afterLSet && fileDeclares(envLocalPath)) {
     return ".env.local (first file to supply; shell did not set it)";
   }
-  if (afterPSet && !afterLSet && envFileDeclaresKeySync(envPlaywrightPath, key)) {
+  if (afterPSet && !afterLSet && fileDeclares(envPlaywrightPath)) {
     return ".env.playwright.local (shell and .env.local did not set it)";
   }
-  if (afterPSet && envFileDeclaresKeySync(envPlaywrightPath, key) && !preSet) {
+  if (afterPSet && fileDeclares(envPlaywrightPath) && !preSet) {
     return ".env.playwright.local (key present in file; order: local then playwright with override:false)";
   }
-  if (afterESet && !afterPSet && envFound && envFileDeclaresKeySync(envPath, key)) {
+  if (afterESet && !afterPSet && envFound && fileDeclares(envPath)) {
     return ".env (standard file; filled after .env.local / .env.playwright.local did not set this key)";
   }
   if (afterLSet) return ".env.local or earlier aggregate (key provenance not matched to file scan)";
@@ -95,28 +108,28 @@ function inferSource(
 }
 
 const sourceDatabaseUrl = inferSource("DATABASE_URL", preDotenv, afterLocal, afterPlaywright, afterDotenv);
-const sourceDirectUrl = inferSource("DATABASE_DIRECT_URL", preDotenv, afterLocal, afterPlaywright, afterDotenv);
+const sourceDirectUrl = inferSource("DIRECT_URL", preDotenv, afterLocal, afterPlaywright, afterDotenv);
 
 console.log(`${PREFIX} cwd=${cwd}`);
 console.log(`${PREFIX} packageRoot=${packageRoot} (env files loaded from here, not from cwd)`);
-console.log(`${PREFIX} pre_dotenv: DATABASE_URL=${preDotenv.DATABASE_URL ? "set" : "unset"} DATABASE_DIRECT_URL=${preDotenv.DATABASE_DIRECT_URL ? "set" : "unset"}`);
+console.log(`${PREFIX} pre_dotenv: DATABASE_URL=${preDotenv.DATABASE_URL ? "set" : "unset"} DIRECT_URL=${preDotenv.DIRECT_URL ? "set" : "unset"}`);
 console.log(
   `${PREFIX} files: .env.local=${envLocalFound ? "found" : "missing"} .env.playwright.local=${envPlaywrightFound ? "found" : "missing"} .env=${envFound ? "found" : "missing"}`,
 );
 console.log(
-  `${PREFIX} file_keys: .env.local declares DATABASE_URL=${envFileDeclaresKeySync(envLocalPath, "DATABASE_URL") ? "yes" : "no"} DATABASE_DIRECT_URL=${envFileDeclaresKeySync(envLocalPath, "DATABASE_DIRECT_URL") ? "yes" : "no"}`,
+  `${PREFIX} file_keys: .env.local declares DATABASE_URL=${envFileDeclaresKeySync(envLocalPath, "DATABASE_URL") ? "yes" : "no"} DIRECT_URL=${envFileDeclaresDirectUrlSync(envLocalPath) ? "yes" : "no"}`,
 );
 console.log(
-  `${PREFIX} file_keys: .env.playwright.local declares DATABASE_URL=${envFileDeclaresKeySync(envPlaywrightPath, "DATABASE_URL") ? "yes" : "no"} DATABASE_DIRECT_URL=${envFileDeclaresKeySync(envPlaywrightPath, "DATABASE_DIRECT_URL") ? "yes" : "no"}`,
+  `${PREFIX} file_keys: .env.playwright.local declares DATABASE_URL=${envFileDeclaresKeySync(envPlaywrightPath, "DATABASE_URL") ? "yes" : "no"} DIRECT_URL=${envFileDeclaresDirectUrlSync(envPlaywrightPath) ? "yes" : "no"}`,
 );
 console.log(
-  `${PREFIX} file_keys: .env declares DATABASE_URL=${envFileDeclaresKeySync(envPath, "DATABASE_URL") ? "yes" : "no"} DATABASE_DIRECT_URL=${envFileDeclaresKeySync(envPath, "DATABASE_DIRECT_URL") ? "yes" : "no"}`,
+  `${PREFIX} file_keys: .env declares DATABASE_URL=${envFileDeclaresKeySync(envPath, "DATABASE_URL") ? "yes" : "no"} DIRECT_URL=${envFileDeclaresDirectUrlSync(envPath) ? "yes" : "no"}`,
 );
 console.log(
-  `${PREFIX} after_dotenv_files: DATABASE_URL=${afterDotenv.DATABASE_URL ? "set" : "unset"} DATABASE_DIRECT_URL=${afterDotenv.DATABASE_DIRECT_URL ? "set" : "unset"}`,
+  `${PREFIX} after_dotenv_files: DATABASE_URL=${afterDotenv.DATABASE_URL ? "set" : "unset"} DIRECT_URL=${afterDotenv.DIRECT_URL ? "set" : "unset"}`,
 );
 console.log(`${PREFIX} inferred_source: DATABASE_URL ← ${sourceDatabaseUrl}`);
-console.log(`${PREFIX} inferred_source: DATABASE_DIRECT_URL ← ${sourceDirectUrl}`);
+console.log(`${PREFIX} inferred_source: DIRECT_URL ← ${sourceDirectUrl}`);
 console.log(`${PREFIX} PRISMA_CLI_USE_DIRECT_URL=${prismaCliUseDirect ? "1" : "0"}`);
 if (prismaCliUseDirect) {
   console.log(
@@ -124,7 +137,7 @@ if (prismaCliUseDirect) {
   );
 }
 console.log(
-  `${PREFIX} prisma_client_will_read: ${effectiveDbVariable === "DATABASE_DIRECT_URL_as_DATABASE_URL" ? "DATABASE_URL (value taken from DATABASE_DIRECT_URL for this process)" : "DATABASE_URL (value from shell/dotenv aggregate)"}`,
+  `${PREFIX} prisma_client_will_read: ${effectiveDbVariable === "DIRECT_URL_as_DATABASE_URL" ? "DATABASE_URL (value taken from DIRECT_URL for this process)" : "DATABASE_URL (value from shell/dotenv aggregate)"}`,
 );
 
 export type CliDotenvTelemetry = {

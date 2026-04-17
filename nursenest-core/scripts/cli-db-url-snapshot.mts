@@ -5,13 +5,16 @@ import { readFileSync, existsSync } from "node:fs";
 
 export type DbEnvPresence = {
   DATABASE_URL: boolean;
-  DATABASE_DIRECT_URL: boolean;
+  /** True if `DIRECT_URL` or legacy `DATABASE_DIRECT_URL` is set. */
+  DIRECT_URL: boolean;
 };
 
 export function dbEnvPresence(): DbEnvPresence {
   return {
     DATABASE_URL: Boolean(process.env.DATABASE_URL?.trim()),
-    DATABASE_DIRECT_URL: Boolean(process.env.DATABASE_DIRECT_URL?.trim()),
+    DIRECT_URL: Boolean(
+      process.env.DIRECT_URL?.trim() || process.env.DATABASE_DIRECT_URL?.trim(),
+    ),
   };
 }
 

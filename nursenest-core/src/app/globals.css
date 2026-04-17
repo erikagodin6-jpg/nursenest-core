@@ -28,7 +28,7 @@ body {
  * prevented theme switching from changing page colors.
  */
 :root {
-  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-sans: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
   --radius: 0.75rem;
   --color-warmwhite: #fdfcfa;
   --color-softgray: #6b7280;

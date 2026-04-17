@@ -192,7 +192,7 @@ curl -sS -o /dev/null -w "%{http_code}\n" http://127.0.0.1:3000/api/health 2>/de
 
 1. Verify in **hosting UI** (DO App Platform env / droplet systemd / PM2 ecosystem) that the variable is **injected for the runtime**, not only in local `.env`.
 2. Reload/restart after changing secrets.
-3. See `src/lib/db/env-bootstrap.ts` and `docs/RELEASE_QA.md` for pooled vs direct URLs — migrations use **`DATABASE_DIRECT_URL`** when set in Prisma schema.
+3. See `src/lib/db/env-bootstrap.ts` and `docs/RELEASE_QA.md` for pooled vs direct URLs — migrations use **`DIRECT_URL`** when set in Prisma schema.
 
 ### If Prisma cannot connect
 

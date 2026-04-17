@@ -37,7 +37,7 @@ Operational model: **stateless** Node/serverless instances, **Postgres** as sour
 ## 5) Connection safety
 
 - **Formula:** `approx_active_pool_slots ≈ (serverless_concurrency_per_region × PRISMA_CONNECTION_LIMIT)` per deploy; must stay **below** Postgres `max_connections` minus admin/migrate slots.
-- **PgBouncer:** set `PRISMA_USE_PGBOUNCER=true` and `DATABASE_DIRECT_URL` for migrations (`env-bootstrap.ts`).
+- **PgBouncer:** set `PRISMA_USE_PGBOUNCER=true` and `DIRECT_URL` for migrations (`env-bootstrap.ts`).
 
 ## 6) Horizontal scaling readiness
 

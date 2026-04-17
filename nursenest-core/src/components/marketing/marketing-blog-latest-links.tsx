@@ -25,7 +25,7 @@ export async function MarketingBlogLatestLinks({ take = 3, className, heading, p
   const posts =
     postsProp !== undefined
       ? postsProp.slice(0, safeTake)
-      : (await getPublishedBlogPostsPage(1, safeTake)).posts;
+      : (await getPublishedBlogPostsPage(1, safeTake, undefined, { includeTotal: false })).posts;
   if (posts.length === 0) return null;
 
   logBlogLatestLinkHrefs(posts.map((p) => `/blog/${encodeURIComponent(p.slug)}`));

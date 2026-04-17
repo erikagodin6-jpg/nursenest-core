@@ -156,6 +156,7 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
   const weekAgo = daysAgo(7);
   const monthAgo = daysAgo(30);
   const chartSince = daysAgo(14);
+  const diagnosticsCounts = diagnostics?.counts;
 
   try {
     const [
@@ -228,18 +229,36 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
       prisma.subscription.count({ where: { status: SubscriptionStatus.PAST_DUE } }),
       prisma.subscription.groupBy({ by: ["planTier"], _count: { _all: true } }),
       prisma.subscription.groupBy({ by: ["planCountry"], _count: { _all: true } }),
-      prisma.contentItem.count({ where: { type: "lesson" } }),
-      prisma.contentItem.count({ where: { type: "lesson", status: "published" } }),
+      diagnosticsCounts
+        ? Promise.resolve(diagnosticsCounts.lessonsContentItemsAll)
+        : prisma.contentItem.count({ where: { type: "lesson" } }),
+      diagnosticsCounts
+        ? Promise.resolve(diagnosticsCounts.lessonsContentItemsPublished)
+        : prisma.contentItem.count({ where: { type: "lesson", status: "published" } }),
       prisma.contentItem.count({ where: { type: "lesson", status: "draft" } }),
-      prisma.pathwayLesson.count({ where: { status: ContentStatus.PUBLISHED } }),
-      prisma.pathwayLesson.count({ where: { status: ContentStatus.DRAFT } }),
-      prisma.examQuestion.count(),
-      prisma.examQuestion.count({ where: { status: "published" } }),
-      prisma.blogPost.count(),
-      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.PUBLISHED } }),
+      diagnosticsCounts
+        ? Promise.resolve(diagnosticsCounts.pathwayLessonsPublished)
+        : prisma.pathwayLesson.count({ where: { status: ContentStatus.PUBLISHED } }),
+      diagnosticsCounts
+        ? Promise.resolve(diagnosticsCounts.pathwayLessonsDraft)
+        : prisma.pathwayLesson.count({ where: { status: ContentStatus.DRAFT } }),
+      diagnosticsCounts
+        ? Promise.resolve(diagnosticsCounts.questionsTotal)
+        : prisma.examQuestion.count(),
+      diagnosticsCounts
+        ? Promise.resolve(diagnosticsCounts.questionsPublished)
+        : prisma.examQuestion.count({ where: { status: "published" } }),
+      diagnosticsCounts
+        ? Promise.resolve(diagnosticsCounts.blogPostsTotal)
+        : prisma.blogPost.count(),
+      diagnosticsCounts
+        ? Promise.resolve(diagnosticsCounts.blogPostsPublished)
+        : prisma.blogPost.count({ where: { postStatus: BlogPostStatus.PUBLISHED } }),
       prisma.blogPost.count({ where: { postStatus: BlogPostStatus.DRAFT } }),
       prisma.blogPost.count({ where: { postStatus: BlogPostStatus.SCHEDULED } }),
-      prisma.flashcard.count({ where: { status: ContentStatus.PUBLISHED } }),
+      diagnosticsCounts
+        ? Promise.resolve(diagnosticsCounts.flashcardsPublished)
+        : prisma.flashcard.count({ where: { status: ContentStatus.PUBLISHED } }),
       prisma.practiceTest.count(),
       prisma.examAttempt.count({ where: { createdAt: { gte: weekAgo } } }),
       prisma.examSession.count({ where: { updatedAt: { gte: weekAgo } } }),

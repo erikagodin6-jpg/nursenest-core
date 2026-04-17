@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import Script from "next/script";
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
 import { AdminGlobalCommandPalette } from "@/components/admin/admin-global-command-palette";
@@ -12,10 +12,10 @@ import "./globals.css";
 /** Bundled with root layout CSS so marketing pages avoid a second render-blocking stylesheet (rules are dark-theme + `.nn-marketing-surface` scoped). */
 import "./(marketing)/marketing-dark-utilities.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
-  weight: "variable",
+  weight: ["400", "500", "600", "700"],
   style: ["normal"],
   display: "swap",
   adjustFontFallback: true,
@@ -80,7 +80,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} h-full antialiased`}
+      className={`${dmSans.variable} h-full antialiased`}
       data-theme="ocean"
       suppressHydrationWarning
     >

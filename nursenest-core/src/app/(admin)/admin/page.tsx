@@ -10,6 +10,46 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
 
+function AdminOverviewFallback() {
+  return (
+    <div
+      className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 text-sm text-[var(--semantic-text-secondary)]"
+      data-testid="admin-overview-pending"
+      role="status"
+    >
+      Loading overview metrics…
+    </div>
+  );
+}
+
+async function AdminOverviewSection() {
+  const overview = await loadAdminDashboardOverview().catch((e) => {
+    console.error("[AdminPage] loadAdminDashboardOverview", e);
+    safeServerLog("admin_dashboard", "overview_load_failed", {
+      detail: e instanceof Error ? e.message.slice(0, 180) : "unknown",
+    });
+    return null;
+  });
+
+  if (!overview) {
+    return (
+      <div
+        className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-warm)] p-6 text-sm text-[var(--semantic-text-secondary)]"
+        data-testid="admin-overview-fallback"
+        role="status"
+      >
+        Overview metrics could not be loaded. Check database connectivity or{" "}
+        <Link className="font-semibold text-[var(--semantic-brand)] underline" href="/admin/system-status">
+          system status
+        </Link>
+        .
+      </div>
+    );
+  }
+
+  return <AdminDashboardOverview data={overview} showHeader={false} />;
+}
+
 function AdminCommandCenterFallback() {
   return (
     <div
@@ -59,14 +99,7 @@ async function AdminCommandCenterSection({ staffTier }: { staffTier: StaffTier }
 }
 
 export default async function AdminPage() {
-  const [overview, staff] = await Promise.all([
-    loadAdminDashboardOverview().catch((e) => {
-      console.error("[AdminPage] loadAdminDashboardOverview", e);
-      return null;
-    }),
-    getStaffSession(),
-  ]);
-
+  const staff = await getStaffSession();
   const staffTier: StaffTier = staff?.tier ?? "super";
 
   return (
@@ -77,20 +110,9 @@ export default async function AdminPage() {
           Operations, content, and platform health for authenticated staff.
         </p>
       </header>
-      {overview ? (
-        <AdminDashboardOverview data={overview} showHeader={false} />
-      ) : (
-        <div
-          className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-warm)] p-6 text-sm text-[var(--semantic-text-secondary)]"
-          role="status"
-        >
-          Overview metrics could not be loaded. Check database connectivity or{" "}
-          <Link className="font-semibold text-[var(--semantic-brand)] underline" href="/admin/system-status">
-            system status
-          </Link>
-          .
-        </div>
-      )}
+      <Suspense fallback={<AdminOverviewFallback />}>
+        <AdminOverviewSection />
+      </Suspense>
 
       <Suspense fallback={<AdminCommandCenterFallback />}>
         <AdminCommandCenterSection staffTier={staffTier} />
