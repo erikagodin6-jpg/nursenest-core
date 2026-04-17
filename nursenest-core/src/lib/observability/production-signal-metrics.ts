@@ -262,5 +262,6 @@ export function recordAutoDegradedEngaged(reasonPrefix: string): void {
     degraded: true,
     errorClass: "auto_degraded",
     message: reason,
+    flow: "other",
   });
 }

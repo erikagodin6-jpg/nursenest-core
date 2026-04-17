@@ -1,11 +1,8 @@
 import Link from "next/link";
 import { unstable_cache } from "next/cache";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { getCatalogLessonPreviewTitles, listPathwayIdsWithLessons } from "@/lib/lessons/pathway-lesson-loader";
-import { examLessonsIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
@@ -68,7 +65,6 @@ export async function PublicLessonsPathwaySections({
     if (g) grouped[g].push(p);
   }
 
-  const { crumbs, schemaItems } = examLessonsIndexBreadcrumbs();
   const m = await loadMarketingMessages(locale);
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
   const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
@@ -94,10 +90,6 @@ export async function PublicLessonsPathwaySections({
 
   return (
     <div id="exam-pathways" className="scroll-mt-8">
-      <BreadcrumbJsonLd items={schemaItems.map((s) => ({ name: s.name, item: s.item }))} />
-      <div className="mb-6">
-        <BreadcrumbTrail items={crumbs} navClassName="nn-marketing-caption" />
-      </div>
       {order.map((key) => {
         const rows = grouped[key];
         if (rows.length === 0) return null;

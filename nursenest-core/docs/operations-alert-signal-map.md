@@ -57,4 +57,5 @@ Use log drains (Axiom, Datadog, etc.) to count **`event`** per window. Spike thr
 
 ## D) Runbooks
 
+**Concise alert rules + thresholds (one page):** `docs/operations-incident-alert-rules-concise.md`.  
 Step-by-step playbooks: `docs/alerting-runbooks.md`. Monitoring overview: `docs/production-monitoring-alerts.md`. Full structured inventory: `docs/structured-log-event-inventory.md`.

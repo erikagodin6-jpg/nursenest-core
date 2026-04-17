@@ -129,6 +129,7 @@
     "test:http-limits": "tsx --test src/lib/http/json-body-limit.test.ts src/lib/http/rate-limit-store.test.ts src/lib/http/rate-limit-unified.test.ts src/lib/server/api-rate-limit-policy.test.ts",
     "test:database-policy": "tsx --test src/lib/db/database-policy.test.ts src/lib/db/prisma-find-many-bounds.test.ts",
     "test:env-policy": "tsx --test src/lib/env/redact-secrets.test.ts src/lib/env/production-env-guard.test.ts",
+    "test:observability-signals": "tsx --test src/lib/observability/structured-log-signal-coverage.test.ts",
     "test:paywall-surface-policy": "tsx --test src/lib/security/paywall-surface-policy.test.ts src/lib/lessons/marketing-pathway-lesson-client-contract.test.ts src/lib/cron/enforce-cron-secret.test.ts src/lib/security/authorization-entitlement-policy.test.ts src/lib/questions/question-api-payload-strip.test.ts",
     "test:security-regression": "node --import tsx --test --test-force-exit src/lib/auth/login-lockout.test.ts src/lib/http/rate-limit-in-memory.test.ts src/lib/http/rate-limit-store.test.ts src/lib/api/api-pagination-limits-security.test.ts src/lib/stripe/stripe-webhook-signature-contract.test.ts src/lib/security/security-regression-sources.test.ts src/lib/exam-pathways/pathway-entitlements.test.ts src/lib/http/json-body-limit.test.ts src/lib/server/api-rate-limit-policy.test.ts src/lib/stripe/stripe-webhook-policy.test.ts",
     "test:lesson-high-yield": "tsx --test src/lib/lessons/lesson-high-yield-study-fields.test.ts",
