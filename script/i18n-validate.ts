@@ -39,7 +39,8 @@ function extractTranslationsFromSource(filePath: string): Record<string, string>
   if (!match) return null;
   const body = match[1];
   const result: Record<string, string> = {};
-  const entryRegex = /["']([^"']+)["']\s*:\s*["'`]((?:[^"'`\\]|\\.)*)["'`]/g;
+  /** Must match `script/compile-i18n.ts` — double-quoted values only. */
+  const entryRegex = /["']([^"']+)["']\s*:\s*"((?:\\.|[^"\\])*)"/g;
   let m: RegExpExecArray | null;
   while ((m = entryRegex.exec(body)) !== null) {
     result[m[1]] = m[2].replace(/\\"/g, '"').replace(/\\'/g, "'").replace(/\\\\/g, "\\");

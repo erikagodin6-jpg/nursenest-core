@@ -20,7 +20,7 @@
     "build:full": "NEXT_TELEMETRY_DISABLED=1 RUN_HEAVY_BUILD_TASKS=false SENTRY_ENABLED=false NODE_OPTIONS=--max-old-space-size=8192 next build",
     "build:verify": "npm run typecheck && npm run build",
     "build:deploy": "npm run build && node scripts/post-build-prune.mjs",
-    "start": "NODE_ENV=production node --max-old-space-size=${NODE_MAX_OLD_SPACE_SIZE_MB:-512} ./node_modules/next/dist/bin/next start -H 0.0.0.0 -p ${PORT:-3000}",
+    "start": "node scripts/start-standalone.mjs",
     "lint": "eslint",
     "typecheck": "NODE_OPTIONS=--max-old-space-size=8192 tsc --noEmit",
     "loadtest:k6": "k6 run tools/loadtest/k6-smoke.js",

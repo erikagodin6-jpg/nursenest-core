@@ -30,7 +30,14 @@ export function logStartupContext(): void {
 
   const db = process.env.DATABASE_URL?.trim();
   const port = process.env.PORT ?? "(unset)";
+  const argv1 = (process.argv[1] ?? "").replace(/\\/g, "/");
+  const serverLabel =
+    argv1.includes(".next/standalone/") && argv1.endsWith("/server.js")
+      ? "standalone server.js"
+      : argv1.endsWith("/scripts/start-standalone.mjs")
+        ? "start-standalone.mjs → standalone"
+        : "node";
   console.error(
-    `[nursenest-core] startup: NODE_ENV=${process.env.NODE_ENV ?? "(unset)"} PORT=${port} bind=0.0.0.0 (next start) databaseUrl=${db ? `configured masked=${maskDatabaseUrl(db)}` : "missing"}`,
+    `[nursenest-core] startup: NODE_ENV=${process.env.NODE_ENV ?? "(unset)"} PORT=${port} bind=0.0.0.0 (${serverLabel}) databaseUrl=${db ? `configured masked=${maskDatabaseUrl(db)}` : "missing"}`,
   );
 }

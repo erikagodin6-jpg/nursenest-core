@@ -31,7 +31,8 @@ services:
     # environment_slug=node-js buildpack runs `npm install` automatically before build_command;
     # do NOT include `npm ci` here — that would double-install and waste build minutes.
     build_command: npm run build:deploy && npm prune --omit=dev
-    run_command: npm run start
+    # Standalone server only (next.config output:standalone). Do not use `next start`.
+    run_command: node scripts/start-standalone.mjs
     http_port: 8080
     routes:
       - path: /

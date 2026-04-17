@@ -118,6 +118,8 @@ npm run build
 npm start
 ```
 
+(`package.json` runs the **standalone** server from `.next/standalone/` — required because `next.config.ts` sets `output: "standalone"`. `PORT` is read from the environment, e.g. App Platform `8080`.)
+
 Environment variables to set in DigitalOcean (see also `.env.example`):
 - **`DATABASE_URL`** (secret) — DigitalOcean Managed PostgreSQL URI; canonical for Prisma at runtime.
 - `AUTH_SECRET`, `AUTH_URL` (Auth.js)

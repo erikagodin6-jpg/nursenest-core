@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-04-16T07:15:30.903Z",
-  "referenceEnKeys": 21105,
+  "generatedAt": "2026-04-17T02:01:54.406Z",
+  "referenceEnKeys": 21159,
   "localesAudited": 22,
   "totals": {
     "missingVsEnAcrossLocales": 0,
     "emptyKeysAcrossLocales": 0,
     "placeholderMismatchesAcrossLocales": 0,
-    "identicalToEnglishKeysAcrossLocales": 206508,
+    "identicalToEnglishKeysAcrossLocales": 205157,
     "rawKeyShapedAcrossLocales": 0,
     "marketingOverlayMissingKeys": 0
   },
@@ -14,7 +14,7 @@
     {
       "locale": "en",
       "file": "client/public/i18n/en.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -32,7 +32,7 @@
     {
       "locale": "fr",
       "file": "client/public/i18n/fr.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -40,7 +40,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 3531,
+      "identicalToEnglishCount": 3463,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.allowedQuestionTypes",
         "allied.alliedAdmin.batchesOf50",
@@ -73,6 +73,10 @@
         {
           "key": "learner.billingPage.accessActive",
           "ratio": "0.40"
+        },
+        {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
         },
         {
           "key": "learner.dashboard.recentPerformance.subtitle",
@@ -115,10 +119,6 @@
           "ratio": "0.56"
         },
         {
-          "key": "pages.home.platformPreview.cardQuestion.body",
-          "ratio": "0.40"
-        },
-        {
           "key": "pages.nclexRnContentHub.thePageYouAreLooking",
           "ratio": "0.56"
         },
@@ -139,10 +139,6 @@
           "ratio": "0.56"
         },
         {
-          "key": "pages.nursingStudyGuides.alwaysDocumentTheTimeThe",
-          "ratio": "0.41"
-        },
-        {
           "key": "pages.refundPolicy.yourFullNameAndThe",
           "ratio": "0.42"
         },
@@ -161,13 +157,17 @@
         {
           "key": "report.successDescription",
           "ratio": "0.50"
+        },
+        {
+          "key": "rexPnHub.pageNotFound",
+          "ratio": "0.56"
         }
       ]
     },
     {
       "locale": "tl",
       "file": "client/public/i18n/tl.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -175,7 +175,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 7388,
+      "identicalToEnglishCount": 7312,
       "identicalToEnglishSample": [
         "account.role.administrator",
         "allied.alliedAdmin.alliedContentPipeline",
@@ -271,6 +271,10 @@
           "ratio": "0.40"
         },
         {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
+        },
+        {
           "key": "learner.dashboard.recentPerformance.subtitle",
           "ratio": "0.43"
         },
@@ -353,17 +357,13 @@
         {
           "key": "pages.healthcareGuidePage.theGuideYouAreLooking",
           "ratio": "0.56"
-        },
-        {
-          "key": "pages.herbalSupplementPage.theHerbalSupplementGuideYou",
-          "ratio": "0.45"
         }
       ]
     },
     {
       "locale": "hi",
       "file": "client/public/i18n/hi.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -371,7 +371,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 10139,
+      "identicalToEnglishCount": 10028,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.adminAccessRequired",
@@ -424,6 +424,10 @@
         {
           "key": "learner.billingPage.accessActive",
           "ratio": "0.40"
+        },
+        {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
         },
         {
           "key": "learner.dashboard.recentPerformance.subtitle",
@@ -488,17 +492,13 @@
         {
           "key": "pages.examBlueprintCategory.theExamCategoryPageYou",
           "ratio": "0.45"
-        },
-        {
-          "key": "pages.examBlueprintHub.theExamBlueprintPageYou",
-          "ratio": "0.45"
         }
       ]
     },
     {
       "locale": "es",
       "file": "client/public/i18n/es.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -506,7 +506,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 9024,
+      "identicalToEnglishCount": 8820,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.adminAccessRequired",
         "allied.alliedAdmin.difficultyDistribution",
@@ -562,6 +562,10 @@
         {
           "key": "learner.billingPage.accessActive",
           "ratio": "0.40"
+        },
+        {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
         },
         {
           "key": "learner.dashboard.recentPerformance.subtitle",
@@ -634,17 +638,13 @@
         {
           "key": "pages.examLessons.emptyPreviewTopicsHint",
           "ratio": "0.46"
-        },
-        {
-          "key": "pages.examPrepCornerstonePages.theExamPreparationPageYou",
-          "ratio": "0.45"
         }
       ]
     },
     {
       "locale": "zh",
       "file": "client/public/i18n/zh.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -652,7 +652,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 10029,
+      "identicalToEnglishCount": 9919,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.adminAccessRequired",
@@ -1188,6 +1188,10 @@
           "ratio": "0.40"
         },
         {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
+        },
+        {
           "key": "learner.dashboard.recentPerformance.subtitle",
           "ratio": "0.43"
         },
@@ -1249,10 +1253,6 @@
         },
         {
           "key": "pages.examBlueprintCategory.theExamCategoryPageYou",
-          "ratio": "0.45"
-        },
-        {
-          "key": "pages.examBlueprintHub.theExamBlueprintPageYou",
           "ratio": "0.45"
         }
       ]
@@ -1260,7 +1260,7 @@
     {
       "locale": "zh-tw",
       "file": "client/public/i18n/zh-tw.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -1268,7 +1268,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 10640,
+      "identicalToEnglishCount": 10515,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.adminAccessRequired",
@@ -1804,6 +1804,10 @@
           "ratio": "0.40"
         },
         {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
+        },
+        {
           "key": "learner.dashboard.recentPerformance.subtitle",
           "ratio": "0.43"
         },
@@ -1866,17 +1870,13 @@
         {
           "key": "pages.examBlueprintCategory.theExamCategoryPageYou",
           "ratio": "0.45"
-        },
-        {
-          "key": "pages.examBlueprintHub.theExamBlueprintPageYou",
-          "ratio": "0.45"
         }
       ]
     },
     {
       "locale": "ar",
       "file": "client/public/i18n/ar.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -1884,7 +1884,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 4901,
+      "identicalToEnglishCount": 4868,
       "identicalToEnglishSample": [
         "allied.alliedHome.youremailcom",
         "allied.alliedInstitutions.nameschooledu",
@@ -2298,6 +2298,14 @@
           "reason": "high_latin_ratio_99pct"
         },
         {
+          "key": "footer.brandTagline",
+          "reason": "high_latin_ratio_99pct"
+        },
+        {
+          "key": "footer.globalPathwaysLine",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
           "key": "home.comparison.disclaimer",
           "reason": "high_latin_ratio_100pct"
         },
@@ -2376,14 +2384,6 @@
         {
           "key": "home.conversion.examCard.npDescUS",
           "reason": "high_latin_ratio_98pct"
-        },
-        {
-          "key": "home.conversion.examCard.pnDescCA",
-          "reason": "high_latin_ratio_98pct"
-        },
-        {
-          "key": "home.conversion.examCard.pnDescUS",
-          "reason": "high_latin_ratio_98pct"
         }
       ],
       "englishStopwordHeavy": [
@@ -2398,6 +2398,10 @@
         {
           "key": "learner.billingPage.accessActive",
           "ratio": "0.40"
+        },
+        {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
         },
         {
           "key": "learner.dashboard.recentPerformance.subtitle",
@@ -2482,17 +2486,13 @@
         {
           "key": "pages.topicClusterPage.theClinicalTopicYouAre",
           "ratio": "0.50"
-        },
-        {
-          "key": "programmatic.practiceBlocks.rationaleSampleNote",
-          "ratio": "0.40"
         }
       ]
     },
     {
       "locale": "ko",
       "file": "client/public/i18n/ko.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -2500,7 +2500,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 10163,
+      "identicalToEnglishCount": 10238,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.adminAccessRequired",
@@ -2578,6 +2578,10 @@
           "reason": "high_latin_ratio_100pct"
         },
         {
+          "key": "allied.alliedDiagnostic.heresAQuickSnapshotEnter",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
           "key": "allied.alliedDiagnostic.noAccountRequiredSeeYour",
           "reason": "high_latin_ratio_100pct"
         },
@@ -2586,7 +2590,19 @@
           "reason": "high_latin_ratio_100pct"
         },
         {
+          "key": "allied.alliedDiagnostic.weDontHaveADiagnostic",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
+          "key": "allied.alliedDiagnostic.wellSendYourResultsAnd",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
           "key": "allied.alliedFacultyDashboard.cohortPerformanceOverviewAndAtrisk",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
+          "key": "allied.alliedHealthArticle.theArticleYoureLookingFor",
           "reason": "high_latin_ratio_100pct"
         },
         {
@@ -2607,6 +2623,10 @@
         },
         {
           "key": "allied.alliedHealthProfession.exploreExamPrepResourcesFor",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
+          "key": "allied.alliedHealthProfession.theAlliedHealthProfessionYoure",
           "reason": "high_latin_ratio_100pct"
         },
         {
@@ -2687,7 +2707,7 @@
         },
         {
           "key": "allied.alliedInstitutions.onlyStudentsWithAVerified",
-          "reason": "high_latin_ratio_100pct"
+          "reason": "high_latin_ratio_99pct"
         },
         {
           "key": "allied.alliedInstitutions.ourMockExamsUseAdaptive",
@@ -2806,6 +2826,10 @@
           "reason": "high_latin_ratio_100pct"
         },
         {
+          "key": "allied.alliedMockExams.youveUsedYourFreeMock",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
           "key": "allied.alliedPricing.chooseYourAlliedHealthExam",
           "reason": "high_latin_ratio_99pct"
         },
@@ -2854,7 +2878,15 @@
           "reason": "high_latin_ratio_100pct"
         },
         {
+          "key": "allied.articleDetail.theArticleYoureLookingFor",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
           "key": "allied.articleListing.practiceWithExamauthenticQuestionsAdaptive",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
+          "key": "allied.articleListing.theProfessionYoureLookingFor",
           "reason": "high_latin_ratio_100pct"
         },
         {
@@ -2894,6 +2926,10 @@
           "reason": "high_latin_ratio_100pct"
         },
         {
+          "key": "allied.careerGuidePage.theCareerGuideYoureLooking",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
           "key": "allied.careerGuideSubpage.takeAFreeDiagnosticTo",
           "reason": "high_latin_ratio_100pct"
         },
@@ -2918,6 +2954,10 @@
           "reason": "high_latin_ratio_100pct"
         },
         {
+          "key": "allied.careerLanding.startFreeUpgradeWhenYoure",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
           "key": "allied.careerLanding.takeAFulllengthTimedMock",
           "reason": "high_latin_ratio_100pct"
         },
@@ -2931,6 +2971,10 @@
         },
         {
           "key": "allied.encyclopediaAdmin.manageEncyclopediaEntriesAcrossAll",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
+          "key": "allied.encyclopediaTopicPage.thisEncyclopediaTopicDoesntExist",
           "reason": "high_latin_ratio_100pct"
         },
         {
@@ -2950,55 +2994,11 @@
           "reason": "high_latin_ratio_100pct"
         },
         {
+          "key": "allied.mltCountryPage.milestoneChecksEnsureYoureOn",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
           "key": "allied.mltCountryPage.questionsAdjustToYourPerformance",
-          "reason": "high_latin_ratio_100pct"
-        },
-        {
-          "key": "allied.mltLabValuesHub.completeLabValuesReferenceFor",
-          "reason": "high_latin_ratio_100pct"
-        },
-        {
-          "key": "allied.mltLabValuesHub.noLabValuesMatchYour",
-          "reason": "high_latin_ratio_100pct"
-        },
-        {
-          "key": "allied.mltLabValuesHub.normalLabValuesForMlt",
-          "reason": "high_latin_ratio_97pct"
-        },
-        {
-          "key": "allied.mltLabValuesViral.completeLabValuesChartFor",
-          "reason": "high_latin_ratio_96pct"
-        },
-        {
-          "key": "allied.mltLabValuesViral.comprehensiveLabValuesChartFor",
-          "reason": "high_latin_ratio_100pct"
-        },
-        {
-          "key": "allied.mltLabValuesViral.the50MostImportantLab",
-          "reason": "high_latin_ratio_100pct"
-        },
-        {
-          "key": "allied.mltLabValuesViral.top50LabValuesYou",
-          "reason": "high_latin_ratio_98pct"
-        },
-        {
-          "key": "allied.mltLanding.chooseYourCountryTrackAnd",
-          "reason": "high_latin_ratio_100pct"
-        },
-        {
-          "key": "allied.mltLanding.mltExamPrepCsmlsAscp",
-          "reason": "high_latin_ratio_94pct"
-        },
-        {
-          "key": "allied.mltLanding.prepareForYourMedicalLaboratory",
-          "reason": "high_latin_ratio_100pct"
-        },
-        {
-          "key": "allied.mltLanding.selectYourCertificationExamAnd",
-          "reason": "high_latin_ratio_99pct"
-        },
-        {
-          "key": "allied.mltMltAdaptivePractice.chooseAPracticeModeQuestions",
           "reason": "high_latin_ratio_100pct"
         }
       ],
@@ -3013,7 +3013,7 @@
         },
         {
           "key": "components.examFollowupModal.focusedPreparationForYourComeback",
-          "ratio": "0.50"
+          "ratio": "0.44"
         },
         {
           "key": "components.marketingCta.yourChecklistIsOnThe",
@@ -3034,6 +3034,10 @@
         {
           "key": "learner.billingPage.accessActive",
           "ratio": "0.40"
+        },
+        {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
         },
         {
           "key": "learner.dashboard.recentPerformance.subtitle",
@@ -3097,10 +3101,6 @@
         },
         {
           "key": "pages.examBlueprintCategory.theExamCategoryPageYou",
-          "ratio": "0.45"
-        },
-        {
-          "key": "pages.examBlueprintHub.theExamBlueprintPageYou",
           "ratio": "0.45"
         }
       ]
@@ -3108,7 +3108,7 @@
     {
       "locale": "pt",
       "file": "client/public/i18n/pt.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -3116,7 +3116,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 10045,
+      "identicalToEnglishCount": 9935,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.adminAccessRequired",
@@ -3169,6 +3169,10 @@
         {
           "key": "learner.billingPage.accessActive",
           "ratio": "0.40"
+        },
+        {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
         },
         {
           "key": "learner.dashboard.recentPerformance.subtitle",
@@ -3232,10 +3236,6 @@
         },
         {
           "key": "pages.examBlueprintCategory.theExamCategoryPageYou",
-          "ratio": "0.45"
-        },
-        {
-          "key": "pages.examBlueprintHub.theExamBlueprintPageYou",
           "ratio": "0.45"
         }
       ]
@@ -3243,7 +3243,7 @@
     {
       "locale": "pa",
       "file": "client/public/i18n/pa.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -3251,7 +3251,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 10134,
+      "identicalToEnglishCount": 10023,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.adminAccessRequired",
@@ -3304,6 +3304,10 @@
         {
           "key": "learner.billingPage.accessActive",
           "ratio": "0.40"
+        },
+        {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
         },
         {
           "key": "learner.dashboard.recentPerformance.subtitle",
@@ -3367,10 +3371,6 @@
         },
         {
           "key": "pages.examBlueprintCategory.theExamCategoryPageYou",
-          "ratio": "0.45"
-        },
-        {
-          "key": "pages.examBlueprintHub.theExamBlueprintPageYou",
           "ratio": "0.45"
         }
       ]
@@ -3378,7 +3378,7 @@
     {
       "locale": "vi",
       "file": "client/public/i18n/vi.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -3386,7 +3386,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 10144,
+      "identicalToEnglishCount": 10033,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.adminAccessRequired",
@@ -3439,6 +3439,10 @@
         {
           "key": "learner.billingPage.accessActive",
           "ratio": "0.40"
+        },
+        {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
         },
         {
           "key": "learner.dashboard.recentPerformance.subtitle",
@@ -3502,10 +3506,6 @@
         },
         {
           "key": "pages.examBlueprintCategory.theExamCategoryPageYou",
-          "ratio": "0.45"
-        },
-        {
-          "key": "pages.examBlueprintHub.theExamBlueprintPageYou",
           "ratio": "0.45"
         }
       ]
@@ -3513,7 +3513,7 @@
     {
       "locale": "ht",
       "file": "client/public/i18n/ht.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -3521,7 +3521,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 10204,
+      "identicalToEnglishCount": 10279,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.adminAccessRequired",
@@ -3553,7 +3553,7 @@
         },
         {
           "key": "components.examFollowupModal.focusedPreparationForYourComeback",
-          "ratio": "0.50"
+          "ratio": "0.44"
         },
         {
           "key": "components.marketingCta.yourChecklistIsOnThe",
@@ -3574,6 +3574,10 @@
         {
           "key": "learner.billingPage.accessActive",
           "ratio": "0.40"
+        },
+        {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
         },
         {
           "key": "learner.dashboard.recentPerformance.subtitle",
@@ -3637,10 +3641,6 @@
         },
         {
           "key": "pages.examBlueprintCategory.theExamCategoryPageYou",
-          "ratio": "0.45"
-        },
-        {
-          "key": "pages.examBlueprintHub.theExamBlueprintPageYou",
           "ratio": "0.45"
         }
       ]
@@ -3648,7 +3648,7 @@
     {
       "locale": "ur",
       "file": "client/public/i18n/ur.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -3656,7 +3656,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 10138,
+      "identicalToEnglishCount": 10027,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.adminAccessRequired",
@@ -4192,6 +4192,10 @@
           "ratio": "0.40"
         },
         {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
+        },
+        {
           "key": "learner.dashboard.recentPerformance.subtitle",
           "ratio": "0.43"
         },
@@ -4253,10 +4257,6 @@
         },
         {
           "key": "pages.examBlueprintCategory.theExamCategoryPageYou",
-          "ratio": "0.45"
-        },
-        {
-          "key": "pages.examBlueprintHub.theExamBlueprintPageYou",
           "ratio": "0.45"
         }
       ]
@@ -4264,7 +4264,7 @@
     {
       "locale": "ja",
       "file": "client/public/i18n/ja.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -4272,7 +4272,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 10137,
+      "identicalToEnglishCount": 10026,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.adminAccessRequired",
@@ -4808,6 +4808,10 @@
           "ratio": "0.40"
         },
         {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
+        },
+        {
           "key": "learner.dashboard.recentPerformance.subtitle",
           "ratio": "0.43"
         },
@@ -4869,10 +4873,6 @@
         },
         {
           "key": "pages.examBlueprintCategory.theExamCategoryPageYou",
-          "ratio": "0.45"
-        },
-        {
-          "key": "pages.examBlueprintHub.theExamBlueprintPageYou",
           "ratio": "0.45"
         }
       ]
@@ -4880,7 +4880,7 @@
     {
       "locale": "fa",
       "file": "client/public/i18n/fa.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -4888,7 +4888,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 10165,
+      "identicalToEnglishCount": 10240,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.adminAccessRequired",
@@ -4966,6 +4966,10 @@
           "reason": "high_latin_ratio_100pct"
         },
         {
+          "key": "allied.alliedDiagnostic.heresAQuickSnapshotEnter",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
           "key": "allied.alliedDiagnostic.noAccountRequiredSeeYour",
           "reason": "high_latin_ratio_100pct"
         },
@@ -4974,7 +4978,19 @@
           "reason": "high_latin_ratio_100pct"
         },
         {
+          "key": "allied.alliedDiagnostic.weDontHaveADiagnostic",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
+          "key": "allied.alliedDiagnostic.wellSendYourResultsAnd",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
           "key": "allied.alliedFacultyDashboard.cohortPerformanceOverviewAndAtrisk",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
+          "key": "allied.alliedHealthArticle.theArticleYoureLookingFor",
           "reason": "high_latin_ratio_100pct"
         },
         {
@@ -4995,6 +5011,10 @@
         },
         {
           "key": "allied.alliedHealthProfession.exploreExamPrepResourcesFor",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
+          "key": "allied.alliedHealthProfession.theAlliedHealthProfessionYoure",
           "reason": "high_latin_ratio_100pct"
         },
         {
@@ -5075,7 +5095,7 @@
         },
         {
           "key": "allied.alliedInstitutions.onlyStudentsWithAVerified",
-          "reason": "high_latin_ratio_100pct"
+          "reason": "high_latin_ratio_99pct"
         },
         {
           "key": "allied.alliedInstitutions.ourMockExamsUseAdaptive",
@@ -5194,6 +5214,10 @@
           "reason": "high_latin_ratio_100pct"
         },
         {
+          "key": "allied.alliedMockExams.youveUsedYourFreeMock",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
           "key": "allied.alliedPricing.chooseYourAlliedHealthExam",
           "reason": "high_latin_ratio_99pct"
         },
@@ -5242,7 +5266,15 @@
           "reason": "high_latin_ratio_100pct"
         },
         {
+          "key": "allied.articleDetail.theArticleYoureLookingFor",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
           "key": "allied.articleListing.practiceWithExamauthenticQuestionsAdaptive",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
+          "key": "allied.articleListing.theProfessionYoureLookingFor",
           "reason": "high_latin_ratio_100pct"
         },
         {
@@ -5282,6 +5314,10 @@
           "reason": "high_latin_ratio_100pct"
         },
         {
+          "key": "allied.careerGuidePage.theCareerGuideYoureLooking",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
           "key": "allied.careerGuideSubpage.takeAFreeDiagnosticTo",
           "reason": "high_latin_ratio_100pct"
         },
@@ -5306,6 +5342,10 @@
           "reason": "high_latin_ratio_100pct"
         },
         {
+          "key": "allied.careerLanding.startFreeUpgradeWhenYoure",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
           "key": "allied.careerLanding.takeAFulllengthTimedMock",
           "reason": "high_latin_ratio_100pct"
         },
@@ -5319,6 +5359,10 @@
         },
         {
           "key": "allied.encyclopediaAdmin.manageEncyclopediaEntriesAcrossAll",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
+          "key": "allied.encyclopediaTopicPage.thisEncyclopediaTopicDoesntExist",
           "reason": "high_latin_ratio_100pct"
         },
         {
@@ -5338,55 +5382,11 @@
           "reason": "high_latin_ratio_100pct"
         },
         {
+          "key": "allied.mltCountryPage.milestoneChecksEnsureYoureOn",
+          "reason": "high_latin_ratio_100pct"
+        },
+        {
           "key": "allied.mltCountryPage.questionsAdjustToYourPerformance",
-          "reason": "high_latin_ratio_100pct"
-        },
-        {
-          "key": "allied.mltLabValuesHub.completeLabValuesReferenceFor",
-          "reason": "high_latin_ratio_100pct"
-        },
-        {
-          "key": "allied.mltLabValuesHub.noLabValuesMatchYour",
-          "reason": "high_latin_ratio_100pct"
-        },
-        {
-          "key": "allied.mltLabValuesHub.normalLabValuesForMlt",
-          "reason": "high_latin_ratio_97pct"
-        },
-        {
-          "key": "allied.mltLabValuesViral.completeLabValuesChartFor",
-          "reason": "high_latin_ratio_96pct"
-        },
-        {
-          "key": "allied.mltLabValuesViral.comprehensiveLabValuesChartFor",
-          "reason": "high_latin_ratio_100pct"
-        },
-        {
-          "key": "allied.mltLabValuesViral.the50MostImportantLab",
-          "reason": "high_latin_ratio_100pct"
-        },
-        {
-          "key": "allied.mltLabValuesViral.top50LabValuesYou",
-          "reason": "high_latin_ratio_98pct"
-        },
-        {
-          "key": "allied.mltLanding.chooseYourCountryTrackAnd",
-          "reason": "high_latin_ratio_100pct"
-        },
-        {
-          "key": "allied.mltLanding.mltExamPrepCsmlsAscp",
-          "reason": "high_latin_ratio_94pct"
-        },
-        {
-          "key": "allied.mltLanding.prepareForYourMedicalLaboratory",
-          "reason": "high_latin_ratio_100pct"
-        },
-        {
-          "key": "allied.mltLanding.selectYourCertificationExamAnd",
-          "reason": "high_latin_ratio_99pct"
-        },
-        {
-          "key": "allied.mltMltAdaptivePractice.chooseAPracticeModeQuestions",
           "reason": "high_latin_ratio_100pct"
         }
       ],
@@ -5401,7 +5401,7 @@
         },
         {
           "key": "components.examFollowupModal.focusedPreparationForYourComeback",
-          "ratio": "0.50"
+          "ratio": "0.44"
         },
         {
           "key": "components.marketingCta.yourChecklistIsOnThe",
@@ -5422,6 +5422,10 @@
         {
           "key": "learner.billingPage.accessActive",
           "ratio": "0.40"
+        },
+        {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
         },
         {
           "key": "learner.dashboard.recentPerformance.subtitle",
@@ -5485,10 +5489,6 @@
         },
         {
           "key": "pages.examBlueprintCategory.theExamCategoryPageYou",
-          "ratio": "0.45"
-        },
-        {
-          "key": "pages.examBlueprintHub.theExamBlueprintPageYou",
           "ratio": "0.45"
         }
       ]
@@ -5496,7 +5496,7 @@
     {
       "locale": "de",
       "file": "client/public/i18n/de.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -5504,7 +5504,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 10562,
+      "identicalToEnglishCount": 10314,
       "identicalToEnglishSample": [
         "account.role.administrator",
         "allied.alliedAdmin.5layerProductionSystem",
@@ -5555,6 +5555,10 @@
           "ratio": "0.40"
         },
         {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
+        },
+        {
           "key": "learner.dashboard.recentPerformance.subtitle",
           "ratio": "0.43"
         },
@@ -5621,17 +5625,13 @@
         {
           "key": "pages.examBlueprintHub.theExamBlueprintPageYou",
           "ratio": "0.45"
-        },
-        {
-          "key": "pages.examLessons.emptyPreviewTopicsHint",
-          "ratio": "0.46"
         }
       ]
     },
     {
       "locale": "th",
       "file": "client/public/i18n/th.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -5639,7 +5639,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 10768,
+      "identicalToEnglishCount": 10847,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.adminAccessRequired",
@@ -5671,7 +5671,7 @@
         },
         {
           "key": "components.examFollowupModal.focusedPreparationForYourComeback",
-          "ratio": "0.50"
+          "ratio": "0.44"
         },
         {
           "key": "components.marketingCta.yourChecklistIsOnThe",
@@ -5692,6 +5692,10 @@
         {
           "key": "learner.billingPage.accessActive",
           "ratio": "0.40"
+        },
+        {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
         },
         {
           "key": "learner.dashboard.recentPerformance.subtitle",
@@ -5755,10 +5759,6 @@
         },
         {
           "key": "pages.examBlueprintCategory.theExamCategoryPageYou",
-          "ratio": "0.45"
-        },
-        {
-          "key": "pages.examBlueprintHub.theExamBlueprintPageYou",
           "ratio": "0.45"
         }
       ]
@@ -5766,7 +5766,7 @@
     {
       "locale": "tr",
       "file": "client/public/i18n/tr.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -5774,7 +5774,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 10767,
+      "identicalToEnglishCount": 10848,
       "identicalToEnglishSample": [
         "allied.alliedAdmin.5layerProductionSystem",
         "allied.alliedAdmin.adminAccessRequired",
@@ -5806,7 +5806,7 @@
         },
         {
           "key": "components.examFollowupModal.focusedPreparationForYourComeback",
-          "ratio": "0.50"
+          "ratio": "0.44"
         },
         {
           "key": "components.marketingCta.yourChecklistIsOnThe",
@@ -5827,6 +5827,10 @@
         {
           "key": "learner.billingPage.accessActive",
           "ratio": "0.40"
+        },
+        {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
         },
         {
           "key": "learner.dashboard.recentPerformance.subtitle",
@@ -5891,17 +5895,13 @@
         {
           "key": "pages.examBlueprintCategory.theExamCategoryPageYou",
           "ratio": "0.45"
-        },
-        {
-          "key": "pages.examBlueprintHub.theExamBlueprintPageYou",
-          "ratio": "0.45"
         }
       ]
     },
     {
       "locale": "id",
       "file": "client/public/i18n/id.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -5909,7 +5909,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 10783,
+      "identicalToEnglishCount": 10864,
       "identicalToEnglishSample": [
         "account.role.administrator",
         "allied.alliedAdmin.5layerProductionSystem",
@@ -5941,7 +5941,7 @@
         },
         {
           "key": "components.examFollowupModal.focusedPreparationForYourComeback",
-          "ratio": "0.50"
+          "ratio": "0.44"
         },
         {
           "key": "components.marketingCta.yourChecklistIsOnThe",
@@ -5962,6 +5962,10 @@
         {
           "key": "learner.billingPage.accessActive",
           "ratio": "0.40"
+        },
+        {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
         },
         {
           "key": "learner.dashboard.recentPerformance.subtitle",
@@ -6026,17 +6030,13 @@
         {
           "key": "pages.examBlueprintCategory.theExamCategoryPageYou",
           "ratio": "0.45"
-        },
-        {
-          "key": "pages.examBlueprintHub.theExamBlueprintPageYou",
-          "ratio": "0.45"
         }
       ]
     },
     {
       "locale": "it",
       "file": "client/public/i18n/it.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -6044,7 +6044,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 13423,
+      "identicalToEnglishCount": 13279,
       "identicalToEnglishSample": [
         "account.role.administrator",
         "allied.alliedAdmin.5layerProductionSystem",
@@ -6103,6 +6103,10 @@
           "ratio": "0.40"
         },
         {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
+        },
+        {
           "key": "learner.dashboard.recentPerformance.subtitle",
           "ratio": "0.43"
         },
@@ -6161,17 +6165,13 @@
         {
           "key": "pages.conditionPage.theConditionYouAreLooking",
           "ratio": "0.40"
-        },
-        {
-          "key": "pages.examBlueprintCategory.theExamCategoryPageYou",
-          "ratio": "0.45"
         }
       ]
     },
     {
       "locale": "ru",
       "file": "client/public/i18n/ru.json",
-      "keyCount": 21105,
+      "keyCount": 21159,
       "missingVsEnCount": 0,
       "missingVsEnSample": [],
       "extraVsEnCount": 0,
@@ -6179,7 +6179,7 @@
       "emptyKeysCount": 0,
       "emptyKeysSample": [],
       "placeholderMismatches": [],
-      "identicalToEnglishCount": 13423,
+      "identicalToEnglishCount": 13279,
       "identicalToEnglishSample": [
         "account.role.administrator",
         "allied.alliedAdmin.5layerProductionSystem",
@@ -6719,6 +6719,10 @@
           "ratio": "0.40"
         },
         {
+          "key": "learner.billingPage.managePortalReturnBlurb",
+          "ratio": "0.42"
+        },
+        {
           "key": "learner.dashboard.recentPerformance.subtitle",
           "ratio": "0.43"
         },
@@ -6777,10 +6781,6 @@
         {
           "key": "pages.conditionPage.theConditionYouAreLooking",
           "ratio": "0.40"
-        },
-        {
-          "key": "pages.examBlueprintCategory.theExamCategoryPageYou",
-          "ratio": "0.45"
         }
       ]
     }

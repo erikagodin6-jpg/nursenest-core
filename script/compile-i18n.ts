@@ -16,7 +16,8 @@ function extractTranslationsFromSource(filePath: string): Record<string, string>
 
   const body = match[1];
   const result: Record<string, string> = {};
-  const entryRegex = /["']([^"']+)["']\s*:\s*["'`]((?:[^"'`\\]|\\.)*)["'`]/g;
+  /** Values are double-quoted; allow `'` inside (e.g. "You've used …") and `\"` escapes. */
+  const entryRegex = /["']([^"']+)["']\s*:\s*"((?:\\.|[^"\\])*)"/g;
   let m: RegExpExecArray | null;
   while ((m = entryRegex.exec(body)) !== null) {
     result[m[1]] = m[2].replace(/\\"/g, '"').replace(/\\'/g, "'").replace(/\\\\/g, "\\");

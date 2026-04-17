@@ -11,7 +11,7 @@
 - **Spec:** `.do/app-nursenest-core-next.yaml`
 - **Source:** `source_dir: nursenest-core`
 - **Build (CI/build phase only):** `npm run build:deploy && npm prune --omit=dev` — **not** a long-lived `next build` on the running instance.
-- **Runtime command:** `npm run start` → `package.json` → `NODE_ENV=production node ... next start -H 0.0.0.0 -p ${PORT:-3000}`
+- **Runtime command:** `npm run start` → `package.json` → `NODE_ENV=production node ... .next/standalone/nursenest-core/server.js` (Next `output: "standalone"`; **`next start` is not supported** — see Next.js warning at boot). `PORT` / `HOSTNAME` come from the environment (standalone defaults `HOSTNAME` to `0.0.0.0`).
 - **App Platform sets:** `PORT=8080`, `http_port: 8080` — the listening port in production there is **8080** inside the container (mapped by the platform).
 - **Process model:** Node runs **one Next.js server process per instance** (autoscaling min 2 / max 3 per spec). **Not** PM2 inside the container unless you added it (default is **not** PM2 on App Platform).
 - **Health check (platform):** `GET /healthz` (initial delay 120s per spec).
@@ -19,7 +19,7 @@
 ### Alternate: Droplet with PM2
 
 - **File:** `deploy/droplet/ecosystem.config.cjs`
-- **Intended command:** PM2 runs `next start` with **`instances: 1`**, `exec_mode: fork`, **`cwd`** = repo `nursenest-core/` (resolved from `deploy/droplet/`).
+- **Intended command:** PM2 runs the **standalone** server (`npm run start`) with **`instances: 1`**, `exec_mode: fork`, **`cwd`** = repo `nursenest-core/` (resolved from `deploy/droplet/`).
 - **Bind:** script args `start -H 127.0.0.1 -p 3000` — expect **reverse proxy** (nginx/Caddy) to **443/80** → **3000** on localhost.
 - **Restart:** PM2 `autorestart: true`, `max_memory_restart: "850M"`.
 
@@ -69,7 +69,7 @@ pgrep -af "next-server" || true
 pgrep -af npm || true
 ```
 
-**Expected:** One **production** Node tree per app instance (`next start` or `next-server` child). **Not** `next dev`. **Not** a stuck `node ... next build` hours after deploy.
+**Expected:** One **production** Node tree per app instance (standalone `server.js` or `next-server` child). **Not** `next dev`. **Not** a stuck `node ... next build` hours after deploy.
 
 ### Memory by process
 
@@ -122,7 +122,7 @@ test -n "$AUTH_SECRET" && echo "AUTH_SECRET is set" || echo "AUTH_SECRET is UNSE
 ```
 
 ```bash
-test -n "$PORT" && echo "PORT=$PORT" || echo "PORT unset (next start may default to 3000)"
+test -n "$PORT" && echo "PORT=$PORT" || echo "PORT unset (standalone server defaults to 3000)"
 ```
 
 ### Logs
@@ -155,9 +155,9 @@ curl -sS -o /dev/null -w "%{http_code}\n" http://127.0.0.1:3000/api/health 2>/de
 
 | Signal | Expected |
 |--------|-----------|
-| **App command** | `next start` (via `npm run start` or PM2 pointing at `next`) with `NODE_ENV=production` |
+| **App command** | Standalone `node .next/standalone/nursenest-core/server.js` (via `npm run start`) with `NODE_ENV=production` |
 | **Dev / build** | **No** `next dev`. **No** persistent `next build` on the serving host after deploy completes |
-| **Instances (single droplet)** | **One** PM2 app process group with **instances: 1** — not multiple unrelated `next start` for the same product |
+| **Instances (single droplet)** | **One** PM2 app process group with **instances: 1** — not multiple unrelated production Node processes for the same product |
 | **App Platform** | **2–3** instances per autoscale spec is **normal**; each is one Node process |
 | **Prisma** | One `PrismaClient` **per Node process** (global singleton in that process) |
 | **Ports** | **App Platform:** listen on **`PORT` (8080)**. **Droplet PM2 file:** **127.0.0.1:3000** behind proxy |
@@ -169,7 +169,7 @@ curl -sS -o /dev/null -w "%{http_code}\n" http://127.0.0.1:3000/api/health 2>/de
 
 ## 4. What “bad” looks like
 
-- **Multiple `next start`** processes on **one** droplet when only **one** is intended (misconfigured duplicate PM2 apps or manual runs).
+- **Multiple** production app processes on **one** droplet when only **one** is intended (misconfigured duplicate PM2 apps or manual runs).
 - **`next dev`** or **`npm run dev`** in production.
 - **`next build`** still running** for a long time** on the serving host (stuck deploy or wrong command).
 - **PM2 / platform restart loop** — `pm2 status` shows constant restarts or **uptime** always near zero.

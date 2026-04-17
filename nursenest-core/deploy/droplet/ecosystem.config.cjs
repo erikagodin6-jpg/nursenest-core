@@ -11,8 +11,8 @@ module.exports = {
     {
       name: "nursenest-core",
       cwd: appDir,
-      script: path.join(appDir, "node_modules", "next", "dist", "bin", "next"),
-      args: "start -H 127.0.0.1 -p 3000",
+      // Standalone trace output — not `next start` (incompatible with output: "standalone" in next.config).
+      script: path.join(appDir, "scripts", "start-standalone.mjs"),
       interpreter: "node",
       instances: 1,
       exec_mode: "fork",
@@ -23,6 +23,7 @@ module.exports = {
       env: {
         NODE_ENV: "production",
         PORT: "3000",
+        HOSTNAME: "127.0.0.1",
         TMPDIR: "/tmp",
       },
     },

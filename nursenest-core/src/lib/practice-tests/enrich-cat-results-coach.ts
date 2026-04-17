@@ -1,3 +1,4 @@
+import { ContentStatus, Prisma } from "@prisma/client";
 import { parseAdaptiveState } from "@/lib/exams/cat-engine";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
@@ -28,24 +29,28 @@ const LESSON_QUALITY_SAMPLE_LIMIT = 150;
 async function loadLessonContentSignal(pathwayId: string | null | undefined): Promise<LessonContentSignal | null> {
   if (!pathwayId?.trim()) return null;
   try {
-    const completeRows = await prisma.pathwayLesson.findMany({
-      where: { pathwayId, status: { not: "DRAFT" }, structuralPublicComplete: true },
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        topic: true,
-        topicSlug: true,
-        bodySystem: true,
-        previewSectionCount: true,
-        seoTitle: true,
-        seoDescription: true,
-        sections: true,
-        locale: true,
-        pathwayId: true,
-      },
-      take: LESSON_QUALITY_SAMPLE_LIMIT,
-    });
+    /**
+     * `computeLessonContentSignal` only uses each section's `body` (word count) and
+     * `sections.length`. Loading full stored section objects (id, heading, kind, body) for many
+     * rows dominated memory; we project to `{ body }[]` per lesson in SQL and keep the same
+     * downstream word-count behavior.
+     */
+    const completeRows = await prisma.$queryRaw<Array<{ sections: Prisma.JsonValue }>>(
+      Prisma.sql`
+        SELECT COALESCE(
+          (
+            SELECT jsonb_agg(jsonb_build_object('body', COALESCE(elem->>'body', '')))
+            FROM jsonb_array_elements(COALESCE(pl.sections, '[]'::jsonb)) AS elem
+          ),
+          '[]'::jsonb
+        ) AS sections
+        FROM pathway_lessons pl
+        WHERE pl.pathway_id = ${pathwayId}
+          AND pl.status <> ${ContentStatus.DRAFT}
+          AND pl.structural_public_complete = true
+        LIMIT ${LESSON_QUALITY_SAMPLE_LIMIT}
+      `,
+    );
     return computeLessonContentSignal(completeRows as Array<{ sections: unknown }>);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
