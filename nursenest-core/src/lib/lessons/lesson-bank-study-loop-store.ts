@@ -4,6 +4,7 @@
  */
 
 import { PracticeTestStatus } from "@prisma/client";
+import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { prisma } from "@/lib/db";
 
 export type LessonBankLoopMode = "lesson_bank_pre" | "lesson_bank_post";
@@ -88,6 +89,7 @@ export async function recordLessonBankStudyLoop(args: {
     },
     select: { id: true },
   });
+  await invalidateLearnerPrivateReadCache(userId);
 
   return row.id;
 }

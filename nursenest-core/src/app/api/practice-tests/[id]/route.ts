@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { PracticeTestStatus } from "@prisma/client";
 import { z } from "zod";
+import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { prisma } from "@/lib/db";
 import { SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
@@ -256,6 +257,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     practiceTestId: id,
     surface: "practice_test_api_patch",
   });
+  const invalidateHeavyReads = async () => invalidateLearnerPrivateReadCache(gate.userId);
 
   if (parsed.data.action === "save") {
     await practiceTestRouteDeps.updatePracticeTest({
@@ -266,6 +268,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         ...(elapsedMs !== undefined ? { elapsedMs } : {}),
       },
     });
+    await invalidateHeavyReads();
     return NextResponse.json({ ok: true });
   }
 
@@ -316,6 +319,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         ...(elapsedMs !== undefined ? { elapsedMs } : {}),
       },
     });
+    await invalidateHeavyReads();
     const committedQuestionIds = getLinearCommittedQuestionIds(nextAdaptive);
     if (cfg.linearDeliveryMode === "practice") {
       return NextResponse.json({
@@ -346,6 +350,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         ...(elapsedMs !== undefined ? { elapsedMs } : {}),
       },
     });
+    await invalidateHeavyReads();
     return NextResponse.json({ ok: true });
   }
 
@@ -378,6 +383,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         },
       });
+      await invalidateHeavyReads();
       return NextResponse.json({
         ok: true,
         catStudyReveal: true as const,
@@ -433,6 +439,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
           reason: error instanceof Error ? error.message : "unknown",
         });
       }
+      await invalidateHeavyReads();
       return NextResponse.json({
         ok: true,
         results: resultsFinal,
@@ -452,6 +459,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         ...(elapsedMs !== undefined ? { elapsedMs } : {}),
       },
     });
+    await invalidateHeavyReads();
     return NextResponse.json({ ok: true, catAdvanced: true });
   }
 
@@ -505,6 +513,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
             reason: error instanceof Error ? error.message : "unknown",
           });
         }
+        await invalidateHeavyReads();
         return NextResponse.json({ ok: true, results: resultsFinal, topicStatsSynced });
       } catch (error) {
         safeServerLog("cat_runner", "cat_complete_failed", {
@@ -540,6 +549,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       topicStatsSynced = false;
     }
     practiceTestRouteDeps.capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, results);
+    await invalidateHeavyReads();
     return NextResponse.json({ ok: true, results, topicStatsSynced });
   }
 

@@ -3,6 +3,7 @@ import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import type { Prisma } from "@prisma/client";
 import { ExamSessionStatus } from "@prisma/client";
 import { z } from "zod";
+import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { JSON_BODY_EXAM_SUBMIT, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { prisma } from "@/lib/db";
 import { userCanAccessExam } from "@/lib/entitlements/content-access-scope";
@@ -241,6 +242,7 @@ export async function POST(req: Request) {
             studyNext = null;
           }
         }
+        await invalidateLearnerPrivateReadCache(gate.userId);
         return NextResponse.json({ attempt: result.attempt, review: prefetchReview, studyNext });
       }
     } catch (e) {
@@ -265,6 +267,7 @@ export async function POST(req: Request) {
       total,
       graded_on_server: false,
     });
+    await invalidateLearnerPrivateReadCache(gate.userId);
     return NextResponse.json({ attempt });
   } catch (e) {
     safeServerLogCritical("api_exams_submit", "attempt_create_failed", {}, e);

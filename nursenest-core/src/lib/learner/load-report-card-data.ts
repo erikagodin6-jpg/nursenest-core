@@ -2,6 +2,7 @@ import "server-only";
 
 import { getLearnerDurabilityObservabilityFields, shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import { ExamSessionStatus, PracticeTestStatus } from "@prisma/client";
+import { learnerPrivateReadAccessScopeKey, loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
@@ -280,8 +281,9 @@ function buildMockReportSlices(
  * - **Analytics (normal, inside dashboard):** topic performance + bank grading aggregate.
  * - **Peer comparison (normal only):** optional benchmark from practice rows; skipped when `NN_SKIP_REPORT_CARD_PEER_BENCHMARK` is set.
  */
-export async function loadReportCardData(userId: string, entitlement: AccessScope): Promise<ReportCardData | null> {
+async function loadReportCardDataUncached(userId: string, entitlement: AccessScope): Promise<ReportCardData | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
+  try {
 
   const skipHeavy = shouldSkipNonCriticalLearnerWork();
   const mockAttemptCap = mockAttemptTakeForReportCard(skipHeavy);
@@ -606,26 +608,50 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     ...getLearnerDurabilityObservabilityFields(),
   });
 
-  return {
-    scopeTier: dash.scope.tier,
-    scopeCountry: dash.scope.country,
-    readiness: dash.readiness,
-    bankGraded,
-    mockAggregate,
-    byQuestionTier,
-    mockByExamTier,
-    pathways,
-    weakTopics: dash.weakTopics.slice(0, 10),
-    strongTopics: dash.strongTopics.slice(0, 10),
-    topicTrends: dash.topicTrends.slice(0, 8),
-    recentBankSessions,
-    recentMocks: dash.recentMocks,
-    recentPracticeTests,
-    mockWeeklyTrend,
-    trendEligible,
-    continueLesson: dash.continueLesson ? { title: dash.continueLesson.title, href: dash.continueLesson.href } : null,
-    recommendedQuizTopic: dash.recommendedQuizTopic,
-    mockLog,
-    peerBenchmark: peerBenchmark ?? null,
-  };
+    return {
+      scopeTier: dash.scope.tier,
+      scopeCountry: dash.scope.country,
+      readiness: dash.readiness,
+      bankGraded,
+      mockAggregate,
+      byQuestionTier,
+      mockByExamTier,
+      pathways,
+      weakTopics: dash.weakTopics.slice(0, 10),
+      strongTopics: dash.strongTopics.slice(0, 10),
+      topicTrends: dash.topicTrends.slice(0, 8),
+      recentBankSessions,
+      recentMocks: dash.recentMocks,
+      recentPracticeTests,
+      mockWeeklyTrend,
+      trendEligible,
+      continueLesson: dash.continueLesson ? { title: dash.continueLesson.title, href: dash.continueLesson.href } : null,
+      recommendedQuizTopic: dash.recommendedQuizTopic,
+      mockLog,
+      peerBenchmark: peerBenchmark ?? null,
+    };
+  } catch {
+    safeServerLog("learner_report_card", "report_card_load_failed", {
+      userIdPrefix: userId.slice(0, 8),
+    });
+    return null;
+  }
+}
+
+export async function loadReportCardData(userId: string, entitlement: AccessScope): Promise<ReportCardData | null> {
+  const skipHeavy = shouldSkipNonCriticalLearnerWork();
+  const skipPeerBenchmark = skipReportCardPeerBenchmarkByEnv();
+  return loadWithLearnerPrivateReadCache(
+    {
+      surface: "report-card",
+      userId,
+      ttlSeconds: 45,
+      keyParts: [
+        learnerPrivateReadAccessScopeKey(entitlement),
+        { degraded: skipHeavy, peerBenchmarkSkipped: skipPeerBenchmark },
+      ],
+      bypass: !entitlement.hasAccess || entitlement.reason === "admin_override",
+    },
+    () => loadReportCardDataUncached(userId, entitlement),
+  );
 }

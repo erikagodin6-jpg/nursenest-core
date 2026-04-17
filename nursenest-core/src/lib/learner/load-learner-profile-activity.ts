@@ -1,3 +1,4 @@
+import { loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
@@ -44,7 +45,7 @@ export type LearnerProfileActivityLimits = {
   lessons?: number;
 };
 
-export async function loadLearnerProfileActivity(
+async function loadLearnerProfileActivityUncached(
   userId: string,
   limits?: LearnerProfileActivityLimits,
 ): Promise<LearnerProfileActivity> {
@@ -136,4 +137,25 @@ export async function loadLearnerProfileActivity(
   } catch {
     return empty;
   }
+}
+
+export async function loadLearnerProfileActivity(
+  userId: string,
+  limits?: LearnerProfileActivityLimits,
+): Promise<LearnerProfileActivity> {
+  return loadWithLearnerPrivateReadCache(
+    {
+      surface: "profile-activity",
+      userId,
+      ttlSeconds: 60,
+      keyParts: [
+        {
+          mocks: limits?.mocks ?? 5,
+          practiceTests: limits?.practiceTests ?? 5,
+          lessons: limits?.lessons ?? 8,
+        },
+      ],
+    },
+    () => loadLearnerProfileActivityUncached(userId, limits),
+  );
 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { ExamFamily, PracticeTestStatus } from "@prisma/client";
 import { z } from "zod";
+import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { enforcePracticeTestsListProtection } from "@/lib/http/api-protection";
 import { prisma } from "@/lib/db";
@@ -532,6 +533,7 @@ export async function POST(req: Request) {
     ...examContextAnalyticsProps(buildGlobalExamContext(d.pathwayId?.trim() || null, "en")),
   });
 
+  await invalidateLearnerPrivateReadCache(gate.userId);
   return NextResponse.json({ id: row.id, questionCount: picked.ids.length, config }, { status: 201 });
   });
 }

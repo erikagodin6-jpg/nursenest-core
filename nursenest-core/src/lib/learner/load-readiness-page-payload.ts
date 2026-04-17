@@ -1,11 +1,13 @@
 import "server-only";
 
 import { PracticeTestStatus } from "@prisma/client";
+import { learnerPrivateReadAccessScopeKey, loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { loadPremiumDashboardSnapshot, type PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import { loadUnifiedTopicPerformance, type TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
 export type CatReadinessSignal = {
@@ -56,6 +58,9 @@ async function loadCatSignal(userId: string): Promise<CatReadinessSignal | null>
       lastCompletedAt: rows[0]!.completedAt,
     };
   } catch {
+    safeServerLog("learner_readiness", "cat_signal_block_failed", {
+      userIdPrefix: userId.slice(0, 8),
+    });
     return null;
   }
 }
@@ -64,15 +69,45 @@ async function loadCatSignal(userId: string): Promise<CatReadinessSignal | null>
  * Server bundle for the Account Readiness page: premium snapshot (includes `computeReadiness` output),
  * unified topic performance for weak-area links, and optional CAT practice-test signal (informational).
  */
-export async function loadReadinessPagePayload(userId: string, entitlement: AccessScope): Promise<ReadinessPagePayload | null> {
+async function loadReadinessPagePayloadUncached(userId: string, entitlement: AccessScope): Promise<ReadinessPagePayload | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
+  try {
+    const [snapshot, topicPerf, catSignal] = await Promise.all([
+      loadPremiumDashboardSnapshot(userId, entitlement),
+      loadUnifiedTopicPerformance(userId, entitlement, 12).catch(() => {
+        safeServerLog("learner_readiness", "topic_performance_block_failed", {
+          userIdPrefix: userId.slice(0, 8),
+        });
+        return null;
+      }),
+      loadCatSignal(userId),
+    ]);
 
-  const [snapshot, topicPerf, catSignal] = await Promise.all([
-    loadPremiumDashboardSnapshot(userId, entitlement),
-    loadUnifiedTopicPerformance(userId, entitlement, 12).catch(() => null),
-    loadCatSignal(userId),
-  ]);
+    if (!snapshot) {
+      safeServerLog("learner_readiness", "snapshot_block_failed", {
+        userIdPrefix: userId.slice(0, 8),
+      });
+      return null;
+    }
 
-  if (!snapshot) return null;
-  return { snapshot, topicPerf, catSignal };
+    return { snapshot, topicPerf, catSignal };
+  } catch {
+    safeServerLog("learner_readiness", "payload_load_failed", {
+      userIdPrefix: userId.slice(0, 8),
+    });
+    return null;
+  }
+}
+
+export async function loadReadinessPagePayload(userId: string, entitlement: AccessScope): Promise<ReadinessPagePayload | null> {
+  return loadWithLearnerPrivateReadCache(
+    {
+      surface: "readiness-page",
+      userId,
+      ttlSeconds: 45,
+      keyParts: [learnerPrivateReadAccessScopeKey(entitlement)],
+      bypass: !entitlement.hasAccess || entitlement.reason === "admin_override",
+    },
+    () => loadReadinessPagePayloadUncached(userId, entitlement),
+  );
 }

@@ -20,6 +20,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { loadStudyStreakDays } from "@/lib/learner/premium-dashboard-snapshot";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { getReadinessBand } from "@/components/study/cat-readiness-hero";
 import type { ReadinessBand } from "@/components/study/cat-readiness-hero";
 
@@ -169,6 +170,12 @@ function parseAttemptResults(raw: unknown): {
   return out;
 }
 
+function logAnalyticsFailure(event: string, userId: string): void {
+  safeServerLog("learner_analytics", event, {
+    userIdPrefix: userId.slice(0, 8),
+  });
+}
+
 // ── Data loaders ──────────────────────────────────────────────────────────────
 
 /**
@@ -245,6 +252,7 @@ export async function loadAnalyticsSummary(userId: string): Promise<AnalyticsSum
       studySessionCount,
     };
   } catch {
+    logAnalyticsFailure("summary_block_failed", userId);
     return empty;
   }
 }
@@ -291,6 +299,7 @@ export async function loadReadinessTrend(
     const cursor = window.length > 0 ? (window[window.length - 1]?.id ?? null) : null;
     return { points, hasMore, cursor };
   } catch {
+    logAnalyticsFailure("readiness_trend_block_failed", userId);
     return { points: [], hasMore: false, cursor: null };
   }
 }
@@ -336,6 +345,7 @@ export async function loadMoreReadinessTrend(
     const cursor = window.length > 0 ? (window[window.length - 1]?.id ?? null) : null;
     return { points, hasMore, cursor };
   } catch {
+    logAnalyticsFailure("more_readiness_trend_block_failed", userId);
     return { points: [], hasMore: false, cursor: null };
   }
 }
@@ -396,6 +406,7 @@ export async function loadConfidenceScatterPoints(
     }
     return out;
   } catch {
+    logAnalyticsFailure("confidence_scatter_block_failed", userId);
     return [];
   }
 }
@@ -460,6 +471,7 @@ export async function loadConfidencePatterns(
       sessionsAnalyzed: sessions.length,
     };
   } catch {
+    logAnalyticsFailure("confidence_patterns_block_failed", userId);
     return empty;
   }
 }
@@ -539,6 +551,7 @@ export async function loadTimeMetrics(
       maxSessionMs: maxMs,
     };
   } catch {
+    logAnalyticsFailure("time_metrics_block_failed", userId);
     return empty;
   }
 }
@@ -576,6 +589,7 @@ export async function loadTopicBreakdown(
       })
       .sort((a, b) => b.totalCount - a.totalCount);
   } catch {
+    logAnalyticsFailure("topic_breakdown_block_failed", userId);
     return [];
   }
 }
@@ -651,6 +665,7 @@ export async function loadQuestionTypeBreakdown(
       .filter((r) => r.correctCount + r.wrongCount >= 3)
       .sort((a, b) => b.correctCount + b.wrongCount - (a.correctCount + a.wrongCount));
   } catch {
+    logAnalyticsFailure("question_type_block_failed", userId);
     return [];
   }
 }

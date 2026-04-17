@@ -15,6 +15,7 @@
  */
 
 import { prisma } from "@/lib/db";
+import { loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import {
   buildReviewQueue,
@@ -150,7 +151,7 @@ function emptyInitialData(): ReviewQueueInitialData {
  *
  * Safe to call from RSC — all IO is server-side.
  */
-export async function loadReviewQueueInitialData(
+async function loadReviewQueueInitialDataUncached(
   userId: string,
 ): Promise<ReviewQueueInitialData> {
   if (!userId || !isDatabaseUrlConfigured()) return emptyInitialData();
@@ -196,6 +197,19 @@ export async function loadReviewQueueInitialData(
     reviewSoon: paginateByPriority(queue, "review_soon", 0, PAGE_SIZE),
     stable:     paginateByPriority(queue, "stable",       0, PAGE_SIZE),
   };
+}
+
+export async function loadReviewQueueInitialData(
+  userId: string,
+): Promise<ReviewQueueInitialData> {
+  return loadWithLearnerPrivateReadCache(
+    {
+      surface: "review-queue-initial",
+      userId,
+      ttlSeconds: 30,
+    },
+    () => loadReviewQueueInitialDataUncached(userId),
+  );
 }
 
 /**

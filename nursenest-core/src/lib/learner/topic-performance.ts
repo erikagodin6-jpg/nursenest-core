@@ -1,4 +1,5 @@
 import type { Prisma } from "@prisma/client";
+import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { prisma } from "@/lib/db";
 import { answerMatches } from "@/lib/exams/score-session-answers";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
@@ -200,6 +201,7 @@ export async function recordTopicOutcomesSequential(
       safeServerLogCritical("topic_performance", "record_failed", { userId, topic }, e);
     }
   }
+  await invalidateLearnerPrivateReadCache(userId);
 }
 
 export async function recordTopicOutcomesFromPracticeTest(

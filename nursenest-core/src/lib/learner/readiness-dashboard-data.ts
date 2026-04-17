@@ -22,6 +22,7 @@
 import "server-only";
 
 import { PracticeTestStatus } from "@prisma/client";
+import { learnerPrivateReadAccessScopeKey, loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
@@ -30,6 +31,7 @@ import {
   type ReadinessPagePayload,
 } from "@/lib/learner/load-readiness-page-payload";
 import { computeBenchmarkData, type BenchmarkData } from "@/lib/learner/benchmark-engine";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -200,6 +202,9 @@ async function loadDimensionBreakdown(userId: string): Promise<DimensionBreakdow
       byQuestionType:   toStats(typeMap),
     };
   } catch {
+    safeServerLog("learner_readiness", "dimension_breakdown_block_failed", {
+      userIdPrefix: userId.slice(0, 8),
+    });
     return empty;
   }
 }
@@ -235,6 +240,9 @@ async function loadCatTrend(userId: string): Promise<CatTrendPoint[]> {
     }
     return trend;
   } catch {
+    safeServerLog("learner_readiness", "cat_trend_block_failed", {
+      userIdPrefix: userId.slice(0, 8),
+    });
     return [];
   }
 }
@@ -248,27 +256,52 @@ async function loadBenchmark(
   try {
     return await computeBenchmarkData(userId, payload.snapshot.readiness);
   } catch {
+    safeServerLog("learner_readiness", "benchmark_block_failed", {
+      userIdPrefix: userId.slice(0, 8),
+    });
     return null;
   }
 }
 
 // ── Main entry ────────────────────────────────────────────────────────────────
 
-export async function loadReadinessDashboardData(
+async function loadReadinessDashboardDataUncached(
   userId: string,
   entitlement: AccessScope,
 ): Promise<ReadinessDashboardPayload | null> {
   if (!userId || !isDatabaseUrlConfigured()) return null;
+  try {
+    // Load base payload first (required) then augment concurrently
+    const base = await loadReadinessPagePayload(userId, entitlement);
+    if (!base) return null;
 
-  // Load base payload first (required) then augment concurrently
-  const base = await loadReadinessPagePayload(userId, entitlement);
-  if (!base) return null;
+    const [dimensions, catTrend, benchmark] = await Promise.all([
+      loadDimensionBreakdown(userId),
+      loadCatTrend(userId),
+      loadBenchmark(userId, base),
+    ]);
 
-  const [dimensions, catTrend, benchmark] = await Promise.all([
-    loadDimensionBreakdown(userId),
-    loadCatTrend(userId),
-    loadBenchmark(userId, base),
-  ]);
+    return { ...base, dimensions, catTrend, benchmark };
+  } catch {
+    safeServerLog("learner_readiness", "dashboard_payload_load_failed", {
+      userIdPrefix: userId.slice(0, 8),
+    });
+    return null;
+  }
+}
 
-  return { ...base, dimensions, catTrend, benchmark };
+export async function loadReadinessDashboardData(
+  userId: string,
+  entitlement: AccessScope,
+): Promise<ReadinessDashboardPayload | null> {
+  return loadWithLearnerPrivateReadCache(
+    {
+      surface: "readiness-dashboard",
+      userId,
+      ttlSeconds: 45,
+      keyParts: [learnerPrivateReadAccessScopeKey(entitlement)],
+      bypass: !entitlement.hasAccess || entitlement.reason === "admin_override",
+    },
+    () => loadReadinessDashboardDataUncached(userId, entitlement),
+  );
 }

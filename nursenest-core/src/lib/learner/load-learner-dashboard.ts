@@ -441,6 +441,11 @@ export async function loadLearnerDashboardAnalytics(
     topicTrends = perf.trends;
     recommendedQuizTopic = perf.recommendedQuizTopic ?? perf.weakTopics[0]?.topic ?? null;
   } catch {
+    safeServerLog("learner_dashboard_perf", "dashboard_analytics_failed", {
+      userIdPrefix: userId.slice(0, 8),
+      durationMs: Math.round(performance.now() - t0),
+      ...getLearnerDurabilityObservabilityFields(),
+    });
     weakTopics = [];
     strongTopics = [];
     topicTrends = [];

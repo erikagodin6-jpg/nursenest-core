@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
+import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -116,6 +117,7 @@ export async function POST(req: Request) {
       create: { userId, lessonId, completed: parsedBody.completed },
       update: { completed: parsedBody.completed },
     });
+    await invalidateLearnerPrivateReadCache(userId);
     const rows = await prisma.progress.findMany({
       where: {
         userId,

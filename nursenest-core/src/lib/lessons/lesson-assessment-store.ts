@@ -11,6 +11,7 @@
  */
 
 import { PracticeTestStatus } from "@prisma/client";
+import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { prisma } from "@/lib/db";
 import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
@@ -103,6 +104,7 @@ export async function recordLessonAssessment(args: {
     },
     select: { id: true },
   });
+  await invalidateLearnerPrivateReadCache(userId);
 
   // Forward post-assessment outcomes to the adaptive engine (UserTopicStat)
   if (type === "post" && topic) {

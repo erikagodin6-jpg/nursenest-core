@@ -3,6 +3,7 @@ import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
+import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { notSubscribedResponse, requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { prisma } from "@/lib/db";
@@ -91,6 +92,7 @@ export async function POST(req: Request) {
       nextCompleted: completed,
     });
     captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
+    await invalidateLearnerPrivateReadCache(userId);
     return NextResponse.json({ ok: true });
   }
 
@@ -117,6 +119,7 @@ export async function POST(req: Request) {
       nextCompleted: completed,
     });
     captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
+    await invalidateLearnerPrivateReadCache(userId);
     return NextResponse.json({ ok: true });
   }
 

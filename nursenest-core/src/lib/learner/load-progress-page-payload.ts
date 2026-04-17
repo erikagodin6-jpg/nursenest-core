@@ -1,6 +1,7 @@
 import "server-only";
 
 import { PracticeTestStatus } from "@prisma/client";
+import { learnerPrivateReadAccessScopeKey, loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
@@ -122,7 +123,7 @@ function sortPathways(a: PathwayProgressCardModel, b: PathwayProgressCardModel):
  * **Pathway catalog:** one {@link loadPathwayLessonProgressBundle} per request; pathway summaries reuse that bundle
  * via `loadPathwayStudySummaries` preload (same entitlement scope as dashboard).
  */
-export async function loadProgressPagePayload(userId: string, entitlement: AccessScope): Promise<ProgressPagePayload | null> {
+async function loadProgressPagePayloadUncached(userId: string, entitlement: AccessScope): Promise<ProgressPagePayload | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
 
   const bundle = await loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadProgressPagePayload" });
@@ -291,4 +292,17 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
     },
     continueLesson,
   };
+}
+
+export async function loadProgressPagePayload(userId: string, entitlement: AccessScope): Promise<ProgressPagePayload | null> {
+  return loadWithLearnerPrivateReadCache(
+    {
+      surface: "progress-page",
+      userId,
+      ttlSeconds: 45,
+      keyParts: [learnerPrivateReadAccessScopeKey(entitlement)],
+      bypass: !entitlement.hasAccess || entitlement.reason === "admin_override",
+    },
+    () => loadProgressPagePayloadUncached(userId, entitlement),
+  );
 }

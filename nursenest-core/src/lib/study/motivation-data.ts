@@ -18,6 +18,7 @@
 import "server-only";
 
 import { PracticeTestStatus } from "@prisma/client";
+import { loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { loadStudyStreakDays } from "@/lib/learner/premium-dashboard-snapshot";
@@ -358,7 +359,7 @@ async function loadOverallAccuracy(userId: string): Promise<{
 
 // ── Main loader ───────────────────────────────────────────────────────────────
 
-export async function loadMotivationPayload(userId: string): Promise<MotivationPayload> {
+async function loadMotivationPayloadUncached(userId: string): Promise<MotivationPayload> {
   if (!isDatabaseUrlConfigured()) return buildEmptyPayload();
 
   const [
@@ -398,6 +399,17 @@ export async function loadMotivationPayload(userId: string): Promise<MotivationP
     totalQuestionsAnswered: accuracy.total,
     mockCount,
   };
+}
+
+export async function loadMotivationPayload(userId: string): Promise<MotivationPayload> {
+  return loadWithLearnerPrivateReadCache(
+    {
+      surface: "motivation-payload",
+      userId,
+      ttlSeconds: 45,
+    },
+    () => loadMotivationPayloadUncached(userId),
+  );
 }
 
 // ── Paginator (called from Server Action) ─────────────────────────────────────
