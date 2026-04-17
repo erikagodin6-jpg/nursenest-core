@@ -11,9 +11,13 @@ import { sitemapXmlResponse } from "@/lib/seo/sitemap-xml-http";
 
 /**
  * Single sitemap urlset at `/sitemap.xml` (canonical crawler entrypoint).
+ *
+ * Force runtime generation: build-time prerender of this route can hang or fail
+ * when optional DB-backed sitemap enrichment cannot reach Postgres in CI/App Platform.
+ * Freshness is still controlled by explicit sitemap cache headers.
  */
 export const runtime = "nodejs";
-export const revalidate = 86400;
+export const dynamic = "force-dynamic";
 
 /** Log when generation crosses this — sitemap work includes optional Prisma (blog + pathway URLs). */
 const SITEMAP_SLOW_MS = 1500;
