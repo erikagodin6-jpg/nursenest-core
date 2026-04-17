@@ -14,7 +14,6 @@ import {
   loadLearnerDashboard,
   loadLearnerDashboardCore,
   loadPathwayLessonProgressBundle,
-  loadPathwayStudySummaries,
   mapExamAttemptRowsToRecentMocks,
   type RecentMock,
 } from "@/lib/learner/load-learner-dashboard";
@@ -24,7 +23,6 @@ import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import {
-  aggregateSessionGradingFromHydratedSessions,
   gradeBankSessionWithTierBreakdown,
   loadBatchedBankGradingQuestionMap,
   type BankGradingQuestionRow,
@@ -120,12 +118,28 @@ export type ReportCardData = {
 };
 
 /** Enough recent mocks for tier splits, weekly trend (~10w), and mock log — single bounded query. */
-const MOCK_ATTEMPT_LIMIT = 60;
+const MOCK_ATTEMPT_LIMIT_FULL = 60;
+/**
+ * Degraded: smaller slice so mock hydration + in-memory trend math stay light; still enough for aggregates + a short log.
+ */
+const MOCK_ATTEMPT_LIMIT_DEGRADED = 28;
 /** Graded bank sessions for tier breakdown + recent list; one batched question map shared with dashboard readiness. */
 const SESSION_LIMIT = 12;
 /** Matches {@link loadSessionGradingAggregate} default — first N rows feed dashboard preload (no duplicate session fetch). */
 const DASHBOARD_SESSION_GRADING_LIMIT = 8;
+/** Recent bank rows rendered in the report card UI (session list is capped; totals use {@link SESSION_LIMIT}). */
+const RECENT_BANK_SESSIONS_UI = 8;
 const TREND_WEEKS = 10;
+
+function mockAttemptTakeForReportCard(degraded: boolean): number {
+  return degraded ? MOCK_ATTEMPT_LIMIT_DEGRADED : MOCK_ATTEMPT_LIMIT_FULL;
+}
+
+/** Ops / incidents: skip cohort SQL while keeping the rest of the report card. */
+function skipReportCardPeerBenchmarkByEnv(): boolean {
+  const v = process.env.NN_SKIP_REPORT_CARD_PEER_BENCHMARK?.trim().toLowerCase();
+  return v === "1" || v === "true" || v === "yes";
+}
 
 export function reportCardTierDisplayLabel(tier: string): string {
   switch (tier) {
@@ -166,14 +180,30 @@ type MockAttemptSelect = {
   exam: { tier: string; title: string };
 };
 
+type BuildMockSlicesOptions = {
+  /**
+   * Off in durability-degraded report card: skips weekly bucket math + long mock log (secondary chart / table).
+   * Tier splits + aggregate + short log still run so the page stays truthful.
+   */
+  includeWeeklyTrend?: boolean;
+  /** Max rows for mock log table; degraded uses a shorter slice. */
+  mockLogTake?: number;
+};
+
 /** Shared mock-tier / weekly / log math from the bounded `examAttempt` query (core path + full path). */
-function buildMockReportSlices(mockAttempts: MockAttemptSelect[]): {
+function buildMockReportSlices(
+  mockAttempts: MockAttemptSelect[],
+  options?: BuildMockSlicesOptions,
+): {
   mockByExamTier: MockTierSummary[];
   mockAggregate: ReportCardData["mockAggregate"];
   mockLog: ReportCardData["mockLog"];
   mockWeeklyTrend: MockWeeklyTrendPoint[];
   trendEligible: boolean;
 } {
+  const includeWeeklyTrend = options?.includeWeeklyTrend !== false;
+  const mockLogTake = Math.min(30, Math.max(0, options?.mockLogTake ?? 30));
+
   const mockByTierMap = new Map<string, { sumScore: number; sumTotal: number; n: number }>();
   let mockSumScore = 0;
   let mockSumTotal = 0;
@@ -200,18 +230,31 @@ function buildMockReportSlices(mockAttempts: MockAttemptSelect[]): {
     }))
     .sort((a, b) => b.sumTotal - a.sumTotal);
 
-  const mockWeekly = new Map<string, { sumScore: number; sumTotal: number; n: number }>();
-  const cutoff = new Date(Date.now() - TREND_WEEKS * 7 * 86400000);
-  for (const a of mockAttempts) {
-    if (a.createdAt < cutoff || a.total <= 0) continue;
-    const wk = weekStartMondayUtc(a.createdAt);
-    const cur = mockWeekly.get(wk) ?? { sumScore: 0, sumTotal: 0, n: 0 };
-    cur.sumScore += a.score;
-    cur.sumTotal += a.total;
-    cur.n += 1;
-    mockWeekly.set(wk, cur);
+  let mockWeeklyTrend: MockWeeklyTrendPoint[] = [];
+  let trendEligible = false;
+  if (includeWeeklyTrend) {
+    const mockWeekly = new Map<string, { sumScore: number; sumTotal: number; n: number }>();
+    const cutoff = new Date(Date.now() - TREND_WEEKS * 7 * 86400000);
+    for (const a of mockAttempts) {
+      if (a.createdAt < cutoff || a.total <= 0) continue;
+      const wk = weekStartMondayUtc(a.createdAt);
+      const cur = mockWeekly.get(wk) ?? { sumScore: 0, sumTotal: 0, n: 0 };
+      cur.sumScore += a.score;
+      cur.sumTotal += a.total;
+      cur.n += 1;
+      mockWeekly.set(wk, cur);
+    }
+    mockWeeklyTrend = [...mockWeekly.entries()]
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([weekStart, v]) => ({
+        weekStart,
+        avgPct: v.sumTotal > 0 ? Math.round((v.sumScore / v.sumTotal) * 100) : 0,
+        attempts: v.n,
+      }));
+    trendEligible = mockWeeklyTrend.filter((p) => p.attempts > 0).length >= 2;
   }
-  const mockLog = mockAttempts.slice(0, 30).map((a) => ({
+
+  const mockLog = mockAttempts.slice(0, mockLogTake).map((a) => ({
     id: a.id,
     examTitle: a.exam.title,
     score: a.score,
@@ -219,15 +262,6 @@ function buildMockReportSlices(mockAttempts: MockAttemptSelect[]): {
     pct: a.total > 0 ? Math.round((a.score / a.total) * 100) : 0,
     createdAt: a.createdAt,
   }));
-
-  const mockWeeklyTrend: MockWeeklyTrendPoint[] = [...mockWeekly.entries()]
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([weekStart, v]) => ({
-      weekStart,
-      avgPct: v.sumTotal > 0 ? Math.round((v.sumScore / v.sumTotal) * 100) : 0,
-      attempts: v.n,
-    }));
-  const trendEligible = mockWeeklyTrend.filter((p) => p.attempts > 0).length >= 2;
 
   const mockAggregate = {
     sumScore: mockSumScore,
@@ -247,12 +281,13 @@ function buildMockReportSlices(mockAttempts: MockAttemptSelect[]): {
  * - **Core:** pathway bundle + visible scope + bounded mock attempts + `loadLearnerDashboardCore` + pathway rows from inventory (degraded), or full dashboard + summaries (normal).
  * - **Practice hydration (normal only):** exam sessions + practice tests + batched question map + session grading preload.
  * - **Analytics (normal, inside dashboard):** topic performance + bank grading aggregate.
- * - **Peer comparison (normal only):** optional benchmark from practice rows.
+ * - **Peer comparison (normal only):** optional benchmark from practice rows; skipped when `NN_SKIP_REPORT_CARD_PEER_BENCHMARK` is set.
  */
 export async function loadReportCardData(userId: string, entitlement: AccessScope): Promise<ReportCardData | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
 
   const skipHeavy = shouldSkipNonCriticalLearnerWork();
+  const mockAttemptCap = mockAttemptTakeForReportCard(skipHeavy);
   const tRoute = performance.now();
 
   const bundle = await loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadReportCardData" });
@@ -265,7 +300,7 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     prisma.examAttempt.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
-      take: MOCK_ATTEMPT_LIMIT,
+      take: mockAttemptCap,
       select: {
         id: true,
         score: true,
@@ -277,7 +312,10 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
   ]);
   const durationMsScopeAndMocks = Math.round(performance.now() - tScopeMocks);
 
-  const mockSlices = buildMockReportSlices(mockAttempts);
+  const mockSlices = buildMockReportSlices(
+    mockAttempts,
+    skipHeavy ? { includeWeeklyTrend: false, mockLogTake: 12 } : undefined,
+  );
 
   if (skipHeavy) {
     const tCore = performance.now();
@@ -322,6 +360,7 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     safeServerLog("learner_report_card", "report_card_load_phases", {
       userIdPrefix: userId.slice(0, 8),
       degraded: true,
+      mockAttemptCap,
       durationMsTotal: Math.round(performance.now() - tRoute),
       durationMsScopeAndMocks,
       durationMsDashboardCore,
@@ -330,6 +369,7 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
       skippedPracticeHydration: true,
       skippedPeerComparison: true,
       skippedFullDashboardLoader: true,
+      skippedMockWeeklyTrend: true,
       ...getLearnerDurabilityObservabilityFields(),
     });
 
@@ -392,63 +432,70 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
   }
   const qById: Map<string, BankGradingQuestionRow> = await loadBatchedBankGradingQuestionMap(allSessionIds, entitlement);
 
-  let sessionGradingPreload: SessionGradingAggregate | undefined;
-  if (sessions.length > 0) {
-    sessionGradingPreload = aggregateSessionGradingFromHydratedSessions(
-      sessions.slice(0, DASHBOARD_SESSION_GRADING_LIMIT),
-      qById,
-    );
-  }
-
-  const tDashPath = performance.now();
-  const [dash, pathwayRaw] = await Promise.all([
-    loadLearnerDashboard(userId, entitlement, {
-      source: "loadReportCardData",
-      userProfile: bundle.user,
-      visibleLessonScope,
-      pathwayRowsForScope: bundle.pathwayLessonRows,
-      pathwayMetadataRowCount: bundle.pathwayLessonRows.length,
-      pathwayProgressRowCount: bundle.pathwayProgressScoped.length,
-      recentMocksPreload: mapExamAttemptRowsToRecentMocks(mockAttempts.slice(0, 5)),
-      sessionGradingPreload,
-    }),
-    loadPathwayStudySummaries(userId, entitlement, {
-      lessonRows: bundle.pathwayLessonRows,
-      pathwayProgress: bundle.pathwayProgressScoped,
-      learnerPath: bundle.user.learnerPath,
-    }),
-  ]);
-  const durationMsDashboardAndPathways = Math.round(performance.now() - tDashPath);
-  if (!dash) return null;
-
-  const pathwayOptions = listPathwaysCompatibleWithSubscription(entitlement);
-  const pathwayLabelById = new Map(pathwayOptions.map((p) => [p.id, p.shortName || p.displayName]));
+  /** Pathway table rows: same inventory math as {@link loadPathwayStudySummaries} with bundle preloads (no extra Prisma). */
+  const pathwayRaw = buildPathwayStudySummariesFromLessonInventory(
+    entitlement,
+    bundle.pathwayLessonRows,
+    bundle.pathwayProgressScoped,
+  );
 
   const tierTotals = new Map<string, { c: number; t: number }>();
   const recentBankSessions: RecentBankSessionRow[] = [];
   let bankCorrect = 0;
   let bankTotal = 0;
+  let preloadCorrect = 0;
+  let preloadTotal = 0;
 
-  for (const s of sessions) {
+  for (let i = 0; i < sessions.length; i++) {
+    const s = sessions[i]!;
     const { correct, total, byTier } = gradeBankSessionWithTierBreakdown(s.questionIds, s.answers, qById);
     bankCorrect += correct;
     bankTotal += total;
+    if (i < DASHBOARD_SESSION_GRADING_LIMIT) {
+      preloadCorrect += correct;
+      preloadTotal += total;
+    }
     for (const [tier, v] of byTier) {
       const cur = tierTotals.get(tier) ?? { c: 0, t: 0 };
       cur.c += v.c;
       cur.t += v.t;
       tierTotals.set(tier, cur);
     }
-    recentBankSessions.push({
-      id: s.id,
-      updatedAt: s.updatedAt,
-      examMode: s.examMode,
-      examTitle: s.exam?.title ?? null,
-      correct,
-      total,
-      accuracyPct: total > 0 ? Math.round((correct / total) * 100) : null,
-    });
+    if (recentBankSessions.length < RECENT_BANK_SESSIONS_UI) {
+      recentBankSessions.push({
+        id: s.id,
+        updatedAt: s.updatedAt,
+        examMode: s.examMode,
+        examTitle: s.exam?.title ?? null,
+        correct,
+        total,
+        accuracyPct: total > 0 ? Math.round((correct / total) * 100) : null,
+      });
+    }
   }
+
+  let sessionGradingPreload: SessionGradingAggregate | undefined;
+  if (sessions.length > 0) {
+    const n = Math.min(sessions.length, DASHBOARD_SESSION_GRADING_LIMIT);
+    sessionGradingPreload = { correct: preloadCorrect, total: preloadTotal, sessionCount: n };
+  }
+
+  const tDashPath = performance.now();
+  const dash = await loadLearnerDashboard(userId, entitlement, {
+    source: "loadReportCardData",
+    userProfile: bundle.user,
+    visibleLessonScope,
+    pathwayRowsForScope: bundle.pathwayLessonRows,
+    pathwayMetadataRowCount: bundle.pathwayLessonRows.length,
+    pathwayProgressRowCount: bundle.pathwayProgressScoped.length,
+    recentMocksPreload: mapExamAttemptRowsToRecentMocks(mockAttempts.slice(0, 5)),
+    sessionGradingPreload,
+  });
+  const durationMsDashboardAndPathways = Math.round(performance.now() - tDashPath);
+  if (!dash) return null;
+
+  const pathwayOptions = listPathwaysCompatibleWithSubscription(entitlement);
+  const pathwayLabelById = new Map(pathwayOptions.map((p) => [p.id, p.shortName || p.displayName]));
 
   /** Same SESSION_LIMIT window as tier + recent list — avoids mismatch with dashboard sessionGrading (8). */
   const bankGraded = {
@@ -535,17 +582,23 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
   // Peer benchmark: best available comparison context (CAT → practice → overall)
   const preferredPathwayId =
     pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? pathways[0]?.pathwayId ?? null;
-  const peerComparisonArgs = bestReportCardComparisonArgs({
-    userId,
-    recentPracticeTests: enrichedPracticeTests,
-    overallAccuracyPct: bankGraded.accuracyPct,
-    preferredPathwayId,
-  });
-  const peerBenchmark = await computePeerComparison(peerComparisonArgs).catch(() => null);
+  const skipPeerBenchmark = skipReportCardPeerBenchmarkByEnv();
+  let peerBenchmark: PeerComparisonResult | null = null;
+  if (!skipPeerBenchmark) {
+    const peerComparisonArgs = bestReportCardComparisonArgs({
+      userId,
+      recentPracticeTests: enrichedPracticeTests,
+      overallAccuracyPct: bankGraded.accuracyPct,
+      preferredPathwayId,
+    });
+    peerBenchmark = await computePeerComparison(peerComparisonArgs).catch(() => null);
+  }
 
   safeServerLog("learner_report_card", "report_card_load_phases", {
     userIdPrefix: userId.slice(0, 8),
     degraded: false,
+    mockAttemptCap,
+    peerBenchmarkSkipped: skipPeerBenchmark,
     durationMsTotal: Math.round(performance.now() - tRoute),
     durationMsScopeAndMocks,
     durationMsPracticeHydration,
@@ -565,7 +618,7 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     weakTopics: dash.weakTopics.slice(0, 10),
     strongTopics: dash.strongTopics.slice(0, 10),
     topicTrends: dash.topicTrends.slice(0, 8),
-    recentBankSessions: recentBankSessions.slice(0, 8),
+    recentBankSessions,
     recentMocks: dash.recentMocks,
     recentPracticeTests,
     mockWeeklyTrend,

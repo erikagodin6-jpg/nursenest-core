@@ -6,6 +6,8 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { recordEntitlementResolveFailureSignal } from "@/lib/observability/production-signal-metrics";
+import { productEvent } from "@/lib/observability/product-events";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
@@ -225,6 +227,17 @@ export async function GET(req: NextRequest) {
   try {
     entitlement = await resolveEntitlement(userId);
   } catch (e) {
+    const correlationId = correlationIdFromRequest(req);
+    productEvent("entitlement_resolve_failed", { surface: "api_questions_list" });
+    recordEntitlementResolveFailureSignal("api_questions_list", correlationId);
+    emitStructuredLog("entitlement_resolve_failed", "error", {
+      correlationId,
+      route: "/api/questions",
+      method: "GET",
+      flow: "content",
+      errorClass: e instanceof Error ? e.name : typeof e,
+      message: "entitlement resolve failed in question list",
+    });
     safeServerLogCritical("api_questions", "entitlement_resolve_failed", { page }, e, { flow: "questions_load" });
     return NextResponse.json(
       { error: "Unable to verify access. Try again shortly.", code: "access_verify_failed" },

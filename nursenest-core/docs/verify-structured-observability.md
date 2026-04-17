@@ -65,7 +65,7 @@
 | Checkout failure | `checkout_failed` | `errorClass` = reason (`unauthorized`, `session_failed`, …). |
 | Question API failure | `question_load_failed` | List, discovery, and `GET /api/questions/[id]` (subscriber vs freemium in `userState`). |
 | Lesson list failure | `lesson_load_failed` | `GET /api/lessons`. |
-| Entitlement read failure | `entitlement_resolve_failed` | RSC `resolveEntitlementForPage`, `GET /api/questions/[id]`, **`requireSubscriberSession`** when `getUserAccess` throws. |
+| Entitlement read failure | `entitlement_resolve_failed` | RSC `resolveEntitlementForPage`, `GET /api/questions` / `GET /api/questions/[id]`, `GET /api/lessons`, **`requireSubscriberSession`** when `getUserAccess` throws. |
 | Signup / password | `signup_failed`, `password_reset_failed` | Auth flows. |
 
 **Wrapped routes** (emit `request_end`, `route_degraded`, `route_timeout`): include `GET /api/lessons`, `GET /api/questions`, `GET /api/questions/discovery`, `GET /api/questions/[id]`, `POST /api/exams/start`, `POST /api/subscriptions/checkout`, `POST /api/subscriptions/webhook`, `GET /api/public/home-stats`, synthetic cron — not every `/api/*` route.

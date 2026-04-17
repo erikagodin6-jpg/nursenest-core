@@ -230,7 +230,12 @@ export function recordPaywallProofNeutral(surface: "fallback" | "safe_mode" | "p
  * Structured `entitlement_resolve_failed` is emitted at call sites; this adds Sentry Metrics + `nn.observability.v1` for dashboards.
  */
 export function recordEntitlementResolveFailureSignal(
-  surface: "page" | "api_questions_id" | "subscriber_api",
+  surface:
+    | "page"
+    | "api_questions_id"
+    | "api_questions_list"
+    | "api_lessons_list"
+    | "subscriber_api",
   correlationId?: string,
 ): void {
   sentryCount("entitlement.resolve.failure", 1, { surface });

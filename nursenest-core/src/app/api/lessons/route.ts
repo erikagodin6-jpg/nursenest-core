@@ -29,6 +29,8 @@ import {
 } from "@/lib/api/api-pagination-limits";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { recordEntitlementResolveFailureSignal } from "@/lib/observability/production-signal-metrics";
+import { productEvent } from "@/lib/observability/product-events";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { jsonResponseGuarded } from "@/lib/server/response-guard";
@@ -112,14 +114,16 @@ export async function GET(req: NextRequest) {
   try {
     entitlement = await resolveEntitlement(userId);
   } catch (e) {
-    emitStructuredLog("lesson_load_failed", "error", {
-      correlationId: correlationIdFromRequest(req),
+    const correlationId = correlationIdFromRequest(req);
+    productEvent("entitlement_resolve_failed", { surface: "api_lessons_list" });
+    recordEntitlementResolveFailureSignal("api_lessons_list", correlationId);
+    emitStructuredLog("entitlement_resolve_failed", "error", {
+      correlationId,
       route: "/api/lessons",
       method: "GET",
       flow: "content",
-      httpStatus: 503,
-      errorClass: e instanceof Error ? e.name : "unknown",
-      message: "entitlement resolve failure",
+      errorClass: e instanceof Error ? e.name : typeof e,
+      message: "entitlement resolve failed in lesson list",
     });
     safeServerLogCritical("api_lessons", "entitlement_resolve_failed", { page }, e);
     return NextResponse.json({ error: "Unable to verify access. Try again shortly." }, { status: 503 });

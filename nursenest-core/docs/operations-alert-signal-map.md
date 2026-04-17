@@ -17,7 +17,7 @@
 | `billing.webhook.failure` | `phase` | Integrity | `billing.webhookFailureCount15m` |
 | `db.client.error` | `bucket`, `prismaCode` | DB instability | — |
 | `db.query.slow` | `severity` | Slow queries | `db.slowQueryCount10m` |
-| `entitlement.resolve.failure` | `surface`: `page` \| `api_questions_id` \| `subscriber_api` | Paywall / RSC / subscriber APIs | `entitlement.resolveFailureCount15m` |
+| `entitlement.resolve.failure` | `surface`: `page` \| `api_questions_id` \| `api_questions_list` \| `api_lessons_list` \| `subscriber_api` | Paywall / RSC / list + detail APIs | `entitlement.resolveFailureCount15m` |
 | `health.ready.failure` | `kind` | DB down | — |
 | `marketing.paywall.proof_neutral` | `surface` | Stats degraded | `marketing.proofNeutralSpikeCount15m` |
 | `resilience.auto_degraded.engaged` | `reason` | Tier-2 skips | `resilience.autoDegradedEngagements15m` |
@@ -41,8 +41,8 @@ Use log drains (Axiom, Datadog, etc.) to count **`event`** per window. Spike thr
 | `checkout_failed` | Stripe session / policy | `billing.checkout.failure` |
 | `webhook_failed` | After verified Stripe event | `billing.webhook.failure` |
 | `webhook_ignored` | Unhandled event type (often OK) | Do **not** page on spike alone |
-| `entitlement_resolve_failed` | `getUserAccess` path threw (RSC, question route, **subscriber gate**) | `entitlement.resolve.failure` |
-| `question_load_failed` / `lesson_load_failed` | Content API | Route 5xx + Prisma |
+| `entitlement_resolve_failed` | `resolveEntitlement` / `getUserAccess` threw (RSC, question list/detail, lesson list, **subscriber gate**) | `entitlement.resolve.failure` |
+| `question_load_failed` / `lesson_load_failed` | Content query failure after entitlement resolved | Route 5xx + Prisma |
 
 ---
 

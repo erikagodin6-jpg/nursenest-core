@@ -17,7 +17,7 @@
 | `checkout_failed` | `POST /api/subscriptions/checkout` | `errorClass` = reason | `billing.checkout.failure` | Revenue: any sustained spike |
 | `webhook_failed` | Stripe handler or idempotency claim after verify | `errorClass`: `handler` \| `claim` | `billing.webhook.failure` | **3** / 15m |
 | `webhook_ignored` | Unhandled Stripe event type (acked) | — | — | **Do not page** on spike alone |
-| `entitlement_resolve_failed` | `getUserAccess` / entitlement threw | `route` (e.g. `rsc:resolveEntitlementForPage`, `api:requireSubscriberSession`) | `entitlement.resolve.failure` `{surface}` | **15** / 15m |
+| `entitlement_resolve_failed` | `resolveEntitlement` / `getUserAccess` threw after auth | `route` (e.g. `rsc:resolveEntitlementForPage`, `/api/questions`, `/api/lessons`, `api:requireSubscriberSession`) | `entitlement.resolve.failure` `{surface}` | **15** / 15m |
 | `question_load_failed` | Questions APIs | `route`, `correlationId` | — | `questionOrLessonLoadFailedCount15m` **30** / 15m |
 | `lesson_load_failed` | `GET /api/lessons` | `route`, `correlationId` | — | same |
 
@@ -29,6 +29,7 @@
 4. **checkout_failed:** `curl -X POST /api/subscriptions/checkout` without session → `checkout_failed` + `errorClass: unauthorized`.
 5. **db_query_failed:** easiest correlation check — trigger any Prisma error inside a route wrapped with `runWithPrismaQueryContextFromRequest` and confirm JSON includes `route` + `correlationId`.
 6. **entitlement_resolve_failed (subscriber_api):** requires `getUserAccess` to throw (e.g. DB down or test double); expect `surface: subscriber_api` on `entitlement.resolve.failure`.
+7. **entitlement_resolve_failed (list routes):** same failure mode while resolving `resolveEntitlement` for `GET /api/questions` or `GET /api/lessons` — expect `surface: api_questions_list` or `api_lessons_list` (not `question_load_failed` / `lesson_load_failed`, which remain for query failures after entitlement succeeds).
 
 ## Correlation propagation
 
