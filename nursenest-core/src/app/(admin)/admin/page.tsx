@@ -12,19 +12,16 @@ export const dynamic = "force-dynamic";
 export default async function AdminPage() {
   await requireAdmin();
 
-  let overview: Awaited<ReturnType<typeof loadAdminDashboardOverview>> | null = null;
-  try {
-    overview = await loadAdminDashboardOverview();
-  } catch (e) {
-    console.error("[AdminPage] loadAdminDashboardOverview", e);
-  }
-
-  let commandCenter: Awaited<ReturnType<typeof loadAdminCommandCenter>> = null;
-  try {
-    commandCenter = await loadAdminCommandCenter();
-  } catch (e) {
-    console.error("[AdminPage] loadAdminCommandCenter", e);
-  }
+  const [overview, commandCenter] = await Promise.all([
+    loadAdminDashboardOverview().catch((e) => {
+      console.error("[AdminPage] loadAdminDashboardOverview", e);
+      return null;
+    }),
+    loadAdminCommandCenter().catch((e) => {
+      console.error("[AdminPage] loadAdminCommandCenter", e);
+      return null;
+    }),
+  ]);
 
   const staff = await getStaffSession();
   const staffTier: StaffTier = staff?.tier ?? "super";

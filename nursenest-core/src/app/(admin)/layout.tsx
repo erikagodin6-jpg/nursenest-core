@@ -9,6 +9,9 @@ import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback
 
 export const dynamic = "force-dynamic";
 
+/** Heavy DB-backed admin UIs; avoid platform timeouts during cold DB + large aggregates. */
+export const maxDuration = 120;
+
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
