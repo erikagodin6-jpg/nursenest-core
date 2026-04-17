@@ -8,11 +8,15 @@
 
 import type { GlobalRegionSlug, GlobalLocaleCode } from "@/lib/i18n/global-regions";
 import { REGION_CONFIG } from "@/lib/i18n/global-regions";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { buildExamPathwayPath, type ExamPathwayDefinition } from "@/lib/exam-pathways/exam-product-registry";
+import { getExamHubForGlobalRegion } from "@/lib/marketing/global-region-exam-hubs";
 import {
   getProfessionsForRegion,
   getExamsForRegionProfession,
   getRegionFlag,
 } from "@/lib/navigation/context-switch-helpers";
+import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { isPublicCountrySwitcherReady } from "@/lib/navigation/market-readiness";
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -28,12 +32,21 @@ export type ResolvedRoute = {
 // ── Route resolver ───────────────────────────────────────────────────────────
 
 /**
+ * Published US/CA pathway rows (same filter as onboarding exam list).
+ */
+function pathwaysForUsCanada(region: GlobalRegionSlug): ExamPathwayDefinition[] {
+  const countrySlug = region === "us" ? "us" : region === "canada" ? "canada" : null;
+  if (!countrySlug) return [];
+  return listPublishedExamPathwaysForPublicSite().filter((p) => p.countrySlug === countrySlug);
+}
+
+/**
  * Build the best destination URL for a given context selection.
  *
  * Falls back gracefully:
- *   1. Exact pathway route if found in the registry
- *   2. Region + profession hub
- *   3. Localized root
+ *   1. **US / Canada** — canonical exam hub `/{country}/{role}/{exam}` (English has **no** `/en/` prefix)
+ *   2. **Expansion regions** — shipped `/exams/…` hub (locale UI via cookie; do not prefix `/tl/` on hubs that only exist on `(default)`)
+ *   3. Localized marketing root `/{locale}` or `/`
  */
 export function resolveOnboardingRoute(
   region: GlobalRegionSlug,
@@ -44,13 +57,36 @@ export function resolveOnboardingRoute(
   const exams = getExamsForRegionProfession(region, profession);
   const resolvedExam = exam ?? exams[0]?.examCode ?? null;
 
-  if (resolvedExam) {
-    const pathwayHref = `/${locale}/${region}/${profession}/${resolvedExam}`;
-    return { href: pathwayHref, locale, region, profession, exam: resolvedExam };
+  if (region === "us" || region === "canada") {
+    const byProfession = pathwaysForUsCanada(region).filter((p) => p.roleTrack === profession);
+    const matching =
+      (resolvedExam && byProfession.find((p) => p.examCode === resolvedExam)) ?? byProfession[0];
+    if (matching) {
+      return {
+        href: buildExamPathwayPath(matching),
+        locale,
+        region,
+        profession,
+        exam: matching.examCode,
+      };
+    }
   }
 
-  // No exam resolved — fall back to localized root
-  return { href: `/${locale}`, locale, region, profession, exam: null };
+  const hub = getExamHubForGlobalRegion(region);
+  if (hub) {
+    return {
+      href: hub.hubPath,
+      locale,
+      region,
+      profession,
+      exam: resolvedExam,
+    };
+  }
+
+  if (locale === DEFAULT_MARKETING_LOCALE) {
+    return { href: "/", locale, region, profession, exam: resolvedExam };
+  }
+  return { href: `/${locale}`, locale, region, profession, exam: resolvedExam };
 }
 
 // ── Helpers for the selector UI ──────────────────────────────────────────────
