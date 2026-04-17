@@ -4,6 +4,8 @@ import {
 } from "@/lib/observability/crawl-surface-observability";
 import { buildSingleSitemapXmlSafe } from "@/lib/seo/sitemap-all-xml";
 import { minimalUrlsetSingleHome } from "@/lib/seo/sitemap-static-xml";
+import { SeoHttpValidationStrictError } from "@/lib/seo/seo-http-emit-validation";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { sitemapXmlResponse } from "@/lib/seo/sitemap-xml-http";
 
 /**
@@ -49,6 +51,27 @@ export async function GET() {
     }
     return sitemapXmlResponse(xml);
   } catch (e) {
+    if (e instanceof SeoHttpValidationStrictError) {
+      const ms = Date.now() - t0;
+      safeServerLog("seo", "sitemap_xml_strict_validation_failed", {
+        count: String(e.failures.length),
+        firstUrl: e.failures[0]?.url?.slice(0, 500) ?? "",
+        firstStatus: String(e.failures[0]?.status ?? ""),
+      });
+      logCrawlSurfaceEvent({
+        routeType: "marketing.sitemap_xml",
+        pathname: SITEMAP_PATHNAME,
+        durationMs: ms,
+        outcome: "error",
+        httpStatus: 503,
+        fallback: false,
+        errorCode: "seo_http_validation_strict",
+      });
+      return new Response(
+        `Sitemap withheld: HTTP validation failed for ${e.failures.length} URL(s). See logs (seo_http_validation_strict).`,
+        { status: 503, headers: { "Content-Type": "text/plain; charset=utf-8" } },
+      );
+    }
     const ms = Date.now() - t0;
     logCrawlSurfaceEvent({
       routeType: "marketing.sitemap_xml",

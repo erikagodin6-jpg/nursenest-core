@@ -5,6 +5,10 @@ import {
 } from "@/lib/observability/crawl-surface-observability";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { localeRobotsOverride } from "@/lib/i18n/language-readiness";
+import {
+  SeoHttpValidationStrictError,
+  validateMetadataAlternatesHttp,
+} from "@/lib/seo/seo-http-emit-validation";
 
 const METADATA_SLOW_MS = 2000;
 
@@ -30,7 +34,9 @@ export type SafeMetadataContext = {
 };
 
 /**
- * Global guard: `generateMetadata` must never throw. Logs `metadata_generation_failed` on errors.
+ * Global guard: `generateMetadata` must not throw for ordinary failures. Logs `metadata_generation_failed` on errors.
+ * When `SEO_HTTP_VALIDATE_PAGE_METADATA` + `SEO_HTTP_VALIDATE_STRICT` are set, {@link validateMetadataAlternatesHttp}
+ * may throw {@link SeoHttpValidationStrictError} so the request fails fast instead of emitting bad alternates.
  *
  * Automatically injects `robots: { index: false, follow: true }` for locales that are
  * not yet fully indexed (tier=partial or tier=incomplete). This prevents thin-content
@@ -84,8 +90,26 @@ export async function safeGenerateMetadata(
         slow: true,
       });
     }
+    try {
+      await validateMetadataAlternatesHttp(result, {
+        pathname: ctx.pathname ?? "/",
+        routeGroup: ctx.routeGroup,
+        sourceFile: "src/lib/seo/safe-marketing-metadata.ts",
+        generator: "safeGenerateMetadata",
+      });
+    } catch (ve) {
+      if (ve instanceof SeoHttpValidationStrictError) {
+        throw ve;
+      }
+      safeServerLog("seo", "metadata_http_validate_unexpected", {
+        detail: ve instanceof Error ? ve.message.slice(0, 200) : String(ve).slice(0, 200),
+      });
+    }
     return result;
   } catch (e) {
+    if (e instanceof SeoHttpValidationStrictError) {
+      throw e;
+    }
     const message = e instanceof Error ? e.message : String(e);
     const durationMs = Date.now() - t0;
     safeServerLog("metadata", "metadata_generation_failed", {

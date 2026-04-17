@@ -17,6 +17,11 @@ import {
 import { getSitemapIncludedLocales } from "@/lib/i18n/language-readiness";
 import { isValidPublicUrl } from "@/lib/seo/public-url-validator";
 import { logSeoEmittedUrlBatch } from "@/lib/seo/seo-url-emission-audit";
+import {
+  isSeoHttpValidationEnabled,
+  SeoHttpValidationStrictError,
+  validateUrlsHttpBatch,
+} from "@/lib/seo/seo-http-emit-validation";
 
 /**
  * Single sitemap urlset used by `/sitemap.xml`.
@@ -98,8 +103,20 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
       staticCount: String(allStatic.size),
       mergedTotal: String(merged.length),
     });
+
+    if (isSeoHttpValidationEnabled()) {
+      await validateUrlsHttpBatch(merged.map((m) => m.loc), {
+        sourceFile: "src/lib/seo/sitemap-all-xml.ts",
+        generator: "buildSingleSitemapXmlSafe",
+        kind: "sitemap",
+      });
+    }
+
     return buildSitemapUrlsetFromAbsoluteUrls(merged);
   } catch (e) {
+    if (e instanceof SeoHttpValidationStrictError) {
+      throw e;
+    }
     const detail = e instanceof Error ? e.message : String(e);
     safeServerLog("seo", "sitemap_merged_build_failed", {
       detail: detail.slice(0, 400),

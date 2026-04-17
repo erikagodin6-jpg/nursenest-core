@@ -36,6 +36,7 @@
     "content:validate-questions-jsonl": "tsx scripts/content-pipeline/validate-exam-question-jsonl.mts",
     "audit:internal-links": "tsx ../scripts/audit-internal-links.ts",
     "audit:links": "tsx scripts/audit/link-integrity-check.mts",
+    "seo:validate-http-sitemap": "tsx scripts/validate-seo-http-sitemap.mts",
     "audit:navigation-inventory": "tsx scripts/audit/navigation-inventory.mts",
     "audit:blog-quality": "tsx scripts/audit-blog-quality.ts",
     "blog:import-uk-licensure-seeds": "tsx scripts/blog/import-uk-licensure-blog-seeds.mts",
