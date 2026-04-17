@@ -31,11 +31,14 @@ export function WeakAreasDashboardClient({ initial }: Props) {
         } catch {
           /* ignore */
         }
-        setRefreshError(msg);
+        setRefreshError(`${msg.trim()} Showing last loaded data.`);
         return;
       }
       const json = (await res.json()) as TopicPerformanceSnapshot;
       setData(json);
+    } catch {
+      /** Network / abort — keep SSR snapshot; never throw (avoids breaking the dashboard shell). */
+      setRefreshError("Could not refresh topic performance. Showing last loaded data.");
     } finally {
       setLoading(false);
     }
@@ -66,7 +69,10 @@ export function WeakAreasDashboardClient({ initial }: Props) {
   const firstWeakTopic = data?.weakTopics[0]?.topic ?? null;
 
   return (
-    <section className="nn-card nn-student-card-lift border-[var(--semantic-border-soft)] p-6 shadow-[var(--semantic-shadow-soft)]">
+    <section
+      className="nn-card nn-student-card-lift border-[var(--semantic-border-soft)] p-6 shadow-[var(--semantic-shadow-soft)]"
+      data-testid="dashboard-topic-performance"
+    >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-wider text-primary/80">Member insight</p>
@@ -79,8 +85,9 @@ export function WeakAreasDashboardClient({ initial }: Props) {
             <p
               className="mt-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-3 py-2 text-xs text-[var(--semantic-warning-contrast)]"
               role="status"
+              data-testid="dashboard-weak-areas-refresh-error"
             >
-              {refreshError} Showing last loaded data.
+              {refreshError}
             </p>
           ) : null}
         </div>

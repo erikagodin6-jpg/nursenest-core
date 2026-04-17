@@ -96,7 +96,8 @@ export default defineConfig({
   projects: [
     {
       name: "release-health",
-      testMatch: /tests\/e2e\/release\/release-health-apis\.spec\.ts$/,
+      testMatch:
+        /tests\/e2e\/release\/(release-health-apis|healthz-liveness-burst)\.spec\.ts$/,
       use: { ...devices["Desktop Chrome"] },
     },
     ...releasePaidProjects,

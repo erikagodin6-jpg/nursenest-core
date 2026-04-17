@@ -75,13 +75,18 @@ function looksLikePlaceholderDatabaseUrl(raw) {
     await prisma.$queryRaw`SELECT 1`;
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
+    const pwdAuth = /password authentication failed|FATAL:\s*password authentication failed/i.test(msg);
+    const sslHint =
+      pwdAuth && /\.ondigitalocean\.com|amazonaws|neon\.tech|supabase/i.test(rawUrl)
+        ? "\nIf the password is correct, ensure the URL includes sslmode=require (added automatically for many managed hosts in src/lib/db/env-bootstrap.ts when omitted)."
+        : "";
     console.error(
       [
         "[e2e-db-check] Cannot connect to Postgres.",
         `Attempted (no secrets): ${redactedConnectionHint(rawUrl)}`,
-        "Credentials login will fail with CredentialsSignin when authorize() cannot query the User table.",
-        "Fix DATABASE_URL (password, host, sslmode, database name), or run `npm run test:e2e:paid-local-green`.",
-        `Detail: ${msg.slice(0, 500)}`,
+        "Credentials login fails with Auth.js code db_url_auth when Prisma cannot open a DB connection (wrong password or TLS/URL).",
+        "Fix DATABASE_URL in App Platform / .env.playwright.local (rotate password in DO if expired), or run `npm run test:e2e:paid-local-green`.",
+        `Detail: ${msg.slice(0, 500)}${sslHint}`,
       ].join("\n"),
     );
     process.exit(1);

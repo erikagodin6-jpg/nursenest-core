@@ -30,6 +30,33 @@ function withDefaultQueryParam(urlString: string, key: string, value: string): s
   }
 }
 
+/**
+ * Managed Postgres (DigitalOcean, Neon, Supabase pooler, RDS) expects TLS. If `sslmode` is omitted,
+ * libpq may still connect in some environments but credentials login / Prisma can fail inconsistently.
+ * Never set for localhost — local dev Postgres often has no TLS.
+ */
+function withDefaultSslModeRequireForRemoteManagedPostgres(urlString: string): string {
+  try {
+    const url = new URL(urlString);
+    const h = url.hostname.toLowerCase();
+    if (h === "localhost" || h === "127.0.0.1" || h.endsWith(".local")) return urlString;
+    if (url.searchParams.has("sslmode") || url.searchParams.has("ssl")) return urlString;
+
+    const remoteManaged =
+      /\.ondigitalocean\.com$/i.test(h) ||
+      /\.neon\.tech$/i.test(h) ||
+      /\.pooler\.supabase\.com$/i.test(h) ||
+      /\.rds\.amazonaws\.com$/i.test(h) ||
+      /\.postgres\.database\.azure\.com$/i.test(h);
+
+    if (!remoteManaged) return urlString;
+    url.searchParams.set("sslmode", "require");
+    return url.toString();
+  } catch {
+    return urlString;
+  }
+}
+
 /** Prisma + transaction-pooling PgBouncer: prepared statements are incompatible unless `pgbouncer=true` is set on the pooled URL. */
 function isPrismaPgbouncerMode(): boolean {
   const v = process.env.PRISMA_USE_PGBOUNCER?.trim().toLowerCase();
@@ -129,7 +156,8 @@ function tuneDatabaseUrlForProcess(rawUrl: string, role: "pooled" | "direct" = "
   const isBuildProcess = lifecycle === "build" || argv.includes("next build");
   const isScriptProcess = isDatabaseScriptOrMigrationsProcess();
 
-  let working = role === "direct" ? stripPgbouncerFromUrl(rawUrl) : rawUrl;
+  let working = withDefaultSslModeRequireForRemoteManagedPostgres(rawUrl);
+  working = role === "direct" ? stripPgbouncerFromUrl(working) : working;
 
   const usePoolerFlag = role === "pooled" && isPrismaPgbouncerMode();
   const connectionLimit =
@@ -206,3 +234,11 @@ export function applyDatabaseUrlFromEnv(): void {
 
 applyDatabaseUrlFromEnv();
 applyDirectDatabaseUrlFromEnv();
+
+if (process.env.NODE_ENV !== "production" && process.env.NN_LOG_DIRECT_URL !== "0") {
+  // Temporary visibility for Prisma `directUrl` / migrate — remove or gate further if noisy.
+  console.log("[env-bootstrap] DIRECT_URL present:", Boolean(process.env.DIRECT_URL?.trim()));
+}
+
+/** Set after URL tuning side effects — `src/lib/db.ts` asserts this ran before `PrismaClient` construction. */
+(globalThis as typeof globalThis & { __ENV_BOOTSTRAP_RAN__?: boolean }).__ENV_BOOTSTRAP_RAN__ = true;

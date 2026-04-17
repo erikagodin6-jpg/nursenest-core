@@ -70,6 +70,8 @@ function localDevWebServer() {
       ...(process.env.E2E_LEARNER_DEGRADED === "1"
         ? { NN_DEGRADED_MODE: "1", NEXT_PUBLIC_NN_DEGRADED_MODE: "1" }
         : {}),
+      /** Prisma `$on('query')` + bounded-read audit for `paid-user-prisma-query-bounds` (override with `PRISMA_QUERY_AUDIT=0`). */
+      ...(process.env.PRISMA_QUERY_AUDIT === "0" ? {} : { PRISMA_QUERY_AUDIT: "1" }),
     },
   } as const;
 }
@@ -86,7 +88,7 @@ const freeAuthEnabled = Boolean(
 
 /** Full paid-user slice (must stay aligned with `chromium` testIgnore below). */
 const CHROMIUM_PAID_SPEC_MATCH =
-  /paid-user-(00-fast-sanity|dashboard-shell-first|dashboard-fail-soft|degraded-mode|data-load|performance|stress|db-stability-burst|login-flow|journey|entitlements|navigation-paths|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke|duplicate-heavy-requests|prisma-client-singleton|accessibility)\.spec\.ts$|paid-subscriber-audit\.spec\.ts$|production-i18n-bundle\.spec\.ts$/;
+  /paid-user-(00-fast-sanity|dashboard-shell-first|dashboard-fail-soft|dashboard-multi-fail-soft|degraded-mode|data-load|performance|stress|db-stability-burst|db-connection-burst|env-bootstrap-order|login-flow|login-reliability|journey|entitlements|navigation-paths|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke|duplicate-heavy-requests|prisma-client-singleton|prisma-query-bounds|accessibility)\.spec\.ts$|paid-subscriber-audit\.spec\.ts$|production-i18n-bundle\.spec\.ts$/;
 
 const freeProjects = freeAuthEnabled
   ? [
@@ -166,7 +168,7 @@ export default defineConfig({
       // Project-level testIgnore replaces the root list — keep `.next` + build dirs here too.
       testIgnore: [
         /lesson-flows\.mobile\.spec\.ts$/,
-        /paid-user-(00-fast-sanity|dashboard-shell-first|dashboard-fail-soft|degraded-mode|data-load|performance|stress|db-stability-burst|login-flow|journey|entitlements|navigation-paths|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke|duplicate-heavy-requests|prisma-client-singleton|accessibility)\.spec\.ts$/,
+        /paid-user-(00-fast-sanity|dashboard-shell-first|dashboard-fail-soft|dashboard-multi-fail-soft|degraded-mode|data-load|performance|stress|db-stability-burst|db-connection-burst|env-bootstrap-order|login-flow|login-reliability|journey|entitlements|navigation-paths|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke|duplicate-heavy-requests|prisma-client-singleton|prisma-query-bounds|accessibility)\.spec\.ts$/,
         /paid-subscriber-audit\.spec\.ts$/,
         /** Only `chromium-paid` should run this placeholder (or it duplicates when creds are missing). */
         /paid-e2e-requires-env\.spec\.ts$/,
