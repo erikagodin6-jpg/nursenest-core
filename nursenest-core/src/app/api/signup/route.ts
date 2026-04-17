@@ -15,6 +15,7 @@ import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
 import { API_SIGNUP_PER_IP_RATE_LIMIT } from "@/lib/server/rate-limit";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { productEvent } from "@/lib/observability/product-events";
+import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
@@ -61,6 +62,7 @@ const schema = z.object({
 });
 
 export async function POST(req: Request) {
+  return runWithApiTelemetry(req, "POST /api/signup", "auth", async () => {
   setSentryServerContext({ route: "/api/signup", feature: SERVER_FEATURE.signup });
   const ip = clientIp(req);
   const rl = await checkRateLimitUnified(API_SIGNUP_PER_IP_RATE_LIMIT.rateLimitKeyForIp(ip), {
@@ -251,4 +253,5 @@ export async function POST(req: Request) {
   });
 
   return NextResponse.json({ ok: true, verificationSent: true }, { status: 201 });
+  });
 }

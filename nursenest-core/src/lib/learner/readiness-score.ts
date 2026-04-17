@@ -315,8 +315,9 @@ export function computeReadiness(args: {
       : confidence === "medium"
         ? "This estimate will become more precise as you complete more practice sessions and exams."
         : "Early estimate based on limited data. Your score will sharpen with more practice.";
+  // NP / Allied-CA profiles use higher minimum signals; surface that the model is intentionally stricter.
   if (calibratedPreview) {
-    summary += " Scoring for this exam track is calibrated conservatively.";
+    summary += " Scoring for this exam track is intentionally stricter until signals are stronger.";
   }
 
   const whatToImprove: string[] = [];

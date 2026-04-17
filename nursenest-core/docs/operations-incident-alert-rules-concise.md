@@ -69,3 +69,5 @@ Full curl list: `docs/verify-structured-observability.md`.
 ## Blind spot (by design)
 
 Handlers that **do not** call `runWithApiTelemetry` / `recordApiRouteTelemetry` will not emit `request_end` / `request_failed` / `route_timeout` from telemetry — add wrapping when promoting a route to SLO coverage. See `docs/production-monitoring-alerts.md` (gap section).
+
+**RSC / server components:** `lesson_load_failed` and `question_load_failed` are emitted from **API routes** when list/detail queries fail after entitlement resolves. A Prisma failure inside an RSC page path may surface as a render error without those events unless the page calls the same helpers — triage with `entitlement_resolve_failed` (RSC) and `db_query_*` when the request used Prisma ALS.

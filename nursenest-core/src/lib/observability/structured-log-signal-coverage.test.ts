@@ -71,6 +71,7 @@ describe("structured log — incident signal coverage (static)", () => {
 
   it("auth + signup routes emit signup_failed / password_reset_failed with correlation", () => {
     assert.match(read("src/app/api/signup/route.ts"), /emitStructuredLog\("signup_failed"/);
+    assert.match(read("src/app/api/signup/route.ts"), /runWithApiTelemetry\(\s*req,\s*"POST \/api\/signup"/);
     assert.match(read("src/app/api/auth/forgot-password/route.ts"), /emitStructuredLog\("password_reset_failed"/);
     assert.match(read("src/app/api/auth/forgot-password/route.ts"), /correlationIdFromRequest/);
   });
