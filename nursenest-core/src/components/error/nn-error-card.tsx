@@ -74,7 +74,7 @@ export function NnErrorCard({
           className="mb-5 inline-flex justify-center bg-transparent"
           aria-label="NurseNest home"
         >
-          <SiteBrandLogoMark variant="auth" />
+          <SiteBrandLogoMark variant="auth" logoVariant="leaf" />
         </a>
 
         <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_06%,var(--semantic-surface))]">

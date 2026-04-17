@@ -49,14 +49,16 @@ test("1–5 Admin: login, header, /admin, dashboard shell, no forbidden mark ass
       await expect(adminCta).toBeVisible({ timeout: 25_000 });
       await expect(adminCta).toHaveAttribute("href", "/admin");
       await adminCta.click();
-      await page.waitForURL((u) => u.pathname.startsWith("/admin"), { timeout: 60_000 });
+      await page.waitForURL((u) => u.pathname === "/admin", { timeout: 60_000 });
     });
 
     await test.step("4. Real dashboard shell (not error recovery)", async () => {
+      await expect(page.getByTestId("admin-dashboard-shell")).toBeVisible({ timeout: 90_000 });
       await expect(page.getByRole("heading", { name: /Admin Dashboard/i })).toBeVisible({
         timeout: 90_000,
       });
       await expect(page.getByRole("heading", { name: /^Just a moment$/i })).toHaveCount(0);
+      await expect(page.getByTestId("admin-command-center-fallback")).toHaveCount(0);
     });
 
     await test.step("5. No forbidden full-mark / arch imagery in main", async () => {

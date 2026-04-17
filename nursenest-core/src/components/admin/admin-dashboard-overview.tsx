@@ -38,20 +38,33 @@ function PrimaryLink({ href, children }: { href: string; children: React.ReactNo
   );
 }
 
-export function AdminDashboardOverview({ data }: { data: AdminDashboardOverview }) {
+export function AdminDashboardOverview({
+  data,
+  showHeader = true,
+}: {
+  data: AdminDashboardOverview;
+  showHeader?: boolean;
+}) {
   const tier = data.exams.byTier;
   return (
     <div className="space-y-8">
-      <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] md:text-3xl">Admin Dashboard</h1>
-        <p className="max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
-          Manage NurseNest content and system
-        </p>
+      {showHeader ? (
+        <header className="space-y-2">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] md:text-3xl">Admin Dashboard</h1>
+          <p className="max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
+            Manage NurseNest content and system
+          </p>
+          <p className="text-xs text-[var(--semantic-text-muted)]">
+            Snapshot {new Date(data.generatedAt).toLocaleString()} ·{" "}
+            {data.env.vercelEnv ? `${data.env.nodeEnv} (${data.env.vercelEnv})` : data.env.nodeEnv}
+          </p>
+        </header>
+      ) : (
         <p className="text-xs text-[var(--semantic-text-muted)]">
           Snapshot {new Date(data.generatedAt).toLocaleString()} ·{" "}
           {data.env.vercelEnv ? `${data.env.nodeEnv} (${data.env.vercelEnv})` : data.env.nodeEnv}
         </p>
-      </header>
+      )}
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         <CardShell
