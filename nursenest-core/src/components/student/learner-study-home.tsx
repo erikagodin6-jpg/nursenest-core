@@ -13,6 +13,7 @@ import { BenchmarkCard } from "@/components/student/dashboard/benchmark-card";
 import { WeaknessHeatmap, type HeatmapTopic } from "@/components/student/dashboard/weakness-heatmap";
 import { LearnerCoreStudyShortcuts } from "@/components/student/learner-core-study-shortcuts";
 import { LearnerAdaptiveFocusCard } from "@/components/student/learner-adaptive-focus-card";
+import { WeakAreasDashboardClient } from "@/components/student/weak-areas-dashboard-client";
 import { LearnerContinueLearningCard } from "@/components/student/learner-continue-learning-card";
 import { PremiumLearnerHub, type RecentLearnerNoteSummary } from "@/components/student/premium-learner-hub";
 import { DashboardCoachCard } from "@/components/student/dashboard/coach-card";
@@ -335,6 +336,10 @@ export function LearnerStudyHome({
           </div>
         </div>
       </LearnerStudySurfaceSection>
+
+      <div className="nn-dash-section nn-dash-band nn-dash-band--topic-performance">
+        <WeakAreasDashboardClient initial={snapshot.topicPerformance} />
+      </div>
 
       {showAttentionSection ? (
         <LearnerStudySurfaceSection
