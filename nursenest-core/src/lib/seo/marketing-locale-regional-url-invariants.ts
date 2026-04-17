@@ -35,15 +35,17 @@ export function localeFirstPathExceedsSegmentBudget(pathname: string, maxSegment
   return true;
 }
 
+/** Sitemap + metadata guard: drop paths that cannot correspond to a real marketing route. */
+export function isDisallowedMarketingSeoPathname(pathname: string): boolean {
+  if (pathnameHasLocalePrefixBeforeExamCountry(pathname)) return true;
+  if (localeFirstPathExceedsSegmentBudget(pathname)) return true;
+  return false;
+}
+
 export function assertMarketingPathnamePassesSeoLocaleRegionalPolicy(pathname: string): void {
-  if (pathnameHasLocalePrefixBeforeExamCountry(pathname)) {
+  if (isDisallowedMarketingSeoPathname(pathname)) {
     throw new Error(
-      `Invalid pathname (locale + exam country): ${pathname} — use /{region}/{exam}/… without a leading /{locale}/`,
-    );
-  }
-  if (localeFirstPathExceedsSegmentBudget(pathname)) {
-    throw new Error(
-      `Invalid pathname (locale-first path exceeds ${4} segments): ${pathname}`,
+      `Invalid marketing pathname (locale+region or locale-first segment budget): ${pathname}`,
     );
   }
 }

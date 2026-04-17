@@ -52,3 +52,13 @@ test("stripForbiddenLocalePrefixedPathwayTopics removes locale-prefixed NP pract
   assert.equal(removed, 1);
   assert.deepEqual(urls, [`${ORIGIN}/fr/pricing`]);
 });
+
+test("stripForbiddenLocalePrefixedPathwayTopics removes any /{locale}/us/… URL (locale + exam region)", () => {
+  const { urls, removed } = stripForbiddenLocalePrefixedPathwayTopics(
+    [`${ORIGIN}/fr/us/np/fnp`, `${ORIGIN}/fr/contact`],
+    ORIGIN,
+    "fr",
+  );
+  assert.equal(removed, 1);
+  assert.deepEqual(urls, [`${ORIGIN}/fr/contact`]);
+});

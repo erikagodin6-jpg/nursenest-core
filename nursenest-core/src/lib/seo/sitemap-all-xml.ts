@@ -15,7 +15,7 @@ import {
   type SitemapUrlEntry,
 } from "@/lib/seo/sitemap-static-xml";
 import { getSitemapIncludedLocales } from "@/lib/i18n/language-readiness";
-import { isEligiblePublicIndexSitemapLoc } from "@/lib/seo/sitemap-marketing-exclusions";
+import { isValidPublicUrl } from "@/lib/seo/public-url-validator";
 
 /**
  * Single sitemap urlset used by `/sitemap.xml`.
@@ -28,7 +28,15 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
     const blogEntries = new Map<string, string | undefined>();
 
     const pushStatic = (url: string) => {
-      if (!isEligiblePublicIndexSitemapLoc(url, origin)) return;
+      const r = isValidPublicUrl(url, { origin });
+      if (!r.ok) {
+        safeServerLog("seo", "sitemap_public_url_rejected", {
+          url: url.slice(0, 500),
+          code: r.code,
+          detail: (r.detail ?? "").slice(0, 200),
+        });
+        return;
+      }
       allStatic.add(url);
     };
 
@@ -51,12 +59,28 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
     }
 
     for (const entry of await listBlogSitemapEntriesSafe()) {
-      if (!isEligiblePublicIndexSitemapLoc(entry.loc, origin)) continue;
+      const r = isValidPublicUrl(entry.loc, { origin });
+      if (!r.ok) {
+        safeServerLog("seo", "sitemap_blog_url_rejected", {
+          url: entry.loc.slice(0, 500),
+          code: r.code,
+          detail: (r.detail ?? "").slice(0, 200),
+        });
+        continue;
+      }
       blogEntries.set(entry.loc, entry.lastmod);
     }
 
     for (const entry of await listLocalizedBlogSitemapEntriesSafe()) {
-      if (!isEligiblePublicIndexSitemapLoc(entry.loc, origin)) continue;
+      const r = isValidPublicUrl(entry.loc, { origin });
+      if (!r.ok) {
+        safeServerLog("seo", "sitemap_localized_blog_url_rejected", {
+          url: entry.loc.slice(0, 500),
+          code: r.code,
+          detail: (r.detail ?? "").slice(0, 200),
+        });
+        continue;
+      }
       blogEntries.set(entry.loc, entry.lastmod);
     }
 

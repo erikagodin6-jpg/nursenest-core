@@ -1,4 +1,5 @@
 import { listNpPracticeTestSegmentPaths } from "@/lib/exam-pathways/np-practice-test-segments";
+import { isDisallowedMarketingSeoPathname } from "@/lib/seo/marketing-locale-regional-url-invariants";
 import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
 
 /**
@@ -31,6 +32,16 @@ export function stripForbiddenLocalePrefixedPathwayTopics(
   let removed = 0;
   for (const u of urls) {
     if (forbidden.has(u)) {
+      removed += 1;
+      continue;
+    }
+    try {
+      const pathname = new URL(u).pathname;
+      if (isDisallowedMarketingSeoPathname(pathname)) {
+        removed += 1;
+        continue;
+      }
+    } catch {
       removed += 1;
       continue;
     }

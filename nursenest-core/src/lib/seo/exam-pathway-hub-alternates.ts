@@ -2,6 +2,7 @@ import { buildExamPathwayPath, EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-pr
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { getPathwayTopicProgrammaticRow } from "@/lib/seo/pathway-topic-programmatic-registry";
+import { filterPublicHreflangRecord } from "@/lib/seo/public-url-validator";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 /**
@@ -33,7 +34,7 @@ export function examPathwayRegionalHreflang(pathway: ExamPathwayDefinition): Rec
   }
   const selfUrl = absoluteUrl(buildExamPathwayPath(pathway));
   out["x-default"] = us ? out["en-US"]! : ca ? out["en-CA"]! : selfUrl;
-  return out;
+  return filterPublicHreflangRecord(out, "seo", "exam_pathway_hreflang_rejected");
 }
 
 /**
@@ -71,5 +72,5 @@ export function examPathwayTopicRegionalHreflang(
     : ca && getPathwayTopicProgrammaticRow(ca.id, topicSegment)
       ? out["en-CA"]!
       : selfUrl;
-  return out;
+  return filterPublicHreflangRecord(out, "seo", "exam_pathway_topic_hreflang_rejected");
 }

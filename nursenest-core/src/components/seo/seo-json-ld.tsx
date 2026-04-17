@@ -1,5 +1,7 @@
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import type { SeoPageDefinition } from "@/lib/seo/programmatic-registry";
+import { isValidPublicUrl } from "@/lib/seo/public-url-validator";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 function JsonLd({ data }: { data: Record<string, unknown> }) {
@@ -63,6 +65,16 @@ export function WebPageJsonLd({
   inLanguage?: string;
 }) {
   const url = absoluteUrl(path);
+  const v = isValidPublicUrl(url);
+  if (!v.ok) {
+    safeServerLog("seo", "webpage_jsonld_rejected", {
+      path: path.slice(0, 400),
+      url: url.slice(0, 500),
+      code: v.code,
+      detail: (v.detail ?? "").slice(0, 200),
+    });
+    return null;
+  }
   return (
     <JsonLd
       data={{

@@ -1,3 +1,5 @@
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { isValidPublicUrl } from "@/lib/seo/public-url-validator";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 /** Relative path (e.g. `/flashcards`) or site-root path. */
@@ -16,10 +18,25 @@ function resolveItemUrl(it: BreadcrumbJsonLdInput): string {
 
 /** Schema.org BreadcrumbList for public marketing pages (indexable). */
 export function BreadcrumbJsonLd({ items }: { items: BreadcrumbJsonLdInput[] }) {
+  const filtered = items.filter((it, i) => {
+    const resolved = resolveItemUrl(it);
+    const r = isValidPublicUrl(resolved);
+    if (!r.ok) {
+      safeServerLog("seo", "breadcrumb_jsonld_item_rejected", {
+        position: String(i + 1),
+        name: it.name.slice(0, 120),
+        url: resolved.slice(0, 500),
+        code: r.code,
+        detail: (r.detail ?? "").slice(0, 200),
+      });
+      return false;
+    }
+    return true;
+  });
   const data = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: items.map((it, i) => ({
+    itemListElement: filtered.map((it, i) => ({
       "@type": "ListItem",
       position: i + 1,
       name: it.name,

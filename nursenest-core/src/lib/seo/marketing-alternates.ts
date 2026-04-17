@@ -1,6 +1,9 @@
 import { isExamHubMarketingPath } from "@/lib/i18n/exam-hub-path";
 import { getHreflangEligibleLocales } from "@/lib/i18n/language-readiness";
+import { stripMarketingLocalePrefix } from "@/lib/i18n/marketing-path";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { filterPublicHreflangRecord, isValidPublicUrl } from "@/lib/seo/public-url-validator";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 /**
@@ -14,20 +17,19 @@ export function normalizeEnMarketingPath(enPath: string): string {
 }
 
 /**
- * Exam hubs (`/us/…`, `/canada/…`) and expansion pages (`/exams/…`) do not use `/{locale}` as a **path**
- * prefix for the US/CA product tree; prefixing would yield non-routes like `/fr/us/np/…`.
- * Expansion hubs may still have localized routes (`/fr/exams/india`) — those use the normal prefix rule.
+ * English-default shell path: strips a leading `/{locale}` when callers accidentally pass a localized
+ * path, so exam hubs (`/us/…`) are recognized even if the input was `/fr/us/…`.
  */
-function shouldOmitMarketingLocalePathPrefix(enPath: string): boolean {
-  const path = normalizeEnMarketingPath(enPath);
-  if (isExamHubMarketingPath(path)) return true;
-  return false;
+function defaultShellMarketingPath(enPath: string): string {
+  const n = normalizeEnMarketingPath(enPath);
+  const { pathname } = stripMarketingLocalePrefix(n);
+  return pathname;
 }
 
 /** URL path for a marketing locale, given the English-default path. */
 export function marketingCanonicalPathForLocale(locale: string, enPath: string): string {
-  const path = normalizeEnMarketingPath(enPath);
-  if (shouldOmitMarketingLocalePathPrefix(enPath)) {
+  const path = defaultShellMarketingPath(enPath);
+  if (isExamHubMarketingPath(path)) {
     return path;
   }
   if (locale === DEFAULT_MARKETING_LOCALE) {
@@ -55,11 +57,11 @@ export function absoluteMarketingCanonical(locale: string, enPath: string): stri
  * `x-default` points at the English-default URL.
  */
 export function marketingHreflangLanguagesForEnPath(enPath: string): Record<string, string> {
-  const path = normalizeEnMarketingPath(enPath);
+  const path = defaultShellMarketingPath(enPath);
   const enUrl = absoluteUrl(path === "/" ? "/" : path);
   /** US/CA exam product URLs: only one indexable URL shape; regional hreflang is handled per-page (en-US/en-CA). */
   if (isExamHubMarketingPath(path)) {
-    return { "x-default": enUrl, en: enUrl };
+    return filterPublicHreflangRecord({ "x-default": enUrl, en: enUrl }, "seo", "marketing_hreflang_rejected");
   }
   const out: Record<string, string> = {
     "x-default": enUrl,
@@ -69,7 +71,7 @@ export function marketingHreflangLanguagesForEnPath(enPath: string): Record<stri
     const localized = path === "/" ? `/${code}` : `/${code}${path}`;
     out[code] = absoluteUrl(localized);
   }
-  return out;
+  return filterPublicHreflangRecord(out, "seo", "marketing_hreflang_rejected");
 }
 
 /** `alternates` for shared localized marketing routes (canonical + hreflang). */
@@ -77,8 +79,17 @@ export function marketingAlternatesSharedPage(
   locale: string,
   enPath: string,
 ): { canonical: string; languages: Record<string, string> } {
+  const canonical = absoluteMarketingCanonical(locale, enPath);
+  const c = isValidPublicUrl(canonical);
+  if (!c.ok) {
+    safeServerLog("seo", "marketing_canonical_rejected", {
+      code: c.code,
+      url: canonical.slice(0, 400),
+      detail: (c.detail ?? "").slice(0, 200),
+    });
+  }
   return {
-    canonical: absoluteMarketingCanonical(locale, enPath),
+    canonical,
     languages: marketingHreflangLanguagesForEnPath(enPath),
   };
 }
@@ -87,5 +98,14 @@ export function marketingAlternatesSharedPage(
  * English-only or non-localized marketing URLs: self canonical only (no `languages` — avoids broken cross-locale links).
  */
 export function marketingAlternatesEnglishOnly(enPath: string): { canonical: string } {
-  return { canonical: absoluteUrl(normalizeEnMarketingPath(enPath)) };
+  const canonical = absoluteUrl(normalizeEnMarketingPath(enPath));
+  const c = isValidPublicUrl(canonical);
+  if (!c.ok) {
+    safeServerLog("seo", "marketing_canonical_rejected", {
+      code: c.code,
+      url: canonical.slice(0, 400),
+      detail: (c.detail ?? "").slice(0, 200),
+    });
+  }
+  return { canonical };
 }
