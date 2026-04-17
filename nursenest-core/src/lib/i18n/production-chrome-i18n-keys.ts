@@ -306,3 +306,6 @@ export const PRODUCTION_CHROME_I18N_KEYS = [
     ...PRODUCTION_LEARNER_SHELL_KEYS,
   ]),
 ];
+
+/** Default export for Node prebuild scripts (`tsx` / ESM interop); named export remains canonical for app code. */
+export default PRODUCTION_CHROME_I18N_KEYS;

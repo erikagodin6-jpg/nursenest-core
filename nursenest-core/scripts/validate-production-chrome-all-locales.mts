@@ -10,7 +10,18 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { MARKETING_LOCALE_CODES } from "../src/lib/i18n/marketing-locale-policy";
-import { PRODUCTION_CHROME_I18N_KEYS } from "../src/lib/i18n/production-chrome-i18n-keys.ts";
+import prodChromeKeys from "../src/lib/i18n/production-chrome-i18n-keys.ts";
+
+const PRODUCTION_CHROME_I18N_KEYS: readonly string[] = Array.isArray(prodChromeKeys)
+  ? prodChromeKeys
+  : (prodChromeKeys as { PRODUCTION_CHROME_I18N_KEYS: readonly string[] }).PRODUCTION_CHROME_I18N_KEYS;
+
+if (!Array.isArray(PRODUCTION_CHROME_I18N_KEYS) || PRODUCTION_CHROME_I18N_KEYS.length === 0) {
+  console.error(
+    "[i18n:validate-chrome-all-locales] Could not load PRODUCTION_CHROME_I18N_KEYS from production-chrome-i18n-keys.ts",
+  );
+  process.exit(1);
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = path.join(__dirname, "..");
