@@ -13,7 +13,7 @@
  * Snapshot of `MARKETING_HERO_NAV_CRITICAL_KEYS` (see `marketing-hero-nav-critical-keys.ts`).
  * Duplicated here so validators do not import that module.
  */
-const MARKETING_HERO_NAV_CRITICAL_KEYS_SNAPSHOT = [
+export const MARKETING_HERO_NAV_CRITICAL_KEYS_SNAPSHOT = [
   "components.homeHeroCarousel.slide01.title",
   "components.homeHeroCarousel.slide01.caption",
   "components.homeHeroCarousel.slide02.title",
