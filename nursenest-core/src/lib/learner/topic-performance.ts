@@ -21,6 +21,7 @@ import {
   type TopicStrength,
   type WeakTopicRow,
 } from "@/lib/learner/weak-topics-from-sessions";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 function stableWeakPrioritySortKey(a: WeakTopicRow, b: WeakTopicRow): number {
@@ -240,6 +241,17 @@ export type TopicPerformanceSnapshot = {
   source: "ledger" | "mixed" | "fallback";
 };
 
+function emptyTopicPerformanceSnapshot(): TopicPerformanceSnapshot {
+  return {
+    weakTopics: [],
+    strongTopics: [],
+    trends: [],
+    byStrength: { strong: [], moderate: [], weak: [] },
+    recommendedQuizTopic: null,
+    source: "fallback",
+  };
+}
+
 /**
  * Unified weak-area list: prefers persisted topic stats; falls back to mock session aggregation when
  * ledger evidence is thin.
@@ -250,96 +262,96 @@ export async function loadUnifiedTopicPerformance(
   limit = 8,
 ): Promise<TopicPerformanceSnapshot> {
   if (!entitlement.hasAccess) {
-    return {
-      weakTopics: [],
-      strongTopics: [],
-      trends: [],
-      byStrength: { strong: [], moderate: [], weak: [] },
-      recommendedQuizTopic: null,
-      source: "fallback",
+    return emptyTopicPerformanceSnapshot();
+  }
+  try {
+    const stats = await prisma.userTopicStat.findMany({
+      where: { userId },
+      orderBy: { updatedAt: "desc" },
+      take: 200,
+    });
+
+    const rows = stats.map((s) =>
+      statRowToWeakTopicRow({
+        topic: s.topic,
+        correctCount: s.correctCount,
+        wrongCount: s.wrongCount,
+        wrongStreak: s.wrongStreak,
+        lastWrongAt: s.lastWrongAt,
+        lastAttemptAt: s.lastAttemptAt,
+      }),
+    );
+
+    const totalLedgerAttempts = rows.reduce((sum, r) => sum + r.attempted, 0);
+
+    const byStrength: TopicPerformanceSnapshot["byStrength"] = {
+      strong: [],
+      moderate: [],
+      weak: [],
     };
+    for (const r of rows) {
+      const tier = (r.strength ?? "moderate") as TopicStrength;
+      byStrength[tier].push(r);
+    }
+    for (const k of Object.keys(byStrength) as (keyof typeof byStrength)[]) {
+      byStrength[k].sort(stableWeakPrioritySortKey);
+    }
+
+    const ledgerWeak = rows.filter((r) => r.strength === "weak").sort(stableWeakPrioritySortKey);
+
+    const fallback = await loadWeakTopicsFromExamSessions(userId, entitlement, limit);
+    const mergedWeak = mergeLedgerAndFallbackWeak({
+      ledgerWeak,
+      ledgerAll: rows,
+      fallback,
+      limit,
+      totalLedgerAttempts,
+      ledgerTopicCount: rows.length,
+    });
+
+    let source: TopicPerformanceSnapshot["source"] = "ledger";
+    if (mergedWeak.some((w) => w.topicSource === "session_fallback" || w.topicSource === "mixed")) {
+      source = "mixed";
+    }
+    if (mergedWeak.length > 0 && mergedWeak.every((m) => m.topicSource === "session_fallback")) {
+      source = "fallback";
+    }
+
+    const recommendedQuizTopic =
+      pickRecommendedQuizTopic(mergedWeak, ledgerWeak) ??
+      rows.find((r) => r.strength === "weak")?.topic ??
+      null;
+
+    const strongTopics = [...rows]
+      .filter((r) => r.attempted >= 3)
+      .sort((a, b) => a.missRate - b.missRate || b.attempted - a.attempted)
+      .slice(0, 6);
+
+    const momentumRank: Record<TopicMomentum, number> = { declining: 0, stable: 1, improving: 2 };
+    const trends: TopicTrendRow[] = [...rows]
+      .filter((r) => r.attempted >= 3)
+      .map((r) => {
+        const momentum = computeTopicMomentum(r);
+        return { topic: r.topic, momentum, summary: topicTrendSummary(r, momentum) };
+      })
+      .sort((a, b) => momentumRank[a.momentum] - momentumRank[b.momentum] || a.topic.localeCompare(b.topic))
+      .slice(0, 8);
+
+    return {
+      weakTopics: mergedWeak,
+      strongTopics,
+      trends,
+      byStrength,
+      recommendedQuizTopic,
+      source,
+    };
+  } catch (error) {
+    safeServerLog("learner_topic_performance", "load_failed", {
+      userIdPrefix: userId.slice(0, 8),
+      limit,
+    });
+    return emptyTopicPerformanceSnapshot();
   }
-
-  const stats = await prisma.userTopicStat.findMany({
-    where: { userId },
-    orderBy: { updatedAt: "desc" },
-    take: 200,
-  });
-
-  const rows = stats.map((s) =>
-    statRowToWeakTopicRow({
-      topic: s.topic,
-      correctCount: s.correctCount,
-      wrongCount: s.wrongCount,
-      wrongStreak: s.wrongStreak,
-      lastWrongAt: s.lastWrongAt,
-      lastAttemptAt: s.lastAttemptAt,
-    }),
-  );
-
-  const totalLedgerAttempts = rows.reduce((sum, r) => sum + r.attempted, 0);
-
-  const byStrength: TopicPerformanceSnapshot["byStrength"] = {
-    strong: [],
-    moderate: [],
-    weak: [],
-  };
-  for (const r of rows) {
-    const tier = (r.strength ?? "moderate") as TopicStrength;
-    byStrength[tier].push(r);
-  }
-  for (const k of Object.keys(byStrength) as (keyof typeof byStrength)[]) {
-    byStrength[k].sort(stableWeakPrioritySortKey);
-  }
-
-  const ledgerWeak = rows.filter((r) => r.strength === "weak").sort(stableWeakPrioritySortKey);
-
-  const fallback = await loadWeakTopicsFromExamSessions(userId, entitlement, limit);
-  const mergedWeak = mergeLedgerAndFallbackWeak({
-    ledgerWeak,
-    ledgerAll: rows,
-    fallback,
-    limit,
-    totalLedgerAttempts,
-    ledgerTopicCount: rows.length,
-  });
-
-  let source: TopicPerformanceSnapshot["source"] = "ledger";
-  if (mergedWeak.some((w) => w.topicSource === "session_fallback" || w.topicSource === "mixed")) {
-    source = "mixed";
-  }
-  if (mergedWeak.length > 0 && mergedWeak.every((m) => m.topicSource === "session_fallback")) {
-    source = "fallback";
-  }
-
-  const recommendedQuizTopic =
-    pickRecommendedQuizTopic(mergedWeak, ledgerWeak) ??
-    rows.find((r) => r.strength === "weak")?.topic ??
-    null;
-
-  const strongTopics = [...rows]
-    .filter((r) => r.attempted >= 3)
-    .sort((a, b) => a.missRate - b.missRate || b.attempted - a.attempted)
-    .slice(0, 6);
-
-  const momentumRank: Record<TopicMomentum, number> = { declining: 0, stable: 1, improving: 2 };
-  const trends: TopicTrendRow[] = [...rows]
-    .filter((r) => r.attempted >= 3)
-    .map((r) => {
-      const momentum = computeTopicMomentum(r);
-      return { topic: r.topic, momentum, summary: topicTrendSummary(r, momentum) };
-    })
-    .sort((a, b) => momentumRank[a.momentum] - momentumRank[b.momentum] || a.topic.localeCompare(b.topic))
-    .slice(0, 8);
-
-  return {
-    weakTopics: mergedWeak,
-    strongTopics,
-    trends,
-    byStrength,
-    recommendedQuizTopic,
-    source,
-  };
 }
 
 function pickRecommendedQuizTopic(mergedWeak: WeakTopicRow[], ledgerWeak: WeakTopicRow[]): string | null {

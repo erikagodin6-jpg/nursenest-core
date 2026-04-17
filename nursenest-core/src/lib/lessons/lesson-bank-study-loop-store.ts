@@ -103,7 +103,7 @@ export async function loadLatestLessonBankStudyRecord(
       config: { path: ["lessonId"], equals: lessonId },
     },
     select: { id: true, config: true, results: true, completedAt: true },
-    orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
+    orderBy: { completedAt: "desc" },
     take: 40,
   });
 

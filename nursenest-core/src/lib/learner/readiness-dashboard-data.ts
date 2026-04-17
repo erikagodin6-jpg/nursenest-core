@@ -123,12 +123,13 @@ async function loadDimensionBreakdown(userId: string): Promise<DimensionBreakdow
 
   try {
     const since = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000); // last 60 days
-    const attempts = await prisma.examAttempt.findMany({
+    const recentAttempts = await prisma.examAttempt.findMany({
       where: { userId, createdAt: { gte: since } },
       select: { results: true },
       orderBy: { createdAt: "desc" },
-      take: MAX_SESSIONS,
+      take: 60,
     });
+    const attempts = recentAttempts.slice(0, MAX_SESSIONS);
 
     // Aggregate per-question correct/total across sessions
     const questionMap = new Map<string, { correct: number; total: number }>();
@@ -214,7 +215,7 @@ async function loadCatTrend(userId: string): Promise<CatTrendPoint[]> {
         completedAt: { not: null },
         config: { path: ["selectionMode"], equals: "cat" },
       },
-      orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
+      orderBy: { completedAt: "desc" },
       select: { id: true, config: true, results: true, completedAt: true },
       take: 12,
     });

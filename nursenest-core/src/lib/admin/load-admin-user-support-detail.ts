@@ -259,7 +259,7 @@ export async function loadAdminUserSupportDetail(userId: string): Promise<AdminU
         }),
         prisma.practiceTest.findMany({
           where: { userId: user.id },
-          orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
+          orderBy: { updatedAt: "desc" },
           take: 12,
           select: {
             id: true,

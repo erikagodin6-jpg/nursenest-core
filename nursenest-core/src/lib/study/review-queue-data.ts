@@ -157,9 +157,9 @@ export async function loadReviewQueueInitialData(
 
   const since = new Date(Date.now() - HISTORY_DAYS * 24 * 60 * 60 * 1000);
 
-  let rawAttempts: { id: string; results: unknown; createdAt: Date }[];
+  let recentAttempts: { id: string; results: unknown; createdAt: Date }[];
   try {
-    rawAttempts = await prisma.examAttempt.findMany({
+    recentAttempts = await prisma.examAttempt.findMany({
       where: {
         userId,
         createdAt: { gte: since },
@@ -170,12 +170,13 @@ export async function loadReviewQueueInitialData(
         createdAt: true,
       },
       orderBy: { createdAt: "desc" },
-      take: MAX_SESSIONS,
+      take: 60,
     });
   } catch {
     // DB errors must not break the page — return empty queue
     return emptyInitialData();
   }
+  const rawAttempts = recentAttempts.slice(0, MAX_SESSIONS);
 
   const allAttempts: QuestionAttemptRecord[] = [];
   for (const attempt of rawAttempts) {
@@ -213,17 +214,18 @@ export async function loadReviewQueuePage(
 
   const since = new Date(Date.now() - HISTORY_DAYS * 24 * 60 * 60 * 1000);
 
-  let rawAttempts: { id: string; results: unknown; createdAt: Date }[];
+  let recentAttempts: { id: string; results: unknown; createdAt: Date }[];
   try {
-    rawAttempts = await prisma.examAttempt.findMany({
+    recentAttempts = await prisma.examAttempt.findMany({
       where: { userId, createdAt: { gte: since } },
       select: { id: true, results: true, createdAt: true },
       orderBy: { createdAt: "desc" },
-      take: MAX_SESSIONS,
+      take: 60,
     });
   } catch {
     return { items: [], total: 0, hasMore: false };
   }
+  const rawAttempts = recentAttempts.slice(0, MAX_SESSIONS);
 
   const allAttempts: QuestionAttemptRecord[] = [];
   for (const attempt of rawAttempts) {

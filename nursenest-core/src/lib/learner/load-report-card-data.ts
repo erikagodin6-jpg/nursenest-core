@@ -300,7 +300,7 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     prisma.examAttempt.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
-      take: mockAttemptCap,
+      take: 60,
       select: {
         id: true,
         score: true,
@@ -406,7 +406,7 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     prisma.examSession.findMany({
       where: { userId, status: ExamSessionStatus.COMPLETED },
       orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
-      take: SESSION_LIMIT,
+      take: 12,
       select: {
         id: true,
         questionIds: true,
@@ -418,8 +418,8 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
     }),
     prisma.practiceTest.findMany({
       where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
-      orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
-      take: SESSION_LIMIT,
+      orderBy: { completedAt: "desc" },
+      take: 12,
       select: { id: true, title: true, completedAt: true, results: true, config: true },
     }),
   ]);

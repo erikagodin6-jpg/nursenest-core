@@ -40,7 +40,7 @@ async function loadCatSignal(userId: string): Promise<CatReadinessSignal | null>
         completedAt: { not: null },
         config: { path: ["selectionMode"], equals: "cat" },
       },
-      orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
+      orderBy: { completedAt: "desc" },
       take: 12,
       select: { config: true, results: true, completedAt: true },
     });

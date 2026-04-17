@@ -69,6 +69,7 @@ export function LearnerStudyHomeDurabilityMinimal({
       >
         <LearnerCoreStudyShortcuts pathwayId={pathwayId} examsLabel={examsNavLabel} t={t} locale={locale} />
       </LearnerStudySurfaceSection>
+    </>
   );
 
   if (!showShell) {

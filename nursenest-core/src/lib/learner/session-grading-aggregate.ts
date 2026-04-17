@@ -132,12 +132,13 @@ export async function loadSessionGradingAggregate(
     return { correct: 0, total: 0, sessionCount: 0 };
   }
 
-  const sessions = await prisma.examSession.findMany({
+  const recentSessions = await prisma.examSession.findMany({
     where: { userId, status: ExamSessionStatus.COMPLETED },
     orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
-    take: Math.min(limitSessions, 12),
+    take: 12,
     select: { questionIds: true, answers: true },
   });
+  const sessions = recentSessions.slice(0, limitSessions);
 
   if (sessions.length === 0) {
     return { correct: 0, total: 0, sessionCount: 0 };

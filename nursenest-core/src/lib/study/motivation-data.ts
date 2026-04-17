@@ -139,7 +139,7 @@ async function loadWeeklyActivity(userId: string): Promise<{
         status: PracticeTestStatus.COMPLETED,
         completedAt: { not: null, gte: since },
       },
-      orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
+      orderBy: { completedAt: "desc" },
       take: 12,
       select: { completedAt: true },
     }),
@@ -236,12 +236,13 @@ async function loadTopicProgressPage(
 // ── Recent readiness trend ────────────────────────────────────────────────────
 
 async function loadRecentReadiness(userId: string, limit = 5): Promise<RecentReadinessPoint[]> {
-  const rows = await prisma.practiceTest.findMany({
+  const recentRows = await prisma.practiceTest.findMany({
     where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
-    orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
-    take: Math.min(limit, 12),
+    orderBy: { completedAt: "desc" },
+    take: 12,
     select: { id: true, results: true, completedAt: true },
   });
+  const rows = recentRows.slice(0, limit);
 
   const points: RecentReadinessPoint[] = [];
   rows.forEach((r, i) => {

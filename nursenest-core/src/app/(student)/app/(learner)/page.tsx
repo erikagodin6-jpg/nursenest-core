@@ -48,6 +48,13 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { LearnerStudyHomeDurabilityMinimal } from "@/components/student/learner-study-home-durability-minimal";
 import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
 
+type DashboardSessionLike = {
+  user?: {
+    id?: string;
+    tier?: string | null;
+  };
+} | null;
+
 /** Match learner shell: CAT entry for nursing exam tracks; generic exams hub otherwise. */
 function examsNavLabelFromLearnerContext(
   learnerPath: string | null | undefined,
@@ -132,7 +139,7 @@ async function LearnerDashboardHeavyContent({
   t: LearnerMarketingT;
   locale: string;
   crumbs: ReturnType<typeof appShellBreadcrumbs>;
-  session: Awaited<ReturnType<typeof auth>>;
+  session: DashboardSessionLike;
   userId: string;
   entitlement: Exclude<Awaited<ReturnType<typeof resolveEntitlementForPage>>, "error">;
   userDisplayName: string | null;
@@ -316,7 +323,7 @@ async function LearnerDashboardDeferredContent({
   locale: string;
   crumbs: ReturnType<typeof appShellBreadcrumbs>;
 }) {
-  const session = await auth();
+  const session = (await auth()) as DashboardSessionLike;
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
 

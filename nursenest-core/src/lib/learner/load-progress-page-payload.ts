@@ -25,8 +25,6 @@ import { loadPathwayTopicCoverageBatch } from "@/lib/lessons/pathway-topic-cover
 
 const PRACTICE_RECENT_LIMIT = 6;
 const MOCK_RECENT_LIMIT = 5;
-const PRACTICE_RECENT_QUERY_LIMIT = 12;
-const MOCK_RECENT_QUERY_LIMIT = 60;
 
 export type LessonsPoolProgress = {
   /** Content + pathway lessons available in plan scope (same basis as dashboard). */
@@ -170,7 +168,7 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
     prisma.examAttempt.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
-      take: MOCK_RECENT_QUERY_LIMIT,
+      take: 60,
       select: {
         id: true,
         score: true,
@@ -184,7 +182,7 @@ export async function loadProgressPagePayload(userId: string, entitlement: Acces
       .findMany({
         where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
         orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
-        take: PRACTICE_RECENT_QUERY_LIMIT,
+        take: 12,
         select: { id: true, title: true, completedAt: true, config: true, results: true },
       })
       .catch(() => []),

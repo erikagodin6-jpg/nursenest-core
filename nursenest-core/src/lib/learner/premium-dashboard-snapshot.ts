@@ -264,154 +264,160 @@ export async function loadPremiumDashboardSnapshot(
   entitlement: AccessScope,
 ): Promise<PremiumDashboardSnapshot | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
+  try {
+    const bundle = await loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadPremiumDashboardSnapshot" });
+    if (!bundle) return null;
 
-  const bundle = await loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadPremiumDashboardSnapshot" });
-  if (!bundle) return null;
-
-  const visibleLessonScope = await buildVisibleLessonScopeForLearner(userId, entitlement, {
-    learnerPath: bundle.user.learnerPath,
-    pathwayLessonRows: bundle.pathwayLessonRows,
-  });
-
-  const dash = await loadLearnerDashboard(userId, entitlement, {
-    source: "loadPremiumDashboardSnapshot",
-    userProfile: bundle.user,
-    visibleLessonScope,
-    pathwayRowsForScope: bundle.pathwayLessonRows,
-    pathwayMetadataRowCount: bundle.pathwayLessonRows.length,
-    pathwayProgressRowCount: bundle.pathwayProgressScoped.length,
-  });
-  if (!dash) return null;
-
-  const skipOptional = shouldSkipNonCriticalLearnerWork();
-
-  const [pathwayRaw, streakDays, topStrongTopic] = await Promise.all([
-    loadPathwayStudySummaries(userId, entitlement, {
-      lessonRows: bundle.pathwayLessonRows,
-      pathwayProgress: bundle.pathwayProgressScoped,
+    const visibleLessonScope = await buildVisibleLessonScopeForLearner(userId, entitlement, {
       learnerPath: bundle.user.learnerPath,
-    }),
-    skipOptional ? Promise.resolve(0) : loadStudyStreakDays(userId),
-    skipOptional ? Promise.resolve(null) : topStrongTopicFromLedger(userId),
-  ]);
+      pathwayLessonRows: bundle.pathwayLessonRows,
+    });
 
-  const lessonContinuations = skipOptional
-    ? []
-    : await loadLessonContinuationRows(userId, entitlement, bundle.user.learnerPath ?? null);
+    const dash = await loadLearnerDashboard(userId, entitlement, {
+      source: "loadPremiumDashboardSnapshot",
+      userProfile: bundle.user,
+      visibleLessonScope,
+      pathwayRowsForScope: bundle.pathwayLessonRows,
+      pathwayMetadataRowCount: bundle.pathwayLessonRows.length,
+      pathwayProgressRowCount: bundle.pathwayProgressScoped.length,
+    });
+    if (!dash) return null;
 
-  const pathways: PathwayProgressRow[] = pathwayRaw.map((p) => {
-    const pct = p.lessonsTotal > 0 ? Math.round((p.lessonsCompleted / p.lessonsTotal) * 100) : 0;
-    return { ...p, pct };
-  });
+    const skipOptional = shouldSkipNonCriticalLearnerWork();
 
-  const lessonPct =
-    dash.lessonsAvailable > 0 ? Math.round((dash.lessonsCompleted / dash.lessonsAvailable) * 100) : 0;
+    const [pathwayRaw, streakDays, topStrongTopic] = await Promise.all([
+      loadPathwayStudySummaries(userId, entitlement, {
+        lessonRows: bundle.pathwayLessonRows,
+        pathwayProgress: bundle.pathwayProgressScoped,
+        learnerPath: bundle.user.learnerPath,
+      }),
+      skipOptional ? Promise.resolve(0) : loadStudyStreakDays(userId),
+      skipOptional ? Promise.resolve(null) : topStrongTopicFromLedger(userId),
+    ]);
 
-  const agg = dash.sessionGrading;
-  const practice: PracticePerformanceSummary = {
-    gradedCorrect: agg.correct,
-    gradedTotal: agg.total,
-    sessionCount: agg.sessionCount,
-    accuracyPct: agg.total > 0 ? Math.round((agg.correct / agg.total) * 100) : null,
-  };
+    const lessonContinuations = skipOptional
+      ? []
+      : await loadLessonContinuationRows(userId, entitlement, bundle.user.learnerPath ?? null);
 
-  const momentumMessages = buildMomentumMessages({
-    recentMocks: dash.recentMocks,
-    topStrongTopic,
-    readiness: dash.readiness,
-    streakDays,
-    lessonPct,
-  });
+    const pathways: PathwayProgressRow[] = pathwayRaw.map((p) => {
+      const pct = p.lessonsTotal > 0 ? Math.round((p.lessonsCompleted / p.lessonsTotal) * 100) : 0;
+      return { ...p, pct };
+    });
 
-  const headline = examReadyHeadline(dash.readiness);
+    const lessonPct =
+      dash.lessonsAvailable > 0 ? Math.round((dash.lessonsCompleted / dash.lessonsAvailable) * 100) : 0;
 
-  /** Full-table counts are expensive at scale; in degraded mode use recent mock list length only. */
-  const mockCount = skipOptional
-    ? dash.recentMocks.length
-    : await prisma.examAttempt.count({ where: { userId } }).catch(() => dash.recentMocks.length);
+    const agg = dash.sessionGrading;
+    const practice: PracticePerformanceSummary = {
+      gradedCorrect: agg.correct,
+      gradedTotal: agg.total,
+      sessionCount: agg.sessionCount,
+      accuracyPct: agg.total > 0 ? Math.round((agg.correct / agg.total) * 100) : null,
+    };
 
-  const milestones = milestoneLines({
-    pathways,
-    lessonPct,
-    practice,
-    streakDays,
-    mockCount,
-  });
+    const momentumMessages = buildMomentumMessages({
+      recentMocks: dash.recentMocks,
+      topStrongTopic,
+      readiness: dash.readiness,
+      streakDays,
+      lessonPct,
+    });
 
-  let flashcards: PremiumDashboardSnapshot["flashcards"] = null;
-  if (!skipOptional) {
-    try {
-      const [fcStats, suggested] = await Promise.all([
-        prisma.flashcardUserStats.findUnique({
-          where: { userId },
-          select: { cardsReviewedTotal: true, currentStreak: true },
-        }),
-        prisma.flashcardDeck.findMany({
-          where: {
-            status: ContentStatus.PUBLISHED,
-            visibility: { not: FlashcardDeckVisibility.HIDDEN },
-          },
-          orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
-          take: 4,
-          select: { slug: true, title: true, cardCount: true },
-        }),
-      ]);
-      flashcards = {
-        cardsReviewedTotal: fcStats?.cardsReviewedTotal ?? 0,
-        reviewStreak: fcStats?.currentStreak ?? 0,
-        suggestedDecks: suggested.map((d) => ({
-          slug: d.slug,
-          title: d.title,
-          cardCount: d.cardCount,
-        })),
-      };
-    } catch {
-      flashcards = null;
+    const headline = examReadyHeadline(dash.readiness);
+
+    /** Full-table counts are expensive at scale; in degraded mode use recent mock list length only. */
+    const mockCount = skipOptional
+      ? dash.recentMocks.length
+      : await prisma.examAttempt.count({ where: { userId } }).catch(() => dash.recentMocks.length);
+
+    const milestones = milestoneLines({
+      pathways,
+      lessonPct,
+      practice,
+      streakDays,
+      mockCount,
+    });
+
+    let flashcards: PremiumDashboardSnapshot["flashcards"] = null;
+    if (!skipOptional) {
+      try {
+        const [fcStats, suggested] = await Promise.all([
+          prisma.flashcardUserStats.findUnique({
+            where: { userId },
+            select: { cardsReviewedTotal: true, currentStreak: true },
+          }),
+          prisma.flashcardDeck.findMany({
+            where: {
+              status: ContentStatus.PUBLISHED,
+              visibility: { not: FlashcardDeckVisibility.HIDDEN },
+            },
+            orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
+            take: 4,
+            select: { slug: true, title: true, cardCount: true },
+          }),
+        ]);
+        flashcards = {
+          cardsReviewedTotal: fcStats?.cardsReviewedTotal ?? 0,
+          reviewStreak: fcStats?.currentStreak ?? 0,
+          suggestedDecks: suggested.map((d) => ({
+            slug: d.slug,
+            title: d.title,
+            cardCount: d.cardCount,
+          })),
+        };
+      } catch {
+        flashcards = null;
+      }
     }
-  }
 
-  let insights: LearnerInsightSnapshot | null = null;
-  if (!skipOptional) {
-    try {
-      insights = await buildLearnerInsightSnapshot(userId, entitlement, dash, {
-        streakDays,
-        mockCount,
-        examDate: bundle.user.examDate,
-        examDatePlanType: bundle.user.examDatePlanType,
-      });
-    } catch {
-      insights = null;
+    let insights: LearnerInsightSnapshot | null = null;
+    if (!skipOptional) {
+      try {
+        insights = await buildLearnerInsightSnapshot(userId, entitlement, dash, {
+          streakDays,
+          mockCount,
+          examDate: bundle.user.examDate,
+          examDatePlanType: bundle.user.examDatePlanType,
+        });
+      } catch {
+        insights = null;
+      }
     }
-  }
 
-  return {
-    learnerPath: bundle.user.learnerPath?.trim() || null,
-    pathways,
-    overallLessons: {
-      completed: dash.lessonsCompleted,
-      total: dash.lessonsAvailable,
-      pct: lessonPct,
-    },
-    readiness: dash.readiness,
-    practice,
-    recentMocks: dash.recentMocks,
-    studyStreakDays: streakDays,
-    momentumMessages,
-    examReadyHeadline: headline,
-    milestones,
-    mockCount,
-    continueLesson: dash.continueLesson ? { title: dash.continueLesson.title, href: dash.continueLesson.href } : null,
-    recommendedQuizTopic: dash.recommendedQuizTopic,
-    flashcards,
-    insights,
-    lessonContinuations,
-    topicPerformance: dash.topicPerformance,
-    studyBootstrap: {
-      alliedProfessionKey: bundle.user.alliedProfessionKey ?? null,
-      tier: bundle.user.tier ?? null,
-      learnerPath: bundle.user.learnerPath ?? null,
-      examDate: bundle.user.examDate ?? null,
-      examDatePlanType: bundle.user.examDatePlanType ?? null,
-    },
-  };
+    return {
+      learnerPath: bundle.user.learnerPath?.trim() || null,
+      pathways,
+      overallLessons: {
+        completed: dash.lessonsCompleted,
+        total: dash.lessonsAvailable,
+        pct: lessonPct,
+      },
+      readiness: dash.readiness,
+      practice,
+      recentMocks: dash.recentMocks,
+      studyStreakDays: streakDays,
+      momentumMessages,
+      examReadyHeadline: headline,
+      milestones,
+      mockCount,
+      continueLesson: dash.continueLesson ? { title: dash.continueLesson.title, href: dash.continueLesson.href } : null,
+      recommendedQuizTopic: dash.recommendedQuizTopic,
+      flashcards,
+      insights,
+      lessonContinuations,
+      topicPerformance: dash.topicPerformance,
+      studyBootstrap: {
+        alliedProfessionKey: bundle.user.alliedProfessionKey ?? null,
+        tier: bundle.user.tier ?? null,
+        learnerPath: bundle.user.learnerPath ?? null,
+        examDate: bundle.user.examDate ?? null,
+        examDatePlanType: bundle.user.examDatePlanType ?? null,
+      },
+    };
+  } catch {
+    safeServerLog("learner_dashboard", "premium_snapshot_load_failed", {
+      userIdPrefix: userId.slice(0, 8),
+    });
+    return null;
+  }
 }

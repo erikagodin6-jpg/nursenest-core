@@ -109,17 +109,18 @@ function parseResultItems(
 
 async function loadQuestionSource(userId: string): Promise<ScoredReviewItem[]> {
   const since = new Date(Date.now() - HISTORY_DAYS * 24 * 60 * 60 * 1000);
-  let rawAttempts: { id: string; results: unknown; createdAt: Date }[];
+  let recentAttempts: { id: string; results: unknown; createdAt: Date }[];
   try {
-    rawAttempts = await prisma.examAttempt.findMany({
+    recentAttempts = await prisma.examAttempt.findMany({
       where: { userId, createdAt: { gte: since } },
       select: { id: true, results: true, createdAt: true },
       orderBy: { createdAt: "desc" },
-      take: MAX_SESSIONS,
+      take: 60,
     });
   } catch {
     return [];
   }
+  const rawAttempts = recentAttempts.slice(0, MAX_SESSIONS);
   const allAttempts: QuestionAttemptRecord[] = [];
   for (const attempt of rawAttempts) {
     const items = parseResultItems(attempt.results, attempt.id, attempt.createdAt);

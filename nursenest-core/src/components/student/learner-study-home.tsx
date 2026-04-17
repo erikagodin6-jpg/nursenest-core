@@ -414,6 +414,7 @@ export function LearnerStudyHome({
           </LearnerSurface>
         </div>
       </LearnerStudySurfaceSection>
+    </>
   );
 
   if (!showShell) {

@@ -54,15 +54,13 @@ export async function loadLearnerProfileActivity(
   const mockTake = limits?.mocks ?? 5;
   const testTake = limits?.practiceTests ?? 5;
   const lessonTake = limits?.lessons ?? 8;
-  const mockQueryTake = 60;
-  const practiceTestQueryTake = 12;
 
   try {
     const [attempts, tests, progressRows] = await Promise.all([
       prisma.examAttempt.findMany({
         where: { userId },
         orderBy: { createdAt: "desc" },
-        take: mockQueryTake,
+        take: 60,
         select: {
           id: true,
           score: true,
@@ -73,8 +71,8 @@ export async function loadLearnerProfileActivity(
       }),
       prisma.practiceTest.findMany({
         where: { userId },
-        orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
-        take: practiceTestQueryTake,
+        orderBy: { updatedAt: "desc" },
+        take: 12,
         select: {
           id: true,
           title: true,

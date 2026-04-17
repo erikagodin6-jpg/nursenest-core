@@ -21,7 +21,7 @@ import type { AnswerRecord } from "./types";
 import type { NpCatAdaptiveState } from "./session-persistence";
 
 /** Maximum number of past sessions to load for history computation. */
-const MAX_HISTORY_SESSIONS = 20;
+const MAX_HISTORY_SESSIONS = 12;
 
 /**
  * Load all AnswerRecords for a user from completed NP CAT sessions.
@@ -41,16 +41,17 @@ export async function loadAnswerHistory(
 ): Promise<AnswerRecord[]> {
   const cutoff = sinceMs ?? Date.now() - 90 * 24 * 60 * 60 * 1000;
 
-  const sessions = await prisma.practiceTest.findMany({
+  const recentSessions = await prisma.practiceTest.findMany({
     where: {
       userId,
       status: "COMPLETED",
       startedAt: { gte: new Date(cutoff) },
     },
-    orderBy: [{ startedAt: "desc" }, { createdAt: "desc" }],
-    take: MAX_HISTORY_SESSIONS,
+    orderBy: { startedAt: "desc" },
+    take: 12,
     select: { adaptiveState: true, startedAt: true },
   });
+  const sessions = recentSessions.slice(0, MAX_HISTORY_SESSIONS);
 
   const allAnswers: AnswerRecord[] = [];
 
@@ -105,12 +106,13 @@ export async function loadNpCatEngagementSummary(
   lastSessionAt: Date | null;
   lastReadinessScore: number | null;
 }> {
-  const sessions = await prisma.practiceTest.findMany({
+  const recentSessions = await prisma.practiceTest.findMany({
     where: { userId, status: "COMPLETED" },
-    orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
-    take: MAX_HISTORY_SESSIONS,
+    orderBy: { completedAt: "desc" },
+    take: 12,
     select: { completedAt: true, cursorIndex: true, results: true, config: true },
   });
+  const sessions = recentSessions.slice(0, MAX_HISTORY_SESSIONS);
 
   const npSessions = sessions.filter((s) => {
     const c = s.config as unknown as { kind?: string };
@@ -171,15 +173,16 @@ export async function recentlyAnsweredIds(
 ): Promise<Set<string>> {
   const cutoff = Date.now() - withinMs;
 
-  const sessions = await prisma.practiceTest.findMany({
+  const recentSessions = await prisma.practiceTest.findMany({
     where: {
       userId,
       startedAt: { gte: new Date(cutoff) },
     },
-    take: 5,
-    orderBy: [{ startedAt: "desc" }, { createdAt: "desc" }],
+    orderBy: { startedAt: "desc" },
+    take: 12,
     select: { adaptiveState: true },
   });
+  const sessions = recentSessions.slice(0, 5);
 
   const ids = new Set<string>();
 
