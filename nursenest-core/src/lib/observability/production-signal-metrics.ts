@@ -235,7 +235,8 @@ export function recordEntitlementResolveFailureSignal(
     | "api_questions_id"
     | "api_questions_list"
     | "api_lessons_list"
-    | "subscriber_api",
+    | "subscriber_api"
+    | "api_freemium_grade",
   correlationId?: string,
 ): void {
   sentryCount("entitlement.resolve.failure", 1, { surface });

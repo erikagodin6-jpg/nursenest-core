@@ -17,7 +17,7 @@
 | `billing.webhook.failure` | `phase` | Integrity | `billing.webhookFailureCount15m` |
 | `db.client.error` | `bucket`, `prismaCode` | DB instability | — |
 | `db.query.slow` | `severity` | Slow queries | `db.slowQueryCount10m` |
-| `entitlement.resolve.failure` | `surface`: `page` \| `api_questions_id` \| `api_questions_list` \| `api_lessons_list` \| `subscriber_api` | Paywall / RSC / list + detail APIs | `entitlement.resolveFailureCount15m` |
+| `entitlement.resolve.failure` | `surface`: `page` \| `api_questions_id` \| `api_questions_list` \| `api_lessons_list` \| `subscriber_api` \| `api_freemium_grade` | Paywall / RSC / list + detail APIs / freemium grade | `entitlement.resolveFailureCount15m` |
 | `health.ready.failure` | `kind` | DB down | — |
 | `marketing.paywall.proof_neutral` | `surface` | Stats degraded | `marketing.proofNeutralSpikeCount15m` |
 | `resilience.auto_degraded.engaged` | `reason` | Tier-2 skips | `resilience.autoDegradedEngagements15m` |

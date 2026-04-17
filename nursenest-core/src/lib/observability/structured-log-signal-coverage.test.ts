@@ -80,6 +80,11 @@ describe("structured log — incident signal coverage (static)", () => {
     assert.match(read("src/lib/entitlements/require-subscriber-session.ts"), /emitStructuredLog\("entitlement_resolve_failed"/);
     assert.match(read("src/app/api/questions/route.ts"), /emitStructuredLog\("entitlement_resolve_failed"/);
     assert.match(read("src/app/api/lessons/route.ts"), /emitStructuredLog\("entitlement_resolve_failed"/);
+    assert.match(read("src/app/api/questions/freemium-grade/route.ts"), /emitStructuredLog\("entitlement_resolve_failed"/);
+  });
+
+  it("reset-password route emits password_reset_failed on server errors", () => {
+    assert.match(read("src/app/api/auth/reset-password/route.ts"), /emitStructuredLog\("password_reset_failed"/);
   });
 
   it("content APIs emit question_load_failed / lesson_load_failed", () => {

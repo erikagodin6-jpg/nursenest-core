@@ -34,7 +34,7 @@ See `StructuredLogFields` in `structured-log.ts` for the allowlist of top-level 
 | `webhook_ignored` | info | `subscriptions/webhook/route.ts` | Yes | Unhandled Stripe event type — **not** a failure; audit only |
 | `question_load_failed` | error | `questions/route.ts`, `questions/discovery/route.ts`, `questions/[id]/route.ts` | Yes | Domain-specific failure |
 | `lesson_load_failed` | error | `lessons/route.ts` | Yes | Domain-specific failure |
-| `entitlement_resolve_failed` | error | `resolve-entitlement-for-page.ts`, `questions/[id]/route.ts`, `questions/route.ts` (list), `lessons/route.ts` (list), `require-subscriber-session.ts` | Yes† / async headers | Pairs with Sentry `entitlement.resolve.failure` (`surface`: page / api_questions_id / api_questions_list / api_lessons_list / subscriber_api) |
+| `entitlement_resolve_failed` | error | `resolve-entitlement-for-page.ts`, `questions/[id]/route.ts`, `questions/route.ts` (list), `lessons/route.ts` (list), `questions/freemium-grade/route.ts`, `require-subscriber-session.ts` | Yes† / async headers | Pairs with Sentry `entitlement.resolve.failure` (`surface`: page / api_questions_id / api_questions_list / api_lessons_list / subscriber_api / api_freemium_grade) |
 
 \*No request object exists in the Prisma extension / resilience helpers; correlation is not attached today.  
 †`correlationId` when available: credentials `Request`, `api-route-telemetry`, `correlationIdFromHeaders()` for RSC.  

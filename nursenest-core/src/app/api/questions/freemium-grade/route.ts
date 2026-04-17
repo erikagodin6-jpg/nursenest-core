@@ -6,6 +6,10 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { notSubscribedResponse } from "@/lib/entitlements/require-subscriber-session";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
+import { recordEntitlementResolveFailureSignal } from "@/lib/observability/production-signal-metrics";
+import { productEvent } from "@/lib/observability/product-events";
+import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
@@ -39,6 +43,17 @@ export async function POST(req: NextRequest) {
   try {
     entitlement = await resolveEntitlement(userId);
   } catch (e) {
+    const correlationId = correlationIdFromRequest(req);
+    productEvent("entitlement_resolve_failed", { surface: "api_freemium_grade" });
+    recordEntitlementResolveFailureSignal("api_freemium_grade", correlationId);
+    emitStructuredLog("entitlement_resolve_failed", "error", {
+      correlationId,
+      route: "/api/questions/freemium-grade",
+      method: "POST",
+      flow: "content",
+      errorClass: e instanceof Error ? e.name : typeof e,
+      message: "resolveEntitlement failed in freemium grade",
+    });
     safeServerLogCritical("api_questions_freemium_grade", "entitlement_resolve_failed", {}, e);
     return NextResponse.json(
       { error: "Unable to verify access. Try again shortly.", code: "access_verify_failed" },
