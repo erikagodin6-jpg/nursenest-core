@@ -1,5 +1,5 @@
 /**
- * Liveness probe load: `GET /healthz` is **edge**, static JSON, **no DB / Prisma / auth**
+ * Liveness probe load: `GET /healthz` is a tiny, dependency-free liveness endpoint
  * (`src/app/healthz/route.ts`). This spec only touches `/healthz`, not `/api/health/ready`.
  *
  * ```
@@ -21,9 +21,8 @@ test.describe("Release — /healthz liveness burst", () => {
 
     const warm = await request.get(url);
     expect(warm.status(), "warmup GET /healthz").toBe(200);
-    const warmJson = (await warm.json()) as { status?: string; service?: string };
-    expect(warmJson.status, "liveness JSON contract").toBe("ok");
-    expect(warmJson.service, "liveness JSON contract").toBe("nursenest-core");
+    const warmBody = await warm.text();
+    expect(warmBody, "liveness body contract").toBe("ok");
 
     /** Sequential back-to-back requests — measures each round-trip without parallel load contention (still “rapid”). */
     const timings: { status: number; ms: number }[] = [];
@@ -43,7 +42,7 @@ test.describe("Release — /healthz liveness burst", () => {
 
     const last = await request.get(url);
     expect(last.status()).toBe(200);
-    const body = (await last.json()) as { status?: string };
-    expect(body.status).toBe("ok");
+    const body = await last.text();
+    expect(body).toBe("ok");
   });
 });

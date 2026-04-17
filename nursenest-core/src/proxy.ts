@@ -31,6 +31,10 @@ import { isRegionPublishedForPublicSite } from "@/lib/navigation/country-exam-la
 /** NextAuth `auth` middleware typing does not always align with App Router `NextRequest` + `NextFetchEvent`. */
 const runAuthMiddleware = middlewareAuth as unknown as NextMiddleware;
 
+function isHealthProxyBypassPath(pathname: string): boolean {
+  return pathname === "/api/health" || pathname === "/api/healthz" || pathname === "/api/health/ready";
+}
+
 function ensureIncomingCorrelationId(request: NextRequest): NextRequest {
   if (request.headers.get(NN_CORRELATION_HEADER)?.trim()) return request;
   const requestHeaders = new Headers(request.headers);
@@ -189,6 +193,12 @@ function mergeAuthContinueWithForwardedRequest(res: Response, forwarded: NextReq
 export async function proxy(request: NextRequest, event: NextFetchEvent) {
   const req = ensureIncomingCorrelationId(request);
   const pathname = req.nextUrl.pathname;
+  if (isHealthProxyBypassPath(pathname)) {
+    const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
+    const next = NextResponse.next();
+    next.headers.set(NN_CORRELATION_HEADER, cid.slice(0, 128));
+    return next;
+  }
 
   if (pathname.startsWith("/api")) {
     const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim();
