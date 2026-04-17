@@ -15,6 +15,7 @@ import {
   type SitemapUrlEntry,
 } from "@/lib/seo/sitemap-static-xml";
 import { getSitemapIncludedLocales } from "@/lib/i18n/language-readiness";
+import { isEligiblePublicIndexSitemapLoc } from "@/lib/seo/sitemap-marketing-exclusions";
 
 /**
  * Single sitemap urlset used by `/sitemap.xml`.
@@ -26,29 +27,36 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
     const allStatic = new Set<string>();
     const blogEntries = new Map<string, string | undefined>();
 
-    for (const url of await collectCoreUrls(origin)) {
+    const pushStatic = (url: string) => {
+      if (!isEligiblePublicIndexSitemapLoc(url, origin)) return;
       allStatic.add(url);
+    };
+
+    for (const url of await collectCoreUrls(origin)) {
+      pushStatic(url);
     }
 
     for (const url of collectSeoPagesUrls(origin)) {
-      allStatic.add(url);
+      pushStatic(url);
     }
 
     for (const url of collectToolsUrls(origin)) {
-      allStatic.add(url);
+      pushStatic(url);
     }
 
     for (const locale of getSitemapIncludedLocales()) {
       for (const url of collectLocaleMarketingUrls(origin, locale)) {
-        allStatic.add(url);
+        pushStatic(url);
       }
     }
 
     for (const entry of await listBlogSitemapEntriesSafe()) {
+      if (!isEligiblePublicIndexSitemapLoc(entry.loc, origin)) continue;
       blogEntries.set(entry.loc, entry.lastmod);
     }
 
     for (const entry of await listLocalizedBlogSitemapEntriesSafe()) {
+      if (!isEligiblePublicIndexSitemapLoc(entry.loc, origin)) continue;
       blogEntries.set(entry.loc, entry.lastmod);
     }
 

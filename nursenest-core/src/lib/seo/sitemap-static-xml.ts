@@ -232,6 +232,9 @@ ${body}
 
 /**
  * Default-locale “core” slice (merged into `/sitemap.xml` via `collectCoreUrls`).
+ *
+ * Omits auth/account routes (`/login`, `/signup`, …) — they are `noindex` (see
+ * `sitemap-marketing-exclusions.ts` and merge-time filtering in `sitemap-all-xml.ts`).
  */
 export async function collectCoreUrls(origin: string): Promise<string[]> {
   const o = normalizeOrigin(origin);
@@ -301,10 +304,6 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     add("/content-review-policy"),
     add("/contact"),
     add("/tools"),
-    add("/login"),
-    add("/signup"),
-    add("/forgot-password"),
-    add("/reset-password"),
     add("/case-studies"),
     ...listPublishedExpansionExamMarketingPaths().map((p) => add(p)),
     ...regionalTopicPaths.map((p) => add(p)),
@@ -365,10 +364,6 @@ export function collectLocaleMarketingUrls(origin: string, locale: string): stri
   urls.push(add(`/${locale}/editorial-policy`));
   urls.push(add(`/${locale}/content-review-policy`));
   urls.push(add(`/${locale}/contact`));
-  urls.push(add(`/${locale}/login`));
-  urls.push(add(`/${locale}/signup`));
-  urls.push(add(`/${locale}/forgot-password`));
-  urls.push(add(`/${locale}/reset-password`));
   for (const slug of getProgrammaticSlugsForSitemap()) {
     if (slug in PROGRAMMATIC_SLUG_TO_PATHWAY_PATH) continue;
     urls.push(add(`/${locale}/${slug}`));
