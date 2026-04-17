@@ -19,3 +19,15 @@ test("resolveGeo: Philippines + Tagalog Accept-Language can yield tl", () => {
   assert.equal(r.locale, "tl");
   assert.equal(r.region, "philippines");
 });
+
+test("resolveGeo: UK + German Accept-Language still yields en", () => {
+  const r = resolveGeo("GB", "de-DE,de;q=0.9,en;q=0.8", null);
+  assert.equal(r.locale, "en");
+  assert.equal(r.region, "uk");
+});
+
+test("resolveGeo: AU + Japanese Accept-Language still yields en", () => {
+  const r = resolveGeo("AU", "ja,en;q=0.9", null);
+  assert.equal(r.locale, "en");
+  assert.equal(r.region, "aus");
+});
