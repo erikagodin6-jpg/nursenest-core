@@ -34,6 +34,7 @@
     "export:deployment": "tsx backup-system/export-deployment.ts",
     "backup:validate": "tsx backup-system/validate-backup.ts",
     "i18n:compile": "npx tsx script/compile-i18n.ts",
+    "i18n:audit:translation": "npx tsx script/translation-quality-audit.ts",
     "i18n:normalize-marketing": "npx tsx script/normalize-marketing-locale-overlays.ts",
     "i18n:validate": "npx tsx script/i18n-validate.ts",
     "i18n:validate:production": "npx tsx script/i18n-validate.ts --strict",
