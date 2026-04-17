@@ -36,16 +36,19 @@ import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { CountrySelector } from "@/components/layout/global-context-switcher";
 const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
 
+/** Primary filled header CTAs — white label on theme primary fill for consistent contrast. */
+const HEADER_NAV_PRIMARY_CTA = "nn-nav-cta text-white";
+
 /** Keep desktop nav pills single-line and compact — font-normal reads more premium than heavy medium weights. */
 const NAV_LINK_CLASS =
-  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-8 items-center justify-center whitespace-nowrap px-2 text-center font-normal leading-none tracking-tight xl:px-2.5";
+  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-8 items-center justify-center whitespace-nowrap px-2 text-center font-normal leading-none tracking-[0.01em] xl:px-2.5";
 /** Muted Learn / Track in the public “Learn → Practice → Track” row. */
 const NAV_FLOW_SECONDARY_CLASS = `${NAV_LINK_CLASS} text-[var(--nav-muted)]`;
 /** Single primary action in that row — Practice (question bank). */
 const NAV_FLOW_PRACTICE_CLASS =
-  "nn-nav-cta nn-marketing-body-sm inline-flex h-8 min-h-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-1.5 font-semibold leading-none tracking-tight xl:px-3.5";
+  `${HEADER_NAV_PRIMARY_CTA} nn-marketing-body-sm inline-flex h-8 min-h-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-1.5 font-semibold leading-none tracking-[0.01em] xl:px-3.5`;
 const NAV_TIER_LINK_CLASS =
-  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-7 items-center justify-center whitespace-nowrap px-2 text-center font-normal leading-none tracking-tight xl:px-2.5";
+  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-7 items-center justify-center whitespace-nowrap px-2 text-center font-normal leading-none tracking-[0.01em] xl:px-2.5";
 const HEADER_SECONDARY_ACTION_CLASS =
   "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
 /** On dark chrome (e.g. non–light-theme header row): translucent trigger. */
@@ -538,7 +541,7 @@ export function SiteHeader() {
                 </Link>
                 <Link
                   href={guestMarketingSignupHref}
-                  className="nn-nav-cta inline-flex min-h-[44px] min-w-0 max-w-[52%] shrink items-center justify-center rounded-xl px-2.5 py-2 text-xs font-medium sm:max-w-none sm:px-4 sm:text-sm"
+                  className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[44px] min-w-0 max-w-[52%] shrink items-center justify-center rounded-xl px-2.5 py-2 text-xs font-medium sm:max-w-none sm:px-4 sm:text-sm`}
                   onClick={closeMegaBeforeAuthNav}
                   aria-label="Start free account — nursing and healthcare exam prep"
                   title="Start free — no credit card required"
@@ -578,7 +581,7 @@ export function SiteHeader() {
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
                     href={resumeStudyingCta?.href ?? "/app"}
-                    className="nn-nav-cta inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4"
+                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4`}
                   >
                     {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                   </Link>
@@ -594,7 +597,7 @@ export function SiteHeader() {
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
                     href={ADMIN_DASHBOARD_ROUTE}
-                    className="nn-nav-cta inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4"
+                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4`}
                     onClick={closeMegaBeforeAuthNav}
                   >
                     {formatTitleCase(t("nav.admin"), locale)}
@@ -611,7 +614,7 @@ export function SiteHeader() {
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
                     href={localizeHref(HUB.pricing)}
-                    className="nn-nav-cta inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4"
+                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4`}
                     onClick={closeMegaBeforeAuthNav}
                   >
                     {formatTitleCase(t("nav.pricing"), locale)}
@@ -727,7 +730,7 @@ export function SiteHeader() {
                   </Link>
                   <Link
                     href={guestMarketingSignupHref}
-                    className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium"
+                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium`}
                     onClick={closeMegaBeforeAuthNav}
                     aria-label="Start free account — nursing and healthcare exam prep"
                     title="Start free — no credit card required"
@@ -739,7 +742,7 @@ export function SiteHeader() {
                 <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
                   <Link
                     href={resumeStudyingCta?.href ?? "/app"}
-                    className="nn-nav-cta inline-flex min-h-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium sm:px-4"
+                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium sm:px-4`}
                   >
                     {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                   </Link>
@@ -760,7 +763,7 @@ export function SiteHeader() {
                 <div className="flex shrink-0 items-center gap-2">
                   <Link
                     href={ADMIN_DASHBOARD_ROUTE}
-                    className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium"
+                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium`}
                     onClick={closeMegaBeforeAuthNav}
                   >
                     {formatTitleCase(t("nav.admin"), locale)}
@@ -777,7 +780,7 @@ export function SiteHeader() {
                 <div className="flex shrink-0 items-center gap-2">
                   <Link
                     href={localizeHref(HUB.pricing)}
-                    className="nn-nav-cta inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium"
+                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 items-center justify-center rounded-xl px-4 py-2 text-sm font-medium`}
                     onClick={closeMegaBeforeAuthNav}
                   >
                     {formatTitleCase(t("nav.pricing"), locale)}
@@ -1025,7 +1028,7 @@ export function SiteHeader() {
                               key={flowPractice.key}
                               href={localizeHref(flowPractice.href)}
                               aria-current={isActivePath(strippedPath, flowPractice.matchBase) ? "page" : undefined}
-                              className="nn-nav-cta mb-2 flex min-h-[48px] w-full items-center justify-center rounded-xl px-4 py-3 text-[15px] font-semibold"
+                              className={`${HEADER_NAV_PRIMARY_CTA} mb-2 flex min-h-[48px] w-full items-center justify-center rounded-xl px-4 py-3 text-[15px] font-semibold`}
                               onClick={() => {
                                 trackClientEvent(PH.marketingNavClick, {
                                   actor: navActor,
@@ -1073,7 +1076,7 @@ export function SiteHeader() {
                             aria-expanded={expanded}
                             aria-controls={`mobile-mega-${menu.key}`}
                             data-active={isMegaMenuKeyActive(menu.key, strippedPath) || undefined}
-                            className={`flex w-full items-center justify-between px-3 py-3 text-left text-[15px] font-medium transition-colors ${isMegaMenuKeyActive(menu.key, strippedPath) ? "text-[var(--nav-link-active)]" : "text-[var(--nav-fg)]"}`}
+                            className={`flex w-full items-center justify-between px-3 py-3 text-left text-[15px] tracking-[0.01em] transition-colors ${isMegaMenuKeyActive(menu.key, strippedPath) ? "font-semibold text-[var(--nav-link-active)]" : "font-normal text-[var(--nav-fg)]"}`}
                             onClick={() => setMobileExpandedMega(expanded ? null : menu.key)}
                           >
                             <span className="flex items-center gap-2">
@@ -1128,7 +1131,7 @@ export function SiteHeader() {
                                         <Link
                                           href={localizeHref(link.href)}
                                           aria-current={isActivePath(strippedPath, link.href) ? "page" : undefined}
-                                          className={`flex items-center gap-2 rounded-lg px-2 py-2 text-[14px] transition-colors ${isActivePath(strippedPath, link.href) ? "bg-[var(--nav-active)] font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                                          className={`flex items-center gap-2 rounded-lg px-2 py-2 text-[14px] tracking-[0.01em] transition-colors ${isActivePath(strippedPath, link.href) ? "bg-[var(--nav-active)] font-semibold text-[var(--nav-link-active)]" : "font-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
                                           onClick={() => {
                                             trackClientEvent(PH.marketingNavClick, {
                                               actor: navActor,
@@ -1161,7 +1164,7 @@ export function SiteHeader() {
                           type="button"
                           aria-expanded={mobileExpandedMega === "moreTracks"}
                           aria-controls="mobile-mega-more-tracks"
-                          className="flex w-full items-center justify-between px-3 py-3 text-left text-[15px] font-medium text-[var(--nav-muted)] transition-colors"
+                          className="flex w-full items-center justify-between px-3 py-3 text-left text-[15px] font-normal tracking-[0.01em] text-[var(--nav-muted)] transition-colors"
                           onClick={() => setMobileExpandedMega(mobileExpandedMega === "moreTracks" ? null : "moreTracks")}
                         >
                           <span>{formatTitleCase(t("nav.examTracks.more"), locale)}</span>
@@ -1239,7 +1242,7 @@ export function SiteHeader() {
                   <>
                     <Link
                       href={guestMarketingSignupHref}
-                      className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium"
+                      className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
                       onClick={() => setMobileOpen(false)}
                       aria-label="Start free account — nursing and healthcare exam prep"
                       title="Start free — no credit card required"
@@ -1264,7 +1267,7 @@ export function SiteHeader() {
                     ) : null}
                     <Link
                       href={resumeStudyingCta?.href ?? "/app"}
-                      className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium"
+                      className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
                       onClick={() => setMobileOpen(false)}
                     >
                       {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
@@ -1285,7 +1288,7 @@ export function SiteHeader() {
                   <>
                     <Link
                       href={ADMIN_DASHBOARD_ROUTE}
-                      className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium"
+                      className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
                       onClick={() => {
                         closeMegaBeforeAuthNav();
                         setMobileOpen(false);
@@ -1317,7 +1320,7 @@ export function SiteHeader() {
                   <>
                     <Link
                       href={localizeHref(HUB.pricing)}
-                      className="nn-nav-cta inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium"
+                      className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
                       onClick={() => {
                         closeMegaBeforeAuthNav();
                         setMobileOpen(false);

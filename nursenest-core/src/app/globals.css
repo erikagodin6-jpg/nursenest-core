@@ -1742,7 +1742,7 @@ html[data-theme] .nn-marketing-surface {
 
 .nn-marketing-nav-link[aria-current="page"],
 .nn-marketing-nav-link[data-active="true"] {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--nav-link-active, var(--header-link-active, var(--nav-fg)));
   border-color: color-mix(in srgb, var(--nav-border) 90%, var(--header-background));
   background: var(--nav-active);
