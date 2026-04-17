@@ -172,7 +172,10 @@ export default async function LearnerShellLayout({ children }: { children: React
         <LearnerExamStudyProviders>
           <LearnerExamChromeGate>
             <LearnerFeedbackShell pathwayId={pathwayId}>
-            <div className="nn-learner-app mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+5rem+env(safe-area-inset-bottom,0px))] sm:px-6 md:pb-[var(--nn-rhythm-shell-y)]">
+            <div
+              className="nn-learner-app mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+5rem+env(safe-area-inset-bottom,0px))] sm:px-6 md:pb-[var(--nn-rhythm-shell-y)]"
+              data-testid="learner-shell"
+            >
               <LearnerMainLandmarkAudit />
               <PathwayLessonProgressRefreshListener />
               <LearnerDegradedModeBanner

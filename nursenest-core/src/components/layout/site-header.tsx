@@ -39,27 +39,27 @@ const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
 /** Primary filled header CTAs — white label on theme primary fill for consistent contrast. */
 const HEADER_NAV_PRIMARY_CTA = "nn-nav-cta text-white";
 
-/** Keep desktop nav pills single-line and compact — font-normal reads more premium than heavy medium weights. */
+/** Match legacy header rhythm: compact sizing with medium-weight copy, not extra-light pills. */
 const NAV_LINK_CLASS =
-  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-8 items-center justify-center whitespace-nowrap px-2 text-center font-normal leading-none tracking-[0.01em] xl:px-2.5";
+  "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-8 items-center justify-center whitespace-nowrap px-2 text-center font-medium leading-none tracking-normal xl:px-2.5";
 /** Muted Learn / Track in the public “Learn → Practice → Track” row. */
 const NAV_FLOW_SECONDARY_CLASS = `${NAV_LINK_CLASS} text-[var(--nav-muted)]`;
 /** Single primary action in that row — Practice (question bank). */
 const NAV_FLOW_PRACTICE_CLASS =
   `${HEADER_NAV_PRIMARY_CTA} nn-marketing-body-sm inline-flex h-8 min-h-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-1.5 font-semibold leading-none tracking-[0.01em] xl:px-3.5`;
 const NAV_TIER_LINK_CLASS =
-  "nn-marketing-body-sm nn-marketing-nav-link inline-flex items-center justify-center whitespace-nowrap text-center font-normal leading-[1.2] tracking-[0.01em]";
+  "nn-marketing-body-sm nn-marketing-nav-link inline-flex items-center justify-center whitespace-nowrap text-center font-medium leading-[1.2] tracking-normal";
 const HEADER_SECONDARY_ACTION_CLASS =
-  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
+  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
 /** On dark chrome (e.g. non–light-theme header row): translucent trigger. */
 const HEADER_MAIN_NAV_MENU_TRIGGER_CLASS =
-  "nn-marketing-body-sm inline-flex h-[30px] max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--nav-fg)_14%,var(--nav-border))] bg-[color-mix(in_srgb,var(--nav-fg)_04%,transparent)] px-2 text-center font-normal leading-tight tracking-tight text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)] xl:max-w-[13rem] xl:px-2.5";
+  "nn-marketing-body-sm inline-flex h-[30px] max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--nav-fg)_14%,var(--nav-border))] bg-[color-mix(in_srgb,var(--nav-fg)_04%,transparent)] px-2 text-center font-medium leading-tight tracking-normal text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)] xl:max-w-[13rem] xl:px-2.5";
 /**
  * Light-theme top brand strip: white filled controls + dark text for contrast (country / locale / theme).
  * Keeps the bar visually lighter than ghost text on saturated chrome.
  */
 const HEADER_LIGHT_UTILITY_TRIGGER_CLASS =
-  "nn-marketing-body-sm inline-flex h-[30px] max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--theme-heading-text,#0f172a)_14%,#cbd5e1)] bg-white px-2.5 text-center font-normal leading-tight tracking-tight text-[var(--theme-heading-text)] shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-colors hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--theme-heading-text)_25%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-white xl:max-w-[13rem]";
+  "nn-marketing-body-sm inline-flex h-[30px] max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--theme-heading-text,#0f172a)_14%,#cbd5e1)] bg-white px-2.5 text-center font-medium leading-tight tracking-normal text-[var(--theme-heading-text)] shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-colors hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--theme-heading-text)_25%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-white xl:max-w-[13rem]";
 type LearnerTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
 type LearnerCountry = "CA" | "US";
 type HeaderResumeCta = { href: string; label: string } | null;

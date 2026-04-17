@@ -125,7 +125,7 @@ export function SiteFooter() {
               </div>
 
               <div>
-                <h3 className="mb-3 text-sm font-medium text-[var(--footer-fg)]">{formatTitleCase("Exam Pathways", locale)}</h3>
+                <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase("Exam Pathways", locale)}</h3>
                 <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
                   <li>
                     <FLink href={examHubs.rn}>RN</FLink>
@@ -143,7 +143,7 @@ export function SiteFooter() {
               </div>
 
               <div>
-                <h3 className="mb-3 text-sm font-medium text-[var(--footer-fg)]">{formatTitleCase("Explore", locale)}</h3>
+                <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase("Explore", locale)}</h3>
                 <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
                   <li>
                     <FLink href={explore.pricing}>Pricing</FLink>
@@ -164,7 +164,7 @@ export function SiteFooter() {
               </div>
 
               <div>
-                <h3 className="mb-3 text-sm font-medium text-[var(--footer-fg)]">{formatTitleCase("Account", locale)}</h3>
+                <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase("Account", locale)}</h3>
                 <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
                   {!isSignedIn ? (
                     <>
@@ -272,7 +272,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mb-6 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_4%,var(--footer-bg))] px-4 pb-6 pt-6">
-          <h3 className="mb-3 break-words text-sm font-medium text-[var(--footer-fg)]">
+          <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">
             {formatTitleCase(t("footer.studyInYourLanguage"), locale)}
           </h3>
           <div className="mb-3 flex flex-wrap gap-2">
