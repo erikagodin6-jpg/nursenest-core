@@ -46,6 +46,11 @@ function withPathnameHeader(request: NextRequest): NextRequest {
 
   /** Trusted pathname for server RBAC + layouts (RSC must not rely on spoofable client headers). */
   requestHeaders.set("x-nn-request-pathname", pathname);
+  /**
+   * Full request URL — lets {@link resolveAdminRequestPath} recover `/admin/...` when pathname-only
+   * headers are missing in RSC (non-super staff would otherwise see RBAC path `/` and be redirected).
+   */
+  requestHeaders.set("x-nn-request-url", request.url);
 
   if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
     requestHeaders.set("x-nn-admin-path", pathname);
