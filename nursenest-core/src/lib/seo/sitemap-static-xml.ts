@@ -37,7 +37,7 @@ import {
   PATHWAY_LESSON_SITEMAP_BATCH,
   listPathwayIdsWithLessons,
   listPathwayLessonSlugBatch,
-  listTopicClusters,
+  listTopicClustersForSitemap,
 } from "@/lib/lessons/pathway-lesson-loader";
 import { PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -160,7 +160,7 @@ export async function collectPathwayLessonSeoUrls(origin: string): Promise<strin
       safeServerLog("seo", "sitemap_pathway_derived_cap", { cap: MAX_PATHWAY_DERIVED_SITEMAP_URLS, phase: "pathway-hub" });
       return urls;
     }
-    const topics = await listTopicClusters(pid, PATHWAY_LESSON_SITEMAP_LOCALE);
+    const topics = await listTopicClustersForSitemap(pid);
     for (const t of topics) {
       if (!push(`${o}${buildExamPathwayPath(p, `lessons/topics/${t.topicSlug}`)}`)) {
         safeServerLog("seo", "sitemap_pathway_derived_cap", { cap: MAX_PATHWAY_DERIVED_SITEMAP_URLS, phase: "topic" });

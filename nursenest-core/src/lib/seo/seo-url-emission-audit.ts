@@ -12,7 +12,7 @@
  * | `/seo/{slug}` in sitemap | Internal rewrite target surfaced | `isValidPublicUrl` blocks `/seo/` |
  * | `/login`, `/signup` in sitemap | Auth pages indexed | `isAuthNoindexMarketingPathname`, sitemap filter |
  * | Lesson URL 404 | Slug in DB/catalog but page `notFound` / gate mismatch | `listPathwayLessonSlugBatch(..., restrictToPublicMarketingSurface: true)` for sitemap |
- * | Topic cluster URL 404 | Topic slug not routable | Same pathway resolution as lesson hub; `listTopicClusters` aligned with page |
+ * | Topic cluster crawl waste / empty hub | `listTopicClusters` included slugs with zero hub-eligible lessons | `listTopicClustersForSitemap` gates on `getLessonsForTopicPage` total > 0 |
  * | Expansion `/exams/{segment}` 404 | Region unpublished | `listPublishedExpansionExamMarketingPaths` + `isRegionalMarketingUrlPublished` |
  * | Regional country topic 404 | Unpublished region | `regionalTopicPaths.filter(isRegionalMarketingUrlPublished)` |
  * | Programmatic `/questions/{slug}` 404 | Registry typo | `getProgrammaticQuestionTopicDefinition` + `notFound()` on page |

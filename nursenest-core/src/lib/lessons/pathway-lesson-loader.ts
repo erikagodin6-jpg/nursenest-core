@@ -19,6 +19,7 @@ import {
   PATHWAY_LESSON_CANONICAL_DB_LOCALE,
   PATHWAY_LESSON_SITEMAP_LOCALE,
 } from "@/lib/lessons/pathway-lesson-locale";
+import { filterTopicClustersForSitemapByTopicPageTotal } from "@/lib/lessons/pathway-topic-sitemap-filter";
 import { evaluatePathwayLessonStructuralGate } from "@/lib/lessons/pathway-lesson-premium";
 import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
 import {
@@ -899,6 +900,19 @@ async function getLessonsForTopicPageWithDataCache(
 }
 
 export const getLessonsForTopicPage = cache(getLessonsForTopicPageWithDataCache);
+
+/**
+ * Topic clusters for `/sitemap.xml` only: keeps slugs where {@link getLessonsForTopicPage} would list
+ * at least one lesson after hub filters (`pathwayLessonEligibleForPublicMarketingSurface`, pathway context, safe slugs).
+ * {@link listTopicClusters} alone can include slugs from raw DB groupBy or catalog aggregates that render
+ * the empty topic state (zero rows after the same filters) — those URLs are poor crawl targets.
+ */
+export async function listTopicClustersForSitemap(pathwayId: string): Promise<TopicCluster[]> {
+  const all = await listTopicClusters(pathwayId, PATHWAY_LESSON_SITEMAP_LOCALE);
+  return filterTopicClustersForSitemapByTopicPageTotal(all, async (topicSlug) =>
+    getLessonsForTopicPage(pathwayId, topicSlug, 1, 1, PATHWAY_LESSON_SITEMAP_LOCALE),
+  );
+}
 
 /** Single lesson by slug — canonical English DB row when present, then file/DB overlays; legacy non-English row if no English. */
 async function getPathwayLessonImpl(
