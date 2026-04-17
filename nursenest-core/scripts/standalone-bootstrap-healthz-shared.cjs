@@ -4,9 +4,17 @@ function isBootstrapHealthzRequest(req) {
   return (method === "GET" || method === "HEAD") && (url === "/healthz" || url.startsWith("/healthz?"));
 }
 
-function maybeServeBootstrapHealthz(req, res, state) {
+function maybeServeBootstrapHealthz(req, res, state, logger) {
   if (state?.handlersReady || !isBootstrapHealthzRequest(req)) {
     return false;
+  }
+
+  if (logger && typeof logger.logBootstrapHealthzIntercepted === "function") {
+    logger.logBootstrapHealthzIntercepted({
+      method: typeof req?.method === "string" ? req.method.toUpperCase() : undefined,
+      url: typeof req?.url === "string" ? req.url : undefined,
+      handlersReady: false,
+    });
   }
 
   res.statusCode = 200;

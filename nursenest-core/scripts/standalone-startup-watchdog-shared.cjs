@@ -1,4 +1,5 @@
 const path = require("node:path");
+const { createRequire } = require("node:module");
 
 function formatStartupWatchdogLine(event, meta) {
   return `[nursenest-core] startup_watchdog ${event} ${JSON.stringify(meta)}`;
@@ -7,6 +8,11 @@ function formatStartupWatchdogLine(event, meta) {
 function resolveStandaloneNextModulePath(entryScript, moduleRelativePath) {
   if (typeof entryScript !== "string" || entryScript.length === 0) return null;
   return path.join(path.dirname(entryScript), "node_modules", "next", moduleRelativePath);
+}
+
+function createStandaloneRequire(entryScript) {
+  if (typeof entryScript !== "string" || entryScript.length === 0) return null;
+  return createRequire(entryScript);
 }
 
 function createStartupWatchdogLogger({
@@ -21,8 +27,39 @@ function createStartupWatchdogLogger({
   }
 
   return {
+    emit,
     logStandaloneSpawn(meta = {}) {
       emit("standalone_spawn", { ...meta, msSinceBoot: now() - bootAt });
+    },
+    logPreloadFileEntered(meta = {}) {
+      emit("preload_file_entered", { ...meta, msSinceBoot: now() - bootAt });
+    },
+    logPreloadInstalled(meta = {}) {
+      emit("preload_installed", { ...meta, msSinceBoot: now() - bootAt });
+    },
+    logPreloadPatchBegin(module) {
+      emit(`preload_patch_${module}_begin`, { msSinceBoot: now() - bootAt });
+    },
+    logPreloadPatchDone(module) {
+      emit(`preload_patch_${module}_done`, { msSinceBoot: now() - bootAt });
+    },
+    logPreloadPatchFailed(module, meta = {}) {
+      emit(`preload_patch_${module}_failed`, { ...meta, msSinceBoot: now() - bootAt });
+    },
+    logPreloadPatchNextBegin(meta = {}) {
+      emit("preload_patch_next_begin", { ...meta, msSinceBoot: now() - bootAt });
+    },
+    logPreloadPatchNextDone(meta = {}) {
+      emit("preload_patch_next_done", { ...meta, msSinceBoot: now() - bootAt });
+    },
+    logPreloadPatchNextFailed(meta = {}) {
+      emit("preload_patch_next_failed", { ...meta, msSinceBoot: now() - bootAt });
+    },
+    logPreloadServerWrapInstalled(meta = {}) {
+      emit("preload_server_wrap_installed", { ...meta, msSinceBoot: now() - bootAt });
+    },
+    logBootstrapHealthzIntercepted(meta = {}) {
+      emit("bootstrap_healthz_intercepted", { ...meta, msSinceBoot: now() - bootAt });
     },
     logServerListening(meta = {}) {
       listeningAt = now();
@@ -57,6 +94,7 @@ function createStartupWatchdogLogger({
 
 module.exports = {
   createStartupWatchdogLogger,
+  createStandaloneRequire,
   formatStartupWatchdogLine,
   resolveStandaloneNextModulePath,
 };

@@ -31,10 +31,16 @@ test("matches GET and HEAD /healthz requests only", () => {
 
 test("serves /healthz directly while handlers are not ready", () => {
   const res = createFakeResponse();
+  const intercepted = [];
   const served = maybeServeBootstrapHealthz(
     { method: "GET", url: "/healthz" },
     res,
     { handlersReady: false },
+    {
+      logBootstrapHealthzIntercepted(meta) {
+        intercepted.push(meta);
+      },
+    },
   );
 
   assert.equal(served, true);
@@ -43,6 +49,7 @@ test("serves /healthz directly while handlers are not ready", () => {
   assert.equal(res.headers["cache-control"], "no-store");
   assert.equal(res.body, "ok");
   assert.equal(res.ended, true);
+  assert.deepEqual(intercepted, [{ method: "GET", url: "/healthz", handlersReady: false }]);
 });
 
 test("serves HEAD /healthz without a body while handlers are not ready", () => {
