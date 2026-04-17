@@ -24,4 +24,5 @@ test("preload emits proof logs when loaded via --require", () => {
   assert.match(combined, /startup_watchdog preload_patch_https_begin/);
   assert.match(combined, /startup_watchdog preload_patch_https_done/);
   assert.match(combined, /startup_watchdog preload_patch_next_begin/);
+  assert.match(combined, /startup_watchdog preload_(patch_next_done|patch_next_failed)/);
 });

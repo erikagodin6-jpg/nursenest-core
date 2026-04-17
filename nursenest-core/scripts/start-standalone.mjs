@@ -40,6 +40,7 @@ const publicHost = process.env.HOSTNAME || "0.0.0.0";
 const internalHost = "127.0.0.1";
 const readinessProbePath = "/_nn_bootstrap_ready_check__";
 const bootstrapReadyTimeoutMs = Number.parseInt(process.env.NN_BOOTSTRAP_READY_TIMEOUT_MS ?? "900000", 10) || 900000;
+const bootstrapTestDelayMs = Number.parseInt(process.env.NN_BOOTSTRAP_TEST_DELAY_MS ?? "0", 10) || 0;
 const memMb = process.env.NODE_MAX_OLD_SPACE_SIZE_MB ?? "512";
 const baseNodeOptions = (process.env.NODE_OPTIONS ?? "").trim();
 const hasHeapOverride =
@@ -79,6 +80,9 @@ function waitForChildReadiness({ internalPort, state }) {
   const startedAt = Date.now();
 
   return (async () => {
+    if (bootstrapTestDelayMs > 0) {
+      await sleep(bootstrapTestDelayMs);
+    }
     while (!state.handlersReady) {
       if (state.childExited) {
         throw new Error("standalone child exited before handlers became ready");
@@ -212,7 +216,7 @@ emit("server_listening", {
 });
 
 const child = spawn(process.execPath, childArgs, {
-  stdio: "inherit",
+  stdio: ["ignore", "pipe", "pipe"],
   cwd: pkgRoot,
   env: {
     ...process.env,
@@ -220,6 +224,9 @@ const child = spawn(process.execPath, childArgs, {
     HOSTNAME: internalHost,
   },
 });
+
+child.stdout?.on("data", (chunk) => process.stdout.write(chunk));
+child.stderr?.on("data", (chunk) => process.stderr.write(chunk));
 
 state.childPid = child.pid ?? null;
 

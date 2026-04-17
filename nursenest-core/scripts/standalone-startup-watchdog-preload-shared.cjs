@@ -1,15 +1,5 @@
-const {
-  createStartupWatchdogLogger,
-  createStandaloneRequire,
-} = require("./standalone-startup-watchdog-shared.cjs");
+const { createStartupWatchdogLogger, createStandaloneRequire } = require("./standalone-startup-watchdog-shared.cjs");
 const { maybeServeBootstrapHealthz } = require("./standalone-bootstrap-healthz-shared.cjs");
-
-function maybeApplyHandlersDelay() {
-  const raw = process.env.NN_BOOTSTRAP_TEST_DELAY_MS;
-  const delayMs = Number.parseInt(raw ?? "", 10);
-  if (!Number.isFinite(delayMs) || delayMs <= 0) return Promise.resolve();
-  return new Promise((resolve) => setTimeout(resolve, delayMs));
-}
 
 function patchServerModule(moduleName, moduleRef, startupState, logger) {
   const label = moduleName.startsWith("node:") ? moduleName.slice("node:".length) : moduleName;
@@ -86,52 +76,18 @@ function patchNextInternals(standaloneEntry, requireModule, startupState, logger
     const appInfoLog = standaloneRequire("next/dist/server/lib/app-info-log");
     const appInfoLogPath = standaloneRequire.resolve("next/dist/server/lib/app-info-log");
     const appInfoDescriptor = Object.getOwnPropertyDescriptor(appInfoLog, "logStartInfo");
-    if (appInfoDescriptor && !appInfoDescriptor.writable && typeof appInfoDescriptor.set !== "function") {
-      throw new Error("next app-info-log.logStartInfo export is read-only");
-    }
-    const originalLogStartInfo = appInfoLog.logStartInfo;
-    if (typeof originalLogStartInfo !== "function") {
-      throw new Error("next app-info-log.logStartInfo is not a function");
-    }
-    appInfoLog.logStartInfo = function patchedLogStartInfo(...args) {
-      const info = args[0] ?? {};
-      logger.logServerListening({
-        appUrl: typeof info.appUrl === "string" ? info.appUrl : undefined,
-        networkUrl: typeof info.networkUrl === "string" ? info.networkUrl : undefined,
-        pid: process.pid,
-      });
-      return originalLogStartInfo.apply(this, args);
-    };
 
     const routerServer = standaloneRequire("next/dist/server/lib/router-server");
     const routerServerPath = standaloneRequire.resolve("next/dist/server/lib/router-server");
     const routerDescriptor = Object.getOwnPropertyDescriptor(routerServer, "initialize");
-    if (routerDescriptor && !routerDescriptor.writable && typeof routerDescriptor.set !== "function") {
-      throw new Error("next router-server.initialize export is read-only");
-    }
-    const originalInitialize = routerServer.initialize;
-    if (typeof originalInitialize !== "function") {
-      throw new Error("next router-server.initialize is not a function");
-    }
-    routerServer.initialize = async function patchedInitialize(...args) {
-      logger.logHandlersInitStart({ pid: process.pid });
-      await maybeApplyHandlersDelay();
-      try {
-        const result = await originalInitialize.apply(this, args);
-        startupState.handlersReady = true;
-        logger.logHandlersReady({ pid: process.pid });
-        return result;
-      } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        logger.logHandlersInitFailed({ error: message.slice(0, 200), pid: process.pid });
-        throw error;
-      }
-    };
 
     logger.logPreloadPatchNextDone({
       standaloneEntry: standaloneEntry || undefined,
       appInfoLogPath,
       routerServerPath,
+      logStartInfoWritable: Boolean(appInfoDescriptor?.writable || typeof appInfoDescriptor?.set === "function"),
+      initializeWritable: Boolean(routerDescriptor?.writable || typeof routerDescriptor?.set === "function"),
+      strategy: "observe_only",
       pid: process.pid,
     });
   } catch (error) {
