@@ -9,12 +9,11 @@
  * | status   | tier       | indexed | hreflang | sitemap | switcher        |
  * |----------|------------|---------|----------|---------|-----------------|
  * | active   | full       | ✓       | ✓        | ✓       | yes, no label   |
- * | partial  | partial    | ✗       | ✓        | ✓       | yes, "(partial)"|
+ * | partial  | partial    | ✗       | ✓        | ✗       | yes, "(partial)"|
  * | disabled | incomplete | ✗       | ✗        | ✗       | hidden          |
  *
- * Routes for every locale remain accessible (no 404). The `disabled` status
- * applies `noindex` and removes the locale from hreflang clusters and sitemaps
- * so mostly-English content is not indexed or recommended by search engines.
+ * Routes for every locale remain accessible (no 404). `partial` uses `noindex` but stays in hreflang;
+ * `disabled` uses `noindex`, `Disallow` in robots.txt, and drops hreflang — neither tier is listed in sitemaps.
  *
  * ## Adding a new language (safe workflow)
  *
@@ -24,15 +23,19 @@
  *    (`npm run i18n:compile` — see `docs/i18n-architecture.md`).
  * 3. Run `language-completeness.ts` checks to measure key coverage.
  * 4. Once navigation + core pages (home, pricing, faq) are translated, promote to `tier: "partial"`.
- *    The locale enters hreflang clusters and sitemaps, appears in the switcher with "(partial)"
- *    label, but keeps `noindex` until promoted to full.
+ *    The locale enters hreflang clusters (not `/sitemap.xml`), appears in the switcher with "(partial)"
+ *    label, and keeps `noindex` until promoted to full.
  * 5. Complete remaining gaps. Publish at least one localized blog post.
  * 6. Pass all items in `LANGUAGE_PROMOTION_CHECKLIST`.
  * 7. Promote to `tier: "full"` → full SEO indexing activates automatically.
  */
 
 import { MARKETING_LANGUAGES, type MarketingLanguageTier } from "./marketing-languages";
-import { DEFAULT_MARKETING_LOCALE, CORE_HOSTED_MARKETING_LOCALES } from "./marketing-locale-policy";
+import {
+  CORE_HOSTED_MARKETING_LOCALES,
+  DEFAULT_MARKETING_LOCALE,
+  isCoreHostedNonDefaultLocale,
+} from "./marketing-locale-policy";
 
 // ─── Status type ──────────────────────────────────────────────────────────────
 
@@ -46,13 +49,13 @@ interface LocaleSeoPolicy {
   seoIndexable: boolean;
   /** Included in hreflang rel=alternate clusters. True for full + partial. */
   hreflangEligible: boolean;
-  /** Included in any sitemap urlset. True for full + partial. */
+  /** Included in any sitemap urlset. True for tier=full only (partial uses noindex; omit from sitemap to avoid crawl waste). */
   sitemapIncluded: boolean;
 }
 
 const TIER_POLICY: Record<MarketingLanguageTier, LocaleSeoPolicy> = {
   full: { status: "active", seoIndexable: true, hreflangEligible: true, sitemapIncluded: true },
-  partial: { status: "partial", seoIndexable: false, hreflangEligible: true, sitemapIncluded: true },
+  partial: { status: "partial", seoIndexable: false, hreflangEligible: true, sitemapIncluded: false },
   incomplete: { status: "disabled", seoIndexable: false, hreflangEligible: false, sitemapIncluded: false },
 };
 
@@ -106,9 +109,23 @@ export function getHreflangEligibleLocales(): readonly string[] {
   return CORE_HOSTED_MARKETING_LOCALES.filter((c) => isLocaleHreflangEligible(c));
 }
 
-/** Non-default locales that should appear in sitemap urlsets (full + partial tiers). */
+/** Non-default locales that should appear in sitemap urlsets (tier=full only). */
 export function getSitemapIncludedLocales(): readonly string[] {
   return CORE_HOSTED_MARKETING_LOCALES.filter((c) => isLocaleSitemapIncluded(c));
+}
+
+/**
+ * True when `pathname` is under `/{marketingLocale}/…` and that locale must not appear in `/sitemap.xml`
+ * (partial + incomplete tiers). Country/exam segments like `/us/…` are unaffected.
+ *
+ * Use as a final guard on merged sitemap `loc` values so DB-backed rows cannot reintroduce excluded locales.
+ */
+export function isLocalePrefixedPathnameExcludedFromSitemap(pathname: string): boolean {
+  const parts = pathname.split("/").filter(Boolean);
+  if (parts.length < 1) return false;
+  const first = parts[0] ?? "";
+  if (!isCoreHostedNonDefaultLocale(first)) return false;
+  return !isLocaleSitemapIncluded(first);
 }
 
 /** Non-default locales with full SEO indexing (tier=full only). */
@@ -131,8 +148,8 @@ export function localeRobotsOverride(localeCode: string): { index: false; follow
 /**
  * When true, `robots.txt` should emit `Disallow: /{locale}/` for this locale.
  *
- * **Only** `incomplete` (disabled-switcher) tiers — **not** `partial` (noindex in metadata but
- * still hreflang/sitemap eligible; bots must fetch pages to see `noindex` + alternates).
+ * **Only** `incomplete` (disabled-switcher) tiers — **not** `partial` (noindex in metadata, hreflang
+ * eligible, **omitted from sitemap**; bots must still be able to fetch pages to see `noindex` + alternates).
  *
  * Do **not** use `!isLocaleSeoIndexable` here — that is also false for partial locales and would
  * incorrectly block crawling.
@@ -159,5 +176,5 @@ export const LANGUAGE_PROMOTION_CHECKLIST = [
   "Routing: /{locale} → 200, /{locale}/pricing → 200 (smoke test)",
   "hreflang: validate with Google Search Console or a tag inspector tool",
   "Canonical: /{locale} canonical resolves correctly; no conflict with English /",
-  "Sitemap: locale marketing URLs appear in merged /sitemap.xml with correct paths",
+  "Sitemap: full-tier locale marketing URLs appear in merged /sitemap.xml with correct paths",
 ] as const;

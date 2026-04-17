@@ -14,7 +14,10 @@ import {
   resolveSitemapOrigin,
   type SitemapUrlEntry,
 } from "@/lib/seo/sitemap-static-xml";
-import { getSitemapIncludedLocales } from "@/lib/i18n/language-readiness";
+import {
+  getSitemapIncludedLocales,
+  isLocalePrefixedPathnameExcludedFromSitemap,
+} from "@/lib/i18n/language-readiness";
 import { isValidPublicUrl } from "@/lib/seo/public-url-validator";
 import { logSeoEmittedUrlBatch } from "@/lib/seo/seo-url-emission-audit";
 import {
@@ -25,7 +28,9 @@ import {
 
 /**
  * Single sitemap urlset used by `/sitemap.xml`.
- * Includes core marketing, locale marketing, tools, SEO pages, and blog URLs.
+ * Includes core marketing, **full-tier** locale marketing, tools, SEO pages, and blog URLs.
+ * Omits `/app/*`, auth noindex paths, partial/incomplete locale prefixes, and other blocked public patterns
+ * (see `public-url-validator`, `sitemap-marketing-exclusions`, `language-readiness`).
  */
 export async function buildSingleSitemapXmlSafe(): Promise<string> {
   try {
@@ -41,6 +46,17 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
           code: r.code,
           detail: (r.detail ?? "").slice(0, 200),
         });
+        return;
+      }
+      try {
+        const path = new URL(url).pathname;
+        if (isLocalePrefixedPathnameExcludedFromSitemap(path)) {
+          safeServerLog("seo", "sitemap_locale_tier_excluded", {
+            url: url.slice(0, 500),
+          });
+          return;
+        }
+      } catch {
         return;
       }
       allStatic.add(url);
@@ -74,6 +90,14 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
         });
         continue;
       }
+      try {
+        if (isLocalePrefixedPathnameExcludedFromSitemap(new URL(entry.loc).pathname)) {
+          safeServerLog("seo", "sitemap_blog_locale_tier_excluded", { url: entry.loc.slice(0, 500) });
+          continue;
+        }
+      } catch {
+        continue;
+      }
       blogEntries.set(entry.loc, entry.lastmod);
     }
 
@@ -85,6 +109,16 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
           code: r.code,
           detail: (r.detail ?? "").slice(0, 200),
         });
+        continue;
+      }
+      try {
+        if (isLocalePrefixedPathnameExcludedFromSitemap(new URL(entry.loc).pathname)) {
+          safeServerLog("seo", "sitemap_localized_blog_locale_tier_excluded", {
+            url: entry.loc.slice(0, 500),
+          });
+          continue;
+        }
+      } catch {
         continue;
       }
       blogEntries.set(entry.loc, entry.lastmod);

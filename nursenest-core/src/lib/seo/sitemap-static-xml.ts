@@ -58,7 +58,7 @@ import {
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { stripForbiddenLocalePrefixedPathwayTopics } from "@/lib/seo/sitemap-locale-prefixed-path-guard";
 
-/** Locales included in merged urlset tooling (full + partial tier); sorted for deterministic URL lists. */
+/** Locales included in merged urlset tooling (tier=full only); sorted for deterministic URL lists. */
 const SORTED_SITEMAP_LOCALES = [...getSitemapIncludedLocales()].sort();
 
 /** Hard cap for pathway lesson + topic URLs in core sitemap (prevents multi‑GB XML / OOM). */

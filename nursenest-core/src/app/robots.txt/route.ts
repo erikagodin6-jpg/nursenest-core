@@ -11,12 +11,14 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
  * (single GSC / crawler entry; no sitemap index or child sitemap URLs here).
  *
  * SEO indexing policy per language status:
- * - active (full tier): allowed — Google indexes the locale pages normally.
- * - partial (partial tier): pages are served with `noindex` meta (injected by
- *   safeGenerateMetadata); crawling is **allowed** (no `Disallow` for `/{code}/`) so bots
- *   can fetch pages and honor hreflang + noindex consistently.
- * - disabled (incomplete tier): `Disallow: /{code}/` to save crawl budget on mostly-English
- *   URLs that are also excluded from hreflang and locale sitemaps. Routes still serve 200 for humans.
+ * - active (full tier): allowed — Google indexes the locale pages normally; locale URLs may appear in `/sitemap.xml`.
+ * - partial (partial tier): `noindex` meta (via safeGenerateMetadata); crawling **allowed** (no `Disallow` for
+ *   `/{code}/`) so bots can fetch pages and honor hreflang + noindex; **not** listed in `/sitemap.xml`.
+ * - disabled (incomplete tier): `Disallow: /{code}/` plus `noindex`; excluded from hreflang and sitemaps.
+ *   Routes may still return 200 for humans.
+ *
+ * **Authenticated / internal surfaces:** `Disallow: /app/`, `/admin/`, `/api/` — learner shell and gated flows;
+ * these are also blocked from sitemap emission via URL validation (see `public-url-validator`).
  *
  * Internal `/seo/*` rewrite targets are disallowed to avoid duplicate indexing
  * with the public `/{slug}` URLs they back.

@@ -4,9 +4,9 @@
  * Complements `sitemap-blog-xml.ts` (canonical blog posts) with
  * localized variant URLs following the /:locale/:region/:profession/:exam/blog/:slug canonical pattern.
  *
- * Only includes rows for locales whose language status allows sitemap inclusion
- * (full + partial tiers). Disabled/incomplete locales are excluded — their pages
- * carry `noindex` meta and should not consume sitemap budget or invite indexing.
+ * Only includes rows for locales whose language status allows sitemap inclusion (tier=full).
+ * Partial and incomplete locales are excluded — their pages use `noindex` (and incomplete tiers are
+ * `Disallow` in robots.txt); they must not consume sitemap budget.
  */
 
 import "server-only";
@@ -39,7 +39,7 @@ export async function listLocalizedBlogSitemapEntriesSafe(): Promise<SitemapUrlE
     let excludedIncompletePath = 0;
 
     for (const r of rows) {
-      // Skip locales that are not sitemap-eligible (incomplete tier).
+      // Skip locales that are not sitemap-eligible (partial + incomplete tiers).
       if (!isLocaleSitemapIncluded(r.locale)) {
         excluded++;
         continue;

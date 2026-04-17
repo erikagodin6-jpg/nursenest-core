@@ -8,7 +8,8 @@
  * Priority:
  *   1. Override cookie (`nn_global_region`)
  *   2. IP-country header → region → region's default locale
- *   3. Accept-Language negotiation (constrained to region's allowed locales)
+ *   3. Accept-Language negotiation (constrained to region's allowed locales), except for
+ *      {@link ENGLISH_DEFAULT_HOME_REGIONS} where locale is always `en`
  *   4. Global fallback: `{ region: GLOBAL_DEFAULT_REGION, locale: "en" }` (see `global-regions.ts`).
  *      The public marketing **header** resolves defaults separately via
  *      `effectiveDefaultPublicGlobalRegion` (route + US/CA context; does not treat stale expansion cookies as default).
@@ -25,6 +26,17 @@ import {
   isGlobalRegionSlug,
   regionFromCountryCode,
 } from "./global-regions";
+
+/**
+ * US / Canada / UK / Australia: marketing home defaults to English — do not promote `es`, `fr`, etc.
+ * from `Accept-Language` ahead of English. Other regions still negotiate from Accept-Language.
+ */
+const ENGLISH_DEFAULT_HOME_REGIONS = new Set<GlobalRegionSlug>(["us", "canada", "uk", "aus"]);
+
+/** True for US/CA/UK/AU — marketing + first-run flows default to English (no es/fr/tl override from browser). */
+export function isEnglishDefaultHomeMarketingRegion(region: GlobalRegionSlug): boolean {
+  return ENGLISH_DEFAULT_HOME_REGIONS.has(region);
+}
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -91,6 +103,9 @@ function pickLocaleForRegion(
   acceptLanguage: string | null | undefined,
 ): GlobalLocaleCode {
   const cfg = REGION_CONFIG[region];
+  if (isEnglishDefaultHomeMarketingRegion(region)) {
+    return "en";
+  }
   if (!acceptLanguage) return cfg.defaultLocale;
 
   const preferred = parseAcceptLanguage(acceptLanguage);

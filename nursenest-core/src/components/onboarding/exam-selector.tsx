@@ -29,6 +29,7 @@ import {
   wasSelectorDismissed,
 } from "@/lib/context/context-persistence";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { isEnglishDefaultHomeMarketingRegion } from "@/lib/i18n/geo-resolver";
 
 // ── Analytics ────────────────────────────────────────────────────────────────
 
@@ -88,10 +89,17 @@ export function ExamSelector({ geoRegion }: ExamSelectorProps) {
     trackClientEvent(EVT.countrySelected, { region });
 
     const localeOptions = getLocaleChoicesForRegion(region);
-    if (localeOptions && localeOptions.length > 1) {
+    const needsLanguageStep =
+      !isEnglishDefaultHomeMarketingRegion(region) &&
+      localeOptions &&
+      localeOptions.length > 1;
+    if (needsLanguageStep) {
       setStep("language");
     } else {
-      finishSelection(region, REGION_CONFIG[region].defaultLocale);
+      finishSelection(
+        region,
+        isEnglishDefaultHomeMarketingRegion(region) ? "en" : REGION_CONFIG[region].defaultLocale,
+      );
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProfession]);

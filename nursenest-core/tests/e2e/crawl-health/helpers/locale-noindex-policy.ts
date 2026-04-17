@@ -2,7 +2,7 @@ import { isLocaleSeoIndexable } from "@/lib/i18n/language-readiness";
 import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 
 /**
- * Partial-tier localized routes are listed in sitemap but ship `noindex` — not a regression.
+ * Partial-tier localized routes ship `noindex` and are omitted from `/sitemap.xml` — not a regression.
  */
 export function isExpectedNoindexLocalizedMarketingPath(pathname: string): boolean {
   const parts = pathname.split("/").filter(Boolean);
