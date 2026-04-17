@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
+import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { NursingTierHubPage } from "@/components/marketing/nursing-tier-hub-page";
 import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
@@ -68,6 +69,11 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
 
     return (
       <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+        <WebPageJsonLd
+          title={npPracticeSeo?.title ?? pathway.seoTitle}
+          description={npPracticeSeo?.description ?? pathway.seoDescription}
+          path={npPracticeSeo ? pathname : buildExamPathwayPath(pathway)}
+        />
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
         <NursingTierHubPage
           pathway={pathway}

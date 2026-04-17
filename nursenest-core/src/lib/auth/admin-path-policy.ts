@@ -88,6 +88,8 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/admin/pathway-launch-workflow",
   "/api/admin/pathway-launch-workflow",
   "/api/admin/exam-hub-preview",
+  /** Prisma env wiring (no secrets) — pooled + direct URL presence for production validation. */
+  "/api/debug/db-env",
 ];
 
 function isSuperOnlyPath(path: string): boolean {

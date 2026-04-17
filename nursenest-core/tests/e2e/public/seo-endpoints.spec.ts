@@ -48,15 +48,14 @@ test.describe("Public — SEO endpoints", () => {
       const url = new URL(pathname, appOrigin).href;
       const t0 = Date.now();
       const res = await request.get(url, { failOnStatusCode: false, timeout: 60_000 });
+      const body = await res.text();
       const ms = Date.now() - t0;
 
       expect(res.status(), `${pathname} should return HTTP 200 (got ${res.status()} for ${url})`).toBe(200);
       expect(
         ms,
-        `${pathname} should respond in under ${SEO_ENDPOINT_SLA_MS}ms (got ${ms}ms for ${url})`,
+        `${pathname} should fully respond (status + body) in under ${SEO_ENDPOINT_SLA_MS}ms (got ${ms}ms for ${url})`,
       ).toBeLessThanOrEqual(SEO_ENDPOINT_SLA_MS);
-
-      const body = await res.text();
       if (pathname === "/sitemap.xml") {
         assertValidSitemapBody(body);
       } else {

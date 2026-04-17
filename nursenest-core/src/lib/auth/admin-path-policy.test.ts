@@ -92,3 +92,8 @@ test("nn-db-final-005: /api/debug session + sentry-test are super-only", () => {
   assert.equal(isPathAllowedForStaffTier("support", "/api/debug/session"), false);
   assert.equal(isPathAllowedForStaffTier("support", "/api/debug/sentry-test"), false);
 });
+
+test("support staff can GET /api/debug/db-env (Prisma env flags, no secrets)", () => {
+  assert.equal(isPathAllowedForStaffTier("support", "/api/debug/db-env"), true);
+  assert.equal(isPathAllowedForStaffTier("content", "/api/debug/db-env"), true);
+});
