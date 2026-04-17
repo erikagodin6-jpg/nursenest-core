@@ -14,13 +14,12 @@ export async function filterTopicClustersForSitemapByTopicPageTotal<T extends To
   clusters: readonly T[],
   check: TopicPageTotalCheck,
 ): Promise<T[]> {
-  const results = await Promise.all(
-    clusters.map(async (t) => {
-      const slug = typeof t.topicSlug === "string" ? t.topicSlug.trim() : "";
-      if (!slug) return null;
-      const page = await check(slug);
-      return page.total > 0 ? t : null;
-    }),
-  );
-  return results.filter((x): x is T => x != null);
+  const out: T[] = [];
+  for (const t of clusters) {
+    const slug = typeof t.topicSlug === "string" ? t.topicSlug.trim() : "";
+    if (!slug) continue;
+    const page = await check(slug);
+    if (page.total > 0) out.push(t);
+  }
+  return out;
 }
