@@ -5,6 +5,7 @@ import { getPublishedBlogPostsPage } from "@/lib/blog/safe-blog-queries";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const HOME_BLOG_TEASER_SLOW_MS = 800;
+const HOME_BLOG_TEASER_TIMEOUT_MS = 1500;
 
 /**
  * Bounded recent posts for the marketing homepage teaser — isolated from the rest of the page so a
@@ -14,7 +15,12 @@ export async function loadHomeBlogTeaserPostsSafe(take: number): Promise<BlogInd
   const t0 = Date.now();
   const safeTake = Math.min(6, Math.max(1, Math.floor(take)));
   try {
-    const { posts } = await getPublishedBlogPostsPage(1, safeTake, undefined, { includeTotal: false });
+    const { posts } = await Promise.race([
+      getPublishedBlogPostsPage(1, safeTake, undefined, { includeTotal: false }),
+      new Promise<{ posts: BlogIndexPost[] }>((_, reject) => {
+        setTimeout(() => reject(new Error("home_blog_teaser_timeout")), HOME_BLOG_TEASER_TIMEOUT_MS);
+      }),
+    ]);
     const ms = Date.now() - t0;
     if (ms > HOME_BLOG_TEASER_SLOW_MS) {
       safeServerLog("crawl_surface", "home_blog_teaser_slow", { ms, count: posts.length });

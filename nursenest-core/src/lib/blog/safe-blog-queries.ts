@@ -1,7 +1,7 @@
 import type { BlogPost, Prisma } from "@prisma/client";
 import { BlogPostStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured, withDatabaseFallback } from "@/lib/db/safe-database";
+import { isDatabaseUrlConfigured, withDatabaseFallback, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { blogLiveWhere, blogPostIsLive } from "@/lib/blog/blog-visibility";
 import {
   getStaticBlogPost,
@@ -12,16 +12,27 @@ import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
 /** @deprecated Use `isDatabaseUrlConfigured` from `@/lib/db/safe-database`. */
 export const isBlogDatabaseConfigured = isDatabaseUrlConfigured;
 
+const BLOG_PUBLIC_QUERY_TIMEOUT_MS = 2000;
+const BLOG_SITEMAP_QUERY_TIMEOUT_MS = 1500;
+
 async function withBlogFallback<T>(run: () => Promise<T>, fallback: T): Promise<T> {
   return withDatabaseFallback(run, fallback);
 }
 
-function isDevMode(): boolean {
-  return process.env.NODE_ENV !== "production";
+async function withBlogTimeoutFallback<T>(
+  run: () => Promise<T>,
+  fallback: T,
+  label: string,
+  timeoutMs: number = BLOG_PUBLIC_QUERY_TIMEOUT_MS,
+): Promise<T> {
+  return withDatabaseFallbackTimeout(run, fallback, timeoutMs, {
+    scope: "blog",
+    label,
+  });
 }
 
 export async function canUseStaticBlogFallback(): Promise<boolean> {
-  if (!isDevMode()) return false;
+  if (listStaticBlogPostsForIndex().length === 0) return false;
   const totalRows = await withBlogFallback(() => prisma.blogPost.count(), 0);
   return totalRows === 0;
 }
@@ -74,7 +85,7 @@ export async function getPublishedBlogPostsPage(
     ],
   } satisfies Prisma.BlogPostWhereInput;
   const [dbPosts, dbTotal] = await Promise.all([
-    withBlogFallback(
+    withBlogTimeoutFallback(
       () =>
         prisma.blogPost.findMany({
           where,
@@ -84,8 +95,11 @@ export async function getPublishedBlogPostsPage(
           take: safeSize,
         }),
       [],
+      "blog_posts_page.posts",
     ),
-    includeTotal ? withBlogFallback(() => prisma.blogPost.count({ where }), 0) : Promise.resolve(0),
+    includeTotal
+      ? withBlogTimeoutFallback(() => prisma.blogPost.count({ where }), 0, "blog_posts_page.total")
+      : Promise.resolve(0),
   ]);
   if (
     scope?.locale &&
@@ -103,7 +117,7 @@ export async function getPublishedBlogPostsPage(
       ],
     } satisfies Prisma.BlogPostWhereInput;
     const [sourcePosts, sourceTotal] = await Promise.all([
-      withBlogFallback(
+      withBlogTimeoutFallback(
         () =>
           prisma.blogPost.findMany({
             where: sourceWhere,
@@ -113,8 +127,11 @@ export async function getPublishedBlogPostsPage(
             take: safeSize,
           }),
         [],
+        "blog_posts_page.source_posts",
       ),
-      includeTotal ? withBlogFallback(() => prisma.blogPost.count({ where: sourceWhere }), 0) : Promise.resolve(0),
+      includeTotal
+        ? withBlogTimeoutFallback(() => prisma.blogPost.count({ where: sourceWhere }), 0, "blog_posts_page.source_total")
+        : Promise.resolve(0),
     ]);
     return { posts: sourcePosts, total: sourceTotal, page: safePage, pageSize: safeSize };
   }
@@ -154,14 +171,14 @@ const metaSelect = {
 export type BlogPostMeta = Prisma.BlogPostGetPayload<{ select: typeof metaSelect }>;
 
 async function resolveScopedBlogPostBySlug(slug: string, scope?: BlogQueryScope): Promise<BlogPost | null> {
-  const db = await withBlogFallback(() => prisma.blogPost.findUnique({ where: { slug } }), null);
+  const db = await withBlogTimeoutFallback(() => prisma.blogPost.findUnique({ where: { slug } }), null, "blog_post.by_slug");
   if (db) {
     const careerMatches = !scope?.careerSlug || !db.careerSlug || db.careerSlug === scope.careerSlug;
     const examMatches = !scope?.exam || db.exam === scope.exam;
     if (!scope?.locale && careerMatches && examMatches) return db;
     if (scope?.locale && db.locale === scope.locale && careerMatches && examMatches) return db;
     if (scope?.locale && db.translationGroupId) {
-      const localizedVariant = await withBlogFallback(
+      const localizedVariant = await withBlogTimeoutFallback(
         () =>
           prisma.blogPost.findFirst({
             where: {
@@ -175,6 +192,7 @@ async function resolveScopedBlogPostBySlug(slug: string, scope?: BlogQueryScope)
             orderBy: { updatedAt: "desc" },
           }),
         null,
+        "blog_post.localized_variant",
       );
       if (localizedVariant) return localizedVariant;
     }
@@ -182,7 +200,7 @@ async function resolveScopedBlogPostBySlug(slug: string, scope?: BlogQueryScope)
   }
   if (!scope?.locale) return null;
   const sourceLocale = scope.sourceLocale ?? "en";
-  const byLocalizedSlug = await withBlogFallback(
+  const byLocalizedSlug = await withBlogTimeoutFallback(
     () =>
       prisma.blogPost.findFirst({
         where: {
@@ -195,9 +213,10 @@ async function resolveScopedBlogPostBySlug(slug: string, scope?: BlogQueryScope)
         },
       }),
     null,
+    "blog_post.by_localized_slug",
   );
   if (byLocalizedSlug) return byLocalizedSlug;
-  const canonical = await withBlogFallback(
+  const canonical = await withBlogTimeoutFallback(
     () =>
       prisma.blogPost.findFirst({
         where: {
@@ -210,10 +229,11 @@ async function resolveScopedBlogPostBySlug(slug: string, scope?: BlogQueryScope)
         },
       }),
     null,
+    "blog_post.canonical",
   );
   if (!canonical) return null;
   if (!canonical.translationGroupId) return canonical;
-  const localizedVariant = await withBlogFallback(
+  const localizedVariant = await withBlogTimeoutFallback(
     () =>
       prisma.blogPost.findFirst({
         where: {
@@ -227,6 +247,7 @@ async function resolveScopedBlogPostBySlug(slug: string, scope?: BlogQueryScope)
         orderBy: { updatedAt: "desc" },
       }),
     null,
+    "blog_post.canonical_localized_variant",
   );
   return localizedVariant ?? canonical;
 }
@@ -302,12 +323,13 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
 
 export async function countPublishedPostsWithTag(tag: string): Promise<number> {
   const now = new Date();
-  return withBlogFallback(
+  return withBlogTimeoutFallback(
     () =>
       prisma.blogPost.count({
         where: { AND: [blogLiveWhere(now), { tags: { has: tag } }] },
       }),
     0,
+    "blog_posts_by_tag.count",
   );
 }
 
@@ -331,7 +353,7 @@ export async function getPublishedBlogPostsByTagPage(
   const now = new Date();
   const where = { AND: [blogLiveWhere(now), { tags: { has: tag } }] };
   const [posts, total] = await Promise.all([
-    withBlogFallback(
+    withBlogTimeoutFallback(
       () =>
         prisma.blogPost.findMany({
           where,
@@ -341,8 +363,9 @@ export async function getPublishedBlogPostsByTagPage(
           take: safeSize,
         }),
       [],
+      "blog_posts_by_tag.posts",
     ),
-    withBlogFallback(() => prisma.blogPost.count({ where }), 0),
+    withBlogTimeoutFallback(() => prisma.blogPost.count({ where }), 0, "blog_posts_by_tag.total"),
   ]);
   return { posts, total, page: safePage, pageSize: safeSize };
 }
@@ -352,7 +375,7 @@ const SITEMAP_BLOG_ROW_CAP = 50_000;
 
 export async function getSitemapPublishedBlogSlugs(): Promise<{ slug: string; updatedAt: Date }[]> {
   const now = new Date();
-  return withBlogFallback(
+  return withBlogTimeoutFallback(
     () =>
       prisma.blogPost.findMany({
         where: blogLiveWhere(now),
@@ -361,12 +384,14 @@ export async function getSitemapPublishedBlogSlugs(): Promise<{ slug: string; up
         take: SITEMAP_BLOG_ROW_CAP,
       }),
     [],
+    "blog_sitemap.slugs",
+    BLOG_SITEMAP_QUERY_TIMEOUT_MS,
   );
 }
 
 export async function getSitemapBlogTagRows(): Promise<{ tags: string[] }[]> {
   const now = new Date();
-  return withBlogFallback(
+  return withBlogTimeoutFallback(
     () =>
       prisma.blogPost.findMany({
         where: blogLiveWhere(now),
@@ -375,5 +400,7 @@ export async function getSitemapBlogTagRows(): Promise<{ tags: string[] }[]> {
         take: SITEMAP_BLOG_ROW_CAP,
       }),
     [],
+    "blog_sitemap.tags",
+    BLOG_SITEMAP_QUERY_TIMEOUT_MS,
   );
 }

@@ -39,6 +39,7 @@ export type PublicHomeStatsPayload = {
 };
 
 const HOME_STATS_SLOW_MS = 2500;
+const HOME_STATS_DB_DEADLINE_MS = 2500;
 
 /** Safe structured fallback when DB throws or routes need a 200 — never crashes callers. */
 export function getDegradedPublicHomeStatsFallback(
@@ -95,8 +96,8 @@ export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
     return await withPrismaReadDeadline(
       "public_home_stats_compute",
       () => computePublicHomeStats(t0),
-      getDegradedPublicHomeStatsFallback("deadline_exceeded"),
-      14_000,
+      getDegradedPublicHomeStatsFallback("db_timeout"),
+      HOME_STATS_DB_DEADLINE_MS,
     );
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);

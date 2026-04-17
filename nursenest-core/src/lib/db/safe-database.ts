@@ -33,6 +33,43 @@ export type DatabaseTimeoutLogContext = {
   label?: string;
 };
 
+export type DatabaseFallbackKind = "db_timeout" | "db_unreachable" | "db_auth_failure" | "db_error";
+
+function errorMessage(e: unknown): string {
+  return e instanceof Error ? e.message : String(e);
+}
+
+export function classifyDatabaseFallbackKind(e: unknown): DatabaseFallbackKind {
+  const msg = errorMessage(e);
+  const code = typeof e === "object" && e !== null && "code" in e ? String((e as { code?: string }).code ?? "") : "";
+  const haystack = `${code} ${msg}`.toLowerCase();
+
+  if (
+    haystack.includes("database_timeout") ||
+    /timeout|timed out|statement timeout|deadline exceeded|read deadline/i.test(haystack)
+  ) {
+    return "db_timeout";
+  }
+
+  if (
+    /p1000|authentication failed|password authentication failed|auth failed|permission denied|role .* does not exist/i.test(
+      haystack,
+    )
+  ) {
+    return "db_auth_failure";
+  }
+
+  if (
+    /p1001|can't reach database server|cannot reach database server|connection refused|econnrefused|enotfound|ehostunreach|server closed the connection unexpectedly|connection terminated|connection reset|econnreset/i.test(
+      haystack,
+    )
+  ) {
+    return "db_unreachable";
+  }
+
+  return "db_error";
+}
+
 export async function withDatabaseFallbackTimeout<T>(
   run: () => Promise<T>,
   fallback: T,
@@ -51,11 +88,16 @@ export async function withDatabaseFallbackTimeout<T>(
     ]);
   } catch (e) {
     if (logCtx?.label) {
-      const timeout = e instanceof Error && e.message === "database_timeout";
-      safeServerLog(logCtx.scope ?? "database", timeout ? "database_read_timeout" : "database_read_error", {
+      const kind = classifyDatabaseFallbackKind(e);
+      safeServerLog(logCtx.scope ?? "database", kind, {
         label: logCtx.label,
         timeout_ms: timeoutMs,
-        ...(timeout ? {} : { detail: (e instanceof Error ? e.message : String(e)).slice(0, 200) }),
+        ...(kind === "db_timeout" ? {} : { detail: errorMessage(e).slice(0, 200) }),
+      });
+      safeServerLog(logCtx.scope ?? "database", "fallback_used", {
+        label: logCtx.label,
+        reason: kind,
+        timeout_ms: timeoutMs,
       });
     }
     return fallback;

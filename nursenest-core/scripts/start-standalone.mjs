@@ -10,8 +10,12 @@ import { once } from "node:events";
 import { setTimeout as sleep } from "node:timers/promises";
 import { existsSync } from "node:fs";
 import { spawn } from "node:child_process";
+import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+
+const require = createRequire(import.meta.url);
+const { childOutputIndicatesReady } = require("./standalone-startup-watchdog-shared.cjs");
 
 const bootAt = Date.now();
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -112,13 +116,7 @@ function waitForChildReadiness({ internalPort, state }) {
           req.end();
         });
 
-        state.handlersReady = true;
-        emit("handlers_ready", {
-          pid: process.pid,
-          childPid: state.childPid,
-          internalPort,
-          publicPort,
-        });
+        markHandlersReady("internal_probe");
         return;
       } catch {
         await sleep(250);
@@ -162,6 +160,29 @@ const state = {
   childPid: null,
   handlersReady: false,
 };
+
+function markHandlersReady(reason) {
+  if (state.handlersReady) return;
+  state.handlersReady = true;
+  emit("handlers_ready", {
+    pid: process.pid,
+    childPid: state.childPid,
+    internalPort,
+    publicPort,
+    reason,
+  });
+}
+
+function monitorChildOutputForReadiness(stream) {
+  let buffer = "";
+  stream?.on("data", (chunk) => {
+    const text = chunk.toString();
+    buffer = `${buffer}${text}`.slice(-4096);
+    if (childOutputIndicatesReady(buffer)) {
+      markHandlersReady("child_ready_log");
+    }
+  });
+}
 
 const server = http.createServer((req, res) => {
   if (isBootstrapHealthzRequest(req)) {
@@ -226,6 +247,8 @@ const child = spawn(process.execPath, childArgs, {
   },
 });
 
+monitorChildOutputForReadiness(child.stdout);
+monitorChildOutputForReadiness(child.stderr);
 child.stdout?.on("data", (chunk) => process.stdout.write(chunk));
 child.stderr?.on("data", (chunk) => process.stderr.write(chunk));
 

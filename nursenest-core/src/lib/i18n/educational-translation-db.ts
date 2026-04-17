@@ -2,6 +2,7 @@ import "server-only";
 
 import { EducationalTranslationSourceKind, EducationalTranslationStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import type {
@@ -29,6 +30,8 @@ function asFlashcardBundlePatch(raw: unknown): Partial<FlashcardEducationalBundl
   return raw as Partial<FlashcardEducationalBundle>;
 }
 
+const EDUCATIONAL_TRANSLATION_PUBLIC_TIMEOUT_MS = 1200;
+
 /**
  * Published `PATHWAY_LESSON` rows keyed by `sourceId` (`pathwayId:slug` or `slug`).
  */
@@ -37,15 +40,22 @@ export async function fetchPublishedPathwayLessonOverlayMapSafe(
   locale: string,
 ): Promise<Record<string, PathwayLessonEducationalOverlay>> {
   if (locale === DEFAULT_MARKETING_LOCALE) return {};
-  try {
-    return await fetchPublishedPathwayLessonOverlayMap(locale);
-  } catch (e) {
-    safeServerLog("i18n", "educational_translation_pathway_lesson_db_failed", {
+  const out = await withDatabaseFallbackTimeout<Record<string, PathwayLessonEducationalOverlay> | null>(
+    () => fetchPublishedPathwayLessonOverlayMap(locale),
+    null,
+    EDUCATIONAL_TRANSLATION_PUBLIC_TIMEOUT_MS,
+    {
+      scope: "i18n",
+      label: `pathway_lesson_overlay:${locale}`,
+    },
+  );
+  if (out === null) {
+    safeServerLog("i18n", "educational_translation_pathway_lesson_overlay_fallback_used", {
       locale,
-      detail: e instanceof Error ? e.message : String(e),
     });
     return {};
   }
+  return out;
 }
 
 export async function fetchPublishedPathwayLessonOverlayMap(

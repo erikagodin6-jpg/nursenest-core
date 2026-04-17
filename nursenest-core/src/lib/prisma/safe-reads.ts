@@ -2,6 +2,7 @@
  * Noncritical Prisma reads: missing tables, schema drift, or connection blips must not take down routes.
  */
 
+import { classifyDatabaseFallbackKind } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -27,6 +28,9 @@ export async function safePrismaCount(
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     const hint = isNonFatalPrismaSchemaError(e) ? "schema_or_table" : "query";
+    const kind = classifyDatabaseFallbackKind(e);
+    safeServerLog("prisma", kind, { label, detail: msg.slice(0, 200) });
+    safeServerLog("prisma", "fallback_used", { label, reason: kind });
     return {
       value: 0,
       warning: `[${label}] ${hint}: ${msg.slice(0, 280)}`,
@@ -46,6 +50,9 @@ export async function withPrismaReadFallback<T>(
     return { value: await run() };
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
+    const kind = classifyDatabaseFallbackKind(e);
+    safeServerLog("prisma", kind, { label, detail: msg.slice(0, 200) });
+    safeServerLog("prisma", "fallback_used", { label, reason: kind });
     return {
       value: fallback,
       warning: `[${label}] ${isNonFatalPrismaSchemaError(e) ? "schema_or_table" : "read"}: ${msg.slice(0, 280)}`,
@@ -74,7 +81,8 @@ export async function withPrismaReadDeadline<T>(label: string, run: () => Promis
     ]);
   } catch (e) {
     if (e instanceof Error && e.message === DEADLINE_ERROR) {
-      safeServerLog("prisma", "read_deadline_exceeded", { label, timeoutMs });
+      safeServerLog("prisma", "db_timeout", { label, timeout_ms: timeoutMs });
+      safeServerLog("prisma", "fallback_used", { label, reason: "db_timeout", timeout_ms: timeoutMs });
       return fallback;
     }
     throw e;

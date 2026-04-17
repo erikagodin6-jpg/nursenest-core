@@ -13,9 +13,19 @@
 import "server-only";
 
 import { prisma } from "@/lib/db";
-import { withDatabaseFallback } from "@/lib/db/safe-database";
+import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
+
+const LOCALIZED_BLOG_PUBLIC_QUERY_TIMEOUT_MS = 2000;
+const LOCALIZED_BLOG_SITEMAP_TIMEOUT_MS = 1500;
+
+async function withLocalizedBlogFallback<T>(run: () => Promise<T>, fallback: T, label: string, timeoutMs = LOCALIZED_BLOG_PUBLIC_QUERY_TIMEOUT_MS): Promise<T> {
+  return withDatabaseFallbackTimeout(run, fallback, timeoutMs, {
+    scope: "localized_blog",
+    label,
+  });
+}
 
 // ── Manual types (replace with Prisma imports after prisma generate) ─────────
 
@@ -195,7 +205,7 @@ export async function getPublishedLocalizedBlogPostsPage(params: {
   const m = localizedModel();
 
   const [posts, total] = await Promise.all([
-    withDatabaseFallback(
+    withLocalizedBlogFallback(
       () =>
         m.findMany({
           where,
@@ -205,8 +215,9 @@ export async function getPublishedLocalizedBlogPostsPage(params: {
           take: safeSize,
         }) as Promise<LocalizedBlogIndexPost[]>,
       [] as LocalizedBlogIndexPost[],
+      "localized_blog_index.posts",
     ),
-    withDatabaseFallback(() => m.count({ where }), 0),
+    withLocalizedBlogFallback(() => m.count({ where }), 0, "localized_blog_index.total"),
   ]);
 
   if (shouldFallbackToEnglishLocale(params.locale, posts.length)) {
@@ -220,7 +231,7 @@ export async function getPublishedLocalizedBlogPostsPage(params: {
       ],
     };
     const [fallbackPosts, fallbackTotal] = await Promise.all([
-      withDatabaseFallback(
+      withLocalizedBlogFallback(
         () =>
           m.findMany({
             where: fallbackWhere,
@@ -230,8 +241,9 @@ export async function getPublishedLocalizedBlogPostsPage(params: {
             take: safeSize,
           }) as Promise<LocalizedBlogIndexPost[]>,
         [] as LocalizedBlogIndexPost[],
+        "localized_blog_index.english_fallback_posts",
       ),
-      withDatabaseFallback(() => m.count({ where: fallbackWhere }), 0),
+      withLocalizedBlogFallback(() => m.count({ where: fallbackWhere }), 0, "localized_blog_index.english_fallback_total"),
     ]);
     return { posts: fallbackPosts, total: fallbackTotal, page: safePage, pageSize: safeSize };
   }
@@ -288,7 +300,7 @@ export async function getPublishedLocalizedBlogBySlug(params: {
 }): Promise<LocalizedBlogFullPost | null> {
   const now = new Date();
   const m = localizedModel();
-  const rows = await withDatabaseFallback(
+  const rows = await withLocalizedBlogFallback(
     () =>
       m.findMany({
         where: {
@@ -302,11 +314,12 @@ export async function getPublishedLocalizedBlogBySlug(params: {
         take: 1,
       }) as Promise<LocalizedBlogFullPost[]>,
     [] as LocalizedBlogFullPost[],
+    "localized_blog_post.primary",
   );
 
   const row = rows[0] ?? null;
   if (shouldFallbackToEnglishLocale(params.locale, row ? 1 : 0)) {
-    const fallbackRows = await withDatabaseFallback(
+    const fallbackRows = await withLocalizedBlogFallback(
       () =>
         m.findMany({
           where: buildLocalizedEnglishFallbackWhere({
@@ -319,6 +332,7 @@ export async function getPublishedLocalizedBlogBySlug(params: {
           take: 1,
         }) as Promise<LocalizedBlogFullPost[]>,
       [] as LocalizedBlogFullPost[],
+      "localized_blog_post.english_fallback",
     );
     const fallback = fallbackRows[0] ?? null;
     if (!fallback) return null;
@@ -342,7 +356,7 @@ export async function getPublishedVariantsForCanonical(canonicalArticleId: strin
 > {
   const now = new Date();
   const m = localizedModel();
-  return withDatabaseFallback(
+  return withLocalizedBlogFallback(
     () =>
       m.findMany({
         where: {
@@ -358,6 +372,7 @@ export async function getPublishedVariantsForCanonical(canonicalArticleId: strin
         },
       }) as Promise<{ locale: string; region: string; profession: string | null; exam: string | null; localizedSlug: string }[]>,
     [],
+    "localized_blog_post.variants",
   );
 }
 
@@ -370,7 +385,7 @@ export async function getSitemapLocalizedBlogRows(): Promise<
 > {
   const now = new Date();
   const m = localizedModel();
-  return withDatabaseFallback(
+  return withLocalizedBlogFallback(
     () =>
       m.findMany({
         where: localizedBlogLiveWhere(now),
@@ -386,6 +401,8 @@ export async function getSitemapLocalizedBlogRows(): Promise<
         take: SITEMAP_CAP,
       }) as Promise<{ locale: string; region: string; profession: string | null; exam: string | null; localizedSlug: string; updatedAt: Date }[]>,
     [],
+    "localized_blog_sitemap.rows",
+    LOCALIZED_BLOG_SITEMAP_TIMEOUT_MS,
   );
 }
 

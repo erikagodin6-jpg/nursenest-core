@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const test = require("node:test");
 
 const {
+  childOutputIndicatesReady,
   createStartupWatchdogLogger,
   formatStartupWatchdogLine,
   resolveStandaloneNextModulePath,
@@ -66,4 +67,10 @@ test("resolves standalone next internals from the traced server entry", () => {
     resolved,
     "/workspace/nursenest-core/.next/standalone/nursenest-core/node_modules/next/dist/server/lib/app-info-log",
   );
+});
+
+test("detects Next ready output lines", () => {
+  assert.equal(childOutputIndicatesReady("✓ Ready in 0ms\n"), true);
+  assert.equal(childOutputIndicatesReady("noise\n✓ Ready in 123ms\nmore"), true);
+  assert.equal(childOutputIndicatesReady("preloading modules"), false);
 });
