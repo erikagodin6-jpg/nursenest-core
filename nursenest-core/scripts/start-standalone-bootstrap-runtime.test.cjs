@@ -129,7 +129,6 @@ test("standalone runtime serves the internal bootstrap probe directly and flips 
   assert.equal(await headRes.text(), "");
 
   await waitForLog("startup_watchdog bootstrap_healthz_intercepted");
-  await waitForLog("startup_watchdog bootstrap_child_probe_intercepted");
   await waitForLog("startup_watchdog internal_probe_response");
   await waitForLog("startup_watchdog handlers_ready");
 

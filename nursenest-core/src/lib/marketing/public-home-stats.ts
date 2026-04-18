@@ -45,6 +45,106 @@ export type PublicHomeStatsPayload = {
 
 const HOME_STATS_SLOW_MS = 2500;
 const HOME_STATS_DB_DEADLINE_MS = 800;
+const HOME_STATS_HOMEPAGE_MEMORY_TTL_MS = 5 * 60_000;
+const HOME_STATS_HOMEPAGE_SHARED_CACHE_BUDGET_MS = 75;
+const HOME_STATS_HOMEPAGE_REFRESH_BUDGET_MS = 1200;
+const HOME_STATS_HOMEPAGE_REFRESH_COOLDOWN_MS = 15_000;
+
+type HomeStatsMemorySnapshot = {
+  payload: PublicHomeStatsPayload;
+  cachedAtMs: number;
+};
+
+type HomeStatsMemoryState = {
+  snapshot?: HomeStatsMemorySnapshot;
+  inflightRefresh?: Promise<void>;
+  lastRefreshStartedAtMs?: number;
+};
+
+type GlobalHomeStatsState = typeof globalThis & {
+  __nursenestHomeStatsMemoryState?: HomeStatsMemoryState;
+};
+
+const HOME_STATS_CACHE_TIMEOUT = Symbol("home_stats_cache_timeout");
+
+function getHomeStatsMemoryState(): HomeStatsMemoryState {
+  const globalState = globalThis as GlobalHomeStatsState;
+  globalState.__nursenestHomeStatsMemoryState ??= {};
+  return globalState.__nursenestHomeStatsMemoryState;
+}
+
+function hasMeaningfulPublicHomeStats(payload: PublicHomeStatsPayload): boolean {
+  return payload.questionCount > 0 || payload.totalLessons > 0 || payload.registeredLearners > 0;
+}
+
+function isHomeStatsSnapshotFresh(cachedAtMs: number, nowMs = Date.now()): boolean {
+  return nowMs - cachedAtMs < HOME_STATS_HOMEPAGE_MEMORY_TTL_MS;
+}
+
+function setHomeStatsMemorySnapshot(payload: PublicHomeStatsPayload, cachedAtMs = Date.now()): void {
+  getHomeStatsMemoryState().snapshot = { payload, cachedAtMs };
+}
+
+async function readSharedHomeStatsWithinBudget(timeoutMs: number): Promise<PublicHomeStatsPayload | typeof HOME_STATS_CACHE_TIMEOUT> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      getCachedPublicHomeStats(),
+      new Promise<typeof HOME_STATS_CACHE_TIMEOUT>((resolve) => {
+        timer = setTimeout(() => resolve(HOME_STATS_CACHE_TIMEOUT), timeoutMs);
+      }),
+    ]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
+function scheduleHomepageHomeStatsRefresh(trigger: string): void {
+  const state = getHomeStatsMemoryState();
+  const nowMs = Date.now();
+  if (state.inflightRefresh) {
+    return;
+  }
+  if (
+    state.lastRefreshStartedAtMs &&
+    nowMs - state.lastRefreshStartedAtMs < HOME_STATS_HOMEPAGE_REFRESH_COOLDOWN_MS
+  ) {
+    return;
+  }
+
+  state.lastRefreshStartedAtMs = nowMs;
+  state.inflightRefresh = (async () => {
+    try {
+      const payload = await readSharedHomeStatsWithinBudget(HOME_STATS_HOMEPAGE_REFRESH_BUDGET_MS);
+      if (payload === HOME_STATS_CACHE_TIMEOUT) {
+        safeServerLog("marketing", "home_stats_fail_soft", {
+          reason: "background_refresh_timeout",
+          trigger,
+          timeout_ms: HOME_STATS_HOMEPAGE_REFRESH_BUDGET_MS,
+        });
+        return;
+      }
+      if (hasMeaningfulPublicHomeStats(payload)) {
+        setHomeStatsMemorySnapshot(payload);
+        return;
+      }
+      safeServerLog("marketing", "home_stats_fail_soft", {
+        reason: payload.degraded ? "background_refresh_degraded" : "background_refresh_empty",
+        trigger,
+      });
+    } catch (e) {
+      const message = e instanceof Error ? e.message : String(e);
+      safeServerLog("marketing", "home_stats_fail_soft", {
+        reason: "background_refresh_exception",
+        trigger,
+        message: message.slice(0, 200),
+      });
+    } finally {
+      getHomeStatsMemoryState().inflightRefresh = undefined;
+    }
+  })();
+}
+
 /** Safe structured fallback when DB throws or routes need a 200 — never crashes callers. */
 export function getDegradedPublicHomeStatsFallback(
   reason: string,
@@ -124,6 +224,71 @@ export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
       }
     },
   );
+}
+
+/**
+ * Homepage-only stats path: prefer fast in-process stale data, then a tiny shared-cache budget,
+ * and otherwise fail soft immediately while a bounded refresh happens off the critical path.
+ */
+export async function getHomepagePublicHomeStats(): Promise<PublicHomeStatsPayload> {
+  const nowMs = Date.now();
+  const memorySnapshot = getHomeStatsMemoryState().snapshot;
+  if (memorySnapshot) {
+    const stale = !isHomeStatsSnapshotFresh(memorySnapshot.cachedAtMs, nowMs);
+    safeServerLog("marketing", "home_stats_cache_hit", {
+      source: "memory",
+      stale,
+      age_ms: nowMs - memorySnapshot.cachedAtMs,
+    });
+    if (stale) {
+      scheduleHomepageHomeStatsRefresh("memory_stale");
+    }
+    return memorySnapshot.payload;
+  }
+
+  const sharedCachePayload = await readSharedHomeStatsWithinBudget(HOME_STATS_HOMEPAGE_SHARED_CACHE_BUDGET_MS);
+  if (sharedCachePayload !== HOME_STATS_CACHE_TIMEOUT) {
+    if (hasMeaningfulPublicHomeStats(sharedCachePayload)) {
+      setHomeStatsMemorySnapshot(sharedCachePayload, nowMs);
+      safeServerLog("marketing", "home_stats_cache_hit", {
+        source: "shared_cache",
+        stale: false,
+      });
+      return sharedCachePayload;
+    }
+    safeServerLog("marketing", "home_stats_fail_soft", {
+      reason: sharedCachePayload.degraded ? "shared_cache_degraded" : "shared_cache_empty",
+    });
+    return getDegradedPublicHomeStatsFallback(
+      sharedCachePayload.degraded ? "shared_cache_degraded" : "shared_cache_empty",
+      { silent: true },
+    );
+  }
+
+  safeServerLog("marketing", "home_stats_cache_miss", {
+    source: "shared_cache",
+    timeout_ms: HOME_STATS_HOMEPAGE_SHARED_CACHE_BUDGET_MS,
+  });
+
+  if (shouldBypassPublicHomeStatsDbAtStartup()) {
+    safeServerLog("marketing", "home_stats_fail_soft", {
+      reason: "startup_window_optional_db_skipped",
+    });
+    return getDegradedPublicHomeStatsFallback("startup_window_optional_db_skipped", { silent: true });
+  }
+
+  if (!isDatabaseUrlConfigured() || isRuntimeSafeMode()) {
+    const reason = !isDatabaseUrlConfigured() ? "database_url_missing" : "runtime_safe_mode";
+    safeServerLog("marketing", "home_stats_fail_soft", { reason });
+    return getDegradedPublicHomeStatsFallback(reason, { silent: true });
+  }
+
+  scheduleHomepageHomeStatsRefresh("shared_cache_miss");
+  safeServerLog("marketing", "home_stats_fail_soft", {
+    reason: "shared_cache_timeout",
+    timeout_ms: HOME_STATS_HOMEPAGE_SHARED_CACHE_BUDGET_MS,
+  });
+  return getDegradedPublicHomeStatsFallback("shared_cache_timeout", { silent: true });
 }
 
 

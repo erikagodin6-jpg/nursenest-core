@@ -13,6 +13,7 @@ import {
   captureSentrySoftError,
   withSentryServerSpan,
 } from "@/lib/observability/sentry-route-observability";
+import { shouldBypassMarketingI18nAtStartup } from "@/lib/marketing-i18n/marketing-i18n-startup";
 import { PUBLIC_I18N_SHARD_FILENAMES } from "@shared/i18n-shard-policy";
 
 /**
@@ -318,6 +319,14 @@ export const loadMarketingMessages = cache(async function loadMarketingMessages(
       attributes: { locale },
     },
     async () => {
+      if (shouldBypassMarketingI18nAtStartup()) {
+        safeServerLog("i18n", "marketing_i18n_startup_bypass", {
+          locale,
+          mode: "merged",
+        });
+        return {} as MarketingMessages;
+      }
+
       const disk = loadFromDiskSync(locale);
       if (disk) return disk;
 

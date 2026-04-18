@@ -37,7 +37,7 @@ if (process.env.NODE_ENV !== "production") {
 
 const publicPort = Number.parseInt(process.env.PORT ?? "3000", 10) || 3000;
 const publicHost = process.env.HOSTNAME || "0.0.0.0";
-const internalHost = "localhost";
+const internalHost = "127.0.0.1";
 const livenessProbePath = "/healthz";
 const readinessProbePath = "/readyz";
 /**
@@ -100,19 +100,19 @@ function waitForChildReadiness({ state }) {
         throw new Error("standalone child exited before handlers became ready");
       }
       if (Date.now() - startedAt > bootstrapReadyTimeoutMs) {
-        throw new Error(`standalone child never answered ${childHealthProbeUrl(publicPort)} within ${bootstrapReadyTimeoutMs}ms`);
+        throw new Error(`standalone child never answered ${childHealthProbeUrl(internalPort)} within ${bootstrapReadyTimeoutMs}ms`);
       }
 
       try {
         attempt += 1;
-        await probeChildHealth(publicPort, attempt);
+        await probeChildHealth(internalPort, attempt);
 
         markHandlersReady("internal_probe");
         return;
       } catch (error) {
         emit("internal_probe_error", {
           attempt,
-          probeUrl: childHealthProbeUrl(publicPort),
+          probeUrl: childHealthProbeUrl(internalPort),
           error: error instanceof Error ? error.message : String(error),
           code:
             error && typeof error === "object" && "code" in error && typeof error.code === "string"
@@ -272,7 +272,7 @@ async function handleBootstrapRequest(req, res) {
     }
 
     try {
-      await probeChildHealth(publicPort);
+      await probeChildHealth(internalPort);
       res.statusCode = 200;
       res.setHeader("content-type", "text/plain; charset=utf-8");
       res.setHeader("cache-control", "no-store");

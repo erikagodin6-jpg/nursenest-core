@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
-import { getCachedPublicHomeStats } from "@/lib/marketing/public-home-stats";
+import { getHomepagePublicHomeStats } from "@/lib/marketing/public-home-stats";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
@@ -65,7 +65,7 @@ export default async function LocalizedHomePage({ params }: Props) {
   const raw = marketingHomeSurfaceBreadcrumbs();
   const marketingRegion = await getMarketingRegionFromCookies();
   const [homeStatsRaw, primary, en, publishedGlobalRegionCardIds] = await Promise.all([
-    getCachedPublicHomeStats(),
+    getHomepagePublicHomeStats(),
     loadMarketingMessages(locale),
     loadMarketingMessages(DEFAULT_MARKETING_LOCALE),
     listPublishedHomeGlobalRegionCardIds(),

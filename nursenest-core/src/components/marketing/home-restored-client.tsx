@@ -48,7 +48,8 @@ export type HomeRestoredClientProps = {
 /**
  * Homepage: hero → product screenshots → sample proof → trust strip → trust Q&A → pathways → how it works → platform proof → differentiation → objection FAQ → final CTA.
  *
- * Stats are resolved on the server (`getCachedPublicHomeStats`) and passed in so the hero/trust sections paint real numbers on first paint—no client waterfall or 0→value jumps.
+ * Stats are resolved on the server and passed in so the hero/trust sections avoid any client waterfall.
+ * When optional stats are unavailable, the downstream sections already degrade to copy-only fallback states.
  */
 export default function HomeRestoredClient({ homeMarketingStats, publishedGlobalRegionCardIds }: HomeRestoredClientProps) {
   const { locale, t } = useMarketingI18n();

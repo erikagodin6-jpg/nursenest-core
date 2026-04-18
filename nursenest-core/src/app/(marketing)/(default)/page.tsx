@@ -7,8 +7,8 @@ import { MARKETING_HOME_FAQ_JSONLD } from "@/lib/seo/marketing-home-faq-schema";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
 import {
-  getCachedPublicHomeStats,
   getDegradedPublicHomeStatsFallback,
+  getHomepagePublicHomeStats,
 } from "@/lib/marketing/public-home-stats";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -101,7 +101,7 @@ export default async function HomePage() {
       const [homeStatsRaw, m, publishedGlobalRegionCardIds, blogTeaserPosts] = await Promise.all([
         skipOptionalDbReads
           ? Promise.resolve(getDegradedPublicHomeStatsFallback("production_request_optional_db_skipped"))
-          : getCachedPublicHomeStats(),
+          : getHomepagePublicHomeStats(),
         loadMarketingMessages(STATIC_LOCALE),
         Promise.resolve(listPublishedHomeGlobalRegionCardIds()),
         skipOptionalDbReads ? Promise.resolve([]) : loadHomeBlogTeaserPostsSafe(3),

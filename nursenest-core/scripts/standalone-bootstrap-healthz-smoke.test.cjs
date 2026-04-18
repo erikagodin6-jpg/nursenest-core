@@ -153,6 +153,7 @@ test("child preload serves /_nn_bootstrap_ready_check__ before request handlers 
     const getRes = await request({ port, method: "GET", path: "/_nn_bootstrap_ready_check__" });
     assert.equal(getRes.statusCode, 200, stderr);
     assert.equal(getRes.body, "ok");
+    assert.notEqual(getRes.body, "late-handler");
     assert.equal(getRes.headers["cache-control"], "no-store");
 
     const headRes = await request({ port, method: "HEAD", path: "/_nn_bootstrap_ready_check__" });

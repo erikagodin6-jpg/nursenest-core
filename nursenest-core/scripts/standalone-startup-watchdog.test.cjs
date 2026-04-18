@@ -93,10 +93,10 @@ test("bootstrap runtime probes the private non-api readiness path", () => {
   assert.equal(source.includes('const childHealthProbePath = "/api/health";'), false);
 });
 
-test("bootstrap runtime probes the child via localhost and emits probe diagnostics", () => {
+test("bootstrap runtime probes the child via the internal loopback host and emits probe diagnostics", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
-  assert.equal(source.includes('const internalHost = "localhost";'), true);
-  assert.equal(source.includes('const internalHost = "127.0.0.1";'), false);
+  assert.equal(source.includes('const internalHost = "127.0.0.1";'), true);
+  assert.equal(source.includes('const internalHost = "localhost";'), false);
   assert.equal(source.includes('emit("internal_probe_attempt"'), true);
   assert.equal(source.includes('emit("internal_probe_response"'), true);
   assert.equal(source.includes('emit("internal_probe_error"'), true);
@@ -108,9 +108,18 @@ test("bootstrap runtime serves the internal probe path directly from the parent 
   assert.equal(source.includes('emit("bootstrap_child_probe_intercepted"'), true);
 });
 
-test("bootstrap readiness loop probes the bootstrap-served path on the public port", () => {
+test("bootstrap readiness loop probes the child path on the internal port", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
-  assert.equal(source.includes("await probeChildHealth(publicPort, attempt)"), true);
+  assert.equal(source.includes("await probeChildHealth(internalPort, attempt)"), true);
+  assert.equal(source.includes("await probeChildHealth(publicPort, attempt)"), false);
+});
+
+test("bootstrap timeout and readyz re-probe both target the internal port", () => {
+  const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
+  assert.equal(source.includes("standalone child never answered ${childHealthProbeUrl(internalPort)}"), true);
+  assert.equal(source.includes("standalone child never answered ${childHealthProbeUrl(publicPort)}"), false);
+  assert.equal(source.includes("await probeChildHealth(internalPort);"), true);
+  assert.equal(source.includes("await probeChildHealth(publicPort);"), false);
 });
 
 test("bootstrap runtime never force-marks handlers ready", () => {

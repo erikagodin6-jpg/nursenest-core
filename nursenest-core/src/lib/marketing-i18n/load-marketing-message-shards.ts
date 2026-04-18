@@ -7,6 +7,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { withSentryServerSpan } from "@/lib/observability/sentry-route-observability";
 import type { I18nShardFilename } from "@shared/i18n-shard-policy";
 import { readCachedI18nJsonFile } from "@/lib/i18n/i18n-translation-cache";
+import { shouldBypassMarketingI18nAtStartup } from "@/lib/marketing-i18n/marketing-i18n-startup";
 
 const mergedShardCache = new Map<string, MarketingMessages>();
 
@@ -117,6 +118,16 @@ export const loadMarketingMessageShards = cache(async function loadMarketingMess
       op: "resource.load",
       attributes: { locale, shardCount: shards.length },
     },
-    async () => loadMarketingMessageShardsSync(locale, shards),
+    async () => {
+      if (shouldBypassMarketingI18nAtStartup()) {
+        safeServerLog("i18n", "marketing_i18n_startup_bypass", {
+          locale,
+          mode: "shards",
+          shard_count: shards.length,
+        });
+        return {};
+      }
+      return loadMarketingMessageShardsSync(locale, shards);
+    },
   );
 });
