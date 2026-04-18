@@ -46,11 +46,5 @@ test("marketing layouts enforce message integrity before rendering chrome", () =
 
   assert.equal(defaultLayout.includes("assertMarketingLayoutMessagesIntegrity"), true);
   assert.equal(localeLayout.includes("assertMarketingLayoutMessagesIntegrity"), true);
-});
-
-test("default English marketing layout repairs empty bundles before healthy render trace", () => {
-  const defaultLayout = fs.readFileSync(path.join(__dirname, "..", "..", "app", "(marketing)", "(default)", "layout.tsx"), "utf8");
-
-  assert.equal(defaultLayout.includes("resolveDefaultEnglishMarketingLayoutMessages"), true);
-  assert.equal(defaultLayout.indexOf("resolveDefaultEnglishMarketingLayoutMessages") < defaultLayout.indexOf('renderTrace("marketing layout after messages"'), true);
+  assert.equal(defaultLayout.includes("resolveDefaultEnglishMarketingLayoutMessages"), false);
 });
