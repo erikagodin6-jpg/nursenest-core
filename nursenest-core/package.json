@@ -363,6 +363,7 @@
     "@radix-ui/react-accordion": "^1.2.12",
     "@sentry/nextjs": "^10.46.0",
     "@tanstack/react-virtual": "^3.13.23",
+    "@tailwindcss/postcss": "^4",
     "bcryptjs": "^2.4.3",
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.562.0",
@@ -380,7 +381,6 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.51.0",
-    "@tailwindcss/postcss": "^4",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/pg": "^8.20.0",
