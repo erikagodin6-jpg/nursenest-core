@@ -10,7 +10,7 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { maxSafeOffsetPage, parseLessonLibraryLimit } from "@/lib/api/api-pagination-limits";
 import { prisma } from "@/lib/db";
-import { withDatabaseFallback, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
+import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import {
   pathwayLessonsAppListWhereWithTopicFilter,

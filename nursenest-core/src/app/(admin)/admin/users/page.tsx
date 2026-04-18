@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/guards";
 import { prisma } from "@/lib/db";
+import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { loadAdminUserSearch } from "@/lib/admin/load-admin-user-search";
 import { AdminUserSearchPanel } from "@/components/admin/admin-user-search-panel";
 import { UserRole } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
+
+const ADMIN_USERS_DB_TIMEOUT_MS = 1800;
 
 export default async function AdminUsersPage({
   searchParams,
@@ -15,19 +18,49 @@ export default async function AdminUsersPage({
   await requireAdmin();
   const sp = await searchParams;
   const q = sp.q?.trim() ?? "";
-  const initialRows = q.length >= 2 ? await loadAdminUserSearch(q) : null;
+  const initialRows =
+    q.length >= 2
+      ? await withDatabaseFallbackTimeout(
+          () => loadAdminUserSearch(q),
+          [],
+          ADMIN_USERS_DB_TIMEOUT_MS,
+          { scope: "admin_users", label: "support_search" },
+        )
+      : null;
 
   const [recent, byCountry, byTier] = await Promise.all([
-    prisma.user.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 40,
-      select: { id: true, email: true, name: true, role: true, country: true, tier: true, createdAt: true, trialStatus: true },
-    }),
-    prisma.user.groupBy({ by: ["country"], _count: { _all: true } }),
-    prisma.user.groupBy({ by: ["tier"], _count: { _all: true } }),
+    withDatabaseFallbackTimeout(
+      () =>
+        prisma.user.findMany({
+          orderBy: { createdAt: "desc" },
+          take: 40,
+          select: { id: true, email: true, name: true, role: true, country: true, tier: true, createdAt: true, trialStatus: true },
+        }),
+      [],
+      ADMIN_USERS_DB_TIMEOUT_MS,
+      { scope: "admin_users", label: "recent_registrations" },
+    ),
+    withDatabaseFallbackTimeout(
+      () => prisma.user.groupBy({ by: ["country"], _count: { _all: true } }),
+      [],
+      ADMIN_USERS_DB_TIMEOUT_MS,
+      { scope: "admin_users", label: "country_distribution" },
+    ),
+    withDatabaseFallbackTimeout(
+      () => prisma.user.groupBy({ by: ["tier"], _count: { _all: true } }),
+      [],
+      ADMIN_USERS_DB_TIMEOUT_MS,
+      { scope: "admin_users", label: "tier_distribution" },
+    ),
   ]);
 
-  const learners = await prisma.user.count({ where: { role: UserRole.LEARNER } });
+  const learners = await withDatabaseFallbackTimeout(
+    () => prisma.user.count({ where: { role: UserRole.LEARNER } }),
+    0,
+    ADMIN_USERS_DB_TIMEOUT_MS,
+    { scope: "admin_users", label: "learner_count" },
+  );
+  const usingFallback = recent.length === 0 && byCountry.length === 0 && byTier.length === 0 && learners === 0;
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -48,6 +81,12 @@ export default async function AdminUsersPage({
       <div className="mt-8">
         <AdminUserSearchPanel key={q || "home"} initialQuery={q} initialRows={initialRows} />
       </div>
+
+      {usingFallback ? (
+        <section className="mt-8 nn-card p-6 text-sm text-[var(--semantic-text-secondary)]">
+          User analytics are temporarily unavailable while database reads recover. Support search will return once the database is responsive again.
+        </section>
+      ) : null}
 
       <section className="mt-8 grid gap-6 lg:grid-cols-2">
         <div className="nn-card p-6">

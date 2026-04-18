@@ -5,7 +5,7 @@ import { ContentStatus } from "@prisma/client";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveDefaultPathwayIdForOnboarding } from "@/lib/onboarding/resolve-default-pathway-for-onboarding";
@@ -15,6 +15,8 @@ import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const dynamic = "force-dynamic";
+
+const START_STUDYING_DB_TIMEOUT_MS = 1500;
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -38,15 +40,50 @@ export default async function StartStudyingPage() {
     redirect(loginWithCallback("/app/start-studying"));
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      onboardingCompletedAt: true,
-      learnerPath: true,
-      country: true,
-      examFocus: true,
-    },
-  });
+  const user = await withDatabaseFallbackTimeout(
+    () =>
+      prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          onboardingCompletedAt: true,
+          learnerPath: true,
+          country: true,
+          examFocus: true,
+        },
+      }),
+    null,
+    START_STUDYING_DB_TIMEOUT_MS,
+    { scope: "start_studying", label: "profile_user" },
+  );
+
+  if (!user) {
+    const fallbackCrumbs: BreadcrumbCrumb[] = [
+      { name: "Home", href: "/", i18nKey: "breadcrumbs.home" },
+      { name: "Dashboard", href: "/app" },
+      { name: t("learner.startStudying.heroTitle"), href: undefined },
+    ];
+    return (
+      <div className="space-y-8">
+        <BreadcrumbTrail items={fallbackCrumbs} />
+        <header className="nn-learner-page-hero">
+          <h1 className="text-2xl font-extrabold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">
+            {t("learner.startStudying.heroTitle")}
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            Start Studying is temporarily unavailable while your learner profile reloads. Open the dashboard or try again shortly.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link href="/app" className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm">
+              Back to dashboard
+            </Link>
+            <Link href="/app/lessons" className="rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold">
+              Lessons
+            </Link>
+          </div>
+        </header>
+      </div>
+    );
+  }
 
   if (!user?.onboardingCompletedAt) {
     redirect("/app/onboarding");
@@ -63,12 +100,43 @@ export default async function StartStudyingPage() {
 
   const firstLessonRaw =
     pathwayId != null
-      ? await prisma.pathwayLesson.findFirst({
-          where: {
-            pathwayId,
-            status: ContentStatus.PUBLISHED,
-            locale: lessonLocale,
-          },
+      ? await withDatabaseFallbackTimeout(
+          () =>
+            prisma.pathwayLesson.findFirst({
+              where: {
+                pathwayId,
+                status: ContentStatus.PUBLISHED,
+                locale: lessonLocale,
+              },
+              orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }],
+              select: {
+                id: true,
+                title: true,
+                topic: true,
+                slug: true,
+                topicSlug: true,
+                bodySystem: true,
+                previewSectionCount: true,
+                seoTitle: true,
+                seoDescription: true,
+                locale: true,
+                structuralPublicComplete: true,
+              },
+            }),
+          null,
+          START_STUDYING_DB_TIMEOUT_MS,
+          { scope: "start_studying", label: "first_lesson_primary_locale" },
+        )
+      : null;
+  let firstLesson = firstLessonRaw;
+  if (firstLessonRaw && pathwayId != null && !firstLessonRaw.structuralPublicComplete) {
+    firstLesson = null;
+  }
+  if (!firstLesson && pathwayId != null && lessonLocale !== "en") {
+    const fallbackRaw = await withDatabaseFallbackTimeout(
+      () =>
+        prisma.pathwayLesson.findFirst({
+          where: { pathwayId, status: ContentStatus.PUBLISHED, locale: "en" },
           orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }],
           select: {
             id: true,
@@ -83,30 +151,11 @@ export default async function StartStudyingPage() {
             locale: true,
             structuralPublicComplete: true,
           },
-        })
-      : null;
-  let firstLesson = firstLessonRaw;
-  if (firstLessonRaw && pathwayId != null && !firstLessonRaw.structuralPublicComplete) {
-    firstLesson = null;
-  }
-  if (!firstLesson && pathwayId != null && lessonLocale !== "en") {
-    const fallbackRaw = await prisma.pathwayLesson.findFirst({
-      where: { pathwayId, status: ContentStatus.PUBLISHED, locale: "en" },
-      orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }],
-      select: {
-        id: true,
-        title: true,
-        topic: true,
-        slug: true,
-        topicSlug: true,
-        bodySystem: true,
-        previewSectionCount: true,
-        seoTitle: true,
-        seoDescription: true,
-        locale: true,
-        structuralPublicComplete: true,
-      },
-    });
+        }),
+      null,
+      START_STUDYING_DB_TIMEOUT_MS,
+      { scope: "start_studying", label: "first_lesson_fallback_locale" },
+    );
     if (fallbackRaw?.structuralPublicComplete) {
       firstLesson = fallbackRaw;
     }

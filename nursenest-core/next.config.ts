@@ -148,7 +148,6 @@ const nextConfig: NextConfig = {
     cpus: 1,
     memoryBasedWorkersCount: true,
     externalDir: true,
-    optimizePackageImports: ["@prisma/client"],
   },
   webpack: (config) => {
     config.parallelism = 1;
