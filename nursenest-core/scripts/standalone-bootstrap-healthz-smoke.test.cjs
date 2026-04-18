@@ -62,6 +62,12 @@ function request({ port, method, path: reqPath }) {
   });
 }
 
+async function stopChild(child) {
+  if (child.exitCode != null || child.killed) return;
+  child.kill("SIGTERM");
+  await new Promise((resolve) => child.once("exit", resolve));
+}
+
 test("bootstrap /healthz returns 200 before handlersReady", async () => {
   const child = spawn(
     process.execPath,
@@ -110,7 +116,7 @@ test("bootstrap /healthz returns 200 before handlersReady", async () => {
     await new Promise((resolve) => setTimeout(resolve, 50));
     assert.match(stderr, /startup_watchdog bootstrap_healthz_intercepted/);
   } finally {
-    child.kill("SIGTERM");
+    await stopChild(child);
   }
 });
 
@@ -160,6 +166,6 @@ test("child preload serves /_nn_bootstrap_ready_check__ before request handlers 
     assert.equal(headRes.statusCode, 200, stderr);
     assert.equal(headRes.body, "");
   } finally {
-    child.kill("SIGTERM");
+    await stopChild(child);
   }
 });

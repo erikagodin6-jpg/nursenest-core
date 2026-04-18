@@ -19,7 +19,8 @@ import type { NextConfig } from "next";
 const monorepoRoot = fileURLToPath(new URL("..", import.meta.url));
 const require = createRequire(import.meta.url);
 
-const runHeavyBuildTasks = process.env.RUN_HEAVY_BUILD_TASKS !== "false";
+// Default off so plain `next build` does not require TS-only route generators from config evaluation.
+const runHeavyBuildTasks = process.env.RUN_HEAVY_BUILD_TASKS === "true";
 const sentryEnabled = process.env.SENTRY_ENABLED === "true";
 const sentryClientEnabled =
   process.env.NEXT_PUBLIC_SENTRY_ENABLED === "true" ||

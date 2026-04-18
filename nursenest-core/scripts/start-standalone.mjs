@@ -16,17 +16,13 @@ import { fileURLToPath } from "node:url";
 const bootAt = Date.now();
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const runtimeBootstrap = join(pkgRoot, "scripts", "start-standalone-runtime.cjs");
-const candidates = [
-  join(pkgRoot, ".next", "standalone", "nursenest-core", "server.js"),
-  join(pkgRoot, ".next", "standalone", "server.js"),
-];
-const entry = candidates.find((p) => existsSync(p));
+const entry = join(pkgRoot, ".next", "standalone", "nursenest-core", "server.js");
 
-if (!entry) {
+if (!existsSync(entry)) {
   console.error(
-    "[nursenest-core] FATAL: standalone server.js not found. Expected one of:\n" +
-      candidates.map((p) => `  - ${p}`).join("\n") +
-      "\n  Run `npm run build` from this package first.",
+    "[nursenest-core] FATAL: standalone server.js not found at:\n" +
+      `  - ${entry}` +
+      "\n  Run `npm run build:deploy` from this package first.",
   );
   process.exit(1);
 }
@@ -120,6 +116,12 @@ function waitForChildReadiness({ state }) {
         throw new Error("standalone child exited before handlers became ready");
       }
       if (Date.now() - startedAt > bootstrapReadyTimeoutMs) {
+        emit("internal_probe_exhausted", {
+          attempt,
+          probeUrl: childHealthProbeUrl(internalPort),
+          reason: "timeout",
+          timeoutMs: bootstrapReadyTimeoutMs,
+        });
         throw new Error(`standalone child never answered ${childHealthProbeUrl(internalPort)} within ${bootstrapReadyTimeoutMs}ms`);
       }
 
@@ -132,6 +134,13 @@ function waitForChildReadiness({ state }) {
       } catch (error) {
         if (attempt >= bootstrapReadyMaxAttempts) {
           const detail = error instanceof Error ? error.message : String(error);
+          emit("internal_probe_exhausted", {
+            attempt,
+            probeUrl: childHealthProbeUrl(internalPort),
+            reason: "attempt_cap",
+            maxAttempts: bootstrapReadyMaxAttempts,
+            error: detail,
+          });
           throw new Error(
             `standalone child never answered ${childHealthProbeUrl(internalPort)} after ${attempt} attempts: ${detail}`,
           );

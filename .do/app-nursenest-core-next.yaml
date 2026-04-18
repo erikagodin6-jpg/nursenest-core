@@ -31,7 +31,7 @@ services:
     # do NOT include `npm ci` here — that would double-install and waste build minutes.
     build_command: npm run build:deploy && npm prune --omit=dev
     # Standalone server only (next.config output:standalone). Do not use `next start`.
-    run_command: node scripts/start-standalone.mjs
+    run_command: npm run start
     http_port: 8080
     routes:
       - path: /

@@ -93,6 +93,14 @@ test("bootstrap runtime probes the private non-api readiness path", () => {
   assert.equal(source.includes('const childHealthProbePath = "/api/health";'), false);
 });
 
+test("bootstrap runtime resolves the exact nested standalone server entry and does not fall back", () => {
+  const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
+  assert.equal(source.includes('join(pkgRoot, ".next", "standalone", "nursenest-core", "server.js")'), true);
+  assert.equal(source.includes('join(pkgRoot, ".next", "standalone", "server.js")'), false);
+  assert.equal(source.includes("const candidates = ["), false);
+  assert.equal(source.includes("candidates.find"), false);
+});
+
 test("bootstrap runtime probes the child via the internal loopback host and emits probe diagnostics", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
   assert.equal(source.includes('const internalHost = "127.0.0.1";'), true);
@@ -127,8 +135,20 @@ test("bootstrap readiness loop has a bounded attempt cap before terminal failure
   assert.equal(source.includes("const bootstrapReadyMaxAttempts ="), true);
   assert.equal(source.includes('process.env.NN_BOOTSTRAP_READY_MAX_ATTEMPTS ?? "120"'), true);
   assert.equal(source.includes("if (attempt >= bootstrapReadyMaxAttempts)"), true);
+  assert.equal(source.includes('emit("internal_probe_exhausted"'), true);
+  assert.equal(source.includes('reason: "attempt_cap"'), true);
   assert.equal(
     source.includes("standalone child never answered ${childHealthProbeUrl(internalPort)} after ${attempt} attempts: ${detail}"),
+    true,
+  );
+});
+
+test("bootstrap readiness loop still has a timeout-based terminal failure", () => {
+  const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
+  assert.equal(source.includes("if (Date.now() - startedAt > bootstrapReadyTimeoutMs)"), true);
+  assert.equal(source.includes('reason: "timeout"'), true);
+  assert.equal(
+    source.includes("standalone child never answered ${childHealthProbeUrl(internalPort)} within ${bootstrapReadyTimeoutMs}ms"),
     true,
   );
 });
@@ -136,6 +156,14 @@ test("bootstrap readiness loop has a bounded attempt cap before terminal failure
 test("bootstrap readiness loop still marks handlers ready on successful probe", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
   assert.equal(source.includes('markHandlersReady("internal_probe")'), true);
+});
+
+test("bootstrap readiness exhaustion follows the deterministic shutdown path", () => {
+  const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
+  assert.equal(source.includes('emit("handlers_init_failed"'), true);
+  assert.equal(source.includes('child.kill("SIGTERM")'), true);
+  assert.equal(source.includes("await new Promise((resolve) => server.close(resolve));"), true);
+  assert.equal(source.includes("process.exit(1);"), true);
 });
 
 test("bootstrap runtime hard-guards child readiness probes to the internal port", () => {
@@ -166,11 +194,11 @@ test("bootstrap runtime skips the internal readiness probe loop when watchdog by
 });
 
 test("child preload recognizes the internal bootstrap ready probe path", () => {
-  assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/_nn_bootstrap_ready_check__" }), false);
-  assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/_nn_bootstrap_ready_check__?ts=1" }), false);
+  assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/_nn_bootstrap_ready_check__" }), true);
+  assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/_nn_bootstrap_ready_check__?ts=1" }), true);
 });
 
-test("bootstrap healthz helper does not serve the internal bootstrap ready probe directly", () => {
+test("bootstrap healthz helper serves the internal bootstrap ready probe directly", () => {
   const headers = new Map();
   const res = {
     statusCode: 0,
@@ -189,8 +217,8 @@ test("bootstrap healthz helper does not serve the internal bootstrap ready probe
     null,
   );
 
-  assert.equal(handled, false);
-  assert.equal(res.statusCode, 0);
-  assert.equal(headers.get("cache-control"), undefined);
-  assert.equal(res.body, undefined);
+  assert.equal(handled, true);
+  assert.equal(res.statusCode, 200);
+  assert.equal(headers.get("cache-control"), "no-store");
+  assert.equal(res.body, "ok");
 });

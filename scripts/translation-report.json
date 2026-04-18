@@ -4,7 +4,7 @@
     "totalKeys": 17832,
     "missingKeys": 539,
     "untranslatedKeys": 3508,
-    "mixedKeys": 1309,
+    "mixedKeys": 1310,
     "coverage": 77.5,
     "byContentType": {
       "optional": {
@@ -346,8 +346,8 @@
     "name": "Spanish",
     "totalKeys": 17951,
     "missingKeys": 1,
-    "untranslatedKeys": 12910,
-    "mixedKeys": 88,
+    "untranslatedKeys": 12908,
+    "mixedKeys": 90,
     "coverage": 28.1,
     "byContentType": {
       "optional": {
@@ -370,9 +370,9 @@
       },
       "lessons": {
         "total": 1712,
-        "translated": 1595,
+        "translated": 1596,
         "missing": 0,
-        "untranslated": 117,
+        "untranslated": 116,
         "coverage": 93.2,
         "threshold": 100,
         "passed": false
@@ -388,9 +388,9 @@
       },
       "ui": {
         "total": 1230,
-        "translated": 1061,
+        "translated": 1062,
         "missing": 1,
-        "untranslated": 168,
+        "untranslated": 167,
         "coverage": 86.3,
         "threshold": 100,
         "passed": false
@@ -1590,8 +1590,8 @@
     "name": "German",
     "totalKeys": 17951,
     "missingKeys": 1,
-    "untranslatedKeys": 14413,
-    "mixedKeys": 93,
+    "untranslatedKeys": 14412,
+    "mixedKeys": 94,
     "coverage": 19.7,
     "byContentType": {
       "optional": {
@@ -1614,10 +1614,10 @@
       },
       "lessons": {
         "total": 1712,
-        "translated": 1589,
+        "translated": 1590,
         "missing": 0,
-        "untranslated": 123,
-        "coverage": 92.8,
+        "untranslated": 122,
+        "coverage": 92.9,
         "threshold": 100,
         "passed": false
       },

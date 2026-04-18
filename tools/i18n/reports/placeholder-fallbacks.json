@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-04-17T02:04:25.172Z",
-  "totalFallbacks": 24,
+  "generatedAt": "2026-04-18T19:15:45.590Z",
+  "totalFallbacks": 8,
   "byLocale": {
     "tl": 1,
     "hi": 1,
@@ -8,17 +8,6 @@
     "zh-tw": 1,
     "ar": 1,
     "ko": 2,
-    "pt": 1,
-    "pa": 1,
-    "vi": 1,
-    "ht": 2,
-    "ur": 1,
-    "ja": 1,
-    "fa": 2,
-    "th": 1,
-    "tr": 2,
-    "id": 3,
-    "it": 1,
     "ru": 1
   },
   "events": [
@@ -99,182 +88,6 @@
       "englishValue": "Save {{percent}}%",
       "placeholdersInEnglish": [
         "percent"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "pt",
-      "key": "upgrade.usageNote",
-      "localizedValue": "You",
-      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
-      "placeholdersInEnglish": [
-        "limit",
-        "percentage",
-        "used"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "pa",
-      "key": "upgrade.usageNote",
-      "localizedValue": "You",
-      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
-      "placeholdersInEnglish": [
-        "limit",
-        "percentage",
-        "used"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "vi",
-      "key": "upgrade.usageNote",
-      "localizedValue": "You",
-      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
-      "placeholdersInEnglish": [
-        "limit",
-        "percentage",
-        "used"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "ht",
-      "key": "glossary.relatedTerms",
-      "localizedValue": "Tèm ki Gen Rapò",
-      "englishValue": "Related {{category}} Terms",
-      "placeholdersInEnglish": [
-        "category"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "ht",
-      "key": "pricing.save",
-      "localizedValue": "Save",
-      "englishValue": "Save {{percent}}%",
-      "placeholdersInEnglish": [
-        "percent"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "ur",
-      "key": "upgrade.usageNote",
-      "localizedValue": "You",
-      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
-      "placeholdersInEnglish": [
-        "limit",
-        "percentage",
-        "used"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "ja",
-      "key": "upgrade.usageNote",
-      "localizedValue": "You",
-      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
-      "placeholdersInEnglish": [
-        "limit",
-        "percentage",
-        "used"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "fa",
-      "key": "glossary.relatedTerms",
-      "localizedValue": "اصطلاحات مرتبط",
-      "englishValue": "Related {{category}} Terms",
-      "placeholdersInEnglish": [
-        "category"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "fa",
-      "key": "pricing.save",
-      "localizedValue": "Save",
-      "englishValue": "Save {{percent}}%",
-      "placeholdersInEnglish": [
-        "percent"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "th",
-      "key": "pricing.save",
-      "localizedValue": "ประหยัด",
-      "englishValue": "Save {{percent}}%",
-      "placeholdersInEnglish": [
-        "percent"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "tr",
-      "key": "upgrade.title",
-      "localizedValue": "Premium'a Yükselt",
-      "englishValue": "Pass Your NCLEX or {{examName}} With Structured Exam-Level Practice",
-      "placeholdersInEnglish": [
-        "examName"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "tr",
-      "key": "upgrade.usageNote",
-      "localizedValue": "Sınırsız kullanım",
-      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
-      "placeholdersInEnglish": [
-        "limit",
-        "percentage",
-        "used"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "id",
-      "key": "pricing.save",
-      "localizedValue": "Hemat",
-      "englishValue": "Save {{percent}}%",
-      "placeholdersInEnglish": [
-        "percent"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "id",
-      "key": "upgrade.title",
-      "localizedValue": "Tingkatkan ke NurseNest Pro",
-      "englishValue": "Pass Your NCLEX or {{examName}} With Structured Exam-Level Practice",
-      "placeholdersInEnglish": [
-        "examName"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "id",
-      "key": "upgrade.usageNote",
-      "localizedValue": "Catatan penggunaan",
-      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
-      "placeholdersInEnglish": [
-        "limit",
-        "percentage",
-        "used"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "it",
-      "key": "upgrade.usageNote",
-      "localizedValue": "You",
-      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
-      "placeholdersInEnglish": [
-        "limit",
-        "percentage",
-        "used"
       ],
       "placeholdersInLocalized": []
     },
