@@ -22,3 +22,10 @@ test("Node and Edge NextAuth configs import the same constant (no literal basePa
   assert.match(authSrc, /basePath:\s*PINNED_AUTH_BASE_PATH/);
   assert.match(middlewareSrc, /basePath:\s*PINNED_AUTH_BASE_PATH/);
 });
+
+test("/api/auth route stays pinned to the shared handlers contract", () => {
+  const routeSrc = readFileSync(join(srcRoot, "app", "api", "auth", "[...nextauth]", "route.ts"), "utf8");
+  assert.match(routeSrc, /import \{ handlers \} from ["']@\/lib\/auth["']/);
+  assert.match(routeSrc, /export const runtime = "nodejs"/);
+  assert.match(routeSrc, /export const \{ GET, POST \} = handlers;/);
+});

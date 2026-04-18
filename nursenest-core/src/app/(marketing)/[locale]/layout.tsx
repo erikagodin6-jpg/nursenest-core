@@ -6,6 +6,7 @@ import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-pro
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld";
 import { MarketingMainI18nShards } from "@/components/i18n/marketing-main-i18n-shards";
 import { DEFAULT_MARKETING_LOCALE, isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
+import { assertMarketingLayoutMessagesIntegrity } from "@/lib/marketing-i18n/marketing-layout-message-integrity";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { MARKETING_CHROME_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
@@ -45,8 +46,13 @@ export default async function MarketingLocaleLayout({
       error: e instanceof Error ? e.message : String(e),
       locale,
     });
-    // Continue with defaults — localized pages render in English without crashing.
   }
+  assertMarketingLayoutMessagesIntegrity({
+    route: "marketing-locale-layout",
+    locale,
+    messages,
+    fallbackMessages,
+  });
 
   return (
     <MarketingI18nProvider key={locale} locale={locale} messages={messages} fallbackMessages={fallbackMessages}>

@@ -5,6 +5,10 @@ import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-pro
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import {
+  assertMarketingLayoutMessagesIntegrity,
+  resolveDefaultEnglishMarketingLayoutMessages,
+} from "@/lib/marketing-i18n/marketing-layout-message-integrity";
 import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
@@ -39,7 +43,10 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
           "marketing_layout.chrome_messages",
           MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS,
         );
-        messages = loadedMessages ?? {};
+        messages = resolveDefaultEnglishMarketingLayoutMessages({
+          route: "shared-marketing-default",
+          messages: loadedMessages ?? {},
+        });
         fallbackMessages = undefined;
       } catch (e) {
         console.error("[marketing-default-layout] failed to load messages", {
@@ -58,6 +65,12 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         route: "shared-marketing-default",
         locale: resolvedLocale,
         messageCount: Object.keys(messages).length,
+      });
+      assertMarketingLayoutMessagesIntegrity({
+        route: "shared-marketing-default",
+        locale: resolvedLocale,
+        messages,
+        fallbackMessages,
       });
 
       return (

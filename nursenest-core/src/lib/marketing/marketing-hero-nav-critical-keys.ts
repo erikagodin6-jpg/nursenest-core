@@ -1,6 +1,6 @@
 /**
- * Critical marketing i18n keys for the homepage hero carousel and top navigation chrome.
- * Used by CI validation and dev-time checks — not a sitewide i18n audit.
+ * Critical marketing i18n keys for the homepage hero carousel, top navigation chrome, and footer.
+ * Used by CI validation and layout integrity checks — not a sitewide i18n audit.
  */
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { HOME_HERO_SCREENSHOT_COUNT, homeHeroSlideCaptionKey, homeHeroSlideTitleKey } from "@/config/home-hero-carousel";
@@ -67,11 +67,23 @@ export const MARKETING_NAV_AUTH_KEYS = [
   "nav.signout",
 ] as const;
 
+/** Footer labels and legal/support copy required for global marketing chrome. */
+export const MARKETING_FOOTER_CRITICAL_KEYS = [
+  "footer.supportingNursesGlobally",
+  "footer.brandTagline",
+  "footer.globalPathwaysLine",
+  "footer.studyInYourLanguage",
+  "footer.viewAllLanguages",
+  "footer.rights",
+  "footer.legalDisclaimer",
+] as const;
+
 export const MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS = {
   heroCarousel: marketingHeroCarouselCriticalKeys(),
   navSubStrip: [...MARKETING_NAV_SUB_STRIP_KEYS],
   navHeaderChrome: [...MARKETING_NAV_HEADER_CHROME_KEYS],
   navAuth: [...MARKETING_NAV_AUTH_KEYS],
+  footer: [...MARKETING_FOOTER_CRITICAL_KEYS],
 } as const;
 
 /** Flat, deduplicated list for validators. */
@@ -81,6 +93,7 @@ export const MARKETING_HERO_NAV_CRITICAL_KEYS: readonly string[] = Array.from(
     ...MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS.navSubStrip,
     ...MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS.navHeaderChrome,
     ...MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS.navAuth,
+    ...MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS.footer,
   ]),
 );
 

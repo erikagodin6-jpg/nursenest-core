@@ -168,7 +168,7 @@ test("standalone runtime serves the internal bootstrap probe directly and flips 
   assert.equal(await readyRes.text(), "ready");
 });
 
-test("standalone runtime can bypass bootstrap watchdog readiness gating after bind", async (t) => {
+test("standalone runtime can bypass bootstrap watchdog readiness gating after bind outside production", async (t) => {
   const standaloneEntry = STANDALONE_CANDIDATES.find((candidate) => existsSync(candidate));
   if (!standaloneEntry) {
     t.skip(`Missing standalone build entry. Checked:\n${STANDALONE_CANDIDATES.join("\n")}`);
@@ -181,7 +181,7 @@ test("standalone runtime can bypass bootstrap watchdog readiness gating after bi
     cwd: APP_ROOT,
     env: {
       ...process.env,
-      NODE_ENV: "production",
+      NODE_ENV: "test",
       PORT: String(port),
       HOSTNAME: "127.0.0.1",
       NN_STRICT_PRODUCTION_ENV: "0",
@@ -223,6 +223,7 @@ test("standalone runtime can bypass bootstrap watchdog readiness gating after bi
   await waitForLog("startup_watchdog handlers_ready", 1_000);
 
   const logsAfterReady = combined.join("");
+  assert.match(logsAfterReady, /startup_watchdog watchdog_bypass_enabled/);
   assert.match(logsAfterReady, /startup_watchdog handlers_ready/);
   assert.doesNotMatch(logsAfterReady, /startup_watchdog internal_probe_attempt/);
   assert.doesNotMatch(logsAfterReady, /startup_watchdog internal_probe_response/);

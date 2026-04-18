@@ -240,7 +240,7 @@ test("start-standalone accepts the top-level standalone server path", async (t) 
     cwd: tempRoot,
     env: {
       ...process.env,
-      NODE_ENV: "production",
+      NODE_ENV: "test",
       HOSTNAME: "127.0.0.1",
       PORT: String(port),
       NN_BYPASS_BOOTSTRAP: "1",
@@ -321,4 +321,79 @@ test("start-standalone exits fatally on readiness timeout with probe URL, timeou
   assert.match(combined.join(""), /timeoutMs=300/);
   assert.match(combined.join(""), /"childState":\{"childPid":\d+/);
   assert.match(combined.join(""), /childState=\{\\"childPid\\":\d+/);
+});
+
+test("start-standalone ignores NN_BYPASS_BOOTSTRAP in production and keeps /readyz gated until the internal probe succeeds", async (t) => {
+  const tempRoot = createTempRuntimeRoot("nn-start-standalone-prod-ignore-bypass-");
+  const standaloneEntry = path.join(tempRoot, ".next", "standalone", "server.js");
+  fs.mkdirSync(path.dirname(standaloneEntry), { recursive: true });
+  fs.writeFileSync(
+    standaloneEntry,
+    [
+      "const http = require('node:http');",
+      "setTimeout(() => {",
+      "  const server = http.createServer((_req, res) => {",
+      "    res.statusCode = 503;",
+      "    res.end('late-handler');",
+      "  });",
+      "  server.listen(Number(process.env.PORT), process.env.HOSTNAME || '127.0.0.1');",
+      "}, 900);",
+      "setInterval(() => {}, 1000);",
+    ].join("\n"),
+    "utf8",
+  );
+
+  const port = await allocatePort();
+  const combined = [];
+  const child = spawn(process.execPath, [path.join(tempRoot, "scripts", "start-standalone.mjs")], {
+    cwd: tempRoot,
+    env: {
+      ...process.env,
+      NODE_ENV: "production",
+      HOSTNAME: "127.0.0.1",
+      PORT: String(port),
+      NN_BYPASS_BOOTSTRAP: "1",
+      NN_CHILD_HEALTH_TIMEOUT_MS: "100",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  const capture = (chunk) => combined.push(String(chunk));
+  child.stdout.on("data", capture);
+  child.stderr.on("data", capture);
+
+  t.after(async () => {
+    if (child.exitCode == null && !child.killed) {
+      child.kill("SIGTERM");
+      await new Promise((resolve) => child.once("exit", resolve));
+    }
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  });
+
+  await waitFor(() => combined.join("").includes("startup_watchdog server_listening"));
+  await waitFor(() => combined.join("").includes("startup_watchdog standalone_spawn"));
+
+  const earlyLogs = combined.join("");
+  assert.doesNotMatch(earlyLogs, /startup_watchdog watchdog_bypass_enabled/);
+  assert.doesNotMatch(earlyLogs, /startup_watchdog handlers_ready/);
+
+  const preReadyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
+  assert.equal(preReadyRes.status, 503);
+  assert.equal(await preReadyRes.text(), "warming");
+
+  await waitFor(() => combined.join("").includes("startup_watchdog internal_probe_response"), {
+    timeoutMs: 10_000,
+    intervalMs: 50,
+  });
+  await waitFor(() => combined.join("").includes("startup_watchdog handlers_ready"), {
+    timeoutMs: 10_000,
+    intervalMs: 50,
+  });
+
+  const finalLogs = combined.join("");
+  assert.doesNotMatch(finalLogs, /startup_watchdog watchdog_bypass_enabled/);
+  assert.match(finalLogs, /startup_watchdog handlers_ready/);
+
+  const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
+  assert.equal(readyRes.status, 200);
+  assert.equal(await readyRes.text(), "ready");
 });
