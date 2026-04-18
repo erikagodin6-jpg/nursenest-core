@@ -22,7 +22,7 @@ const base = baseRaw.replace(/\/$/, "");
 const timeoutMs = Math.min(120_000, Math.max(3_000, Number(process.env.VERIFY_HTTP_TIMEOUT_MS ?? 15_000) || 15_000));
 const wantReady = process.env.VERIFY_READINESS === "1" || process.env.VERIFY_READINESS === "true";
 
-const paths = ["/healthz", "/api/health"];
+const paths = ["/healthz", "/readyz", "/api/health"];
 if (wantReady) paths.push("/api/health/ready");
 
 async function get(path) {

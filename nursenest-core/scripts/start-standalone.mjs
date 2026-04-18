@@ -46,10 +46,11 @@ if (process.env.NODE_ENV !== "production") {
 const publicPort = Number.parseInt(process.env.PORT ?? "3000", 10) || 3000;
 const publicHost = process.env.HOSTNAME || "0.0.0.0";
 const internalHost = "127.0.0.1";
-/** Internal child readiness probe: use a real lightweight route so readiness never falls through locale routing. */
-const readinessProbePath = "/api/health";
+/** Internal child readiness probe: keep it outside `/api/*` so proxy/auth/admin/DB imports never gate startup. */
+const readinessProbePath = "/readyz";
 const bootstrapReadyTimeoutMs = Number.parseInt(process.env.NN_BOOTSTRAP_READY_TIMEOUT_MS ?? "900000", 10) || 900000;
 const bootstrapTestDelayMs = Number.parseInt(process.env.NN_BOOTSTRAP_TEST_DELAY_MS ?? "0", 10) || 0;
+const childReadinessProbeTimeoutMs = Number.parseInt(process.env.NN_CHILD_READINESS_TIMEOUT_MS ?? "1000", 10) || 1000;
 const memMb = process.env.NODE_MAX_OLD_SPACE_SIZE_MB ?? "512";
 const baseNodeOptions = (process.env.NODE_OPTIONS ?? "").trim();
 const hasHeapOverride =
@@ -79,6 +80,39 @@ function allocatePort() {
   });
 }
 
+function probeChildReadiness(internalPort, method = "HEAD") {
+  return new Promise((resolve, reject) => {
+    const req = http.request(
+      {
+        hostname: internalHost,
+        port: internalPort,
+        path: readinessProbePath,
+        method,
+        timeout: childReadinessProbeTimeoutMs,
+      },
+      (res) => {
+        const chunks = [];
+        res.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+        res.on("end", () => {
+          const statusCode = res.statusCode ?? 500;
+          if (statusCode < 200 || statusCode >= 300) {
+            reject(new Error(`child readiness probe returned ${statusCode}`));
+            return;
+          }
+          resolve({
+            statusCode,
+            headers: res.headers,
+            body: Buffer.concat(chunks),
+          });
+        });
+      },
+    );
+    req.on("timeout", () => req.destroy(new Error("child readiness probe timeout")));
+    req.on("error", reject);
+    req.end();
+  });
+}
+
 function waitForChildReadiness({ internalPort, state }) {
   const startedAt = Date.now();
 
@@ -95,25 +129,7 @@ function waitForChildReadiness({ internalPort, state }) {
       }
 
       try {
-        await new Promise((resolve, reject) => {
-          const req = http.request(
-            {
-              hostname: internalHost,
-              port: internalPort,
-              path: readinessProbePath,
-              method: "GET",
-              timeout: 1000,
-            },
-            (res) => {
-              res.resume();
-              res.once("end", resolve);
-            },
-          );
-          req.on("timeout", () => req.destroy(new Error("readiness probe timeout")));
-          req.on("error", reject);
-          req.end();
-        });
-
+        await probeChildReadiness(internalPort);
         markHandlersReady("internal_probe");
         return;
       } catch {
@@ -149,54 +165,6 @@ function proxyToChild(req, res, internalPort) {
   });
 
   req.pipe(proxyReq);
-}
-
-async function proxyBootstrapReadyz(req, res, internalPort) {
-  try {
-    const probe = await new Promise((resolve, reject) => {
-      const upstreamReq = http.request(
-        {
-          hostname: internalHost,
-          port: internalPort,
-          path: readinessProbePath,
-          method: "GET",
-          timeout: 1500,
-        },
-        (upstreamRes) => {
-          const chunks = [];
-          upstreamRes.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
-          upstreamRes.on("end", () => {
-            resolve({
-              statusCode: upstreamRes.statusCode ?? 503,
-              headers: upstreamRes.headers,
-              body: Buffer.concat(chunks),
-            });
-          });
-        },
-      );
-      upstreamReq.on("timeout", () => upstreamReq.destroy(new Error("bootstrap readyz upstream timeout")));
-      upstreamReq.on("error", reject);
-      upstreamReq.end();
-    });
-
-    res.statusCode = probe.statusCode;
-    for (const [key, value] of Object.entries(probe.headers)) {
-      if (value !== undefined) {
-        res.setHeader(key, value);
-      }
-    }
-    res.setHeader("cache-control", "no-store");
-    if ((req.method ?? "").toUpperCase() === "HEAD") {
-      res.end();
-    } else {
-      res.end(probe.body);
-    }
-  } catch {
-    res.statusCode = 503;
-    res.setHeader("content-type", "text/plain; charset=utf-8");
-    res.setHeader("cache-control", "no-store");
-    res.end("bootstrap: ready probe failed");
-  }
 }
 
 const internalPort = await allocatePort();
@@ -244,7 +212,7 @@ const server = http.createServer((req, res) => {
       res.end("bootstrap: request handlers not ready");
       return;
     }
-    void proxyBootstrapReadyz(req, res, internalPort);
+    proxyToChild(req, res, internalPort);
     return;
   }
 

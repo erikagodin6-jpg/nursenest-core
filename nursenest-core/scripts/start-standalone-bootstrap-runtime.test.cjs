@@ -130,12 +130,12 @@ test("standalone runtime serves bootstrap /healthz before handlers_ready", async
   await waitForLog("startup_watchdog handlers_ready", 15_000);
   const readyAfterRes = await fetch(`http://127.0.0.1:${port}/readyz`);
   assert.equal(readyAfterRes.status, 200);
-  const readyAfterJson = await readyAfterRes.json();
-  assert.equal(readyAfterJson.ok, true);
-  assert.equal(readyAfterJson.live, true);
+  assert.equal(await readyAfterRes.text(), "ready");
+  assert.equal(readyAfterRes.headers.get("content-type"), "text/plain; charset=utf-8");
   const apiHealthRes = await fetch(`http://127.0.0.1:${port}/api/health`);
   assert.equal(apiHealthRes.status, 200);
   const apiHealthJson = await apiHealthRes.json();
   assert.equal(apiHealthJson.ok, true);
   assert.equal(apiHealthJson.live, true);
+  assert.equal(apiHealthJson.service, "nursenest-core");
 });
