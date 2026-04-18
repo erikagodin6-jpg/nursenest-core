@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-04-18T19:15:45.590Z",
-  "totalFallbacks": 8,
+  "generatedAt": "2026-04-18T19:23:09.506Z",
+  "totalFallbacks": 14,
   "byLocale": {
     "tl": 1,
     "hi": 1,
@@ -8,7 +8,12 @@
     "zh-tw": 1,
     "ar": 1,
     "ko": 2,
-    "ru": 1
+    "pt": 1,
+    "pa": 1,
+    "vi": 1,
+    "ht": 2,
+    "ur": 1,
+    "ja": 1
   },
   "events": [
     {
@@ -92,7 +97,75 @@
       "placeholdersInLocalized": []
     },
     {
-      "locale": "ru",
+      "locale": "pt",
+      "key": "upgrade.usageNote",
+      "localizedValue": "You",
+      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
+      "placeholdersInEnglish": [
+        "limit",
+        "percentage",
+        "used"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pa",
+      "key": "upgrade.usageNote",
+      "localizedValue": "You",
+      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
+      "placeholdersInEnglish": [
+        "limit",
+        "percentage",
+        "used"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "vi",
+      "key": "upgrade.usageNote",
+      "localizedValue": "You",
+      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
+      "placeholdersInEnglish": [
+        "limit",
+        "percentage",
+        "used"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ht",
+      "key": "glossary.relatedTerms",
+      "localizedValue": "Tèm ki Gen Rapò",
+      "englishValue": "Related {{category}} Terms",
+      "placeholdersInEnglish": [
+        "category"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ht",
+      "key": "pricing.save",
+      "localizedValue": "Save",
+      "englishValue": "Save {{percent}}%",
+      "placeholdersInEnglish": [
+        "percent"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ur",
+      "key": "upgrade.usageNote",
+      "localizedValue": "You",
+      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
+      "placeholdersInEnglish": [
+        "limit",
+        "percentage",
+        "used"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ja",
       "key": "upgrade.usageNote",
       "localizedValue": "You",
       "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
