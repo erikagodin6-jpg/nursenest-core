@@ -1,6 +1,6 @@
 import { ContentStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
-import { withDatabaseFallback } from "@/lib/db/safe-database";
+import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { publicMarketingFlashcardDeckWhere } from "@/lib/entitlements/content-access-scope";
 import { truncateForPreview } from "@/lib/flashcards/flashcard-access";
 import {
@@ -12,6 +12,14 @@ import {
 import { formatTitleCase } from "@/lib/format/text-case";
 
 export type PublicFlashcardTopicRow = { slug: string; name: string };
+const PUBLIC_FLASHCARD_DB_TIMEOUT_MS = 1000;
+
+async function withPublicFlashcardFallback<T>(run: () => Promise<T>, fallback: T, label: string): Promise<T> {
+  return withDatabaseFallbackTimeout(run, fallback, PUBLIC_FLASHCARD_DB_TIMEOUT_MS, {
+    scope: "public_flashcards",
+    label,
+  });
+}
 
 export type PublicFeaturedDeck = {
   slug: string;
@@ -44,37 +52,46 @@ export async function loadPublicFlashcardHub(): Promise<{
   categorySections: PublicFlashcardCategorySection[];
   highYieldDecks: PublicFeaturedDeck[];
 }> {
-  return withDatabaseFallback(async () => {
-    const deckWhere = publicMarketingFlashcardDeckWhere();
-    // Fetch more than 12 so dedup doesn't leave us short
-    const [topics, rawDecks] = await Promise.all([
-      prisma.flashcardTag.findMany({
-        where: { decks: { some: { deck: deckWhere } } },
-        orderBy: { name: "asc" },
-        take: 48,
-        select: { slug: true, name: true },
-      }),
-      prisma.flashcardDeck.findMany({
-        where: { ...deckWhere, cardCount: { gt: 0 } },
-        orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
-        take: 24,
-        select: {
-          id: true,
-          pathwayId: true,
-          slug: true,
-          title: true,
-          description: true,
-          cardCount: true,
-          tags: { select: { tag: { select: { slug: true, name: true } } } },
-          cards: {
-            where: { status: ContentStatus.PUBLISHED },
-            take: 1,
-            orderBy: { positionInDeck: "asc" },
-            select: { front: true },
+  const deckWhere = publicMarketingFlashcardDeckWhere();
+  // Fetch more than 12 so dedup doesn't leave us short
+  const [topics, rawDecks] = await Promise.all([
+    withPublicFlashcardFallback(
+      () =>
+        prisma.flashcardTag.findMany({
+          where: { decks: { some: { deck: deckWhere } } },
+          orderBy: { name: "asc" },
+          take: 48,
+          select: { slug: true, name: true },
+        }),
+      [],
+      "flashcard_hub.topics",
+    ),
+    withPublicFlashcardFallback(
+      () =>
+        prisma.flashcardDeck.findMany({
+          where: { ...deckWhere, cardCount: { gt: 0 } },
+          orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
+          take: 24,
+          select: {
+            id: true,
+            pathwayId: true,
+            slug: true,
+            title: true,
+            description: true,
+            cardCount: true,
+            tags: { select: { tag: { select: { slug: true, name: true } } } },
+            cards: {
+              where: { status: ContentStatus.PUBLISHED },
+              take: 1,
+              orderBy: { positionInDeck: "asc" },
+              select: { front: true },
+            },
           },
-        },
-      }),
-    ]);
+        }),
+      [],
+      "flashcard_hub.decks",
+    ),
+  ]);
 
     // Deduplicate by slug, then by normalised title — keeps first occurrence per pair.
     const seenSlugs = new Set<string>();
@@ -91,15 +108,23 @@ export async function loadPublicFlashcardHub(): Promise<{
     const NON_NURSING_KEYWORDS = /paramedic|emt\b|firefighter|fire fighter/i;
     const nursingDecks = deduped.filter((d) => !NON_NURSING_KEYWORDS.test(d.title));
 
-    const lessonSourceRows = await prisma.flashcard.findMany({
-      where: {
-        status: ContentStatus.PUBLISHED,
-        deckId: { in: nursingDecks.map((d) => d.id) },
-        sourceKey: { startsWith: "lesson:" },
-      },
-      orderBy: [{ deckId: "asc" }, { positionInDeck: "asc" }],
-      select: { deckId: true, sourceKey: true },
-    });
+    const lessonSourceRows =
+      nursingDecks.length === 0
+        ? []
+        : await withPublicFlashcardFallback(
+            () =>
+              prisma.flashcard.findMany({
+                where: {
+                  status: ContentStatus.PUBLISHED,
+                  deckId: { in: nursingDecks.map((d) => d.id) },
+                  sourceKey: { startsWith: "lesson:" },
+                },
+                orderBy: [{ deckId: "asc" }, { positionInDeck: "asc" }],
+                select: { deckId: true, sourceKey: true },
+              }),
+            [],
+            "flashcard_hub.lesson_sources",
+          );
     const lessonSourceByDeckId = new Map<string, { slug: string; name: string }>();
     for (const row of lessonSourceRows) {
       if (!row.deckId || lessonSourceByDeckId.has(row.deckId)) continue;
@@ -155,13 +180,12 @@ export async function loadPublicFlashcardHub(): Promise<{
         .filter((section) => section.decks.length > 0 || (section.subcategories?.length ?? 0) > 0);
     });
 
-    return {
-      topics,
-      featuredDecks: decorated,
-      categorySections,
-      highYieldDecks: decorated.filter((deck) => deck.highYield),
-    };
-  }, { topics: [], featuredDecks: [], categorySections: [], highYieldDecks: [] });
+  return {
+    topics,
+    featuredDecks: decorated,
+    categorySections,
+    highYieldDecks: decorated.filter((deck) => deck.highYield),
+  };
 }
 
 export type PublicDeckLanding = {
@@ -182,86 +206,94 @@ export type PublicTopicLanding = {
 };
 
 export async function loadPublicFlashcardSlugLanding(slug: string): Promise<PublicDeckLanding | PublicTopicLanding | null> {
-  return withDatabaseFallback(async () => {
-    const deckWhere = publicMarketingFlashcardDeckWhere();
-    const deck = await prisma.flashcardDeck.findFirst({
-      where: { AND: [{ slug }, deckWhere] },
-      select: {
-        slug: true,
-        title: true,
-        description: true,
-        cardCount: true,
-        cards: {
-          where: { status: ContentStatus.PUBLISHED },
-          take: 6,
-          orderBy: { positionInDeck: "asc" },
-          select: { front: true, back: true },
+  const deckWhere = publicMarketingFlashcardDeckWhere();
+  const deck = await withPublicFlashcardFallback(
+    () =>
+      prisma.flashcardDeck.findFirst({
+        where: { AND: [{ slug }, deckWhere] },
+        select: {
+          slug: true,
+          title: true,
+          description: true,
+          cardCount: true,
+          cards: {
+            where: { status: ContentStatus.PUBLISHED },
+            take: 6,
+            orderBy: { positionInDeck: "asc" },
+            select: { front: true, back: true },
+          },
         },
-      },
-    });
+      }),
+    null,
+    `flashcard_slug_deck:${slug}`,
+  );
 
-    if (deck) {
-      return {
-        kind: "deck",
-        slug: deck.slug,
-        title: formatTitleCase(deck.title),
-        description: deck.description,
-        cardCount: deck.cardCount,
-        samples: deck.cards.map((c) => ({
-          front: c.front,
-          backTeaser: truncateForPreview(c.back),
-        })),
-      };
-    }
+  if (deck) {
+    return {
+      kind: "deck",
+      slug: deck.slug,
+      title: formatTitleCase(deck.title),
+      description: deck.description,
+      cardCount: deck.cardCount,
+      samples: deck.cards.map((c) => ({
+        front: c.front,
+        backTeaser: truncateForPreview(c.back),
+      })),
+    };
+  }
 
-    const tag = await prisma.flashcardTag.findFirst({
-      where: { slug, decks: { some: { deck: deckWhere } } },
-      select: {
-        slug: true,
-        name: true,
-        decks: {
-          where: { deck: deckWhere },
-          take: 8,
-          select: {
-            deck: {
-              select: {
-                title: true,
-                slug: true,
-                cards: {
-                  where: { status: ContentStatus.PUBLISHED },
-                  take: 1,
-                  orderBy: { positionInDeck: "asc" },
-                  select: { front: true, back: true },
+  const tag = await withPublicFlashcardFallback(
+    () =>
+      prisma.flashcardTag.findFirst({
+        where: { slug, decks: { some: { deck: deckWhere } } },
+        select: {
+          slug: true,
+          name: true,
+          decks: {
+            where: { deck: deckWhere },
+            take: 8,
+            select: {
+              deck: {
+                select: {
+                  title: true,
+                  slug: true,
+                  cards: {
+                    where: { status: ContentStatus.PUBLISHED },
+                    take: 1,
+                    orderBy: { positionInDeck: "asc" },
+                    select: { front: true, back: true },
+                  },
                 },
               },
             },
           },
         },
-      },
+      }),
+    null,
+    `flashcard_slug_tag:${slug}`,
+  );
+
+  if (!tag || tag.decks.length === 0) return null;
+
+  const samples: PublicTopicLanding["samples"] = [];
+  const deckMap = new Map<string, string>();
+  for (const row of tag.decks) {
+    deckMap.set(row.deck.slug, row.deck.title);
+    const c = row.deck.cards[0];
+    if (!c) continue;
+    samples.push({
+      front: c.front,
+      backTeaser: truncateForPreview(c.back),
+      deckTitle: formatTitleCase(row.deck.title),
     });
+    if (samples.length >= 6) break;
+  }
 
-    if (!tag || tag.decks.length === 0) return null;
-
-    const samples: PublicTopicLanding["samples"] = [];
-    const deckMap = new Map<string, string>();
-    for (const row of tag.decks) {
-      deckMap.set(row.deck.slug, row.deck.title);
-      const c = row.deck.cards[0];
-      if (!c) continue;
-      samples.push({
-        front: c.front,
-        backTeaser: truncateForPreview(c.back),
-        deckTitle: formatTitleCase(row.deck.title),
-      });
-      if (samples.length >= 6) break;
-    }
-
-    return {
-      kind: "topic",
-      slug: tag.slug,
-      name: formatTitleCase(tag.name),
-      decks: [...deckMap.entries()].map(([slug, title]) => ({ slug, title: formatTitleCase(title) })),
-      samples,
-    };
-  }, null);
+  return {
+    kind: "topic",
+    slug: tag.slug,
+    name: formatTitleCase(tag.name),
+    decks: [...deckMap.entries()].map(([deckSlug, title]) => ({ slug: deckSlug, title: formatTitleCase(title) })),
+    samples,
+  };
 }

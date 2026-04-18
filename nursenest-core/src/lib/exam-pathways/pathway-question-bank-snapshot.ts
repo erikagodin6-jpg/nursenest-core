@@ -10,7 +10,7 @@ import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tr
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { isCompleteCatQuestionRow } from "@/lib/practice-tests/cat-pool";
 
-const SNAPSHOT_TIMEOUT_MS = 10_000;
+const SNAPSHOT_TIMEOUT_MS = 1000;
 const REVALIDATE_SECONDS = 3600;
 
 /**
@@ -48,16 +48,27 @@ async function computePathwayQuestionBankSnapshot(pathway: ExamPathwayDefinition
     async (): Promise<PathwayQuestionBankSnapshot> => {
       const base = pathwayExamQuestionMarketingWhere(pathway);
       const counts = await Promise.allSettled([
-        prisma.examQuestion.count({ where: base }),
-        prisma.examQuestion.findMany({
-          where: { AND: [base, { isAdaptiveEligible: true }] },
-          select: {
-            stem: true,
-            options: true,
-            correctAnswer: true,
-            rationale: true,
-          },
-        }),
+        withDatabaseFallbackTimeout(
+          () => prisma.examQuestion.count({ where: base }),
+          0,
+          SNAPSHOT_TIMEOUT_MS,
+          { scope: "exam_pathway_hub", label: `question_snapshot_count:${pathway.id}` },
+        ),
+        withDatabaseFallbackTimeout(
+          () =>
+            prisma.examQuestion.findMany({
+              where: { AND: [base, { isAdaptiveEligible: true }] },
+              select: {
+                stem: true,
+                options: true,
+                correctAnswer: true,
+                rationale: true,
+              },
+            }),
+          [],
+          SNAPSHOT_TIMEOUT_MS,
+          { scope: "exam_pathway_hub", label: `question_snapshot_adaptive:${pathway.id}` },
+        ),
       ]);
       const pathwayScopedCount =
         counts[0]?.status === "fulfilled" && typeof counts[0].value === "number" ? counts[0].value : 0;

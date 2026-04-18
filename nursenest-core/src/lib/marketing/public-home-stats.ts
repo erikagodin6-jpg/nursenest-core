@@ -15,7 +15,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 import { recordPaywallProofNeutral } from "@/lib/observability/production-signal-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { safePrismaCount, withPrismaReadDeadline, withPrismaReadFallback } from "@/lib/prisma/safe-reads";
+import { safePrismaCountTimeout, withPrismaReadFallbackTimeout } from "@/lib/prisma/safe-reads";
 
 /** Full payload returned by `GET /api/public/home-stats` — shared with the marketing homepage (SSR). */
 export type PublicHomeStatsPayload = {
@@ -39,7 +39,7 @@ export type PublicHomeStatsPayload = {
 };
 
 const HOME_STATS_SLOW_MS = 2500;
-const HOME_STATS_DB_DEADLINE_MS = 2500;
+const HOME_STATS_DB_DEADLINE_MS = 800;
 
 /** Safe structured fallback when DB throws or routes need a 200 — never crashes callers. */
 export function getDegradedPublicHomeStatsFallback(
@@ -93,12 +93,7 @@ export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
 
   const t0 = Date.now();
   try {
-    return await withPrismaReadDeadline(
-      "public_home_stats_compute",
-      () => computePublicHomeStats(t0),
-      getDegradedPublicHomeStatsFallback("db_timeout"),
-      HOME_STATS_DB_DEADLINE_MS,
-    );
+    return await computePublicHomeStats(t0);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     safeServerLog("prisma", "home_stats_threw", { message: msg.slice(0, 300) });
@@ -120,27 +115,33 @@ async function computePublicHomeStats(t0: number): Promise<PublicHomeStatsPayloa
     scenariosR,
     topicGroupsR,
   ] = await Promise.all([
-    safePrismaCount("home_stats.content_items", () =>
+    safePrismaCountTimeout("home_stats.content_items", () =>
       prisma.contentItem.count({ where: publicMarketingLessonWhere() }),
+      HOME_STATS_DB_DEADLINE_MS,
     ),
-    safePrismaCount("home_stats.pathway_lessons", () =>
+    safePrismaCountTimeout("home_stats.pathway_lessons", () =>
       prisma.pathwayLesson.count({
         where: { status: ContentStatus.PUBLISHED, locale: "en" },
       }),
+      HOME_STATS_DB_DEADLINE_MS,
     ),
-    safePrismaCount("home_stats.flashcards", () =>
+    safePrismaCountTimeout("home_stats.flashcards", () =>
       prisma.flashcard.count({ where: publicMarketingFlashcardWhere() }),
+      HOME_STATS_DB_DEADLINE_MS,
     ),
-    safePrismaCount("home_stats.flashcard_decks", () =>
+    safePrismaCountTimeout("home_stats.flashcard_decks", () =>
       prisma.flashcardDeck.count({ where: publicMarketingFlashcardDeckWhere() }),
+      HOME_STATS_DB_DEADLINE_MS,
     ),
-    safePrismaCount("home_stats.users", () =>
+    safePrismaCountTimeout("home_stats.users", () =>
       prisma.user.count({ where: { role: UserRole.LEARNER } }),
+      HOME_STATS_DB_DEADLINE_MS,
     ),
-    safePrismaCount("home_stats.exam_questions", () =>
+    safePrismaCountTimeout("home_stats.exam_questions", () =>
       prisma.examQuestion.count({ where: publicMarketingExamQuestionWhere() }),
+      HOME_STATS_DB_DEADLINE_MS,
     ),
-    withPrismaReadFallback(
+    withPrismaReadFallbackTimeout(
       "home_stats.exam_questions_by_tier",
       () =>
         prisma.examQuestion.groupBy({
@@ -149,13 +150,15 @@ async function computePublicHomeStats(t0: number): Promise<PublicHomeStatsPayloa
           _count: { _all: true },
         }),
       [],
+      HOME_STATS_DB_DEADLINE_MS,
     ),
-    safePrismaCount("home_stats.exam_questions_scenarios", () =>
+    safePrismaCountTimeout("home_stats.exam_questions_scenarios", () =>
       prisma.examQuestion.count({
         where: { status: DB_PUBLISHED, isScenario: true },
       }),
+      HOME_STATS_DB_DEADLINE_MS,
     ),
-    withPrismaReadFallback(
+    withPrismaReadFallbackTimeout(
       "home_stats.exam_questions_topics_distinct",
       () =>
         prisma.examQuestion.groupBy({
@@ -168,6 +171,7 @@ async function computePublicHomeStats(t0: number): Promise<PublicHomeStatsPayloa
           _count: { _all: true },
         }),
       [],
+      HOME_STATS_DB_DEADLINE_MS,
     ),
   ]);
 

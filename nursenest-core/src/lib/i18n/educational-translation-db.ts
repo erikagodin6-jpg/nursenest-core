@@ -30,7 +30,7 @@ function asFlashcardBundlePatch(raw: unknown): Partial<FlashcardEducationalBundl
   return raw as Partial<FlashcardEducationalBundle>;
 }
 
-const EDUCATIONAL_TRANSLATION_PUBLIC_TIMEOUT_MS = 1200;
+const EDUCATIONAL_TRANSLATION_PUBLIC_TIMEOUT_MS = 800;
 
 /**
  * Published `PATHWAY_LESSON` rows keyed by `sourceId` (`pathwayId:slug` or `slug`).

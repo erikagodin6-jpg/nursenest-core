@@ -1,7 +1,7 @@
 import type { BlogPost, Prisma } from "@prisma/client";
 import { BlogPostStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured, withDatabaseFallback, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
+import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { blogLiveWhere, blogPostIsLive } from "@/lib/blog/blog-visibility";
 import {
   getStaticBlogPost,
@@ -12,12 +12,8 @@ import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
 /** @deprecated Use `isDatabaseUrlConfigured` from `@/lib/db/safe-database`. */
 export const isBlogDatabaseConfigured = isDatabaseUrlConfigured;
 
-const BLOG_PUBLIC_QUERY_TIMEOUT_MS = 2000;
-const BLOG_SITEMAP_QUERY_TIMEOUT_MS = 1500;
-
-async function withBlogFallback<T>(run: () => Promise<T>, fallback: T): Promise<T> {
-  return withDatabaseFallback(run, fallback);
-}
+const BLOG_PUBLIC_QUERY_TIMEOUT_MS = 1000;
+const BLOG_SITEMAP_QUERY_TIMEOUT_MS = 800;
 
 async function withBlogTimeoutFallback<T>(
   run: () => Promise<T>,
@@ -33,7 +29,7 @@ async function withBlogTimeoutFallback<T>(
 
 export async function canUseStaticBlogFallback(): Promise<boolean> {
   if (listStaticBlogPostsForIndex().length === 0) return false;
-  const totalRows = await withBlogFallback(() => prisma.blogPost.count(), 0);
+  const totalRows = await withBlogTimeoutFallback(() => prisma.blogPost.count(), 0, "blog_static_fallback_probe");
   return totalRows === 0;
 }
 
@@ -61,9 +57,10 @@ export const BLOG_LIST_PAGE_SIZE = 24;
 
 export async function countPublishedBlogPosts(): Promise<number> {
   const now = new Date();
-  return withBlogFallback(
+  return withBlogTimeoutFallback(
     () => prisma.blogPost.count({ where: blogLiveWhere(now) }),
     0,
+    "blog_posts_published_count",
   );
 }
 

@@ -10,7 +10,7 @@ import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 
 export type PublicFlashcardTagsPayload = { tags: Array<{ slug: string; name: string }> };
 
-const TAG_QUERY_TIMEOUT_MS = 12_000;
+const TAG_QUERY_TIMEOUT_MS = 800;
 
 /**
  * Loads public-scope flashcard tags (max 80) — **uncached**; prefer {@link getCachedPublicFlashcardTags}.

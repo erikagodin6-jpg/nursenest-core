@@ -89,7 +89,7 @@ export {
   PATHWAY_HUB_PAGE_SIZE_MAX,
 } from "@/lib/lessons/pathway-lesson-scale";
 /** DB read timeout for pathway lesson queries (marketing paths). */
-export const PATHWAY_LESSON_DB_TIMEOUT_MS = 1500;
+export const PATHWAY_LESSON_DB_TIMEOUT_MS = 1000;
 /**
  * Cross-request Data Cache TTL for public lesson payloads (no user/session).
  * Personalized progress stays outside this layer (see pathway-lesson-progress).

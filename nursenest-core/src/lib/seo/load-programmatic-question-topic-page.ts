@@ -4,7 +4,7 @@ import { ContentStatus } from "@prisma/client";
 import type { Prisma } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
-import { withDatabaseFallback } from "@/lib/db/safe-database";
+import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
@@ -17,6 +17,7 @@ import {
 export const PROGRAMMATIC_QUESTION_TOPIC_PAGE_SIZE = 6;
 /** Defense-in-depth: shallow pagination only. */
 export const PROGRAMMATIC_QUESTION_TOPIC_MAX_PAGE = 12;
+const PROGRAMMATIC_QUESTION_TOPIC_DB_TIMEOUT_MS = 1000;
 
 export type ProgrammaticQuestionTopicRow = {
   id: string;
@@ -55,17 +56,24 @@ function truncateStem(s: string, max = 720): string {
   return `${t.slice(0, max - 1)}…`;
 }
 
+async function withProgrammaticTopicFallback<T>(run: () => Promise<T>, fallback: T, label: string): Promise<T> {
+  return withDatabaseFallbackTimeout(run, fallback, PROGRAMMATIC_QUESTION_TOPIC_DB_TIMEOUT_MS, {
+    scope: "seo_programmatic_topic",
+    label,
+  });
+}
+
 async function resolveWhere(
   pathway: ExamPathwayDefinition,
   def: ProgrammaticQuestionTopicDefinition,
 ): Promise<{ where: Prisma.ExamQuestionWhereInput; usedFallback: boolean }> {
   const base = pathwayExamQuestionMarketingWhere(pathway);
   const narrow = def.topicWhere ? mergeWhere(base, def.topicWhere) : base;
-  const narrowCount = await withDatabaseFallback(() => prisma.examQuestion.count({ where: narrow }), 0);
+  const narrowCount = await withProgrammaticTopicFallback(() => prisma.examQuestion.count({ where: narrow }), 0, "narrow_count");
   if (narrowCount > 0 || !def.fallbackToPathwayPool) {
     return { where: narrow, usedFallback: false };
   }
-  const broadCount = await withDatabaseFallback(() => prisma.examQuestion.count({ where: base }), 0);
+  const broadCount = await withProgrammaticTopicFallback(() => prisma.examQuestion.count({ where: base }), 0, "broad_count");
   return { where: base, usedFallback: broadCount > 0 && narrowCount === 0 };
 }
 
@@ -82,12 +90,12 @@ async function loadQuestionsForPageUncached(
     return { rows: [], total: 0, usedFallback: false };
   }
   const { where, usedFallback } = await resolveWhere(pathway, def);
-  const total = await withDatabaseFallback(() => prisma.examQuestion.count({ where }), 0);
+  const total = await withProgrammaticTopicFallback(() => prisma.examQuestion.count({ where }), 0, "page_total");
   if (total === 0) {
     return { rows: [], total: 0, usedFallback };
   }
   const skip = (page - 1) * PROGRAMMATIC_QUESTION_TOPIC_PAGE_SIZE;
-  const rawRows = await withDatabaseFallback(
+  const rawRows = await withProgrammaticTopicFallback(
     () =>
       prisma.examQuestion.findMany({
         where,
@@ -97,6 +105,7 @@ async function loadQuestionsForPageUncached(
         select: { id: true, stem: true, options: true },
       }),
     [],
+    "page_rows",
   );
   const rows: ProgrammaticQuestionTopicRow[] = rawRows.map((r) => ({
     id: r.id,
@@ -158,7 +167,7 @@ async function loadRelatedLessonsUncached(def: ProgrammaticQuestionTopicDefiniti
     }
     if (or.length === 0) continue;
     where.OR = or;
-    const rows = await withDatabaseFallback(
+    const rows = await withProgrammaticTopicFallback(
       () =>
         prisma.pathwayLesson.findMany({
           where,
@@ -167,6 +176,7 @@ async function loadRelatedLessonsUncached(def: ProgrammaticQuestionTopicDefiniti
           select: { slug: true, title: true },
         }),
       [],
+      `related_lessons:${spec.pathwayId}`,
     );
     for (const r of rows) {
       links.push({ title: r.title, href: `${basePath}/lessons/${r.slug}` });

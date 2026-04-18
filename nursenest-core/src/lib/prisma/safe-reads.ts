@@ -38,6 +38,14 @@ export async function safePrismaCount(
   }
 }
 
+export async function safePrismaCountTimeout(
+  label: string,
+  run: () => Promise<number>,
+  timeoutMs: number,
+): Promise<{ value: number; warning?: string }> {
+  return withPrismaReadFallbackTimeout(label, run, 0, timeoutMs);
+}
+
 export async function withPrismaReadFallback<T>(
   label: string,
   run: () => Promise<T>,
@@ -57,6 +65,46 @@ export async function withPrismaReadFallback<T>(
       value: fallback,
       warning: `[${label}] ${isNonFatalPrismaSchemaError(e) ? "schema_or_table" : "read"}: ${msg.slice(0, 280)}`,
     };
+  }
+}
+
+export async function withPrismaReadFallbackTimeout<T>(
+  label: string,
+  run: () => Promise<T>,
+  fallback: T,
+  timeoutMs: number,
+): Promise<{ value: T; warning?: string }> {
+  if (isRuntimeSafeMode()) {
+    return { value: fallback, warning: `[${label}] runtime_safe_mode` };
+  }
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return {
+      value: await Promise.race([
+        run(),
+        new Promise<T>((_, reject) => {
+          timer = setTimeout(() => reject(new Error(DEADLINE_ERROR)), timeoutMs);
+        }),
+      ]),
+    };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    const kind = e instanceof Error && e.message === DEADLINE_ERROR ? "db_timeout" : classifyDatabaseFallbackKind(e);
+    safeServerLog("prisma", kind, {
+      label,
+      ...(kind === "db_timeout" ? { timeout_ms: timeoutMs } : { detail: msg.slice(0, 200) }),
+    });
+    safeServerLog("prisma", "fallback_used", {
+      label,
+      reason: kind,
+      ...(kind === "db_timeout" ? { timeout_ms: timeoutMs } : {}),
+    });
+    return {
+      value: fallback,
+      warning: `[${label}] ${kind === "db_timeout" ? "timeout" : isNonFatalPrismaSchemaError(e) ? "schema_or_table" : "read"}: ${msg.slice(0, 280)}`,
+    };
+  } finally {
+    if (timer) clearTimeout(timer);
   }
 }
 

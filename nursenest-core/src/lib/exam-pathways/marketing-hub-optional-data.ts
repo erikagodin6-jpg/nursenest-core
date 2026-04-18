@@ -8,7 +8,6 @@ import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-qu
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import {
   countPathwayLessonsPublic,
-  getPathwayLessonsPage,
   getPathwayLessonsPageFresh,
   listTopicClustersForPublicNavigation,
   resolvePathwayLaunchBundle,
@@ -60,7 +59,7 @@ function logHubDataLoadFailed(
   }
 }
 
-const HUB_OPTIONAL_TASK_TIMEOUT_MS = 14_000;
+const HUB_OPTIONAL_TASK_TIMEOUT_MS = 1000;
 
 async function runHubOptionalTask<T>(p: Promise<T>): Promise<T> {
   let timer: ReturnType<typeof setTimeout> | undefined;
@@ -182,7 +181,6 @@ export async function loadPathwayLessonsHubAggregates(
     pageSizeRequested,
     lessonContentLocale,
     listOpts,
-    qEffective,
     skipLaunchBundle,
     includeLessonCount = true,
     includeLaunchBundle = true,

@@ -5,7 +5,7 @@ import { getPublishedBlogPostsPage } from "@/lib/blog/safe-blog-queries";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const HOME_BLOG_TEASER_SLOW_MS = 800;
-const HOME_BLOG_TEASER_TIMEOUT_MS = 1500;
+const HOME_BLOG_TEASER_TIMEOUT_MS = 1000;
 
 /**
  * Bounded recent posts for the marketing homepage teaser — isolated from the rest of the page so a
