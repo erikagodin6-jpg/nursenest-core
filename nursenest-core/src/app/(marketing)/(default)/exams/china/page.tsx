@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ExamsChinaHubShell } from "@/components/marketing/exams-china/exams-china-hub-shell";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -10,9 +11,10 @@ import { robotsForRegionalMarketingHub } from "@/lib/seo/expansion-hub-robots";
 export const revalidate = 86400;
 
 const PATH = "/exams/china";
+const CHINA_METADATA_KEYS = ["exams.china.metaTitle", "exams.china.metaDescription"] as const;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const messages = await loadMarketingMetadataMessages(DEFAULT_MARKETING_LOCALE, CHINA_METADATA_KEYS);
   const title =
     messages["exams.china.metaTitle"] ??
     "Nursing in China: National Nurse Qualification Examination & Working Abroad (2026 Guide)";

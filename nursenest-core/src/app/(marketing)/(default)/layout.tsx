@@ -5,6 +5,7 @@ import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-pro
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld";
 import { MarketingMainI18nShards } from "@/components/i18n/marketing-main-i18n-shards";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { loadSharedMarketingMessagesOnce } from "@/lib/marketing-i18n/shared-marketing-message-cache";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { MARKETING_CHROME_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
@@ -36,7 +37,9 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
 
       try {
         const loadedMessages = await safeAwait(
-          loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS),
+          loadSharedMarketingMessagesOnce(`marketing-chrome:${DEFAULT_MARKETING_LOCALE}`, async () => {
+            return (await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS)) ?? {};
+          }),
           "marketing_layout.chrome_messages",
           MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS,
         );

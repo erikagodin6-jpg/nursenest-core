@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { MarketingI18nShardLayer } from "@/components/i18n/marketing-i18n-provider";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { loadSharedMarketingMessagesOnce } from "@/lib/marketing-i18n/shared-marketing-message-cache";
 import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { safeAwait } from "@/lib/async/safe-await";
@@ -22,7 +23,9 @@ export async function MarketingMainI18nShards({
   renderTrace("marketing main shards start", { route: "shared-marketing-main", locale });
   const primary =
     (await safeAwait(
-      loadMarketingMessageShards(locale, MARKETING_PAGE_BODY_MESSAGE_SHARDS),
+      loadSharedMarketingMessagesOnce(`marketing-pages:${locale}`, async () => {
+        return (await loadMarketingMessageShards(locale, MARKETING_PAGE_BODY_MESSAGE_SHARDS)) ?? {};
+      }),
       `marketing_main_shards.primary:${locale}`,
       MARKETING_MAIN_SHARDS_TIMEOUT_MS,
     )) ?? {};
@@ -30,7 +33,11 @@ export async function MarketingMainI18nShards({
     locale === DEFAULT_MARKETING_LOCALE
       ? undefined
       : ((await safeAwait(
-          loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS),
+          loadSharedMarketingMessagesOnce(`marketing-pages:${DEFAULT_MARKETING_LOCALE}`, async () => {
+            return (
+              (await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS)) ?? {}
+            );
+          }),
           `marketing_main_shards.fallback:${DEFAULT_MARKETING_LOCALE}`,
           MARKETING_MAIN_SHARDS_TIMEOUT_MS,
         )) ?? undefined);

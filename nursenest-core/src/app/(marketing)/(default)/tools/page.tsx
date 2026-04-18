@@ -2,11 +2,16 @@ import type { Metadata } from "next";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { ToolsHubClient } from "@/components/tools/tools-hub-client";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { MARKETING_CHROME_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
+import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { renderTrace } from "@/lib/observability/render-trace";
 import { withSentryServerSpan } from "@/lib/observability/sentry-route-observability";
+
+export const dynamic = "force-dynamic";
+
+const TOOLS_METADATA_KEYS = ["tools.hub.metaTitle", "tools.hub.metaDescription"] as const;
 
 export async function generateMetadata(): Promise<Metadata> {
   return withSentryServerSpan(
@@ -19,7 +24,11 @@ export async function generateMetadata(): Promise<Metadata> {
       renderTrace("tools metadata start", { route: "/tools" });
       return safeGenerateMetadata(
         async () => {
-          const m = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+          const m = await loadMarketingMetadataMessages(
+            DEFAULT_MARKETING_LOCALE,
+            TOOLS_METADATA_KEYS,
+            MARKETING_CHROME_MESSAGE_SHARDS,
+          );
           renderTrace("tools metadata after inputs", {
             route: "/tools",
             messageCount: Object.keys(m).length,

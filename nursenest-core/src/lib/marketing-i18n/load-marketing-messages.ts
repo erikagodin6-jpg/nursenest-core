@@ -6,6 +6,7 @@ import { safeAwait } from "@/lib/async/safe-await";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-marketing-messages";
+import { loadSharedMarketingMessagesOnce } from "@/lib/marketing-i18n/shared-marketing-message-cache";
 import { loadMergedMarketingMessagesFromNextPublicDir } from "@/lib/i18n/merge-next-public-i18n-shards";
 import { getTranslationCacheGeneration } from "@/lib/i18n/i18n-translation-cache";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -306,28 +307,32 @@ export function loadMarketingMessagesSync(locale: string): MarketingMessages {
 
 /** Server / Node: merged monolith + marketing strings. Tries disk first, then optional CDN, then English. */
 export const loadMarketingMessages = cache(async function loadMarketingMessages(locale: string): Promise<MarketingMessages> {
-  return withSentryServerSpan(
-    {
-      name: "marketing.i18n.load_messages",
-      op: "resource.load",
-      attributes: { locale },
-    },
-    async () => {
-      const disk = loadFromDiskSync(locale);
-      if (disk) return disk;
+  return loadSharedMarketingMessagesOnce(
+    `marketing-messages:${getTranslationCacheGeneration()}:${locale}`,
+    async () =>
+      withSentryServerSpan(
+        {
+          name: "marketing.i18n.load_messages",
+          op: "resource.load",
+          attributes: { locale },
+        },
+        async () => {
+          const disk = loadFromDiskSync(locale);
+          if (disk) return disk;
 
-      const fromCdn = await safeAwait(
-        loadFromCdn(locale),
-        `marketing_i18n.load_from_cdn:${locale}`,
-        MARKETING_I18N_TIMEOUT_MS,
-      );
-      if (fromCdn) return fromCdn;
+          const fromCdn = await safeAwait(
+            loadFromCdn(locale),
+            `marketing_i18n.load_from_cdn:${locale}`,
+            MARKETING_I18N_TIMEOUT_MS,
+          );
+          if (fromCdn) return fromCdn;
 
-      safeServerLog("i18n", "merged_bundle_missing", { locale });
-      if (locale === DEFAULT_MARKETING_LOCALE) {
-        return loadEnglishBundleFromDisk();
-      }
-      return {} as MarketingMessages;
-    },
+          safeServerLog("i18n", "merged_bundle_missing", { locale });
+          if (locale === DEFAULT_MARKETING_LOCALE) {
+            return loadEnglishBundleFromDisk();
+          }
+          return {} as MarketingMessages;
+        },
+      ),
   );
 });

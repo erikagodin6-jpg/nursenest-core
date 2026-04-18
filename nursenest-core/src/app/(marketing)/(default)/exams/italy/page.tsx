@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ExamsItalyHubShell } from "@/components/marketing/exams-italy/exams-italy-hub-shell";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -10,9 +11,10 @@ import { robotsForRegionalMarketingHub } from "@/lib/seo/expansion-hub-robots";
 export const revalidate = 86400;
 
 const PATH = "/exams/italy";
+const ITALY_METADATA_KEYS = ["exams.italy.metaTitle", "exams.italy.metaDescription"] as const;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const messages = await loadMarketingMetadataMessages(DEFAULT_MARKETING_LOCALE, ITALY_METADATA_KEYS);
   const title =
     messages["exams.italy.metaTitle"] ?? "Nursing Registration in Italy (2026 Complete Guide)";
   const description =
