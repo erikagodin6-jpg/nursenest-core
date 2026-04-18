@@ -19,6 +19,7 @@ import { ExamSelectorGate } from "@/components/onboarding/exam-selector-gate";
 import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
 import { loadHomeBlogTeaserPostsSafe } from "@/lib/blog/home-blog-teaser";
 import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
+import { renderTrace } from "@/lib/observability/render-trace";
 
 /** ISR: homepage shell — aligned with `getCachedPublicHomeStats` / `PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC` (3600). */
 export const revalidate = 3600;
@@ -38,6 +39,7 @@ const HOME_FALLBACK_METADATA: Metadata = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
+  renderTrace("home metadata start", { route: "/" });
   return safeGenerateMetadata(
     async () => {
       const m = await loadMarketingMessages(STATIC_LOCALE);
@@ -70,12 +72,19 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
+  renderTrace("home page start", { route: "/" });
   const [homeStatsRaw, m, publishedGlobalRegionCardIds, blogTeaserPosts] = await Promise.all([
     getCachedPublicHomeStats(),
     loadMarketingMessages(STATIC_LOCALE),
     Promise.resolve(listPublishedHomeGlobalRegionCardIds()),
     loadHomeBlogTeaserPostsSafe(3),
   ]);
+  renderTrace("home page after data", {
+    route: "/",
+    degraded: Boolean(homeStatsRaw.degraded),
+    blogCount: blogTeaserPosts.length,
+    regionCardCount: publishedGlobalRegionCardIds.length,
+  });
   const homeMarketingStats = {
     questionCount: homeStatsRaw.questionCount,
     registeredLearners: homeStatsRaw.registeredLearners,

@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import Script from "next/script";
+import { Suspense } from "react";
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
 import { AdminGlobalCommandPalette } from "@/components/admin/admin-global-command-palette";
 import { AnalyticsProvider } from "@/components/providers/analytics-provider";
 import { AppThemeProvider } from "@/components/theme/app-theme-provider";
 import { marketingOpenGraphImageUrl } from "@/lib/marketing-assets";
+import { renderTrace } from "@/lib/observability/render-trace";
 import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
 import { NURSENEST_DEFAULT_THEME, THEME_STORAGE_KEY } from "@/lib/theme/theme-registry";
 import "./globals.css";
@@ -70,6 +72,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  renderTrace("root layout start", { route: "shared-root-layout" });
   const themeBoot = `(function(){try{var k=${JSON.stringify(THEME_STORAGE_KEY)};var d=${JSON.stringify(NURSENEST_DEFAULT_THEME)};var v=localStorage.getItem(k);if(v==null||v===""){v=d;localStorage.setItem(k,v);}document.documentElement.setAttribute("data-theme",v);}catch(e){}})();`;
 
   /** Duplicates the first layout rules from `globals.css` so the parser can paint before the main stylesheet finishes. */
@@ -93,7 +96,9 @@ export default function RootLayout({
           <AuthSessionProvider>
             <AnalyticsProvider>
               {children}
-              <AdminGlobalCommandPalette />
+              <Suspense fallback={null}>
+                <AdminGlobalCommandPalette />
+              </Suspense>
             </AnalyticsProvider>
           </AuthSessionProvider>
         </AppThemeProvider>

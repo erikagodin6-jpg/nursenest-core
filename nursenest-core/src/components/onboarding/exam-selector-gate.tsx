@@ -10,16 +10,28 @@
 
 import { cookies, headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { safeAwait } from "@/lib/async/safe-await";
 import { parseGlobalRegionCookie, GLOBAL_REGION_COOKIE } from "@/lib/region/global-region-cookie";
 import { geoCountryToRegion } from "@/lib/context/resolve-initial-context";
+import { renderTrace } from "@/lib/observability/render-trace";
 import { ExamSelector } from "./exam-selector";
 
+const EXAM_SELECTOR_AUTH_TIMEOUT_MS = 1000;
+
 export async function ExamSelectorGate() {
+  renderTrace("exam selector gate start", { route: "/" });
   const [jar, hdrs, session] = await Promise.all([
     cookies(),
     headers(),
-    auth(),
+    safeAwait(auth(), "exam_selector_gate.auth", EXAM_SELECTOR_AUTH_TIMEOUT_MS),
   ]);
+  renderTrace("exam selector gate after auth", {
+    route: "/",
+    hasSessionUser: Boolean(session?.user),
+  });
+  if (!session && process.env.NODE_ENV === "production") {
+    return null;
+  }
 
   // Suppress for logged-in users
   if (session?.user) return null;

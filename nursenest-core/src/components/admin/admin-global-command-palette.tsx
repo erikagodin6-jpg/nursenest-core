@@ -22,6 +22,9 @@ export async function AdminGlobalCommandPalette() {
     route: "shared-root-layout",
     hasStaff: Boolean(staff),
   });
-  if (!staff) return null;
+  if (!staff) {
+    renderTrace("admin palette fallback", { route: "shared-root-layout", reason: "no_staff_or_timeout" });
+    return null;
+  }
   return <AdminGlobalCommandPaletteUi staffTier={staff.tier} />;
 }
