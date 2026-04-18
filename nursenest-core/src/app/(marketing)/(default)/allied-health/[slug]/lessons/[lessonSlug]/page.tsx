@@ -72,6 +72,7 @@ import { LessonRecallToggle } from "@/components/lessons/lesson-recall-toggle";
 import { LessonRecallBlock } from "@/components/lessons/lesson-recall-block";
 import { LessonKeyRecallChip } from "@/components/lessons/lesson-key-recall-chip";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
+import { DEFAULT_STUDY_SETTINGS } from "@/lib/learner/study-settings";
 import { cleanLessonTitleForDisplay, compactPathwayLabel } from "@/lib/lessons/lesson-title-presentation";
 import {
   pathwayLessonSectionPrefersWideColumn,
@@ -155,18 +156,22 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   if (!alliedLessonMatchesProfessionFilter(lesson, prof.topicSlugsIn)) notFound();
 
   const userId = "";
-  const entitlement = await resolveEntitlementForPage(userId);
-  const studySettings = await loadStudySettings(userId);
-
-  let learnerPath: string | null = null;
-  if (userId && isDatabaseUrlConfigured()) {
-    try {
-      const u = await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } });
-      learnerPath = u?.learnerPath ?? null;
-    } catch {
-      learnerPath = null;
-    }
-  }
+  const [entitlementRes, studySettingsRes, learnerPathRes] = await Promise.allSettled([
+    resolveEntitlementForPage(userId),
+    loadStudySettings(userId),
+    (async (): Promise<string | null> => {
+      if (!userId || !isDatabaseUrlConfigured()) return null;
+      try {
+        const u = await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } });
+        return u?.learnerPath ?? null;
+      } catch {
+        return null;
+      }
+    })(),
+  ]);
+  const entitlement = entitlementRes.status === "fulfilled" ? entitlementRes.value : "error";
+  const studySettings = studySettingsRes.status === "fulfilled" ? studySettingsRes.value : DEFAULT_STUDY_SETTINGS;
+  const learnerPath = learnerPathRes.status === "fulfilled" ? learnerPathRes.value : null;
 
   const scope =
     entitlement === "error"
@@ -174,7 +179,20 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       : entitlement;
 
   const fullAccess = canViewFullPathwayLesson(scope, pathway, learnerPath);
-  const bankAssessments = await resolvePathwayLessonBankAssessments(pathway, lesson);
+  const [bankAssessmentsRes, adjacentSlugsRes, relatedQuestionStemsRes, contentDatesRes] = await Promise.allSettled([
+    resolvePathwayLessonBankAssessments(pathway, lesson),
+    loadPathwayLessonAdjacent(pathway.id, lesson.slug, lessonContentLocale),
+    loadRelatedExamQuestionStemsForPathwayLesson({
+      pathway,
+      lessonSlug: lesson.slug,
+      lessonTitle: lesson.title,
+      lessonTopic: lesson.topic,
+      lessonTopicSlug: lesson.topicSlug,
+      bodySystem: lesson.bodySystem,
+    }),
+    getPathwayLessonContentDates(pathway.id, lesson.slug, lessonContentLocale),
+  ]);
+  const bankAssessments = bankAssessmentsRes.status === "fulfilled" ? bankAssessmentsRes.value : [];
   const lessonMeasurementSystem = getMeasurementSystemForCountry(pathway.countryCode);
   const visible = visibleSectionsForLesson(lesson, fullAccess);
   const previewLesson = fullAccess ? lesson : { ...lesson, sections: visible, preTest: undefined, postTest: undefined };
@@ -194,7 +212,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   const professionHeroPath = alliedHealthSegmentPath(prof.segment);
   const base = alliedHealthLessonsIndexPath(prof.professionKey);
   const lessonPath = alliedHealthLessonDetailPath(prof.professionKey, lesson.slug);
-  const adjacentSlugs = await loadPathwayLessonAdjacent(pathway.id, lesson.slug, lessonContentLocale);
+  const adjacentSlugs = adjacentSlugsRes.status === "fulfilled" ? adjacentSlugsRes.value : { prev: null, next: null };
   const lessonAdjacentHrefs = mapPathwayLessonAdjacentToHrefs(adjacentSlugs, (slug) =>
     alliedHealthLessonDetailPath(prof.professionKey, slug),
   );
@@ -221,14 +239,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   const displayLessonTitle = cleanLessonTitleForDisplay(lesson.title);
   const compactExamLabel = compactPathwayLabel(pathway.shortName);
 
-  const relatedQuestionStems = await loadRelatedExamQuestionStemsForPathwayLesson({
-    pathway,
-    lessonSlug: lesson.slug,
-    lessonTitle: lesson.title,
-    lessonTopic: lesson.topic,
-    lessonTopicSlug: lesson.topicSlug,
-    bodySystem: lesson.bodySystem,
-  });
+  const relatedQuestionStems = relatedQuestionStemsRes.status === "fulfilled" ? relatedQuestionStemsRes.value : [];
 
   const { crumbs, schemaItems } = alliedLessonDetailBreadcrumbs(
     prof.h1,
@@ -238,7 +249,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
     lessonPath,
   );
   const lessonQuality = classifyPathwayLesson(lesson);
-  const contentDates = await getPathwayLessonContentDates(pathway.id, lesson.slug, lessonContentLocale);
+  const contentDates = contentDatesRes.status === "fulfilled" ? contentDatesRes.value : null;
   const quickReviewBullets = buildQuickReviewBullets(previewLesson);
   const matchedLessonImage = resolveLessonImage({
     slug: lesson.slug,

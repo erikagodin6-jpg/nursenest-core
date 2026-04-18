@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminSubLayout({ children }: { children: React.ReactNode }) {
   await requireAdmin();
-  const staff = await getStaffSession();
+  const staff = await getStaffSession().catch(() => null);
   const tier: StaffTier = staff?.tier ?? "super";
 
   return (

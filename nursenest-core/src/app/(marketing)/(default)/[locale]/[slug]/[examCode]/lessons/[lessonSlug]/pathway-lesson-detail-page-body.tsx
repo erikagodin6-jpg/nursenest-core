@@ -63,6 +63,7 @@ import {
 import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-lesson-record-chips";
 import { MarketingPathwayLessonDetailViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
+import { DEFAULT_STUDY_SETTINGS } from "@/lib/learner/study-settings";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 import {
   pathwayLessonSectionPrefersWideColumn,
@@ -125,7 +126,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
       }
     })(),
   ]);
-  const studySettings = studySettingsRes.status === "fulfilled" ? studySettingsRes.value : null;
+  const studySettings = studySettingsRes.status === "fulfilled" ? studySettingsRes.value : DEFAULT_STUDY_SETTINGS;
   const entitlement = entRes.status === "fulfilled" ? entRes.value : "error";
   const learnerPathResolved = lpRes.status === "fulfilled" ? lpRes.value : null;
 
