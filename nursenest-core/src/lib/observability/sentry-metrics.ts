@@ -2,8 +2,25 @@
  * Thin wrappers for Sentry metrics (SDK v10+). Safe no-ops when Sentry is disabled or API unavailable.
  * Prefer **low-cardinality** `attributes` keys — high cardinality breaks billing and alert noise.
  */
-import { metrics } from "@sentry/core";
 import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
+
+type SentryMetricsApi = {
+  metrics: {
+    count(name: string, value: number, options?: { attributes?: Record<string, string> }): void;
+    distribution(name: string, value: number, options?: { attributes?: Record<string, string> }): void;
+  };
+};
+
+let sentryMetricsPromise: Promise<SentryMetricsApi | null> | null = null;
+
+function loadSentryMetrics(): Promise<SentryMetricsApi | null> {
+  if (!sentryMetricsPromise) {
+    sentryMetricsPromise = import("@sentry/core")
+      .then((mod) => ({ metrics: mod.metrics }))
+      .catch(() => null);
+  }
+  return sentryMetricsPromise;
+}
 
 function enabled(): boolean {
   return isSentryServerRuntimeEnabled();
@@ -16,19 +33,25 @@ export function sentryCount(
   attributes?: Record<string, string>,
 ): void {
   if (!enabled()) return;
-  try {
-    metrics.count(name, value, attributes ? { attributes } : undefined);
-  } catch {
-    /* noop — edge / constrained runtime */
-  }
+  void loadSentryMetrics().then((api) => {
+    if (!api) return;
+    try {
+      api.metrics.count(name, value, attributes ? { attributes } : undefined);
+    } catch {
+      /* noop — edge / constrained runtime */
+    }
+  });
 }
 
 /** Distribution sample (e.g. API duration ms). */
 export function sentryDistribution(name: string, value: number, attributes?: Record<string, string>): void {
   if (!enabled()) return;
-  try {
-    metrics.distribution(name, value, attributes ? { attributes } : undefined);
-  } catch {
-    /* noop */
-  }
+  void loadSentryMetrics().then((api) => {
+    if (!api) return;
+    try {
+      api.metrics.distribution(name, value, attributes ? { attributes } : undefined);
+    } catch {
+      /* noop */
+    }
+  });
 }

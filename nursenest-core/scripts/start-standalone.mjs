@@ -83,11 +83,11 @@ function allocatePort() {
   });
 }
 
-function childHealthProbeUrl(internalPort) {
-  return `http://${internalHost}:${internalPort}${childHealthProbePath}`;
+function childHealthProbeUrl(probePort) {
+  return `http://${internalHost}:${probePort}${childHealthProbePath}`;
 }
 
-function waitForChildReadiness({ internalPort, state }) {
+function waitForChildReadiness({ state }) {
   const startedAt = Date.now();
   let attempt = 0;
 
@@ -100,19 +100,19 @@ function waitForChildReadiness({ internalPort, state }) {
         throw new Error("standalone child exited before handlers became ready");
       }
       if (Date.now() - startedAt > bootstrapReadyTimeoutMs) {
-        throw new Error(`standalone child never answered ${childHealthProbeUrl(internalPort)} within ${bootstrapReadyTimeoutMs}ms`);
+        throw new Error(`standalone child never answered ${childHealthProbeUrl(publicPort)} within ${bootstrapReadyTimeoutMs}ms`);
       }
 
       try {
         attempt += 1;
-        await probeChildHealth(internalPort, attempt);
+        await probeChildHealth(publicPort, attempt);
 
         markHandlersReady("internal_probe");
         return;
       } catch (error) {
         emit("internal_probe_error", {
           attempt,
-          probeUrl: childHealthProbeUrl(internalPort),
+          probeUrl: childHealthProbeUrl(publicPort),
           error: error instanceof Error ? error.message : String(error),
           code:
             error && typeof error === "object" && "code" in error && typeof error.code === "string"
@@ -125,8 +125,8 @@ function waitForChildReadiness({ internalPort, state }) {
   })();
 }
 
-function probeChildHealth(internalPort, attempt) {
-  const probeUrl = childHealthProbeUrl(internalPort);
+function probeChildHealth(probePort, attempt) {
+  const probeUrl = childHealthProbeUrl(probePort);
   emit("internal_probe_attempt", {
     attempt,
     probeUrl,
@@ -137,7 +137,7 @@ function probeChildHealth(internalPort, attempt) {
     const req = http.request(
       {
         hostname: internalHost,
-        port: internalPort,
+        port: probePort,
         path: childHealthProbePath,
         method: "HEAD",
         timeout: childHealthProbeTimeoutMs,
@@ -213,6 +213,17 @@ function markHandlersReady(reason) {
   });
 }
 
+function serveProbeOk(req, res) {
+  res.statusCode = 200;
+  res.setHeader("content-type", "text/plain; charset=utf-8");
+  res.setHeader("cache-control", "no-store");
+  if ((req.method ?? "").toUpperCase() === "HEAD") {
+    res.end();
+  } else {
+    res.end("ok");
+  }
+}
+
 async function handleBootstrapRequest(req, res) {
   if (isBootstrapProbeRequest(req, livenessProbePath)) {
     emit("bootstrap_healthz_intercepted", {
@@ -234,6 +245,19 @@ async function handleBootstrapRequest(req, res) {
     return;
   }
 
+  if (isBootstrapProbeRequest(req, childHealthProbePath)) {
+    emit("bootstrap_child_probe_intercepted", {
+      pid: process.pid,
+      method: req.method,
+      url: req.url,
+      handlersReady: state.handlersReady,
+      internalPort,
+      publicPort,
+    });
+    serveProbeOk(req, res);
+    return;
+  }
+
   if (isBootstrapProbeRequest(req, readinessProbePath)) {
     if (!state.handlersReady || state.childExited) {
       res.statusCode = 503;
@@ -248,7 +272,7 @@ async function handleBootstrapRequest(req, res) {
     }
 
     try {
-      await probeChildHealth(internalPort);
+      await probeChildHealth(publicPort);
       res.statusCode = 200;
       res.setHeader("content-type", "text/plain; charset=utf-8");
       res.setHeader("cache-control", "no-store");
@@ -370,7 +394,7 @@ child.on("exit", async (code, signal) => {
   process.exit(code ?? 1);
 });
 
-waitForChildReadiness({ internalPort, state }).catch(async (error) => {
+waitForChildReadiness({ state }).catch(async (error) => {
   emit("handlers_init_failed", {
     pid: process.pid,
     childPid: state.childPid,

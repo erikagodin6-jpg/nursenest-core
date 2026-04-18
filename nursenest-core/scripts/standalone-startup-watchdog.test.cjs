@@ -8,6 +8,10 @@ const {
   formatStartupWatchdogLine,
   resolveStandaloneNextModulePath,
 } = require("./standalone-startup-watchdog-shared.cjs");
+const {
+  isBootstrapHealthzRequest,
+  maybeServeBootstrapHealthz,
+} = require("./standalone-bootstrap-healthz-shared.cjs");
 
 test("formats startup watchdog lines consistently", () => {
   const line = formatStartupWatchdogLine("server_listening", { appUrl: "http://127.0.0.1:8080" });
@@ -98,9 +102,50 @@ test("bootstrap runtime probes the child via localhost and emits probe diagnosti
   assert.equal(source.includes('emit("internal_probe_error"'), true);
 });
 
+test("bootstrap runtime serves the internal probe path directly from the parent layer", () => {
+  const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
+  assert.equal(source.includes("isBootstrapProbeRequest(req, childHealthProbePath)"), true);
+  assert.equal(source.includes('emit("bootstrap_child_probe_intercepted"'), true);
+});
+
+test("bootstrap readiness loop probes the bootstrap-served path on the public port", () => {
+  const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
+  assert.equal(source.includes("await probeChildHealth(publicPort, attempt)"), true);
+});
+
 test("bootstrap runtime never force-marks handlers ready", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
   assert.equal(source.includes("forcedHandlersReadyFallbackMs"), false);
   assert.equal(source.includes('emit("handlers_ready_forced"'), false);
   assert.equal(source.includes("state.handlersReadyForced"), false);
+});
+
+test("child preload recognizes the internal bootstrap ready probe path", () => {
+  assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/_nn_bootstrap_ready_check__" }), true);
+  assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/_nn_bootstrap_ready_check__?ts=1" }), true);
+});
+
+test("child preload serves the internal bootstrap ready probe directly", () => {
+  const headers = new Map();
+  const res = {
+    statusCode: 0,
+    setHeader(name, value) {
+      headers.set(name, value);
+    },
+    end(value) {
+      this.body = value;
+    },
+  };
+
+  const handled = maybeServeBootstrapHealthz(
+    { method: "GET", url: "/_nn_bootstrap_ready_check__" },
+    res,
+    { handlersReady: false },
+    null,
+  );
+
+  assert.equal(handled, true);
+  assert.equal(res.statusCode, 200);
+  assert.equal(headers.get("cache-control"), "no-store");
+  assert.equal(res.body, "ok");
 });

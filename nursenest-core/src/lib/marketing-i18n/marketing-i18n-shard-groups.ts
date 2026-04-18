@@ -18,6 +18,15 @@ export const MARKETING_CHROME_MESSAGE_SHARDS = [
 /** Route/marketing page bodies (`pages.*` keys). */
 export const MARKETING_PAGE_BODY_MESSAGE_SHARDS = ["pages"] as const satisfies readonly I18nShardFilename[];
 
+/**
+ * Default marketing shell + route-body copy for prerendered public pages.
+ * Keeps allied vertical keys out of the shared layout bundle.
+ */
+export const MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS = [
+  ...MARKETING_CHROME_MESSAGE_SHARDS,
+  ...MARKETING_PAGE_BODY_MESSAGE_SHARDS,
+] as const satisfies readonly I18nShardFilename[];
+
 /** Allied health marketing vertical (`allied.*`). Loaded only under `/allied-health/*`. */
 export const MARKETING_ALLIED_VERTICAL_MESSAGE_SHARDS = ["allied"] as const satisfies readonly I18nShardFilename[];
 

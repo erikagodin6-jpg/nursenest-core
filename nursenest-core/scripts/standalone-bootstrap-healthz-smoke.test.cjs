@@ -113,3 +113,55 @@ test("bootstrap /healthz returns 200 before handlersReady", async () => {
     child.kill("SIGTERM");
   }
 });
+
+test("child preload serves /_nn_bootstrap_ready_check__ before request handlers exist", async () => {
+  const child = spawn(
+    process.execPath,
+    [
+      "--require",
+      preloadPath,
+      "-e",
+      [
+        "const http = require('node:http');",
+        "const server = http.createServer();",
+        "server.listen(0, '127.0.0.1', () => {",
+        "  const address = server.address();",
+        "  process.stdout.write(`PORT:${address.port}\\n`);",
+        "});",
+        "setTimeout(() => {",
+        "  server.on('request', (_req, res) => {",
+        "    res.statusCode = 503;",
+        "    res.end('late-handler');",
+        "  });",
+        "}, 1000);",
+      ].join(" "),
+    ],
+    {
+      cwd: __dirname,
+      stdio: ["ignore", "pipe", "pipe"],
+    },
+  );
+
+  let stderr = "";
+  child.stderr.on("data", (chunk) => {
+    stderr += String(chunk);
+  });
+
+  try {
+    const { port } = await waitForPort(child);
+
+    const getRes = await request({ port, method: "GET", path: "/_nn_bootstrap_ready_check__" });
+    assert.equal(getRes.statusCode, 200, stderr);
+    assert.equal(getRes.body, "ok");
+    assert.equal(getRes.headers["cache-control"], "no-store");
+
+    const headRes = await request({ port, method: "HEAD", path: "/_nn_bootstrap_ready_check__" });
+    assert.equal(headRes.statusCode, 200, stderr);
+    assert.equal(headRes.body, "");
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    assert.match(stderr, /startup_watchdog bootstrap_healthz_intercepted/);
+  } finally {
+    child.kill("SIGTERM");
+  }
+});

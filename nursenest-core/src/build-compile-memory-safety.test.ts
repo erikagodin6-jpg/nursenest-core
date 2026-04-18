@@ -68,6 +68,12 @@ test("auth runtime defers optional Sentry import", () => {
   assert.match(auth, /import\(["']@sentry\/nextjs["']\)/);
 });
 
+test("sentry metrics helper defers core SDK import", () => {
+  const sentryMetrics = readFileSync(join(root, "src", "lib", "observability", "sentry-metrics.ts"), "utf8");
+  assert.doesNotMatch(sentryMetrics, /^import .*@sentry\/core["'];?$/m);
+  assert.match(sentryMetrics, /import\(["']@sentry\/core["']\)/);
+});
+
 test("on-demand marketing routes do not keep empty generateStaticParams exports", () => {
   for (const file of onDemandRouteFiles) {
     const source = readFileSync(join(root, file), "utf8");

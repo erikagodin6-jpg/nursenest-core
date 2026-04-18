@@ -1,7 +1,13 @@
 function isBootstrapHealthzRequest(req) {
   const method = typeof req?.method === "string" ? req.method.toUpperCase() : "";
   const url = typeof req?.url === "string" ? req.url : "";
-  return (method === "GET" || method === "HEAD") && (url === "/healthz" || url.startsWith("/healthz?"));
+  if (method !== "GET" && method !== "HEAD") return false;
+  return (
+    url === "/healthz" ||
+    url.startsWith("/healthz?") ||
+    url === "/_nn_bootstrap_ready_check__" ||
+    url.startsWith("/_nn_bootstrap_ready_check__?")
+  );
 }
 
 function maybeServeBootstrapHealthz(req, res, state, logger) {

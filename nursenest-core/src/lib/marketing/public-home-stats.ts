@@ -19,6 +19,7 @@ import {
   captureSentrySoftError,
   withSentryServerSpan,
 } from "@/lib/observability/sentry-route-observability";
+import { shouldBypassPublicHomeStatsDbAtStartup } from "@/lib/marketing/public-home-stats-startup";
 import { safePrismaCountTimeout, withPrismaReadFallbackTimeout } from "@/lib/prisma/safe-reads";
 
 /** Full payload returned by `GET /api/public/home-stats` — shared with the marketing homepage (SSR). */
@@ -44,7 +45,6 @@ export type PublicHomeStatsPayload = {
 
 const HOME_STATS_SLOW_MS = 2500;
 const HOME_STATS_DB_DEADLINE_MS = 800;
-
 /** Safe structured fallback when DB throws or routes need a 200 — never crashes callers. */
 export function getDegradedPublicHomeStatsFallback(
   reason: string,
@@ -100,6 +100,10 @@ export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
           runtimeSafeMode: isRuntimeSafeMode(),
           proofDisplay: "neutral",
         };
+      }
+
+      if (shouldBypassPublicHomeStatsDbAtStartup()) {
+        return getDegradedPublicHomeStatsFallback("startup_window_optional_db_skipped", { silent: true });
       }
 
       const t0 = Date.now();

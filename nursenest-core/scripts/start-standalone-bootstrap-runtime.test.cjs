@@ -47,7 +47,7 @@ function allocatePort() {
   });
 }
 
-test("standalone runtime keeps readiness red when the child probe never flips", async (t) => {
+test("standalone runtime serves the internal bootstrap probe directly and flips handlers ready", async (t) => {
   const standaloneEntry = STANDALONE_CANDIDATES.find((candidate) => existsSync(candidate));
   if (!standaloneEntry) {
     t.skip(`Missing standalone build entry. Checked:\n${STANDALONE_CANDIDATES.join("\n")}`);
@@ -112,6 +112,14 @@ test("standalone runtime keeps readiness red when the child probe never flips", 
   assert.match(logsBeforeProbe, /startup_watchdog preload_patch_next_done/);
   assert.doesNotMatch(logsBeforeProbe, /startup_watchdog handlers_ready/);
 
+  const internalGetRes = await fetch(`http://127.0.0.1:${port}/_nn_bootstrap_ready_check__`);
+  assert.equal(internalGetRes.status, 200);
+  assert.equal(await internalGetRes.text(), "ok");
+
+  const internalHeadRes = await fetch(`http://127.0.0.1:${port}/_nn_bootstrap_ready_check__`, { method: "HEAD" });
+  assert.equal(internalHeadRes.status, 200);
+  assert.equal(await internalHeadRes.text(), "");
+
   const getRes = await fetch(`http://127.0.0.1:${port}/healthz`);
   assert.equal(getRes.status, 200);
   assert.equal(await getRes.text(), "ok");
@@ -121,12 +129,11 @@ test("standalone runtime keeps readiness red when the child probe never flips", 
   assert.equal(await headRes.text(), "");
 
   await waitForLog("startup_watchdog bootstrap_healthz_intercepted");
-  assert.doesNotMatch(combined.join(""), /startup_watchdog handlers_ready/);
-
-  await new Promise((resolve) => setTimeout(resolve, 5500));
-  assert.doesNotMatch(combined.join(""), /startup_watchdog handlers_ready_forced/);
+  await waitForLog("startup_watchdog bootstrap_child_probe_intercepted");
+  await waitForLog("startup_watchdog internal_probe_response");
+  await waitForLog("startup_watchdog handlers_ready");
 
   const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
-  assert.equal(readyRes.status, 503);
-  assert.equal(await readyRes.text(), "warming");
+  assert.equal(readyRes.status, 200);
+  assert.equal(await readyRes.text(), "ready");
 });
