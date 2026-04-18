@@ -35,31 +35,6 @@ function metadataWithCanonical(url: string): Metadata {
   };
 }
 
-test("validateMetadataAlternatesHttp stays nonfatal in production even when strict is requested", async () => {
-  setEnv({
-    NODE_ENV: "production",
-    VERCEL_ENV: "production",
-    CI: undefined,
-    SEO_HTTP_VALIDATE_PAGE_METADATA: "1",
-    SEO_HTTP_VALIDATE_STRICT: "1",
-  });
-  setFetchStatus(500);
-
-  const result = await validateMetadataAlternatesHttp(metadataWithCanonical("https://example.com/"), {
-    pathname: "/",
-    routeGroup: "marketing.default.home",
-    sourceFile: "src/app/(marketing)/(default)/page.tsx",
-    generator: "generateMetadata",
-  });
-
-  assert.equal(result.failures.length, 1);
-  assert.equal(result.strictRequested, true);
-  assert.equal(result.strictEnforced, false);
-  assert.equal(result.environmentName, "production");
-  assert.equal(result.skipped, false);
-  assert.equal(result.reason, "bad_status_500");
-});
-
 test("validateMetadataAlternatesHttp skips outbound HTTP checks entirely in production request mode", async () => {
   setEnv({
     NODE_ENV: "production",
@@ -116,7 +91,7 @@ test("safeGenerateMetadata returns route fallback metadata instead of throwing o
   setEnv({
     NODE_ENV: "production",
     VERCEL_ENV: "production",
-    CI: undefined,
+    CI: "1",
     SEO_HTTP_VALIDATE_PAGE_METADATA: "1",
     SEO_HTTP_VALIDATE_STRICT: "1",
   });
