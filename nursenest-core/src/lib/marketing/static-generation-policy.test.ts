@@ -20,6 +20,31 @@ describe("marketing static generation policy", () => {
     assert.match(examsLayout, /export const dynamic = "force-dynamic"/);
   });
 
+  it("uses build-phase DB skipping on the default homepage shell", () => {
+    const homePage = readAppFile("app/(marketing)/(default)/page.tsx");
+
+    assert.match(homePage, /process\.env\.NEXT_PHASE === "phase-production-build"/);
+  });
+
+  it("uses shard-based marketing i18n loaders on fixed default home and lessons surfaces", () => {
+    const homePage = readAppFile("app/(marketing)/(default)/page.tsx");
+    const lessonsPage = readAppFile("app/(marketing)/(default)/lessons/page.tsx");
+    const lessonSections = readAppFile("components/marketing/public-lessons-pathway-sections.tsx");
+
+    assert.match(homePage, /loadMarketingMessageShards/, "home page should use shard loader");
+    assert.doesNotMatch(homePage, /loadMarketingMessages/, "home page should not use merged bundle loader");
+
+    assert.match(lessonsPage, /loadMarketingMessageShards/, "lessons page should use shard loader");
+    assert.doesNotMatch(lessonsPage, /loadMarketingMessages/, "lessons page should not use merged bundle loader");
+
+    assert.match(lessonSections, /loadMarketingMessageShards/, "lesson sections should use shard loader");
+    assert.doesNotMatch(
+      lessonSections,
+      /loadMarketingMessages/,
+      "lesson sections should not use merged bundle loader",
+    );
+  });
+
   it("keeps the default tools hub dynamic", () => {
     const toolsPage = readAppFile("app/(marketing)/(default)/tools/page.tsx");
     assert.match(toolsPage, /export const dynamic = "force-dynamic"/);

@@ -2,6 +2,7 @@ import "server-only";
 import { existsSync, statSync } from "fs";
 import path from "path";
 import { cache } from "react";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { withSentryServerSpan } from "@/lib/observability/sentry-route-observability";
@@ -124,8 +125,9 @@ export const loadMarketingMessageShards = cache(async function loadMarketingMess
           locale,
           mode: "shards",
           shard_count: shards.length,
+          fallbackLocale: DEFAULT_MARKETING_LOCALE,
         });
-        return {};
+        return loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards);
       }
       return loadMarketingMessageShardsSync(locale, shards);
     },

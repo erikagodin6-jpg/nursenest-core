@@ -4,7 +4,8 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { getCatalogLessonPreviewTitles, listPathwayIdsWithLessons } from "@/lib/lessons/pathway-lesson-loader";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
@@ -65,8 +66,8 @@ export async function PublicLessonsPathwaySections({
     if (g) grouped[g].push(p);
   }
 
-  const m = await loadMarketingMessages(locale);
-  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const m = await loadMarketingMessageShards(locale, MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS);
+  const en = await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS);
   const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
 
   const regionLabel = (slug: string) =>

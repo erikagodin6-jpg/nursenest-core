@@ -323,8 +323,9 @@ export const loadMarketingMessages = cache(async function loadMarketingMessages(
         safeServerLog("i18n", "marketing_i18n_startup_bypass", {
           locale,
           mode: "merged",
+          fallbackLocale: DEFAULT_MARKETING_LOCALE,
         });
-        return {} as MarketingMessages;
+        return loadEnglishBundleFromDisk();
       }
 
       const disk = loadFromDiskSync(locale);

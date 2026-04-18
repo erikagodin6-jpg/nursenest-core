@@ -48,3 +48,19 @@ test("marketing layouts enforce message integrity before rendering chrome", () =
   assert.equal(localeLayout.includes("assertMarketingLayoutMessagesIntegrity"), true);
   assert.equal(defaultLayout.includes("resolveDefaultEnglishMarketingLayoutMessages"), false);
 });
+
+test("merged marketing loader startup bypass returns canonical English instead of an empty bundle", () => {
+  const source = fs.readFileSync(path.join(__dirname, "load-marketing-messages.ts"), "utf8");
+
+  assert.equal(source.includes('"marketing_i18n_startup_bypass"'), true);
+  assert.equal(source.includes("return loadEnglishBundleFromDisk();"), true);
+  assert.equal(source.includes("return {} as MarketingMessages;"), true);
+});
+
+test("shard marketing loader startup bypass returns canonical English shard messages instead of an empty bundle", () => {
+  const source = fs.readFileSync(path.join(__dirname, "load-marketing-message-shards.ts"), "utf8");
+
+  assert.equal(source.includes('event: "marketing_i18n_startup_bypass"'), false);
+  assert.equal(source.includes('"marketing_i18n_startup_bypass"'), true);
+  assert.equal(source.includes("loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards)"), true);
+});

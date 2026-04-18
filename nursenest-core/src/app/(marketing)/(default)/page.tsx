@@ -12,7 +12,8 @@ import {
 } from "@/lib/marketing/public-home-stats";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
@@ -43,7 +44,10 @@ const HOME_FALLBACK_METADATA: Metadata = {
 };
 
 function shouldSkipOptionalMarketingDbReads(): boolean {
-  return process.env.NODE_ENV === "production" && process.env.CI !== "1";
+  return (
+    process.env.NEXT_PHASE === "phase-production-build" ||
+    (process.env.NODE_ENV === "production" && process.env.CI !== "1")
+  );
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -57,7 +61,7 @@ export async function generateMetadata(): Promise<Metadata> {
       renderTrace("home metadata start", { route: "/" });
       return safeGenerateMetadata(
         async () => {
-          const m = await loadMarketingMessages(STATIC_LOCALE);
+          const m = await loadMarketingMessageShards(STATIC_LOCALE, MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS);
           const title = resolveMarketingCopy(m, "pages.home.metaTitleUS", m, defaultHomeMetaTitle(STATIC_REGION));
           const description = resolveMarketingCopy(
             m,
@@ -102,7 +106,7 @@ export default async function HomePage() {
         skipOptionalDbReads
           ? Promise.resolve(getDegradedPublicHomeStatsFallback("production_request_optional_db_skipped"))
           : getHomepagePublicHomeStats(),
-        loadMarketingMessages(STATIC_LOCALE),
+        loadMarketingMessageShards(STATIC_LOCALE, MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS),
         Promise.resolve(listPublishedHomeGlobalRegionCardIds()),
         skipOptionalDbReads ? Promise.resolve([]) : loadHomeBlogTeaserPostsSafe(3),
       ]);
