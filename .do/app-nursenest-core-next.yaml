@@ -36,25 +36,20 @@ services:
     http_port: 8080
     routes:
       - path: /
-    # GET /healthz (no DB). Traffic is not routed until checks pass.
+    # `/healthz`: bootstrap/liveness only (no DB, no child-handler dependency).
+    # `/readyz`: returns 200 only after the child app answers the lightweight internal readiness probe.
     #
-    # Next.js 16 standalone: the process prints "Ready in …" when the HTTP socket listens, but
-    # `getRequestHandlers()` still runs afterward — every request (including /healthz) awaits that
-    # init. On basic-xs that can exceed multiple minutes; probes that start too early see "timeout
-    # awaiting headers" until handlers are actually ready. The startup watchdog in
-    # `scripts/start-standalone.mjs` now logs:
+    # Next.js 16 standalone can print "Ready in …" before request handlers are actually serving.
+    # The bootstrap wrapper now treats logs as informational only; readiness flips only after the
+    # internal `/api/health` probe succeeds. The startup watchdog logs:
     # - `startup_watchdog server_listening`
-    # - Next's own `Ready in …`
     # - `startup_watchdog handlers_ready`
-    # `/healthz` is a minimal Node.js route (no DB/auth) — it keeps the liveness handler cheap once
-    # request handlers are ready, but it does not change Next standalone init ordering.
-    # Recommendation: move production off `basic-xs`; the observed failure mode is pre-handler startup
-    # stall under weak CPU headroom, not route-body work.
+    # Recommendation: keep `/readyz` as the routing health check and `/healthz` as liveness.
     #
     # Rollback: App Platform → Deployments → redeploy a previous successful deployment if a bad build ships.
     # Post-deploy verification: BASE_URL=https://… npm run qa:verify:health (see nursenest-core/docs/deploy-safety.md).
     health_check:
-      http_path: /healthz
+      http_path: /readyz
       port: 8080
       initial_delay_seconds: 240
       period_seconds: 15

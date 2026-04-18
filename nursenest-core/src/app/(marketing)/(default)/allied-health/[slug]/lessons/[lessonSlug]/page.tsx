@@ -23,6 +23,7 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { normalizePathwayLessonLocale } from "@/lib/lessons/pathway-lesson-locale";
 import {
   getPathwayLesson,
+  getPathwayLessonSeoMeta,
   getRelatedPathwayLessons,
   RELATED_PATHWAY_LESSONS_LIMIT,
 } from "@/lib/lessons/pathway-lesson-loader";
@@ -115,11 +116,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const resolved = resolveProfession(slug);
       const prof = resolved?.prof;
       const pathway = prof ? getPathwayOrThrow(prof.pathwayId) : undefined;
-      const lessonContentLocale = DEFAULT_MARKETING_LOCALE;
-      const lesson = pathway ? await getPathwayLesson(pathway.id, lessonSlug, lessonContentLocale) : undefined;
+      const lesson = pathway ? await getPathwayLessonSeoMeta(pathway.id, lessonSlug) : undefined;
       if (!prof || !pathway || !lesson) return {};
-      if (!alliedLessonMatchesProfessionFilter(lesson, prof.topicSlugsIn)) return {};
-      if (!lesson.structuralQuality?.publicComplete) {
+      if (!prof.topicSlugsIn.includes(lesson.topicSlug)) return {};
+      if (!lesson.publicComplete) {
         return { title: "Lesson", robots: { index: false, follow: false } };
       }
       const path = alliedHealthLessonDetailPath(prof.professionKey, lesson.slug);

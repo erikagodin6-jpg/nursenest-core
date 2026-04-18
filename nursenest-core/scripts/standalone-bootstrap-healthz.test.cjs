@@ -3,6 +3,7 @@ const test = require("node:test");
 
 const {
   isBootstrapHealthzRequest,
+  isBootstrapReadyzRequest,
   maybeServeBootstrapHealthz,
 } = require("./standalone-bootstrap-healthz-shared.cjs");
 
@@ -27,6 +28,10 @@ test("matches GET and HEAD /healthz requests only", () => {
   assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/healthz?check=1" }), true);
   assert.equal(isBootstrapHealthzRequest({ method: "POST", url: "/healthz" }), false);
   assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/api/health" }), false);
+  assert.equal(isBootstrapReadyzRequest({ method: "GET", url: "/readyz" }), true);
+  assert.equal(isBootstrapReadyzRequest({ method: "HEAD", url: "/readyz?check=1" }), true);
+  assert.equal(isBootstrapReadyzRequest({ method: "POST", url: "/readyz" }), false);
+  assert.equal(isBootstrapReadyzRequest({ method: "GET", url: "/api/health/ready" }), false);
 });
 
 test("serves /healthz directly while handlers are not ready", () => {
@@ -66,7 +71,7 @@ test("serves HEAD /healthz without a body while handlers are not ready", () => {
   assert.equal(res.ended, true);
 });
 
-test("does not intercept /healthz after handlers are ready", () => {
+test("still serves /healthz directly after handlers are ready", () => {
   const res = createFakeResponse();
   const served = maybeServeBootstrapHealthz(
     { method: "GET", url: "/healthz" },
@@ -74,6 +79,8 @@ test("does not intercept /healthz after handlers are ready", () => {
     { handlersReady: true },
   );
 
-  assert.equal(served, false);
-  assert.equal(res.ended, false);
+  assert.equal(served, true);
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body, "ok");
+  assert.equal(res.ended, true);
 });

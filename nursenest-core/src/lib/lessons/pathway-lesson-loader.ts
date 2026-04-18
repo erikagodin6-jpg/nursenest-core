@@ -1049,6 +1049,111 @@ async function getPathwayLessonWithDataCache(
 /** Dedupes metadata + page lesson fetches in the same request. */
 export const getPathwayLesson = cache(getPathwayLessonWithDataCache);
 
+export type PathwayLessonSeoMeta = {
+  slug: string;
+  seoTitle: string;
+  seoDescription: string;
+  topic: string;
+  topicSlug: string;
+  bodySystem: string;
+  publicComplete: boolean;
+};
+
+function pathwayLessonSeoMetaFromRecord(record: PathwayLessonRecord): PathwayLessonSeoMeta {
+  return {
+    slug: record.slug,
+    seoTitle: record.seoTitle,
+    seoDescription: record.seoDescription,
+    topic: record.topic,
+    topicSlug: record.topicSlug,
+    bodySystem: record.bodySystem,
+    publicComplete: Boolean(record.structuralQuality?.publicComplete),
+  };
+}
+
+async function getPathwayLessonSeoMetaImpl(pathwayId: string, slug: string): Promise<PathwayLessonSeoMeta | undefined> {
+  const rowEn = await dbCall(
+    () =>
+      prisma.pathwayLesson.findUnique({
+        where: {
+          pathwayId_slug_locale: {
+            pathwayId,
+            slug,
+            locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE,
+          },
+        },
+        select: {
+          slug: true,
+          seoTitle: true,
+          seoDescription: true,
+          topic: true,
+          topicSlug: true,
+          bodySystem: true,
+          structuralPublicComplete: true,
+          status: true,
+        },
+      }),
+    null,
+  );
+
+  if (rowEn && rowEn.status === ContentStatus.PUBLISHED) {
+    if (rowEn.structuralPublicComplete) {
+      return {
+        slug: rowEn.slug,
+        seoTitle: rowEn.seoTitle,
+        seoDescription: rowEn.seoDescription,
+        topic: rowEn.topic,
+        topicSlug: rowEn.topicSlug,
+        bodySystem: rowEn.bodySystem,
+        publicComplete: true,
+      };
+    }
+
+    const catalogHit = getCatalogLessonsRaw(pathwayId).find((lesson) => lesson.slug === slug);
+    if (catalogHit) {
+      const fromCatalog = normalizeLesson(catalogHit, pathwayId);
+      if (pathwayLessonEligibleForPublicMarketingSurface(fromCatalog)) {
+        safeServerLog("pathway_lessons", "lesson_metadata_catalog_fallback_after_db_incomplete", {
+          pathwayId,
+          slug,
+        });
+        return pathwayLessonSeoMetaFromRecord(fromCatalog);
+      }
+    }
+
+    return {
+      slug: rowEn.slug,
+      seoTitle: rowEn.seoTitle,
+      seoDescription: rowEn.seoDescription,
+      topic: rowEn.topic,
+      topicSlug: rowEn.topicSlug,
+      bodySystem: rowEn.bodySystem,
+      publicComplete: false,
+    };
+  }
+
+  const hit = getCatalogLessonsRaw(pathwayId).find((lesson) => lesson.slug === slug);
+  if (!hit) return undefined;
+  return pathwayLessonSeoMetaFromRecord(normalizeLesson(hit, pathwayId));
+}
+
+async function getPathwayLessonSeoMetaWithDataCache(
+  pathwayId: string,
+  slug: string,
+): Promise<PathwayLessonSeoMeta | undefined> {
+  return unstable_cache(
+    async () => getPathwayLessonSeoMetaImpl(pathwayId, slug),
+    ["pathway-lesson-seo-meta", pathwayId, slug],
+    {
+      revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS,
+      tags: [`pathway-lessons:${pathwayId}`, `pathway-lesson:${pathwayId}:${slug}`],
+    },
+  )();
+}
+
+/** Thin metadata loader for lesson SEO without hydrating the full lesson body. */
+export const getPathwayLessonSeoMeta = cache(getPathwayLessonSeoMetaWithDataCache);
+
 export type ResolvedPathwayLaunchBundle = {
   spec: PathwayLaunchBundleSpec;
   resolved: Array<{ entry: LaunchBundleEntry; lesson: PathwayLessonRecord }>;

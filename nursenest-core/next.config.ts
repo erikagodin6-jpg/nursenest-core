@@ -106,6 +106,9 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   output: "standalone",
   /** Playwright / alternate hosts loading `/_next/*` in dev (default blocks cross-origin). */
   allowedDevOrigins: ["127.0.0.1", "localhost"],

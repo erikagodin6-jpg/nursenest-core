@@ -3,12 +3,8 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { PathwayLessonDetailPageLoadingFallback } from "@/components/lessons/pathway-lesson-detail-loading-fallback";
 import { pathwayLessonPublicDetailPath } from "@/lib/lessons/pathway-lesson-types";
-import { loadPathwayLessonWithLegacySlugRedirect } from "@/lib/lessons/pathway-lesson-detail-redirect";
-import {
-  pathwayLessonEligibleForPublicMarketingSurface,
-  resolveMarketingPathwayLessonRouteResolution,
-} from "@/lib/lessons/pathway-lesson-route-access";
-import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { loadPathwayLessonSeoMetaWithLegacySlugRedirect } from "@/lib/lessons/pathway-lesson-detail-redirect";
+import { resolveMarketingPathwayLessonRouteResolution } from "@/lib/lessons/pathway-lesson-route-access";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
@@ -43,12 +39,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, {
         pathname,
       });
-      const viewerLessonLocale = DEFAULT_MARKETING_LOCALE;
       const lesson = pathway
-        ? await loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, viewerLessonLocale)
+        ? await loadPathwayLessonSeoMetaWithLegacySlugRedirect(pathway, lessonSlug)
         : undefined;
       if (!pathway || !lesson) return {};
-      if (!pathwayLessonEligibleForPublicMarketingSurface(lesson)) {
+      if (!lesson.publicComplete) {
         return { title: "Lesson", robots: { index: false, follow: false } };
       }
       const path = pathwayLessonPublicDetailPath(pathway, lesson.slug);
@@ -65,13 +60,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ]
         .filter(Boolean)
         .join(", ");
-      const strictPublic = process.env.PATHWAY_LESSON_STRICT_PUBLIC_QUALITY === "1";
-      const gate = lesson.structuralQuality;
-      const incomplete = !pathwayLessonEligibleForPublicMarketingSurface(lesson);
-      const robots =
-        incomplete && (strictPublic || gate?.structureMode === "premium")
-          ? ({ index: false, follow: true } as const)
-          : ({ index: true, follow: true } as const);
       return {
         title: lesson.seoTitle,
         description: lesson.seoDescription,
@@ -90,7 +78,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           description:
             lesson.seoDescription.length > 160 ? `${lesson.seoDescription.slice(0, 157)}…` : lesson.seoDescription,
         },
-        robots,
+        robots: { index: true, follow: true },
       };
     },
     { pathname, locale: countrySlug, routeGroup: "marketing.exam_hub.lesson_detail" },
