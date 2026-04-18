@@ -26,7 +26,11 @@ let startupLogged = false;
 export function logStartupContext(): void {
   if (startupLogged) return;
   startupLogged = true;
-  if (process.env.NODE_ENV !== "production") return;
+  const nodeEnv = process.env.NODE_ENV?.trim();
+  if (!nodeEnv) {
+    console.error("[nursenest-core] startup_env_warning NODE_ENV is unset; production deploys must set NODE_ENV=production");
+  }
+  if (nodeEnv !== "production") return;
 
   const db = process.env.DATABASE_URL?.trim();
   const port = process.env.PORT ?? "(unset)";
@@ -38,6 +42,6 @@ export function logStartupContext(): void {
         ? "start-standalone.mjs → standalone"
         : "node";
   console.error(
-    `[nursenest-core] startup: NODE_ENV=${process.env.NODE_ENV ?? "(unset)"} PORT=${port} bind=0.0.0.0 (${serverLabel}) databaseUrl=${db ? `configured masked=${maskDatabaseUrl(db)}` : "missing"}`,
+    `[nursenest-core] startup: NODE_ENV=${nodeEnv ?? "(unset)"} PORT=${port} bind=0.0.0.0 (${serverLabel}) databaseUrl=${db ? `configured masked=${maskDatabaseUrl(db)}` : "missing"}`,
   );
 }

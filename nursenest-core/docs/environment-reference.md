@@ -58,9 +58,33 @@ Add `?statement_timeout=…` and `connection_limit=…` on the URL when possible
 
 | Variable | Purpose |
 |----------|---------|
-| `SENTRY_ENABLED` | Enable Sentry SDK |
-| `SENTRY_*` | DSN, sampling (see `sentry.*.config.ts`) |
+| `SENTRY_ENABLED` | Server/edge runtime Sentry enable flag. Also required before source map upload is allowed. |
+| `NEXT_PUBLIC_SENTRY_ENABLED` | Optional client/browser enable flag. Defaults to `SENTRY_ENABLED` when omitted at build time. |
+| `SENTRY_DSN` | Server/edge DSN (falls back to `NEXT_PUBLIC_SENTRY_DSN` if only one DSN is provided). |
+| `NEXT_PUBLIC_SENTRY_DSN` | Browser DSN. Keep aligned with the same Sentry project when browser events are enabled. |
+| `SENTRY_AUTH_TOKEN` | Build-time auth for source map uploads only. Not used for runtime event sending. |
+| `SENTRY_ORG` | Build-time source map upload org. |
+| `SENTRY_PROJECT` | Build-time source map upload project. |
+| `SENTRY_ENVIRONMENT` | Server/edge Sentry environment override. |
+| `NEXT_PUBLIC_SENTRY_ENVIRONMENT` | Optional browser environment override; defaults from `SENTRY_ENVIRONMENT` / platform env during build. |
+| `SENTRY_RELEASE` | Release identifier for stack trace/source map resolution. Defaults to commit SHA envs when omitted. |
+| `NEXT_PUBLIC_SENTRY_RELEASE` | Optional browser release override; defaults from server release envs during build. |
+| `SENTRY_TRACES_SAMPLE_RATE` | Server/edge traces sample rate override (0..1). Keep conservative in production. |
+| `NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE` | Browser traces sample rate override (0..1). Keep very low in production. |
+| `SENTRY_PROFILES_SAMPLE_RATE` | Server profiling sample rate override. Default `0`. |
+| `NEXT_PUBLIC_SENTRY_REPLAY_ENABLED` | Enables Session Replay. Default OFF. Leave unset unless intentionally rolling out replay. |
+| `NEXT_PUBLIC_SENTRY_REPLAY_SESSION_SAMPLE_RATE` | Replay session sample rate override when replay is enabled. |
+| `NEXT_PUBLIC_SENTRY_REPLAY_ON_ERROR_SAMPLE_RATE` | Replay-on-error sample rate override when replay is enabled. |
 | PostHog keys | See `src/lib/observability/posthog-server.ts` |
+
+Source map uploads run only when **all** of the following are set at build time:
+
+- `SENTRY_ENABLED=true`
+- `SENTRY_AUTH_TOKEN`
+- `SENTRY_ORG`
+- `SENTRY_PROJECT`
+
+If any of those are missing, runtime Sentry can still run, but source map upload is skipped safely.
 
 ## Email
 

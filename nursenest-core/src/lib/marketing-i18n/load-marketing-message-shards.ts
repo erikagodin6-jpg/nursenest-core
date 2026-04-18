@@ -4,6 +4,7 @@ import path from "path";
 import { cache } from "react";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { withSentryServerSpan } from "@/lib/observability/sentry-route-observability";
 import type { I18nShardFilename } from "@shared/i18n-shard-policy";
 import { readCachedI18nJsonFile } from "@/lib/i18n/i18n-translation-cache";
 
@@ -100,5 +101,12 @@ export const loadMarketingMessageShards = cache(async function loadMarketingMess
   locale: string,
   shards: readonly I18nShardFilename[],
 ): Promise<MarketingMessages> {
-  return loadMarketingMessageShardsSync(locale, shards);
+  return withSentryServerSpan(
+    {
+      name: "marketing.i18n.load_shards",
+      op: "resource.load",
+      attributes: { locale, shardCount: shards.length },
+    },
+    async () => loadMarketingMessageShardsSync(locale, shards),
+  );
 });

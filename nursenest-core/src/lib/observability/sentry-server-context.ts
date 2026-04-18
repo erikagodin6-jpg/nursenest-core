@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/nextjs";
+import { getSentryEnvironmentServer } from "@/lib/observability/sentry-flags";
 import { sentryUserHash } from "@/lib/observability/sentry-user-hash";
 import type { ServerFeatureTag } from "@/lib/observability/server-feature-tags";
 
@@ -17,7 +18,7 @@ export function setSentryServerContext(opts: {
   Sentry.setTag("feature", opts.feature);
   Sentry.setTag("route", opts.route);
   Sentry.setContext("nursenest", {
-    environment: process.env.SENTRY_ENVIRONMENT || process.env.VERCEL_ENV || process.env.NODE_ENV,
+    environment: getSentryEnvironmentServer(),
     route: opts.route,
   });
   if (opts.userId) {

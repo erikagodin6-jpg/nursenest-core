@@ -7,6 +7,11 @@ import {
 } from "@/lib/marketing/public-home-stats";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+import {
+  captureSentrySoftError,
+  withSentryServerSpan,
+} from "@/lib/observability/sentry-route-observability";
 import { safeJsonRoute } from "@/lib/server/safe-api-route";
 
 /** Keep numeric literal — Next segment config must be statically analyzable (see `API_ROUTE_MAX_DURATION_PUBLIC_MARKETING_SEC`). */
@@ -16,8 +21,16 @@ export const maxDuration = 30;
 export async function GET(req: NextRequest) {
   return runWithApiTelemetry(req, "GET /api/public/home-stats", "public", async () => {
     return safeJsonRoute("GET /api/public/home-stats", async () => {
+      setSentryServerContext({ route: "/api/public/home-stats", feature: SERVER_FEATURE.api });
       try {
-        const data = await getCachedPublicHomeStats();
+        const data = await withSentryServerSpan(
+          {
+            name: "api.public.home_stats.load",
+            op: "http.server",
+            attributes: { route: "/api/public/home-stats" },
+          },
+          async () => getCachedPublicHomeStats(),
+        );
         const body = JSON.stringify(data);
         const etag = buildPublicResponseEtag(body);
         const headers = new Headers(CACHE_HEADER_HOME_STATS);
@@ -30,6 +43,14 @@ export async function GET(req: NextRequest) {
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
         safeServerLog("api", "public_home_stats_route_failed", { message: msg.slice(0, 200) });
+        captureSentrySoftError({
+          scope: "api_public_home_stats",
+          event: "route_failed",
+          error: e,
+          route: "/api/public/home-stats",
+          feature: SERVER_FEATURE.api,
+          meta: { message: msg.slice(0, 200) },
+        });
         const degradedBody = JSON.stringify(getDegradedPublicHomeStatsFallback("route_uncaught"));
         const etag = buildPublicResponseEtag(degradedBody);
         const headers = new Headers(CACHE_HEADER_HOME_STATS);

@@ -19,6 +19,31 @@ import type { NextConfig } from "next";
 const monorepoRoot = fileURLToPath(new URL("..", import.meta.url));
 
 const runHeavyBuildTasks = process.env.RUN_HEAVY_BUILD_TASKS !== "false";
+const sentryEnabled = process.env.SENTRY_ENABLED === "true";
+const sentryClientEnabled =
+  process.env.NEXT_PUBLIC_SENTRY_ENABLED === "true" ||
+  (process.env.NEXT_PUBLIC_SENTRY_ENABLED == null && sentryEnabled);
+const sentryEnvironment =
+  process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT ||
+  process.env.SENTRY_ENVIRONMENT ||
+  process.env.NEXT_PUBLIC_VERCEL_ENV ||
+  process.env.VERCEL_ENV ||
+  process.env.NODE_ENV ||
+  "";
+const sentryRelease =
+  process.env.NEXT_PUBLIC_SENTRY_RELEASE ||
+  process.env.SENTRY_RELEASE ||
+  process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ||
+  process.env.VERCEL_GIT_COMMIT_SHA ||
+  process.env.GITHUB_SHA ||
+  "";
+const sentrySourceMapsEnabled =
+  sentryEnabled &&
+  Boolean(
+    process.env.SENTRY_AUTH_TOKEN?.trim() &&
+      process.env.SENTRY_ORG?.trim() &&
+      process.env.SENTRY_PROJECT?.trim(),
+  );
 
 type HeavyRoutingDeps = {
   CORE_HOSTED_MARKETING_LOCALES: typeof import("./src/lib/i18n/marketing-locale-policy").CORE_HOSTED_MARKETING_LOCALES;
@@ -108,7 +133,9 @@ const nextConfig: NextConfig = {
   env: {
     // Use || so empty string (often set by hosts with no value) defaults to trusted.
     AUTH_TRUST_HOST: process.env.AUTH_TRUST_HOST || "true",
-    NEXT_PUBLIC_SENTRY_ENABLED: process.env.SENTRY_ENABLED === "true" ? "true" : "",
+    NEXT_PUBLIC_SENTRY_ENABLED: sentryClientEnabled ? "true" : "",
+    NEXT_PUBLIC_SENTRY_ENVIRONMENT: sentryEnvironment,
+    NEXT_PUBLIC_SENTRY_RELEASE: sentryRelease,
   },
   // Allow importing shared monolith modules (`../shared/*`) without publishing a package.
   experimental: {
@@ -292,21 +319,16 @@ const nextConfig: NextConfig = {
   },
 };
 
-const sentryEnabled = process.env.SENTRY_ENABLED === "true";
-
-const sentryWebpackPluginEnabled = Boolean(process.env.SENTRY_AUTH_TOKEN?.trim());
-
 export default sentryEnabled
   ? withSentryConfig(nextConfig, {
-      org: process.env.SENTRY_ORG,
-      project: process.env.SENTRY_PROJECT,
+      org: sentrySourceMapsEnabled ? process.env.SENTRY_ORG : undefined,
+      project: sentrySourceMapsEnabled ? process.env.SENTRY_PROJECT : undefined,
+      authToken: sentrySourceMapsEnabled ? process.env.SENTRY_AUTH_TOKEN : undefined,
       silent: true,
-      ...(sentryWebpackPluginEnabled
-        ? {}
-        : {
-            sourcemaps: {
-              disable: true,
-            },
-          }),
+      telemetry: false,
+      disableLogger: true,
+      sourcemaps: {
+        disable: !sentrySourceMapsEnabled,
+      },
     })
   : nextConfig;

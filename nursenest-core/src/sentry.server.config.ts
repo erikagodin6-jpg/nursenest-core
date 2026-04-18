@@ -1,17 +1,20 @@
 import * as Sentry from "@sentry/nextjs";
 import { getSentryDsnServer } from "@/lib/observability/sentry-dsn";
+import {
+  getSentryEnvironmentServer,
+  getSentryProfilesSampleRate,
+  getSentryTraceSampleRate,
+} from "@/lib/observability/sentry-flags";
 import { getSentryReleaseServer } from "@/lib/observability/sentry-release";
 import { scrubSentryEvent } from "@/lib/observability/sentry-scrub";
-
-const isDev = process.env.NODE_ENV === "development";
 
 Sentry.init({
   dsn: getSentryDsnServer(),
   release: getSentryReleaseServer(),
-  environment: process.env.SENTRY_ENVIRONMENT || process.env.VERCEL_ENV || process.env.NODE_ENV,
+  environment: getSentryEnvironmentServer(),
   sendDefaultPii: false,
-  tracesSampleRate: isDev ? Number(process.env.SENTRY_TRACES_SAMPLE_RATE ?? 0.2) : Number(process.env.SENTRY_TRACES_SAMPLE_RATE ?? 0.08),
-  profilesSampleRate: isDev ? 0 : Number(process.env.SENTRY_PROFILES_SAMPLE_RATE ?? 0),
+  tracesSampleRate: getSentryTraceSampleRate("server"),
+  profilesSampleRate: getSentryProfilesSampleRate(),
   maxBreadcrumbs: 80,
   ignoreErrors: [
     /^ResizeObserver loop/i,

@@ -4,6 +4,8 @@ import { PrismaClient, type Prisma } from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as {
   prisma?: PrismaClient;
+  __PRISMA_CLIENT_COUNT__?: number;
+  __PRISMA_CLIENT_DUPLICATE_WARNED__?: boolean;
 };
 
 /** Query capture + bounded-read heuristics (see `prisma-query-audit.ts`). Off in production unless `PRISMA_QUERY_AUDIT=1`. */
@@ -28,9 +30,12 @@ if ((globalThis as typeof globalThis & { __ENV_BOOTSTRAP_RAN__?: boolean }).__EN
 }
 
 function registerPrismaClientConstruction(): void {
-  const g = globalThis as typeof globalThis & { __PRISMA_CLIENT_COUNT__?: number };
-  g.__PRISMA_CLIENT_COUNT__ = (g.__PRISMA_CLIENT_COUNT__ ?? 0) + 1;
-  if (g.__PRISMA_CLIENT_COUNT__ > 1) {
+  globalForPrisma.__PRISMA_CLIENT_COUNT__ = (globalForPrisma.__PRISMA_CLIENT_COUNT__ ?? 0) + 1;
+  if (
+    globalForPrisma.__PRISMA_CLIENT_COUNT__ > 1 &&
+    globalForPrisma.__PRISMA_CLIENT_DUPLICATE_WARNED__ !== true
+  ) {
+    globalForPrisma.__PRISMA_CLIENT_DUPLICATE_WARNED__ = true;
     console.warn(
       "[prisma] Multiple Prisma clients detected — more than one PrismaClient was constructed in this process. Use the shared singleton from src/lib/db.ts.",
     );

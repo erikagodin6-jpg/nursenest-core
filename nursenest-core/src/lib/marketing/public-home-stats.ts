@@ -15,6 +15,10 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 import { recordPaywallProofNeutral } from "@/lib/observability/production-signal-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import {
+  captureSentrySoftError,
+  withSentryServerSpan,
+} from "@/lib/observability/sentry-route-observability";
 import { safePrismaCountTimeout, withPrismaReadFallbackTimeout } from "@/lib/prisma/safe-reads";
 
 /** Full payload returned by `GET /api/public/home-stats` — shared with the marketing homepage (SSR). */
@@ -72,33 +76,50 @@ export function getDegradedPublicHomeStatsFallback(
  * Use `getCachedPublicHomeStats` on the homepage / paywall to avoid duplicate DB work and “0 → value” flashes.
  */
 export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
-  if (!isDatabaseUrlConfigured() || isRuntimeSafeMode()) {
-    return {
-      totalLessons: 0,
-      pathwayLessonsPublished: 0,
-      contentItemsLessonCount: 0,
-      questionCount: 0,
-      totalFlashcards: 0,
-      totalDecks: 0,
-      storeProductCount: 0,
-      registeredLearners: 0,
-      questionsByTier: {},
-      scenarioCount: 0,
-      topicCategoryCount: 0,
-      degraded: true,
-      runtimeSafeMode: isRuntimeSafeMode(),
-      proofDisplay: "neutral",
-    };
-  }
+  return withSentryServerSpan(
+    {
+      name: "marketing.home.public_stats",
+      op: "db.query",
+      attributes: { route: "/" },
+    },
+    async () => {
+      if (!isDatabaseUrlConfigured() || isRuntimeSafeMode()) {
+        return {
+          totalLessons: 0,
+          pathwayLessonsPublished: 0,
+          contentItemsLessonCount: 0,
+          questionCount: 0,
+          totalFlashcards: 0,
+          totalDecks: 0,
+          storeProductCount: 0,
+          registeredLearners: 0,
+          questionsByTier: {},
+          scenarioCount: 0,
+          topicCategoryCount: 0,
+          degraded: true,
+          runtimeSafeMode: isRuntimeSafeMode(),
+          proofDisplay: "neutral",
+        };
+      }
 
-  const t0 = Date.now();
-  try {
-    return await computePublicHomeStats(t0);
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    safeServerLog("prisma", "home_stats_threw", { message: msg.slice(0, 300) });
-    return getDegradedPublicHomeStatsFallback("exception");
-  }
+      const t0 = Date.now();
+      try {
+        return await computePublicHomeStats(t0);
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        safeServerLog("prisma", "home_stats_threw", { message: msg.slice(0, 300) });
+        captureSentrySoftError({
+          scope: "marketing_home",
+          event: "public_stats_failed",
+          error: e,
+          route: "/",
+          feature: "marketing_home",
+          meta: { message: msg.slice(0, 200) },
+        });
+        return getDegradedPublicHomeStatsFallback("exception");
+      }
+    },
+  );
 }
 
 

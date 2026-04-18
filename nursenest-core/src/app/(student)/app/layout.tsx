@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import { AdminGlobalCommandPalette } from "@/components/admin/admin-global-command-palette";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 
@@ -30,6 +32,9 @@ export default async function AppSegmentLayout({ children }: { children: React.R
   return (
     <MarketingI18nProvider locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
       {children}
+      <Suspense fallback={null}>
+        <AdminGlobalCommandPalette />
+      </Suspense>
     </MarketingI18nProvider>
   );
 }

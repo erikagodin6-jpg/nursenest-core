@@ -3,12 +3,13 @@
  * Sentry.init lives in `sentry.client.config.ts` (Session Replay + tracing).
  */
 import * as Sentry from "@sentry/nextjs";
+import { isSentryClientRuntimeEnabled } from "@/lib/observability/sentry-flags";
 
-if (process.env.NEXT_PUBLIC_SENTRY_ENABLED === "true") {
+if (isSentryClientRuntimeEnabled()) {
   void import("./sentry.client.config");
 }
 
 export const onRouterTransitionStart =
-  process.env.NEXT_PUBLIC_SENTRY_ENABLED === "true"
+  isSentryClientRuntimeEnabled()
     ? Sentry.captureRouterTransitionStart
     : () => {};

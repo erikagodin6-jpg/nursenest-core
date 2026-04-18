@@ -28,6 +28,10 @@ function shouldSkipPathForAccessLog(rawUrl: string): boolean {
   return false;
 }
 
+function shouldEmitLifecycleStart(route: string): boolean {
+  return route === "/" || route === "/tools";
+}
+
 export function installHttpAccessLogHook(): void {
   if (installed || !shouldEmitAccessLog()) return;
   installed = true;
@@ -41,10 +45,17 @@ export function installHttpAccessLogHook(): void {
       if (!shouldSkipPathForAccessLog(rawUrl)) {
         const started = Date.now();
         const cpu0 = process.cpuUsage();
+        const route = rawUrl.split("?")[0]?.slice(0, 160) ?? "";
+        if (shouldEmitLifecycleStart(route)) {
+          safeServerLog("http", "request_start", {
+            schema: "nn.http_access.v1",
+            route,
+            method: req.method ?? "GET",
+          });
+        }
         res.on("finish", () => {
           try {
             const responseTimeMs = Date.now() - started;
-            const route = rawUrl.split("?")[0]?.slice(0, 160) ?? "";
             const mem = process.memoryUsage();
             const cpu = process.cpuUsage(cpu0);
             const memoryUsageHeapMb = Math.round(mem.heapUsed / 1024 / 1024);
@@ -73,6 +84,12 @@ export function installHttpAccessLogHook(): void {
                 ...baseMeta,
                 thresholdMs: 1000,
               });
+              if (shouldEmitLifecycleStart(route)) {
+                safeServerLog("http", "request_slow", {
+                  ...baseMeta,
+                  thresholdMs: 1000,
+                });
+              }
             }
             if (statusCode >= 500) {
               safeServerLog("http", "request_error_response", {

@@ -5,6 +5,7 @@
  */
 import * as Sentry from "@sentry/nextjs";
 import { redactMetaForLog } from "@/lib/env/redact-secrets";
+import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
 
 const PREFIX = "[nursenest-core]";
 
@@ -31,6 +32,7 @@ export function safeServerLogCritical(
   flowTags?: Record<string, string>,
 ): void {
   safeServerLog(scope, event, meta);
+  if (!isSentryServerRuntimeEnabled()) return;
   const err = error instanceof Error ? error : error ? new Error(String(error)) : new Error(`${scope}:${event}`);
   const extra =
     meta && Object.keys(meta).length > 0

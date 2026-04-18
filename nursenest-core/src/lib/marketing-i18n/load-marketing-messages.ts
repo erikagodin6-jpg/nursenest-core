@@ -9,6 +9,10 @@ import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-mark
 import { loadMergedMarketingMessagesFromNextPublicDir } from "@/lib/i18n/merge-next-public-i18n-shards";
 import { getTranslationCacheGeneration } from "@/lib/i18n/i18n-translation-cache";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import {
+  captureSentrySoftError,
+  withSentryServerSpan,
+} from "@/lib/observability/sentry-route-observability";
 import { PUBLIC_I18N_SHARD_FILENAMES } from "@shared/i18n-shard-policy";
 
 /**
@@ -140,30 +144,44 @@ async function fetchCdnFragment(
   const pending = cdnInflight.get(inflightKey);
   if (pending) return pending;
 
-  const work = (async () => {
-    try {
-      const res = await safeAwait(
-        fetch(url, { cache: "force-cache" }),
-        `marketing_i18n.fetch_fragment:${locale}:${label}`,
-        MARKETING_I18N_TIMEOUT_MS,
-      );
-      if (!res?.ok) return null;
-      const json = await safeAwait(
-        res.json() as Promise<MarketingMessages>,
-        `marketing_i18n.fetch_fragment_json:${locale}:${label}`,
-        MARKETING_I18N_TIMEOUT_MS,
-      );
-      if (!json) return null;
-      const part = normalizeMarketingMessagesRecord(json);
-      if (Object.keys(part).length === 0) return null;
-      cdnFragmentCache.set(fragmentKey, part);
-      return part;
-    } catch {
-      return null;
-    } finally {
-      cdnInflight.delete(inflightKey);
-    }
-  })();
+  const work = withSentryServerSpan(
+    {
+      name: "marketing.i18n.fragment",
+      op: "resource.fetch",
+      attributes: { locale, label },
+    },
+    async () => {
+      try {
+        const res = await safeAwait(
+          fetch(url, { cache: "force-cache" }),
+          `marketing_i18n.fetch_fragment:${locale}:${label}`,
+          MARKETING_I18N_TIMEOUT_MS,
+        );
+        if (!res?.ok) return null;
+        const json = await safeAwait(
+          res.json() as Promise<MarketingMessages>,
+          `marketing_i18n.fetch_fragment_json:${locale}:${label}`,
+          MARKETING_I18N_TIMEOUT_MS,
+        );
+        if (!json) return null;
+        const part = normalizeMarketingMessagesRecord(json);
+        if (Object.keys(part).length === 0) return null;
+        cdnFragmentCache.set(fragmentKey, part);
+        return part;
+      } catch (error) {
+        captureSentrySoftError({
+          scope: "marketing_i18n",
+          event: "cdn_fragment_failed",
+          error,
+          feature: "marketing_i18n",
+          meta: { locale, label },
+        });
+        return null;
+      } finally {
+        cdnInflight.delete(inflightKey);
+      }
+    },
+  );
 
   cdnInflight.set(inflightKey, work);
   return work;
@@ -182,8 +200,14 @@ async function loadFromCdn(locale: string): Promise<MarketingMessages | null> {
   const pendingMerged = cdnInflight.get(mergedInflightKey);
   if (pendingMerged) return pendingMerged;
 
-  const work = (async () => {
-    try {
+  const work = withSentryServerSpan(
+    {
+      name: "marketing.i18n.bundle",
+      op: "resource.fetch",
+      attributes: { locale },
+    },
+    async () => {
+      try {
       const legacyUrl = `${base}/${encodeURIComponent(locale)}.json`;
       const legacyRes = await safeAwait(
         fetch(legacyUrl, { cache: "force-cache" }),
@@ -248,11 +272,19 @@ async function loadFromCdn(locale: string): Promise<MarketingMessages | null> {
     } catch (e) {
       const detail = e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200);
       safeServerLog("i18n", "cdn_bundle_fetch_error", { locale, detail });
+      captureSentrySoftError({
+        scope: "marketing_i18n",
+        event: "cdn_bundle_fetch_error",
+        error: e,
+        feature: "marketing_i18n",
+        meta: { locale, detail },
+      });
       return null;
     } finally {
       cdnInflight.delete(mergedInflightKey);
     }
-  })();
+    },
+  );
 
   cdnInflight.set(mergedInflightKey, work);
   return work;
@@ -274,19 +306,28 @@ export function loadMarketingMessagesSync(locale: string): MarketingMessages {
 
 /** Server / Node: merged monolith + marketing strings. Tries disk first, then optional CDN, then English. */
 export const loadMarketingMessages = cache(async function loadMarketingMessages(locale: string): Promise<MarketingMessages> {
-  const disk = loadFromDiskSync(locale);
-  if (disk) return disk;
+  return withSentryServerSpan(
+    {
+      name: "marketing.i18n.load_messages",
+      op: "resource.load",
+      attributes: { locale },
+    },
+    async () => {
+      const disk = loadFromDiskSync(locale);
+      if (disk) return disk;
 
-  const fromCdn = await safeAwait(
-    loadFromCdn(locale),
-    `marketing_i18n.load_from_cdn:${locale}`,
-    MARKETING_I18N_TIMEOUT_MS,
+      const fromCdn = await safeAwait(
+        loadFromCdn(locale),
+        `marketing_i18n.load_from_cdn:${locale}`,
+        MARKETING_I18N_TIMEOUT_MS,
+      );
+      if (fromCdn) return fromCdn;
+
+      safeServerLog("i18n", "merged_bundle_missing", { locale });
+      if (locale === DEFAULT_MARKETING_LOCALE) {
+        return loadEnglishBundleFromDisk();
+      }
+      return {} as MarketingMessages;
+    },
   );
-  if (fromCdn) return fromCdn;
-
-  safeServerLog("i18n", "merged_bundle_missing", { locale });
-  if (locale === DEFAULT_MARKETING_LOCALE) {
-    return loadEnglishBundleFromDisk();
-  }
-  return {} as MarketingMessages;
 });

@@ -1,16 +1,17 @@
 import * as Sentry from "@sentry/nextjs";
+import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
-    const { registerNodeInstrumentation } = await import("@/lib/instrumentation/register-node");
-    await registerNodeInstrumentation();
-    if (process.env.SENTRY_ENABLED === "true") {
+    if (isSentryServerRuntimeEnabled()) {
       await import("./sentry.server.config");
     }
+    const { registerNodeInstrumentation } = await import("@/lib/instrumentation/register-node");
+    await registerNodeInstrumentation();
   }
   if (process.env.NEXT_RUNTIME === "edge") {
-    if (process.env.SENTRY_ENABLED === "true") {
+    if (isSentryServerRuntimeEnabled()) {
       await import("./sentry.edge.config");
     }
   }
@@ -25,6 +26,6 @@ export const onRequestError: typeof Sentry.captureRequestError = (...args) => {
     errorName: err instanceof Error ? err.name : "non_error",
     messageSample: msg.slice(0, 200),
   });
-  if (process.env.SENTRY_ENABLED !== "true") return;
+  if (!isSentryServerRuntimeEnabled()) return;
   return Sentry.captureRequestError(...args);
 };

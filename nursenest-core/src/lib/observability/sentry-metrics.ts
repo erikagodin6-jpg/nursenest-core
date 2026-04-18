@@ -3,9 +3,10 @@
  * Prefer **low-cardinality** `attributes` keys — high cardinality breaks billing and alert noise.
  */
 import { metrics } from "@sentry/core";
+import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
 
 function enabled(): boolean {
-  return process.env.SENTRY_ENABLED === "true";
+  return isSentryServerRuntimeEnabled();
 }
 
 /** Increment a counter (e.g. auth failure reason bucket, checkout outcome). */
