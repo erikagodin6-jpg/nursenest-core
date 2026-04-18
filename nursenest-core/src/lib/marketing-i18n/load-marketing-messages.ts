@@ -6,6 +6,8 @@ import { safeAwait } from "@/lib/async/safe-await";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-marketing-messages";
+import { loadMarketingMessageShardsSync } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { MARKETING_CHROME_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { loadMergedMarketingMessagesFromNextPublicDir } from "@/lib/i18n/merge-next-public-i18n-shards";
 import { getTranslationCacheGeneration } from "@/lib/i18n/i18n-translation-cache";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -37,6 +39,7 @@ import { PUBLIC_I18N_SHARD_FILENAMES } from "@shared/i18n-shard-policy";
  */
 const MAX_MERGED_BUNDLE_BYTES = 12 * 1024 * 1024;
 const MARKETING_I18N_TIMEOUT_MS = 1500;
+const MARKETING_BUILD_PHASE = "phase-production-build";
 const diskMergedLocaleCache = new Map<string, MarketingMessages>();
 
 const isEmptyValue = (v: string | undefined): boolean =>
@@ -326,6 +329,20 @@ export const loadMarketingMessages = cache(async function loadMarketingMessages(
           fallbackLocale: DEFAULT_MARKETING_LOCALE,
         });
         return loadEnglishBundleFromDisk();
+      }
+
+      if (process.env.NEXT_PHASE === MARKETING_BUILD_PHASE) {
+        safeServerLog("i18n", "marketing_i18n_build_shard_only", {
+          locale,
+          mode: "build_shard_only",
+          fallbackLocale: DEFAULT_MARKETING_LOCALE,
+        });
+        const chromeMessages = loadMarketingMessageShardsSync(locale, MARKETING_CHROME_MESSAGE_SHARDS);
+        const fallbackChromeMessages =
+          locale === DEFAULT_MARKETING_LOCALE
+            ? chromeMessages
+            : loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS);
+        return mergeMissingMessageKeys(chromeMessages, fallbackChromeMessages);
       }
 
       const disk = loadFromDiskSync(locale);
