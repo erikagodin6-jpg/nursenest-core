@@ -2,6 +2,7 @@ import "server-only";
 import { existsSync, statSync } from "fs";
 import path from "path";
 import { cache } from "react";
+import { safeAwait } from "@/lib/async/safe-await";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-marketing-messages";
@@ -30,6 +31,7 @@ import { PUBLIC_I18N_SHARD_FILENAMES } from "@shared/i18n-shard-policy";
  * `MARKETING_I18N_CDN_CACHE_REVISION` so new CDN blobs can invalidate without stale cross-locale reuse.
  */
 const MAX_MERGED_BUNDLE_BYTES = 12 * 1024 * 1024;
+const MARKETING_I18N_TIMEOUT_MS = 1500;
 
 const isEmptyValue = (v: string | undefined): boolean =>
   v === undefined || (typeof v === "string" && v.trim() === "");
@@ -140,9 +142,19 @@ async function fetchCdnFragment(
 
   const work = (async () => {
     try {
-      const res = await fetch(url, { cache: "force-cache" });
-      if (!res.ok) return null;
-      const part = normalizeMarketingMessagesRecord(await res.json());
+      const res = await safeAwait(
+        fetch(url, { cache: "force-cache" }),
+        `marketing_i18n.fetch_fragment:${locale}:${label}`,
+        MARKETING_I18N_TIMEOUT_MS,
+      );
+      if (!res?.ok) return null;
+      const json = await safeAwait(
+        res.json() as Promise<MarketingMessages>,
+        `marketing_i18n.fetch_fragment_json:${locale}:${label}`,
+        MARKETING_I18N_TIMEOUT_MS,
+      );
+      if (!json) return null;
+      const part = normalizeMarketingMessagesRecord(json);
       if (Object.keys(part).length === 0) return null;
       cdnFragmentCache.set(fragmentKey, part);
       return part;
@@ -173,13 +185,24 @@ async function loadFromCdn(locale: string): Promise<MarketingMessages | null> {
   const work = (async () => {
     try {
       const legacyUrl = `${base}/${encodeURIComponent(locale)}.json`;
-      const legacyRes = await fetch(legacyUrl, { cache: "force-cache" });
+      const legacyRes = await safeAwait(
+        fetch(legacyUrl, { cache: "force-cache" }),
+        `marketing_i18n.fetch_legacy:${locale}`,
+        MARKETING_I18N_TIMEOUT_MS,
+      );
 
+      const legacyStatus = legacyRes?.status ?? "timeout_or_missing";
       let data: MarketingMessages | null = null;
-      if (legacyRes.ok) {
-        const raw = normalizeMarketingMessagesRecord(await legacyRes.json());
+      if (legacyRes?.ok) {
+        const json = await safeAwait(
+          legacyRes.json() as Promise<MarketingMessages>,
+          `marketing_i18n.fetch_legacy_json:${locale}`,
+          MARKETING_I18N_TIMEOUT_MS,
+        );
+        if (!json) return null;
+        const raw = normalizeMarketingMessagesRecord(json);
         if (Object.keys(raw).length === 0) {
-          safeServerLog("i18n", "cdn_bundle_fetch_failed", { locale, status: legacyRes.status });
+          safeServerLog("i18n", "cdn_bundle_fetch_failed", { locale, status: legacyStatus });
           return null;
         }
         cdnFragmentCache.set(`${cacheGen}|${locale}|legacy`, raw);
@@ -212,7 +235,7 @@ async function loadFromCdn(locale: string): Promise<MarketingMessages | null> {
       }
 
       if (!data || Object.keys(data).length === 0) {
-        safeServerLog("i18n", "cdn_bundle_fetch_failed", { locale, status: legacyRes.status });
+        safeServerLog("i18n", "cdn_bundle_fetch_failed", { locale, status: legacyStatus });
         return null;
       }
 
@@ -254,7 +277,11 @@ export const loadMarketingMessages = cache(async function loadMarketingMessages(
   const disk = loadFromDiskSync(locale);
   if (disk) return disk;
 
-  const fromCdn = await loadFromCdn(locale);
+  const fromCdn = await safeAwait(
+    loadFromCdn(locale),
+    `marketing_i18n.load_from_cdn:${locale}`,
+    MARKETING_I18N_TIMEOUT_MS,
+  );
   if (fromCdn) return fromCdn;
 
   safeServerLog("i18n", "merged_bundle_missing", { locale });
