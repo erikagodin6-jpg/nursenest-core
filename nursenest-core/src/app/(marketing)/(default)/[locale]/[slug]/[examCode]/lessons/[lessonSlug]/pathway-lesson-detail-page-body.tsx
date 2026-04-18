@@ -2,7 +2,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { ExamFamily, type TierCode } from "@prisma/client";
-import { auth } from "@/lib/auth";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
 import { LessonSectionCard } from "@/components/lessons/lesson-section-card";
 import { contentTierForPathwayLessonRender } from "@/lib/lessons/global-lesson-architecture";
@@ -32,8 +31,6 @@ import { PathwayLessonMedicalEducationJsonLd } from "@/components/seo/seo-json-l
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { pathwayLessonDetailBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { getPathwayLessonContentDates } from "@/lib/seo/pathway-lesson-content-dates";
-import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
-import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
 import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
@@ -85,6 +82,10 @@ import {
   pickPathwayLessonMarketingRecordChipsSource,
   toPathwayLessonDeferredServerSnapshot,
 } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
+import { loadMarketingMessageShardsSync } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { LEARNER_APP_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 
 /**
  * Paywall: full `PathwayLessonRecord` / `sections[]` stay in this server component. Gate with
@@ -100,19 +101,16 @@ export type PathwayLessonDetailPageBodyProps = {
 };
 
 export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlug }: PathwayLessonDetailPageBodyProps) {
-  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
+  const lessonContentLocale = DEFAULT_MARKETING_LOCALE;
 
-  const [lessonResult, sessionResult] = await Promise.allSettled([
+  const [lessonResult] = await Promise.allSettled([
     loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, lessonContentLocale),
-    auth(),
   ]);
   const loadedLesson =
     lessonResult.status === "fulfilled" ? lessonResult.value : undefined;
   const lessonLoadFailed = lessonResult.status === "rejected";
 
-  const session = sessionResult.status === "fulfilled" ? sessionResult.value : null;
-
-  const userId = (session?.user as { id?: string })?.id ?? "";
+  const userId = "";
   const studySettings = await loadStudySettings(userId);
 
   const [entRes, lpRes] = await Promise.allSettled([
@@ -192,8 +190,12 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
     topicSlug: lesson.topicSlug,
   });
   const requestedNorm = normalizePathwayLessonLocale(lessonContentLocale);
-  const marketingUiLocale = await getMarketingLocaleForDefaultRoute();
-  const { t } = await getLearnerMarketingBundle();
+  const marketingUiLocale = DEFAULT_MARKETING_LOCALE;
+  const marketingMessages = loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, LEARNER_APP_MESSAGE_SHARDS);
+  const t = (key: string, params?: Record<string, string | number | undefined>) =>
+    formatMarketingMessage(marketingMessages, key, params, marketingMessages, {
+      locale: DEFAULT_MARKETING_LOCALE,
+    });
   const showLocaleFallbackNotice = Boolean(
     lesson.localeMeta &&
       (lesson.localeMeta.usedLocaleFallback ||

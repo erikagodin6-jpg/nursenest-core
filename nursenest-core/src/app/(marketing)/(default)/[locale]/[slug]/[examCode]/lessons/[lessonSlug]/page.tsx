@@ -8,7 +8,7 @@ import {
   pathwayLessonEligibleForPublicMarketingSurface,
   resolveMarketingPathwayLessonRouteResolution,
 } from "@/lib/lessons/pathway-lesson-route-access";
-import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, {
         pathname,
       });
-      const viewerLessonLocale = await getMarketingLocaleForDefaultRoute();
+      const viewerLessonLocale = DEFAULT_MARKETING_LOCALE;
       const lesson = pathway
         ? await loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, viewerLessonLocale)
         : undefined;

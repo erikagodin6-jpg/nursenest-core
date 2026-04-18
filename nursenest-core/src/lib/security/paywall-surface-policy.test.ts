@@ -129,6 +129,45 @@ describe("paywall surface policy (static checks)", () => {
     assert.match(page, /PathwayLessonDetailPageBody/);
     assert.match(page, /Subscriber-only supplements/);
   });
+
+  it("marketing lesson detail routes do not use server auth during SSR", () => {
+    const alliedLessonPage = readFileSync(
+      join(
+        nursenestCoreRoot,
+        "src",
+        "app",
+        "(marketing)",
+        "(default)",
+        "allied-health",
+        "[slug]",
+        "lessons",
+        "[lessonSlug]",
+        "page.tsx",
+      ),
+      "utf8",
+    );
+    assert.doesNotMatch(alliedLessonPage, /from\s+["']@\/lib\/auth["']/);
+    assert.doesNotMatch(alliedLessonPage, /\bauth\(/);
+
+    const marketingLessonBody = readFileSync(
+      join(
+        nursenestCoreRoot,
+        "src",
+        "app",
+        "(marketing)",
+        "(default)",
+        "[locale]",
+        "[slug]",
+        "[examCode]",
+        "lessons",
+        "[lessonSlug]",
+        "pathway-lesson-detail-page-body.tsx",
+      ),
+      "utf8",
+    );
+    assert.doesNotMatch(marketingLessonBody, /from\s+["']@\/lib\/auth["']/);
+    assert.doesNotMatch(marketingLessonBody, /\bauth\(/);
+  });
 });
 
 describe("locked marketing preview record shape", () => {

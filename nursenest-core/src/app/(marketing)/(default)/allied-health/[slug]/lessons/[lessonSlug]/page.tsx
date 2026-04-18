@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
 import { PathwayLessonBody } from "@/components/lessons/pathway-lesson-body";
 import { LessonSectionCard } from "@/components/lessons/lesson-section-card";
 import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
@@ -20,7 +19,7 @@ import {
   getPathwayLessonPreviewKind,
   visibleSectionsForLesson,
 } from "@/lib/lessons/pathway-lesson-access";
-import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { normalizePathwayLessonLocale } from "@/lib/lessons/pathway-lesson-locale";
 import {
   getPathwayLesson,
@@ -115,7 +114,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const resolved = resolveProfession(slug);
       const prof = resolved?.prof;
       const pathway = prof ? getPathwayOrThrow(prof.pathwayId) : undefined;
-      const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
+      const lessonContentLocale = DEFAULT_MARKETING_LOCALE;
       const lesson = pathway ? await getPathwayLesson(pathway.id, lessonSlug, lessonContentLocale) : undefined;
       if (!prof || !pathway || !lesson) return {};
       if (!alliedLessonMatchesProfessionFilter(lesson, prof.topicSlugsIn)) return {};
@@ -149,14 +148,13 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   const pathway = getPathwayOrThrow(prof.pathwayId);
   if (!pathway) notFound();
 
-  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
+  const lessonContentLocale = DEFAULT_MARKETING_LOCALE;
   const lesson = await getPathwayLesson(pathway.id, lessonSlug, lessonContentLocale);
   if (!lesson) notFound();
   if (!lesson.structuralQuality?.publicComplete) notFound();
   if (!alliedLessonMatchesProfessionFilter(lesson, prof.topicSlugsIn)) notFound();
 
-  const session = await auth();
-  const userId = (session?.user as { id?: string })?.id ?? "";
+  const userId = "";
   const entitlement = await resolveEntitlementForPage(userId);
   const studySettings = await loadStudySettings(userId);
 
