@@ -25,6 +25,47 @@ describe("marketing static generation policy", () => {
     assert.match(toolsPage, /export const dynamic = "force-dynamic"/);
   });
 
+  it("keeps low-value default brochure, auth, and legal routes out of build-time static generation", () => {
+    const dynamicPages = [
+      "app/(marketing)/(default)/about/page.tsx",
+      "app/(marketing)/(default)/contact/page.tsx",
+      "app/(marketing)/(default)/faq/page.tsx",
+      "app/(marketing)/(default)/how-it-works/page.tsx",
+      "app/(marketing)/(default)/for-institutions/page.tsx",
+      "app/(marketing)/(default)/login/page.tsx",
+      "app/(marketing)/(default)/signup/page.tsx",
+      "app/(marketing)/(default)/forgot-password/page.tsx",
+      "app/(marketing)/(default)/reset-password/page.tsx",
+      "app/(marketing)/(default)/acceptable-use/page.tsx",
+      "app/(marketing)/(default)/content-review-policy/page.tsx",
+      "app/(marketing)/(default)/editorial-policy/page.tsx",
+      "app/(marketing)/(default)/privacy/page.tsx",
+      "app/(marketing)/(default)/refund-policy/page.tsx",
+      "app/(marketing)/(default)/terms/page.tsx",
+      "app/(marketing)/(default)/disclaimer/page.tsx",
+    ];
+
+    for (const page of dynamicPages) {
+      assert.match(readAppFile(page), /export const dynamic = "force-dynamic"/, page);
+    }
+  });
+
+  it("uses metadata-slice loaders on default auth entry routes", () => {
+    const authPages = [
+      "app/(marketing)/(default)/login/page.tsx",
+      "app/(marketing)/(default)/signup/page.tsx",
+      "app/(marketing)/(default)/forgot-password/page.tsx",
+      "app/(marketing)/(default)/reset-password/page.tsx",
+      "app/(marketing)/(default)/for-institutions/page.tsx",
+    ];
+
+    for (const page of authPages) {
+      const src = readAppFile(page);
+      assert.match(src, /loadMarketingMetadataMessages/, page);
+      assert.doesNotMatch(src, /loadMarketingMessages/, page);
+    }
+  });
+
   it("does not use deprecated next eslint build config", () => {
     const nextConfig = readFileSync(join(appRoot, "..", "next.config.ts"), "utf8");
     assert.doesNotMatch(nextConfig, /eslint:\s*\{/);

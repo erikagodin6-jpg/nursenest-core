@@ -1,20 +1,26 @@
-import { GET as healthGet } from "../api/health/route";
-
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+const READY_HEADERS = {
+  "content-type": "text/plain; charset=utf-8",
+  "cache-control": "no-store",
+};
+
 /**
  * Internal-only startup alias for older bootstrap wrappers that still probe the
- * historical path. Keep it lightweight and identical to `/api/health`.
+ * historical path. Keep this outside `/api/*` and independent from the proxy/auth
+ * stack so it stays usable during cold start.
  */
-export async function GET() {
-  return healthGet();
+export function GET() {
+  return new Response("ready", {
+    status: 200,
+    headers: READY_HEADERS,
+  });
 }
 
-export async function HEAD() {
-  const response = await healthGet();
+export function HEAD() {
   return new Response(null, {
-    status: response.status,
-    headers: response.headers,
+    status: 200,
+    headers: READY_HEADERS,
   });
 }

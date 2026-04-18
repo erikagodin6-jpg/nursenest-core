@@ -28,3 +28,21 @@ test("readyz exposes a minimal readiness contract", async () => {
   assert.equal(await headResponse.text(), "");
   assert.equal(headResponse.headers.get("content-type"), "text/plain; charset=utf-8");
 });
+
+test("legacy bootstrap readiness alias stays lightweight and outside api routing", async () => {
+  const routeModule = await import("../../app/_nn_bootstrap_ready_check__/route");
+  assert.equal(typeof routeModule.GET, "function");
+  assert.equal(typeof routeModule.HEAD, "function");
+
+  const getResponse = await routeModule.GET();
+  assert.equal(getResponse.status, 200);
+  assert.equal(await getResponse.text(), "ready");
+  assert.equal(getResponse.headers.get("content-type"), "text/plain; charset=utf-8");
+  assert.equal(getResponse.headers.get("cache-control"), "no-store");
+
+  const headResponse = await routeModule.HEAD();
+  assert.equal(headResponse.status, 200);
+  assert.equal(await headResponse.text(), "");
+  assert.equal(headResponse.headers.get("content-type"), "text/plain; charset=utf-8");
+  assert.equal(headResponse.headers.get("cache-control"), "no-store");
+});

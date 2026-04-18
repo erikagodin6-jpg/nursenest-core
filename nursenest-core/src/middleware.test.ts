@@ -33,6 +33,31 @@ test("proxy matcher includes /app, /admin, and exam hub roots; auth-middleware u
   assert.match(am, /\/app/);
 });
 
+test("bootstrap readiness routes stay outside proxy matcher", () => {
+  const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
+  assert.doesNotMatch(proxySrc, /"\/readyz"/);
+  assert.doesNotMatch(proxySrc, /"\/_nn_bootstrap_ready_check__"/);
+  assert.match(proxySrc, /pathname === "\/api\/health"/);
+  assert.match(proxySrc, /pathname === "\/api\/healthz"/);
+  assert.match(proxySrc, /pathname === "\/api\/health\/ready"/);
+});
+
+test("proxy lazy-loads heavy auth, admin, api, and marketing branches after path checks", () => {
+  const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
+  assert.match(proxySrc, /async function loadAuthProxyDeps/);
+  assert.match(proxySrc, /async function loadAdminProxyDeps/);
+  assert.match(proxySrc, /async function loadApiProxyDeps/);
+  assert.match(proxySrc, /async function loadMarketingProxyDeps/);
+  assert.match(proxySrc, /import\("@\/lib\/auth-middleware"\)/);
+  assert.match(proxySrc, /import\("next-auth\/jwt"\)/);
+  assert.match(proxySrc, /import\("@\/lib\/server\/rate-limit"\)/);
+  assert.match(proxySrc, /import\("@\/lib\/navigation\/country-exam-launch-readiness"\)/);
+  assert.doesNotMatch(proxySrc, /^import .*@\/lib\/auth-middleware.*$/m);
+  assert.doesNotMatch(proxySrc, /^import .*next-auth\/jwt.*$/m);
+  assert.doesNotMatch(proxySrc, /^import .*@\/lib\/server\/rate-limit.*$/m);
+  assert.doesNotMatch(proxySrc, /^import .*@\/lib\/navigation\/country-exam-launch-readiness.*$/m);
+});
+
 test("proxy sets x-nn-admin-path for /admin and /api/admin (RBAC header for guards)", () => {
   const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
   assert.match(proxySrc, /x-nn-admin-path/);

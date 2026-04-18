@@ -6,30 +6,119 @@
  * (sign-in). Do **not** pre-redirect `/app/lessons` with `getToken()` — in Edge it can miss valid JWTs
  * that the same middleware resolves, incorrectly sending paying subscribers to the public `/lessons` hub.
  */
-import "@/lib/auth-trust-env";
-import { getToken } from "next-auth/jwt";
 import type { NextFetchEvent, NextMiddleware } from "next/server";
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
-import { middlewareAuth } from "@/lib/auth-middleware";
-import { loadUserRoleFromDbIdentity } from "@/lib/auth/admin-role-source";
-import { isPathAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
-import { emitStructuredLog } from "@/lib/observability/structured-log";
-import { canonicalExamHubPathFromPossiblyLocalizedPath } from "@/lib/i18n/exam-hub-path";
-import { MARKETING_LOCALE_COOKIE, MARKETING_LOCALE_COOKIE_MAX_AGE } from "@/lib/i18n/marketing-locale-cookie";
-import { isRateLimitingEnabled } from "@/lib/config/production-safety-flags";
-import { enforceApiRateLimit } from "@/lib/server/rate-limit";
-import {
-  REGIONAL_EXAM_MARKETING_FALLBACK_PATH,
-} from "@/lib/marketing/expansion-exams-path-gate";
-import { globalRegionSlugFromRegionalMarketingPublicPath } from "@/lib/marketing/regional-marketing-public-gate";
-import { EXAM_HUB_PREVIEW_COOKIE } from "@/lib/admin/exam-hub-preview-cookie";
-import { isRegionPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 
-/** NextAuth `auth` middleware typing does not always align with App Router `NextRequest` + `NextFetchEvent`. */
-const runAuthMiddleware = middlewareAuth as unknown as NextMiddleware;
+type ProxyAuthDeps = {
+  getToken: typeof import("next-auth/jwt").getToken;
+  runAuthMiddleware: NextMiddleware;
+};
+
+type ProxyAdminDeps = {
+  isPathAllowedForStaffTier: typeof import("@/lib/auth/admin-path-policy").isPathAllowedForStaffTier;
+  loadUserRoleFromDbIdentity: typeof import("@/lib/auth/admin-role-source").loadUserRoleFromDbIdentity;
+  safeServerLog: typeof import("@/lib/observability/safe-server-log").safeServerLog;
+};
+
+type ProxyApiDeps = {
+  emitStructuredLog: typeof import("@/lib/observability/structured-log").emitStructuredLog;
+  enforceApiRateLimit: typeof import("@/lib/server/rate-limit").enforceApiRateLimit;
+  isRateLimitingEnabled: typeof import("@/lib/config/production-safety-flags").isRateLimitingEnabled;
+};
+
+type ProxyMarketingDeps = {
+  EXAM_HUB_PREVIEW_COOKIE: typeof import("@/lib/admin/exam-hub-preview-cookie").EXAM_HUB_PREVIEW_COOKIE;
+  MARKETING_LOCALE_COOKIE: typeof import("@/lib/i18n/marketing-locale-cookie").MARKETING_LOCALE_COOKIE;
+  MARKETING_LOCALE_COOKIE_MAX_AGE: typeof import("@/lib/i18n/marketing-locale-cookie").MARKETING_LOCALE_COOKIE_MAX_AGE;
+  REGIONAL_EXAM_MARKETING_FALLBACK_PATH: typeof import("@/lib/marketing/expansion-exams-path-gate").REGIONAL_EXAM_MARKETING_FALLBACK_PATH;
+  canonicalExamHubPathFromPossiblyLocalizedPath: typeof import("@/lib/i18n/exam-hub-path").canonicalExamHubPathFromPossiblyLocalizedPath;
+  globalRegionSlugFromRegionalMarketingPublicPath: typeof import("@/lib/marketing/regional-marketing-public-gate").globalRegionSlugFromRegionalMarketingPublicPath;
+  isRegionPublishedForPublicSite: typeof import("@/lib/navigation/country-exam-launch-readiness").isRegionPublishedForPublicSite;
+};
+
+let authDepsPromise: Promise<ProxyAuthDeps> | undefined;
+let adminDepsPromise: Promise<ProxyAdminDeps> | undefined;
+let apiDepsPromise: Promise<ProxyApiDeps> | undefined;
+let marketingDepsPromise: Promise<ProxyMarketingDeps> | undefined;
+
+async function loadAuthProxyDeps(): Promise<ProxyAuthDeps> {
+  authDepsPromise ??= (async () => {
+    await import("@/lib/auth-trust-env");
+    const [{ getToken }, { middlewareAuth }] = await Promise.all([
+      import("next-auth/jwt"),
+      import("@/lib/auth-middleware"),
+    ]);
+    return {
+      getToken,
+      runAuthMiddleware: middlewareAuth as unknown as NextMiddleware,
+    };
+  })();
+  return authDepsPromise;
+}
+
+async function loadAdminProxyDeps(): Promise<ProxyAdminDeps> {
+  adminDepsPromise ??= (async () => {
+    const [{ isPathAllowedForStaffTier }, { loadUserRoleFromDbIdentity }, { safeServerLog }] = await Promise.all([
+      import("@/lib/auth/admin-path-policy"),
+      import("@/lib/auth/admin-role-source"),
+      import("@/lib/observability/safe-server-log"),
+    ]);
+    return {
+      isPathAllowedForStaffTier,
+      loadUserRoleFromDbIdentity,
+      safeServerLog,
+    };
+  })();
+  return adminDepsPromise;
+}
+
+async function loadApiProxyDeps(): Promise<ProxyApiDeps> {
+  apiDepsPromise ??= (async () => {
+    const [{ emitStructuredLog }, { enforceApiRateLimit }, { isRateLimitingEnabled }] = await Promise.all([
+      import("@/lib/observability/structured-log"),
+      import("@/lib/server/rate-limit"),
+      import("@/lib/config/production-safety-flags"),
+    ]);
+    return {
+      emitStructuredLog,
+      enforceApiRateLimit,
+      isRateLimitingEnabled,
+    };
+  })();
+  return apiDepsPromise;
+}
+
+async function loadMarketingProxyDeps(): Promise<ProxyMarketingDeps> {
+  marketingDepsPromise ??= (async () => {
+    const [
+      { EXAM_HUB_PREVIEW_COOKIE },
+      { MARKETING_LOCALE_COOKIE, MARKETING_LOCALE_COOKIE_MAX_AGE },
+      { REGIONAL_EXAM_MARKETING_FALLBACK_PATH },
+      { canonicalExamHubPathFromPossiblyLocalizedPath },
+      { globalRegionSlugFromRegionalMarketingPublicPath },
+      { isRegionPublishedForPublicSite },
+    ] = await Promise.all([
+      import("@/lib/admin/exam-hub-preview-cookie"),
+      import("@/lib/i18n/marketing-locale-cookie"),
+      import("@/lib/marketing/expansion-exams-path-gate"),
+      import("@/lib/i18n/exam-hub-path"),
+      import("@/lib/marketing/regional-marketing-public-gate"),
+      import("@/lib/navigation/country-exam-launch-readiness"),
+    ]);
+    return {
+      EXAM_HUB_PREVIEW_COOKIE,
+      MARKETING_LOCALE_COOKIE,
+      MARKETING_LOCALE_COOKIE_MAX_AGE,
+      REGIONAL_EXAM_MARKETING_FALLBACK_PATH,
+      canonicalExamHubPathFromPossiblyLocalizedPath,
+      globalRegionSlugFromRegionalMarketingPublicPath,
+      isRegionPublishedForPublicSite,
+    };
+  })();
+  return marketingDepsPromise;
+}
 
 function isHealthProxyBypassPath(pathname: string): boolean {
   return pathname === "/api/health" || pathname === "/api/healthz" || pathname === "/api/health/ready";
@@ -102,12 +191,16 @@ function redirectWithCorrelation(request: NextRequest, pathname: string, correla
   return response;
 }
 
-async function enforceAdminProxyRoute(request: NextRequest): Promise<NextResponse | null> {
+async function enforceAdminProxyRoute(
+  request: NextRequest,
+  authDeps: ProxyAuthDeps,
+  adminDeps: ProxyAdminDeps,
+): Promise<NextResponse | null> {
   const pathname = request.nextUrl.pathname;
   if (!pathname.startsWith("/admin")) return null;
 
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
-  const token = secret ? await getToken({ req: request, secret }) : null;
+  const token = secret ? await authDeps.getToken({ req: request, secret }) : null;
   const userId =
     (typeof token?.sub === "string" && token.sub.trim()) ||
     (token as { id?: string } | null)?.id?.trim() ||
@@ -117,7 +210,7 @@ async function enforceAdminProxyRoute(request: NextRequest): Promise<NextRespons
 
   if (!userId && !email) {
     if (adminAccessDebug()) {
-      safeServerLog("admin_access", "proxy_admin_gate", {
+      adminDeps.safeServerLog("admin_access", "proxy_admin_gate", {
         pathAttempted: pathname,
         email: email ?? undefined,
         role: "missing_token_identity",
@@ -132,10 +225,10 @@ async function enforceAdminProxyRoute(request: NextRequest): Promise<NextRespons
     return response;
   }
 
-  const roleRecord = await loadUserRoleFromDbIdentity({ userId, email });
+  const roleRecord = await adminDeps.loadUserRoleFromDbIdentity({ userId, email });
   if (!roleRecord?.isAdmin) {
     if (adminAccessDebug()) {
-      safeServerLog("admin_access", "proxy_admin_gate", {
+      adminDeps.safeServerLog("admin_access", "proxy_admin_gate", {
         pathAttempted: pathname,
         email: email ?? undefined,
         role: roleRecord?.role ?? "missing",
@@ -145,9 +238,9 @@ async function enforceAdminProxyRoute(request: NextRequest): Promise<NextRespons
     return redirectWithCorrelation(request, "/app", correlationId);
   }
 
-  if (!isPathAllowedForStaffTier(roleRecord.tier, pathname)) {
+  if (!adminDeps.isPathAllowedForStaffTier(roleRecord.tier, pathname)) {
     if (adminAccessDebug()) {
-      safeServerLog("admin_access", "proxy_admin_gate", {
+      adminDeps.safeServerLog("admin_access", "proxy_admin_gate", {
         pathAttempted: pathname,
         email: email ?? undefined,
         role: roleRecord.role,
@@ -158,7 +251,7 @@ async function enforceAdminProxyRoute(request: NextRequest): Promise<NextRespons
   }
 
   if (adminAccessDebug()) {
-    safeServerLog("admin_access", "proxy_admin_gate", {
+    adminDeps.safeServerLog("admin_access", "proxy_admin_gate", {
       pathAttempted: pathname,
       email: email ?? undefined,
       role: roleRecord.role,
@@ -201,35 +294,37 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
   }
 
   if (pathname.startsWith("/api")) {
+    const { emitStructuredLog, enforceApiRateLimit, isRateLimitingEnabled } = await loadApiProxyDeps();
     const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim();
     emitStructuredLog("request_start", "info", {
       correlationId: cid,
       route: pathname.slice(0, 200),
       method: req.method,
     });
-  }
 
-  /** Next.js 16+ proxy defaults to the Node.js runtime — `checkRateLimitUnified` uses shared Postgres buckets when `DATABASE_URL` is set (not per-instance memory). */
-  if (pathname.startsWith("/api/") && isRateLimitingEnabled()) {
-    const limited = await enforceApiRateLimit(req);
-    if (limited) {
-      const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
-      limited.headers.set(NN_CORRELATION_HEADER, cid.slice(0, 128));
-      return limited;
+    /** Next.js 16+ proxy defaults to the Node.js runtime — `checkRateLimitUnified` uses shared Postgres buckets when `DATABASE_URL` is set (not per-instance memory). */
+    if (pathname.startsWith("/api/") && isRateLimitingEnabled()) {
+      const limited = await enforceApiRateLimit(req);
+      if (limited) {
+        const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
+        limited.headers.set(NN_CORRELATION_HEADER, cid.slice(0, 128));
+        return limited;
+      }
     }
   }
 
+  const marketingDeps = await loadMarketingProxyDeps();
   // ── Existing: locale-prefixed exam hub canonical redirect ──────────────────
-  const canonicalExamHub = canonicalExamHubPathFromPossiblyLocalizedPath(pathname);
+  const canonicalExamHub = marketingDeps.canonicalExamHubPathFromPossiblyLocalizedPath(pathname);
   if (canonicalExamHub) {
     const url = req.nextUrl.clone();
     url.pathname = canonicalExamHub.canonicalPath;
     const response = NextResponse.redirect(url);
     const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
     response.headers.set(NN_CORRELATION_HEADER, cid.slice(0, 128));
-    response.cookies.set(MARKETING_LOCALE_COOKIE, canonicalExamHub.locale, {
+    response.cookies.set(marketingDeps.MARKETING_LOCALE_COOKIE, canonicalExamHub.locale, {
       path: "/",
-      maxAge: MARKETING_LOCALE_COOKIE_MAX_AGE,
+      maxAge: marketingDeps.MARKETING_LOCALE_COOKIE_MAX_AGE,
       sameSite: "lax",
       httpOnly: true,
     });
@@ -237,13 +332,13 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
   }
 
   // Unpublished regional marketing (`/exams/…` hubs + country-topic SEO trees): redirect to a published hub.
-  const gatedRegion = globalRegionSlugFromRegionalMarketingPublicPath(pathname);
-  if (gatedRegion && !isRegionPublishedForPublicSite(gatedRegion)) {
-    const previewRegion = req.cookies.get(EXAM_HUB_PREVIEW_COOKIE)?.value ?? "";
+  const gatedRegion = marketingDeps.globalRegionSlugFromRegionalMarketingPublicPath(pathname);
+  if (gatedRegion && !marketingDeps.isRegionPublishedForPublicSite(gatedRegion)) {
+    const previewRegion = req.cookies.get(marketingDeps.EXAM_HUB_PREVIEW_COOKIE)?.value ?? "";
     const allowStaffPreview = previewRegion === gatedRegion;
     if (!allowStaffPreview) {
       const url = req.nextUrl.clone();
-      url.pathname = REGIONAL_EXAM_MARKETING_FALLBACK_PATH;
+      url.pathname = marketingDeps.REGIONAL_EXAM_MARKETING_FALLBACK_PATH;
       const response = NextResponse.redirect(url, 307);
       const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
       response.headers.set(NN_CORRELATION_HEADER, cid.slice(0, 128));
@@ -251,11 +346,14 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     }
   }
 
+  const authDeps = await loadAuthProxyDeps();
   const forwarded = withPathnameHeader(req);
-  const res = await runAuthMiddleware(forwarded, event);
+  const res = await authDeps.runAuthMiddleware(forwarded, event);
   const outCid = forwarded.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
   if (res == null) {
-    const adminRedirect = await enforceAdminProxyRoute(forwarded);
+    const adminRedirect = pathname.startsWith("/admin")
+      ? await enforceAdminProxyRoute(forwarded, authDeps, await loadAdminProxyDeps())
+      : null;
     if (adminRedirect) {
       return adminRedirect;
     }
@@ -265,7 +363,9 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
   }
   const merged = mergeAuthContinueWithForwardedRequest(res, forwarded, outCid);
   if (merged !== res) {
-    const adminRedirect = await enforceAdminProxyRoute(forwarded);
+    const adminRedirect = pathname.startsWith("/admin")
+      ? await enforceAdminProxyRoute(forwarded, authDeps, await loadAdminProxyDeps())
+      : null;
     if (adminRedirect) {
       return copySetCookies(res, adminRedirect);
     }
