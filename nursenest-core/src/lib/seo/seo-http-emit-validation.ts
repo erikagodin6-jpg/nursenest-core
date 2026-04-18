@@ -64,6 +64,12 @@ export function shouldEnforceStrictPageMetadataValidation(): boolean {
   return process.env.NODE_ENV !== "production";
 }
 
+export function shouldSkipPageMetadataHttpValidationInProductionRequest(): boolean {
+  if (!isSeoPageMetadataHttpValidationEnabled()) return false;
+  if (envEnabled("CI")) return false;
+  return process.env.NODE_ENV === "production";
+}
+
 function maxUrls(): number {
   const raw = process.env.SEO_HTTP_VALIDATE_MAX_URLS?.trim();
   const n = raw ? Number.parseInt(raw, 10) : 2000;
@@ -214,6 +220,8 @@ export type MetadataAlternatesHttpValidationResult = {
   strictRequested: boolean;
   strictEnforced: boolean;
   environmentName: string;
+  skipped: boolean;
+  skipReason?: string;
   reason?: string;
 };
 
@@ -233,6 +241,18 @@ export async function validateMetadataAlternatesHttp(
       strictRequested,
       strictEnforced: false,
       environmentName,
+      skipped: false,
+    };
+  }
+
+  if (shouldSkipPageMetadataHttpValidationInProductionRequest()) {
+    return {
+      failures: [],
+      strictRequested,
+      strictEnforced: false,
+      environmentName,
+      skipped: true,
+      skipReason: "production_request_mode",
     };
   }
 
@@ -244,6 +264,7 @@ export async function validateMetadataAlternatesHttp(
       strictRequested,
       strictEnforced,
       environmentName,
+      skipped: false,
     };
   }
 
@@ -280,6 +301,7 @@ export async function validateMetadataAlternatesHttp(
       strictRequested,
       strictEnforced,
       environmentName,
+      skipped: false,
     };
   }
 
@@ -318,6 +340,7 @@ export async function validateMetadataAlternatesHttp(
     strictRequested,
     strictEnforced,
     environmentName,
+    skipped: false,
     reason,
   };
 }

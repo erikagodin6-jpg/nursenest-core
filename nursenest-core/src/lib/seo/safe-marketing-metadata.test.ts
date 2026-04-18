@@ -56,7 +56,39 @@ test("validateMetadataAlternatesHttp stays nonfatal in production even when stri
   assert.equal(result.strictRequested, true);
   assert.equal(result.strictEnforced, false);
   assert.equal(result.environmentName, "production");
+  assert.equal(result.skipped, false);
   assert.equal(result.reason, "bad_status_500");
+});
+
+test("validateMetadataAlternatesHttp skips outbound HTTP checks entirely in production request mode", async () => {
+  setEnv({
+    NODE_ENV: "production",
+    VERCEL_ENV: "production",
+    CI: undefined,
+    SEO_HTTP_VALIDATE_PAGE_METADATA: "1",
+    SEO_HTTP_VALIDATE_STRICT: "1",
+  });
+
+  let fetchCalls = 0;
+  globalThis.fetch = async () => {
+    fetchCalls += 1;
+    return new Response(null, { status: 500 });
+  };
+
+  const result = await validateMetadataAlternatesHttp(metadataWithCanonical("https://example.com/"), {
+    pathname: "/",
+    routeGroup: "marketing.default.home",
+    sourceFile: "src/app/(marketing)/(default)/page.tsx",
+    generator: "generateMetadata",
+  });
+
+  assert.equal(fetchCalls, 0);
+  assert.equal(result.failures.length, 0);
+  assert.equal(result.strictRequested, true);
+  assert.equal(result.strictEnforced, false);
+  assert.equal(result.environmentName, "production");
+  assert.equal(result.skipped, true);
+  assert.equal(result.skipReason, "production_request_mode");
 });
 
 test("validateMetadataAlternatesHttp still throws strict validation errors in development", async () => {

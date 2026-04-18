@@ -19,12 +19,9 @@ import { ExamSelectorGate } from "@/components/onboarding/exam-selector-gate";
 import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
 import { loadHomeBlogTeaserPostsSafe } from "@/lib/blog/home-blog-teaser";
 import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
-import { logCrawlSurfaceEvent } from "@/lib/observability/crawl-surface-observability";
 
 /** ISR: homepage shell — aligned with `getCachedPublicHomeStats` / `PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC` (3600). */
 export const revalidate = 3600;
-
-const MARKETING_HOME_SLOW_MS = 2500;
 
 const STATIC_LOCALE = DEFAULT_MARKETING_LOCALE;
 const STATIC_REGION = "US" as const;
@@ -73,24 +70,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const t0 = Date.now();
   const [homeStatsRaw, m, publishedGlobalRegionCardIds, blogTeaserPosts] = await Promise.all([
     getCachedPublicHomeStats(),
     loadMarketingMessages(STATIC_LOCALE),
     Promise.resolve(listPublishedHomeGlobalRegionCardIds()),
     loadHomeBlogTeaserPostsSafe(3),
   ]);
-  const wallMs = Date.now() - t0;
-  if (wallMs > MARKETING_HOME_SLOW_MS) {
-    logCrawlSurfaceEvent({
-      routeType: "marketing.home",
-      pathname: "/",
-      durationMs: wallMs,
-      outcome: "ok_slow",
-      httpStatus: 200,
-      slow: true,
-    });
-  }
   const homeMarketingStats = {
     questionCount: homeStatsRaw.questionCount,
     registeredLearners: homeStatsRaw.registeredLearners,
