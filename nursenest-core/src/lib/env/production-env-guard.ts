@@ -1,8 +1,8 @@
 /**
  * Centralized production environment validation (Node instrumentation).
  *
- * **Default:** In `NODE_ENV=production`, **critical** misconfiguration exits the process (`process.exit(1)`)
- * unless `NN_STRICT_PRODUCTION_ENV=0` (or `false`/`off`/`no`) — fail-fast for DigitalOcean / managed deploys.
+ * **Default:** In `NODE_ENV=production`, env issues are logged but do not exit the process.
+ * Set `NN_STRICT_PRODUCTION_ENV=1` to fail fast on critical issues when you explicitly want strict startup gating.
  *
  * Naming: prefer `AUTH_SECRET` over legacy `NEXTAUTH_SECRET`; `DATABASE_URL` is the only database URL variable.
  */
@@ -200,13 +200,12 @@ export function collectProductionEnvIssues(): EnvIssue[] {
 
 /**
  * When true, `runProductionEnvGuard` exits on any **critical** issue.
- * In production, defaults to **on**; set `NN_STRICT_PRODUCTION_ENV=0` to only log (not recommended for live).
+ * In production, defaults to **off** so optional integration/env drift does not take down the whole site.
  */
 export function strictProductionEnvEnabled(): boolean {
   if (process.env.NODE_ENV !== "production") return false;
   const v = process.env.NN_STRICT_PRODUCTION_ENV?.trim().toLowerCase();
-  if (v === "0" || v === "false" || v === "no" || v === "off") return false;
-  return true;
+  return v === "1" || v === "true" || v === "yes" || v === "on";
 }
 
 /** `next build` often runs with NODE_ENV=production without production secrets — skip fail-fast until runtime. */
@@ -232,7 +231,7 @@ export function runProductionEnvGuard(): void {
   const critical = issues.filter((i) => i.severity === "critical");
   if (strictProductionEnvEnabled() && critical.length > 0) {
     console.error(
-      `[nursenest-core] env_guard: exiting due to ${critical.length} critical issue(s). Fix env vars or set NN_STRICT_PRODUCTION_ENV=0 to log only (not recommended for production).`,
+      `[nursenest-core] env_guard: exiting due to ${critical.length} critical issue(s). Fix env vars or unset NN_STRICT_PRODUCTION_ENV to return to log-only startup mode.`,
     );
     process.exit(1);
   }
