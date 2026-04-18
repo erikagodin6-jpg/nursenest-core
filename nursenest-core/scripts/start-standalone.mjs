@@ -15,7 +15,11 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const require = createRequire(import.meta.url);
-const { childOutputIndicatesReady } = require("./standalone-startup-watchdog-shared.cjs");
+const {
+  isBootstrapHealthzRequest,
+  isBootstrapReadyzRequest,
+  maybeServeBootstrapHealthz,
+} = require("./standalone-bootstrap-healthz-shared.cjs");
 
 const bootAt = Date.now();
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -55,12 +59,6 @@ const childExecArgv = hasHeapOverride ? [...process.execArgv] : [`--max-old-spac
 
 function emit(event, meta = {}) {
   console.error(`[nursenest-core] startup_watchdog ${event} ${JSON.stringify({ ...meta, msSinceBoot: Date.now() - bootAt })}`);
-}
-
-function isBootstrapHealthzRequest(req) {
-  const method = typeof req?.method === "string" ? req.method.toUpperCase() : "";
-  const url = typeof req?.url === "string" ? req.url : "";
-  return (method === "GET" || method === "HEAD") && (url === "/healthz" || url.startsWith("/healthz?"));
 }
 
 function allocatePort() {
@@ -153,6 +151,54 @@ function proxyToChild(req, res, internalPort) {
   req.pipe(proxyReq);
 }
 
+async function proxyBootstrapReadyz(req, res, internalPort) {
+  try {
+    const probe = await new Promise((resolve, reject) => {
+      const upstreamReq = http.request(
+        {
+          hostname: internalHost,
+          port: internalPort,
+          path: readinessProbePath,
+          method: "GET",
+          timeout: 1500,
+        },
+        (upstreamRes) => {
+          const chunks = [];
+          upstreamRes.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+          upstreamRes.on("end", () => {
+            resolve({
+              statusCode: upstreamRes.statusCode ?? 503,
+              headers: upstreamRes.headers,
+              body: Buffer.concat(chunks),
+            });
+          });
+        },
+      );
+      upstreamReq.on("timeout", () => upstreamReq.destroy(new Error("bootstrap readyz upstream timeout")));
+      upstreamReq.on("error", reject);
+      upstreamReq.end();
+    });
+
+    res.statusCode = probe.statusCode;
+    for (const [key, value] of Object.entries(probe.headers)) {
+      if (value !== undefined) {
+        res.setHeader(key, value);
+      }
+    }
+    res.setHeader("cache-control", "no-store");
+    if ((req.method ?? "").toUpperCase() === "HEAD") {
+      res.end();
+    } else {
+      res.end(probe.body);
+    }
+  } catch {
+    res.statusCode = 503;
+    res.setHeader("content-type", "text/plain; charset=utf-8");
+    res.setHeader("cache-control", "no-store");
+    res.end("bootstrap: ready probe failed");
+  }
+}
+
 const internalPort = await allocatePort();
 const childArgs = [...childExecArgv, runtimeBootstrap, entry];
 const state = {
@@ -173,35 +219,32 @@ function markHandlersReady(reason) {
   });
 }
 
-function monitorChildOutputForReadiness(stream) {
-  let buffer = "";
-  stream?.on("data", (chunk) => {
-    const text = chunk.toString();
-    buffer = `${buffer}${text}`.slice(-4096);
-    if (childOutputIndicatesReady(buffer)) {
-      markHandlersReady("child_ready_log");
-    }
-  });
-}
-
 const server = http.createServer((req, res) => {
-  if (isBootstrapHealthzRequest(req)) {
-    emit("bootstrap_healthz_intercepted", {
-      pid: process.pid,
-      method: req.method,
-      url: req.url,
-      handlersReady: state.handlersReady,
-      internalPort,
-      publicPort,
-    });
-    res.statusCode = 200;
-    res.setHeader("content-type", "text/plain; charset=utf-8");
-    res.setHeader("cache-control", "no-store");
-    if ((req.method ?? "").toUpperCase() === "HEAD") {
-      res.end();
-    } else {
-      res.end("ok");
+  if (
+    maybeServeBootstrapHealthz(req, res, state, {
+      logBootstrapHealthzIntercepted(meta) {
+        emit("bootstrap_healthz_intercepted", {
+          pid: process.pid,
+          internalPort,
+          publicPort,
+          ...meta,
+        });
+      },
+    })
+  ) {
+    return;
+  }
+
+  if (isBootstrapReadyzRequest(req)) {
+    if (!state.handlersReady) {
+      res.statusCode = 503;
+      res.setHeader("content-type", "text/plain; charset=utf-8");
+      res.setHeader("cache-control", "no-store");
+      res.setHeader("retry-after", "5");
+      res.end("bootstrap: request handlers not ready");
+      return;
     }
+    void proxyBootstrapReadyz(req, res, internalPort);
     return;
   }
 
@@ -247,8 +290,6 @@ const child = spawn(process.execPath, childArgs, {
   },
 });
 
-monitorChildOutputForReadiness(child.stdout);
-monitorChildOutputForReadiness(child.stderr);
 child.stdout?.on("data", (chunk) => process.stdout.write(chunk));
 child.stderr?.on("data", (chunk) => process.stderr.write(chunk));
 

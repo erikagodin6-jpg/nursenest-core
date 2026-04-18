@@ -15,11 +15,6 @@ function createStandaloneRequire(entryScript) {
   return createRequire(entryScript);
 }
 
-function childOutputIndicatesReady(text) {
-  if (typeof text !== "string" || text.length === 0) return false;
-  return /(?:^|\n).*Ready in \d+ms(?:\n|$)/.test(text);
-}
-
 function createStartupWatchdogLogger({
   now = Date.now,
   write = (line) => console.error(line),
@@ -98,7 +93,6 @@ function createStartupWatchdogLogger({
 }
 
 module.exports = {
-  childOutputIndicatesReady,
   createStartupWatchdogLogger,
   createStandaloneRequire,
   formatStartupWatchdogLine,
