@@ -45,13 +45,19 @@ const sentrySourceMapsEnabled =
       process.env.SENTRY_PROJECT?.trim(),
   );
 
+type RedirectEntry = {
+  source: string;
+  destination: string;
+  permanent: boolean;
+};
+
 type HeavyRoutingDeps = {
-  CORE_HOSTED_MARKETING_LOCALES: typeof import("./src/lib/i18n/marketing-locale-policy").CORE_HOSTED_MARKETING_LOCALES;
-  PROGRAMMATIC_SLUG_TO_PATHWAY_PATH: typeof import("./src/lib/exam-pathways/programmatic-slug-redirects").PROGRAMMATIC_SLUG_TO_PATHWAY_PATH;
-  LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT: typeof import("./src/lib/marketing/canonical-pathway-hubs").LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT;
-  buildLegacyProgrammaticSeoRedirectsToPathwayHubs: typeof import("./src/lib/marketing/canonical-pathway-hubs").buildLegacyProgrammaticSeoRedirectsToPathwayHubs;
-  buildPathwayLessonSlugRedirectsForNextConfig: typeof import("./src/lib/lessons/pathway-lesson-slug-redirects").buildPathwayLessonSlugRedirectsForNextConfig;
-  getAllProgrammaticSlugs: typeof import("./src/lib/seo/programmatic-registry").getAllProgrammaticSlugs;
+  CORE_HOSTED_MARKETING_LOCALES: readonly string[];
+  PROGRAMMATIC_SLUG_TO_PATHWAY_PATH: Record<string, string>;
+  LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT: ReadonlySet<string>;
+  buildLegacyProgrammaticSeoRedirectsToPathwayHubs: (locales: readonly string[]) => RedirectEntry[];
+  buildPathwayLessonSlugRedirectsForNextConfig: () => RedirectEntry[];
+  getAllProgrammaticSlugs: () => readonly string[];
 };
 
 let heavyRoutingDepsPromise: Promise<HeavyRoutingDeps> | null = null;
