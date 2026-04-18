@@ -88,3 +88,19 @@ test("bootstrap runtime probes the private non-api readiness path", () => {
   assert.equal(source.includes('const childHealthProbePath = "/_nn_bootstrap_ready_check__";'), true);
   assert.equal(source.includes('const childHealthProbePath = "/api/health";'), false);
 });
+
+test("bootstrap runtime probes the child via localhost and emits probe diagnostics", () => {
+  const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
+  assert.equal(source.includes('const internalHost = "localhost";'), true);
+  assert.equal(source.includes('const internalHost = "127.0.0.1";'), false);
+  assert.equal(source.includes('emit("internal_probe_attempt"'), true);
+  assert.equal(source.includes('emit("internal_probe_response"'), true);
+  assert.equal(source.includes('emit("internal_probe_error"'), true);
+});
+
+test("bootstrap runtime includes a forced readiness fallback after five seconds", () => {
+  const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
+  assert.equal(source.includes("const forcedHandlersReadyFallbackMs = 5000;"), true);
+  assert.equal(source.includes('emit("handlers_ready_forced"'), true);
+  assert.equal(source.includes("state.handlersReadyForced"), true);
+});

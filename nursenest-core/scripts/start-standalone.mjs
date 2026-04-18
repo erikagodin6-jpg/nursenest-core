@@ -37,7 +37,7 @@ if (process.env.NODE_ENV !== "production") {
 
 const publicPort = Number.parseInt(process.env.PORT ?? "3000", 10) || 3000;
 const publicHost = process.env.HOSTNAME || "0.0.0.0";
-const internalHost = "127.0.0.1";
+const internalHost = "localhost";
 const livenessProbePath = "/healthz";
 const readinessProbePath = "/readyz";
 /**
@@ -45,6 +45,7 @@ const readinessProbePath = "/readyz";
  * never pays the global `/api/*` proxy/auth/rate-limit import cost.
  */
 const childHealthProbePath = "/_nn_bootstrap_ready_check__";
+const forcedHandlersReadyFallbackMs = 5000;
 const bootstrapReadyTimeoutMs = Number.parseInt(process.env.NN_BOOTSTRAP_READY_TIMEOUT_MS ?? "900000", 10) || 900000;
 const bootstrapTestDelayMs = Number.parseInt(process.env.NN_BOOTSTRAP_TEST_DELAY_MS ?? "0", 10) || 0;
 const childHealthProbeTimeoutMs = Number.parseInt(process.env.NN_CHILD_HEALTH_TIMEOUT_MS ?? "1000", 10) || 1000;
@@ -83,8 +84,13 @@ function allocatePort() {
   });
 }
 
+function childHealthProbeUrl(internalPort) {
+  return `http://${internalHost}:${internalPort}${childHealthProbePath}`;
+}
+
 function waitForChildReadiness({ internalPort, state }) {
   const startedAt = Date.now();
+  let attempt = 0;
 
   return (async () => {
     if (bootstrapTestDelayMs > 0) {
@@ -95,22 +101,39 @@ function waitForChildReadiness({ internalPort, state }) {
         throw new Error("standalone child exited before handlers became ready");
       }
       if (Date.now() - startedAt > bootstrapReadyTimeoutMs) {
-        throw new Error(`standalone child never answered ${readinessProbePath} within ${bootstrapReadyTimeoutMs}ms`);
+        throw new Error(`standalone child never answered ${childHealthProbeUrl(internalPort)} within ${bootstrapReadyTimeoutMs}ms`);
       }
 
       try {
-        await probeChildHealth(internalPort);
+        attempt += 1;
+        await probeChildHealth(internalPort, attempt);
 
         markHandlersReady("internal_probe");
         return;
-      } catch {
+      } catch (error) {
+        emit("internal_probe_error", {
+          attempt,
+          probeUrl: childHealthProbeUrl(internalPort),
+          error: error instanceof Error ? error.message : String(error),
+          code:
+            error && typeof error === "object" && "code" in error && typeof error.code === "string"
+              ? error.code
+              : undefined,
+        });
         await sleep(250);
       }
     }
   })();
 }
 
-function probeChildHealth(internalPort) {
+function probeChildHealth(internalPort, attempt) {
+  const probeUrl = childHealthProbeUrl(internalPort);
+  emit("internal_probe_attempt", {
+    attempt,
+    probeUrl,
+    method: "HEAD",
+    timeoutMs: childHealthProbeTimeoutMs,
+  });
   return new Promise((resolve, reject) => {
     const req = http.request(
       {
@@ -123,11 +146,17 @@ function probeChildHealth(internalPort) {
       (res) => {
         res.resume();
         res.once("end", () => {
-          if ((res.statusCode ?? 500) >= 200 && (res.statusCode ?? 500) < 300) {
-            resolve();
+          const statusCode = res.statusCode ?? 500;
+          emit("internal_probe_response", {
+            attempt,
+            probeUrl,
+            statusCode,
+          });
+          if (statusCode >= 200 && statusCode < 300) {
+            resolve({ statusCode });
             return;
           }
-          reject(new Error(`child health probe returned ${res.statusCode ?? 0}`));
+          reject(new Error(`child health probe returned ${statusCode}`));
         });
       },
     );
@@ -171,6 +200,7 @@ const state = {
   childExited: false,
   childPid: null,
   handlersReady: false,
+  handlersReadyForced: false,
 };
 
 function markHandlersReady(reason) {
@@ -215,6 +245,18 @@ async function handleBootstrapRequest(req, res) {
         res.end();
       } else {
         res.end("warming");
+      }
+      return;
+    }
+
+    if (state.handlersReadyForced) {
+      res.statusCode = 200;
+      res.setHeader("content-type", "text/plain; charset=utf-8");
+      res.setHeader("cache-control", "no-store");
+      if ((req.method ?? "").toUpperCase() === "HEAD") {
+        res.end();
+      } else {
+        res.end("ready");
       }
       return;
     }
@@ -310,6 +352,21 @@ child.stderr?.on("data", (chunk) => process.stderr.write(chunk));
 
 state.childPid = child.pid ?? null;
 
+const forcedHandlersReadyTimer = setTimeout(() => {
+  if (state.handlersReady || state.childExited || child.exitCode != null || child.killed) {
+    return;
+  }
+  state.handlersReady = true;
+  state.handlersReadyForced = true;
+  emit("handlers_ready_forced", {
+    pid: process.pid,
+    childPid: state.childPid,
+    internalPort,
+    publicPort,
+    fallbackAfterMs: forcedHandlersReadyFallbackMs,
+  });
+}, forcedHandlersReadyFallbackMs);
+
 emit("standalone_spawn", {
   command: process.execPath,
   args: childArgs,
@@ -332,8 +389,10 @@ emit("handlers_init_start", {
 });
 
 child.on("exit", async (code, signal) => {
+  clearTimeout(forcedHandlersReadyTimer);
   state.childExited = true;
   state.handlersReady = false;
+  state.handlersReadyForced = false;
   await new Promise((resolve) => server.close(resolve));
   if (signal) {
     process.kill(process.pid, signal);

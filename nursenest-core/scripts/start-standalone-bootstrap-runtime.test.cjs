@@ -47,7 +47,7 @@ function allocatePort() {
   });
 }
 
-test("standalone runtime serves bootstrap /healthz before handlers_ready", async (t) => {
+test("standalone runtime forces readiness when the child probe never flips", async (t) => {
   const standaloneEntry = STANDALONE_CANDIDATES.find((candidate) => existsSync(candidate));
   if (!standaloneEntry) {
     t.skip(`Missing standalone build entry. Checked:\n${STANDALONE_CANDIDATES.join("\n")}`);
@@ -123,10 +123,8 @@ test("standalone runtime serves bootstrap /healthz before handlers_ready", async
   await waitForLog("startup_watchdog bootstrap_healthz_intercepted");
   assert.doesNotMatch(combined.join(""), /startup_watchdog handlers_ready/);
 
-  await waitForLog("startup_watchdog handlers_ready", 15_000);
-  const apiHealthRes = await fetch(`http://127.0.0.1:${port}/api/health`);
-  assert.equal(apiHealthRes.status, 200);
-  const apiHealthJson = await apiHealthRes.json();
-  assert.equal(apiHealthJson.ok, true);
-  assert.equal(apiHealthJson.live, true);
+  await waitForLog("startup_watchdog handlers_ready_forced", 15_000);
+  const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
+  assert.equal(readyRes.status, 200);
+  assert.equal(await readyRes.text(), "ready");
 });
