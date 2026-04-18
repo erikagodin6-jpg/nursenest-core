@@ -46,6 +46,14 @@ test("fixed home and lessons surfaces use page-body shards during production bui
   assert.match(lessonSections, /MARKETING_PAGE_BODY_MESSAGE_SHARDS/);
 });
 
+test("next config keeps webpack memory guards enabled during custom builds", () => {
+  const nextConfig = readAppFile("../next.config.ts");
+
+  assert.match(nextConfig, /webpackBuildWorker:\s*true/);
+  assert.match(nextConfig, /webpackMemoryOptimizations:\s*true/);
+  assert.match(nextConfig, /config\.parallelism = 1/);
+});
+
 test("admin blueprint coverage page avoids top-level catalog JSON imports", () => {
   const adminBlueprintPage = readAppFile("app/(admin)/admin/lessons/blueprint-coverage/page.tsx");
 

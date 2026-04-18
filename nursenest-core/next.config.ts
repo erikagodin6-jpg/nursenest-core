@@ -151,6 +151,8 @@ const nextConfig: NextConfig = {
   experimental: {
     cpus: 1,
     memoryBasedWorkersCount: true,
+    webpackBuildWorker: true,
+    webpackMemoryOptimizations: true,
     externalDir: true,
   },
   webpack: (config) => {
