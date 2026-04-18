@@ -93,12 +93,10 @@ test("bootstrap runtime probes the private non-api readiness path", () => {
   assert.equal(source.includes('const childHealthProbePath = "/api/health";'), false);
 });
 
-test("bootstrap runtime resolves the exact nested standalone server entry and does not fall back", () => {
+test("bootstrap runtime reuses verifier-based standalone entry resolution with nested-first fallback", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
-  assert.equal(source.includes('join(pkgRoot, ".next", "standalone", "nursenest-core", "server.js")'), true);
-  assert.equal(source.includes('join(pkgRoot, ".next", "standalone", "server.js")'), false);
-  assert.equal(source.includes("const candidates = ["), false);
-  assert.equal(source.includes("candidates.find"), false);
+  assert.equal(source.includes('from "./verify-standalone-artifact.mjs"'), true);
+  assert.equal(source.includes("verifyStandaloneArtifact(pkgRoot)"), true);
 });
 
 test("bootstrap runtime probes the child via the internal loopback host and emits probe diagnostics", () => {
@@ -124,8 +122,8 @@ test("bootstrap readiness loop probes the child path on the internal port", () =
 
 test("bootstrap timeout and readyz re-probe both target the internal port", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
-  assert.equal(source.includes("standalone child never answered ${childHealthProbeUrl(internalPort)}"), true);
-  assert.equal(source.includes("standalone child never answered ${childHealthProbeUrl(publicPort)}"), false);
+  assert.equal(source.includes("formatReadinessFailure({"), true);
+  assert.equal(source.includes("probeUrl: childHealthProbeUrl(publicPort)"), false);
   assert.equal(source.includes("await probeChildHealth(internalPort);"), true);
   assert.equal(source.includes("await probeChildHealth(publicPort);"), false);
 });
@@ -137,20 +135,16 @@ test("bootstrap readiness loop has a bounded attempt cap before terminal failure
   assert.equal(source.includes("if (attempt >= bootstrapReadyMaxAttempts)"), true);
   assert.equal(source.includes('emit("internal_probe_exhausted"'), true);
   assert.equal(source.includes('reason: "attempt_cap"'), true);
-  assert.equal(
-    source.includes("standalone child never answered ${childHealthProbeUrl(internalPort)} after ${attempt} attempts: ${detail}"),
-    true,
-  );
+  assert.equal(source.includes("detail,"), true);
 });
 
-test("bootstrap readiness loop still has a timeout-based terminal failure", () => {
+test("bootstrap readiness loop still has a timeout-based terminal failure with detailed child state", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
   assert.equal(source.includes("if (Date.now() - startedAt > bootstrapReadyTimeoutMs)"), true);
   assert.equal(source.includes('reason: "timeout"'), true);
-  assert.equal(
-    source.includes("standalone child never answered ${childHealthProbeUrl(internalPort)} within ${bootstrapReadyTimeoutMs}ms"),
-    true,
-  );
+  assert.equal(source.includes("probeUrl="), true);
+  assert.equal(source.includes("timeoutMs="), true);
+  assert.equal(source.includes("childState="), true);
 });
 
 test("bootstrap readiness loop still marks handlers ready on successful probe", () => {

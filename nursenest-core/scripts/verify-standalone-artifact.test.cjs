@@ -1,5 +1,7 @@
 const assert = require("node:assert/strict");
+const { spawn, spawnSync } = require("node:child_process");
 const fs = require("node:fs");
+const net = require("node:net");
 const os = require("node:os");
 const path = require("node:path");
 const test = require("node:test");
@@ -11,6 +13,66 @@ async function loadVerifier() {
 function pathToFileUrl(filePath) {
   const normalized = path.resolve(filePath).replace(/\\/g, "/");
   return `file://${normalized}`;
+}
+
+function createTempScriptRoot(prefix, scriptNames) {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), prefix));
+  const scriptsDir = path.join(tempRoot, "scripts");
+  fs.mkdirSync(scriptsDir, { recursive: true });
+  for (const scriptName of scriptNames) {
+    fs.copyFileSync(path.join(__dirname, scriptName), path.join(scriptsDir, scriptName));
+  }
+  return tempRoot;
+}
+
+const STARTUP_RUNTIME_SCRIPTS = [
+  "start-standalone.mjs",
+  "start-standalone-runtime.cjs",
+  "standalone-startup-watchdog-preload.cjs",
+  "standalone-startup-watchdog-preload-shared.cjs",
+  "standalone-startup-watchdog-shared.cjs",
+  "standalone-bootstrap-healthz-shared.cjs",
+  "verify-standalone-artifact.mjs",
+];
+
+function createTempRuntimeRoot(prefix) {
+  return createTempScriptRoot(prefix, STARTUP_RUNTIME_SCRIPTS);
+}
+
+function waitFor(condition, { timeoutMs = 10_000, intervalMs = 25 } = {}) {
+  const startedAt = Date.now();
+  return new Promise((resolve, reject) => {
+    const tick = () => {
+      if (condition()) {
+        resolve();
+        return;
+      }
+      if (Date.now() - startedAt > timeoutMs) {
+        reject(new Error(`Condition not met within ${timeoutMs}ms`));
+        return;
+      }
+      setTimeout(tick, intervalMs);
+    };
+    tick();
+  });
+}
+
+function allocatePort() {
+  return new Promise((resolve, reject) => {
+    const socket = net.createServer();
+    socket.listen(0, "127.0.0.1", () => {
+      const address = socket.address();
+      const port = typeof address === "object" && address ? address.port : 0;
+      socket.close((error) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+        resolve(port);
+      });
+    });
+    socket.on("error", reject);
+  });
 }
 
 test("verifyStandaloneArtifact returns the expected nested standalone server path", async () => {
@@ -28,15 +90,89 @@ test("verifyStandaloneArtifact returns the expected nested standalone server pat
   }
 });
 
-test("verifyStandaloneArtifact hard-fails when the nested standalone server path is missing", async () => {
+test("verifyStandaloneArtifact falls back to the top-level standalone server path", async () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "nn-standalone-artifact-top-level-"));
+  const standaloneEntry = path.join(tempRoot, ".next", "standalone", "server.js");
+  fs.mkdirSync(path.dirname(standaloneEntry), { recursive: true });
+  fs.writeFileSync(standaloneEntry, "module.exports = {};\n", "utf8");
+
+  try {
+    const { verifyStandaloneArtifact } = await loadVerifier();
+    assert.equal(verifyStandaloneArtifact(tempRoot), standaloneEntry);
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
+
+test("verifyStandaloneArtifact hard-fails when both standalone server paths are missing", async () => {
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "nn-standalone-artifact-missing-"));
 
   try {
     const { verifyStandaloneArtifact } = await loadVerifier();
     assert.throws(
       () => verifyStandaloneArtifact(tempRoot),
-      /standalone server\.js not found at .*\.next\/standalone\/nursenest-core\/server\.js/,
+      /standalone server\.js not found\. Expected one of:\n  - .*\.next\/standalone\/nursenest-core\/server\.js\n  - .*\.next\/standalone\/server\.js/,
     );
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
+
+test("verify-standalone-artifact CLI exits 0 and prints the verified nested server path", () => {
+  const tempRoot = createTempScriptRoot("nn-standalone-artifact-cli-ok-", ["verify-standalone-artifact.mjs"]);
+  const standaloneEntry = path.join(tempRoot, ".next", "standalone", "nursenest-core", "server.js");
+  fs.mkdirSync(path.dirname(standaloneEntry), { recursive: true });
+  fs.writeFileSync(standaloneEntry, "module.exports = {};\n", "utf8");
+
+  try {
+    const result = spawnSync(process.execPath, [path.join(tempRoot, "scripts", "verify-standalone-artifact.mjs")], {
+      encoding: "utf8",
+      timeout: 5000,
+    });
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, new RegExp(`\\[verify-standalone-artifact\\] verified ${standaloneEntry.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
+    assert.equal(result.stderr, "");
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
+
+test("verify-standalone-artifact CLI exits 1 with a clear FATAL when the nested server path is missing", () => {
+  const tempRoot = createTempScriptRoot("nn-standalone-artifact-cli-missing-", ["verify-standalone-artifact.mjs"]);
+
+  try {
+    const result = spawnSync(process.execPath, [path.join(tempRoot, "scripts", "verify-standalone-artifact.mjs")], {
+      encoding: "utf8",
+      timeout: 5000,
+    });
+
+    assert.equal(result.status, 1);
+    assert.match(
+      result.stderr,
+      /FATAL: standalone server\.js not found\. Expected one of:\n  - .*\.next\/standalone\/nursenest-core\/server\.js\n  - .*\.next\/standalone\/server\.js\nRun `npm run build:deploy` from nursenest-core to generate a fresh standalone build\./,
+    );
+    assert.equal(result.stdout, "");
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
+
+test("verify-standalone-artifact CLI accepts the top-level standalone server path", () => {
+  const tempRoot = createTempScriptRoot("nn-standalone-artifact-cli-top-level-", ["verify-standalone-artifact.mjs"]);
+  const standaloneEntry = path.join(tempRoot, ".next", "standalone", "server.js");
+  fs.mkdirSync(path.dirname(standaloneEntry), { recursive: true });
+  fs.writeFileSync(standaloneEntry, "module.exports = {};\n", "utf8");
+
+  try {
+    const result = spawnSync(process.execPath, [path.join(tempRoot, "scripts", "verify-standalone-artifact.mjs")], {
+      encoding: "utf8",
+      timeout: 5000,
+    });
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, new RegExp(`\\[verify-standalone-artifact\\] verified ${standaloneEntry.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
+    assert.equal(result.stderr, "");
   } finally {
     fs.rmSync(tempRoot, { recursive: true, force: true });
   }
@@ -58,15 +194,131 @@ test("deploy build script forces a clean rebuild and verifies the standalone art
   assert.equal(pkg.scripts.start, "node scripts/start-standalone.mjs");
 });
 
-test("active DigitalOcean app spec builds before runtime and starts through npm run start", () => {
+test("active DigitalOcean app spec builds before runtime, starts through npm run start, and routes readiness through /readyz", () => {
   const appSpec = fs.readFileSync(path.join(__dirname, "..", "..", ".do", "app-nursenest-core-next.yaml"), "utf8");
   assert.match(appSpec, /build_command: npm run build:deploy && npm prune --omit=dev/);
   assert.match(appSpec, /run_command: npm run start/);
+  assert.match(appSpec, /health_check:\n(?:.*\n)*?\s+http_path: \/readyz/);
+  assert.match(appSpec, /liveness_health_check:\n(?:.*\n)*?\s+http_path: \/healthz/);
 });
 
-test("runtime startup checks the same standalone artifact path as build verification", () => {
+test("runtime startup uses the same standalone artifact resolution as build verification", () => {
   const startupSource = fs.readFileSync(path.join(__dirname, "start-standalone.mjs"), "utf8");
-  assert.match(startupSource, /\.next", "standalone", "nursenest-core", "server\.js"/);
-  assert.doesNotMatch(startupSource, /\.next", "standalone", "server\.js"/);
-  assert.match(startupSource, /standalone server\.js not found at:/);
+  assert.match(startupSource, /verifyStandaloneArtifact/);
+  assert.match(startupSource, /verify-standalone-artifact\.mjs/);
+});
+
+test("start-standalone hard-fails immediately when the standalone server artifact is missing", () => {
+  const tempRoot = createTempRuntimeRoot("nn-start-standalone-missing-");
+
+  try {
+    const result = spawnSync(process.execPath, [path.join(tempRoot, "scripts", "start-standalone.mjs")], {
+      encoding: "utf8",
+      timeout: 5000,
+    });
+
+    assert.equal(result.status, 1);
+    assert.match(
+      result.stderr,
+      /FATAL: standalone server\.js not found\. Expected one of:\n  - .*\.next\/standalone\/nursenest-core\/server\.js\n  - .*\.next\/standalone\/server\.js\nRun `npm run build:deploy` from nursenest-core to generate a fresh standalone build\./,
+    );
+    assert.equal(result.stdout, "");
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
+
+test("start-standalone accepts the top-level standalone server path", async (t) => {
+  const tempRoot = createTempRuntimeRoot("nn-start-standalone-top-level-");
+  const standaloneEntry = path.join(tempRoot, ".next", "standalone", "server.js");
+  fs.mkdirSync(path.dirname(standaloneEntry), { recursive: true });
+  fs.writeFileSync(standaloneEntry, "setInterval(() => {}, 1000);\n", "utf8");
+
+  const port = await allocatePort();
+  const combined = [];
+  const child = spawn(process.execPath, [path.join(tempRoot, "scripts", "start-standalone.mjs")], {
+    cwd: tempRoot,
+    env: {
+      ...process.env,
+      NODE_ENV: "production",
+      HOSTNAME: "127.0.0.1",
+      PORT: String(port),
+      NN_BYPASS_BOOTSTRAP: "1",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  const capture = (chunk) => combined.push(String(chunk));
+  child.stdout.on("data", capture);
+  child.stderr.on("data", capture);
+
+  t.after(async () => {
+    if (child.exitCode == null && !child.killed) {
+      child.kill("SIGTERM");
+      await new Promise((resolve) => child.once("exit", resolve));
+    }
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  });
+
+  await waitFor(() => combined.join("").includes("startup_watchdog standalone_spawn"));
+  assert.match(combined.join(""), new RegExp(`"entry":"${standaloneEntry.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`));
+
+  const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
+  assert.equal(readyRes.status, 200);
+  assert.equal(await readyRes.text(), "ready");
+});
+
+test("start-standalone exits fatally on readiness timeout with probe URL, timeout, and child state in the error", async (t) => {
+  const tempRoot = createTempRuntimeRoot("nn-start-standalone-timeout-");
+  const standaloneEntry = path.join(tempRoot, ".next", "standalone", "server.js");
+  fs.mkdirSync(path.dirname(standaloneEntry), { recursive: true });
+  fs.writeFileSync(
+    standaloneEntry,
+    [
+      "const net = require('node:net');",
+      "const server = net.createServer(() => {});",
+      "server.listen(Number(process.env.PORT), process.env.HOSTNAME || '127.0.0.1');",
+      "setInterval(() => {}, 1000);",
+    ].join("\n"),
+    "utf8",
+  );
+
+  const port = await allocatePort();
+  const combined = [];
+  const child = spawn(process.execPath, [path.join(tempRoot, "scripts", "start-standalone.mjs")], {
+    cwd: tempRoot,
+    env: {
+      ...process.env,
+      NODE_ENV: "production",
+      HOSTNAME: "127.0.0.1",
+      PORT: String(port),
+      NN_BOOTSTRAP_READY_TIMEOUT_MS: "300",
+      NN_CHILD_HEALTH_TIMEOUT_MS: "100",
+      NN_BOOTSTRAP_READY_MAX_ATTEMPTS: "2",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  const capture = (chunk) => combined.push(String(chunk));
+  child.stdout.on("data", capture);
+  child.stderr.on("data", capture);
+
+  t.after(() => {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  });
+
+  const exitCode = await new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => {
+      reject(new Error(`timed out waiting for startup exit\n${combined.join("")}`));
+    }, 8000);
+    child.once("exit", (code) => {
+      clearTimeout(timeout);
+      resolve(code);
+    });
+  });
+
+  assert.equal(exitCode, 1, combined.join(""));
+  assert.match(combined.join(""), /startup_watchdog handlers_init_failed/);
+  assert.match(combined.join(""), /probeUrl=http:\/\/127\.0\.0\.1:\d+\/_nn_bootstrap_ready_check__/);
+  assert.match(combined.join(""), /timeoutMs=300/);
+  assert.match(combined.join(""), /"childState":\{"childPid":\d+/);
+  assert.match(combined.join(""), /childState=\{\\"childPid\\":\d+/);
 });

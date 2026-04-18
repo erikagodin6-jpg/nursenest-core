@@ -148,6 +148,10 @@ test("standalone runtime serves the internal bootstrap probe directly and flips 
   assert.equal(headRes.status, 200);
   assert.equal(await headRes.text(), "");
 
+  const preReadyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
+  assert.equal(preReadyRes.status, 503);
+  assert.equal(await preReadyRes.text(), "warming");
+
   await waitForLog("startup_watchdog bootstrap_healthz_intercepted");
   await waitForLog("startup_watchdog internal_probe_response");
   await waitForLog("startup_watchdog handlers_ready");

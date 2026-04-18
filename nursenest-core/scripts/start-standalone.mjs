@@ -8,22 +8,20 @@ import http from "node:http";
 import net from "node:net";
 import { once } from "node:events";
 import { setTimeout as sleep } from "node:timers/promises";
-import { existsSync } from "node:fs";
 import { spawn } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { verifyStandaloneArtifact } from "./verify-standalone-artifact.mjs";
 
 const bootAt = Date.now();
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const runtimeBootstrap = join(pkgRoot, "scripts", "start-standalone-runtime.cjs");
-const entry = join(pkgRoot, ".next", "standalone", "nursenest-core", "server.js");
-
-if (!existsSync(entry)) {
-  console.error(
-    "[nursenest-core] FATAL: standalone server.js not found at:\n" +
-      `  - ${entry}` +
-      "\n  Run `npm run build:deploy` from this package first.",
-  );
+let entry;
+try {
+  entry = verifyStandaloneArtifact(pkgRoot);
+} catch (error) {
+  const message = error instanceof Error ? error.message : String(error);
+  console.error(`[nursenest-core] FATAL: ${message}`);
   process.exit(1);
 }
 
@@ -94,6 +92,38 @@ function assertInternalProbePort(probePort) {
   }
 }
 
+function snapshotChildState(state) {
+  return JSON.stringify({
+    childPid: state.childPid,
+    childExited: state.childExited,
+    childExitCode: state.childExitCode,
+    childExitSignal: state.childExitSignal,
+    handlersReady: state.handlersReady,
+  });
+}
+
+function formatReadinessFailure({
+  state,
+  probeUrl,
+  timeoutMs,
+  attempt,
+  detail,
+}) {
+  const parts = [
+    "standalone child readiness failed",
+    `probeUrl=${probeUrl}`,
+    `timeoutMs=${timeoutMs}`,
+    `childState=${snapshotChildState(state)}`,
+  ];
+  if (typeof attempt === "number") {
+    parts.push(`attempt=${attempt}`);
+  }
+  if (detail) {
+    parts.push(`detail=${detail}`);
+  }
+  return parts.join(" ");
+}
+
 function waitForChildReadiness({ state }) {
   const startedAt = Date.now();
   let attempt = 0;
@@ -116,13 +146,23 @@ function waitForChildReadiness({ state }) {
         throw new Error("standalone child exited before handlers became ready");
       }
       if (Date.now() - startedAt > bootstrapReadyTimeoutMs) {
+        const probeUrl = childHealthProbeUrl(internalPort);
         emit("internal_probe_exhausted", {
           attempt,
-          probeUrl: childHealthProbeUrl(internalPort),
+          probeUrl,
           reason: "timeout",
           timeoutMs: bootstrapReadyTimeoutMs,
+          childState: JSON.parse(snapshotChildState(state)),
         });
-        throw new Error(`standalone child never answered ${childHealthProbeUrl(internalPort)} within ${bootstrapReadyTimeoutMs}ms`);
+        throw new Error(
+          formatReadinessFailure({
+            state,
+            probeUrl,
+            timeoutMs: bootstrapReadyTimeoutMs,
+            attempt,
+            detail: "startup watchdog deadline exceeded",
+          }),
+        );
       }
 
       try {
@@ -134,15 +174,23 @@ function waitForChildReadiness({ state }) {
       } catch (error) {
         if (attempt >= bootstrapReadyMaxAttempts) {
           const detail = error instanceof Error ? error.message : String(error);
+          const probeUrl = childHealthProbeUrl(internalPort);
           emit("internal_probe_exhausted", {
             attempt,
-            probeUrl: childHealthProbeUrl(internalPort),
+            probeUrl,
             reason: "attempt_cap",
             maxAttempts: bootstrapReadyMaxAttempts,
             error: detail,
+            childState: JSON.parse(snapshotChildState(state)),
           });
           throw new Error(
-            `standalone child never answered ${childHealthProbeUrl(internalPort)} after ${attempt} attempts: ${detail}`,
+            formatReadinessFailure({
+              state,
+              probeUrl,
+              timeoutMs: bootstrapReadyTimeoutMs,
+              attempt,
+              detail,
+            }),
           );
         }
         emit("internal_probe_error", {
@@ -233,6 +281,8 @@ const internalPort = await allocatePort();
 const childArgs = [...childExecArgv, runtimeBootstrap, entry];
 const state = {
   childExited: false,
+  childExitCode: null,
+  childExitSignal: null,
   childPid: null,
   handlersReady: false,
 };
@@ -425,6 +475,8 @@ emit("handlers_init_start", {
 
 child.on("exit", async (code, signal) => {
   state.childExited = true;
+  state.childExitCode = code ?? null;
+  state.childExitSignal = signal ?? null;
   state.handlersReady = false;
   await new Promise((resolve) => server.close(resolve));
   if (signal) {

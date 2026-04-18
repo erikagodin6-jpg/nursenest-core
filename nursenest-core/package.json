@@ -15,7 +15,7 @@
     "prepare": "node scripts/install-husky.mjs",
     "dev": "TMPDIR=${TMPDIR:-/tmp} next dev",
     "build:prechecks": "node scripts/run-build-prechecks.mjs",
-    "build": "next build",
+    "build": "TMPDIR=${TMPDIR:-/tmp} NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 RUN_HEAVY_BUILD_TASKS=false SKIP_I18N_PREBUILD=1 SENTRY_ENABLED=false NODE_OPTIONS=--max-old-space-size=${BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-3584} next build --webpack",
     "build:webpack": "TMPDIR=${TMPDIR:-/tmp} NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 RUN_HEAVY_BUILD_TASKS=false SKIP_I18N_PREBUILD=1 SENTRY_ENABLED=false NODE_OPTIONS=--max-old-space-size=${BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-3584} next build --webpack",
     "build:full": "TMPDIR=${TMPDIR:-/tmp} NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 RUN_HEAVY_BUILD_TASKS=false SKIP_I18N_PREBUILD=1 SENTRY_ENABLED=false NODE_OPTIONS=--max-old-space-size=${BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-3584} next build --webpack",
     "build:verify": "npm run typecheck && npm run build:prechecks && npm run build",
