@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import questions from "@/content/transfusion-safety-questions.json";
 
 type Q = {
   promptKey: string;
@@ -11,13 +10,20 @@ type Q = {
   rationaleKey: string;
 };
 
-const DATA = questions as Q[];
+let questionsCache: Q[] | null = null;
+
+function getQuestions(): Q[] {
+  if (questionsCache) return questionsCache;
+  questionsCache = require("@/content/transfusion-safety-questions.json") as Q[];
+  return questionsCache;
+}
 
 export default function TransfusionSafetyTool() {
   const { t } = useMarketingI18n();
+  const data = getQuestions();
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
-  const q = DATA[idx];
+  const q = data[idx];
 
   return (
     <div className="space-y-6">
@@ -51,7 +57,7 @@ export default function TransfusionSafetyTool() {
             type="button"
             className="rounded-full border border-border px-3 py-1.5 text-sm font-medium"
             onClick={() => {
-              setIdx((j) => (j - 1 + DATA.length) % DATA.length);
+              setIdx((j) => (j - 1 + data.length) % data.length);
               setPicked(null);
             }}
           >
@@ -61,7 +67,7 @@ export default function TransfusionSafetyTool() {
             type="button"
             className="rounded-full border border-border px-3 py-1.5 text-sm font-medium"
             onClick={() => {
-              setIdx((j) => (j + 1) % DATA.length);
+              setIdx((j) => (j + 1) % data.length);
               setPicked(null);
             }}
           >

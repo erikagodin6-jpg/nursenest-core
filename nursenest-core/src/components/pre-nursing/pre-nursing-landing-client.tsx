@@ -3,13 +3,19 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen, FlaskConical, Sparkles } from "lucide-react";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
-import strings from "@/content/pre-nursing/pre-nursing-strings-en.json";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 
-const dict = strings as Record<string, string>;
+let preNursingStringsCache: Record<string, string> | null = null;
+
+function getPreNursingStrings(): Record<string, string> {
+  if (preNursingStringsCache) return preNursingStringsCache;
+  preNursingStringsCache = require("@/content/pre-nursing/pre-nursing-strings-en.json") as Record<string, string>;
+  return preNursingStringsCache;
+}
 
 export function PreNursingLandingClient() {
+  const dict = getPreNursingStrings();
   return (
     <>
       <header className="mb-10">

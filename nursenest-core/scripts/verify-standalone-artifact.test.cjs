@@ -186,6 +186,10 @@ test("next config keeps standalone output enabled", () => {
 test("deploy build script forces a clean rebuild and verifies the standalone artifact", () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
   assert.equal(pkg.scripts.build.includes("next build"), true);
+  assert.match(
+    pkg.scripts.build,
+    /NODE_OPTIONS=\$\{NODE_OPTIONS:-"--max-old-space-size=\$\{BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-3584\}"\}/,
+  );
   assert.equal(pkg.scripts["verify:standalone-artifact"], "node scripts/verify-standalone-artifact.mjs");
   assert.equal(
     pkg.scripts["build:deploy"],

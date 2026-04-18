@@ -8,7 +8,6 @@ import { PreNursingMilestoneStrip } from "@/components/pre-nursing/pre-nursing-m
 import { PreNursingSurfaceAnalytics } from "@/components/pre-nursing/pre-nursing-surface-analytics";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
-import strings from "@/content/pre-nursing/pre-nursing-strings-en.json";
 import { PRE_NURSING_LESSON_HUB_PAGE_SIZE } from "@/lib/pre-nursing/pre-nursing-constants";
 import { preNursingLessonsHubBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -19,7 +18,13 @@ import {
   preloadInlineContentMap,
 } from "@/components/inline-content";
 
-const dict = strings as Record<string, string>;
+let preNursingStringsCache: Record<string, string> | null = null;
+
+function getPreNursingStrings(): Record<string, string> {
+  if (preNursingStringsCache) return preNursingStringsCache;
+  preNursingStringsCache = require("@/content/pre-nursing/pre-nursing-strings-en.json") as Record<string, string>;
+  return preNursingStringsCache;
+}
 
 const PRE_NURSING_LESSONS_INLINE_KEYS = [
   "inline.marketing.preNursing.lessons.kicker",
@@ -58,6 +63,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 }
 
 export default async function PreNursingLessonsHubPage({ searchParams }: Props) {
+  const dict = getPreNursingStrings();
   const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
   const all = [...PRE_NURSING_MODULE_REGISTRY].filter(pathwayLessonHasRenderableHubSlug);

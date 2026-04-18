@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
-import strings from "@/content/pre-nursing/pre-nursing-strings-en.json";
 import { BANK_MODULE_SLUGS } from "@/lib/pre-nursing/pre-nursing-question-bank";
 import {
   examPrepHrefForHint,
@@ -19,9 +18,16 @@ import {
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 
-const dict = strings as Record<string, string>;
+let preNursingStringsCache: Record<string, string> | null = null;
+
+function getPreNursingStrings(): Record<string, string> {
+  if (preNursingStringsCache) return preNursingStringsCache;
+  preNursingStringsCache = require("@/content/pre-nursing/pre-nursing-strings-en.json") as Record<string, string>;
+  return preNursingStringsCache;
+}
 
 function moduleTitleForSlug(s: string): string {
+  const dict = getPreNursingStrings();
   const m = PRE_NURSING_MODULE_REGISTRY.find((x) => x.slug === s);
   return m ? dict[m.titleKey] ?? s : s;
 }

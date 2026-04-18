@@ -6,13 +6,18 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { PreNursingQuizRunner } from "@/components/pre-nursing/pre-nursing-quiz-runner";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
-import strings from "@/content/pre-nursing/pre-nursing-strings-en.json";
 import { getQuestionsForModule } from "@/lib/pre-nursing/pre-nursing-question-bank";
 import { buildPracticeExam } from "@/lib/pre-nursing/pre-nursing-exam-engine";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
-const dict = strings as Record<string, string>;
+let preNursingStringsCache: Record<string, string> | null = null;
+
+function getPreNursingStrings(): Record<string, string> {
+  if (preNursingStringsCache) return preNursingStringsCache;
+  preNursingStringsCache = require("@/content/pre-nursing/pre-nursing-strings-en.json") as Record<string, string>;
+  return preNursingStringsCache;
+}
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -20,6 +25,7 @@ export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const dict = getPreNursingStrings();
   const { slug } = await params;
   return safeGenerateMetadata(
     async () => {
@@ -41,6 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PreNursingPracticeExamPage({ params }: Props) {
+  const dict = getPreNursingStrings();
   const { slug } = await params;
 
   // Ensure module exists in registry

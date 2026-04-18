@@ -76,3 +76,36 @@ test("priority content and catalog helper modules avoid top-level JSON imports",
     assert.match(source, /require\(["']@\/content\/.+\.json["']\)/);
   }
 });
+
+test("remaining pre-nursing and interactive content modules avoid top-level JSON imports", () => {
+  const sourcePaths = [
+    "components/tools/calculators/transfusion-safety-tool.tsx",
+    "components/pre-nursing/pre-nursing-landing-client.tsx",
+    "components/pre-nursing/pre-nursing-milestone-strip.tsx",
+    "components/pre-nursing/pre-nursing-module-engagement.tsx",
+    "components/marketing/case-studies-page-client.tsx",
+    "app/(marketing)/[locale]/pre-nursing/lessons/[slug]/page.tsx",
+    "app/(marketing)/(default)/pre-nursing/lessons/page.tsx",
+    "app/(marketing)/(default)/pre-nursing/lessons/[slug]/page.tsx",
+    "app/(marketing)/(default)/pre-nursing/practice/[slug]/page.tsx",
+  ];
+
+  for (const sourcePath of sourcePaths) {
+    const source = readAppFile(sourcePath);
+    assert.doesNotMatch(source, /import\s+.+\s+from\s+["']@\/(content|data)\/.+\.json["']/);
+    assert.match(source, /require\(["']@\/content\/.+\.json["']\)/);
+  }
+});
+
+test("server-facing readiness and inventory helpers avoid top-level JSON imports", () => {
+  const sourcePaths = [
+    "lib/navigation/country-exam-readiness-snapshot.ts",
+    "lib/education-images/inventory.ts",
+  ];
+
+  for (const sourcePath of sourcePaths) {
+    const source = readAppFile(sourcePath);
+    assert.doesNotMatch(source, /import\s+.+\s+from\s+["']@\/(config|content|data)\/.+\.json["']/);
+    assert.match(source, /require\(["']@\/config\/.+\.json["']\)/);
+  }
+});

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import cases from "@/content/clinical-case-studies.json";
 
 type CaseItem = {
   id: string;
@@ -14,10 +13,17 @@ type CaseItem = {
   takeaway: string;
 };
 
-const DATA = cases as CaseItem[];
+let caseStudiesCache: CaseItem[] | null = null;
+
+function getCaseStudies(): CaseItem[] {
+  if (caseStudiesCache) return caseStudiesCache;
+  caseStudiesCache = require("@/content/clinical-case-studies.json") as CaseItem[];
+  return caseStudiesCache;
+}
 
 export function CaseStudiesPageClient() {
-  const [open, setOpen] = useState<string | null>(DATA[0]?.id ?? null);
+  const data = getCaseStudies();
+  const [open, setOpen] = useState<string | null>(data[0]?.id ?? null);
   const [picked, setPicked] = useState<Record<string, number | null>>({});
 
   return (
@@ -29,7 +35,7 @@ export function CaseStudiesPageClient() {
         </p>
       </header>
       <ul className="space-y-4">
-        {DATA.map((c) => {
+        {data.map((c) => {
           const isOpen = open === c.id;
           const choice = picked[c.id] ?? null;
           return (
