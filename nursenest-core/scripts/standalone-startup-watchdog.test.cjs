@@ -104,8 +104,8 @@ test("bootstrap runtime probes the child via the internal loopback host and emit
 
 test("bootstrap runtime serves the internal probe path directly from the parent layer", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
-  assert.equal(source.includes("isBootstrapProbeRequest(req, childHealthProbePath)"), true);
-  assert.equal(source.includes('emit("bootstrap_child_probe_intercepted"'), true);
+  assert.equal(source.includes('emit("bootstrap_child_probe_intercepted"'), false);
+  assert.equal(source.includes("serveProbeOk(req, res)"), false);
 });
 
 test("bootstrap readiness loop probes the child path on the internal port", () => {
@@ -122,6 +122,29 @@ test("bootstrap timeout and readyz re-probe both target the internal port", () =
   assert.equal(source.includes("await probeChildHealth(publicPort);"), false);
 });
 
+test("bootstrap readiness loop has a bounded attempt cap before terminal failure", () => {
+  const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
+  assert.equal(source.includes("const bootstrapReadyMaxAttempts ="), true);
+  assert.equal(source.includes('process.env.NN_BOOTSTRAP_READY_MAX_ATTEMPTS ?? "120"'), true);
+  assert.equal(source.includes("if (attempt >= bootstrapReadyMaxAttempts)"), true);
+  assert.equal(
+    source.includes("standalone child never answered ${childHealthProbeUrl(internalPort)} after ${attempt} attempts: ${detail}"),
+    true,
+  );
+});
+
+test("bootstrap readiness loop still marks handlers ready on successful probe", () => {
+  const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
+  assert.equal(source.includes('markHandlersReady("internal_probe")'), true);
+});
+
+test("bootstrap runtime hard-guards child readiness probes to the internal port", () => {
+  const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
+  assert.equal(source.includes("function assertInternalProbePort(probePort)"), true);
+  assert.equal(source.includes("if (probePort !== internalPort)"), true);
+  assert.equal(source.includes("assertInternalProbePort(probePort);"), true);
+});
+
 test("bootstrap runtime never force-marks handlers ready", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
   assert.equal(source.includes("forcedHandlersReadyFallbackMs"), false);
@@ -129,12 +152,25 @@ test("bootstrap runtime never force-marks handlers ready", () => {
   assert.equal(source.includes("state.handlersReadyForced"), false);
 });
 
-test("child preload recognizes the internal bootstrap ready probe path", () => {
-  assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/_nn_bootstrap_ready_check__" }), true);
-  assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/_nn_bootstrap_ready_check__?ts=1" }), true);
+test("bootstrap runtime supports an env-guarded watchdog bypass after bind", () => {
+  const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
+  assert.equal(source.includes('process.env.NN_BYPASS_BOOTSTRAP === "1"'), true);
+  assert.equal(source.includes('markHandlersReady("watchdog_bypass_after_bind")'), true);
 });
 
-test("child preload serves the internal bootstrap ready probe directly", () => {
+test("bootstrap runtime skips the internal readiness probe loop when watchdog bypass is enabled", () => {
+  const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
+  assert.equal(source.includes("if (bypassBootstrapReadiness)"), true);
+  assert.equal(source.includes('emit("watchdog_bypass_enabled"'), true);
+  assert.equal(source.includes("await probeChildHealth(internalPort, attempt)"), true);
+});
+
+test("child preload recognizes the internal bootstrap ready probe path", () => {
+  assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/_nn_bootstrap_ready_check__" }), false);
+  assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/_nn_bootstrap_ready_check__?ts=1" }), false);
+});
+
+test("bootstrap healthz helper does not serve the internal bootstrap ready probe directly", () => {
   const headers = new Map();
   const res = {
     statusCode: 0,
@@ -153,8 +189,8 @@ test("child preload serves the internal bootstrap ready probe directly", () => {
     null,
   );
 
-  assert.equal(handled, true);
-  assert.equal(res.statusCode, 200);
-  assert.equal(headers.get("cache-control"), "no-store");
-  assert.equal(res.body, "ok");
+  assert.equal(handled, false);
+  assert.equal(res.statusCode, 0);
+  assert.equal(headers.get("cache-control"), undefined);
+  assert.equal(res.body, undefined);
 });

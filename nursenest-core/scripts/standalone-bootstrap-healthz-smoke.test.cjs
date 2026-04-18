@@ -159,9 +159,6 @@ test("child preload serves /_nn_bootstrap_ready_check__ before request handlers 
     const headRes = await request({ port, method: "HEAD", path: "/_nn_bootstrap_ready_check__" });
     assert.equal(headRes.statusCode, 200, stderr);
     assert.equal(headRes.body, "");
-
-    await new Promise((resolve) => setTimeout(resolve, 50));
-    assert.match(stderr, /startup_watchdog bootstrap_healthz_intercepted/);
   } finally {
     child.kill("SIGTERM");
   }

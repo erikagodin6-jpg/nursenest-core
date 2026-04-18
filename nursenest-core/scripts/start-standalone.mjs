@@ -46,8 +46,13 @@ const readinessProbePath = "/readyz";
  */
 const childHealthProbePath = "/_nn_bootstrap_ready_check__";
 const bootstrapReadyTimeoutMs = Number.parseInt(process.env.NN_BOOTSTRAP_READY_TIMEOUT_MS ?? "900000", 10) || 900000;
+const bootstrapReadyMaxAttempts = Math.max(
+  1,
+  Number.parseInt(process.env.NN_BOOTSTRAP_READY_MAX_ATTEMPTS ?? "120", 10) || 120,
+);
 const bootstrapTestDelayMs = Number.parseInt(process.env.NN_BOOTSTRAP_TEST_DELAY_MS ?? "0", 10) || 0;
 const childHealthProbeTimeoutMs = Number.parseInt(process.env.NN_CHILD_HEALTH_TIMEOUT_MS ?? "1000", 10) || 1000;
+const bypassBootstrapReadiness = process.env.NN_BYPASS_BOOTSTRAP === "1";
 const memMb = process.env.NODE_MAX_OLD_SPACE_SIZE_MB ?? "512";
 const baseNodeOptions = (process.env.NODE_OPTIONS ?? "").trim();
 const hasHeapOverride =
@@ -87,11 +92,26 @@ function childHealthProbeUrl(probePort) {
   return `http://${internalHost}:${probePort}${childHealthProbePath}`;
 }
 
+function assertInternalProbePort(probePort) {
+  if (probePort !== internalPort) {
+    throw new Error("child readiness probes must target the internal port");
+  }
+}
+
 function waitForChildReadiness({ state }) {
   const startedAt = Date.now();
   let attempt = 0;
 
   return (async () => {
+    if (bypassBootstrapReadiness) {
+      emit("watchdog_bypass_enabled", {
+        pid: process.pid,
+        childPid: state.childPid,
+        publicPort,
+        internalPort,
+      });
+      return;
+    }
     if (bootstrapTestDelayMs > 0) {
       await sleep(bootstrapTestDelayMs);
     }
@@ -110,6 +130,12 @@ function waitForChildReadiness({ state }) {
         markHandlersReady("internal_probe");
         return;
       } catch (error) {
+        if (attempt >= bootstrapReadyMaxAttempts) {
+          const detail = error instanceof Error ? error.message : String(error);
+          throw new Error(
+            `standalone child never answered ${childHealthProbeUrl(internalPort)} after ${attempt} attempts: ${detail}`,
+          );
+        }
         emit("internal_probe_error", {
           attempt,
           probeUrl: childHealthProbeUrl(internalPort),
@@ -126,6 +152,7 @@ function waitForChildReadiness({ state }) {
 }
 
 function probeChildHealth(probePort, attempt) {
+  assertInternalProbePort(probePort);
   const probeUrl = childHealthProbeUrl(probePort);
   emit("internal_probe_attempt", {
     attempt,
@@ -213,17 +240,6 @@ function markHandlersReady(reason) {
   });
 }
 
-function serveProbeOk(req, res) {
-  res.statusCode = 200;
-  res.setHeader("content-type", "text/plain; charset=utf-8");
-  res.setHeader("cache-control", "no-store");
-  if ((req.method ?? "").toUpperCase() === "HEAD") {
-    res.end();
-  } else {
-    res.end("ok");
-  }
-}
-
 async function handleBootstrapRequest(req, res) {
   if (isBootstrapProbeRequest(req, livenessProbePath)) {
     emit("bootstrap_healthz_intercepted", {
@@ -246,19 +262,30 @@ async function handleBootstrapRequest(req, res) {
   }
 
   if (isBootstrapProbeRequest(req, childHealthProbePath)) {
-    emit("bootstrap_child_probe_intercepted", {
-      pid: process.pid,
-      method: req.method,
-      url: req.url,
-      handlersReady: state.handlersReady,
-      internalPort,
-      publicPort,
-    });
-    serveProbeOk(req, res);
+    res.statusCode = 404;
+    res.setHeader("content-type", "text/plain; charset=utf-8");
+    res.setHeader("cache-control", "no-store");
+    if ((req.method ?? "").toUpperCase() === "HEAD") {
+      res.end();
+    } else {
+      res.end("not found");
+    }
     return;
   }
 
   if (isBootstrapProbeRequest(req, readinessProbePath)) {
+    if (bypassBootstrapReadiness) {
+      res.statusCode = 200;
+      res.setHeader("content-type", "text/plain; charset=utf-8");
+      res.setHeader("cache-control", "no-store");
+      if ((req.method ?? "").toUpperCase() === "HEAD") {
+        res.end();
+      } else {
+        res.end("ready");
+      }
+      return;
+    }
+
     if (!state.handlersReady || state.childExited) {
       res.statusCode = 503;
       res.setHeader("content-type", "text/plain; charset=utf-8");
@@ -346,6 +373,10 @@ emit("server_listening", {
   readinessProbePath,
   childHealthProbePath,
 });
+
+if (bypassBootstrapReadiness) {
+  markHandlersReady("watchdog_bypass_after_bind");
+}
 
 const child = spawn(process.execPath, childArgs, {
   stdio: ["ignore", "pipe", "pipe"],

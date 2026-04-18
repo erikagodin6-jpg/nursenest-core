@@ -1,25 +1,6 @@
 const { createStartupWatchdogLogger, createStandaloneRequire } = require("./standalone-startup-watchdog-shared.cjs");
 const { maybeServeBootstrapHealthz } = require("./standalone-bootstrap-healthz-shared.cjs");
 
-function maybeServeInternalBootstrapReadyProbe(req, res) {
-  if (req.url === "/_nn_bootstrap_ready_check__") {
-    if (req.method === "GET" || req.method === "HEAD") {
-      res.statusCode = 200;
-      res.setHeader("content-type", "text/plain");
-
-      if (req.method === "HEAD") {
-        res.end();
-        return true;
-      }
-
-      res.end("ok");
-      return true;
-    }
-  }
-
-  return false;
-}
-
 function patchServerModule(moduleName, moduleRef, startupState, logger) {
   const label = moduleName.startsWith("node:") ? moduleName.slice("node:".length) : moduleName;
   logger.logPreloadPatchBegin(label);
@@ -34,9 +15,6 @@ function patchServerModule(moduleName, moduleRef, startupState, logger) {
         if (event === "request" && args.length >= 2) {
           const req = args[0];
           const res = args[1];
-          if (maybeServeInternalBootstrapReadyProbe(req, res)) {
-            return true;
-          }
           if (maybeServeBootstrapHealthz(req, res, startupState, logger)) {
             return true;
           }
@@ -60,9 +38,6 @@ function patchServerModule(moduleName, moduleRef, startupState, logger) {
         if (listenerIndex >= 0) {
           const originalListener = args[listenerIndex];
           args[listenerIndex] = function wrappedRequestListener(req, res, ...rest) {
-            if (maybeServeInternalBootstrapReadyProbe(req, res)) {
-              return;
-            }
             if (maybeServeBootstrapHealthz(req, res, startupState, logger)) {
               return;
             }
