@@ -326,7 +326,6 @@ export default sentryEnabled
       authToken: sentrySourceMapsEnabled ? process.env.SENTRY_AUTH_TOKEN : undefined,
       silent: true,
       telemetry: false,
-      disableLogger: true,
       sourcemaps: {
         disable: !sentrySourceMapsEnabled,
       },
