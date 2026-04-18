@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { OnboardingPageClient } from "./onboarding-page-client";
@@ -10,7 +10,7 @@ export const metadata = {
 };
 
 export default async function OnboardingPage() {
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).onboarding");
   const userId = (session?.user as { id?: string })?.id;
 
   if (!userId || !isDatabaseUrlConfigured()) {

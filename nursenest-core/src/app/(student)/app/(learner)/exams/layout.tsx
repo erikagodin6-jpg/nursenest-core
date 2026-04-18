@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import "./exam-shell.css";
 
@@ -14,7 +14,7 @@ export default async function ExamShellLayout({ children }: { children: React.Re
   let t: (key: string) => string = (key) => key;
 
   try {
-    [session] = await Promise.all([auth()]);
+    [session] = await Promise.all([getProtectedRouteSession("(student).app.(learner).exams")]);
     const bundle = await getLearnerMarketingBundle();
     t = bundle.t;
   } catch (e) {

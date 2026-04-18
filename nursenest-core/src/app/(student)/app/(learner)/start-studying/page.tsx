@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { ContentStatus } from "@prisma/client";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
@@ -31,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function StartStudyingPage() {
   const { t, locale } = await getLearnerMarketingBundle();
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).start-studying");
   const userId = (session?.user as { id?: string })?.id ?? "";
 
   if (!userId || !isDatabaseUrlConfigured()) {

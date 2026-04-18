@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountEmptyState } from "@/components/student/learner-account-empty-state";
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
@@ -30,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AccountStudyHistoryPage() {
   const { t } = await getLearnerMarketingBundle();
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).account.study-history");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const crumbs = appAccountBreadcrumbs(t("learner.account.nav.studyHistory"));
   const entitlement = await resolveEntitlementForPage(userId);

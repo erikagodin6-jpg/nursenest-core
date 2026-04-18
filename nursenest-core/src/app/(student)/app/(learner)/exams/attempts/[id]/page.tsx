@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { PostTestStudyNextCard } from "@/components/student/post-test-study-next-card";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
@@ -32,7 +32,7 @@ export default async function ExamAttemptReportPage({ params }: Props) {
   const [m, en] = await Promise.all([loadMarketingMessages(locale), loadMarketingMessages("en")]);
   const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
 
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).exams.attempts.[id]");
   const userId = (session?.user as { id?: string })?.id ?? "";
   if (!userId) {
     return (

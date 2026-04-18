@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
@@ -48,7 +48,7 @@ function emptyUnifiedData(): UnifiedReviewData {
 }
 
 export default async function ReviewQueuePage() {
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).review");
   const userId = (session?.user as { id?: string })?.id ?? "";
 
   if (!userId) {

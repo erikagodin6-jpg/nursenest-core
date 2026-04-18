@@ -1,10 +1,10 @@
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { FlashcardCustomStudyClient } from "@/components/flashcards/flashcard-custom-study-client";
 
 export default async function FlashcardCustomPage() {
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).flashcards.custom");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
   if (entitlement === "error") {

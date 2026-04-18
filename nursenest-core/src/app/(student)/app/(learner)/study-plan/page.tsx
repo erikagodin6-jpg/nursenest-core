@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
@@ -27,7 +27,7 @@ type Props = { searchParams: Promise<{ kind?: string }> };
 export default async function StudyPlanPage({ searchParams }: Props) {
   const sp = await searchParams;
   const { t } = await getLearnerMarketingBundle();
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).study-plan");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
 

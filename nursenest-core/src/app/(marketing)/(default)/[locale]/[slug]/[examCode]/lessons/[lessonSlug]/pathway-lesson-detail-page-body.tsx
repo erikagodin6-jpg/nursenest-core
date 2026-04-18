@@ -111,9 +111,9 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
   const lessonLoadFailed = lessonResult.status === "rejected";
 
   const userId = "";
-  const studySettings = await loadStudySettings(userId);
 
-  const [entRes, lpRes] = await Promise.allSettled([
+  const [studySettingsRes, entRes, lpRes] = await Promise.allSettled([
+    loadStudySettings(userId),
     resolveEntitlementForPage(userId),
     (async (): Promise<string | null> => {
       if (!userId || !isDatabaseUrlConfigured()) return null;
@@ -125,6 +125,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
       }
     })(),
   ]);
+  const studySettings = studySettingsRes.status === "fulfilled" ? studySettingsRes.value : null;
   const entitlement = entRes.status === "fulfilled" ? entRes.value : "error";
   const learnerPathResolved = lpRes.status === "fulfilled" ? lpRes.value : null;
 
@@ -140,8 +141,13 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
 
   const { lesson, fullAccess, scope, entitlementError } = routeResolution;
   const examName = pathwayRegionAwareExamName(pathway);
-  const bankAssessments = await resolvePathwayLessonBankAssessments(pathway, lesson);
-  const adjacentSlugs = await loadPathwayLessonAdjacent(pathway.id, lesson.slug, lessonContentLocale);
+  const [bankAssessmentsRes, adjacentSlugsRes, contentDatesRes] = await Promise.allSettled([
+    resolvePathwayLessonBankAssessments(pathway, lesson),
+    loadPathwayLessonAdjacent(pathway.id, lesson.slug, lessonContentLocale),
+    getPathwayLessonContentDates(pathway.id, lesson.slug, lessonContentLocale),
+  ]);
+  const bankAssessments = bankAssessmentsRes.status === "fulfilled" ? bankAssessmentsRes.value : [];
+  const adjacentSlugs = adjacentSlugsRes.status === "fulfilled" ? adjacentSlugsRes.value : { prev: null, next: null };
   const lessonAdjacentHrefs = mapPathwayLessonAdjacentToHrefs(adjacentSlugs, (slug) =>
     pathwayLessonPublicDetailPath(pathway, slug),
   );
@@ -178,7 +184,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
   const displayLessonTitle = cleanLessonTitleForDisplay(lesson.title);
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, displayLessonTitle);
   const lessonQuality = classifyPathwayLesson(lesson);
-  const contentDates = await getPathwayLessonContentDates(pathway.id, lesson.slug, lessonContentLocale);
+  const contentDates = contentDatesRes.status === "fulfilled" ? contentDatesRes.value : null;
   const jsonLdLessonPath = pathwayLessonPublicDetailPath(pathway, lesson.slug) ?? pathname;
   const quickReviewBullets = buildQuickReviewBullets(previewLesson);
   const examFocusPrimary = extractExamFocusHighYieldLines(previewLesson);

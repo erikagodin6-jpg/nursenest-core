@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { BaselineAssessmentFlow } from "@/components/student/baseline-assessment-flow";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function BaselineAssessmentPage() {
   const { t } = await getLearnerMarketingBundle();
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).baseline-assessment");
   const userId = (session?.user as { id?: string })?.id;
   if (!userId) {
     return (

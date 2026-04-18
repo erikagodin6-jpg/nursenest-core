@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { LockedDashboardOverlay } from "@/components/student/dashboard/locked-dashboard-overlay";
@@ -323,7 +323,7 @@ async function LearnerDashboardDeferredContent({
   locale: string;
   crumbs: ReturnType<typeof appShellBreadcrumbs>;
 }) {
-  const session = (await auth()) as DashboardSessionLike;
+  const session = (await getProtectedRouteSession("(student).app.(learner)")) as DashboardSessionLike;
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
 

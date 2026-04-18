@@ -6,7 +6,7 @@ import { QuestionBankPracticeClient } from "@/components/student/question-bank-p
 import { QuestionBankPracticeSetupClient } from "@/components/student/question-bank-practice-setup-client";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
@@ -20,7 +20,7 @@ import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config
 
 export default async function QuestionBankPage() {
   const { t } = await getLearnerMarketingBundle();
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).questions");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerSecurityHub } from "@/components/student/learner-security-hub";
@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AccountSecurityPage() {
   const { t } = await getLearnerMarketingBundle();
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).account.security");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const crumbs = appAccountBreadcrumbs(t("learner.account.nav.security"));
 

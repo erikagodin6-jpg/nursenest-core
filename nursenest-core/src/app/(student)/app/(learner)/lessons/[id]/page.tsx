@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExamFamily, LearnerNoteScope, type TierCode } from "@prisma/client";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import { PremiumLessonShell } from "@/components/student/premium-lesson-shell";
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
@@ -170,7 +170,7 @@ type Props = { params: Promise<{ id: string }> };
 
 export default async function LessonDetailPage({ params }: Props) {
   const { id } = await params;
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).lessons.[id]");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
   const { t, messages, fallbackMessages } = await getLearnerMarketingBundle();

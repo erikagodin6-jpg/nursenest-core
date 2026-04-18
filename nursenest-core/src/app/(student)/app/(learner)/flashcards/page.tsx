@@ -1,14 +1,14 @@
 import { Suspense } from "react";
 import { FlashcardsHubClient } from "@/components/flashcards/flashcards-hub-client";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 
 export default async function FlashcardsPage() {
   const { t } = await getLearnerMarketingBundle();
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).flashcards");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
   if (entitlement === "error") {

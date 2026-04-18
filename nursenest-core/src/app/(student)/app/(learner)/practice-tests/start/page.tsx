@@ -2,7 +2,7 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { PathwayCatSessionStartClient } from "@/components/student/pathway-cat-session-start-client";
 import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { listPathwaysCompatibleWithSubscription, pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements";
@@ -29,7 +29,7 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
   const sp = await searchParams;
   const requestedPathwayId = typeof sp.pathwayId === "string" && sp.pathwayId.trim().length > 2 ? sp.pathwayId.trim() : null;
 
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).practice-tests.start");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
 

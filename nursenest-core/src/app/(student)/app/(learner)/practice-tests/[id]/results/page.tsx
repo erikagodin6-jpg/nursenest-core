@@ -7,7 +7,7 @@ import {
   type PracticeTestIncorrectReviewItem,
 } from "@/components/student/practice-test-results-static";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
@@ -19,8 +19,12 @@ import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loadBenchmarkForReport } from "@/lib/study/benchmarking/benchmark-service";
 import type { BenchmarkServiceResult } from "@/lib/study/benchmarking/benchmark-service";
+import { safeAwait } from "@/lib/async/safe-await";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 type Props = { params: Promise<{ id: string }> };
+
+const PRACTICE_TEST_RESULTS_DB_TIMEOUT_MS = 1500;
 
 function stemPreview(stem: string, max = 160): string {
   const t = stem.replace(/\s+/g, " ").trim();
@@ -45,7 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function PracticeTestResultsPage({ params }: Props) {
   const { id } = await params;
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).practice-tests.[id].results");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
   const { t, locale } = await getLearnerMarketingBundle();
@@ -81,16 +85,71 @@ export default async function PracticeTestResultsPage({ params }: Props) {
     );
   }
 
-  const row = await prisma.practiceTest.findFirst({
-    where: { id, userId },
-    select: {
-      status: true,
-      title: true,
-      results: true,
-      config: true,
-      completedAt: true,
-    },
-  });
+  let rowEnvelope:
+    | {
+        row: Awaited<
+          ReturnType<typeof prisma.practiceTest.findFirst<{
+            select: {
+              status: true;
+              title: true;
+              results: true;
+              config: true;
+              completedAt: true;
+            };
+          }>>
+        >;
+      }
+    | null = null;
+  try {
+    rowEnvelope = await safeAwait(
+      prisma.practiceTest
+        .findFirst({
+          where: { id, userId },
+          select: {
+            status: true,
+            title: true,
+            results: true,
+            config: true,
+            completedAt: true,
+          },
+        })
+        .then((row) => ({ row })),
+      "practice_test_results.row",
+      PRACTICE_TEST_RESULTS_DB_TIMEOUT_MS,
+    );
+  } catch (error) {
+    safeServerLog("practice_test_results", "row_load_failed", {
+      detail: (error instanceof Error ? error.message : String(error)).slice(0, 180),
+    });
+  }
+
+  if (rowEnvelope === null) {
+    safeServerLog("practice_test_results", "fallback_used", {
+      reason: "db_timeout_or_error",
+    });
+    return (
+      <div>
+        <div className="mb-4">
+          <BreadcrumbTrail items={RESULTS_CRUMBS} />
+        </div>
+        <h1 className="text-2xl font-bold">Practice test results</h1>
+        <p className="mt-3 text-sm text-muted-foreground">
+          Saved results are temporarily unavailable. You can reopen the session or try again shortly.
+        </p>
+        <p className="mt-4 text-sm text-muted">
+          <Link className="font-medium text-primary underline" href={`/app/practice-tests/${id}`}>
+            Back to session
+          </Link>{" "}
+          ·{" "}
+          <Link className="font-medium text-primary underline" href="/app/practice-tests">
+            All tests
+          </Link>
+        </p>
+      </div>
+    );
+  }
+
+  const { row } = rowEnvelope;
 
   if (!row) notFound();
 

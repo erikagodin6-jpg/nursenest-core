@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerPersonalInfoForm } from "@/components/student/learner-personal-info-form";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AccountPersonalPage() {
   const { t, locale } = await getLearnerMarketingBundle();
   const localeTag = locale.replace(/_/g, "-");
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).account.personal");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const crumbs = appAccountBreadcrumbs(t("learner.account.nav.personal"));
 

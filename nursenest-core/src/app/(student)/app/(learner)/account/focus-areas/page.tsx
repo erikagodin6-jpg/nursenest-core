@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountEmptyState } from "@/components/student/learner-account-empty-state";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
@@ -30,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AccountFocusAreasPage() {
   const { t } = await getLearnerMarketingBundle();
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).account.focus-areas");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const crumbs = appAccountBreadcrumbs(t("learner.account.nav.focusAreas"));
   const entitlement = await resolveEntitlementForPage(userId);

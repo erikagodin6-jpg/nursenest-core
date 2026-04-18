@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
@@ -19,7 +19,7 @@ export default async function QuickStartPage({ searchParams }: Props) {
   const sp = await searchParams;
   const diagnostic = sp.diagnostic === "1" || sp.diagnostic === "true";
 
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).quick-start");
   const userId = (session?.user as { id?: string })?.id;
 
   if (!userId || !isDatabaseUrlConfigured()) {

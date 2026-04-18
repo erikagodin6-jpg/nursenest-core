@@ -1,6 +1,6 @@
 import { FlashcardStudyClient } from "@/components/flashcards/flashcard-study-client";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
@@ -15,7 +15,7 @@ export default async function FlashcardDeckStudyPage({ params, searchParams }: P
   const { deckRef } = await params;
   const sp = await searchParams;
   const studyMode = sp.mode === "test" ? "test" : "learn";
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).flashcards.[deckRef]");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
   const email = (session?.user as { email?: string | null })?.email ?? null;

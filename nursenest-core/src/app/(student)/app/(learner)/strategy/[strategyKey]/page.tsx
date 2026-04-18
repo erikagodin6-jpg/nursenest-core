@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { StrategySessionClient } from "@/components/study/strategy-session-client";
@@ -23,7 +23,7 @@ export default async function StrategySessionPage({ params }: Props) {
     notFound();
   }
 
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).strategy.[strategyKey]");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
 

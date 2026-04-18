@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { StrategyOverviewSection } from "@/components/study/strategy-overview-section";
@@ -7,7 +7,7 @@ import { StrategyPracticeCards } from "@/components/study/strategy-practice-card
 import { loadStrategyCounts } from "@/app/(student)/app/(learner)/strategy/actions";
 
 export default async function StrategyHubPage() {
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).strategy");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
 

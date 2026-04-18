@@ -4,7 +4,7 @@ import { PracticeTestsHubClient } from "@/components/student/practice-tests-hub-
 import { isCatExamSimulationFeatureEnabled } from "@/lib/exams/cat-exam-simulation";
 import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import {
@@ -21,7 +21,7 @@ import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 export default async function PracticeTestsPage() {
   const { t } = await getLearnerMarketingBundle();
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).practice-tests");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
 

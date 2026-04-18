@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
@@ -31,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AccountProgressPage() {
   const { t, locale } = await getLearnerMarketingBundle();
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).account.progress");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const crumbs = appAccountBreadcrumbs(t("learner.account.nav.progress"));
   const localeTag = locale.replace(/_/g, "-");

@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
@@ -10,7 +10,7 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { maxSafeOffsetPage, parseLessonLibraryLimit } from "@/lib/api/api-pagination-limits";
 import { prisma } from "@/lib/db";
-import { withDatabaseFallback } from "@/lib/db/safe-database";
+import { withDatabaseFallback, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import {
   pathwayLessonsAppListWhereWithTopicFilter,
@@ -42,6 +42,8 @@ type AppLessonListRow = {
   /** Present for `pathway_lessons` rows — used for hub-style progress + chips. */
   pathwayMeta?: { pathwayId: string; slug: string };
 };
+
+const LESSONS_PAGE_DB_TIMEOUT_MS = 1800;
 
 type LessonsListBlock = {
   source: "content_items" | "pathway_lessons" | "legacy_content_map";
@@ -132,7 +134,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function LessonsPage({ searchParams }: Props) {
   const { t } = await getLearnerMarketingBundle();
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).lessons");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
 
@@ -189,9 +191,11 @@ export default async function LessonsPage({ searchParams }: Props) {
     !topicSlugFilter && typeof sp.topic === "string" && sp.topic.trim().length > 0 ? sp.topic.trim() : null;
   const pathwayIdFilter =
     typeof sp.pathwayId === "string" && sp.pathwayId.trim().length > 0 ? sp.pathwayId.trim() : null;
-  const learnerPathRow = await withDatabaseFallback(
+  const learnerPathRow = await withDatabaseFallbackTimeout(
     async () => (userId ? prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } }) : null),
     null,
+    LESSONS_PAGE_DB_TIMEOUT_MS,
+    { scope: "page_lessons", label: "learner_path" },
   );
   const learnerPath = learnerPathRow?.learnerPath ?? null;
   const visiblePathwayIds = visiblePathwayIdsForAppLessons(entitlement, learnerPath);
@@ -202,7 +206,7 @@ export default async function LessonsPage({ searchParams }: Props) {
     intent: "start",
   });
 
-  const lessonsBlockFromDb = await withDatabaseFallback(async () => {
+  const lessonsBlockFromDb = await withDatabaseFallbackTimeout(async () => {
     const contentWhere = lessonAccessWhere(entitlement);
     const contentFilters: typeof contentWhere[] = [];
     if (topicFilter || topicSlugFilter) {
@@ -342,7 +346,7 @@ export default async function LessonsPage({ searchParams }: Props) {
       pageCount: legacy.pageCount,
       rows,
     };
-  }, null);
+  }, null, LESSONS_PAGE_DB_TIMEOUT_MS, { scope: "page_lessons", label: "lesson_list_block" });
 
   let lessonsBlock: LessonsListBlock;
   if (lessonsBlockFromDb !== null) {

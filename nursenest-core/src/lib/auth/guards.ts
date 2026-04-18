@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
 import { adminRouteGateDecision } from "@/lib/auth/admin-path-policy";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { resolveAdminRequestPath } from "@/lib/auth/resolve-admin-request-path";
 import { getStaffSession } from "@/lib/auth/staff-session";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -18,7 +18,7 @@ function loginRedirectWithCallback(path: string): string {
  * Must agree with `authorized()` in `src/lib/auth-middleware.ts`, which treats `id` **or** `email` as signed-in.
  */
 export async function requireUser() {
-  const session = await auth();
+  const session = await getProtectedRouteSession("auth.require_user");
   const u = session?.user as { id?: string; email?: string | null } | undefined;
   if (!session?.user || (!u?.id && !u?.email)) {
     notFound();
@@ -34,12 +34,12 @@ function adminAccessDebug(): boolean {
 }
 
 export async function requireAdmin() {
-  const session = await auth();
-  const u = session?.user as { id?: string; email?: string | null } | undefined;
   /** Set by `src/proxy.ts` as `x-nn-admin-path` / `x-nn-request-pathname` for RBAC. */
-  const path = await resolveAdminRequestPath();
+  const path = await resolveAdminRequestPath().catch(() => "/admin");
   /** Unresolved path is `"/"` — do not send users to login with callback `/` (use `/admin`). */
   const callbackPath = path && path.length > 0 && path !== "/" ? path : "/admin";
+  const session = await getProtectedRouteSession("auth.require_admin");
+  const u = session?.user as { id?: string; email?: string | null } | undefined;
 
   if (!session?.user || (!u?.id && !u?.email)) {
     redirect(loginRedirectWithCallback(callbackPath));

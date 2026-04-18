@@ -26,7 +26,7 @@
  */
 
 import type { Metadata } from "next";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -93,7 +93,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ExamPlanPage() {
   const { t: lt } = await getLearnerMarketingBundle();
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).exam-plan");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
 

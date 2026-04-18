@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { LearnerShellUserBar } from "@/components/auth/learner-shell-user-bar";
 import { LearnerShellLanguageControl } from "@/components/student/learner-shell-language-control";
 import { CheckoutSuccessBanner } from "@/components/student/checkout-success-banner";
@@ -53,7 +53,7 @@ export const dynamic = "force-dynamic";
 
 export default async function LearnerShellLayout({ children }: { children: React.ReactNode }) {
   /** Tier 0 — session + entitlement (no safeOptional; resolveEntitlementForPage is internally fail-closed). */
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner)");
   const userId = (session?.user as { id?: string })?.id ?? "";
 
   if (isDegradedMode()) {

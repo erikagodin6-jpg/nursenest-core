@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerReportCardPremium } from "@/components/student/learner-report-card-premium";
@@ -32,7 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AccountReportCardPage() {
   const { t, locale } = await getLearnerMarketingBundle();
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).account.report-card");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
   const crumbs = appAccountBreadcrumbs(t("learner.account.nav.reportCard"));

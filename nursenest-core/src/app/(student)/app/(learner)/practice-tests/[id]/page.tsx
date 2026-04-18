@@ -3,7 +3,7 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { ExamSessionErrorBoundary } from "@/components/exam/exam-session-error-boundary";
 import { PracticeTestRunnerClient } from "@/components/student/practice-test-runner-client";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
@@ -32,7 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function PracticeTestRunPage({ params }: Props) {
   const { id } = await params;
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).practice-tests.[id]");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
   const { t } = await getLearnerMarketingBundle();

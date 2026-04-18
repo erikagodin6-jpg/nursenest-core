@@ -1,13 +1,13 @@
 import { FlashcardWeakStudyClient } from "@/components/flashcards/flashcard-weak-study-client";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 
 export default async function FlashcardWeakAreasPage() {
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).flashcards.weak-areas");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
   const email = (session?.user as { email?: string | null })?.email ?? null;

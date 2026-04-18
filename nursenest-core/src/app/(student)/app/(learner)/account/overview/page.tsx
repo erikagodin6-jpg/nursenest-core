@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { TrialStatus } from "@prisma/client";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
 import { LearnerInsightEnginePanel } from "@/components/student/learner-insight-engine-panel";
@@ -12,7 +12,7 @@ import { LockedStudyNextPreview } from "@/components/student/locked-study-next-p
 import { TrackedStudyLoopCatLink } from "@/components/student/tracked-study-loop-cat-link";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { buildAdaptiveRecommendations } from "@/lib/learner/adaptive-recommendations";
@@ -49,6 +49,8 @@ export async function generateMetadata(): Promise<Metadata> {
   );
 }
 
+const ACCOUNT_OVERVIEW_DB_TIMEOUT_MS = 1500;
+
 function tierLabel(t: string): string {
   return t.replace(/_/g, " ");
 }
@@ -56,7 +58,7 @@ function tierLabel(t: string): string {
 export default async function LearnerAccountOverviewPage() {
   const { t, locale } = await getLearnerMarketingBundle();
   const nowMs = Date.now();
-  const session = await auth();
+  const session = await getProtectedRouteSession("(student).app.(learner).account.overview");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
   const localeTag = locale.replace(/_/g, "-");
@@ -79,38 +81,50 @@ export default async function LearnerAccountOverviewPage() {
     );
   }
 
-  const userRow = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      email: true,
-      name: true,
-      country: true,
-      tier: true,
-      trialStatus: true,
-      trialEndsAt: true,
-      trialStartedAt: true,
-      passwordHash: true,
-    },
-  });
-
-  const subscription = await prisma.subscription.findFirst({
-    where: { userId },
-    orderBy: { createdAt: "desc" },
-    select: {
-      status: true,
-      planTier: true,
-      planCountry: true,
-      stripeCustomerId: true,
-      stripeSubscriptionId: true,
-      createdAt: true,
-    },
-  });
+  const [userRow, subscription, activity] = await Promise.all([
+    withDatabaseFallbackTimeout(
+      () =>
+        prisma.user.findUnique({
+          where: { id: userId },
+          select: {
+            email: true,
+            name: true,
+            country: true,
+            tier: true,
+            trialStatus: true,
+            trialEndsAt: true,
+            trialStartedAt: true,
+            passwordHash: true,
+          },
+        }),
+      null,
+      ACCOUNT_OVERVIEW_DB_TIMEOUT_MS,
+      { scope: "learner_account_overview", label: "profile_user" },
+    ),
+    withDatabaseFallbackTimeout(
+      () =>
+        prisma.subscription.findFirst({
+          where: { userId },
+          orderBy: { createdAt: "desc" },
+          select: {
+            status: true,
+            planTier: true,
+            planCountry: true,
+            stripeCustomerId: true,
+            stripeSubscriptionId: true,
+            createdAt: true,
+          },
+        }),
+      null,
+      ACCOUNT_OVERVIEW_DB_TIMEOUT_MS,
+      { scope: "learner_account_overview", label: "subscription_summary" },
+    ),
+    loadLearnerProfileActivity(userId),
+  ]);
 
   let premiumSnapshot = null;
   let topicPerf = null;
   let adaptive = null;
-  const activity = await loadLearnerProfileActivity(userId);
-
   if (entitlement !== "error" && entitlement.hasAccess) {
     try {
       premiumSnapshot = await loadPremiumDashboardSnapshot(userId, entitlement);
