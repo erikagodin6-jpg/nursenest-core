@@ -45,7 +45,6 @@ const readinessProbePath = "/readyz";
  * never pays the global `/api/*` proxy/auth/rate-limit import cost.
  */
 const childHealthProbePath = "/_nn_bootstrap_ready_check__";
-const forcedHandlersReadyFallbackMs = 5000;
 const bootstrapReadyTimeoutMs = Number.parseInt(process.env.NN_BOOTSTRAP_READY_TIMEOUT_MS ?? "900000", 10) || 900000;
 const bootstrapTestDelayMs = Number.parseInt(process.env.NN_BOOTSTRAP_TEST_DELAY_MS ?? "0", 10) || 0;
 const childHealthProbeTimeoutMs = Number.parseInt(process.env.NN_CHILD_HEALTH_TIMEOUT_MS ?? "1000", 10) || 1000;
@@ -200,7 +199,6 @@ const state = {
   childExited: false,
   childPid: null,
   handlersReady: false,
-  handlersReadyForced: false,
 };
 
 function markHandlersReady(reason) {
@@ -245,18 +243,6 @@ async function handleBootstrapRequest(req, res) {
         res.end();
       } else {
         res.end("warming");
-      }
-      return;
-    }
-
-    if (state.handlersReadyForced) {
-      res.statusCode = 200;
-      res.setHeader("content-type", "text/plain; charset=utf-8");
-      res.setHeader("cache-control", "no-store");
-      if ((req.method ?? "").toUpperCase() === "HEAD") {
-        res.end();
-      } else {
-        res.end("ready");
       }
       return;
     }
@@ -352,21 +338,6 @@ child.stderr?.on("data", (chunk) => process.stderr.write(chunk));
 
 state.childPid = child.pid ?? null;
 
-const forcedHandlersReadyTimer = setTimeout(() => {
-  if (state.handlersReady || state.childExited || child.exitCode != null || child.killed) {
-    return;
-  }
-  state.handlersReady = true;
-  state.handlersReadyForced = true;
-  emit("handlers_ready_forced", {
-    pid: process.pid,
-    childPid: state.childPid,
-    internalPort,
-    publicPort,
-    fallbackAfterMs: forcedHandlersReadyFallbackMs,
-  });
-}, forcedHandlersReadyFallbackMs);
-
 emit("standalone_spawn", {
   command: process.execPath,
   args: childArgs,
@@ -389,10 +360,8 @@ emit("handlers_init_start", {
 });
 
 child.on("exit", async (code, signal) => {
-  clearTimeout(forcedHandlersReadyTimer);
   state.childExited = true;
   state.handlersReady = false;
-  state.handlersReadyForced = false;
   await new Promise((resolve) => server.close(resolve));
   if (signal) {
     process.kill(process.pid, signal);

@@ -47,7 +47,7 @@ function allocatePort() {
   });
 }
 
-test("standalone runtime forces readiness when the child probe never flips", async (t) => {
+test("standalone runtime keeps readiness red when the child probe never flips", async (t) => {
   const standaloneEntry = STANDALONE_CANDIDATES.find((candidate) => existsSync(candidate));
   if (!standaloneEntry) {
     t.skip(`Missing standalone build entry. Checked:\n${STANDALONE_CANDIDATES.join("\n")}`);
@@ -123,8 +123,10 @@ test("standalone runtime forces readiness when the child probe never flips", asy
   await waitForLog("startup_watchdog bootstrap_healthz_intercepted");
   assert.doesNotMatch(combined.join(""), /startup_watchdog handlers_ready/);
 
-  await waitForLog("startup_watchdog handlers_ready_forced", 15_000);
+  await new Promise((resolve) => setTimeout(resolve, 5500));
+  assert.doesNotMatch(combined.join(""), /startup_watchdog handlers_ready_forced/);
+
   const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
-  assert.equal(readyRes.status, 200);
-  assert.equal(await readyRes.text(), "ready");
+  assert.equal(readyRes.status, 503);
+  assert.equal(await readyRes.text(), "warming");
 });

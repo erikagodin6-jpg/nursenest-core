@@ -98,9 +98,9 @@ test("bootstrap runtime probes the child via localhost and emits probe diagnosti
   assert.equal(source.includes('emit("internal_probe_error"'), true);
 });
 
-test("bootstrap runtime includes a forced readiness fallback after five seconds", () => {
+test("bootstrap runtime never force-marks handlers ready", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
-  assert.equal(source.includes("const forcedHandlersReadyFallbackMs = 5000;"), true);
-  assert.equal(source.includes('emit("handlers_ready_forced"'), true);
-  assert.equal(source.includes("state.handlersReadyForced"), true);
+  assert.equal(source.includes("forcedHandlersReadyFallbackMs"), false);
+  assert.equal(source.includes('emit("handlers_ready_forced"'), false);
+  assert.equal(source.includes("state.handlersReadyForced"), false);
 });
