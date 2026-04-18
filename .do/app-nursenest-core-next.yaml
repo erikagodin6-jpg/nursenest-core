@@ -73,6 +73,24 @@ services:
       - key: NODE_ENV
         value: production
         scope: BUILD_AND_RUN_TIME
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+        scope: BUILD_TIME
+      - key: RUN_HEAVY_BUILD_TASKS
+        value: "false"
+        scope: BUILD_TIME
+      - key: SKIP_I18N_PREBUILD
+        value: "1"
+        scope: BUILD_TIME
+      - key: SENTRY_ENABLED
+        value: "false"
+        scope: BUILD_TIME
+      - key: BUILD_NODE_MAX_OLD_SPACE_SIZE_MB
+        value: "3584"
+        scope: BUILD_TIME
+      - key: TMPDIR
+        value: /tmp
+        scope: BUILD_TIME
       - key: PORT
         value: "8080"
         scope: RUN_TIME
