@@ -13,7 +13,10 @@ import {
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
-import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
+import {
+  MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
+  MARKETING_PAGE_BODY_MESSAGE_SHARDS,
+} from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
@@ -31,6 +34,7 @@ export const revalidate = 3600;
 
 const STATIC_LOCALE = DEFAULT_MARKETING_LOCALE;
 const STATIC_REGION = "US" as const;
+const MARKETING_BUILD_PHASE = "phase-production-build";
 const HOME_FALLBACK_TITLE = defaultHomeMetaTitle(STATIC_REGION);
 const HOME_FALLBACK_DESCRIPTION = defaultHomeMetaDescription(STATIC_REGION);
 const HOME_FALLBACK_METADATA: Metadata = {
@@ -45,9 +49,15 @@ const HOME_FALLBACK_METADATA: Metadata = {
 
 function shouldSkipOptionalMarketingDbReads(): boolean {
   return (
-    process.env.NEXT_PHASE === "phase-production-build" ||
+    process.env.NEXT_PHASE === MARKETING_BUILD_PHASE ||
     (process.env.NODE_ENV === "production" && process.env.CI !== "1")
   );
+}
+
+function homePageMessageShards() {
+  return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE
+    ? MARKETING_PAGE_BODY_MESSAGE_SHARDS
+    : MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS;
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -61,7 +71,7 @@ export async function generateMetadata(): Promise<Metadata> {
       renderTrace("home metadata start", { route: "/" });
       return safeGenerateMetadata(
         async () => {
-          const m = await loadMarketingMessageShards(STATIC_LOCALE, MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS);
+          const m = await loadMarketingMessageShards(STATIC_LOCALE, homePageMessageShards());
           const title = resolveMarketingCopy(m, "pages.home.metaTitleUS", m, defaultHomeMetaTitle(STATIC_REGION));
           const description = resolveMarketingCopy(
             m,
@@ -106,7 +116,7 @@ export default async function HomePage() {
         skipOptionalDbReads
           ? Promise.resolve(getDegradedPublicHomeStatsFallback("production_request_optional_db_skipped"))
           : getHomepagePublicHomeStats(),
-        loadMarketingMessageShards(STATIC_LOCALE, MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS),
+        loadMarketingMessageShards(STATIC_LOCALE, homePageMessageShards()),
         Promise.resolve(listPublishedHomeGlobalRegionCardIds()),
         skipOptionalDbReads ? Promise.resolve([]) : loadHomeBlogTeaserPostsSafe(3),
       ]);

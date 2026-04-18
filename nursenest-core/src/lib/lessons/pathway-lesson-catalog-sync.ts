@@ -2,9 +2,6 @@
  * Pure catalog lesson normalization + scoped-gold merge (no Prisma, no i18n DB overlays).
  * Split from `pathway-lesson-loader.ts` so CLI audits and tooling can import without the `server-only` graph.
  */
-import catalog from "@/content/pathway-lessons/catalog.json";
-import alliedBundledCatalog from "@/content/pathway-lessons/allied-bundled-catalog.json";
-import newGradTransitionCatalog from "@/content/pathway-lessons/new-grad-transition-catalog.json";
 import { inferExamAudienceFromPathwayId } from "@/lib/lessons/exam-complete-lesson-template";
 import { deriveLessonHighYieldStudyFields } from "@/lib/lessons/lesson-high-yield-study-fields";
 import { resolveLessonContextForPathwayId } from "@/lib/lessons/lesson-region-exam";
@@ -75,22 +72,41 @@ type CatalogShape = {
   >;
 };
 
-const data = catalog as CatalogShape;
+let catalogDataCache: CatalogShape | null = null;
+let alliedBundledPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
+let newGradTransitionPathwaysCache: Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> | null = null;
 
-const alliedBundledPathways =
-  (alliedBundledCatalog as { pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]> }).pathways ??
-  {};
+function getCatalogData(): CatalogShape {
+  if (catalogDataCache) return catalogDataCache;
+  catalogDataCache = require("@/content/pathway-lessons/catalog.json") as CatalogShape;
+  return catalogDataCache;
+}
+
+function getAlliedBundledPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (alliedBundledPathwaysCache) return alliedBundledPathwaysCache;
+  alliedBundledPathwaysCache =
+    (require("@/content/pathway-lessons/allied-bundled-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return alliedBundledPathwaysCache;
+}
+
+function getNewGradTransitionPathways(): Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> {
+  if (newGradTransitionPathwaysCache) return newGradTransitionPathwaysCache;
+  newGradTransitionPathwaysCache =
+    (require("@/content/pathway-lessons/new-grad-transition-catalog.json") as {
+      pathways?: Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }>;
+    }).pathways ?? {};
+  return newGradTransitionPathwaysCache;
+}
 
 function alliedBundledLessonsForPathway(pathwayId: string): LessonInput[] {
-  const rows = alliedBundledPathways[pathwayId];
+  const rows = getAlliedBundledPathways()[pathwayId];
   return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
 }
 
-const newGradTransitionPathways =
-  (newGradTransitionCatalog as { pathways?: Record<string, { lessons?: LessonInput[] }> }).pathways ?? {};
-
 function newGradTransitionLessonsForPathway(pathwayId: string): LessonInput[] {
-  const bucket = newGradTransitionPathways[pathwayId];
+  const bucket = getNewGradTransitionPathways()[pathwayId];
   const rows = bucket?.lessons;
   return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
 }
@@ -622,7 +638,7 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
   };
 }
 export function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
-  const bucket = data.pathways[pathwayId];
+  const bucket = getCatalogData().pathways[pathwayId];
   const fromJson = bucket?.lessons?.length ? bucket.lessons.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
   const allied = alliedBundledLessonsForPathway(pathwayId);
   const newGrad = newGradTransitionLessonsForPathway(pathwayId);
@@ -658,9 +674,9 @@ export function pathwayHasBundledCatalogLessonsSync(pathwayId: string): boolean 
 /** Pathway ids that have at least one catalog (+ allied bundled slice + scoped-gold) lesson row. */
 export function listCatalogPathwayIdsWithLessonsSync(): string[] {
   const ids = new Set<string>([
-    ...Object.keys(data.pathways ?? {}),
-    ...Object.keys(alliedBundledPathways),
-    ...Object.keys(newGradTransitionPathways),
+    ...Object.keys(getCatalogData().pathways ?? {}),
+    ...Object.keys(getAlliedBundledPathways()),
+    ...Object.keys(getNewGradTransitionPathways()),
   ]);
   return [...ids].filter((id) => getCatalogPathwayLessonsSync(id).length > 0);
 }

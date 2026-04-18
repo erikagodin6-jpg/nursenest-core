@@ -1,3 +1,4 @@
+import { MarketingMainI18nShards } from "@/components/i18n/marketing-main-i18n-shards";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { PathwayLessonProgressRefreshListener } from "@/components/lessons/pathway-lesson-progress-refresh-listener";
@@ -6,7 +7,10 @@ import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld"
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { assertMarketingLayoutMessagesIntegrity } from "@/lib/marketing-i18n/marketing-layout-message-integrity";
-import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
+import {
+  MARKETING_CHROME_MESSAGE_SHARDS,
+  MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
+} from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
@@ -19,6 +23,17 @@ import {
 } from "@/lib/observability/sentry-route-observability";
 
 const MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS = 1200;
+const MARKETING_BUILD_PHASE = "phase-production-build";
+
+function defaultLayoutMessageShards() {
+  return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE
+    ? MARKETING_CHROME_MESSAGE_SHARDS
+    : MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS;
+}
+
+function shouldLayerMainPageShards() {
+  return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE;
+}
 
 export default async function MarketingDefaultLocaleLayout({ children }: { children: React.ReactNode }) {
   return withSentryServerSpan(
@@ -36,7 +51,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
 
       try {
         const loadedMessages = await safeAwait(
-          loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS),
+          loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, defaultLayoutMessageShards()),
           "marketing_layout.chrome_messages",
           MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS,
         );
@@ -82,7 +97,13 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                 <SiteHeader />
                 <PathwayLessonProgressRefreshListener />
                 <main className="flex min-h-0 flex-1 flex-col">
-                  <PageTransitionShell>{children}</PageTransitionShell>
+                  {shouldLayerMainPageShards() ? (
+                    <MarketingMainI18nShards locale={resolvedLocale}>
+                      <PageTransitionShell>{children}</PageTransitionShell>
+                    </MarketingMainI18nShards>
+                  ) : (
+                    <PageTransitionShell>{children}</PageTransitionShell>
+                  )}
                 </main>
                 <SiteFooter />
               </div>

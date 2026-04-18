@@ -57,6 +57,14 @@ test("merged marketing loader startup bypass returns canonical English instead o
   assert.equal(source.includes("return {} as MarketingMessages;"), true);
 });
 
+test("merged marketing loader avoids full-bundle fallback during production build phase", () => {
+  const source = fs.readFileSync(path.join(__dirname, "load-marketing-messages.ts"), "utf8");
+
+  assert.equal(source.includes('process.env.NEXT_PHASE === "phase-production-build"'), true);
+  assert.equal(source.includes('mode: "build_shard_only"'), true);
+  assert.equal(source.includes("return {} as MarketingMessages;"), true);
+});
+
 test("shard marketing loader startup bypass returns canonical English shard messages instead of an empty bundle", () => {
   const source = fs.readFileSync(path.join(__dirname, "load-marketing-message-shards.ts"), "utf8");
 
