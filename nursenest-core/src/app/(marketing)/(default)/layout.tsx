@@ -11,21 +11,36 @@ import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
+import { safeAwait } from "@/lib/async/safe-await";
+import { renderTrace } from "@/lib/observability/render-trace";
+
+const MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS = 1200;
 
 export default async function MarketingDefaultLocaleLayout({ children }: { children: React.ReactNode }) {
+  renderTrace("marketing layout start", { route: "shared-marketing-default" });
   const resolvedLocale: string = DEFAULT_MARKETING_LOCALE;
   const serverRegion: MarketingRegionToggle = "US";
   let messages: Record<string, string> = {};
   let fallbackMessages: Record<string, string> | undefined = undefined;
 
   try {
-    messages = await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS);
+    const loadedMessages = await safeAwait(
+      loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS),
+      "marketing_layout.chrome_messages",
+      MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS,
+    );
+    messages = loadedMessages ?? {};
     fallbackMessages = undefined;
   } catch (e) {
     console.error("[marketing-default-layout] failed to load messages", {
       error: e instanceof Error ? e.message : String(e),
     });
   }
+  renderTrace("marketing layout after messages", {
+    route: "shared-marketing-default",
+    locale: resolvedLocale,
+    messageCount: Object.keys(messages).length,
+  });
 
   return (
     <MarketingI18nProvider
