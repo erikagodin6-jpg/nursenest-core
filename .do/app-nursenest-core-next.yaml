@@ -44,12 +44,15 @@ services:
     # internal `/api/health` probe succeeds. The startup watchdog logs:
     # - `startup_watchdog server_listening`
     # - `startup_watchdog handlers_ready`
-    # Recommendation: keep `/readyz` as the routing health check and `/healthz` as liveness.
+    # Temporary deploy-stability mode: use `/healthz` for the routing health check too.
+    # This avoids deploy flapping when the bootstrap watchdog misses `handlers_ready`
+    # even though the child app has already reached Next's "Ready" state.
+    # Keep deeper readiness in post-deploy verification (`/readyz`, `/api/health`, `/api/health/ready`).
     #
     # Rollback: App Platform → Deployments → redeploy a previous successful deployment if a bad build ships.
     # Post-deploy verification: BASE_URL=https://… npm run qa:verify:health (see nursenest-core/docs/deploy-safety.md).
     health_check:
-      http_path: /readyz
+      http_path: /healthz
       port: 8080
       initial_delay_seconds: 240
       period_seconds: 15
