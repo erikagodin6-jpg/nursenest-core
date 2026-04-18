@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { AdminGlobalCommandPalette } from "@/components/admin/admin-global-command-palette";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
-import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 
 /** Shared marketing/locale dictionary for all `/app/*` routes (learner shell, exams, practice). */
 export const dynamic = "force-dynamic";
@@ -13,6 +11,10 @@ export const metadata: Metadata = {
 };
 
 export default async function AppSegmentLayout({ children }: { children: React.ReactNode }) {
+  const [{ AdminGlobalCommandPalette }, { getLearnerMarketingBundle }] = await Promise.all([
+    import("@/components/admin/admin-global-command-palette"),
+    import("@/lib/learner/learner-marketing-server"),
+  ]);
   let locale = "en";
   let messages: Record<string, string> = {};
   let fallbackMessages: Record<string, string> | undefined = undefined;

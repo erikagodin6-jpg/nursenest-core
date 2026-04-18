@@ -52,6 +52,9 @@ export const prisma =
     if (shouldCapturePrismaQueries()) {
       attachPrismaQueryCapture(client);
     }
-    globalForPrisma.prisma = client;
     return client;
   })();
+
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = prisma;
+}

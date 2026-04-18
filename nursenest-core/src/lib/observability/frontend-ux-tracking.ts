@@ -4,9 +4,11 @@
  * User-visible failure signals for Sentry (tags + contexts). Use when the UI is wrong, empty, or stuck.
  * Pair with Session Replay; never put secrets or full PII in `message` / `extra`.
  */
-import * as Sentry from "@sentry/nextjs";
 import { stripMarketingLocalePrefix } from "@/lib/i18n/marketing-path";
 import { readMarketingRegionFromDocument } from "@/lib/observability/learner-analytics-context.client";
+
+type SentryScope = import("@sentry/nextjs").Scope;
+type SentrySeverityLevel = import("@sentry/nextjs").SeverityLevel;
 
 export type UxFailureKind =
   | "runtime_exception"
@@ -61,7 +63,7 @@ export function getUxTrackingContext(): UxTrackingContext {
   };
 }
 
-function applyUxContextToScope(scope: Sentry.Scope, ctx: UxTrackingContext): void {
+function applyUxContextToScope(scope: SentryScope, ctx: UxTrackingContext): void {
   scope.setTag("ux.route", ctx.route.slice(0, 120));
   scope.setTag("ux.locale", ctx.locale);
   scope.setTag("ux.country", ctx.country);
@@ -76,7 +78,7 @@ function applyUxContextToScope(scope: Sentry.Scope, ctx: UxTrackingContext): voi
 
 /** Tag the *current* Sentry event (e.g. ErrorBoundary capture) without emitting a second issue. */
 export function enrichSentryScopeWithUx(
-  scope: Sentry.Scope,
+  scope: SentryScope,
   opts: {
     kind: UxFailureKind | string;
     fallbackShown?: boolean;
@@ -93,7 +95,7 @@ export function enrichSentryScopeWithUx(
 export type CaptureUxFailureOpts = {
   kind: UxFailureKind | string;
   message: string;
-  level?: Sentry.SeverityLevel;
+  level?: SentrySeverityLevel;
   error?: unknown;
   /** User saw a recovery / empty / paywall fallback instead of real content. */
   fallbackShown?: boolean;
@@ -128,24 +130,28 @@ export function captureUxFailure(opts: CaptureUxFailureOpts): void {
       ...opts.extra,
     },
   };
-  Sentry.addBreadcrumb(crumb);
+  void import("@sentry/nextjs")
+    .then((Sentry) => {
+      Sentry.addBreadcrumb(crumb);
+      Sentry.withScope((scope) => {
+        applyUxContextToScope(scope, ctx);
+        scope.setTag("ux.kind", String(opts.kind).slice(0, 64));
+        scope.setTag("ux.user_visible", "true");
+        if (opts.fallbackShown !== undefined) scope.setTag("ux.fallback_shown", opts.fallbackShown ? "true" : "false");
+        if (opts.retrySucceeded !== undefined) scope.setTag("ux.retry_succeeded", opts.retrySucceeded ? "true" : "false");
+        if (opts.extra) scope.setContext("ux_extra", opts.extra as Record<string, unknown>);
 
-  Sentry.withScope((scope) => {
-    applyUxContextToScope(scope, ctx);
-    scope.setTag("ux.kind", String(opts.kind).slice(0, 64));
-    scope.setTag("ux.user_visible", "true");
-    if (opts.fallbackShown !== undefined) scope.setTag("ux.fallback_shown", opts.fallbackShown ? "true" : "false");
-    if (opts.retrySucceeded !== undefined) scope.setTag("ux.retry_succeeded", opts.retrySucceeded ? "true" : "false");
-    if (opts.extra) scope.setContext("ux_extra", opts.extra as Record<string, unknown>);
+        if (opts.error instanceof Error) {
+          scope.setFingerprint(["ux", String(opts.kind), opts.error.name]);
+          Sentry.captureException(opts.error);
+          return;
+        }
 
-    if (opts.error instanceof Error) {
-      scope.setFingerprint(["ux", String(opts.kind), opts.error.name]);
-      Sentry.captureException(opts.error);
-    } else {
-      scope.setFingerprint(["ux", String(opts.kind), opts.message.slice(0, 40)]);
-      Sentry.captureMessage(opts.message, opts.level ?? "warning");
-    }
-  });
+        scope.setFingerprint(["ux", String(opts.kind), opts.message.slice(0, 40)]);
+        Sentry.captureMessage(opts.message, opts.level ?? "warning");
+      });
+    })
+    .catch(() => {});
 }
 
 /** Deduped hydration signal (browser may emit multiple error events). */

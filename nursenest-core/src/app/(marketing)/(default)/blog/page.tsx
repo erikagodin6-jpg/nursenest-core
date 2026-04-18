@@ -25,10 +25,7 @@ const BLOG_INLINE_KEYS = [
 
 export const dynamicParams = true;
 
-export async function generateMetadata({
-}: {
-  searchParams: Promise<{ page?: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {
       return {

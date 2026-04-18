@@ -1,4 +1,3 @@
-import * as Sentry from "@sentry/nextjs";
 import { redactMetaForLog } from "@/lib/env/redact-secrets";
 import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
 
@@ -27,6 +26,7 @@ export async function withSentryServerSpan<T>(
 ): Promise<T> {
   if (!isSentryServerRuntimeEnabled()) return fn();
   const attributes = scrubMeta(opts.attributes);
+  const Sentry = await import("@sentry/nextjs");
   return Sentry.startSpan(
     {
       name: opts.name,
@@ -49,18 +49,22 @@ export function captureSentrySoftError(opts: {
   if (!isSentryServerRuntimeEnabled()) return;
   const error = opts.error instanceof Error ? opts.error : opts.error ? new Error(String(opts.error)) : undefined;
   const safeMeta = scrubMeta(opts.meta);
-  Sentry.withScope((scope) => {
-    scope.setLevel(opts.level ?? "warning");
-    scope.setTag("scope", opts.scope);
-    scope.setTag("event", opts.event);
-    scope.setTag("soft_failure", "true");
-    if (opts.route) scope.setTag("route", opts.route);
-    if (opts.feature) scope.setTag("feature", opts.feature);
-    if (safeMeta) scope.setContext("soft_failure_meta", safeMeta);
-    if (error) {
-      Sentry.captureException(error);
-      return;
-    }
-    Sentry.captureMessage(`${opts.scope}:${opts.event}`, opts.level ?? "warning");
-  });
+  void import("@sentry/nextjs")
+    .then((Sentry) => {
+      Sentry.withScope((scope) => {
+        scope.setLevel(opts.level ?? "warning");
+        scope.setTag("scope", opts.scope);
+        scope.setTag("event", opts.event);
+        scope.setTag("soft_failure", "true");
+        if (opts.route) scope.setTag("route", opts.route);
+        if (opts.feature) scope.setTag("feature", opts.feature);
+        if (safeMeta) scope.setContext("soft_failure_meta", safeMeta);
+        if (error) {
+          Sentry.captureException(error);
+          return;
+        }
+        Sentry.captureMessage(`${opts.scope}:${opts.event}`, opts.level ?? "warning");
+      });
+    })
+    .catch(() => {});
 }

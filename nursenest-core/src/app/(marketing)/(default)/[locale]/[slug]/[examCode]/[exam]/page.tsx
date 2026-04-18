@@ -15,10 +15,6 @@ export const dynamicParams = true;
 /** Must be a numeric literal for Next static route config (keep aligned with `PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS`). */
 export const revalidate = 86400;
 
-export function generateStaticParams(): { locale: string; slug: string; examCode: string; exam: string }[] {
-  return [];
-}
-
 type Props = { params: Promise<{ locale: string; slug: string; examCode: string; exam: string }> };
 
 function marketingRegionForPathway(countrySlug: string): MarketingRegionToggle {

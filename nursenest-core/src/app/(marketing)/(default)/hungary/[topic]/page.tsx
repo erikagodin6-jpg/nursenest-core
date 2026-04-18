@@ -12,10 +12,6 @@ export const dynamicParams = true;
 
 type Props = { params: Promise<{ topic: string }> };
 
-export function generateStaticParams() {
-  return [];
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { topic } = await params;
   const slug = parseHungaryTopicParam(topic);

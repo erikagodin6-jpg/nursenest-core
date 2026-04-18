@@ -1,4 +1,3 @@
-import * as Sentry from "@sentry/nextjs";
 import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -17,7 +16,7 @@ export async function register() {
   }
 }
 
-export const onRequestError: typeof Sentry.captureRequestError = (...args) => {
+export async function onRequestError(...args: Parameters<typeof import("@sentry/nextjs").captureRequestError>) {
   const err = args[0];
   const req = args[1] as { url?: string } | undefined;
   const msg = err instanceof Error ? err.message : String(err);
@@ -27,5 +26,6 @@ export const onRequestError: typeof Sentry.captureRequestError = (...args) => {
     messageSample: msg.slice(0, 200),
   });
   if (!isSentryServerRuntimeEnabled()) return;
+  const Sentry = await import("@sentry/nextjs");
   return Sentry.captureRequestError(...args);
-};
+}

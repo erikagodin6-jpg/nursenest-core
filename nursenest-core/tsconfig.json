@@ -18,6 +18,7 @@
     "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "incremental": true,
+    "tsBuildInfoFile": "./node_modules/.cache/typescript/next-app.tsbuildinfo",
     "plugins": [
       {
         "name": "next"
@@ -42,8 +43,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "prisma/**/*.ts",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
@@ -56,8 +56,11 @@
     "dist",
     "out",
     ".turbo",
+    ".cache",
     "data",
     "public",
+    "playwright-report",
+    "test-results",
     "scripts",
     "src/**/*.test.ts",
     "src/**/*.test.tsx",

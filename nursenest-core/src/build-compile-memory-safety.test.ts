@@ -1,0 +1,96 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import test from "node:test";
+import { fileURLToPath } from "node:url";
+
+const dir = dirname(fileURLToPath(import.meta.url));
+const root = join(dir, "..");
+const emptyGenerateStaticParamsPattern =
+  /export function generateStaticParams\([^)]*\)\s*(:\s*[^{]+)?\s*\{\s*return \[\];\s*\}/m;
+
+const onDemandRouteFiles = [
+  "src/app/(marketing)/(default)/australia/[topic]/page.tsx",
+  "src/app/(marketing)/(default)/china/[topic]/page.tsx",
+  "src/app/(marketing)/(default)/france/[topic]/page.tsx",
+  "src/app/(marketing)/(default)/germany/[topic]/page.tsx",
+  "src/app/(marketing)/(default)/hungary/[topic]/page.tsx",
+  "src/app/(marketing)/(default)/india/[topic]/page.tsx",
+  "src/app/(marketing)/(default)/italy/[topic]/page.tsx",
+  "src/app/(marketing)/(default)/japan/[topic]/page.tsx",
+  "src/app/(marketing)/(default)/korea/[topic]/page.tsx",
+  "src/app/(marketing)/(default)/mexico/[topic]/page.tsx",
+  "src/app/(marketing)/(default)/middle-east/[topic]/page.tsx",
+  "src/app/(marketing)/(default)/portugal/[topic]/page.tsx",
+  "src/app/(marketing)/[locale]/australia/[topic]/page.tsx",
+  "src/app/(marketing)/[locale]/china/[topic]/page.tsx",
+  "src/app/(marketing)/[locale]/france/[topic]/page.tsx",
+  "src/app/(marketing)/[locale]/germany/[topic]/page.tsx",
+  "src/app/(marketing)/[locale]/hungary/[topic]/page.tsx",
+  "src/app/(marketing)/[locale]/india/[topic]/page.tsx",
+  "src/app/(marketing)/[locale]/italy/[topic]/page.tsx",
+  "src/app/(marketing)/[locale]/japan/[topic]/page.tsx",
+  "src/app/(marketing)/[locale]/korea/[topic]/page.tsx",
+  "src/app/(marketing)/[locale]/mexico/[topic]/page.tsx",
+  "src/app/(marketing)/[locale]/middle-east/[topic]/page.tsx",
+  "src/app/(marketing)/[locale]/portugal/[topic]/page.tsx",
+  "src/app/(marketing)/(default)/allied-health/[slug]/page.tsx",
+  "src/app/(marketing)/(default)/allied-health/[slug]/lessons/page.tsx",
+  "src/app/(marketing)/(default)/allied-health/[slug]/lessons/[lessonSlug]/page.tsx",
+  "src/app/(marketing)/(default)/allied/[career]/page.tsx",
+  "src/app/(marketing)/(default)/pre-nursing/lessons/[slug]/page.tsx",
+  "src/app/(marketing)/(default)/pre-nursing/practice/[slug]/page.tsx",
+  "src/app/(marketing)/[locale]/pre-nursing/lessons/[slug]/page.tsx",
+  "src/app/(marketing)/(default)/questions/[slug]/page.tsx",
+  "src/app/(marketing)/(default)/seo/[slug]/page.tsx",
+  "src/app/(marketing)/[locale]/[slug]/page.tsx",
+  "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/[exam]/page.tsx",
+] as const;
+
+test("next.config avoids async-module and optional static Sentry load during build", () => {
+  const nextConfig = readFileSync(join(root, "next.config.ts"), "utf8");
+  assert.doesNotMatch(nextConfig, /await\s+import\(["']@sentry\/nextjs["']\)/);
+  assert.doesNotMatch(nextConfig, /import\s+\{\s*withSentryConfig\s*\}\s+from\s+["']@sentry\/nextjs["']/);
+  assert.doesNotMatch(nextConfig, /\beslint\s*:\s*\{/);
+});
+
+test("staff-session defers heavy auth and role-source imports", () => {
+  const staffSession = readFileSync(join(root, "src", "lib", "auth", "staff-session.ts"), "utf8");
+  assert.doesNotMatch(staffSession, /^import .*@\/lib\/auth["'];?$/m);
+  assert.doesNotMatch(staffSession, /^import .*@\/lib\/auth\/admin-role-source["'];?$/m);
+  assert.match(staffSession, /await import\(["']@\/lib\/auth["']\)/);
+  assert.match(staffSession, /await import\(["']@\/lib\/auth\/admin-role-source["']\)/);
+});
+
+test("auth runtime defers optional Sentry import", () => {
+  const auth = readFileSync(join(root, "src", "lib", "auth.ts"), "utf8");
+  assert.doesNotMatch(auth, /^import \* as Sentry from ["']@sentry\/nextjs["'];?$/m);
+  assert.match(auth, /import\(["']@sentry\/nextjs["']\)/);
+});
+
+test("on-demand marketing routes do not keep empty generateStaticParams exports", () => {
+  for (const file of onDemandRouteFiles) {
+    const source = readFileSync(join(root, file), "utf8");
+    assert.doesNotMatch(source, emptyGenerateStaticParamsPattern, file);
+  }
+});
+
+test("root app error boundary defers optional Sentry import", () => {
+  const appError = readFileSync(join(root, "src", "app", "error.tsx"), "utf8");
+  assert.doesNotMatch(appError, /^import \* as Sentry from ["']@sentry\/nextjs["'];?$/m);
+  assert.match(appError, /import\(["']@sentry\/nextjs["']\)/);
+});
+
+test("shared app layouts defer admin palette and learner bundle loaders", () => {
+  const appLayout = readFileSync(join(root, "src", "app", "(student)", "app", "layout.tsx"), "utf8");
+  assert.doesNotMatch(appLayout, /^import .*@\/components\/admin\/admin-global-command-palette["'];?$/m);
+  assert.doesNotMatch(appLayout, /^import .*@\/lib\/learner\/learner-marketing-server["'];?$/m);
+  assert.match(appLayout, /import\(["']@\/components\/admin\/admin-global-command-palette["']\)/);
+  assert.match(appLayout, /import\(["']@\/lib\/learner\/learner-marketing-server["']\)/);
+
+  const adminLayout = readFileSync(join(root, "src", "app", "(admin)", "layout.tsx"), "utf8");
+  assert.doesNotMatch(adminLayout, /^import .*@\/components\/admin\/admin-global-command-palette["'];?$/m);
+  assert.doesNotMatch(adminLayout, /^import .*@\/lib\/marketing-i18n\/load-marketing-message-shards["'];?$/m);
+  assert.match(adminLayout, /import\(["']@\/components\/admin\/admin-global-command-palette["']\)/);
+  assert.match(adminLayout, /import\(["']@\/lib\/marketing-i18n\/load-marketing-message-shards["']\)/);
+});

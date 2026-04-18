@@ -13,8 +13,6 @@ const PAGE_TITLE = "How NurseNest Works — Adaptive Exam Prep System";
 const PAGE_DESCRIPTION =
   "See how NurseNest guides you step-by-step through baseline testing, personalised study plans, smart review, and readiness tracking to help you pass your nursing exam.";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {

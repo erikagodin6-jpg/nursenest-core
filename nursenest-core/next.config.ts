@@ -11,12 +11,13 @@
  * **RUN_HEAVY_BUILD_TASKS:** set to `false` to skip loading large redirect/rewrite graphs during `next build`
  * (lower memory — production deploys should set this in CI/build env). See `docs/OPERATOR_DATA_IMPORT_AND_BUILD.md`.
  */
+import { createRequire } from "module";
 import { fileURLToPath } from "url";
-import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 /** Parent of `nursenest-core/` (repo root); avoids `path` in config bundle (fixes ESM load). */
 const monorepoRoot = fileURLToPath(new URL("..", import.meta.url));
+const require = createRequire(import.meta.url);
 
 const runHeavyBuildTasks = process.env.RUN_HEAVY_BUILD_TASKS !== "false";
 const sentryEnabled = process.env.SENTRY_ENABLED === "true";
@@ -44,6 +45,8 @@ const sentrySourceMapsEnabled =
       process.env.SENTRY_ORG?.trim() &&
       process.env.SENTRY_PROJECT?.trim(),
   );
+
+type SentryNextConfigModule = typeof import("@sentry/nextjs");
 
 type RedirectEntry = {
   source: string;
@@ -324,15 +327,23 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default sentryEnabled
-  ? withSentryConfig(nextConfig, {
-      org: sentrySourceMapsEnabled ? process.env.SENTRY_ORG : undefined,
-      project: sentrySourceMapsEnabled ? process.env.SENTRY_PROJECT : undefined,
-      authToken: sentrySourceMapsEnabled ? process.env.SENTRY_AUTH_TOKEN : undefined,
-      silent: true,
-      telemetry: false,
-      sourcemaps: {
-        disable: !sentrySourceMapsEnabled,
-      },
-    })
-  : nextConfig;
+function withOptionalSentryConfig(baseConfig: NextConfig): NextConfig {
+  if (!sentryEnabled) {
+    return baseConfig;
+  }
+  const { withSentryConfig } = require("@sentry/nextjs") as SentryNextConfigModule;
+  return withSentryConfig(baseConfig, {
+    org: sentrySourceMapsEnabled ? process.env.SENTRY_ORG : undefined,
+    project: sentrySourceMapsEnabled ? process.env.SENTRY_PROJECT : undefined,
+    authToken: sentrySourceMapsEnabled ? process.env.SENTRY_AUTH_TOKEN : undefined,
+    silent: true,
+    telemetry: false,
+    sourcemaps: {
+      disable: !sentrySourceMapsEnabled,
+    },
+  });
+}
+
+const exportedConfig = withOptionalSentryConfig(nextConfig);
+
+export default exportedConfig;

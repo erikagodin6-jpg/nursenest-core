@@ -14,10 +14,6 @@ export const dynamicParams = true;
 /** Keep in sync with `PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS` — literal required for Next segment config parsing. */
 export const revalidate = 86400;
 
-export function generateStaticParams(): { locale: string; slug: string }[] {
-  return [];
-}
-
 export async function generateMetadata({
   params,
 }: {

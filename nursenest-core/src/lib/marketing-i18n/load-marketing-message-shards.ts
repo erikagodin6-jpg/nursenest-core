@@ -8,6 +8,8 @@ import { withSentryServerSpan } from "@/lib/observability/sentry-route-observabi
 import type { I18nShardFilename } from "@shared/i18n-shard-policy";
 import { readCachedI18nJsonFile } from "@/lib/i18n/i18n-translation-cache";
 
+const mergedShardCache = new Map<string, MarketingMessages>();
+
 /** Two cwd candidates — matches `load-marketing-messages.ts`. */
 function resolveNextI18nPublicDir(): string | null {
   const candidates = [
@@ -57,6 +59,10 @@ function mergeShardMaps(
   locale: string,
   shards: readonly I18nShardFilename[],
 ): MarketingMessages {
+  const cacheKey = `${locale}|${shards.join(",")}`;
+  const cached = mergedShardCache.get(cacheKey);
+  if (cached) return cached;
+
   const localeShardDir = path.join(i18nDir, locale);
   const hasShardTree = existsSync(localeShardDir) && statSync(localeShardDir).isDirectory();
   if (hasShardTree) {
@@ -75,13 +81,17 @@ function mergeShardMaps(
         merged[k] = v;
       }
     }
+    mergedShardCache.set(cacheKey, merged);
     return merged;
   }
   const legacy = tryReadLegacyLocaleBundle(i18nDir, locale);
   if (legacy && Object.keys(legacy).length > 0) {
+    mergedShardCache.set(cacheKey, legacy);
     return legacy;
   }
-  return {};
+  const empty: MarketingMessages = {};
+  mergedShardCache.set(cacheKey, empty);
+  return empty;
 }
 
 /**

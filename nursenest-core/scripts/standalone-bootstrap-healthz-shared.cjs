@@ -4,14 +4,8 @@ function isBootstrapHealthzRequest(req) {
   return (method === "GET" || method === "HEAD") && (url === "/healthz" || url.startsWith("/healthz?"));
 }
 
-function isBootstrapReadyzRequest(req) {
-  const method = typeof req?.method === "string" ? req.method.toUpperCase() : "";
-  const url = typeof req?.url === "string" ? req.url : "";
-  return (method === "GET" || method === "HEAD") && (url === "/readyz" || url.startsWith("/readyz?"));
-}
-
 function maybeServeBootstrapHealthz(req, res, state, logger) {
-  if (!isBootstrapHealthzRequest(req)) {
+  if (state?.handlersReady || !isBootstrapHealthzRequest(req)) {
     return false;
   }
 
@@ -40,6 +34,5 @@ function maybeServeBootstrapHealthz(req, res, state, logger) {
 
 module.exports = {
   isBootstrapHealthzRequest,
-  isBootstrapReadyzRequest,
   maybeServeBootstrapHealthz,
 };

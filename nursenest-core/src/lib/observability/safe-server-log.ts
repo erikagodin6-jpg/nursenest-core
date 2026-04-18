@@ -3,7 +3,6 @@
  * Use for production diagnosis (platform log drains pick up stderr).
  * Meta values are lightly redacted when keys look sensitive (see {@link redactMetaForLog}).
  */
-import * as Sentry from "@sentry/nextjs";
 import { redactMetaForLog } from "@/lib/env/redact-secrets";
 import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
 
@@ -38,9 +37,13 @@ export function safeServerLogCritical(
     meta && Object.keys(meta).length > 0
       ? (redactMetaForLog(meta as Record<string, unknown>) as Record<string, unknown>)
       : {};
-  Sentry.captureException(err, {
-    tags: { scope, event, critical: "true", ...flowTags },
-    extra,
-    level: "error",
-  });
+  void import("@sentry/nextjs")
+    .then((Sentry) =>
+      Sentry.captureException(err, {
+        tags: { scope, event, critical: "true", ...flowTags },
+        extra,
+        level: "error",
+      }),
+    )
+    .catch(() => {});
 }

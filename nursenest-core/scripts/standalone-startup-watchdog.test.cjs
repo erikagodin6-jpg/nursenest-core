@@ -1,7 +1,9 @@
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
 const test = require("node:test");
 
 const {
+  childOutputIndicatesReady,
   createStartupWatchdogLogger,
   formatStartupWatchdogLine,
   resolveStandaloneNextModulePath,
@@ -68,3 +70,21 @@ test("resolves standalone next internals from the traced server entry", () => {
   );
 });
 
+test("does not treat Next ready output as handler readiness", () => {
+  assert.equal(childOutputIndicatesReady("✓ Ready in 0ms\n"), false);
+  assert.equal(childOutputIndicatesReady("noise\n✓ Ready in 123ms\nmore"), false);
+  assert.equal(childOutputIndicatesReady("preloading modules"), false);
+});
+
+test("bootstrap runtime has no child-log readiness path", () => {
+  const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
+  assert.equal(source.includes("child_ready_log"), false);
+  assert.equal(source.includes("monitorChildOutputForReadiness"), false);
+  assert.equal(source.includes("childOutputIndicatesReady"), false);
+});
+
+test("bootstrap runtime probes the private non-api readiness path", () => {
+  const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
+  assert.equal(source.includes('const childHealthProbePath = "/_nn_bootstrap_ready_check__";'), true);
+  assert.equal(source.includes('const childHealthProbePath = "/api/health";'), false);
+});

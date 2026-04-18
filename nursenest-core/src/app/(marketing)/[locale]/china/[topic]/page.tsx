@@ -15,10 +15,6 @@ export const dynamicParams = true;
 
 type Props = { params: Promise<{ locale: string; topic: string }> };
 
-export function generateStaticParams() {
-  return [];
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, topic } = await params;
   if (!isCoreHostedNonDefaultLocale(locale)) notFound();

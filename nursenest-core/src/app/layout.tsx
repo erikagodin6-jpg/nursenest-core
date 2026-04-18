@@ -4,7 +4,6 @@ import Script from "next/script";
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
 import { AnalyticsProvider } from "@/components/providers/analytics-provider";
 import { AppThemeProvider } from "@/components/theme/app-theme-provider";
-import { marketingOpenGraphImageUrl } from "@/lib/marketing-assets";
 import { renderTrace } from "@/lib/observability/render-trace";
 import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
 import { NURSENEST_DEFAULT_THEME, THEME_STORAGE_KEY } from "@/lib/theme/theme-registry";
@@ -23,6 +22,8 @@ const dmSans = DM_Sans({
 });
 
 const siteUrl = MARKETING_SITE_ORIGIN;
+const ROOT_LAYOUT_OPEN_GRAPH_IMAGE =
+  "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot1.png";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -49,7 +50,7 @@ export const metadata: Metadata = {
       "Premium NCLEX and global licensing prep for nurses worldwide—strongest pathways in the US and Canada (RPN, LVN/LPN, RN, NP), plus regional hubs across Asia and the Middle East.",
     images: [
       {
-        url: marketingOpenGraphImageUrl(),
+        url: ROOT_LAYOUT_OPEN_GRAPH_IMAGE,
         width: 1200,
         height: 630,
         alt: "NurseNest",
@@ -61,7 +62,7 @@ export const metadata: Metadata = {
     title: "NurseNest | Healthcare Exam Prep",
     description:
       "Premium NCLEX and global licensing prep for nurses worldwide—strongest pathways in the US and Canada (RPN, LVN/LPN, RN, NP), plus regional hubs across Asia and the Middle East.",
-    images: [marketingOpenGraphImageUrl()],
+    images: [ROOT_LAYOUT_OPEN_GRAPH_IMAGE],
   },
 };
 

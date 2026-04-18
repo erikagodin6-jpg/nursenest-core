@@ -1,14 +1,26 @@
 "use client";
 
-import posthog from "posthog-js";
-
 let initialized = false;
+let posthogModulePromise: Promise<typeof import("posthog-js").default> | null = null;
+let posthogClient: typeof import("posthog-js").default | null = null;
 
-export function initPosthogClient(): void {
+async function getPosthogClient(): Promise<typeof import("posthog-js").default | null> {
+  if (typeof window === "undefined") return null;
+  if (posthogClient) return posthogClient;
+  if (!posthogModulePromise) {
+    posthogModulePromise = import("posthog-js").then((module) => module.default);
+  }
+  posthogClient = await posthogModulePromise;
+  return posthogClient;
+}
+
+export async function initPosthogClient(): Promise<void> {
   if (initialized || typeof window === "undefined") return;
   const key = process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim();
   if (!key) return;
   const host = process.env.NEXT_PUBLIC_POSTHOG_HOST?.trim() || "https://us.i.posthog.com";
+  const posthog = await getPosthogClient();
+  if (!posthog) return;
   posthog.init(key, {
     api_host: host,
     capture_pageview: false,
@@ -20,17 +32,32 @@ export function initPosthogClient(): void {
   });
 }
 
-export function trackClientEvent(
+export async function trackClientEvent(
   event: string,
   props?: Record<string, string | number | boolean | undefined>,
-): void {
+): Promise<void> {
   if (typeof window === "undefined") return;
   if (!initialized || !process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim()) return;
   try {
+    const posthog = await getPosthogClient();
+    if (!posthog) return;
     posthog.capture(event, props);
   } catch {
     // ignore
   }
 }
 
-export { posthog };
+export async function capturePosthogPageview(path: string, currentUrl: string): Promise<void> {
+  if (typeof window === "undefined") return;
+  if (!initialized || !process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim()) return;
+  try {
+    const posthog = await getPosthogClient();
+    if (!posthog) return;
+    posthog.capture("$pageview", {
+      path,
+      $current_url: currentUrl,
+    });
+  } catch {
+    // ignore
+  }
+}

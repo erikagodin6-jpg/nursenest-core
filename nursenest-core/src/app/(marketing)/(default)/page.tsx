@@ -12,7 +12,6 @@ import {
 } from "@/lib/marketing/public-home-stats";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
@@ -33,7 +32,6 @@ const STATIC_LOCALE = DEFAULT_MARKETING_LOCALE;
 const STATIC_REGION = "US" as const;
 const HOME_FALLBACK_TITLE = defaultHomeMetaTitle(STATIC_REGION);
 const HOME_FALLBACK_DESCRIPTION = defaultHomeMetaDescription(STATIC_REGION);
-const HOME_METADATA_KEYS = ["pages.home.metaTitleUS", "pages.home.metaDescriptionUS"] as const;
 const HOME_FALLBACK_METADATA: Metadata = {
   title: HOME_FALLBACK_TITLE,
   description: HOME_FALLBACK_DESCRIPTION,
@@ -59,7 +57,7 @@ export async function generateMetadata(): Promise<Metadata> {
       renderTrace("home metadata start", { route: "/" });
       return safeGenerateMetadata(
         async () => {
-          const m = await loadMarketingMetadataMessages(STATIC_LOCALE, HOME_METADATA_KEYS);
+          const m = await loadMarketingMessages(STATIC_LOCALE);
           const title = resolveMarketingCopy(m, "pages.home.metaTitleUS", m, defaultHomeMetaTitle(STATIC_REGION));
           const description = resolveMarketingCopy(
             m,

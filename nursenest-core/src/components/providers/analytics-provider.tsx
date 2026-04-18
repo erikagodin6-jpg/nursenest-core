@@ -2,10 +2,9 @@
 
 import { Suspense, useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-import * as Sentry from "@sentry/nextjs";
 import { FrontendUxInit } from "@/components/observability/frontend-ux-init";
 import { touchUxNavigation } from "@/lib/observability/frontend-ux-tracking";
-import { initPosthogClient, posthog, trackClientEvent } from "@/lib/observability/posthog-client";
+import { capturePosthogPageview, initPosthogClient, trackClientEvent } from "@/lib/observability/posthog-client";
 
 function PostHogPageViews() {
   const pathname = usePathname();
@@ -13,7 +12,7 @@ function PostHogPageViews() {
   const last = useRef<string | null>(null);
 
   useEffect(() => {
-    initPosthogClient();
+    void initPosthogClient();
   }, []);
 
   useEffect(() => {
@@ -24,15 +23,16 @@ function PostHogPageViews() {
     last.current = url;
     touchUxNavigation();
     if (typeof window === "undefined") return;
-    try {
-      posthog.capture("$pageview", {
-        path: pathname,
-        $current_url: window.location.href,
-      });
-    } catch {
-      trackClientEvent("page_view_fallback", { path: pathname });
+    void capturePosthogPageview(pathname, window.location.href).catch(() => {
+      void trackClientEvent("page_view_fallback", { path: pathname });
+    });
+    if (process.env.NEXT_PUBLIC_SENTRY_ENABLED === "true") {
+      void import("@sentry/nextjs")
+        .then((Sentry) => {
+          Sentry.addBreadcrumb({ category: "navigation", message: pathname, level: "info" });
+        })
+        .catch(() => {});
     }
-    Sentry.addBreadcrumb({ category: "navigation", message: pathname, level: "info" });
   }, [pathname, searchParams]);
 
   return null;

@@ -27,10 +27,6 @@ import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 export const dynamicParams = true;
 export const revalidate = 86_400;
 
-export function generateStaticParams(): { slug: string }[] {
-  return [];
-}
-
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ page?: string }>;

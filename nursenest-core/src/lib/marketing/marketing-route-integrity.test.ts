@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { describe, it } from "node:test";
+import { fileURLToPath } from "node:url";
 import { createRouteValidator } from "../../../../scripts/audit-internal-links";
 import {
   defaultPathwayIdForMarketingOffering,
@@ -16,6 +19,7 @@ import {
 import { isWellFormedExamHubPath } from "@/lib/marketing/nursing-exam-nav-validation";
 
 describe("marketing route integrity", () => {
+  const dir = dirname(fileURLToPath(import.meta.url));
   const { isValidPath } = createRouteValidator();
 
   it("US and CA exam strip + hero hubs resolve to valid internal routes", () => {
@@ -101,5 +105,10 @@ describe("marketing route integrity", () => {
     });
     assert.ok(canadaPn);
     assert.equal(canadaPn.id, "ca-rpn-rex-pn");
+  });
+
+  it("default public exams family is request-time rendered to avoid build-time prerender fanout", () => {
+    const examsLayout = readFileSync(join(dir, "..", "..", "app", "(marketing)", "(default)", "exams", "layout.tsx"), "utf8");
+    assert.match(examsLayout, /export const dynamic = "force-dynamic"/);
   });
 });

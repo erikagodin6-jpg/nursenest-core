@@ -21,10 +21,6 @@ export const dynamic = "force-dynamic";
 export const revalidate = 86400;
 export const dynamicParams = true;
 
-export function generateStaticParams() {
-  return [];
-}
-
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

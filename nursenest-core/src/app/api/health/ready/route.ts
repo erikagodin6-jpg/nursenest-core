@@ -50,17 +50,7 @@ export async function GET() {
         classification: r.classification,
       });
       recordHealthReadyDatabaseFailure();
-      return NextResponse.json(
-        {
-          ok: false,
-          database: "error",
-          classification: r.classification,
-          service: "nursenest-core",
-          readinessTimeoutMs,
-          timestamp: new Date().toISOString(),
-        },
-        { status: 503, headers: NO_STORE },
-      );
+      return NextResponse.json({ ok: false, ready: false, database: "error" }, { status: 503, headers: NO_STORE });
     }
     if ("latencyMs" in r) {
       const entry = buildHealthProbeLogEntry({
@@ -73,18 +63,7 @@ export async function GET() {
       if (entry) {
         safeServerLog("health", entry.event, entry.meta);
       }
-      return NextResponse.json(
-        {
-          ok: true,
-          database: "ok",
-          classification: "OK" satisfies DatabaseHealthClassification,
-          latencyMs: r.latencyMs,
-          readinessTimeoutMs,
-          service: "nursenest-core",
-          timestamp: new Date().toISOString(),
-        },
-        { status: 200, headers: NO_STORE },
-      );
+      return NextResponse.json({ ok: true, ready: true, database: "ok" }, { status: 200, headers: NO_STORE });
     }
     const entry = buildHealthProbeLogEntry({
       route: "/api/health/ready",
@@ -97,17 +76,7 @@ export async function GET() {
     if (entry) {
       safeServerLog("health", entry.event, entry.meta);
     }
-    return NextResponse.json(
-      {
-        ok: true,
-        database: "not_configured",
-        classification: "DATABASE_URL_NOT_CONFIGURED" satisfies DatabaseHealthClassification,
-        service: "nursenest-core",
-        readinessTimeoutMs,
-        timestamp: new Date().toISOString(),
-      },
-      { status: 200, headers: NO_STORE },
-    );
+    return NextResponse.json({ ok: true, ready: true, database: "not_configured" }, { status: 200, headers: NO_STORE });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     const detail = msg.slice(0, 120);
@@ -125,16 +94,6 @@ export async function GET() {
     }
     safeServerLog("health", "ready_handler_error", { detail });
     recordHealthReadyDatabaseFailure();
-    return NextResponse.json(
-      {
-        ok: false,
-        database: "error",
-        classification: "DB_OTHER" satisfies DatabaseHealthClassification,
-        service: "nursenest-core",
-        readinessTimeoutMs,
-        timestamp: new Date().toISOString(),
-      },
-      { status: 503, headers: NO_STORE },
-    );
+    return NextResponse.json({ ok: false, ready: false, database: "error" }, { status: 503, headers: NO_STORE });
   }
 }

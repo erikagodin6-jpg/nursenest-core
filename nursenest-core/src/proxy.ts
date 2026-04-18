@@ -2,126 +2,173 @@
  * Next.js 16+: `proxy` replaces `middleware` (same matcher + auth behavior).
  * @see https://nextjs.org/docs/messages/middleware-to-proxy
  *
- * Unauthenticated `/app/*` requests are handled by {@link middlewareAuth}'s `authorized` callback
+ * Unauthenticated `/app/*` requests are handled by `middlewareAuth`'s `authorized` callback
  * (sign-in). Do **not** pre-redirect `/app/lessons` with `getToken()` — in Edge it can miss valid JWTs
  * that the same middleware resolves, incorrectly sending paying subscribers to the public `/lessons` hub.
  */
+import "@/lib/auth-trust-env";
 import type { NextFetchEvent, NextMiddleware } from "next/server";
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
 
-type ProxyAuthDeps = {
+type AdminProxyDeps = {
   getToken: typeof import("next-auth/jwt").getToken;
-  runAuthMiddleware: NextMiddleware;
-};
-
-type ProxyAdminDeps = {
-  isPathAllowedForStaffTier: typeof import("@/lib/auth/admin-path-policy").isPathAllowedForStaffTier;
   loadUserRoleFromDbIdentity: typeof import("@/lib/auth/admin-role-source").loadUserRoleFromDbIdentity;
+  isPathAllowedForStaffTier: typeof import("@/lib/auth/admin-path-policy").isPathAllowedForStaffTier;
   safeServerLog: typeof import("@/lib/observability/safe-server-log").safeServerLog;
 };
 
-type ProxyApiDeps = {
+type ApiProxyDeps = {
   emitStructuredLog: typeof import("@/lib/observability/structured-log").emitStructuredLog;
-  enforceApiRateLimit: typeof import("@/lib/server/rate-limit").enforceApiRateLimit;
   isRateLimitingEnabled: typeof import("@/lib/config/production-safety-flags").isRateLimitingEnabled;
+  enforceApiRateLimit: typeof import("@/lib/server/rate-limit").enforceApiRateLimit;
 };
 
-type ProxyMarketingDeps = {
-  EXAM_HUB_PREVIEW_COOKIE: typeof import("@/lib/admin/exam-hub-preview-cookie").EXAM_HUB_PREVIEW_COOKIE;
+type AuthProxyDeps = {
+  runAuthMiddleware: NextMiddleware;
+};
+
+type MarketingProxyDeps = {
+  canonicalExamHubPathFromPossiblyLocalizedPath: typeof import("@/lib/i18n/exam-hub-path").canonicalExamHubPathFromPossiblyLocalizedPath;
   MARKETING_LOCALE_COOKIE: typeof import("@/lib/i18n/marketing-locale-cookie").MARKETING_LOCALE_COOKIE;
   MARKETING_LOCALE_COOKIE_MAX_AGE: typeof import("@/lib/i18n/marketing-locale-cookie").MARKETING_LOCALE_COOKIE_MAX_AGE;
   REGIONAL_EXAM_MARKETING_FALLBACK_PATH: typeof import("@/lib/marketing/expansion-exams-path-gate").REGIONAL_EXAM_MARKETING_FALLBACK_PATH;
-  canonicalExamHubPathFromPossiblyLocalizedPath: typeof import("@/lib/i18n/exam-hub-path").canonicalExamHubPathFromPossiblyLocalizedPath;
   globalRegionSlugFromRegionalMarketingPublicPath: typeof import("@/lib/marketing/regional-marketing-public-gate").globalRegionSlugFromRegionalMarketingPublicPath;
+  EXAM_HUB_PREVIEW_COOKIE: typeof import("@/lib/admin/exam-hub-preview-cookie").EXAM_HUB_PREVIEW_COOKIE;
   isRegionPublishedForPublicSite: typeof import("@/lib/navigation/country-exam-launch-readiness").isRegionPublishedForPublicSite;
 };
 
-let authDepsPromise: Promise<ProxyAuthDeps> | undefined;
-let adminDepsPromise: Promise<ProxyAdminDeps> | undefined;
-let apiDepsPromise: Promise<ProxyApiDeps> | undefined;
-let marketingDepsPromise: Promise<ProxyMarketingDeps> | undefined;
+let adminProxyDepsPromise: Promise<AdminProxyDeps> | null = null;
+let apiProxyDepsPromise: Promise<ApiProxyDeps> | null = null;
+let authProxyDepsPromise: Promise<AuthProxyDeps> | null = null;
+let marketingProxyDepsPromise: Promise<MarketingProxyDeps> | null = null;
 
-async function loadAuthProxyDeps(): Promise<ProxyAuthDeps> {
-  authDepsPromise ??= (async () => {
-    await import("@/lib/auth-trust-env");
-    const [{ getToken }, { middlewareAuth }] = await Promise.all([
+function loadAdminProxyDeps(): Promise<AdminProxyDeps> {
+  if (!adminProxyDepsPromise) {
+    adminProxyDepsPromise = Promise.all([
       import("next-auth/jwt"),
-      import("@/lib/auth-middleware"),
-    ]);
-    return {
-      getToken,
-      runAuthMiddleware: middlewareAuth as unknown as NextMiddleware,
-    };
-  })();
-  return authDepsPromise;
-}
-
-async function loadAdminProxyDeps(): Promise<ProxyAdminDeps> {
-  adminDepsPromise ??= (async () => {
-    const [{ isPathAllowedForStaffTier }, { loadUserRoleFromDbIdentity }, { safeServerLog }] = await Promise.all([
-      import("@/lib/auth/admin-path-policy"),
       import("@/lib/auth/admin-role-source"),
+      import("@/lib/auth/admin-path-policy"),
       import("@/lib/observability/safe-server-log"),
-    ]);
-    return {
-      isPathAllowedForStaffTier,
-      loadUserRoleFromDbIdentity,
-      safeServerLog,
-    };
-  })();
-  return adminDepsPromise;
+    ]).then(([jwt, adminRoleSource, adminPathPolicy, safeServerLog]) => ({
+      getToken: jwt.getToken,
+      loadUserRoleFromDbIdentity: adminRoleSource.loadUserRoleFromDbIdentity,
+      isPathAllowedForStaffTier: adminPathPolicy.isPathAllowedForStaffTier,
+      safeServerLog: safeServerLog.safeServerLog,
+    }));
+  }
+  return adminProxyDepsPromise;
 }
 
-async function loadApiProxyDeps(): Promise<ProxyApiDeps> {
-  apiDepsPromise ??= (async () => {
-    const [{ emitStructuredLog }, { enforceApiRateLimit }, { isRateLimitingEnabled }] = await Promise.all([
+function loadApiProxyDeps(): Promise<ApiProxyDeps> {
+  if (!apiProxyDepsPromise) {
+    apiProxyDepsPromise = Promise.all([
       import("@/lib/observability/structured-log"),
-      import("@/lib/server/rate-limit"),
       import("@/lib/config/production-safety-flags"),
-    ]);
-    return {
-      emitStructuredLog,
-      enforceApiRateLimit,
-      isRateLimitingEnabled,
-    };
-  })();
-  return apiDepsPromise;
+      import("@/lib/server/rate-limit"),
+    ]).then(([structuredLog, productionSafetyFlags, rateLimit]) => ({
+      emitStructuredLog: structuredLog.emitStructuredLog,
+      isRateLimitingEnabled: productionSafetyFlags.isRateLimitingEnabled,
+      enforceApiRateLimit: rateLimit.enforceApiRateLimit,
+    }));
+  }
+  return apiProxyDepsPromise;
 }
 
-async function loadMarketingProxyDeps(): Promise<ProxyMarketingDeps> {
-  marketingDepsPromise ??= (async () => {
-    const [
-      { EXAM_HUB_PREVIEW_COOKIE },
-      { MARKETING_LOCALE_COOKIE, MARKETING_LOCALE_COOKIE_MAX_AGE },
-      { REGIONAL_EXAM_MARKETING_FALLBACK_PATH },
-      { canonicalExamHubPathFromPossiblyLocalizedPath },
-      { globalRegionSlugFromRegionalMarketingPublicPath },
-      { isRegionPublishedForPublicSite },
-    ] = await Promise.all([
-      import("@/lib/admin/exam-hub-preview-cookie"),
+function loadAuthProxyDeps(): Promise<AuthProxyDeps> {
+  if (!authProxyDepsPromise) {
+    authProxyDepsPromise = import("@/lib/auth-middleware").then(({ middlewareAuth }) => ({
+      /** NextAuth `auth` middleware typing does not always align with App Router `NextRequest` + `NextFetchEvent`. */
+      runAuthMiddleware: middlewareAuth as unknown as NextMiddleware,
+    }));
+  }
+  return authProxyDepsPromise;
+}
+
+function loadMarketingProxyDeps(): Promise<MarketingProxyDeps> {
+  if (!marketingProxyDepsPromise) {
+    marketingProxyDepsPromise = Promise.all([
+      import("@/lib/i18n/exam-hub-path"),
       import("@/lib/i18n/marketing-locale-cookie"),
       import("@/lib/marketing/expansion-exams-path-gate"),
-      import("@/lib/i18n/exam-hub-path"),
       import("@/lib/marketing/regional-marketing-public-gate"),
+      import("@/lib/admin/exam-hub-preview-cookie"),
       import("@/lib/navigation/country-exam-launch-readiness"),
-    ]);
-    return {
-      EXAM_HUB_PREVIEW_COOKIE,
-      MARKETING_LOCALE_COOKIE,
-      MARKETING_LOCALE_COOKIE_MAX_AGE,
-      REGIONAL_EXAM_MARKETING_FALLBACK_PATH,
-      canonicalExamHubPathFromPossiblyLocalizedPath,
-      globalRegionSlugFromRegionalMarketingPublicPath,
-      isRegionPublishedForPublicSite,
-    };
-  })();
-  return marketingDepsPromise;
+    ]).then(
+      ([
+        examHubPath,
+        marketingLocaleCookie,
+        expansionExamPathGate,
+        regionalMarketingPublicGate,
+        previewCookie,
+        countryExamLaunchReadiness,
+      ]) => ({
+        canonicalExamHubPathFromPossiblyLocalizedPath: examHubPath.canonicalExamHubPathFromPossiblyLocalizedPath,
+        MARKETING_LOCALE_COOKIE: marketingLocaleCookie.MARKETING_LOCALE_COOKIE,
+        MARKETING_LOCALE_COOKIE_MAX_AGE: marketingLocaleCookie.MARKETING_LOCALE_COOKIE_MAX_AGE,
+        REGIONAL_EXAM_MARKETING_FALLBACK_PATH: expansionExamPathGate.REGIONAL_EXAM_MARKETING_FALLBACK_PATH,
+        globalRegionSlugFromRegionalMarketingPublicPath:
+          regionalMarketingPublicGate.globalRegionSlugFromRegionalMarketingPublicPath,
+        EXAM_HUB_PREVIEW_COOKIE: previewCookie.EXAM_HUB_PREVIEW_COOKIE,
+        isRegionPublishedForPublicSite: countryExamLaunchReadiness.isRegionPublishedForPublicSite,
+      }),
+    );
+  }
+  return marketingProxyDepsPromise;
 }
 
 function isHealthProxyBypassPath(pathname: string): boolean {
   return pathname === "/api/health" || pathname === "/api/healthz" || pathname === "/api/health/ready";
+}
+
+const REGIONAL_MARKETING_PUBLIC_PREFIXES = [
+  "/exams",
+  "/us",
+  "/canada",
+  "/japan",
+  "/india",
+  "/china",
+  "/korea",
+  "/germany",
+  "/france",
+  "/italy",
+  "/hungary",
+  "/portugal",
+  "/mexico",
+  "/australia",
+  "/middle-east",
+] as const;
+
+const REGIONAL_MARKETING_PUBLIC_LOCALE_SEGMENTS = [
+  "exams",
+  "us",
+  "canada",
+  "japan",
+  "india",
+  "china",
+  "korea",
+  "germany",
+  "france",
+  "italy",
+  "hungary",
+  "portugal",
+  "mexico",
+  "australia",
+  "middle-east",
+] as const;
+
+function shouldLoadMarketingProxyDeps(pathname: string): boolean {
+  if (REGIONAL_MARKETING_PUBLIC_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`))) {
+    return true;
+  }
+
+  const [, localeSegment, publicSegment] = pathname.split("/", 3);
+  return Boolean(
+    localeSegment &&
+      publicSegment &&
+      REGIONAL_MARKETING_PUBLIC_LOCALE_SEGMENTS.some((segment) => segment === publicSegment),
+  );
 }
 
 function ensureIncomingCorrelationId(request: NextRequest): NextRequest {
@@ -144,7 +191,7 @@ function withPathnameHeader(request: NextRequest): NextRequest {
   /** Trusted pathname for server RBAC + layouts (RSC must not rely on spoofable client headers). */
   requestHeaders.set("x-nn-request-pathname", pathname);
   /**
-   * Full request URL — lets {@link resolveAdminRequestPath} recover `/admin/...` when pathname-only
+   * Full request URL — lets `resolveAdminRequestPath` recover `/admin/...` when pathname-only
    * headers are missing in RSC (non-super staff would otherwise see RBAC path `/` and be redirected).
    */
   requestHeaders.set("x-nn-request-url", request.url);
@@ -191,16 +238,13 @@ function redirectWithCorrelation(request: NextRequest, pathname: string, correla
   return response;
 }
 
-async function enforceAdminProxyRoute(
-  request: NextRequest,
-  authDeps: ProxyAuthDeps,
-  adminDeps: ProxyAdminDeps,
-): Promise<NextResponse | null> {
+async function enforceAdminProxyRoute(request: NextRequest): Promise<NextResponse | null> {
   const pathname = request.nextUrl.pathname;
   if (!pathname.startsWith("/admin")) return null;
 
+  const { getToken, loadUserRoleFromDbIdentity, isPathAllowedForStaffTier, safeServerLog } = await loadAdminProxyDeps();
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
-  const token = secret ? await authDeps.getToken({ req: request, secret }) : null;
+  const token = secret ? await getToken({ req: request, secret }) : null;
   const userId =
     (typeof token?.sub === "string" && token.sub.trim()) ||
     (token as { id?: string } | null)?.id?.trim() ||
@@ -210,7 +254,7 @@ async function enforceAdminProxyRoute(
 
   if (!userId && !email) {
     if (adminAccessDebug()) {
-      adminDeps.safeServerLog("admin_access", "proxy_admin_gate", {
+      safeServerLog("admin_access", "proxy_admin_gate", {
         pathAttempted: pathname,
         email: email ?? undefined,
         role: "missing_token_identity",
@@ -225,10 +269,10 @@ async function enforceAdminProxyRoute(
     return response;
   }
 
-  const roleRecord = await adminDeps.loadUserRoleFromDbIdentity({ userId, email });
+  const roleRecord = await loadUserRoleFromDbIdentity({ userId, email });
   if (!roleRecord?.isAdmin) {
     if (adminAccessDebug()) {
-      adminDeps.safeServerLog("admin_access", "proxy_admin_gate", {
+      safeServerLog("admin_access", "proxy_admin_gate", {
         pathAttempted: pathname,
         email: email ?? undefined,
         role: roleRecord?.role ?? "missing",
@@ -238,9 +282,9 @@ async function enforceAdminProxyRoute(
     return redirectWithCorrelation(request, "/app", correlationId);
   }
 
-  if (!adminDeps.isPathAllowedForStaffTier(roleRecord.tier, pathname)) {
+  if (!isPathAllowedForStaffTier(roleRecord.tier, pathname)) {
     if (adminAccessDebug()) {
-      adminDeps.safeServerLog("admin_access", "proxy_admin_gate", {
+      safeServerLog("admin_access", "proxy_admin_gate", {
         pathAttempted: pathname,
         email: email ?? undefined,
         role: roleRecord.role,
@@ -251,7 +295,7 @@ async function enforceAdminProxyRoute(
   }
 
   if (adminAccessDebug()) {
-    adminDeps.safeServerLog("admin_access", "proxy_admin_gate", {
+    safeServerLog("admin_access", "proxy_admin_gate", {
       pathAttempted: pathname,
       email: email ?? undefined,
       role: roleRecord.role,
@@ -294,16 +338,19 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
   }
 
   if (pathname.startsWith("/api")) {
-    const { emitStructuredLog, enforceApiRateLimit, isRateLimitingEnabled } = await loadApiProxyDeps();
+    const { emitStructuredLog } = await loadApiProxyDeps();
     const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim();
     emitStructuredLog("request_start", "info", {
       correlationId: cid,
       route: pathname.slice(0, 200),
       method: req.method,
     });
+  }
 
-    /** Next.js 16+ proxy defaults to the Node.js runtime — `checkRateLimitUnified` uses shared Postgres buckets when `DATABASE_URL` is set (not per-instance memory). */
-    if (pathname.startsWith("/api/") && isRateLimitingEnabled()) {
+  /** Next.js 16+ proxy defaults to the Node.js runtime — `checkRateLimitUnified` uses shared Postgres buckets when `DATABASE_URL` is set (not per-instance memory). */
+  if (pathname.startsWith("/api/")) {
+    const { isRateLimitingEnabled, enforceApiRateLimit } = await loadApiProxyDeps();
+    if (isRateLimitingEnabled()) {
       const limited = await enforceApiRateLimit(req);
       if (limited) {
         const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
@@ -313,47 +360,56 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     }
   }
 
-  const marketingDeps = await loadMarketingProxyDeps();
-  // ── Existing: locale-prefixed exam hub canonical redirect ──────────────────
-  const canonicalExamHub = marketingDeps.canonicalExamHubPathFromPossiblyLocalizedPath(pathname);
-  if (canonicalExamHub) {
-    const url = req.nextUrl.clone();
-    url.pathname = canonicalExamHub.canonicalPath;
-    const response = NextResponse.redirect(url);
-    const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
-    response.headers.set(NN_CORRELATION_HEADER, cid.slice(0, 128));
-    response.cookies.set(marketingDeps.MARKETING_LOCALE_COOKIE, canonicalExamHub.locale, {
-      path: "/",
-      maxAge: marketingDeps.MARKETING_LOCALE_COOKIE_MAX_AGE,
-      sameSite: "lax",
-      httpOnly: true,
-    });
-    return response;
-  }
+  if (shouldLoadMarketingProxyDeps(pathname)) {
+    const {
+      canonicalExamHubPathFromPossiblyLocalizedPath,
+      MARKETING_LOCALE_COOKIE,
+      MARKETING_LOCALE_COOKIE_MAX_AGE,
+      REGIONAL_EXAM_MARKETING_FALLBACK_PATH,
+      globalRegionSlugFromRegionalMarketingPublicPath,
+      EXAM_HUB_PREVIEW_COOKIE,
+      isRegionPublishedForPublicSite,
+    } = await loadMarketingProxyDeps();
 
-  // Unpublished regional marketing (`/exams/…` hubs + country-topic SEO trees): redirect to a published hub.
-  const gatedRegion = marketingDeps.globalRegionSlugFromRegionalMarketingPublicPath(pathname);
-  if (gatedRegion && !marketingDeps.isRegionPublishedForPublicSite(gatedRegion)) {
-    const previewRegion = req.cookies.get(marketingDeps.EXAM_HUB_PREVIEW_COOKIE)?.value ?? "";
-    const allowStaffPreview = previewRegion === gatedRegion;
-    if (!allowStaffPreview) {
+    // ── Existing: locale-prefixed exam hub canonical redirect ──────────────────
+    const canonicalExamHub = canonicalExamHubPathFromPossiblyLocalizedPath(pathname);
+    if (canonicalExamHub) {
       const url = req.nextUrl.clone();
-      url.pathname = marketingDeps.REGIONAL_EXAM_MARKETING_FALLBACK_PATH;
-      const response = NextResponse.redirect(url, 307);
+      url.pathname = canonicalExamHub.canonicalPath;
+      const response = NextResponse.redirect(url);
       const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
       response.headers.set(NN_CORRELATION_HEADER, cid.slice(0, 128));
+      response.cookies.set(MARKETING_LOCALE_COOKIE, canonicalExamHub.locale, {
+        path: "/",
+        maxAge: MARKETING_LOCALE_COOKIE_MAX_AGE,
+        sameSite: "lax",
+        httpOnly: true,
+      });
       return response;
+    }
+
+    // Unpublished regional marketing (`/exams/…` hubs + country-topic SEO trees): redirect to a published hub.
+    const gatedRegion = globalRegionSlugFromRegionalMarketingPublicPath(pathname);
+    if (gatedRegion && !isRegionPublishedForPublicSite(gatedRegion)) {
+      const previewRegion = req.cookies.get(EXAM_HUB_PREVIEW_COOKIE)?.value ?? "";
+      const allowStaffPreview = previewRegion === gatedRegion;
+      if (!allowStaffPreview) {
+        const url = req.nextUrl.clone();
+        url.pathname = REGIONAL_EXAM_MARKETING_FALLBACK_PATH;
+        const response = NextResponse.redirect(url, 307);
+        const cid = req.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
+        response.headers.set(NN_CORRELATION_HEADER, cid.slice(0, 128));
+        return response;
+      }
     }
   }
 
-  const authDeps = await loadAuthProxyDeps();
   const forwarded = withPathnameHeader(req);
-  const res = await authDeps.runAuthMiddleware(forwarded, event);
+  const { runAuthMiddleware } = await loadAuthProxyDeps();
+  const res = await runAuthMiddleware(forwarded, event);
   const outCid = forwarded.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
   if (res == null) {
-    const adminRedirect = pathname.startsWith("/admin")
-      ? await enforceAdminProxyRoute(forwarded, authDeps, await loadAdminProxyDeps())
-      : null;
+    const adminRedirect = await enforceAdminProxyRoute(forwarded);
     if (adminRedirect) {
       return adminRedirect;
     }
@@ -363,9 +419,7 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
   }
   const merged = mergeAuthContinueWithForwardedRequest(res, forwarded, outCid);
   if (merged !== res) {
-    const adminRedirect = pathname.startsWith("/admin")
-      ? await enforceAdminProxyRoute(forwarded, authDeps, await loadAdminProxyDeps())
-      : null;
+    const adminRedirect = await enforceAdminProxyRoute(forwarded);
     if (adminRedirect) {
       return copySetCookies(res, adminRedirect);
     }

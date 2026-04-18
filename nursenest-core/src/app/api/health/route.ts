@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 /** Exempt from aggressive API rate limits via `/api/health` prefix — keep non-cached. */
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const NO_STORE = { "Cache-Control": "no-store" };
@@ -10,20 +11,15 @@ const NO_STORE = { "Cache-Control": "no-store" };
  * DB readiness: `GET /api/health/ready` (`SELECT 1` with timeout).
  */
 export async function GET() {
-  const mem = process.memoryUsage();
-  return NextResponse.json(
-    {
-      ok: true,
-      live: true,
-      service: "nursenest-core",
-      nodeEnv: process.env.NODE_ENV ?? null,
-      memory: {
-        heapUsedMb: Math.round((mem.heapUsed / 1024 / 1024) * 10) / 10,
-        rssMb: Math.round((mem.rss / 1024 / 1024) * 10) / 10,
-      },
-      uptimeSeconds: Math.floor(process.uptime()),
-      timestamp: new Date().toISOString(),
+  return NextResponse.json({ ok: true, live: true }, { status: 200, headers: NO_STORE });
+}
+
+export async function HEAD() {
+  return new Response(null, {
+    status: 200,
+    headers: {
+      "Cache-Control": "no-store",
+      "content-type": "application/json; charset=utf-8",
     },
-    { status: 200, headers: NO_STORE },
-  );
+  });
 }

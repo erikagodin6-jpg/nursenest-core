@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { ExamsFranceHubShell } from "@/components/marketing/exams-france/exams-france-hub-shell";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -11,10 +10,9 @@ import { robotsForRegionalMarketingHub } from "@/lib/seo/expansion-hub-robots";
 export const revalidate = 86400;
 
 const PATH = "/exams/france";
-const FRANCE_METADATA_KEYS = ["exams.france.metaTitle", "exams.france.metaDescription"] as const;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const messages = await loadMarketingMetadataMessages(DEFAULT_MARKETING_LOCALE, FRANCE_METADATA_KEYS);
+  const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
   const title =
     messages["exams.france.metaTitle"] ?? "Nursing Registration in France (2026 Complete Guide)";
   const description =

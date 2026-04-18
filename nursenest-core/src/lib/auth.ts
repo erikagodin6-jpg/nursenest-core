@@ -32,7 +32,6 @@ import {
   type SessionSubscriptionStatus,
 } from "@/lib/entitlements/get-user-access";
 import { prisma } from "@/lib/db";
-import * as Sentry from "@sentry/nextjs";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { PINNED_AUTH_BASE_PATH } from "@/lib/auth/auth-base-path";
 import { logAuthIncidentLine } from "@/lib/auth/auth-incident-log";
@@ -162,6 +161,14 @@ function rejectCredentialsOrNull(code: string): null {
   return null;
 }
 
+function captureAuthWarningSentry(message: string, options: { level: "warning"; tags: Record<string, string> }): void {
+  void import("@sentry/nextjs")
+    .then(({ captureMessage }) => {
+      captureMessage(message, options);
+    })
+    .catch(() => {});
+}
+
 export const authConfig: NextAuthConfig = {
   /**
    * No Prisma adapter: schema has no Account/Session/VerificationToken models required by
@@ -214,7 +221,7 @@ export const authConfig: NextAuthConfig = {
         const rl = await checkRateLimitUnified(`login:${ip}`, { windowMs: 60_000, max: 40 });
         if (!rl.ok) {
           safeServerLog("auth", "login_rate_limited", { ip: ip.slice(0, 64) });
-          Sentry.captureMessage("login_rate_limited", {
+          captureAuthWarningSentry("login_rate_limited", {
             level: "warning",
             tags: { flow: "auth", kind: "rate_limit" },
           });

@@ -1,4 +1,3 @@
-import * as Sentry from "@sentry/nextjs";
 import "@/lib/db/env-bootstrap";
 import { logDatabaseEnvOnce } from "@/lib/db/database-env";
 import { validateProductionDatabaseEnv } from "@/lib/db/validate-production-db-env";
@@ -16,6 +15,19 @@ import {
 } from "@/lib/stripe/pricing-map";
 import { assertPinnedAuthBasePath } from "@/lib/auth/auth-base-path";
 import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
+
+async function captureSentryProcessException(
+  error: unknown,
+  options: {
+    tags: Record<string, string>;
+    level: "error" | "fatal";
+  },
+): Promise<void> {
+  if (!isSentryServerRuntimeEnabled()) return;
+  const Sentry = await import("@sentry/nextjs");
+  const err = error instanceof Error ? error : new Error(String(error));
+  Sentry.captureException(err, options);
+}
 
 export async function registerNodeInstrumentation(): Promise<void> {
   logStartupContext();
@@ -37,21 +49,17 @@ export async function registerNodeInstrumentation(): Promise<void> {
   process.on("unhandledRejection", (reason) => {
     const msg = reason instanceof Error ? reason.message : String(reason);
     console.error(`[nursenest-core] process_unhandledRejection ${msg}`);
-    if (isSentryServerRuntimeEnabled()) {
-      Sentry.captureException(reason instanceof Error ? reason : new Error(msg), {
+    void captureSentryProcessException(reason instanceof Error ? reason : new Error(msg), {
         tags: { scope: "process", event: "unhandledRejection", critical: "true" },
         level: "error",
       });
-    }
   });
   process.on("uncaughtException", (err) => {
     console.error(`[nursenest-core] process_uncaughtException ${err?.message ?? err}`);
-    if (isSentryServerRuntimeEnabled()) {
-      Sentry.captureException(err instanceof Error ? err : new Error(String(err)), {
+    void captureSentryProcessException(err instanceof Error ? err : new Error(String(err)), {
         tags: { scope: "process", event: "uncaughtException", critical: "true" },
         level: "fatal",
       });
-    }
   });
 
   const rawMemInterval = process.env.PERF_MEMORY_LOG_INTERVAL_MS;

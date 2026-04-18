@@ -15,6 +15,15 @@ function createStandaloneRequire(entryScript) {
   return createRequire(entryScript);
 }
 
+/**
+ * Legacy helper kept intentionally hard-disabled so old test imports stay stable.
+ * Bootstrap readiness must come only from the internal child HTTP probe in
+ * `scripts/start-standalone.mjs`, never from parsing child stdout/stderr.
+ */
+function childOutputIndicatesReady(text) {
+  return false;
+}
+
 function createStartupWatchdogLogger({
   now = Date.now,
   write = (line) => console.error(line),
@@ -93,6 +102,7 @@ function createStartupWatchdogLogger({
 }
 
 module.exports = {
+  childOutputIndicatesReady,
   createStartupWatchdogLogger,
   createStandaloneRequire,
   formatStartupWatchdogLine,

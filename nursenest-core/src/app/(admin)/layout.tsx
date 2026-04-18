@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { AdminGlobalCommandPalette } from "@/components/admin/admin-global-command-palette";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
 import { MarketingI18nProvider } from "@/components/i18n/marketing-i18n-provider";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { ADMIN_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 
 export const dynamic = "force-dynamic";
@@ -19,6 +17,10 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminGroupLayout({ children }: { children: React.ReactNode }) {
+  const [{ AdminGlobalCommandPalette }, { loadMarketingMessageShards }] = await Promise.all([
+    import("@/components/admin/admin-global-command-palette"),
+    import("@/lib/marketing-i18n/load-marketing-message-shards"),
+  ]);
   let messages: Awaited<ReturnType<typeof loadMarketingMessageShards>> = {};
   try {
     messages = await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, ADMIN_LAYOUT_MESSAGE_SHARDS);

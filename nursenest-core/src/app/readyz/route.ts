@@ -7,8 +7,9 @@ const READY_HEADERS = {
 };
 
 /**
- * Lightweight app-boot readiness signal. Keep this outside `/api/*` so it does not
- * flow through proxy/auth/admin/DB runtime paths.
+ * Framework-level readiness contract for local/dev and non-bootstrap runtimes.
+ * The standalone watchdog intercepts `/readyz` in production so DO sees a true
+ * "handlers are serving" signal instead of generic process liveness.
  */
 export function GET() {
   return new Response("ready", {

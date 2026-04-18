@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProgrammaticSeoPage } from "@/components/seo/programmatic-seo-page";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { buildProgrammaticMetadata } from "@/lib/seo/programmatic-metadata";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { resolveProgrammaticSeoForLocale } from "@/lib/seo/resolve-programmatic-seo";
@@ -13,10 +12,6 @@ export const dynamicParams = true;
 /** Keep in sync with `PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS` — literal required for Next segment config parsing. */
 export const revalidate = 86400;
 
-export function generateStaticParams(): { slug: string }[] {
-  return [];
-}
-
 export async function generateMetadata({
   params,
 }: {
@@ -26,8 +21,7 @@ export async function generateMetadata({
   const pathname = `/seo/${slug}`;
   return safeGenerateMetadata(
     async () => {
-      const locale = await getMarketingLocaleForDefaultRoute();
-      const resolved = resolveProgrammaticSeoForLocale(slug, locale);
+      const resolved = resolveProgrammaticSeoForLocale(slug, DEFAULT_MARKETING_LOCALE);
       if (!resolved) return {};
       return buildProgrammaticMetadata(resolved.page, DEFAULT_MARKETING_LOCALE);
     },

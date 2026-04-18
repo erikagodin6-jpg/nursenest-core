@@ -2,9 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { UserRole } from "@prisma/client";
 import type { Session } from "next-auth";
-import { auth } from "@/lib/auth";
 import { safeAwait } from "@/lib/async/safe-await";
-import { loadUserRoleFromDbIdentity } from "@/lib/auth/admin-role-source";
 import { renderTrace } from "@/lib/observability/render-trace";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { StaffTier } from "@/lib/auth/staff-roles";
@@ -30,6 +28,7 @@ async function loadStaffSession(): Promise<StaffSession | null> {
   renderTrace("staff session start", { route: "shared-root-layout" });
   let session: Session | null = null;
   try {
+    const { auth } = await import("@/lib/auth");
     session = await safeAwait(
       auth() as Promise<Session | null>,
       "staff_session.auth",
@@ -64,6 +63,7 @@ async function loadStaffSession(): Promise<StaffSession | null> {
   }
 
   try {
+    const { loadUserRoleFromDbIdentity } = await import("@/lib/auth/admin-role-source");
     const row = await safeAwait(
       loadUserRoleFromDbIdentity({ userId, email: emailRaw }),
       "staff_session.role_lookup",

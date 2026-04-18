@@ -27,10 +27,6 @@ export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 export const revalidate = 86400;
 
-export function generateStaticParams() {
-  return [];
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   if (!isCoreHostedNonDefaultLocale(locale)) notFound();
