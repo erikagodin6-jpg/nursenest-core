@@ -6,7 +6,10 @@ import {
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { localeRobotsOverride } from "@/lib/i18n/language-readiness";
 import {
+  classifySeoHttpValidationFailureReason,
   SeoHttpValidationStrictError,
+  seoHttpValidationEnvironmentName,
+  isSeoHttpValidationStrict,
   validateMetadataAlternatesHttp,
 } from "@/lib/seo/seo-http-emit-validation";
 
@@ -31,12 +34,42 @@ export type SafeMetadataContext = {
   /** e.g. marketing.exam_hub, marketing.blog, app.learner */
   routeGroup?: string;
   locale?: string;
+  fallbackMetadata?: Metadata;
 };
+
+function fallbackMetadataForContext(ctx: SafeMetadataContext): Metadata {
+  return ctx.fallbackMetadata ?? FALLBACK_SITE_METADATA;
+}
+
+function logNonfatalMetadataValidationFailure(
+  ctx: SafeMetadataContext,
+  reason: string,
+  durationMs: number,
+): void {
+  const pathname = ctx.pathname ?? "/";
+  safeServerLog("seo", "metadata_validation_failed_nonfatal", {
+    pathname,
+    route_group: ctx.routeGroup,
+    strict_requested: isSeoHttpValidationStrict(),
+    environmentName: seoHttpValidationEnvironmentName(),
+    reason,
+    fallback_used: true,
+  });
+  logCrawlSurfaceEvent({
+    routeType: "metadata.generation",
+    pathname,
+    durationMs,
+    outcome: "fallback",
+    routeGroup: ctx.routeGroup,
+    fallback: true,
+    errorCode: `metadata_validation_failed_nonfatal:${reason}`.slice(0, 120),
+  });
+}
 
 /**
  * Global guard: `generateMetadata` must not throw for ordinary failures. Logs `metadata_generation_failed` on errors.
- * When `SEO_HTTP_VALIDATE_PAGE_METADATA` + `SEO_HTTP_VALIDATE_STRICT` are set, {@link validateMetadataAlternatesHttp}
- * may throw {@link SeoHttpValidationStrictError} so the request fails fast instead of emitting bad alternates.
+ * Page metadata HTTP validation is observe-only in request rendering: validation failures are logged and converted
+ * into fallback metadata instead of taking down the route.
  *
  * Automatically injects `robots: { index: false, follow: true }` for locales that are
  * not yet fully indexed (tier=partial or tier=incomplete). This prevents thin-content
@@ -51,6 +84,7 @@ export async function safeGenerateMetadata(
   ctx: SafeMetadataContext = {},
 ): Promise<Metadata> {
   const t0 = Date.now();
+  const fallbackMetadata = fallbackMetadataForContext(ctx);
   try {
     const m = await run();
     const durationMs = Date.now() - t0;
@@ -64,7 +98,7 @@ export async function safeGenerateMetadata(
         fallback: true,
         errorCode: "metadata_null_or_non_object",
       });
-      return FALLBACK_SITE_METADATA;
+      return fallbackMetadata;
     }
     // Preserve intentional `{}` so layouts/parent metadata can apply (e.g. unresolved pathway before notFound).
     if (Object.keys(m).length === 0) {
@@ -91,15 +125,20 @@ export async function safeGenerateMetadata(
       });
     }
     try {
-      await validateMetadataAlternatesHttp(result, {
+      const validation = await validateMetadataAlternatesHttp(result, {
         pathname: ctx.pathname ?? "/",
         routeGroup: ctx.routeGroup,
         sourceFile: "src/lib/seo/safe-marketing-metadata.ts",
         generator: "safeGenerateMetadata",
       });
+      if (validation.failures.length > 0) {
+        logNonfatalMetadataValidationFailure(ctx, validation.reason ?? "unknown", Date.now() - t0);
+        return fallbackMetadata;
+      }
     } catch (ve) {
       if (ve instanceof SeoHttpValidationStrictError) {
-        throw ve;
+        logNonfatalMetadataValidationFailure(ctx, classifySeoHttpValidationFailureReason(ve.failures), Date.now() - t0);
+        return fallbackMetadata;
       }
       safeServerLog("seo", "metadata_http_validate_unexpected", {
         detail: ve instanceof Error ? ve.message.slice(0, 200) : String(ve).slice(0, 200),
@@ -108,7 +147,8 @@ export async function safeGenerateMetadata(
     return result;
   } catch (e) {
     if (e instanceof SeoHttpValidationStrictError) {
-      throw e;
+      logNonfatalMetadataValidationFailure(ctx, classifySeoHttpValidationFailureReason(e.failures), Date.now() - t0);
+      return fallbackMetadata;
     }
     const message = e instanceof Error ? e.message : String(e);
     const durationMs = Date.now() - t0;
@@ -128,7 +168,7 @@ export async function safeGenerateMetadata(
       fallback: true,
       errorCode: crawlSurfaceErrorCode(e),
     });
-    return FALLBACK_SITE_METADATA;
+    return fallbackMetadata;
   }
 }
 

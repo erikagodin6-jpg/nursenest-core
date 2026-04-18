@@ -28,6 +28,17 @@ const MARKETING_HOME_SLOW_MS = 2500;
 
 const STATIC_LOCALE = DEFAULT_MARKETING_LOCALE;
 const STATIC_REGION = "US" as const;
+const HOME_FALLBACK_TITLE = defaultHomeMetaTitle(STATIC_REGION);
+const HOME_FALLBACK_DESCRIPTION = defaultHomeMetaDescription(STATIC_REGION);
+const HOME_FALLBACK_METADATA: Metadata = {
+  title: HOME_FALLBACK_TITLE,
+  description: HOME_FALLBACK_DESCRIPTION,
+  openGraph: {
+    title: HOME_FALLBACK_TITLE,
+    description: HOME_FALLBACK_DESCRIPTION,
+    type: "website",
+  },
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -53,7 +64,11 @@ export async function generateMetadata(): Promise<Metadata> {
         },
       };
     },
-    { pathname: "/", routeGroup: "marketing.default.home" },
+    {
+      pathname: "/",
+      routeGroup: "marketing.default.home",
+      fallbackMetadata: HOME_FALLBACK_METADATA,
+    },
   );
 }
 

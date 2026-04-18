@@ -3,7 +3,8 @@
  *
  * - `SEO_HTTP_VALIDATE_EMITTED_URLS=1` — HEAD/GET each URL (sitemap merge path; see `sitemap-all-xml.ts`).
  * - `SEO_HTTP_VALIDATE_PAGE_METADATA=1` — after metadata resolves, check canonical + hreflang (`safe-marketing-metadata.ts`).
- * - `SEO_HTTP_VALIDATE_STRICT=1` — throw {@link SeoHttpValidationStrictError} on 404/410/5xx (fails sitemap response or metadata).
+ * - `SEO_HTTP_VALIDATE_STRICT=1` — throw {@link SeoHttpValidationStrictError} on 404/410/5xx for sitemap flows and
+ *   for page-metadata validation only outside production request rendering (development or explicit CI checks).
  *
  * Caps: `SEO_HTTP_VALIDATE_MAX_URLS` (default 2000 sitemap), `SEO_HTTP_VALIDATE_CONCURRENCY` (default 8).
  *
@@ -53,6 +54,16 @@ export function isSeoHttpValidationStrict(): boolean {
   return envEnabled("SEO_HTTP_VALIDATE_STRICT");
 }
 
+export function seoHttpValidationEnvironmentName(): string {
+  return process.env.VERCEL_ENV?.trim() || process.env.NODE_ENV?.trim() || "unknown";
+}
+
+export function shouldEnforceStrictPageMetadataValidation(): boolean {
+  if (!isSeoHttpValidationStrict()) return false;
+  if (envEnabled("CI")) return true;
+  return process.env.NODE_ENV !== "production";
+}
+
 function maxUrls(): number {
   const raw = process.env.SEO_HTTP_VALIDATE_MAX_URLS?.trim();
   const n = raw ? Number.parseInt(raw, 10) : 2000;
@@ -66,9 +77,13 @@ function concurrency(): number {
 }
 
 /** Single request; HEAD first, GET fallback when HEAD unsupported. `redirect: manual` — 3xx logged, not failed. */
-export async function fetchHttpStatusForSeoValidation(url: string): Promise<{ status: number; detail?: string }> {
+export async function fetchHttpStatusForSeoValidation(
+  url: string,
+  options?: { timeoutMs?: number },
+): Promise<{ status: number; detail?: string }> {
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), 12_000);
+  const timeoutMs = options?.timeoutMs ?? 12_000;
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
     let res = await fetch(url, {
       method: "HEAD",
@@ -104,6 +119,17 @@ export function isSeoHttpValidationBadStatus(status: number): boolean {
   if (status >= 500 && status < 600) return true;
   if (status === 0) return true;
   return false;
+}
+
+export function classifySeoHttpValidationFailureReason(failures: readonly SeoHttpValidationFailure[]): string {
+  const first = failures[0];
+  if (!first) return "unknown";
+  if (first.status === 0) {
+    const detail = (first.detail ?? "").toLowerCase();
+    if (detail.includes("abort") || detail.includes("timeout")) return "timeout";
+    return "network_error";
+  }
+  return `bad_status_${first.status}`;
 }
 
 function logFailure(f: SeoHttpValidationFailure, requestPathname?: string): void {
@@ -183,15 +209,43 @@ export async function validateUrlsHttpBatch(
 }
 
 /** Extract alternates from Next metadata and validate each URL. */
+export type MetadataAlternatesHttpValidationResult = {
+  failures: SeoHttpValidationFailure[];
+  strictRequested: boolean;
+  strictEnforced: boolean;
+  environmentName: string;
+  reason?: string;
+};
+
+const PAGE_METADATA_HTTP_TIMEOUT_MS = 2_000;
+
 export async function validateMetadataAlternatesHttp(
   m: Metadata,
   ctx: { pathname: string; routeGroup?: string; sourceFile: string; generator: string },
-): Promise<void> {
-  if (!isSeoPageMetadataHttpValidationEnabled()) return;
+): Promise<MetadataAlternatesHttpValidationResult> {
+  const strictRequested = isSeoHttpValidationStrict();
+  const strictEnforced = shouldEnforceStrictPageMetadataValidation();
+  const environmentName = seoHttpValidationEnvironmentName();
+
+  if (!isSeoPageMetadataHttpValidationEnabled()) {
+    return {
+      failures: [],
+      strictRequested,
+      strictEnforced: false,
+      environmentName,
+    };
+  }
 
   const entries: SeoHttpValidationEntry[] = [];
   const alt = m.alternates;
-  if (!alt) return;
+  if (!alt) {
+    return {
+      failures: [],
+      strictRequested,
+      strictEnforced,
+      environmentName,
+    };
+  }
 
   const canon = alt.canonical;
   if (canon != null) {
@@ -220,11 +274,20 @@ export async function validateMetadataAlternatesHttp(
     }
   }
 
-  if (entries.length === 0) return;
+  if (entries.length === 0) {
+    return {
+      failures: [],
+      strictRequested,
+      strictEnforced,
+      environmentName,
+    };
+  }
 
   const failures: SeoHttpValidationFailure[] = [];
   await runPool(entries, concurrency(), async (e) => {
-    const { status, detail } = await fetchHttpStatusForSeoValidation(e.url);
+    const { status, detail } = await fetchHttpStatusForSeoValidation(e.url, {
+      timeoutMs: PAGE_METADATA_HTTP_TIMEOUT_MS,
+    });
     if (status >= 300 && status < 400) {
       safeServerLog("seo", "http_emit_url_redirect", {
         url: e.url.slice(0, 800),
@@ -244,7 +307,17 @@ export async function validateMetadataAlternatesHttp(
     return null;
   });
 
-  if (isSeoHttpValidationStrict() && failures.length > 0) {
+  if (strictEnforced && failures.length > 0) {
     throw new SeoHttpValidationStrictError(failures);
   }
+
+  const reason = failures.length > 0 ? classifySeoHttpValidationFailureReason(failures) : undefined;
+
+  return {
+    failures,
+    strictRequested,
+    strictEnforced,
+    environmentName,
+    reason,
+  };
 }
