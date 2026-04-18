@@ -8,7 +8,7 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { assertMarketingLayoutMessagesIntegrity } from "@/lib/marketing-i18n/marketing-layout-message-integrity";
 import {
-  MARKETING_CHROME_MESSAGE_SHARDS,
+  MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS,
   MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
 } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
@@ -27,7 +27,7 @@ const MARKETING_BUILD_PHASE = "phase-production-build";
 
 function defaultLayoutMessageShards() {
   return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE
-    ? MARKETING_CHROME_MESSAGE_SHARDS
+    ? MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS
     : MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS;
 }
 

@@ -1,12 +1,17 @@
-import raw from "@/content/topic-maps/master-topic-map.json";
 import type { ExamKey, MasterTopicMapDocument, MasterTopicMapExam, MasterTopicMapTopic } from "./master-topic-map.types";
 
 export type { ExamKey, MasterTopicMapDocument, MasterTopicMapExam, MasterTopicMapCategory, MasterTopicMapTopic } from "./master-topic-map.types";
 
-export const masterTopicMap = raw as MasterTopicMapDocument;
+let masterTopicMapCache: MasterTopicMapDocument | null = null;
+
+export function getMasterTopicMap(): MasterTopicMapDocument {
+  if (masterTopicMapCache) return masterTopicMapCache;
+  masterTopicMapCache = require("@/content/topic-maps/master-topic-map.json") as MasterTopicMapDocument;
+  return masterTopicMapCache;
+}
 
 export function getExamTrack(exam: ExamKey): MasterTopicMapExam {
-  return masterTopicMap.exams[exam];
+  return getMasterTopicMap().exams[exam];
 }
 
 export function findTopic(

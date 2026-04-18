@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import type { PilotCountrySlug } from "@/config/country-localization-types";
-import { PILOT_BLOG_SAMPLE_BUNDLES } from "@/lib/blog/pilot-sample-posts-bundles";
+import { getPilotBlogSampleBundle } from "@/lib/blog/pilot-sample-posts-bundles";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { formatTitleCase } from "@/lib/format/text-case";
@@ -34,7 +34,7 @@ export function PilotHubFeaturedBlog({ pilot }: { pilot: PilotCountrySlug }) {
   const { t, locale } = useMarketingI18n();
   const p = FEATURED_PREFIX[pilot];
 
-  const bundle = PILOT_BLOG_SAMPLE_BUNDLES[pilot];
+  const bundle = getPilotBlogSampleBundle(pilot);
   const languageTryOrder = useMemo(() => resolveLanguageTryOrder(pilot, locale), [pilot, locale]);
   const ranked = useMemo(
     () => rankAndSortBlogSamples(bundle.entries, pilot, languageTryOrder).slice(0, 6),

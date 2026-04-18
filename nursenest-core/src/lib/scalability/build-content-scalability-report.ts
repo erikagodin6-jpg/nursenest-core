@@ -1,4 +1,3 @@
-import catalog from "@/content/pathway-lessons/catalog.json";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
@@ -11,6 +10,13 @@ const DB_TIMEOUT = Math.min(PATHWAY_LESSON_DB_TIMEOUT_MS, 8_000);
 const REPORT_CACHE_MS = 30_000;
 let cachedScalabilityReport: { at: number; value: ContentScalabilityReport } | null = null;
 let scalabilityInFlight: Promise<ContentScalabilityReport> | null = null;
+let catalogCache: CatalogShape | null = null;
+
+function getCatalog(): CatalogShape {
+  if (catalogCache) return catalogCache;
+  catalogCache = require("@/content/pathway-lessons/catalog.json") as CatalogShape;
+  return catalogCache;
+}
 
 export type ContentScalabilityReport = {
   generatedAt: string;
@@ -58,7 +64,7 @@ export async function buildContentScalabilityReport(): Promise<ContentScalabilit
 
   const generatedAt = new Date().toISOString();
   const databaseConfigured = isDatabaseUrlConfigured();
-  const cat = catalog as unknown as CatalogShape;
+  const cat = getCatalog();
 
   scalabilityInFlight = (async () => {
     const dbLocaleBuckets = databaseConfigured

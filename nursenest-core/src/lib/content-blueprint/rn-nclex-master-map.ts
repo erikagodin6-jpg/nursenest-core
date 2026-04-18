@@ -8,7 +8,6 @@
  * (`exam-complete-lesson-template.ts`) and **RN tier depth rules** (`rn-nclex-content-depth-rules.ts`).
  * Do not bulk-append thin placeholders to `catalog.json` — merge in batches with full prose meeting tier word targets.
  */
-import raw from "@/content/pathway-lessons/rn-nclex-master-map.json";
 import type { RnNclexTier } from "@/lib/content-blueprint/rn-nclex-content-depth-rules";
 
 export type { RnNclexTier } from "@/lib/content-blueprint/rn-nclex-content-depth-rules";
@@ -35,12 +34,6 @@ export type RnNclexMasterLesson = {
   bodySystem: string;
 };
 
-export type RnNclexMasterMap = typeof raw;
-
-export const RN_NCLEX_MASTER_MAP: RnNclexMasterMap = raw;
-
-export const RN_NCLEX_BUILD_ORDER = raw.buildOrder as readonly string[];
-
 export type RnNclexStagedBuildPhase = {
   phase: number;
   label: string;
@@ -48,21 +41,37 @@ export type RnNclexStagedBuildPhase = {
   categoryIds: readonly string[];
 };
 
-export const RN_NCLEX_STAGED_BUILD_PHASES = raw.stagedBuildPhases as readonly RnNclexStagedBuildPhase[];
+export type RnNclexMasterMap = typeof import("@/content/pathway-lessons/rn-nclex-master-map.json");
+
+let rnNclexMasterMapCache: RnNclexMasterMap | null = null;
+
+export function getRnNclexMasterMap(): RnNclexMasterMap {
+  if (rnNclexMasterMapCache) return rnNclexMasterMapCache;
+  rnNclexMasterMapCache = require("@/content/pathway-lessons/rn-nclex-master-map.json") as RnNclexMasterMap;
+  return rnNclexMasterMapCache;
+}
+
+export function getRnNclexBuildOrder(): readonly string[] {
+  return getRnNclexMasterMap().buildOrder as readonly string[];
+}
+
+export function getRnNclexStagedBuildPhases(): readonly RnNclexStagedBuildPhase[] {
+  return getRnNclexMasterMap().stagedBuildPhases as readonly RnNclexStagedBuildPhase[];
+}
 
 export function rnNclexLessonsForCategory(categoryId: string): RnNclexMasterLesson[] {
-  return (raw.lessons as RnNclexMasterLesson[]).filter(
+  return (getRnNclexMasterMap().lessons as RnNclexMasterLesson[]).filter(
     (l) => l.primaryCategoryId === categoryId || l.secondaryCategoryIds.includes(categoryId),
   );
 }
 
 export function rnNclexLessonsPrimaryCategory(categoryId: string): RnNclexMasterLesson[] {
-  return (raw.lessons as RnNclexMasterLesson[]).filter((l) => l.primaryCategoryId === categoryId);
+  return (getRnNclexMasterMap().lessons as RnNclexMasterLesson[]).filter((l) => l.primaryCategoryId === categoryId);
 }
 
 /** Titles with explicit merge / ownership notes (cross-category dedup). */
 export function rnNclexMergeDecisions(): Array<{ title: string; note: string; primaryCategoryId: string }> {
-  return (raw.lessons as RnNclexMasterLesson[])
+  return (getRnNclexMasterMap().lessons as RnNclexMasterLesson[])
     .filter((l) => l.mergeNote)
     .map((l) => ({
       title: l.canonicalTitle,
@@ -72,7 +81,7 @@ export function rnNclexMergeDecisions(): Array<{ title: string; note: string; pr
 }
 
 export function rnNclexLessonsByArchetype(archetype: RnNclexLessonArchetype): RnNclexMasterLesson[] {
-  return (raw.lessons as RnNclexMasterLesson[]).filter((l) => l.archetype === archetype);
+  return (getRnNclexMasterMap().lessons as RnNclexMasterLesson[]).filter((l) => l.archetype === archetype);
 }
 
 /** Lessons that appear in more than one category bucket (secondary hub coverage; one canonical slug). */
@@ -83,7 +92,7 @@ export function rnNclexCrossListedLessons(): Array<{
   secondaryCategoryIds: string[];
   mergeNote: string | null;
 }> {
-  return (raw.lessons as RnNclexMasterLesson[])
+  return (getRnNclexMasterMap().lessons as RnNclexMasterLesson[])
     .filter((l) => l.secondaryCategoryIds.length > 0)
     .map((l) => ({
       canonicalTitle: l.canonicalTitle,

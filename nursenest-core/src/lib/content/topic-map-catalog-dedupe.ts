@@ -1,4 +1,3 @@
-import catalog from "@/content/pathway-lessons/catalog.json";
 import { flattenTopicMap } from "./master-topic-map";
 
 export type TopicCatalogCollision = {
@@ -9,6 +8,16 @@ export type TopicCatalogCollision = {
   catalogTitle: string;
   reason: "normalized_equality" | "token_overlap";
 };
+
+type CatalogShape = { pathways?: Record<string, { lessons?: { title?: string }[] }> };
+
+let catalogCache: CatalogShape | null = null;
+
+function getCatalog(): CatalogShape {
+  if (catalogCache) return catalogCache;
+  catalogCache = require("@/content/pathway-lessons/catalog.json") as CatalogShape;
+  return catalogCache;
+}
 
 function normalizeTitle(s: string): string {
   return s
@@ -35,7 +44,7 @@ function jaccard(a: Set<string>, b: Set<string>): number {
 
 /** Collect every published/catalog lesson title (all pathways) for dedupe checks */
 export function collectCatalogLessonTitles(): { pathwayId: string; title: string }[] {
-  const pathways = (catalog as { pathways?: Record<string, { lessons?: { title?: string }[] }> }).pathways ?? {};
+  const pathways = getCatalog().pathways ?? {};
   const rows: { pathwayId: string; title: string }[] = [];
   for (const [pathwayId, bundle] of Object.entries(pathways)) {
     for (const lesson of bundle.lessons ?? []) {

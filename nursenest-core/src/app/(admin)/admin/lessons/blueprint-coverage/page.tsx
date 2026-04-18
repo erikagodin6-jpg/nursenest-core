@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/guards";
-import catalog from "@/content/pathway-lessons/catalog.json";
 import { buildLessonBlueprintCoverageDashboard } from "@/lib/content-blueprint/lesson-blueprint-coverage-dashboard";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminLessonBlueprintCoveragePage() {
   await requireAdmin();
+  const catalog = require("@/content/pathway-lessons/catalog.json");
   const dashboard = buildLessonBlueprintCoverageDashboard(catalog);
 
   return (

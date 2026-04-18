@@ -3,7 +3,6 @@
  * `rn-nclex-master-map.json` — total plain-text words vs tier band from the map.
  */
 import { countWords, stripToPlainText } from "@/lib/content-quality/plain-text";
-import map from "@/content/pathway-lessons/rn-nclex-master-map.json";
 import {
   type RnNclexTier,
   RN_NCLEX_TIER_WORD_RANGE,
@@ -12,9 +11,20 @@ import {
 
 const RN_PATHWAYS = new Set(["us-rn-nclex-rn", "ca-rn-nclex-rn"]);
 
-const bySlug = new Map(
-  (map.lessons as Array<{ slug: string; tier: RnNclexTier; canonicalTitle: string }>).map((l) => [l.slug, l]),
-);
+type RnNclexDepthRow = { slug: string; tier: RnNclexTier; canonicalTitle: string };
+
+let bySlugCache: Map<string, RnNclexDepthRow> | null = null;
+
+function getRnNclexDepthRowsBySlug(): Map<string, RnNclexDepthRow> {
+  if (bySlugCache) return bySlugCache;
+
+  const map = require("@/content/pathway-lessons/rn-nclex-master-map.json") as {
+    lessons?: RnNclexDepthRow[];
+  };
+
+  bySlugCache = new Map((map.lessons ?? []).map((lesson) => [lesson.slug, lesson]));
+  return bySlugCache;
+}
 
 export function evaluateRnNclexMapDepthForCatalogRow(input: {
   pathwayId: string;
@@ -22,7 +32,7 @@ export function evaluateRnNclexMapDepthForCatalogRow(input: {
   sections: Array<{ body?: string }>;
 }): Array<{ ruleId: string; severity: "warn"; message: string; slug: string }> {
   if (!RN_PATHWAYS.has(input.pathwayId)) return [];
-  const row = bySlug.get(input.slug);
+  const row = getRnNclexDepthRowsBySlug().get(input.slug);
   if (!row) return [];
 
   let total = 0;

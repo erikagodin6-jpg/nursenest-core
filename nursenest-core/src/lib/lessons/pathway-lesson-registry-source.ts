@@ -2,7 +2,6 @@
  * Ops-facing matrix: registry pathways vs pathway_lessons DB vs static catalog.json.
  * Used by `npm run ops:pathway-lesson-sources` and admin scalability-style tooling.
  */
-import catalog from "@/content/pathway-lessons/catalog.json";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
@@ -12,6 +11,13 @@ import { ContentStatus } from "@prisma/client";
 type CatalogShape = { pathways: Record<string, { lessons: unknown[] }> };
 
 const DB_TIMEOUT = Math.min(PATHWAY_LESSON_DB_TIMEOUT_MS, 8_000);
+let catalogCache: CatalogShape | null = null;
+
+function getCatalog(): CatalogShape {
+  if (catalogCache) return catalogCache;
+  catalogCache = require("@/content/pathway-lessons/catalog.json") as CatalogShape;
+  return catalogCache;
+}
 
 function catalogLessonCount(pathwayId: string, cat: CatalogShape): number {
   const n = cat.pathways[pathwayId]?.lessons?.length ?? 0;
@@ -45,7 +51,7 @@ export type RegistryPathwayLessonSourceReport = {
 export async function buildRegistryPathwayLessonSourceReport(): Promise<RegistryPathwayLessonSourceReport> {
   const generatedAt = new Date().toISOString();
   const databaseConfigured = isDatabaseUrlConfigured();
-  const cat = catalog as unknown as CatalogShape;
+  const cat = getCatalog();
 
   const dbLocaleBuckets = databaseConfigured
     ? await withDatabaseFallbackTimeout(

@@ -15,6 +15,15 @@ export const MARKETING_CHROME_MESSAGE_SHARDS = [
   "common",
 ] as const satisfies readonly I18nShardFilename[];
 
+/**
+ * Build-time marketing layout shell: just the anonymous public chrome keys needed to render
+ * header/footer and the email signup band while `<main>` loads `pages.*` separately.
+ */
+export const MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS = [
+  "marketing",
+  "nav",
+] as const satisfies readonly I18nShardFilename[];
+
 /** Route/marketing page bodies (`pages.*` keys). */
 export const MARKETING_PAGE_BODY_MESSAGE_SHARDS = ["pages"] as const satisfies readonly I18nShardFilename[];
 
