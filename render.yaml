@@ -1,3 +1,5 @@
+# LEGACY RENDER CONFIG - NOT THE ACTIVE DIGITALOCEAN APP PLATFORM SPEC
+# Active DO deploy spec: `.do/app-nursenest-core-next.yaml`
 # Minimal Render blueprint: single Node web service (Express + built Vite client).
 # Set env vars in the Render dashboard; do not commit secrets.
 services:

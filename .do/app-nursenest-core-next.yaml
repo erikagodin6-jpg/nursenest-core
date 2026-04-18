@@ -1,8 +1,7 @@
-# Next.js app only (Auth.js lives here). Use this spec OR mirror these settings in the DO UI.
-# The repo root is the Express+Vite monolith; building "/" runs that heavy build and can hit
-# the ~60m App Platform job limit or post-build hangs. Point the component at nursenest-core/.
-#
-# Apply: App Platform → Settings → App Spec, or: doctl apps update --spec .do/app-nursenest-core-next.yaml
+# DO NOT CHANGE VIA UI
+# This spec is the source of truth for deployment
+# Active DigitalOcean App Platform spec for the standalone Next app in `nursenest-core/`.
+# Apply with: doctl apps update --spec .do/app-nursenest-core-next.yaml
 #
 name: nursenest-core-next
 region: tor

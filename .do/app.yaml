@@ -1,3 +1,6 @@
+# LEGACY DEPLOY CONFIG - NOT THE ACTIVE DIGITALOCEAN APP PLATFORM SPEC
+# Active DO deploy spec: `.do/app-nursenest-core-next.yaml`
+#
 name: nursenest
 region: tor
 
