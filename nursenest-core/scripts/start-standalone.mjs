@@ -16,7 +16,6 @@ import { verifyStandaloneArtifact } from "./verify-standalone-artifact.mjs";
 const bootAt = Date.now();
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const runtimeBootstrap = join(pkgRoot, "scripts", "start-standalone-runtime.cjs");
-const initialNodeEnv = process.env.NODE_ENV ?? "";
 let entry;
 try {
   entry = verifyStandaloneArtifact(pkgRoot);
@@ -47,7 +46,8 @@ const bootstrapReadyMaxAttempts = Math.max(
 );
 const bootstrapTestDelayMs = Number.parseInt(process.env.NN_BOOTSTRAP_TEST_DELAY_MS ?? "0", 10) || 0;
 const childHealthProbeTimeoutMs = Number.parseInt(process.env.NN_CHILD_HEALTH_TIMEOUT_MS ?? "1000", 10) || 1000;
-const bypassBootstrapReadiness = initialNodeEnv !== "production" && process.env.NN_BYPASS_BOOTSTRAP === "1";
+/** NN_BYPASS_BOOTSTRAP=1: skip internal child readiness watchdog (ops recovery when the probe never succeeds). */
+const BYPASS = process.env.NN_BYPASS_BOOTSTRAP === "1";
 const memMb = process.env.NODE_MAX_OLD_SPACE_SIZE_MB ?? "512";
 const baseNodeOptions = (process.env.NODE_OPTIONS ?? "").trim();
 const hasHeapOverride =
@@ -140,7 +140,7 @@ function waitForChildReadiness({ state }) {
   let attempt = 0;
 
   return (async () => {
-    if (bypassBootstrapReadiness) {
+    if (BYPASS) {
       emit("watchdog_bypass_enabled", {
         pid: process.pid,
         childPid: state.childPid,
@@ -395,7 +395,7 @@ emit("server_listening", {
   childHealthProbePath,
 });
 
-if (bypassBootstrapReadiness) {
+if (BYPASS) {
   markHandlersReady("watchdog_bypass_after_bind");
 }
 
