@@ -2,15 +2,19 @@ import "server-only";
 
 import { headers } from "next/headers";
 import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
+import {
+  emitNnHomePerfDiagLine,
+  HOME_PERF_DIAG_VERSION,
+  isNnTraceHomePerfTrue,
+} from "@/lib/observability/home-perf-diag";
 import { NN_HOME_PERF_ANCHOR_HEADER, NN_HOME_PERF_REQUEST_KIND_HEADER } from "@/lib/observability/home-perf-headers";
 
-const ENV_FLAG = "NN_TRACE_HOME_PERF";
 const MARKETING_BUILD_PHASE = "phase-production-build";
 
-/** Temporary production diagnostics for `GET /` only. Remove by unsetting {@link ENV_FLAG}. */
+/** Temporary production diagnostics for `GET /` only. Remove by unsetting `NN_TRACE_HOME_PERF`. */
 export function isHomePerfTraceEnabled(): boolean {
   if (process.env.NEXT_PHASE === MARKETING_BUILD_PHASE) return false;
-  return process.env[ENV_FLAG]?.trim().toLowerCase() === "true";
+  return isNnTraceHomePerfTrue();
 }
 
 const anchorByCorrelation = new Map<string, number>();
@@ -65,7 +69,15 @@ export async function homePerfLogForGetRoot(
 ): Promise<void> {
   if (!isHomePerfTraceEnabled()) return;
   const { pathname, correlation, anchorFromProxy, requestKind } = await readHomePerfContext();
-  if (pathname !== "/") return;
+  if (pathname !== "/") {
+    emitNnHomePerfDiagLine({
+      tag: "nn_home_perf_server_path_mismatch",
+      phase,
+      pathname_received: pathname || "(empty)",
+      correlation: correlation || undefined,
+    });
+    return;
+  }
 
   const now = Date.now();
   const corrKey = correlation || "none";
@@ -73,19 +85,29 @@ export async function homePerfLogForGetRoot(
   const duration_ms = now - anchor;
   const segment_ms = now - segmentT0;
 
-  console.error(
-    JSON.stringify({
-      tag: "nn_home_perf",
+  try {
+    console.error(
+      JSON.stringify({
+        tag: "nn_home_perf",
+        phase,
+        pathname: "/",
+        duration_ms,
+        segment_ms,
+        wall_ms: now,
+        correlation: correlation || undefined,
+        request_kind: requestKind,
+        home_perf_version: HOME_PERF_DIAG_VERSION,
+        ...extra,
+      }),
+    );
+  } catch {
+    emitNnHomePerfDiagLine({
+      tag: "nn_home_perf_log_json_fallback",
       phase,
       pathname: "/",
-      duration_ms,
-      segment_ms,
-      wall_ms: now,
       correlation: correlation || undefined,
-      request_kind: requestKind,
-      ...extra,
-    }),
-  );
+    });
+  }
 }
 
 /** Single terminal line per successful or failed `GET /` home pipeline (layout/page/deferred). */
@@ -95,24 +117,44 @@ export async function homePerfFinalForGetRoot(
 ): Promise<void> {
   if (!isHomePerfTraceEnabled()) return;
   const { pathname, correlation, anchorFromProxy, requestKind } = await readHomePerfContext();
-  if (pathname !== "/") return;
+  if (pathname !== "/") {
+    emitNnHomePerfDiagLine({
+      tag: "nn_home_perf_server_path_mismatch",
+      phase: "home.server.final",
+      pathname_received: pathname || "(empty)",
+      outcome,
+      correlation: correlation || undefined,
+    });
+    return;
+  }
 
   const now = Date.now();
   const corrKey = correlation || "none";
   const anchor = anchorFromProxy ?? anchorMs(corrKey, now);
   const duration_ms = now - anchor;
 
-  console.error(
-    JSON.stringify({
-      tag: "nn_home_perf",
+  try {
+    console.error(
+      JSON.stringify({
+        tag: "nn_home_perf",
+        phase: "home.server.final",
+        outcome,
+        pathname: "/",
+        duration_ms,
+        wall_ms: now,
+        correlation: correlation || undefined,
+        request_kind: requestKind,
+        home_perf_version: HOME_PERF_DIAG_VERSION,
+        ...extra,
+      }),
+    );
+  } catch {
+    emitNnHomePerfDiagLine({
+      tag: "nn_home_perf_log_json_fallback",
       phase: "home.server.final",
       outcome,
       pathname: "/",
-      duration_ms,
-      wall_ms: now,
       correlation: correlation || undefined,
-      request_kind: requestKind,
-      ...extra,
-    }),
-  );
+    });
+  }
 }

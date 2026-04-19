@@ -11,6 +11,7 @@ import type { NextFetchEvent, NextMiddleware } from "next/server";
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
+import { emitNnHomePerfDiagLine, isNnTraceHomePerfTrue } from "@/lib/observability/home-perf-diag";
 import { NN_HOME_PERF_ANCHOR_HEADER, NN_HOME_PERF_REQUEST_KIND_HEADER } from "@/lib/observability/home-perf-headers";
 
 type AdminProxyDeps = {
@@ -180,7 +181,7 @@ function ensureIncomingCorrelationId(request: NextRequest): NextRequest {
 }
 
 function isHomePerfTraceEnabledEdge(): boolean {
-  return process.env.NN_TRACE_HOME_PERF?.trim().toLowerCase() === "true";
+  return isNnTraceHomePerfTrue();
 }
 
 /**
@@ -190,7 +191,20 @@ function isHomePerfTraceEnabledEdge(): boolean {
 function appendHomePerfHeadersForGetRoot(request: NextRequest, requestHeaders: Headers): void {
   if (request.method !== "GET") return;
   if (request.nextUrl.pathname !== "/") return;
-  if (!isHomePerfTraceEnabledEdge()) return;
+
+  const traceLiteralTrue = isHomePerfTraceEnabledEdge();
+  const traceEnvDefined = process.env.NN_TRACE_HOME_PERF !== undefined;
+  if (traceLiteralTrue || traceEnvDefined) {
+    emitNnHomePerfDiagLine({
+      tag: "nn_home_perf_proxy_hit",
+      method: request.method,
+      pathname: request.nextUrl.pathname,
+      trace_literal_true: traceLiteralTrue,
+      trace_env_defined: traceEnvDefined,
+    });
+  }
+
+  if (!traceLiteralTrue) return;
 
   const anchor_ms = Date.now();
   requestHeaders.set(NN_HOME_PERF_ANCHOR_HEADER, String(anchor_ms));
@@ -210,18 +224,16 @@ function appendHomePerfHeadersForGetRoot(request: NextRequest, requestHeaders: H
   requestHeaders.set(NN_HOME_PERF_REQUEST_KIND_HEADER, request_kind);
 
   const correlation = requestHeaders.get(NN_CORRELATION_HEADER)?.trim()?.slice(0, 64) ?? "";
-  console.error(
-    JSON.stringify({
-      tag: "nn_home_perf",
-      phase: "home.server.request_start",
-      pathname: "/",
-      duration_ms: 0,
-      segment_ms: 0,
-      wall_ms: anchor_ms,
-      correlation: correlation || undefined,
-      request_kind,
-    }),
-  );
+  emitNnHomePerfDiagLine({
+    tag: "nn_home_perf",
+    phase: "home.server.request_start",
+    pathname: "/",
+    duration_ms: 0,
+    segment_ms: 0,
+    wall_ms: anchor_ms,
+    correlation: correlation || undefined,
+    request_kind,
+  });
 }
 
 function withPathnameHeader(request: NextRequest): NextRequest {
@@ -236,6 +248,7 @@ function withPathnameHeader(request: NextRequest): NextRequest {
 
   /** Trusted pathname for server RBAC + layouts (RSC must not rely on spoofable client headers). */
   requestHeaders.set("x-nn-request-pathname", pathname);
+  requestHeaders.set("x-nn-request-method", request.method);
   /**
    * Full request URL — lets `resolveAdminRequestPath` recover `/admin/...` when pathname-only
    * headers are missing in RSC (non-super staff would otherwise see RBAC path `/` and be redirected).

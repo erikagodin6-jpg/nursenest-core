@@ -9,6 +9,7 @@ import type { I18nShardFilename } from "@shared/i18n-shard-policy";
 import { readCachedI18nJsonFile } from "@/lib/i18n/i18n-translation-cache";
 import { loadSharedMarketingMessagesOnce } from "@/lib/marketing-i18n/shared-marketing-message-cache";
 import { shouldBypassMarketingI18nAtStartup } from "@/lib/marketing-i18n/marketing-i18n-startup";
+import { coerceFlatMessageValue } from "@/lib/marketing-i18n/safe-marketing-messages";
 
 const mergedShardCache = new Map<string, MarketingMessages>();
 
@@ -65,6 +66,24 @@ function tryReadLegacyLocaleBundle(i18nDir: string, locale: string): MarketingMe
   return readCachedI18nJsonFile(fp, { locale, shard: "legacy" });
 }
 
+/** Best-effort: copy missing string keys from the default-locale merge (avoids partial shard trees). */
+function fillMissingFromDefaultLocale(
+  merged: MarketingMessages,
+  i18nDir: string,
+  locale: string,
+  shards: readonly I18nShardFilename[],
+): void {
+  if (locale === DEFAULT_MARKETING_LOCALE) return;
+  try {
+    const enMap = mergeShardMaps(i18nDir, DEFAULT_MARKETING_LOCALE, shards);
+    for (const [k, v] of Object.entries(enMap)) {
+      if (coerceFlatMessageValue(merged[k]) === undefined) merged[k] = v;
+    }
+  } catch {
+    /* ignore */
+  }
+}
+
 function mergeShardMaps(
   i18nDir: string,
   locale: string,
@@ -74,35 +93,70 @@ function mergeShardMaps(
   const cached = mergedShardCache.get(cacheKey);
   if (cached) return cached;
 
-  const localeShardDir = path.join(i18nDir, locale);
-  const hasShardTree = existsSync(localeShardDir) && statSync(localeShardDir).isDirectory();
-  if (hasShardTree) {
-    const merged: MarketingMessages = {};
-    for (const name of shards) {
-      const part = readShardFile(i18nDir, locale, name);
-      if (!part) continue;
-      for (const [k, v] of Object.entries(part)) {
-        if (k in merged && process.env.NODE_ENV === "development") {
-          safeServerLog("i18n", "shard_duplicate_key_last_wins", {
+  try {
+    const localeShardDir = path.join(i18nDir, locale);
+    let hasShardTree = false;
+    try {
+      hasShardTree = existsSync(localeShardDir) && statSync(localeShardDir).isDirectory();
+    } catch {
+      hasShardTree = false;
+    }
+
+    if (hasShardTree) {
+      const merged: MarketingMessages = {};
+      for (const name of shards) {
+        try {
+          const part = readShardFile(i18nDir, locale, name);
+          if (!part) continue;
+          for (const [k, v] of Object.entries(part)) {
+            if (k in merged && process.env.NODE_ENV === "development") {
+              safeServerLog("i18n", "shard_duplicate_key_last_wins", {
+                locale,
+                shard: name,
+                key: k.slice(0, 120),
+              });
+            }
+            merged[k] = v;
+          }
+        } catch (e) {
+          safeServerLog("i18n", "marketing_shard_file_failed", {
             locale,
-            shard: name,
-            key: k.slice(0, 120),
+            shard: String(name).slice(0, 40),
+            errorName: e instanceof Error ? e.name.slice(0, 80) : "non_error",
           });
         }
-        merged[k] = v;
+      }
+      fillMissingFromDefaultLocale(merged, i18nDir, locale, shards);
+      mergedShardCache.set(cacheKey, merged);
+      return merged;
+    }
+
+    const legacy = tryReadLegacyLocaleBundle(i18nDir, locale);
+    if (legacy && Object.keys(legacy).length > 0) {
+      const filled: MarketingMessages = { ...legacy };
+      fillMissingFromDefaultLocale(filled, i18nDir, locale, shards);
+      mergedShardCache.set(cacheKey, filled);
+      return filled;
+    }
+
+    const empty: MarketingMessages = {};
+    fillMissingFromDefaultLocale(empty, i18nDir, locale, shards);
+    mergedShardCache.set(cacheKey, empty);
+    return empty;
+  } catch (e) {
+    safeServerLog("i18n", "merge_shard_maps_failed", {
+      locale,
+      errorName: e instanceof Error ? e.name.slice(0, 80) : "non_error",
+    });
+    if (locale !== DEFAULT_MARKETING_LOCALE) {
+      try {
+        return mergeShardMaps(i18nDir, DEFAULT_MARKETING_LOCALE, shards);
+      } catch {
+        /* fall through */
       }
     }
-    mergedShardCache.set(cacheKey, merged);
-    return merged;
+    return {};
   }
-  const legacy = tryReadLegacyLocaleBundle(i18nDir, locale);
-  if (legacy && Object.keys(legacy).length > 0) {
-    mergedShardCache.set(cacheKey, legacy);
-    return legacy;
-  }
-  const empty: MarketingMessages = {};
-  mergedShardCache.set(cacheKey, empty);
-  return empty;
 }
 
 /**

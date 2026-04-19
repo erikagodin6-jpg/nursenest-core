@@ -10,7 +10,10 @@ import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross
 import { loginWithCallback, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
-import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import {
+  loadMarketingMessageShards,
+  loadMarketingMessageShardsSync,
+} from "@/lib/marketing-i18n/load-marketing-message-shards";
 import {
   MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
   MARKETING_PAGE_BODY_MESSAGE_SHARDS,
@@ -42,8 +45,19 @@ export async function generateMetadata(): Promise<Metadata> {
     async () => {
       const locale = await getMarketingLocaleForDefaultRoute();
       const marketingRegion = await getMarketingRegionFromCookies();
-      const m = await loadMarketingMessageShards(locale, lessonsPageMessageShards());
-      const en = await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, lessonsPageMessageShards());
+      const shards = lessonsPageMessageShards();
+      let m: Awaited<ReturnType<typeof loadMarketingMessageShards>>;
+      let en: Awaited<ReturnType<typeof loadMarketingMessageShards>>;
+      try {
+        m = await loadMarketingMessageShards(locale, shards);
+      } catch {
+        m = loadMarketingMessageShardsSync(locale, shards);
+      }
+      try {
+        en = await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, shards);
+      } catch {
+        en = loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards);
+      }
       const metaSfx = marketingRegion === "US" ? "US" : "CA";
       const title = resolveMarketingCopy(
         m,
@@ -72,8 +86,19 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PublicLessonsLandingPage() {
   const locale = await getMarketingLocaleForDefaultRoute();
   const marketingRegion = await getMarketingRegionFromCookies();
-  const m = await loadMarketingMessageShards(locale, lessonsPageMessageShards());
-  const en = await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, lessonsPageMessageShards());
+  const shards = lessonsPageMessageShards();
+  let m: Awaited<ReturnType<typeof loadMarketingMessageShards>>;
+  let en: Awaited<ReturnType<typeof loadMarketingMessageShards>>;
+  try {
+    m = await loadMarketingMessageShards(locale, shards);
+  } catch {
+    m = loadMarketingMessageShardsSync(locale, shards);
+  }
+  try {
+    en = await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, shards);
+  } catch {
+    en = loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards);
+  }
   const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
   const h1Key = marketingRegion === "US" ? "pages.publicLessons.h1US" : "pages.publicLessons.h1CA";
   const introKey = marketingRegion === "US" ? "pages.publicLessons.introUS" : "pages.publicLessons.introCA";

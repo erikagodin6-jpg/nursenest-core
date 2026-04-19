@@ -3,7 +3,10 @@ import { unstable_cache } from "next/cache";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import {
+  loadMarketingMessageShards,
+  loadMarketingMessageShardsSync,
+} from "@/lib/marketing-i18n/load-marketing-message-shards";
 import {
   MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
   MARKETING_PAGE_BODY_MESSAGE_SHARDS,
@@ -90,8 +93,19 @@ export async function PublicLessonsPathwaySections({
     if (g) grouped[g].push(row);
   }
 
-  const m = await loadMarketingMessageShards(locale, lessonsPageMessageShards());
-  const en = await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, lessonsPageMessageShards());
+  const shards = lessonsPageMessageShards();
+  let m: Awaited<ReturnType<typeof loadMarketingMessageShards>>;
+  let en: Awaited<ReturnType<typeof loadMarketingMessageShards>>;
+  try {
+    m = await loadMarketingMessageShards(locale, shards);
+  } catch {
+    m = loadMarketingMessageShardsSync(locale, shards);
+  }
+  try {
+    en = await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, shards);
+  } catch {
+    en = loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards);
+  }
   const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
 
   const regionLabel = (slug: string) =>

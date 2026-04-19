@@ -6,6 +6,7 @@ import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-pro
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { assertMarketingLayoutMessagesIntegrity } from "@/lib/marketing-i18n/marketing-layout-message-integrity";
+import { mergeMinimalMarketingLayoutShellMessages } from "@/lib/marketing-i18n/minimal-marketing-layout-shell-fallback";
 import { getMarketingDefaultLayoutChromeMessages } from "@/lib/marketing-i18n/marketing-layout-chrome-messages.server";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
@@ -55,20 +56,34 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
             meta: { locale: DEFAULT_MARKETING_LOCALE },
           });
         }
-        await homePerfLogForGetRoot("home.server.after_layout_chrome_messages", perfLayoutT0, {
+        messages = mergeMinimalMarketingLayoutShellMessages(messages);
+        void homePerfLogForGetRoot("home.server.after_layout_chrome_messages", perfLayoutT0, {
           message_count: Object.keys(messages).length,
+        }).catch(() => {
+          /* perf must not affect render */
         });
         layoutStderrTrace("marketing_layout", "marketing layout after messages", {
           route: "shared-marketing-default",
           locale: resolvedLocale,
           messageCount: Object.keys(messages).length,
         });
-        assertMarketingLayoutMessagesIntegrity({
-          route: "shared-marketing-default",
-          locale: resolvedLocale,
-          messages,
-          fallbackMessages,
-        });
+        try {
+          assertMarketingLayoutMessagesIntegrity({
+            route: "shared-marketing-default",
+            locale: resolvedLocale,
+            messages,
+            fallbackMessages,
+          });
+        } catch (integrityErr) {
+          captureSentryRuntimeSoftError({
+            scope: "marketing_layout",
+            event: "marketing_layout_integrity_soft_fail",
+            error: integrityErr,
+            route: "shared-marketing-default",
+            feature: "marketing_layout",
+            meta: { locale: DEFAULT_MARKETING_LOCALE },
+          });
+        }
 
         return (
           <MarketingI18nProvider
@@ -100,8 +115,34 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
           </MarketingI18nProvider>
         );
       } catch (e) {
-        await homePerfFinalForGetRoot("failure", { error_phase: "layout" });
-        throw e;
+        void homePerfFinalForGetRoot("failure", { error_phase: "layout" }).catch(() => {
+          /* perf */
+        });
+        captureSentryRuntimeSoftError({
+          scope: "marketing_layout",
+          event: "marketing_layout_fatal_soft_shell",
+          error: e,
+          route: "shared-marketing-default",
+          feature: "marketing_layout",
+          meta: { locale: DEFAULT_MARKETING_LOCALE },
+        });
+        const shellMessages = mergeMinimalMarketingLayoutShellMessages({});
+        return (
+          <MarketingI18nProvider
+            key={DEFAULT_MARKETING_LOCALE}
+            locale={DEFAULT_MARKETING_LOCALE}
+            messages={shellMessages}
+            fallbackMessages={undefined}
+          >
+            <NursenestRegionRoot serverRegion={"US"}>
+              <div className="nn-marketing-surface flex min-h-screen flex-col">
+                <main className="flex min-h-0 flex-1 flex-col">
+                  <PageTransitionShell>{children}</PageTransitionShell>
+                </main>
+              </div>
+            </NursenestRegionRoot>
+          </MarketingI18nProvider>
+        );
       }
     },
   );
