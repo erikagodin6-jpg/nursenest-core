@@ -8,7 +8,10 @@ import {
   MARKETING_CHROME_MESSAGE_SHARDS,
 } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 
-const MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS = 1200;
+/** Must exceed `MARKETING_SHARD_ASYNC_FACTORY_BUDGET_MS` in `load-marketing-message-shards.ts` (2500). */
+const MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS = 2600;
+/** Must exceed `MARKETING_SHARD_ASYNC_FACTORY_BUDGET_MS` in `load-marketing-message-shards.ts` (2500). */
+const LOCALE_CHROME_SHARD_TIMEOUT_MS = 2600;
 const MARKETING_BUILD_PHASE = "phase-production-build";
 
 function defaultLayoutShardList() {
@@ -78,18 +81,32 @@ export async function getMarketingLocaleLayoutChromePayload(locale: string): Pro
   let p = localeChromeInflight.get(locale);
   if (!p) {
     p = (async () => {
-      const messages = (await loadMarketingMessageShards(locale, MARKETING_CHROME_MESSAGE_SHARDS)) ?? {};
+      const messages =
+        (await safeAwait(
+          loadMarketingMessageShards(locale, MARKETING_CHROME_MESSAGE_SHARDS),
+          `marketing_layout.locale_chrome:${locale}`,
+          LOCALE_CHROME_SHARD_TIMEOUT_MS,
+        )) ?? {};
       const fallbackMessages =
         locale === DEFAULT_MARKETING_LOCALE
           ? undefined
-          : ((await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS)) ?? {});
+          : ((await safeAwait(
+              loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS),
+              `marketing_layout.locale_chrome_en`,
+              LOCALE_CHROME_SHARD_TIMEOUT_MS,
+            )) ?? {});
       const payload: LocaleChromePayload = { messages, fallbackMessages };
       localeChromeResolved.set(locale, payload);
       localeChromeInflight.delete(locale);
       return payload;
-    })().catch((err) => {
+    })().catch(() => {
       localeChromeInflight.delete(locale);
-      throw err;
+      const empty: LocaleChromePayload = {
+        messages: {},
+        fallbackMessages: locale === DEFAULT_MARKETING_LOCALE ? undefined : {},
+      };
+      localeChromeResolved.set(locale, empty);
+      return empty;
     });
     localeChromeInflight.set(locale, p);
   }

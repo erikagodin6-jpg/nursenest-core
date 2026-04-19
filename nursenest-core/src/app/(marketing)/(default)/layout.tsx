@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { MarketingMainI18nShards } from "@/components/i18n/marketing-main-i18n-shards";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -13,6 +14,7 @@ import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-rout
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
 import { homePerfFinalForGetRoot, homePerfLogForGetRoot } from "@/lib/observability/home-perf-trace";
+import { emitNnHomeRouteDiag, shouldEmitNnHomeRouteDiag } from "@/lib/observability/nn-home-isolation-flags";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 
 /** Single module promise — avoids per-request `import()` bookkeeping on hot marketing layout path. */
@@ -33,6 +35,21 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
     },
     async () => {
       const perfLayoutT0 = Date.now();
+      if (shouldEmitNnHomeRouteDiag()) {
+        let hp = "";
+        try {
+          hp = (await headers()).get("x-nn-request-pathname")?.trim() ?? "";
+        } catch {
+          hp = "(headers_unavailable)";
+        }
+        if (hp === "/") {
+          emitNnHomeRouteDiag({
+            segment: "layout_marketing_default_enter",
+            pathname: hp,
+            elapsed_ms: Date.now() - perfLayoutT0,
+          });
+        }
+      }
       try {
         layoutStderrTrace("marketing_layout", "marketing layout start", { route: "shared-marketing-default" });
         const resolvedLocale: string = DEFAULT_MARKETING_LOCALE;
@@ -83,6 +100,21 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
             feature: "marketing_layout",
             meta: { locale: DEFAULT_MARKETING_LOCALE },
           });
+        }
+
+        if (shouldEmitNnHomeRouteDiag()) {
+          let hp2 = "";
+          try {
+            hp2 = (await headers()).get("x-nn-request-pathname")?.trim() ?? "";
+          } catch {
+            hp2 = "(headers_unavailable)";
+          }
+          if (hp2 === "/") {
+            emitNnHomeRouteDiag({
+              segment: "layout_marketing_default_before_shell_return",
+              elapsed_ms: Date.now() - perfLayoutT0,
+            });
+          }
         }
 
         return (

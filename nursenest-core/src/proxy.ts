@@ -12,6 +12,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
 import { emitNnHomePerfDiagLine, isNnTraceHomePerfTrue } from "@/lib/observability/home-perf-diag";
+import { emitNnHomeRouteDiag, shouldEmitNnHomeRouteDiag } from "@/lib/observability/nn-home-isolation-flags";
 import { NN_HOME_PERF_ANCHOR_HEADER, NN_HOME_PERF_REQUEST_KIND_HEADER } from "@/lib/observability/home-perf-headers";
 
 type AdminProxyDeps = {
@@ -249,6 +250,9 @@ function withPathnameHeader(request: NextRequest): NextRequest {
   /** Trusted pathname for server RBAC + layouts (RSC must not rely on spoofable client headers). */
   requestHeaders.set("x-nn-request-pathname", pathname);
   requestHeaders.set("x-nn-request-method", request.method);
+  if (pathname === "/" && request.method === "GET" && shouldEmitNnHomeRouteDiag()) {
+    emitNnHomeRouteDiag({ segment: "proxy_withPathnameHeader_enter", pathname: "/", method: request.method });
+  }
   /**
    * Full request URL — lets `resolveAdminRequestPath` recover `/admin/...` when pathname-only
    * headers are missing in RSC (non-super staff would otherwise see RBAC path `/` and be redirected).

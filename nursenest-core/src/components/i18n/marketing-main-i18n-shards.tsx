@@ -9,7 +9,8 @@ import {
 import { safeAwait } from "@/lib/async/safe-await";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 
-const MARKETING_MAIN_SHARDS_TIMEOUT_MS = 1200;
+/** Must exceed `MARKETING_SHARD_ASYNC_FACTORY_BUDGET_MS` in `load-marketing-message-shards.ts` (2500). */
+const MARKETING_MAIN_SHARDS_TIMEOUT_MS = 2600;
 
 /** Dedupe dev/build stderr traces — shard loads are already singleton via `loadSharedMarketingMessagesOnce`. */
 const marketingMainShardTraceLogged = new Set<string>();

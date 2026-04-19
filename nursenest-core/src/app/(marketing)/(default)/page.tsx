@@ -26,12 +26,20 @@ import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-
 import { safeAwait } from "@/lib/async/safe-await";
 import { emitNnHomePerfDiagLine, isNnTraceHomePerfTrue } from "@/lib/observability/home-perf-diag";
 import { homePerfFinalForGetRoot, homePerfLogForGetRoot } from "@/lib/observability/home-perf-trace";
+import {
+  emitNnHomeRouteDiag,
+  nnHomeDiagNowMs,
+  nnHomeStaticProbeEnabled,
+} from "@/lib/observability/nn-home-isolation-flags";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 
 const homeMarketingSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
 
 const HOME_PAGE_BODY_I18N_BUDGET_MS = 2800;
-const HOME_METADATA_I18N_BUDGET_MS = 2000;
+/** Must exceed `MARKETING_SHARD_ASYNC_FACTORY_BUDGET_MS` in `load-marketing-message-shards.ts` (2500). */
+const HOME_METADATA_I18N_BUDGET_MS = 2600;
+/** If `import("@/lib/observability/sentry-runtime")` never settles, `/` render/metadata must still complete. */
+const HOME_SENTRY_RUNTIME_BUDGET_MS = 2000;
 
 /** ISR: homepage shell — aligned with `getCachedPublicHomeStats` / `PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC` (3600). */
 export const revalidate = 3600;
@@ -88,58 +96,97 @@ function listPublishedHomeGlobalRegionCardIdsSafe(): readonly string[] {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { withSentryRuntimeSpan } = await homeMarketingSentryRuntimePromise;
-  return withSentryRuntimeSpan(
-    {
-      name: "marketing.route.metadata.home",
-      op: "ui.server.metadata",
-      attributes: { route: "/", routeGroup: "marketing.default.home" },
-    },
-    async () => {
-      layoutStderrTrace("marketing_home", "home metadata start", { route: "/" });
-      return safeGenerateMetadata(
-        async () => {
-          const m = await loadHomePageMarketingMessagesSafe(HOME_METADATA_I18N_BUDGET_MS, "marketing_home.metadata");
-          const title = resolveMarketingCopy(m, "pages.home.metaTitleUS", m, defaultHomeMetaTitle(STATIC_REGION));
-          const description = resolveMarketingCopy(
-            m,
-            "pages.home.metaDescriptionUS",
-            m,
-            defaultHomeMetaDescription(STATIC_REGION),
-          );
-          const alt = marketingAlternatesSharedPage(STATIC_LOCALE, "/");
-          return {
+  const tDiag = nnHomeDiagNowMs();
+  if (nnHomeStaticProbeEnabled()) {
+    emitNnHomeRouteDiag({ segment: "metadata_static_probe_short_circuit", elapsed_ms: nnHomeDiagNowMs() - tDiag });
+    return HOME_FALLBACK_METADATA;
+  }
+  emitNnHomeRouteDiag({ segment: "metadata_fn_enter", elapsed_ms: 0 });
+  const runtime = await safeAwait(
+    homeMarketingSentryRuntimePromise,
+    "marketing_home.metadata.sentry_import",
+    HOME_SENTRY_RUNTIME_BUDGET_MS,
+  );
+  emitNnHomeRouteDiag({ segment: "metadata_after_sentry_import", elapsed_ms: nnHomeDiagNowMs() - tDiag });
+
+  const runMetadataInner = async (): Promise<Metadata> => {
+    emitNnHomeRouteDiag({ segment: "metadata_span_inner_start", elapsed_ms: nnHomeDiagNowMs() - tDiag });
+    layoutStderrTrace("marketing_home", "home metadata start", { route: "/" });
+    const meta = await safeGenerateMetadata(
+      async () => {
+        emitNnHomeRouteDiag({ segment: "metadata_shard_load_start", elapsed_ms: nnHomeDiagNowMs() - tDiag });
+        const m = await loadHomePageMarketingMessagesSafe(HOME_METADATA_I18N_BUDGET_MS, "marketing_home.metadata");
+        emitNnHomeRouteDiag({
+          segment: "metadata_shard_load_done",
+          elapsed_ms: nnHomeDiagNowMs() - tDiag,
+          message_key_count: Object.keys(m).length,
+        });
+        const title = resolveMarketingCopy(m, "pages.home.metaTitleUS", m, defaultHomeMetaTitle(STATIC_REGION));
+        const description = resolveMarketingCopy(
+          m,
+          "pages.home.metaDescriptionUS",
+          m,
+          defaultHomeMetaDescription(STATIC_REGION),
+        );
+        const alt = marketingAlternatesSharedPage(STATIC_LOCALE, "/");
+        return {
+          title,
+          description,
+          alternates: { canonical: alt.canonical, languages: alt.languages },
+          openGraph: {
             title,
             description,
-            alternates: { canonical: alt.canonical, languages: alt.languages },
-            openGraph: {
-              title,
-              description,
-              url: alt.canonical,
-              type: "website",
-            },
-          };
-        },
-        {
-          pathname: "/",
-          routeGroup: "marketing.default.home",
-          fallbackMetadata: HOME_FALLBACK_METADATA,
-        },
-      );
-    },
-  );
+            url: alt.canonical,
+            type: "website",
+          },
+        };
+      },
+      {
+        pathname: "/",
+        routeGroup: "marketing.default.home",
+        fallbackMetadata: HOME_FALLBACK_METADATA,
+      },
+    );
+    emitNnHomeRouteDiag({ segment: "metadata_span_inner_done", elapsed_ms: nnHomeDiagNowMs() - tDiag });
+    return meta;
+  };
+
+  if (runtime?.withSentryRuntimeSpan) {
+    return runtime.withSentryRuntimeSpan(
+      {
+        name: "marketing.route.metadata.home",
+        op: "ui.server.metadata",
+        attributes: { route: "/", routeGroup: "marketing.default.home" },
+      },
+      runMetadataInner,
+    );
+  }
+  return runMetadataInner();
 }
 
 export default async function HomePage() {
-  const { withSentryRuntimeSpan } = await homeMarketingSentryRuntimePromise;
-  return withSentryRuntimeSpan(
-    {
-      name: "marketing.route.render.home",
-      op: "ui.server.render",
-      attributes: { route: "/", routeGroup: "marketing.default.home" },
-    },
-    async () => {
-      const perfPageT0 = Date.now();
+  const tDiag = nnHomeDiagNowMs();
+  emitNnHomeRouteDiag({ segment: "page_fn_enter", elapsed_ms: 0 });
+
+  if (nnHomeStaticProbeEnabled()) {
+    emitNnHomeRouteDiag({ segment: "page_static_probe_short_circuit", elapsed_ms: nnHomeDiagNowMs() - tDiag });
+    return (
+      <div data-nn-home-static-probe="1" className="p-6">
+        <p>NN_HOME_STATIC_PROBE</p>
+      </div>
+    );
+  }
+
+  const runtime = await safeAwait(
+    homeMarketingSentryRuntimePromise,
+    "marketing_home.page.sentry_import",
+    HOME_SENTRY_RUNTIME_BUDGET_MS,
+  );
+  emitNnHomeRouteDiag({ segment: "page_after_sentry_import", elapsed_ms: nnHomeDiagNowMs() - tDiag });
+
+  const renderHomePage = async () => {
+      const perfPageT0 = nnHomeDiagNowMs();
+      emitNnHomeRouteDiag({ segment: "page_span_inner_start", elapsed_ms: nnHomeDiagNowMs() - tDiag });
       let pathnameProbe = "";
       let methodProbe = "";
       try {
@@ -150,18 +197,22 @@ export default async function HomePage() {
         pathnameProbe = "(headers_unavailable)";
         methodProbe = "(headers_unavailable)";
       }
-      emitNnHomePerfDiagLine({
-        tag: "nn_home_perf_fallback_probe",
-        pid: process.pid,
-        pathname: pathnameProbe,
-        request_method: methodProbe || "(method_header_empty)",
-        trace_literal_true: isNnTraceHomePerfTrue(),
-      });
+      if (isNnTraceHomePerfTrue()) {
+        emitNnHomePerfDiagLine({
+          tag: "nn_home_perf_fallback_probe",
+          pid: process.pid,
+          pathname: pathnameProbe,
+          request_method: methodProbe || "(method_header_empty)",
+          trace_literal_true: true,
+        });
+      }
       try {
         void homePerfLogForGetRoot("home.server.03_page_render_start", perfPageT0).catch(() => {});
+        emitNnHomeRouteDiag({ segment: "page_try_enter", elapsed_ms: nnHomeDiagNowMs() - tDiag });
         layoutStderrTrace("marketing_home", "home page start", { route: "/" });
         const skipOptionalDbReads = shouldSkipOptionalMarketingDbReads();
 
+        emitNnHomeRouteDiag({ segment: "page_parallel_load_start", elapsed_ms: nnHomeDiagNowMs() - tDiag });
         const [m, publishedGlobalRegionCardIds] = await Promise.all([
           loadHomePageMarketingMessagesSafe(HOME_PAGE_BODY_I18N_BUDGET_MS, "marketing_home.page_body").then(
             (resolved) => {
@@ -179,6 +230,12 @@ export default async function HomePage() {
             return ids;
           }),
         ]);
+        emitNnHomeRouteDiag({
+          segment: "page_parallel_load_done",
+          elapsed_ms: nnHomeDiagNowMs() - tDiag,
+          message_key_count: Object.keys(m).length,
+          region_card_count: publishedGlobalRegionCardIds.length,
+        });
 
         layoutStderrTrace("marketing_home", "home page after shell data", {
           route: "/",
@@ -208,6 +265,7 @@ export default async function HomePage() {
         void homePerfLogForGetRoot("home.server.06_before_page_shell_return", perfPageT0, {
           optional_db_skipped: skipOptionalDbReads,
         }).catch(() => {});
+        emitNnHomeRouteDiag({ segment: "page_before_section_jsx", elapsed_ms: nnHomeDiagNowMs() - tDiag });
 
         const webPageProps = buildMarketingWebPageJsonLdProps({
           locale: STATIC_LOCALE,
@@ -216,6 +274,7 @@ export default async function HomePage() {
           description,
         });
 
+        emitNnHomeRouteDiag({ segment: "page_before_return_jsx", elapsed_ms: nnHomeDiagNowMs() - tDiag });
         return (
           <>
             <WebPageJsonLd {...webPageProps} />
@@ -242,9 +301,21 @@ export default async function HomePage() {
           </>
         );
       } catch {
+        emitNnHomeRouteDiag({ segment: "page_catch_emergency_fallback", elapsed_ms: nnHomeDiagNowMs() - tDiag });
         void homePerfFinalForGetRoot("failure", { error_phase: "page" }).catch(() => {});
         return <MarketingHomeEmergencyFallback />;
       }
-    },
-  );
+  };
+
+  if (runtime?.withSentryRuntimeSpan) {
+    return runtime.withSentryRuntimeSpan(
+      {
+        name: "marketing.route.render.home",
+        op: "ui.server.render",
+        attributes: { route: "/", routeGroup: "marketing.default.home" },
+      },
+      renderHomePage,
+    );
+  }
+  return renderHomePage();
 }

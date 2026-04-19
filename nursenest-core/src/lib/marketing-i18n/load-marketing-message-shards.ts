@@ -1,6 +1,7 @@
 import "server-only";
 import { existsSync, statSync } from "fs";
 import path from "path";
+import { safeAwait } from "@/lib/async/safe-await";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
@@ -12,6 +13,18 @@ import { shouldBypassMarketingI18nAtStartup } from "@/lib/marketing-i18n/marketi
 import { coerceFlatMessageValue } from "@/lib/marketing-i18n/safe-marketing-messages";
 
 const mergedShardCache = new Map<string, MarketingMessages>();
+
+/**
+ * Hard cap for the async work inside `loadSharedMarketingMessagesOnce` (Sentry span + shard impl).
+ * On timeout we sync-fallback so the **deduped promise always settles** (never wedges waiters).
+ *
+ * Invariant: MUST be **strictly less** than every route-level `safeAwait(..., loadMarketingMessageShards(...))`
+ * budget that can race the same deduped promise (e.g. homepage body 2800ms in `page.tsx`, metadata and
+ * layout/main shard wrappers in `page.tsx`, `marketing-layout-chrome-messages.server.ts`,
+ * `marketing-main-i18n-shards.tsx`). Then the shared promise completes before callers hit their outer timeout,
+ * avoiding misleading `[timeout]` on the caller while the factory is still running.
+ */
+const MARKETING_SHARD_ASYNC_FACTORY_BUDGET_MS = 2500;
 
 /**
  * Stable string key for process-wide shard dedupe (layout, metadata, routes).
@@ -199,18 +212,28 @@ export async function loadMarketingMessageShards(
 ): Promise<MarketingMessages> {
   const key = marketingShardsAsyncCacheKey(locale, shards);
   return loadSharedMarketingMessagesOnce(`marketing_shards:${key}`, async () => {
-    if (!isSentryServerRuntimeEnabled()) {
-      return loadMarketingMessageShardsImpl(locale, shards);
+    const loadInner = async (): Promise<MarketingMessages> => {
+      if (!isSentryServerRuntimeEnabled()) {
+        return loadMarketingMessageShardsImpl(locale, shards);
+      }
+      const { withSentryServerSpan } = await import("@/lib/observability/sentry-route-observability");
+      return withSentryServerSpan(
+        {
+          name: "marketing.i18n.load_shards",
+          op: "resource.load",
+          attributes: { locale, shardCount: shards.length },
+        },
+        () => loadMarketingMessageShardsImpl(locale, shards),
+      );
+    };
+
+    const raced = await safeAwait(loadInner(), `marketing_shards.factory:${key}`, MARKETING_SHARD_ASYNC_FACTORY_BUDGET_MS);
+    if (raced != null) return raced;
+    try {
+      return loadMarketingMessageShardsSync(locale, shards);
+    } catch {
+      return loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards);
     }
-    const { withSentryServerSpan } = await import("@/lib/observability/sentry-route-observability");
-    return withSentryServerSpan(
-      {
-        name: "marketing.i18n.load_shards",
-        op: "resource.load",
-        attributes: { locale, shardCount: shards.length },
-      },
-      () => loadMarketingMessageShardsImpl(locale, shards),
-    );
   });
 }
 

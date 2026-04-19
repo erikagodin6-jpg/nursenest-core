@@ -60,7 +60,10 @@ function emit(event, meta = {}) {
   console.error(`[nursenest-core] startup_watchdog ${event} ${JSON.stringify({ ...meta, msSinceBoot: Date.now() - bootAt })}`);
 }
 
-/** TEMP: remove after diagnosing external /readyz vs bootstrap (logs stderr only for normalized `/readyz`). */
+/**
+ * Optional stderr breadcrumbs for `/readyz` while the public listener owns readiness gating.
+ * Emitted only for normalized `/readyz` (see `normalizeBootstrapProbePathname`).
+ */
 function isReadyzTraceRequest(req) {
   return normalizeBootstrapProbePathname(req) === readinessProbePath;
 }
