@@ -91,6 +91,24 @@ describe("marketing static generation policy", () => {
     }
   });
 
+  it("avoids merged marketing bundle loaders on shard-tightened marketing hotspots", () => {
+    const pages = [
+      "app/(marketing)/(default)/pricing/page.tsx",
+      "app/(marketing)/[locale]/pricing/page.tsx",
+      "app/(marketing)/(default)/question-bank/page.tsx",
+      "app/(marketing)/[locale]/question-bank/page.tsx",
+      "app/(marketing)/(default)/exams/india/page.tsx",
+      "app/(marketing)/[locale]/exams/india/page.tsx",
+    ];
+    const shardLoader = /loadMarketingLayoutShardsOverlay|loadMarketingMetadataMessages|loadMarketingMessageShards/;
+
+    for (const page of pages) {
+      const src = readAppFile(page);
+      assert.doesNotMatch(src, /loadMarketingMessages/, page);
+      assert.match(src, shardLoader, page);
+    }
+  });
+
   it("does not use deprecated next eslint build config", () => {
     const nextConfig = readFileSync(join(appRoot, "..", "next.config.ts"), "utf8");
     assert.doesNotMatch(nextConfig, /eslint:\s*\{/);

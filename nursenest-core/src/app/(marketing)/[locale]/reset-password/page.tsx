@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { MarketingResetPasswordPage } from "@/components/marketing/marketing-reset-password-page";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
@@ -9,11 +9,13 @@ type Props = {
   searchParams: Promise<{ token?: string }>;
 };
 
+const RESET_PASSWORD_META_KEYS = ["pages.resetPassword.metaTitle", "pages.resetPassword.metaDescription"] as const;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   return safeGenerateMetadata(
     async () => {
-      const m = await loadMarketingMessages(locale);
+      const m = await loadMarketingMetadataMessages(locale, [...RESET_PASSWORD_META_KEYS]);
       const title = m["pages.resetPassword.metaTitle"] ?? "Reset password";
       const description = m["pages.resetPassword.metaDescription"] ?? "Set a new NurseNest password";
       const alt = marketingAlternatesSharedPage(locale, "/reset-password");

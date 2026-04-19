@@ -2,22 +2,24 @@ import type { Metadata } from "next";
 import { MarketingLoginPage } from "@/components/marketing/marketing-login-page";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+
+const LOGIN_META_KEYS = ["pages.login.title", "pages.login.description"] as const;
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {
-      const m = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const m = await loadMarketingMetadataMessages(DEFAULT_MARKETING_LOCALE, [...LOGIN_META_KEYS]);
       const alt = marketingAlternatesSharedPage(DEFAULT_MARKETING_LOCALE, "/login");
       return {
-        title: m["pages.login.title"],
-        description: m["pages.login.description"],
+        title: m["pages.login.title"]!,
+        description: m["pages.login.description"]!,
         alternates: { canonical: alt.canonical, languages: alt.languages },
         robots: { index: false, follow: true },
         openGraph: {
-          title: m["pages.login.title"],
+          title: m["pages.login.title"]!,
           url: alt.canonical,
           type: "website",
         },

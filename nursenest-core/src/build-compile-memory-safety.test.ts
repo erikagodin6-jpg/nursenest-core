@@ -125,7 +125,7 @@ test("canonical destinations avoid eager learner nav imports in public marketing
     join(root, "src", "lib", "navigation", "canonical-destinations.ts"),
     "utf8",
   );
-  assert.doesNotMatch(canonicalDestinations, /^import .*@\/lib\/navigation\/learner-primary-nav["'];?$/m);
+  assert.doesNotMatch(canonicalDestinations, /^import\s+(?!type\b).*@\/lib\/navigation\/learner-primary-nav["'];?$/m);
   assert.match(canonicalDestinations, /getLearnerPrimaryNavModule/);
 });
 

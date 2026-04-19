@@ -2,22 +2,24 @@ import type { Metadata } from "next";
 import { MarketingForInstitutionsPage } from "@/components/marketing/marketing-for-institutions-page";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+
+const FOR_INSTITUTIONS_META_KEYS = ["pages.forInstitutions.title", "pages.forInstitutions.description"] as const;
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {
-      const m = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const m = await loadMarketingMetadataMessages(DEFAULT_MARKETING_LOCALE, [...FOR_INSTITUTIONS_META_KEYS]);
       const alt = marketingAlternatesSharedPage(DEFAULT_MARKETING_LOCALE, "/for-institutions");
       return {
-        title: m["pages.forInstitutions.title"],
-        description: m["pages.forInstitutions.description"],
+        title: m["pages.forInstitutions.title"]!,
+        description: m["pages.forInstitutions.description"]!,
         alternates: { canonical: alt.canonical, languages: alt.languages },
         openGraph: {
-          title: m["pages.forInstitutions.title"],
-          description: m["pages.forInstitutions.description"],
+          title: m["pages.forInstitutions.title"]!,
+          description: m["pages.forInstitutions.description"]!,
           url: alt.canonical,
           type: "website",
         },
