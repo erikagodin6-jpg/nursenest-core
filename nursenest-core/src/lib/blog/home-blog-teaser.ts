@@ -2,10 +2,8 @@ import "server-only";
 
 import type { BlogIndexPost } from "@/lib/blog/safe-blog-queries";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import {
-  captureSentrySoftError,
-  withSentryServerSpan,
-} from "@/lib/observability/sentry-route-observability";
+
+const homeBlogTeaserSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
 
 const HOME_BLOG_TEASER_SLOW_MS = 800;
 const HOME_BLOG_TEASER_TIMEOUT_MS = 1000;
@@ -15,7 +13,8 @@ const HOME_BLOG_TEASER_TIMEOUT_MS = 1000;
  * slow/failed DB read cannot fail the entire `/` render (crawl + first paint).
  */
 export async function loadHomeBlogTeaserPostsSafe(take: number): Promise<BlogIndexPost[]> {
-  return withSentryServerSpan(
+  const { withSentryRuntimeSpan, captureSentryRuntimeSoftError } = await homeBlogTeaserSentryRuntimePromise;
+  return withSentryRuntimeSpan(
     {
       name: "marketing.home.blog_teaser",
       op: "resource.load",
@@ -43,7 +42,7 @@ export async function loadHomeBlogTeaserPostsSafe(take: number): Promise<BlogInd
           ms: Date.now() - t0,
           detail: detail.slice(0, 200),
         });
-        captureSentrySoftError({
+        captureSentryRuntimeSoftError({
           scope: "marketing_home",
           event: "blog_teaser_failed",
           error: e,

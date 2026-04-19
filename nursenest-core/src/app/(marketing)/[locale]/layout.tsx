@@ -14,6 +14,9 @@ import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
+
+const marketingLocaleLayoutSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
+
 export const dynamic = "force-dynamic";
 
 export default async function MarketingLocaleLayout({
@@ -41,7 +44,7 @@ export default async function MarketingLocaleLayout({
       error: e instanceof Error ? e.message : String(e),
       locale,
     });
-    const { captureSentryRuntimeSoftError } = await import("@/lib/observability/sentry-runtime");
+    const { captureSentryRuntimeSoftError } = await marketingLocaleLayoutSentryRuntimePromise;
     captureSentryRuntimeSoftError({
       scope: "marketing_layout",
       event: "locale_chrome_failed",

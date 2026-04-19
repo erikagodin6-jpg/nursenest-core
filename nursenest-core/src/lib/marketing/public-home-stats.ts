@@ -16,13 +16,15 @@ import {
   getDegradedPublicHomeStatsFallback,
   type PublicHomeStatsPayload,
 } from "@/lib/marketing/public-home-stats-payload";
+import {
+  getHomeStatsMemoryState,
+  setHomeStatsMemorySnapshot,
+} from "@/lib/marketing/public-home-stats-memory";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 import { recordPaywallProofNeutral } from "@/lib/observability/production-signal-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import {
-  captureSentrySoftError,
-  withSentryServerSpan,
-} from "@/lib/observability/sentry-route-observability";
+
+const publicHomeStatsSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
 import { shouldBypassPublicHomeStatsDbAtStartup } from "@/lib/marketing/public-home-stats-startup";
 import { safePrismaCountTimeout, withPrismaReadFallbackTimeout } from "@/lib/prisma/safe-reads";
 
@@ -33,28 +35,7 @@ const HOME_STATS_HOMEPAGE_SHARED_CACHE_BUDGET_MS = 75;
 const HOME_STATS_HOMEPAGE_REFRESH_BUDGET_MS = 1200;
 const HOME_STATS_HOMEPAGE_REFRESH_COOLDOWN_MS = 15_000;
 
-type HomeStatsMemorySnapshot = {
-  payload: PublicHomeStatsPayload;
-  cachedAtMs: number;
-};
-
-type HomeStatsMemoryState = {
-  snapshot?: HomeStatsMemorySnapshot;
-  inflightRefresh?: Promise<void>;
-  lastRefreshStartedAtMs?: number;
-};
-
-type GlobalHomeStatsState = typeof globalThis & {
-  __nursenestHomeStatsMemoryState?: HomeStatsMemoryState;
-};
-
 const HOME_STATS_CACHE_TIMEOUT = Symbol("home_stats_cache_timeout");
-
-function getHomeStatsMemoryState(): HomeStatsMemoryState {
-  const globalState = globalThis as GlobalHomeStatsState;
-  globalState.__nursenestHomeStatsMemoryState ??= {};
-  return globalState.__nursenestHomeStatsMemoryState;
-}
 
 function hasMeaningfulPublicHomeStats(payload: PublicHomeStatsPayload): boolean {
   return payload.questionCount > 0 || payload.totalLessons > 0 || payload.registeredLearners > 0;
@@ -62,10 +43,6 @@ function hasMeaningfulPublicHomeStats(payload: PublicHomeStatsPayload): boolean 
 
 function isHomeStatsSnapshotFresh(cachedAtMs: number, nowMs = Date.now()): boolean {
   return nowMs - cachedAtMs < HOME_STATS_HOMEPAGE_MEMORY_TTL_MS;
-}
-
-function setHomeStatsMemorySnapshot(payload: PublicHomeStatsPayload, cachedAtMs = Date.now()): void {
-  getHomeStatsMemoryState().snapshot = { payload, cachedAtMs };
 }
 
 async function readSharedHomeStatsWithinBudget(timeoutMs: number): Promise<PublicHomeStatsPayload | typeof HOME_STATS_CACHE_TIMEOUT> {
@@ -133,7 +110,8 @@ function scheduleHomepageHomeStatsRefresh(trigger: string): void {
  * Use `getCachedPublicHomeStats` on the homepage / paywall to avoid duplicate DB work and “0 → value” flashes.
  */
 export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
-  return withSentryServerSpan(
+  const { withSentryRuntimeSpan, captureSentryRuntimeSoftError } = await publicHomeStatsSentryRuntimePromise;
+  return withSentryRuntimeSpan(
     {
       name: "marketing.home.public_stats",
       op: "db.query",
@@ -169,7 +147,7 @@ export async function getPublicHomeStats(): Promise<PublicHomeStatsPayload> {
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
         safeServerLog("prisma", "home_stats_threw", { message: msg.slice(0, 300) });
-        captureSentrySoftError({
+        captureSentryRuntimeSoftError({
           scope: "marketing_home",
           event: "public_stats_failed",
           error: e,

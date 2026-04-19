@@ -1,7 +1,6 @@
 import "server-only";
 import { existsSync, statSync } from "fs";
 import path from "path";
-import { cache } from "react";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
@@ -13,7 +12,11 @@ import { shouldBypassMarketingI18nAtStartup } from "@/lib/marketing-i18n/marketi
 
 const mergedShardCache = new Map<string, MarketingMessages>();
 
-/** Stable key for cross-boundary dedupe (layout vs page vs `generateMetadata`). */
+/**
+ * Stable string key for process-wide shard dedupe (layout, metadata, routes).
+ * Value-based on shard **names** only — not array identity — so callers can pass
+ * fresh `readonly` arrays (e.g. `lessonsPageMessageShards()`) without bypassing the cache.
+ */
 function marketingShardsAsyncCacheKey(locale: string, shards: readonly I18nShardFilename[]): string {
   return `${locale}|${shards.join(",")}`;
 }
@@ -131,16 +134,16 @@ async function loadMarketingMessageShardsImpl(
   return loadMarketingMessageShardsSync(locale, shards);
 }
 
-export const loadMarketingMessageShards = cache(async function loadMarketingMessageShards(
+/**
+ * Async shard loader — **single** process-wide dedupe via {@link loadSharedMarketingMessagesOnce}
+ * (do not wrap in `React.cache()`: it keys on array identity and breaks dedupe when callers pass
+ * freshly allocated shard arrays with the same logical list).
+ */
+export async function loadMarketingMessageShards(
   locale: string,
   shards: readonly I18nShardFilename[],
 ): Promise<MarketingMessages> {
   const key = marketingShardsAsyncCacheKey(locale, shards);
-  /**
-   * `React.cache()` does not always dedupe across `generateMetadata`, layouts, and route bodies.
-   * `loadSharedMarketingMessagesOnce` is module-scoped so concurrent callers await the same promise
-   * and avoid duplicate ~7k-key merges / JSON work on cold requests (e.g. `/`).
-   */
   return loadSharedMarketingMessagesOnce(`marketing_shards:${key}`, async () => {
     if (!isSentryServerRuntimeEnabled()) {
       return loadMarketingMessageShardsImpl(locale, shards);
@@ -155,4 +158,12 @@ export const loadMarketingMessageShards = cache(async function loadMarketingMess
       () => loadMarketingMessageShardsImpl(locale, shards),
     );
   });
-});
+}
+
+/** Canonical async entry — same implementation as {@link loadMarketingMessageShards}. */
+export function getMarketingShardBundle(
+  locale: string,
+  shards: readonly I18nShardFilename[],
+): Promise<MarketingMessages> {
+  return loadMarketingMessageShards(locale, shards);
+}

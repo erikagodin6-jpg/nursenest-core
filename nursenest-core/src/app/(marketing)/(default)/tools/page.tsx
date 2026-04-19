@@ -5,22 +5,26 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { renderTrace } from "@/lib/observability/render-trace";
-import { withSentryServerSpan } from "@/lib/observability/sentry-route-observability";
+import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
+
+export const dynamic = "force-dynamic";
+
+const toolsMarketingSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
 
 export async function generateMetadata(): Promise<Metadata> {
-  return withSentryServerSpan(
+  const { withSentryRuntimeSpan } = await toolsMarketingSentryRuntimePromise;
+  return withSentryRuntimeSpan(
     {
       name: "marketing.route.metadata.tools",
       op: "ui.server.metadata",
       attributes: { route: "/tools", routeGroup: "marketing.default.tools" },
     },
     async () => {
-      renderTrace("tools metadata start", { route: "/tools" });
+      layoutStderrTrace("marketing_tools", "tools metadata start", { route: "/tools" });
       return safeGenerateMetadata(
         async () => {
           const m = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-          renderTrace("tools metadata after inputs", {
+          layoutStderrTrace("marketing_tools", "tools metadata after inputs", {
             route: "/tools",
             messageCount: Object.keys(m).length,
           });
@@ -44,14 +48,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ToolsHubPage() {
-  return withSentryServerSpan(
+  const { withSentryRuntimeSpan } = await toolsMarketingSentryRuntimePromise;
+  return withSentryRuntimeSpan(
     {
       name: "marketing.route.render.tools",
       op: "ui.server.render",
       attributes: { route: "/tools", routeGroup: "marketing.default.tools" },
     },
     async () => {
-      renderTrace("tools page start", { route: "/tools" });
+      layoutStderrTrace("marketing_tools", "tools page start", { route: "/tools" });
       return (
         <>
           <ToolsHubClient />

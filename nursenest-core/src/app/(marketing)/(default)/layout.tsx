@@ -18,8 +18,9 @@ const MARKETING_BUILD_PHASE = "phase-production-build";
 /** Single module promise — avoids per-request `import()` bookkeeping on hot marketing layout path. */
 const marketingDefaultLayoutSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
 
+/** Keep `pages.*` off the layout merge; load under `<main>` via `MarketingMainI18nShards` (build + runtime). */
 function shouldLayerMainPageShards() {
-  return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE;
+  return true;
 }
 
 export default async function MarketingDefaultLocaleLayout({ children }: { children: React.ReactNode }) {

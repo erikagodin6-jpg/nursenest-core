@@ -1,6 +1,5 @@
 import "server-only";
 
-import { cache } from "react";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
@@ -20,7 +19,7 @@ const loadMarketingLayoutOverlayModuleCache = new Map<string, Promise<MarketingM
  * Loads only the `pages` shard for `locale`, plus English `pages` for missing-key resolution.
  * Prefer this over {@link loadMarketingMessages} when a route only needs `pages.*` keys.
  */
-export const loadMarketingPageBodyWithEnFallback = cache(async function loadMarketingPageBodyWithEnFallback(
+export async function loadMarketingPageBodyWithEnFallback(
   locale: string,
 ): Promise<{ primary: MarketingMessages; en: MarketingMessages }> {
   let p = loadMarketingPageBodyModuleCache.get(locale);
@@ -39,13 +38,13 @@ export const loadMarketingPageBodyWithEnFallback = cache(async function loadMark
     loadMarketingPageBodyModuleCache.set(locale, p);
   }
   return p;
-});
+}
 
 /**
  * English marketing chrome + `pages` shards, overlaid by the same shard set for `locale`.
  * Same intent as `{ ...enMessages, ...localeMessages }` from merged bundles, without loading monolith JSON.
  */
-export const loadMarketingLayoutShardsOverlay = cache(async function loadMarketingLayoutShardsOverlay(
+export async function loadMarketingLayoutShardsOverlay(
   locale: string,
 ): Promise<MarketingMessages> {
   let p = loadMarketingLayoutOverlayModuleCache.get(locale);
@@ -63,4 +62,4 @@ export const loadMarketingLayoutShardsOverlay = cache(async function loadMarketi
     loadMarketingLayoutOverlayModuleCache.set(locale, p);
   }
   return p;
-});
+}

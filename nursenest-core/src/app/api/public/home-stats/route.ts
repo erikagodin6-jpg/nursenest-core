@@ -7,13 +7,12 @@ import {
 } from "@/lib/marketing/public-home-stats";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
-import {
-  captureSentrySoftError,
-  withSentryServerSpan,
-} from "@/lib/observability/sentry-route-observability";
+import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
+import { SERVER_FEATURE } from "@/lib/observability/server-feature-tags";
 import { getOrSetJsonCache } from "@/lib/server/cache";
 import { safeJsonRoute } from "@/lib/server/safe-api-route";
+
+const publicHomeStatsApiSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
 
 /** Keep numeric literal — Next segment config must be statically analyzable (see `API_ROUTE_MAX_DURATION_PUBLIC_MARKETING_SEC`). */
 export const maxDuration = 30;
@@ -22,9 +21,13 @@ export const maxDuration = 30;
 export async function GET(req: NextRequest) {
   return runWithApiTelemetry(req, "GET /api/public/home-stats", "public", async () => {
     return safeJsonRoute("GET /api/public/home-stats", async () => {
-      setSentryServerContext({ route: "/api/public/home-stats", feature: SERVER_FEATURE.api });
+      if (isSentryServerRuntimeEnabled()) {
+        const { setSentryServerContext } = await import("@/lib/observability/sentry-server-context");
+        setSentryServerContext({ route: "/api/public/home-stats", feature: SERVER_FEATURE.api });
+      }
       try {
-        const data = await withSentryServerSpan(
+        const { withSentryRuntimeSpan } = await publicHomeStatsApiSentryRuntimePromise;
+        const data = await withSentryRuntimeSpan(
           {
             name: "api.public.home_stats.load",
             op: "http.server",
@@ -49,7 +52,8 @@ export async function GET(req: NextRequest) {
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
         safeServerLog("api", "public_home_stats_route_failed", { message: msg.slice(0, 200) });
-        captureSentrySoftError({
+        const { captureSentryRuntimeSoftError } = await publicHomeStatsApiSentryRuntimePromise;
+        captureSentryRuntimeSoftError({
           scope: "api_public_home_stats",
           event: "route_failed",
           error: e,

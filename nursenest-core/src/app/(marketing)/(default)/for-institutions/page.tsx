@@ -6,6 +6,9 @@ import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketi
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
+
+export const dynamic = "force-dynamic";
+
 const FOR_INSTITUTIONS_META_KEYS = ["pages.forInstitutions.title", "pages.forInstitutions.description"] as const;
 
 export async function generateMetadata(): Promise<Metadata> {

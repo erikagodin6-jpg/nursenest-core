@@ -8,6 +8,9 @@ import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 
 const MARKETING_MAIN_SHARDS_TIMEOUT_MS = 1200;
 
+/** Dedupe dev/build stderr traces — shard loads are already singleton via `loadSharedMarketingMessagesOnce`. */
+const marketingMainShardTraceLogged = new Set<string>();
+
 /**
  * Server-only: loads `pages.*` shard(s) and merges them into i18n context for subtree (typically `<main>`).
  * Keeps header/footer on the smaller chrome bundle from the parent layout.
@@ -19,7 +22,14 @@ export async function MarketingMainI18nShards({
   locale: string;
   children: ReactNode;
 }) {
-  layoutStderrTrace("marketing_main_shards", "marketing main shards start", { route: "shared-marketing-main", locale });
+  const traceKeyStart = `start:${locale}`;
+  if (!marketingMainShardTraceLogged.has(traceKeyStart)) {
+    marketingMainShardTraceLogged.add(traceKeyStart);
+    layoutStderrTrace("marketing_main_shards", "marketing main shards start", {
+      route: "shared-marketing-main",
+      locale,
+    });
+  }
   const primary =
     (await safeAwait(
       loadMarketingMessageShards(locale, MARKETING_PAGE_BODY_MESSAGE_SHARDS),
@@ -34,12 +44,16 @@ export async function MarketingMainI18nShards({
           `marketing_main_shards.fallback:${DEFAULT_MARKETING_LOCALE}`,
           MARKETING_MAIN_SHARDS_TIMEOUT_MS,
         )) ?? undefined);
-  layoutStderrTrace("marketing_main_shards", "marketing main shards after load", {
-    route: "shared-marketing-main",
-    locale,
-    primaryCount: Object.keys(primary).length,
-    fallbackCount: fallback ? Object.keys(fallback).length : 0,
-  });
+  const traceKeyAfter = `after:${locale}`;
+  if (!marketingMainShardTraceLogged.has(traceKeyAfter)) {
+    marketingMainShardTraceLogged.add(traceKeyAfter);
+    layoutStderrTrace("marketing_main_shards", "marketing main shards after load", {
+      route: "shared-marketing-main",
+      locale,
+      primaryCount: Object.keys(primary).length,
+      fallbackCount: fallback ? Object.keys(fallback).length : 0,
+    });
+  }
   return (
     <MarketingI18nShardLayer messages={primary} fallbackMessages={fallback}>
       {children}

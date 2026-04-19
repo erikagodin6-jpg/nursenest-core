@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Suspense } from "react";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { MARKETING_HOME_FAQ_JSONLD } from "@/lib/seo/marketing-home-faq-schema";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import HomeRestoredClient from "@/components/marketing/home-restored-client";
-import { getDegradedPublicHomeStatsFallback } from "@/lib/marketing/public-home-stats-payload";
+import { HomeRestoredWithDeferredStats } from "@/components/marketing/home-restored-with-deferred-stats.server";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
-import { getMarketingDefaultLayoutChromeMessages } from "@/lib/marketing-i18n/marketing-layout-chrome-messages.server";
 import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
@@ -18,8 +16,10 @@ import { resolveMarketingCopy, type MarketingMessages } from "@/lib/marketing-i1
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { ExamSelectorGateLazy } from "@/components/onboarding/exam-selector-gate-lazy";
-import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
-import { loadHomeBlogTeaserPostsSafe } from "@/lib/blog/home-blog-teaser";
+import {
+  HomeBlogTeaserSectionAsync,
+  HomeBlogTeaserSectionShell,
+} from "@/components/marketing/home-blog-teaser-section.server";
 import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 
@@ -43,7 +43,14 @@ const HOME_FALLBACK_METADATA: Metadata = {
   },
 };
 
+/**
+ * Optional DB/blog reads on `/` — default unchanged when unset.
+ * Set `MARKETING_HOME_SKIP_OPTIONAL_DB=true` or `false` to override explicitly.
+ */
 function shouldSkipOptionalMarketingDbReads(): boolean {
+  const raw = process.env.MARKETING_HOME_SKIP_OPTIONAL_DB?.trim().toLowerCase();
+  if (raw === "true") return true;
+  if (raw === "false") return false;
   return (
     process.env.NEXT_PHASE === MARKETING_BUILD_PHASE ||
     (process.env.NODE_ENV === "production" && process.env.CI !== "1")
@@ -51,23 +58,12 @@ function shouldSkipOptionalMarketingDbReads(): boolean {
 }
 
 /**
- * Runtime `/`: same merged shard bundle as `(marketing)/(default)/layout` (singleton in
- * `getMarketingDefaultLayoutChromeMessages`) — avoids a second merge / parse after layout warmed it.
- * Build prerender: pages shard only (layout uses lighter chrome set during `phase-production-build`).
+ * `pages.*` only for server-rendered home surfaces (metadata, JSON-LD, blog shell).
+ * Layout supplies chrome shards; `MarketingMainI18nShards` under `<main>` merges the same
+ * `pages` shard for the client tree (shared async + merged JSON cache).
  */
 async function loadHomePageMarketingMessagesForRequest(): Promise<MarketingMessages> {
-  if (process.env.NEXT_PHASE === MARKETING_BUILD_PHASE) {
-    return loadMarketingMessageShards(STATIC_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
-  }
-  return getMarketingDefaultLayoutChromeMessages();
-}
-
-async function loadHomePageStats(skipOptionalDbReads: boolean) {
-  if (skipOptionalDbReads) {
-    return getDegradedPublicHomeStatsFallback("production_request_optional_db_skipped");
-  }
-  const { getHomepagePublicHomeStats } = await import("@/lib/marketing/public-home-stats");
-  return getHomepagePublicHomeStats();
+  return loadMarketingMessageShards(STATIC_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -124,24 +120,16 @@ export default async function HomePage() {
     async () => {
       layoutStderrTrace("marketing_home", "home page start", { route: "/" });
       const skipOptionalDbReads = shouldSkipOptionalMarketingDbReads();
-      const [homeStatsRaw, m, publishedGlobalRegionCardIds, blogTeaserPosts] = await Promise.all([
-        loadHomePageStats(skipOptionalDbReads),
+      const [m, publishedGlobalRegionCardIds] = await Promise.all([
         loadHomePageMarketingMessagesForRequest(),
         Promise.resolve(listPublishedHomeGlobalRegionCardIds()),
-        skipOptionalDbReads ? Promise.resolve([]) : loadHomeBlogTeaserPostsSafe(3),
       ]);
-      layoutStderrTrace("marketing_home", "home page after data", {
+      layoutStderrTrace("marketing_home", "home page after shell data", {
         route: "/",
-        degraded: Boolean(homeStatsRaw.degraded),
-        blogCount: blogTeaserPosts.length,
+        stats: skipOptionalDbReads ? "sync_optional_db_skipped" : "deferred",
         regionCardCount: publishedGlobalRegionCardIds.length,
         optionalDbSkipped: skipOptionalDbReads,
       });
-      const homeMarketingStats = {
-        questionCount: homeStatsRaw.questionCount,
-        registeredLearners: homeStatsRaw.registeredLearners,
-        totalLessons: homeStatsRaw.totalLessons,
-      };
       const title = resolveMarketingCopy(m, "pages.home.metaTitleUS", m, defaultHomeMetaTitle(STATIC_REGION));
       const description = resolveMarketingCopy(
         m,
@@ -167,33 +155,17 @@ export default async function HomePage() {
               <BreadcrumbTrail items={crumbs} />
             </div>
           ) : null}
-          <HomeRestoredClient
-            homeMarketingStats={homeMarketingStats}
+          <HomeRestoredWithDeferredStats
+            skipOptionalDbReads={skipOptionalDbReads}
             publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
           />
-          <section className="mx-auto mt-6 w-full max-w-7xl px-4 pb-2 sm:px-6 lg:px-8">
-            <div className="nn-card border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-5">
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">
-                    {resolveMarketingCopy(m, "pages.home.blogTeaser.title", undefined, "")}
-                  </h2>
-                  <p className="mt-1 max-w-prose text-sm text-[var(--theme-muted-text)]">
-                    {resolveMarketingCopy(m, "pages.home.blogTeaser.subtitle", undefined, "")}
-                  </p>
-                </div>
-                <Link href="/blog" className="shrink-0 text-sm font-semibold text-primary hover:underline">
-                  {resolveMarketingCopy(m, "pages.home.blogTeaser.viewAll", undefined, "")}
-                </Link>
-              </div>
-              <MarketingBlogLatestLinks
-                take={3}
-                posts={blogTeaserPosts}
-                className="mt-4 border-t border-[var(--border-subtle)] pt-4"
-                heading={resolveMarketingCopy(m, "pages.home.blogTeaser.latestHeading", undefined, "")}
-              />
-            </div>
-          </section>
+          {skipOptionalDbReads ? (
+            <HomeBlogTeaserSectionShell m={m} posts={[]} />
+          ) : (
+            <Suspense fallback={<HomeBlogTeaserSectionShell m={m} posts={[]} />}>
+              <HomeBlogTeaserSectionAsync m={m} />
+            </Suspense>
+          )}
           <ExamSelectorGateLazy />
         </>
       );

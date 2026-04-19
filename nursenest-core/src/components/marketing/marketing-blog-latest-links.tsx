@@ -15,32 +15,29 @@ type Props = {
   posts?: BlogIndexPost[];
 };
 
-/**
- * Crawl-friendly internal links to the newest published blog posts.
- * Used on high-authority marketing surfaces (home, lessons, pathway hubs).
- */
-export async function MarketingBlogLatestLinks({ take = 3, className, heading, posts: postsProp }: Props) {
+/** Sync list render when posts are already loaded (e.g. homepage Suspense streaming). */
+export function MarketingBlogLatestLinksWithPosts({
+  take = 3,
+  className,
+  heading,
+  posts,
+}: {
+  take?: number;
+  className?: string;
+  heading?: string;
+  posts: BlogIndexPost[];
+}) {
   const safeTake = Math.min(6, Math.max(1, Math.floor(take)));
-  const posts =
-    postsProp !== undefined
-      ? postsProp.slice(0, safeTake)
-      : (
-          await (await import("@/lib/blog/safe-blog-queries")).getPublishedBlogPostsPage(
-            1,
-            safeTake,
-            undefined,
-            { includeTotal: false },
-          )
-        ).posts;
-  if (posts.length === 0) return null;
+  const sliced = posts.slice(0, safeTake);
+  if (sliced.length === 0) return null;
 
-  logBlogLatestLinkHrefs(posts.map((p) => `/blog/${encodeURIComponent(p.slug)}`));
+  logBlogLatestLinkHrefs(sliced.map((p) => `/blog/${encodeURIComponent(p.slug)}`));
 
   return (
     <div className={className}>
       {heading ? <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">{heading}</p> : null}
       <ul className="mt-2 flex flex-col gap-1.5 text-sm">
-        {posts.map((p) => (
+        {sliced.map((p) => (
           <li key={p.slug}>
             <Link href={`/blog/${encodeURIComponent(p.slug)}`} className="font-medium text-primary hover:underline">
               {p.title}
@@ -50,4 +47,24 @@ export async function MarketingBlogLatestLinks({ take = 3, className, heading, p
       </ul>
     </div>
   );
+}
+
+/**
+ * Crawl-friendly internal links to the newest published blog posts.
+ * Used on high-authority marketing surfaces (home, lessons, pathway hubs).
+ */
+export async function MarketingBlogLatestLinks({ take = 3, className, heading, posts: postsProp }: Props) {
+  const safeTake = Math.min(6, Math.max(1, Math.floor(take)));
+  if (postsProp !== undefined) {
+    return <MarketingBlogLatestLinksWithPosts take={take} className={className} heading={heading} posts={postsProp} />;
+  }
+  const posts = (
+    await (await import("@/lib/blog/safe-blog-queries")).getPublishedBlogPostsPage(
+      1,
+      safeTake,
+      undefined,
+      { includeTotal: false },
+    )
+  ).posts;
+  return <MarketingBlogLatestLinksWithPosts take={take} className={className} heading={heading} posts={posts} />;
 }

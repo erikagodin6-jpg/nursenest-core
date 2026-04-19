@@ -6,7 +6,6 @@ import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-
 import {
   MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS,
   MARKETING_CHROME_MESSAGE_SHARDS,
-  MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
 } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 
 const MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS = 1200;
@@ -15,7 +14,7 @@ const MARKETING_BUILD_PHASE = "phase-production-build";
 function defaultLayoutShardList() {
   return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE
     ? MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS
-    : MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS;
+    : MARKETING_CHROME_MESSAGE_SHARDS;
 }
 
 type DefaultChromeState = {
@@ -32,6 +31,8 @@ const defaultChromeState: DefaultChromeState = {
 
 /**
  * Singleton chrome bundle for `(marketing)/(default)` layout — loader runs here, not in `layout.tsx`.
+ * Runtime uses `MARKETING_CHROME_MESSAGE_SHARDS` only; `pages.*` loads under `<main>` via
+ * `MarketingMainI18nShards`.
  */
 export async function getMarketingDefaultLayoutChromeMessages(): Promise<Record<string, string>> {
   const shards = defaultLayoutShardList();

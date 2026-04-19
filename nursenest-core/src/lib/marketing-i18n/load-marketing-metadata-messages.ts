@@ -1,7 +1,6 @@
 import { cache } from "react";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import type { I18nShardFilename } from "@shared/i18n-shard-policy";
-import { loadSharedMarketingMessagesOnce } from "@/lib/marketing-i18n/shared-marketing-message-cache";
 import { loadMarketingMessageShards, loadMarketingMessageShardsSync } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 
@@ -56,14 +55,12 @@ export function loadMarketingMetadataMessagesSync(
   return mergeMetadataKeys(primary, fallback, keys);
 }
 
+/** Uses the same async path + process cache as layout/routes — no second `loadSharedMarketingMessagesOnce` layer. */
 async function loadMetadataShard(
   locale: string,
   shards: readonly I18nShardFilename[],
 ): Promise<Record<string, string>> {
-  const shardKey = shards.join(",");
-  return loadSharedMarketingMessagesOnce(`marketing-metadata-shards:${locale}:${shardKey}`, async () => {
-    return (await loadMarketingMessageShards(locale, shards)) ?? {};
-  });
+  return (await loadMarketingMessageShards(locale, shards)) ?? {};
 }
 
 const metadataPickedResolved = new Map<string, Record<string, string>>();

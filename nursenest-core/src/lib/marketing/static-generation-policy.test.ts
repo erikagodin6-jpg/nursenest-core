@@ -23,7 +23,11 @@ describe("marketing static generation policy", () => {
   it("uses build-phase DB skipping on the default homepage shell", () => {
     const homePage = readAppFile("app/(marketing)/(default)/page.tsx");
 
-    assert.match(homePage, /process\.env\.NEXT_PHASE === "phase-production-build"/);
+    assert.match(
+      homePage,
+      /process\.env\.NEXT_PHASE === (?:MARKETING_BUILD_PHASE|"phase-production-build")/,
+      "home page should gate optional DB reads on the production build phase",
+    );
   });
 
   it("uses shard-based marketing i18n loaders on fixed default home and lessons surfaces", () => {
