@@ -4,7 +4,6 @@ import { LearnerShellUserBar } from "@/components/auth/learner-shell-user-bar";
 import { LearnerShellLanguageControl } from "@/components/student/learner-shell-language-control";
 import { CheckoutSuccessBanner } from "@/components/student/checkout-success-banner";
 import { LearnerExamChromeGate } from "@/components/exam/learner-exam-chrome";
-import { LearnerStudyNextBlock } from "@/components/student/learner-study-next-block";
 import { LearnerThemeControl } from "@/components/student/learner-theme-control";
 import { LearnerAppSectionAnalytics } from "@/components/observability/learner-app-section-analytics";
 import { SentryLearnerShell } from "@/components/observability/sentry-learner-shell";
@@ -36,7 +35,6 @@ import {
   learnerShellShouldDisablePageTransition,
 } from "@/lib/motion/page-transition-shell";
 import { isLearnerTutorShellEnabled } from "@/lib/learner/tutor/learner-tutor-policy";
-import { LearnerTutorShell } from "@/components/learner-tutor";
 import { LearnerFeedbackShell } from "@/components/feedback/learner-feedback-shell";
 import { UserFeedbackNavPill } from "@/components/feedback/user-feedback-nav-pill";
 import { LearnerExamStudyProviders } from "@/components/exam/learner-exam-study-providers";
@@ -166,6 +164,14 @@ export default async function LearnerShellLayout({ children }: { children: React
       ? { pathwayId, pathwayLabel: pathwayShortLabel }
       : null;
 
+  // Keep optional shell features out of the shared learner layout graph unless the current request needs them.
+  const LearnerStudyNextBlockComponent = studyNextBlock
+    ? (await import("@/components/student/learner-study-next-block")).LearnerStudyNextBlock
+    : null;
+  const LearnerTutorShellComponent = tutorContext
+    ? (await import("@/components/learner-tutor")).LearnerTutorShell
+    : null;
+
   return (
     <SentryLearnerShell userId={userId}>
       <PaywallHomeStatsProvider value={paywallHomeStats}>
@@ -225,7 +231,9 @@ export default async function LearnerShellLayout({ children }: { children: React
                         />
                       }
                     >
-                      <LearnerStudyNextBlock model={studyNextBlock} />
+                      {LearnerStudyNextBlockComponent ? (
+                        <LearnerStudyNextBlockComponent model={studyNextBlock} />
+                      ) : null}
                     </Suspense>
                   </div>
                 </LearnerSilentSectionBoundary>
@@ -249,7 +257,7 @@ export default async function LearnerShellLayout({ children }: { children: React
               </PageTransitionShell>
               {tutorContext ? (
                 <LearnerSilentSectionBoundary name="tutor">
-                  <LearnerTutorShell context={tutorContext} />
+                  {LearnerTutorShellComponent ? <LearnerTutorShellComponent context={tutorContext} /> : null}
                 </LearnerSilentSectionBoundary>
               ) : null}
             </div>

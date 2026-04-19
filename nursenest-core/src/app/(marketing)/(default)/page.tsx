@@ -19,7 +19,7 @@ import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-js
 import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { ExamSelectorGate } from "@/components/onboarding/exam-selector-gate";
+import { ExamSelectorGateLazy } from "@/components/onboarding/exam-selector-gate-lazy";
 import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
 import { loadHomeBlogTeaserPostsSafe } from "@/lib/blog/home-blog-teaser";
 import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
@@ -187,7 +187,7 @@ export default async function HomePage() {
               />
             </div>
           </section>
-          <ExamSelectorGate />
+          <ExamSelectorGateLazy />
         </>
       );
     },

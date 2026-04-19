@@ -147,6 +147,27 @@ test("home and paywall shells lazy-load public home stats instead of importing t
   assert.match(paywallHomeStats, /await import\(["']@\/lib\/marketing\/public-home-stats["']\)/);
 });
 
+test("homepage defers the anonymous exam selector gate behind a tiny lazy wrapper", () => {
+  const defaultHomePage = readAppFile("app/(marketing)/(default)/page.tsx");
+  const deferredGate = readAppFile("components/onboarding/exam-selector-gate-lazy.tsx");
+
+  assert.doesNotMatch(defaultHomePage, /from ["']@\/components\/onboarding\/exam-selector-gate["']/);
+  assert.match(defaultHomePage, /@\/components\/onboarding\/exam-selector-gate-lazy/);
+
+  assert.match(deferredGate, /dynamic\(/);
+  assert.match(deferredGate, /@\/components\/onboarding\/exam-selector-gate/);
+  assert.match(deferredGate, /ssr:\s*false/);
+});
+
+test("learner shell defers optional study-next and tutor chrome until the request needs them", () => {
+  const learnerShellLayout = readAppFile("app/(student)/app/(learner)/layout.tsx");
+
+  assert.doesNotMatch(learnerShellLayout, /from ["']@\/components\/student\/learner-study-next-block["']/);
+  assert.doesNotMatch(learnerShellLayout, /from ["']@\/components\/learner-tutor["']/);
+  assert.match(learnerShellLayout, /await import\(["']@\/components\/student\/learner-study-next-block["']\)/);
+  assert.match(learnerShellLayout, /await import\(["']@\/components\/learner-tutor["']\)/);
+});
+
 test("ops lesson helpers use loader config without importing the full loader", () => {
   const sourcePaths = [
     "lib/lessons/pathway-lesson-registry-source.ts",

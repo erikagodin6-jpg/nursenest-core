@@ -58,6 +58,7 @@ import {
 } from "@/lib/marketing/published-regional-marketing-urls";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { stripForbiddenLocalePrefixedPathwayTopics } from "@/lib/seo/sitemap-locale-prefixed-path-guard";
+import { shouldReduceNonCriticalBuildWork } from "@/lib/build/build-safe-mode";
 
 /** Locales included in merged urlset tooling (tier=full only); sorted for deterministic URL lists. */
 const SORTED_SITEMAP_LOCALES = [...getSitemapIncludedLocales()].sort();
@@ -252,6 +253,7 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     const p = path.startsWith("/") ? path : `/${path}`;
     return `${o}${p}`;
   };
+  const reduceForBuildSafeMode = shouldReduceNonCriticalBuildWork();
   /** Regional long-tail URLs (not `/exams/…` hubs — those come from {@link listPublishedExpansionExamMarketingPaths}). */
   const regionalTopicPaths = [
     "/india/nursing-exams",
@@ -298,7 +300,6 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     add("/"),
     add("/about"),
     add("/question-bank"),
-    ...getAllProgrammaticQuestionTopicSlugs().map((s) => add(`/questions/${s}`)),
     add("/practice-exams"),
     add("/lessons"),
     add("/pricing"),
@@ -313,6 +314,16 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     add("/editorial-policy"),
     add("/content-review-policy"),
     add("/contact"),
+  ];
+  if (reduceForBuildSafeMode) {
+    safeServerLog("seo", "sitemap_build_safe_mode_core_only", {
+      reason: "nn_build_safe_mode",
+    });
+    return base;
+  }
+  const expandedBase = [
+    ...base,
+    ...getAllProgrammaticQuestionTopicSlugs().map((s) => add(`/questions/${s}`)),
     add("/tools"),
     add("/case-studies"),
     ...listPublishedExpansionExamMarketingPaths().map((p) => add(p)),
@@ -320,7 +331,7 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
   ];
   const lessonUrls = await collectPathwayLessonSeoUrls(o);
   return [
-    ...base,
+    ...expandedBase,
     ...collectExamPathwayUrls(o),
     ...collectNpPracticeTestHubUrls(o),
     ...collectPathwayTopicProgrammaticUrls(o),

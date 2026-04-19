@@ -7,6 +7,12 @@ Canonical validation: `src/lib/env/production-env-guard.ts` (startup) + `src/lib
 
 - **`NN_STRICT_PRODUCTION_ENV`**: set to `1` / `true` in production to **exit the process** if any **critical** env check fails. Use in CI or after confirming all vars are set. Omit or `0` to only log warnings (default).
 
+## Build safety
+
+| Variable | Purpose |
+|----------|---------|
+| `NN_BUILD_SAFE_MODE` | Build-only fallback for `next build`. When set to `1` / `true`, the app keeps core runtime behavior unchanged but trims non-critical sitemap fan-out during build: long-tail question-topic URLs, tools/detail URLs, locale-marketing sitemap slices, long-tail regional/exam/programmatic SEO expansions, and blog/localized-blog sitemap enrichment. Keep this as a **build-time** env in DigitalOcean App Platform. |
+
 ## Naming and environments
 
 | Canonical | Legacy / alias | Notes |

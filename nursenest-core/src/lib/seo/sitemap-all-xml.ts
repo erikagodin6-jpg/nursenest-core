@@ -3,6 +3,7 @@ import "server-only";
 import { listBlogSitemapEntriesSafe } from "@/lib/seo/sitemap-blog-xml";
 import { listLocalizedBlogSitemapEntriesSafe } from "@/lib/seo/sitemap-localized-blog-xml";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { shouldReduceNonCriticalBuildWork } from "@/lib/build/build-safe-mode";
 import { shouldSkipDbBackedSitemapUrlsForBuild } from "@/lib/seo/sitemap-build-skip";
 import {
   buildSitemapUrlsetFromAbsoluteUrls,
@@ -39,6 +40,7 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
     const allStatic = new Set<string>();
     const blogEntries = new Map<string, string | undefined>();
     const skipDbBackedEntries = shouldSkipDbBackedSitemapUrlsForBuild();
+    const reduceForBuildSafeMode = shouldReduceNonCriticalBuildWork();
 
     const pushStatic = (url: string) => {
       const r = isValidPublicUrl(url, { origin });
@@ -66,25 +68,31 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
 
     const [coreUrls, blogSitemapEntries, localizedBlogSitemapEntries] = await Promise.all([
       collectCoreUrls(origin),
-      skipDbBackedEntries ? Promise.resolve<SitemapUrlEntry[]>([]) : listBlogSitemapEntriesSafe(),
-      skipDbBackedEntries ? Promise.resolve<SitemapUrlEntry[]>([]) : listLocalizedBlogSitemapEntriesSafe(),
+      skipDbBackedEntries || reduceForBuildSafeMode
+        ? Promise.resolve<SitemapUrlEntry[]>([])
+        : listBlogSitemapEntriesSafe(),
+      skipDbBackedEntries || reduceForBuildSafeMode
+        ? Promise.resolve<SitemapUrlEntry[]>([])
+        : listLocalizedBlogSitemapEntriesSafe(),
     ]);
 
     for (const url of coreUrls) {
       pushStatic(url);
     }
 
-    for (const url of collectSeoPagesUrls(origin)) {
-      pushStatic(url);
-    }
-
-    for (const url of collectToolsUrls(origin)) {
-      pushStatic(url);
-    }
-
-    for (const locale of getSitemapIncludedLocales()) {
-      for (const url of collectLocaleMarketingUrls(origin, locale)) {
+    if (!reduceForBuildSafeMode) {
+      for (const url of collectSeoPagesUrls(origin)) {
         pushStatic(url);
+      }
+
+      for (const url of collectToolsUrls(origin)) {
+        pushStatic(url);
+      }
+
+      for (const locale of getSitemapIncludedLocales()) {
+        for (const url of collectLocaleMarketingUrls(origin, locale)) {
+          pushStatic(url);
+        }
       }
     }
 
@@ -145,6 +153,7 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
       staticCount: String(allStatic.size),
       mergedTotal: String(merged.length),
       dbBackedEntriesSkipped: skipDbBackedEntries ? "1" : "0",
+      buildSafeMode: reduceForBuildSafeMode ? "1" : "0",
     });
 
     if (isSeoHttpValidationEnabled()) {
