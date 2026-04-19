@@ -1,5 +1,6 @@
 import { isExamHubMarketingPath, isExpansionExamMarketingPath } from "@/lib/i18n/exam-hub-path";
 import { DEFAULT_MARKETING_LOCALE, isMarketingLocaleCode } from "@/lib/i18n/marketing-locale-policy";
+import { stripMarketingLocalePrefix } from "@/lib/i18n/marketing-locale-prefix";
 
 /**
  * Prefix a same-origin marketing path with `/[lang]` when UI language is not English and the target
@@ -27,15 +28,4 @@ export function withMarketingLocale(locale: string, href: string): string {
 /** Alias for readability where “locale” is not in scope. */
 export function internalMarketingHref(href: string): string {
   return withMarketingLocale(DEFAULT_MARKETING_LOCALE, href);
-}
-
-export function stripMarketingLocalePrefix(pathname: string): { locale: string; pathname: string } {
-  const p = pathname.startsWith("/") ? pathname : `/${pathname}`;
-  const parts = p.split("/").filter(Boolean);
-  const first = parts[0];
-  if (first && isMarketingLocaleCode(first) && first !== DEFAULT_MARKETING_LOCALE) {
-    const rest = parts.length > 1 ? `/${parts.slice(1).join("/")}` : "/";
-    return { locale: first, pathname: rest };
-  }
-  return { locale: DEFAULT_MARKETING_LOCALE, pathname: p === "" ? "/" : p };
 }

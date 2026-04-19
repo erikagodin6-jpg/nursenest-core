@@ -4,7 +4,7 @@
  * User-visible failure signals for Sentry (tags + contexts). Use when the UI is wrong, empty, or stuck.
  * Pair with Session Replay; never put secrets or full PII in `message` / `extra`.
  */
-import { stripMarketingLocalePrefix } from "@/lib/i18n/marketing-path";
+import { stripMarketingLocalePrefix } from "@/lib/i18n/marketing-locale-prefix";
 import { readMarketingRegionFromDocument } from "@/lib/observability/learner-analytics-context.client";
 
 type SentryScope = import("@sentry/nextjs").Scope;

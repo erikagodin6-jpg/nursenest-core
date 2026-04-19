@@ -65,13 +65,20 @@ test("staff-session defers heavy auth and role-source imports", () => {
 test("auth runtime defers optional Sentry import", () => {
   const auth = readFileSync(join(root, "src", "lib", "auth.ts"), "utf8");
   assert.doesNotMatch(auth, /^import \* as Sentry from ["']@sentry\/nextjs["'];?$/m);
-  assert.match(auth, /import\(["']@sentry\/nextjs["']\)/);
+  assert.doesNotMatch(auth, /import\(["']@sentry\/nextjs["']\)/);
+  assert.match(auth, /loadSentryAuthSdk/);
 });
 
 test("sentry metrics helper defers core SDK import", () => {
   const sentryMetrics = readFileSync(join(root, "src", "lib", "observability", "sentry-metrics.ts"), "utf8");
   assert.doesNotMatch(sentryMetrics, /^import .*@sentry\/core["'];?$/m);
   assert.match(sentryMetrics, /import\(["']@sentry\/core["']\)/);
+});
+
+test("safe server log keeps optional Sentry load opaque to build-time tracing", () => {
+  const safeServerLog = readFileSync(join(root, "src", "lib", "observability", "safe-server-log.ts"), "utf8");
+  assert.doesNotMatch(safeServerLog, /import\(["']@sentry\/nextjs["']\)/);
+  assert.match(safeServerLog, /loadSentryServerSdk/);
 });
 
 test("on-demand marketing routes do not keep empty generateStaticParams exports", () => {
@@ -85,6 +92,20 @@ test("root app error boundary defers optional Sentry import", () => {
   const appError = readFileSync(join(root, "src", "app", "error.tsx"), "utf8");
   assert.doesNotMatch(appError, /^import \* as Sentry from ["']@sentry\/nextjs["'];?$/m);
   assert.match(appError, /import\(["']@sentry\/nextjs["']\)/);
+});
+
+test("safe server log helper avoids async Sentry import in shared build graph", () => {
+  const safeServerLog = readFileSync(join(root, "src", "lib", "observability", "safe-server-log.ts"), "utf8");
+  assert.doesNotMatch(safeServerLog, /import\(["']@sentry\/nextjs["']\)/);
+  assert.match(safeServerLog, /loadSentryServerSdk/);
+});
+
+test("root not-found page defers auth-bound resume imports during build", () => {
+  const notFound = readFileSync(join(root, "src", "app", "not-found.tsx"), "utf8");
+  assert.doesNotMatch(notFound, /^import .*@\/lib\/auth["'];?$/m);
+  assert.doesNotMatch(notFound, /^import .*@\/lib\/ui\/not-found-resume["'];?$/m);
+  assert.match(notFound, /import\(["']@\/lib\/auth["']\)/);
+  assert.match(notFound, /import\(["']@\/lib\/ui\/not-found-resume["']\)/);
 });
 
 test("shared app layouts defer admin palette and learner bundle loaders", () => {

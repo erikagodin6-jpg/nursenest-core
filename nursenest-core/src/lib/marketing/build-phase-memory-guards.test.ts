@@ -54,6 +54,20 @@ test("next config keeps webpack memory guards enabled during custom builds", () 
   assert.match(nextConfig, /config\.parallelism = 1/);
 });
 
+test("pre-nursing i18n provider avoids top-level JSON imports", () => {
+  const source = readAppFile("content/pre-nursing/pre-nursing-i18n.tsx");
+
+  assert.doesNotMatch(source, /import strings from ["']\.\/pre-nursing-strings-en\.json["']/);
+  assert.match(source, /require\(["']\.\/pre-nursing-strings-en\.json["']\)/);
+});
+
+test("root ux tracking avoids broad marketing path imports", () => {
+  const uxTracking = readAppFile("lib/observability/frontend-ux-tracking.ts");
+
+  assert.doesNotMatch(uxTracking, /@\/lib\/i18n\/marketing-path/);
+  assert.match(uxTracking, /@\/lib\/i18n\/marketing-locale-prefix/);
+});
+
 test("admin blueprint coverage page avoids top-level catalog JSON imports", () => {
   const adminBlueprintPage = readAppFile("app/(admin)/admin/lessons/blueprint-coverage/page.tsx");
 

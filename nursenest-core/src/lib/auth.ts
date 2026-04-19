@@ -161,10 +161,31 @@ function rejectCredentialsOrNull(code: string): null {
   return null;
 }
 
+type SentryAuthSdk = {
+  captureMessage: (message: string, options: { level: "warning"; tags: Record<string, string> }) => void;
+};
+
+let sentryAuthSdkPromise: Promise<SentryAuthSdk | null> | null = null;
+
+function loadSentryAuthSdk(): Promise<SentryAuthSdk | null> {
+  if (process.env.SENTRY_ENABLED !== "true") return Promise.resolve(null);
+  if (sentryAuthSdkPromise) return sentryAuthSdkPromise;
+  sentryAuthSdkPromise = Promise.resolve().then(() => {
+    try {
+      const sentryModuleId = ["@sentry", "nextjs"].join("/");
+      return require(sentryModuleId) as SentryAuthSdk;
+    } catch {
+      return null;
+    }
+  });
+  return sentryAuthSdkPromise;
+}
+
 function captureAuthWarningSentry(message: string, options: { level: "warning"; tags: Record<string, string> }): void {
-  void import("@sentry/nextjs")
-    .then(({ captureMessage }) => {
-      captureMessage(message, options);
+  void loadSentryAuthSdk()
+    .then((Sentry) => {
+      if (!Sentry) return;
+      Sentry.captureMessage(message, options);
     })
     .catch(() => {});
 }

@@ -1,15 +1,21 @@
 "use client";
 
 import * as React from "react";
-import strings from "./pre-nursing-strings-en.json";
 
 type Dict = Record<string, string>;
 
 const Ctx = React.createContext<(key: string) => string>(() => "");
+let stringsCache: Dict | null = null;
+
+function getStrings(): Dict {
+  if (stringsCache) return stringsCache;
+  stringsCache = require("./pre-nursing-strings-en.json") as Dict;
+  return stringsCache;
+}
 
 export function PreNursingStringsProvider({ children }: { children: React.ReactNode }) {
   const t = React.useCallback((key: string) => {
-    const v = (strings as Dict)[key];
+    const v = getStrings()[key];
     return v ?? key;
   }, []);
   return <Ctx.Provider value={t}>{children}</Ctx.Provider>;
