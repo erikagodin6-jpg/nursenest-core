@@ -8,31 +8,41 @@ function trimTrailingSlash(pathname) {
 }
 
 /**
- * Pathname for bootstrap matching: `new URL` handles relative and absolute-form request-targets.
- * Keep behavior aligned with parent `standalone-bootstrap-probe-pathname.mjs` where possible.
+ * Normalizes `req.url` to a pathname (absolute or relative request-target).
+ * No trailing-slash folding — used for the child readiness probe exact match.
  */
-function normalizeBootstrapProbePathname(req) {
-  const raw = typeof req?.url === "string" ? req.url : "";
-  if (!raw) return "";
+function getNormalizedPathname(req) {
   try {
-    const parsed = new URL(raw, "http://localhost");
-    return trimTrailingSlash(parsed.pathname || "/");
+    return new URL(typeof req?.url === "string" ? req.url || "/" : "/", "http://localhost").pathname;
   } catch {
-    const noQueryHash = raw.split("?")[0].split("#")[0];
-    let pathname = noQueryHash;
-    if (!pathname.startsWith("/")) {
-      const abs = /^https?:\/\/[^/]+(\/.*)?$/i.exec(pathname);
-      pathname = abs && abs[1] && abs[1].length > 0 ? abs[1] : abs ? "/" : pathname;
-    }
-    return trimTrailingSlash(pathname);
+    return typeof req?.url === "string" ? req.url : "";
   }
+}
+
+/** Trimmed pathname for /healthz and /readyz matching only (not the probe). */
+function normalizeBootstrapProbePathname(req) {
+  let raw = getNormalizedPathname(req);
+  if (raw && !raw.startsWith("/")) {
+    try {
+      raw = new URL(raw, "http://localhost").pathname;
+    } catch {
+      const u = typeof req?.url === "string" ? req.url : "";
+      raw = u.split("?")[0].split("#")[0] || "";
+    }
+  }
+  return trimTrailingSlash(raw || "") || "/";
 }
 
 function isBootstrapHealthzRequest(req) {
   const method = typeof req?.method === "string" ? req.method.toUpperCase() : "";
   if (method !== "GET" && method !== "HEAD") return false;
-  const pathname = normalizeBootstrapProbePathname(req);
-  return pathname === "/healthz" || pathname === "/readyz" || pathname === CHILD_BOOTSTRAP_READY_PATH;
+  const raw = getNormalizedPathname(req);
+  if (raw === CHILD_BOOTSTRAP_READY_PATH) return true;
+  const pn = trimTrailingSlash(raw || "") || "/";
+  if (pn === CHILD_BOOTSTRAP_READY_PATH && raw !== CHILD_BOOTSTRAP_READY_PATH) {
+    return false;
+  }
+  return pn === "/healthz" || pn === "/readyz";
 }
 
 function logProbeDebug(line, meta) {
@@ -42,36 +52,36 @@ function logProbeDebug(line, meta) {
 function maybeServeBootstrapHealthz(req, res, state, logger) {
   const method = typeof req?.method === "string" ? req.method.toUpperCase() : "";
   const rawUrl = typeof req?.url === "string" ? req.url : undefined;
-  const pathname = normalizeBootstrapProbePathname(req);
+  const rawPath = getNormalizedPathname(req);
   const writableEnded = Boolean(res?.writableEnded);
   const finished = Boolean(res?.finished);
 
   logProbeDebug("incoming request", {
     method,
     rawUrl,
-    pathname,
+    pathname: rawPath,
     writableEnded,
     finished,
   });
 
   if (method !== "GET" && method !== "HEAD") {
-    logProbeDebug("no match", { reason: "method", method, pathname });
+    logProbeDebug("no match", { reason: "method", method, pathname: rawPath });
     return false;
   }
 
-  if (pathname === CHILD_BOOTSTRAP_READY_PATH) {
-    if (writableEnded || finished) {
-      logProbeDebug("matched probe path", { method, pathname, rawUrl, alreadyEnded: true });
+  if (rawPath === CHILD_BOOTSTRAP_READY_PATH) {
+    if (res.writableEnded) {
+      logProbeDebug("matched probe path", { method, pathname: rawPath, rawUrl, skipped: "writableEnded" });
       return true;
     }
 
-    logProbeDebug("matched probe path", { method, pathname, rawUrl });
+    logProbeDebug("matched probe path", { method, pathname: rawPath, rawUrl });
 
     if (logger && typeof logger.logBootstrapHealthzIntercepted === "function") {
       logger.logBootstrapHealthzIntercepted({
         method,
         url: rawUrl,
-        pathname,
+        pathname: rawPath,
         handlersReady: Boolean(state?.handlersReady),
       });
     }
@@ -91,18 +101,24 @@ function maybeServeBootstrapHealthz(req, res, state, logger) {
 
     if (!res.writableEnded) {
       console.error(
-        `[probe_debug] ERROR probe response not writableEnded after end() ${JSON.stringify({ method, pathname, rawUrl })}`,
+        `[probe_debug] ERROR probe response not writableEnded after end() ${JSON.stringify({ method, pathname: rawPath, rawUrl })}`,
       );
     }
 
     return true;
   }
 
-  logProbeDebug("no match", { method, pathname, reason: "not_probe_path" });
+  logProbeDebug("no match", { method, pathname: rawPath, reason: "not_probe_path" });
 
   if (state?.handlersReady || !isBootstrapHealthzRequest(req)) {
     return false;
   }
+
+  if (res.writableEnded) {
+    return true;
+  }
+
+  const pathname = normalizeBootstrapProbePathname(req);
 
   if (logger && typeof logger.logBootstrapHealthzIntercepted === "function") {
     logger.logBootstrapHealthzIntercepted({
@@ -129,6 +145,7 @@ function maybeServeBootstrapHealthz(req, res, state, logger) {
 }
 
 module.exports = {
+  getNormalizedPathname,
   isBootstrapHealthzRequest,
   maybeServeBootstrapHealthz,
   normalizeBootstrapProbePathname,

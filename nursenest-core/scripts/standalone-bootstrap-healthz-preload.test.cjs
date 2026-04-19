@@ -91,10 +91,18 @@ test("patched createServer: HEAD /_nn_bootstrap_ready_check__ returns before hun
     assert.match(joined(), /\[probe_debug\] short-circuit before Next/);
 
     stderrLines.length = 0;
+    nextListenerInvoked = false;
 
-    const trailing = await request({ port, method: "HEAD", path: "/_nn_bootstrap_ready_check__/" });
-    assert.equal(trailing.statusCode, 200);
+    const absHead = await request({
+      port,
+      method: "HEAD",
+      path: `http://127.0.0.1:${port}/_nn_bootstrap_ready_check__`,
+    });
+    assert.equal(absHead.statusCode, 200);
+    assert.equal(absHead.body, "");
+    assert.equal(nextListenerInvoked, false);
     assert.match(joined(), /\[probe_debug\] matched probe path/);
+    assert.match(joined(), /\[probe_debug\] short-circuit before Next/);
 
     stderrLines.length = 0;
 

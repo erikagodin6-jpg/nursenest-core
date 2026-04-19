@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const test = require("node:test");
 
 const {
+  getNormalizedPathname,
   isBootstrapHealthzRequest,
   maybeServeBootstrapHealthz,
   normalizeBootstrapProbePathname,
@@ -47,12 +48,29 @@ test("matches GET and HEAD bootstrap probe requests only", () => {
   );
 });
 
-test("normalizeBootstrapProbePathname: query and trailing slash for probe", () => {
-  assert.equal(normalizeBootstrapProbePathname({ url: "/_nn_bootstrap_ready_check__?ts=1" }), "/_nn_bootstrap_ready_check__");
+test("getNormalizedPathname: relative, absolute, query; trailing slash preserved on pathname", () => {
+  assert.equal(getNormalizedPathname({ url: "/_nn_bootstrap_ready_check__" }), "/_nn_bootstrap_ready_check__");
+  assert.equal(getNormalizedPathname({ url: "/_nn_bootstrap_ready_check__?x=1" }), "/_nn_bootstrap_ready_check__");
   assert.equal(
-    normalizeBootstrapProbePathname({ url: "/_nn_bootstrap_ready_check__/" }),
+    getNormalizedPathname({ url: "http://127.0.0.1:63074/_nn_bootstrap_ready_check__" }),
     "/_nn_bootstrap_ready_check__",
   );
+  assert.equal(getNormalizedPathname({ url: "/_nn_bootstrap_ready_check__/" }), "/_nn_bootstrap_ready_check__/");
+});
+
+test("trailing-slash probe URL does not match intercept or isBootstrapHealthzRequest", () => {
+  assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/_nn_bootstrap_ready_check__/" }), false);
+  const res = createFakeResponse();
+  assert.equal(
+    maybeServeBootstrapHealthz({ method: "HEAD", url: "/_nn_bootstrap_ready_check__/" }, res, {}, null),
+    false,
+  );
+  assert.equal(res.ended, false);
+});
+
+test("normalizeBootstrapProbePathname: query and trailing slash (trimmed helper)", () => {
+  assert.equal(normalizeBootstrapProbePathname({ url: "/_nn_bootstrap_ready_check__?ts=1" }), "/_nn_bootstrap_ready_check__");
+  assert.equal(normalizeBootstrapProbePathname({ url: "/_nn_bootstrap_ready_check__/" }), "/_nn_bootstrap_ready_check__");
   assert.equal(
     normalizeBootstrapProbePathname({ url: "http://127.0.0.1:3000/_nn_bootstrap_ready_check__/?x=1" }),
     "/_nn_bootstrap_ready_check__",
@@ -156,6 +174,20 @@ test("internal bootstrap probe is intercepted even when handlersReady is true", 
   assert.equal(res.body, "ok");
   assert.equal(res.ended, true);
   assert.equal(res.writableEnded, true);
+});
+
+test("probe path: second invoke is no-op when res.writableEnded (no double write)", () => {
+  const res = createFakeResponse();
+  assert.equal(
+    maybeServeBootstrapHealthz({ method: "GET", url: "/_nn_bootstrap_ready_check__" }, res, {}, null),
+    true,
+  );
+  const bodyAfterFirst = res.body;
+  assert.equal(
+    maybeServeBootstrapHealthz({ method: "GET", url: "/_nn_bootstrap_ready_check__" }, res, {}, null),
+    true,
+  );
+  assert.equal(res.body, bodyAfterFirst);
 });
 
 test("serves HEAD for the internal bootstrap ready probe without a body", () => {
