@@ -4,6 +4,7 @@ const test = require("node:test");
 const {
   isBootstrapHealthzRequest,
   maybeServeBootstrapHealthz,
+  normalizeBootstrapProbePathname,
 } = require("./standalone-bootstrap-healthz-shared.cjs");
 
 function createFakeResponse() {
@@ -11,12 +12,16 @@ function createFakeResponse() {
     statusCode: 0,
     headers: {},
     ended: false,
+    writableEnded: false,
+    finished: false,
     body: undefined,
     setHeader(name, value) {
       this.headers[name.toLowerCase()] = value;
     },
     end(body) {
       this.ended = true;
+      this.writableEnded = true;
+      this.finished = true;
       this.body = body;
     },
   };
@@ -39,6 +44,18 @@ test("matches GET and HEAD bootstrap probe requests only", () => {
   assert.equal(
     isBootstrapHealthzRequest({ method: "GET", url: "http://127.0.0.1:9/_nn_bootstrap_ready_check__?ts=1" }),
     true,
+  );
+});
+
+test("normalizeBootstrapProbePathname: query and trailing slash for probe", () => {
+  assert.equal(normalizeBootstrapProbePathname({ url: "/_nn_bootstrap_ready_check__?ts=1" }), "/_nn_bootstrap_ready_check__");
+  assert.equal(
+    normalizeBootstrapProbePathname({ url: "/_nn_bootstrap_ready_check__/" }),
+    "/_nn_bootstrap_ready_check__",
+  );
+  assert.equal(
+    normalizeBootstrapProbePathname({ url: "http://127.0.0.1:3000/_nn_bootstrap_ready_check__/?x=1" }),
+    "/_nn_bootstrap_ready_check__",
   );
 });
 
@@ -97,10 +114,11 @@ test("serves the internal bootstrap ready probe directly while handlers are not 
 
   assert.equal(served, true);
   assert.equal(res.statusCode, 200);
-  assert.equal(res.headers["content-type"], "text/plain; charset=utf-8");
+  assert.equal(res.headers["content-type"], "text/plain");
   assert.equal(res.headers["cache-control"], "no-store");
   assert.equal(res.body, "ok");
   assert.equal(res.ended, true);
+  assert.equal(res.writableEnded, true);
   assert.deepEqual(intercepted, [
     {
       method: "GET",
@@ -120,8 +138,10 @@ test("serves internal bootstrap probe for absolute-form request-target (HEAD)", 
   );
   assert.equal(served, true);
   assert.equal(res.statusCode, 200);
+  assert.equal(res.headers["content-type"], "text/plain");
   assert.equal(res.body, undefined);
   assert.equal(res.ended, true);
+  assert.equal(res.writableEnded, true);
 });
 
 test("internal bootstrap probe is intercepted even when handlersReady is true", () => {
@@ -135,6 +155,7 @@ test("internal bootstrap probe is intercepted even when handlersReady is true", 
   assert.equal(res.statusCode, 200);
   assert.equal(res.body, "ok");
   assert.equal(res.ended, true);
+  assert.equal(res.writableEnded, true);
 });
 
 test("serves HEAD for the internal bootstrap ready probe without a body", () => {
@@ -149,6 +170,7 @@ test("serves HEAD for the internal bootstrap ready probe without a body", () => 
   assert.equal(res.statusCode, 200);
   assert.equal(res.body, undefined);
   assert.equal(res.ended, true);
+  assert.equal(res.writableEnded, true);
 });
 
 test("does not intercept /healthz after handlers are ready", () => {

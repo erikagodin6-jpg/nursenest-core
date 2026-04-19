@@ -20,11 +20,19 @@ function patchServerModule(moduleName, moduleRef, startupState, logger) {
         if (event === "request" && args.length >= 2) {
           const req = args[0];
           const res = args[1];
+          const rawUrl = typeof req?.url === "string" ? req.url : undefined;
+          const method = typeof req?.method === "string" ? req.method : undefined;
+          console.error(
+            `[probe_debug] emit hook triggered ${JSON.stringify({ module: label, event, method, rawUrl })}`,
+          );
           if (maybeServeBootstrapHealthz(req, res, startupState, logger)) {
+            console.error(
+              `[probe_debug] short-circuit before Next ${JSON.stringify({ via: "server_emit", module: label, method, rawUrl })}`,
+            );
             return true;
           }
         }
-        return originalEmit.call(this, event, ...args);
+        return originalEmit.apply(this, arguments);
       }
       patchedEmit.__nnBootstrapHealthzPatched = true;
       moduleRef.Server.prototype.emit = patchedEmit;
@@ -44,8 +52,23 @@ function patchServerModule(moduleName, moduleRef, startupState, logger) {
           const originalListener = args[listenerIndex];
           args[listenerIndex] = function wrappedRequestListener(req, res, ...rest) {
             if (maybeServeBootstrapHealthz(req, res, startupState, logger)) {
+              console.error(
+                `[probe_debug] short-circuit before Next ${JSON.stringify({
+                  via: "create_server_wrap",
+                  module: label,
+                  method: typeof req?.method === "string" ? req.method : undefined,
+                  rawUrl: typeof req?.url === "string" ? req.url : undefined,
+                })}`,
+              );
               return;
             }
+            console.error(
+              `[probe_debug] forwarding to Next ${JSON.stringify({
+                module: label,
+                method: typeof req?.method === "string" ? req.method : undefined,
+                rawUrl: typeof req?.url === "string" ? req.url : undefined,
+              })}`,
+            );
             return originalListener.call(this, req, res, ...rest);
           };
         }
