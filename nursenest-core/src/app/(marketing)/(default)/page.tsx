@@ -29,6 +29,7 @@ import { homePerfFinalForGetRoot, homePerfLogForGetRoot } from "@/lib/observabil
 import {
   emitNnHomeRouteDiag,
   nnHomeDiagNowMs,
+  nnHomeStaticMetadataEnabled,
   nnHomeStaticProbeEnabled,
 } from "@/lib/observability/nn-home-isolation-flags";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
@@ -97,6 +98,15 @@ function listPublishedHomeGlobalRegionCardIdsSafe(): readonly string[] {
 
 export async function generateMetadata(): Promise<Metadata> {
   const tDiag = nnHomeDiagNowMs();
+  if (nnHomeStaticMetadataEnabled()) {
+    try {
+      console.error("[nursenest-core] NN_HOME_STATIC_METADATA=1: generateMetadata returns static fallback (no async)");
+    } catch {
+      /* noop */
+    }
+    emitNnHomeRouteDiag({ segment: "metadata_static_metadata_short_circuit", elapsed_ms: nnHomeDiagNowMs() - tDiag });
+    return HOME_FALLBACK_METADATA;
+  }
   if (nnHomeStaticProbeEnabled()) {
     emitNnHomeRouteDiag({ segment: "metadata_static_probe_short_circuit", elapsed_ms: nnHomeDiagNowMs() - tDiag });
     return HOME_FALLBACK_METADATA;
