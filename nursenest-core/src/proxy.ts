@@ -11,6 +11,7 @@ import type { NextFetchEvent, NextMiddleware } from "next/server";
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
+import { NN_HOME_PERF_ANCHOR_HEADER, NN_HOME_PERF_REQUEST_KIND_HEADER } from "@/lib/observability/home-perf-headers";
 
 type AdminProxyDeps = {
   getToken: typeof import("next-auth/jwt").getToken;
@@ -178,6 +179,51 @@ function ensureIncomingCorrelationId(request: NextRequest): NextRequest {
   return new NextRequest(request.url, { headers: requestHeaders });
 }
 
+function isHomePerfTraceEnabledEdge(): boolean {
+  return process.env.NN_TRACE_HOME_PERF?.trim().toLowerCase() === "true";
+}
+
+/**
+ * `GET /` only: anchor + request kind for `home-perf-trace.ts`, and one `request_start` line on stderr.
+ * Runs only when {@link isHomePerfTraceEnabledEdge} — removable via env.
+ */
+function appendHomePerfHeadersForGetRoot(request: NextRequest, requestHeaders: Headers): void {
+  if (request.method !== "GET") return;
+  if (request.nextUrl.pathname !== "/") return;
+  if (!isHomePerfTraceEnabledEdge()) return;
+
+  const anchor_ms = Date.now();
+  requestHeaders.set(NN_HOME_PERF_ANCHOR_HEADER, String(anchor_ms));
+
+  const rsc = request.headers.get("RSC") === "1";
+  const dest = request.headers.get("Sec-Fetch-Dest")?.trim().toLowerCase() ?? "";
+  let request_kind: string;
+  if (rsc) {
+    request_kind = "rsc_flight";
+  } else if (dest === "document") {
+    request_kind = "html_document";
+  } else if (dest) {
+    request_kind = `sec_fetch_${dest}`;
+  } else {
+    request_kind = "unknown";
+  }
+  requestHeaders.set(NN_HOME_PERF_REQUEST_KIND_HEADER, request_kind);
+
+  const correlation = requestHeaders.get(NN_CORRELATION_HEADER)?.trim()?.slice(0, 64) ?? "";
+  console.error(
+    JSON.stringify({
+      tag: "nn_home_perf",
+      phase: "home.server.request_start",
+      pathname: "/",
+      duration_ms: 0,
+      segment_ms: 0,
+      wall_ms: anchor_ms,
+      correlation: correlation || undefined,
+      request_kind,
+    }),
+  );
+}
+
 function withPathnameHeader(request: NextRequest): NextRequest {
   const pathname = request.nextUrl.pathname;
   const requestHeaders = new Headers(request.headers);
@@ -208,6 +254,8 @@ function withPathnameHeader(request: NextRequest): NextRequest {
   if (isExamHub) {
     requestHeaders.set("x-nn-pathname", pathname);
   }
+
+  appendHomePerfHeadersForGetRoot(request, requestHeaders);
 
   return new NextRequest(request.url, { headers: requestHeaders });
 }
@@ -437,6 +485,7 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
  */
 export const config = {
   matcher: [
+    "/",
     "/app",
     "/app/:path*",
     "/admin",

@@ -1,4 +1,3 @@
-import { cache } from "react";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import type { I18nShardFilename } from "@shared/i18n-shard-policy";
 import { loadMarketingMessageShards, loadMarketingMessageShardsSync } from "@/lib/marketing-i18n/load-marketing-message-shards";
@@ -74,7 +73,7 @@ function metadataMessagesCacheKey(
   return `${locale}|${[...keys].sort().join(",")}|${shards.join(",")}`;
 }
 
-export const loadMarketingMetadataMessages = cache(async function loadMarketingMetadataMessages(
+export async function loadMarketingMetadataMessages(
   locale: string,
   keys: readonly string[],
   shards: readonly I18nShardFilename[] = MARKETING_PAGE_BODY_MESSAGE_SHARDS,
@@ -106,4 +105,4 @@ export const loadMarketingMetadataMessages = cache(async function loadMarketingM
     metadataPickedInflight.set(cacheKey, inflight);
   }
   return inflight;
-});
+}

@@ -21,11 +21,15 @@ test("default blog and lessons routes opt out of build-time static work", () => 
 
 test("marketing default layout uses chrome-only shards and layers main page shards during production build", () => {
   const defaultLayout = readAppFile("app/(marketing)/(default)/layout.tsx");
+  const chromeServer = readAppFile("lib/marketing-i18n/marketing-layout-chrome-messages.server.ts");
+  const mainShards = readAppFile("components/i18n/marketing-main-i18n-shards.tsx");
   const shardGroups = readAppFile("lib/marketing-i18n/marketing-i18n-shard-groups.ts");
 
-  assert.match(defaultLayout, /process\.env\.NEXT_PHASE === MARKETING_BUILD_PHASE/);
-  assert.match(defaultLayout, /MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS/);
   assert.match(defaultLayout, /MarketingMainI18nShards/);
+  assert.match(chromeServer, /process\.env\.NEXT_PHASE === MARKETING_BUILD_PHASE/);
+  assert.match(chromeServer, /MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS/);
+  assert.match(chromeServer, /MARKETING_CHROME_MESSAGE_SHARDS/);
+  assert.match(mainShards, /Suspense/);
   assert.match(shardGroups, /MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS = \[/);
   assert.match(shardGroups, /"marketing"/);
   assert.match(shardGroups, /"nav"/);
@@ -135,14 +139,17 @@ test("shared lessons metadata lazy-loads the heavy catalog sync module", () => {
 
 test("home and paywall shells lazy-load public home stats instead of importing the full stats module", () => {
   const defaultHomePage = readAppFile("app/(marketing)/(default)/page.tsx");
+  const deferredHomeStats = readAppFile("components/marketing/home-restored-with-deferred-stats.server.tsx");
   const localizedHomePage = readAppFile("app/(marketing)/[locale]/page.tsx");
   const paywallHomeStats = readAppFile("lib/marketing/load-paywall-home-stats-for-shell.ts");
 
   assert.doesNotMatch(defaultHomePage, /from ["']@\/lib\/marketing\/public-home-stats["']/);
+  assert.doesNotMatch(deferredHomeStats, /from ["']@\/lib\/marketing\/public-home-stats["']/);
   assert.doesNotMatch(localizedHomePage, /from ["']@\/lib\/marketing\/public-home-stats["']/);
   assert.doesNotMatch(paywallHomeStats, /from ["']@\/lib\/marketing\/public-home-stats["']/);
 
-  assert.match(defaultHomePage, /await import\(["']@\/lib\/marketing\/public-home-stats["']\)/);
+  assert.match(defaultHomePage, /home-restored-with-deferred-stats/);
+  assert.match(deferredHomeStats, /await import\(["']@\/lib\/marketing\/public-home-stats["']\)/);
   assert.match(localizedHomePage, /await import\(["']@\/lib\/marketing\/public-home-stats["']\)/);
   assert.match(paywallHomeStats, /await import\(["']@\/lib\/marketing\/public-home-stats["']\)/);
 });

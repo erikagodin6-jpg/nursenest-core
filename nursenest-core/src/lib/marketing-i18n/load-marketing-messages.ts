@@ -1,7 +1,6 @@
 import "server-only";
 import { existsSync, statSync } from "fs";
 import path from "path";
-import { cache } from "react";
 import { safeAwait } from "@/lib/async/safe-await";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -68,7 +67,7 @@ function captureMarketingI18nSoftError(opts: {
     .catch(() => {});
 }
 
-/** Cross-render / cross-static-page dedupe (React `cache` resets per prerender worker invocation). */
+/** Process-wide in-flight + result dedupe per locale (persists across RSC / static workers in one Node process). */
 const loadMarketingMessagesModuleCache = new Map<string, Promise<MarketingMessages>>();
 
 const isEmptyValue = (v: string | undefined): boolean =>
@@ -400,7 +399,7 @@ async function loadMarketingMessagesImpl(locale: string): Promise<MarketingMessa
 }
 
 /** Server / Node: merged monolith + marketing strings. Tries disk first, then optional CDN, then English. */
-export const loadMarketingMessages = cache(async function loadMarketingMessages(locale: string): Promise<MarketingMessages> {
+export async function loadMarketingMessages(locale: string): Promise<MarketingMessages> {
   let p = loadMarketingMessagesModuleCache.get(locale);
   if (!p) {
     p = loadMarketingMessagesImpl(locale).catch((err) => {
@@ -410,4 +409,4 @@ export const loadMarketingMessages = cache(async function loadMarketingMessages(
     loadMarketingMessagesModuleCache.set(locale, p);
   }
   return p;
-});
+}

@@ -13,6 +13,7 @@ const dir = dirname(fileURLToPath(import.meta.url));
  */
 test("proxy matcher includes /app, /admin, and exam hub roots; auth-middleware uses authorized", () => {
   const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
+  assert.match(proxySrc, /"\/",/);
   assert.match(proxySrc, /\/app",/);
   assert.match(proxySrc, /\/admin",/);
   assert.match(proxySrc, /\/us",/);

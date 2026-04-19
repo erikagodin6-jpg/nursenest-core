@@ -11,9 +11,8 @@ import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
+import { homePerfFinalForGetRoot, homePerfLogForGetRoot } from "@/lib/observability/home-perf-trace";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
-
-const MARKETING_BUILD_PHASE = "phase-production-build";
 
 /** Single module promise — avoids per-request `import()` bookkeeping on hot marketing layout path. */
 const marketingDefaultLayoutSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
@@ -32,69 +31,78 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       attributes: { route: "shared-marketing-default", locale: DEFAULT_MARKETING_LOCALE },
     },
     async () => {
-      layoutStderrTrace("marketing_layout", "marketing layout start", { route: "shared-marketing-default" });
-      const resolvedLocale: string = DEFAULT_MARKETING_LOCALE;
-      const serverRegion: MarketingRegionToggle = "US";
-      let messages: Record<string, string> = {};
-      let fallbackMessages: Record<string, string> | undefined = undefined;
-
+      const perfLayoutT0 = Date.now();
       try {
-        messages = await getMarketingDefaultLayoutChromeMessages();
-        fallbackMessages = undefined;
-      } catch (e) {
-        console.error("[marketing-default-layout] failed to load messages", {
-          error: e instanceof Error ? e.message : String(e),
-        });
-        captureSentryRuntimeSoftError({
-          scope: "marketing_layout",
-          event: "chrome_messages_failed",
-          error: e,
-          route: "shared-marketing-default",
-          feature: "marketing_layout",
-          meta: { locale: DEFAULT_MARKETING_LOCALE },
-        });
-      }
-      layoutStderrTrace("marketing_layout", "marketing layout after messages", {
-        route: "shared-marketing-default",
-        locale: resolvedLocale,
-        messageCount: Object.keys(messages).length,
-      });
-      assertMarketingLayoutMessagesIntegrity({
-        route: "shared-marketing-default",
-        locale: resolvedLocale,
-        messages,
-        fallbackMessages,
-      });
+        layoutStderrTrace("marketing_layout", "marketing layout start", { route: "shared-marketing-default" });
+        const resolvedLocale: string = DEFAULT_MARKETING_LOCALE;
+        const serverRegion: MarketingRegionToggle = "US";
+        let messages: Record<string, string> = {};
+        let fallbackMessages: Record<string, string> | undefined = undefined;
 
-      return (
-        <MarketingI18nProvider
-          key={resolvedLocale}
-          locale={resolvedLocale}
-          messages={messages}
-          fallbackMessages={fallbackMessages}
-        >
-          <NursenestRegionRoot serverRegion={serverRegion}>
-            <OrganizationJsonLd />
-            <WebSiteJsonLd />
-            <MarketingFeedbackShell>
-              <div className="nn-marketing-surface flex min-h-screen flex-col">
-                <SiteHeader />
-                <PathwayLessonProgressRefreshListener />
-                <main className="flex min-h-0 flex-1 flex-col">
-                  {shouldLayerMainPageShards() ? (
-                    <MarketingMainI18nShards locale={resolvedLocale}>
+        try {
+          messages = await getMarketingDefaultLayoutChromeMessages();
+          fallbackMessages = undefined;
+        } catch (e) {
+          console.error("[marketing-default-layout] failed to load messages", {
+            error: e instanceof Error ? e.message : String(e),
+          });
+          captureSentryRuntimeSoftError({
+            scope: "marketing_layout",
+            event: "chrome_messages_failed",
+            error: e,
+            route: "shared-marketing-default",
+            feature: "marketing_layout",
+            meta: { locale: DEFAULT_MARKETING_LOCALE },
+          });
+        }
+        await homePerfLogForGetRoot("home.server.after_layout_chrome_messages", perfLayoutT0, {
+          message_count: Object.keys(messages).length,
+        });
+        layoutStderrTrace("marketing_layout", "marketing layout after messages", {
+          route: "shared-marketing-default",
+          locale: resolvedLocale,
+          messageCount: Object.keys(messages).length,
+        });
+        assertMarketingLayoutMessagesIntegrity({
+          route: "shared-marketing-default",
+          locale: resolvedLocale,
+          messages,
+          fallbackMessages,
+        });
+
+        return (
+          <MarketingI18nProvider
+            key={resolvedLocale}
+            locale={resolvedLocale}
+            messages={messages}
+            fallbackMessages={fallbackMessages}
+          >
+            <NursenestRegionRoot serverRegion={serverRegion}>
+              <OrganizationJsonLd />
+              <WebSiteJsonLd />
+              <MarketingFeedbackShell>
+                <div className="nn-marketing-surface flex min-h-screen flex-col">
+                  <SiteHeader />
+                  <PathwayLessonProgressRefreshListener />
+                  <main className="flex min-h-0 flex-1 flex-col">
+                    {shouldLayerMainPageShards() ? (
+                      <MarketingMainI18nShards locale={resolvedLocale}>
+                        <PageTransitionShell>{children}</PageTransitionShell>
+                      </MarketingMainI18nShards>
+                    ) : (
                       <PageTransitionShell>{children}</PageTransitionShell>
-                    </MarketingMainI18nShards>
-                  ) : (
-                    <PageTransitionShell>{children}</PageTransitionShell>
-                  )}
-                </main>
-                <SiteFooter />
-              </div>
-            </MarketingFeedbackShell>
-          </NursenestRegionRoot>
-        </MarketingI18nProvider>
-      );
+                    )}
+                  </main>
+                  <SiteFooter />
+                </div>
+              </MarketingFeedbackShell>
+            </NursenestRegionRoot>
+          </MarketingI18nProvider>
+        );
+      } catch (e) {
+        await homePerfFinalForGetRoot("failure", { error_phase: "layout" });
+        throw e;
+      }
     },
   );
 }

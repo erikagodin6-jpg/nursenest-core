@@ -21,6 +21,7 @@ import {
   HomeBlogTeaserSectionShell,
 } from "@/components/marketing/home-blog-teaser-section.server";
 import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
+import { homePerfFinalForGetRoot, homePerfLogForGetRoot } from "@/lib/observability/home-perf-trace";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 
 const homeMarketingSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
@@ -118,57 +119,77 @@ export default async function HomePage() {
       attributes: { route: "/", routeGroup: "marketing.default.home" },
     },
     async () => {
-      layoutStderrTrace("marketing_home", "home page start", { route: "/" });
-      const skipOptionalDbReads = shouldSkipOptionalMarketingDbReads();
-      const [m, publishedGlobalRegionCardIds] = await Promise.all([
-        loadHomePageMarketingMessagesForRequest(),
-        Promise.resolve(listPublishedHomeGlobalRegionCardIds()),
-      ]);
-      layoutStderrTrace("marketing_home", "home page after shell data", {
-        route: "/",
-        stats: skipOptionalDbReads ? "sync_optional_db_skipped" : "deferred",
-        regionCardCount: publishedGlobalRegionCardIds.length,
-        optionalDbSkipped: skipOptionalDbReads,
-      });
-      const title = resolveMarketingCopy(m, "pages.home.metaTitleUS", m, defaultHomeMetaTitle(STATIC_REGION));
-      const description = resolveMarketingCopy(
-        m,
-        "pages.home.metaDescriptionUS",
-        m,
-        defaultHomeMetaDescription(STATIC_REGION),
-      );
-      const { crumbs, schemaItems } = marketingHomeSurfaceBreadcrumbs();
-      return (
-        <>
-          <WebPageJsonLd
-            {...buildMarketingWebPageJsonLdProps({
-              locale: STATIC_LOCALE,
-              enPath: "/",
-              title,
-              description,
-            })}
-          />
-          <BreadcrumbJsonLd items={schemaItems} />
-          <FaqJsonLd items={MARKETING_HOME_FAQ_JSONLD} />
-          {crumbs.length > 0 ? (
-            <div className="mx-auto max-w-7xl px-4 pt-2 sm:px-6 sm:pt-3 lg:px-8">
-              <BreadcrumbTrail items={crumbs} />
-            </div>
-          ) : null}
-          <HomeRestoredWithDeferredStats
-            skipOptionalDbReads={skipOptionalDbReads}
-            publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
-          />
-          {skipOptionalDbReads ? (
-            <HomeBlogTeaserSectionShell m={m} posts={[]} />
-          ) : (
-            <Suspense fallback={<HomeBlogTeaserSectionShell m={m} posts={[]} />}>
-              <HomeBlogTeaserSectionAsync m={m} />
-            </Suspense>
-          )}
-          <ExamSelectorGateLazy />
-        </>
-      );
+      const perfPageT0 = Date.now();
+      try {
+        layoutStderrTrace("marketing_home", "home page start", { route: "/" });
+        const skipOptionalDbReads = shouldSkipOptionalMarketingDbReads();
+        const [m, publishedGlobalRegionCardIds] = await Promise.all([
+          loadHomePageMarketingMessagesForRequest().then(async (resolved) => {
+            await homePerfLogForGetRoot("home.server.after_homepage_page_body_messages", perfPageT0, {
+              message_key_count: Object.keys(resolved).length,
+            });
+            return resolved;
+          }),
+          (async () => {
+            const ids = await Promise.resolve(listPublishedHomeGlobalRegionCardIds());
+            await homePerfLogForGetRoot("home.server.after_region_ids", perfPageT0, {
+              region_card_count: ids.length,
+            });
+            return ids;
+          })(),
+        ]);
+        layoutStderrTrace("marketing_home", "home page after shell data", {
+          route: "/",
+          stats: skipOptionalDbReads ? "sync_optional_db_skipped" : "deferred",
+          regionCardCount: publishedGlobalRegionCardIds.length,
+          optionalDbSkipped: skipOptionalDbReads,
+        });
+        const title = resolveMarketingCopy(m, "pages.home.metaTitleUS", m, defaultHomeMetaTitle(STATIC_REGION));
+        const description = resolveMarketingCopy(
+          m,
+          "pages.home.metaDescriptionUS",
+          m,
+          defaultHomeMetaDescription(STATIC_REGION),
+        );
+        const { crumbs, schemaItems } = marketingHomeSurfaceBreadcrumbs();
+        await homePerfLogForGetRoot("home.server.before_shell_return", perfPageT0, {
+          optional_db_skipped: skipOptionalDbReads,
+        });
+        return (
+          <>
+            <WebPageJsonLd
+              {...buildMarketingWebPageJsonLdProps({
+                locale: STATIC_LOCALE,
+                enPath: "/",
+                title,
+                description,
+              })}
+            />
+            <BreadcrumbJsonLd items={schemaItems} />
+            <FaqJsonLd items={MARKETING_HOME_FAQ_JSONLD} />
+            {crumbs.length > 0 ? (
+              <div className="mx-auto max-w-7xl px-4 pt-2 sm:px-6 sm:pt-3 lg:px-8">
+                <BreadcrumbTrail items={crumbs} />
+              </div>
+            ) : null}
+            <HomeRestoredWithDeferredStats
+              skipOptionalDbReads={skipOptionalDbReads}
+              publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
+            />
+            {skipOptionalDbReads ? (
+              <HomeBlogTeaserSectionShell m={m} posts={[]} />
+            ) : (
+              <Suspense fallback={<HomeBlogTeaserSectionShell m={m} posts={[]} />}>
+                <HomeBlogTeaserSectionAsync m={m} />
+              </Suspense>
+            )}
+            <ExamSelectorGateLazy />
+          </>
+        );
+      } catch (e) {
+        await homePerfFinalForGetRoot("failure", { error_phase: "page" });
+        throw e;
+      }
     },
   );
 }
