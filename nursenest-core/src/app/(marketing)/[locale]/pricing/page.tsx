@@ -4,8 +4,9 @@ import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
+import { loadMarketingLayoutShardsOverlay } from "@/lib/marketing-i18n/load-marketing-route-shard-bundles";
+import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
 import { localizeBreadcrumbResolution } from "@/lib/seo/breadcrumb-i18n";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingPricingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
@@ -13,19 +14,21 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ locale: string }> };
 
+const PRICING_META_KEYS = ["pages.pricing.title", "pages.pricing.description"] as const;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   return safeGenerateMetadata(
     async () => {
-      const m = await loadMarketingMessages(locale);
+      const m = await loadMarketingMetadataMessages(locale, [...PRICING_META_KEYS]);
       const alt = marketingAlternatesSharedPage(locale, "/pricing");
       return {
-        title: m["pages.pricing.title"],
-        description: m["pages.pricing.description"],
+        title: m["pages.pricing.title"]!,
+        description: m["pages.pricing.description"]!,
         alternates: { canonical: alt.canonical, languages: alt.languages },
         openGraph: {
-          title: m["pages.pricing.title"],
-          description: m["pages.pricing.description"],
+          title: m["pages.pricing.title"]!,
+          description: m["pages.pricing.description"]!,
           url: alt.canonical,
           type: "website",
         },
@@ -38,52 +41,52 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function LocalizedPricingPage({ params }: Props) {
   const { locale } = await params;
   const raw = marketingPricingBreadcrumbs();
-  const primary = await loadMarketingMessages(locale);
-  const { crumbs, schemaItems } = localizeBreadcrumbResolution(raw, primary);
+  const messages = await loadMarketingLayoutShardsOverlay(locale);
+  const { crumbs, schemaItems } = localizeBreadcrumbResolution(raw, messages);
   const pricingFaqJsonLd = [
     {
-      question: primary["pages.pricing.regionFaq.usCanadaQuestion"],
-      answer: primary["pages.pricing.regionFaq.usCanadaAnswer"],
+      question: messages["pages.pricing.regionFaq.usCanadaQuestion"],
+      answer: messages["pages.pricing.regionFaq.usCanadaAnswer"],
     },
     {
-      question: primary["pages.pricing.regionFaq.correctExamQuestion"],
-      answer: primary["pages.pricing.regionFaq.correctExamAnswer"],
+      question: messages["pages.pricing.regionFaq.correctExamQuestion"],
+      answer: messages["pages.pricing.regionFaq.correctExamAnswer"],
     },
     {
-      question: primary["pages.pricing.regionFaq.switchCountryQuestion"],
-      answer: primary["pages.pricing.regionFaq.switchCountryAnswer"],
+      question: messages["pages.pricing.regionFaq.switchCountryQuestion"],
+      answer: messages["pages.pricing.regionFaq.switchCountryAnswer"],
     },
     {
-      question: primary["pages.pricing.reliabilityFaq.siteCrashQuestion"],
-      answer: primary["pages.pricing.reliabilityFaq.siteCrashAnswer"],
+      question: messages["pages.pricing.reliabilityFaq.siteCrashQuestion"],
+      answer: messages["pages.pricing.reliabilityFaq.siteCrashAnswer"],
     },
     {
-      question: primary["pages.pricing.reliabilityFaq.slowExperienceQuestion"],
-      answer: primary["pages.pricing.reliabilityFaq.slowExperienceAnswer"],
+      question: messages["pages.pricing.reliabilityFaq.slowExperienceQuestion"],
+      answer: messages["pages.pricing.reliabilityFaq.slowExperienceAnswer"],
     },
     {
-      question: primary["pages.pricing.reliabilityFaq.studyReliabilityQuestion"],
-      answer: primary["pages.pricing.reliabilityFaq.studyReliabilityAnswer"],
+      question: messages["pages.pricing.reliabilityFaq.studyReliabilityQuestion"],
+      answer: messages["pages.pricing.reliabilityFaq.studyReliabilityAnswer"],
     },
     {
-      question: primary["pages.pricing.learnerFaq.passGuaranteeQuestion"],
-      answer: primary["pages.pricing.learnerFaq.passGuaranteeAnswer"],
+      question: messages["pages.pricing.learnerFaq.passGuaranteeQuestion"],
+      answer: messages["pages.pricing.learnerFaq.passGuaranteeAnswer"],
     },
     {
-      question: primary["pages.pricing.learnerFaq.startingBehindQuestion"],
-      answer: primary["pages.pricing.learnerFaq.startingBehindAnswer"],
+      question: messages["pages.pricing.learnerFaq.startingBehindQuestion"],
+      answer: messages["pages.pricing.learnerFaq.startingBehindAnswer"],
     },
     {
-      question: primary["pages.pricing.learnerFaq.tryBeforePayQuestion"],
-      answer: primary["pages.pricing.learnerFaq.tryBeforePayAnswer"],
+      question: messages["pages.pricing.learnerFaq.tryBeforePayQuestion"],
+      answer: messages["pages.pricing.learnerFaq.tryBeforePayAnswer"],
     },
     {
-      question: primary["pages.pricing.learnerFaq.examRealismQuestion"],
-      answer: primary["pages.pricing.learnerFaq.examRealismAnswer"],
+      question: messages["pages.pricing.learnerFaq.examRealismQuestion"],
+      answer: messages["pages.pricing.learnerFaq.examRealismAnswer"],
     },
     {
-      question: primary["pages.pricing.learnerFaq.refundRemorseQuestion"],
-      answer: primary["pages.pricing.learnerFaq.refundRemorseAnswer"],
+      question: messages["pages.pricing.learnerFaq.refundRemorseQuestion"],
+      answer: messages["pages.pricing.learnerFaq.refundRemorseAnswer"],
     },
   ];
   return (
@@ -92,8 +95,8 @@ export default async function LocalizedPricingPage({ params }: Props) {
         {...buildMarketingWebPageJsonLdProps({
           locale,
           enPath: "/pricing",
-          title: primary["pages.pricing.title"],
-          description: primary["pages.pricing.description"],
+          title: messages["pages.pricing.title"],
+          description: messages["pages.pricing.description"],
         })}
       />
       <BreadcrumbJsonLd items={schemaItems} />

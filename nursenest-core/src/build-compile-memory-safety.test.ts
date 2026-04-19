@@ -108,6 +108,27 @@ test("root not-found page defers auth-bound resume imports during build", () => 
   assert.match(notFound, /import\(["']@\/lib\/ui\/not-found-resume["']\)/);
 });
 
+test("shared root layouts avoid eager observability imports during production build", () => {
+  const rootLayout = readFileSync(join(root, "src", "app", "layout.tsx"), "utf8");
+  assert.doesNotMatch(rootLayout, /^import .*@\/lib\/observability\/render-trace["'];?$/m);
+  assert.match(rootLayout, /loadRenderTrace/);
+
+  const marketingLayout = readFileSync(join(root, "src", "app", "(marketing)", "(default)", "layout.tsx"), "utf8");
+  assert.doesNotMatch(marketingLayout, /^import .*@\/lib\/observability\/render-trace["'];?$/m);
+  assert.doesNotMatch(marketingLayout, /^import .*@\/lib\/observability\/sentry-route-observability["'];?$/m);
+  assert.match(marketingLayout, /loadRenderTrace/);
+  assert.match(marketingLayout, /loadMarketingLayoutObservability/);
+});
+
+test("canonical destinations avoid eager learner nav imports in public marketing callers", () => {
+  const canonicalDestinations = readFileSync(
+    join(root, "src", "lib", "navigation", "canonical-destinations.ts"),
+    "utf8",
+  );
+  assert.doesNotMatch(canonicalDestinations, /^import .*@\/lib\/navigation\/learner-primary-nav["'];?$/m);
+  assert.match(canonicalDestinations, /getLearnerPrimaryNavModule/);
+});
+
 test("shared app layouts defer admin palette and learner bundle loaders", () => {
   const appLayout = readFileSync(join(root, "src", "app", "(student)", "app", "layout.tsx"), "utf8");
   assert.doesNotMatch(appLayout, /^import .*@\/components\/admin\/admin-global-command-palette["'];?$/m);

@@ -6,24 +6,29 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingLayoutShardsOverlay } from "@/lib/marketing-i18n/load-marketing-route-shard-bundles";
+import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
+import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { marketingPricingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
+const PRICING_META_KEYS = ["pages.pricing.title", "pages.pricing.description"] as const;
+
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {
-      const m = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const m = await loadMarketingMetadataMessages(DEFAULT_MARKETING_LOCALE, [...PRICING_META_KEYS]);
       const alt = marketingAlternatesSharedPage(DEFAULT_MARKETING_LOCALE, "/pricing");
       return {
-        title: m["pages.pricing.title"],
-        description: m["pages.pricing.description"],
+        title: m["pages.pricing.title"]!,
+        description: m["pages.pricing.description"]!,
         alternates: { canonical: alt.canonical, languages: alt.languages },
         openGraph: {
-          title: m["pages.pricing.title"],
-          description: m["pages.pricing.description"],
+          title: m["pages.pricing.title"]!,
+          description: m["pages.pricing.description"]!,
           url: alt.canonical,
           type: "website",
         },
@@ -36,8 +41,10 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PricingPage() {
   const { crumbs, schemaItems } = marketingPricingBreadcrumbs();
   const locale = await getMarketingLocaleForDefaultRoute();
-  const m = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const mLocale = await loadMarketingMessages(locale);
+  const m =
+    (await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS)) ?? {};
+  const mLocale =
+    locale === DEFAULT_MARKETING_LOCALE ? m : await loadMarketingLayoutShardsOverlay(locale);
   const pricingFaqJsonLd = [
     {
       question: mLocale["pages.pricing.regionFaq.usCanadaQuestion"],
