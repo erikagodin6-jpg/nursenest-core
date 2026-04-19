@@ -200,11 +200,15 @@ test("bootstrap healthz helper serves the internal bootstrap ready probe directl
   const headers = new Map();
   const res = {
     statusCode: 0,
+    writableEnded: false,
+    finished: false,
     setHeader(name, value) {
       headers.set(name, value);
     },
     end(value) {
       this.body = value;
+      this.writableEnded = true;
+      this.finished = true;
     },
   };
 
