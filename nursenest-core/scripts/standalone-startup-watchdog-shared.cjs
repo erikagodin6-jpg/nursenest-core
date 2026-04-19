@@ -67,6 +67,9 @@ function createStartupWatchdogLogger({
     logPreloadServerWrapInstalled(meta = {}) {
       emit("preload_server_wrap_installed", { ...meta, msSinceBoot: now() - bootAt });
     },
+    logPreloadProbeSeen(meta = {}) {
+      emit("preload_probe_seen", { ...meta, msSinceBoot: now() - bootAt });
+    },
     logBootstrapHealthzIntercepted(meta = {}) {
       emit("bootstrap_healthz_intercepted", { ...meta, msSinceBoot: now() - bootAt });
     },

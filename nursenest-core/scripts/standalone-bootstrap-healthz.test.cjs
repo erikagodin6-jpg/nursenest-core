@@ -162,6 +162,68 @@ test("serves internal bootstrap probe for absolute-form request-target (HEAD)", 
   assert.equal(res.writableEnded, true);
 });
 
+test("serves internal bootstrap probe for absolute-form GET with query string", () => {
+  const res = createFakeResponse();
+  const served = maybeServeBootstrapHealthz(
+    { method: "GET", url: "http://127.0.0.1:1234/_nn_bootstrap_ready_check__?x=1&y=2" },
+    res,
+    { handlersReady: false },
+  );
+  assert.equal(served, true);
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body, "ok");
+  assert.equal(res.ended, true);
+});
+
+test("non-probe path does not emit bootstrap_probe_helper_eval and does not end response", () => {
+  const lines = [];
+  const origErr = console.error;
+  console.error = (msg, ...rest) => {
+    lines.push([msg, ...rest].map(String).join(" "));
+    origErr(msg, ...rest);
+  };
+  try {
+    const res = createFakeResponse();
+    const served = maybeServeBootstrapHealthz(
+      { method: "GET", url: "/api/health" },
+      res,
+      { handlersReady: false },
+      null,
+    );
+    assert.equal(served, false);
+    assert.equal(res.ended, false);
+    assert.ok(!lines.some((l) => l.includes("bootstrap_probe_helper_eval")));
+  } finally {
+    console.error = origErr;
+  }
+});
+
+test("bootstrap_probe_helper_eval logs intercepted outcome for relative HEAD probe", () => {
+  const lines = [];
+  const origErr = console.error;
+  console.error = (msg, ...rest) => {
+    lines.push([msg, ...rest].map(String).join(" "));
+    origErr(msg, ...rest);
+  };
+  try {
+    const res = createFakeResponse();
+    maybeServeBootstrapHealthz(
+      { method: "HEAD", url: "/_nn_bootstrap_ready_check__" },
+      res,
+      { handlersReady: false },
+      null,
+    );
+    const joined = lines.join("\n");
+    assert.match(joined, /\[nursenest-core\] startup_watchdog bootstrap_probe_helper_eval/);
+    assert.match(joined, /"outcome":"intercepted"/);
+    assert.match(joined, /"matched":true/);
+    assert.match(joined, /"intercepted":true/);
+    assert.match(joined, /"normalizedPathname":"\/_nn_bootstrap_ready_check__"/);
+  } finally {
+    console.error = origErr;
+  }
+});
+
 test("internal bootstrap probe is intercepted even when handlersReady is true", () => {
   const res = createFakeResponse();
   const served = maybeServeBootstrapHealthz(

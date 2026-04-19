@@ -1,5 +1,18 @@
 const { createStartupWatchdogLogger, createStandaloneRequire } = require("./standalone-startup-watchdog-shared.cjs");
-const { maybeServeBootstrapHealthz } = require("./standalone-bootstrap-healthz-shared.cjs");
+const {
+  CHILD_BOOTSTRAP_READY_PATH,
+  getNormalizedPathname,
+  maybeServeBootstrapHealthz,
+} = require("./standalone-bootstrap-healthz-shared.cjs");
+
+function isReadinessProbeLikeRequest(req) {
+  const rawUrl = typeof req?.url === "string" ? req.url : undefined;
+  const normalizedPathname = getNormalizedPathname(req);
+  return (
+    normalizedPathname === CHILD_BOOTSTRAP_READY_PATH ||
+    (typeof rawUrl === "string" && rawUrl.includes("_nn_bootstrap_ready_check__"))
+  );
+}
 
 /**
  * Patches `http(s).createServer` and `Server.prototype.emit` so bootstrap healthz
@@ -22,10 +35,21 @@ function patchServerModule(moduleName, moduleRef, startupState, logger) {
           const res = args[1];
           const rawUrl = typeof req?.url === "string" ? req.url : undefined;
           const method = typeof req?.method === "string" ? req.method : undefined;
-          console.error(
-            `[probe_debug] emit hook triggered ${JSON.stringify({ module: label, event, method, rawUrl })}`,
-          );
-          if (maybeServeBootstrapHealthz(req, res, startupState, logger)) {
+          const normalizedPathname = getNormalizedPathname(req);
+          const probeLike = isReadinessProbeLikeRequest(req);
+          const intercepted = maybeServeBootstrapHealthz(req, res, startupState, logger);
+          if (probeLike && typeof logger?.logPreloadProbeSeen === "function") {
+            logger.logPreloadProbeSeen({
+              via: "server_emit",
+              module: label,
+              method,
+              rawUrl,
+              normalizedPathname,
+              intercepted,
+              forwardingToNext: !intercepted,
+            });
+          }
+          if (intercepted) {
             console.error(
               `[probe_debug] short-circuit before Next ${JSON.stringify({ via: "server_emit", module: label, method, rawUrl })}`,
             );
@@ -51,24 +75,42 @@ function patchServerModule(moduleName, moduleRef, startupState, logger) {
         if (listenerIndex >= 0) {
           const originalListener = args[listenerIndex];
           args[listenerIndex] = function wrappedRequestListener(req, res, ...rest) {
-            if (maybeServeBootstrapHealthz(req, res, startupState, logger)) {
+            const rawUrl = typeof req?.url === "string" ? req.url : undefined;
+            const method = typeof req?.method === "string" ? req.method : undefined;
+            const normalizedPathname = getNormalizedPathname(req);
+            const probeLike = isReadinessProbeLikeRequest(req);
+            const intercepted = maybeServeBootstrapHealthz(req, res, startupState, logger);
+            if (probeLike && typeof logger?.logPreloadProbeSeen === "function") {
+              logger.logPreloadProbeSeen({
+                via: "create_server_wrap",
+                module: label,
+                method,
+                rawUrl,
+                normalizedPathname,
+                intercepted,
+                forwardingToNext: !intercepted,
+              });
+            }
+            if (intercepted) {
               console.error(
                 `[probe_debug] short-circuit before Next ${JSON.stringify({
                   via: "create_server_wrap",
                   module: label,
-                  method: typeof req?.method === "string" ? req.method : undefined,
-                  rawUrl: typeof req?.url === "string" ? req.url : undefined,
+                  method,
+                  rawUrl,
                 })}`,
               );
               return;
             }
-            console.error(
-              `[probe_debug] forwarding to Next ${JSON.stringify({
-                module: label,
-                method: typeof req?.method === "string" ? req.method : undefined,
-                rawUrl: typeof req?.url === "string" ? req.url : undefined,
-              })}`,
-            );
+            if (probeLike) {
+              console.error(
+                `[probe_debug] forwarding to Next ${JSON.stringify({
+                  module: label,
+                  method,
+                  rawUrl,
+                })}`,
+              );
+            }
             return originalListener.call(this, req, res, ...rest);
           };
         }

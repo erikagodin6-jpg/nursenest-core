@@ -1,4 +1,7 @@
+const { formatStartupWatchdogLine } = require("./standalone-startup-watchdog-shared.cjs");
+
 const CHILD_BOOTSTRAP_READY_PATH = "/_nn_bootstrap_ready_check__";
+const CHILD_BOOTSTRAP_READY_TOKEN = "_nn_bootstrap_ready_check__";
 
 function trimTrailingSlash(pathname) {
   if (pathname.length > 1 && pathname.endsWith("/")) {
@@ -12,10 +15,19 @@ function trimTrailingSlash(pathname) {
  * No trailing-slash folding — used for the child readiness probe exact match.
  */
 function getNormalizedPathname(req) {
+  const raw = typeof req?.url === "string" ? req.url : "";
   try {
-    return new URL(typeof req?.url === "string" ? req.url || "/" : "/", "http://localhost").pathname;
+    return new URL(raw || "/", "http://localhost").pathname;
   } catch {
-    return typeof req?.url === "string" ? req.url : "";
+    try {
+      if (raw.startsWith("/")) {
+        return new URL(`http://localhost${raw}`, "http://localhost").pathname;
+      }
+      return new URL(raw, "http://localhost").pathname;
+    } catch {
+      const base = raw.split("?")[0].split("#")[0];
+      return base;
+    }
   }
 }
 
@@ -49,33 +61,49 @@ function logProbeDebug(line, meta) {
   console.error(`[probe_debug] ${line} ${JSON.stringify(meta)}`);
 }
 
+function isReadinessProbeLikeRequest(rawUrl, normalizedPathname) {
+  return (
+    normalizedPathname === CHILD_BOOTSTRAP_READY_PATH ||
+    (typeof rawUrl === "string" && rawUrl.includes(CHILD_BOOTSTRAP_READY_TOKEN))
+  );
+}
+
+function logBootstrapProbeHelperEval(fields) {
+  console.error(formatStartupWatchdogLine("bootstrap_probe_helper_eval", fields));
+}
+
 function maybeServeBootstrapHealthz(req, res, state, logger) {
   const method = typeof req?.method === "string" ? req.method.toUpperCase() : "";
   const rawUrl = typeof req?.url === "string" ? req.url : undefined;
   const rawPath = getNormalizedPathname(req);
   const writableEnded = Boolean(res?.writableEnded);
   const finished = Boolean(res?.finished);
+  const probeLike = isReadinessProbeLikeRequest(rawUrl, rawPath);
 
-  logProbeDebug("incoming request", {
-    method,
-    rawUrl,
-    pathname: rawPath,
-    writableEnded,
-    finished,
-  });
+  const flushEval = (extra) => {
+    if (!probeLike) return;
+    logBootstrapProbeHelperEval({
+      method,
+      rawUrl,
+      normalizedPathname: rawPath,
+      writableEnded,
+      finished,
+      ...extra,
+    });
+  };
 
   if (method !== "GET" && method !== "HEAD") {
-    logProbeDebug("no match", { reason: "method", method, pathname: rawPath });
+    flushEval({ matched: false, intercepted: false, outcome: "method_not_allowed" });
     return false;
   }
 
   if (rawPath === CHILD_BOOTSTRAP_READY_PATH) {
     if (res.writableEnded) {
-      logProbeDebug("matched probe path", { method, pathname: rawPath, rawUrl, skipped: "writableEnded" });
+      flushEval({ matched: true, intercepted: false, outcome: "skipped_already_ended" });
       return true;
     }
 
-    logProbeDebug("matched probe path", { method, pathname: rawPath, rawUrl });
+    flushEval({ matched: true, intercepted: true, outcome: "intercepted" });
 
     if (logger && typeof logger.logBootstrapHealthzIntercepted === "function") {
       logger.logBootstrapHealthzIntercepted({
@@ -108,7 +136,9 @@ function maybeServeBootstrapHealthz(req, res, state, logger) {
     return true;
   }
 
-  logProbeDebug("no match", { method, pathname: rawPath, reason: "not_probe_path" });
+  if (probeLike) {
+    flushEval({ matched: false, intercepted: false, outcome: "pathname_not_exact" });
+  }
 
   if (state?.handlersReady || !isBootstrapHealthzRequest(req)) {
     return false;
@@ -145,6 +175,7 @@ function maybeServeBootstrapHealthz(req, res, state, logger) {
 }
 
 module.exports = {
+  CHILD_BOOTSTRAP_READY_PATH,
   getNormalizedPathname,
   isBootstrapHealthzRequest,
   maybeServeBootstrapHealthz,
