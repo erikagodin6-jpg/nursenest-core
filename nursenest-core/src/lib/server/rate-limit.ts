@@ -17,6 +17,7 @@ import {
 } from "@/lib/http/rate-limit-unified";
 import { getTrustedClientIp } from "@/lib/http/client-ip";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { getRedisClient, type RedisJsonClient } from "@/lib/server/redis";
 
 /** Brute-force sensitive auth endpoints (not session polling). */
 const AUTH_STRICT_SUBSTRINGS = [
@@ -136,6 +137,40 @@ const TIGHT_PUBLIC_MAX = 24;
 /** Rolling window of 429s per IP — drives exponential Retry-After (shared store). */
 const STREAK_WINDOW_MS = 600_000;
 const STREAK_BUCKET_MAX = 512;
+
+type RedisFixedWindowClient = Pick<RedisJsonClient, "incr" | "expire">;
+
+function fixedWindowTtlSeconds(windowMs: number): number {
+  return Math.max(1, Math.ceil(windowMs / 1000));
+}
+
+export async function checkRedisFixedWindowLimit(
+  key: string,
+  opts: { windowMs: number; max: number; redis?: RedisFixedWindowClient | null },
+): Promise<{ ok: boolean; remaining: number }> {
+  const redis = opts.redis === undefined ? getRedisClient() : opts.redis;
+  if (!redis) {
+    return { ok: true, remaining: opts.max };
+  }
+
+  try {
+    const count = Number(await redis.incr(key));
+    if (count === 1) {
+      await redis.expire(key, fixedWindowTtlSeconds(opts.windowMs));
+    }
+
+    return {
+      ok: count <= opts.max,
+      remaining: Math.max(0, opts.max - count),
+    };
+  } catch (error) {
+    safeServerLog("security", "redis_fixed_window_fail_open", {
+      keyPrefix: key.slice(0, 48),
+      detail: error instanceof Error ? error.message.slice(0, 160) : "unknown",
+    });
+    return { ok: true, remaining: opts.max };
+  }
+}
 
 function abuseStrikeMetaKey(ip: string): string {
   return `ratelimit:meta:abuse_strike:ip:${ip}`;

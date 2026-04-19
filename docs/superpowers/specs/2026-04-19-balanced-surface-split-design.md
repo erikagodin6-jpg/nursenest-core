@@ -95,7 +95,9 @@ Use a balanced surface split:
 - global metadata
 - global CSS / font setup
 - first-paint theme boot script
-- `AppThemeProvider` only, if still required for theme hydration parity
+- `AppThemeProvider` only if client-side theme switching via `next-themes` is still required
+
+If client-side theme switching is not required for a surface, prefer a server-rendered theme attribute/class on `<html>` instead of widening the global client provider graph.
 
 It must not mount:
 
@@ -105,6 +107,18 @@ It must not mount:
 - any large content/data source
 
 This isolates global cost to only the minimal theme/document concerns that truly affect first paint.
+
+### 1.1 Root Import Boundary Rule
+
+Root/layout hotspot files must not import:
+
+- lesson loaders
+- blog loaders
+- question loaders
+- full merged i18n loaders
+- any content/data module that expands the shared graph beyond document/theme concerns
+
+The root layout should remain nearly empty: no auth, no analytics, no content loaders.
 
 ### 2. Marketing Surface Contract
 
@@ -119,7 +133,23 @@ But they must use shard-based loading only for hotspot surfaces. The design is:
 
 - keep `loadMarketingMessageShards()` as the only marketing layout/homepage i18n loader in hotspot paths
 - avoid `loadMarketingMessages()` in marketing layout/homepage metadata or page code for these surfaces
-- collapse duplicate i18n loading where page and metadata can share the same shard policy
+- collapse duplicate i18n loading where page and metadata can share the same shard policy and cached shard helper
+
+For the localized homepage specifically, the target is a single shard-based helper that is reused by both:
+
+- `generateMetadata`
+- the page body
+
+That helper should be cacheable and summary-only so the route stops paying for repeated merged-message loads.
+
+### 2.1 Marketing Import Boundary Rule
+
+Marketing hotspot layouts must not import:
+
+- learner modules
+- auth modules used only for client session convenience
+- merged/full i18n loaders when shard loaders are sufficient
+- unrelated heavy content loaders
 
 ### 3. Navigation And Footer Split
 
@@ -127,6 +157,21 @@ But they must use shard-based loading only for hotspot surfaces. The design is:
 
 - a server shell responsible for structure, server-safe inputs, and composition
 - client subcomponents responsible only for interactivity
+
+The split should be explicit, for example:
+
+- `SiteHeader.server.tsx`
+- `SiteHeader.client.tsx`
+- `SiteFooter.server.tsx`
+- `SiteFooter.client.tsx`
+
+The server shell must not import:
+
+- `useSession`
+- `useTheme`
+- analytics hooks
+- large menu helpers
+- other client-only hooks or heavy interactive libraries
 
 Examples of client-only behavior that should live below the server shell:
 
@@ -154,6 +199,12 @@ The learner surface becomes the home for session-aware global client providers:
 Placement should be as high as necessary for learner/app/admin behavior, but no higher. The likely target is `src/app/(student)/app/layout.tsx` unless validation shows a tighter placement is safe.
 
 The learner shell keeps SSR/session access intact because server-side session reads already happen through server helpers, not through the client provider.
+
+Critical safety rule:
+
+- client auth provider is UI convenience only
+- server session helpers and DB-backed RBAC remain the source of truth
+- no server decision may be rewritten to depend on client auth state
 
 ### 5. Metadata Contract
 
@@ -242,8 +293,10 @@ If a hotspot route currently depends on a heavy import path only to support meta
 Add or update tests so that:
 
 - root layout no longer imports `AuthSessionProvider` or `AnalyticsProvider`
+- root/layout hotspot files do not import lesson/blog/question/full i18n loaders
 - hotspot marketing homepage/layout files do not use `loadMarketingMessages()`
 - learner app layout owns auth/analytics provider wiring
+- marketing hotspot layouts do not import learner modules or convenience auth modules
 - header/footer server shells do not directly absorb the full previous client graph again
 
 ### Regression Coverage
@@ -276,8 +329,10 @@ Mitigation: scope tests only to root/layout/provider hotspot files named in this
 ## Success Criteria
 
 - root layout is minimal and no longer mounts auth/analytics
+- root layout stays nearly empty and only keeps a global theme provider when `next-themes` is still required
 - learner surface owns auth/analytics providers without breaking session behavior
 - hotspot marketing layouts/homepages use shard-based i18n loading only
+- localized homepage uses one cached shard-based helper across metadata and page rather than repeated merged-message loading
 - header/footer are split so interactive client code is no longer the entire chrome surface
 - homepage and hotspot metadata avoid heavier merged-message loading
 - no feature removal, no SEO regression, no auth regression, no visible UI regression

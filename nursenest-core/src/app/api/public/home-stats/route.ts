@@ -12,6 +12,7 @@ import {
   captureSentrySoftError,
   withSentryServerSpan,
 } from "@/lib/observability/sentry-route-observability";
+import { getOrSetJsonCache } from "@/lib/server/cache";
 import { safeJsonRoute } from "@/lib/server/safe-api-route";
 
 /** Keep numeric literal — Next segment config must be statically analyzable (see `API_ROUTE_MAX_DURATION_PUBLIC_MARKETING_SEC`). */
@@ -29,7 +30,12 @@ export async function GET(req: NextRequest) {
             op: "http.server",
             attributes: { route: "/api/public/home-stats" },
           },
-          async () => getCachedPublicHomeStats(),
+          async () =>
+            getOrSetJsonCache(
+              "cache:api:public-home-stats:v1",
+              async () => getCachedPublicHomeStats(),
+              { ttlSeconds: 120 },
+            ),
         );
         const body = JSON.stringify(data);
         const etag = buildPublicResponseEtag(body);

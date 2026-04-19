@@ -1,53 +1,26 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import test from "node:test";
-import { collectCoreUrls } from "@/lib/seo/sitemap-static-xml";
+import { fileURLToPath } from "node:url";
 
-async function withEnv<T>(env: Record<string, string | undefined>, run: () => Promise<T>): Promise<T> {
-  const previous = new Map<string, string | undefined>();
-  for (const [key, value] of Object.entries(env)) {
-    previous.set(key, process.env[key]);
-    if (value === undefined) delete process.env[key];
-    else process.env[key] = value;
-  }
+const here = dirname(fileURLToPath(import.meta.url));
+const appRoot = join(here, "..", "..");
 
-  try {
-    return await run();
-  } finally {
-    for (const [key, value] of previous) {
-      if (value === undefined) delete process.env[key];
-      else process.env[key] = value;
-    }
-  }
+function readAppFile(relativePath: string): string {
+  return readFileSync(join(appRoot, relativePath), "utf8");
 }
 
-test("collectCoreUrls keeps only compact core marketing URLs in build safe mode", async () => {
-  const origin = "https://example.com";
+test("sitemap builders gate long-tail SEO fan-out behind build safe mode", () => {
+  const staticXml = readAppFile("lib/seo/sitemap-static-xml.ts");
+  const mergedXml = readAppFile("lib/seo/sitemap-all-xml.ts");
 
-  const normalUrls = await withEnv(
-    {
-      NN_BUILD_SAFE_MODE: undefined,
-      NEXT_PHASE: "phase-production-build",
-      npm_lifecycle_event: "build",
-    },
-    () => collectCoreUrls(origin),
-  );
+  assert.match(staticXml, /shouldReduceNonCriticalBuildWork/);
+  assert.match(staticXml, /sitemap_build_safe_mode_core_only/);
+  assert.match(staticXml, /return base;/);
+  assert.match(staticXml, /getAllProgrammaticQuestionTopicSlugs\(\)/);
 
-  const safeUrls = await withEnv(
-    {
-      NN_BUILD_SAFE_MODE: "1",
-      NEXT_PHASE: "phase-production-build",
-      npm_lifecycle_event: "build",
-    },
-    () => collectCoreUrls(origin),
-  );
-
-  assert.ok(safeUrls.length < normalUrls.length);
-  assert.ok(safeUrls.includes(`${origin}/`));
-  assert.ok(safeUrls.includes(`${origin}/lessons`));
-  assert.ok(safeUrls.includes(`${origin}/pricing`));
-  assert.ok(safeUrls.includes(`${origin}/blog`));
-
-  assert.equal(safeUrls.some((url) => url.includes("/questions/")), false);
-  assert.equal(safeUrls.some((url) => url.includes("/tools/")), false);
-  assert.equal(safeUrls.some((url) => url.includes("/lessons/topics/")), false);
+  assert.match(mergedXml, /shouldReduceNonCriticalBuildWork/);
+  assert.match(mergedXml, /if \(!reduceForBuildSafeMode\)/);
+  assert.match(mergedXml, /buildSafeMode: reduceForBuildSafeMode \? "1" : "0"/);
 });

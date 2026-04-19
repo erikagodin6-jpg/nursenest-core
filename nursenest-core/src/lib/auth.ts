@@ -22,7 +22,7 @@ import {
   normalizeLoginIdentifier,
   sanitizeRawLoginIdentifier,
 } from "@/lib/auth/normalize-login-identifier";
-import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
+import { getTrustedClientIp } from "@/lib/http/client-ip";
 import { Prisma } from "@prisma/client";
 import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
 import { emitBillingAudit, prefixUserId } from "@/lib/observability/billing-entitlement-audit";
@@ -38,6 +38,7 @@ import { logAuthIncidentLine } from "@/lib/auth/auth-incident-log";
 import { recordCredentialsLoginFailure } from "@/lib/observability/production-signal-metrics";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
+import { checkRedisFixedWindowLimit } from "@/lib/server/rate-limit";
 
 if (process.env.NODE_ENV === "production") {
   const hasSecret = Boolean(
@@ -71,11 +72,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 function clientIpFromRequest(req: Request): string {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    req.headers.get("x-real-ip") ??
-    "unknown"
-  );
+  return getTrustedClientIp(req);
 }
 
 /** Same behavior as next-auth/lib/env `reqWithEnvURL` (not a public export). */
@@ -239,7 +236,10 @@ export const authConfig: NextAuthConfig = {
           : "";
         const ip = clientIpFromRequest(request);
 
-        const rl = await checkRateLimitUnified(`login:${ip}`, { windowMs: 60_000, max: 40 });
+        const rl = await checkRedisFixedWindowLimit(`ratelimit:auth:credentials_login:ip:${ip}`, {
+          windowMs: 60_000,
+          max: 40,
+        });
         if (!rl.ok) {
           safeServerLog("auth", "login_rate_limited", { ip: ip.slice(0, 64) });
           captureAuthWarningSentry("login_rate_limited", {
