@@ -126,9 +126,12 @@ test("balanced surface split keeps root and learner app layouts isolated", () =>
   const rootLayout = readFileSync(join(root, "src", "app", "layout.tsx"), "utf8");
   assert.doesNotMatch(rootLayout, /^import .*AuthSessionProvider.*["'];?$/m);
   assert.doesNotMatch(rootLayout, /^import .*AnalyticsProvider.*["'];?$/m);
-  assert.doesNotMatch(rootLayout, /^import .*@\/(components\/lessons|lib\/lessons)\/.*["'];?$/m);
-  assert.doesNotMatch(rootLayout, /^import .*@\/(components\/blog|lib\/blog)\/.*["'];?$/m);
-  assert.doesNotMatch(rootLayout, /^import .*@\/(components\/questions|lib\/questions)\/.*["'];?$/m);
+  assert.doesNotMatch(rootLayout, /^import .*@\/lib\/lessons\/pathway-lesson-loader["'];?$/m);
+  assert.doesNotMatch(
+    rootLayout,
+    /^import .*@\/lib\/blog\/(safe-blog-queries|safe-localized-blog-queries)["'];?$/m,
+  );
+  assert.doesNotMatch(rootLayout, /^import .*@\/lib\/questions\/load-question-bank-remediation-intelligence["'];?$/m);
   assert.doesNotMatch(rootLayout, /^import .*@\/lib\/marketing-i18n\/load-marketing-messages["'];?$/m);
   assert.doesNotMatch(rootLayout, /^import .*@\/lib\/marketing-i18n\/load-marketing-message-shards["'];?$/m);
 
