@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 /**
  * Production entry: bind a tiny bootstrap HTTP server on the public port immediately, then
- * run Next standalone on a private loopback port. Public `GET/HEAD /healthz` and `GET/HEAD /readyz`
- * never wait for Next request handlers, while all other traffic proxies to the child process once ready.
+ * run Next standalone on a private loopback port. Public `GET/HEAD /healthz` reports liveness
+ * immediately. Public `/readyz` only flips to 200 after the child can answer a real health route,
+ * and all other traffic waits for the same readiness gate before proxying.
  */
 import http from "node:http";
 import net from "node:net";
@@ -12,6 +13,7 @@ import { spawn } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { verifyStandaloneArtifact } from "./verify-standalone-artifact.mjs";
+import { normalizeBootstrapProbePathname } from "./standalone-bootstrap-probe-pathname.mjs";
 
 const bootAt = Date.now();
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -34,11 +36,10 @@ const publicHost = process.env.HOSTNAME || "0.0.0.0";
 const internalHost = "127.0.0.1";
 const livenessProbePath = "/healthz";
 const readinessProbePath = "/readyz";
-/**
- * Internal child readiness probe: use the private bootstrap route so readiness
- * never pays the global `/api/*` proxy/auth/rate-limit import cost.
- */
-const childHealthProbePath = "/_nn_bootstrap_ready_check__";
+/** Keep the legacy bootstrap-only child probe path hidden from public traffic. */
+const childBootstrapProbePath = "/_nn_bootstrap_ready_check__";
+/** Probe a real child route so `handlersReady` only flips after request handlers can answer. */
+const childHealthProbePath = "/api/health";
 const bootstrapReadyTimeoutMs = Number.parseInt(process.env.NN_BOOTSTRAP_READY_TIMEOUT_MS ?? "900000", 10) || 900000;
 const bootstrapReadyMaxAttempts = Math.max(
   1,
@@ -59,20 +60,84 @@ function emit(event, meta = {}) {
   console.error(`[nursenest-core] startup_watchdog ${event} ${JSON.stringify({ ...meta, msSinceBoot: Date.now() - bootAt })}`);
 }
 
-function isBootstrapProbeRequest(req, path) {
+/**
+ * GET/HEAD only. Pathname must equal one of: /healthz, /readyz, /_nn_bootstrap_ready_check__ (after normalize).
+ * @returns {boolean} true if matched and response was fully written
+ */
+function handleBootstrapRequest(req, res) {
   const method = typeof req?.method === "string" ? req.method.toUpperCase() : "";
-  const raw = typeof req?.url === "string" ? req.url : "";
   if (method !== "GET" && method !== "HEAD") return false;
-  const noQueryHash = raw.split("?")[0].split("#")[0];
-  let pathname = noQueryHash;
-  if (!pathname.startsWith("/")) {
-    const abs = /^https?:\/\/[^/]+(\/.*)?$/i.exec(pathname);
-    pathname = abs && abs[1] && abs[1].length > 0 ? abs[1] : abs ? "/" : pathname;
+
+  const pathname = normalizeBootstrapProbePathname(req);
+  if (
+    pathname !== livenessProbePath &&
+    pathname !== readinessProbePath &&
+    pathname !== childBootstrapProbePath
+  ) {
+    return false;
   }
-  if (pathname.length > 1 && pathname.endsWith("/")) {
-    pathname = pathname.slice(0, -1);
+
+  if (pathname === livenessProbePath) {
+    emit("bootstrap_healthz_intercepted", {
+      pid: process.pid,
+      method: req.method,
+      url: req.url,
+      handlersReady: state.handlersReady,
+      internalPort,
+      publicPort,
+    });
+    res.statusCode = 200;
+    res.setHeader("content-type", "text/plain; charset=utf-8");
+    res.setHeader("cache-control", "no-store");
+    if (method === "HEAD") {
+      res.end();
+    } else {
+      res.end("ok");
+    }
+    return true;
   }
-  return pathname === path;
+
+  if (pathname === readinessProbePath) {
+    emit("bootstrap_healthz_intercepted", {
+      pid: process.pid,
+      method: req.method,
+      url: req.url,
+      handlersReady: state.handlersReady,
+      internalPort,
+      publicPort,
+    });
+    if (!state.handlersReady) {
+      res.statusCode = 503;
+      res.setHeader("content-type", "text/plain; charset=utf-8");
+      res.setHeader("cache-control", "no-store");
+      res.setHeader("retry-after", "5");
+      if (method === "HEAD") {
+        res.end();
+      } else {
+        res.end("bootstrap: request handlers not ready");
+      }
+      return true;
+    }
+    res.statusCode = 200;
+    res.setHeader("content-type", "text/plain; charset=utf-8");
+    res.setHeader("cache-control", "no-store");
+    if (method === "HEAD") {
+      res.end();
+    } else {
+      res.end("ok");
+    }
+    return true;
+  }
+
+  res.statusCode = 404;
+  res.setHeader("content-type", "text/plain; charset=utf-8");
+  res.setHeader("cache-control", "no-store");
+  if (method === "HEAD") {
+    res.end();
+  } else {
+    res.end("not found");
+  }
+  return true;
 }
 
 function allocatePort() {
@@ -140,6 +205,16 @@ function waitForChildReadiness({ state }) {
   let attempt = 0;
 
   return (async () => {
+    emit("child_readiness_watchdog_start", {
+      pid: process.pid,
+      bypass: BYPASS,
+      bootstrapReadyTimeoutMs,
+      bootstrapReadyMaxAttempts,
+      childHealthProbePath,
+      childHealthProbeTimeoutMs,
+      internalPort,
+      publicPort,
+    });
     if (BYPASS) {
       emit("watchdog_bypass_enabled", {
         pid: process.pid,
@@ -154,10 +229,36 @@ function waitForChildReadiness({ state }) {
     }
     while (!state.handlersReady) {
       if (state.childExited) {
+        const probeUrl = childHealthProbeUrl(internalPort);
+        const reason =
+          "FATAL: standalone child process exited before HEAD " +
+          `${childHealthProbePath} succeeded (internalPort=${internalPort}, probeUrl=${probeUrl})`;
+        emit("readiness_fatal_child_exited", {
+          pid: process.pid,
+          childPid: state.childPid,
+          exitCode: state.childExitCode,
+          exitSignal: state.childExitSignal,
+          probeUrl,
+          reason,
+        });
+        console.error(`[nursenest-core] ${reason}`);
         throw new Error("standalone child exited before handlers became ready");
       }
       if (Date.now() - startedAt > bootstrapReadyTimeoutMs) {
         const probeUrl = childHealthProbeUrl(internalPort);
+        const reason =
+          `FATAL: readiness watchdog timeout after ${bootstrapReadyTimeoutMs}ms without successful HEAD ` +
+          `${childHealthProbePath} on internalPort=${internalPort} (attempts=${attempt}, probeUrl=${probeUrl})`;
+        emit("readiness_fatal_timeout", {
+          pid: process.pid,
+          childPid: state.childPid,
+          attempt,
+          probeUrl,
+          timeoutMs: bootstrapReadyTimeoutMs,
+          childHealthProbePath,
+          reason,
+          childState: JSON.parse(snapshotChildState(state)),
+        });
         emit("internal_probe_exhausted", {
           attempt,
           probeUrl,
@@ -165,6 +266,7 @@ function waitForChildReadiness({ state }) {
           timeoutMs: bootstrapReadyTimeoutMs,
           childState: JSON.parse(snapshotChildState(state)),
         });
+        console.error(`[nursenest-core] ${reason}`);
         throw new Error(
           formatReadinessFailure({
             state,
@@ -178,6 +280,11 @@ function waitForChildReadiness({ state }) {
 
       try {
         attempt += 1;
+        emit("readiness_probe_cycle", {
+          attempt,
+          elapsedMs: Date.now() - startedAt,
+          probeUrl: childHealthProbeUrl(internalPort),
+        });
         await probeChildHealth(internalPort, attempt);
 
         markHandlersReady("internal_probe");
@@ -186,6 +293,19 @@ function waitForChildReadiness({ state }) {
         if (attempt >= bootstrapReadyMaxAttempts) {
           const detail = error instanceof Error ? error.message : String(error);
           const probeUrl = childHealthProbeUrl(internalPort);
+          const reason =
+            `FATAL: readiness watchdog gave up after ${attempt} failed HEAD attempts to ` +
+            `${childHealthProbePath} (maxAttempts=${bootstrapReadyMaxAttempts}, lastError=${detail}, probeUrl=${probeUrl})`;
+          emit("readiness_fatal_max_attempts", {
+            pid: process.pid,
+            childPid: state.childPid,
+            attempt,
+            maxAttempts: bootstrapReadyMaxAttempts,
+            probeUrl,
+            lastError: detail,
+            reason,
+            childState: JSON.parse(snapshotChildState(state)),
+          });
           emit("internal_probe_exhausted", {
             attempt,
             probeUrl,
@@ -194,6 +314,7 @@ function waitForChildReadiness({ state }) {
             error: detail,
             childState: JSON.parse(snapshotChildState(state)),
           });
+          console.error(`[nursenest-core] ${reason}`);
           throw new Error(
             formatReadinessFailure({
               state,
@@ -300,49 +421,29 @@ const state = {
 
 function markHandlersReady(reason) {
   if (state.handlersReady) return;
+  const wasReady = state.handlersReady;
   state.handlersReady = true;
+  emit("handlers_ready_flip", {
+    pid: process.pid,
+    childPid: state.childPid,
+    internalPort,
+    publicPort,
+    reason,
+    handlersReadyBefore: wasReady,
+    handlersReadyAfter: true,
+  });
   emit("handlers_ready", {
     pid: process.pid,
     childPid: state.childPid,
     internalPort,
     publicPort,
     reason,
+    handlersReadyBefore: wasReady,
+    handlersReadyAfter: true,
   });
 }
 
-async function handleBootstrapRequest(req, res) {
-  if (isBootstrapProbeRequest(req, livenessProbePath) || isBootstrapProbeRequest(req, readinessProbePath)) {
-    emit("bootstrap_healthz_intercepted", {
-      pid: process.pid,
-      method: req.method,
-      url: req.url,
-      handlersReady: state.handlersReady,
-      internalPort,
-      publicPort,
-    });
-    res.statusCode = 200;
-    res.setHeader("content-type", "text/plain; charset=utf-8");
-    res.setHeader("cache-control", "no-store");
-    if ((req.method ?? "").toUpperCase() === "HEAD") {
-      res.end();
-    } else {
-      res.end("ok");
-    }
-    return;
-  }
-
-  if (isBootstrapProbeRequest(req, childHealthProbePath)) {
-    res.statusCode = 404;
-    res.setHeader("content-type", "text/plain; charset=utf-8");
-    res.setHeader("cache-control", "no-store");
-    if ((req.method ?? "").toUpperCase() === "HEAD") {
-      res.end();
-    } else {
-      res.end("not found");
-    }
-    return;
-  }
-
+async function serveAfterBootstrapProbe(req, res) {
   if (!state.handlersReady) {
     res.statusCode = 503;
     res.setHeader("content-type", "text/plain; charset=utf-8");
@@ -355,7 +456,10 @@ async function handleBootstrapRequest(req, res) {
 }
 
 const server = http.createServer((req, res) => {
-  void handleBootstrapRequest(req, res).catch(() => {
+  if (handleBootstrapRequest(req, res)) {
+    return;
+  }
+  void serveAfterBootstrapProbe(req, res).catch(() => {
     if (!res.headersSent) {
       res.statusCode = 500;
       res.setHeader("content-type", "text/plain; charset=utf-8");
@@ -393,6 +497,7 @@ emit("server_listening", {
   livenessProbePath,
   readinessProbePath,
   childHealthProbePath,
+  childBootstrapProbePath,
 });
 
 if (BYPASS) {
@@ -440,21 +545,39 @@ child.on("exit", async (code, signal) => {
   state.childExitCode = code ?? null;
   state.childExitSignal = signal ?? null;
   state.handlersReady = false;
+  emit("watchdog_child_process_exit", {
+    pid: process.pid,
+    childPid: state.childPid,
+    exitCode: code ?? null,
+    exitSignal: signal ?? null,
+    nextParentExitCode: signal ? "signal_forward" : code ?? 1,
+  });
   await new Promise((resolve) => server.close(resolve));
   if (signal) {
     process.kill(process.pid, signal);
     return;
   }
+  emit("watchdog_parent_process_exit", { pid: process.pid, exitCode: code ?? 1, cause: "child_exit" });
   process.exit(code ?? 1);
 });
 
 waitForChildReadiness({ state }).catch(async (error) => {
+  const message = error instanceof Error ? error.message : String(error);
   emit("handlers_init_failed", {
     pid: process.pid,
     childPid: state.childPid,
     internalPort,
-    error: error instanceof Error ? error.message : String(error),
+    error: message,
   });
+  emit("watchdog_parent_process_exit", {
+    pid: process.pid,
+    exitCode: 1,
+    cause: "readiness_watchdog_failed",
+    error: message,
+  });
+  console.error(
+    `[nursenest-core] FATAL: startup readiness watchdog exiting parent (exit=1): ${message}`,
+  );
   if (!state.childExited && child.pid) {
     child.kill("SIGTERM");
   }
