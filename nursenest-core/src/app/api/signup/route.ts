@@ -20,6 +20,7 @@ import { correlationIdFromRequest } from "@/lib/observability/request-correlatio
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+import { triggerWelcomeEmailRequested } from "@/lib/server/inngest";
 
 function signupStructuredFailed(req: Request, errorClass: string, severity: "warn" | "error" = "warn"): void {
   emitStructuredLog("signup_failed", severity, {
@@ -251,6 +252,7 @@ export async function POST(req: Request) {
       detail: e instanceof Error ? e.message.slice(0, 200) : "unknown",
     });
   });
+  void triggerWelcomeEmailRequested(createdId);
 
   return NextResponse.json({ ok: true, verificationSent: true }, { status: 201 });
   });

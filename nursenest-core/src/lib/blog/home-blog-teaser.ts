@@ -1,7 +1,6 @@
 import "server-only";
 
 import type { BlogIndexPost } from "@/lib/blog/safe-blog-queries";
-import { getPublishedBlogPostsPage } from "@/lib/blog/safe-blog-queries";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
   captureSentrySoftError,
@@ -26,6 +25,7 @@ export async function loadHomeBlogTeaserPostsSafe(take: number): Promise<BlogInd
       const t0 = Date.now();
       const safeTake = Math.min(6, Math.max(1, Math.floor(take)));
       try {
+        const { getPublishedBlogPostsPage } = await import("@/lib/blog/safe-blog-queries");
         const { posts } = await Promise.race([
           getPublishedBlogPostsPage(1, safeTake, undefined, { includeTotal: false }),
           new Promise<{ posts: BlogIndexPost[] }>((_, reject) => {

@@ -5,7 +5,7 @@
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
-import { PATHWAY_LESSON_DB_TIMEOUT_MS } from "@/lib/lessons/pathway-lesson-loader";
+import { PATHWAY_LESSON_DB_TIMEOUT_MS } from "@/lib/lessons/pathway-lesson-loader-config";
 import { ContentStatus } from "@prisma/client";
 
 type CatalogShape = { pathways: Record<string, { lessons: unknown[] }> };

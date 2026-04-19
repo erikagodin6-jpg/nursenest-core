@@ -60,6 +60,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-scale";
 import { emptyPathwayLessonsPageResult } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import { dedupePathwayLessonsForLibrary } from "@/lib/lessons/pathway-lesson-dedupe";
+import { PATHWAY_LESSON_DB_TIMEOUT_MS } from "@/lib/lessons/pathway-lesson-loader-config";
 import type { LessonInput } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import {
   getCatalogLessonsRaw,
@@ -88,8 +89,7 @@ export {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   PATHWAY_HUB_PAGE_SIZE_MAX,
 } from "@/lib/lessons/pathway-lesson-scale";
-/** DB read timeout for pathway lesson queries (marketing paths). */
-export const PATHWAY_LESSON_DB_TIMEOUT_MS = 1000;
+export { PATHWAY_LESSON_DB_TIMEOUT_MS } from "@/lib/lessons/pathway-lesson-loader-config";
 /**
  * Cross-request Data Cache TTL for public lesson payloads (no user/session).
  * Personalized progress stays outside this layer (see pathway-lesson-progress).

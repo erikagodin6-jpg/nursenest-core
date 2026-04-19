@@ -2,7 +2,6 @@ import Link from "next/link";
 import { unstable_cache } from "next/cache";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { getCatalogLessonPreviewTitles, listPathwayIdsWithLessons } from "@/lib/lessons/pathway-lesson-loader";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import {
@@ -23,9 +22,13 @@ import {
   publicLessonsHubSectionLeadPn,
   publicLessonsHubSectionLeadRn,
 } from "@/lib/marketing/nursing-tier-public-labels";
+import {
+  getCatalogLessonPreviewTitlesForPublicSurface,
+  listPathwayIdsWithLessonsForPublicSurface,
+} from "@/lib/lessons/pathway-lesson-public-metadata";
 
 const cachedPathwayIdsWithLessons = unstable_cache(
-  () => listPathwayIdsWithLessons(),
+  () => listPathwayIdsWithLessonsForPublicSurface(),
   ["public-lessons-pathway-sections-v1"],
   { revalidate: 600, tags: ["pathway-lesson-index"] },
 );
@@ -113,7 +116,7 @@ export async function PublicLessonsPathwaySections({
             <p className="mt-1 nn-marketing-body-sm text-muted">{sectionLead[key]}</p>
             <ul className="mt-4 flex flex-col gap-3 sm:gap-[var(--nn-rhythm-card-grid-gap)]">
               {rows.map((p) => {
-                const previews = getCatalogLessonPreviewTitles(p.id, 4);
+                const previews = getCatalogLessonPreviewTitlesForPublicSurface(p.id, 4);
                 return (
                   <li key={p.id} className="nn-card p-4">
                     <p className="nn-marketing-label nn-marketing-label--accent">

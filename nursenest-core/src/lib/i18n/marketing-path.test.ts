@@ -11,11 +11,18 @@ import {
   globalRegionSlugFromRegionalMarketingPublicPath,
 } from "@/lib/marketing/regional-marketing-public-gate";
 import { globalRegionSlugFromRegionalMarketingPublicPath } from "@/lib/marketing/regional-marketing-public-gate";
-import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 
 test("withMarketingLocale prefixes non-English marketing paths", () => {
   assert.equal(withMarketingLocale("fr", "/pricing"), "/fr/pricing");
   assert.equal(withMarketingLocale("en", "/pricing"), "/pricing");
+});
+
+test("marketing-path re-exports locale stripping helper for shared callers", () => {
+  assert.deepEqual(stripMarketingLocalePrefix("/fr/pricing"), {
+    locale: "fr",
+    pathname: "/pricing",
+  });
 });
 
 test("withMarketingLocale does not prefix exam hub country paths", () => {

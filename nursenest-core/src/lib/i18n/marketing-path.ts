@@ -2,6 +2,8 @@ import { isExamHubMarketingPath, isExpansionExamMarketingPath } from "@/lib/i18n
 import { DEFAULT_MARKETING_LOCALE, isMarketingLocaleCode } from "@/lib/i18n/marketing-locale-policy";
 import { stripMarketingLocalePrefix } from "@/lib/i18n/marketing-locale-prefix";
 
+export { stripMarketingLocalePrefix } from "@/lib/i18n/marketing-locale-prefix";
+
 /**
  * Prefix a same-origin marketing path with `/[lang]` when UI language is not English and the target
  * has a localized route under `(marketing)/[locale]/…`.

@@ -7,9 +7,9 @@ import {
   isKnownPathwayLessonContentLocale,
   normalizePathwayLessonLocale,
 } from "@/lib/lessons/pathway-lesson-locale";
+import { PATHWAY_LESSON_DB_TIMEOUT_MS } from "@/lib/lessons/pathway-lesson-loader-config";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
-import { PATHWAY_LESSON_DB_TIMEOUT_MS } from "@/lib/lessons/pathway-lesson-loader";
 import { ContentStatus } from "@prisma/client";
 
 const DB_TIMEOUT = Math.min(PATHWAY_LESSON_DB_TIMEOUT_MS, 10_000);

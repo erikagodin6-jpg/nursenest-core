@@ -99,6 +99,45 @@ test("priority content and catalog helper modules avoid top-level JSON imports",
   }
 });
 
+test("homepage blog helpers lazy-load the static blog corpus and query layer", () => {
+  const staticBlogPosts = readAppFile("lib/blog/static-blog-posts.ts");
+  const homeBlogTeaser = readAppFile("lib/blog/home-blog-teaser.ts");
+  const latestLinks = readAppFile("components/marketing/marketing-blog-latest-links.tsx");
+
+  assert.doesNotMatch(staticBlogPosts, /import\s+\{\s*STATIC_BLOG_POSTS/);
+  assert.match(staticBlogPosts, /require\(["']@\/content\/blog-static-posts["']\)/);
+
+  assert.doesNotMatch(homeBlogTeaser, /import\s+\{\s*getPublishedBlogPostsPage/);
+  assert.match(homeBlogTeaser, /await import\(["']@\/lib\/blog\/safe-blog-queries["']\)/);
+
+  assert.doesNotMatch(latestLinks, /import\s+\{\s*getPublishedBlogPostsPage/);
+  assert.match(latestLinks, /await import\(["']@\/lib\/blog\/safe-blog-queries["']\)/);
+});
+
+test("public lessons hub uses metadata helpers instead of the full lesson loader", () => {
+  const lessonSections = readAppFile("components/marketing/public-lessons-pathway-sections.tsx");
+  const publicMetadata = readAppFile("lib/lessons/pathway-lesson-public-metadata.ts");
+
+  assert.doesNotMatch(lessonSections, /@\/lib\/lessons\/pathway-lesson-loader/);
+  assert.match(lessonSections, /@\/lib\/lessons\/pathway-lesson-public-metadata/);
+  assert.match(publicMetadata, /listCatalogPathwayIdsWithLessonsSync/);
+  assert.match(publicMetadata, /getCatalogLessonPreviewTitlesForPublicSurface/);
+});
+
+test("ops lesson helpers use loader config without importing the full loader", () => {
+  const sourcePaths = [
+    "lib/lessons/pathway-lesson-registry-source.ts",
+    "lib/scalability/build-content-scalability-report.ts",
+    "lib/lessons/pathway-lesson-translation-diagnostics.ts",
+  ];
+
+  for (const sourcePath of sourcePaths) {
+    const source = readAppFile(sourcePath);
+    assert.doesNotMatch(source, /@\/lib\/lessons\/pathway-lesson-loader["']/);
+    assert.match(source, /@\/lib\/lessons\/pathway-lesson-loader-config["']/);
+  }
+});
+
 test("remaining pre-nursing and interactive content modules avoid top-level JSON imports", () => {
   const sourcePaths = [
     "components/tools/calculators/transfusion-safety-tool.tsx",

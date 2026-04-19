@@ -1,20 +1,27 @@
-import {
-  STATIC_BLOG_POSTS,
-  type StaticBlogPostRecord,
-} from "@/content/blog-static-posts";
+import type { StaticBlogPostRecord } from "@/content/blog-static-posts";
 
-const posts: StaticBlogPostRecord[] = STATIC_BLOG_POSTS;
+type StaticBlogPostsModule = {
+  STATIC_BLOG_POSTS: StaticBlogPostRecord[];
+};
+
+let staticBlogPostsCache: StaticBlogPostRecord[] | null = null;
+
+function getStaticBlogPosts(): StaticBlogPostRecord[] {
+  if (staticBlogPostsCache) return staticBlogPostsCache;
+  staticBlogPostsCache = (require("@/content/blog-static-posts") as StaticBlogPostsModule).STATIC_BLOG_POSTS;
+  return staticBlogPostsCache;
+}
 
 export function listStaticBlogPostsForIndex(): StaticBlogPostRecord[] {
-  return [...posts].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+  return [...getStaticBlogPosts()].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 }
 
 export function getStaticBlogPost(slug: string): StaticBlogPostRecord | undefined {
-  return posts.find((p) => p.slug === slug);
+  return getStaticBlogPosts().find((p) => p.slug === slug);
 }
 
 export function countStaticBlogPosts(): number {
-  return posts.length;
+  return getStaticBlogPosts().length;
 }
 
 /** Shape consumed by `/blog/[slug]` rendering (matches Prisma fields used there). */
