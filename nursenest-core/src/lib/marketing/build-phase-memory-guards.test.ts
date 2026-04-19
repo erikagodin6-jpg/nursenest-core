@@ -33,11 +33,13 @@ test("marketing default layout uses chrome-only shards and layers main page shar
 
 test("fixed home and lessons surfaces use page-body shards during production build", () => {
   const homePage = readAppFile("app/(marketing)/(default)/page.tsx");
+  const homepageShardHelper = readAppFile("lib/marketing-i18n/homepage-message-shards.ts");
   const lessonsPage = readAppFile("app/(marketing)/(default)/lessons/page.tsx");
   const lessonSections = readAppFile("components/marketing/public-lessons-pathway-sections.tsx");
 
-  assert.match(homePage, /process\.env\.NEXT_PHASE === MARKETING_BUILD_PHASE/);
-  assert.match(homePage, /MARKETING_PAGE_BODY_MESSAGE_SHARDS/);
+  assert.match(homePage, /@\/lib\/marketing-i18n\/homepage-message-shards/);
+  assert.match(homepageShardHelper, /process\.env\.NEXT_PHASE === MARKETING_BUILD_PHASE/);
+  assert.match(homepageShardHelper, /MARKETING_PAGE_BODY_MESSAGE_SHARDS/);
 
   assert.match(lessonsPage, /process\.env\.NEXT_PHASE === MARKETING_BUILD_PHASE/);
   assert.match(lessonsPage, /MARKETING_PAGE_BODY_MESSAGE_SHARDS/);

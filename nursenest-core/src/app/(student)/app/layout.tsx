@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
+import { LearnerSurfaceProviders } from "./learner-surface-providers";
 
 /** Shared marketing/locale dictionary for all `/app/*` routes (learner shell, exams, practice). */
 export const dynamic = "force-dynamic";
@@ -32,11 +33,13 @@ export default async function AppSegmentLayout({ children }: { children: React.R
   }
 
   return (
-    <MarketingI18nProvider locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
-      {children}
-      <Suspense fallback={null}>
-        <AdminGlobalCommandPalette />
-      </Suspense>
-    </MarketingI18nProvider>
+    <LearnerSurfaceProviders>
+      <MarketingI18nProvider locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
+        {children}
+        <Suspense fallback={null}>
+          <AdminGlobalCommandPalette />
+        </Suspense>
+      </MarketingI18nProvider>
+    </LearnerSurfaceProviders>
   );
 }

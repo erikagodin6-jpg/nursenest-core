@@ -4,6 +4,7 @@ import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback
 import { MarketingI18nProvider } from "@/components/i18n/marketing-i18n-provider";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { AdminSurfaceProviders } from "./admin-surface-providers";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { ADMIN_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 
@@ -28,17 +29,19 @@ export default async function AdminGroupLayout({ children }: { children: React.R
     console.error("[AdminGroupLayout] loadMarketingMessageShards", e);
   }
   return (
-    <MarketingI18nProvider key={DEFAULT_MARKETING_LOCALE} locale={DEFAULT_MARKETING_LOCALE} messages={messages}>
-      <MarketingFeedbackShell>
-        <div className="nn-marketing-surface flex min-h-screen flex-col">
-          <SiteHeader />
-          <div className="flex-1">{children}</div>
-          <Suspense fallback={null}>
-            <AdminGlobalCommandPalette />
-          </Suspense>
-          <SiteFooter />
-        </div>
-      </MarketingFeedbackShell>
-    </MarketingI18nProvider>
+    <AdminSurfaceProviders>
+      <MarketingI18nProvider key={DEFAULT_MARKETING_LOCALE} locale={DEFAULT_MARKETING_LOCALE} messages={messages}>
+        <MarketingFeedbackShell>
+          <div className="nn-marketing-surface flex min-h-screen flex-col">
+            <SiteHeader />
+            <div className="flex-1">{children}</div>
+            <Suspense fallback={null}>
+              <AdminGlobalCommandPalette />
+            </Suspense>
+            <SiteFooter />
+          </div>
+        </MarketingFeedbackShell>
+      </MarketingI18nProvider>
+    </AdminSurfaceProviders>
   );
 }

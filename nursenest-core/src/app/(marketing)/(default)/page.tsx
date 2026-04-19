@@ -9,11 +9,7 @@ import HomeRestoredClient from "@/components/marketing/home-restored-client";
 import { getDegradedPublicHomeStatsFallback } from "@/lib/marketing/public-home-stats-payload";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
-import {
-  MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
-  MARKETING_PAGE_BODY_MESSAGE_SHARDS,
-} from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
+import { loadHomepageMessageBundle } from "@/lib/marketing-i18n/homepage-message-shards";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
@@ -51,12 +47,6 @@ function shouldSkipOptionalMarketingDbReads(): boolean {
   );
 }
 
-function homePageMessageShards() {
-  return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE
-    ? MARKETING_PAGE_BODY_MESSAGE_SHARDS
-    : MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS;
-}
-
 async function loadHomePageStats(skipOptionalDbReads: boolean) {
   if (skipOptionalDbReads) {
     return getDegradedPublicHomeStatsFallback("production_request_optional_db_skipped");
@@ -76,12 +66,17 @@ export async function generateMetadata(): Promise<Metadata> {
       renderTrace("home metadata start", { route: "/" });
       return safeGenerateMetadata(
         async () => {
-          const m = await loadMarketingMessageShards(STATIC_LOCALE, homePageMessageShards());
-          const title = resolveMarketingCopy(m, "pages.home.metaTitleUS", m, defaultHomeMetaTitle(STATIC_REGION));
+          const { messages, fallbackMessages } = await loadHomepageMessageBundle(STATIC_LOCALE);
+          const title = resolveMarketingCopy(
+            messages,
+            "pages.home.metaTitleUS",
+            fallbackMessages,
+            defaultHomeMetaTitle(STATIC_REGION),
+          );
           const description = resolveMarketingCopy(
-            m,
+            messages,
             "pages.home.metaDescriptionUS",
-            m,
+            fallbackMessages,
             defaultHomeMetaDescription(STATIC_REGION),
           );
           const alt = marketingAlternatesSharedPage(STATIC_LOCALE, "/");
@@ -117,12 +112,13 @@ export default async function HomePage() {
     async () => {
       renderTrace("home page start", { route: "/" });
       const skipOptionalDbReads = shouldSkipOptionalMarketingDbReads();
-      const [homeStatsRaw, m, publishedGlobalRegionCardIds, blogTeaserPosts] = await Promise.all([
+      const [homeStatsRaw, bundle, publishedGlobalRegionCardIds, blogTeaserPosts] = await Promise.all([
         loadHomePageStats(skipOptionalDbReads),
-        loadMarketingMessageShards(STATIC_LOCALE, homePageMessageShards()),
+        loadHomepageMessageBundle(STATIC_LOCALE),
         Promise.resolve(listPublishedHomeGlobalRegionCardIds()),
         skipOptionalDbReads ? Promise.resolve([]) : loadHomeBlogTeaserPostsSafe(3),
       ]);
+      const { messages, fallbackMessages } = bundle;
       renderTrace("home page after data", {
         route: "/",
         degraded: Boolean(homeStatsRaw.degraded),
@@ -135,11 +131,16 @@ export default async function HomePage() {
         registeredLearners: homeStatsRaw.registeredLearners,
         totalLessons: homeStatsRaw.totalLessons,
       };
-      const title = resolveMarketingCopy(m, "pages.home.metaTitleUS", m, defaultHomeMetaTitle(STATIC_REGION));
+      const title = resolveMarketingCopy(
+        messages,
+        "pages.home.metaTitleUS",
+        fallbackMessages,
+        defaultHomeMetaTitle(STATIC_REGION),
+      );
       const description = resolveMarketingCopy(
-        m,
+        messages,
         "pages.home.metaDescriptionUS",
-        m,
+        fallbackMessages,
         defaultHomeMetaDescription(STATIC_REGION),
       );
       const { crumbs, schemaItems } = marketingHomeSurfaceBreadcrumbs();
@@ -169,21 +170,26 @@ export default async function HomePage() {
               <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                   <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">
-                    {resolveMarketingCopy(m, "pages.home.blogTeaser.title", undefined, "")}
+                    {resolveMarketingCopy(messages, "pages.home.blogTeaser.title", fallbackMessages, "")}
                   </h2>
                   <p className="mt-1 max-w-prose text-sm text-[var(--theme-muted-text)]">
-                    {resolveMarketingCopy(m, "pages.home.blogTeaser.subtitle", undefined, "")}
+                    {resolveMarketingCopy(messages, "pages.home.blogTeaser.subtitle", fallbackMessages, "")}
                   </p>
                 </div>
                 <Link href="/blog" className="shrink-0 text-sm font-semibold text-primary hover:underline">
-                  {resolveMarketingCopy(m, "pages.home.blogTeaser.viewAll", undefined, "")}
+                  {resolveMarketingCopy(messages, "pages.home.blogTeaser.viewAll", fallbackMessages, "")}
                 </Link>
               </div>
               <MarketingBlogLatestLinks
                 take={3}
                 posts={blogTeaserPosts}
                 className="mt-4 border-t border-[var(--border-subtle)] pt-4"
-                heading={resolveMarketingCopy(m, "pages.home.blogTeaser.latestHeading", undefined, "")}
+                heading={resolveMarketingCopy(
+                  messages,
+                  "pages.home.blogTeaser.latestHeading",
+                  fallbackMessages,
+                  "",
+                )}
               />
             </div>
           </section>

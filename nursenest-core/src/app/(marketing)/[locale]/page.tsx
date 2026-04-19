@@ -8,10 +8,9 @@ import { MARKETING_HOME_FAQ_JSONLD } from "@/lib/seo/marketing-home-faq-schema";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { localizeBreadcrumbResolution } from "@/lib/seo/breadcrumb-i18n";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
-import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { loadHomepageMessageBundle } from "@/lib/marketing-i18n/homepage-message-shards";
 import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
@@ -37,14 +36,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {
       const marketingRegion = await getMarketingRegionFromCookies();
-      const m = await loadMarketingMessages(locale);
-      const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const { messages, fallbackMessages } = await loadHomepageMessageBundle(locale);
       const metaSfx = marketingRegion === "US" ? "US" : "CA";
-      const title = resolveMarketingCopy(m, `pages.home.metaTitle${metaSfx}`, en, defaultHomeMetaTitle(marketingRegion));
+      const title = resolveMarketingCopy(
+        messages,
+        `pages.home.metaTitle${metaSfx}`,
+        fallbackMessages,
+        defaultHomeMetaTitle(marketingRegion),
+      );
       const description = resolveMarketingCopy(
-        m,
+        messages,
         `pages.home.metaDescription${metaSfx}`,
-        en,
+        fallbackMessages,
         defaultHomeMetaDescription(marketingRegion),
       );
       const alt = marketingAlternatesSharedPage(locale, "/");
@@ -68,26 +71,31 @@ export default async function LocalizedHomePage({ params }: Props) {
   const { locale } = await params;
   const raw = marketingHomeSurfaceBreadcrumbs();
   const marketingRegion = await getMarketingRegionFromCookies();
-  const [homeStatsRaw, primary, en, publishedGlobalRegionCardIds] = await Promise.all([
+  const [homeStatsRaw, bundle, publishedGlobalRegionCardIds] = await Promise.all([
     loadLocalizedHomePageStats(),
-    loadMarketingMessages(locale),
-    loadMarketingMessages(DEFAULT_MARKETING_LOCALE),
+    loadHomepageMessageBundle(locale),
     listPublishedHomeGlobalRegionCardIds(),
   ]);
+  const { messages, fallbackMessages } = bundle;
   const homeMarketingStats = {
     questionCount: homeStatsRaw.questionCount,
     registeredLearners: homeStatsRaw.registeredLearners,
     totalLessons: homeStatsRaw.totalLessons,
   };
   const metaSfx = marketingRegion === "US" ? "US" : "CA";
-  const title = resolveMarketingCopy(primary, `pages.home.metaTitle${metaSfx}`, en, defaultHomeMetaTitle(marketingRegion));
+  const title = resolveMarketingCopy(
+    messages,
+    `pages.home.metaTitle${metaSfx}`,
+    fallbackMessages,
+    defaultHomeMetaTitle(marketingRegion),
+  );
   const description = resolveMarketingCopy(
-    primary,
+    messages,
     `pages.home.metaDescription${metaSfx}`,
-    en,
+    fallbackMessages,
     defaultHomeMetaDescription(marketingRegion),
   );
-  const { crumbs, schemaItems } = localizeBreadcrumbResolution(raw, primary);
+  const { crumbs, schemaItems } = localizeBreadcrumbResolution(raw, messages);
   return (
     <>
       <WebPageJsonLd

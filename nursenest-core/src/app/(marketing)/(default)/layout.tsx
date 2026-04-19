@@ -1,9 +1,10 @@
 import { MarketingMainI18nShards } from "@/components/i18n/marketing-main-i18n-shards";
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooterServer } from "@/components/layout/site-footer.server";
+import { SiteHeaderServer } from "@/components/layout/site-header.server";
 import { PathwayLessonProgressRefreshListener } from "@/components/lessons/pathway-lesson-progress-refresh-listener";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld";
+import { MarketingSurfaceProviders } from "../marketing-surface-providers";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { assertMarketingLayoutMessagesIntegrity } from "@/lib/marketing-i18n/marketing-layout-message-integrity";
@@ -83,33 +84,35 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       });
 
       return (
-        <MarketingI18nProvider
-          key={resolvedLocale}
-          locale={resolvedLocale}
-          messages={messages}
-          fallbackMessages={fallbackMessages}
-        >
-          <NursenestRegionRoot serverRegion={serverRegion}>
-            <OrganizationJsonLd />
-            <WebSiteJsonLd />
-            <MarketingFeedbackShell>
-              <div className="nn-marketing-surface flex min-h-screen flex-col">
-                <SiteHeader />
-                <PathwayLessonProgressRefreshListener />
-                <main className="flex min-h-0 flex-1 flex-col">
-                  {shouldLayerMainPageShards() ? (
-                    <MarketingMainI18nShards locale={resolvedLocale}>
+        <MarketingSurfaceProviders>
+          <MarketingI18nProvider
+            key={resolvedLocale}
+            locale={resolvedLocale}
+            messages={messages}
+            fallbackMessages={fallbackMessages}
+          >
+            <NursenestRegionRoot serverRegion={serverRegion}>
+              <OrganizationJsonLd />
+              <WebSiteJsonLd />
+              <MarketingFeedbackShell>
+                <div className="nn-marketing-surface flex min-h-screen flex-col">
+                  <SiteHeaderServer />
+                  <PathwayLessonProgressRefreshListener />
+                  <main className="flex min-h-0 flex-1 flex-col">
+                    {shouldLayerMainPageShards() ? (
+                      <MarketingMainI18nShards locale={resolvedLocale}>
+                        <PageTransitionShell>{children}</PageTransitionShell>
+                      </MarketingMainI18nShards>
+                    ) : (
                       <PageTransitionShell>{children}</PageTransitionShell>
-                    </MarketingMainI18nShards>
-                  ) : (
-                    <PageTransitionShell>{children}</PageTransitionShell>
-                  )}
-                </main>
-                <SiteFooter />
-              </div>
-            </MarketingFeedbackShell>
-          </NursenestRegionRoot>
-        </MarketingI18nProvider>
+                    )}
+                  </main>
+                  <SiteFooterServer />
+                </div>
+              </MarketingFeedbackShell>
+            </NursenestRegionRoot>
+          </MarketingI18nProvider>
+        </MarketingSurfaceProviders>
       );
     },
   );

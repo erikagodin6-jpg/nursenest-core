@@ -139,3 +139,28 @@ test("balanced surface split keeps root and learner app layouts isolated", () =>
   assert.match(learnerAppLayout, /^import .*LearnerSurfaceProviders.*["'];?$/m);
   assert.doesNotMatch(learnerAppLayout, /^import .*AuthSessionProvider.*["'];?$/m);
 });
+
+test("marketing layouts own their auth and analytics surface wrapper", () => {
+  const defaultMarketingLayout = readFileSync(
+    join(root, "src", "app", "(marketing)", "(default)", "layout.tsx"),
+    "utf8",
+  );
+  assert.match(defaultMarketingLayout, /^import .*MarketingSurfaceProviders.*["'];?$/m);
+  assert.doesNotMatch(defaultMarketingLayout, /^import .*AuthSessionProvider.*["'];?$/m);
+  assert.doesNotMatch(defaultMarketingLayout, /^import .*AnalyticsProvider.*["'];?$/m);
+
+  const localeMarketingLayout = readFileSync(
+    join(root, "src", "app", "(marketing)", "[locale]", "layout.tsx"),
+    "utf8",
+  );
+  assert.match(localeMarketingLayout, /^import .*MarketingSurfaceProviders.*["'];?$/m);
+  assert.doesNotMatch(localeMarketingLayout, /^import .*AuthSessionProvider.*["'];?$/m);
+  assert.doesNotMatch(localeMarketingLayout, /^import .*AnalyticsProvider.*["'];?$/m);
+});
+
+test("admin layout owns its auth and analytics surface wrapper", () => {
+  const adminLayout = readFileSync(join(root, "src", "app", "(admin)", "layout.tsx"), "utf8");
+  assert.match(adminLayout, /^import .*AdminSurfaceProviders.*["'];?$/m);
+  assert.doesNotMatch(adminLayout, /^import .*AuthSessionProvider.*["'];?$/m);
+  assert.doesNotMatch(adminLayout, /^import .*AnalyticsProvider.*["'];?$/m);
+});

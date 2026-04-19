@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import Script from "next/script";
-import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
-import { AnalyticsProvider } from "@/components/providers/analytics-provider";
 import { AppThemeProvider } from "@/components/theme/app-theme-provider";
 import { renderTrace } from "@/lib/observability/render-trace";
 import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
@@ -91,13 +89,7 @@ export default function RootLayout({
         <Script id="nursenest-theme-boot" strategy="beforeInteractive">
           {themeBoot}
         </Script>
-        <AppThemeProvider>
-          <AuthSessionProvider>
-            <AnalyticsProvider>
-              {children}
-            </AnalyticsProvider>
-          </AuthSessionProvider>
-        </AppThemeProvider>
+        <AppThemeProvider>{children}</AppThemeProvider>
       </body>
     </html>
   );

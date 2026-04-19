@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import { MarketingLocaleUrlSync } from "@/components/i18n/marketing-locale-url-sync";
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooterServer } from "@/components/layout/site-footer.server";
+import { SiteHeaderServer } from "@/components/layout/site-header.server";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld";
 import { MarketingMainI18nShards } from "@/components/i18n/marketing-main-i18n-shards";
+import { MarketingSurfaceProviders } from "../marketing-surface-providers";
 import { DEFAULT_MARKETING_LOCALE, isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { assertMarketingLayoutMessagesIntegrity } from "@/lib/marketing-i18n/marketing-layout-message-integrity";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
@@ -55,25 +56,27 @@ export default async function MarketingLocaleLayout({
   });
 
   return (
-    <MarketingI18nProvider key={locale} locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
-      <NursenestRegionRoot serverRegion={serverRegion}>
-        <MarketingLocaleUrlSync locale={locale} />
-        <OrganizationJsonLd />
-        <WebSiteJsonLd />
-        <MarketingFeedbackShell>
-          <div className="nn-marketing-surface flex min-h-screen flex-col">
-            <SiteHeader />
-            <main className="flex-1">
-              <MarketingMainI18nShards locale={locale}>
-                <MarketingMainErrorBoundary name="marketing_locale_main">
-                  <PageTransitionShell>{children}</PageTransitionShell>
-                </MarketingMainErrorBoundary>
-              </MarketingMainI18nShards>
-            </main>
-            <SiteFooter />
-          </div>
-        </MarketingFeedbackShell>
-      </NursenestRegionRoot>
-    </MarketingI18nProvider>
+    <MarketingSurfaceProviders>
+      <MarketingI18nProvider key={locale} locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
+        <NursenestRegionRoot serverRegion={serverRegion}>
+          <MarketingLocaleUrlSync locale={locale} />
+          <OrganizationJsonLd />
+          <WebSiteJsonLd />
+          <MarketingFeedbackShell>
+            <div className="nn-marketing-surface flex min-h-screen flex-col">
+              <SiteHeaderServer />
+              <main className="flex-1">
+                <MarketingMainI18nShards locale={locale}>
+                  <MarketingMainErrorBoundary name="marketing_locale_main">
+                    <PageTransitionShell>{children}</PageTransitionShell>
+                  </MarketingMainErrorBoundary>
+                </MarketingMainI18nShards>
+              </main>
+              <SiteFooterServer />
+            </div>
+          </MarketingFeedbackShell>
+        </NursenestRegionRoot>
+      </MarketingI18nProvider>
+    </MarketingSurfaceProviders>
   );
 }
