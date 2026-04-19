@@ -87,10 +87,10 @@ test("bootstrap runtime has no child-log readiness path", () => {
   assert.equal(source.includes("childOutputIndicatesReady"), false);
 });
 
-test("bootstrap runtime probes the private non-api readiness path", () => {
+test("bootstrap runtime probes /api/health; legacy /_nn_bootstrap_ready_check__ is bootstrap-only", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
-  assert.equal(source.includes('const childHealthProbePath = "/_nn_bootstrap_ready_check__";'), true);
-  assert.equal(source.includes('const childHealthProbePath = "/api/health";'), false);
+  assert.equal(source.includes('const childHealthProbePath = "/api/health";'), true);
+  assert.equal(source.includes('const childBootstrapProbePath = "/_nn_bootstrap_ready_check__";'), true);
 });
 
 test("bootstrap runtime reuses verifier-based standalone entry resolution with nested-first fallback", () => {
@@ -124,8 +124,8 @@ test("bootstrap timeout and readyz re-probe both target the internal port", () =
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
   assert.equal(source.includes("formatReadinessFailure({"), true);
   assert.equal(source.includes("probeUrl: childHealthProbeUrl(publicPort)"), false);
-  assert.equal(source.includes("await probeChildHealth(internalPort);"), true);
-  assert.equal(source.includes("await probeChildHealth(publicPort);"), false);
+  assert.equal(source.includes("await probeChildHealth(internalPort, attempt)"), true);
+  assert.equal(source.includes("await probeChildHealth(publicPort, attempt)"), false);
 });
 
 test("bootstrap readiness loop has a bounded attempt cap before terminal failure", () => {
@@ -182,7 +182,7 @@ test("bootstrap runtime supports an env-guarded watchdog bypass after bind", () 
 
 test("bootstrap runtime skips the internal readiness probe loop when watchdog bypass is enabled", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
-  assert.equal(source.includes("if (bypassBootstrapReadiness)"), true);
+  assert.equal(source.includes("if (BYPASS)"), true);
   assert.equal(source.includes('emit("watchdog_bypass_enabled"'), true);
   assert.equal(source.includes("await probeChildHealth(internalPort, attempt)"), true);
 });

@@ -159,9 +159,9 @@ test("standalone runtime serves the internal bootstrap probe directly and flips 
   const logsAfterReady = combined.join("");
   assert.match(
     logsAfterReady,
-    new RegExp(`"probeUrl":"http://127\\.0\\.0\\.1:${serverListeningMeta.internalPort}/_nn_bootstrap_ready_check__"`),
+    new RegExp(`"probeUrl":"http://127\\.0\\.0\\.1:${serverListeningMeta.internalPort}/api/health"`),
   );
-  assert.doesNotMatch(logsAfterReady, new RegExp(`"probeUrl":"http://127\\.0\\.0\\.1:${port}/_nn_bootstrap_ready_check__"`));
+  assert.doesNotMatch(logsAfterReady, new RegExp(`"probeUrl":"http://127\\.0\\.0\\.1:${port}/api/health"`));
 
   const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
   assert.equal(readyRes.status, 200);

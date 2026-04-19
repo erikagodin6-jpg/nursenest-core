@@ -28,6 +28,7 @@ function createTempScriptRoot(prefix, scriptNames) {
 const STARTUP_RUNTIME_SCRIPTS = [
   "start-standalone.mjs",
   "start-standalone-runtime.cjs",
+  "standalone-bootstrap-probe-pathname.mjs",
   "standalone-startup-watchdog-preload.cjs",
   "standalone-startup-watchdog-preload-shared.cjs",
   "standalone-startup-watchdog-shared.cjs",
@@ -321,10 +322,114 @@ test("start-standalone exits fatally on readiness timeout with probe URL, timeou
 
   assert.equal(exitCode, 1, combined.join(""));
   assert.match(combined.join(""), /startup_watchdog handlers_init_failed/);
-  assert.match(combined.join(""), /probeUrl=http:\/\/127\.0\.0\.1:\d+\/_nn_bootstrap_ready_check__/);
+  assert.match(combined.join(""), /probeUrl=http:\/\/127\.0\.0\.1:\d+\/api\/health/);
+  assert.match(combined.join(""), /readiness_fatal_(timeout|max_attempts)/);
+  assert.match(combined.join(""), /FATAL: readiness watchdog/);
   assert.match(combined.join(""), /timeoutMs=300/);
   assert.match(combined.join(""), /"childState":\{"childPid":\d+/);
   assert.match(combined.join(""), /childState=\{\\"childPid\\":\d+/);
+});
+
+test("start-standalone: /healthz and /readyz are intercepted before proxy; /api/health waits for child", async (t) => {
+  const tempRoot = createTempRuntimeRoot("nn-start-standalone-real-health-gate-");
+  const standaloneEntry = path.join(tempRoot, ".next", "standalone", "server.js");
+  fs.mkdirSync(path.dirname(standaloneEntry), { recursive: true });
+  fs.writeFileSync(
+    standaloneEntry,
+    [
+      "const http = require('node:http');",
+      "const server = http.createServer();",
+      "server.listen(Number(process.env.PORT), process.env.HOSTNAME || '127.0.0.1');",
+      "setTimeout(() => {",
+      "  server.on('request', (req, res) => {",
+      "    const isHealth = req.url === '/api/health' || req.url.startsWith('/api/health?');",
+      "    res.statusCode = 200;",
+      "    res.setHeader('cache-control', 'no-store');",
+      "    res.setHeader('content-type', isHealth ? 'application/json; charset=utf-8' : 'text/plain; charset=utf-8');",
+      "    if ((req.method || '').toUpperCase() === 'HEAD') {",
+      "      res.end();",
+      "      return;",
+      "    }",
+      "    res.end(isHealth ? '{\"ok\":true,\"live\":true}' : 'ok');",
+      "  });",
+      "}, 900);",
+      "setInterval(() => {}, 1000);",
+    ].join("\n"),
+    "utf8",
+  );
+
+  const port = await allocatePort();
+  const combined = [];
+  const child = spawn(process.execPath, [path.join(tempRoot, "scripts", "start-standalone.mjs")], {
+    cwd: tempRoot,
+    env: {
+      ...process.env,
+      NODE_ENV: "production",
+      HOSTNAME: "127.0.0.1",
+      PORT: String(port),
+      NN_CHILD_HEALTH_TIMEOUT_MS: "100",
+      NN_BOOTSTRAP_READY_TIMEOUT_MS: "4000",
+      NN_BOOTSTRAP_READY_MAX_ATTEMPTS: "30",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  const capture = (chunk) => combined.push(String(chunk));
+  child.stdout.on("data", capture);
+  child.stderr.on("data", capture);
+
+  t.after(async () => {
+    if (child.exitCode == null && !child.killed) {
+      child.kill("SIGTERM");
+      await new Promise((resolve) => child.once("exit", resolve));
+    }
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  });
+
+  await waitFor(() => combined.join("").includes("startup_watchdog server_listening"));
+  await waitFor(() => combined.join("").includes("startup_watchdog standalone_spawn"));
+
+  const earlyLogs = combined.join("");
+  assert.doesNotMatch(earlyLogs, /startup_watchdog handlers_ready/);
+
+  const preReadyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
+  assert.equal(preReadyRes.status, 503);
+  assert.equal(await preReadyRes.text(), "bootstrap: request handlers not ready");
+
+  const preReadyHealthzRes = await fetch(`http://127.0.0.1:${port}/healthz`);
+  assert.equal(preReadyHealthzRes.status, 200);
+  assert.equal(await preReadyHealthzRes.text(), "ok");
+
+  const preReadyApiRes = await fetch(`http://127.0.0.1:${port}/api/health`);
+  assert.equal(preReadyApiRes.status, 503);
+  assert.equal(await preReadyApiRes.text(), "bootstrap: request handlers not ready");
+
+  const logsAfterPublicProbes = combined.join("");
+  assert.match(logsAfterPublicProbes, /startup_watchdog bootstrap_healthz_intercepted.*\/readyz/);
+  await waitFor(
+    () => (combined.join("").match(/startup_watchdog bootstrap_healthz_intercepted/g) || []).length >= 2,
+    { timeoutMs: 3000, intervalMs: 25 },
+  );
+
+  await waitFor(() => combined.join("").includes("startup_watchdog internal_probe_response"), {
+    timeoutMs: 10_000,
+    intervalMs: 50,
+  });
+  await waitFor(() => combined.join("").includes("startup_watchdog handlers_ready"), {
+    timeoutMs: 10_000,
+    intervalMs: 50,
+  });
+
+  const finalLogs = combined.join("");
+  assert.match(finalLogs, /"probeUrl":"http:\/\/127\.0\.0\.1:\d+\/api\/health"/);
+  assert.doesNotMatch(finalLogs, /"probeUrl":"http:\/\/127\.0\.0\.1:\d+\/_nn_bootstrap_ready_check__"/);
+
+  const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
+  assert.equal(readyRes.status, 200);
+  assert.equal(await readyRes.text(), "ok");
+
+  const readyApiRes = await fetch(`http://127.0.0.1:${port}/api/health`);
+  assert.equal(readyApiRes.status, 200);
+  assert.equal(await readyApiRes.text(), '{"ok":true,"live":true}');
 });
 
 test("start-standalone ignores NN_BYPASS_BOOTSTRAP in production; public /readyz mirrors /healthz while internal probe still runs", async (t) => {

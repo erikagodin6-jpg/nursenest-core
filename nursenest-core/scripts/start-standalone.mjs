@@ -60,6 +60,15 @@ function emit(event, meta = {}) {
   console.error(`[nursenest-core] startup_watchdog ${event} ${JSON.stringify({ ...meta, msSinceBoot: Date.now() - bootAt })}`);
 }
 
+/** TEMP: remove after diagnosing external /readyz vs bootstrap (logs stderr only for normalized `/readyz`). */
+function isReadyzTraceRequest(req) {
+  return normalizeBootstrapProbePathname(req) === readinessProbePath;
+}
+
+function logReadyzTrace(phase, payload) {
+  console.error(`[nursenest-core] readyz_trace ${phase} ${JSON.stringify({ ...payload, msSinceBoot: Date.now() - bootAt })}`);
+}
+
 /**
  * GET/HEAD only. Pathname must equal one of: /healthz, /readyz, /_nn_bootstrap_ready_check__ (after normalize).
  * @returns {boolean} true if matched and response was fully written
@@ -116,6 +125,7 @@ function handleBootstrapRequest(req, res) {
       } else {
         res.end("bootstrap: request handlers not ready");
       }
+      logReadyzTrace("bootstrap_handler_close", { status: 503, handled: true });
       return true;
     }
     res.statusCode = 200;
@@ -126,6 +136,7 @@ function handleBootstrapRequest(req, res) {
     } else {
       res.end("ok");
     }
+    logReadyzTrace("bootstrap_handler_close", { status: 200, handled: true });
     return true;
   }
 
@@ -444,20 +455,55 @@ function markHandlersReady(reason) {
 }
 
 async function serveAfterBootstrapProbe(req, res) {
+  const traceReadyz = isReadyzTraceRequest(req);
+  if (traceReadyz) {
+    logReadyzTrace("serve_after_enter", {
+      method: req.method,
+      rawUrl: req.url,
+      pathNorm: normalizeBootstrapProbePathname(req),
+      handlersReady: state.handlersReady,
+    });
+  }
   if (!state.handlersReady) {
     res.statusCode = 503;
     res.setHeader("content-type", "text/plain; charset=utf-8");
     res.setHeader("retry-after", "5");
     res.end("bootstrap: request handlers not ready");
+    if (traceReadyz) {
+      logReadyzTrace("serve_after_close", { status: 503, proxied: false });
+    }
     return;
   }
 
+  if (traceReadyz) {
+    logReadyzTrace("proxy_to_child", {
+      method: req.method,
+      rawUrl: req.url,
+      pathNorm: normalizeBootstrapProbePathname(req),
+    });
+  }
   proxyToChild(req, res, internalPort);
 }
 
 const server = http.createServer((req, res) => {
-  if (handleBootstrapRequest(req, res)) {
+  const traceReadyz = isReadyzTraceRequest(req);
+  if (traceReadyz) {
+    logReadyzTrace("inbound", {
+      method: req.method,
+      rawUrl: req.url,
+      pathNorm: normalizeBootstrapProbePathname(req),
+      handlersReady: state.handlersReady,
+    });
+  }
+  const intercepted = handleBootstrapRequest(req, res);
+  if (traceReadyz) {
+    logReadyzTrace("after_bootstrap_handler", { intercepted });
+  }
+  if (intercepted) {
     return;
+  }
+  if (traceReadyz) {
+    logReadyzTrace("fallthrough", { next: "serveAfterBootstrapProbe" });
   }
   void serveAfterBootstrapProbe(req, res).catch(() => {
     if (!res.headersSent) {
