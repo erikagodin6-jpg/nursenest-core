@@ -4,12 +4,16 @@
  * run Next standalone on a private loopback port. Public `GET/HEAD /healthz` reports liveness
  * immediately. Public `/readyz` only flips to 200 after the child can answer a real health route,
  * and all other traffic waits for the same readiness gate before proxying.
+ *
+ * **Ops restore — `NN_DIRECT_STANDALONE=1`:** skip the bootstrap HTTP listener and proxy; spawn the
+ * same standalone stack (`start-standalone-runtime.cjs` + `server.js`) with **inherited** `PORT` /
+ * `HOSTNAME` so Next binds the platform port directly (no internal hop). Rollback: unset the env var.
  */
 import http from "node:http";
 import net from "node:net";
 import { once } from "node:events";
 import { setTimeout as sleep } from "node:timers/promises";
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { verifyStandaloneArtifact } from "./verify-standalone-artifact.mjs";
@@ -55,6 +59,23 @@ const hasHeapOverride =
   baseNodeOptions.includes("--max-old-space-size") ||
   process.execArgv.some((arg) => arg.startsWith("--max-old-space-size"));
 const childExecArgv = hasHeapOverride ? [...process.execArgv] : [`--max-old-space-size=${memMb}`, ...process.execArgv];
+
+/** When true, do not allocate an internal port or start the bootstrap proxy — Next uses `PORT` from the environment. */
+const DIRECT_STANDALONE = /^(1|true|yes)$/i.test(process.env.NN_DIRECT_STANDALONE?.trim() ?? "");
+
+if (DIRECT_STANDALONE) {
+  const childArgs = [...childExecArgv, runtimeBootstrap, entry];
+  console.error(
+    `[nursenest-core] NN_DIRECT_STANDALONE=1: bypassing bootstrap proxy; spawning standalone with inherited env (PORT=${process.env.PORT ?? "unset"}, HOSTNAME=${process.env.HOSTNAME ?? "unset"})`,
+  );
+  console.error(`[nursenest-core] direct_standalone_spawn ${JSON.stringify({ entry, argvTail: childArgs.slice(-2) })}`);
+  const result = spawnSync(process.execPath, childArgs, {
+    stdio: "inherit",
+    cwd: pkgRoot,
+    env: { ...process.env },
+  });
+  process.exit(result.status === null ? 1 : result.status);
+}
 
 function emit(event, meta = {}) {
   console.error(`[nursenest-core] startup_watchdog ${event} ${JSON.stringify({ ...meta, msSinceBoot: Date.now() - bootAt })}`);

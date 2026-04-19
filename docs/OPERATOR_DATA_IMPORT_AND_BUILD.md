@@ -61,8 +61,13 @@ Local: `cd nursenest-core && npm run ci:data-guardrails` (from app package).
 
 1. Build container / run CI (**no** DB migration inside `next build`).
 2. Run **`prisma migrate deploy`** against the target DB.
-3. Start app (`next start` or platform equivalent).
+3. Start app (`npm run start` → `node scripts/start-standalone.mjs` for this package’s **standalone** output).
 4. Run **imports / backfills** as separate jobs with resource limits — not on the web process.
+
+### Standalone bootstrap vs direct bind (App Platform / Docker)
+
+- **Default:** `start-standalone.mjs` listens on **`PORT`** (e.g. 8080) and proxies to Next on a **loopback-only** internal port (child gets `PORT=<internal>` + `HOSTNAME=127.0.0.1`).
+- **Ops restore — bypass proxy:** set **`NN_DIRECT_STANDALONE=1`** (or `true` / `yes`) on the web component so the script **`spawnSync`s** the same child stack (`start-standalone-runtime.cjs` + `.next/standalone/.../server.js`) with **inherited** `PORT` / `HOSTNAME` — Next then binds the platform port directly. **Rollback:** remove the env var to return to the bootstrap proxy.
 
 ---
 
