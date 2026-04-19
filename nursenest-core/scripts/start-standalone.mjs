@@ -61,8 +61,18 @@ function emit(event, meta = {}) {
 
 function isBootstrapProbeRequest(req, path) {
   const method = typeof req?.method === "string" ? req.method.toUpperCase() : "";
-  const url = typeof req?.url === "string" ? req.url : "";
-  return (method === "GET" || method === "HEAD") && (url === path || url.startsWith(`${path}?`));
+  const raw = typeof req?.url === "string" ? req.url : "";
+  if (method !== "GET" && method !== "HEAD") return false;
+  const noQueryHash = raw.split("?")[0].split("#")[0];
+  let pathname = noQueryHash;
+  if (!pathname.startsWith("/")) {
+    const abs = /^https?:\/\/[^/]+(\/.*)?$/i.exec(pathname);
+    pathname = abs && abs[1] && abs[1].length > 0 ? abs[1] : abs ? "/" : pathname;
+  }
+  if (pathname.length > 1 && pathname.endsWith("/")) {
+    pathname = pathname.slice(0, -1);
+  }
+  return pathname === path;
 }
 
 function allocatePort() {

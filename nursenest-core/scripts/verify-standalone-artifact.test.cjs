@@ -268,7 +268,7 @@ test("start-standalone accepts the top-level standalone server path", async (t) 
 
   const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
   assert.equal(readyRes.status, 200);
-  assert.equal(await readyRes.text(), "ready");
+  assert.equal(await readyRes.text(), "ok");
 });
 
 test("start-standalone exits fatally on readiness timeout with probe URL, timeout, and child state in the error", async (t) => {
@@ -327,7 +327,7 @@ test("start-standalone exits fatally on readiness timeout with probe URL, timeou
   assert.match(combined.join(""), /childState=\{\\"childPid\\":\d+/);
 });
 
-test("start-standalone ignores NN_BYPASS_BOOTSTRAP in production and keeps /readyz gated until the internal probe succeeds", async (t) => {
+test("start-standalone ignores NN_BYPASS_BOOTSTRAP in production; public /readyz mirrors /healthz while internal probe still runs", async (t) => {
   const tempRoot = createTempRuntimeRoot("nn-start-standalone-prod-ignore-bypass-");
   const standaloneEntry = path.join(tempRoot, ".next", "standalone", "server.js");
   fs.mkdirSync(path.dirname(standaloneEntry), { recursive: true });
@@ -381,8 +381,8 @@ test("start-standalone ignores NN_BYPASS_BOOTSTRAP in production and keeps /read
   assert.doesNotMatch(earlyLogs, /startup_watchdog handlers_ready/);
 
   const preReadyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
-  assert.equal(preReadyRes.status, 503);
-  assert.equal(await preReadyRes.text(), "warming");
+  assert.equal(preReadyRes.status, 200);
+  assert.equal(await preReadyRes.text(), "ok");
 
   await waitFor(() => combined.join("").includes("startup_watchdog internal_probe_response"), {
     timeoutMs: 10_000,
@@ -399,5 +399,9 @@ test("start-standalone ignores NN_BYPASS_BOOTSTRAP in production and keeps /read
 
   const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
   assert.equal(readyRes.status, 200);
-  assert.equal(await readyRes.text(), "ready");
+  assert.equal(await readyRes.text(), "ok");
+
+  const readySlash = await fetch(`http://127.0.0.1:${port}/readyz/`);
+  assert.equal(readySlash.status, 200);
+  assert.equal(await readySlash.text(), "ok");
 });
