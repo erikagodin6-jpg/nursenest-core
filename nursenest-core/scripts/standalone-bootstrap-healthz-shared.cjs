@@ -5,6 +5,8 @@ function isBootstrapHealthzRequest(req) {
   return (
     url === "/healthz" ||
     url.startsWith("/healthz?") ||
+    url === "/readyz" ||
+    url.startsWith("/readyz?") ||
     url === "/_nn_bootstrap_ready_check__" ||
     url.startsWith("/_nn_bootstrap_ready_check__?")
   );
