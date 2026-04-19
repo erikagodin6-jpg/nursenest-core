@@ -402,21 +402,15 @@ git commit -m "refactor: share shard-based homepage metadata loader"
 
 - [ ] **Step 1: Create the header client island**
 
-Move the current interactive implementation from `nursenest-core/src/components/layout/site-header.tsx` into `nursenest-core/src/components/layout/site-header.client.tsx` and keep the top of the file as:
+Copy the current contents of `nursenest-core/src/components/layout/site-header.tsx` into `nursenest-core/src/components/layout/site-header.client.tsx`, then change the export name from `SiteHeader` to `SiteHeaderClient`.
+
+The top of the new file should look like:
 
 ```tsx
 "use client";
 
 export function SiteHeaderClient() {
-  // move the current SiteHeader body here unchanged first
-}
-```
-
-Inside that file, rename the export:
-
-```tsx
-export function SiteHeaderClient() {
-  // previous SiteHeader implementation
+  // keep the existing `SiteHeader` function body exactly the same in this step
 }
 ```
 
@@ -506,13 +500,15 @@ git commit -m "refactor: split marketing header into server and client"
 
 - [ ] **Step 1: Create the footer client island**
 
-Move the current interactive implementation from `nursenest-core/src/components/layout/site-footer.tsx` into `nursenest-core/src/components/layout/site-footer.client.tsx` and rename the export:
+Copy the current contents of `nursenest-core/src/components/layout/site-footer.tsx` into `nursenest-core/src/components/layout/site-footer.client.tsx`, then change the export name from `SiteFooter` to `SiteFooterClient`.
+
+The top of the new file should look like:
 
 ```tsx
 "use client";
 
 export function SiteFooterClient() {
-  // previous SiteFooter implementation
+  // keep the existing `SiteFooter` function body exactly the same in this step
 }
 ```
 
@@ -630,20 +626,39 @@ Use this structure in the final summary:
 
 ```md
 A. Files changed
-- ...
+- `src/app/layout.tsx`
+- `src/app/(student)/app/layout.tsx`
+- `src/app/(student)/app/learner-surface-providers.tsx`
+- `src/app/(marketing)/(default)/layout.tsx`
+- `src/app/(marketing)/[locale]/layout.tsx`
+- `src/app/(marketing)/(default)/page.tsx`
+- `src/app/(marketing)/[locale]/page.tsx`
+- `src/components/layout/site-header.tsx`
+- `src/components/layout/site-header.server.tsx`
+- `src/components/layout/site-header.client.tsx`
+- `src/components/layout/site-footer.tsx`
+- `src/components/layout/site-footer.server.tsx`
+- `src/components/layout/site-footer.client.tsx`
+- `src/lib/marketing-i18n/homepage-message-shards.ts`
+- `src/build-compile-memory-safety.test.ts`
+- `src/lib/marketing/build-phase-memory-guards.test.ts`
 
 B. Providers moved and why
 - `AuthSessionProvider`: root -> learner app layout for client UI convenience only
 - `AnalyticsProvider`: root -> learner app layout to reduce shared public graph
 
 C. Imports removed from root/layouts
-- ...
+- `AuthSessionProvider` removed from `src/app/layout.tsx`
+- `AnalyticsProvider` removed from `src/app/layout.tsx`
+- `loadMarketingMessages` removed from `src/app/(marketing)/[locale]/page.tsx`
+- direct `SiteHeader` / `SiteFooter` hotspot layout imports replaced with `SiteHeaderServer` / `SiteFooterServer`
 
 D. i18n loading improvements
 - localized homepage switched from `loadMarketingMessages()` to cached shard helper reused by metadata + page
 
 E. Metadata optimizations
-- ...
+- homepage metadata resolves from shard helper output instead of a repeated merged-message load
+- localized homepage metadata reuses the same cached shard helper as the page body
 
 F. Expected reduction in shared graph size
 - auth + analytics removed from global root graph
@@ -651,7 +666,8 @@ F. Expected reduction in shared graph size
 - homepage removed repeated merged-message loads
 
 G. Remaining hotspots not addressed
-- ...
+- deeper learner-shell dynamic imports remain a follow-up if further graph trimming is needed
+- non-homepage marketing routes outside the hotspot scope retain their current structure
 ```
 
 - [ ] **Step 5: Create the final verification commit**
