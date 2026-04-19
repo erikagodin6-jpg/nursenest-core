@@ -21,7 +21,7 @@
     "build:verify": "npm run typecheck && npm run build:prechecks && npm run build",
     "verify:core-build-modules": "node --import tsx --test src/lib/build/build-safe-mode.test.ts",
     "verify:bootstrap-probe-pathname": "node --test scripts/standalone-bootstrap-probe-pathname.test.mjs",
-    "build:deploy": "npm run verify:bootstrap-probe-pathname && npm run verify:standalone-artifact && node scripts/post-build-prune.mjs",
+    "build:deploy": "npm run verify:bootstrap-probe-pathname && npm run build && npm run verify:standalone-artifact && node scripts/post-build-prune.mjs",
     "build:deploy:full": "npm run verify:bootstrap-probe-pathname && npm run build && npm run verify:standalone-artifact && node scripts/post-build-prune.mjs",
     "start": "node scripts/start-standalone.mjs",
     "verify:standalone-artifact": "node scripts/verify-standalone-artifact.mjs",
