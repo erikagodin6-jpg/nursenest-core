@@ -87,10 +87,11 @@ test("bootstrap runtime has no child-log readiness path", () => {
   assert.equal(source.includes("childOutputIndicatesReady"), false);
 });
 
-test("bootstrap runtime probes /api/health; legacy /_nn_bootstrap_ready_check__ is bootstrap-only", () => {
+test("bootstrap runtime probes the lightweight internal bootstrap path", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
-  assert.equal(source.includes('const childHealthProbePath = "/api/health";'), true);
   assert.equal(source.includes('const childBootstrapProbePath = "/_nn_bootstrap_ready_check__";'), true);
+  assert.equal(source.includes("const childHealthProbePath = childBootstrapProbePath;"), true);
+  assert.equal(source.includes('const childHealthProbePath = "/api/health";'), false);
 });
 
 test("bootstrap runtime reuses verifier-based standalone entry resolution with nested-first fallback", () => {

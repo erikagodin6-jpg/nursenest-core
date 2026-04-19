@@ -36,10 +36,10 @@ const publicHost = process.env.HOSTNAME || "0.0.0.0";
 const internalHost = "127.0.0.1";
 const livenessProbePath = "/healthz";
 const readinessProbePath = "/readyz";
-/** Keep the legacy bootstrap-only child probe path hidden from public traffic. */
+/** Lightweight internal-only child probe, hidden from public traffic. */
 const childBootstrapProbePath = "/_nn_bootstrap_ready_check__";
-/** Probe a real child route so `handlersReady` only flips after request handlers can answer. */
-const childHealthProbePath = "/api/health";
+/** Probe the child server bind path directly; public readiness still gates on `handlersReady`. */
+const childHealthProbePath = childBootstrapProbePath;
 const bootstrapReadyTimeoutMs = Number.parseInt(process.env.NN_BOOTSTRAP_READY_TIMEOUT_MS ?? "900000", 10) || 900000;
 const bootstrapReadyMaxAttempts = Math.max(
   1,

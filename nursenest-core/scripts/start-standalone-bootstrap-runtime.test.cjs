@@ -57,7 +57,7 @@ function extractStartupWatchdogMeta(logs, event) {
   return match ? JSON.parse(match[1]) : null;
 }
 
-test("standalone runtime serves the internal bootstrap probe directly and flips handlers ready", async (t) => {
+test("standalone runtime reaches ready without bypass via the internal bootstrap probe", async (t) => {
   const standaloneEntry = STANDALONE_CANDIDATES.find((candidate) => existsSync(candidate));
   if (!standaloneEntry) {
     t.skip(`Missing standalone build entry. Checked:\n${STANDALONE_CANDIDATES.join("\n")}`);
@@ -149,19 +149,20 @@ test("standalone runtime serves the internal bootstrap probe directly and flips 
   assert.equal(await headRes.text(), "");
 
   const preReadyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
-  assert.equal(preReadyRes.status, 200);
-  assert.equal(await preReadyRes.text(), "ok");
+  assert.equal(preReadyRes.status, 503);
+  assert.equal(await preReadyRes.text(), "bootstrap: request handlers not ready");
 
   await waitForLog("startup_watchdog bootstrap_healthz_intercepted");
   await waitForLog("startup_watchdog internal_probe_response");
   await waitForLog("startup_watchdog handlers_ready");
 
   const logsAfterReady = combined.join("");
+  assert.doesNotMatch(logsAfterReady, /startup_watchdog watchdog_bypass_enabled/);
   assert.match(
     logsAfterReady,
-    new RegExp(`"probeUrl":"http://127\\.0\\.0\\.1:${serverListeningMeta.internalPort}/api/health"`),
+    new RegExp(`"probeUrl":"http://127\\.0\\.0\\.1:${serverListeningMeta.internalPort}/_nn_bootstrap_ready_check__"`),
   );
-  assert.doesNotMatch(logsAfterReady, new RegExp(`"probeUrl":"http://127\\.0\\.0\\.1:${port}/api/health"`));
+  assert.doesNotMatch(logsAfterReady, new RegExp(`"probeUrl":"http://127\\.0\\.0\\.1:${port}/_nn_bootstrap_ready_check__"`));
 
   const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
   assert.equal(readyRes.status, 200);
