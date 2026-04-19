@@ -15,6 +15,7 @@ export const I18N_SHARD_FILENAMES = [
   "learner",
   "auth",
   "billing",
+  "brand",
   "nav",
   "errors",
   "allied",
@@ -118,7 +119,7 @@ const FIRST_SEGMENT_TO_SHARD: Record<string, I18nShardFilename> = {
   // shell / wayfinding
   nav: "nav",
   footer: "nav",
-  brand: "nav",
+  brand: "brand",
   search: "nav",
 
   // errors & empty states
