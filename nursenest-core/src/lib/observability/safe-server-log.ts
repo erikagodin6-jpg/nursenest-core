@@ -4,6 +4,7 @@
  * Meta values are lightly redacted when keys look sensitive (see {@link redactMetaForLog}).
  */
 import { redactMetaForLog } from "@/lib/env/redact-secrets";
+import { importSentryNextjs } from "@/lib/observability/sentry-nextjs-dynamic";
 import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
 
 const PREFIX = "[nursenest-core]";
@@ -25,14 +26,9 @@ export type SafeLogMeta = Record<string, string | number | boolean | undefined>;
 function loadSentryServerSdk(): Promise<SentryServerSdk | null> {
   if (!isSentryServerRuntimeEnabled()) return Promise.resolve(null);
   if (sentryServerSdkPromise) return sentryServerSdkPromise;
-  sentryServerSdkPromise = Promise.resolve().then(() => {
-    try {
-      const sentryModuleId = ["@sentry", "nextjs"].join("/");
-      return require(sentryModuleId) as SentryServerSdk;
-    } catch {
-      return null;
-    }
-  });
+  sentryServerSdkPromise = importSentryNextjs()
+    .then((mod) => mod as unknown as SentryServerSdk)
+    .catch(() => null);
   return sentryServerSdkPromise;
 }
 

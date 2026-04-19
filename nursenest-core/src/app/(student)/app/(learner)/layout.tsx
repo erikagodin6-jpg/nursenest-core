@@ -39,7 +39,7 @@ import { LearnerFeedbackShell } from "@/components/feedback/learner-feedback-she
 import { UserFeedbackNavPill } from "@/components/feedback/user-feedback-nav-pill";
 import { LearnerExamStudyProviders } from "@/components/exam/learner-exam-study-providers";
 import { isCoreOnlyEmergencyMode, shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 import { LearnerSilentSectionBoundary } from "@/components/learner/learner-silent-section-boundary";
 import { PaywallHomeStatsProvider } from "@/components/student/paywall-home-stats-context";
 import { loadPaywallHomeStatsForShell } from "@/lib/marketing/load-paywall-home-stats-for-shell";
@@ -55,7 +55,7 @@ export default async function LearnerShellLayout({ children }: { children: React
   const userId = (session?.user as { id?: string })?.id ?? "";
 
   if (isDegradedMode()) {
-    safeServerLog("learner_shell", "degraded_mode_active", { active: true });
+    layoutStderrTrace("learner_shell", "degraded_mode_active", { active: true });
   }
 
   if (!userId) {
@@ -71,7 +71,7 @@ export default async function LearnerShellLayout({ children }: { children: React
   const coreOnlyEmergency = isCoreOnlyEmergencyMode();
 
   if (skipNonCritical && entitlement !== "error" && entitlement.hasAccess) {
-    safeServerLog("learner_shell", "optional_shell_work_skipped", {
+    layoutStderrTrace("learner_shell", "optional_shell_work_skipped", {
       surface: "study_next_strip_analytics",
       reason: "durability_degraded_or_core_only",
     });
@@ -93,7 +93,7 @@ export default async function LearnerShellLayout({ children }: { children: React
       label: "learner_pathway_nav_metadata",
       onUsedFallback: (reason) => {
         if (cachedNav != null) {
-          safeServerLog("learner_shell", "fallback_used", {
+          layoutStderrTrace("learner_shell", "fallback_used", {
             surface: "pathway_nav",
             reason,
           });

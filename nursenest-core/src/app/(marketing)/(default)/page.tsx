@@ -10,21 +10,20 @@ import { getDegradedPublicHomeStatsFallback } from "@/lib/marketing/public-home-
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
-import {
-  MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
-  MARKETING_PAGE_BODY_MESSAGE_SHARDS,
-} from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
+import { getMarketingDefaultLayoutChromeMessages } from "@/lib/marketing-i18n/marketing-layout-chrome-messages.server";
+import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
-import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
+import { resolveMarketingCopy, type MarketingMessages } from "@/lib/marketing-i18n-core";
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { ExamSelectorGateLazy } from "@/components/onboarding/exam-selector-gate-lazy";
 import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
 import { loadHomeBlogTeaserPostsSafe } from "@/lib/blog/home-blog-teaser";
 import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
-import { renderTrace } from "@/lib/observability/render-trace";
-import { withSentryServerSpan } from "@/lib/observability/sentry-route-observability";
+import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
+
+const homeMarketingSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
 
 /** ISR: homepage shell — aligned with `getCachedPublicHomeStats` / `PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC` (3600). */
 export const revalidate = 3600;
@@ -51,10 +50,16 @@ function shouldSkipOptionalMarketingDbReads(): boolean {
   );
 }
 
-function homePageMessageShards() {
-  return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE
-    ? MARKETING_PAGE_BODY_MESSAGE_SHARDS
-    : MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS;
+/**
+ * Runtime `/`: same merged shard bundle as `(marketing)/(default)/layout` (singleton in
+ * `getMarketingDefaultLayoutChromeMessages`) — avoids a second merge / parse after layout warmed it.
+ * Build prerender: pages shard only (layout uses lighter chrome set during `phase-production-build`).
+ */
+async function loadHomePageMarketingMessagesForRequest(): Promise<MarketingMessages> {
+  if (process.env.NEXT_PHASE === MARKETING_BUILD_PHASE) {
+    return loadMarketingMessageShards(STATIC_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
+  }
+  return getMarketingDefaultLayoutChromeMessages();
 }
 
 async function loadHomePageStats(skipOptionalDbReads: boolean) {
@@ -66,17 +71,18 @@ async function loadHomePageStats(skipOptionalDbReads: boolean) {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  return withSentryServerSpan(
+  const { withSentryRuntimeSpan } = await homeMarketingSentryRuntimePromise;
+  return withSentryRuntimeSpan(
     {
       name: "marketing.route.metadata.home",
       op: "ui.server.metadata",
       attributes: { route: "/", routeGroup: "marketing.default.home" },
     },
     async () => {
-      renderTrace("home metadata start", { route: "/" });
+      layoutStderrTrace("marketing_home", "home metadata start", { route: "/" });
       return safeGenerateMetadata(
         async () => {
-          const m = await loadMarketingMessageShards(STATIC_LOCALE, homePageMessageShards());
+          const m = await loadHomePageMarketingMessagesForRequest();
           const title = resolveMarketingCopy(m, "pages.home.metaTitleUS", m, defaultHomeMetaTitle(STATIC_REGION));
           const description = resolveMarketingCopy(
             m,
@@ -108,22 +114,23 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  return withSentryServerSpan(
+  const { withSentryRuntimeSpan } = await homeMarketingSentryRuntimePromise;
+  return withSentryRuntimeSpan(
     {
       name: "marketing.route.render.home",
       op: "ui.server.render",
       attributes: { route: "/", routeGroup: "marketing.default.home" },
     },
     async () => {
-      renderTrace("home page start", { route: "/" });
+      layoutStderrTrace("marketing_home", "home page start", { route: "/" });
       const skipOptionalDbReads = shouldSkipOptionalMarketingDbReads();
       const [homeStatsRaw, m, publishedGlobalRegionCardIds, blogTeaserPosts] = await Promise.all([
         loadHomePageStats(skipOptionalDbReads),
-        loadMarketingMessageShards(STATIC_LOCALE, homePageMessageShards()),
+        loadHomePageMarketingMessagesForRequest(),
         Promise.resolve(listPublishedHomeGlobalRegionCardIds()),
         skipOptionalDbReads ? Promise.resolve([]) : loadHomeBlogTeaserPostsSafe(3),
       ]);
-      renderTrace("home page after data", {
+      layoutStderrTrace("marketing_home", "home page after data", {
         route: "/",
         degraded: Boolean(homeStatsRaw.degraded),
         blogCount: blogTeaserPosts.length,

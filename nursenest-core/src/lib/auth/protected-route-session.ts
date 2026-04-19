@@ -2,6 +2,12 @@ import type { Session } from "next-auth";
 
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
+let authModulePromise: Promise<typeof import("@/lib/auth")> | null = null;
+function getAuthModulePromise(): Promise<typeof import("@/lib/auth")> {
+  authModulePromise ??= import("@/lib/auth");
+  return authModulePromise;
+}
+
 type LoadSession = () => Promise<Session | null | undefined>;
 
 /**
@@ -16,7 +22,7 @@ export async function getProtectedRouteSession(
     const readSession =
       loadSession ??
       (async () => {
-        const { auth } = await import("@/lib/auth");
+        const { auth } = await getAuthModulePromise();
         return auth();
       });
     return (await readSession()) ?? null;

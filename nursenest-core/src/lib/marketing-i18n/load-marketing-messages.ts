@@ -11,10 +11,7 @@ import { MARKETING_CHROME_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-
 import { loadMergedMarketingMessagesFromNextPublicDir } from "@/lib/i18n/merge-next-public-i18n-shards";
 import { getTranslationCacheGeneration } from "@/lib/i18n/i18n-translation-cache";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import {
-  captureSentrySoftError,
-  withSentryServerSpan,
-} from "@/lib/observability/sentry-route-observability";
+import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
 import { shouldBypassMarketingI18nAtStartup } from "@/lib/marketing-i18n/marketing-i18n-startup";
 import { PUBLIC_I18N_SHARD_FILENAMES } from "@shared/i18n-shard-policy";
 
@@ -41,6 +38,38 @@ const MAX_MERGED_BUNDLE_BYTES = 12 * 1024 * 1024;
 const MARKETING_I18N_TIMEOUT_MS = 1500;
 const MARKETING_BUILD_PHASE = "phase-production-build";
 const diskMergedLocaleCache = new Map<string, MarketingMessages>();
+
+/** Avoid re-reading/parsing the full English merged tree on every marketing load during `next build`. */
+let englishDiskBundleSingleton: MarketingMessages | null | undefined;
+
+async function withMarketingI18nSpan<T>(
+  options: { name: string; op: string; attributes: Record<string, string | number | boolean | undefined> },
+  fn: () => Promise<T>,
+): Promise<T> {
+  if (!isSentryServerRuntimeEnabled()) return fn();
+  const { withSentryServerSpan } = await import("@/lib/observability/sentry-route-observability");
+  return withSentryServerSpan(options as never, fn);
+}
+
+function captureMarketingI18nSoftError(opts: {
+  scope: string;
+  event: string;
+  error?: unknown;
+  meta?: Record<string, string | number | boolean | undefined>;
+  route?: string;
+  feature?: string;
+  level?: "warning" | "error";
+}): void {
+  if (!isSentryServerRuntimeEnabled()) return;
+  void import("@/lib/observability/sentry-route-observability")
+    .then((m) => {
+      m.captureSentrySoftError(opts);
+    })
+    .catch(() => {});
+}
+
+/** Cross-render / cross-static-page dedupe (React `cache` resets per prerender worker invocation). */
+const loadMarketingMessagesModuleCache = new Map<string, Promise<MarketingMessages>>();
 
 const isEmptyValue = (v: string | undefined): boolean =>
   v === undefined || (typeof v === "string" && v.trim() === "");
@@ -80,9 +109,13 @@ const cdnLocaleMergedCache = new Map<string, MarketingMessages>();
 const cdnInflight = new Map<string, Promise<MarketingMessages | null>>();
 
 function tryLoadEnglishDiskBundle(): MarketingMessages | null {
+  if (englishDiskBundleSingleton !== undefined) {
+    return englishDiskBundleSingleton;
+  }
   const dir = resolveNextI18nPublicDir();
   if (!dir) {
     safeServerLog("i18n", "merged_bundle_missing", { locale: DEFAULT_MARKETING_LOCALE });
+    englishDiskBundleSingleton = null;
     return null;
   }
   try {
@@ -109,11 +142,14 @@ function tryLoadEnglishDiskBundle(): MarketingMessages | null {
     const parsed = loadMergedMarketingMessagesFromNextPublicDir(dir, DEFAULT_MARKETING_LOCALE);
     if (!parsed || Object.keys(parsed).length === 0) {
       safeServerLog("i18n", "merged_bundle_read_failed", { locale: DEFAULT_MARKETING_LOCALE });
+      englishDiskBundleSingleton = null;
       return null;
     }
+    englishDiskBundleSingleton = parsed;
     return parsed;
   } catch {
     safeServerLog("i18n", "merged_bundle_read_failed", { locale: DEFAULT_MARKETING_LOCALE });
+    englishDiskBundleSingleton = null;
     return null;
   }
 }
@@ -153,7 +189,7 @@ async function fetchCdnFragment(
   const pending = cdnInflight.get(inflightKey);
   if (pending) return pending;
 
-  const work = withSentryServerSpan(
+  const work = withMarketingI18nSpan(
     {
       name: "marketing.i18n.fragment",
       op: "resource.fetch",
@@ -178,7 +214,7 @@ async function fetchCdnFragment(
         cdnFragmentCache.set(fragmentKey, part);
         return part;
       } catch (error) {
-        captureSentrySoftError({
+        captureMarketingI18nSoftError({
           scope: "marketing_i18n",
           event: "cdn_fragment_failed",
           error,
@@ -209,7 +245,7 @@ async function loadFromCdn(locale: string): Promise<MarketingMessages | null> {
   const pendingMerged = cdnInflight.get(mergedInflightKey);
   if (pendingMerged) return pendingMerged;
 
-  const work = withSentryServerSpan(
+  const work = withMarketingI18nSpan(
     {
       name: "marketing.i18n.bundle",
       op: "resource.fetch",
@@ -281,7 +317,7 @@ async function loadFromCdn(locale: string): Promise<MarketingMessages | null> {
     } catch (e) {
       const detail = e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200);
       safeServerLog("i18n", "cdn_bundle_fetch_error", { locale, detail });
-      captureSentrySoftError({
+      captureMarketingI18nSoftError({
         scope: "marketing_i18n",
         event: "cdn_bundle_fetch_error",
         error: e,
@@ -313,9 +349,8 @@ export function loadMarketingMessagesSync(locale: string): MarketingMessages {
   return {} as MarketingMessages;
 }
 
-/** Server / Node: merged monolith + marketing strings. Tries disk first, then optional CDN, then English. */
-export const loadMarketingMessages = cache(async function loadMarketingMessages(locale: string): Promise<MarketingMessages> {
-  return withSentryServerSpan(
+async function loadMarketingMessagesImpl(locale: string): Promise<MarketingMessages> {
+  return withMarketingI18nSpan(
     {
       name: "marketing.i18n.load_messages",
       op: "resource.load",
@@ -362,4 +397,17 @@ export const loadMarketingMessages = cache(async function loadMarketingMessages(
       return {} as MarketingMessages;
     },
   );
+}
+
+/** Server / Node: merged monolith + marketing strings. Tries disk first, then optional CDN, then English. */
+export const loadMarketingMessages = cache(async function loadMarketingMessages(locale: string): Promise<MarketingMessages> {
+  let p = loadMarketingMessagesModuleCache.get(locale);
+  if (!p) {
+    p = loadMarketingMessagesImpl(locale).catch((err) => {
+      loadMarketingMessagesModuleCache.delete(locale);
+      throw err;
+    });
+    loadMarketingMessagesModuleCache.set(locale, p);
+  }
+  return p;
 });

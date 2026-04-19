@@ -5,17 +5,15 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld";
 import { MarketingMainI18nShards } from "@/components/i18n/marketing-main-i18n-shards";
-import { DEFAULT_MARKETING_LOCALE, isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
+import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { assertMarketingLayoutMessagesIntegrity } from "@/lib/marketing-i18n/marketing-layout-message-integrity";
-import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
-import { MARKETING_CHROME_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
+import { getMarketingLocaleLayoutChromePayload } from "@/lib/marketing-i18n/marketing-layout-chrome-messages.server";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { MarketingMainErrorBoundary } from "@/components/marketing/marketing-main-error-boundary";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
-
 export const dynamic = "force-dynamic";
 
 export default async function MarketingLocaleLayout({
@@ -35,16 +33,22 @@ export default async function MarketingLocaleLayout({
   try {
     /** Cookie sync: `cookies().set` is not allowed in RSC; {@link MarketingLocaleUrlSync} calls the server action. */
     serverRegion = (await getMarketingRegionFromCookies()) as MarketingRegionToggle;
-    messages = await loadMarketingMessageShards(locale, MARKETING_CHROME_MESSAGE_SHARDS);
-    /** Always supply English so missing overlay keys resolve to canonical copy in production. */
-    fallbackMessages =
-      locale === DEFAULT_MARKETING_LOCALE
-        ? undefined
-        : await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS);
+    const payload = await getMarketingLocaleLayoutChromePayload(locale);
+    messages = payload.messages;
+    fallbackMessages = payload.fallbackMessages;
   } catch (e) {
     console.error("[marketing-locale-layout] failed to load locale/region data", {
       error: e instanceof Error ? e.message : String(e),
       locale,
+    });
+    const { captureSentryRuntimeSoftError } = await import("@/lib/observability/sentry-runtime");
+    captureSentryRuntimeSoftError({
+      scope: "marketing_layout",
+      event: "locale_chrome_failed",
+      error: e,
+      route: "marketing-locale-layout",
+      feature: "marketing_layout",
+      meta: { locale },
     });
   }
   assertMarketingLayoutMessagesIntegrity({

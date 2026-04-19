@@ -66,17 +66,47 @@ async function loadMetadataShard(
   });
 }
 
+const metadataPickedResolved = new Map<string, Record<string, string>>();
+const metadataPickedInflight = new Map<string, Promise<Record<string, string>>>();
+
+function metadataMessagesCacheKey(
+  locale: string,
+  keys: readonly string[],
+  shards: readonly I18nShardFilename[],
+): string {
+  return `${locale}|${[...keys].sort().join(",")}|${shards.join(",")}`;
+}
+
 export const loadMarketingMetadataMessages = cache(async function loadMarketingMetadataMessages(
   locale: string,
   keys: readonly string[],
   shards: readonly I18nShardFilename[] = MARKETING_PAGE_BODY_MESSAGE_SHARDS,
 ): Promise<Record<string, string>> {
-  const primary = pickMetadataKeys(await loadMetadataShard(locale, shards), keys);
+  const cacheKey = metadataMessagesCacheKey(locale, keys, shards);
+  const hit = metadataPickedResolved.get(cacheKey);
+  if (hit) return hit;
 
-  if (locale === DEFAULT_MARKETING_LOCALE) {
-    return primary;
+  let inflight = metadataPickedInflight.get(cacheKey);
+  if (!inflight) {
+    inflight = (async () => {
+      const primary = pickMetadataKeys(await loadMetadataShard(locale, shards), keys);
+
+      if (locale === DEFAULT_MARKETING_LOCALE) {
+        metadataPickedResolved.set(cacheKey, primary);
+        metadataPickedInflight.delete(cacheKey);
+        return primary;
+      }
+
+      const fallback = pickMetadataKeys(await loadMetadataShard(DEFAULT_MARKETING_LOCALE, shards), keys);
+      const merged = mergeMetadataKeys(primary, fallback, keys);
+      metadataPickedResolved.set(cacheKey, merged);
+      metadataPickedInflight.delete(cacheKey);
+      return merged;
+    })().catch((err) => {
+      metadataPickedInflight.delete(cacheKey);
+      throw err;
+    });
+    metadataPickedInflight.set(cacheKey, inflight);
   }
-
-  const fallback = pickMetadataKeys(await loadMetadataShard(DEFAULT_MARKETING_LOCALE, shards), keys);
-  return mergeMetadataKeys(primary, fallback, keys);
+  return inflight;
 });

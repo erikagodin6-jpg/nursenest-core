@@ -41,10 +41,14 @@ const HOME_EXPANSION_CARD_ID_TO_PATH: Record<string, string> = {
 };
 
 /** Card ids (`us`, `ca`, …) safe to show on the marketing homepage. */
+let publishedHomeGlobalRegionCardIdsCache: string[] | null = null;
+
 export function listPublishedHomeGlobalRegionCardIds(): string[] {
+  if (publishedHomeGlobalRegionCardIdsCache) return publishedHomeGlobalRegionCardIdsCache;
   const out: string[] = ["us", "ca"];
   for (const [id, p] of Object.entries(HOME_EXPANSION_CARD_ID_TO_PATH)) {
     if (isRegionalMarketingUrlPublished(p)) out.push(id);
   }
+  publishedHomeGlobalRegionCardIdsCache = out;
   return out;
 }

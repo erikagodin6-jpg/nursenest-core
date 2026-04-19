@@ -4,13 +4,19 @@ import path from "path";
 import { cache } from "react";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
+import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { withSentryServerSpan } from "@/lib/observability/sentry-route-observability";
 import type { I18nShardFilename } from "@shared/i18n-shard-policy";
 import { readCachedI18nJsonFile } from "@/lib/i18n/i18n-translation-cache";
+import { loadSharedMarketingMessagesOnce } from "@/lib/marketing-i18n/shared-marketing-message-cache";
 import { shouldBypassMarketingI18nAtStartup } from "@/lib/marketing-i18n/marketing-i18n-startup";
 
 const mergedShardCache = new Map<string, MarketingMessages>();
+
+/** Stable key for cross-boundary dedupe (layout vs page vs `generateMetadata`). */
+function marketingShardsAsyncCacheKey(locale: string, shards: readonly I18nShardFilename[]): string {
+  return `${locale}|${shards.join(",")}`;
+}
 
 /** Two cwd candidates — matches `load-marketing-messages.ts`. */
 function resolveNextI18nPublicDir(): string | null {
@@ -73,7 +79,7 @@ function mergeShardMaps(
       const part = readShardFile(i18nDir, locale, name);
       if (!part) continue;
       for (const [k, v] of Object.entries(part)) {
-        if (k in merged) {
+        if (k in merged && process.env.NODE_ENV === "development") {
           safeServerLog("i18n", "shard_duplicate_key_last_wins", {
             locale,
             shard: name,
@@ -109,27 +115,44 @@ export function loadMarketingMessageShardsSync(
   return mergeShardMaps(dir, locale, shards);
 }
 
+async function loadMarketingMessageShardsImpl(
+  locale: string,
+  shards: readonly I18nShardFilename[],
+): Promise<MarketingMessages> {
+  if (shouldBypassMarketingI18nAtStartup()) {
+    safeServerLog("i18n", "marketing_i18n_startup_bypass", {
+      locale,
+      mode: "shards",
+      shard_count: shards.length,
+      fallbackLocale: DEFAULT_MARKETING_LOCALE,
+    });
+    return loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards);
+  }
+  return loadMarketingMessageShardsSync(locale, shards);
+}
+
 export const loadMarketingMessageShards = cache(async function loadMarketingMessageShards(
   locale: string,
   shards: readonly I18nShardFilename[],
 ): Promise<MarketingMessages> {
-  return withSentryServerSpan(
-    {
-      name: "marketing.i18n.load_shards",
-      op: "resource.load",
-      attributes: { locale, shardCount: shards.length },
-    },
-    async () => {
-      if (shouldBypassMarketingI18nAtStartup()) {
-        safeServerLog("i18n", "marketing_i18n_startup_bypass", {
-          locale,
-          mode: "shards",
-          shard_count: shards.length,
-          fallbackLocale: DEFAULT_MARKETING_LOCALE,
-        });
-        return loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards);
-      }
-      return loadMarketingMessageShardsSync(locale, shards);
-    },
-  );
+  const key = marketingShardsAsyncCacheKey(locale, shards);
+  /**
+   * `React.cache()` does not always dedupe across `generateMetadata`, layouts, and route bodies.
+   * `loadSharedMarketingMessagesOnce` is module-scoped so concurrent callers await the same promise
+   * and avoid duplicate ~7k-key merges / JSON work on cold requests (e.g. `/`).
+   */
+  return loadSharedMarketingMessagesOnce(`marketing_shards:${key}`, async () => {
+    if (!isSentryServerRuntimeEnabled()) {
+      return loadMarketingMessageShardsImpl(locale, shards);
+    }
+    const { withSentryServerSpan } = await import("@/lib/observability/sentry-route-observability");
+    return withSentryServerSpan(
+      {
+        name: "marketing.i18n.load_shards",
+        op: "resource.load",
+        attributes: { locale, shardCount: shards.length },
+      },
+      () => loadMarketingMessageShardsImpl(locale, shards),
+    );
+  });
 });

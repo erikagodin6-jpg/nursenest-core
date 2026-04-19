@@ -1,3 +1,4 @@
+import { importSentryNextjs } from "@/lib/observability/sentry-nextjs-dynamic";
 import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -26,6 +27,6 @@ export async function onRequestError(...args: Parameters<typeof import("@sentry/
     messageSample: msg.slice(0, 200),
   });
   if (!isSentryServerRuntimeEnabled()) return;
-  const Sentry = await import("@sentry/nextjs");
+  const Sentry = await importSentryNextjs();
   return Sentry.captureRequestError(...args);
 }

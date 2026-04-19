@@ -10,6 +10,13 @@
  *
  * **RUN_HEAVY_BUILD_TASKS:** set to `false` to skip loading large redirect/rewrite graphs during `next build`
  * (lower memory — production deploys should set this in CI/build env). See `docs/OPERATOR_DATA_IMPORT_AND_BUILD.md`.
+ *
+ * **Build / compile cache (DigitalOcean App Platform):** Next.js writes `.next/cache` during `next build`.
+ * DO’s default Node build runs in an ephemeral container with no guaranteed reuse of that directory between
+ * builds, so **persistent Turbopack/webpack disk cache across deploys is not enabled here** (would need a
+ * custom build image or CI layer that restores `.next/cache`, or a remote cache product). Setting
+ * `NEXT_CACHE_DIR` only changes the path, not persistence. Enable remote caching only when the team adopts
+ * an officially supported workflow (e.g. Vercel Remote Cache with token) compatible with this Next version.
  */
 import { createRequire } from "module";
 import { fileURLToPath } from "url";

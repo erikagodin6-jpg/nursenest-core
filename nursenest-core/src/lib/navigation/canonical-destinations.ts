@@ -8,32 +8,27 @@
  * `marketing-entry-routes` / `country-exam-offerings` modules via this file’s re-exports.
  */
 
-import { defaultPathwayIdForMarketingOffering, type CountryExamOfferingId } from "@/lib/marketing/country-exam-offerings";
-import {
-  defaultNursingExamMarketingHub,
-  marketingExamPrepHubs,
-} from "@/lib/marketing/marketing-exam-navigation";
+import type { CountryExamOfferingId } from "@/lib/marketing/country-exam-offerings";
+import { defaultPathwayIdForMarketingOffering } from "@/lib/marketing/country-exam-offerings";
 import {
   HUB,
   type MarketingRegionToggle,
   rnQuestions,
 } from "@/lib/marketing/marketing-entry-routes";
+import {
+  defaultNursingExamMarketingHub as defaultNursingExamMarketingHubFromNav,
+  marketingExamPrepHubs,
+} from "@/lib/marketing/marketing-exam-navigation";
 import type { LearnerExamsSurfaceLabel } from "@/lib/navigation/learner-primary-nav";
+import {
+  buildLearnerPrimaryNavItems as buildLearnerPrimaryNavItemsImpl,
+  CANONICAL_LEARNER_ROUTES,
+  learnerPrimaryNavLabelKey as learnerPrimaryNavLabelKeyImpl,
+} from "@/lib/navigation/learner-primary-nav";
 
 export type { MarketingRegionToggle };
 
-type LearnerPrimaryNavModule = typeof import("@/lib/navigation/learner-primary-nav");
-type LearnerPrimaryNavKey = Parameters<LearnerPrimaryNavModule["learnerPrimaryNavLabelKey"]>[0];
-type CanonicalLearnerRoutes = LearnerPrimaryNavModule["CANONICAL_LEARNER_ROUTES"];
-
-let learnerPrimaryNavModuleCache: LearnerPrimaryNavModule | null = null;
-
-function getLearnerPrimaryNavModule(): LearnerPrimaryNavModule {
-  if (learnerPrimaryNavModuleCache) return learnerPrimaryNavModuleCache;
-  const moduleId = ["@/lib/navigation", "learner-primary-nav"].join("/");
-  learnerPrimaryNavModuleCache = require(moduleId) as LearnerPrimaryNavModule;
-  return learnerPrimaryNavModuleCache;
-}
+type LearnerPrimaryNavKey = Parameters<typeof learnerPrimaryNavLabelKeyImpl>[0];
 
 /** Session tier aligned with NextAuth user.tier + SiteHeader learner helpers. */
 export type NavSessionTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
@@ -97,31 +92,13 @@ export function publicMarketingExploreDestinations(region: MarketingRegionToggle
   } as const;
 }
 
-export const CANONICAL_LEARNER_ROUTES: CanonicalLearnerRoutes = {
-  get lessons() {
-    return getLearnerPrimaryNavModule().CANONICAL_LEARNER_ROUTES.lessons;
-  },
-  get practice() {
-    return getLearnerPrimaryNavModule().CANONICAL_LEARNER_ROUTES.practice;
-  },
-  get flashcards() {
-    return getLearnerPrimaryNavModule().CANONICAL_LEARNER_ROUTES.flashcards;
-  },
-  get cat() {
-    return getLearnerPrimaryNavModule().CANONICAL_LEARNER_ROUTES.cat;
-  },
-  get catBuilder() {
-    return getLearnerPrimaryNavModule().CANONICAL_LEARNER_ROUTES.catBuilder;
-  },
-  get reports() {
-    return getLearnerPrimaryNavModule().CANONICAL_LEARNER_ROUTES.reports;
-  },
-  get profile() {
-    return getLearnerPrimaryNavModule().CANONICAL_LEARNER_ROUTES.profile;
-  },
-} as CanonicalLearnerRoutes;
+export { CANONICAL_LEARNER_ROUTES };
 
-export { defaultNursingExamMarketingHub, HUB };
+export function defaultNursingExamMarketingHub(region: MarketingRegionToggle): string {
+  return defaultNursingExamMarketingHubFromNav(region);
+}
+
+export { HUB };
 
 // —— Learner ——
 
@@ -131,11 +108,11 @@ export function buildLearnerPrimaryNavItems(
   pathwayId: string | null,
   options?: { examsLabel?: LearnerExamsSurfaceLabel },
 ) {
-  return getLearnerPrimaryNavModule().buildLearnerPrimaryNavItems(pathwayId, options);
+  return buildLearnerPrimaryNavItemsImpl(pathwayId, options);
 }
 
 export function learnerPrimaryNavLabelKey(key: LearnerPrimaryNavKey): string {
-  return getLearnerPrimaryNavModule().learnerPrimaryNavLabelKey(key);
+  return learnerPrimaryNavLabelKeyImpl(key);
 }
 
 /**
@@ -146,5 +123,5 @@ export function learnerPrimaryStudyDestinations(
   pathwayId: string | null,
   options?: { examsLabel?: LearnerExamsSurfaceLabel },
 ) {
-  return buildLearnerPrimaryNavItems(pathwayId, options);
+  return buildLearnerPrimaryNavItemsImpl(pathwayId, options);
 }

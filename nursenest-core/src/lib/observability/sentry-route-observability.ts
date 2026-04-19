@@ -1,4 +1,5 @@
 import { redactMetaForLog } from "@/lib/env/redact-secrets";
+import { importSentryNextjs } from "@/lib/observability/sentry-nextjs-dynamic";
 import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
 
 type SentryMetaValue = string | number | boolean | undefined;
@@ -26,7 +27,7 @@ export async function withSentryServerSpan<T>(
 ): Promise<T> {
   if (!isSentryServerRuntimeEnabled()) return fn();
   const attributes = scrubMeta(opts.attributes);
-  const Sentry = await import("@sentry/nextjs");
+  const Sentry = await importSentryNextjs();
   return Sentry.startSpan(
     {
       name: opts.name,
@@ -49,7 +50,7 @@ export function captureSentrySoftError(opts: {
   if (!isSentryServerRuntimeEnabled()) return;
   const error = opts.error instanceof Error ? opts.error : opts.error ? new Error(String(opts.error)) : undefined;
   const safeMeta = scrubMeta(opts.meta);
-  void import("@sentry/nextjs")
+  void importSentryNextjs()
     .then((Sentry) => {
       Sentry.withScope((scope) => {
         scope.setLevel(opts.level ?? "warning");

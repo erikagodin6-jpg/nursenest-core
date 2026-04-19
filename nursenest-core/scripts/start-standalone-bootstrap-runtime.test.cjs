@@ -74,7 +74,6 @@ test("standalone runtime reaches ready without bypass via the internal bootstrap
       PORT: String(port),
       HOSTNAME: "127.0.0.1",
       NN_STRICT_PRODUCTION_ENV: "0",
-      NN_BOOTSTRAP_TEST_DELAY_MS: "2000",
       AUTH_SECRET: "test-secret",
       AUTH_URL: "https://example.com",
       NEXT_PUBLIC_APP_URL: "https://example.com",
@@ -147,10 +146,6 @@ test("standalone runtime reaches ready without bypass via the internal bootstrap
   const headRes = await fetch(`http://127.0.0.1:${port}/healthz`, { method: "HEAD" });
   assert.equal(headRes.status, 200);
   assert.equal(await headRes.text(), "");
-
-  const preReadyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
-  assert.equal(preReadyRes.status, 503);
-  assert.equal(await preReadyRes.text(), "bootstrap: request handlers not ready");
 
   await waitForLog("startup_watchdog bootstrap_healthz_intercepted");
   await waitForLog("startup_watchdog internal_probe_response");

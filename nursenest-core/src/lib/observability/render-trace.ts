@@ -1,3 +1,4 @@
+import { importSentryNextjs } from "@/lib/observability/sentry-nextjs-dynamic";
 import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
 
 type RenderTraceMeta = Record<string, string | number | boolean | undefined>;
@@ -7,7 +8,7 @@ export function renderTrace(label: string, meta?: RenderTraceMeta): void {
     meta && Object.keys(meta).length > 0 ? ` ${JSON.stringify(meta)}` : "";
   console.error(`[trace] ${label}${payload}`);
   if (!isSentryServerRuntimeEnabled()) return;
-  void import("@sentry/nextjs")
+  void importSentryNextjs()
     .then((Sentry) =>
       Sentry.addBreadcrumb({
         category: "render-trace",

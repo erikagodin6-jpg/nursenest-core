@@ -6,25 +6,10 @@ import { AnalyticsProvider } from "@/components/providers/analytics-provider";
 import { AppThemeProvider } from "@/components/theme/app-theme-provider";
 import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
 import { NURSENEST_DEFAULT_THEME, THEME_STORAGE_KEY } from "@/lib/theme/theme-registry";
+import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 import "./globals.css";
 /** Bundled with root layout CSS so marketing pages avoid a second render-blocking stylesheet (rules are dark-theme + `.nn-marketing-surface` scoped). */
 import "./(marketing)/marketing-dark-utilities.css";
-
-const BUILD_PHASE = "phase-production-build";
-type RenderTraceFn = typeof import("@/lib/observability/render-trace")["renderTrace"];
-let renderTraceCache: RenderTraceFn | null | undefined;
-
-function loadRenderTrace(): RenderTraceFn | null {
-  if (process.env.NEXT_PHASE === BUILD_PHASE) return null;
-  if (renderTraceCache !== undefined) return renderTraceCache;
-  try {
-    const moduleId = ["@/lib/observability", "render-trace"].join("/");
-    renderTraceCache = (require(moduleId) as { renderTrace?: RenderTraceFn }).renderTrace ?? null;
-  } catch {
-    renderTraceCache = null;
-  }
-  return renderTraceCache;
-}
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -86,7 +71,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  loadRenderTrace()?.("root layout start", { route: "shared-root-layout" });
+  layoutStderrTrace("root_layout", "root layout start", { route: "shared-root-layout" });
   const themeBoot = `(function(){try{var k=${JSON.stringify(THEME_STORAGE_KEY)};var d=${JSON.stringify(NURSENEST_DEFAULT_THEME)};var v=localStorage.getItem(k);if(v==null||v===""){v=d;localStorage.setItem(k,v);}document.documentElement.setAttribute("data-theme",v);}catch(e){}})();`;
 
   /** Duplicates the first layout rules from `globals.css` so the parser can paint before the main stylesheet finishes. */

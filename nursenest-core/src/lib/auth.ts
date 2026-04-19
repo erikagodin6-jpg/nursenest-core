@@ -32,7 +32,9 @@ import {
   type SessionSubscriptionStatus,
 } from "@/lib/entitlements/get-user-access";
 import { prisma } from "@/lib/db";
+import { importSentryNextjs } from "@/lib/observability/sentry-nextjs-dynamic";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
 import { PINNED_AUTH_BASE_PATH } from "@/lib/auth/auth-base-path";
 import { logAuthIncidentLine } from "@/lib/auth/auth-incident-log";
 import { recordCredentialsLoginFailure } from "@/lib/observability/production-signal-metrics";
@@ -165,16 +167,11 @@ type SentryAuthSdk = {
 let sentryAuthSdkPromise: Promise<SentryAuthSdk | null> | null = null;
 
 function loadSentryAuthSdk(): Promise<SentryAuthSdk | null> {
-  if (process.env.SENTRY_ENABLED !== "true") return Promise.resolve(null);
+  if (!isSentryServerRuntimeEnabled()) return Promise.resolve(null);
   if (sentryAuthSdkPromise) return sentryAuthSdkPromise;
-  sentryAuthSdkPromise = Promise.resolve().then(() => {
-    try {
-      const sentryModuleId = ["@sentry", "nextjs"].join("/");
-      return require(sentryModuleId) as SentryAuthSdk;
-    } catch {
-      return null;
-    }
-  });
+  sentryAuthSdkPromise = importSentryNextjs()
+    .then((mod) => mod as unknown as SentryAuthSdk)
+    .catch(() => null);
   return sentryAuthSdkPromise;
 }
 
