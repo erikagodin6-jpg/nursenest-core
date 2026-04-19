@@ -1,6 +1,11 @@
 const { createStartupWatchdogLogger, createStandaloneRequire } = require("./standalone-startup-watchdog-shared.cjs");
 const { maybeServeBootstrapHealthz } = require("./standalone-bootstrap-healthz-shared.cjs");
 
+/**
+ * Patches `http(s).createServer` and `Server.prototype.emit` so bootstrap healthz
+ * and `/_nn_bootstrap_ready_check__` run before Next's `requestListener` (which awaits
+ * `handlersPromise` and would otherwise stall the parent's internal HEAD probe).
+ */
 function patchServerModule(moduleName, moduleRef, startupState, logger) {
   const label = moduleName.startsWith("node:") ? moduleName.slice("node:".length) : moduleName;
   logger.logPreloadPatchBegin(label);

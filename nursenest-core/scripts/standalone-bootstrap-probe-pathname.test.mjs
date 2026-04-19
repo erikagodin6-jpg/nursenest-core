@@ -21,4 +21,8 @@ test("normalizeBootstrapProbePathname: absolute-form request-target", () => {
     normalizeBootstrapProbePathname({ url: "https://example.com/healthz?z=1" }),
     "/healthz",
   );
+  assert.equal(
+    normalizeBootstrapProbePathname({ url: "http://127.0.0.1:3005/_nn_bootstrap_ready_check__" }),
+    "/_nn_bootstrap_ready_check__",
+  );
 });
