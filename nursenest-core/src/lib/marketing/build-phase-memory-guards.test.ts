@@ -55,7 +55,9 @@ test("next config keeps webpack memory guards enabled during custom builds", () 
 
   assert.match(nextConfig, /webpackBuildWorker:\s*true/);
   assert.match(nextConfig, /webpackMemoryOptimizations:\s*true/);
-  assert.match(nextConfig, /config\.parallelism = 1/);
+  assert.match(nextConfig, /resolveBuildWebpackParallelism/);
+  assert.match(nextConfig, /cpus:\s*buildWebpackParallelism/);
+  assert.match(nextConfig, /config\.parallelism = buildWebpackParallelism/);
 });
 
 test("pre-nursing i18n provider avoids top-level JSON imports", () => {

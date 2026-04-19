@@ -21,9 +21,9 @@ Use this runbook to avoid **OOM builds**, **accidental giant Git commits**, and 
 ## 2) Build-time guardrails (already enforced)
 
 - **`RUN_HEAVY_BUILD_TASKS`**: Production builds default to **`false`** so `next build` does not eagerly load full SEO redirect graphs. Set to `true` only when you intentionally regenerate redirects and accept higher memory (release tooling).
-- **`prebuild`**: Runs **`i18n:validate-chrome`** — fails fast on i18n contract breaks; does not import question banks.
-- **Node heap**: `package.json` sets `NODE_OPTIONS=--max-old-space-size=8192` for `build` / `typecheck` to reduce OOM on large TS projects.
-- **Prisma**: `optimizePackageImports: ["@prisma/client"]` in `next.config.ts`.
+- **`SKIP_I18N_PREBUILD`**: `npm run build` sets **`1`** so `build:prechecks` skips heavy i18n validations during compile (faster CI/deploy); run `i18n:validate-production` / `i18n:validate-chrome` in a separate quality job when needed.
+- **`BUILD_WEBPACK_PARALLELISM`**: Optional integer (default **`1`** in `next.config.ts`) for webpack `parallelism` and `experimental.cpus`, capped by CPU count. Use **`2`–`4`** on larger runners with adequate `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` to shorten compile time; raise gradually and watch for OOM.
+- **Node heap**: `package.json` sets `NODE_OPTIONS=--max-old-space-size=3584` for `next build` (override via `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB`); `typecheck` uses a higher cap.
 
 ---
 

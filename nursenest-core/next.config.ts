@@ -11,6 +11,10 @@
  * **RUN_HEAVY_BUILD_TASKS:** set to `false` to skip loading large redirect/rewrite graphs during `next build`
  * (lower memory — production deploys should set this in CI/build env). See `docs/OPERATOR_DATA_IMPORT_AND_BUILD.md`.
  *
+ * **BUILD_WEBPACK_PARALLELISM:** optional positive integer (default `1`). Webpack `parallelism` and
+ * `experimental.cpus` use this value capped by `os.cpus().length` — keeps small-builder memory safety by
+ * default; set `2`–`4` on larger CI runners / higher `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` to cut compile time.
+ *
  * **Build / compile cache (DigitalOcean App Platform):** Next.js writes `.next/cache` during `next build`.
  * DO’s default Node build runs in an ephemeral container with no guaranteed reuse of that directory between
  * builds, so **persistent Turbopack/webpack disk cache across deploys is not enabled here** (would need a
@@ -19,12 +23,24 @@
  * an officially supported workflow (e.g. Vercel Remote Cache with token) compatible with this Next version.
  */
 import { createRequire } from "module";
+import os from "node:os";
 import { fileURLToPath } from "url";
 import type { NextConfig } from "next";
 
 /** Parent of `nursenest-core/` (repo root); avoids `path` in config bundle (fixes ESM load). */
 const monorepoRoot = fileURLToPath(new URL("..", import.meta.url));
 const require = createRequire(import.meta.url);
+
+/** Default 1 for memory-bound builders; opt-in via `BUILD_WEBPACK_PARALLELISM` on larger runners. */
+function resolveBuildWebpackParallelism(): number {
+  const raw = process.env.BUILD_WEBPACK_PARALLELISM?.trim();
+  if (!raw) return 1;
+  const n = Number.parseInt(raw, 10);
+  if (!Number.isFinite(n) || n < 1) return 1;
+  return Math.min(n, Math.max(1, os.cpus().length));
+}
+
+const buildWebpackParallelism = resolveBuildWebpackParallelism();
 
 // Default off so plain `next build` does not require TS-only route generators from config evaluation.
 const runHeavyBuildTasks = process.env.RUN_HEAVY_BUILD_TASKS === "true";
@@ -156,14 +172,14 @@ const nextConfig: NextConfig = {
   },
   // Allow importing shared monolith modules (`../shared/*`) without publishing a package.
   experimental: {
-    cpus: 1,
+    cpus: buildWebpackParallelism,
     memoryBasedWorkersCount: true,
     webpackBuildWorker: true,
     webpackMemoryOptimizations: true,
     externalDir: true,
   },
   webpack: (config) => {
-    config.parallelism = 1;
+    config.parallelism = buildWebpackParallelism;
     return config;
   },
   // next.config.ts is evaluated at build time only; exclude it from server-component NFT so
