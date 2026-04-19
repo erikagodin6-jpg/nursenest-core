@@ -26,7 +26,7 @@ export function verifyStandaloneArtifact(root = packageRoot) {
     throw new Error(
       "standalone server.js not found. Expected one of:\n" +
         candidates.map((candidate) => `  - ${candidate}`).join("\n") +
-        "\nRun `npm run build:deploy` from nursenest-core to generate a fresh standalone build.",
+        "\nRun `npm run build` (or `npm run build:deploy:full`) from nursenest-core to generate a fresh standalone build.",
     );
   }
   return standaloneServerPath;

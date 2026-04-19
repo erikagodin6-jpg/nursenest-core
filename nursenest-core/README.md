@@ -20,7 +20,7 @@ Commands: `npm run disk:audit`, `npm run storage:check` (use `storage:check:stri
 - **Symptom:** `ENOSPC` while writing `.next` — usually the host volume is nearly full (check with `df -h`).
 - **Clean:** `npm run clean:build` removes `.next`, `dist`, `build`, and `out` under this package.
 - **Build:** `npm run build` sets `TMPDIR=${TMPDIR:-/tmp}` so Turbopack/Next temp files use a writable path when defaults are tight.
-- **Deploy:** `build:deploy` runs the same build, then `scripts/post-build-prune.mjs` (drops `.next/cache` in the artifact).
+- **Deploy (App Platform):** the Node buildpack runs `npm run build` first; `build:deploy` then verifies the standalone artifact and runs `post-build-prune.mjs` (drops `.next/cache`). For a **single** local command that includes `next build`, use `npm run build:deploy:full`.
 - **Monitor:** keep several GB free on the volume that holds the repo and `~/.npm`; prune old `node_modules` copies if needed.
 
 ### Build directory & monorepo root

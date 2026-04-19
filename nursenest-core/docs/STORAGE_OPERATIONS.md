@@ -34,7 +34,7 @@ Quick reference for **safe** content and disk operations. Full policy: `STORAGE_
 ## Cleaning build artifacts (local / CI)
 
 1. **`npm run clean:next`** — removes `.next`.
-2. **`npm run build:deploy`** — build + removes **`.next/cache`**.
+2. **`npm run build`** (App Platform) or **`npm run build:deploy:full`** (single local/droplet command) — then **`npm run build:deploy`** on App Platform only runs verify + removes **`.next/cache`**.
 3. After production install on builders: **`npm prune --omit=dev`** (already in App Platform spec).
 4. Remove **`reports/i18n-status.json`** only if safe (regenerated); not required in production.
 

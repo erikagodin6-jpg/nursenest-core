@@ -10,7 +10,7 @@ This document is for operators moving **nursenest-core** (Next.js 16, Prisma, Ne
 |------|------------------|--------------|
 | **App directory** | Run all npm commands inside `nursenest-core/` (this package), not the monorepo root `rest-express` tree. | Clone full repo; `cd <repo>/nursenest-core`. |
 | **Monorepo root** | `next.config.ts` sets `turbopack.root` and `outputFileTracingRoot` to the **parent** of this package (repo root). Required for `@shared/*` imports. | Deploy must include parent `shared/` (and lockfile at repo root if present). |
-| **Build** | `npm run build` or `npm run build:deploy` runs `prisma generate`, disk check, `next build`. `TMPDIR` should be writable (`/tmp`). | Export `TMPDIR=/tmp` (or larger disk path) before build. |
+| **Build** | `npm run build` or `npm run build:deploy:full` (includes `next build`). `TMPDIR` should be writable (`/tmp`). | Export `TMPDIR=/tmp` (or larger disk path) before build. |
 | **Start** | `npm run start` → `next start -H 0.0.0.0 -p ${PORT:-3000}` | On Droplet, bind **127.0.0.1:3000** behind Caddy/Nginx; set `PORT=3000`. |
 | **Prisma** | `prisma migrate deploy` for prod schema. | Run from app directory after deploy, before or with rolling restart. |
 | **Database URL** | `DATABASE_URL` or, in production only, `PROD_DATABASE_URL` if `DATABASE_URL` unset (`env-bootstrap`). | Prefer single `DATABASE_URL` on Droplet to reduce confusion. |
@@ -29,7 +29,7 @@ Point uptime monitors and load balancers at **`/healthz`** for liveness. Use **`
 
 - **Automatic HTTPS** → Caddy or Nginx + Let’s Encrypt on the Droplet.
 - **Injected `PORT`** → set `PORT=3000` (or chosen internal port) in PM2/env.
-- **Build command in UI** → your `deploy-app.sh` runs `npm ci` + `npm run build:deploy` (or `build`).
+- **Build command in UI** → your `deploy-app.sh` runs `npm ci` + `npm run build:deploy:full` (or `npm run build` then `npm run build:deploy` on App Platform).
 - **Zero-downtime rolling** (if configured) → PM2 `reload` or brief restart; for minimal complexity accept seconds of blip or use two Droplets + LB later.
 
 ### Spaces / CDN
@@ -149,7 +149,7 @@ Pack from the **monorepo root** (parent of `nursenest-core/`) after a successful
 
 - `shared/` — full tree as in the repo (TypeScript sources and package metadata the app depends on).
 - `nursenest-core/` including at minimum:
-  - `.next/` (output of `npm run build:deploy` on the build host)
+  - `.next/` (output of `npm run build` / `build:deploy:full` on the build host)
   - `package.json`, `package-lock.json`
   - `prisma/` (schema + migrations) for `migrate deploy`
   - `public/`, `next.config.ts` (and other config the runtime needs)
@@ -186,7 +186,7 @@ Each release directory is a **repo-shaped root**: `.../shared/` and `.../nursene
 # On CI or a build machine (Linux, Node 20.x), monorepo root:
 cd nursenest-core
 npm ci
-npm run build:deploy
+npm run build:deploy:full
 cd ..
 tar -czf nursenest-release.tgz shared nursenest-core
 ```

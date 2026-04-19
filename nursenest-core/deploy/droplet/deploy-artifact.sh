@@ -11,7 +11,7 @@
 #   nursenest-core/      (Next app with .next/, prisma/, package.json, deploy/droplet/, …)
 #
 # Typical pack on the build host (from monorepo root, after build):
-#   cd nursenest-core && npm ci && npm run build:deploy
+#   cd nursenest-core && npm ci && npm run build:deploy:full
 #   cd .. && tar -czf nursenest-release.tgz shared nursenest-core
 #
 # Environment:
@@ -74,7 +74,7 @@ APP_DIR="${INNER_ROOT}/nursenest-core"
 ECOSYSTEM="${APP_DIR}/deploy/droplet/ecosystem.config.cjs"
 
 if [[ ! -f "${APP_DIR}/.next/BUILD_ID" ]]; then
-  echo "Missing built app: ${APP_DIR}/.next/BUILD_ID (run build:deploy on the build host)." >&2
+  echo "Missing built app: ${APP_DIR}/.next/BUILD_ID (run npm run build:deploy:full on the build host)." >&2
   exit 1
 fi
 

@@ -36,9 +36,9 @@ Default app path: `$NURSE_NEST_REPO_ROOT/nursenest-core` (the inner package).
 
 ## Artifact deploy (summary)
 
-1. On a **Linux** build host with **Node 20.x**, from monorepo root (after `npm run build:deploy` in `nursenest-core/`):
+1. On a **Linux** build host with **Node 20.x**, from monorepo root (after `npm run build:deploy:full` in `nursenest-core/`):
    ```bash
-   cd nursenest-core && npm ci && npm run build:deploy && cd ..
+   cd nursenest-core && npm ci && npm run build:deploy:full && cd ..
    tar -czf nursenest-release.tgz shared nursenest-core
    ```
    Prefer including **`nursenest-core/node_modules`** from that host so the Droplet can set **`NURSE_NEST_SKIP_NPM_CI=1`**.

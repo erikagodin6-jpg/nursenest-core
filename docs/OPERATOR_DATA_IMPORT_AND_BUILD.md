@@ -11,7 +11,7 @@ Use this runbook to avoid **OOM builds**, **accidental giant Git commits**, and 
 | **Install** | `npm ci` | CI / laptop | Lockfile only. |
 | **Generate** | `npm run db:generate` (`prisma generate`) | CI + deploy | Before `build` if schema changed. |
 | **Migrate** | `npm run db:deploy` (`prisma migrate deploy`) | Deploy job / operator | **Never** inside `next build`. |
-| **Build** | `npm run build` | CI / DO / Vercel | Default **`RUN_HEAVY_BUILD_TASKS=false`** in `package.json` — skips huge redirect graph generation (see `next.config.ts`). |
+| **Build** | `npm run build` (then on DO: `npm run build:deploy`) | CI / DO / Vercel | Node buildpack runs `build`; `build:deploy` verifies standalone + prunes `.next/cache` only (see `.do/app-nursenest-core-next.yaml`). Default **`RUN_HEAVY_BUILD_TASKS=false`** (see `next.config.ts`). |
 | **Start** | `npm run start` | Runtime | No bulk imports. |
 | **Import / seed** | `tsx scripts/...`, `npm run import:*`, `db:seed*` | Operator / batch VM | Use **`IMPORT_*` chunk limits** in `src/lib/content-pipeline/import-safeguards.ts`. Never pipe multi‑GB files into a single Node buffer. |
 | **Audit / export** | `npm run audit:*`, `ops:*` | CI optional / operator | Read-only or scoped writes; outputs often **gitignored**. |

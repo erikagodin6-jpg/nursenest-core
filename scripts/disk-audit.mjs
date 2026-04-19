@@ -58,7 +58,7 @@ try {
 }
 
 console.log("\n=== Safe cleanup targets (manual) ===");
-console.log("- rm -rf .next/cache   (also done by npm run build:deploy)");
+console.log("- rm -rf .next/cache   (also done after `npm run build` via `npm run build:deploy` on App Platform)");
 console.log("- rm -rf .next         (npm run clean:next)");
 console.log("- npm prune --omit=dev after production install on builders");
 console.log("- Keep repo root attached_assets/, data/imports/ out of deploy context");

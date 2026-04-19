@@ -51,7 +51,7 @@ echo "== Database migrations =="
 npx prisma migrate deploy
 
 echo "== Production build =="
-npm run build:deploy
+npm run build:deploy:full
 
 ECOSYSTEM="${APP_DIR}/deploy/droplet/ecosystem.config.cjs"
 if [[ ! -f "${ECOSYSTEM}" ]]; then

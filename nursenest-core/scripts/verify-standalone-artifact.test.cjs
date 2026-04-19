@@ -151,7 +151,7 @@ test("verify-standalone-artifact CLI exits 1 with a clear FATAL when the nested 
     assert.equal(result.status, 1);
     assert.match(
       result.stderr,
-      /FATAL: standalone server\.js not found\. Expected one of:\n  - .*\.next\/standalone\/nursenest-core\/server\.js\n  - .*\.next\/standalone\/server\.js\nRun `npm run build:deploy` from nursenest-core to generate a fresh standalone build\./,
+      /FATAL: standalone server\.js not found\. Expected one of:\n  - .*\.next\/standalone\/nursenest-core\/server\.js\n  - .*\.next\/standalone\/server\.js\nRun `npm run build` \(or `npm run build:deploy:full`\) from nursenest-core to generate a fresh standalone build\./,
     );
     assert.equal(result.stdout, "");
   } finally {
@@ -184,7 +184,7 @@ test("next config keeps standalone output enabled", () => {
   assert.match(nextConfig, /output:\s*"standalone"/);
 });
 
-test("deploy build script forces a clean rebuild and verifies the standalone artifact", () => {
+test("deploy build script verifies the standalone artifact without duplicating next build in build:deploy", () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
   assert.equal(pkg.scripts.build.includes("next build"), true);
   assert.match(
@@ -194,8 +194,9 @@ test("deploy build script forces a clean rebuild and verifies the standalone art
   assert.equal(pkg.scripts["verify:standalone-artifact"], "node scripts/verify-standalone-artifact.mjs");
   assert.equal(
     pkg.scripts["build:deploy"],
-    "npm run clean:next && npm run build && npm run verify:standalone-artifact && node scripts/post-build-prune.mjs",
+    "npm run verify:bootstrap-probe-pathname && npm run verify:standalone-artifact && node scripts/post-build-prune.mjs",
   );
+  assert.match(pkg.scripts["build:deploy:full"], /npm run build && npm run verify:standalone-artifact/);
   assert.equal(pkg.scripts.start, "node scripts/start-standalone.mjs");
 });
 
@@ -225,7 +226,7 @@ test("start-standalone hard-fails immediately when the standalone server artifac
     assert.equal(result.status, 1);
     assert.match(
       result.stderr,
-      /FATAL: standalone server\.js not found\. Expected one of:\n  - .*\.next\/standalone\/nursenest-core\/server\.js\n  - .*\.next\/standalone\/server\.js\nRun `npm run build:deploy` from nursenest-core to generate a fresh standalone build\./,
+      /FATAL: standalone server\.js not found\. Expected one of:\n  - .*\.next\/standalone\/nursenest-core\/server\.js\n  - .*\.next\/standalone\/server\.js\nRun `npm run build` \(or `npm run build:deploy:full`\) from nursenest-core to generate a fresh standalone build\./,
     );
     assert.equal(result.stdout, "");
   } finally {
