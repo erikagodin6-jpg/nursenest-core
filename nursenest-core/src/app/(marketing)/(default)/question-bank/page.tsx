@@ -14,9 +14,8 @@ import {
   type MarketingRegionToggle,
 } from "@/lib/marketing/marketing-entry-routes";
 import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
-import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingLayoutShardsOverlay } from "@/lib/marketing-i18n/load-marketing-route-shard-bundles";
 import { formatMarketingMessage, resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
@@ -107,19 +106,18 @@ export async function generateMetadata(): Promise<Metadata> {
     async () => {
       const locale = await getMarketingLocaleForDefaultRoute();
       const marketingRegion = await getMarketingRegionFromCookies();
-      const m = await loadMarketingMessages(locale);
-      const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const messages = await loadMarketingLayoutShardsOverlay(locale);
       const metaSfx = marketingRegion === "US" ? "US" : "CA";
       const title = resolveMarketingCopy(
-        m,
+        messages,
         `pages.publicQuestionBank.metaTitle${metaSfx}`,
-        en,
+        undefined,
         defaultQuestionBankMetaTitle(marketingRegion),
       );
       const description = resolveMarketingCopy(
-        m,
+        messages,
         `pages.publicQuestionBank.metaDescription${metaSfx}`,
-        en,
+        undefined,
         defaultQuestionBankMetaDescription(marketingRegion),
       );
       const alt = marketingAlternatesSharedPage(locale, "/question-bank");
@@ -137,20 +135,20 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function QuestionBankHubPage() {
   const locale = await getMarketingLocaleForDefaultRoute();
   const marketingRegion = await getMarketingRegionFromCookies();
-  const m = await loadMarketingMessages(locale);
-  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
+  const messages = await loadMarketingLayoutShardsOverlay(locale);
+  const t = (key: string, params?: Record<string, string | number>) =>
+    formatMarketingMessage(messages, key, params, undefined, { locale });
   const metaSfx = marketingRegion === "US" ? "US" : "CA";
   const title = resolveMarketingCopy(
-    m,
+    messages,
     `pages.publicQuestionBank.metaTitle${metaSfx}`,
-    en,
+    undefined,
     defaultQuestionBankMetaTitle(marketingRegion),
   );
   const description = resolveMarketingCopy(
-    m,
+    messages,
     `pages.publicQuestionBank.metaDescription${metaSfx}`,
-    en,
+    undefined,
     defaultQuestionBankMetaDescription(marketingRegion),
   );
 

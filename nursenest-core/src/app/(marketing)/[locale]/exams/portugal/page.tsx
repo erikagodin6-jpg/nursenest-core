@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ExamsPortugalHubShell } from "@/components/marketing/exams-portugal/exams-portugal-hub-shell";
-import { DEFAULT_MARKETING_LOCALE, isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
+import { loadMarketingLayoutShardsOverlay } from "@/lib/marketing-i18n/load-marketing-route-shard-bundles";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { robotsForRegionalMarketingHub } from "@/lib/seo/expansion-hub-robots";
@@ -18,9 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   if (!isCoreHostedNonDefaultLocale(locale)) notFound();
 
-  const messages = await loadMarketingMessages(locale);
-  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const merged = { ...en, ...messages };
+  const merged = await loadMarketingLayoutShardsOverlay(locale);
   const title = merged["exams.portugal.metaTitle"] ?? merged["exams.portugal.title"] ?? "Portugal nursing";
   const description =
     merged["exams.portugal.metaDescription"] ??
@@ -68,9 +66,7 @@ export default async function PortugalExamsHubLocalePage({ params }: Props) {
   const { locale } = await params;
   if (!isCoreHostedNonDefaultLocale(locale)) notFound();
 
-  const messages = await loadMarketingMessages(locale);
-  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const merged = { ...en, ...messages };
+  const merged = await loadMarketingLayoutShardsOverlay(locale);
 
   return <ExamsPortugalHubShell locale={locale} messages={merged} />;
 }

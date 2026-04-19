@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ExamsHungaryHubShell } from "@/components/marketing/exams-hungary/exams-hungary-hub-shell";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingLayoutShardsOverlay } from "@/lib/marketing-i18n/load-marketing-route-shard-bundles";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { robotsForRegionalMarketingHub } from "@/lib/seo/expansion-hub-robots";
@@ -12,7 +12,7 @@ export const revalidate = 86400;
 const PATH = "/exams/hungary";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const messages = await loadMarketingLayoutShardsOverlay(DEFAULT_MARKETING_LOCALE);
   const title =
     messages["exams.hungary.metaTitle"] ?? "Nursing Registration in Hungary (2026 Complete Guide)";
   const description =
@@ -57,6 +57,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HungaryExamsHubEnglishPage() {
-  const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const messages = await loadMarketingLayoutShardsOverlay(DEFAULT_MARKETING_LOCALE);
   return <ExamsHungaryHubShell locale={DEFAULT_MARKETING_LOCALE} messages={messages} />;
 }

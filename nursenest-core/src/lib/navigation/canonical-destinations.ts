@@ -18,14 +18,22 @@ import {
   type MarketingRegionToggle,
   rnQuestions,
 } from "@/lib/marketing/marketing-entry-routes";
-import {
-  buildLearnerPrimaryNavItems,
-  CANONICAL_LEARNER_ROUTES,
-  learnerPrimaryNavLabelKey,
-  type LearnerExamsSurfaceLabel,
-} from "@/lib/navigation/learner-primary-nav";
+import type { LearnerExamsSurfaceLabel } from "@/lib/navigation/learner-primary-nav";
 
 export type { MarketingRegionToggle };
+
+type LearnerPrimaryNavModule = typeof import("@/lib/navigation/learner-primary-nav");
+type LearnerPrimaryNavKey = Parameters<LearnerPrimaryNavModule["learnerPrimaryNavLabelKey"]>[0];
+type CanonicalLearnerRoutes = LearnerPrimaryNavModule["CANONICAL_LEARNER_ROUTES"];
+
+let learnerPrimaryNavModuleCache: LearnerPrimaryNavModule | null = null;
+
+function getLearnerPrimaryNavModule(): LearnerPrimaryNavModule {
+  if (learnerPrimaryNavModuleCache) return learnerPrimaryNavModuleCache;
+  const moduleId = ["@/lib/navigation", "learner-primary-nav"].join("/");
+  learnerPrimaryNavModuleCache = require(moduleId) as LearnerPrimaryNavModule;
+  return learnerPrimaryNavModuleCache;
+}
 
 /** Session tier aligned with NextAuth user.tier + SiteHeader learner helpers. */
 export type NavSessionTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
@@ -89,11 +97,46 @@ export function publicMarketingExploreDestinations(region: MarketingRegionToggle
   } as const;
 }
 
-export { defaultNursingExamMarketingHub, HUB, CANONICAL_LEARNER_ROUTES };
+export const CANONICAL_LEARNER_ROUTES: CanonicalLearnerRoutes = {
+  get lessons() {
+    return getLearnerPrimaryNavModule().CANONICAL_LEARNER_ROUTES.lessons;
+  },
+  get practice() {
+    return getLearnerPrimaryNavModule().CANONICAL_LEARNER_ROUTES.practice;
+  },
+  get flashcards() {
+    return getLearnerPrimaryNavModule().CANONICAL_LEARNER_ROUTES.flashcards;
+  },
+  get cat() {
+    return getLearnerPrimaryNavModule().CANONICAL_LEARNER_ROUTES.cat;
+  },
+  get catBuilder() {
+    return getLearnerPrimaryNavModule().CANONICAL_LEARNER_ROUTES.catBuilder;
+  },
+  get reports() {
+    return getLearnerPrimaryNavModule().CANONICAL_LEARNER_ROUTES.reports;
+  },
+  get profile() {
+    return getLearnerPrimaryNavModule().CANONICAL_LEARNER_ROUTES.profile;
+  },
+} as CanonicalLearnerRoutes;
+
+export { defaultNursingExamMarketingHub, HUB };
 
 // —— Learner ——
 
-export { buildLearnerPrimaryNavItems, learnerPrimaryNavLabelKey, type LearnerExamsSurfaceLabel };
+export type { LearnerExamsSurfaceLabel };
+
+export function buildLearnerPrimaryNavItems(
+  pathwayId: string | null,
+  options?: { examsLabel?: LearnerExamsSurfaceLabel },
+) {
+  return getLearnerPrimaryNavModule().buildLearnerPrimaryNavItems(pathwayId, options);
+}
+
+export function learnerPrimaryNavLabelKey(key: LearnerPrimaryNavKey): string {
+  return getLearnerPrimaryNavModule().learnerPrimaryNavLabelKey(key);
+}
 
 /**
  * Ordered learner study links — same hrefs as {@link buildLearnerPrimaryNavItems} (learner shell).

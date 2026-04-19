@@ -16,14 +16,56 @@ import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-rout
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
 import { safeAwait } from "@/lib/async/safe-await";
-import { renderTrace } from "@/lib/observability/render-trace";
-import {
-  captureSentrySoftError,
-  withSentryServerSpan,
-} from "@/lib/observability/sentry-route-observability";
 
 const MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS = 1200;
 const MARKETING_BUILD_PHASE = "phase-production-build";
+type RenderTraceFn = typeof import("@/lib/observability/render-trace")["renderTrace"];
+type MarketingLayoutObservability = Pick<
+  typeof import("@/lib/observability/sentry-route-observability"),
+  "captureSentrySoftError" | "withSentryServerSpan"
+>;
+
+let marketingLayoutRenderTraceCache: RenderTraceFn | null | undefined;
+let marketingLayoutObservabilityCache: MarketingLayoutObservability | null | undefined;
+
+function loadRenderTrace(): RenderTraceFn | null {
+  if (process.env.NEXT_PHASE === MARKETING_BUILD_PHASE) return null;
+  if (marketingLayoutRenderTraceCache !== undefined) return marketingLayoutRenderTraceCache;
+  try {
+    const moduleId = ["@/lib/observability", "render-trace"].join("/");
+    marketingLayoutRenderTraceCache = (require(moduleId) as { renderTrace?: RenderTraceFn }).renderTrace ?? null;
+  } catch {
+    marketingLayoutRenderTraceCache = null;
+  }
+  return marketingLayoutRenderTraceCache;
+}
+
+function loadMarketingLayoutObservability(): MarketingLayoutObservability | null {
+  if (process.env.NEXT_PHASE === MARKETING_BUILD_PHASE) return null;
+  if (marketingLayoutObservabilityCache !== undefined) return marketingLayoutObservabilityCache;
+  try {
+    const moduleId = ["@/lib/observability", "sentry-route-observability"].join("/");
+    marketingLayoutObservabilityCache = require(moduleId) as MarketingLayoutObservability;
+  } catch {
+    marketingLayoutObservabilityCache = null;
+  }
+  return marketingLayoutObservabilityCache;
+}
+
+async function withMarketingLayoutSpan<T>(
+  opts: Parameters<NonNullable<MarketingLayoutObservability>["withSentryServerSpan"]>[0],
+  fn: () => Promise<T>,
+): Promise<T> {
+  const observability = loadMarketingLayoutObservability();
+  if (!observability) return fn();
+  return observability.withSentryServerSpan(opts, fn);
+}
+
+function captureMarketingLayoutSoftError(
+  opts: Parameters<NonNullable<MarketingLayoutObservability>["captureSentrySoftError"]>[0],
+): void {
+  loadMarketingLayoutObservability()?.captureSentrySoftError(opts);
+}
 
 function defaultLayoutMessageShards() {
   return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE
@@ -36,14 +78,14 @@ function shouldLayerMainPageShards() {
 }
 
 export default async function MarketingDefaultLocaleLayout({ children }: { children: React.ReactNode }) {
-  return withSentryServerSpan(
+  return withMarketingLayoutSpan(
     {
       name: "marketing.layout.default.render",
       op: "ui.server.render",
       attributes: { route: "shared-marketing-default", locale: DEFAULT_MARKETING_LOCALE },
     },
     async () => {
-      renderTrace("marketing layout start", { route: "shared-marketing-default" });
+      loadRenderTrace()?.("marketing layout start", { route: "shared-marketing-default" });
       const resolvedLocale: string = DEFAULT_MARKETING_LOCALE;
       const serverRegion: MarketingRegionToggle = "US";
       let messages: Record<string, string> = {};
@@ -61,7 +103,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         console.error("[marketing-default-layout] failed to load messages", {
           error: e instanceof Error ? e.message : String(e),
         });
-        captureSentrySoftError({
+        captureMarketingLayoutSoftError({
           scope: "marketing_layout",
           event: "chrome_messages_failed",
           error: e,
@@ -70,7 +112,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
           meta: { locale: DEFAULT_MARKETING_LOCALE },
         });
       }
-      renderTrace("marketing layout after messages", {
+      loadRenderTrace()?.("marketing layout after messages", {
         route: "shared-marketing-default",
         locale: resolvedLocale,
         messageCount: Object.keys(messages).length,

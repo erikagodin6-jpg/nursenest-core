@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ExamsGermanyHubShell } from "@/components/marketing/exams-germany/exams-germany-hub-shell";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingLayoutShardsOverlay } from "@/lib/marketing-i18n/load-marketing-route-shard-bundles";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { robotsForRegionalMarketingHub } from "@/lib/seo/expansion-hub-robots";
@@ -12,7 +12,7 @@ export const revalidate = 86400;
 const PATH = "/exams/germany";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const messages = await loadMarketingLayoutShardsOverlay(DEFAULT_MARKETING_LOCALE);
   const title =
     messages["exams.germany.metaTitle"] ??
     "Nursing Registration and Recognition in Germany (2026 Complete Guide)";
@@ -60,6 +60,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function GermanyExamsHubEnglishPage() {
-  const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const messages = await loadMarketingLayoutShardsOverlay(DEFAULT_MARKETING_LOCALE);
   return <ExamsGermanyHubShell locale={DEFAULT_MARKETING_LOCALE} messages={messages} />;
 }

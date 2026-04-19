@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ExamsIndiaHubShell } from "@/components/marketing/exams-india/exams-india-hub-shell";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingLayoutShardsOverlay } from "@/lib/marketing-i18n/load-marketing-route-shard-bundles";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { robotsForRegionalMarketingHub } from "@/lib/seo/expansion-hub-robots";
@@ -11,7 +11,7 @@ export const revalidate = 86400;
 const PATH = "/exams/india";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const messages = await loadMarketingLayoutShardsOverlay(DEFAULT_MARKETING_LOCALE);
   const title = messages["exams.india.metaTitle"] ?? "Nursing Exams in India (2026 Complete Guide)";
   const description =
     messages["exams.india.metaDescription"] ??
@@ -59,6 +59,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function IndiaExamsHubEnglishPage() {
-  const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const messages = await loadMarketingLayoutShardsOverlay(DEFAULT_MARKETING_LOCALE);
   return <ExamsIndiaHubShell locale={DEFAULT_MARKETING_LOCALE} messages={messages} />;
 }
