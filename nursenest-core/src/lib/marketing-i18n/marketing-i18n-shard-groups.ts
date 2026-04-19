@@ -16,12 +16,16 @@ export const MARKETING_CHROME_MESSAGE_SHARDS = [
 ] as const satisfies readonly I18nShardFilename[];
 
 /**
- * Build-time marketing layout shell: just the anonymous public chrome keys needed to render
- * header/footer and the email signup band while `<main>` loads `pages.*` separately.
+ * Build-time marketing layout shell: anonymous public chrome keys for prerender (narrower than
+ * {@link MARKETING_CHROME_MESSAGE_SHARDS} to save memory). Must still cover homepage/header/footer
+ * paths that read synchronously during the layout pass. There is no separate `brand` shard —
+ * `brand.*` keys live in `nav.json` per `shared/i18n-shard-policy.ts`.
  */
 export const MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS = [
   "marketing",
   "nav",
+  "components",
+  "auth",
 ] as const satisfies readonly I18nShardFilename[];
 
 /** Route/marketing page bodies (`pages.*` keys). */
