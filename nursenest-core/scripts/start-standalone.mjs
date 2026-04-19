@@ -5,9 +5,12 @@
  * immediately. Public `/readyz` only flips to 200 after the child can answer a real health route,
  * and all other traffic waits for the same readiness gate before proxying.
  *
- * **Ops restore — `NN_DIRECT_STANDALONE=1`:** skip the bootstrap HTTP listener and proxy; spawn the
- * same standalone stack (`start-standalone-runtime.cjs` + `server.js`) with **inherited** `PORT` /
- * `HOSTNAME` so Next binds the platform port directly (no internal hop). Rollback: unset the env var.
+ * **Startup mode (single source of truth):** `resolve-bootstrap-mode.mjs` → `BOOTSTRAP_MODE`.
+ * - Default: `bootstrap_proxy` (safe for DigitalOcean `/healthz` on `PORT`).
+ * - `direct_standalone` only when **`NN_DIRECT_STANDALONE` is truthy** AND **`NN_ALLOW_DIRECT_STANDALONE=1`**
+ *   AND not in conflict with **`NN_BYPASS_BOOTSTRAP=1`** (both set → forced `bootstrap_proxy` + ERROR).
+ * - **`NN_BYPASS_BOOTSTRAP`:** deprecated for mode selection; still gates **readiness watchdog bypass**
+ *   in `bootstrap_proxy` when not conflicting (see `resolveBootstrapStartupMode`).
  */
 import http from "node:http";
 import net from "node:net";
@@ -18,6 +21,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { verifyStandaloneArtifact } from "./verify-standalone-artifact.mjs";
 import { normalizeBootstrapProbePathname } from "./standalone-bootstrap-probe-pathname.mjs";
+import { resolveBootstrapStartupMode } from "./resolve-bootstrap-mode.mjs";
 
 const bootAt = Date.now();
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -35,6 +39,28 @@ if (process.env.NODE_ENV !== "production") {
   process.env.NODE_ENV = "production";
 }
 
+const startupResolved = resolveBootstrapStartupMode(process.env);
+const BOOTSTRAP_MODE = startupResolved.mode;
+const BYPASS = startupResolved.readinessWatchdogBypass;
+
+for (const line of startupResolved.errors) {
+  console.error(line);
+}
+for (const line of startupResolved.warnings) {
+  console.error(line);
+}
+console.error(
+  JSON.stringify({
+    tag: "startup_mode",
+    mode: BOOTSTRAP_MODE,
+    NN_DIRECT_STANDALONE: process.env.NN_DIRECT_STANDALONE ?? null,
+    NN_BYPASS_BOOTSTRAP: process.env.NN_BYPASS_BOOTSTRAP ?? null,
+    NN_ALLOW_DIRECT_STANDALONE: process.env.NN_ALLOW_DIRECT_STANDALONE ?? null,
+    PORT: process.env.PORT ?? null,
+    HOSTNAME: process.env.HOSTNAME ?? null,
+  }),
+);
+
 const publicPort = Number.parseInt(process.env.PORT ?? "3000", 10) || 3000;
 const publicHost = process.env.HOSTNAME || "0.0.0.0";
 const internalHost = "127.0.0.1";
@@ -51,8 +77,7 @@ const bootstrapReadyMaxAttempts = Math.max(
 );
 const bootstrapTestDelayMs = Number.parseInt(process.env.NN_BOOTSTRAP_TEST_DELAY_MS ?? "0", 10) || 0;
 const childHealthProbeTimeoutMs = Number.parseInt(process.env.NN_CHILD_HEALTH_TIMEOUT_MS ?? "1000", 10) || 1000;
-/** NN_BYPASS_BOOTSTRAP=1: skip internal child readiness watchdog (ops recovery when the probe never succeeds). */
-const BYPASS = process.env.NN_BYPASS_BOOTSTRAP === "1";
+/** Readiness watchdog bypass: from `resolveBootstrapStartupMode` (legacy `NN_BYPASS_BOOTSTRAP=1` when safe). */
 const memMb = process.env.NODE_MAX_OLD_SPACE_SIZE_MB ?? "512";
 const baseNodeOptions = (process.env.NODE_OPTIONS ?? "").trim();
 const hasHeapOverride =
@@ -60,13 +85,10 @@ const hasHeapOverride =
   process.execArgv.some((arg) => arg.startsWith("--max-old-space-size"));
 const childExecArgv = hasHeapOverride ? [...process.execArgv] : [`--max-old-space-size=${memMb}`, ...process.execArgv];
 
-/** When true, do not allocate an internal port or start the bootstrap proxy — Next uses `PORT` from the environment. */
-const DIRECT_STANDALONE = /^(1|true|yes)$/i.test(process.env.NN_DIRECT_STANDALONE?.trim() ?? "");
-
-if (DIRECT_STANDALONE) {
+if (BOOTSTRAP_MODE === "direct_standalone") {
   const childArgs = [...childExecArgv, runtimeBootstrap, entry];
   console.error(
-    `[nursenest-core] NN_DIRECT_STANDALONE=1: bypassing bootstrap proxy; spawning standalone with inherited env (PORT=${process.env.PORT ?? "unset"}, HOSTNAME=${process.env.HOSTNAME ?? "unset"})`,
+    `[nursenest-core] BOOTSTRAP_MODE=direct_standalone: bypassing bootstrap proxy; spawning standalone with inherited env (PORT=${process.env.PORT ?? "unset"}, HOSTNAME=${process.env.HOSTNAME ?? "unset"})`,
   );
   console.error(`[nursenest-core] direct_standalone_spawn ${JSON.stringify({ entry, argvTail: childArgs.slice(-2) })}`);
   const result = spawnSync(process.execPath, childArgs, {
@@ -563,7 +585,7 @@ emit("server_listening", {
   publicPort,
   internalPort,
   nodeEnv: process.env.NODE_ENV ?? null,
-  mode: "bootstrap_proxy",
+  mode: BOOTSTRAP_MODE,
   livenessProbePath,
   readinessProbePath,
   childHealthProbePath,

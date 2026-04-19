@@ -177,8 +177,11 @@ test("bootstrap runtime never force-marks handlers ready", () => {
 
 test("bootstrap runtime supports an env-guarded watchdog bypass after bind", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
-  assert.equal(source.includes('process.env.NN_BYPASS_BOOTSTRAP === "1"'), true);
+  assert.equal(source.includes("resolveBootstrapStartupMode"), true);
+  assert.equal(source.includes("readinessWatchdogBypass"), true);
   assert.equal(source.includes('markHandlersReady("watchdog_bypass_after_bind")'), true);
+  const resolver = fs.readFileSync(require.resolve("./resolve-bootstrap-mode.mjs"), "utf8");
+  assert.equal(resolver.includes("readinessWatchdogBypass"), true);
 });
 
 test("bootstrap runtime skips the internal readiness probe loop when watchdog bypass is enabled", () => {

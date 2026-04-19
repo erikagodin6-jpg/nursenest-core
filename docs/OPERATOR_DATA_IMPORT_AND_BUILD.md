@@ -67,7 +67,8 @@ Local: `cd nursenest-core && npm run ci:data-guardrails` (from app package).
 ### Standalone bootstrap vs direct bind (App Platform / Docker)
 
 - **Default:** `start-standalone.mjs` listens on **`PORT`** (e.g. 8080) and proxies to Next on a **loopback-only** internal port (child gets `PORT=<internal>` + `HOSTNAME=127.0.0.1`).
-- **Ops restore — bypass proxy:** set **`NN_DIRECT_STANDALONE=1`** (or `true` / `yes`) on the web component so the script **`spawnSync`s** the same child stack (`start-standalone-runtime.cjs` + `.next/standalone/.../server.js`) with **inherited** `PORT` / `HOSTNAME` — Next then binds the platform port directly. **Rollback:** remove the env var to return to the bootstrap proxy.
+- **Ops — bypass proxy (explicit opt-in):** set **`NN_DIRECT_STANDALONE=1`** (or `true` / `yes`) **and** **`NN_ALLOW_DIRECT_STANDALONE=1`** so the script **`spawnSync`s** the same child stack (`start-standalone-runtime.cjs` + `.next/standalone/.../server.js`) with **inherited** `PORT` / `HOSTNAME` — Next then binds the platform port directly (no public bootstrap **`/healthz`**). **Rollback:** unset both vars (or remove only `NN_ALLOW_DIRECT_STANDALONE`) to return to the bootstrap proxy.
+- **`NN_BYPASS_BOOTSTRAP=1`:** deprecated for mode selection; it may still enable **readiness watchdog bypass** in bootstrap mode when not combined with `NN_DIRECT_STANDALONE` (see `scripts/resolve-bootstrap-mode.mjs`). Do not set it together with **`NN_DIRECT_STANDALONE`** (conflict forces bootstrap).
 
 ---
 
