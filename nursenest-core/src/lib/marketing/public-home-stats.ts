@@ -12,6 +12,10 @@ import {
 } from "@/lib/entitlements/content-access-scope";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import {
+  getDegradedPublicHomeStatsFallback,
+  type PublicHomeStatsPayload,
+} from "@/lib/marketing/public-home-stats-payload";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 import { recordPaywallProofNeutral } from "@/lib/observability/production-signal-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -21,27 +25,6 @@ import {
 } from "@/lib/observability/sentry-route-observability";
 import { shouldBypassPublicHomeStatsDbAtStartup } from "@/lib/marketing/public-home-stats-startup";
 import { safePrismaCountTimeout, withPrismaReadFallbackTimeout } from "@/lib/prisma/safe-reads";
-
-/** Full payload returned by `GET /api/public/home-stats` — shared with the marketing homepage (SSR). */
-export type PublicHomeStatsPayload = {
-  totalLessons: number;
-  pathwayLessonsPublished: number;
-  contentItemsLessonCount: number;
-  questionCount: number;
-  totalFlashcards: number;
-  totalDecks: number;
-  storeProductCount: number;
-  registeredLearners: number;
-  questionsByTier: Record<string, number>;
-  scenarioCount: number;
-  topicCategoryCount: number;
-  degraded?: boolean;
-  runtimeSafeMode?: boolean;
-  /**
-   * When `neutral`, UIs should show explanatory copy instead of numeric proof (avoids “empty/broken” zeros).
-   */
-  proofDisplay?: "full" | "neutral";
-};
 
 const HOME_STATS_SLOW_MS = 2500;
 const HOME_STATS_DB_DEADLINE_MS = 800;
@@ -143,32 +126,6 @@ function scheduleHomepageHomeStatsRefresh(trigger: string): void {
       getHomeStatsMemoryState().inflightRefresh = undefined;
     }
   })();
-}
-
-/** Safe structured fallback when DB throws or routes need a 200 — never crashes callers. */
-export function getDegradedPublicHomeStatsFallback(
-  reason: string,
-  opts?: { silent?: boolean },
-): PublicHomeStatsPayload {
-  if (!opts?.silent) {
-    safeServerLog("marketing", "public_home_stats_degraded", { reason: reason.slice(0, 120) });
-    recordPaywallProofNeutral("fallback");
-  }
-  return {
-    totalLessons: 0,
-    pathwayLessonsPublished: 0,
-    contentItemsLessonCount: 0,
-    questionCount: 0,
-    totalFlashcards: 0,
-    totalDecks: 0,
-    storeProductCount: 0,
-    registeredLearners: 0,
-    questionsByTier: {},
-    scenarioCount: 0,
-    topicCategoryCount: 0,
-    degraded: true,
-    proofDisplay: "neutral",
-  };
 }
 
 /**
@@ -451,6 +408,10 @@ async function computePublicHomeStats(t0: number): Promise<PublicHomeStatsPayloa
 
 /** Re-export for pages importing from `@/lib/marketing/public-home-stats`. */
 export { PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC } from "@/lib/cache/public-edge-cache";
+export {
+  getDegradedPublicHomeStatsFallback,
+  type PublicHomeStatsPayload,
+} from "@/lib/marketing/public-home-stats-payload";
 
 /** Cached — single source for marketing homepage + public API + paywall layout (no duplicate DB fanout). */
 export const getCachedPublicHomeStats = unstable_cache(

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
-import { getHomepagePublicHomeStats } from "@/lib/marketing/public-home-stats";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
@@ -24,6 +23,11 @@ import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-
 export const revalidate = 3600;
 
 type Props = { params: Promise<{ locale: string }> };
+
+async function loadLocalizedHomePageStats() {
+  const { getHomepagePublicHomeStats } = await import("@/lib/marketing/public-home-stats");
+  return getHomepagePublicHomeStats();
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -65,7 +69,7 @@ export default async function LocalizedHomePage({ params }: Props) {
   const raw = marketingHomeSurfaceBreadcrumbs();
   const marketingRegion = await getMarketingRegionFromCookies();
   const [homeStatsRaw, primary, en, publishedGlobalRegionCardIds] = await Promise.all([
-    getHomepagePublicHomeStats(),
+    loadLocalizedHomePageStats(),
     loadMarketingMessages(locale),
     loadMarketingMessages(DEFAULT_MARKETING_LOCALE),
     listPublishedHomeGlobalRegionCardIds(),

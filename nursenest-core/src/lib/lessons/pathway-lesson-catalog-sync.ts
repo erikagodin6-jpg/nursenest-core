@@ -1,6 +1,7 @@
 /**
  * Pure catalog lesson normalization + scoped-gold merge (no Prisma, no i18n DB overlays).
  * Split from `pathway-lesson-loader.ts` so CLI audits and tooling can import without the `server-only` graph.
+ * Catalog-backed and still heavy enough to keep out of shared layouts, homepage chrome, and nav/header paths.
  */
 import { inferExamAudienceFromPathwayId } from "@/lib/lessons/exam-complete-lesson-template";
 import { deriveLessonHighYieldStudyFields } from "@/lib/lessons/lesson-high-yield-study-fields";

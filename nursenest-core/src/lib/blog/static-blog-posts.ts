@@ -1,3 +1,8 @@
+/**
+ * Route-scoped static blog corpus access.
+ * Keep this out of root/shared layouts, homepage shell chrome, and the site header;
+ * shared surfaces should use smaller teaser/query helpers instead.
+ */
 import type { StaticBlogPostRecord } from "@/content/blog-static-posts";
 
 type StaticBlogPostsModule = {

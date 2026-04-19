@@ -1,9 +1,8 @@
 import "server-only";
 import {
-  getCachedPublicHomeStats,
   getDegradedPublicHomeStatsFallback,
   type PublicHomeStatsPayload,
-} from "@/lib/marketing/public-home-stats";
+} from "@/lib/marketing/public-home-stats-payload";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /** Caps wait so marketing cache work cannot block the learner shell under DB/cache pressure. */
@@ -15,6 +14,7 @@ const PAYWALL_STATS_SHELL_TIMEOUT_MS = 2500;
  */
 export async function loadPaywallHomeStatsForShell(): Promise<PublicHomeStatsPayload> {
   try {
+    const { getCachedPublicHomeStats } = await import("@/lib/marketing/public-home-stats");
     return await Promise.race([
       getCachedPublicHomeStats(),
       new Promise<PublicHomeStatsPayload>((_, reject) => {

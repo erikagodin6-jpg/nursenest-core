@@ -2,10 +2,6 @@ import { ContentStatus } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
-import {
-  getCatalogPathwayLessonsSync,
-  listCatalogPathwayIdsWithLessonsSync,
-} from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { PATHWAY_LESSON_DB_TIMEOUT_MS } from "@/lib/lessons/pathway-lesson-loader-config";
 import { sortPathwayLessonsForPublicPreview } from "@/lib/lessons/pathway-lesson-public-preview-priority";
 
@@ -33,8 +29,13 @@ async function listPathwayIdsWithPublishedDbLessons(): Promise<string[]> {
   );
 }
 
+async function loadPublicCatalogSync() {
+  return await import("@/lib/lessons/pathway-lesson-catalog-sync");
+}
+
 export const listPathwayIdsWithLessonsForPublicSurface = unstable_cache(
   async (): Promise<string[]> => {
+    const { listCatalogPathwayIdsWithLessonsSync } = await loadPublicCatalogSync();
     const catalogIds = listCatalogPathwayIdsWithLessonsSync();
     const dbIds = await listPathwayIdsWithPublishedDbLessons();
     return [...new Set([...catalogIds, ...dbIds])].sort((a, b) => a.localeCompare(b));
@@ -43,7 +44,8 @@ export const listPathwayIdsWithLessonsForPublicSurface = unstable_cache(
   { revalidate: 600, tags: ["pathway-lesson-index"] },
 );
 
-export function getCatalogLessonPreviewTitlesForPublicSurface(pathwayId: string, limit = 4): string[] {
+export async function getCatalogLessonPreviewTitlesForPublicSurface(pathwayId: string, limit = 4): Promise<string[]> {
+  const { getCatalogPathwayLessonsSync } = await loadPublicCatalogSync();
   const lessons = sortPathwayLessonsForPublicPreview(pathwayId, getCatalogPathwayLessonsSync(pathwayId));
   return lessons.slice(0, Math.max(0, limit)).map((lesson) => lesson.title);
 }

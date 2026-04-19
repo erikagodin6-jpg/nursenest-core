@@ -14,6 +14,9 @@ const SNAPSHOT_TIMEOUT_MS = 1000;
 const REVALIDATE_SECONDS = 3600;
 
 /**
+ * Route-scoped marketing/question-bank aggregate.
+ * Do not pull this into root/shared layouts, homepage shell modules, or header/nav chrome.
+ *
  * Published `exam_questions` rows that match how the subscriber question bank and CAT pool scope items:
  * {@link questionBankWhereForProfile} (tier ladder + region) plus pathway `contentExamKeys` on `exam`
  * when the pathway defines keys (same as {@link questionAccessWhereWithPathway} for entitled users).

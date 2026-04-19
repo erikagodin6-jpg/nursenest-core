@@ -124,6 +124,29 @@ test("public lessons hub uses metadata helpers instead of the full lesson loader
   assert.match(publicMetadata, /getCatalogLessonPreviewTitlesForPublicSurface/);
 });
 
+test("shared lessons metadata lazy-loads the heavy catalog sync module", () => {
+  const lessonSections = readAppFile("components/marketing/public-lessons-pathway-sections.tsx");
+  const publicMetadata = readAppFile("lib/lessons/pathway-lesson-public-metadata.ts");
+
+  assert.doesNotMatch(publicMetadata, /from ["']@\/lib\/lessons\/pathway-lesson-catalog-sync["']/);
+  assert.match(publicMetadata, /await import\(["']@\/lib\/lessons\/pathway-lesson-catalog-sync["']\)/);
+  assert.match(lessonSections, /await getCatalogLessonPreviewTitlesForPublicSurface\(/);
+});
+
+test("home and paywall shells lazy-load public home stats instead of importing the full stats module", () => {
+  const defaultHomePage = readAppFile("app/(marketing)/(default)/page.tsx");
+  const localizedHomePage = readAppFile("app/(marketing)/[locale]/page.tsx");
+  const paywallHomeStats = readAppFile("lib/marketing/load-paywall-home-stats-for-shell.ts");
+
+  assert.doesNotMatch(defaultHomePage, /from ["']@\/lib\/marketing\/public-home-stats["']/);
+  assert.doesNotMatch(localizedHomePage, /from ["']@\/lib\/marketing\/public-home-stats["']/);
+  assert.doesNotMatch(paywallHomeStats, /from ["']@\/lib\/marketing\/public-home-stats["']/);
+
+  assert.match(defaultHomePage, /await import\(["']@\/lib\/marketing\/public-home-stats["']\)/);
+  assert.match(localizedHomePage, /await import\(["']@\/lib\/marketing\/public-home-stats["']\)/);
+  assert.match(paywallHomeStats, /await import\(["']@\/lib\/marketing\/public-home-stats["']\)/);
+});
+
 test("ops lesson helpers use loader config without importing the full loader", () => {
   const sourcePaths = [
     "lib/lessons/pathway-lesson-registry-source.ts",

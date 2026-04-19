@@ -6,6 +6,8 @@
  * do not pre-render every lesson slug.
  * **Catalog:** `catalog.json` is bundled with server code; full-lesson bodies load only for detail/sitemap
  * batches — avoid passing entire pathway catalogs to client components.
+ * **Scope:** Intentional route-scoped heavy loader. Do not import this into root/shared layouts, the
+ * homepage shell, or header/nav chrome; use metadata/preview helpers on shared surfaces instead.
  */
 import { scopedGoldHubRowsForPathway } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
 import { prisma } from "@/lib/db";

@@ -6,10 +6,7 @@ import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { MARKETING_HOME_FAQ_JSONLD } from "@/lib/seo/marketing-home-faq-schema";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
-import {
-  getDegradedPublicHomeStatsFallback,
-  getHomepagePublicHomeStats,
-} from "@/lib/marketing/public-home-stats";
+import { getDegradedPublicHomeStatsFallback } from "@/lib/marketing/public-home-stats-payload";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
@@ -58,6 +55,14 @@ function homePageMessageShards() {
   return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE
     ? MARKETING_PAGE_BODY_MESSAGE_SHARDS
     : MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS;
+}
+
+async function loadHomePageStats(skipOptionalDbReads: boolean) {
+  if (skipOptionalDbReads) {
+    return getDegradedPublicHomeStatsFallback("production_request_optional_db_skipped");
+  }
+  const { getHomepagePublicHomeStats } = await import("@/lib/marketing/public-home-stats");
+  return getHomepagePublicHomeStats();
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -113,9 +118,7 @@ export default async function HomePage() {
       renderTrace("home page start", { route: "/" });
       const skipOptionalDbReads = shouldSkipOptionalMarketingDbReads();
       const [homeStatsRaw, m, publishedGlobalRegionCardIds, blogTeaserPosts] = await Promise.all([
-        skipOptionalDbReads
-          ? Promise.resolve(getDegradedPublicHomeStatsFallback("production_request_optional_db_skipped"))
-          : getHomepagePublicHomeStats(),
+        loadHomePageStats(skipOptionalDbReads),
         loadMarketingMessageShards(STATIC_LOCALE, homePageMessageShards()),
         Promise.resolve(listPublishedHomeGlobalRegionCardIds()),
         skipOptionalDbReads ? Promise.resolve([]) : loadHomeBlogTeaserPostsSafe(3),

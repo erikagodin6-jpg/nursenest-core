@@ -69,15 +69,25 @@ export async function PublicLessonsPathwaySections({
       return a.displayName.localeCompare(b.displayName);
     });
 
-  const grouped: Record<"rn" | "pn" | "np" | "allied", ExamPathwayDefinition[]> = {
+  const pathwaysWithPreviews = await Promise.all(
+    pathways.map(async (pathway) => ({
+      pathway,
+      previews: await getCatalogLessonPreviewTitlesForPublicSurface(pathway.id, 4),
+    })),
+  );
+
+  const grouped: Record<
+    "rn" | "pn" | "np" | "allied",
+    Array<{ pathway: ExamPathwayDefinition; previews: string[] }>
+  > = {
     rn: [],
     pn: [],
     np: [],
     allied: [],
   };
-  for (const p of pathways) {
-    const g = roleGroup(p);
-    if (g) grouped[g].push(p);
+  for (const row of pathwaysWithPreviews) {
+    const g = roleGroup(row.pathway);
+    if (g) grouped[g].push(row);
   }
 
   const m = await loadMarketingMessageShards(locale, lessonsPageMessageShards());
@@ -115,8 +125,7 @@ export async function PublicLessonsPathwaySections({
             </h2>
             <p className="mt-1 nn-marketing-body-sm text-muted">{sectionLead[key]}</p>
             <ul className="mt-4 flex flex-col gap-3 sm:gap-[var(--nn-rhythm-card-grid-gap)]">
-              {rows.map((p) => {
-                const previews = getCatalogLessonPreviewTitlesForPublicSurface(p.id, 4);
+              {rows.map(({ pathway: p, previews }) => {
                 return (
                   <li key={p.id} className="nn-card p-4">
                     <p className="nn-marketing-label nn-marketing-label--accent">

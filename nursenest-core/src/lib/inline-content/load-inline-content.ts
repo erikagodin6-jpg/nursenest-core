@@ -1,5 +1,6 @@
 import "server-only";
 
+import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import type { InlineContentKind } from "@prisma/client";
 import { prisma } from "@/lib/db";
@@ -12,6 +13,7 @@ export type InlineContentResolved = {
 };
 
 const SEP = "\x1e";
+export const INLINE_CONTENT_SHARED_CACHE_REVALIDATE_SEC = 120;
 
 async function loadInlineContentMapImpl(keysJoined: string): Promise<Map<string, InlineContentResolved>> {
   const keys = keysJoined.split(SEP).filter(Boolean);
@@ -34,8 +36,32 @@ async function loadInlineContentMapImpl(keysJoined: string): Promise<Map<string,
   return out;
 }
 
-/** Request-cached batch load; pass sorted unique keys joined with the same separator internally. */
-export const loadInlineContentMap = cache(async (keysJoined: string) => loadInlineContentMapImpl(keysJoined));
+function inlineContentMapToRecord(
+  map: Map<string, InlineContentResolved>,
+): Record<string, InlineContentResolved> {
+  return Object.fromEntries(map.entries());
+}
+
+function inlineContentRecordToMap(
+  record: Record<string, InlineContentResolved>,
+): Map<string, InlineContentResolved> {
+  return new Map(Object.entries(record));
+}
+
+const loadCachedInlineContentMap = unstable_cache(
+  async (keysJoined: string) => inlineContentMapToRecord(await loadInlineContentMapImpl(keysJoined)),
+  ["inline-content-map", "v1"],
+  { revalidate: INLINE_CONTENT_SHARED_CACHE_REVALIDATE_SEC },
+);
+
+/** Request-cached batch load; shared cache is short-lived and failures fall back to uncached DB reads. */
+export const loadInlineContentMap = cache(async (keysJoined: string) => {
+  try {
+    return inlineContentRecordToMap(await loadCachedInlineContentMap(keysJoined));
+  } catch {
+    return loadInlineContentMapImpl(keysJoined);
+  }
+});
 
 /**
  * Batch-load inline overrides for a set of keys (one DB round-trip per unique key-set per request).
