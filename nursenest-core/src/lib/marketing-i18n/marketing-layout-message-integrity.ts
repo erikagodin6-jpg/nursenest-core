@@ -1,3 +1,4 @@
+import { isProductionBuildInvocation } from "@/lib/build/build-safe-mode";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { validateMarketingHeroNavCriticalKeys } from "@/lib/marketing/marketing-hero-nav-critical-keys";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
@@ -46,6 +47,14 @@ export function assertMarketingLayoutMessagesIntegrity({
         `[marketing-layout] ${route} is missing required English marketing shell keys: ${missingRequiredKeys.join(", ")}`,
       );
     }
+  }
+
+  // Default marketing layout intentionally loads `MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS`
+  // (marketing + nav only) during `next build` prerender; carousel/account chrome keys live
+  // in other shards merged at runtime or under `<main>`. Do not block the production build on
+  // keys that are absent from that reduced merge only.
+  if (isProductionBuildInvocation()) {
+    return;
   }
 
   const { ok, missing } = validateMarketingHeroNavCriticalKeys(messages);
