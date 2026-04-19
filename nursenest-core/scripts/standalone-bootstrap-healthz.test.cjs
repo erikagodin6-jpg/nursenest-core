@@ -27,6 +27,8 @@ test("matches GET and HEAD bootstrap probe requests only", () => {
   assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/healthz?check=1" }), true);
   assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/_nn_bootstrap_ready_check__" }), true);
   assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/_nn_bootstrap_ready_check__?check=1" }), true);
+  assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/readyz" }), true);
+  assert.equal(isBootstrapHealthzRequest({ method: "HEAD", url: "/readyz?check=1" }), true);
   assert.equal(isBootstrapHealthzRequest({ method: "POST", url: "/healthz" }), false);
   assert.equal(isBootstrapHealthzRequest({ method: "POST", url: "/_nn_bootstrap_ready_check__" }), false);
   assert.equal(isBootstrapHealthzRequest({ method: "GET", url: "/api/health" }), false);

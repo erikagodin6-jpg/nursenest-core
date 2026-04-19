@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * Production entry: bind a tiny bootstrap HTTP server on the public port immediately, then
- * run Next standalone on a private loopback port. Public `GET/HEAD /healthz` never waits for
- * Next request handlers, while all other traffic proxies to the child process once ready.
+ * run Next standalone on a private loopback port. Public `GET/HEAD /healthz` and `GET/HEAD /readyz`
+ * never wait for Next request handlers, while all other traffic proxies to the child process once ready.
  */
 import http from "node:http";
 import net from "node:net";
@@ -301,7 +301,7 @@ function markHandlersReady(reason) {
 }
 
 async function handleBootstrapRequest(req, res) {
-  if (isBootstrapProbeRequest(req, livenessProbePath)) {
+  if (isBootstrapProbeRequest(req, livenessProbePath) || isBootstrapProbeRequest(req, readinessProbePath)) {
     emit("bootstrap_healthz_intercepted", {
       pid: process.pid,
       method: req.method,
@@ -331,55 +331,6 @@ async function handleBootstrapRequest(req, res) {
       res.end("not found");
     }
     return;
-  }
-
-  if (isBootstrapProbeRequest(req, readinessProbePath)) {
-    if (bypassBootstrapReadiness) {
-      res.statusCode = 200;
-      res.setHeader("content-type", "text/plain; charset=utf-8");
-      res.setHeader("cache-control", "no-store");
-      if ((req.method ?? "").toUpperCase() === "HEAD") {
-        res.end();
-      } else {
-        res.end("ready");
-      }
-      return;
-    }
-
-    if (!state.handlersReady || state.childExited) {
-      res.statusCode = 503;
-      res.setHeader("content-type", "text/plain; charset=utf-8");
-      res.setHeader("cache-control", "no-store");
-      if ((req.method ?? "").toUpperCase() === "HEAD") {
-        res.end();
-      } else {
-        res.end("warming");
-      }
-      return;
-    }
-
-    try {
-      await probeChildHealth(internalPort);
-      res.statusCode = 200;
-      res.setHeader("content-type", "text/plain; charset=utf-8");
-      res.setHeader("cache-control", "no-store");
-      if ((req.method ?? "").toUpperCase() === "HEAD") {
-        res.end();
-      } else {
-        res.end("ready");
-      }
-      return;
-    } catch {
-      res.statusCode = 503;
-      res.setHeader("content-type", "text/plain; charset=utf-8");
-      res.setHeader("cache-control", "no-store");
-      if ((req.method ?? "").toUpperCase() === "HEAD") {
-        res.end();
-      } else {
-        res.end("unready");
-      }
-      return;
-    }
   }
 
   if (!state.handlersReady) {

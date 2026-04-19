@@ -149,8 +149,8 @@ test("standalone runtime serves the internal bootstrap probe directly and flips 
   assert.equal(await headRes.text(), "");
 
   const preReadyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
-  assert.equal(preReadyRes.status, 503);
-  assert.equal(await preReadyRes.text(), "warming");
+  assert.equal(preReadyRes.status, 200);
+  assert.equal(await preReadyRes.text(), "ok");
 
   await waitForLog("startup_watchdog bootstrap_healthz_intercepted");
   await waitForLog("startup_watchdog internal_probe_response");
@@ -165,7 +165,7 @@ test("standalone runtime serves the internal bootstrap probe directly and flips 
 
   const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
   assert.equal(readyRes.status, 200);
-  assert.equal(await readyRes.text(), "ready");
+  assert.equal(await readyRes.text(), "ok");
 });
 
 test("standalone runtime can bypass bootstrap watchdog readiness gating after bind outside production", async (t) => {
@@ -234,5 +234,5 @@ test("standalone runtime can bypass bootstrap watchdog readiness gating after bi
 
   const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
   assert.equal(readyRes.status, 200);
-  assert.equal(await readyRes.text(), "ready");
+  assert.equal(await readyRes.text(), "ok");
 });
