@@ -147,6 +147,20 @@ test("home and paywall shells lazy-load public home stats instead of importing t
   assert.match(paywallHomeStats, /await import\(["']@\/lib\/marketing\/public-home-stats["']\)/);
 });
 
+test("balanced surface split keeps marketing chrome server-only and localized home on cached shard helpers", () => {
+  const defaultLayout = readAppFile("app/(marketing)/(default)/layout.tsx");
+  const localizedLayout = readAppFile("app/(marketing)/[locale]/layout.tsx");
+  const localizedHomePage = readAppFile("app/(marketing)/[locale]/page.tsx");
+
+  assert.match(defaultLayout, /^import .*SiteHeaderServer.*["'];?$/m);
+  assert.match(defaultLayout, /^import .*SiteFooterServer.*["'];?$/m);
+  assert.match(localizedLayout, /^import .*SiteHeaderServer.*["'];?$/m);
+  assert.match(localizedLayout, /^import .*SiteFooterServer.*["'];?$/m);
+
+  assert.doesNotMatch(localizedHomePage, /\bloadMarketingMessages\(/);
+  assert.match(localizedHomePage, /^import .*@\/lib\/marketing-i18n\/homepage-message-shards["'];?$/m);
+});
+
 test("homepage defers the anonymous exam selector gate behind a tiny lazy wrapper", () => {
   const defaultHomePage = readAppFile("app/(marketing)/(default)/page.tsx");
   const deferredGate = readAppFile("components/onboarding/exam-selector-gate-lazy.tsx");
