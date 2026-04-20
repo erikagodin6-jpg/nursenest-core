@@ -28,6 +28,7 @@ jobs:
           BASE_URL: ${{ secrets.PRODUCTION_VERIFY_BASE_URL }}
           ORIGIN_BASE_URL: ${{ secrets.PRODUCTION_VERIFY_ORIGIN_BASE_URL }}
           VERIFY_CANONICAL_HOME: "1"
+          VERIFY_MARKETING_SENTINELS: "1"
           VERIFY_HTTP_TIMEOUT_MS: "20000"
           VERIFY_HOME_TIMEOUT_MS: "45000"
         run: |

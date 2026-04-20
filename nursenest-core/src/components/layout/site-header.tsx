@@ -33,7 +33,6 @@ import { buildMarketingMegaMenus, type ExamMenuKey } from "@/lib/navigation/mark
 import { formatEyebrow, formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
-import { MarketingCountryHubStrip } from "@/components/marketing/marketing-country-hub-strip";
 import { MarketingHeaderUtilityStrip } from "@/components/layout/marketing-header-utility-strip";
 const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
 
@@ -390,20 +389,11 @@ export function SiteHeader() {
         onMouseLeave={scheduleMegaClose}
       >
         {/*
-          Desktop (`xl+`): one preferences rail for all themes — hubs + country + language + theme.
+          Desktop (`xl+`): preferences rail — country, language, and theme.
           Light: dark-bar surface; dark: recessive utility surface. Middle row keeps logo/links/auth only.
         */}
         <div className="nn-header-hide-until-xl w-full">
-          <MarketingHeaderUtilityStrip
-            variant={isLightTheme ? "dark-bar" : "standard"}
-            leading={
-              isLightTheme ? (
-                <MarketingCountryHubStrip surface="darkUtility" />
-              ) : (
-                <MarketingCountryHubStrip />
-              )
-            }
-          />
+          <MarketingHeaderUtilityStrip variant={isLightTheme ? "dark-bar" : "standard"} />
         </div>
         <div className="nn-section-shell flex flex-col overflow-visible">
           {/* ── Mobile brand row ── */}
@@ -539,7 +529,7 @@ export function SiteHeader() {
 
           {/* ── Desktop main header row: left logo | center core public links | right utilities + auth ── */}
           <div className="nn-header-desktop-grid overflow-visible">
-            <div className="flex shrink-0 items-center gap-2.5">
+            <div className="nn-header-brand-cluster flex shrink-0 items-center gap-2.5">
               <Link
                 href={localizeHref("/")}
                 className="nn-header-logo-link group flex shrink-0 items-center overflow-visible bg-transparent"

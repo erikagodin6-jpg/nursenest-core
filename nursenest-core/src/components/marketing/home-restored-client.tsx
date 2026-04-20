@@ -16,6 +16,7 @@ import { HomeObjectionFaqSection } from "@/components/marketing/home-objection-f
 import { HomeFinalStudyCta } from "@/components/marketing/home-final-study-cta";
 import { FunnelHomepageViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -43,12 +44,13 @@ export type HomeRestoredClientProps = {
   homeMarketingStats: HomeMarketingStats;
   /** Homepage global region cards — must exclude unpublished expansion exam hubs. */
   publishedGlobalRegionCardIds: readonly string[];
-  /** Canada-first global hub strip — rendered after hero product proof (screenshots); server slot from `page.tsx`. */
+  /** Global hub strip — rendered after proof blocks, before pathway cards; server slot from `page.tsx`. */
   introAfterHero?: ReactNode;
 };
 
 /**
- * Homepage: hero → product screenshots → global hub intro → sample proof → trust strip → trust Q&A → pathways → how it works → platform proof → differentiation → objection FAQ → final CTA.
+ * Homepage flow: hero → product carousel → how it works (value) → proof stack (sample, regions, trust)
+ * → platform preview + differentiation → hub strip → pathways → objection FAQ → final CTA.
  *
  * Stats are passed from the server (initial paint may use a memory snapshot or silent placeholders,
  * then a deferred server segment can replace with fresh DB-backed values).
@@ -116,28 +118,45 @@ export default function HomeRestoredClient({
       <div className="min-h-0 flex-1 overflow-x-hidden">
         {/* 1. HERO */}
         <HomeConversionHero questionCount={questionCount} lessonCount={lessonCount} />
-        {/* 1b. Product screenshots — directly under hero; carousel chunk loads after first paint */}
+        {/* 2. Product carousel — visual proof directly after hero */}
         <HomeHeroScreenshotSection />
-        {introAfterHero}
-        {/* 2. PROOF — sample item + rationale */}
+        {/* 3. How it works — explains the value behind what the carousel shows */}
+        <HomeHowItWorksSection />
+        {/* 4. Proof — sample item + rationale */}
         <HomeSampleQuestionPreview />
-        {/* 2b. Global regions — licensing hubs beyond US/Canada */}
+        {/* 5. Global regions — licensing hubs beyond core markets */}
         <HomeGlobalRegionsSection visibleCardIds={publishedGlobalRegionCardIds} />
-        {/* 3. TRUST — credibility + freshness (stats shown in hero; strip avoids repeating counts) */}
+        {/* 6. Trust — credibility + freshness */}
         <HomeTrustStripSection
           lessonCount={lessonCount}
           questionCount={questionCount}
           registeredLearners={registeredLearners}
         />
-        {/* 4. OBJECTIONS — short reassurance before pathway split */}
+        {/* 7. Short reassurance */}
         <HomeTrustFearsSection questionCount={questionCount} registeredLearners={registeredLearners} />
-        {/* 5. PATHWAYS — RN / PN / NP / Allied (below proof + trust) */}
+        {/* 8. Deeper product proof + differentiation (before pathway choice) */}
+        <HomePlatformPreviewSection />
+        <HomeTrustProofSection />
+        {/* 9. Global hub strip — bridges proof to pathway choice */}
+        {introAfterHero}
+        {/* 10. Pathways — RN / PN / NP / Allied */}
         <section
           className="nn-section-block scroll-mt-20 border-b border-[var(--border-subtle)] bg-[var(--page-bg)]"
           aria-label={t("pages.home.audienceBalance.ariaLabel")}
           data-testid="section-home-audience-balance"
         >
-          <div className="nn-section-shell py-10 sm:py-11">
+          <div className="nn-section-shell py-9 sm:py-10">
+            <div className="mx-auto mb-8 max-w-2xl text-center md:mb-9">
+              <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+                {formatSentenceCase(t("pages.home.pathwaysSection.kicker"), locale)}
+              </p>
+              <h2 className="nn-marketing-h2 mt-2 text-balance text-[var(--theme-heading-text)]">
+                {formatTitleCase(t("pages.home.pathwaysSection.title"), locale)}
+              </h2>
+              <p className="nn-marketing-body mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-[var(--semantic-text-muted)]">
+                {formatSentenceCase(t("pages.home.pathwaysSection.lead"), locale)}
+              </p>
+            </div>
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {audienceBalanceCards.map((c) => (
                 <MarketingTrackedLink
@@ -164,16 +183,9 @@ export default function HomeRestoredClient({
             </div>
           </div>
         </section>
-        {/* Pathway hub grid hidden to reduce above-the-fold choice overload; audience cards + nav cover entry points. */}
-        {/* 6. HOW IT WORKS */}
-        <HomeHowItWorksSection />
-        {/* 7. PRODUCT PROOF (interactive demo) */}
-        <HomePlatformPreviewSection />
-        {/* 8. DIFFERENTIATION */}
-        <HomeTrustProofSection />
-        {/* 9. OBJECTION FAQ — worth paying, region, rationales, platform trust */}
+        {/* 11. Objection FAQ */}
         <HomeObjectionFaqSection />
-        {/* 10. FINAL CTA */}
+        {/* 12. Final CTA */}
         <HomeFinalStudyCta />
       </div>
     </div>

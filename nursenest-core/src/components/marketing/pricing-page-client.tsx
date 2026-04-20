@@ -712,7 +712,7 @@ export function PricingPageClient({
                   </>
                 ) : (
                   <div className="mt-8 flex flex-1 flex-col justify-end">
-                    <p className="text-sm text-muted-foreground">Loading pricing...</p>
+                    <p className="text-sm text-muted-foreground">{t("pages.pricing.rowPlansLoading")}</p>
                   </div>
                 )}
               </article>

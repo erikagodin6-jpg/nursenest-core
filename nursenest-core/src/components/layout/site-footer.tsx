@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
@@ -10,6 +11,7 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { EmailSignupBanner } from "@/components/marketing/email-signup-banner";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { useThemeLogo } from "@/lib/theme/use-theme-logo";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import {
   learnerMarketingPathwayIdFromSession,
@@ -57,6 +59,26 @@ function FLink({
   );
 }
 
+
+function FooterLeafWatermark() {
+  const { url, kind } = useThemeLogo("leaf");
+  const leafUrl = kind === "local" && typeof url === "string" && url.trim().length > 0 ? url : null;
+  if (!leafUrl) return null;
+  return (
+    <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden select-none" aria-hidden>
+      <Image
+        src={leafUrl}
+        alt=""
+        width={420}
+        height={420}
+        unoptimized
+        className="max-h-[min(48vw,18rem)] w-auto opacity-[0.055] grayscale sm:max-h-[min(40vw,20rem)] sm:opacity-[0.065]"
+        draggable={false}
+      />
+    </div>
+  );
+}
+
 export function SiteFooter() {
   const { t, locale } = useMarketingI18n();
   const { data: session } = useSession();
@@ -88,30 +110,10 @@ export function SiteFooter() {
       className="mt-auto border-t border-[var(--footer-border)] py-[var(--nn-rhythm-footer-y)] shadow-[inset_0_1px_0_0_color-mix(in_srgb,var(--footer-fg)_6%,transparent)]"
     >
       <div className="nn-section-shell">
-        <div className="mb-6 sm:mb-8">
-          <EmailSignupBanner />
-        </div>
-
         <div className="relative mb-8 overflow-hidden rounded-2xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_4%,var(--footer-bg))] px-5 py-6 sm:px-6 sm:py-7">
-          <div
-            className="pointer-events-none absolute inset-0 z-0 select-none overflow-hidden"
-            aria-hidden="true"
-          >
-            <span
-              className="absolute left-[8%] top-1/2 -translate-y-1/2 whitespace-nowrap font-semibold tracking-tight text-[var(--footer-fg)] opacity-[0.028] sm:left-[12%] sm:opacity-[0.042] md:opacity-[0.048]"
-              style={{ fontSize: "clamp(2.75rem, 14vw, 9.5rem)" }}
-            >
-              {t("brand.nurseNest")}
-            </span>
-          </div>
+          <FooterLeafWatermark />
 
           <div className="relative z-[1] space-y-6">
-            <div className="border-b border-[color-mix(in_srgb,var(--footer-fg)_10%,transparent)] pb-4">
-              <p className="text-lg font-semibold tracking-[0.14em] text-[color-mix(in_srgb,var(--footer-fg)_92%,transparent)] sm:text-xl">
-                {t("brand.nurseNest")}
-              </p>
-            </div>
-
             <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-5">
               <div className="space-y-4">
                 <div className="flex items-center bg-transparent">
@@ -169,7 +171,7 @@ export function SiteFooter() {
 
               <div>
                 <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">
-                  {formatTitleCase(`Featured · ${countryNav.regionLabel}`, locale)}
+                  {formatTitleCase(t("footer.regionalHubLinks"), locale)}
                 </h3>
                 <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
                   {countryNav.footerFeatured.map((item) => (
@@ -186,7 +188,7 @@ export function SiteFooter() {
                   {!isSignedIn ? (
                     <>
                       <li>
-                        <FLink href={learnerSignInHref}>Login</FLink>
+                        <FLink href={learnerSignInHref}>{formatTitleCase(t("nav.logIn"), locale)}</FLink>
                       </li>
                       <li>
                         <FLink href="/contact">Contact Support</FLink>
@@ -312,6 +314,10 @@ export function SiteFooter() {
           <Link href={mapLegacyMarketingHref("/languages")} className="nn-footer-link text-xs">
             {formatTitleCase(t("footer.viewAllLanguages"), locale)}
           </Link>
+        </div>
+
+        <div className="mb-6 sm:mb-8">
+          <EmailSignupBanner />
         </div>
 
         <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_5%,var(--footer-bg))] px-4 py-5 md:flex-row">

@@ -332,13 +332,18 @@ export function MarketingHeroCarousel({
             />
           );
         })}
-        {hasLoaded && mediaOk && shouldOverlayCaption && currentSlide ? (
+        {mediaOk && shouldOverlayCaption && currentSlide ? (
           <div
             className="pointer-events-none absolute inset-x-0 bottom-0 z-10"
             data-testid={captionTestId}
             aria-hidden
           >
             <div className="bg-gradient-to-t from-[color-mix(in_srgb,var(--palette-heading)_55%,transparent)] via-[color-mix(in_srgb,var(--palette-heading)_22%,transparent)] to-transparent px-3 pb-2.5 pt-7 sm:px-4 sm:pb-3 sm:pt-9">
+              {currentSlide.label ? (
+                <p className="mb-1 line-clamp-1 text-left text-[10px] font-semibold uppercase leading-tight tracking-wide text-[color-mix(in_srgb,var(--text-on-accent)_88%,transparent)] sm:text-[11px]">
+                  {currentSlide.label}
+                </p>
+              ) : null}
               <p className="line-clamp-4 text-left text-sm font-semibold leading-snug text-[var(--text-on-accent)] text-balance break-words drop-shadow-sm sm:text-base">
                 {currentSlide.title}
               </p>
@@ -349,47 +354,28 @@ export function MarketingHeroCarousel({
           </div>
         ) : null}
       </div>
-      {hasLoaded && mediaOk ? (
+      {mediaOk ? (
         <>
-          {extraSlidesMounted || slides.length <= 1 ? (
-            <div
-              className={`flex flex-wrap justify-center ${isBelowFoldSection ? "mt-2 gap-2" : "mt-3 gap-2"}`}
-              data-testid={dotsTestId}
-            >
-              {slides.map((_, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  disabled={failed.has(index)}
-                  onClick={() => {
-                    if (!failed.has(index)) setCurrent(index);
-                  }}
-                  className={`rounded-full transition-all duration-[var(--brand-motion-normal)] ease-[var(--brand-motion-ease-luxury)] ${
-                    isBelowFoldSection
-                      ? index === current
-                        ? "h-1.5 w-5 bg-role-cta opacity-100"
-                        : "h-1.5 w-1.5 bg-[var(--theme-muted-text)]/28 hover:bg-[var(--theme-muted-text)]/45"
-                      : index === current
-                        ? "h-2 w-6 bg-role-cta"
-                        : "h-2 w-2 bg-[var(--theme-muted-text)]/35 hover:bg-[var(--theme-muted-text)]/55"
-                  } ${failed.has(index) ? "cursor-not-allowed opacity-40" : ""}`}
-                  aria-label={t("components.marketingHeroCarousel.goToSlide", { n: index + 1 })}
-                  data-testid={
-                    testIdPrefix === "hero-carousel" ? `button-carousel-dot-${index}` : `button-${testIdPrefix}-dot-${index}`
-                  }
-                />
-              ))}
-            </div>
-          ) : null}
           {currentSlide && !shouldOverlayCaption ? (
             <div
-              className={`px-0 text-center ${isBelowFoldSection ? "mt-2 space-y-1" : "mt-2 space-y-1"}`}
+              className={`px-0 text-left ${isBelowFoldSection ? "mt-2 space-y-1.5" : "mt-2 space-y-1"}`}
               data-testid={captionTestId}
             >
+              {currentSlide.label ? (
+                <p
+                  className={
+                    isBelowFoldSection
+                      ? "nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--palette-text-muted)]"
+                      : "nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]"
+                  }
+                >
+                  {currentSlide.label}
+                </p>
+              ) : null}
               <p
                 className={
                   isBelowFoldSection
-                    ? "line-clamp-1 text-balance break-words text-sm font-semibold leading-snug text-[var(--palette-heading)] sm:line-clamp-2"
+                    ? "text-balance break-words text-base font-semibold leading-snug text-[var(--palette-heading)] sm:text-lg"
                     : "nn-marketing-h4 text-balance break-words"
                 }
               >
@@ -398,13 +384,47 @@ export function MarketingHeroCarousel({
               <p
                 className={
                   isBelowFoldSection
-                    ? "mx-auto max-w-xl line-clamp-2 text-balance break-words text-xs leading-snug text-[var(--palette-text-muted)] sm:text-[0.8125rem]"
+                    ? "max-w-xl text-pretty text-sm leading-relaxed text-[var(--palette-text-muted)] sm:max-w-2xl"
                     : "nn-marketing-caption text-balance break-words text-[var(--theme-body-text)]"
                 }
               >
                 {currentSlide.caption}
               </p>
             </div>
+          ) : null}
+          {hasLoaded ? (
+            <>
+              {extraSlidesMounted || slides.length <= 1 ? (
+                <div
+                  className={`flex flex-wrap justify-center ${isBelowFoldSection ? "mt-2 gap-2" : "mt-3 gap-2"}`}
+                  data-testid={dotsTestId}
+                >
+                  {slides.map((_, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      disabled={failed.has(index)}
+                      onClick={() => {
+                        if (!failed.has(index)) setCurrent(index);
+                      }}
+                      className={`rounded-full transition-all duration-[var(--brand-motion-normal)] ease-[var(--brand-motion-ease-luxury)] ${
+                        isBelowFoldSection
+                          ? index === current
+                            ? "h-1.5 w-5 bg-role-cta opacity-100"
+                            : "h-1.5 w-1.5 bg-[var(--theme-muted-text)]/28 hover:bg-[var(--theme-muted-text)]/45"
+                          : index === current
+                            ? "h-2 w-6 bg-role-cta"
+                            : "h-2 w-2 bg-[var(--theme-muted-text)]/35 hover:bg-[var(--theme-muted-text)]/55"
+                      } ${failed.has(index) ? "cursor-not-allowed opacity-40" : ""}`}
+                      aria-label={t("components.marketingHeroCarousel.goToSlide", { n: index + 1 })}
+                      data-testid={
+                        testIdPrefix === "hero-carousel" ? `button-carousel-dot-${index}` : `button-${testIdPrefix}-dot-${index}`
+                      }
+                    />
+                  ))}
+                </div>
+              ) : null}
+            </>
           ) : null}
         </>
       ) : null}

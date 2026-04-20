@@ -16,6 +16,8 @@
  *   VERIFY_NEXT_STATIC=1 — after Tier 1, fetch `/` (redirects followed), extract first `/_next/static/….(js|css)`,
  *     then GET with `Range: bytes=0-0` and cancel the body; fails if status is not 2xx or `Content-Type` is `text/html`
  *     (typical when standalone is missing `.next/static` and the app returns HTML for asset URLs)
+ *   VERIFY_MARKETING_SENTINELS=1 — GET `/`, `/pricing`, `/login` (HTML); fail on placeholder pricing copy,
+ *     obvious stub strings, duplicate public headers, or missing `<html lang="en"` (default marketing root).
  *
  * Output is grouped into tiers (per BASE_URL / ORIGIN_BASE_URL):
  *   Tier 1 — platform liveness + routing readiness (/healthz, /readyz)
@@ -43,6 +45,8 @@ const wantReady = process.env.VERIFY_READINESS === "1" || process.env.VERIFY_REA
 const wantHome = process.env.VERIFY_CANONICAL_HOME === "1" || process.env.VERIFY_CANONICAL_HOME === "true";
 const wantNextStatic =
   process.env.VERIFY_NEXT_STATIC === "1" || process.env.VERIFY_NEXT_STATIC === "true";
+const wantMarketingSentinels =
+  process.env.VERIFY_MARKETING_SENTINELS === "1" || process.env.VERIFY_MARKETING_SENTINELS === "true";
 
 const tier1Paths = ["/healthz", "/readyz"];
 const tier3Paths = ["/api/health"];
@@ -101,7 +105,69 @@ async function getHome(base) {
   return { ok: false, status: 0, url: current, err: "redirect loop cap" };
 }
 
-/** @typedef {{ base: string, tier1Failed: boolean, tier2State: "skip" | "pass" | "fail", tier2bState: "skip" | "pass" | "fail", tier3Failed: boolean }} TierSummary */
+const MARKETING_SENTINEL_PATHS = ["/", "/pricing", "/login"];
+
+const MARKETING_SENTINEL_FORBIDDEN = [
+  "Loading pricing...",
+  "Loading pricing…",
+  "Lorem ipsum",
+  "<<stub",
+  "tbd —",
+  "[missing:",
+  "{{missing",
+];
+
+/**
+ * @param {string} base
+ * @returns {Promise<{ ok: boolean; detail: string }>}
+ */
+async function verifyMarketingSentinels(base) {
+  for (const p of MARKETING_SENTINEL_PATHS) {
+    const url = `${base}${p === "/" ? "/" : p}`;
+    const ac = new AbortController();
+    const t = setTimeout(() => ac.abort(), homeTimeoutMs);
+    try {
+      const res = await fetch(url, {
+        method: "GET",
+        redirect: "follow",
+        signal: ac.signal,
+        headers: { Accept: "text/html,*/*;q=0.8" },
+      });
+      if (!res.ok || res.status >= 400) {
+        return { ok: false, detail: `${p} → HTTP ${res.status}` };
+      }
+      const html = await res.text();
+      const head = html.slice(0, 12_000);
+      if (!/<html[\s>]/i.test(head)) {
+        return { ok: false, detail: `${p} — response does not look like HTML document` };
+      }
+      if (!/<html[^>]*\blang="en"/i.test(head)) {
+        return { ok: false, detail: `${p} — expected root <html lang="en"…> for default marketing HTML` };
+      }
+      const lower = html.toLowerCase();
+      for (const bad of MARKETING_SENTINEL_FORBIDDEN) {
+        if (lower.includes(bad.toLowerCase())) {
+          return { ok: false, detail: `${p} — forbidden substring in HTML: ${bad}` };
+        }
+      }
+      const headerMatches = html.match(/<header[^>]*\bnn-header-animate-in\b/gi) ?? [];
+      if (headerMatches.length > 1) {
+        return {
+          ok: false,
+          detail: `${p} — duplicate marketing headers (${headerMatches.length}× nn-header-animate-in)`,
+        };
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      return { ok: false, detail: `${p}: ${msg}` };
+    } finally {
+      clearTimeout(t);
+    }
+  }
+  return { ok: true, detail: "marketing HTML sentinels OK for /, /pricing, /login" };
+}
+
+/** @typedef {{ base: string, tier1Failed: boolean, tier2State: "skip" | "pass" | "fail", tier2bState: "skip" | "pass" | "fail", tier3Failed: boolean, tier4State: "skip" | "pass" | "fail" }} TierSummary */
 
 /** @type {TierSummary[]} */
 const summaries = [];
@@ -183,6 +249,7 @@ for (const base of bases) {
     tier2State: "skip",
     tier2bState: "skip",
     tier3Failed: false,
+    tier4State: "skip",
   };
 
   console.log(`\n${"=".repeat(72)}\n  Base: ${base}\n${"=".repeat(72)}`);
@@ -281,6 +348,30 @@ for (const base of bases) {
     }
   }
 
+  if (wantMarketingSentinels) {
+    summary.tier4State = "fail";
+    console.log("\n[Tier 4] Marketing HTML sentinels (/, /pricing, /login)");
+    try {
+      const r = await verifyMarketingSentinels(base);
+      if (r.ok) {
+        console.log(`OK [Tier 4] ${r.detail}`);
+        summary.tier4State = "pass";
+      } else {
+        anyFailed = true;
+        console.error(`FAIL [Tier 4] ${r.detail}`);
+        console.error(`verify-deploy-health: Tier 4 FAILED — ${r.detail}`);
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      anyFailed = true;
+      summary.tier4State = "fail";
+      console.error(`FAIL [Tier 4]: ${msg}`);
+      console.error(`verify-deploy-health: Tier 4 FAILED — ${msg}`);
+    }
+  } else {
+    console.log("\n[Tier 4] Marketing HTML sentinels — skipped (set VERIFY_MARKETING_SENTINELS=1)");
+  }
+
   summaries.push(summary);
 }
 
@@ -294,7 +385,9 @@ if (anyFailed) {
     const t2b =
       s.tier2bState === "skip" ? "SKIP" : s.tier2bState === "pass" ? "OK" : "FAIL";
     const t3 = s.tier3Failed ? "FAIL" : "OK";
-    console.error(`  ${s.base} → Tier 1: ${t1} | Tier 1b: ${t2b} | Tier 2: ${t2} | Tier 3: ${t3}`);
+    const t4 =
+      s.tier4State === "skip" ? "SKIP" : s.tier4State === "pass" ? "OK" : "FAIL";
+    console.error(`  ${s.base} → Tier 1: ${t1} | Tier 1b: ${t2b} | Tier 2: ${t2} | Tier 3: ${t3} | Tier 4: ${t4}`);
   }
 
   for (const s of summaries) {

@@ -1909,6 +1909,12 @@ html[data-theme] .nn-marketing-surface {
     min-height: 3.625rem;
     padding-block: 0.45rem;
   }
+
+  /* Anchor brand column slightly left of center nav — avoids “floating” lockup beside centered links. */
+  .nn-header-desktop-grid > .nn-header-brand-cluster {
+    justify-self: start;
+    margin-inline-start: -0.125rem;
+  }
 }
 
 /*

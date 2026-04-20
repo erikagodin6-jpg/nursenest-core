@@ -33,6 +33,8 @@ export type HomeHeroSlide = {
   objectKey: string;
   /** Canonical `https://…cdn.digitaloceanspaces.com/screenshot{N}.png` */
   publicUrl: string;
+  /** Small context line above the headline (e.g. “From the Question Bank”). */
+  label: string;
   title: string;
   caption: string;
   alt: string;
@@ -89,22 +91,33 @@ export function homeHeroSlideCaptionKey(index1To15: number): string {
   return `${HOME_HERO_SLIDE_KEY_PREFIX}.slide${String(index1To15).padStart(2, "0")}.caption`;
 }
 
-function buildAlt(title: string, caption: string): string {
+export function homeHeroSlideLabelKey(index1To15: number): string {
+  return `${HOME_HERO_SLIDE_KEY_PREFIX}.slide${String(index1To15).padStart(2, "0")}.label`;
+}
+
+function buildAlt(label: string, title: string, caption: string): string {
+  const l = label.trim();
   const t = title.trim();
   const c = caption.trim();
-  return `${t}. ${c}`.slice(0, 220);
+  const head = l ? `${l}. ${t}` : t;
+  return `${head}. ${c}`.slice(0, 220);
 }
 
 function slideFromMeta(t: (key: string) => string, meta: HomeHeroSlideMetadata): HomeHeroSlide {
+  const labelKey = homeHeroSlideLabelKey(meta.index);
+  const rawLabel = t(labelKey);
+  const label =
+    rawLabel === labelKey || rawLabel.startsWith(`${HOME_HERO_SLIDE_KEY_PREFIX}.`) ? "" : rawLabel.trim();
   const title = t(homeHeroSlideTitleKey(meta.index));
   const caption = t(homeHeroSlideCaptionKey(meta.index));
   return {
     index: meta.index,
     objectKey: meta.objectKey,
     publicUrl: meta.publicUrl,
+    label,
     title,
     caption,
-    alt: buildAlt(title, caption),
+    alt: buildAlt(label, title, caption),
   };
 }
 

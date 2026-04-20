@@ -91,6 +91,11 @@ function ScreenshotFrame({ slide }: { slide: HomeHeroSlide }) {
         rounded="rounded-2xl"
       />
       <div className="space-y-1 px-0.5">
+        {slide.label ? (
+          <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+            {slide.label}
+          </p>
+        ) : null}
         <p className="nn-marketing-h4 leading-snug">{slide.title}</p>
         <p className="nn-marketing-body-sm mt-1">{slide.caption}</p>
       </div>

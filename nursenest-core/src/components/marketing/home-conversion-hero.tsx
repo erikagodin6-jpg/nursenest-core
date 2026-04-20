@@ -1,6 +1,7 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
+import Image from "next/image";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -14,6 +15,10 @@ import {
 } from "@/lib/theme/marketing-hero-pattern";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { StaggerGroup, StaggerItem } from "@/lib/motion";
+import { buildHomepageHeroSlidesAtIndices } from "@/config/home-hero-carousel";
+
+/** 0-based slide index → `screenshot9.png` (study modes / platform chrome—reads as real product UI). */
+const HOME_HERO_ABOVE_FOLD_STILL_INDEX = 8 as const;
 
 function formatStat(n: number, locale: string): string {
   if (n <= 0) return "";
@@ -21,7 +26,7 @@ function formatStat(n: number, locale: string): string {
 }
 
 /**
- * Premium split hero: one outcome headline + conversion CTAs + live stats + product preview carousel.
+ * Homepage hero: left column (headline, scannable copy, CTAs) + right column (product still).
  */
 export function HomeConversionHero({
   questionCount = 0,
@@ -57,6 +62,17 @@ export function HomeConversionHero({
     </span>,
   );
 
+  const heroDesktopPreview = useMemo(
+    () => buildHomepageHeroSlidesAtIndices(t, [HOME_HERO_ABOVE_FOLD_STILL_INDEX])[0],
+    [t],
+  );
+
+  const scanItems = useMemo(
+    () =>
+      [1, 2, 3, 4].map((n) => t(`pages.home.hero.scanItem${n}`)).filter((line) => line.trim().length > 0),
+    [t],
+  );
+
   return (
     <section
       className="nn-gradient-safe nn-hero-branded nn-hero-branded--ambient-depth relative overflow-x-hidden border-b border-[var(--header-nav-border)]"
@@ -65,12 +81,11 @@ export function HomeConversionHero({
     >
       <div className="relative pt-10 pb-12 md:pt-12 md:pb-14">
         <div className="nn-section-shell">
-          {/*
-            Above-the-fold: never gate on IntersectionObserver. `overflow-hidden` on the section
-            plus motion transforms has caused WebKit paint/clipping edge cases; `overflow-x-hidden`
-            keeps horizontal containment without vertically clipping staggered content.
-          */}
-          <StaggerGroup className="mx-auto min-w-0 max-w-3xl space-y-6 lg:max-w-4xl" whenInView={false}>
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
+            <StaggerGroup
+              className="min-w-0 space-y-5 lg:col-span-7 lg:max-w-none xl:col-span-6"
+              whenInView={false}
+            >
               <StaggerItem variant="softReveal" timing="hero">
                 <p className="nn-marketing-caption inline-block max-w-full text-balance break-words rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] px-3.5 py-1.5 font-semibold tracking-wide text-[var(--pill-fg)]">
                   {formatTitleCase(t("pages.home.hero.eyebrowBrand"), locale)}
@@ -95,18 +110,32 @@ export function HomeConversionHero({
               </StaggerItem>
               <StaggerItem variant="softReveal" timing="hero">
                 <p
+                  className="nn-marketing-body max-w-lg text-pretty break-words leading-relaxed text-[var(--palette-text-muted)]"
+                  data-testid="text-hero-subheading2"
+                >
+                  {formatSentenceCase(t("pages.home.hero.subheading2"), locale)}
+                </p>
+              </StaggerItem>
+              {scanItems.length > 0 ? (
+                <StaggerItem variant="softReveal" timing="hero">
+                  <ul className="nn-marketing-body-sm max-w-lg list-none space-y-2 text-[var(--palette-text-muted)]">
+                    {scanItems.map((line) => (
+                      <li key={line} className="flex gap-2.5">
+                        <span className="mt-0.5 shrink-0 font-semibold text-[var(--semantic-brand)]" aria-hidden>
+                          ·
+                        </span>
+                        <span className="min-w-0 leading-snug">{line}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </StaggerItem>
+              ) : null}
+              <StaggerItem variant="softReveal" timing="hero">
+                <p
                   className="nn-marketing-body-sm max-w-lg text-pretty leading-relaxed text-[var(--palette-text-muted)]"
                   data-testid="text-hero-emotional-anchor"
                 >
                   {formatSentenceCase(t("pages.home.hero.emotionalAnchorLine"), locale)}
-                </p>
-              </StaggerItem>
-              <StaggerItem variant="softReveal" timing="hero">
-                <p
-                  className="nn-marketing-body-sm max-w-lg text-pretty leading-relaxed text-[var(--palette-text)]"
-                  data-testid="text-hero-confidence-line"
-                >
-                  {formatSentenceCase(t("pages.home.hero.confidenceLine"), locale)}
                 </p>
               </StaggerItem>
               <StaggerItem variant="softReveal" timing="hero">
@@ -191,6 +220,37 @@ export function HomeConversionHero({
                 </p>
               </StaggerItem>
             </StaggerGroup>
+
+            <div className="min-w-0 lg:col-span-5 lg:self-center xl:col-span-6">
+              <figure
+                className="mx-auto w-full max-w-md rounded-2xl border border-[var(--border-subtle)] bg-[var(--semantic-panel-muted)] p-2 shadow-[var(--shadow-card)] lg:mx-0 lg:max-w-none lg:sticky lg:top-24"
+                aria-label={heroDesktopPreview.alt}
+              >
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-[var(--page-bg)]">
+                  <Image
+                    src={heroDesktopPreview.publicUrl}
+                    alt={heroDesktopPreview.alt}
+                    fill
+                    sizes="(min-width: 1024px) 42vw, 100vw"
+                    className="object-cover object-top"
+                    priority
+                    fetchPriority="high"
+                  />
+                </div>
+                <figcaption className="mt-2 space-y-1 px-1 text-center text-[var(--palette-text-muted)] lg:text-start">
+                  {heroDesktopPreview.label ? (
+                    <span className="nn-marketing-caption block font-semibold uppercase tracking-wide text-[var(--palette-text-muted)]">
+                      {heroDesktopPreview.label}
+                    </span>
+                  ) : null}
+                  <span className="block text-sm font-semibold leading-snug text-[var(--palette-heading)]">
+                    {heroDesktopPreview.title}
+                  </span>
+                  <span className="nn-marketing-caption block text-pretty">{heroDesktopPreview.caption}</span>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
         </div>
       </div>
     </section>

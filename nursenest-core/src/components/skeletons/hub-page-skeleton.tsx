@@ -228,7 +228,11 @@ export function CatPageSkeleton() {
  */
 export function PricingPageSkeleton() {
   return (
-    <main className="mx-auto w-full max-w-6xl nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0" aria-busy="true" aria-label="Loading pricing…">
+    <main
+      className="mx-auto w-full max-w-6xl nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0"
+      aria-busy="true"
+      aria-label="Preparing subscription plans"
+    >
       <div className="border-b border-[var(--border-subtle)] pb-10 pt-2">
         <div className="mx-auto max-w-3xl space-y-4 text-center">
           <Bar w="75%" h="2.25rem" className="mx-auto rounded-xl" />
