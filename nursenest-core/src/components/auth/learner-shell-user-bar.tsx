@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { ChevronDown, User } from "lucide-react";
-import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useMarketingI18n, useMarketingLocale } from "@/lib/marketing-i18n";
 import { isStaffRole } from "@/lib/auth/staff-roles";
 import { UserFeedbackAccountMenuItem } from "@/components/feedback/user-feedback-account-menu-item";
@@ -57,7 +57,14 @@ function countryDisplayKey(country: string): string {
   return "learner.userBar.region.fallback";
 }
 
-export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShortLabel?: string | null }) {
+export function LearnerShellUserBar({
+  pathwayShortLabel = null,
+  serverHasStaffSession,
+}: {
+  pathwayShortLabel?: string | null;
+  /** DB staff row for this request (JWT role may still lag after promotion). */
+  serverHasStaffSession?: boolean;
+}) {
   const { t } = useMarketingI18n();
   const locale = useMarketingLocale();
   const { data: session, status } = useSession();
@@ -94,7 +101,7 @@ export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShort
   const user = session.user;
   const displayName = user.name?.trim() || user.email?.split("@")[0] || t("learner.userBar.fallbackName");
   const emailLine = user.email?.trim() ?? "";
-  const admin = isStaffRole(user.role);
+  const admin = serverHasStaffSession === true || isStaffRole(user.role);
   const sub = user.subscriptionStatus ?? "none";
   const tier = user.tier ?? "";
   const country = user.country ?? "";
@@ -201,6 +208,7 @@ export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShort
             <div className="border-t border-[var(--border-subtle)] px-2 py-1.5">
               <Link
                 href={ADMIN_DASHBOARD_ROUTE}
+                prefetch={false}
                 className={`${linkClass} font-medium text-primary`}
                 role="menuitem"
                 onClick={close}

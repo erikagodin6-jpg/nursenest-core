@@ -29,6 +29,7 @@ import {
   shouldEmitNnHomeRouteDiag,
 } from "@/lib/observability/nn-home-isolation-flags";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
+import { getStaffSession } from "@/lib/auth/staff-session";
 
 /** Single module promise — avoids per-request `import()` bookkeeping on hot marketing layout path. */
 const marketingDefaultLayoutSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
@@ -267,6 +268,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       const trustClientPersistedRegion = marketingRegionCookie !== undefined;
       const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingRegionCookie);
       const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie();
+      const staffSession = await getStaffSession().catch(() => null);
 
       return (
         <MarketingI18nProvider
@@ -282,7 +284,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
               <MarketingFeedbackShell>
                 <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
                   <div className="nn-marketing-surface flex min-h-screen flex-col">
-                    <SiteHeader />
+                    <SiteHeader serverHasStaffSession={staffSession != null} />
                     <PathwayLessonProgressRefreshListener />
                     <main className="flex min-h-0 flex-1 flex-col">
                       {shouldLayerMainPageShards() ? (

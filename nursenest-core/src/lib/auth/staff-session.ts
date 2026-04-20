@@ -53,12 +53,11 @@ async function loadStaffSession(): Promise<StaffSession | null> {
   const userId = typeof su?.id === "string" && su.id.trim().length > 0 ? su.id.trim() : undefined;
   const emailRaw = typeof su?.email === "string" && su.email.trim().length > 0 ? su.email.trim() : null;
 
-  if (!userId) {
-    renderTrace("staff session fallback", { route: "shared-root-layout", reason: "missing_user_id" });
+  /** Match `enforceAdminProxyRoute` / `loadUserRoleFromDbIdentity`: email-only sessions still resolve staff in DB. */
+  if (!userId && !emailRaw) {
+    renderTrace("staff session fallback", { route: "shared-root-layout", reason: "missing_identity" });
     if (adminAccessDebug()) {
-      safeServerLog("admin_access", "staff_session_no_user_id", {
-        hasEmail: Boolean(emailRaw),
-      });
+      safeServerLog("admin_access", "staff_session_no_identity", {});
     }
     return null;
   }
@@ -66,7 +65,7 @@ async function loadStaffSession(): Promise<StaffSession | null> {
   try {
     const { loadUserRoleFromDbIdentity } = await import("@/lib/auth/admin-role-source");
     const row = await safeAwait(
-      loadUserRoleFromDbIdentity({ userId, email: emailRaw }),
+      loadUserRoleFromDbIdentity({ userId: userId ?? null, email: emailRaw }),
       "staff_session.role_lookup",
       STAFF_SESSION_ROLE_TIMEOUT_MS,
     );
@@ -79,7 +78,7 @@ async function loadStaffSession(): Promise<StaffSession | null> {
       renderTrace("staff session fallback", { route: "shared-root-layout", reason: "not_staff_or_role_timeout" });
       if (adminAccessDebug()) {
         safeServerLog("admin_access", "staff_session_not_staff", {
-          userIdPrefix: userId.slice(0, 8),
+          userIdPrefix: (userId ?? row?.userId ?? "").slice(0, 8),
           role: row?.role ?? "missing",
         });
       }
@@ -87,7 +86,7 @@ async function loadStaffSession(): Promise<StaffSession | null> {
     }
     if (adminAccessDebug()) {
       safeServerLog("admin_access", "staff_session_ok", {
-        userIdPrefix: userId.slice(0, 8),
+        userIdPrefix: row.userId.slice(0, 8),
         role: row.role,
         tier: row.tier,
       });

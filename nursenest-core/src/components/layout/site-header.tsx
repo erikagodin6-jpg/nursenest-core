@@ -105,7 +105,12 @@ function examIndicatorLabel(
   return `${regionShort} ${tier}`;
 }
 
-export function SiteHeader() {
+export type SiteHeaderProps = {
+  /** True when getStaffSession() found a staff row for this request (JWT role may still lag). */
+  serverHasStaffSession?: boolean;
+};
+
+export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   const { t, locale } = useMarketingI18n();
   const router = useRouter();
   const pathname = usePathname() ?? "/";
@@ -238,8 +243,16 @@ export function SiteHeader() {
   const activeNav = useActiveNavContext();
   const megaMenus = useMemo(() => buildMarketingMegaMenus(region, t), [region, t]);
   const isAuthenticated = Boolean(sessionStatus === "authenticated" && user);
-  const isAdminAuthenticated = Boolean(isAuthenticated && user?.role && isStaffRole(user.role));
-  const isLearnerRole = Boolean(isAuthenticated && user?.role && !isStaffRole(user.role));
+  const isAdminAuthenticated = Boolean(
+    isAuthenticated &&
+      (serverHasStaffSession === true || Boolean(user?.role && isStaffRole(user.role))),
+  );
+  const isLearnerRole = Boolean(
+    isAuthenticated &&
+      user?.role &&
+      !isStaffRole(user.role) &&
+      serverHasStaffSession !== true,
+  );
   /** Entitled learners: show Continue / Account / Log out in the marketing header (not a separate “learner nav” IA). */
   const isMarketingEntitledLearner =
     isLearnerRole && activeNav.entitlement === "entitled";
@@ -473,13 +486,15 @@ export function SiteHeader() {
           {/* Mobile/tablet: signed-in CTAs (learners/staff) — guests use the top row above */}
           {isAuthenticated ? (
             <div className="nn-header-mobile-only-flex relative z-[130] items-center justify-end gap-2 border-b border-[var(--header-border)] bg-[var(--nav-bg)] px-4 py-2.5">
-              {isMarketingEntitledLearner ? (
+              {isAdminAuthenticated ? (
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
-                    href={resumeStudyingCta?.href ?? "/app"}
+                    href={ADMIN_DASHBOARD_ROUTE}
+                    prefetch={false}
                     className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4`}
+                    onClick={closeMegaBeforeAuthNav}
                   >
-                    {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
+                    {formatTitleCase(t("nav.admin"), locale)}
                   </Link>
                   <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
                     {formatTitleCase(t("nav.dashboard"), locale)}
@@ -489,14 +504,13 @@ export function SiteHeader() {
                     redirectTo={withMarketingLocale(locale, "/login")}
                   />
                 </div>
-              ) : isAdminAuthenticated ? (
+              ) : isMarketingEntitledLearner ? (
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
-                    href={ADMIN_DASHBOARD_ROUTE}
+                    href={resumeStudyingCta?.href ?? "/app"}
                     className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4`}
-                    onClick={closeMegaBeforeAuthNav}
                   >
-                    {formatTitleCase(t("nav.admin"), locale)}
+                    {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                   </Link>
                   <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS}>
                     {formatTitleCase(t("nav.dashboard"), locale)}
@@ -633,6 +647,24 @@ export function SiteHeader() {
                     {formatTitleCase(t("nav.signup"), locale)}
                   </Link>
                 </div>
+              ) : isAdminAuthenticated ? (
+                <div className="flex shrink-0 items-center gap-2">
+                  <Link
+                    href={ADMIN_DASHBOARD_ROUTE}
+                    prefetch={false}
+                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
+                    onClick={closeMegaBeforeAuthNav}
+                  >
+                    {formatTitleCase(t("nav.admin"), locale)}
+                  </Link>
+                  <Link href="/app" className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}>
+                    {formatTitleCase(t("nav.dashboard"), locale)}
+                  </Link>
+                  <SignOutButton
+                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
+                    redirectTo={withMarketingLocale(locale, "/login")}
+                  />
+                </div>
               ) : isMarketingEntitledLearner ? (
                 <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
                   <Link
@@ -648,23 +680,6 @@ export function SiteHeader() {
                   >
                     <User className="h-4 w-4 shrink-0 opacity-90" aria-hidden />
                     <span className="hidden 2xl:inline whitespace-nowrap">{formatTitleCase(t("nav.account"), locale)}</span>
-                  </Link>
-                  <SignOutButton
-                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
-                    redirectTo={withMarketingLocale(locale, "/login")}
-                  />
-                </div>
-              ) : isAdminAuthenticated ? (
-                <div className="flex shrink-0 items-center gap-2">
-                  <Link
-                    href={ADMIN_DASHBOARD_ROUTE}
-                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
-                    onClick={closeMegaBeforeAuthNav}
-                  >
-                    {formatTitleCase(t("nav.admin"), locale)}
-                  </Link>
-                  <Link href="/app" className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}>
-                    {formatTitleCase(t("nav.dashboard"), locale)}
                   </Link>
                   <SignOutButton
                     className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
@@ -1154,36 +1169,11 @@ export function SiteHeader() {
                       {formatTitleCase(t("nav.logIn"), locale)}
                     </Link>
                   </>
-                ) : isMarketingEntitledLearner ? (
-                  <>
-                    {learnerExamBadge ? (
-                      <div className="nn-header-tier-pill flex w-full justify-center py-2.5" role="status">
-                        {learnerExamBadge}
-                      </div>
-                    ) : null}
-                    <Link
-                      href={resumeStudyingCta?.href ?? "/app"}
-                      className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
-                    </Link>
-                    <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS} onClick={() => setMobileOpen(false)}>
-                      {formatTitleCase(t("nav.dashboard"), locale)}
-                    </Link>
-                    <Link href="/app/account/overview" className={HEADER_SECONDARY_ACTION_CLASS} onClick={() => setMobileOpen(false)}>
-                      {formatTitleCase(t("nav.account"), locale)}
-                    </Link>
-                    <SignOutButton
-                      className="mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
-                      onBeforeSignOut={() => setMobileOpen(false)}
-                      redirectTo={withMarketingLocale(locale, "/login")}
-                    />
-                  </>
                 ) : isAdminAuthenticated ? (
                   <>
                     <Link
                       href={ADMIN_DASHBOARD_ROUTE}
+                      prefetch={false}
                       className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
                       onClick={() => {
                         closeMegaBeforeAuthNav();
@@ -1204,6 +1194,32 @@ export function SiteHeader() {
                       className={HEADER_SECONDARY_ACTION_CLASS}
                       onClick={() => setMobileOpen(false)}
                     >
+                      {formatTitleCase(t("nav.account"), locale)}
+                    </Link>
+                    <SignOutButton
+                      className="mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
+                      onBeforeSignOut={() => setMobileOpen(false)}
+                      redirectTo={withMarketingLocale(locale, "/login")}
+                    />
+                  </>
+                ) : isMarketingEntitledLearner ? (
+                  <>
+                    {learnerExamBadge ? (
+                      <div className="nn-header-tier-pill flex w-full justify-center py-2.5" role="status">
+                        {learnerExamBadge}
+                      </div>
+                    ) : null}
+                    <Link
+                      href={resumeStudyingCta?.href ?? "/app"}
+                      className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
+                    </Link>
+                    <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS} onClick={() => setMobileOpen(false)}>
+                      {formatTitleCase(t("nav.dashboard"), locale)}
+                    </Link>
+                    <Link href="/app/account/overview" className={HEADER_SECONDARY_ACTION_CLASS} onClick={() => setMobileOpen(false)}>
                       {formatTitleCase(t("nav.account"), locale)}
                     </Link>
                     <SignOutButton

@@ -46,6 +46,7 @@ import { loadPaywallHomeStatsForShell } from "@/lib/marketing/load-paywall-home-
 import { LearnerDegradedModeBanner } from "@/components/student/learner-degraded-mode-banner";
 import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
 
+import { getStaffSession } from "@/lib/auth/staff-session";
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
 
@@ -62,9 +63,10 @@ export default async function LearnerShellLayout({ children }: { children: React
     return <LearnerUnauthenticatedGate />;
   }
 
-  const [entitlement, paywallHomeStats] = await Promise.all([
+  const [entitlement, paywallHomeStats, staffSession] = await Promise.all([
     resolveEntitlementForPage(userId),
     loadPaywallHomeStatsForShell(),
+    getStaffSession().catch(() => null),
   ]);
 
   const skipNonCritical = shouldSkipNonCriticalLearnerWork();
@@ -198,7 +200,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                         <LearnerShellPathwayPill pathwayPillLabel={pathwayShortLabel} pathwayHubHref={pathwayHubHref} />
                       </div>
                       <div className="flex flex-shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-2.5">
-                        <LearnerShellUserBar pathwayShortLabel={pathwayShortLabel} />
+                        <LearnerShellUserBar pathwayShortLabel={pathwayShortLabel} serverHasStaffSession={staffSession != null} />
                         {!coreOnlyEmergency ? <UserFeedbackNavPill /> : null}
                         <LearnerShellLanguageControl />
                         <LearnerThemeControl />

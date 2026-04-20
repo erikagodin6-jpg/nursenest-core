@@ -88,14 +88,16 @@ test("marketing header: staff see Admin link to /admin; learners use Dashboard t
   const header = readFileSync(join(dir, "components", "layout", "site-header.tsx"), "utf8");
   assert.match(header, /const ADMIN_DASHBOARD_ROUTE = "\/admin"/);
   assert.match(header, /href=\{ADMIN_DASHBOARD_ROUTE\}/);
-  assert.match(header, /isAdminAuthenticated.*isStaffRole/);
+  assert.match(header, /isAdminAuthenticated/);
+  assert.match(header, /isStaffRole\(user\.role\)/);
   assert.match(header, /isLearnerRole/);
   assert.match(header, /<Link href="\/app"/);
 });
 
-test("learner shell user bar: admin link only when isStaffRole", () => {
+test("learner shell user bar: admin link when JWT staff or server staff hint", () => {
   const bar = readFileSync(join(dir, "components", "auth", "learner-shell-user-bar.tsx"), "utf8");
   assert.match(bar, /const ADMIN_DASHBOARD_ROUTE = "\/admin"/);
   assert.match(bar, /href=\{ADMIN_DASHBOARD_ROUTE\}/);
+  assert.match(bar, /serverHasStaffSession === true \|\| isStaffRole\(user\.role\)/);
   assert.match(bar, /\{admin \? \(/);
 });

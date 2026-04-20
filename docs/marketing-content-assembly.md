@@ -1,25 +1,22 @@
-# Marketing default layout — content assembly and validation
+# Marketing content assembly (default locale)
 
-## Order of assembly (public `(marketing)/(default)`)
+Canonical locale for public marketing copy is **English (`en`)** under `public/i18n/en/*.json`. Runtime resolution uses `formatMarketingMessage` (`src/lib/marketing-i18n-core.ts`): primary shard → optional English `fallbackMessages` → humanized tail fallback (never raw `pages.*` paths in UI).
 
-1. **Root layout** (`src/app/layout.tsx`): document shell, `lang="en"` default.
-2. **Default marketing layout** (`src/app/(marketing)/(default)/layout.tsx`): exactly one `SiteHeader` and one `SiteFooter`; `MarketingI18nProvider` with chrome shards; optional `MarketingMainI18nShards` for `pages.*` under `<main>`.
-3. **Route body** (e.g. `page.tsx` for `/`): JSON-LD, optional safe modes, then `HomeRestoredWithDeferredStats` and tail sections.
+## Build-time order
 
-## Fallback precedence
+1. `scripts/run-build-prechecks.mjs` — always runs `validate-marketing-production-surface.mjs` (stub/empty/required-key checks + single `SiteHeader` / `SiteFooter` in `(marketing)/(default)/layout.tsx`). When `SKIP_I18N_PREBUILD` is unset, also runs `i18n:validate-production` and `i18n:validate-chrome`.
+2. `npm run build` — Next production build (`SKIP_I18N_PREBUILD=1` does **not** skip step 1’s surface validator).
+3. `build:deploy:full` — runs `validate-marketing-production-surface.mjs` again immediately before `next build`, then standalone artifact checks.
 
-1. Primary locale messages from loaded shards.
-2. `fallbackMessages` (canonical English) inside `formatMarketingMessage` when a key is missing in the primary map.
-3. `humanizedKeyFallback` only when neither map has the key (logged; must not ship for required chrome — caught by `assertMarketingLayoutMessagesIntegrity` in dev/build where enabled).
-4. Homepage empty i18n: `MarketingHomeSafeMode` (embedded) from `page.tsx`.
-5. Fatal layout: `MarketingDefaultLayoutChromeFailsafeShell` (diagnostic / last-resort).
+## Deploy-time order
 
-## Build and deploy gates (do not bypass)
+With `BASE_URL` set, `scripts/verify-deploy-health.mjs` supports:
 
-- `node scripts/validate-marketing-production-surface.mjs` — required keys + stub scan + single header/footer in default layout. Runs from `run-build-prechecks.mjs` even when `SKIP_I18N_PREBUILD=1`, and from `npm run build:deploy:full` before `next build`.
-- `npm run i18n:validate-production` / `i18n:validate-chrome` when prebuild is not skipped (`ci:verify`, local `build:verify`).
-- Post-deploy: `VERIFY_MARKETING_SENTINELS=1 node nursenest-core/scripts/verify-deploy-health.mjs` (Tier 4 HTML checks for `/`, `/pricing`, `/login`).
+- `VERIFY_CANONICAL_HOME=1` — GET `/` (redirect bounded).
+- `VERIFY_MARKETING_SENTINELS=1` — GET `/`, `/pricing`, `/login`; rejects placeholder substrings, duplicate `nn-header-animate-in`, and missing `<html lang="en…">` on the default marketing HTML surface.
 
-## Playwright
+Production cron (`.github/workflows/production-public-health-watch.yml`) enables marketing sentinels when the verify base URL secret is configured.
 
-- `tests/e2e/public/marketing-production-sentinel.spec.ts` — placeholder / pricing / header / `/admin` redirect smoke.
+## Homepage body order (client)
+
+See `src/components/marketing/home-restored-client.tsx`: hero → hero screenshot carousel (with handoff copy) → how-it-works → proof stack → global hub strip (`introAfterHero`) → pathways → FAQ → final CTA.

@@ -6,7 +6,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { ADMIN_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
-
+import { getStaffSession } from "@/lib/auth/staff-session";
 export const dynamic = "force-dynamic";
 
 /** Heavy DB-backed admin UIs; avoid platform timeouts during cold DB + large aggregates. */
@@ -17,9 +17,10 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminGroupLayout({ children }: { children: React.ReactNode }) {
-  const [{ AdminGlobalCommandPalette }, { loadMarketingMessageShards }] = await Promise.all([
+  const [{ AdminGlobalCommandPalette }, { loadMarketingMessageShards }, staffSession] = await Promise.all([
     import("@/components/admin/admin-global-command-palette"),
     import("@/lib/marketing-i18n/load-marketing-message-shards"),
+    getStaffSession().catch(() => null),
   ]);
   let messages: Awaited<ReturnType<typeof loadMarketingMessageShards>> = {};
   try {
@@ -31,7 +32,7 @@ export default async function AdminGroupLayout({ children }: { children: React.R
     <MarketingI18nProvider key={DEFAULT_MARKETING_LOCALE} locale={DEFAULT_MARKETING_LOCALE} messages={messages}>
       <MarketingFeedbackShell>
         <div className="nn-marketing-surface flex min-h-screen flex-col">
-          <SiteHeader />
+          <SiteHeader serverHasStaffSession={staffSession != null} />
           <div className="flex-1">{children}</div>
           <Suspense fallback={null}>
             <AdminGlobalCommandPalette />

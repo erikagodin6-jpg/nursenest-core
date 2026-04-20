@@ -22,6 +22,7 @@ import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback
 import { MarketingHeaderGlobalRegionServerBridge } from "@/lib/region/marketing-header-global-region-server-bridge";
 import { readOptionalGlobalRegionSlugFromCookie } from "@/lib/region/read-optional-global-region-cookie.server";
 
+import { getStaffSession } from "@/lib/auth/staff-session";
 const marketingLocaleLayoutSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
 
 export const dynamic = "force-dynamic";
@@ -94,6 +95,7 @@ export default async function MarketingLocaleLayout({
   const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry();
   const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingRegionCookie);
   const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie();
+  const staffSession = await getStaffSession().catch(() => null);
 
   return (
     <MarketingI18nProvider key={locale} locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
@@ -105,7 +107,7 @@ export default async function MarketingLocaleLayout({
           <MarketingFeedbackShell>
             <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
               <div className="nn-marketing-surface flex min-h-screen flex-col">
-                <SiteHeader />
+                <SiteHeader serverHasStaffSession={staffSession != null} />
                 <main className="flex-1">
                   <MarketingMainI18nShards locale={locale}>
                     <MarketingMainErrorBoundary name="marketing_locale_main">
