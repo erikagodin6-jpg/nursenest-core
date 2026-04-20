@@ -52,6 +52,11 @@ export async function requireAdmin() {
       (typeof u?.email === "string" && u.email.trim()) ||
       (typeof u?.sub === "string" && u.sub.trim()))
   ) {
+    if (adminAccessDebug()) {
+      safeServerLog("admin_access", "requireAdmin_redirect_login", {
+        path: callbackPath.length > 128 ? `${callbackPath.slice(0, 128)}…` : callbackPath,
+      });
+    }
     redirect(loginRedirectWithCallback(callbackPath));
   }
 

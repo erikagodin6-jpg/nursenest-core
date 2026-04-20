@@ -8,6 +8,26 @@ import { getAuthSessionJwtFromRequest, sessionJwtHasUserIdentity } from "@/lib/a
 import type { NextRequest } from "next/server";
 
 /**
+ * When the platform forwards `https` externally but `request.nextUrl.origin` is still an internal
+ * origin (or differs from `AUTH_URL`), `resolveNextAuthHttpsForRequest` + cookie-name parity can
+ * disagree with how the session cookie was issued. Mirror `reqWithEnvURL` in `auth.ts` so
+ * {@link getAuthSessionJwtFromRequest} sees the same canonical origin as login.
+ */
+function nextRequestForEdgeJwtRead(request: NextRequest): NextRequest {
+  const raw = process.env.AUTH_URL?.trim() || process.env.NEXTAUTH_URL?.trim();
+  if (!raw) return request;
+  try {
+    const base = raw.startsWith("http") ? raw : `https://${raw}`;
+    const envOrigin = new URL(base).origin;
+    const { href, origin } = request.nextUrl;
+    if (origin === envOrigin) return request;
+    return new NextRequest(href.replace(origin, envOrigin), { headers: request.headers });
+  } catch {
+    return request;
+  }
+}
+
+/**
  * Edge-only NextAuth instance: no Prisma, bcrypt, or PrismaAdapter.
  * Bundling `@/lib/auth` into middleware pulled Prisma into the Edge runtime and
  * broke session resolution in production behind proxies.
@@ -56,16 +76,25 @@ export const { auth: middlewareAuth } = NextAuth({
         return hasUser;
       }
       /**
-       * Admin surfaces: NextAuth’s `getSession` → `auth` can disagree with cookie-backed `getToken`
-       * when `secureCookie` / proxy TLS hints differ from how the cookie was issued.
-       * Run the same dual-read JWT path as {@link enforceAdminProxyRoute} **first** so valid session
-       * cookies are not treated as signed-out before the proxy DB gate runs.
+       * `/admin` + `/api/admin` only — authentication, not RBAC.
+       *
+       * NextAuth’s session → `auth` can be empty in Edge while the session JWT cookie is still
+       * valid (`__Secure-` vs plain name / TLS hint mismatch). That made `authorized()` return false
+       * and redirect to `/login` before `enforceAdminProxyRoute` could run.
+       *
+       * Use the same {@link getAuthSessionJwtFromRequest} dual-read as the proxy gate. If the JWT
+       * carries identity, treat as signed-in here; staff vs learner and tier limits stay in
+       * `enforceAdminProxyRoute` + `requireAdmin`.
        */
       if (path.startsWith("/admin") || path.startsWith("/api/admin")) {
-        const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
-        if (secret) {
-          const token = await getAuthSessionJwtFromRequest(request as NextRequest, secret);
+        const secret = (process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET)?.trim();
+        if (!secret) return hasUser;
+        try {
+          const reqForJwt = nextRequestForEdgeJwtRead(request as NextRequest);
+          const token = await getAuthSessionJwtFromRequest(reqForJwt, secret);
           if (sessionJwtHasUserIdentity(token)) return true;
+        } catch {
+          /* malformed request / token decode — fall back to Auth.js session */
         }
         return hasUser;
       }

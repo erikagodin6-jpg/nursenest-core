@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -21,6 +23,7 @@ import {
 import { ADMIN_DASHBOARD_HREF } from "@/lib/auth/admin-dashboard-link";
 import { isStaffRole, shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
 import { CONTINUE_STUDYING_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { SiteFooterFeedbackTrigger } from "@/components/layout/site-footer-feedback-trigger";
@@ -87,6 +90,12 @@ type SiteFooterProps = {
 
 export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
   const { t, locale } = useMarketingI18n();
+  const pathname = usePathname() ?? "/";
+  const searchParams = useSearchParams();
+  const authResumePath = useMemo(
+    () => resolveMarketingAuthRedirectTarget(pathname, searchParams, locale),
+    [pathname, searchParams, locale],
+  );
   const { data: session } = useSession();
   const activeNav = useActiveNavContext();
   const { theme } = useTheme();
@@ -103,8 +112,11 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
   const isEntitledLearner =
     Boolean(user?.role && !isStaffRole(user.role)) && activeNav.entitlement === "entitled";
   const learnerPathwayId = learnerMarketingPathwayIdFromSession(session?.user ?? null);
-  const learnerSignInHref = withMarketingLocale(locale, loginWithCallback("/app"));
-  const startPracticingHref = withMarketingLocale(locale, "/signup?callbackUrl=%2Fapp");
+  const learnerSignInHref = withMarketingLocale(locale, loginWithCallback(authResumePath));
+  const startPracticingHref = withMarketingLocale(
+    locale,
+    `/signup?callbackUrl=${encodeURIComponent(authResumePath)}`,
+  );
   const learnerContinueHref =
     learnerPathwayId != null
       ? `/app/lessons?pathwayId=${encodeURIComponent(learnerPathwayId)}`

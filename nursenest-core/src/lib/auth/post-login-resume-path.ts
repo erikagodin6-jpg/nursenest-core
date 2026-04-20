@@ -1,4 +1,5 @@
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { safeCallbackPath } from "@/lib/auth/safe-callback-path";
 
 /**
  * Surfaces where resuming the same URL after auth would loop or leak API bodies into the document.
@@ -16,6 +17,30 @@ const AUTH_RESUME_BLOCKLIST_PREFIXES = [
 function isBlockedResumeStrippedPath(strippedPathname: string): boolean {
   const p = strippedPathname.split("?")[0] || "";
   return AUTH_RESUME_BLOCKLIST_PREFIXES.some((prefix) => p === prefix || p.startsWith(`${prefix}/`));
+}
+
+/**
+ * Resolves where to send the user after credentials auth on marketing surfaces.
+ * - Honors explicit same-origin `callbackUrl` except the bare learner shell root (`/app`), which is ignored
+ *   as a legacy generic default so post-login can stay on the marketing shell.
+ * - Falls back to {@link marketingResumeCallbackFromLocation} using the current pathname and query
+ *   (with `callbackUrl` stripped from the query so it cannot echo back into the resume URL).
+ */
+export function resolveMarketingAuthRedirectTarget(
+  pathname: string,
+  searchParams: Pick<URLSearchParams, "get" | "toString">,
+  locale: string,
+): string {
+  const fromQuery = safeCallbackPath(searchParams.get("callbackUrl"), { rejectLearnerAppShell: true });
+  if (fromQuery) {
+    return fromQuery;
+  }
+  const sp = new URLSearchParams(searchParams.toString());
+  sp.delete("callbackUrl");
+  const qs = sp.toString();
+  const q = qs ? `?${qs}` : "";
+  const path = pathname.startsWith("/") ? pathname : `/${pathname}`;
+  return marketingResumeCallbackFromLocation(path, q, locale);
 }
 
 /** Localized marketing home (`/` or `/fr`, …). */

@@ -8,7 +8,12 @@ import { NextRequest } from "next/server";
 import type { JWT } from "next-auth/jwt";
 import type { Session } from "next-auth";
 import type { SessionUserRole } from "@/types/next-auth";
-import { getAuthSessionJwtFromRequest } from "@/lib/auth/nextauth-request-jwt";
+import {
+  ensureCookieHeaderForJwtRead,
+  type CookieJarEntry,
+} from "@/lib/auth/jwt-read-cookie-header-merge";
+import { getAuthSessionJwtFromRequest, sessionJwtHasUserIdentity } from "@/lib/auth/nextauth-request-jwt";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /**
  * Builds a synthetic {@link NextRequest} from the current incoming request headers so
@@ -16,24 +21,25 @@ import { getAuthSessionJwtFromRequest } from "@/lib/auth/nextauth-request-jwt";
  * `pathname` only affects `nextUrl` fallback inside {@link resolveNextAuthHttpsForRequest}; cookies are path `/`.
  *
  * Under the hood, `getToken` (`@auth/core/jwt`) parses **only** the raw `Cookie` header string. Some App Router
- * requests omit `Cookie` from {@link headers} while {@link cookies} still exposes chips — JWT fallback would then
- * return null and `/admin` RSC gates (`requireAdmin`, `getStaffSession`) redirect to `/login` after Edge already allowed the request.
+ * requests omit `Cookie` from `headers()` while `cookies()` still exposes chips — JWT fallback would then return null
+ * and `/admin` RSC gates (`requireAdmin`, `getStaffSession`) redirect to `/login` after Edge already allowed the request.
  */
-async function incomingRequestForJwtRead(pathname: string): Promise<NextRequest> {
-  const h = await headers();
-  const merged = new Headers(h);
-  if (!merged.get("cookie")?.trim()) {
-    try {
-      const jar = await cookies();
-      const serialized = jar
-        .getAll()
-        .map((c) => `${c.name}=${c.value}`)
-        .join("; ");
-      if (serialized.trim()) merged.set("Cookie", serialized);
-    } catch {
-      /* cookies() unavailable in this runtime context */
-    }
+function adminJwtReadDebug(): boolean {
+  return process.env.ADMIN_ACCESS_DEBUG === "1" || process.env.ADMIN_ACCESS_DEBUG === "true";
+}
+
+async function incomingRequestForJwtRead(pathname: string): Promise<{
+  req: NextRequest;
+  cookieMeta: { hadIncomingCookieHeader: boolean; synthesizedFromJar: boolean };
+}> {
+  const merged = new Headers(await headers());
+  let jar: CookieJarEntry[] = [];
+  try {
+    if (!merged.get("cookie")?.trim()) jar = (await cookies()).getAll();
+  } catch {
+    /* cookies() unavailable in this runtime context */
   }
+  const cookieMeta = ensureCookieHeaderForJwtRead(merged, jar);
   const host = merged.get("x-forwarded-host")?.trim() || merged.get("host")?.trim() || "localhost";
   const rawProto = merged.get("x-forwarded-proto");
   const firstProto = rawProto?.split(",")[0]?.trim().toLowerCase() ?? "";
@@ -52,7 +58,7 @@ async function incomingRequestForJwtRead(pathname: string): Promise<NextRequest>
   }
   const path = pathname.startsWith("/") ? pathname : `/${pathname}`;
   const url = `${proto}://${host}${path}`;
-  return new NextRequest(url, { headers: merged });
+  return { req: new NextRequest(url, { headers: merged }), cookieMeta };
 }
 
 /**
@@ -124,8 +130,30 @@ export const getAuthSessionWithJwtCookieFallback = cache(async (): Promise<Sessi
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
   if (!secret?.trim()) return null;
   try {
-    const req = await incomingRequestForJwtRead("/admin");
+    const { req, cookieMeta } = await incomingRequestForJwtRead("/admin");
     const token = await getAuthSessionJwtFromRequest(req, secret);
+    const jwtIdentityOk = sessionJwtHasUserIdentity(token);
+
+    if (adminJwtReadDebug()) {
+      let jarHadSessionNamedCookie = false;
+      try {
+        const names = new Set((await cookies()).getAll().map((c) => c.name));
+        jarHadSessionNamedCookie =
+          names.has("authjs.session-token") ||
+          names.has("__Secure-authjs.session-token") ||
+          names.has("next-auth.session-token") ||
+          names.has("__Secure-next-auth.session-token");
+      } catch {
+        /* ignore */
+      }
+      safeServerLog("admin_access", "jwt_fallback_rsc_read", {
+        hadCookieHeaderInHeadersBag: cookieMeta.hadIncomingCookieHeader,
+        synthesizedFromNextCookiesJar: cookieMeta.synthesizedFromJar,
+        jarHadSessionNamedCookie,
+        jwtIdentityOk,
+      });
+    }
+
     if (!token) return null;
     return sessionFromJwtToken(token as JWT);
   } catch {

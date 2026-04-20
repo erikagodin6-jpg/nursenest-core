@@ -1,18 +1,27 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useMemo } from "react";
 import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
 import { buildSimulatedAdaptiveRecommendationsForConversionPreview } from "@/lib/learner/adaptive-recommendations";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
 
 /**
  * Blurred Study Next preview for non-subscribers. Uses simulated engine output, clearly not user-specific.
  */
 export function LockedStudyNextPreview({ className }: { className?: string }) {
   const { t, locale } = useMarketingI18n();
-  const signupToApp = `${withMarketingLocale(locale, "/signup")}?callbackUrl=${encodeURIComponent("/app")}`;
+  const pathname = usePathname() ?? "/";
+  const searchParams = useSearchParams();
+  const signupResume = useMemo(
+    () => resolveMarketingAuthRedirectTarget(pathname, searchParams, locale),
+    [pathname, searchParams, locale],
+  );
+  const signupToApp = `${withMarketingLocale(locale, "/signup")}?callbackUrl=${encodeURIComponent(signupResume)}`;
   const tryQuestions = withMarketingLocale(locale, HUB.questionBank);
   const adaptive = buildSimulatedAdaptiveRecommendationsForConversionPreview();
 

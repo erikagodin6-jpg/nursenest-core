@@ -317,6 +317,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
                 kind="default_preview"
                 pathwayShortName={pathway.shortName}
                 pathwayCountryLabel={pathway.countryCode === "CA" ? "Canada" : "United States"}
+                postAuthReturnPath={pathname}
               />
             </>
           ) : (
@@ -324,6 +325,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
               kind={getPathwayLessonPreviewKind(scope, pathway, learnerPathResolved, userId)}
               pathwayShortName={pathway.shortName}
               pathwayCountryLabel={pathway.countryCode === "CA" ? "Canada" : "United States"}
+              postAuthReturnPath={pathname}
             />
           )
         ) : null}
@@ -433,7 +435,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
 
           {lockedSections.length > 0 ? (
             <div className="mx-auto mt-5 max-w-5xl">
-              <PathwayLessonLockedSectionsPreview sections={lockedSections} />
+              <PathwayLessonLockedSectionsPreview sections={lockedSections} postAuthReturnPath={pathname} />
             </div>
           ) : null}
 

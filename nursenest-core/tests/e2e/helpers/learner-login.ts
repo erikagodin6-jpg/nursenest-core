@@ -6,7 +6,8 @@
 import type { Page, Response } from "@playwright/test";
 import { parseCredentialsCallbackPayload } from "./auth-credentials-login";
 import { describeAuthFailureSurface } from "./auth-diagnostics";
-import { isLearnerShell, PLAYWRIGHT_AUTH_NAV_TIMEOUT_MS } from "./learner-shell";
+import { PLAYWRIGHT_AUTH_NAV_TIMEOUT_MS } from "./learner-shell";
+import { waitForAuthenticatedLearnerShell } from "./paid-learner-shell";
 import { resolveRnFullContentBaseUrl } from "./rn-full-content-environment";
 import {
   humanReadableOperatorHint,
@@ -58,20 +59,40 @@ function metaFromAuthCode(code: string | null, errorParam: string | null): RnFul
   };
 }
 
+export type LoginWithCredentialsOptions = {
+  /**
+   * When true (default), navigate to `/app` after a successful marketing login so specs that exercise the
+   * learner shell keep a single entry point. Set false to assert marketing-shell continuity (no `/app` hop).
+   */
+  enterLearnerApp?: boolean;
+  /**
+   * Full path + query for the credentials form (default `/login`). Use to preserve `callbackUrl` (e.g. resume homepage).
+   */
+  loginUrl?: string;
+};
+
 /**
- * Credentials login on /login → learner shell.
+ * Credentials login on `/login`.
  *
- * Waits for a **post-onboarding** learner route. `/app/onboarding` is treated as failure for paid regression seeds.
+ * Production sends users back to the **marketing** resume target (not `/app`); this helper optionally opens
+ * `/app` afterward so paid E2E can reuse one flow.
  *
  * **Auth.js:** the browser POSTs to `/api/auth/callback/credentials` and returns JSON `{ url }`. Failures embed
  * `error=` in `url` (often `CredentialsSignin`) — we parse that to avoid a long wait on `/login`.
  */
-export async function loginWithCredentials(page: Page, email: string, password: string): Promise<void> {
+export async function loginWithCredentials(
+  page: Page,
+  email: string,
+  password: string,
+  opts?: LoginWithCredentialsOptions,
+): Promise<void> {
+  const enterLearnerApp = opts?.enterLearnerApp !== false;
+  const loginUrl = opts?.loginUrl ?? "/login";
   /** Align with Playwright `use.baseURL` / `resolveRnFullContentBaseUrl` — avoid localhost vs 127.0.0.1 drift in errors. */
   const baseURL = resolveRnFullContentBaseUrl(process.env.BASE_URL);
 
   try {
-    await page.goto("/login", { waitUntil: "domcontentloaded" });
+    await page.goto(loginUrl, { waitUntil: "domcontentloaded" });
     await page.locator("#login-identifier").waitFor({ state: "visible", timeout: 25_000 });
     await page.locator("#login-password").waitFor({ state: "visible", timeout: 25_000 });
   } catch (e) {
@@ -176,23 +197,9 @@ export async function loginWithCredentials(page: Page, email: string, password: 
       () => {
         const path = window.location.pathname;
         if (!path) return false;
-
-        if (
-          path.includes("/login") ||
-          path.includes("/signup") ||
-          path.includes("/sign-up") ||
-          path.includes("/app/onboarding")
-        ) {
-          return false;
-        }
-
-        return (
-          path === "/app" ||
-          path.startsWith("/app/") ||
-          path.startsWith("/lessons") ||
-          path.startsWith("/questions") ||
-          path.startsWith("/flashcards")
-        );
+        if (path.includes("/login") || path.includes("/signup") || path.includes("/sign-up")) return false;
+        if (path.includes("/app/onboarding")) return false;
+        return true;
       },
       undefined,
       { timeout: PLAYWRIGHT_AUTH_NAV_TIMEOUT_MS },
@@ -223,7 +230,7 @@ export async function loginWithCredentials(page: Page, email: string, password: 
 
     throw new RnFullContentLoginError(
       [
-        `Timed out waiting for learner shell navigation (${PLAYWRIGHT_AUTH_NAV_TIMEOUT_MS}ms).`,
+        `Timed out waiting for post-login navigation (${PLAYWRIGHT_AUTH_NAV_TIMEOUT_MS}ms).`,
         `url=${atUrl} pathname=${pathname}`,
         phase0.operatorHint,
         diag,
@@ -232,9 +239,9 @@ export async function loginWithCredentials(page: Page, email: string, password: 
     );
   }
 
-  const atUrl = page.url();
-  const pathname = new URL(atUrl).pathname;
-  const body = await page.locator("body").innerText().catch(() => "");
+  let atUrl = page.url();
+  let pathname = new URL(atUrl).pathname;
+  let body = await page.locator("body").innerText().catch(() => "");
 
   if (/Unable to sign in|Invalid email, username, or password|Invalid credentials|incorrect password/i.test(body)) {
     const diag = await describeAuthFailureSurface(page).catch(() => "");
@@ -250,6 +257,29 @@ export async function loginWithCredentials(page: Page, email: string, password: 
       phase0,
     );
   }
+
+  if (enterLearnerApp) {
+    await page.goto("/app", { waitUntil: "domcontentloaded" });
+    await waitForAuthenticatedLearnerShell(page);
+    atUrl = page.url();
+    pathname = new URL(atUrl).pathname;
+    body = await page.locator("body").innerText().catch(() => "");
+    if (/Unable to sign in|Invalid email, username, or password|Invalid credentials|incorrect password/i.test(body)) {
+      const diag = await describeAuthFailureSurface(page).catch(() => "");
+      const phase0: RnFullContentLoginPhase0Meta = {
+        primaryClassification: "QA_PASSWORD_REJECTED",
+        authCallbackCode: null,
+        authErrorParam: null,
+        operatorHint: humanReadableOperatorHint("QA_PASSWORD_REJECTED"),
+        callbackHttpStatus: null,
+      };
+      throw new RnFullContentLoginError(
+        `Login rejected after learner navigation. url=${atUrl} pathname=${pathname} ${diag}`,
+        phase0,
+      );
+    }
+  }
+
   if (pathname.includes("/app/onboarding")) {
     const phase0: RnFullContentLoginPhase0Meta = {
       primaryClassification: "LEARNER_SHELL_TRANSITION_FAILED",
@@ -259,15 +289,5 @@ export async function loginWithCredentials(page: Page, email: string, password: 
       callbackHttpStatus: null,
     };
     throw new RnFullContentLoginError("On /app/onboarding — complete onboarding or reset QA account.", phase0);
-  }
-  if (!isLearnerShell(pathname)) {
-    const phase0: RnFullContentLoginPhase0Meta = {
-      primaryClassification: "LEARNER_SHELL_TRANSITION_FAILED",
-      authCallbackCode: null,
-      authErrorParam: null,
-      operatorHint: humanReadableOperatorHint("LEARNER_SHELL_TRANSITION_FAILED"),
-      callbackHttpStatus: null,
-    };
-    throw new RnFullContentLoginError(`Not on learner shell. url=${atUrl} pathname=${pathname}`, phase0);
   }
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -18,6 +18,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { applyGlobalRegionSelection } from "@/lib/marketing/apply-global-region-selection";
 import { effectiveMarketingHeaderGlobalRegion } from "@/lib/marketing/marketing-header-global-region";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
+import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HeaderBrandLockup } from "@/components/brand/header-brand-lockup";
 import { ThemePicker } from "@/components/theme/theme-picker";
@@ -113,6 +114,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   const { t, locale } = useMarketingI18n();
   const router = useRouter();
   const pathname = usePathname() ?? "/";
+  const searchParams = useSearchParams();
   const { theme } = useTheme();
   const navChromeStyle = getNavChromeStyle(theme);
   const navChromeVars = getNavChromeVars(theme);
@@ -146,6 +148,10 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   const headerRef = useRef<HTMLDivElement>(null);
 
   const strippedPath = stripMarketingLocalePrefix(pathname).pathname;
+  const postLoginCallbackPath = useMemo(
+    () => resolveMarketingAuthRedirectTarget(pathname, searchParams, locale),
+    [pathname, searchParams, locale],
+  );
   const clientGlobalRegion = useClientGlobalRegionCookie();
   const effectiveGlobalRegion: GlobalRegionSlug = useMemo(
     () =>
@@ -342,13 +348,13 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
 
   /** Homepage-only acquisition param; other marketing pages keep plain signup URL. */
   const guestMarketingSignupHref = useMemo(() => {
-    const base = `/signup?callbackUrl=${encodeURIComponent("/app")}`;
+    const base = `/signup?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`;
     const isHome = strippedPath === "/" || strippedPath === "";
     const raw = isHome ? `${base}&entry=homepage` : base;
     const mapped = mapLegacyMarketingHref(raw);
     if (mapped.startsWith("http://") || mapped.startsWith("https://")) return mapped;
     return withMarketingLocale(locale, mapped);
-  }, [locale, strippedPath]);
+  }, [locale, strippedPath, postLoginCallbackPath]);
 
   useEffect(() => {
     if (!isMarketingEntitledLearner) {
@@ -447,7 +453,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
             ) : !isAuthenticated ? (
               <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2">
                 <Link
-                  href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)}
+                  href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
                   className="inline-flex min-h-[44px] max-w-[38%] shrink-0 items-center justify-center rounded-xl border border-[var(--nav-border)] px-2 py-2 text-xs font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] sm:max-w-none sm:px-3 sm:text-sm"
                   onClick={closeMegaBeforeAuthNav}
                   aria-label="Log in to your NurseNest account"
@@ -636,7 +642,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               ) : !isAuthenticated ? (
                 <div className="flex shrink-0 items-center gap-2">
                   <Link
-                    href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)}
+                    href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
                     className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}
                     onClick={closeMegaBeforeAuthNav}
                     aria-label="Log in to your NurseNest account"
@@ -1167,7 +1173,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                       {formatTitleCase(t("nav.signup"), locale)}
                     </Link>
                     <Link
-                      href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)}
+                      href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
                       className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-4 py-3 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                       onClick={scheduleMobileDrawerClose}
                       aria-label="Log in to your NurseNest account"

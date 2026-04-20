@@ -14,7 +14,7 @@ import { ProgrammaticPracticeConversionBlocks } from "@/components/seo/programma
 import { ProgrammaticPracticeHeroActions } from "@/components/seo/programmatic-practice-hero-actions";
 import { ProgrammaticPracticeDynamicHeader } from "@/components/seo/programmatic-practice-dynamic-header";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { resolveProgrammaticProductLinks } from "@/lib/seo/programmatic-page-links";
 import { ProgrammaticStudyHubBlock } from "@/components/seo/programmatic-study-hub-block";
 import { ProgrammaticFinalFunnelCta, ProgrammaticMidPagePracticeCta } from "@/components/seo/programmatic-funnel-ctas";
@@ -53,14 +53,14 @@ export async function ProgrammaticSeoPage({
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
   const t = (key: string) => formatMarketingMessage(m, key, undefined, en);
 
-  const signup = withMarketingLocale(locale, "/signup");
-  const pricing = withMarketingLocale(locale, HUB.pricing);
-  const loginToApp = withMarketingLocale(locale, `/login?callbackUrl=${encodeURIComponent("/app")}`);
-  const product = resolveProgrammaticProductLinks(page, locale, marketingRegion, pathwayForProductLinks);
-  const { lessons, questions, cat, testBank, exams, tools, flashcards } = product;
-
   const pathForProgrammatic = (slug: string) =>
     localizedUrl && locale !== DEFAULT_MARKETING_LOCALE ? `/${locale}/${slug}` : `/${slug}`;
+
+  const signup = withMarketingLocale(locale, "/signup");
+  const pricing = withMarketingLocale(locale, HUB.pricing);
+  const loginToApp = withMarketingLocale(locale, loginWithCallback(pathForProgrammatic(page.slug)));
+  const product = resolveProgrammaticProductLinks(page, locale, marketingRegion, pathwayForProductLinks);
+  const { lessons, questions, cat, testBank, exams, tools, flashcards } = product;
 
   const { crumbs, schemaItems } =
     breadcrumbResolution ??

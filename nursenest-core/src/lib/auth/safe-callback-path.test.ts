@@ -17,4 +17,13 @@ describe("safeCallbackPath", () => {
     assert.equal(safeCallbackPath("/api/pricing"), null);
     assert.equal(safeCallbackPath("/api/foo/bar"), null);
   });
+
+  it("optionally rejects only bare /app for marketing auth flows", () => {
+    assert.equal(safeCallbackPath("/app", { rejectLearnerAppShell: true }), null);
+    assert.equal(safeCallbackPath("/app/", { rejectLearnerAppShell: true }), null);
+    assert.equal(safeCallbackPath("/app?x=1", { rejectLearnerAppShell: true }), null);
+    assert.equal(safeCallbackPath("/app/lessons", { rejectLearnerAppShell: true }), "/app/lessons");
+    assert.equal(safeCallbackPath("/app/account/readiness", { rejectLearnerAppShell: true }), "/app/account/readiness");
+    assert.equal(safeCallbackPath("/pricing", { rejectLearnerAppShell: true }), "/pricing");
+  });
 });

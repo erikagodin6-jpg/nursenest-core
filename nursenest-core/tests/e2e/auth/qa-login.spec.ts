@@ -12,12 +12,11 @@ import { expect, test } from "@playwright/test";
 import { attachPageObservers, logObserverDiagnostics } from "../helpers/attach-observers";
 import { loginWithCredentials } from "../helpers/learner-login";
 import { getPaidTestCredentials } from "../helpers/paid-test-credentials";
-import { expectOnLearnerApp } from "../helpers/paid-surface-assertions";
 
 test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe("QA — login", () => {
-  test("navigates to /login, submits QA credentials, reaches learner shell", async ({ page }, testInfo) => {
+  test("navigates to /login, submits QA credentials, returns to marketing shell (not forced /app)", async ({ page }, testInfo) => {
     const creds = getPaidTestCredentials();
     test.skip(!creds, "Set E2E_PAID_EMAIL and E2E_PAID_PASSWORD (or PLAYWRIGHT_TEST_*) for QA login");
 

@@ -75,6 +75,8 @@ test("edge auth: /admin and /api/admin use JWT cookie parity fallback (getAuthSe
   const am = readFileSync(join(dir, "lib", "auth-middleware.ts"), "utf8");
   assert.match(am, /path\.startsWith\("\/admin"\)/);
   assert.match(am, /getAuthSessionJwtFromRequest/);
+  assert.match(am, /nextRequestForEdgeJwtRead/);
+  assert.match(am, /sessionJwtHasUserIdentity/);
   assert.match(am, /pages:\s*\{\s*signIn:\s*["']\/login["']/);
 });
 

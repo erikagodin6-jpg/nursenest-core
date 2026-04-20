@@ -5,8 +5,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { getSession, signIn, useSession } from "next-auth/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { marketingResumeCallbackFromLocation } from "@/lib/auth/post-login-resume-path";
-import { safeCallbackPath } from "@/lib/auth/safe-callback-path";
+import { refreshThenReplaceIfDifferent } from "@/lib/auth/post-login-client-navigation";
+import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
 import { resolveLoginSubmitOutcome } from "@/components/auth/login-form-result";
 import { isLikelyNetworkFailure } from "@/components/auth/auth-client-error-handling";
 
@@ -32,19 +32,15 @@ export function LoginForm({
   const [pending, setPending] = useState(false);
   /** Synchronous guard — `pending` state may not flip before a second submit in the same tick. */
   const submitInFlightRef = useRef(false);
-  const redirectTarget = useMemo(() => {
-    const fromQuery = safeCallbackPath(searchParams.get("callbackUrl"));
-    if (fromQuery) return fromQuery;
-    const qs = searchParams.toString();
-    const q = qs ? `?${qs}` : "";
-    return marketingResumeCallbackFromLocation(pathname ?? "/", q, locale);
-  }, [searchParams, pathname, locale]);
+  const redirectTarget = useMemo(
+    () => resolveMarketingAuthRedirectTarget(pathname ?? "/", searchParams, locale),
+    [searchParams, pathname, locale],
+  );
 
   useEffect(() => {
-    if (status === "authenticated") {
-      router.replace(redirectTarget);
-    }
-  }, [status, router, redirectTarget]);
+    if (status !== "authenticated") return;
+    void refreshThenReplaceIfDifferent(router, redirectTarget, pathname ?? "/", searchParams);
+  }, [status, router, redirectTarget, pathname, searchParams]);
 
   /**
    * Release the sync submit guard after we have left the login surface.
@@ -69,7 +65,7 @@ export function LoginForm({
       return;
     }
     if (status === "authenticated") {
-      router.replace(redirectTarget);
+      await refreshThenReplaceIfDifferent(router, redirectTarget, pathname ?? "/", searchParams);
       return;
     }
 
@@ -97,8 +93,7 @@ export function LoginForm({
         const session = await getSession().catch(() => null);
         if (session?.user) {
           keepSpinnerUntilRedirect = true;
-          await router.refresh();
-          router.push(redirectTarget);
+          await refreshThenReplaceIfDifferent(router, redirectTarget, pathname ?? "/", searchParams);
           return;
         }
         setError(isLikelyNetworkFailure(e) ? t("pages.login.errorNetwork") : t("pages.login.errorGeneric"));
@@ -128,9 +123,8 @@ export function LoginForm({
       }
 
       keepSpinnerUntilRedirect = true;
-      await router.refresh();
       try {
-        await router.push(redirectTarget);
+        await refreshThenReplaceIfDifferent(router, redirectTarget, pathname ?? "/", searchParams);
       } catch {
         keepSpinnerUntilRedirect = false;
         submitInFlightRef.current = false;

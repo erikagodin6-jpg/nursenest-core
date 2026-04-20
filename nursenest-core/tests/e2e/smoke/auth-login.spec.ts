@@ -7,12 +7,11 @@ import {
   buildCaptureFromObservers,
 } from "../helpers/smoke-evidence";
 import { getQaPaidCredentials } from "../helpers/smoke-credentials";
-import { expectOnLearnerApp } from "../helpers/paid-surface-assertions";
 
 test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe("Smoke — auth login", () => {
-  test("login redirects to learner shell; no error surface", async ({ page }, testInfo) => {
+  test("login returns to marketing shell (not forced /app); no error surface", async ({ page }, testInfo) => {
     const creds = getQaPaidCredentials();
     test.skip(!creds, "Set QA_PAID_EMAIL + QA_PAID_PASSWORD (or E2E_PAID_* / PLAYWRIGHT_TEST_*)");
 
@@ -21,9 +20,10 @@ test.describe("Smoke — auth login", () => {
       await page.goto("/login", { waitUntil: "domcontentloaded" });
       await expect(page.getByRole("heading", { name: /log in|sign in/i })).toBeVisible({ timeout: 30_000 });
 
-      await loginWithCredentials(page, creds!.email, creds!.password);
+      await loginWithCredentials(page, creds!.email, creds!.password, { enterLearnerApp: false });
 
-      await expectOnLearnerApp(page);
+      await expect(page.locator(".nn-marketing-surface")).toBeVisible({ timeout: 45_000 });
+      await expect(page).not.toHaveURL(/\/app(\/|$)/);
       await expect(page.locator("main")).toBeVisible({ timeout: 45_000 });
 
       const body = await page.locator("body").innerText().catch(() => "");

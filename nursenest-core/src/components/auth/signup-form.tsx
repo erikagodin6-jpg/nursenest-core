@@ -16,8 +16,8 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackProductEvent } from "@/lib/observability/product-analytics";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { marketingResumeCallbackFromLocation } from "@/lib/auth/post-login-resume-path";
-import { safeCallbackPath } from "@/lib/auth/safe-callback-path";
+import { refreshThenReplaceIfDifferent } from "@/lib/auth/post-login-client-navigation";
+import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
 
 export function SignupForm({
   termsHref = "/terms",
@@ -36,13 +36,10 @@ export function SignupForm({
   const searchParams = useSearchParams();
   const submitGeneration = useRef(0);
 
-  const redirectTarget = useMemo(() => {
-    const fromQuery = safeCallbackPath(searchParams.get("callbackUrl"));
-    if (fromQuery) return fromQuery;
-    const qs = searchParams.toString();
-    const q = qs ? `?${qs}` : "";
-    return marketingResumeCallbackFromLocation(pathname, q, locale);
-  }, [searchParams, pathname, locale]);
+  const redirectTarget = useMemo(
+    () => resolveMarketingAuthRedirectTarget(pathname, searchParams, locale),
+    [searchParams, pathname, locale],
+  );
 
   const loginAfterSignupHref = useMemo(() => {
     const loginBase = withMarketingLocale(locale, "/login");
@@ -177,8 +174,7 @@ export function SignupForm({
         const session = await getSession().catch(() => null);
         if (session?.user) {
           keepSpinnerUntilRedirect = true;
-          await router.refresh();
-          router.push(redirectTarget);
+          await refreshThenReplaceIfDifferent(router, redirectTarget, pathname, searchParams);
           return;
         }
         keepSpinnerUntilRedirect = true;
@@ -196,8 +192,7 @@ export function SignupForm({
 
       if (outcome === "success") {
         keepSpinnerUntilRedirect = true;
-        await router.refresh();
-        router.push(redirectTarget);
+        await refreshThenReplaceIfDifferent(router, redirectTarget, pathname, searchParams);
         return;
       }
 

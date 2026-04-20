@@ -1,10 +1,13 @@
 import Link from "next/link";
 import type { PathwayLessonPreviewKind } from "@/lib/lessons/pathway-lesson-access";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 
 type Props = {
   kind: PathwayLessonPreviewKind;
   pathwayShortName: string;
   pathwayCountryLabel: string;
+  /** Current marketing lesson URL — keeps users in the same shell after sign-in. */
+  postAuthReturnPath?: string;
 };
 
 const FEATURE_BULLETS = [
@@ -18,8 +21,13 @@ const FEATURE_BULLETS = [
  * Explains why a pathway lesson is preview-only and routes users to the right recovery action.
  * Renders server-side; no client state required.
  */
-export function PathwayLessonPreviewBanner({ kind, pathwayShortName, pathwayCountryLabel }: Props) {
-  const loginHref = `/login?callbackUrl=${encodeURIComponent("/app")}`;
+export function PathwayLessonPreviewBanner({ kind, pathwayShortName, pathwayCountryLabel, postAuthReturnPath }: Props) {
+  const resume = postAuthReturnPath?.trim()
+    ? postAuthReturnPath.startsWith("/")
+      ? postAuthReturnPath
+      : `/${postAuthReturnPath}`
+    : "/";
+  const loginHref = loginWithCallback(resume);
 
   const copy: Record<PathwayLessonPreviewKind, { badge: string; title: string; body: string }> = {
     anonymous: {

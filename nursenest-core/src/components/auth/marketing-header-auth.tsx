@@ -7,7 +7,7 @@ import { ChevronDown, User } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { marketingResumeCallbackFromLocation } from "@/lib/auth/post-login-resume-path";
+import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { ADMIN_DASHBOARD_HREF } from "@/lib/auth/admin-dashboard-link";
@@ -38,14 +38,23 @@ function useLocalizeHref() {
 /**
  * Marketing header: Sign in + Get Started (guests) or account menu (signed-in). Same component at all breakpoints.
  */
-function useGuestMarketingSignupHref(localizeHref: (href: string) => string) {
+function useMarketingAuthResumePath(locale: string): string {
+  const pathname = usePathname() ?? "/";
+  const searchParams = useSearchParams();
+  return useMemo(
+    () => resolveMarketingAuthRedirectTarget(pathname, searchParams, locale),
+    [pathname, searchParams, locale],
+  );
+}
+
+function useGuestMarketingSignupHref(localizeHref: (href: string) => string, resumePath: string) {
   const pathname = usePathname();
   return useMemo(() => {
-    const base = `/signup?callbackUrl=${encodeURIComponent("/app")}`;
+    const base = `/signup?callbackUrl=${encodeURIComponent(resumePath)}`;
     const stripped = stripMarketingLocalePrefix(pathname ?? "/").pathname;
     const isHome = stripped === "/" || stripped === "";
     return localizeHref(isHome ? `${base}&entry=homepage` : base);
-  }, [localizeHref, pathname]);
+  }, [localizeHref, pathname, resumePath]);
 }
 
 export function MarketingHeaderAuthDesktop({
@@ -56,7 +65,8 @@ export function MarketingHeaderAuthDesktop({
 } = {}) {
   const { t, locale } = useMarketingI18n();
   const localizeHref = useLocalizeHref();
-  const guestMarketingSignupHref = useGuestMarketingSignupHref(localizeHref);
+  const resumePath = useMarketingAuthResumePath(locale);
+  const guestMarketingSignupHref = useGuestMarketingSignupHref(localizeHref, resumePath);
   const { data: session, status } = useSession();
   const { theme } = useTheme();
   const navChromeStyle = getNavChromeStyle(theme);
@@ -175,7 +185,8 @@ export function MarketingHeaderAuthMobile({
 }) {
   const { t, locale } = useMarketingI18n();
   const localizeHref = useLocalizeHref();
-  const guestMarketingSignupHref = useGuestMarketingSignupHref(localizeHref);
+  const resumePath = useMarketingAuthResumePath(locale);
+  const guestMarketingSignupHref = useGuestMarketingSignupHref(localizeHref, resumePath);
   const { data: session, status } = useSession();
 
   if (status === "loading") {
@@ -183,11 +194,11 @@ export function MarketingHeaderAuthMobile({
   }
 
   if (status !== "authenticated" || !session?.user) {
-    const loginToApp = localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`);
+    const loginHref = localizeHref(`/login?callbackUrl=${encodeURIComponent(resumePath)}`);
     return (
       <div className="mt-4 flex gap-2">
         <Link
-          href={loginToApp}
+          href={loginHref}
           className={`${SIGN_IN_CLASS} flex-1 justify-center border border-[var(--nav-border)] py-2`}
           onClick={onNavigate}
           aria-label="Log in to your NurseNest account"
@@ -239,15 +250,6 @@ export function MarketingHeaderAuthMobile({
         onActivate={onNavigate}
         className="w-full rounded-xl border border-[var(--nav-border)] px-3 py-2.5 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
       />
-      <SignOutButton
-        className="w-full rounded-xl border border-[var(--nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
-        onBeforeSignOut={onNavigate}
-        redirectTo={localizeHref("/login")}
-      />
-    </div>
-  );
-}
-
       <SignOutButton
         className="w-full rounded-xl border border-[var(--nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
         onBeforeSignOut={onNavigate}

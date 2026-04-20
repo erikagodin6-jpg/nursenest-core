@@ -34,7 +34,7 @@ setup("authenticate paid test account and save storage state", async ({ page }, 
   const observers = attachPageObservers(page, { profile: "public", probeAuthApi: true, captureConsoleContext: true });
 
   try {
-    await loginWithCredentials(page, creds.email, creds.password);
+    await loginWithCredentials(page, creds.email, creds.password, { enterLearnerApp: false });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     const diag = await describeAuthFailureSurface(page).catch(() => "");
@@ -63,7 +63,7 @@ setup("authenticate paid test account and save storage state", async ({ page }, 
     });
     throw new Error(
       [
-        `Paid auth setup failed: login did not reach learner shell after submit. email=${creds.email}`,
+        `Paid auth setup failed: login did not complete after submit. email=${creds.email}`,
         msg,
         "category=auth",
         "Check BASE_URL, DATABASE_URL (Prisma must connect — password auth / sslmode for managed Postgres), QA account exists with ACTIVE subscription (`scripts/qa-paid-test-account-reset.mts`), and credentials.",

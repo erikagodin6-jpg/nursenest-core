@@ -352,6 +352,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
               kind="default_preview"
               pathwayShortName={pathway.shortName}
               pathwayCountryLabel={pathway.countryCode === "CA" ? "Canada" : "United States"}
+              postAuthReturnPath={`/allied-health/${slug}/lessons/${lessonSlug}`}
             />
           </>
         ) : (
@@ -359,6 +360,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
             kind={getPathwayLessonPreviewKind(scope, pathway, learnerPath, userId)}
             pathwayShortName={pathway.shortName}
             pathwayCountryLabel={pathway.countryCode === "CA" ? "Canada" : "United States"}
+            postAuthReturnPath={`/allied-health/${slug}/lessons/${lessonSlug}`}
           />
         )
       ) : null}
@@ -446,7 +448,12 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
           ) : null}
         </LessonRecallProvider>
 
-        {lockedSections.length > 0 ? <PathwayLessonLockedSectionsPreview sections={lockedSections} /> : null}
+        {lockedSections.length > 0 ? (
+          <PathwayLessonLockedSectionsPreview
+            sections={lockedSections}
+            postAuthReturnPath={`/allied-health/${slug}/lessons/${lessonSlug}`}
+          />
+        ) : null}
 
         <PathwayLessonActions
           pathwayId={pathway.id}

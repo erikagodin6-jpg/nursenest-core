@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 
 type Section = { id: string; heading?: string | null };
 
@@ -6,8 +7,22 @@ type Section = { id: string; heading?: string | null };
  * Marketing / preview pathway lessons: tease locked sections without exposing full body (blur headings only).
  * Receives only { id, heading } — body is stripped server-side before passing here.
  */
-export function PathwayLessonLockedSectionsPreview({ sections }: { sections: Section[] }) {
+export function PathwayLessonLockedSectionsPreview({
+  sections,
+  postAuthReturnPath,
+}: {
+  sections: Section[];
+  /** Current marketing lesson URL — keeps users in the same shell after sign-in. */
+  postAuthReturnPath?: string;
+}) {
   if (sections.length === 0) return null;
+
+  const resume = postAuthReturnPath?.trim()
+    ? postAuthReturnPath.startsWith("/")
+      ? postAuthReturnPath
+      : `/${postAuthReturnPath}`
+    : "/";
+  const signInHref = loginWithCallback(resume);
 
   return (
     <div className="relative mt-8 overflow-hidden rounded-2xl border border-dashed border-primary/35 bg-[var(--theme-muted-surface)]/40">
@@ -38,7 +53,7 @@ export function PathwayLessonLockedSectionsPreview({ sections }: { sections: Sec
             Start free trial
           </Link>
           <Link
-            href={`/login?callbackUrl=${encodeURIComponent("/app")}`}
+            href={signInHref}
             className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-border-soft)_80%,var(--semantic-brand))] bg-[var(--semantic-surface)] px-6 py-2 text-sm font-semibold text-[var(--theme-heading-text)]"
           >
             Sign in
