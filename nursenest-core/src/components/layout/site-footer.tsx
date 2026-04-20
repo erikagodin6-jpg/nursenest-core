@@ -323,14 +323,14 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
           </Link>
         </div>
 
+        <div className="mb-6 sm:mb-8">
+          <EmailSignupBanner />
+        </div>
+
         <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_5%,var(--footer-bg))] px-4 py-5 md:flex-row">
           <div className="text-sm text-[var(--footer-muted)]">
             © {new Date().getFullYear()} {t("brand.nurseNest")}. {t("footer.rights")}
           </div>
-        </div>
-
-        <div className="mb-6 mt-6 sm:mb-8">
-          <EmailSignupBanner />
         </div>
 
         <div className="mx-auto mt-4 max-w-3xl text-center text-xs leading-relaxed text-[var(--footer-muted)]">
