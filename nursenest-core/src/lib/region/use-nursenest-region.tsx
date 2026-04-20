@@ -44,6 +44,10 @@ function readLocalStorageRegion(): NursenestRegion | null {
  * When `trustClientPersistedRegion` is false, the client must not override `serverRegion` with
  * `localStorage` — used on unprefixed marketing where no `nn_marketing_region` cookie means a
  * Canada-first default (stale `nursenest-region` US would otherwise win after hydration).
+ *
+ * **Hydration:** `serverRegion` is always the first-paint source of truth. We reconcile cookie +
+ * `localStorage` to match it on mount and when it changes — we do not promote `localStorage` above
+ * the server value (that caused US/CA swaps after hydration when LS disagreed with the cookie).
  */
 export function NursenestRegionRoot({
   serverRegion,
@@ -51,32 +55,21 @@ export function NursenestRegionRoot({
   children,
 }: {
   serverRegion: NursenestRegion;
-  /** When false, ignore `localStorage` for region and sync storage + cookie from `serverRegion`. */
+  /** When false, skip `regionChange` listeners so stale other-tab LS cannot override Canada-first. */
   trustClientPersistedRegion?: boolean;
   children: ReactNode;
 }) {
   const [region, setRegionState] = useState<NursenestRegion>(serverRegion);
 
   useEffect(() => {
-    if (!trustClientPersistedRegion) {
-      setRegionState(serverRegion);
-      writeRegionCookie(serverRegion);
-      try {
-        localStorage.setItem(STORAGE_KEY, serverRegion);
-      } catch {
-        /* ignore */
-      }
-      return;
-    }
-    const ls = readLocalStorageRegion();
-    if (ls) {
-      setRegionState(ls);
-      writeRegionCookie(ls);
-      return;
-    }
     setRegionState(serverRegion);
     writeRegionCookie(serverRegion);
-  }, [serverRegion, trustClientPersistedRegion]);
+    try {
+      localStorage.setItem(STORAGE_KEY, serverRegion);
+    } catch {
+      /* ignore */
+    }
+  }, [serverRegion]);
 
   useEffect(() => {
     if (!trustClientPersistedRegion) return;

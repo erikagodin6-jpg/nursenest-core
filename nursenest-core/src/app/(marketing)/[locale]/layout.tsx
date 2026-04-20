@@ -18,6 +18,8 @@ import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-ser
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
+import { MarketingHeaderGlobalRegionServerBridge } from "@/lib/region/marketing-header-global-region-server-bridge";
+import { readOptionalGlobalRegionSlugFromCookie } from "@/lib/region/read-optional-global-region-cookie.server";
 
 const marketingLocaleLayoutSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
 
@@ -73,6 +75,7 @@ export default async function MarketingLocaleLayout({
   }
   const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry();
   const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingRegionCookie);
+  const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie();
 
   return (
     <MarketingI18nProvider key={locale} locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
@@ -82,17 +85,19 @@ export default async function MarketingLocaleLayout({
           <OrganizationJsonLd />
           <WebSiteJsonLd />
           <MarketingFeedbackShell>
-            <div className="nn-marketing-surface flex min-h-screen flex-col">
-              <SiteHeader />
-              <main className="flex-1">
-                <MarketingMainI18nShards locale={locale}>
-                  <MarketingMainErrorBoundary name="marketing_locale_main">
-                    <PageTransitionShell>{children}</PageTransitionShell>
-                  </MarketingMainErrorBoundary>
-                </MarketingMainI18nShards>
-              </main>
-              <SiteFooter />
-            </div>
+            <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
+              <div className="nn-marketing-surface flex min-h-screen flex-col">
+                <SiteHeader />
+                <main className="flex-1">
+                  <MarketingMainI18nShards locale={locale}>
+                    <MarketingMainErrorBoundary name="marketing_locale_main">
+                      <PageTransitionShell>{children}</PageTransitionShell>
+                    </MarketingMainErrorBoundary>
+                  </MarketingMainI18nShards>
+                </main>
+                <SiteFooter />
+              </div>
+            </MarketingHeaderGlobalRegionServerBridge>
           </MarketingFeedbackShell>
         </MarketingCountryChromeProvider>
       </NursenestRegionRoot>

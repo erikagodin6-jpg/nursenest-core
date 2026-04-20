@@ -16,6 +16,9 @@ import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
+import { MarketingDefaultLayoutChromeFailsafeShell } from "@/components/marketing/marketing-default-layout-chrome-failsafe";
+import { MarketingHeaderGlobalRegionServerBridge } from "@/lib/region/marketing-header-global-region-server-bridge";
+import { readOptionalGlobalRegionSlugFromCookie } from "@/lib/region/read-optional-global-region-cookie.server";
 import { safeAwait } from "@/lib/async/safe-await";
 import { homePerfFinalForGetRoot, homePerfLogForGetRoot } from "@/lib/observability/home-perf-trace";
 import {
@@ -55,11 +58,13 @@ function marketingDefaultLayoutStaticShellForHome({
       fallbackMessages={undefined}
     >
       <NursenestRegionRoot serverRegion={serverRegion} trustClientPersistedRegion={trustClientPersistedRegion}>
-        <div className="nn-marketing-surface flex min-h-screen flex-col">
-          <main className="flex min-h-0 flex-1 flex-col">
-            <PageTransitionShell>{children}</PageTransitionShell>
-          </main>
-        </div>
+        <MarketingCountryChromeProvider country="canada">
+          <MarketingFeedbackShell>
+            <MarketingDefaultLayoutChromeFailsafeShell>
+              <PageTransitionShell>{children}</PageTransitionShell>
+            </MarketingDefaultLayoutChromeFailsafeShell>
+          </MarketingFeedbackShell>
+        </MarketingCountryChromeProvider>
       </NursenestRegionRoot>
     </MarketingI18nProvider>
   );
@@ -248,6 +253,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       const serverRegion: MarketingRegionToggle = marketingRegionCookie ?? "CA";
       const trustClientPersistedRegion = marketingRegionCookie !== undefined;
       const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingRegionCookie);
+      const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie();
 
       return (
         <MarketingI18nProvider
@@ -261,20 +267,22 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
               <OrganizationJsonLd />
               <WebSiteJsonLd />
               <MarketingFeedbackShell>
-                <div className="nn-marketing-surface flex min-h-screen flex-col">
-                  <SiteHeader />
-                  <PathwayLessonProgressRefreshListener />
-                  <main className="flex min-h-0 flex-1 flex-col">
-                    {shouldLayerMainPageShards() ? (
-                      <MarketingMainI18nShards locale={resolvedLocale}>
+                <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
+                  <div className="nn-marketing-surface flex min-h-screen flex-col">
+                    <SiteHeader />
+                    <PathwayLessonProgressRefreshListener />
+                    <main className="flex min-h-0 flex-1 flex-col">
+                      {shouldLayerMainPageShards() ? (
+                        <MarketingMainI18nShards locale={resolvedLocale}>
+                          <PageTransitionShell>{children}</PageTransitionShell>
+                        </MarketingMainI18nShards>
+                      ) : (
                         <PageTransitionShell>{children}</PageTransitionShell>
-                      </MarketingMainI18nShards>
-                    ) : (
-                      <PageTransitionShell>{children}</PageTransitionShell>
-                    )}
-                  </main>
-                  <SiteFooter />
-                </div>
+                      )}
+                    </main>
+                    <SiteFooter />
+                  </div>
+                </MarketingHeaderGlobalRegionServerBridge>
               </MarketingFeedbackShell>
             </MarketingCountryChromeProvider>
           </NursenestRegionRoot>
@@ -301,11 +309,13 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
           fallbackMessages={undefined}
         >
           <NursenestRegionRoot serverRegion={"CA"} trustClientPersistedRegion={false}>
-            <div className="nn-marketing-surface flex min-h-screen flex-col">
-              <main className="flex min-h-0 flex-1 flex-col">
-                <PageTransitionShell>{children}</PageTransitionShell>
-              </main>
-            </div>
+            <MarketingCountryChromeProvider country="canada">
+              <MarketingFeedbackShell>
+                <MarketingDefaultLayoutChromeFailsafeShell>
+                  <PageTransitionShell>{children}</PageTransitionShell>
+                </MarketingDefaultLayoutChromeFailsafeShell>
+              </MarketingFeedbackShell>
+            </MarketingCountryChromeProvider>
           </NursenestRegionRoot>
         </MarketingI18nProvider>
       );
