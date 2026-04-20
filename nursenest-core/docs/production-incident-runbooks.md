@@ -118,9 +118,9 @@ Concise playbooks for on-call. Pair with `docs/alerting-runbooks.md` (alert wiri
 
 **How to confirm:** Stripe **Developers → Webhooks** delivery logs; our logs `webhook_received` vs `webhook_failed` with same `correlationId`; DB idempotency table errors; Sentry issues in `applyStripeWebhookEvent`.
 
-**Likely causes:** Handler throw (code bug), DB write failure on dedupe, wrong `STRIPE_WEBHOOK_SECRET`, timeout, duplicate event processing edge case.
+**Likely causes:** Handler throw (code bug), DB write failure on dedupe, wrong `STRIPE_WEBHOOK_SECRET`, timeout, duplicate event processing edge case, **Stripe cannot reach the webhook URL** (TLS / wrong hostname — production canonical URL and recovery: `docs/stripe-webhook-production-operations.md`).
 
-**Immediate mitigation:** Fix and deploy handler; **replay** failed events from Stripe UI after fix verified in staging. Do not rotate webhook secret during active queue without coordinating replay. If DB—§3.
+**Immediate mitigation:** Fix and deploy handler; **replay** failed events from Stripe UI after fix verified in staging. Do not rotate webhook secret during active queue without coordinating replay. If DB—§3. If deliveries show **connection / TLS errors**, fix the Dashboard endpoint URL or edge cert first (`stripe-webhook-production-operations.md` §5–§6).
 
 **Rollback guidance:** Roll back **bad** deploy first; then replay webhooks—order matters. Document replay window for finance.
 

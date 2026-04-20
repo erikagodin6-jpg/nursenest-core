@@ -68,6 +68,8 @@ test.describe("Admin JWT gate regression — non-admin", () => {
     const creds = getQaFreeCredentials();
     test.skip(!creds, "Set E2E_FREE_EMAIL + E2E_FREE_PASSWORD (or QA_FREE_*)");
     const origin = originFromBaseURL(baseURL);
+    await page.context().clearCookies();
+    await page.goto("about:blank");
     await loginWithCredentials(page, creds!.email, creds!.password, { navigationOrigin: origin });
     await page.goto(`${origin}/admin`, { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT_MS });
     await expect
@@ -89,6 +91,8 @@ test.describe("Admin JWT gate regression — staff", () => {
 
     const observers = attachPageObservers(page, { profile: "app", captureConsoleContext: true, probeAuthApi: true });
     try {
+      await page.context().clearCookies();
+      await page.goto("about:blank");
       await page.goto(`${origin}/login`, { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT_MS });
       await page.locator("#login-identifier").fill(creds.email);
       await page.locator("#login-password").fill(creds.password);
