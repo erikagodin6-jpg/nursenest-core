@@ -134,23 +134,37 @@ function useInlineEditModal(contentKey: string, kind: InlineContentKind, initial
   const [draft, setDraft] = useState(initialText);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const saveInFlight = useRef(false);
 
   useEffect(() => {
     setDraft(initialText);
   }, [initialText]);
 
   const save = useCallback(async () => {
+    if (saveInFlight.current) return;
+    saveInFlight.current = true;
     setSaving(true);
     setError(null);
     try {
       const res = await fetch("/api/admin/inline-content", {
         method: "PATCH",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ key: contentKey, body: draft, kind }),
       });
       if (!res.ok) {
-        const j = (await res.json().catch(() => ({}))) as { error?: string };
-        setError(j.error ?? `Save failed (${res.status})`);
+        const text = (await res.text().catch(() => "")).trim();
+        let j: { error?: string; code?: string; message?: string } = {};
+        if (text.startsWith("{")) {
+          try {
+            j = JSON.parse(text) as typeof j;
+          } catch {
+            /* keep empty */
+          }
+        }
+        const detail =
+          j.error ?? j.message ?? (j.code ? `${j.code} (${res.status})` : null) ?? (text.length > 0 ? text : null);
+        setError(detail ?? `Save failed (${res.status})`);
         return;
       }
       setOpen(false);
@@ -159,6 +173,7 @@ function useInlineEditModal(contentKey: string, kind: InlineContentKind, initial
       setError("Network error");
     } finally {
       setSaving(false);
+      saveInFlight.current = false;
     }
   }, [contentKey, draft, kind, router]);
 

@@ -17,6 +17,22 @@ export function getTrustedClientIp(req: { headers: Headers }): string {
   return "unknown";
 }
 
+/**
+ * When {@link getTrustedClientIp} is `unknown`, every client would otherwise share one global bucket
+ * (`…:ip:unknown`) and hit 429 together. Spread unknown clients using coarse request hints (not a
+ * stable identity — abuse-only partitioning).
+ */
+export function rateLimitClientPartition(req: { headers: Headers }, ip: string): string {
+  if (ip !== "unknown") return ip;
+  const ua = req.headers.get("user-agent") ?? "";
+  const al = req.headers.get("accept-language") ?? "";
+  const seed = `${ua.slice(0, 160)}|${al.slice(0, 48)}`;
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) | 0;
+  const part = (h >>> 0).toString(36).slice(0, 10);
+  return `unknown:${part}`;
+}
+
 export function ipRateLimitKey(ip: string, route: string): string {
   const safe = ip.replace(/[^a-zA-Z0-9.:_-]/g, "_").slice(0, 128);
   return `api:ip:${safe}:${route}`;

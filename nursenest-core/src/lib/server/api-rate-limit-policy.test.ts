@@ -84,9 +84,10 @@ describe("enforceApiRateLimit path classification", () => {
   });
 
   it("exponential Retry-After from streak (capped)", () => {
-    assert.equal(retryAfterSecondsFrom429Streak(1), 10);
-    assert.equal(retryAfterSecondsFrom429Streak(2), 20);
-    assert.equal(retryAfterSecondsFrom429Streak(3), 40);
-    assert.equal(retryAfterSecondsFrom429Streak(10), 300);
+    assert.equal(retryAfterSecondsFrom429Streak(1), 5);
+    assert.equal(retryAfterSecondsFrom429Streak(2), 10);
+    assert.equal(retryAfterSecondsFrom429Streak(3), 20);
+    assert.equal(retryAfterSecondsFrom429Streak(5), 80);
+    assert.equal(retryAfterSecondsFrom429Streak(20), 80);
   });
 });

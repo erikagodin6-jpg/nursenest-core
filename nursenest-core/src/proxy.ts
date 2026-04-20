@@ -10,6 +10,7 @@ import "@/lib/auth-trust-env";
 import type { NextFetchEvent, NextMiddleware } from "next/server";
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
+import { nextAuthSecureCookieForRequest } from "@/lib/auth/nextauth-secure-cookie-request";
 import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
 import { emitNnHomePerfDiagLine, isNnTraceHomePerfTrue } from "@/lib/observability/home-perf-diag";
 import { emitNnHomeRouteDiag, shouldEmitNnHomeRouteDiag } from "@/lib/observability/nn-home-isolation-flags";
@@ -309,7 +310,8 @@ async function enforceAdminProxyRoute(request: NextRequest): Promise<NextRespons
 
   const { getToken, loadUserRoleFromDbIdentity, isPathAllowedForStaffTier, safeServerLog } = await loadAdminProxyDeps();
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
-  const token = secret ? await getToken({ req: request, secret }) : null;
+  const secureCookie = nextAuthSecureCookieForRequest(request);
+  const token = secret ? await getToken({ req: request, secret, secureCookie }) : null;
   const userId =
     (typeof token?.sub === "string" && token.sub.trim()) ||
     (token as { id?: string } | null)?.id?.trim() ||

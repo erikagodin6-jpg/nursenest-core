@@ -9,13 +9,14 @@
 import { getToken } from "next-auth/jwt";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { nextAuthSecureCookieForRequest } from "@/lib/auth/nextauth-secure-cookie-request";
 import { tightenPublicCap } from "@/lib/config/rate-limit-tightening";
 import {
   checkRateLimitUnified,
   consumeRateLimitUnified,
   readRateLimitWindowCountUnified,
 } from "@/lib/http/rate-limit-unified";
-import { getTrustedClientIp } from "@/lib/http/client-ip";
+import { getTrustedClientIp, rateLimitClientPartition } from "@/lib/http/client-ip";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { getRedisClient, type RedisJsonClient } from "@/lib/server/redis";
 
@@ -42,7 +43,7 @@ const LEARNER_PREFIXES = [
 
 /** Anonymous access to heavy content list APIs — tighter than generic `/api/*` (protects Prisma + DB). */
 const LEARNER_ANON_CONTENT_WINDOW_MS = 60_000;
-const LEARNER_ANON_CONTENT_MAX = 28;
+const LEARNER_ANON_CONTENT_MAX = 40;
 
 /** Billing / newsletter — expensive or spam-prone; separate bucket from generic public API. */
 const BILLING_RATE_PATH_PREFIXES = ["/api/subscriptions/checkout", "/api/subscribe"] as const;
@@ -78,7 +79,7 @@ const ADMIN_API_WINDOW_MS = 60_000;
 /** ~5 req/s sustained — legitimate admin UIs; blocks hammering with a stolen cookie. */
 const ADMIN_API_MAX_PER_USER = 300;
 /** Stricter than {@link PUBLIC_MAX} — anonymous hits to `/api/admin/*` should be rare. */
-const ADMIN_API_MAX_PER_IP_UNAUTH = 90;
+const ADMIN_API_MAX_PER_IP_UNAUTH = 120;
 
 /** Signup — per IP (stricter than generic public; bots target this). */
 const SIGNUP_WINDOW_MS = 60_000;
@@ -96,32 +97,34 @@ export const API_SIGNUP_PER_IP_RATE_LIMIT = {
 
 /** Per auth *kind* so login throttles don’t consume forgot-password quota (and vice versa). */
 const AUTH_KIND_LIMITS: Record<string, { windowMs: number; max: number }> = {
-  signin: { windowMs: 60_000, max: 6 },
-  callback: { windowMs: 60_000, max: 20 },
-  csrf: { windowMs: 60_000, max: 40 },
-  providers: { windowMs: 60_000, max: 24 },
-  forgot: { windowMs: 60_000, max: 4 },
-  reset: { windowMs: 60_000, max: 4 },
-  change: { windowMs: 60_000, max: 4 },
-  register: { windowMs: 60_000, max: 6 },
-  error: { windowMs: 60_000, max: 16 },
-  auth_other: { windowMs: 60_000, max: 8 },
+  /** Sign-in page + provider links — allow refreshes / RSC without locking humans out. */
+  signin: { windowMs: 60_000, max: 18 },
+  /** Credentials + OAuth callbacks — shared IPs (schools, offices) need headroom. */
+  callback: { windowMs: 60_000, max: 48 },
+  csrf: { windowMs: 60_000, max: 96 },
+  providers: { windowMs: 60_000, max: 48 },
+  forgot: { windowMs: 60_000, max: 8 },
+  reset: { windowMs: 60_000, max: 8 },
+  change: { windowMs: 60_000, max: 8 },
+  register: { windowMs: 60_000, max: 12 },
+  error: { windowMs: 60_000, max: 24 },
+  auth_other: { windowMs: 60_000, max: 16 },
 };
 
 const PUBLIC_WINDOW_MS = 60_000;
-const PUBLIC_MAX = 36;
+const PUBLIC_MAX = 56;
 
 /** Marketing / public JSON under `/api/public/*` (cached counts, tags) — scanners love these. */
 const PUBLIC_JSON_WINDOW_MS = 60_000;
-const PUBLIC_JSON_MAX = 16;
+const PUBLIC_JSON_MAX = 24;
 
 /** Hot stats endpoint — hammered by bots + homepage; tight per IP before generic public_json. */
 const HOME_STATS_WINDOW_MS = 60_000;
-const HOME_STATS_MAX = 10;
+const HOME_STATS_MAX = 14;
 
 /** Flashcard tag list — DB join; tighter than generic `/api/public/*` now that route is cache-backed. */
 const FLASHCARD_TAGS_WINDOW_MS = 60_000;
-const FLASHCARD_TAGS_MAX = 8;
+const FLASHCARD_TAGS_MAX = 12;
 
 const LEARNER_WINDOW_MS = 60_000;
 const LEARNER_MAX = 120;
@@ -129,10 +132,10 @@ const LEARNER_MAX = 120;
 /** After many 429s, temporarily tighten public IP bucket (abuse signal only). */
 const ABUSE_STRIKE_WINDOW_MS = 120_000;
 /** Policy threshold — tighten public caps after this many 429s in the abuse window. */
-const ABUSE_STRIKE_MAX = 32;
+const ABUSE_STRIKE_MAX = 48;
 /** Bucket ceiling for Postgres/in-memory (strikes continue counting past the policy threshold). */
 const ABUSE_STRIKE_BUCKET_MAX = 4096;
-const TIGHT_PUBLIC_MAX = 24;
+const TIGHT_PUBLIC_MAX = 32;
 
 /** Rolling window of 429s per IP — drives exponential Retry-After (shared store). */
 const STREAK_WINDOW_MS = 600_000;
@@ -180,9 +183,9 @@ function streakMetaKey(ip: string): string {
   return `ratelimit:meta:429_streak:ip:${ip}`;
 }
 
-/** Exported for unit tests — 10s → 20s → … capped at 300s. */
+/** Exported for unit tests — softer backoff so shared IPs recover (capped at 120s). */
 export function retryAfterSecondsFrom429Streak(streak: number): number {
-  return Math.min(300, Math.floor(10 * Math.pow(2, Math.min(Math.max(0, streak - 1), 5))));
+  return Math.min(120, Math.floor(5 * Math.pow(2, Math.min(Math.max(0, streak - 1), 4))));
 }
 
 async function recordStrikeAndTighten(ip: string): Promise<boolean> {
@@ -329,10 +332,14 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   const pathname = request.nextUrl.pathname;
   if (!pathname.startsWith("/api/")) return null;
   if (isExemptPath(pathname)) return null;
+  const method = request.method.toUpperCase();
+  if (method === "OPTIONS" || method === "HEAD") return null;
 
   const ip = getTrustedClientIp(request);
+  const ipKey = rateLimitClientPartition(request, ip);
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
-  const token = secret ? await getToken({ req: request, secret }) : null;
+  const secureCookie = nextAuthSecureCookieForRequest(request);
+  const token = secret ? await getToken({ req: request, secret, secureCookie }) : null;
   const userId =
     (typeof token?.sub === "string" && token.sub) ||
     (token as { id?: string } | null)?.id ||
@@ -349,12 +356,12 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
         safeServerLog("security", "admin_api_rate_limit_exceeded", {
           kind: "admin_api_user",
           path: pathname.slice(0, 96),
-          ipHash: hashIp(ip),
+          ipHash: hashIp(ipKey),
         });
         return json429AdminFixed();
       }
     } else {
-      const key = `ratelimit:admin:ip_unauth:${ip}`;
+      const key = `ratelimit:admin:ip_unauth:${ipKey}`;
       const { ok } = await checkRateLimitUnified(key, {
         windowMs: ADMIN_API_WINDOW_MS,
         max: tightenPublicCap(ADMIN_API_MAX_PER_IP_UNAUTH),
@@ -363,63 +370,63 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
         safeServerLog("security", "admin_api_rate_limit_exceeded", {
           kind: "admin_api_ip",
           path: pathname.slice(0, 96),
-          ipHash: hashIp(ip),
+          ipHash: hashIp(ipKey),
         });
-        return await json429WithBackoff(ip);
+        return await json429WithBackoff(ipKey);
       }
     }
     return null;
   }
 
   if (isBillingRateLimitPath(pathname)) {
-    const key = `ratelimit:billing:ip:${ip}`;
+    const key = `ratelimit:billing:ip:${ipKey}`;
     const { ok } = await checkRateLimitUnified(key, {
       windowMs: BILLING_WINDOW_MS,
       max: tightenPublicCap(BILLING_MAX),
     });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "billing", path: pathname.slice(0, 96) });
-      return await json429WithBackoff(ip);
+      return await json429WithBackoff(ipKey);
     }
     return null;
   }
 
   if (isPricingRateLimitPath(pathname)) {
-    const key = `ratelimit:pricing:ip:${ip}`;
+    const key = `ratelimit:pricing:ip:${ipKey}`;
     const { ok } = await checkRateLimitUnified(key, {
       windowMs: PRICING_WINDOW_MS,
       max: tightenPublicCap(PRICING_MAX),
     });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "pricing", path: pathname.slice(0, 96) });
-      return await json429WithBackoff(ip);
+      return await json429WithBackoff(ipKey);
     }
     return null;
   }
 
   if (isAiExpensiveRateLimitPath(pathname)) {
-    const key = `ratelimit:ai_expensive:ip:${ip}`;
+    const key = `ratelimit:ai_expensive:ip:${ipKey}`;
     const { ok } = await checkRateLimitUnified(key, {
       windowMs: AI_EXPENSIVE_WINDOW_MS,
       max: tightenPublicCap(AI_EXPENSIVE_MAX),
     });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "ai_expensive", path: pathname.slice(0, 96) });
-      return await json429WithBackoff(ip);
+      return await json429WithBackoff(ipKey);
     }
     return null;
   }
 
   /** Stats — scanned heavily; limit before generic public_json. */
   if (isHomeStatsRateLimitPath(pathname)) {
-    const cap = await publicCapForIpAsync(ip, tightenPublicCap(HOME_STATS_MAX));
-    const key = `ratelimit:public_home_stats:ip:${ip}`;
+    const cap = await publicCapForIpAsync(ipKey, tightenPublicCap(HOME_STATS_MAX));
+    const key = `ratelimit:public_home_stats:ip:${ipKey}`;
     const { ok } = await checkRateLimitUnified(key, { windowMs: HOME_STATS_WINDOW_MS, max: cap });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "public_home_stats", path: pathname.slice(0, 96) });
-      const res = await json429WithBackoff(ip);
-      if (await recordStrikeAndTighten(ip)) {
-        safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ip) });
+      const res = await json429WithBackoff(ipKey);
+      if (await recordStrikeAndTighten(ipKey)) {
+        safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ipKey) });
       }
       return res;
     }
@@ -427,12 +434,12 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   }
 
   if (isPublicFlashcardTagsRateLimitPath(pathname)) {
-    const cap = await publicCapForIpAsync(ip, tightenPublicCap(FLASHCARD_TAGS_MAX));
-    const key = `ratelimit:public_flashcard_tags:ip:${ip}`;
+    const cap = await publicCapForIpAsync(ipKey, tightenPublicCap(FLASHCARD_TAGS_MAX));
+    const key = `ratelimit:public_flashcard_tags:ip:${ipKey}`;
     const { ok } = await checkRateLimitUnified(key, { windowMs: FLASHCARD_TAGS_WINDOW_MS, max: cap });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "public_flashcard_tags", path: pathname.slice(0, 96) });
-      return await json429WithBackoff(ip);
+      return await json429WithBackoff(ipKey);
     }
     return null;
   }
@@ -440,7 +447,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   if (isAuthStrictPath(pathname)) {
     const kind = authRouteKind(pathname);
     const limits = AUTH_KIND_LIMITS[kind] ?? AUTH_KIND_LIMITS.auth_other;
-    const key = `ratelimit:auth:${kind}:ip:${ip}`;
+    const key = `ratelimit:auth:${kind}:ip:${ipKey}`;
     const { ok } = await checkRateLimitUnified(key, {
       windowMs: limits.windowMs,
       max: tightenPublicCap(limits.max),
@@ -451,20 +458,20 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
         authKind: kind,
         path: pathname.slice(0, 96),
       });
-      return await json429WithBackoff(ip);
+      return await json429WithBackoff(ipKey);
     }
     return null;
   }
 
   if (pathname.startsWith("/api/auth/session")) {
-    const cap = await publicCapForIpAsync(ip, tightenPublicCap(120));
-    const key = `ratelimit:auth_session:ip:${ip}`;
+    const cap = await publicCapForIpAsync(ipKey, tightenPublicCap(200));
+    const key = `ratelimit:auth_session:ip:${ipKey}`;
     const { ok } = await checkRateLimitUnified(key, { windowMs: PUBLIC_WINDOW_MS, max: cap });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "auth_session", path: "/api/auth/session" });
-      const res = await json429WithBackoff(ip);
-      if (await recordStrikeAndTighten(ip)) {
-        safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ip) });
+      const res = await json429WithBackoff(ipKey);
+      if (await recordStrikeAndTighten(ipKey)) {
+        safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ipKey) });
       }
       return res;
     }
@@ -472,20 +479,20 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   }
 
   if (pathname.startsWith(SUBSCRIPTION_API_STRICT_PREFIX) && !pathname.startsWith("/api/subscriptions/webhook")) {
-    const key = `ratelimit:subscriptions:ip:${ip}`;
+    const key = `ratelimit:subscriptions:ip:${ipKey}`;
     const { ok } = await checkRateLimitUnified(key, {
       windowMs: SUBSCRIPTION_STRICT_WINDOW_MS,
       max: tightenPublicCap(SUBSCRIPTION_STRICT_MAX),
     });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "subscriptions_api", path: pathname.slice(0, 96) });
-      return await json429WithBackoff(ip);
+      return await json429WithBackoff(ipKey);
     }
     return null;
   }
 
   if (isLearnerContentAnonymousApiPath(pathname) && !userId) {
-    const key = `ratelimit:learner_anon_content:ip:${ip}`;
+    const key = `ratelimit:learner_anon_content:ip:${ipKey}`;
     const { ok } = await checkRateLimitUnified(key, {
       windowMs: LEARNER_ANON_CONTENT_WINDOW_MS,
       max: tightenPublicCap(LEARNER_ANON_CONTENT_MAX),
@@ -495,7 +502,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
         kind: "learner_anon_content",
         path: pathname.slice(0, 96),
       });
-      return await json429WithBackoff(ip);
+      return await json429WithBackoff(ipKey);
     }
     return null;
   }
@@ -511,28 +518,28 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   }
 
   if (isPublicJsonRateLimitPath(pathname)) {
-    const cap = await publicCapForIpAsync(ip, tightenPublicCap(PUBLIC_JSON_MAX));
-    const key = `ratelimit:public_json:ip:${ip}`;
+    const cap = await publicCapForIpAsync(ipKey, tightenPublicCap(PUBLIC_JSON_MAX));
+    const key = `ratelimit:public_json:ip:${ipKey}`;
     const { ok } = await checkRateLimitUnified(key, { windowMs: PUBLIC_JSON_WINDOW_MS, max: cap });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "public_json", path: pathname.slice(0, 96) });
-      const res = await json429WithBackoff(ip);
-      if (await recordStrikeAndTighten(ip)) {
-        safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ip) });
+      const res = await json429WithBackoff(ipKey);
+      if (await recordStrikeAndTighten(ipKey)) {
+        safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ipKey) });
       }
       return res;
     }
     return null;
   }
 
-  const cap = await publicCapForIpAsync(ip, tightenPublicCap(PUBLIC_MAX));
-  const key = `ratelimit:public:ip:${ip}`;
+  const cap = await publicCapForIpAsync(ipKey, tightenPublicCap(PUBLIC_MAX));
+  const key = `ratelimit:public:ip:${ipKey}`;
   const { ok } = await checkRateLimitUnified(key, { windowMs: PUBLIC_WINDOW_MS, max: cap });
   if (!ok) {
     safeServerLog("security", "rate_limit_exceeded", { kind: "public", path: pathname.slice(0, 96) });
-    const res = await json429WithBackoff(ip);
-    if (await recordStrikeAndTighten(ip)) {
-      safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ip) });
+    const res = await json429WithBackoff(ipKey);
+    if (await recordStrikeAndTighten(ipKey)) {
+      safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ipKey) });
     }
     return res;
   }

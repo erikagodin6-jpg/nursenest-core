@@ -22,7 +22,7 @@ import {
   normalizeLoginIdentifier,
   sanitizeRawLoginIdentifier,
 } from "@/lib/auth/normalize-login-identifier";
-import { getTrustedClientIp } from "@/lib/http/client-ip";
+import { getTrustedClientIp, rateLimitClientPartition } from "@/lib/http/client-ip";
 import { Prisma } from "@prisma/client";
 import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
 import { emitBillingAudit, prefixUserId } from "@/lib/observability/billing-entitlement-audit";
@@ -234,10 +234,11 @@ export const authConfig: NextAuthConfig = {
           ? normalizeEmailForDedup(enteredEmailLower)
           : "";
         const ip = clientIpFromRequest(request);
+        const ipKey = rateLimitClientPartition(request, ip);
 
-        const rl = await checkRedisFixedWindowLimit(`ratelimit:auth:credentials_login:ip:${ip}`, {
+        const rl = await checkRedisFixedWindowLimit(`ratelimit:auth:credentials_login:ip:${ipKey}`, {
           windowMs: 60_000,
-          max: 40,
+          max: 72,
         });
         if (!rl.ok) {
           safeServerLog("auth", "login_rate_limited", { ip: ip.slice(0, 64) });
