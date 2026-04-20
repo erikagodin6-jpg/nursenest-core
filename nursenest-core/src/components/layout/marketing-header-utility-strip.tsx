@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { ChevronDown } from "lucide-react";
@@ -23,8 +23,19 @@ import { isStaffRole } from "@/lib/auth/staff-roles";
  *
  * variant="standard"  — recessive faint-tint surface (dark themes and default).
  * variant="dark-bar"  — full brand/nav-background surface (top band in light-theme 3-layer header).
+ *
+ * `leading` — optional left cluster (e.g. country hub shortcuts) when the strip shares a row with preferences.
+ * `visibilityClassName` — override default `hidden md:block` (e.g. `hidden xl:block` when parent header is xl-only).
  */
-export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?: "standard" | "dark-bar" }) {
+export function MarketingHeaderUtilityStrip({
+  variant = "standard",
+  leading,
+  visibilityClassName,
+}: {
+  variant?: "standard" | "dark-bar";
+  leading?: ReactNode;
+  visibilityClassName?: string;
+}) {
   const { t, locale } = useMarketingI18n();
   const pathname = usePathname() ?? "/";
   const router = useRouter();
@@ -105,11 +116,18 @@ export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?
       ? "inline-flex h-[30px] max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] bg-white px-2.5 text-[11px] font-normal leading-tight tracking-tight text-[var(--theme-heading-text)] shadow-[0_1px_2px_rgba(15,23,42,0.05)] hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))]"
       : undefined;
 
+  const vis = visibilityClassName ?? "hidden md:block";
+  const shellJustify = leading ? "justify-between" : "justify-end";
+
   return (
-    <div className={`${variant === "dark-bar" ? "nn-header-utility-dark" : "nn-header-utility"} hidden md:block`}>
+    <div className={`${variant === "dark-bar" ? "nn-header-utility-dark" : "nn-header-utility"} ${vis}`}>
       <div
-        className={`nn-section-shell flex items-center justify-end gap-1.5 lg:gap-2 ${variant === "dark-bar" ? "min-h-[36px] py-[3px] md:min-h-[40px] md:py-1" : "h-9 gap-2"}`}
+        className={`nn-section-shell flex items-center gap-1.5 lg:gap-2 ${shellJustify} ${
+          variant === "dark-bar" ? "min-h-[36px] py-[3px] md:min-h-[40px] md:py-1" : "h-9 gap-2"
+        }`}
       >
+        {leading ? <div className="min-w-0 flex-1 overflow-hidden pe-2">{leading}</div> : null}
+        <div className="flex shrink-0 items-center justify-end gap-1.5 lg:gap-2">
         {/* Country selector — replaces old US/CA toggle with global selector */}
         <div className="relative" ref={countryRef}>
           <CompactCountryTrigger
@@ -181,6 +199,7 @@ export function MarketingHeaderUtilityStrip({ variant = "standard" }: { variant?
               themeGroupDark: t("nav.themeGroupDark"),
             }}
           />
+        </div>
         </div>
       </div>
     </div>

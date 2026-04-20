@@ -43,12 +43,12 @@ export type HomeRestoredClientProps = {
   homeMarketingStats: HomeMarketingStats;
   /** Homepage global region cards — must exclude unpublished expansion exam hubs. */
   publishedGlobalRegionCardIds: readonly string[];
-  /** Canada-first global hub strip — rendered immediately after {@link HomeConversionHero} (server slot from `page.tsx`). */
+  /** Canada-first global hub strip — rendered after hero product proof (screenshots); server slot from `page.tsx`. */
   introAfterHero?: ReactNode;
 };
 
 /**
- * Homepage: hero → product screenshots → sample proof → trust strip → trust Q&A → pathways → how it works → platform proof → differentiation → objection FAQ → final CTA.
+ * Homepage: hero → product screenshots → global hub intro → sample proof → trust strip → trust Q&A → pathways → how it works → platform proof → differentiation → objection FAQ → final CTA.
  *
  * Stats are passed from the server (initial paint may use a memory snapshot or silent placeholders,
  * then a deferred server segment can replace with fresh DB-backed values).
@@ -116,9 +116,9 @@ export default function HomeRestoredClient({
       <div className="min-h-0 flex-1 overflow-x-hidden">
         {/* 1. HERO */}
         <HomeConversionHero questionCount={questionCount} lessonCount={lessonCount} />
-        {introAfterHero}
         {/* 1b. Product screenshots — directly under hero; carousel chunk loads after first paint */}
         <HomeHeroScreenshotSection />
+        {introAfterHero}
         {/* 2. PROOF — sample item + rationale */}
         <HomeSampleQuestionPreview />
         {/* 2b. Global regions — licensing hubs beyond US/Canada */}

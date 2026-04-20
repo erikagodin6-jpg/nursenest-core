@@ -68,6 +68,8 @@ function formatTokenTitleCase(token: string): string {
 
 function formatTokenSentenceCase(token: string, isFirst: boolean): string {
   if (!token) return token;
+  // i18n shards already encode proper nouns, acronyms, and brand casing — do not flatten them.
+  if (token !== token.toLowerCase()) return token;
   const lower = token.toLowerCase();
   const preserved = PRESERVE_CASE[lower];
   if (preserved) return preserved;

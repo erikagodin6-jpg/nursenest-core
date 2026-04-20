@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { GLOBAL_ROOT_HOMEPAGE } from "@/lib/marketing/countries/registry";
 
-/** Canada-first, globally inclusive hub strip for `/` — composed immediately after the primary home hero in the home body. */
+/** Canada-first, globally inclusive hub strip for `/` — composed after hero screenshots in the home body. */
 export function GlobalMarketingHomeIntro() {
   const c = GLOBAL_ROOT_HOMEPAGE;
   return (

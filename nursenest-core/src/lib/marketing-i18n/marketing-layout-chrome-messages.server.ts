@@ -2,7 +2,10 @@ import "server-only";
 
 import { safeAwait } from "@/lib/async/safe-await";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import {
+  loadMarketingMessageShards,
+  loadMarketingMessageShardsSync,
+} from "@/lib/marketing-i18n/load-marketing-message-shards";
 import {
   MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS,
   MARKETING_CHROME_MESSAGE_SHARDS,
@@ -55,7 +58,21 @@ export async function getMarketingDefaultLayoutChromeMessages(): Promise<Record<
         "marketing_layout.chrome_messages",
         MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS,
       );
-      const out = loaded ?? {};
+      /**
+       * When `safeAwait` times out it returns `null`. Treating that as `{}` and caching it wedged the
+       * process-wide singleton with empty chrome — `SiteHeader` lost mega-menu / carousel copy keys
+       * until restart. If async is empty or timed out, retry via the same sync FS merge the shard
+       * loader uses internally.
+       */
+      let out: Record<string, string> = loaded != null ? loaded : {};
+      if (Object.keys(out).length === 0) {
+        try {
+          const syncFill = loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards);
+          if (Object.keys(syncFill).length > 0) out = syncFill;
+        } catch {
+          /* keep out */
+        }
+      }
       defaultChromeState.resolved = out;
       return out;
     } catch {

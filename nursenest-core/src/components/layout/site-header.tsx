@@ -35,6 +35,7 @@ import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { CountrySelector } from "@/components/layout/global-context-switcher";
 import { MarketingCountryHubStrip } from "@/components/marketing/marketing-country-hub-strip";
+import { MarketingHeaderUtilityStrip } from "@/components/layout/marketing-header-utility-strip";
 const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
 
 /** Primary filled header CTAs — white label on theme primary fill for consistent contrast. */
@@ -494,6 +495,17 @@ export function SiteHeader() {
   return (
     <div style={navChromeVars} className="sticky top-0 z-50" ref={headerRef}>
       {/*
+        Light themes: top preferences rail (country / language / theme) above the logo row — matches
+        `globals.css` “Light-theme 3-layer header”. Desktop grid hides below `xl` with the strip.
+      */}
+      {isLightTheme ? (
+        <MarketingHeaderUtilityStrip
+          variant="dark-bar"
+          visibilityClassName="hidden xl:block"
+          leading={<MarketingCountryHubStrip surface="darkUtility" />}
+        />
+      ) : null}
+      {/*
         Keep enter animation on <header> only. `nn-header-animate-in` ends with a transform, which
         creates a fixed-position containing block — mobile drawers are siblings after </header> and
         must stay outside that subtree so `fixed inset-0` covers the viewport, not the header box.
@@ -722,7 +734,7 @@ export function SiteHeader() {
             </nav>
 
             <div className="relative z-[130] flex shrink-0 items-center justify-end gap-2 xl:gap-2.5">
-              {marketingDesktopUtilityControls}
+              {!isLightTheme ? marketingDesktopUtilityControls : null}
               {isSessionPending ? (
                 <div className="flex shrink-0 items-center gap-2" aria-busy="true" aria-label={t("nav.logIn")}>
                   <div className="h-10 w-20 animate-pulse rounded-xl bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))]" />

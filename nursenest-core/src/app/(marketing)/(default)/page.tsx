@@ -12,7 +12,10 @@ import { MarketingHomeEmergencyFallback } from "@/components/marketing/marketing
 import { MarketingHomeSafeMode } from "@/components/marketing/marketing-home-safe-mode";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import {
+  loadMarketingMessageShards,
+  loadMarketingMessageShardsSync,
+} from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
@@ -93,9 +96,18 @@ async function loadHomePageMarketingMessagesForRequest(): Promise<MarketingMessa
 async function loadHomePageMarketingMessagesSafe(budgetMs: number, label: string): Promise<MarketingMessages> {
   try {
     const m = await safeAwait(loadHomePageMarketingMessagesForRequest(), label, budgetMs);
-    return m ?? {};
+    if (m != null && Object.keys(m).length > 0) return m;
+    try {
+      return loadMarketingMessageShardsSync(STATIC_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
+    } catch {
+      return {};
+    }
   } catch {
-    return {};
+    try {
+      return loadMarketingMessageShardsSync(STATIC_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
+    } catch {
+      return {};
+    }
   }
 }
 
