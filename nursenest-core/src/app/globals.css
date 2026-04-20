@@ -2108,8 +2108,8 @@ html[data-theme] .nn-marketing-surface {
 
 /* Exam-tier strip only: denser pills + stable hover (no float) so the bar stays thin. */
 .nn-header-nav-row .nn-marketing-nav-link {
-  min-height: 1.75rem;
-  padding: 0.125rem 0.625rem;
+  min-height: 1.5rem;
+  padding: 0.0625rem 0.625rem;
   line-height: 1.2;
 }
 

@@ -671,7 +671,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
           </div>{/* /nav-row */}
         </div>{/* /shell */}
         <div className="nn-header-hide-until-xl w-full border-t border-[var(--nn-nav-border)] nn-header-nav-row">
-          <div className="nn-section-shell flex min-h-[36px] flex-wrap items-center gap-x-0.5 gap-y-0 py-0 md:min-h-[40px] md:py-0.5 lg:gap-x-0.5">
+          <div className="nn-section-shell flex min-h-[30px] flex-wrap items-center gap-x-0.5 gap-y-0 py-0 md:min-h-[32px] md:py-0 lg:gap-x-0.5">
             <nav
               aria-label={t("nav.marketingExplore")}
               className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-0 xl:gap-0.5"
