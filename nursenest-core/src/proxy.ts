@@ -307,6 +307,27 @@ function redirectWithCorrelation(request: NextRequest, pathname: string, correla
   return response;
 }
 
+/** Matches `pages.signIn` in `auth-middleware.ts` — used to detect Auth.js default unauthenticated redirect. */
+function isAuthMiddlewareSignInRedirect(request: NextRequest, authRes: Response, signInPathname: "/login"): boolean {
+  if (authRes.status < 300 || authRes.status >= 400) return false;
+  const loc = authRes.headers.get("location");
+  if (!loc) return false;
+  try {
+    return new URL(loc, request.url).pathname === signInPathname;
+  } catch {
+    return false;
+  }
+}
+
+function redirectLocationPathname(locationHeader: string | null, baseUrl: string): string | null {
+  if (!locationHeader) return null;
+  try {
+    return new URL(locationHeader, baseUrl).pathname;
+  } catch {
+    return null;
+  }
+}
+
 async function enforceAdminProxyRoute(request: NextRequest): Promise<NextResponse | null> {
   const pathname = request.nextUrl.pathname;
   if (!pathname.startsWith("/admin")) return null;
@@ -334,6 +355,7 @@ async function enforceAdminProxyRoute(request: NextRequest): Promise<NextRespons
           secureCookieModePrimary: readMeta.secureCookieModePrimary,
           primaryJwtReadOk: readMeta.primaryJwtReadOk,
           fallbackJwtReadOk: readMeta.fallbackJwtReadOk,
+          explicitCookieJwtReadOk: readMeta.explicitCookieJwtReadOk,
           resolvedJwtOk: readMeta.resolvedJwtOk,
           jwtIdentityOk,
         }
@@ -543,6 +565,32 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
       return copySetCookies(res, adminRedirect);
     }
     return next;
+  }
+  /**
+   * NextAuth `authorized()` can disagree with cookie-backed `getToken` (session JSON empty while JWT
+   * is valid). That produced a sign-in redirect **before** this file's DB-backed gate ran, stranding
+   * real staff on `/login`. Reconcile: if Auth.js says "sign in" for `/admin` or `/api/admin`, apply
+   * {@link enforceAdminProxyRoute} and prefer allow / `/app` / explicit login from the gate.
+   */
+  if (
+    merged === res &&
+    isAdminSurface &&
+    res.headers.get("location") &&
+    isAuthMiddlewareSignInRedirect(forwarded, res, "/login")
+  ) {
+    const adminGate = await enforceAdminProxyRoute(forwarded);
+    if (adminGate === null) {
+      const next = NextResponse.next({ request: { headers: forwarded.headers } });
+      copySetCookies(res, next);
+      next.headers.set(NN_CORRELATION_HEADER, outCid.slice(0, 128));
+      return next;
+    }
+    const gatePath = redirectLocationPathname(adminGate.headers.get("location"), forwarded.url);
+    const authPath = redirectLocationPathname(res.headers.get("location"), forwarded.url);
+    if (gatePath && authPath && gatePath !== authPath) {
+      adminGate.headers.set(NN_CORRELATION_HEADER, outCid.slice(0, 128));
+      return copySetCookies(res, adminGate);
+    }
   }
   res.headers.set(NN_CORRELATION_HEADER, outCid.slice(0, 128));
   return res;

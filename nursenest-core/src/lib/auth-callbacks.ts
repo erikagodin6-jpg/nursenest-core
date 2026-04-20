@@ -55,7 +55,11 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
     }
     const su = session.user as unknown as Record<string, unknown>;
     /** Stable strings for client hooks / headers — never leave `id` undefined after login. */
-    const id = typeof token.sub === "string" && token.sub.length > 0 ? token.sub : "";
+    const t = token as unknown as { sub?: unknown; id?: unknown };
+    const fromSub = typeof t.sub === "string" && t.sub.length > 0 ? t.sub : "";
+    const fromLegacyId = typeof t.id === "string" && t.id.length > 0 ? t.id : "";
+    /** Align with `sessionJwtHasUserIdentity` / JWT fallback (`sub` OR legacy `id`). */
+    const id = fromSub || fromLegacyId;
     su.id = id;
     su.email = typeof token.email === "string" ? token.email : "";
     su.name = typeof token.name === "string" && token.name.length > 0 ? token.name : su.email || "Learner";

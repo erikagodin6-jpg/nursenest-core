@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { getSession, signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { TurnstileSignup } from "@/components/auth/turnstile-signup";
 import { resolveLoginSubmitOutcome } from "@/components/auth/login-form-result";
 import { isLikelyNetworkFailure } from "@/components/auth/auth-client-error-handling";
@@ -16,6 +16,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackProductEvent } from "@/lib/observability/product-analytics";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { marketingResumeCallbackFromLocation } from "@/lib/auth/post-login-resume-path";
 import { safeCallbackPath } from "@/lib/auth/safe-callback-path";
 
 export function SignupForm({
@@ -31,10 +32,17 @@ export function SignupForm({
 } = {}) {
   const { t, locale } = useMarketingI18n();
   const router = useRouter();
+  const pathname = usePathname() ?? "/";
   const searchParams = useSearchParams();
   const submitGeneration = useRef(0);
 
-  const redirectTarget = useMemo(() => safeCallbackPath(searchParams.get("callbackUrl")) ?? "/app", [searchParams]);
+  const redirectTarget = useMemo(() => {
+    const fromQuery = safeCallbackPath(searchParams.get("callbackUrl"));
+    if (fromQuery) return fromQuery;
+    const qs = searchParams.toString();
+    const q = qs ? `?${qs}` : "";
+    return marketingResumeCallbackFromLocation(pathname, q, locale);
+  }, [searchParams, pathname, locale]);
 
   const loginAfterSignupHref = useMemo(() => {
     const loginBase = withMarketingLocale(locale, "/login");

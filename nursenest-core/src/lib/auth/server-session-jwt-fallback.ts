@@ -3,7 +3,7 @@
  * Intentionally no `import "server-only"` so Node unit tests can import {@link sessionHasUserIdentity}.
  */
 import { cache } from "react";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { NextRequest } from "next/server";
 import type { JWT } from "next-auth/jwt";
 import type { Session } from "next-auth";
@@ -14,10 +14,26 @@ import { getAuthSessionJwtFromRequest } from "@/lib/auth/nextauth-request-jwt";
  * Builds a synthetic {@link NextRequest} from the current incoming request headers so
  * {@link getAuthSessionJwtFromRequest} can run with the same `secureCookie` parity as Edge (`proxy.ts`).
  * `pathname` only affects `nextUrl` fallback inside {@link resolveNextAuthHttpsForRequest}; cookies are path `/`.
+ *
+ * Under the hood, `getToken` (`@auth/core/jwt`) parses **only** the raw `Cookie` header string. Some App Router
+ * requests omit `Cookie` from {@link headers} while {@link cookies} still exposes chips — JWT fallback would then
+ * return null and `/admin` RSC gates (`requireAdmin`, `getStaffSession`) redirect to `/login` after Edge already allowed the request.
  */
 async function incomingRequestForJwtRead(pathname: string): Promise<NextRequest> {
   const h = await headers();
   const merged = new Headers(h);
+  if (!merged.get("cookie")?.trim()) {
+    try {
+      const jar = await cookies();
+      const serialized = jar
+        .getAll()
+        .map((c) => `${c.name}=${c.value}`)
+        .join("; ");
+      if (serialized.trim()) merged.set("Cookie", serialized);
+    } catch {
+      /* cookies() unavailable in this runtime context */
+    }
+  }
   const host = merged.get("x-forwarded-host")?.trim() || merged.get("host")?.trim() || "localhost";
   const rawProto = merged.get("x-forwarded-proto");
   const firstProto = rawProto?.split(",")[0]?.trim().toLowerCase() ?? "";

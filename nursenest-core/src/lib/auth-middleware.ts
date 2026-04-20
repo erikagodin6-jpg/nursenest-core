@@ -45,8 +45,13 @@ export const { auth: middlewareAuth } = NextAuth({
      */
     async authorized({ auth, request }) {
       const path = request.nextUrl.pathname;
-      const hasUser =
-        !!(auth?.user && ((auth.user as { id?: string }).id || auth.user.email));
+      const u = auth?.user as { id?: string; email?: string | null; sub?: string } | undefined;
+      const hasUser = Boolean(
+        u &&
+          ((typeof u.id === "string" && u.id.trim()) ||
+            (typeof u.email === "string" && u.email.trim()) ||
+            (typeof u.sub === "string" && u.sub.trim())),
+      );
       if (path.startsWith("/app")) {
         return hasUser;
       }

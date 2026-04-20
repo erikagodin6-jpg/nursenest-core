@@ -19,8 +19,13 @@ function loginRedirectWithCallback(path: string): string {
  */
 export async function requireUser() {
   const session = await getProtectedRouteSession("auth.require_user");
-  const u = session?.user as { id?: string; email?: string | null } | undefined;
-  if (!session?.user || (!u?.id && !u?.email)) {
+  const u = session?.user as { id?: string; email?: string | null; sub?: string } | undefined;
+  if (
+    !session?.user ||
+    !((typeof u?.id === "string" && u.id.trim()) ||
+      (typeof u?.email === "string" && u.email.trim()) ||
+      (typeof u?.sub === "string" && u.sub.trim()))
+  ) {
     notFound();
   }
   return session;
@@ -39,9 +44,14 @@ export async function requireAdmin() {
   /** Unresolved path is `"/"` — do not send users to login with callback `/` (use `/admin`). */
   const callbackPath = path && path.length > 0 && path !== "/" ? path : "/admin";
   const session = await getProtectedRouteSession("auth.require_admin");
-  const u = session?.user as { id?: string; email?: string | null } | undefined;
+  const u = session?.user as { id?: string; email?: string | null; sub?: string } | undefined;
 
-  if (!session?.user || (!u?.id && !u?.email)) {
+  if (
+    !session?.user ||
+    !((typeof u?.id === "string" && u.id.trim()) ||
+      (typeof u?.email === "string" && u.email.trim()) ||
+      (typeof u?.sub === "string" && u.sub.trim()))
+  ) {
     redirect(loginRedirectWithCallback(callbackPath));
   }
 

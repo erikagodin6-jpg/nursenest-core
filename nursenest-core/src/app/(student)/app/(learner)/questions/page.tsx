@@ -30,7 +30,7 @@ export default async function QuestionBankPage() {
         headline={t("learner.questions.title")}
         body={t("learner.entitlement.verifyFailed")}
         tone="default"
-        primaryCta={{ label: t("learner.dashboard.openAccountHub"), href: "/app/account/overview", variant: "primary" }}
+        primaryCta={{ label: t("learner.dashboard.openAccountHub"), href: "/app/account", variant: "primary" }}
         secondaryCtas={[{ label: t("nav.lessons"), href: "/app/lessons", variant: "secondary" }]}
         visualLayout="stack"
         ctaLayout="stack"

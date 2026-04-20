@@ -8,6 +8,8 @@ export function safeCallbackPath(raw: string | null): string | null {
     const u = new URL(raw, origin);
     if (u.origin !== new URL(origin).origin) return null;
     if (!u.pathname.startsWith("/")) return null;
+    /** Never post-login navigate to API routes — `router.push` to `/api/*` can render a raw JSON body in the document. */
+    if (u.pathname === "/api" || u.pathname.startsWith("/api/")) return null;
     return `${u.pathname}${u.search}${u.hash}`;
   } catch {
     return null;

@@ -3,6 +3,7 @@ import { cache } from "react";
 import { UserRole } from "@prisma/client";
 import type { Session } from "next-auth";
 import { safeAwait } from "@/lib/async/safe-await";
+import { AUTH_NODE_SESSION_READ_TIMEOUT_MS } from "@/lib/auth/auth-session-constants";
 import { renderTrace } from "@/lib/observability/render-trace";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { StaffTier } from "@/lib/auth/staff-roles";
@@ -21,8 +22,6 @@ function adminAccessDebug(): boolean {
   return process.env.ADMIN_ACCESS_DEBUG === "1" || process.env.ADMIN_ACCESS_DEBUG === "true";
 }
 
-/** Cold Postgres / pool warmup on small instances can exceed 1s; avoid false “not staff” → `/app` redirects. */
-const STAFF_SESSION_AUTH_TIMEOUT_MS = 2000;
 const STAFF_SESSION_ROLE_TIMEOUT_MS = 3500;
 
 /**
@@ -37,13 +36,13 @@ async function loadStaffSession(): Promise<StaffSession | null> {
     session = await safeAwait(
       auth() as Promise<Session | null>,
       "staff_session.auth",
-      STAFF_SESSION_AUTH_TIMEOUT_MS,
+      AUTH_NODE_SESSION_READ_TIMEOUT_MS,
     );
   } catch (error) {
     safeServerLog("auth", "staff_session_auth_failed", {
       detail: (error instanceof Error ? error.message : String(error)).slice(0, 200),
     });
-    return null;
+    session = null;
   }
   if (!sessionHasUserIdentity(session)) {
     const fb = await getAuthSessionWithJwtCookieFallback();

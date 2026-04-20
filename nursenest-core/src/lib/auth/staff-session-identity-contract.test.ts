@@ -16,8 +16,14 @@ test("staff-session: DB role lookup accepts email-only identity (parity with pro
   assert.match(staffSession, /if \(!userId && !emailRaw\)/);
   assert.match(staffSession, /loadUserRoleFromDbIdentity\(\{\s*userId:\s*userId\s*\?\?\s*null/);
   assert.match(staffSession, /enforceAdminProxyRoute|loadUserRoleFromDbIdentity/);
+  assert.match(
+    staffSession,
+    /session = null/,
+    "auth import failures should fall through to JWT cookie fallback instead of returning null immediately",
+  );
 
   const proxy = readFileSync(join(dir, "..", "..", "proxy.ts"), "utf8");
-  assert.match(proxy, /if \(!userId && !email\)/);
+  assert.match(proxy, /jwtIdentityOk/);
+  assert.match(proxy, /sessionJwtHasUserIdentity/);
   assert.match(proxy, /loadUserRoleFromDbIdentity\(\{\s*userId,\s*email\s*\}\)/);
 });

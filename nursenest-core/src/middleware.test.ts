@@ -78,6 +78,17 @@ test("edge auth: /admin and /api/admin use JWT cookie parity fallback (getAuthSe
   assert.match(am, /pages:\s*\{\s*signIn:\s*["']\/login["']/);
 });
 
+test("proxy reconciles Auth.js sign-in redirect on /admin with enforceAdminProxyRoute (DB gate)", () => {
+  const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
+  assert.match(proxySrc, /isAuthMiddlewareSignInRedirect/);
+  assert.match(proxySrc, /enforceAdminProxyRoute\(forwarded\)/);
+  assert.match(
+    proxySrc,
+    /NextAuth `authorized\(\)` can disagree with cookie-backed `getToken`/,
+    "document why admin surfaces re-run the proxy DB gate after an Auth.js sign-in redirect",
+  );
+});
+
 test("requireAdmin sends non-staff signed-in users to /app; tier mismatch to /admin", () => {
   const guards = readFileSync(join(dir, "lib", "auth", "guards.ts"), "utf8");
   const policy = readFileSync(join(dir, "lib", "auth", "admin-path-policy.ts"), "utf8");

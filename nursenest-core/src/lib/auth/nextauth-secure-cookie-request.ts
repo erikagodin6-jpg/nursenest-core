@@ -4,6 +4,8 @@
  * and rate limiting — authenticated requests then look anonymous.
  */
 export type NextAuthHttpsSignal =
+  | "auth_env_url_https"
+  | "auth_env_url_http"
   | "xff_any_https"
   | "xff_all_http"
   | "xff_inconclusive"
@@ -17,11 +19,51 @@ export type NextAuthHttpsResolution = {
   signal: NextAuthHttpsSignal;
 };
 
+function isLikelyLocalDevHostname(hostname: string): boolean {
+  const h = hostname.trim().toLowerCase();
+  if (!h) return false;
+  return h === "localhost" || h === "127.0.0.1" || h === "[::1]" || h.endsWith(".local");
+}
+
+function requestHostname(request: { headers: Headers; nextUrl: URL }): string {
+  const raw = request.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
+  if (raw) {
+    try {
+      return new URL(`http://${raw}`).hostname.toLowerCase();
+    } catch {
+      return raw.toLowerCase();
+    }
+  }
+  return request.nextUrl.hostname.toLowerCase();
+}
+
 /**
  * Resolves whether `getToken` should use the secure session cookie name, and records which input
  * determined that (for diagnostics — no secrets).
  */
 export function resolveNextAuthHttpsForRequest(request: { headers: Headers; nextUrl: URL }): NextAuthHttpsResolution {
+  /**
+   * Match `@auth/core` init: when `AUTH_URL` / `NEXTAUTH_URL` is an https origin, session cookies use
+   * the `__Secure-` name even if `x-forwarded-proto` is wrong/missing on the edge request (common behind
+   * misconfigured proxies). Skip this for localhost-style hosts so dev heuristics stay unchanged.
+   */
+  if (!isLikelyLocalDevHostname(requestHostname(request))) {
+    const envRaw = process.env.AUTH_URL?.trim() || process.env.NEXTAUTH_URL?.trim();
+    if (envRaw) {
+      try {
+        const u = new URL(envRaw.includes("://") ? envRaw : `https://${envRaw}`);
+        if (u.protocol === "https:") {
+          return { secureCookie: true, signal: "auth_env_url_https" };
+        }
+        if (u.protocol === "http:") {
+          return { secureCookie: false, signal: "auth_env_url_http" };
+        }
+      } catch {
+        /* ignore malformed env — fall through to forwarded headers */
+      }
+    }
+  }
+
   const rawProto = request.headers.get("x-forwarded-proto");
   if (rawProto) {
     const segments = rawProto

@@ -2,9 +2,14 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { nextAuthSecureCookieForRequest, resolveNextAuthHttpsForRequest } from "@/lib/auth/nextauth-secure-cookie-request";
 
-function req(headers: Record<string, string>, protocol: "http:" | "https:" = "https:") {
+/** Default host `localhost` so `AUTH_URL` in CI does not override x-forwarded-proto–driven expectations. */
+function req(
+  headers: Record<string, string>,
+  protocol: "http:" | "https:" = "https:",
+  hostname: string = "localhost",
+) {
   const h = new Headers(headers);
-  return { headers: h, nextUrl: new URL(`${protocol}//example.com/api/admin/x`) };
+  return { headers: h, nextUrl: new URL(`${protocol}//${hostname}/api/admin/x`) };
 }
 
 describe("nextAuthSecureCookieForRequest", () => {
@@ -57,5 +62,22 @@ describe("nextAuthSecureCookieForRequest", () => {
       secureCookie: true,
       signal: "next_url_https",
     });
+  });
+
+  it("uses AUTH_URL https for non-local hosts so secure session cookies match @auth/core", () => {
+    const prev = process.env.AUTH_URL;
+    process.env.AUTH_URL = "https://www.example.com";
+    try {
+      assert.deepEqual(
+        resolveNextAuthHttpsForRequest(req({ "x-forwarded-proto": "http" }, "http:", "www.example.com")),
+        { secureCookie: true, signal: "auth_env_url_https" },
+      );
+    } finally {
+      if (prev === undefined) {
+        Reflect.deleteProperty(process.env, "AUTH_URL");
+      } else {
+        process.env.AUTH_URL = prev;
+      }
+    }
   });
 });

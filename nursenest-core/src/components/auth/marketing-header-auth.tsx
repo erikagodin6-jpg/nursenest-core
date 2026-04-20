@@ -2,11 +2,12 @@
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { ChevronDown, User } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { marketingResumeCallbackFromLocation } from "@/lib/auth/post-login-resume-path";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { ADMIN_DASHBOARD_HREF } from "@/lib/auth/admin-dashboard-link";
@@ -77,10 +78,10 @@ export function MarketingHeaderAuthDesktop({
   }
 
   if (status !== "authenticated" || !session?.user) {
-    const loginToApp = localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`);
+    const loginHref = localizeHref(`/login?callbackUrl=${encodeURIComponent(resumePath)}`);
     return (
       <div style={navChromeStyle} className="flex max-w-[100vw] items-center gap-2">
-        <Link href={loginToApp} className={SIGN_IN_CLASS} aria-label="Log in to your NurseNest account">
+        <Link href={loginHref} className={SIGN_IN_CLASS} aria-label="Log in to your NurseNest account">
           {formatTitleCase("Log in", locale)}
         </Link>
         <Link
@@ -238,6 +239,15 @@ export function MarketingHeaderAuthMobile({
         onActivate={onNavigate}
         className="w-full rounded-xl border border-[var(--nav-border)] px-3 py-2.5 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
       />
+      <SignOutButton
+        className="w-full rounded-xl border border-[var(--nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
+        onBeforeSignOut={onNavigate}
+        redirectTo={localizeHref("/login")}
+      />
+    </div>
+  );
+}
+
       <SignOutButton
         className="w-full rounded-xl border border-[var(--nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
         onBeforeSignOut={onNavigate}

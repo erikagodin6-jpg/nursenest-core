@@ -2,6 +2,14 @@ import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 import type { NextAuthHttpsSignal } from "@/lib/auth/nextauth-secure-cookie-request";
 import { resolveNextAuthHttpsForRequest } from "@/lib/auth/nextauth-secure-cookie-request";
+
+/** Last-resort attempts when primary `secureCookie` + inverse miss (legacy names / odd proxies). */
+const EXPLICIT_AUTH_SESSION_COOKIE_ATTEMPTS: readonly { secureCookie: boolean; cookieName: string }[] = [
+  { secureCookie: true, cookieName: "__Secure-authjs.session-token" },
+  { secureCookie: false, cookieName: "authjs.session-token" },
+  { secureCookie: true, cookieName: "__Secure-next-auth.session-token" },
+  { secureCookie: false, cookieName: "next-auth.session-token" },
+];
 import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -25,6 +33,7 @@ export type AuthSessionJwtReadMeta = {
   secureCookieModePrimary: boolean;
   primaryJwtReadOk: boolean;
   fallbackJwtReadOk: boolean;
+  explicitCookieJwtReadOk: boolean;
   resolvedJwtOk: boolean;
 };
 
@@ -39,12 +48,24 @@ export async function readAuthSessionJwtWithMeta(
   const { secureCookie: primary, signal } = resolveNextAuthHttpsForRequest(request);
   const first = await getToken({ req: request, secret, secureCookie: primary });
   const second = first ? null : await getToken({ req: request, secret, secureCookie: !primary });
-  const resolved = first ?? second;
+  let resolved = first ?? second;
+  let explicitHit = false;
+  if (!resolved) {
+    for (const { secureCookie, cookieName } of EXPLICIT_AUTH_SESSION_COOKIE_ATTEMPTS) {
+      const t = await getToken({ req: request, secret, secureCookie, cookieName });
+      if (t) {
+        resolved = t;
+        explicitHit = true;
+        break;
+      }
+    }
+  }
   const readMeta: AuthSessionJwtReadMeta = {
     httpsSignal: signal,
     secureCookieModePrimary: primary,
     primaryJwtReadOk: Boolean(first),
     fallbackJwtReadOk: Boolean(second),
+    explicitCookieJwtReadOk: explicitHit,
     resolvedJwtOk: Boolean(resolved),
   };
   return { token: resolved, readMeta };
@@ -74,6 +95,7 @@ export async function getAuthSessionJwtFromRequest(
       secureCookieModePrimary: readMeta.secureCookieModePrimary,
       primaryJwtReadOk: readMeta.primaryJwtReadOk,
       fallbackJwtReadOk: readMeta.fallbackJwtReadOk,
+      explicitCookieJwtReadOk: readMeta.explicitCookieJwtReadOk,
       resolvedJwtOk: readMeta.resolvedJwtOk,
       ...(correlationId ? { correlationId } : {}),
     });
@@ -88,10 +110,11 @@ export async function getAuthSessionJwtFromRequest(
  * `src/lib/auth-middleware.ts` so “authenticated?” checks do not diverge.
  */
 export function sessionJwtHasUserIdentity(token: SessionJwtPayload | null): boolean {
-  if (!token) return false;
-  const sub = typeof token.sub === "string" ? token.sub.trim() : "";
-  const legacyIdRaw = (token as { id?: string | null }).id;
+  if (!token || typeof token !== "object") return false;
+  const t = token as { sub?: string; id?: string | null; email?: string | null };
+  const sub = typeof t.sub === "string" ? t.sub.trim() : "";
+  const legacyIdRaw = t.id;
   const legacyId = typeof legacyIdRaw === "string" ? legacyIdRaw.trim() : "";
-  const email = typeof token.email === "string" ? token.email.trim() : "";
+  const email = typeof t.email === "string" ? t.email.trim() : "";
   return Boolean(sub || legacyId || email);
 }

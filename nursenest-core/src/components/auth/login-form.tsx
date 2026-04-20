@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getSession, signIn, useSession } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { marketingResumeCallbackFromLocation } from "@/lib/auth/post-login-resume-path";
 import { safeCallbackPath } from "@/lib/auth/safe-callback-path";
 import { resolveLoginSubmitOutcome } from "@/components/auth/login-form-result";
 import { isLikelyNetworkFailure } from "@/components/auth/auth-client-error-handling";
@@ -21,8 +22,9 @@ export function LoginForm({
   /** Kept for API compatibility with marketing pages. */
   contactHref?: string;
 } = {}) {
-  const { t } = useMarketingI18n();
+  const { t, locale } = useMarketingI18n();
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const { status } = useSession();
   const [error, setError] = useState<string | null>(null);
@@ -32,14 +34,28 @@ export function LoginForm({
   const submitInFlightRef = useRef(false);
   const redirectTarget = useMemo(() => {
     const fromQuery = safeCallbackPath(searchParams.get("callbackUrl"));
-    return fromQuery ?? "/app";
-  }, [searchParams]);
+    if (fromQuery) return fromQuery;
+    const qs = searchParams.toString();
+    const q = qs ? `?${qs}` : "";
+    return marketingResumeCallbackFromLocation(pathname ?? "/", q, locale);
+  }, [searchParams, pathname, locale]);
 
   useEffect(() => {
     if (status === "authenticated") {
       router.replace(redirectTarget);
     }
   }, [status, router, redirectTarget]);
+
+  /**
+   * Release the sync submit guard after we have left the login surface.
+   * Clearing on `authenticated` alone can race: session can flip before client navigation finishes,
+   * briefly allowing a second credential POST while still on `/login`.
+   */
+  useEffect(() => {
+    if (status !== "authenticated") return;
+    if (pathname.includes("/login")) return;
+    submitInFlightRef.current = false;
+  }, [status, pathname]);
 
   async function onSubmit(formData: FormData) {
     setError(null);
@@ -113,10 +129,20 @@ export function LoginForm({
 
       keepSpinnerUntilRedirect = true;
       await router.refresh();
-      router.push(redirectTarget);
+      try {
+        await router.push(redirectTarget);
+      } catch {
+        keepSpinnerUntilRedirect = false;
+        submitInFlightRef.current = false;
+        setPending(false);
+        setError(t("pages.login.errorGeneric"));
+        setErrorHelp(null);
+        return;
+      }
     } finally {
-      submitInFlightRef.current = false;
+      /** Do not clear until navigation/session settles — otherwise a second submit can POST credentials again and hit proxy rate limits while the first login still succeeds. */
       if (!keepSpinnerUntilRedirect) {
+        submitInFlightRef.current = false;
         setPending(false);
       }
     }
@@ -135,7 +161,7 @@ export function LoginForm({
       className="mt-6 space-y-4"
       onSubmit={(e) => {
         e.preventDefault();
-        if (pending) return;
+        if (pending || submitInFlightRef.current) return;
         const fd = new FormData(e.currentTarget);
         void onSubmit(fd);
       }}

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-/** Short URL → canonical learner profile under /app. */
+/** Short URL → learner account hub (`/app/profile` also redirects here). */
 export default function ProfileShortLinkPage() {
-  redirect("/app/account/overview");
+  redirect("/app/account");
 }

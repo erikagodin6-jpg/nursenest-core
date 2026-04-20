@@ -1,7 +1,7 @@
 /**
  * Behavioral baseline guards: legacy SPA / marketing URL contracts vs Core learner surfaces.
  * Source-of-truth for legacy routing: `client/src/App.tsx` (wouter), allied under `client/src/allied/*`.
- * Core mapping: `src/lib/legacy-marketing-routes.ts`; learner IA: `src/components/student/learner-account-nav.tsx`.
+ * Core mapping: `src/lib/legacy-marketing-routes.ts`; learner IA: `src/lib/learner/learner-account-nav-groups.ts` (+ `learner-account-nav.tsx`).
  */
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
@@ -54,6 +54,8 @@ describe("Core route modules exist (guards dead lesson/profile/marketing entry)"
     const accountIdx = join(appRoot, "app", "(student)", "app", "(learner)", "account", "page.tsx");
     const hubSrc = readFileSync(accountIdx, "utf8");
     assert.match(hubSrc, /LearnerAccountHub/, "account landing should render LearnerAccountHub");
+    const profileIdx = join(appRoot, "app", "(student)", "app", "(learner)", "profile", "page.tsx");
+    assert.match(readFileSync(profileIdx, "utf8"), /redirect\("\/app\/account"\)/, "profile short URL should land on account hub");
   });
 
   it("pre-nursing marketing surfaces", () => {

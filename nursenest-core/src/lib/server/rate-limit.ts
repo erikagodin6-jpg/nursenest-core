@@ -477,7 +477,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     const { ok } = await checkRateLimitUnified(key, { windowMs: PUBLIC_WINDOW_MS, max: cap });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", { kind: "auth_session", path: "/api/auth/session" });
-      const res = await json429WithBackoff(ipKey);
+      const res = await json429WithBackoff(ipKey, request);
       if (await recordStrikeAndTighten(ipKey)) {
         safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ipKey) });
       }

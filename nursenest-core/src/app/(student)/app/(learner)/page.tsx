@@ -387,7 +387,7 @@ async function LearnerDashboardDeferredContent({
           headline={t("learner.dashboard.title")}
           body={t("learner.entitlement.verifyFailed")}
           tone="default"
-          primaryCta={{ label: t("learner.dashboard.openAccountHub"), href: "/app/account/overview", variant: "primary" }}
+          primaryCta={{ label: t("learner.dashboard.openAccountHub"), href: "/app/account", variant: "primary" }}
           secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
