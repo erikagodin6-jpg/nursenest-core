@@ -106,6 +106,8 @@ type CredentialsUserRow = Prisma.UserGetPayload<{ select: typeof CREDENTIALS_USE
 let authDebugStartupConfigLogged = false;
 
 function logAuthDebugStartupConfigOnce(): void {
+  /** Next static prerender / collectPageData spawns many workers; skip noisy duplicate lines during build. */
+  if (process.env.NEXT_PHASE === "phase-production-build") return;
   if (authDebugStartupConfigLogged) return;
   authDebugStartupConfigLogged = true;
   const has = (k: string) =>

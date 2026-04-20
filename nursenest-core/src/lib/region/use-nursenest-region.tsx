@@ -39,19 +39,35 @@ function readLocalStorageRegion(): NursenestRegion | null {
 }
 
 /**
- * Wrap marketing chrome + pages. `serverRegion` comes from {@link getMarketingRegionFromCookies} so SSR/CSR
- * match the `nn_marketing_region` cookie before localStorage is applied.
+ * Wrap marketing chrome + pages. `serverRegion` comes from the marketing layout (cookie-aware).
+ *
+ * When `trustClientPersistedRegion` is false, the client must not override `serverRegion` with
+ * `localStorage` — used on unprefixed marketing where no `nn_marketing_region` cookie means a
+ * Canada-first default (stale `nursenest-region` US would otherwise win after hydration).
  */
 export function NursenestRegionRoot({
   serverRegion,
+  trustClientPersistedRegion = true,
   children,
 }: {
   serverRegion: NursenestRegion;
+  /** When false, ignore `localStorage` for region and sync storage + cookie from `serverRegion`. */
+  trustClientPersistedRegion?: boolean;
   children: ReactNode;
 }) {
   const [region, setRegionState] = useState<NursenestRegion>(serverRegion);
 
   useEffect(() => {
+    if (!trustClientPersistedRegion) {
+      setRegionState(serverRegion);
+      writeRegionCookie(serverRegion);
+      try {
+        localStorage.setItem(STORAGE_KEY, serverRegion);
+      } catch {
+        /* ignore */
+      }
+      return;
+    }
     const ls = readLocalStorageRegion();
     if (ls) {
       setRegionState(ls);
@@ -60,16 +76,17 @@ export function NursenestRegionRoot({
     }
     setRegionState(serverRegion);
     writeRegionCookie(serverRegion);
-  }, [serverRegion]);
+  }, [serverRegion, trustClientPersistedRegion]);
 
   useEffect(() => {
+    if (!trustClientPersistedRegion) return;
     const handler = () => {
       const ls = readLocalStorageRegion();
       if (ls) setRegionState(ls);
     };
     window.addEventListener(CHANGE_EVENT, handler);
     return () => window.removeEventListener(CHANGE_EVENT, handler);
-  }, []);
+  }, [trustClientPersistedRegion]);
 
   const setRegion = useCallback((next: NursenestRegion) => {
     try {

@@ -6,6 +6,8 @@ import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messa
 import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
+import { parseMarketingRegionCookieValue } from "@/lib/region/marketing-region-cookie";
+import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import {
   defaultPracticeExamsMetaDescription,
   defaultPracticeExamsMetaTitle,
@@ -23,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!isCoreHostedNonDefaultLocale(locale)) notFound();
   return safeGenerateMetadata(
     async () => {
-      const marketingRegion = await getMarketingRegionFromCookies();
+      const marketingRegion = parseMarketingRegionCookieValue(undefined) as MarketingRegionToggle;
       const m = await loadMarketingMessages(locale);
       const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
       const metaSfx = marketingRegion === "US" ? "US" : "CA";

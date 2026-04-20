@@ -14,12 +14,14 @@ import {
   type MarketingRegionToggle,
 } from "@/lib/marketing/marketing-entry-routes";
 import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { loadMarketingLayoutShardsOverlay } from "@/lib/marketing-i18n/load-marketing-route-shard-bundles";
 import { formatMarketingMessage, resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
+import { parseMarketingRegionCookieValue } from "@/lib/region/marketing-region-cookie";
 import {
   defaultQuestionBankMetaDescription,
   defaultQuestionBankMetaTitle,
@@ -104,8 +106,9 @@ const CARDS: PathwayCard[] = [
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {
-      const locale = await getMarketingLocaleForDefaultRoute();
-      const marketingRegion = await getMarketingRegionFromCookies();
+      /** No `cookies()` here — keeps prerender / collectPageData static-safe (body may still read cookies). */
+      const locale = DEFAULT_MARKETING_LOCALE;
+      const marketingRegion = parseMarketingRegionCookieValue(undefined) as MarketingRegionToggle;
       const messages = await loadMarketingLayoutShardsOverlay(locale);
       const metaSfx = marketingRegion === "US" ? "US" : "CA";
       const title = resolveMarketingCopy(

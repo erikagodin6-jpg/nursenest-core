@@ -37,7 +37,15 @@ function shouldLayerMainPageShards() {
 }
 
 /** Minimal chrome for `/` when `NN_HOME_STATIC_MARKETING_LAYOUT` — matches fatal-shell shape (no header/footer). */
-function marketingDefaultLayoutStaticShellForHome({ children }: { children: React.ReactNode }) {
+function marketingDefaultLayoutStaticShellForHome({
+  children,
+  serverRegion,
+  trustClientPersistedRegion,
+}: {
+  children: React.ReactNode;
+  serverRegion: MarketingRegionToggle;
+  trustClientPersistedRegion: boolean;
+}) {
   const shellMessages = mergeMinimalMarketingLayoutShellMessages({});
   return (
     <MarketingI18nProvider
@@ -46,7 +54,7 @@ function marketingDefaultLayoutStaticShellForHome({ children }: { children: Reac
       messages={shellMessages}
       fallbackMessages={undefined}
     >
-      <NursenestRegionRoot serverRegion={"US"}>
+      <NursenestRegionRoot serverRegion={serverRegion} trustClientPersistedRegion={trustClientPersistedRegion}>
         <div className="nn-marketing-surface flex min-h-screen flex-col">
           <main className="flex min-h-0 flex-1 flex-col">
             <PageTransitionShell>{children}</PageTransitionShell>
@@ -78,7 +86,13 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
             elapsed_ms: nnHomeDiagNowMs() - layoutBootT0,
           });
         }
-        return marketingDefaultLayoutStaticShellForHome({ children });
+        const staticShellRegionCookie = await readOptionalMarketingRegionToggleForCountry();
+        const staticShellServerRegion: MarketingRegionToggle = staticShellRegionCookie ?? "CA";
+        return marketingDefaultLayoutStaticShellForHome({
+          children,
+          serverRegion: staticShellServerRegion,
+          trustClientPersistedRegion: staticShellRegionCookie !== undefined,
+        });
       }
     } catch {
       /* fall through — e.g. headers unavailable */
@@ -128,7 +142,6 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
     try {
       layoutStderrTrace("marketing_layout", "marketing layout start", { route: "shared-marketing-default" });
       const resolvedLocale: string = DEFAULT_MARKETING_LOCALE;
-      const serverRegion: MarketingRegionToggle = "US";
       let messages: Record<string, string> = {};
       let fallbackMessages: Record<string, string> | undefined = undefined;
 
@@ -231,6 +244,9 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         marketingRequestPath = "/";
       }
       const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry();
+      /** Canada-first on unprefixed marketing: no cookie means CA, not US (see `readOptionalMarketingRegionToggleForCountry`). */
+      const serverRegion: MarketingRegionToggle = marketingRegionCookie ?? "CA";
+      const trustClientPersistedRegion = marketingRegionCookie !== undefined;
       const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingRegionCookie);
 
       return (
@@ -240,7 +256,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
           messages={messages}
           fallbackMessages={fallbackMessages}
         >
-          <NursenestRegionRoot serverRegion={serverRegion}>
+          <NursenestRegionRoot serverRegion={serverRegion} trustClientPersistedRegion={trustClientPersistedRegion}>
             <MarketingCountryChromeProvider country={marketingCountry}>
               <OrganizationJsonLd />
               <WebSiteJsonLd />
@@ -284,7 +300,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
           messages={shellMessages}
           fallbackMessages={undefined}
         >
-          <NursenestRegionRoot serverRegion={"US"}>
+          <NursenestRegionRoot serverRegion={"CA"} trustClientPersistedRegion={false}>
             <div className="nn-marketing-surface flex min-h-screen flex-col">
               <main className="flex min-h-0 flex-1 flex-col">
                 <PageTransitionShell>{children}</PageTransitionShell>

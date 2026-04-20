@@ -5,6 +5,7 @@ import { loadMarketingLayoutShardsOverlay } from "@/lib/marketing-i18n/load-mark
 import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
+import { parseMarketingRegionCookieValue } from "@/lib/region/marketing-region-cookie";
 import {
   defaultQuestionBankMetaDescription,
   defaultQuestionBankMetaTitle,
@@ -24,7 +25,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!isCoreHostedNonDefaultLocale(locale)) notFound();
   return safeGenerateMetadata(
     async () => {
-      const marketingRegion = (await getMarketingRegionFromCookies()) as MarketingRegionToggle;
+      /** Deterministic US/CA meta keys for prerender — same anonymous default as a missing region cookie. */
+      const marketingRegion = parseMarketingRegionCookieValue(undefined) as MarketingRegionToggle;
       const messages = await loadMarketingLayoutShardsOverlay(locale);
       const metaSfx = marketingRegion === "US" ? "US" : "CA";
       const title = resolveMarketingCopy(
