@@ -1141,17 +1141,17 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
 
 /* Subtle entry motion for section wrappers (cheap, no JS dependency). */
 .nn-section-enter {
-  animation: nn-section-fade-up var(--motion-slow) var(--motion-ease) both;
+  animation: nn-section-fade-up var(--motion-slow) var(--motion-ease) forwards;
 }
 
 /* Premium empty states: one-shot fade, token timing */
 .nn-empty-state-enter {
-  animation: nn-empty-state-fade var(--motion-slow) var(--motion-ease) both;
+  animation: nn-empty-state-fade var(--motion-slow) var(--motion-ease) forwards;
 }
 
 @keyframes nn-empty-state-fade {
   from {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(4px);
   }
   to {
@@ -2464,19 +2464,20 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
 }
 
 .animate-page-enter {
-  animation: pageEnter 0.34s ease-out;
+  /* `forwards` only — never `both` (backwards fill must not pre-hide marketing chrome). */
+  animation: pageEnter 0.34s ease-out forwards;
 }
 
 /* Legacy hero column motion (replaces tailwindcss-animate utilities not bundled in Core) */
 @media (min-width: 768px) {
   .hero-motion-enter {
-    animation: heroFadeUp 0.7s ease-out both;
+    animation: heroFadeUp 0.7s ease-out forwards;
   }
 }
 
 @keyframes heroFadeUp {
   from {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(8px);
   }
   to {
@@ -2487,7 +2488,7 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
 
 @keyframes pageEnter {
   from {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(8px);
   }
   to {
@@ -2498,7 +2499,7 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
 
 @keyframes nn-section-fade-up {
   from {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(6px);
   }
   to {
@@ -2507,10 +2508,13 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
   }
 }
 
+/* Enter motion only: never drive opacity to 0 — `animation-fill-mode: both` on `.nn-header-animate-in`
+   applies `from` before the first frame, which previously made the whole public header invisible
+   briefly (read as “missing nav/logo” on slow devices or under load). */
 @keyframes nn-header-enter {
   from {
-    opacity: 0;
-    transform: translateY(-6px);
+    opacity: 1;
+    transform: translateY(-5px);
   }
   to {
     opacity: 1;
@@ -2519,12 +2523,12 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
 }
 
 .nn-header-animate-in {
-  animation: nn-header-enter var(--brand-motion-medium) var(--brand-motion-ease-luxury) both;
+  animation: nn-header-enter var(--brand-motion-medium) var(--brand-motion-ease-luxury) forwards;
 }
 
 @keyframes nn-overlay-enter {
   from {
-    opacity: 0;
+    opacity: 0.5;
   }
   to {
     opacity: 1;
@@ -2553,7 +2557,7 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
 
 @keyframes nn-mega-panel-enter {
   from {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(4px);
   }
   to {

@@ -40,7 +40,12 @@ function shouldLayerMainPageShards() {
   return true;
 }
 
-/** Minimal chrome for `/` when `NN_HOME_STATIC_MARKETING_LAYOUT` — matches fatal-shell shape (no header/footer). */
+/**
+ * Minimal chrome for `/` when `NN_HOME_STATIC_MARKETING_LAYOUT` (diagnostic; production-guarded).
+ * Uses {@link MarketingDefaultLayoutChromeFailsafeShell} (logo + compact nav + theme), not
+ * {@link SiteHeader}/{@link SiteFooter}, to avoid heavy chrome shard loads — do not expect parity
+ * with the full marketing shell when this path is active.
+ */
 function marketingDefaultLayoutStaticShellForHome({
   children,
   serverRegion,

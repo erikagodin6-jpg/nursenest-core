@@ -19,7 +19,7 @@ export type PageTransitionShellProps = {
 };
 
 /**
- * Subtle route transition: fade + slight translateY.
+ * Subtle route transition: translateY only (opacity stays 1 so marketing shell never “blinks”).
  * First paint / direct loads: no enter animation (avoids hydration mismatch and flash).
  * `prefers-reduced-motion`: pass-through, no animation.
  */
@@ -47,7 +47,7 @@ export function PageTransitionShell({
   return (
     <motion.div
       key={pathname}
-      initial={shouldAnimateEnter ? { opacity: 0, y: ENTER_Y } : { opacity: 1, y: 0 }}
+      initial={shouldAnimateEnter ? { opacity: 1, y: ENTER_Y } : { opacity: 1, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: DURATION, ease: EASE_LUXURY }}
       className="min-h-0"

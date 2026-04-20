@@ -887,7 +887,7 @@ export function SiteHeader() {
             id={`mega-menu-${openMega.key}`}
             role="dialog"
             aria-label={`${openMega.label} menu`}
-            className="absolute inset-x-0 top-full z-[120] hidden xl:block animate-[nn-mega-panel-enter_var(--brand-motion-normal)_var(--brand-motion-ease-luxury)_both]"
+            className="absolute inset-x-0 top-full z-[120] hidden xl:block animate-[nn-mega-panel-enter_var(--brand-motion-normal)_var(--brand-motion-ease-luxury)_forwards]"
           >
             <div className="nn-section-shell pb-5 pt-1.5">
               <div className="overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-strong)] shadow-[var(--shadow-elevated)] ring-1 ring-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border-subtle))]">
@@ -1007,9 +1007,9 @@ export function SiteHeader() {
 
       {mobileOpen && typeof document !== "undefined"
         ? createPortal(
-            <div className="fixed inset-0 z-[200] xl:hidden animate-[nn-overlay-enter_0.24s_ease_both]">
+            <div className="fixed inset-0 z-[200] xl:hidden animate-[nn-overlay-enter_0.24s_ease_forwards]">
           <button type="button" className="absolute inset-0 bg-black/56" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)} />
-          <div className="absolute inset-x-0 top-0 flex h-[100dvh] max-h-[100dvh] flex-col border-b border-[var(--nav-border)] bg-[var(--nav-bg)] text-[var(--nav-fg)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-in_0.28s_cubic-bezier(0.25,0.1,0.25,1)_both]">
+          <div className="absolute inset-x-0 top-0 flex h-[100dvh] max-h-[100dvh] flex-col border-b border-[var(--nav-border)] bg-[var(--nav-bg)] text-[var(--nav-fg)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-in_0.28s_cubic-bezier(0.25,0.1,0.25,1)_forwards]">
             <div className="flex h-16 shrink-0 items-center justify-between border-b border-[var(--header-border)] px-4 pt-[max(0.5rem,env(safe-area-inset-top))]">
               <Link
                 href={localizeHref("/")}

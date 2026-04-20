@@ -85,7 +85,7 @@ export function MobileContextDrawer({
   const hasMultipleLocales = regionCfg.allowedLocales.length > 1;
 
   const overlay = (
-    <div className="fixed inset-0 z-[210] md:hidden animate-[nn-overlay-enter_0.24s_ease_both]">
+    <div className="fixed inset-0 z-[210] md:hidden animate-[nn-overlay-enter_0.24s_ease_forwards]">
       {/* Backdrop */}
       <button
         type="button"
@@ -95,7 +95,7 @@ export function MobileContextDrawer({
       />
 
       {/* Drawer panel — slides from bottom */}
-      <div className="absolute inset-x-0 bottom-0 flex max-h-[85dvh] flex-col rounded-t-2xl border-t border-[var(--border-subtle)] bg-[var(--surface-strong)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-up_0.28s_cubic-bezier(0.25,0.1,0.25,1)_both]">
+      <div className="absolute inset-x-0 bottom-0 flex max-h-[85dvh] flex-col rounded-t-2xl border-t border-[var(--border-subtle)] bg-[var(--surface-strong)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-up_0.28s_cubic-bezier(0.25,0.1,0.25,1)_forwards]">
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-[var(--border-subtle)] px-5 py-3.5">
           <div className="flex items-center gap-2">

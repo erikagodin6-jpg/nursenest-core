@@ -2,8 +2,9 @@
  * Reversible homepage isolation / diagnostics (env-gated). No secrets.
  * - `NN_HOME_STATIC_PROBE=true` — minimal `/` page body in `page.tsx` (skip heavy awaits).
  * - `NN_HOME_STATIC_METADATA=true` — `generateMetadata` for `/` returns static fallback only (no async).
- * - `NN_HOME_STATIC_MARKETING_LAYOUT=true` — `(marketing)/(default)/layout.tsx` serves a minimal shell for
- *   requests whose `x-nn-request-pathname` is `/` only (skips chrome shard load + Sentry span import).
+ * - `NN_HOME_STATIC_MARKETING_LAYOUT=true` — `(marketing)/(default)/layout.tsx` serves a minimal **failsafe**
+ *   shell (not `SiteHeader`/`SiteFooter`) for requests whose `x-nn-request-pathname` is `/` only
+ *   (skips chrome shard load + Sentry span import).
  * - `NN_HOME_ROUTE_DIAG=true` — stderr JSON breadcrumbs for `/` path timing (narrow segments).
  * - `NN_HOME_RENDER_DIAG=true` — same JSON breadcrumbs as route diag, but without forcing static probes
  *   (use to trace hangs while keeping normal HTML/metadata).

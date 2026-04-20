@@ -83,14 +83,15 @@ export const fadeInVariants: Variants = {
 /** @deprecated Use `fadeInVariants` — same opacity-only fade. */
 export const fadeVariants = fadeInVariants;
 
+/** Opacity stays 1 so first paint / SSR is never “blank” hero lines; motion is translate only. */
 export const fadeUpVariants: Variants = {
-  hidden: { opacity: 0, y: yFade },
+  hidden: { opacity: 1, y: yFade },
   visible: { opacity: 1, y: 0 },
 };
 
 /** Tighter vertical travel than fadeUp — section lines, captions. */
 export const softRevealVariants: Variants = {
-  hidden: { opacity: 0, y: ySoft },
+  hidden: { opacity: 1, y: ySoft },
   visible: { opacity: 1, y: 0 },
 };
 
