@@ -213,8 +213,9 @@ Runtime secrets for all `STRIPE_*` and `NEXT_PUBLIC_APP_URL`. Ensure outbound HT
 ### Dashboard / outside repo
 
 - **Stripe Dashboard:** Products, Prices, Customers, **Developers → Webhooks**.
-- Point webhook to: `https://<your-domain>/api/subscriptions/webhook`.
+- **Production (live):** endpoint URL **`https://www.nursenest.ca/api/subscriptions/webhook`** (see below). Other environments: use a hostname with **valid TLS for that exact name** + `/api/subscriptions/webhook`.
 - Events: subscribe to what `route.ts` handles (subscription lifecycle — align with implementation).
+- **Operator checklist (cutover, secret rotation, replay):** `docs/stripe-webhook-production-operations.md`.
 
 ### Production hostname (NurseNest live)
 

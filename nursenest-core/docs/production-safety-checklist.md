@@ -43,7 +43,7 @@ Use this document for **every production or production-like** promotion. It comp
 
 - [ ] **`DATABASE_URL`**: Set, `postgresql` scheme, includes sensible **`connect_timeout`** / **`statement_timeout`** in options where policy requires (see `validate-production-db-env`).
 - [ ] **`AUTH_SECRET` or `NEXTAUTH_SECRET`**: Set in production; **`AUTH_URL` / `NEXTAUTH_URL`** origin-only (no `/login` path).
-- [ ] **Stripe**: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, and price env keys for every **live** plan surface; webhook endpoint URL matches this deployment’s public origin.
+- [ ] **Stripe**: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, and price env keys for every **live** plan surface; live webhook endpoint URL is **`https://www.nursenest.ca/api/subscriptions/webhook`** and `STRIPE_WEBHOOK_SECRET` matches that endpoint’s signing secret (`docs/stripe-webhook-production-operations.md`).
 - [ ] **Email**: `RESEND_API_KEY` and from-addresses if transactional email is required.
 - [ ] **Redis / optional**: If used for rate limits or caches, URL and TLS match runtime; login rate limit **fails open** on Redis error — monitor anyway.
 - [ ] **Public vs secret**: No secrets in `NEXT_PUBLIC_*`; no secrets committed to repo; `.env.example` documents non-secret defaults only.
