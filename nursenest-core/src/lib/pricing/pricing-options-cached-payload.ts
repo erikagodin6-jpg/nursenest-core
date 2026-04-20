@@ -66,7 +66,7 @@ export type PricingOptionsPayload = {
   trialDays: typeof STRIPE_TRIAL_DAYS;
 };
 
-function buildPricingOptionsPayload(): PricingOptionsPayload {
+export function buildPricingOptionsPayload(): PricingOptionsPayload {
   const nursingPlans: NursingPlanRow[] = [];
   for (const combo of eachNursingPricedCombination()) {
     const { tier, duration, planCode } = combo;

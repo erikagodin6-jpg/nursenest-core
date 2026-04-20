@@ -19,7 +19,8 @@ export async function loadUserRoleFromDbIdentity(identity: RoleIdentity): Promis
   if (!isDatabaseUrlConfigured()) return null;
 
   const userId = identity.userId?.trim() || null;
-  const email = identity.email?.trim() || null;
+  const emailRaw = identity.email?.trim() || null;
+  const email = emailRaw ? emailRaw.toLowerCase() : null;
 
   const byId = userId
     ? await prisma.user.findUnique({

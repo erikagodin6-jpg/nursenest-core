@@ -5,12 +5,21 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 type Variant = "login" | "signup";
 
+/** `aboveForm`: spacing before the form (inside auth card). `standalone`: below primary card; outer page supplies gap. */
+type TrustLayout = "aboveForm" | "standalone";
+
 const ICONS = [ShieldCheck, CircleHelp, KeyRound, Wifi] as const;
 
 /**
  * Addresses common auth anxieties (safety, failures, password reset, reliability) on login/signup.
  */
-export function AuthFlowTrustReassurance({ variant }: { variant: Variant }) {
+export function AuthFlowTrustReassurance({
+  variant,
+  layout = "aboveForm",
+}: {
+  variant: Variant;
+  layout?: TrustLayout;
+}) {
   const { t } = useMarketingI18n();
 
   const items: { q: string; a: string; Icon: (typeof ICONS)[number] }[] = [
@@ -39,11 +48,12 @@ export function AuthFlowTrustReassurance({ variant }: { variant: Variant }) {
     },
   ];
 
+  const panelClass =
+    "rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-4 text-left";
+  const layoutClass = layout === "aboveForm" ? "mb-6" : "";
+
   return (
-    <div
-      className="mb-6 rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-4 text-left"
-      aria-labelledby="auth-trust-heading"
-    >
+    <div className={[layoutClass, panelClass].filter(Boolean).join(" ")} aria-labelledby="auth-trust-heading">
       <p id="auth-trust-heading" className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-info)]">
         {t("pages.authTrust.heading")}
       </p>

@@ -213,7 +213,7 @@ export const authConfig: NextAuthConfig = {
       },
     },
   },
-  pages: { signIn: "/login" },
+  pages: { signIn: "/login", error: "/login" },
   providers: [
     Credentials({
       credentials: {

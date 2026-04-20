@@ -1,7 +1,14 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { CACHE_HEADER_PRICING_OPTIONS } from "@/lib/cache/public-edge-cache";
 import { recordApiRouteTelemetry } from "@/lib/observability/api-route-telemetry";
-import { getCachedPricingOptionsPayload } from "@/lib/pricing/pricing-options-cached-payload";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+import {
+  buildPricingOptionsPayload,
+  getCachedPricingOptionsPayload,
+  type PricingOptionsPayload,
+} from "@/lib/pricing/pricing-options-cached-payload";
+
+export const runtime = "nodejs";
 
 /**
  * Anonymous display pricing — **no cookies / no user headers** in cache key.
@@ -9,7 +16,14 @@ import { getCachedPricingOptionsPayload } from "@/lib/pricing/pricing-options-ca
  */
 export async function GET(req: NextRequest) {
   const startedAt = performance.now();
-  const body = await getCachedPricingOptionsPayload();
+  let body: PricingOptionsPayload;
+  try {
+    body = await getCachedPricingOptionsPayload();
+  } catch (error) {
+    const message = (error instanceof Error ? error.message : String(error)).slice(0, 400);
+    safeServerLog("billing", "pricing_options_cache_unavailable", { message });
+    body = buildPricingOptionsPayload();
+  }
   const res = NextResponse.json(body, { headers: CACHE_HEADER_PRICING_OPTIONS });
   recordApiRouteTelemetry({
     req,

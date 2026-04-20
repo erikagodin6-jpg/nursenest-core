@@ -46,7 +46,7 @@ export const { auth: middlewareAuth } = NextAuth({
     maxAge: JWT_SESSION_MAX_AGE_SEC,
     updateAge: JWT_SESSION_UPDATE_AGE_SEC,
   },
-  pages: { signIn: "/login" },
+  pages: { signIn: "/login", error: "/login" },
   providers: [
     Credentials({
       credentials: {

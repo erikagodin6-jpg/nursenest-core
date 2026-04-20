@@ -284,13 +284,32 @@ async function publicCapForIpAsync(ip: string, base: number): Promise<number> {
   return base;
 }
 
+function isLikelyBrowserDocumentNavigation(request: NextRequest): boolean {
+  const mode = request.headers.get("sec-fetch-mode");
+  if (mode === "navigate") return true;
+  const dest = request.headers.get("sec-fetch-dest");
+  if (dest === "document") return true;
+  const accept = request.headers.get("accept") ?? "";
+  return accept.includes("text/html");
+}
+
+/**
+ * GETs to these paths are commonly full-page navigations (back button, `window.location`, OAuth return).
+ * Returning JSON 429 would paint raw JSON in the document — redirect to `/login` instead.
+ */
+function isAuthStrictPathForDocumentRateLimitRedirect(pathname: string): boolean {
+  if (pathname === "/api/auth/error") return true;
+  if (pathname === "/api/auth/providers") return true;
+  if (pathname === "/api/auth/signin" || pathname.startsWith("/api/auth/signin/")) return true;
+  return false;
+}
+
 /**
  * Auth.js browser `signIn({ redirect: false })` always parses `const data = await res.json()` then
  * `new URL(data.url)` **before** branching on `res.ok`. A bare JSON 429 without `url` throws `TypeError: Invalid URL`,
  * which breaks the login UX and can surface odd client states when a duplicate POST races.
  *
- * For proxy rate limits on `/api/auth/*` strict paths, include a stable `signin` URL with query params the client can parse.
- * @see {@link buildAuthStrictRateLimit429Json}
+ * For proxy rate limits on `/api/auth/*` strict paths, include a stable **UI** `url` (see {@link buildAuthStrictRateLimit429Json}).
  */
 async function json429WithBackoff(ip: string, request?: NextRequest): Promise<NextResponse> {
   const r = await consumeRateLimitUnified(streakMetaKey(ip), 1, {
@@ -299,6 +318,26 @@ async function json429WithBackoff(ip: string, request?: NextRequest): Promise<Ne
   });
   const streak = r.ok ? STREAK_BUCKET_MAX - Math.max(0, r.remaining) : STREAK_BUCKET_MAX;
   const sec = retryAfterSecondsFrom429Streak(streak);
+  if (
+    request &&
+    request.method.toUpperCase() === "GET" &&
+    isLikelyBrowserDocumentNavigation(request) &&
+    isAuthStrictPathForDocumentRateLimitRedirect(request.nextUrl.pathname)
+  ) {
+    const dest = request.nextUrl.clone();
+    dest.pathname = "/login";
+    dest.search = "";
+    dest.searchParams.set("error", "rate_limited");
+    dest.searchParams.set("code", "rate_limit_exceeded");
+    dest.searchParams.set("retryAfterSec", String(sec));
+    return NextResponse.redirect(dest, {
+      status: 302,
+      headers: {
+        "Retry-After": String(sec),
+        "Cache-Control": "no-store",
+      },
+    });
+  }
   const body =
     request != null
       ? buildAuthStrictRateLimit429Json(request.nextUrl.origin, sec)

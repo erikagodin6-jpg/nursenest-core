@@ -1,3 +1,5 @@
+import { sanitizeClientNavigationHref } from "@/lib/auth/safe-auth-ui-redirect";
+
 type ClientAppRouter = {
   refresh: () => Promise<void> | void;
   replace: (href: string) => Promise<void> | void;
@@ -31,8 +33,9 @@ export async function refreshThenReplaceIfDifferent(
   searchParams: Pick<URLSearchParams, "toString">,
 ): Promise<void> {
   await router.refresh();
+  const safeTarget = sanitizeClientNavigationHref(redirectTarget, "/login");
   const here = pathnameWithSearch(pathname, searchParams);
-  if (!pathsEqualForSpaNavigation(redirectTarget, here)) {
-    await router.replace(redirectTarget);
+  if (!pathsEqualForSpaNavigation(safeTarget, here)) {
+    await router.replace(safeTarget);
   }
 }

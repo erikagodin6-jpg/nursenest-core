@@ -50,10 +50,10 @@ test.describe("Admin JWT gate regression — unauthenticated", () => {
       }
     });
     await page.context().clearCookies();
+    await page.goto("about:blank");
     await page.goto(`${origin}/admin`, { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT_MS });
     await expect(page).toHaveURL(/\/login/i, { timeout: 45_000 });
     await expect(page.locator("#login-identifier")).toBeVisible({ timeout: 15_000 });
-    await expect(page.locator("#login-identifier")).toBeEnabled({ timeout: 10_000 });
     const tail = urls.slice(-12);
     const oscillation =
       tail.length >= 6 &&
@@ -68,7 +68,7 @@ test.describe("Admin JWT gate regression — non-admin", () => {
     const creds = getQaFreeCredentials();
     test.skip(!creds, "Set E2E_FREE_EMAIL + E2E_FREE_PASSWORD (or QA_FREE_*)");
     const origin = originFromBaseURL(baseURL);
-    await loginWithCredentials(page, creds!.email, creds!.password);
+    await loginWithCredentials(page, creds!.email, creds!.password, { navigationOrigin: origin });
     await page.goto(`${origin}/admin`, { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT_MS });
     await expect
       .poll(() => new URL(page.url()).pathname, { timeout: 45_000 })

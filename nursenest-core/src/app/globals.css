@@ -1910,10 +1910,10 @@ html[data-theme] .nn-marketing-surface {
     padding-block: 0.45rem;
   }
 
-  /* Anchor brand column slightly left of center nav — avoids “floating” lockup beside centered links. */
+  /* Brand flush-left in the section shell; center column owns main nav between brand and auth. */
   .nn-header-desktop-grid > .nn-header-brand-cluster {
     justify-self: start;
-    margin-inline-start: -0.125rem;
+    margin-inline-start: 0;
   }
 }
 

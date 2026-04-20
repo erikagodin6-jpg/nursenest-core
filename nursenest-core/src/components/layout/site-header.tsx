@@ -135,14 +135,12 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileContextOpen, setMobileContextOpen] = useState(false);
   const [mobileExpandedMega, setMobileExpandedMega] = useState<ExamMenuKey | "moreTracks" | null>(null);
-  const [desktopMoreOpen, setDesktopMoreOpen] = useState(false);
   const [desktopMoreTracksOpen, setDesktopMoreTracksOpen] = useState(false);
   const [mobileLangOpen, setMobileLangOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [openMegaMenu, setOpenMegaMenu] = useState<ExamMenuKey | null>(null);
   const [resumeStudyingCta, setResumeStudyingCta] = useState<HeaderResumeCta>(null);
   const closeMegaTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const desktopMoreRef = useRef<HTMLDivElement>(null);
   const desktopMoreTracksRef = useRef<HTMLDivElement>(null);
   const mobileLangRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -201,7 +199,6 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
 
   useEffect(() => {
     const close = (e: PointerEvent) => {
-      if (!desktopMoreRef.current?.contains(e.target as Node)) setDesktopMoreOpen(false);
       if (!desktopMoreTracksRef.current?.contains(e.target as Node)) setDesktopMoreTracksOpen(false);
       if (!mobileLangRef.current?.contains(e.target as Node)) setMobileLangOpen(false);
       if (!headerRef.current?.contains(e.target as Node)) setOpenMegaMenu(null);
@@ -209,7 +206,6 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
     const onEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setOpenMegaMenu(null);
-        setDesktopMoreOpen(false);
         setDesktopMoreTracksOpen(false);
         setMobileLangOpen(false);
       }
@@ -235,7 +231,6 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
     queueMicrotask(() => {
       setOpenMegaMenu(null);
       setMobileExpandedMega(null);
-      setDesktopMoreOpen(false);
       setDesktopMoreTracksOpen(false);
       setMobileLangOpen(false);
     });
@@ -321,17 +316,6 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
       { key: "tools", href: HUB.tools, matchBase: HUB.tools, label: formatTitleCase(t("nav.tools"), locale) },
     ],
     [t, locale],
-  );
-  const marketingDesktopPrimaryLinks: HeaderNavLink[] = useMemo(
-    () =>
-      marketingMoreLinks.filter(
-        (item) => item.key === "pricing" || item.key === "blog" || item.key === "faq",
-      ),
-    [marketingMoreLinks],
-  );
-  const marketingDesktopOverflowLinks: HeaderNavLink[] = useMemo(
-    () => marketingMoreLinks.filter((item) => item.key === "pre-nursing" || item.key === "tools"),
-    [marketingMoreLinks],
   );
   const primaryMegaMenus = useMemo(() => megaMenus.filter((m) => m.key === "rn" || m.key === "pn" || m.key === "np"), [megaMenus]);
   const secondaryMegaMenus = useMemo(
@@ -575,9 +559,9 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
 
             <nav
               aria-label={t("nav.marketingExplore")}
-              className="flex min-w-0 flex-1 items-center justify-center gap-0.5 xl:gap-1"
+              className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-0.5 px-2 sm:px-3 xl:gap-1"
             >
-              {marketingDesktopPrimaryLinks.map((item) => (
+              {marketingMoreLinks.map((item) => (
                 <Link
                   key={item.key}
                   href={localizeHref(item.href)}
@@ -595,45 +579,6 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                   {item.label}
                 </Link>
               ))}
-              <div className="relative shrink-0" ref={desktopMoreRef}>
-                <button
-                  type="button"
-                  className={`${NAV_LINK_CLASS} inline-flex items-center gap-0.5 whitespace-nowrap`}
-                  aria-expanded={desktopMoreOpen}
-                  aria-haspopup="menu"
-                  onClick={() => setDesktopMoreOpen((o) => !o)}
-                >
-                  {formatTitleCase(t("nav.marketingMore"), locale)}
-                  <ChevronDown className={`h-3.5 w-3.5 shrink-0 opacity-70 ${desktopMoreOpen ? "rotate-180" : ""}`} aria-hidden />
-                </button>
-                {desktopMoreOpen ? (
-                  <div
-                    role="menu"
-                    className="absolute end-0 z-[130] mt-2 min-w-[12rem] rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] py-1 shadow-[var(--shadow-card-hover)]"
-                  >
-                    {marketingDesktopOverflowLinks.map((item) => (
-                      <Link
-                        key={item.key}
-                        role="menuitem"
-                        href={localizeHref(item.href)}
-                        aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                        className="flex items-center px-3 py-2.5 text-sm font-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
-                        onClick={() => {
-                          setDesktopMoreOpen(false);
-                          trackClientEvent(PH.marketingNavClick, {
-                            actor: navActor,
-                            nav_id: item.key,
-                            surface: "site_header_desktop_more",
-                            marketing_region: region,
-                          });
-                        }}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                ) : null}
-              </div>
             </nav>
 
             <div className="relative z-[130] flex shrink-0 items-center justify-end gap-2 xl:gap-2.5">

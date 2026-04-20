@@ -77,7 +77,7 @@ test("edge auth: /admin and /api/admin use JWT cookie parity fallback (getAuthSe
   assert.match(am, /getAuthSessionJwtFromRequest/);
   assert.match(am, /nextRequestForEdgeJwtRead/);
   assert.match(am, /sessionJwtHasUserIdentity/);
-  assert.match(am, /pages:\s*\{\s*signIn:\s*["']\/login["']/);
+  assert.match(am, /pages:\s*\{[\s\S]*signIn:\s*["']\/login["'][\s\S]*error:\s*["']\/login["']/);
 });
 
 test("proxy reconciles Auth.js sign-in redirect on /admin with enforceAdminProxyRoute (DB gate)", () => {
@@ -96,6 +96,8 @@ test("requireAdmin sends non-staff signed-in users to /app; tier mismatch to /ad
   const policy = readFileSync(join(dir, "lib", "auth", "admin-path-policy.ts"), "utf8");
   assert.match(guards, /redirect\(gate\.redirectTo\)/);
   assert.match(guards, /adminRouteGateDecision/);
+  assert.match(guards, /admin_required/);
+  assert.match(guards, /loginRedirectAdminRequired/);
   assert.match(guards, /x-nn-admin-path/);
   assert.match(guards, /\/login\?callbackUrl=/);
   assert.match(policy, /redirectTo: "\/app"/);
@@ -116,6 +118,14 @@ test("marketing header: staff see Admin link to /admin; learners use Dashboard t
   assert.match(header, /shouldShowAdminDashboardNav/);
   assert.match(header, /isLearnerRole/);
   assert.match(header, /<Link href="\/app"/);
+});
+
+test("marketing desktop white nav: explore links are top-level (no desktop More dropdown)", () => {
+  const header = readFileSync(join(dir, "components", "layout", "site-header.tsx"), "utf8");
+  assert.match(header, /marketingMoreLinks\.map\(\(item\) =>/);
+  assert.match(header, /key: "pre-nursing"/);
+  assert.match(header, /key: "tools"/);
+  assert.ok(!header.includes("desktopMoreOpen"), "desktop product nav must not use a More menu");
 });
 
 test("learner shell user bar: admin link when JWT staff or server staff hint", () => {

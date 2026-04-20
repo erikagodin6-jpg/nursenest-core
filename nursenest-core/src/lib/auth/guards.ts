@@ -3,11 +3,21 @@ import { adminRouteGateDecision } from "@/lib/auth/admin-path-policy";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { resolveAdminRequestPath } from "@/lib/auth/resolve-admin-request-path";
 import { getStaffSession } from "@/lib/auth/staff-session";
+import { isStaffRole } from "@/lib/auth/staff-roles";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 function loginRedirectWithCallback(path: string): string {
   const safe = path.startsWith("/") ? path : "/admin";
   return `/login?callbackUrl=${encodeURIComponent(safe)}`;
+}
+
+function loginRedirectAdminRequired(path: string): string {
+  const safe = path.startsWith("/") ? path : "/admin";
+  const qs = new URLSearchParams({
+    error: "admin_required",
+    callbackUrl: safe,
+  });
+  return `/login?${qs.toString()}`;
 }
 
 /**
@@ -61,6 +71,17 @@ export async function requireAdmin() {
   }
 
   const staff = await getStaffSession();
+  if (!staff) {
+    const jwtRole = (session.user as { role?: string | null }).role;
+    if (isStaffRole(jwtRole)) {
+      if (adminAccessDebug()) {
+        safeServerLog("admin_access", "requireAdmin_staff_db_miss_jwt_staff", {
+          path: callbackPath.length > 128 ? `${callbackPath.slice(0, 128)}…` : callbackPath,
+        });
+      }
+      redirect(loginRedirectAdminRequired(callbackPath));
+    }
+  }
   const gate = adminRouteGateDecision(staff, path);
   if (adminAccessDebug()) {
     safeServerLog("admin_access", "requireAdmin_gate", {

@@ -32,10 +32,51 @@ export function LoginForm({
   const [pending, setPending] = useState(false);
   /** Synchronous guard — `pending` state may not flip before a second submit in the same tick. */
   const submitInFlightRef = useRef(false);
+  const urlRateLimitBannerRef = useRef(false);
+  const adminRequiredBannerRef = useRef(false);
   const redirectTarget = useMemo(
     () => resolveMarketingAuthRedirectTarget(pathname ?? "/", searchParams, locale),
     [searchParams, pathname, locale],
   );
+
+  /** Staff session present in JWT but server could not verify admin row — controlled message, not generic app error. */
+  useEffect(() => {
+    if (adminRequiredBannerRef.current) return;
+    const err = searchParams.get("error");
+    if (err !== "admin_required") return;
+    adminRequiredBannerRef.current = true;
+    setError(
+      "We could not verify admin access with the database on your last attempt. Sign in again, then open the Admin Dashboard.",
+    );
+    setErrorHelp(null);
+    const sp = new URLSearchParams(searchParams.toString());
+    sp.delete("error");
+    const qs = sp.toString();
+    const base = pathname ?? "/login";
+    router.replace(`${base}${qs ? `?${qs}` : ""}`);
+  }, [searchParams, pathname, router]);
+
+  /** Full-page hits to `/api/auth/*` (rate limit, stale links) — normalize to a login banner, not raw JSON. */
+  useEffect(() => {
+    if (urlRateLimitBannerRef.current) return;
+    const err = searchParams.get("error");
+    const code = searchParams.get("code");
+    const isRateLimited =
+      code === "rate_limit_exceeded" ||
+      err === "rate_limited" ||
+      (err === "AccessDenied" && code === "rate_limit_exceeded");
+    if (!isRateLimited) return;
+    urlRateLimitBannerRef.current = true;
+    setError(t("pages.login.errorRateLimited"));
+    setErrorHelp(null);
+    const sp = new URLSearchParams(searchParams.toString());
+    sp.delete("error");
+    sp.delete("code");
+    sp.delete("retryAfterSec");
+    const qs = sp.toString();
+    const base = pathname ?? "/login";
+    router.replace(`${base}${qs ? `?${qs}` : ""}`);
+  }, [searchParams, pathname, router, t]);
 
   useEffect(() => {
     if (status !== "authenticated") return;
@@ -56,23 +97,21 @@ export function LoginForm({
   async function onSubmit(formData: FormData) {
     setError(null);
     setErrorHelp(null);
+    if (status === "authenticated") {
+      submitInFlightRef.current = false;
+      await refreshThenReplaceIfDifferent(router, redirectTarget, pathname ?? "/", searchParams);
+      return;
+    }
     const email = String(formData.get("email") ?? "").trim();
     const password = String(formData.get("password") ?? "");
     if (!email || !password) {
+      submitInFlightRef.current = false;
       setError(t("pages.login.errorInvalid"));
       const g = t("pages.login.errorInvalidGuidance")?.trim();
       setErrorHelp(g || null);
       return;
     }
-    if (status === "authenticated") {
-      await refreshThenReplaceIfDifferent(router, redirectTarget, pathname ?? "/", searchParams);
-      return;
-    }
 
-    if (submitInFlightRef.current) {
-      return;
-    }
-    submitInFlightRef.current = true;
     setPending(true);
     let keepSpinnerUntilRedirect = false;
     try {
@@ -142,13 +181,7 @@ export function LoginForm({
     }
   }
 
-  if (status === "authenticated") {
-    return (
-      <p className="mt-6 text-sm text-muted-foreground" role="status">
-        {t("pages.login.alreadySignedIn")}
-      </p>
-    );
-  }
+  const alreadySignedIn = status === "authenticated";
 
   return (
     <form
@@ -156,10 +189,16 @@ export function LoginForm({
       onSubmit={(e) => {
         e.preventDefault();
         if (pending || submitInFlightRef.current) return;
+        submitInFlightRef.current = true;
         const fd = new FormData(e.currentTarget);
         void onSubmit(fd);
       }}
     >
+      {alreadySignedIn ? (
+        <p className="text-sm text-muted-foreground" role="status">
+          {t("pages.login.alreadySignedIn")}
+        </p>
+      ) : null}
       <div className="space-y-1.5">
         <label htmlFor="login-identifier" className="text-sm font-medium text-foreground">
           {t("pages.login.fieldIdentifierLabel")}
@@ -170,7 +209,7 @@ export function LoginForm({
           type="text"
           name="email"
           placeholder={t("pages.login.placeholderIdentifier")}
-          required
+          required={!alreadySignedIn}
           autoComplete="username"
           aria-describedby="login-identifier-hint"
         />
@@ -193,7 +232,7 @@ export function LoginForm({
           type="password"
           name="password"
           placeholder={t("pages.login.placeholderPassword")}
-          required
+          required={!alreadySignedIn}
           autoComplete="current-password"
         />
       </div>

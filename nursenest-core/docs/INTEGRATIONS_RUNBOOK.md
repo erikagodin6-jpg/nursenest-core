@@ -216,6 +216,15 @@ Runtime secrets for all `STRIPE_*` and `NEXT_PUBLIC_APP_URL`. Ensure outbound HT
 - Point webhook to: `https://<your-domain>/api/subscriptions/webhook`.
 - Events: subscribe to what `route.ts` handles (subscription lifecycle — align with implementation).
 
+### Production hostname (NurseNest live)
+
+The webhook URL must use a **public hostname that completes TLS with a valid certificate** for that exact name. DNS alone (e.g. a CNAME to the app) is **not** enough: Stripe reports **“Could not connect to server”** when the TCP connection or TLS handshake fails before HTTP.
+
+- **Canonical live app host in this repo** (production smoke / audits): `https://www.nursenest.ca` (see `package.json` `qa:paid-smoke:production`, `tests/e2e/admin/admin-production-anonymous-redirects.spec.ts`).
+- **Live Stripe webhook URL to configure:** `https://www.nursenest.ca/api/subscriptions/webhook`
+- **`app.nursenest.ca`:** only use if that hostname is fully provisioned on your edge (e.g. Cloudflare **Custom Hostname** + certificate covering `app.nursenest.ca`). If `https://app.nursenest.ca` fails TLS in a browser or with `openssl s_client -servername app.nursenest.ca`, **do not** point Stripe at it — fix SSL or switch the Dashboard endpoint to `www` as above.
+- Keep **`NEXT_PUBLIC_APP_URL`** and customer-facing return URLs aligned with the same canonical origin you use for webhooks.
+
 ### Webhooks
 
 | Endpoint | Secret env |
@@ -231,6 +240,7 @@ Runtime secrets for all `STRIPE_*` and `NEXT_PUBLIC_APP_URL`. Ensure outbound HT
 
 ### Common failure modes
 
+- **Stripe “Could not connect to server” (live):** almost always **TLS/DNS to the configured host**, not application code — wrong subdomain, hostname not on the edge certificate, or origin down. Confirm `openssl s_client -connect <host>:443 -servername <host>` succeeds, then `POST https://<host>/api/subscriptions/webhook` returns **400** without `Stripe-Signature` (handler reachable) or **2xx** with a valid test event.
 - **400 on webhook:** wrong `STRIPE_WEBHOOK_SECRET` or body not raw.
 - **Price misconfig:** missing `STRIPE_PRICE_*` → checkout errors or startup warnings in `pricing-map` logs.
 

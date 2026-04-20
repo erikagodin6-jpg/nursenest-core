@@ -22,7 +22,7 @@ function adminAccessDebug(): boolean {
   return process.env.ADMIN_ACCESS_DEBUG === "1" || process.env.ADMIN_ACCESS_DEBUG === "true";
 }
 
-const STAFF_SESSION_ROLE_TIMEOUT_MS = 3500;
+const STAFF_SESSION_ROLE_TIMEOUT_MS = 5500;
 
 /**
  * Database is source of truth for staff role (JWT may lag after promotion).
@@ -71,11 +71,20 @@ async function loadStaffSession(): Promise<StaffSession | null> {
 
   try {
     const { loadUserRoleFromDbIdentity } = await import("@/lib/auth/admin-role-source");
-    const row = await safeAwait(
-      loadUserRoleFromDbIdentity({ userId: userId ?? null, email: emailRaw }),
+    const identity = { userId: userId ?? null, email: emailRaw };
+    let row = await safeAwait(
+      loadUserRoleFromDbIdentity(identity),
       "staff_session.role_lookup",
       STAFF_SESSION_ROLE_TIMEOUT_MS,
     );
+    /** Cold DB / pool warm-up: first read can time out and yield `null` — one retry before caching null. */
+    if (row == null && (userId || emailRaw)) {
+      row = await safeAwait(
+        loadUserRoleFromDbIdentity(identity),
+        "staff_session.role_lookup_retry",
+        STAFF_SESSION_ROLE_TIMEOUT_MS,
+      );
+    }
     renderTrace("staff session after role", {
       route: "shared-root-layout",
       hasRoleRow: Boolean(row),

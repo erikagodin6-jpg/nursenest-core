@@ -143,7 +143,7 @@ Use **`nursenest-core`** as the app **source directory**. Align env with how Nex
 | `DATABASE_URL` | Only if a build step imports Prisma and queries (unusual); optional marketing home DB skips during `NEXT_PHASE=phase-production-build`. | **Required** for real homepage stats/blog and most APIs. |
 | Stripe / Resend / Spaces / Inngest secrets | Usually not needed for compile. | **Required** on the web service. |
 
-External dashboards: **Stripe** webhook → `https://<your-domain>/api/subscriptions/webhook`; **Inngest** app sync URL → `https://<your-domain>/api/inngest`; **Resend** verified domain; **Spaces** CORS/keys; **Sentry** DSN + optional release auth token.
+External dashboards: **Stripe** webhook → `https://<your-domain>/api/subscriptions/webhook` (must be a hostname with **valid TLS for that exact name** — production default in-repo is `https://www.nursenest.ca/...`; see `docs/INTEGRATIONS_RUNBOOK.md` § Billing); **Inngest** app sync URL → `https://<your-domain>/api/inngest`; **Resend** verified domain; **Spaces** CORS/keys; **Sentry** DSN + optional release auth token.
 
 Full operator narrative: `docs/INTEGRATIONS_RUNBOOK.md`.
 

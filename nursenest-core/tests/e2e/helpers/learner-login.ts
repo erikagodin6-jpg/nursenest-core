@@ -69,6 +69,11 @@ export type LoginWithCredentialsOptions = {
    * Full path + query for the credentials form (default `/login`). Use to preserve `callbackUrl` (e.g. resume homepage).
    */
   loginUrl?: string;
+  /**
+   * When set (e.g. Playwright `baseURL` origin), navigate with `new URL(loginUrl, navigationOrigin)` so the
+   * browser host matches the dev server `AUTH_URL` / `NEXTAUTH_URL` (avoids localhost vs 127.0.0.1 CSRF/cookie drift).
+   */
+  navigationOrigin?: string;
 };
 
 /**
@@ -90,9 +95,14 @@ export async function loginWithCredentials(
   const loginUrl = opts?.loginUrl ?? "/login";
   /** Align with Playwright `use.baseURL` / `resolveRnFullContentBaseUrl` — avoid localhost vs 127.0.0.1 drift in errors. */
   const baseURL = resolveRnFullContentBaseUrl(process.env.BASE_URL);
+  const navOrigin = opts?.navigationOrigin?.trim();
+  const loginHref =
+    navOrigin && loginUrl.startsWith("/")
+      ? new URL(loginUrl, navOrigin.endsWith("/") ? navOrigin : `${navOrigin}/`).href
+      : loginUrl;
 
   try {
-    await page.goto(loginUrl, { waitUntil: "domcontentloaded" });
+    await page.goto(loginHref, { waitUntil: "domcontentloaded" });
     await page.locator("#login-identifier").waitFor({ state: "visible", timeout: 25_000 });
     await page.locator("#login-password").waitFor({ state: "visible", timeout: 25_000 });
   } catch (e) {
@@ -259,7 +269,11 @@ export async function loginWithCredentials(
   }
 
   if (enterLearnerApp) {
-    await page.goto("/app", { waitUntil: "domcontentloaded" });
+    const appHref =
+      navOrigin && navOrigin.length > 0
+        ? new URL("/app", navOrigin.endsWith("/") ? navOrigin : `${navOrigin}/`).href
+        : "/app";
+    await page.goto(appHref, { waitUntil: "domcontentloaded" });
     await waitForAuthenticatedLearnerShell(page);
     atUrl = page.url();
     pathname = new URL(atUrl).pathname;

@@ -82,14 +82,14 @@ export async function MarketingLoginPage({
     resolved !== DEFAULT_MARKETING_LOCALE ? pickLoginSurfaceMessages(english) : undefined;
 
   return (
-    <main className="mx-auto w-full max-w-md nn-marketing-x nn-rhythm-page">
-      <div className="nn-card relative overflow-hidden p-6 sm:p-8">
-        <AuthLeafWatermark />
-        <div className="relative z-[1]">
-          <div className="mb-6 flex justify-center bg-transparent">
-            <SiteBrandLogoMark variant="auth" logoVariant="leaf" className="!h-11 !max-h-11 sm:!h-12 sm:!max-h-12" />
-          </div>
-          <MarketingI18nShardLayer messages={loginSurface} fallbackMessages={loginSurfaceFallback}>
+    <main className="mx-auto flex w-full max-w-md flex-col nn-marketing-x nn-rhythm-page">
+      <MarketingI18nShardLayer messages={loginSurface} fallbackMessages={loginSurfaceFallback}>
+        <div className="nn-card relative overflow-hidden p-6 sm:p-8">
+          <AuthLeafWatermark />
+          <div className="relative z-[1]">
+            <div className="mb-6 flex justify-center bg-transparent">
+              <SiteBrandLogoMark variant="auth" logoVariant="leaf" className="!h-11 !max-h-11 sm:!h-12 sm:!max-h-12" />
+            </div>
             <Suspense>
               <VerifyStatusBanner />
             </Suspense>
@@ -100,7 +100,6 @@ export async function MarketingLoginPage({
               </h1>
               <p className="mt-2 text-center text-sm text-muted-foreground sm:text-base">{m["pages.login.subtitle"]}</p>
             </header>
-            <AuthFlowTrustReassurance variant="login" />
             <Suspense fallback={<LoginFormStreamFallback />}>
               <LoginForm
                 forgotPasswordHref={forgotHref}
@@ -109,30 +108,33 @@ export async function MarketingLoginPage({
                 contactHref={withMarketingLocale(resolved, "/contact")}
               />
             </Suspense>
-          </MarketingI18nShardLayer>
-          <div className="nn-account-recovery-hint space-y-3 border-t border-[var(--semantic-border-soft)] pt-5">
-            <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{m["pages.login.recoveryHeading"]}</p>
-            <ol className="list-decimal space-y-2 pl-5 text-sm leading-relaxed text-muted-foreground">
-              <li>
-                <Link href={forgotHref} className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline">
-                  {m["pages.login.forgotPasswordLink"]}
-                </Link>
-                <span className="text-muted-foreground"> — {m["pages.login.recoveryForgotHint"]}</span>
-              </li>
-              <li>{m["pages.login.cantFindAccount"]}</li>
-              <li>
-                <Link
-                  href={withMarketingLocale(resolved, "/contact")}
-                  className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
-                >
-                  {m["pages.login.recoveryContactLink"]}
-                </Link>
-                {m["pages.login.recoveryContactSuffix"]}
-              </li>
-            </ol>
+            <div className="nn-account-recovery-hint space-y-3 border-t border-[var(--semantic-border-soft)] pt-5">
+              <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{m["pages.login.recoveryHeading"]}</p>
+              <ol className="list-decimal space-y-2 pl-5 text-sm leading-relaxed text-muted-foreground">
+                <li>
+                  <Link href={forgotHref} className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline">
+                    {m["pages.login.forgotPasswordLink"]}
+                  </Link>
+                  <span className="text-muted-foreground"> — {m["pages.login.recoveryForgotHint"]}</span>
+                </li>
+                <li>{m["pages.login.cantFindAccount"]}</li>
+                <li>
+                  <Link
+                    href={withMarketingLocale(resolved, "/contact")}
+                    className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+                  >
+                    {m["pages.login.recoveryContactLink"]}
+                  </Link>
+                  {m["pages.login.recoveryContactSuffix"]}
+                </li>
+              </ol>
+            </div>
           </div>
         </div>
-      </div>
+        <section className="mt-8 w-full pb-2" aria-labelledby="auth-trust-heading">
+          <AuthFlowTrustReassurance variant="login" layout="standalone" />
+        </section>
+      </MarketingI18nShardLayer>
     </main>
   );
 }

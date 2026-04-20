@@ -52,16 +52,21 @@ export function professionKeyToCareerKey(professionKey: string): AlliedCareerKey
 // ── Nursing tier prices (CAD) ────────────────────────────────────────────────
 //
 // Source of truth: Stripe prices exported 2026-03-14.
-// PRE_NURSING and LVN_LPN are omitted — no Stripe prices exist for them yet.
 // NEW_GRAD has no 3-month Stripe price — that duration is intentionally absent.
-// Amounts must match what is configured in Stripe; checkout charges the Stripe
+// PRE_NURSING / LVN_LPN: display amounts mirror adjacent tracks until dedicated Stripe
+// rows exist; checkout still requires matching STRIPE_PRICE_* envs (see pricing-map).
+// Amounts must match what is configured in Stripe for tiers that checkout; checkout charges the Stripe
 // price, not these display values.
 
 const LIST_PRICE_MAJOR: Partial<Record<TierCode, Partial<Record<BillingDuration, number>>>> = {
+  // Pre-nursing — list mirrors New Grad until a dedicated Stripe matrix ships
+  PRE_NURSING: { monthly: 9.99, "6-month": 39.99, yearly: 59.99 },
   // New Grad Prep — 3 plans only (no 3-month in Stripe)
   NEW_GRAD: { monthly: 9.99, "6-month": 39.99, yearly: 59.99 },
   // Canada RPN / REx-PN
   RPN: { monthly: 24.99, "3-month": 59.99, "6-month": 99.99, yearly: 149.99 },
+  // US LVN/LPN / NCLEX-PN — display mirrors Canadian PN list (CAD catalog; region toggle is UX)
+  LVN_LPN: { monthly: 24.99, "3-month": 59.99, "6-month": 99.99, yearly: 149.99 },
   // RN / NCLEX-RN
   RN: { monthly: 29.99, "3-month": 74.99, "6-month": 119.99, yearly: 179.99 },
   // Nurse Practitioner
@@ -84,6 +89,7 @@ const ALLIED_PRICE: Record<BillingDuration, number> = {
 
 const ANCHOR_PRICE_MAJOR: Partial<Record<TierCode, Partial<Record<BillingDuration, number>>>> = {
   RPN: { "3-month": 99.99, "6-month": 159.99, yearly: 229.99 },
+  LVN_LPN: { "3-month": 99.99, "6-month": 159.99, yearly: 229.99 },
   RN: { "3-month": 119.99, "6-month": 199.99, yearly: 299.99 },
   NP: { "3-month": 149.99, "6-month": 249.99, yearly: 389.99 },
 };

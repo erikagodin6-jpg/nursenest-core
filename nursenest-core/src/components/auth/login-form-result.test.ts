@@ -65,4 +65,9 @@ describe("resolveLoginSubmitOutcome", () => {
     };
     assert.equal(resolveLoginSubmitOutcome(result, true), "success");
   });
+
+  it("classifies bare HTTP 429 without parsed error as rate limited", () => {
+    const result: LoginSubmitResultLike = { ok: false, status: 429 };
+    assert.equal(resolveLoginSubmitOutcome(result, false), "rate_limited");
+  });
 });

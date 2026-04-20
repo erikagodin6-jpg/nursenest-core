@@ -30,6 +30,10 @@ export function resolveLoginSubmitOutcome(
     }
     return "generic_error";
   }
-  if (result.ok === false) return "generic_error";
+  if (result.ok === false) {
+    /** Credential POST hit proxy 429 before URL parsing in some edge builds — still rate-limited. */
+    if (result.status === 429) return "rate_limited";
+    return "generic_error";
+  }
   return "success";
 }
