@@ -26,11 +26,13 @@ services:
     source_dir: nursenest-core
     # DB: set `DATABASE_URL` (SECRET) to DigitalOcean Managed Postgres URI. Prisma uses this only.
     # Migrations: GitHub Actions → “Prisma migrate” workflow with secret `DATABASE_URL` (same URI as here).
-    # Drop .next/cache after build; prune devDependencies to shrink the slug (runtime uses production deps only).
-    # `build_command` runs after `npm install`. `npm run build:deploy` → `build:deploy:full`: one `next build`, then
-    # verify standalone artifact, ensure standalone static, post-build-prune. Post-build-only: `build:deploy:postbuild`.
+    # `package.json` `cacheDirectories` includes `.next/cache` for Heroku/DO build cache. `post-build-prune.mjs`
+    # preserves `.next/cache` by default (set `NN_POST_BUILD_PRUNE_NEXT_CACHE=1` to delete for a smaller slug).
+    # `build_command` runs after `npm install`. `npm run build:deploy` runs one `next build`, then verify standalone,
+    # ensure standalone static, post-build-prune, then `npm prune` when `NN_TIMED_INCLUDE_NPM_PRUNE=1` (logged as
+    # `[build-deploy-full] npm_prune duration_ms=…`). Post-build-only: `build:deploy:postbuild`.
     # Do NOT add `npm ci` here — install is already done.
-    build_command: npm run build:deploy && npm prune --omit=dev
+    build_command: npm run build:deploy
     # Standalone server only (next.config output:standalone). Do not use `next start`.
     run_command: npm run start
     http_port: 8080
@@ -76,6 +78,14 @@ services:
         value: "false"
         scope: BUILD_TIME
       - key: SKIP_I18N_PREBUILD
+        value: "1"
+        scope: BUILD_TIME
+      # Signals App Platform–aware scripts (e.g. marketing guards). `.next/cache` is preserved by default in post-build-prune.
+      - key: NN_APP_PLATFORM_BUILD
+        value: "true"
+        scope: BUILD_TIME
+      # Run `npm prune --omit=dev` as the final orchestrated step (avoids a second shell `npm prune` and records duration).
+      - key: NN_TIMED_INCLUDE_NPM_PRUNE
         value: "1"
         scope: BUILD_TIME
       - key: SENTRY_ENABLED

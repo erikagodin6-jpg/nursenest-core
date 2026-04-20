@@ -31,6 +31,9 @@ import {
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 import { getStaffSession } from "@/lib/auth/staff-session";
 
+/** Layout reads `headers()` (pathname probe + staff chrome); avoid wasted static-generation attempts during `next build`. */
+export const dynamic = "force-dynamic";
+
 /** Single module promise — avoids per-request `import()` bookkeeping on hot marketing layout path. */
 const marketingDefaultLayoutSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
 

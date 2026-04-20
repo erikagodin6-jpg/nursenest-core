@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import type { Session } from "next-auth";
 import { getSession, SessionProvider } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { PINNED_AUTH_BASE_PATH } from "@/lib/auth/auth-base-path";
 
 type AuthSessionProviderProps = {
@@ -21,15 +22,27 @@ type AuthSessionProviderProps = {
  * Server handlers use {@link PINNED_AUTH_BASE_PATH} — this keeps the browser aligned.
  */
 function BfcacheSessionResync() {
+  const router = useRouter();
   useEffect(() => {
     const onPageShow = (e: PageTransitionEvent) => {
-      /** BFCache restore: React state can be stale while cookies are still valid — refetch session. */
+      /** BFCache restore: RSC + `useSession()` can show stale logged-out chrome while cookies are valid. */
       if (!e.persisted) return;
-      void getSession();
+      void (async () => {
+        try {
+          await getSession();
+        } catch {
+          /* ignore */
+        }
+        try {
+          await router.refresh();
+        } catch {
+          /* ignore */
+        }
+      })();
     };
     window.addEventListener("pageshow", onPageShow);
     return () => window.removeEventListener("pageshow", onPageShow);
-  }, []);
+  }, [router]);
   return null;
 }
 

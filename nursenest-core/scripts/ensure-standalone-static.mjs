@@ -10,7 +10,7 @@
  * manifest as production `GET /_next/static/...` returning HTML (the app document) instead
  * of CSS/JS/fonts — browsers show unstyled content.
  */
-import { cpSync, existsSync, mkdirSync, readdirSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, symlinkSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { getStandaloneStaticSyncTargets, verifyStandaloneArtifact } from "./verify-standalone-artifact.mjs";
@@ -84,11 +84,53 @@ if (targets.length === 0) {
   );
 }
 
-for (const { serverPath, destStatic } of targets) {
+const t0 = Date.now();
+const canSymlinkExtras = process.platform !== "win32";
+console.log(
+  `[ensure-standalone-static] standalone server.js targets count=${targets.length} symlink_extras=${canSymlinkExtras && targets.length > 1}`,
+);
+
+function prepareDestDir(destStatic) {
   mkdirSync(path.dirname(destStatic), { recursive: true });
+  if (existsSync(destStatic)) {
+    rmSync(destStatic, { recursive: true, force: true });
+  }
+}
+
+function copyTree(destStatic, serverPath, mode) {
+  prepareDestDir(destStatic);
   cpSync(sourceStatic, destStatic, { recursive: true, force: true });
   assertNonEmptyCssDir(destStatic);
   assertNonEmptyChunksDir(destStatic);
   assertMediaSynced(sourceStatic, destStatic);
-  console.log(`[ensure-standalone-static] synced ${sourceStatic} -> ${destStatic} (server=${serverPath})`);
+  console.log(
+    `[ensure-standalone-static] ${mode} ${sourceStatic} -> ${destStatic} (server=${serverPath})`,
+  );
 }
+
+const primary = targets[0];
+copyTree(primary.destStatic, primary.serverPath, "copied");
+
+for (let i = 1; i < targets.length; i++) {
+  const { serverPath, destStatic } = targets[i];
+  if (canSymlinkExtras) {
+    prepareDestDir(destStatic);
+    const rel = path.relative(path.dirname(destStatic), primary.destStatic);
+    if (!rel) {
+      throw new Error(
+        `[ensure-standalone-static] symlink target would be empty (same dir as primary?) dest=${destStatic} primary=${primary.destStatic}`,
+      );
+    }
+    symlinkSync(rel, destStatic);
+    assertNonEmptyCssDir(destStatic);
+    assertNonEmptyChunksDir(destStatic);
+    assertMediaSynced(sourceStatic, destStatic);
+    console.log(
+      `[ensure-standalone-static] symlinked ${destStatic} -> ${rel} (server=${serverPath})`,
+    );
+  } else {
+    copyTree(destStatic, serverPath, "copied");
+  }
+}
+
+console.log(`[ensure-standalone-static] done duration_ms=${Date.now() - t0}`);

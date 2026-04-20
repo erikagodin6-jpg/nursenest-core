@@ -2,7 +2,7 @@
 
 import type { TierCode } from "@prisma/client";
 import Link from "next/link";
-import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Check } from "lucide-react";
@@ -194,6 +194,9 @@ export function PricingPageClient({
   const [checkoutIntentHandled, setCheckoutIntentHandled] = useState(false);
   const [plansLoaded, setPlansLoaded] = useState(false);
   const { locale, t } = useMarketingI18n();
+  /** `t` is recreated when marketing shards merge — do not use it as a fetch effect dep (can starve in-flight loads). */
+  const tRef = useRef(t);
+  tRef.current = t;
   const { region } = useNursenestRegion();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -218,7 +221,8 @@ export function PricingPageClient({
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch("/api/pricing/options");
+        /** Avoid stale browser HTTP cache for anonymous pricing JSON (CDN is still authoritative at origin). */
+        const res = await fetch("/api/pricing/options", { cache: "no-store" });
         if (!res.ok) throw new Error("load_failed");
         const data = await res.json();
         if (!cancelled) {
@@ -229,7 +233,7 @@ export function PricingPageClient({
         }
       } catch {
         if (!cancelled) {
-          setLoadError(t("pages.pricing.error.loadPlans"));
+          setLoadError(tRef.current("pages.pricing.error.loadPlans"));
           setPlansLoaded(true);
         }
       }
@@ -237,7 +241,7 @@ export function PricingPageClient({
     return () => {
       cancelled = true;
     };
-  }, [t]);
+  }, []);
 
   const isUS = region === "US";
   const segmentLabels: Record<Segment, string> = useMemo(

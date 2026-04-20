@@ -81,6 +81,11 @@ describe("enforceApiRateLimit path classification", () => {
     assert.equal(authRouteKind("/api/auth/forgot-password"), "forgot");
     assert.equal(authRouteKind("/api/auth/reset-password"), "reset");
     assert.equal(authRouteKind("/api/auth/csrf"), "csrf");
+    assert.equal(authRouteKind("/api/auth/providers"), "providers");
+  });
+
+  it("does not treat NextAuth providers discovery as auth-strict RL (signIn precondition)", () => {
+    assert.equal(isAuthStrictPath("/api/auth/providers"), false);
   });
 
   it("exponential Retry-After from streak (capped)", () => {

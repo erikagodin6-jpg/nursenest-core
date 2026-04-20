@@ -17,7 +17,10 @@ import {
 } from "@/lib/http/rate-limit-unified";
 import { getTrustedClientIp, rateLimitClientPartition } from "@/lib/http/client-ip";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { buildAuthStrictRateLimit429Json } from "@/lib/server/rate-limit-auth-429-json";
+import {
+  buildAuthStrictRateLimit429Json,
+  publicRequestOriginForAuthUiRedirect,
+} from "@/lib/server/rate-limit-auth-429-json";
 import { getRedisClient, type RedisJsonClient } from "@/lib/server/redis";
 
 /** Brute-force sensitive auth endpoints (not session polling). */
@@ -25,7 +28,6 @@ const AUTH_STRICT_SUBSTRINGS = [
   "/api/auth/callback",
   "/api/auth/signin",
   "/api/auth/csrf",
-  "/api/auth/providers",
   "/api/auth/register",
   "/api/auth/error",
   "/api/auth/forgot-password",
@@ -340,7 +342,7 @@ async function json429WithBackoff(ip: string, request?: NextRequest): Promise<Ne
   }
   const body =
     request != null
-      ? buildAuthStrictRateLimit429Json(request.nextUrl.origin, sec)
+      ? buildAuthStrictRateLimit429Json(publicRequestOriginForAuthUiRedirect(request), sec)
       : { error: "Too many requests", code: "rate_limit_exceeded", retryAfterSec: sec };
   return NextResponse.json(body, {
     status: 429,
@@ -382,6 +384,17 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   if (isExemptPath(pathname)) return null;
   const method = request.method.toUpperCase();
   if (method === "OPTIONS" || method === "HEAD") return null;
+
+  /**
+   * NextAuth client `signIn()` always calls `GET /api/auth/providers` first. When this hits the strict
+   * auth per-IP bucket (shared CI egress, prefetch bursts), `fetchData` gets a 429 → `null` providers →
+   * the library hard-navigates to `/api/auth/error` **without** posting `/api/auth/callback/credentials`
+   * (Playwright: “No POST response … within 45s”). Listing provider ids is not a brute-force surface;
+   * keep brute-force protection on `/api/auth/callback/*` and `/api/auth/csrf`.
+   */
+  if (method === "GET" && pathname === "/api/auth/providers") {
+    return null;
+  }
 
   const ip = getTrustedClientIp(request);
   const ipKey = rateLimitClientPartition(request, ip);
