@@ -295,7 +295,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                         <PageTransitionShell>{children}</PageTransitionShell>
                       )}
                     </main>
-                    <SiteFooter />
+                    <SiteFooter serverHasStaffSession={staffSession != null} />
                   </div>
                 </MarketingHeaderGlobalRegionServerBridge>
               </MarketingFeedbackShell>

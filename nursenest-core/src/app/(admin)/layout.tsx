@@ -37,7 +37,7 @@ export default async function AdminGroupLayout({ children }: { children: React.R
           <Suspense fallback={null}>
             <AdminGlobalCommandPalette />
           </Suspense>
-          <SiteFooter />
+          <SiteFooter serverHasStaffSession={staffSession != null} />
         </div>
       </MarketingFeedbackShell>
     </MarketingI18nProvider>

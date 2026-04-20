@@ -406,7 +406,10 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
           Light: dark-bar surface; dark: recessive utility surface. Middle row keeps logo/links/auth only.
         */}
         <div className="nn-header-hide-until-xl w-full">
-          <MarketingHeaderUtilityStrip variant={isLightTheme ? "dark-bar" : "standard"} />
+          <MarketingHeaderUtilityStrip
+            variant={isLightTheme ? "dark-bar" : "standard"}
+            includeUnpublishedRegions={isAdminAuthenticated}
+          />
         </div>
         <div className="nn-section-shell flex flex-col overflow-visible">
           {/* ── Mobile brand row ── */}

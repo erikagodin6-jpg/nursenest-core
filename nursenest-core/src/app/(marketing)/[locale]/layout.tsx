@@ -115,7 +115,7 @@ export default async function MarketingLocaleLayout({
                     </MarketingMainErrorBoundary>
                   </MarketingMainI18nShards>
                 </main>
-                <SiteFooter />
+                <SiteFooter serverHasStaffSession={staffSession != null} />
               </div>
             </MarketingHeaderGlobalRegionServerBridge>
           </MarketingFeedbackShell>

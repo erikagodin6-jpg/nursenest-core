@@ -79,7 +79,12 @@ function FooterLeafWatermark() {
   );
 }
 
-export function SiteFooter() {
+type SiteFooterProps = {
+  /** Same DB-backed hint as {@link SiteHeader} — JWT role can lag after role changes. */
+  serverHasStaffSession?: boolean;
+};
+
+export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
   const { t, locale } = useMarketingI18n();
   const { data: session } = useSession();
   const activeNav = useActiveNavContext();
@@ -93,7 +98,9 @@ export function SiteFooter() {
   const pnRoleLabel = getNursingRoleLabel({ country: region, role: "PN" });
   const user = session?.user;
   const isSignedIn = Boolean(user);
-  const isAdmin = Boolean(user?.role && isStaffRole(user.role));
+  const isAdmin = Boolean(
+    serverHasStaffSession === true || (user?.role && isStaffRole(user.role)),
+  );
   const isEntitledLearner =
     Boolean(user?.role && !isStaffRole(user.role)) && activeNav.entitlement === "entitled";
   const learnerPathwayId = learnerMarketingPathwayIdFromSession(session?.user ?? null);

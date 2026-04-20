@@ -32,9 +32,16 @@ import { isStaffRole } from "@/lib/auth/staff-roles";
 export function MarketingHeaderUtilityStrip({
   variant = "standard",
   leading,
+  includeUnpublishedRegions,
 }: {
   variant?: "standard" | "dark-bar";
   leading?: ReactNode;
+  /**
+   * When provided (from {@link SiteHeader} `isAdminAuthenticated`), matches header/staff hub
+   * visibility using the same DB-backed session hint + JWT fallback. When omitted, falls back to
+   * JWT role only (utility strip has no separate server prop).
+   */
+  includeUnpublishedRegions?: boolean;
 }) {
   const { t, locale } = useMarketingI18n();
   const pathname = usePathname() ?? "/";
@@ -85,9 +92,10 @@ export function MarketingHeaderUtilityStrip({
     [strippedPath, clientGlobalRegion, region, user?.country],
   );
 
-  const countrySelectorIncludeUnpublished = Boolean(
-    user?.role && isStaffRole(user.role),
-  );
+  const countrySelectorIncludeUnpublished =
+    typeof includeUnpublishedRegions === "boolean"
+      ? includeUnpublishedRegions
+      : Boolean(user?.role && isStaffRole(user.role));
 
   const buildLocalizedMarketingPath = useCallback(
     (localeCode: string, path: string) => {
