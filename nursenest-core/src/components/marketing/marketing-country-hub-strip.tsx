@@ -26,8 +26,8 @@ export function MarketingCountryHubStrip({ surface = "light" }: { surface?: Mark
       aria-label="Country hubs"
       className={
         onDarkUtility
-          ? "hidden min-[1280px]:flex max-w-[min(100%,28rem)] flex-wrap items-center justify-start gap-x-2 gap-y-1 text-[11px] font-medium leading-tight text-white min-[1440px]:max-w-none"
-          : "hidden min-[1280px]:flex max-w-[min(100%,28rem)] flex-wrap items-center justify-end gap-x-2 gap-y-1 text-[11px] font-medium leading-tight text-[var(--theme-heading-text)] opacity-90 min-[1440px]:max-w-none"
+          ? "nn-marketing-hub-strip--desktop max-w-[min(100%,28rem)] flex-wrap items-center justify-start gap-x-2 gap-y-1 text-[11px] font-medium leading-tight text-white min-[1440px]:max-w-none"
+          : "nn-marketing-hub-strip--desktop max-w-[min(100%,28rem)] flex-wrap items-center justify-end gap-x-2 gap-y-1 text-[11px] font-medium leading-tight text-[var(--theme-heading-text)] opacity-90 min-[1440px]:max-w-none"
       }
     >
       <span

@@ -1911,6 +1911,67 @@ html[data-theme] .nn-marketing-surface {
   }
 }
 
+/*
+ * Marketing public header — hard breakpoint at 1280px (Tailwind `xl`).
+ * If responsive utilities are missing from a route’s CSS chunk, mobile + desktop
+ * chrome can both paint (duplicate brand/auth, pathway reads as loose text).
+ * These classes are always in globals.css so the split cannot drop them.
+ */
+.nn-header-hide-until-xl {
+  display: none;
+}
+@media (min-width: 1280px) {
+  .nn-header-hide-until-xl {
+    display: block;
+  }
+}
+
+.nn-header-hide-until-xl-flex {
+  display: none;
+}
+@media (min-width: 1280px) {
+  .nn-header-hide-until-xl-flex {
+    display: flex;
+  }
+}
+
+.nn-header-mobile-only-flex {
+  display: flex;
+}
+@media (min-width: 1280px) {
+  .nn-header-mobile-only-flex {
+    display: none !important;
+  }
+}
+
+.nn-header-mobile-only-inline-flex {
+  display: inline-flex;
+}
+@media (min-width: 1280px) {
+  .nn-header-mobile-only-inline-flex {
+    display: none !important;
+  }
+}
+
+.nn-header-overlay-mobile-only {
+  display: block;
+}
+@media (min-width: 1280px) {
+  .nn-header-overlay-mobile-only {
+    display: none !important;
+  }
+}
+
+/* Country hub shortcuts beside desktop preferences — same 1280px gate as header chrome */
+.nn-marketing-hub-strip--desktop {
+  display: none;
+}
+@media (min-width: 1280px) {
+  .nn-marketing-hub-strip--desktop {
+    display: flex;
+  }
+}
+
 /* Header utility rail — preferences / region strip above the main nav */
 .nn-header-utility {
   background: color-mix(in srgb, var(--header-utility-surface) 86%, var(--header-background));

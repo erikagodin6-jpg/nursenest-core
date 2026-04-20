@@ -33,7 +33,6 @@ import { buildMarketingMegaMenus, type ExamMenuKey } from "@/lib/navigation/mark
 import { formatEyebrow, formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
-import { CountrySelector } from "@/components/layout/global-context-switcher";
 import { MarketingCountryHubStrip } from "@/components/marketing/marketing-country-hub-strip";
 import { MarketingHeaderUtilityStrip } from "@/components/layout/marketing-header-utility-strip";
 const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
@@ -50,15 +49,6 @@ const NAV_TIER_LINK_CLASS =
   "nn-marketing-body-sm nn-marketing-nav-link inline-flex items-center justify-center whitespace-nowrap text-center font-medium leading-[1.2] tracking-normal";
 const HEADER_SECONDARY_ACTION_CLASS =
   "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
-/** On dark chrome (e.g. non–light-theme header row): translucent trigger. */
-const HEADER_MAIN_NAV_MENU_TRIGGER_CLASS =
-  "nn-marketing-body-sm inline-flex h-[30px] shrink-0 items-center gap-1 whitespace-nowrap rounded-lg border border-[color-mix(in_srgb,var(--nav-fg)_14%,var(--nav-border))] bg-[color-mix(in_srgb,var(--nav-fg)_04%,transparent)] px-2.5 text-center font-medium leading-tight tracking-normal text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]";
-/**
- * Light-theme top brand strip: white filled controls + dark text for contrast (country / locale / theme).
- * Keeps the bar visually lighter than ghost text on saturated chrome.
- */
-const HEADER_LIGHT_UTILITY_TRIGGER_CLASS =
-  "nn-marketing-body-sm inline-flex h-[30px] shrink-0 items-center gap-1 whitespace-nowrap rounded-lg border border-[color-mix(in_srgb,var(--theme-heading-text,#0f172a)_14%,#cbd5e1)] bg-white px-2.5 text-center font-medium leading-tight tracking-normal text-[var(--theme-heading-text)] shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-colors hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--theme-heading-text)_25%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-white";
 type LearnerTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
 type LearnerCountry = "CA" | "US";
 type HeaderResumeCta = { href: string; label: string } | null;
@@ -140,8 +130,6 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileContextOpen, setMobileContextOpen] = useState(false);
   const [mobileExpandedMega, setMobileExpandedMega] = useState<ExamMenuKey | "moreTracks" | null>(null);
-  const [desktopCountryOpen, setDesktopCountryOpen] = useState(false);
-  const [desktopLangOpen, setDesktopLangOpen] = useState(false);
   const [desktopMoreOpen, setDesktopMoreOpen] = useState(false);
   const [desktopMoreTracksOpen, setDesktopMoreTracksOpen] = useState(false);
   const [mobileLangOpen, setMobileLangOpen] = useState(false);
@@ -149,8 +137,6 @@ export function SiteHeader() {
   const [openMegaMenu, setOpenMegaMenu] = useState<ExamMenuKey | null>(null);
   const [resumeStudyingCta, setResumeStudyingCta] = useState<HeaderResumeCta>(null);
   const closeMegaTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const desktopCountryRef = useRef<HTMLDivElement>(null);
-  const desktopLangRef = useRef<HTMLDivElement>(null);
   const desktopMoreRef = useRef<HTMLDivElement>(null);
   const desktopMoreTracksRef = useRef<HTMLDivElement>(null);
   const mobileLangRef = useRef<HTMLDivElement>(null);
@@ -199,23 +185,8 @@ export function SiteHeader() {
     setOpenMegaMenu(null);
   }, []);
 
-  const handleDesktopRegionSelect = useCallback(
-    async (newRegion: GlobalRegionSlug) => {
-      await applyGlobalRegionSelection(newRegion, {
-        marketingLocale: globalLocale,
-        setUsCaMarketingRegion: setRegionAndRefresh,
-        router,
-        buildLocalizedPath: buildLocalizedMarketingPath,
-      });
-      setDesktopCountryOpen(false);
-    },
-    [globalLocale, setRegionAndRefresh, router, buildLocalizedMarketingPath],
-  );
-
   useEffect(() => {
     const close = (e: PointerEvent) => {
-      if (!desktopCountryRef.current?.contains(e.target as Node)) setDesktopCountryOpen(false);
-      if (!desktopLangRef.current?.contains(e.target as Node)) setDesktopLangOpen(false);
       if (!desktopMoreRef.current?.contains(e.target as Node)) setDesktopMoreOpen(false);
       if (!desktopMoreTracksRef.current?.contains(e.target as Node)) setDesktopMoreTracksOpen(false);
       if (!mobileLangRef.current?.contains(e.target as Node)) setMobileLangOpen(false);
@@ -224,8 +195,6 @@ export function SiteHeader() {
     const onEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setOpenMegaMenu(null);
-        setDesktopCountryOpen(false);
-        setDesktopLangOpen(false);
         setDesktopMoreOpen(false);
         setDesktopMoreTracksOpen(false);
         setMobileLangOpen(false);
@@ -252,8 +221,6 @@ export function SiteHeader() {
     queueMicrotask(() => {
       setOpenMegaMenu(null);
       setMobileExpandedMega(null);
-      setDesktopCountryOpen(false);
-      setDesktopLangOpen(false);
       setDesktopMoreOpen(false);
       setDesktopMoreTracksOpen(false);
       setMobileLangOpen(false);
@@ -358,94 +325,6 @@ export function SiteHeader() {
     return `${inset}, 0 12px 36px -14px color-mix(in srgb, var(--theme-heading-text) 18%, transparent)`;
   }, [isScrolled]);
 
-  /** Light homepage: white pills on brand strip; dark unified header: translucent triggers. */
-  const headerUtilityMenuTriggerClass = isLightTheme
-    ? HEADER_LIGHT_UTILITY_TRIGGER_CLASS
-    : HEADER_MAIN_NAV_MENU_TRIGGER_CLASS;
-  const utilityThemePickerShellClass = isLightTheme
-    ? "text-[var(--theme-heading-text)] [&_button]:h-[30px] [&_button]:min-h-0 [&_button]:shrink-0 [&_button]:items-center [&_button]:gap-1.5 [&_button]:whitespace-nowrap [&_button]:rounded-lg [&_button]:border [&_button]:border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] [&_button]:bg-white [&_button]:px-2.5 [&_button]:py-1 [&_button]:text-[11px] [&_button]:font-normal [&_button]:leading-tight [&_button]:text-[var(--theme-heading-text)] [&_button]:shadow-[0_1px_2px_rgba(15,23,42,0.05)] [&_button]:hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))] [&_button]:hover:text-[var(--theme-heading-text)]"
-    : "text-[var(--nav-fg)] [&_button]:min-h-0 [&_button]:shrink-0 [&_button]:whitespace-nowrap [&_button]:border-[var(--nav-border)] [&_button]:bg-transparent [&_button]:px-2.5 [&_button]:py-1.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:shadow-none [&_button]:hover:bg-[var(--nav-hover)] [&_button]:hover:text-[var(--nav-fg)]";
-
-  const marketingDesktopUtilityControls = (
-    <div className="flex shrink-0 items-center gap-1.5 xl:gap-2">
-      <MarketingCountryHubStrip />
-      <div className="relative shrink-0" ref={desktopCountryRef}>
-        <button
-          type="button"
-          onClick={() => setDesktopCountryOpen((open) => !open)}
-          className={headerUtilityMenuTriggerClass}
-          aria-expanded={desktopCountryOpen}
-          aria-haspopup="listbox"
-          aria-label={`${t("nav.regionLabel")}: ${REGION_CONFIG[effectiveGlobalRegion].displayName}. ${t("nav.openMenu")}`}
-        >
-          <MapPin className={`h-3.5 w-3.5 shrink-0 ${isLightTheme ? "opacity-70" : "opacity-80"}`} aria-hidden />
-          <span className="whitespace-nowrap">
-            {effectiveGlobalRegion === "canada"
-              ? formatTitleCase(t("home.region.ca"), locale)
-              : effectiveGlobalRegion === "us"
-                ? formatTitleCase(t("home.region.us"), locale)
-                : REGION_CONFIG[effectiveGlobalRegion].displayName}
-          </span>
-          <ChevronDown className={`h-3 w-3 shrink-0 opacity-60 transition-transform ${desktopCountryOpen ? "rotate-180" : ""}`} aria-hidden />
-        </button>
-        {desktopCountryOpen ? (
-          <div className="absolute end-0 z-[120] mt-2 w-[min(100vw-2rem,18rem)] sm:w-72">
-            <CountrySelector
-              currentRegion={effectiveGlobalRegion}
-              onSelect={handleDesktopRegionSelect}
-              onClose={() => setDesktopCountryOpen(false)}
-              variant="popover"
-              includeUnpublishedRegions={isAdminAuthenticated}
-            />
-          </div>
-        ) : null}
-      </div>
-      <div className="relative shrink-0" ref={desktopLangRef}>
-        <button
-          type="button"
-          onClick={() => setDesktopLangOpen((open) => !open)}
-          className={headerUtilityMenuTriggerClass}
-          aria-expanded={desktopLangOpen}
-          aria-haspopup="listbox"
-          aria-label={`${t("nav.language")}: ${locale.toUpperCase()}. Click to change.`}
-        >
-          <span className="whitespace-nowrap">{locale.toUpperCase()}</span>
-          <ChevronDown className={`h-3 w-3 shrink-0 opacity-60 transition-transform ${desktopLangOpen ? "rotate-180" : ""}`} aria-hidden />
-        </button>
-        {desktopLangOpen ? (
-          <div className="absolute end-0 z-[120] mt-2 max-h-56 w-52 overflow-y-auto rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-strong)] p-1 text-[var(--theme-heading-text)] shadow-[var(--shadow-card-hover)]">
-            <MarketingLanguagePreferenceList
-              onDone={() => setDesktopLangOpen(false)}
-              renderItem={({ code, name, flag, disabled, onSelect }) => (
-                <button
-                  type="button"
-                  disabled={disabled}
-                  onClick={onSelect}
-                  className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-xs hover:bg-[color-mix(in_srgb,var(--theme-heading-text)_06%,var(--surface-strong))] ${
-                    code === locale ? "bg-[var(--accent-surface-a)] font-medium text-[var(--text-accent)]" : "text-[var(--theme-heading-text)]"
-                  }`}
-                >
-                  <span>{flag}</span>
-                  {name}
-                </button>
-              )}
-            />
-          </div>
-        ) : null}
-      </div>
-      <div className={`shrink-0 whitespace-nowrap ${utilityThemePickerShellClass}`}>
-        <ThemePicker
-          className="shrink-0"
-          labels={{
-            navTheme: t("nav.theme"),
-            themeGroupLight: t("nav.themeGroupLight"),
-            themeGroupDark: t("nav.themeGroupDark"),
-          }}
-        />
-      </div>
-    </div>
-  );
-
   /** Homepage-only acquisition param; other marketing pages keep plain signup URL. */
   const guestMarketingSignupHref = useMemo(() => {
     const base = `/signup?callbackUrl=${encodeURIComponent("/app")}`;
@@ -495,17 +374,6 @@ export function SiteHeader() {
   return (
     <div style={navChromeVars} className="sticky top-0 z-50" ref={headerRef}>
       {/*
-        Light themes: top preferences rail (country / language / theme) above the logo row — matches
-        `globals.css` “Light-theme 3-layer header”. Desktop grid hides below `xl` with the strip.
-      */}
-      {isLightTheme ? (
-        <MarketingHeaderUtilityStrip
-          variant="dark-bar"
-          visibilityClassName="hidden xl:block"
-          leading={<MarketingCountryHubStrip surface="darkUtility" />}
-        />
-      ) : null}
-      {/*
         Keep enter animation on <header> only. `nn-header-animate-in` ends with a transform, which
         creates a fixed-position containing block — mobile drawers are siblings after </header> and
         must stay outside that subtree so `fixed inset-0` covers the viewport, not the header box.
@@ -513,7 +381,7 @@ export function SiteHeader() {
       <header
         data-nn-nav-mode="public"
         style={isLightTheme ? undefined : { ...navChromeStyle, boxShadow: darkHeaderShadow }}
-        className={`nn-header-animate-in relative w-full border-b${
+        className={`nn-header-animate-in relative flex w-full flex-col border-b${
           isLightTheme
             ? ` nn-header-logo-row${isScrolled ? " nn-header-logo-row--scrolled" : ""}`
             : " nn-header-dark-surface"
@@ -521,9 +389,25 @@ export function SiteHeader() {
         onMouseEnter={clearMegaCloseTimer}
         onMouseLeave={scheduleMegaClose}
       >
+        {/*
+          Desktop (`xl+`): one preferences rail for all themes — hubs + country + language + theme.
+          Light: dark-bar surface; dark: recessive utility surface. Middle row keeps logo/links/auth only.
+        */}
+        <div className="nn-header-hide-until-xl w-full">
+          <MarketingHeaderUtilityStrip
+            variant={isLightTheme ? "dark-bar" : "standard"}
+            leading={
+              isLightTheme ? (
+                <MarketingCountryHubStrip surface="darkUtility" />
+              ) : (
+                <MarketingCountryHubStrip />
+              )
+            }
+          />
+        </div>
         <div className="nn-section-shell flex flex-col overflow-visible">
           {/* ── Mobile brand row ── */}
-          <div className="flex min-h-[4.5rem] items-center gap-2 overflow-visible border-b border-[var(--header-border)] pt-[env(safe-area-inset-top,0px)] sm:gap-4 xl:hidden">
+          <div className="nn-header-mobile-only-flex min-h-[4.5rem] items-center gap-2 overflow-visible border-b border-[var(--header-border)] pt-[env(safe-area-inset-top,0px)] sm:gap-4">
             <div className="flex min-w-0 shrink items-center gap-2 overflow-hidden">
               <Link
                 href={localizeHref("/")}
@@ -573,11 +457,11 @@ export function SiteHeader() {
               </div>
             ) : null}
             {/* Mobile controls — only below `md` (tablet+ uses desktop chrome) */}
-            <div className={`flex shrink-0 items-center gap-2 xl:hidden ${isAuthenticated ? "ml-auto" : ""}`}>
+            <div className={`nn-header-mobile-only-flex shrink-0 items-center gap-2 ${isAuthenticated ? "ml-auto" : ""}`}>
               <button
                 type="button"
                 onClick={() => setMobileContextOpen(true)}
-                className="xl:hidden inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--nn-nav-border)] bg-transparent p-0 text-[var(--nn-nav-fg)] transition-colors hover:bg-[var(--nn-nav-hover-bg)]"
+                className="nn-header-mobile-only-inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--nn-nav-border)] bg-transparent p-0 text-[var(--nn-nav-fg)] transition-colors hover:bg-[var(--nn-nav-hover-bg)]"
                 aria-label="Region and language settings"
                 aria-expanded={mobileContextOpen}
               >
@@ -598,7 +482,7 @@ export function SiteHeader() {
 
           {/* Mobile/tablet: signed-in CTAs (learners/staff) — guests use the top row above */}
           {isAuthenticated ? (
-            <div className="relative z-[130] flex items-center justify-end gap-2 border-b border-[var(--header-border)] bg-[var(--nav-bg)] px-4 py-2.5 xl:hidden">
+            <div className="nn-header-mobile-only-flex relative z-[130] items-center justify-end gap-2 border-b border-[var(--header-border)] bg-[var(--nav-bg)] px-4 py-2.5">
               {isMarketingEntitledLearner ? (
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
@@ -734,7 +618,6 @@ export function SiteHeader() {
             </nav>
 
             <div className="relative z-[130] flex shrink-0 items-center justify-end gap-2 xl:gap-2.5">
-              {!isLightTheme ? marketingDesktopUtilityControls : null}
               {isSessionPending ? (
                 <div className="flex shrink-0 items-center gap-2" aria-busy="true" aria-label={t("nav.logIn")}>
                   <div className="h-10 w-20 animate-pulse rounded-xl bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))]" />
@@ -819,7 +702,7 @@ export function SiteHeader() {
             </div>
           </div>{/* /nav-row */}
         </div>{/* /shell */}
-        <div className="hidden w-full border-t border-[var(--nn-nav-border)] nn-header-nav-row xl:block">
+        <div className="nn-header-hide-until-xl w-full border-t border-[var(--nn-nav-border)] nn-header-nav-row">
           <div className="nn-section-shell flex min-h-[36px] flex-wrap items-center gap-x-0.5 gap-y-0 py-0 md:min-h-[40px] md:py-0.5 lg:gap-x-0.5">
             <nav
               aria-label={t("nav.marketingExplore")}
@@ -899,7 +782,7 @@ export function SiteHeader() {
             id={`mega-menu-${openMega.key}`}
             role="dialog"
             aria-label={`${openMega.label} menu`}
-            className="absolute inset-x-0 top-full z-[120] hidden xl:block animate-[nn-mega-panel-enter_var(--brand-motion-normal)_var(--brand-motion-ease-luxury)_forwards]"
+            className="nn-header-hide-until-xl absolute inset-x-0 top-full z-[120] animate-[nn-mega-panel-enter_var(--brand-motion-normal)_var(--brand-motion-ease-luxury)_forwards]"
           >
             <div className="nn-section-shell pb-5 pt-1.5">
               <div className="overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-strong)] shadow-[var(--shadow-elevated)] ring-1 ring-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border-subtle))]">
@@ -1019,7 +902,7 @@ export function SiteHeader() {
 
       {mobileOpen && typeof document !== "undefined"
         ? createPortal(
-            <div className="fixed inset-0 z-[200] xl:hidden animate-[nn-overlay-enter_0.24s_ease_forwards]">
+            <div className="nn-header-overlay-mobile-only fixed inset-0 z-[200] animate-[nn-overlay-enter_0.24s_ease_forwards]">
           <button type="button" className="absolute inset-0 bg-black/56" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)} />
           <div className="absolute inset-x-0 top-0 flex h-[100dvh] max-h-[100dvh] flex-col border-b border-[var(--nav-border)] bg-[var(--nav-bg)] text-[var(--nav-fg)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-in_0.28s_cubic-bezier(0.25,0.1,0.25,1)_forwards]">
             <div className="flex h-16 shrink-0 items-center justify-between border-b border-[var(--header-border)] px-4 pt-[max(0.5rem,env(safe-area-inset-top))]">

@@ -25,16 +25,16 @@ import { isStaffRole } from "@/lib/auth/staff-roles";
  * variant="dark-bar"  — full brand/nav-background surface (top band in light-theme 3-layer header).
  *
  * `leading` — optional left cluster (e.g. country hub shortcuts) when the strip shares a row with preferences.
- * `visibilityClassName` — override default `hidden md:block` (e.g. `hidden xl:block` when parent header is xl-only).
+ *
+ * Visibility (e.g. `hidden xl:block`) is applied by the parent wrapper in `SiteHeader` so Tailwind
+ * always sees full class literals in that module — dynamic `className` strings here can be purged.
  */
 export function MarketingHeaderUtilityStrip({
   variant = "standard",
   leading,
-  visibilityClassName,
 }: {
   variant?: "standard" | "dark-bar";
   leading?: ReactNode;
-  visibilityClassName?: string;
 }) {
   const { t, locale } = useMarketingI18n();
   const pathname = usePathname() ?? "/";
@@ -116,11 +116,10 @@ export function MarketingHeaderUtilityStrip({
       ? "inline-flex h-[30px] max-w-[11rem] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] bg-white px-2.5 text-[11px] font-normal leading-tight tracking-tight text-[var(--theme-heading-text)] shadow-[0_1px_2px_rgba(15,23,42,0.05)] hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))]"
       : undefined;
 
-  const vis = visibilityClassName ?? "hidden md:block";
   const shellJustify = leading ? "justify-between" : "justify-end";
 
   return (
-    <div className={`${variant === "dark-bar" ? "nn-header-utility-dark" : "nn-header-utility"} ${vis}`}>
+    <div className={`w-full ${variant === "dark-bar" ? "nn-header-utility-dark" : "nn-header-utility"}`}>
       <div
         className={`nn-section-shell flex items-center gap-1.5 lg:gap-2 ${shellJustify} ${
           variant === "dark-bar" ? "min-h-[36px] py-[3px] md:min-h-[40px] md:py-1" : "h-9 gap-2"
