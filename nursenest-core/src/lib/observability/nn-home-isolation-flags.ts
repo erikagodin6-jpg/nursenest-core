@@ -10,21 +10,41 @@
  *
  * Unset in normal production. Diagnostics use wall-clock ms via `nnHomeDiagNowMs`
  * (keeps `Date.now` out of RSC modules that enforce `react-hooks/purity`).
+ *
+ * **Production guard:** when `NODE_ENV=production`, the three `NN_HOME_STATIC_*` switches are ignored
+ * unless `NN_HOME_ALLOW_DEGRADED_PATHS_IN_PRODUCTION=true` (prevents accidental fallback homepage /
+ * stripped chrome). Next's static generation phase still honors those env vars when set.
  */
+const NEXT_STATIC_GENERATION_PHASE = "phase-production-build";
+
+function envFlagTrue(raw: string | undefined): boolean {
+  return raw?.trim().toLowerCase() === "true";
+}
+
+/** Honor `NN_HOME_STATIC_*` env toggles (probe, metadata, minimal layout). */
+function honorHomeStaticIsolationEnv(): boolean {
+  if (process.env.NEXT_PHASE === NEXT_STATIC_GENERATION_PHASE) return true;
+  if (process.env.NODE_ENV !== "production") return true;
+  return envFlagTrue(process.env.NN_HOME_ALLOW_DEGRADED_PATHS_IN_PRODUCTION);
+}
+
 export function nnHomeDiagNowMs(): number {
   return Date.now();
 }
 
 export function nnHomeStaticProbeEnabled(): boolean {
-  return process.env.NN_HOME_STATIC_PROBE?.trim().toLowerCase() === "true";
+  if (!honorHomeStaticIsolationEnv()) return false;
+  return envFlagTrue(process.env.NN_HOME_STATIC_PROBE);
 }
 
 export function nnHomeStaticMetadataEnabled(): boolean {
-  return process.env.NN_HOME_STATIC_METADATA?.trim().toLowerCase() === "true";
+  if (!honorHomeStaticIsolationEnv()) return false;
+  return envFlagTrue(process.env.NN_HOME_STATIC_METADATA);
 }
 
 export function nnHomeStaticMarketingLayoutEnabled(): boolean {
-  return process.env.NN_HOME_STATIC_MARKETING_LAYOUT?.trim().toLowerCase() === "true";
+  if (!honorHomeStaticIsolationEnv()) return false;
+  return envFlagTrue(process.env.NN_HOME_STATIC_MARKETING_LAYOUT);
 }
 
 export function nnHomeRouteDiagEnabled(): boolean {
