@@ -7,6 +7,7 @@ import { loadAdminCommandCenter } from "@/lib/admin/load-admin-command-center";
 import { loadAdminDashboardOverview } from "@/lib/admin/load-admin-dashboard-overview";
 import { AdminCommandCenter } from "@/components/admin/admin-command-center";
 import { AdminDashboardOverview } from "@/components/admin/admin-dashboard-overview";
+import { AdminLegacyOperationsHub } from "@/components/admin/admin-legacy-operations-hub";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
@@ -77,6 +78,16 @@ function AdminCommandCenterFallback() {
   );
 }
 
+async function AdminLegacyOperationsSection() {
+  const staff = await getStaffSession().catch(() => null);
+  const staffTier: StaffTier = staff?.tier ?? "super";
+  return (
+    <section className="mt-10 space-y-3" data-testid="admin-legacy-operations-section">
+      <AdminLegacyOperationsHub staffTier={staffTier} />
+    </section>
+  );
+}
+
 async function AdminCommandCenterSection() {
   const staff = await getStaffSession().catch(() => null);
   const staffTier: StaffTier = staff?.tier ?? "super";
@@ -121,6 +132,10 @@ export default async function AdminPage() {
     <AdminPageShell>
       <Suspense fallback={<AdminOverviewFallback />}>
         <AdminOverviewSection />
+      </Suspense>
+
+      <Suspense fallback={null}>
+        <AdminLegacyOperationsSection />
       </Suspense>
 
       <Suspense fallback={<AdminCommandCenterFallback />}>

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-/** Canonical account analytics live under `/app/account/overview`. */
+/** Legacy `/profile` parity: land on the account hub (overview remains one tap away). */
 export default function LearnerProfileRedirectPage() {
-  redirect("/app/account/overview");
+  redirect("/app/account");
 }

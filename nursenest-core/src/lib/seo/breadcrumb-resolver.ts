@@ -138,9 +138,14 @@ export function appAccountBreadcrumbs(leafLabel: string): BreadcrumbCrumb[] {
   return [
     HOME,
     { name: "Dashboard", href: "/app" },
-    { name: "Account", href: "/app/account/overview" },
+    { name: "Account", href: "/app/account" },
     { name: leafLabel, href: undefined },
   ];
+}
+
+/** Account landing (`/app/account`): Home → Dashboard → Account (current). */
+export function appAccountHubBreadcrumbs(): BreadcrumbCrumb[] {
+  return [HOME, { name: "Dashboard", href: "/app" }, { name: "Account", href: undefined }];
 }
 
 /** App shell: UX only. No schema items. */

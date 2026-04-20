@@ -45,4 +45,24 @@ describe("resolveLoginSubmitOutcome", () => {
     };
     assert.equal(resolveLoginSubmitOutcome(result, false), "success");
   });
+
+  it("classifies proxy + Auth.js compat rate limit (code from signin URL query)", () => {
+    const result: LoginSubmitResultLike = {
+      error: "AccessDenied",
+      code: "rate_limit_exceeded",
+      status: 429,
+      ok: false,
+    };
+    assert.equal(resolveLoginSubmitOutcome(result, false), "rate_limited");
+  });
+
+  it("still succeeds when session exists even if signIn reports rate limit (duplicate POST race)", () => {
+    const result: LoginSubmitResultLike = {
+      error: "AccessDenied",
+      code: "rate_limit_exceeded",
+      status: 429,
+      ok: false,
+    };
+    assert.equal(resolveLoginSubmitOutcome(result, true), "success");
+  });
 });

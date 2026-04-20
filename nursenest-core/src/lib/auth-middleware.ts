@@ -4,6 +4,8 @@ import Credentials from "next-auth/providers/credentials";
 import { authCallbacks } from "@/lib/auth-callbacks";
 import { PINNED_AUTH_BASE_PATH } from "@/lib/auth/auth-base-path";
 import { JWT_SESSION_MAX_AGE_SEC, JWT_SESSION_UPDATE_AGE_SEC } from "@/lib/auth/auth-session-constants";
+import { getAuthSessionJwtFromRequest, sessionJwtHasUserIdentity } from "@/lib/auth/nextauth-request-jwt";
+import type { NextRequest } from "next/server";
 
 /**
  * Edge-only NextAuth instance: no Prisma, bcrypt, or PrismaAdapter.
@@ -41,11 +43,25 @@ export const { auth: middlewareAuth } = NextAuth({
      * layouts could run without a session and use `redirect("/login")` in RSC, which has caused raw
      * Flight payloads to appear in the browser document (Next.js 16).
      */
-    authorized({ auth, request }) {
+    async authorized({ auth, request }) {
       const path = request.nextUrl.pathname;
       const hasUser =
         !!(auth?.user && ((auth.user as { id?: string }).id || auth.user.email));
-      if (path.startsWith("/app") || path.startsWith("/admin") || path.startsWith("/api/admin")) {
+      if (path.startsWith("/app")) {
+        return hasUser;
+      }
+      /**
+       * Admin surfaces: NextAuth’s `getSession` → `auth` can disagree with cookie-backed `getToken`
+       * when `secureCookie` / proxy TLS hints differ from how the cookie was issued.
+       * Run the same dual-read JWT path as {@link enforceAdminProxyRoute} **first** so valid session
+       * cookies are not treated as signed-out before the proxy DB gate runs.
+       */
+      if (path.startsWith("/admin") || path.startsWith("/api/admin")) {
+        const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
+        if (secret) {
+          const token = await getAuthSessionJwtFromRequest(request as NextRequest, secret);
+          if (sessionJwtHasUserIdentity(token)) return true;
+        }
         return hasUser;
       }
       return true;

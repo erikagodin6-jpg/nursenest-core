@@ -104,6 +104,7 @@ test.describe("Admin — dashboard render contract", () => {
 
       await expect(page.getByTestId("admin-overview-fallback")).toHaveCount(0);
       await expect(page.getByTestId("admin-command-center-fallback")).toHaveCount(0);
+      await expect(page.getByTestId("admin-legacy-operations-hub")).toBeVisible();
 
       const serious = observers.consoleErrors.filter((t) => !isIgnorableAdminDashboardConsole(t));
       expect(serious, serious.join(" | ")).toEqual([]);

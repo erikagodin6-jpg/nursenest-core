@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getSession, signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -28,6 +28,8 @@ export function LoginForm({
   const [error, setError] = useState<string | null>(null);
   const [errorHelp, setErrorHelp] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  /** Synchronous guard — `pending` state may not flip before a second submit in the same tick. */
+  const submitInFlightRef = useRef(false);
   const redirectTarget = useMemo(() => {
     const fromQuery = safeCallbackPath(searchParams.get("callbackUrl"));
     return fromQuery ?? "/app";
@@ -55,13 +57,17 @@ export function LoginForm({
       return;
     }
 
+    if (submitInFlightRef.current) {
+      return;
+    }
+    submitInFlightRef.current = true;
     setPending(true);
     let keepSpinnerUntilRedirect = false;
     try {
       const rememberMe =
         formData.get("rememberMe") === "on" ||
         String(formData.get("rememberMe") ?? "") === "true";
-      let result: Awaited<ReturnType<typeof signIn>>;
+      let result: Awaited<ReturnType<typeof signIn>> | undefined;
       try {
         result = await signIn("credentials", {
           email,
@@ -72,15 +78,22 @@ export function LoginForm({
         });
       } catch (e) {
         console.error("[login] signIn threw", e);
+        const session = await getSession().catch(() => null);
+        if (session?.user) {
+          keepSpinnerUntilRedirect = true;
+          await router.refresh();
+          router.push(redirectTarget);
+          return;
+        }
         setError(isLikelyNetworkFailure(e) ? t("pages.login.errorNetwork") : t("pages.login.errorGeneric"));
         setErrorHelp(null);
         return;
       }
 
-      let outcome = resolveLoginSubmitOutcome(result, false);
+      let outcome = resolveLoginSubmitOutcome(result ?? null, false);
       if (outcome !== "success") {
         const session = await getSession().catch(() => null);
-        outcome = resolveLoginSubmitOutcome(result, Boolean(session?.user));
+        outcome = resolveLoginSubmitOutcome(result ?? null, Boolean(session?.user));
       }
 
       if (outcome !== "success") {
@@ -88,6 +101,9 @@ export function LoginForm({
           setError(t("pages.login.errorInvalid"));
           const g = t("pages.login.errorInvalidGuidance")?.trim();
           setErrorHelp(g || null);
+        } else if (outcome === "rate_limited") {
+          setError(t("pages.login.errorRateLimited"));
+          setErrorHelp(null);
         } else {
           setError(t("pages.login.errorGeneric"));
           setErrorHelp(null);
@@ -99,6 +115,7 @@ export function LoginForm({
       await router.refresh();
       router.push(redirectTarget);
     } finally {
+      submitInFlightRef.current = false;
       if (!keepSpinnerUntilRedirect) {
         setPending(false);
       }

@@ -6,6 +6,10 @@ import { safeAwait } from "@/lib/async/safe-await";
 import { renderTrace } from "@/lib/observability/render-trace";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { StaffTier } from "@/lib/auth/staff-roles";
+import {
+  getAuthSessionWithJwtCookieFallback,
+  sessionHasUserIdentity,
+} from "@/lib/auth/server-session-jwt-fallback";
 
 export type StaffSession = {
   userId: string;
@@ -40,6 +44,10 @@ async function loadStaffSession(): Promise<StaffSession | null> {
       detail: (error instanceof Error ? error.message : String(error)).slice(0, 200),
     });
     return null;
+  }
+  if (!sessionHasUserIdentity(session)) {
+    const fb = await getAuthSessionWithJwtCookieFallback();
+    if (sessionHasUserIdentity(fb)) session = fb;
   }
   renderTrace("staff session after auth", {
     route: "shared-root-layout",

@@ -5,7 +5,7 @@ export type LoginSubmitResultLike = {
   ok?: boolean;
 } | null;
 
-export type LoginSubmitOutcome = "success" | "invalid_credentials" | "generic_error";
+export type LoginSubmitOutcome = "success" | "invalid_credentials" | "generic_error" | "rate_limited";
 
 export function resolveLoginSubmitOutcome(
   result: LoginSubmitResultLike,
@@ -16,6 +16,9 @@ export function resolveLoginSubmitOutcome(
   /** Auth.js returns `ok: true` on successful credential exchange; treat that as success even if `error` is empty string. */
   if (result.ok === true && !result.error) return "success";
   if (result.error) {
+    if (result.code === "rate_limit_exceeded") {
+      return "rate_limited";
+    }
     /** Auth.js v5: `error` query = type (`CredentialsSignin`); `code` = subcode (`credentials`). */
     if (
       result.error === "CredentialsSignin" ||

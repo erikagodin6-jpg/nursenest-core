@@ -14,6 +14,10 @@ const VALUE_ACCENTS = [
 
 /**
  * High-intent clarity: what you pay for, what is / isn’t included, payment safety, post-checkout expectations.
+ *
+ * All `pages.pricing.conversionClarity.*` keys used here are listed in
+ * `scripts/contracts/pricing-conversion-clarity-keys.json` and validated at build time
+ * (`scripts/validate-marketing-production-surface.mjs`).
  */
 export function PricingConversionClarity() {
   const { t, locale } = useMarketingI18n();

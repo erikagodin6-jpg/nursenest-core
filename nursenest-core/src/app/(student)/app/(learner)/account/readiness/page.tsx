@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
+import { LearnerPerformanceWorkspaceNav } from "@/components/student/learner-performance-workspace-nav";
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
@@ -65,6 +66,7 @@ export default async function AccountReadinessPage() {
     return (
       <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
+        <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/readiness" />
         <PremiumEmptyState
           headline={t("learner.account.readiness.title")}
           body={t("learner.entitlement.verifyFailed")}
@@ -82,6 +84,7 @@ export default async function AccountReadinessPage() {
     return (
       <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
+        <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/readiness" />
         <PremiumEmptyState
           headline={t("learner.account.readiness.title")}
           body={t("learner.profile.performanceGate.body")}
@@ -115,6 +118,7 @@ export default async function AccountReadinessPage() {
     return (
       <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
+        <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/readiness" />
         <div className="nn-learner-page-hero">
           <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">
             {t("learner.account.readiness.title")}
@@ -146,6 +150,7 @@ export default async function AccountReadinessPage() {
   return (
     <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
+      <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/readiness" />
 
       {/* Page heading */}
       <div className="nn-learner-page-hero">

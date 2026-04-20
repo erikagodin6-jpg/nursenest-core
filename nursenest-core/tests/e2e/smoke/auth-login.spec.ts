@@ -30,6 +30,10 @@ test.describe("Smoke — auth login", () => {
       expect(body).not.toMatch(
         /Unable to sign in|Invalid email, username, or password|Invalid credentials|incorrect password/i,
       );
+      expect(body, "login must not surface raw API rate-limit JSON").not.toContain("rate_limit_exceeded");
+      expect(body, "login must not surface raw JSON error bodies").not.toMatch(
+        /\{\s*"error"\s*:\s*"Too many requests"/,
+      );
 
       const spinnerOnly = await page.locator('[aria-busy="true"]').count().catch(() => 0);
       expect(spinnerOnly === 0 || body.length > 80, "unexpected empty / infinite loading").toBeTruthy();

@@ -34,6 +34,11 @@ test("proxy matcher includes /app, /admin, and exam hub roots; auth-middleware u
   assert.match(am, /\/app/);
 });
 
+test("proxy admin gate resolves session JWT with readAuthSessionJwtWithMeta (cookie name / TLS hint parity)", () => {
+  const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
+  assert.match(proxySrc, /readAuthSessionJwtWithMeta/);
+});
+
 test("proxy sets x-nn-admin-path for /admin and /api/admin (RBAC header for guards)", () => {
   const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
   assert.match(proxySrc, /x-nn-admin-path/);
@@ -66,9 +71,10 @@ test("proxy keeps heavy admin, auth, rate-limit, and marketing graphs behind laz
   assert.match(proxySrc, /if \(isHealthProxyBypassPath\(pathname\)\)[\s\S]*NextResponse\.next\(\)/);
 });
 
-test("edge auth requires a session for /admin (unauthenticated → NextAuth sign-in redirect)", () => {
+test("edge auth: /admin and /api/admin use JWT cookie parity fallback (getAuthSessionJwtFromRequest) before sign-in redirect", () => {
   const am = readFileSync(join(dir, "lib", "auth-middleware.ts"), "utf8");
   assert.match(am, /path\.startsWith\("\/admin"\)/);
+  assert.match(am, /getAuthSessionJwtFromRequest/);
   assert.match(am, /pages:\s*\{\s*signIn:\s*["']\/login["']/);
 });
 

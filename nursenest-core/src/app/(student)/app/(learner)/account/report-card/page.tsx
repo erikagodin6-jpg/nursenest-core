@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
+import { LearnerPerformanceWorkspaceNav } from "@/components/student/learner-performance-workspace-nav";
 import { LearnerReportCardPremium } from "@/components/student/learner-report-card-premium";
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
@@ -59,6 +60,7 @@ export default async function AccountReportCardPage() {
     return (
       <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
+        <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/report-card" />
         <PremiumEmptyState
           headline={t("learner.account.reportCard.title")}
           body={t("learner.entitlement.verifyFailed")}
@@ -76,6 +78,7 @@ export default async function AccountReportCardPage() {
     return (
       <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
+        <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/report-card" />
         <PremiumEmptyState
           headline={t("learner.account.reportCard.title")}
           body={t("learner.account.reportCard.lockedBody")}
@@ -110,6 +113,7 @@ export default async function AccountReportCardPage() {
     return (
       <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
+        <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/report-card" />
         <div className="nn-learner-page-hero">
           <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.account.reportCard.title")}</h1>
           <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">{t("learner.account.reportCard.intro")}</p>
@@ -124,6 +128,7 @@ export default async function AccountReportCardPage() {
   return (
     <div className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
+      <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/report-card" />
       <div className="nn-learner-page-hero">
         <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.account.reportCard.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">{t("learner.account.reportCard.intro")}</p>

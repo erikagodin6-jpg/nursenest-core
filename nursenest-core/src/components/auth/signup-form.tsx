@@ -166,6 +166,13 @@ export function SignupForm({
       } catch (e) {
         if (myGeneration !== submitGeneration.current) return;
         console.error("[signup] post-register signIn threw", e);
+        const session = await getSession().catch(() => null);
+        if (session?.user) {
+          keepSpinnerUntilRedirect = true;
+          await router.refresh();
+          router.push(redirectTarget);
+          return;
+        }
         keepSpinnerUntilRedirect = true;
         router.push(loginAfterSignupHref);
         return;
@@ -183,6 +190,12 @@ export function SignupForm({
         keepSpinnerUntilRedirect = true;
         await router.refresh();
         router.push(redirectTarget);
+        return;
+      }
+
+      if (outcome === "rate_limited") {
+        setError(t("pages.signup.errorRateLimited"));
+        setErrorHelp(null);
         return;
       }
 

@@ -6,10 +6,9 @@
  * Priority: authenticated learner traffic gets a higher per-user ceiling; auth + public scraping get tight per-IP caps.
  * Repeated 429s from an IP increase `Retry-After` (exponential backoff) to protect real users from bot floods.
  */
-import { getToken } from "next-auth/jwt";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { nextAuthSecureCookieForRequest } from "@/lib/auth/nextauth-secure-cookie-request";
+import { getAuthSessionJwtFromRequest } from "@/lib/auth/nextauth-request-jwt";
 import { tightenPublicCap } from "@/lib/config/rate-limit-tightening";
 import {
   checkRateLimitUnified,
@@ -18,6 +17,7 @@ import {
 } from "@/lib/http/rate-limit-unified";
 import { getTrustedClientIp, rateLimitClientPartition } from "@/lib/http/client-ip";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { buildAuthStrictRateLimit429Json } from "@/lib/server/rate-limit-auth-429-json";
 import { getRedisClient, type RedisJsonClient } from "@/lib/server/redis";
 
 /** Brute-force sensitive auth endpoints (not session polling). */
@@ -284,23 +284,32 @@ async function publicCapForIpAsync(ip: string, base: number): Promise<number> {
   return base;
 }
 
-async function json429WithBackoff(ip: string): Promise<NextResponse> {
+/**
+ * Auth.js browser `signIn({ redirect: false })` always parses `const data = await res.json()` then
+ * `new URL(data.url)` **before** branching on `res.ok`. A bare JSON 429 without `url` throws `TypeError: Invalid URL`,
+ * which breaks the login UX and can surface odd client states when a duplicate POST races.
+ *
+ * For proxy rate limits on `/api/auth/*` strict paths, include a stable `signin` URL with query params the client can parse.
+ * @see {@link buildAuthStrictRateLimit429Json}
+ */
+async function json429WithBackoff(ip: string, request?: NextRequest): Promise<NextResponse> {
   const r = await consumeRateLimitUnified(streakMetaKey(ip), 1, {
     windowMs: STREAK_WINDOW_MS,
     max: STREAK_BUCKET_MAX,
   });
   const streak = r.ok ? STREAK_BUCKET_MAX - Math.max(0, r.remaining) : STREAK_BUCKET_MAX;
   const sec = retryAfterSecondsFrom429Streak(streak);
-  return NextResponse.json(
-    { error: "Too many requests", code: "rate_limit_exceeded", retryAfterSec: sec },
-    {
-      status: 429,
-      headers: {
-        "Retry-After": String(sec),
-        "Cache-Control": "no-store",
-      },
+  const body =
+    request != null
+      ? buildAuthStrictRateLimit429Json(request.nextUrl.origin, sec)
+      : { error: "Too many requests", code: "rate_limit_exceeded", retryAfterSec: sec };
+  return NextResponse.json(body, {
+    status: 429,
+    headers: {
+      "Retry-After": String(sec),
+      "Cache-Control": "no-store",
     },
-  );
+  });
 }
 
 /** Subscriber learner bucket: fixed Retry-After (no exponential on user id — avoids punishing shared devices unfairly). */
@@ -338,8 +347,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   const ip = getTrustedClientIp(request);
   const ipKey = rateLimitClientPartition(request, ip);
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
-  const secureCookie = nextAuthSecureCookieForRequest(request);
-  const token = secret ? await getToken({ req: request, secret, secureCookie }) : null;
+  const token = secret ? await getAuthSessionJwtFromRequest(request, secret) : null;
   const userId =
     (typeof token?.sub === "string" && token.sub) ||
     (token as { id?: string } | null)?.id ||
@@ -458,7 +466,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
         authKind: kind,
         path: pathname.slice(0, 96),
       });
-      return await json429WithBackoff(ipKey);
+      return await json429WithBackoff(ipKey, request);
     }
     return null;
   }

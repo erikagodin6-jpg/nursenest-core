@@ -1,6 +1,10 @@
 import type { Session } from "next-auth";
 
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import {
+  getAuthSessionWithJwtCookieFallback,
+  sessionHasUserIdentity,
+} from "@/lib/auth/server-session-jwt-fallback";
 
 let authModulePromise: Promise<typeof import("@/lib/auth")> | null = null;
 function getAuthModulePromise(): Promise<typeof import("@/lib/auth")> {
@@ -25,7 +29,16 @@ export async function getProtectedRouteSession(
         const { auth } = await getAuthModulePromise();
         return auth();
       });
-    return (await readSession()) ?? null;
+    const primary = ((await readSession()) ?? null) as Session | null;
+    if (sessionHasUserIdentity(primary)) return primary;
+    /**
+     * Node `auth()` can miss the same JWT cookie that Edge already decoded for `/admin` (secure
+     * cookie name / forwarded-proto parity). Re-read via {@link getAuthSessionJwtFromRequest} so
+     * `requireAdmin` does not send signed-in staff to `/login`.
+     */
+    if (loadSession) return primary;
+    const fallback = await getAuthSessionWithJwtCookieFallback();
+    return sessionHasUserIdentity(fallback) ? fallback : null;
   } catch (error) {
     safeServerLog("auth", "protected_route_session_failed", {
       surface,

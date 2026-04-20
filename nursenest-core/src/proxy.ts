@@ -3,21 +3,26 @@
  * @see https://nextjs.org/docs/messages/middleware-to-proxy
  *
  * Unauthenticated `/app/*` requests are handled by `middlewareAuth`'s `authorized` callback
- * (sign-in). Do **not** pre-redirect `/app/lessons` with `getToken()` — in Edge it can miss valid JWTs
+ * (sign-in). Do **not** pre-redirect `/app/lessons` with raw `getToken()` — it can miss valid JWTs
  * that the same middleware resolves, incorrectly sending paying subscribers to the public `/lessons` hub.
+ * Admin/staff `/admin` uses {@link readAuthSessionJwtWithMeta} (secure-cookie hint + fallback).
  */
 import "@/lib/auth-trust-env";
 import type { NextFetchEvent, NextMiddleware } from "next/server";
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
-import { nextAuthSecureCookieForRequest } from "@/lib/auth/nextauth-secure-cookie-request";
+import {
+  readAuthSessionJwtWithMeta,
+  sessionJwtHasUserIdentity,
+  type SessionJwtPayload,
+} from "@/lib/auth/nextauth-request-jwt";
+import type { StaffTier } from "@/lib/auth/staff-roles";
 import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
 import { emitNnHomePerfDiagLine, isNnTraceHomePerfTrue } from "@/lib/observability/home-perf-diag";
 import { emitNnHomeRouteDiag, shouldEmitNnHomeRouteDiag } from "@/lib/observability/nn-home-isolation-flags";
 import { NN_HOME_PERF_ANCHOR_HEADER, NN_HOME_PERF_REQUEST_KIND_HEADER } from "@/lib/observability/home-perf-headers";
 
 type AdminProxyDeps = {
-  getToken: typeof import("next-auth/jwt").getToken;
   loadUserRoleFromDbIdentity: typeof import("@/lib/auth/admin-role-source").loadUserRoleFromDbIdentity;
   isPathAllowedForStaffTier: typeof import("@/lib/auth/admin-path-policy").isPathAllowedForStaffTier;
   safeServerLog: typeof import("@/lib/observability/safe-server-log").safeServerLog;
@@ -51,12 +56,10 @@ let marketingProxyDepsPromise: Promise<MarketingProxyDeps> | null = null;
 function loadAdminProxyDeps(): Promise<AdminProxyDeps> {
   if (!adminProxyDepsPromise) {
     adminProxyDepsPromise = Promise.all([
-      import("next-auth/jwt"),
       import("@/lib/auth/admin-role-source"),
       import("@/lib/auth/admin-path-policy"),
       import("@/lib/observability/safe-server-log"),
-    ]).then(([jwt, adminRoleSource, adminPathPolicy, safeServerLog]) => ({
-      getToken: jwt.getToken,
+    ]).then(([adminRoleSource, adminPathPolicy, safeServerLog]) => ({
       loadUserRoleFromDbIdentity: adminRoleSource.loadUserRoleFromDbIdentity,
       isPathAllowedForStaffTier: adminPathPolicy.isPathAllowedForStaffTier,
       safeServerLog: safeServerLog.safeServerLog,
@@ -308,24 +311,43 @@ async function enforceAdminProxyRoute(request: NextRequest): Promise<NextRespons
   const pathname = request.nextUrl.pathname;
   if (!pathname.startsWith("/admin")) return null;
 
-  const { getToken, loadUserRoleFromDbIdentity, isPathAllowedForStaffTier, safeServerLog } = await loadAdminProxyDeps();
+  const { loadUserRoleFromDbIdentity, isPathAllowedForStaffTier, safeServerLog } = await loadAdminProxyDeps();
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
-  const secureCookie = nextAuthSecureCookieForRequest(request);
-  const token = secret ? await getToken({ req: request, secret, secureCookie }) : null;
+  const debug = adminAccessDebug();
+  const { token, readMeta } = secret ? await readAuthSessionJwtWithMeta(request, secret) : { token: null, readMeta: null };
+  type GateJwt = { sub?: string; id?: string; email?: string | null };
+  const gateJwt: GateJwt | null = token !== null && typeof token === "object" ? (token as GateJwt) : null;
   const userId =
-    (typeof token?.sub === "string" && token.sub.trim()) ||
-    (token as { id?: string } | null)?.id?.trim() ||
+    (typeof gateJwt?.sub === "string" && gateJwt.sub.trim()) ||
+    (typeof gateJwt?.id === "string" && gateJwt.id.trim()) ||
     null;
-  const email = typeof token?.email === "string" && token.email.trim().length > 0 ? token.email.trim() : null;
+  const email = typeof gateJwt?.email === "string" && gateJwt.email.trim().length > 0 ? gateJwt.email.trim() : null;
   const correlationId = request.headers.get(NN_CORRELATION_HEADER)?.trim() || randomUUID();
+  const jwtIdentityOk = sessionJwtHasUserIdentity(
+    token !== null && typeof token === "object" ? (token as SessionJwtPayload) : null,
+  );
+  const jwtDiag =
+    debug && readMeta
+      ? {
+          correlationId: correlationId.slice(0, 64),
+          httpsSignal: readMeta.httpsSignal,
+          secureCookieModePrimary: readMeta.secureCookieModePrimary,
+          primaryJwtReadOk: readMeta.primaryJwtReadOk,
+          fallbackJwtReadOk: readMeta.fallbackJwtReadOk,
+          resolvedJwtOk: readMeta.resolvedJwtOk,
+          jwtIdentityOk,
+        }
+      : {};
 
-  if (!userId && !email) {
-    if (adminAccessDebug()) {
+  if (!jwtIdentityOk) {
+    if (debug) {
       safeServerLog("admin_access", "proxy_admin_gate", {
         pathAttempted: pathname,
         email: email ?? undefined,
         role: "missing_token_identity",
         result: "redirect_login",
+        dbAdminRoleOk: false,
+        ...jwtDiag,
       });
     }
     const loginUrl = request.nextUrl.clone();
@@ -338,35 +360,42 @@ async function enforceAdminProxyRoute(request: NextRequest): Promise<NextRespons
 
   const roleRecord = await loadUserRoleFromDbIdentity({ userId, email });
   if (!roleRecord?.isAdmin) {
-    if (adminAccessDebug()) {
+    if (debug) {
       safeServerLog("admin_access", "proxy_admin_gate", {
         pathAttempted: pathname,
         email: email ?? undefined,
         role: roleRecord?.role ?? "missing",
         result: "redirect_non_admin",
+        dbAdminRoleOk: false,
+        ...jwtDiag,
       });
     }
     return redirectWithCorrelation(request, "/app", correlationId);
   }
 
-  if (!isPathAllowedForStaffTier(roleRecord.tier, pathname)) {
-    if (adminAccessDebug()) {
+  const staffTier: StaffTier = roleRecord.tier ?? "support";
+  if (!isPathAllowedForStaffTier(staffTier, pathname)) {
+    if (debug) {
       safeServerLog("admin_access", "proxy_admin_gate", {
         pathAttempted: pathname,
         email: email ?? undefined,
         role: roleRecord.role,
         result: "redirect_rbac",
+        dbAdminRoleOk: true,
+        ...jwtDiag,
       });
     }
     return redirectWithCorrelation(request, "/admin", correlationId);
   }
 
-  if (adminAccessDebug()) {
+  if (debug) {
     safeServerLog("admin_access", "proxy_admin_gate", {
       pathAttempted: pathname,
       email: email ?? undefined,
       role: roleRecord.role,
       result: "allow",
+      dbAdminRoleOk: true,
+      ...jwtDiag,
     });
   }
 

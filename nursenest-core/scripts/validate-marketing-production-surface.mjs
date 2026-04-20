@@ -18,6 +18,12 @@ const pkgRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PAGES_EN = path.join(pkgRoot, "public", "i18n", "en", "pages.json");
 const NAV_EN = path.join(pkgRoot, "public", "i18n", "en", "nav.json");
 const BRAND_EN = path.join(pkgRoot, "public", "i18n", "en", "brand.json");
+const PRICING_CONVERSION_CLARITY_KEYS = path.join(
+  pkgRoot,
+  "scripts",
+  "contracts",
+  "pricing-conversion-clarity-keys.json",
+);
 const DEFAULT_MARKETING_LAYOUT = path.join(pkgRoot, "src", "app", "(marketing)", "(default)", "layout.tsx");
 
 /** Homepage + shell strings that must be non-empty and non-stub in canonical `en`. */
@@ -50,6 +56,23 @@ const FORBIDDEN_SUBSTRINGS = [
   "tbd--",
   "{{missing",
   "[missing:",
+  /** Humanized-key fallbacks from `marketing-i18n-core` (must never ship as visible EN copy). */
+  "value1 title",
+  "value2 title",
+  "value3 title",
+  "included heading",
+  "not included heading",
+  "not included lead",
+  "reassure cancel title",
+  "reassure fees title",
+  "reassure secure title",
+  "worth it question",
+  "after pay question",
+  "after pay answer",
+  "after pay refund link",
+  "after pay terms link",
+  "after pay refund suffix",
+  "after pay terms suffix",
 ];
 
 /** Whole-value stubs (trimmed, lowercased). */
@@ -78,6 +101,15 @@ function looksLikeLeakedKeyPath(v) {
   );
 }
 
+/** Mirrors `humanizedKeyFallback` in `src/lib/marketing-i18n-core.ts` (used when a key is missing). */
+function humanizedKeyFallback(key) {
+  const tail = key.includes(".") ? (key.split(".").pop() ?? key) : key;
+  const words = tail.replace(/([A-Z])/g, " $1").replace(/[-_]/g, " ").trim();
+  if (!words) return "NurseNest";
+  const t = words.charAt(0).toUpperCase() + words.slice(1);
+  return t.length > 80 ? `${t.slice(0, 77)}…` : t;
+}
+
 function validateValue(key, value) {
   if (typeof value !== "string") {
     return `key "${key}" is not a string`;
@@ -91,6 +123,57 @@ function validateValue(key, value) {
   if (FORBIDDEN_EXACT.has(lower)) return `key "${key}" is forbidden stub value "${value.trim()}"`;
   if (looksLikeLeakedKeyPath(v)) return `key "${key}" looks like a raw i18n path: ${v}`;
   return null;
+}
+
+function validatePricingConversionClarityKeys(pages) {
+  const errors = [];
+  let keys;
+  try {
+    keys = readJson(PRICING_CONVERSION_CLARITY_KEYS);
+  } catch (e) {
+    return [`missing pricing conversion clarity contract: ${e instanceof Error ? e.message : String(e)}`];
+  }
+  if (!Array.isArray(keys) || keys.length === 0) {
+    errors.push("pricing-conversion-clarity-keys.json must be a non-empty array");
+    return errors;
+  }
+  for (const key of keys) {
+    const err = validateValue(key, pages[key]);
+    if (err) errors.push(err);
+    else {
+      const v = String(pages[key]).trim();
+      const human = humanizedKeyFallback(key);
+      if (v.toLowerCase() === human.toLowerCase()) {
+        errors.push(
+          `key "${key}" equals humanized missing-key fallback "${human}" — add real English copy in en/pages.json`,
+        );
+      }
+    }
+  }
+  return errors;
+}
+
+/** Any English `pages.*` value must not contain known pricing UI stub phrases (case-insensitive). */
+function assertNoPricingStubPhrasesAnywhereInEnPages(pages) {
+  const needles = [
+    "value1 title",
+    "value2 title",
+    "value3 title",
+    "included heading",
+    "not included heading",
+    "reassure cancel title",
+    "worth it question",
+    "after pay question",
+  ];
+  const errors = [];
+  for (const [key, value] of Object.entries(pages)) {
+    if (typeof value !== "string" || !key.startsWith("pages.")) continue;
+    const lower = value.toLowerCase();
+    for (const n of needles) {
+      if (lower.includes(n)) errors.push(`key "${key}" contains forbidden stub phrase "${n}"`);
+    }
+  }
+  return errors;
 }
 
 function readJson(filePath) {
@@ -150,13 +233,19 @@ function main() {
     if (err) errors.push(err);
   }
 
+  for (const line of validatePricingConversionClarityKeys(pages)) errors.push(line);
+
+  for (const line of assertNoPricingStubPhrasesAnywhereInEnPages(pages)) errors.push(line);
+
   if (errors.length) {
     console.error("[validate-marketing-production-surface] FAILED:");
     for (const line of errors) console.error("  -", line);
     process.exit(1);
   }
 
-  console.log("[validate-marketing-production-surface] OK — en pages/nav homepage + shell checks passed.");
+  console.log(
+    "[validate-marketing-production-surface] OK — en pages/nav homepage + pricing conversion clarity + shell checks passed.",
+  );
 }
 
 main();
