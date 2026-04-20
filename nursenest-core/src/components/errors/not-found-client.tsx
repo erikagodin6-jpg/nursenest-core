@@ -5,6 +5,10 @@ import { useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { BrandLeafMark } from "@/components/brand/brand-leaf-mark";
 import { BRAND_NAME } from "@/lib/branding/logo-config";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { postLoginMarketingHomePath } from "@/lib/auth/post-login-resume-path";
 import {
   BROWSE_LESSONS_HREF,
   buildNotFoundRecoverySuggestions,
@@ -31,6 +35,12 @@ export function NotFoundClient({
   resumeStudying: NotFoundResumeStudying | null;
 }) {
   const pathname = usePathname() ?? "/";
+  const { locale } = useMarketingI18n();
+
+  const guestSignInHref = useMemo(
+    () => withMarketingLocale(locale, loginWithCallback(postLoginMarketingHomePath(locale))),
+    [locale],
+  );
 
   const smart = useMemo(() => buildNotFoundRecoverySuggestions(pathname), [pathname]);
 
@@ -48,7 +58,7 @@ export function NotFoundClient({
     return mergeNotFoundRecoveryLinks(smart, base, NOT_FOUND_RECOVERY_CAP);
   }, [isAuthenticated, resumeStudying, smart]);
 
-  const primaryHref = isAuthenticated ? "/app" : "/login?callbackUrl=%2Fapp";
+  const primaryHref = isAuthenticated ? "/app" : guestSignInHref;
   const secondaryHref = isAuthenticated ? "/app/lessons" : BROWSE_LESSONS_HREF;
 
   return (

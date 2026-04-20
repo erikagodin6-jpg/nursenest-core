@@ -17,9 +17,6 @@ test.describe("Smoke — auth login", () => {
 
     const observers = attachPageObservers(page, { profile: "app", probeAuthApi: true });
     try {
-      await page.goto("/login", { waitUntil: "domcontentloaded" });
-      await expect(page.getByRole("heading", { name: /log in|sign in/i })).toBeVisible({ timeout: 30_000 });
-
       await loginWithCredentials(page, creds!.email, creds!.password, { enterLearnerApp: false });
 
       await expect(page.locator(".nn-marketing-surface")).toBeVisible({ timeout: 45_000 });

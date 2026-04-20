@@ -352,11 +352,15 @@ async function enforceAdminProxyRoute(request: NextRequest): Promise<NextRespons
       ? {
           correlationId: correlationId.slice(0, 64),
           httpsSignal: readMeta.httpsSignal,
+          secureCookieHintFromAuthPublicEnv: readMeta.secureCookieHintFromAuthPublicEnv,
           secureCookieModePrimary: readMeta.secureCookieModePrimary,
           primaryJwtReadOk: readMeta.primaryJwtReadOk,
           fallbackJwtReadOk: readMeta.fallbackJwtReadOk,
           explicitCookieJwtReadOk: readMeta.explicitCookieJwtReadOk,
+          jwtDecodePath: readMeta.jwtDecodePath,
           resolvedJwtOk: readMeta.resolvedJwtOk,
+          authUrlEnvSet: Boolean(process.env.AUTH_URL?.trim()),
+          nextAuthUrlEnvSet: Boolean(process.env.NEXTAUTH_URL?.trim()),
           jwtIdentityOk,
         }
       : {};

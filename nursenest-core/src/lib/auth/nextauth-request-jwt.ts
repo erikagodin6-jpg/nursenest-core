@@ -1,7 +1,12 @@
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 import type { NextAuthHttpsSignal } from "@/lib/auth/nextauth-secure-cookie-request";
-import { resolveNextAuthHttpsForRequest } from "@/lib/auth/nextauth-secure-cookie-request";
+import {
+  resolveNextAuthHttpsForRequest,
+  secureCookieHintFromAuthPublicEnv,
+} from "@/lib/auth/nextauth-secure-cookie-request";
+import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /** Last-resort attempts when primary `secureCookie` + inverse miss (legacy names / odd proxies). */
 const EXPLICIT_AUTH_SESSION_COOKIE_ATTEMPTS: readonly { secureCookie: boolean; cookieName: string }[] = [
@@ -10,8 +15,6 @@ const EXPLICIT_AUTH_SESSION_COOKIE_ATTEMPTS: readonly { secureCookie: boolean; c
   { secureCookie: true, cookieName: "__Secure-next-auth.session-token" },
   { secureCookie: false, cookieName: "next-auth.session-token" },
 ];
-import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /**
  * JWT read diagnostics: set `NN_AUTH_JWT_DIAG=1` for all paths (briefly — can be chatty on hot routes).
@@ -28,12 +31,16 @@ function shouldEmitAuthSessionJwtDiag(pathname: string): boolean {
 export type SessionJwtPayload = Awaited<ReturnType<typeof getToken>>;
 
 /** Non-secret JWT read outcome for diagnostics (proxy gate + optional `auth_session_jwt_from_request`). */
+export type AuthSessionJwtDecodePath = "primary" | "inverse" | "explicit" | "none";
+
 export type AuthSessionJwtReadMeta = {
   httpsSignal: NextAuthHttpsSignal;
+  secureCookieHintFromAuthPublicEnv: boolean;
   secureCookieModePrimary: boolean;
   primaryJwtReadOk: boolean;
   fallbackJwtReadOk: boolean;
   explicitCookieJwtReadOk: boolean;
+  jwtDecodePath: AuthSessionJwtDecodePath;
   resolvedJwtOk: boolean;
 };
 
@@ -60,12 +67,19 @@ export async function readAuthSessionJwtWithMeta(
       }
     }
   }
+  let jwtDecodePath: AuthSessionJwtDecodePath = "none";
+  if (first) jwtDecodePath = "primary";
+  else if (second) jwtDecodePath = "inverse";
+  else if (explicitHit) jwtDecodePath = "explicit";
+
   const readMeta: AuthSessionJwtReadMeta = {
     httpsSignal: signal,
+    secureCookieHintFromAuthPublicEnv: secureCookieHintFromAuthPublicEnv(signal),
     secureCookieModePrimary: primary,
     primaryJwtReadOk: Boolean(first),
     fallbackJwtReadOk: Boolean(second),
     explicitCookieJwtReadOk: explicitHit,
+    jwtDecodePath,
     resolvedJwtOk: Boolean(resolved),
   };
   return { token: resolved, readMeta };
@@ -92,10 +106,12 @@ export async function getAuthSessionJwtFromRequest(
     safeServerLog("admin_access", "auth_session_jwt_from_request", {
       path: path.length > 160 ? `${path.slice(0, 160)}…` : path,
       httpsSignal: readMeta.httpsSignal,
+      secureCookieHintFromAuthPublicEnv: readMeta.secureCookieHintFromAuthPublicEnv,
       secureCookieModePrimary: readMeta.secureCookieModePrimary,
       primaryJwtReadOk: readMeta.primaryJwtReadOk,
       fallbackJwtReadOk: readMeta.fallbackJwtReadOk,
       explicitCookieJwtReadOk: readMeta.explicitCookieJwtReadOk,
+      jwtDecodePath: readMeta.jwtDecodePath,
       resolvedJwtOk: readMeta.resolvedJwtOk,
       ...(correlationId ? { correlationId } : {}),
     });

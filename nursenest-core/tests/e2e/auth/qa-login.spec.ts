@@ -1,5 +1,5 @@
 /**
- * QA login: `/login` → credentials → learner shell, with diagnostics.
+ * QA login: `/login` → credentials → marketing shell by default (no forced `/app`), with diagnostics.
  *
  * **Credentials:** `E2E_PAID_EMAIL` + `E2E_PAID_PASSWORD` (or `PLAYWRIGHT_TEST_EMAIL` / `PLAYWRIGHT_TEST_PASSWORD`)
  * — same seeded QA account as other paid E2E (see `helpers/paid-test-credentials.ts`, optional `.env.playwright.local`).
@@ -23,12 +23,13 @@ test.describe("QA — login", () => {
     const observers = attachPageObservers(page, { profile: "app", probeAuthApi: true });
 
     try {
-      await loginWithCredentials(page, creds!.email, creds!.password);
+      await loginWithCredentials(page, creds!.email, creds!.password, { enterLearnerApp: false });
 
       const finalUrl = page.url();
       expect(finalUrl, "expected redirect off /login after successful sign-in").not.toMatch(/\/login/i);
 
-      await expectOnLearnerApp(page);
+      await expect(page.locator(".nn-marketing-surface")).toBeVisible({ timeout: 45_000 });
+      expect(finalUrl, "marketing login must not force /app shell").not.toMatch(/\/app(\/|$)/);
 
       await expect(page.locator("main")).toBeVisible({ timeout: 45_000 });
 

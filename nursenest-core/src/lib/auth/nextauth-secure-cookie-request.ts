@@ -107,3 +107,8 @@ export function resolveNextAuthHttpsForRequest(request: { headers: Headers; next
 export function nextAuthSecureCookieForRequest(request: { headers: Headers; nextUrl: URL }): boolean {
   return resolveNextAuthHttpsForRequest(request).secureCookie;
 }
+
+/** True when {@link resolveNextAuthHttpsForRequest} used `AUTH_URL` / `NEXTAUTH_URL` (not forwarded headers). */
+export function secureCookieHintFromAuthPublicEnv(signal: NextAuthHttpsSignal): boolean {
+  return signal === "auth_env_url_https" || signal === "auth_env_url_http";
+}

@@ -7,6 +7,7 @@
  * Naming: prefer `AUTH_SECRET` over legacy `NEXTAUTH_SECRET`; `DATABASE_URL` is the only database URL variable.
  */
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { collectAuthPublicOriginEnvIssues, hasAnyAuthPublicOriginUrl } from "@/lib/auth/auth-public-origin-env";
 
 export type EnvIssue = {
   code: string;
@@ -61,8 +62,7 @@ function collectDatabaseUrlIssues(): EnvIssue[] {
 
 function collectAuthUrlIssues(): EnvIssue[] {
   const issues: EnvIssue[] = [];
-  const authUrl = process.env.AUTH_URL?.trim() || process.env.NEXTAUTH_URL?.trim();
-  if (!isTruthy(authUrl)) {
+  if (!hasAnyAuthPublicOriginUrl()) {
     issues.push({
       code: "auth_url_missing",
       severity: "critical",
@@ -71,30 +71,11 @@ function collectAuthUrlIssues(): EnvIssue[] {
     });
     return issues;
   }
-  try {
-    const u = new URL(authUrl!);
-    const pathname = u.pathname;
-    if (pathname !== "/" && pathname !== "") {
-      issues.push({
-        code: "auth_url_has_path",
-        severity: "critical",
-        message: `AUTH_URL/NEXTAUTH_URL must be origin-only (no /api/auth path). Got pathname "${pathname.slice(0, 96)}".`,
-      });
-    }
-    if (process.env.NODE_ENV === "production" && u.protocol !== "https:") {
-      issues.push({
-        code: "auth_url_not_https",
-        severity: "critical",
-        message: "AUTH_URL/NEXTAUTH_URL must use https:// in production.",
-      });
-    }
-  } catch {
-    issues.push({
-      code: "auth_url_invalid",
-      severity: "critical",
-      message: "AUTH_URL/NEXTAUTH_URL is not a valid URL.",
-    });
-  }
+  issues.push(
+    ...collectAuthPublicOriginEnvIssues({
+      requireProductionHttps: process.env.NODE_ENV === "production",
+    }),
+  );
   return issues;
 }
 

@@ -113,10 +113,8 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
     Boolean(user?.role && !isStaffRole(user.role)) && activeNav.entitlement === "entitled";
   const learnerPathwayId = learnerMarketingPathwayIdFromSession(session?.user ?? null);
   const learnerSignInHref = withMarketingLocale(locale, loginWithCallback(authResumePath));
-  const startPracticingHref = withMarketingLocale(
-    locale,
-    `/signup?callbackUrl=${encodeURIComponent(authResumePath)}`,
-  );
+  /** Primary footer CTA — explicit study entry; keeps post-signup landing in the learner shell. */
+  const startPracticingHref = withMarketingLocale(locale, `/signup?callbackUrl=${encodeURIComponent("/app")}`);
   const learnerContinueHref =
     learnerPathwayId != null
       ? `/app/lessons?pathwayId=${encodeURIComponent(learnerPathwayId)}`

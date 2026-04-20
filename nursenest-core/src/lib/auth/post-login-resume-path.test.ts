@@ -34,7 +34,7 @@ describe("postLoginMarketingHomePath", () => {
 });
 
 describe("resolveMarketingAuthRedirectTarget", () => {
-  it("ignores learner /app callbacks and falls back to marketing resume", () => {
+  it("ignores bare /app callback on login and falls back to marketing home", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/app");
     assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/");
@@ -58,7 +58,7 @@ describe("resolveMarketingAuthRedirectTarget", () => {
     assert.equal(resolveMarketingAuthRedirectTarget("/us/rn/nclex-rn/lessons", sp, "en"), "/us/rn/nclex-rn/lessons");
   });
 
-  it("sends blocked auth pages to localized home when callback is learner shell", () => {
+  it("sends blocked auth pages to localized home when callback is bare /app", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/app");
     assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/");
