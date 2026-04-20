@@ -17,8 +17,9 @@ function adminAccessDebug(): boolean {
   return process.env.ADMIN_ACCESS_DEBUG === "1" || process.env.ADMIN_ACCESS_DEBUG === "true";
 }
 
-const STAFF_SESSION_AUTH_TIMEOUT_MS = 1000;
-const STAFF_SESSION_ROLE_TIMEOUT_MS = 1000;
+/** Cold Postgres / pool warmup on small instances can exceed 1s; avoid false “not staff” → `/app` redirects. */
+const STAFF_SESSION_AUTH_TIMEOUT_MS = 2000;
+const STAFF_SESSION_ROLE_TIMEOUT_MS = 3500;
 
 /**
  * Database is source of truth for staff role (JWT may lag after promotion).
