@@ -27,9 +27,10 @@ services:
     # DB: set `DATABASE_URL` (SECRET) to DigitalOcean Managed Postgres URI. Prisma uses this only.
     # Migrations: GitHub Actions → “Prisma migrate” workflow with secret `DATABASE_URL` (same URI as here).
     # Drop .next/cache after build; prune devDependencies to shrink the slug (runtime uses production deps only).
-    # Node buildpack already runs `npm run build` during the buildpack compile phase; `build_command` runs after.
-    # `build:deploy` must NOT invoke `next build` again (duplicate compile). Use `npm run build:deploy:full` locally
-    # or on hosts that skip the default `build` script. Do NOT add `npm ci` here — install is already done.
+    # Node buildpack runs `npm run build` after install (Heroku-style compile). `build_command` runs after —
+    # `npm run build:deploy` verifies standalone, syncs `.next/static` beside each `server.js`, prunes `.next/cache`
+    # (no second `next build`). Full one-shot: `npm run build:deploy:full`. Alias: `build:deploy:app-platform`.
+    # Do NOT add `npm ci` here — install is already done.
     build_command: npm run build:deploy && npm prune --omit=dev
     # Standalone server only (next.config output:standalone). Do not use `next start`.
     run_command: npm run start

@@ -257,8 +257,9 @@ test("ensure-standalone-static copies .next/static beside both nested and top-le
   }
 });
 
-test("deploy build script verifies the standalone artifact without duplicating next build in build:deploy", () => {
+test("deploy scripts: App Platform build:deploy is post-build only (no second next build)", () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
+  assert.deepEqual(pkg.cacheDirectories, ["node_modules", ".next/cache"]);
   assert.equal(pkg.scripts.build.includes("next build"), true);
   assert.match(
     pkg.scripts.build,
@@ -267,8 +268,10 @@ test("deploy build script verifies the standalone artifact without duplicating n
   assert.equal(pkg.scripts["verify:standalone-artifact"], "node scripts/verify-standalone-artifact.mjs");
   assert.equal(
     pkg.scripts["build:deploy"],
-    "npm run verify:bootstrap-probe-pathname && npm run build && npm run verify:standalone-artifact && node scripts/ensure-standalone-static.mjs && node scripts/post-build-prune.mjs",
+    "npm run verify:bootstrap-probe-pathname && npm run verify:standalone-artifact && node scripts/ensure-standalone-static.mjs && node scripts/post-build-prune.mjs",
   );
+  assert.equal(pkg.scripts["build:deploy"].includes("npm run build"), false);
+  assert.equal(pkg.scripts["build:deploy:app-platform"], "npm run build:deploy");
   assert.match(
     pkg.scripts["build:deploy:full"],
     /npm run build && npm run verify:standalone-artifact && node scripts\/ensure-standalone-static\.mjs/,
