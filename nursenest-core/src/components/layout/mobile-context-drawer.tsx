@@ -1,5 +1,7 @@
 "use client";
 
+import { createPortal } from "react-dom";
+
 /**
  * Mobile context/settings drawer.
  *
@@ -71,6 +73,7 @@ export function MobileContextDrawer({
   countrySelectorIncludeUnpublished = false,
 }: MobileContextDrawerProps) {
   if (!open) return null;
+  if (typeof document === "undefined") return null;
 
   const regionCfg = REGION_CONFIG[region];
   const flag = getRegionFlag(region);
@@ -81,7 +84,7 @@ export function MobileContextDrawer({
   const hasMultipleExams = exams.length > 1;
   const hasMultipleLocales = regionCfg.allowedLocales.length > 1;
 
-  return (
+  const overlay = (
     <div className="fixed inset-0 z-[210] md:hidden animate-[nn-overlay-enter_0.24s_ease_both]">
       {/* Backdrop */}
       <button
@@ -201,6 +204,8 @@ export function MobileContextDrawer({
       </div>
     </div>
   );
+
+  return createPortal(overlay, document.body);
 }
 
 // ── Sub-components ───────────────────────────────────────────────────────────

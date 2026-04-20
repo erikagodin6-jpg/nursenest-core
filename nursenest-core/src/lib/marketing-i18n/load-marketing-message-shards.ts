@@ -180,9 +180,26 @@ export function loadMarketingMessageShardsSync(
   locale: string,
   shards: readonly I18nShardFilename[],
 ): MarketingMessages {
-  const dir = resolveNextI18nPublicDir();
-  if (!dir) return {};
-  return mergeShardMaps(dir, locale, shards);
+  try {
+    const dir = resolveNextI18nPublicDir();
+    if (!dir) return {};
+    return mergeShardMaps(dir, locale, shards);
+  } catch (e) {
+    safeServerLog("i18n", "marketing_shard_sync_load_failed", {
+      locale,
+      errorName: e instanceof Error ? e.name.slice(0, 80) : "non_error",
+    });
+    if (locale !== DEFAULT_MARKETING_LOCALE) {
+      try {
+        const dir = resolveNextI18nPublicDir();
+        if (!dir) return {};
+        return mergeShardMaps(dir, DEFAULT_MARKETING_LOCALE, shards);
+      } catch {
+        return {};
+      }
+    }
+    return {};
+  }
 }
 
 async function loadMarketingMessageShardsImpl(

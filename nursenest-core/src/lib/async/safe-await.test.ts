@@ -16,3 +16,8 @@ test("safeAwait returns null after timeout", async () => {
   assert.ok(elapsedMs >= 40);
   assert.ok(elapsedMs < 500);
 });
+
+test("safeAwait returns null when the input promise rejects", async () => {
+  const value = await safeAwait(Promise.reject(new Error("boom")), "safe_await.reject", 2000);
+  assert.equal(value, null);
+});

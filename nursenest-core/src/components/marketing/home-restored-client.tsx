@@ -105,9 +105,9 @@ export default function HomeRestoredClient({ homeMarketingStats, publishedGlobal
   }, [locale, region, t]);
 
   return (
-    <div className="font-sans md:animate-page-enter flex min-h-screen flex-col overflow-x-hidden bg-[var(--page-bg)]">
+    <div className="font-sans md:animate-page-enter flex w-full min-h-0 flex-1 flex-col overflow-x-hidden bg-[var(--page-bg)]">
       <FunnelHomepageViewBeacon marketingRegion={marketingRegion} marketingLocale={locale} />
-      <div className="flex-grow overflow-x-hidden">
+      <div className="min-h-0 flex-1 overflow-x-hidden">
         {/* 1. HERO */}
         <HomeConversionHero questionCount={questionCount} lessonCount={lessonCount} />
         {/* 1b. Product screenshots — directly under hero; carousel chunk loads after first paint */}

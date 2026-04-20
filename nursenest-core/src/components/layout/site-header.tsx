@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useTheme } from "next-themes";
 import { getNavChromeStyle, getNavChromeVars } from "@/lib/theme/nav-chrome";
 import { ChevronDown, ChevronRight, MapPin, Menu, Settings, User, X } from "lucide-react";
@@ -491,11 +492,16 @@ export function SiteHeader() {
   }, [isMarketingEntitledLearner, locale]);
 
   return (
-    <div style={navChromeVars} className="sticky top-0 z-50 nn-header-animate-in" ref={headerRef}>
+    <div style={navChromeVars} className="sticky top-0 z-50" ref={headerRef}>
+      {/*
+        Keep enter animation on <header> only. `nn-header-animate-in` ends with a transform, which
+        creates a fixed-position containing block — mobile drawers are siblings after </header> and
+        must stay outside that subtree so `fixed inset-0` covers the viewport, not the header box.
+      */}
       <header
         data-nn-nav-mode="public"
         style={isLightTheme ? undefined : { ...navChromeStyle, boxShadow: darkHeaderShadow }}
-        className={`relative w-full border-b${
+        className={`nn-header-animate-in relative w-full border-b${
           isLightTheme
             ? ` nn-header-logo-row${isScrolled ? " nn-header-logo-row--scrolled" : ""}`
             : " nn-header-dark-surface"
@@ -999,8 +1005,9 @@ export function SiteHeader() {
         }}
       />
 
-      {mobileOpen ? (
-        <div className="fixed inset-0 z-[200] xl:hidden animate-[nn-overlay-enter_0.24s_ease_both]">
+      {mobileOpen && typeof document !== "undefined"
+        ? createPortal(
+            <div className="fixed inset-0 z-[200] xl:hidden animate-[nn-overlay-enter_0.24s_ease_both]">
           <button type="button" className="absolute inset-0 bg-black/56" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)} />
           <div className="absolute inset-x-0 top-0 flex h-[100dvh] max-h-[100dvh] flex-col border-b border-[var(--nav-border)] bg-[var(--nav-bg)] text-[var(--nav-fg)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-in_0.28s_cubic-bezier(0.25,0.1,0.25,1)_both]">
             <div className="flex h-16 shrink-0 items-center justify-between border-b border-[var(--header-border)] px-4 pt-[max(0.5rem,env(safe-area-inset-top))]">
@@ -1413,8 +1420,10 @@ export function SiteHeader() {
               </div>
             </div>
           </div>
-        </div>
-      ) : null}
+        </div>,
+            document.body,
+          )
+        : null}
     </div>
   );
 }

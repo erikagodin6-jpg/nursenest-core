@@ -49,15 +49,21 @@ export async function getMarketingDefaultLayoutChromeMessages(): Promise<Record<
   if (defaultChromeState.inflight) return defaultChromeState.inflight;
 
   const p = (async () => {
-    const loaded = await safeAwait(
-      loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, shards),
-      "marketing_layout.chrome_messages",
-      MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS,
-    );
-    const out = loaded ?? {};
-    defaultChromeState.resolved = out;
-    defaultChromeState.inflight = null;
-    return out;
+    try {
+      const loaded = await safeAwait(
+        loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, shards),
+        "marketing_layout.chrome_messages",
+        MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS,
+      );
+      const out = loaded ?? {};
+      defaultChromeState.resolved = out;
+      return out;
+    } catch {
+      /* Leave `resolved` null so a later request can retry after transient FS/network issues. */
+      return {};
+    } finally {
+      defaultChromeState.inflight = null;
+    }
   })();
   defaultChromeState.inflight = p;
   return p;

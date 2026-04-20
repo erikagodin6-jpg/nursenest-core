@@ -11,7 +11,8 @@ export function GlobalMarketingHomeIntro() {
     >
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-9 lg:px-8">
         <p className="nn-marketing-eyebrow text-[var(--semantic-text-muted)]">{c.brandLine}</p>
-        <h1 className="nn-marketing-h1 mt-2 max-w-3xl text-balance">{c.headline}</h1>
+        {/* One <h1> per page: primary product hero (`HomeConversionHero`); this intro uses h2 with the same visual scale. */}
+        <h2 className="nn-marketing-h1 mt-2 max-w-3xl text-balance">{c.headline}</h2>
         <p className="nn-marketing-body mt-3 max-w-3xl text-pretty text-[var(--semantic-text-muted)]">{c.subheadline}</p>
         <div className="mt-6 flex flex-wrap gap-2 text-sm font-semibold">
           <Link href="/canada" className="nn-nav-cta inline-flex min-h-[40px] items-center rounded-xl px-4 py-2">

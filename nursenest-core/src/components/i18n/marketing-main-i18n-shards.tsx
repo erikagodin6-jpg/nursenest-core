@@ -1,6 +1,7 @@
 import { Suspense, type ReactNode } from "react";
 import { MarketingI18nShardLayer } from "@/components/i18n/marketing-i18n-provider";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import {
   loadMarketingMessageShards,
@@ -34,11 +35,27 @@ function MarketingMainI18nShardsStreamingFallback({
       locale,
     });
   }
-  const primary = loadMarketingMessageShardsSync(locale, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
-  const fallback =
-    locale === DEFAULT_MARKETING_LOCALE
-      ? undefined
-      : loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
+  let primary: MarketingMessages = {};
+  let fallback: MarketingMessages | undefined;
+  try {
+    primary = loadMarketingMessageShardsSync(locale, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
+    fallback =
+      locale === DEFAULT_MARKETING_LOCALE
+        ? undefined
+        : loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
+  } catch {
+    primary = {};
+    fallback =
+      locale === DEFAULT_MARKETING_LOCALE
+        ? undefined
+        : (() => {
+            try {
+              return loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
+            } catch {
+              return {};
+            }
+          })();
+  }
   return (
     <MarketingI18nShardLayer messages={primary} fallbackMessages={fallback}>
       {children}

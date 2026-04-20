@@ -30,7 +30,10 @@ export function useClientGlobalRegionCookie(): GlobalRegionSlug | null {
   );
 
   useEffect(() => {
-    setRegion(readGlobalRegionFromDocument());
+    const id = requestAnimationFrame(() => {
+      setRegion(readGlobalRegionFromDocument());
+    });
+    return () => cancelAnimationFrame(id);
   }, [pathname]);
 
   return region;
