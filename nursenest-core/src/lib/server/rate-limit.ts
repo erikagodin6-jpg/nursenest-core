@@ -104,7 +104,6 @@ const AUTH_KIND_LIMITS: Record<string, { windowMs: number; max: number }> = {
   /** Credentials + OAuth callbacks — shared IPs (schools, offices) need headroom. */
   callback: { windowMs: 60_000, max: 48 },
   csrf: { windowMs: 60_000, max: 96 },
-  providers: { windowMs: 60_000, max: 48 },
   forgot: { windowMs: 60_000, max: 8 },
   reset: { windowMs: 60_000, max: 8 },
   change: { windowMs: 60_000, max: 8 },
