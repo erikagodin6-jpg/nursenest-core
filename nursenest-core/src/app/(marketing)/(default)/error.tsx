@@ -1,6 +1,8 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { NnErrorCard } from "@/components/error/nn-error-card";
+import { MarketingHomeSafeMode } from "@/components/marketing/marketing-home-safe-mode";
 
 /**
  * Error boundary for all pages rendered inside the default marketing layout
@@ -14,6 +16,13 @@ export default function MarketingDefaultSegmentError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const pathname = usePathname();
+  const isHome = pathname === "/" || pathname === "";
+
+  if (isHome) {
+    return <MarketingHomeSafeMode layout="embedded" onRetry={reset} />;
+  }
+
   return (
     <NnErrorCard
       error={error}

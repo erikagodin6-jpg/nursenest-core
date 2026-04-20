@@ -1,6 +1,6 @@
 import "server-only";
 
-import { Suspense } from "react";
+import { Suspense, type ReactNode } from "react";
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
 import {
   getDegradedPublicHomeStatsFallback,
@@ -44,8 +44,10 @@ function getHomepagePublicHomeStatsSyncInitialSafe(): PublicHomeStatsPayload {
 
 async function HomeRestoredAfterStatsLoad({
   publishedGlobalRegionCardIds,
+  introAfterHero,
 }: {
   publishedGlobalRegionCardIds: readonly string[];
+  introAfterHero?: ReactNode;
 }) {
   const perfStatsT0 = Date.now();
   void homePerfLogForGetRoot("home.server.07_deferred_stats_start", perfStatsT0).catch(() => {});
@@ -78,6 +80,7 @@ async function HomeRestoredAfterStatsLoad({
       <HomeRestoredClient
         homeMarketingStats={homeMarketingStatsFromPayload(homeStatsRaw)}
         publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
+        introAfterHero={introAfterHero}
       />
     );
   } catch {
@@ -95,6 +98,7 @@ async function HomeRestoredAfterStatsLoad({
       <HomeRestoredClient
         homeMarketingStats={homeMarketingStatsFromPayload(homeStatsRaw)}
         publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
+        introAfterHero={introAfterHero}
       />
     );
   }
@@ -108,11 +112,13 @@ export function HomeRestoredWithDeferredStats({
   skipOptionalDbReads,
   publishedGlobalRegionCardIds,
   skipOptionalDbPerfSegmentT0,
+  introAfterHero,
 }: {
   skipOptionalDbReads: boolean;
   publishedGlobalRegionCardIds: readonly string[];
   /** From homepage render start — avoids `Date.now` in sync RSC (react-hooks/purity). */
   skipOptionalDbPerfSegmentT0?: number;
+  introAfterHero?: ReactNode;
 }) {
   if (skipOptionalDbReads) {
     void homePerfLogForGetRoot(
@@ -125,6 +131,7 @@ export function HomeRestoredWithDeferredStats({
       <HomeRestoredClient
         homeMarketingStats={homeMarketingStatsFromPayload(homeStatsRaw)}
         publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
+        introAfterHero={introAfterHero}
       />
     );
   }
@@ -136,10 +143,14 @@ export function HomeRestoredWithDeferredStats({
         <HomeRestoredClient
           homeMarketingStats={homeMarketingStatsFromPayload(initial)}
           publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
+          introAfterHero={introAfterHero}
         />
       }
     >
-      <HomeRestoredAfterStatsLoad publishedGlobalRegionCardIds={publishedGlobalRegionCardIds} />
+      <HomeRestoredAfterStatsLoad
+        publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
+        introAfterHero={introAfterHero}
+      />
     </Suspense>
   );
 }

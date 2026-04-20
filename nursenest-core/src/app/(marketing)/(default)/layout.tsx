@@ -17,6 +17,7 @@ import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-rout
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
 import { MarketingDefaultLayoutChromeFailsafeShell } from "@/components/marketing/marketing-default-layout-chrome-failsafe";
+import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { MarketingHeaderGlobalRegionServerBridge } from "@/lib/region/marketing-header-global-region-server-bridge";
 import { readOptionalGlobalRegionSlugFromCookie } from "@/lib/region/read-optional-global-region-cookie.server";
 import { safeAwait } from "@/lib/async/safe-await";
@@ -44,10 +45,13 @@ function marketingDefaultLayoutStaticShellForHome({
   children,
   serverRegion,
   trustClientPersistedRegion,
+  serverGlobalRegion,
 }: {
   children: React.ReactNode;
   serverRegion: MarketingRegionToggle;
   trustClientPersistedRegion: boolean;
+  /** Server `nn_global_region` (or null) so client hooks match SSR under static `/` shell. */
+  serverGlobalRegion: GlobalRegionSlug | null;
 }) {
   const shellMessages = mergeMinimalMarketingLayoutShellMessages({});
   return (
@@ -60,9 +64,11 @@ function marketingDefaultLayoutStaticShellForHome({
       <NursenestRegionRoot serverRegion={serverRegion} trustClientPersistedRegion={trustClientPersistedRegion}>
         <MarketingCountryChromeProvider country="canada">
           <MarketingFeedbackShell>
-            <MarketingDefaultLayoutChromeFailsafeShell>
-              <PageTransitionShell>{children}</PageTransitionShell>
-            </MarketingDefaultLayoutChromeFailsafeShell>
+            <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegion}>
+              <MarketingDefaultLayoutChromeFailsafeShell>
+                <PageTransitionShell>{children}</PageTransitionShell>
+              </MarketingDefaultLayoutChromeFailsafeShell>
+            </MarketingHeaderGlobalRegionServerBridge>
           </MarketingFeedbackShell>
         </MarketingCountryChromeProvider>
       </NursenestRegionRoot>
@@ -93,10 +99,12 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         }
         const staticShellRegionCookie = await readOptionalMarketingRegionToggleForCountry();
         const staticShellServerRegion: MarketingRegionToggle = staticShellRegionCookie ?? "CA";
+        const staticShellGlobalRegion = await readOptionalGlobalRegionSlugFromCookie();
         return marketingDefaultLayoutStaticShellForHome({
           children,
           serverRegion: staticShellServerRegion,
           trustClientPersistedRegion: staticShellRegionCookie !== undefined,
+          serverGlobalRegion: staticShellGlobalRegion,
         });
       }
     } catch {
@@ -301,6 +309,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         meta: { locale: DEFAULT_MARKETING_LOCALE },
       });
       const shellMessages = mergeMinimalMarketingLayoutShellMessages({});
+      const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie();
       return (
         <MarketingI18nProvider
           key={DEFAULT_MARKETING_LOCALE}
@@ -311,9 +320,11 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
           <NursenestRegionRoot serverRegion={"CA"} trustClientPersistedRegion={false}>
             <MarketingCountryChromeProvider country="canada">
               <MarketingFeedbackShell>
-                <MarketingDefaultLayoutChromeFailsafeShell>
-                  <PageTransitionShell>{children}</PageTransitionShell>
-                </MarketingDefaultLayoutChromeFailsafeShell>
+                <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
+                  <MarketingDefaultLayoutChromeFailsafeShell>
+                    <PageTransitionShell>{children}</PageTransitionShell>
+                  </MarketingDefaultLayoutChromeFailsafeShell>
+                </MarketingHeaderGlobalRegionServerBridge>
               </MarketingFeedbackShell>
             </MarketingCountryChromeProvider>
           </NursenestRegionRoot>

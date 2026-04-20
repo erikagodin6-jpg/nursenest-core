@@ -2,7 +2,7 @@
 
 import { ArrowRight } from "lucide-react";
 import dynamic from "next/dynamic";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, type ReactNode } from "react";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { HomeConversionHero } from "@/components/marketing/home-conversion-hero";
 import { HomeSampleQuestionPreview } from "@/components/marketing/home-sample-question-preview";
@@ -43,6 +43,8 @@ export type HomeRestoredClientProps = {
   homeMarketingStats: HomeMarketingStats;
   /** Homepage global region cards — must exclude unpublished expansion exam hubs. */
   publishedGlobalRegionCardIds: readonly string[];
+  /** Canada-first global hub strip — rendered immediately after {@link HomeConversionHero} (server slot from `page.tsx`). */
+  introAfterHero?: ReactNode;
 };
 
 /**
@@ -52,7 +54,11 @@ export type HomeRestoredClientProps = {
  * then a deferred server segment can replace with fresh DB-backed values).
  * When optional stats are unavailable, the downstream sections already degrade to copy-only fallback states.
  */
-export default function HomeRestoredClient({ homeMarketingStats, publishedGlobalRegionCardIds }: HomeRestoredClientProps) {
+export default function HomeRestoredClient({
+  homeMarketingStats,
+  publishedGlobalRegionCardIds,
+  introAfterHero,
+}: HomeRestoredClientProps) {
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const marketingRegion = region === "US" ? "US" : "CA";
@@ -110,6 +116,7 @@ export default function HomeRestoredClient({ homeMarketingStats, publishedGlobal
       <div className="min-h-0 flex-1 overflow-x-hidden">
         {/* 1. HERO */}
         <HomeConversionHero questionCount={questionCount} lessonCount={lessonCount} />
+        {introAfterHero}
         {/* 1b. Product screenshots — directly under hero; carousel chunk loads after first paint */}
         <HomeHeroScreenshotSection />
         {/* 2. PROOF — sample item + rationale */}

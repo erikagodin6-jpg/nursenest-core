@@ -9,6 +9,7 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { HomeRestoredWithDeferredStats } from "@/components/marketing/home-restored-with-deferred-stats.server";
 import { GlobalMarketingHomeIntro } from "@/components/marketing/global-marketing-home-intro.server";
 import { MarketingHomeEmergencyFallback } from "@/components/marketing/marketing-home-emergency-fallback";
+import { MarketingHomeSafeMode } from "@/components/marketing/marketing-home-safe-mode";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
@@ -261,6 +262,19 @@ export default async function HomePage() {
           region_card_count: publishedGlobalRegionCardIds.length,
         });
 
+        if (Object.keys(m).length === 0) {
+          emitNnHomeRouteDiag({
+            segment: "page_safe_mode_empty_i18n",
+            elapsed_ms: nnHomeDiagNowMs() - tDiag,
+            region_card_count: publishedGlobalRegionCardIds.length,
+          });
+          void homePerfFinalForGetRoot("success", { error_phase: "i18n_empty_safe_mode" }).catch(() => {});
+          void homePerfLogForGetRoot("home.server.safe_mode_i18n", perfPageT0, {
+            message_key_count: 0,
+          }).catch(() => {});
+          return <MarketingHomeSafeMode layout="embedded" />;
+        }
+
         layoutStderrTrace("marketing_home", "home page after shell data", {
           route: "/",
           stats: skipOptionalDbReads ? "sync_optional_db_skipped" : "deferred",
@@ -310,11 +324,11 @@ export default async function HomePage() {
                 <BreadcrumbTrail items={crumbs} />
               </div>
             ) : null}
-            <GlobalMarketingHomeIntro />
             <HomeRestoredWithDeferredStats
               skipOptionalDbReads={skipOptionalDbReads}
               publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
               skipOptionalDbPerfSegmentT0={skipOptionalDbReads ? perfPageT0 : undefined}
+              introAfterHero={<GlobalMarketingHomeIntro />}
             />
             {skipOptionalDbReads ? (
               <HomeBlogTeaserSectionShell m={m} posts={[]} />
