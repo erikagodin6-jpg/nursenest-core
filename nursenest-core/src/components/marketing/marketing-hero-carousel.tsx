@@ -298,6 +298,13 @@ export function MarketingHeroCarousel({
           const slideMotionClass = isBelowFoldSection
             ? "nn-carousel-slide-crossfade nn-carousel-slide-crossfade--depth"
             : "nn-carousel-slide-crossfade";
+          /** Inactive slides stay opacity 1; clip-path hides them (works if JS/CSS transitions never run). */
+          const slideVisibilityClass = active
+            ? "z-[1] scale-100 opacity-100 [clip-path:inset(0_0_0_0)]"
+            : isBelowFoldSection
+              ? "z-0 scale-[0.96] opacity-100 [clip-path:inset(0_100%_0_0)]"
+              : "z-0 scale-100 opacity-100 [clip-path:inset(0_100%_0_0)]";
+          const slideMotionSafe = reducedMotion ? "" : slideMotionClass;
           return (
             <Image
               key={`${slide.objectKey}-${index}-${tier}`}
@@ -310,13 +317,7 @@ export function MarketingHeroCarousel({
               loading={loadLazy ? "lazy" : undefined}
               fetchPriority={isBelowFoldSection && index === 0 ? "low" : undefined}
               unoptimized={marketingImageShouldUnoptimize(src)}
-              className={`pointer-events-none object-contain ${slideImageBgClass} ${slideMotionClass} ${
-                active
-                  ? "z-[1] scale-100 opacity-100"
-                  : isBelowFoldSection
-                    ? "z-0 scale-[0.96] opacity-0"
-                    : "z-0 opacity-0"
-              }`}
+              className={`pointer-events-none object-contain ${slideImageBgClass} ${slideMotionSafe} ${slideVisibilityClass}`}
               data-testid={`img-${imgTestIdPrefix}-slide-${index}`}
               aria-hidden={!active}
               referrerPolicy="no-referrer"

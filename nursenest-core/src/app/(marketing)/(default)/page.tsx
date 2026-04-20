@@ -70,17 +70,19 @@ const HOME_FALLBACK_METADATA: Metadata = {
 };
 
 /**
- * Optional DB/blog reads on `/` — default unchanged when unset.
- * Set `MARKETING_HOME_SKIP_OPTIONAL_DB=true` or `false` to override explicitly.
+ * Optional DB/blog reads on `/` (deferred stats + blog teaser).
+ *
+ * - Default: skip **only** during Next static generation (`NEXT_PHASE=phase-production-build`) so
+ *   `next build` does not require Postgres for the marketing home shell.
+ * - Production runtime (`next start`) is **not** skipped — real stats/blog load when `DATABASE_URL` is set.
+ * - Override: `MARKETING_HOME_SKIP_OPTIONAL_DB=true` to force skip (e.g. incident mode);
+ *   `false` to force DB even during static generation (CI with DB must succeed).
  */
 function shouldSkipOptionalMarketingDbReads(): boolean {
   const raw = process.env.MARKETING_HOME_SKIP_OPTIONAL_DB?.trim().toLowerCase();
   if (raw === "true") return true;
   if (raw === "false") return false;
-  return (
-    process.env.NEXT_PHASE === MARKETING_BUILD_PHASE ||
-    (process.env.NODE_ENV === "production" && process.env.CI !== "1")
-  );
+  return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE;
 }
 
 async function loadHomePageMarketingMessagesForRequest(): Promise<MarketingMessages> {

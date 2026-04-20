@@ -130,6 +130,23 @@ If any of those are missing, runtime Sentry can still run, but source map upload
 - Use `safeServerLog` / `safeServerLogCritical` — meta keys matching `*token*`, `*secret*`, etc. are redacted via `src/lib/env/redact-secrets.ts`.
 - Database URLs in logs should use `maskDatabaseUrl` (`database-env.ts`).
 
+## DigitalOcean App Platform (integration checklist)
+
+Use **`nursenest-core`** as the app **source directory**. Align env with how Next evaluates them:
+
+| Concern | Build-time (compile / `next.config` eval) | Runtime (`next start`) |
+|--------|---------------------------------------------|---------------------------|
+| `NEXT_PUBLIC_*` (PostHog, Sentry browser, Turnstile site key, `NEXT_PUBLIC_APP_URL`, …) | **Required** on the component that runs `npm run build` — values are inlined. | Same values unless you rebuild after changing them. |
+| `next.config.ts` → `env` (`AUTH_TRUST_HOST`, `NEXT_PUBLIC_SENTRY_*`) | Evaluated when config loads during **build**. | Not re-read from disk for client bundle after deploy without rebuild. |
+| `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT` + `SENTRY_ENABLED=true` | Needed for **source map upload** during build. | Not used for sending events. |
+| `RUN_HEAVY_BUILD_TASKS` | Set to `true` on the **build** job if the full programmatic redirect/rewrite graph must ship (default npm script uses `false` to save memory). | Does not add redirects at runtime. |
+| `DATABASE_URL` | Only if a build step imports Prisma and queries (unusual); optional marketing home DB skips during `NEXT_PHASE=phase-production-build`. | **Required** for real homepage stats/blog and most APIs. |
+| Stripe / Resend / Spaces / Inngest secrets | Usually not needed for compile. | **Required** on the web service. |
+
+External dashboards: **Stripe** webhook → `https://<your-domain>/api/subscriptions/webhook`; **Inngest** app sync URL → `https://<your-domain>/api/inngest`; **Resend** verified domain; **Spaces** CORS/keys; **Sentry** DSN + optional release auth token.
+
+Full operator narrative: `docs/INTEGRATIONS_RUNBOOK.md`.
+
 ## Related files
 
 - `src/instrumentation.ts` — runs DB validation + production env guard  

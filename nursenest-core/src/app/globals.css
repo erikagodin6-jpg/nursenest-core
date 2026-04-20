@@ -2566,29 +2566,33 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
   }
 }
 
-/* Marketing / product carousels — opacity crossfade (pair with `prefers-reduced-motion` in component) */
+/* Marketing carousels: clip-path + transform (inactive slides stay opacity 1 for first-paint / no-JS safety) */
 .nn-carousel-slide-crossfade {
-  transition-property: opacity;
+  transition-property: clip-path, transform;
   transition-duration: var(--brand-motion-medium);
   transition-timing-function: var(--brand-motion-ease-calm-out);
 }
 
-/* Homepage screenshot strip: crossfade + slight scale so inactive slides feel recessed */
+/* Screenshot strip: same motion surface; optional extra transform layered in component */
 .nn-carousel-slide-crossfade.nn-carousel-slide-crossfade--depth {
-  transition-property: opacity, transform;
+  transition-property: clip-path, transform;
 }
 
+/* Transform-only: first paint stays opacity 1 (no `animation-fill-mode: both` on opacity). */
 @keyframes nn-skeleton-fade-in {
   from {
-    opacity: 0.4;
+    opacity: 1;
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
 .nn-skeleton-fade {
-  animation: nn-skeleton-fade-in var(--brand-motion-medium) var(--brand-motion-ease-luxury) both;
+  opacity: 1;
+  animation: nn-skeleton-fade-in var(--brand-motion-medium) var(--brand-motion-ease-luxury) forwards;
 }
 
 @keyframes nn-skeleton-soft-pulse {

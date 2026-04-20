@@ -951,7 +951,7 @@ export function SiteHeader() {
                                   }}
                                 >
                                   <span
-                                    className={`h-1.5 w-1.5 shrink-0 rounded-full transition-opacity duration-100 ${isActivePath(strippedPath, link.href) ? "bg-[var(--text-accent)] opacity-100" : "opacity-0"}`}
+                                    className={`h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-100 ${isActivePath(strippedPath, link.href) ? "bg-[var(--text-accent)]" : "bg-transparent"}`}
                                     aria-hidden
                                   />
                                   {formatTitleCase(link.label, locale)}
@@ -1092,7 +1092,7 @@ export function SiteHeader() {
                           >
                             <span className="flex items-center gap-2">
                               <span
-                                className={`h-1.5 w-1.5 shrink-0 rounded-full transition-opacity duration-100 ${isMegaMenuKeyActive(menu.key, strippedPath) ? "bg-[var(--text-accent)] opacity-100" : "opacity-0"}`}
+                                className={`h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-100 ${isMegaMenuKeyActive(menu.key, strippedPath) ? "bg-[var(--text-accent)]" : "bg-transparent"}`}
                                 aria-hidden
                               />
                               {menu.label}
@@ -1154,7 +1154,7 @@ export function SiteHeader() {
                                           }}
                                         >
                                           <span
-                                            className={`h-1.5 w-1.5 shrink-0 rounded-full transition-opacity duration-100 ${isActivePath(strippedPath, link.href) ? "bg-[var(--text-accent)] opacity-100" : "opacity-0"}`}
+                                            className={`h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-100 ${isActivePath(strippedPath, link.href) ? "bg-[var(--text-accent)]" : "bg-transparent"}`}
                                             aria-hidden
                                           />
                                           {formatTitleCase(link.label, locale)}
@@ -1233,7 +1233,7 @@ export function SiteHeader() {
                           }}
                         >
                           <span
-                            className={`h-1.5 w-1.5 shrink-0 rounded-full transition-opacity duration-100 ${isActivePath(strippedPath, item.matchBase) ? "bg-[var(--text-accent)] opacity-100" : "opacity-0"}`}
+                            className={`h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-100 ${isActivePath(strippedPath, item.matchBase) ? "bg-[var(--text-accent)]" : "bg-transparent"}`}
                             aria-hidden
                           />
                           {item.label}

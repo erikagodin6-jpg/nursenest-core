@@ -13,6 +13,9 @@
  *   VERIFY_READINESS=1  — also GET /api/health/ready (Postgres; may 503 if DB down)
  *   VERIFY_HTTP_TIMEOUT_MS=15000 — per-request timeout for probe paths
  *   VERIFY_CANONICAL_HOME=1 — also GET / (follow up to 10 redirects); uses VERIFY_HOME_TIMEOUT_MS (default 45000)
+ *   VERIFY_NEXT_STATIC=1 — after Tier 1, fetch `/` (redirects followed), extract first `/_next/static/….(js|css)`,
+ *     then GET with `Range: bytes=0-0` and cancel the body; fails if status is not 2xx or `Content-Type` is `text/html`
+ *     (typical when standalone is missing `.next/static` and the app returns HTML for asset URLs)
  *
  * Output is grouped into tiers (per BASE_URL / ORIGIN_BASE_URL):
  *   Tier 1 — platform liveness + routing readiness (/healthz, /readyz)
@@ -38,6 +41,8 @@ const timeoutMs = Math.min(120_000, Math.max(3_000, Number(process.env.VERIFY_HT
 const homeTimeoutMs = Math.min(120_000, Math.max(5_000, Number(process.env.VERIFY_HOME_TIMEOUT_MS ?? 45_000) || 45_000));
 const wantReady = process.env.VERIFY_READINESS === "1" || process.env.VERIFY_READINESS === "true";
 const wantHome = process.env.VERIFY_CANONICAL_HOME === "1" || process.env.VERIFY_CANONICAL_HOME === "true";
+const wantNextStatic =
+  process.env.VERIFY_NEXT_STATIC === "1" || process.env.VERIFY_NEXT_STATIC === "true";
 
 const tier1Paths = ["/healthz", "/readyz"];
 const tier3Paths = ["/api/health"];
@@ -96,10 +101,77 @@ async function getHome(base) {
   return { ok: false, status: 0, url: current, err: "redirect loop cap" };
 }
 
-/** @typedef {{ base: string, tier1Failed: boolean, tier2State: "skip" | "pass" | "fail", tier3Failed: boolean }} TierSummary */
+/** @typedef {{ base: string, tier1Failed: boolean, tier2State: "skip" | "pass" | "fail", tier2bState: "skip" | "pass" | "fail", tier3Failed: boolean }} TierSummary */
 
 /** @type {TierSummary[]} */
 const summaries = [];
+
+/** First fingerprinted chunk or CSS path from HTML, or null. */
+function extractNextStaticAssetPath(html) {
+  const m = html.match(/\/_next\/static\/(?:chunks|css)\/[^"'>\s]+\.(?:js|css)/);
+  return m ? m[0] : null;
+}
+
+/**
+ * @param {string} base
+ * @returns {Promise<{ ok: boolean; detail: string }>}
+ */
+async function verifyNextStaticDelivery(base) {
+  const url = `${base}/`;
+  const ac = new AbortController();
+  const t = setTimeout(() => ac.abort(), homeTimeoutMs);
+  try {
+    const res = await fetch(url, {
+      method: "GET",
+      redirect: "follow",
+      signal: ac.signal,
+      headers: { Accept: "text/html,*/*;q=0.8" },
+    });
+    if (!res.ok) {
+      return { ok: false, detail: `GET / returned ${res.status}` };
+    }
+    const html = await res.text();
+    const path = extractNextStaticAssetPath(html);
+    if (!path) {
+      return { ok: false, detail: "no /_next/static/*.js|.css reference found in HTML" };
+    }
+    const assetUrl = `${base}${path}`;
+    const ac2 = new AbortController();
+    const t2 = setTimeout(() => ac2.abort(), timeoutMs);
+    try {
+      const assetRes = await fetch(assetUrl, {
+        method: "GET",
+        redirect: "manual",
+        signal: ac2.signal,
+        headers: { Range: "bytes=0-0" },
+      });
+      const status = assetRes.status;
+      const ct = (assetRes.headers.get("content-type") || "").toLowerCase();
+      try {
+        await assetRes.body?.cancel();
+      } catch {
+        /* ignore */
+      }
+      if (status < 200 || status >= 300) {
+        return { ok: false, detail: `GET ${path} → ${status}` };
+      }
+      if (ct.includes("text/html")) {
+        return {
+          ok: false,
+          detail: `GET ${path} returned text/html (expected JS/CSS — standalone .next/static likely missing)`,
+        };
+      }
+      return { ok: true, detail: `${path} → ${status} ${ct || "(no content-type)"}` };
+    } finally {
+      clearTimeout(t2);
+    }
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return { ok: false, detail: msg };
+  } finally {
+    clearTimeout(t);
+  }
+}
 
 let anyFailed = false;
 
@@ -109,6 +181,7 @@ for (const base of bases) {
     base,
     tier1Failed: false,
     tier2State: "skip",
+    tier2bState: "skip",
     tier3Failed: false,
   };
 
@@ -132,6 +205,29 @@ for (const base of bases) {
       anyFailed = true;
       console.error(`verify-deploy-health: Tier 1 FAILED — ${path}: ${msg}`);
     }
+  }
+
+  if (wantNextStatic) {
+    summary.tier2bState = "fail";
+    console.log("\n[Tier 1b] Next.js static bundle (/_next/static/* must not be served as HTML)");
+    try {
+      const r = await verifyNextStaticDelivery(base);
+      if (r.ok) {
+        console.log(`OK [Tier 1b] ${r.detail}`);
+        summary.tier2bState = "pass";
+      } else {
+        anyFailed = true;
+        console.error(`FAIL [Tier 1b] ${r.detail}`);
+        console.error(`verify-deploy-health: Tier 1b FAILED — ${r.detail}`);
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      anyFailed = true;
+      console.error(`FAIL [Tier 1b]: ${msg}`);
+      console.error(`verify-deploy-health: Tier 1b FAILED — ${msg}`);
+    }
+  } else {
+    console.log("\n[Tier 1b] Next static asset probe — skipped (set VERIFY_NEXT_STATIC=1)");
   }
 
   if (wantHome) {
@@ -195,8 +291,10 @@ if (anyFailed) {
     const t1 = s.tier1Failed ? "FAIL" : "OK";
     const t2 =
       s.tier2State === "skip" ? "SKIP" : s.tier2State === "pass" ? "OK" : "FAIL";
+    const t2b =
+      s.tier2bState === "skip" ? "SKIP" : s.tier2bState === "pass" ? "OK" : "FAIL";
     const t3 = s.tier3Failed ? "FAIL" : "OK";
-    console.error(`  ${s.base} → Tier 1: ${t1} | Tier 2: ${t2} | Tier 3: ${t3}`);
+    console.error(`  ${s.base} → Tier 1: ${t1} | Tier 1b: ${t2b} | Tier 2: ${t2} | Tier 3: ${t3}`);
   }
 
   for (const s of summaries) {

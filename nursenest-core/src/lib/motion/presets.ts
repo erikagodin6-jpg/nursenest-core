@@ -75,9 +75,10 @@ export const notFoundLeafFloatTransition: Transition = {
 /** @deprecated Prefer `transitionMedium` */
 export const transitionEntrance: Transition = transitionMedium;
 
+/** Opacity stays 1 — translate-only so first paint is never blank if `Fade` is used above the fold. */
 export const fadeInVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
+  hidden: { opacity: 1, y: 6 },
+  visible: { opacity: 1, y: 0 },
 };
 
 /** @deprecated Use `fadeInVariants` — same opacity-only fade. */
@@ -95,8 +96,9 @@ export const softRevealVariants: Variants = {
   visible: { opacity: 1, y: 0 },
 };
 
+/** Scale-only entrance — opacity stays 1 for first paint if this variant is ever used above the fold. */
 export const scaleInVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.992 },
+  hidden: { opacity: 1, scale: 0.992 },
   visible: { opacity: 1, scale: 1 },
 };
 

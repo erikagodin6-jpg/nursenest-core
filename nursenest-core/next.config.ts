@@ -16,11 +16,12 @@
  * default; set `2`–`4` on larger CI runners / higher `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` to cut compile time.
  *
  * **Build / compile cache (DigitalOcean App Platform):** Next.js writes `.next/cache` during `next build`.
- * DO’s default Node build runs in an ephemeral container with no guaranteed reuse of that directory between
- * builds, so **persistent Turbopack/webpack disk cache across deploys is not enabled here** (would need a
- * custom build image or CI layer that restores `.next/cache`, or a remote cache product). Setting
- * `NEXT_CACHE_DIR` only changes the path, not persistence. Enable remote caching only when the team adopts
- * an officially supported workflow (e.g. Vercel Remote Cache with token) compatible with this Next version.
+ * The Heroku Node buildpack (used by DO) saves the cache **after** `npm run build` and **before** App
+ * Platform’s `build_command`. `package.json` → `cacheDirectories` includes `node_modules` and
+ * `.next/cache` so warm webpack/Turbopack data can restore on the next deploy; `post-build-prune.mjs` still
+ * removes `.next/cache` from the **deploy artifact** in `build_command` (after the cache snapshot). If the
+ * cache is cleared (stack/Node/npm signature change or “Clear build cache”), Next logs “No build cache found”.
+ * Remote cache (e.g. Vercel) remains opt-in when the team adopts a supported workflow for this Next version.
  */
 import { createRequire } from "module";
 import os from "node:os";
@@ -163,6 +164,10 @@ const nextConfig: NextConfig = {
   },
   // Auth.js reads AUTH_TRUST_HOST in proxied environments (e.g. DigitalOcean).
   // Ensures UntrustedHost does not occur if platform env is missing at deploy time.
+  //
+  // DigitalOcean / CI: this `env` block is evaluated at **`next build` only**. Values here are compiled
+  // into the client bundle for `NEXT_PUBLIC_*`. Mirror the same vars on the **build** component/job
+  // as on runtime if DO splits env scopes; otherwise Sentry browser flags/release drift after deploy.
   env: {
     // Use || so empty string (often set by hosts with no value) defaults to trusted.
     AUTH_TRUST_HOST: process.env.AUTH_TRUST_HOST || "true",

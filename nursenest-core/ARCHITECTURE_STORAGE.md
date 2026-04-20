@@ -53,7 +53,7 @@ Large folders at **monorepo root** (`attached_assets/`, legacy `client/`, `.loca
 
 - `npm run disk:audit` — largest paths under `nursenest-core` and build outputs.
 - `npm run storage:check` — warn on oversized `public/` files; `npm run storage:check -- --strict` fails CI if non‑i18n assets exceed 512 KiB.
-- `npm run build` (App Platform default) then `npm run build:deploy` — verifies standalone output and removes `.next/cache` (see `scripts/post-build-prune.mjs`). For one-shot builds: `npm run build:deploy:full`.
+- `npm run build` (App Platform buildpack) then `npm run build:deploy` — verifies standalone output, syncs `.next/static` into standalone, removes `.next/cache` (see `scripts/post-build-prune.mjs`). For one-shot builds: `npm run build:deploy:full`.
 - `npm run clean:next` — remove `.next` locally when reclaiming disk.
 
 ## Runtime resilience (summary)

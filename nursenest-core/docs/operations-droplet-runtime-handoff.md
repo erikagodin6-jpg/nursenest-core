@@ -10,7 +10,7 @@
 
 - **Spec:** `.do/app-nursenest-core-next.yaml`
 - **Source:** `source_dir: nursenest-core`
-- **Build (CI/build phase only):** droplet/build hosts use `npm run build:deploy:full && npm prune --omit=dev` (includes `next build`). App Platform uses the buildpack’s `npm run build` plus `npm run build:deploy && npm prune --omit=dev` — **not** a long-lived build on the running instance.
+- **Build (CI/build phase only):** droplet/build hosts use `npm run build:deploy:full && npm prune --omit=dev` (includes `next build`). App Platform uses the buildpack’s `npm run build` plus `npm run build:deploy && npm prune --omit=dev` (verify + static sync + prune; **no** second `next build`) — **not** a long-lived build on the running instance.
 - **Runtime command:** `npm run start` → `package.json` → `NODE_ENV=production node ... .next/standalone/nursenest-core/server.js` (Next `output: "standalone"`; **`next start` is not supported** — see Next.js warning at boot). `PORT` / `HOSTNAME` come from the environment (standalone defaults `HOSTNAME` to `0.0.0.0`).
 - **App Platform sets:** `PORT=8080`, `http_port: 8080` — the listening port in production there is **8080** inside the container (mapped by the platform).
 - **Process model:** Node runs **one Next.js server process per instance** (autoscaling min 2 / max 3 per spec). **Not** PM2 inside the container unless you added it (default is **not** PM2 on App Platform).

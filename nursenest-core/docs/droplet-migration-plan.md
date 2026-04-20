@@ -31,7 +31,7 @@ Point uptime monitors and load balancers at **`/healthz`** for liveness. Use **`
 
 - **Automatic HTTPS** → Caddy or Nginx + Let’s Encrypt on the Droplet.
 - **Injected `PORT`** → set `PORT=3000` (or chosen internal port) in PM2/env.
-- **Build command in UI** → your `deploy-app.sh` runs `npm ci` + `npm run build:deploy:full` (or `npm run build` then `npm run build:deploy` on App Platform).
+- **Build command in UI** → your `deploy-app.sh` runs `npm ci` + `npm run build:deploy:full` (or on App Platform: buildpack `npm run build` then `npm run build:deploy`).
 - **Zero-downtime rolling** (if configured) → PM2 `reload` or brief restart; for minimal complexity accept seconds of blip or use two Droplets + LB later.
 
 ### Spaces / CDN
