@@ -83,6 +83,12 @@ export function loginWithCallback(path: string): string {
   return `${HUB.login}?callbackUrl=${enc}`;
 }
 
+/** Signup with post-auth resume path (same shape as {@link loginWithCallback}). */
+export function signupWithCallback(path: string): string {
+  const enc = encodeURIComponent(path.startsWith("/") ? path : `/${path}`);
+  return `${HUB.signup}?callbackUrl=${enc}`;
+}
+
 export function rnLessons(region: MarketingRegionToggle): string {
   return region === "US" ? RN.usLessons : RN.caLessons;
 }

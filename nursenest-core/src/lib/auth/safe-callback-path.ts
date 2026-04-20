@@ -1,14 +1,14 @@
 export type SafeCallbackPathOptions = {
   /**
-   * When true, reject only the bare learner shell root (`/app`, `/app/`) so generic marketing auth does not
-   * swap shells. Deep links such as `/app/lessons` remain valid explicit study targets.
+   * When true, reject learner-shell callback targets: `/app`, `/app/`, and any `/app/…` path.
+   * Marketing auth flows should not deep-link into subscriber chrome via `callbackUrl`.
    */
   rejectLearnerAppShell?: boolean;
 };
 
-/** True for `/app` or `/app/` (optional trailing slash), not `/app/lessons` or deeper. */
-export function isLearnerAppShellRootPathname(pathname: string): boolean {
-  return pathname === "/app" || pathname === "/app/";
+/** Learner shell root or any route under it (`/app`, `/app/`, `/app/lessons`, …). */
+export function isLearnerAppShellCallbackPathname(pathname: string): boolean {
+  return pathname === "/app" || pathname === "/app/" || pathname.startsWith("/app/");
 }
 
 /**
@@ -23,7 +23,7 @@ export function safeCallbackPath(raw: string | null, opts?: SafeCallbackPathOpti
     if (!u.pathname.startsWith("/")) return null;
     /** Never post-login navigate to API routes — `router.push` to `/api/*` can render a raw JSON body in the document. */
     if (u.pathname === "/api" || u.pathname.startsWith("/api/")) return null;
-    if (opts?.rejectLearnerAppShell && isLearnerAppShellRootPathname(u.pathname)) {
+    if (opts?.rejectLearnerAppShell && isLearnerAppShellCallbackPathname(u.pathname)) {
       return null;
     }
     return `${u.pathname}${u.search}${u.hash}`;

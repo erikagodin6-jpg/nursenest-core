@@ -20,9 +20,9 @@ import {
   publicExamPrepHubDestinations,
   publicMarketingExploreDestinations,
 } from "@/lib/navigation/canonical-destinations";
-import { ADMIN_DASHBOARD_HREF } from "@/lib/auth/admin-dashboard-link";
+import { ADMIN_DASHBOARD_HREF, navigateAdminDashboardHard } from "@/lib/auth/admin-dashboard-link";
 import { isStaffRole, shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, loginWithCallback, signupWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
 import { CONTINUE_STUDYING_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
@@ -113,8 +113,8 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
     Boolean(user?.role && !isStaffRole(user.role)) && activeNav.entitlement === "entitled";
   const learnerPathwayId = learnerMarketingPathwayIdFromSession(session?.user ?? null);
   const learnerSignInHref = withMarketingLocale(locale, loginWithCallback(authResumePath));
-  /** Primary footer CTA — explicit study entry; keeps post-signup landing in the learner shell. */
-  const startPracticingHref = withMarketingLocale(locale, `/signup?callbackUrl=${encodeURIComponent("/app")}`);
+  /** Primary footer CTA — resume marketing question bank after signup (matches post-login resume rules). */
+  const startPracticingHref = withMarketingLocale(locale, signupWithCallback(HUB.questionBank));
   const learnerContinueHref =
     learnerPathwayId != null
       ? `/app/lessons?pathwayId=${encodeURIComponent(learnerPathwayId)}`
@@ -226,6 +226,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                           href={ADMIN_DASHBOARD_HREF}
                           prefetch={false}
                           className="nn-footer-link break-words text-sm leading-relaxed [overflow-wrap:anywhere]"
+                          onClick={navigateAdminDashboardHard}
                         >
                           {formatTitleCase("Admin", locale)}
                         </Link>

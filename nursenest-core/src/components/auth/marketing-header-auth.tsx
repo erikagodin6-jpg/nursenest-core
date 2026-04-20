@@ -10,7 +10,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
-import { ADMIN_DASHBOARD_HREF } from "@/lib/auth/admin-dashboard-link";
+import { ADMIN_DASHBOARD_HREF, navigateAdminDashboardHard } from "@/lib/auth/admin-dashboard-link";
 import { shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { getNavChromeStyle } from "@/lib/theme/nav-chrome";
@@ -152,7 +152,10 @@ export function MarketingHeaderAuthDesktop({
               prefetch={false}
               className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] [overflow-wrap:anywhere] hover:bg-[var(--nav-hover)]"
               role="menuitem"
-              onClick={() => window.setTimeout(() => setOpen(false), 0)}
+              onClick={(e) => {
+                window.setTimeout(() => setOpen(false), 0);
+                navigateAdminDashboardHard(e);
+              }}
             >
               {formatTitleCase(t("nav.admin"), locale)}
             </Link>
@@ -241,7 +244,10 @@ export function MarketingHeaderAuthMobile({
           href={ADMIN_DASHBOARD_HREF}
           prefetch={false}
           className="block rounded-xl border border-primary/20 bg-primary/5 px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-primary hover:bg-primary/10"
-          onClick={onNavigate}
+          onClick={(e) => {
+            onNavigate();
+            navigateAdminDashboardHard(e);
+          }}
         >
           {formatTitleCase(t("nav.admin"), locale)}
         </Link>

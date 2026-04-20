@@ -1,9 +1,9 @@
-#!/usr/bin/env npx tsx
 /**
  * Validates AUTH_URL / NEXTAUTH_URL for Auth.js public-origin + secure-cookie alignment.
  *
  * From `nursenest-core/` with deploy env loaded (e.g. DigitalOcean env vars):
  *   npx tsx scripts/verify-auth-public-origin.ts
+ *   npm run verify:auth-public-origin
  *
  * Local HTTP: pass `--allow-http` to skip https-only checks.
  */
@@ -14,14 +14,19 @@ import {
 
 const allowHttp = process.argv.includes("--allow-http");
 const issues = !hasAnyAuthPublicOriginUrl()
-  ? [
-      {
-        code: "auth_url_missing",
-        severity: "critical" as const,
-        message:
-          "Set AUTH_URL or NEXTAUTH_URL to the canonical public origin (origin-only, e.g. https://www.example.com).",
-      },
-    ]
+  ? (() => {
+      console.error(
+        "[verify-auth-public-origin] error: neither AUTH_URL nor NEXTAUTH_URL is set — set one to your canonical public origin (origin-only, e.g. https://www.example.com).",
+      );
+      return [
+        {
+          code: "auth_url_missing",
+          severity: "critical" as const,
+          message:
+            "Set AUTH_URL or NEXTAUTH_URL to the canonical public origin (origin-only, e.g. https://www.example.com).",
+        },
+      ];
+    })()
   : collectAuthPublicOriginEnvIssues({ requireProductionHttps: !allowHttp });
 
 for (const i of issues) {

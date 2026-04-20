@@ -21,8 +21,8 @@ function isBlockedResumeStrippedPath(strippedPathname: string): boolean {
 
 /**
  * Resolves where to send the user after credentials auth on marketing surfaces.
- * - Honors explicit same-origin `callbackUrl` except the bare learner shell root (`/app`), which is ignored
- *   as a legacy generic default so post-login can stay on the marketing shell.
+ * - Honors explicit same-origin `callbackUrl` except `/app` and `/app/*` (learner shell), which are ignored
+ *   so post-login does not swap the marketing shell for subscriber chrome.
  * - Falls back to {@link marketingResumeCallbackFromLocation} using the current pathname and query
  *   (with `callbackUrl` stripped from the query so it cannot echo back into the resume URL).
  */

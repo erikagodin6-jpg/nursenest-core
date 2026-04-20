@@ -10,7 +10,11 @@ function marketingOrigin(baseURL: string | undefined): string {
   }
 }
 
-async function expectHeaderLoginCallbackResumesPath(page: import("@playwright/test").Page, origin: string, pathHint: RegExp) {
+async function expectHeaderLoginCallbackResumesPath(
+  page: import("@playwright/test").Page,
+  origin: string,
+  pathHint: RegExp | string,
+) {
   const loginLink = page.locator(`header a[href*="/login"][href*="callbackUrl"]`).first();
   await expect(loginLink).toBeVisible({ timeout: 30_000 });
   const href = await loginLink.getAttribute("href");
@@ -20,7 +24,11 @@ async function expectHeaderLoginCallbackResumesPath(page: import("@playwright/te
   const cb = u.searchParams.get("callbackUrl");
   expect(cb).toBeTruthy();
   const decoded = decodeURIComponent(cb!);
-  expect(decoded).toMatch(pathHint);
+  if (typeof pathHint === "string") {
+    expect(decoded).toBe(pathHint);
+  } else {
+    expect(decoded).toMatch(pathHint);
+  }
   expect(decoded).not.toMatch(/^\/app\/?(\?|$)/);
 }
 
@@ -34,7 +42,7 @@ test.describe("Post-login marketing continuity", () => {
   test("homepage header login preserves marketing shell (not bare /app)", async ({ page, baseURL }) => {
     const origin = marketingOrigin(baseURL);
     await page.goto(`${origin}/`, { waitUntil: "domcontentloaded", timeout: 60_000 });
-    await expectHeaderLoginCallbackResumesPath(page, origin, /^\/(\?|$)/);
+    await expectHeaderLoginCallbackResumesPath(page, origin, "/");
   });
 
   test("pricing header login preserves pricing path", async ({ page, baseURL }) => {
@@ -49,10 +57,10 @@ test.describe("Post-login marketing continuity", () => {
     await expectHeaderLoginCallbackResumesPath(page, origin, /blog/i);
   });
 
-  test("public lessons hub keeps explicit study signup callback to /app/lessons", async ({ page, baseURL }) => {
+  test("public lessons hub signup uses marketing /lessons callback (not learner shell)", async ({ page, baseURL }) => {
     const origin = marketingOrigin(baseURL);
     await page.goto(`${origin}/lessons`, { waitUntil: "domcontentloaded", timeout: 60_000 });
-    const signup = page.locator(`a[href*="/signup"][href*="callbackUrl=%2Fapp%2Flessons"]`).first();
+    const signup = page.locator(`a[href*="/signup"][href*="callbackUrl=%2Flessons"]`).first();
     await expect(signup).toBeVisible({ timeout: 30_000 });
     const href = await signup.getAttribute("href");
     expect(href).toBeTruthy();
@@ -60,6 +68,6 @@ test.describe("Post-login marketing continuity", () => {
     const u = new URL(abs);
     const cb = u.searchParams.get("callbackUrl");
     expect(cb).toBeTruthy();
-    expect(decodeURIComponent(cb!)).toBe("/app/lessons");
+    expect(decodeURIComponent(cb!)).toBe("/lessons");
   });
 });

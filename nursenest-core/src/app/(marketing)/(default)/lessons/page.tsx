@@ -7,7 +7,7 @@ import { examLessonsIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-public-study-landing";
 import { PublicLessonsPathwaySections } from "@/components/marketing/public-lessons-pathway-sections";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
-import { loginWithCallback, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, loginWithCallback, rnQuestions, signupWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import {
@@ -116,7 +116,7 @@ export default async function PublicLessonsLandingPage() {
     defaultPublicLessonsMetaDescription(marketingRegion),
   );
 
-  const signupLessons = `${withMarketingLocale(locale, "/signup")}?callbackUrl=${encodeURIComponent("/app/lessons")}`;
+  const signupLessons = withMarketingLocale(locale, signupWithCallback(HUB.examLessons));
 
   const { crumbs, schemaItems } = examLessonsIndexBreadcrumbs();
 
@@ -150,7 +150,7 @@ export default async function PublicLessonsLandingPage() {
         <PublicLessonsPathwaySections locale={locale} region={marketingRegion} />
         <p className="nn-marketing-body-sm text-muted">
           {t("pages.examLessons.appLessonsLead")}{" "}
-          <Link href={loginWithCallback("/app/lessons")} className="font-semibold text-primary">
+          <Link href={loginWithCallback(HUB.examLessons)} className="font-semibold text-primary">
             {t("pages.examLessons.appLessonsLink")}
           </Link>
         </p>

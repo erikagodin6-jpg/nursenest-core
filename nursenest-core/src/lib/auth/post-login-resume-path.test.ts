@@ -40,22 +40,49 @@ describe("resolveMarketingAuthRedirectTarget", () => {
     assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/");
   });
 
-  it("keeps deep learner callbacks such as /app/lessons", () => {
+  it("ignores deep /app routes as callbacks on auth pages", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/app/lessons");
-    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/app/lessons");
+    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/");
   });
 
   it("honors marketing callback paths", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/pricing");
     assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/pricing");
+    sp.delete("callbackUrl");
+    sp.set("callbackUrl", "/blog");
+    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/blog");
+  });
+
+  it("ignores /api callback and resumes current marketing path", () => {
+    const sp = new URLSearchParams();
+    sp.set("callbackUrl", "/api/auth/session");
+    assert.equal(resolveMarketingAuthRedirectTarget("/blog", sp, "en"), "/blog");
+  });
+
+  it("honors marketing callback with query on path", () => {
+    const sp = new URLSearchParams();
+    sp.set("callbackUrl", "/login?foo=bar");
+    assert.equal(resolveMarketingAuthRedirectTarget("/signup", sp, "en"), "/login?foo=bar");
+  });
+
+  it("honors locale-prefixed marketing paths as callback", () => {
+    const sp = new URLSearchParams();
+    sp.set("callbackUrl", "/fr/pricing");
+    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/fr/pricing");
   });
 
   it("ignores generic /app callback and resumes current marketing path", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/app");
     assert.equal(resolveMarketingAuthRedirectTarget("/us/rn/nclex-rn/lessons", sp, "en"), "/us/rn/nclex-rn/lessons");
+  });
+
+  it("ignores /app/lessons callback and resumes marketing path when on marketing", () => {
+    const sp = new URLSearchParams();
+    sp.set("callbackUrl", "/app/lessons");
+    assert.equal(resolveMarketingAuthRedirectTarget("/question-bank", sp, "en"), "/question-bank");
   });
 
   it("sends blocked auth pages to localized home when callback is bare /app", () => {

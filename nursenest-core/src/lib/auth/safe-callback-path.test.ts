@@ -18,12 +18,15 @@ describe("safeCallbackPath", () => {
     assert.equal(safeCallbackPath("/api/foo/bar"), null);
   });
 
-  it("optionally rejects only bare /app for marketing auth flows", () => {
+  it("with rejectLearnerAppShell, rejects /app and /app/*", () => {
     assert.equal(safeCallbackPath("/app", { rejectLearnerAppShell: true }), null);
     assert.equal(safeCallbackPath("/app/", { rejectLearnerAppShell: true }), null);
     assert.equal(safeCallbackPath("/app?x=1", { rejectLearnerAppShell: true }), null);
-    assert.equal(safeCallbackPath("/app/lessons", { rejectLearnerAppShell: true }), "/app/lessons");
-    assert.equal(safeCallbackPath("/app/account/readiness", { rejectLearnerAppShell: true }), "/app/account/readiness");
+    assert.equal(safeCallbackPath("/app/lessons", { rejectLearnerAppShell: true }), null);
+    assert.equal(safeCallbackPath("/app/account/readiness", { rejectLearnerAppShell: true }), null);
     assert.equal(safeCallbackPath("/pricing", { rejectLearnerAppShell: true }), "/pricing");
+    assert.equal(safeCallbackPath("/blog", { rejectLearnerAppShell: true }), "/blog");
+    assert.equal(safeCallbackPath("/login?next=1", { rejectLearnerAppShell: true }), "/login?next=1");
+    assert.equal(safeCallbackPath("/admin", { rejectLearnerAppShell: true }), "/admin");
   });
 });

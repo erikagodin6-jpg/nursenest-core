@@ -10,7 +10,7 @@ import { getNavChromeStyle, getNavChromeVars } from "@/lib/theme/nav-chrome";
 import { ChevronDown, ChevronRight, MapPin, Menu, Settings, User, X } from "lucide-react";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { isStaffRole, shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
-import { ADMIN_DASHBOARD_HREF } from "@/lib/auth/admin-dashboard-link";
+import { ADMIN_DASHBOARD_HREF, navigateAdminDashboardHard } from "@/lib/auth/admin-dashboard-link";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { useClientGlobalRegionCookie } from "@/lib/region/use-client-global-region";
 import { useMarketingRegionToggleWithRefresh } from "@/lib/region/use-marketing-region-toggle";
@@ -28,7 +28,7 @@ import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { MobileContextDrawer } from "@/components/layout/mobile-context-drawer";
 import { REGION_CONFIG, type GlobalRegionSlug, type GlobalLocaleCode } from "@/lib/i18n/global-regions";
-import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, signupWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import { useActiveNavContext } from "@/lib/navigation/use-active-nav-context";
 import { buildMarketingMegaMenus, type ExamMenuKey } from "@/lib/navigation/marketing-mega-menu";
@@ -290,7 +290,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
       },
       {
         key: "flow-track",
-        href: `/signup?callbackUrl=${encodeURIComponent("/app/account/progress")}`,
+        href: signupWithCallback(HUB.tools),
         matchBase: "/signup",
         label: formatTitleCase(t("nav.marketingFlow.track"), locale),
       },
@@ -504,7 +504,10 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                     href={ADMIN_DASHBOARD_HREF}
                     prefetch={false}
                     className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4`}
-                    onClick={closeMegaBeforeAuthNav}
+                    onClick={(e) => {
+                      closeMegaBeforeAuthNav();
+                      navigateAdminDashboardHard(e);
+                    }}
                   >
                     {formatTitleCase(t("nav.admin"), locale)}
                   </Link>
@@ -665,7 +668,10 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                     href={ADMIN_DASHBOARD_HREF}
                     prefetch={false}
                     className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
-                    onClick={closeMegaBeforeAuthNav}
+                    onClick={(e) => {
+                      closeMegaBeforeAuthNav();
+                      navigateAdminDashboardHard(e);
+                    }}
                   >
                     {formatTitleCase(t("nav.admin"), locale)}
                   </Link>
@@ -1187,9 +1193,10 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                       href={ADMIN_DASHBOARD_HREF}
                       prefetch={false}
                       className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
-                      onClick={() => {
+                      onClick={(e) => {
                         closeMegaBeforeAuthNav();
                         scheduleMobileDrawerClose();
+                        navigateAdminDashboardHard(e);
                       }}
                     >
                       {formatTitleCase(t("nav.admin"), locale)}

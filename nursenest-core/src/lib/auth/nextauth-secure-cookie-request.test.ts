@@ -80,4 +80,23 @@ describe("nextAuthSecureCookieForRequest", () => {
       }
     }
   });
+
+  it("misleading x-forwarded-proto http on non-local host: AUTH_URL https still yields auth_env_url_https", () => {
+    const prev = process.env.AUTH_URL;
+    process.env.AUTH_URL = "https://www.nurse.example";
+    try {
+      assert.deepEqual(
+        resolveNextAuthHttpsForRequest(
+          req({ "x-forwarded-proto": "http" }, "http:", "www.nurse.example"),
+        ),
+        { secureCookie: true, signal: "auth_env_url_https" },
+      );
+    } finally {
+      if (prev === undefined) {
+        Reflect.deleteProperty(process.env, "AUTH_URL");
+      } else {
+        process.env.AUTH_URL = prev;
+      }
+    }
+  });
 });

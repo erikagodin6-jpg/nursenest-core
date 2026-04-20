@@ -14,6 +14,7 @@ import {
   pnQuestions,
   rnLessons,
   rnQuestions,
+  signupWithCallback,
 } from "@/lib/marketing/marketing-entry-routes";
 import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
 import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
@@ -51,7 +52,7 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
   const alliedHubHref = alliedHub(region);
   const npLessons = region === "US" ? NP.fnpLessons : NP.caNpLessons;
   const npQuestionHref = npNpQuestionsForRegion(region);
-  const studyPlanSignupHref = `${HUB.signup}?callbackUrl=${encodeURIComponent("/app/study-plan")}`;
+  const studyPlanSignupHref = signupWithCallback("/pre-nursing/study-plan");
   const alliedCareerPathwaysHref = alliedCareersMarketingUrl();
   const newGradHub = "/pre-nursing";
   const newGradLessons = HUB.examLessons;

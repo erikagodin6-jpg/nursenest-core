@@ -5,7 +5,7 @@ import { examLessonsIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-public-study-landing";
 import { PublicLessonsPathwaySections } from "@/components/marketing/public-lessons-pathway-sections";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
-import { loginWithCallback, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, loginWithCallback, rnQuestions, signupWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
@@ -21,7 +21,7 @@ export async function PublicLessonsHubView({ locale }: { locale: string }) {
   const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
   const h1Key = marketingRegion === "US" ? "pages.publicLessons.h1US" : "pages.publicLessons.h1CA";
   const introKey = marketingRegion === "US" ? "pages.publicLessons.introUS" : "pages.publicLessons.introCA";
-  const signupLessons = `${withMarketingLocale(locale, "/signup")}?callbackUrl=${encodeURIComponent("/app/lessons")}`;
+  const signupLessons = withMarketingLocale(locale, signupWithCallback(HUB.examLessons));
 
   const { crumbs, schemaItems } = examLessonsIndexBreadcrumbs();
 
@@ -47,7 +47,7 @@ export async function PublicLessonsHubView({ locale }: { locale: string }) {
         <PublicLessonsPathwaySections locale={locale} region={marketingRegion} />
         <p className="nn-marketing-body-sm text-muted">
           {t("pages.examLessons.appLessonsLead")}{" "}
-          <Link href={loginWithCallback("/app/lessons")} className="font-semibold text-primary">
+          <Link href={loginWithCallback(HUB.examLessons)} className="font-semibold text-primary">
             {t("pages.examLessons.appLessonsLink")}
           </Link>
         </p>
