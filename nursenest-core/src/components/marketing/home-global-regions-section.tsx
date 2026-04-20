@@ -18,18 +18,18 @@ type RegionCard = {
 
 export const HOME_GLOBAL_REGION_CARDS: readonly RegionCard[] = [
   {
-    id: "us",
-    titleKey: "pages.home.globalRegions.us.title",
-    bodyKey: "pages.home.globalRegions.us.body",
-    path: "/us",
-    accentVar: "var(--semantic-info)",
-  },
-  {
     id: "ca",
     titleKey: "pages.home.globalRegions.ca.title",
     bodyKey: "pages.home.globalRegions.ca.body",
     path: "/canada",
     accentVar: "var(--semantic-chart-2)",
+  },
+  {
+    id: "us",
+    titleKey: "pages.home.globalRegions.us.title",
+    bodyKey: "pages.home.globalRegions.us.body",
+    path: "/us",
+    accentVar: "var(--semantic-info)",
   },
   {
     id: "ph",
@@ -60,7 +60,7 @@ export type HomeGlobalRegionsSectionProps = {
 };
 
 /**
- * Highlights major regional licensing hubs while keeping US/Canada primary CTAs above the fold.
+ * Highlights major regional licensing hubs (order is intentional: Canada before US for a global-first scan).
  */
 export function HomeGlobalRegionsSection({ visibleCardIds }: HomeGlobalRegionsSectionProps) {
   const { locale, t } = useMarketingI18n();
@@ -81,7 +81,7 @@ export function HomeGlobalRegionsSection({ visibleCardIds }: HomeGlobalRegionsSe
       aria-labelledby="home-global-regions-heading"
       data-testid="section-home-global-regions"
     >
-      <div className="nn-section-shell py-10 sm:py-12">
+      <div className="nn-section-shell">
         <div className="mb-8 max-w-3xl space-y-3">
           <p className="nn-marketing-caption inline-flex items-center gap-2 font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">
             <Globe2 className="h-4 w-4 shrink-0 opacity-90" aria-hidden />

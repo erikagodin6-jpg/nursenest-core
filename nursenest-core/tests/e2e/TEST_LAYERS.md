@@ -48,6 +48,7 @@ Tests are grouped by **deployment risk**, not by folder structure alone. **Do no
 | Layer | Notes |
 |-------|--------|
 | Public smoke | `public/smoke.spec.ts`, `public/pre-deploy-regression.spec.ts` — product-dependent |
+| Marketing durability | `public/marketing-production-sentinel.spec.ts` — `npm run qa:marketing-sentinel` / bundled in `npm run qa:pre-deploy:public` |
 | Freemium | `auth/freemium-paywall.spec.ts` (`chromium-free`) |
 | Marketing / crawl | `public/link-crawl-audit.spec.ts`, `navigation/country-selector.spec.ts`, `crawl-health/public-crawl-regression.spec.ts` (`npm run qa:crawl-health`) — longer, env-sensitive |
 

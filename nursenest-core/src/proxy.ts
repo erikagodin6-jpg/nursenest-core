@@ -490,6 +490,29 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     }
     return merged;
   }
+  /**
+   * Some auth middleware "continue" responses omit `x-middleware-next: 1`, so {@link mergeAuthContinueWithForwardedRequest}
+   * returns unchanged `res` and pathname headers never reach RSC — `resolveAdminRequestPath` falls back to `/`,
+   * which breaks tier RBAC and can surface wrong shells. Re-wrap only for admin surfaces and plain 2xx continues.
+   */
+  const isAdminSurface = pathname.startsWith("/admin") || pathname.startsWith("/api/admin");
+  if (
+    merged === res &&
+    isAdminSurface &&
+    !res.headers.get("location") &&
+    res.status >= 200 &&
+    res.status < 300 &&
+    res.headers.get("x-middleware-next") !== "1"
+  ) {
+    const next = NextResponse.next({ request: { headers: forwarded.headers } });
+    copySetCookies(res, next);
+    next.headers.set(NN_CORRELATION_HEADER, outCid.slice(0, 128));
+    const adminRedirect = await enforceAdminProxyRoute(forwarded);
+    if (adminRedirect) {
+      return copySetCookies(res, adminRedirect);
+    }
+    return next;
+  }
   res.headers.set(NN_CORRELATION_HEADER, outCid.slice(0, 128));
   return res;
 }

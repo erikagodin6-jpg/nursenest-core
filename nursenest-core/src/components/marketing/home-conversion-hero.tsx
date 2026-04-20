@@ -79,7 +79,7 @@ export function HomeConversionHero({
       data-testid="hero-section"
       aria-labelledby="home-conversion-hero-heading"
     >
-      <div className="relative pt-10 pb-12 md:pt-12 md:pb-14">
+      <div className="relative pt-10 pb-[var(--nn-rhythm-page-y)] md:pt-12 md:pb-[calc(var(--nn-rhythm-page-y)+var(--nn-rhythm-tight-y))]">
         <div className="nn-section-shell">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
             <StaggerGroup

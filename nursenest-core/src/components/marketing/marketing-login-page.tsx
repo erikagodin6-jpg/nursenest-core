@@ -6,12 +6,22 @@ import { VerifyStatusBanner } from "@/components/auth/verify-status-banner";
 import { AuthLeafWatermark } from "@/components/brand/auth-leaf-watermark";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { AuthIncidentNotice } from "@/components/marketing/auth-incident-notice";
+import { DEFAULT_MARKETING_LOCALE, isMarketingLocaleCode } from "@/lib/i18n/marketing-locale-policy";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessages, mergeMissingMarketingMessageKeys } from "@/lib/marketing-i18n/load-marketing-messages";
+
+function resolveLoginMarketingLocale(locale: string): string {
+  const trimmed = typeof locale === "string" ? locale.trim() : "";
+  if (!trimmed || !isMarketingLocaleCode(trimmed)) return DEFAULT_MARKETING_LOCALE;
+  return trimmed;
+}
 
 export async function MarketingLoginPage({ locale }: { locale: string }) {
-  const m = await loadMarketingMessages(locale);
-  const forgotHref = withMarketingLocale(locale, "/forgot-password");
+  const resolved = resolveLoginMarketingLocale(locale);
+  const primary = await loadMarketingMessages(resolved);
+  const english = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const m = mergeMissingMarketingMessageKeys(primary, english);
+  const forgotHref = withMarketingLocale(resolved, "/forgot-password");
   return (
     <main className="mx-auto w-full max-w-md nn-marketing-x nn-rhythm-page">
       <div className="nn-card relative overflow-hidden p-6 sm:p-8">
@@ -23,7 +33,7 @@ export async function MarketingLoginPage({ locale }: { locale: string }) {
           <Suspense>
             <VerifyStatusBanner />
           </Suspense>
-          <AuthIncidentNotice contactHref={withMarketingLocale(locale, "/contact")} />
+          <AuthIncidentNotice contactHref={withMarketingLocale(resolved, "/contact")} />
           <header className="mb-6 text-center">
             <h1 className="text-2xl font-semibold tracking-tight text-[var(--palette-heading)] sm:text-3xl">
               {m["pages.login.welcome"]}
@@ -34,9 +44,9 @@ export async function MarketingLoginPage({ locale }: { locale: string }) {
           <Suspense fallback={<div className="mt-6 h-32 animate-pulse rounded-xl bg-border/40" aria-hidden />}>
             <LoginForm
               forgotPasswordHref={forgotHref}
-              termsHref={withMarketingLocale(locale, "/terms")}
-              privacyHref={withMarketingLocale(locale, "/privacy")}
-              contactHref={withMarketingLocale(locale, "/contact")}
+              termsHref={withMarketingLocale(resolved, "/terms")}
+              privacyHref={withMarketingLocale(resolved, "/privacy")}
+              contactHref={withMarketingLocale(resolved, "/contact")}
             />
           </Suspense>
           <div className="nn-account-recovery-hint space-y-3 border-t border-[var(--semantic-border-soft)] pt-5">
@@ -51,7 +61,7 @@ export async function MarketingLoginPage({ locale }: { locale: string }) {
               <li>{m["pages.login.cantFindAccount"]}</li>
               <li>
                 <Link
-                  href={withMarketingLocale(locale, "/contact")}
+                  href={withMarketingLocale(resolved, "/contact")}
                   className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
                 >
                   {m["pages.login.recoveryContactLink"]}

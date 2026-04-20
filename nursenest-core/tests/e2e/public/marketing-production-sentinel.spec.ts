@@ -25,7 +25,7 @@ test.describe("Marketing production sentinels", () => {
 
   test("home, pricing, login — no placeholders, single header, html lang en", async ({ page }) => {
     for (const path of ["/", "/pricing", "/login"] as const) {
-      await page.goto(path, { waitUntil: "domcontentloaded", timeout: 60_000 });
+      await page.goto(path, { waitUntil: "load", timeout: 90_000 });
       await dismissMarketingScrims(page);
 
       const lang = await page.locator("html").getAttribute("lang");

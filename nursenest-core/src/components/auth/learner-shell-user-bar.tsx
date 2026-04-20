@@ -5,12 +5,11 @@ import Link from "next/link";
 import { ChevronDown, User } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useMarketingI18n, useMarketingLocale } from "@/lib/marketing-i18n";
-import { isStaffRole } from "@/lib/auth/staff-roles";
+import { ADMIN_DASHBOARD_HREF } from "@/lib/auth/admin-dashboard-link";
+import { shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
 import { UserFeedbackAccountMenuItem } from "@/components/feedback/user-feedback-account-menu-item";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-
-const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
 
 type MenuItem = { href: string; i18nKey: string };
 
@@ -71,24 +70,28 @@ export function LearnerShellUserBar({
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  const close = useCallback(() => setOpen(false), []);
+  const closeNow = useCallback(() => setOpen(false), []);
+  /** Defer so `Link` navigation is not cancelled when the menu unmounts in the same tick (portaled / dropdown). */
+  const closeAfterNav = useCallback(() => {
+    window.setTimeout(() => setOpen(false), 0);
+  }, []);
 
   useEffect(() => {
     const onDoc = (e: PointerEvent) => {
-      if (!ref.current?.contains(e.target as Node)) close();
+      if (!ref.current?.contains(e.target as Node)) closeNow();
     };
     document.addEventListener("click", onDoc);
     return () => document.removeEventListener("click", onDoc);
-  }, [close]);
+  }, [closeNow]);
 
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
+      if (e.key === "Escape") closeNow();
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [open, close]);
+  }, [open, closeNow]);
 
   if (status === "loading") {
     return <span className="h-10 w-36 animate-pulse rounded-full bg-primary/[0.08]" aria-hidden />;
@@ -101,7 +104,7 @@ export function LearnerShellUserBar({
   const user = session.user;
   const displayName = user.name?.trim() || user.email?.split("@")[0] || t("learner.userBar.fallbackName");
   const emailLine = user.email?.trim() ?? "";
-  const admin = serverHasStaffSession === true || isStaffRole(user.role);
+  const admin = shouldShowAdminDashboardNav({ serverHasStaffSession, sessionRole: user.role });
   const sub = user.subscriptionStatus ?? "none";
   const tier = user.tier ?? "";
   const country = user.country ?? "";
@@ -140,7 +143,7 @@ export function LearnerShellUserBar({
             href={href}
             className={linkClass}
             role="menuitem"
-            onClick={close}
+            onClick={closeAfterNav}
           >
             {t(i18nKey)}
           </Link>
@@ -207,11 +210,11 @@ export function LearnerShellUserBar({
           {admin ? (
             <div className="border-t border-[var(--border-subtle)] px-2 py-1.5">
               <Link
-                href={ADMIN_DASHBOARD_ROUTE}
+                href={ADMIN_DASHBOARD_HREF}
                 prefetch={false}
                 className={`${linkClass} font-medium text-primary`}
                 role="menuitem"
-                onClick={close}
+                onClick={closeAfterNav}
               >
                 {t("nav.admin")}
               </Link>
@@ -219,13 +222,13 @@ export function LearnerShellUserBar({
           ) : null}
           <div className="border-t border-[var(--border-subtle)] bg-[var(--bg-muted)]/30 p-2">
             <UserFeedbackAccountMenuItem
-              onActivate={close}
+              onActivate={closeAfterNav}
               className={`${linkClass} mb-1.5 w-full border-0 text-left text-foreground`}
             />
             <SignOutButton
               role="menuitem"
               className="w-full touch-manipulation rounded-xl px-3 py-2.5 text-left text-sm font-medium text-foreground transition-colors hover:bg-[var(--surface-interactive-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
-              onBeforeSignOut={close}
+              onBeforeSignOut={closeAfterNav}
               redirectTo={withMarketingLocale(locale, "/login")}
             />
           </div>

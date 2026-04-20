@@ -74,7 +74,10 @@ const isEmptyValue = (v: string | undefined): boolean =>
   v === undefined || (typeof v === "string" && v.trim() === "");
 
 /** Fill holes in `primary` using `fallback` (same contract as client `formatMarketingMessage`). */
-function mergeMissingMessageKeys(primary: MarketingMessages, fallback: MarketingMessages): MarketingMessages {
+export function mergeMissingMarketingMessageKeys(
+  primary: MarketingMessages,
+  fallback: MarketingMessages,
+): MarketingMessages {
   const p = normalizeMarketingMessagesRecord(primary);
   const f = normalizeMarketingMessagesRecord(fallback);
   if (!f || Object.keys(f).length === 0) return p;
@@ -309,7 +312,7 @@ async function loadFromCdn(locale: string): Promise<MarketingMessages | null> {
 
       const enDisk = tryLoadEnglishDiskBundle();
       if (enDisk && Object.keys(enDisk).length > 0) {
-        data = mergeMissingMessageKeys(data, enDisk);
+        data = mergeMissingMarketingMessageKeys(data, enDisk);
       }
       cdnLocaleMergedCache.set(mergedKey, data);
       return data;
@@ -376,7 +379,7 @@ async function loadMarketingMessagesImpl(locale: string): Promise<MarketingMessa
           locale === DEFAULT_MARKETING_LOCALE
             ? chromeMessages
             : loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS);
-        return mergeMissingMessageKeys(chromeMessages, fallbackChromeMessages);
+        return mergeMissingMarketingMessageKeys(chromeMessages, fallbackChromeMessages);
       }
 
       const disk = loadFromDiskSync(locale);

@@ -9,7 +9,8 @@ import { useTheme } from "next-themes";
 import { getNavChromeStyle, getNavChromeVars } from "@/lib/theme/nav-chrome";
 import { ChevronDown, ChevronRight, MapPin, Menu, Settings, User, X } from "lucide-react";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
-import { isStaffRole } from "@/lib/auth/staff-roles";
+import { isStaffRole, shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
+import { ADMIN_DASHBOARD_HREF } from "@/lib/auth/admin-dashboard-link";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { useClientGlobalRegionCookie } from "@/lib/region/use-client-global-region";
 import { useMarketingRegionToggleWithRefresh } from "@/lib/region/use-marketing-region-toggle";
@@ -34,8 +35,6 @@ import { formatEyebrow, formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { MarketingHeaderUtilityStrip } from "@/components/layout/marketing-header-utility-strip";
-const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
-
 /** Primary filled header CTAs — white label on theme primary fill for consistent contrast. */
 const HEADER_NAV_PRIMARY_CTA = "nn-nav-cta text-white";
 
@@ -189,6 +188,11 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
     setOpenMegaMenu(null);
   }, []);
 
+  /** Defer drawer close so `Link` navigations (e.g. `/admin`) are not cancelled when the portal unmounts in the same tick. */
+  const scheduleMobileDrawerClose = useCallback(() => {
+    window.setTimeout(() => setMobileOpen(false), 0);
+  }, []);
+
   useEffect(() => {
     const close = (e: PointerEvent) => {
       if (!desktopMoreRef.current?.contains(e.target as Node)) setDesktopMoreOpen(false);
@@ -244,8 +248,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   const megaMenus = useMemo(() => buildMarketingMegaMenus(region, t), [region, t]);
   const isAuthenticated = Boolean(sessionStatus === "authenticated" && user);
   const isAdminAuthenticated = Boolean(
-    isAuthenticated &&
-      (serverHasStaffSession === true || Boolean(user?.role && isStaffRole(user.role))),
+    isAuthenticated && shouldShowAdminDashboardNav({ serverHasStaffSession, sessionRole: user?.role }),
   );
   const isLearnerRole = Boolean(
     isAuthenticated &&
@@ -492,7 +495,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               {isAdminAuthenticated ? (
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
-                    href={ADMIN_DASHBOARD_ROUTE}
+                    href={ADMIN_DASHBOARD_HREF}
                     prefetch={false}
                     className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4`}
                     onClick={closeMegaBeforeAuthNav}
@@ -653,7 +656,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               ) : isAdminAuthenticated ? (
                 <div className="flex shrink-0 items-center gap-2">
                   <Link
-                    href={ADMIN_DASHBOARD_ROUTE}
+                    href={ADMIN_DASHBOARD_HREF}
                     prefetch={false}
                     className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
                     onClick={closeMegaBeforeAuthNav}
@@ -911,18 +914,18 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
       {mobileOpen && typeof document !== "undefined"
         ? createPortal(
             <div className="nn-header-overlay-mobile-only fixed inset-0 z-[200] animate-[nn-overlay-enter_0.24s_ease_forwards]">
-          <button type="button" className="absolute inset-0 bg-black/56" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)} />
+          <button type="button" className="absolute inset-0 bg-black/56" aria-label={t("nav.closeMenu")} onClick={scheduleMobileDrawerClose} />
           <div className="absolute inset-x-0 top-0 flex h-[100dvh] max-h-[100dvh] flex-col border-b border-[var(--nav-border)] bg-[var(--nav-bg)] text-[var(--nav-fg)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-in_0.28s_cubic-bezier(0.25,0.1,0.25,1)_forwards]">
             <div className="flex h-16 shrink-0 items-center justify-between border-b border-[var(--header-border)] px-4 pt-[max(0.5rem,env(safe-area-inset-top))]">
               <Link
                 href={localizeHref("/")}
                 className="flex min-w-0 shrink-0 items-center overflow-visible bg-transparent"
                 aria-label={t("brand.homeAriaLabel")}
-                onClick={() => setMobileOpen(false)}
+                onClick={scheduleMobileDrawerClose}
               >
                 <HeaderBrandLockup />
               </Link>
-              <Button type="button" variant="ghost" className="h-10 w-10 shrink-0 rounded-xl border border-[var(--nav-border)] p-0 text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)}>
+              <Button type="button" variant="ghost" className="h-10 w-10 shrink-0 rounded-xl border border-[var(--nav-border)] p-0 text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]" aria-label={t("nav.closeMenu")} onClick={scheduleMobileDrawerClose}>
                 <X className="h-5 w-5" />
               </Button>
             </div>
@@ -950,7 +953,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                                   surface: "site_header_mobile_drawer",
                                   marketing_region: region,
                                 });
-                                setMobileOpen(false);
+                                scheduleMobileDrawerClose();
                               }}
                             >
                               {flowPractice.label}
@@ -970,7 +973,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                                     surface: "site_header_mobile_drawer",
                                     marketing_region: region,
                                   });
-                                  setMobileOpen(false);
+                                  scheduleMobileDrawerClose();
                                 }}
                               >
                                 {item.label}
@@ -1016,7 +1019,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                                     surface: "site_header_mobile_mega",
                                     marketing_region: region,
                                   });
-                                  setMobileOpen(false);
+                                  scheduleMobileDrawerClose();
                                 }}
                               >
                                 <div className="min-w-0">
@@ -1053,7 +1056,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                                               surface: "site_header_mobile_mega",
                                               marketing_region: region,
                                             });
-                                            setMobileOpen(false);
+                                            scheduleMobileDrawerClose();
                                           }}
                                         >
                                           <span
@@ -1104,7 +1107,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                                     surface: "site_header_mobile_mega",
                                     marketing_region: region,
                                   });
-                                  setMobileOpen(false);
+                                  scheduleMobileDrawerClose();
                                 }}
                               >
                                 <span className="text-[14px] font-semibold text-[var(--nav-fg)]">{menu.label}</span>
@@ -1132,7 +1135,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                               surface: "site_header_mobile_drawer",
                               marketing_region: region,
                             });
-                            setMobileOpen(false);
+                            scheduleMobileDrawerClose();
                           }}
                         >
                           <span
@@ -1157,7 +1160,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                     <Link
                       href={guestMarketingSignupHref}
                       className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
-                      onClick={() => setMobileOpen(false)}
+                      onClick={scheduleMobileDrawerClose}
                       aria-label="Start free account — nursing and healthcare exam prep"
                       title="Start free — no credit card required"
                     >
@@ -1166,7 +1169,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                     <Link
                       href={localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`)}
                       className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-4 py-3 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
-                      onClick={() => setMobileOpen(false)}
+                      onClick={scheduleMobileDrawerClose}
                       aria-label="Log in to your NurseNest account"
                     >
                       {formatTitleCase(t("nav.logIn"), locale)}
@@ -1175,12 +1178,12 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                 ) : isAdminAuthenticated ? (
                   <>
                     <Link
-                      href={ADMIN_DASHBOARD_ROUTE}
+                      href={ADMIN_DASHBOARD_HREF}
                       prefetch={false}
                       className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
                       onClick={() => {
                         closeMegaBeforeAuthNav();
-                        setMobileOpen(false);
+                        scheduleMobileDrawerClose();
                       }}
                     >
                       {formatTitleCase(t("nav.admin"), locale)}
@@ -1188,20 +1191,20 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                     <Link
                       href="/app"
                       className={HEADER_SECONDARY_ACTION_CLASS}
-                      onClick={() => setMobileOpen(false)}
+                      onClick={scheduleMobileDrawerClose}
                     >
                       {formatTitleCase(t("nav.dashboard"), locale)}
                     </Link>
                     <Link
                       href="/app/account/overview"
                       className={HEADER_SECONDARY_ACTION_CLASS}
-                      onClick={() => setMobileOpen(false)}
+                      onClick={scheduleMobileDrawerClose}
                     >
                       {formatTitleCase(t("nav.account"), locale)}
                     </Link>
                     <SignOutButton
                       className="mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
-                      onBeforeSignOut={() => setMobileOpen(false)}
+                      onBeforeSignOut={scheduleMobileDrawerClose}
                       redirectTo={withMarketingLocale(locale, "/login")}
                     />
                   </>
@@ -1215,19 +1218,19 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                     <Link
                       href={resumeStudyingCta?.href ?? "/app"}
                       className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
-                      onClick={() => setMobileOpen(false)}
+                      onClick={scheduleMobileDrawerClose}
                     >
                       {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                     </Link>
-                    <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS} onClick={() => setMobileOpen(false)}>
+                    <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS} onClick={scheduleMobileDrawerClose}>
                       {formatTitleCase(t("nav.dashboard"), locale)}
                     </Link>
-                    <Link href="/app/account/overview" className={HEADER_SECONDARY_ACTION_CLASS} onClick={() => setMobileOpen(false)}>
+                    <Link href="/app/account/overview" className={HEADER_SECONDARY_ACTION_CLASS} onClick={scheduleMobileDrawerClose}>
                       {formatTitleCase(t("nav.account"), locale)}
                     </Link>
                     <SignOutButton
                       className="mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
-                      onBeforeSignOut={() => setMobileOpen(false)}
+                      onBeforeSignOut={scheduleMobileDrawerClose}
                       redirectTo={withMarketingLocale(locale, "/login")}
                     />
                   </>
@@ -1238,7 +1241,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                       className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
                       onClick={() => {
                         closeMegaBeforeAuthNav();
-                        setMobileOpen(false);
+                        scheduleMobileDrawerClose();
                       }}
                     >
                       {formatTitleCase(t("nav.pricing"), locale)}
@@ -1246,20 +1249,20 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                     <Link
                       href="/app"
                       className={HEADER_SECONDARY_ACTION_CLASS}
-                      onClick={() => setMobileOpen(false)}
+                      onClick={scheduleMobileDrawerClose}
                     >
                       {formatTitleCase(t("nav.dashboard"), locale)}
                     </Link>
                     <Link
                       href="/app/account/overview"
                       className={HEADER_SECONDARY_ACTION_CLASS}
-                      onClick={() => setMobileOpen(false)}
+                      onClick={scheduleMobileDrawerClose}
                     >
                       {formatTitleCase(t("nav.account"), locale)}
                     </Link>
                     <SignOutButton
                       className="mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
-                      onBeforeSignOut={() => setMobileOpen(false)}
+                      onBeforeSignOut={scheduleMobileDrawerClose}
                       redirectTo={withMarketingLocale(locale, "/login")}
                     />
                   </>

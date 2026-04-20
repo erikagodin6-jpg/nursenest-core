@@ -26,11 +26,13 @@ export function HomeHeroScreenshotSection() {
 
   return (
     <section
-      className="border-b border-[var(--header-nav-border)] bg-[var(--page-bg)] pt-6 md:pt-8"
+      id="home-hero-product-carousel"
+      className="border-b border-[var(--header-nav-border)] bg-[var(--page-bg)] pt-[var(--nn-rhythm-mobile-section-y)] md:pt-[var(--nn-rhythm-shell-y)]"
       aria-label={t("components.homeConversionSections.platformCarouselHeading")}
+      aria-describedby="home-conversion-hero-heading"
       data-testid="home-hero-screenshot-section"
     >
-      <div className="nn-section-shell pb-4 sm:pb-5 md:pb-6">
+      <div className="nn-section-shell pb-[var(--nn-rhythm-shell-y)]">
         <div className="mx-auto mb-5 max-w-2xl text-center md:mb-6">
           <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
             {formatSentenceCase(t("pages.home.carouselHandoff.kicker"), locale)}

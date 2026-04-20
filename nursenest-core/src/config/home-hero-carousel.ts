@@ -7,7 +7,7 @@
  *   `…/screenshot{N}-1200w.webp`, `…/screenshot{N}-768w.webp`, `…/screenshot{N}-480w.webp`
  * Same bucket path prefix as PNG (typically CDN root). If WebP objects are missing, the UI falls back to PNG.
  *
- * Slide copy (title, caption, alt) is loaded via `buildHomepageHeroSlides(t)` and marketing i18n keys.
+ * Slide copy (label, title, caption, alt) is loaded via `buildHomepageHeroSlides(t)` and marketing i18n keys.
  * This module keeps only non-localized metadata (URLs, object keys).
  */
 export const HOME_HERO_CDN_BASE_URL = "https://nursenest-images.tor1.cdn.digitaloceanspaces.com" as const;

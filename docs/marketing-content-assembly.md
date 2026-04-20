@@ -17,6 +17,15 @@ With `BASE_URL` set, `scripts/verify-deploy-health.mjs` supports:
 
 Production cron (`.github/workflows/production-public-health-watch.yml`) enables marketing sentinels when the verify base URL secret is configured.
 
+## Playwright (local / pre-deploy)
+
+From `nursenest-core`:
+
+- `npm run qa:marketing-sentinel` — `tests/e2e/public/marketing-production-sentinel.spec.ts` (placeholders, duplicate headers, `/admin` redirect).
+- `npm run qa:pre-deploy:public` — includes the same sentinel spec plus `pre-deploy-regression.spec.ts`.
+
+Requires a running app on `BASE_URL` or allow Playwright to start `next dev` (default `localhost:3000`).
+
 ## Homepage body order (client)
 
 See `src/components/marketing/home-restored-client.tsx`: hero → hero screenshot carousel (with handoff copy) → how-it-works → proof stack → global hub strip (`introAfterHero`) → pathways → FAQ → final CTA.

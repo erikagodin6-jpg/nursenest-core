@@ -21,8 +21,10 @@
  *
  * Output is grouped into tiers (per BASE_URL / ORIGIN_BASE_URL):
  *   Tier 1 — platform liveness + routing readiness (/healthz, /readyz)
+ *   Tier 1b — Next static asset MIME probe when VERIFY_NEXT_STATIC=1
  *   Tier 2 — canonical homepage (GET /) when VERIFY_CANONICAL_HOME=1
  *   Tier 3 — deeper API health (/api/health, optional /api/health/ready)
+ *   Tier 4 — marketing HTML sentinels (/, /pricing, /login) when VERIFY_MARKETING_SENTINELS=1
  *
  * Exit: 0 = all checks passed, non-zero = failure.
  */

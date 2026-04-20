@@ -25,11 +25,16 @@ const REQUIRED_PAGE_KEYS = [
   "pages.home.hero.headline",
   "pages.home.hero.subheading",
   "pages.home.hero.eyebrowBrand",
+  "pages.home.carouselHandoff.kicker",
+  "pages.home.carouselHandoff.lead",
+  "pages.home.howItWorks.kicker",
+  "pages.home.howItWorks.title",
+  "pages.home.howItWorks.subtitle",
   "pages.home.globalRegions.title",
   "pages.home.globalRegions.subtitle",
   "pages.home.metaTitleCA",
   "pages.home.metaDescriptionCA",
-  /** Pricing client must never fall back to hardcoded English “Loading pricing…” (deploy sentinels). */
+  /** Non-empty i18n for pricing loading state (deploy sentinels reject stuck English “Loading pricing…”). */
   "pages.pricing.rowPlansLoading",
 ];
 

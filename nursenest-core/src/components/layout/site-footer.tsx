@@ -18,7 +18,8 @@ import {
   publicExamPrepHubDestinations,
   publicMarketingExploreDestinations,
 } from "@/lib/navigation/canonical-destinations";
-import { isStaffRole } from "@/lib/auth/staff-roles";
+import { ADMIN_DASHBOARD_HREF } from "@/lib/auth/admin-dashboard-link";
+import { isStaffRole, shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { CONTINUE_STUDYING_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
@@ -98,9 +99,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
   const pnRoleLabel = getNursingRoleLabel({ country: region, role: "PN" });
   const user = session?.user;
   const isSignedIn = Boolean(user);
-  const isAdmin = Boolean(
-    serverHasStaffSession === true || (user?.role && isStaffRole(user.role)),
-  );
+  const isAdmin = shouldShowAdminDashboardNav({ serverHasStaffSession, sessionRole: user?.role });
   const isEntitledLearner =
     Boolean(user?.role && !isStaffRole(user.role)) && activeNav.entitlement === "entitled";
   const learnerPathwayId = learnerMarketingPathwayIdFromSession(session?.user ?? null);
@@ -214,7 +213,8 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                     <>
                       <li>
                         <Link
-                          href="/admin"
+                          href={ADMIN_DASHBOARD_HREF}
+                          prefetch={false}
                           className="nn-footer-link break-words text-sm leading-relaxed [overflow-wrap:anywhere]"
                         >
                           {formatTitleCase("Admin", locale)}
@@ -323,14 +323,14 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
           </Link>
         </div>
 
-        <div className="mb-6 sm:mb-8">
-          <EmailSignupBanner />
-        </div>
-
         <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_5%,var(--footer-bg))] px-4 py-5 md:flex-row">
           <div className="text-sm text-[var(--footer-muted)]">
             © {new Date().getFullYear()} {t("brand.nurseNest")}. {t("footer.rights")}
           </div>
+        </div>
+
+        <div className="mb-6 mt-6 sm:mb-8">
+          <EmailSignupBanner />
         </div>
 
         <div className="mx-auto mt-4 max-w-3xl text-center text-xs leading-relaxed text-[var(--footer-muted)]">

@@ -63,7 +63,7 @@ export function HomeTrustFearsSection({ questionCount, registeredLearners }: Pro
       aria-labelledby="home-trust-fears-heading"
       data-testid="section-home-trust-fears"
     >
-      <div className="nn-section-shell py-10 sm:py-11">
+      <div className="nn-section-shell">
         <FadeUp whenInView once viewMargin="-28px" className="mx-auto mb-8 max-w-2xl text-center">
           <p className="nn-marketing-eyebrow text-[var(--semantic-brand)]">
             {formatTitleCase(t("pages.home.trustFears.eyebrow"), locale)}

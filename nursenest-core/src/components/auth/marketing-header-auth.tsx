@@ -9,13 +9,12 @@ import { useTheme } from "next-themes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
-import { isStaffRole } from "@/lib/auth/staff-roles";
+import { ADMIN_DASHBOARD_HREF } from "@/lib/auth/admin-dashboard-link";
+import { shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { getNavChromeStyle } from "@/lib/theme/nav-chrome";
 import { UserFeedbackAccountMenuItem } from "@/components/feedback/user-feedback-account-menu-item";
 import { SignOutButton } from "@/components/auth/sign-out-button";
-
-const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
 
 const SIGN_IN_CLASS =
   "nn-marketing-body-sm inline-flex items-center rounded-md px-3 py-2 font-medium tracking-normal text-[color:var(--nn-nav-fg,var(--nav-link))] transition-colors duration-150 hover:bg-[color:var(--nn-nav-hover-bg,var(--nav-hover))] hover:text-[color:var(--nn-nav-hover-fg,var(--nav-link-hover))]";
@@ -48,7 +47,12 @@ function useGuestMarketingSignupHref(localizeHref: (href: string) => string) {
   }, [localizeHref, pathname]);
 }
 
-export function MarketingHeaderAuthDesktop() {
+export function MarketingHeaderAuthDesktop({
+  serverHasStaffSession,
+}: {
+  /** Same DB-backed hint as {@link SiteHeader} when this cluster is wired into a layout. */
+  serverHasStaffSession?: boolean;
+} = {}) {
   const { t, locale } = useMarketingI18n();
   const localizeHref = useLocalizeHref();
   const guestMarketingSignupHref = useGuestMarketingSignupHref(localizeHref);
@@ -93,7 +97,7 @@ export function MarketingHeaderAuthDesktop() {
 
   const user = session.user;
   const label = user.email ?? user.name ?? (user.id ? `${user.id.slice(0, 8)}…` : t("nav.account"));
-  const admin = isStaffRole(user.role);
+  const admin = shouldShowAdminDashboardNav({ serverHasStaffSession, sessionRole: user.role });
 
   return (
     <div style={navChromeStyle} className="relative inline-block max-w-full" ref={ref}>
@@ -133,10 +137,11 @@ export function MarketingHeaderAuthDesktop() {
           </Link>
           {admin ? (
             <Link
-              href={ADMIN_DASHBOARD_ROUTE}
+              href={ADMIN_DASHBOARD_HREF}
+              prefetch={false}
               className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] [overflow-wrap:anywhere] hover:bg-[var(--nav-hover)]"
               role="menuitem"
-              onClick={() => setOpen(false)}
+              onClick={() => window.setTimeout(() => setOpen(false), 0)}
             >
               {formatTitleCase(t("nav.admin"), locale)}
             </Link>
@@ -160,7 +165,13 @@ export function MarketingHeaderAuthDesktop() {
 /**
  * Mobile drawer account block (optional; header bar uses {@link MarketingHeaderAuthDesktop} at all sizes).
  */
-export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => void }) {
+export function MarketingHeaderAuthMobile({
+  onNavigate,
+  serverHasStaffSession,
+}: {
+  onNavigate: () => void;
+  serverHasStaffSession?: boolean;
+}) {
   const { t, locale } = useMarketingI18n();
   const localizeHref = useLocalizeHref();
   const guestMarketingSignupHref = useGuestMarketingSignupHref(localizeHref);
@@ -197,7 +208,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
 
   const user = session.user;
   const label = user.email ?? user.name ?? `${t("account.idPrefix")} ${user.id?.slice(0, 8)}…`;
-  const admin = isStaffRole(user.role);
+  const admin = shouldShowAdminDashboardNav({ serverHasStaffSession, sessionRole: user.role });
 
   return (
     <div className="mt-4 space-y-2 border-t border-[var(--header-nav-border)] pt-4">
@@ -215,7 +226,8 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
       </Link>
       {admin ? (
         <Link
-          href={ADMIN_DASHBOARD_ROUTE}
+          href={ADMIN_DASHBOARD_HREF}
+          prefetch={false}
           className="block rounded-xl border border-primary/20 bg-primary/5 px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-primary hover:bg-primary/10"
           onClick={onNavigate}
         >

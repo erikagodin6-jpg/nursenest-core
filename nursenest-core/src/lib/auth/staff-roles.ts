@@ -19,6 +19,18 @@ export function isAdminRole(role: UserRole | string | null | undefined): boolean
 
 export const isStaffRole = isAdminRole;
 
+/**
+ * Marketing / shell nav only — server RBAC unchanged.
+ * Prefer the DB-backed layout hint when the JWT `role` claim lags after promotion/demotion.
+ */
+export function shouldShowAdminDashboardNav(options: {
+  serverHasStaffSession?: boolean | null;
+  sessionRole?: string | null;
+}): boolean {
+  if (options.serverHasStaffSession === true) return true;
+  return Boolean(options.sessionRole && isStaffRole(options.sessionRole));
+}
+
 export function staffTierFromRole(role: UserRole): StaffTier {
   switch (role) {
     case UserRole.SUPER_ADMIN:

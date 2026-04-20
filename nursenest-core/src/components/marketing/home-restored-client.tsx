@@ -28,10 +28,10 @@ const HomeHeroScreenshotSection = dynamic(
   {
     loading: () => (
       <div
-        className="border-b border-[var(--header-nav-border)] bg-[var(--page-bg)]"
+        className="border-b border-[var(--header-nav-border)] bg-[var(--page-bg)] pt-[var(--nn-rhythm-mobile-section-y)] md:pt-[var(--nn-rhythm-shell-y)]"
         aria-hidden
       >
-        <div className="nn-section-shell py-3 sm:py-4 md:py-5">
+        <div className="nn-section-shell pb-[var(--nn-rhythm-shell-y)]">
           {/* Reserve the compact 4:3 product-card footprint to avoid CLS while the chunk loads. */}
           <div className="mx-auto aspect-[4/3] w-full max-w-2xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--semantic-panel-muted)]" />
         </div>
@@ -145,7 +145,7 @@ export default function HomeRestoredClient({
           aria-label={t("pages.home.audienceBalance.ariaLabel")}
           data-testid="section-home-audience-balance"
         >
-          <div className="nn-section-shell py-9 sm:py-10">
+          <div className="nn-section-shell">
             <div className="mx-auto mb-8 max-w-2xl text-center md:mb-9">
               <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
                 {formatSentenceCase(t("pages.home.pathwaysSection.kicker"), locale)}

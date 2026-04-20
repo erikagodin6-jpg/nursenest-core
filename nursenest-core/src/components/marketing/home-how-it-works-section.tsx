@@ -64,8 +64,11 @@ export function HomeHowItWorksSection() {
       data-testid="section-how-it-works"
     >
       <div className="nn-section-shell">
-        <FadeUp whenInView once viewMargin="-32px" className="mx-auto mb-12 max-w-2xl text-center">
-          <h2 id="home-how-heading" className="nn-marketing-h2 text-balance">
+        <FadeUp whenInView once viewMargin="-32px" className="mx-auto mb-9 max-w-2xl text-center md:mb-10">
+          <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+            {formatSentenceCase(t("pages.home.howItWorks.kicker"), locale)}
+          </p>
+          <h2 id="home-how-heading" className="nn-marketing-h2 mt-2 text-balance">
             {formatTitleCase(t("pages.home.howItWorks.title"), locale)}
           </h2>
           <p className="nn-marketing-body mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-[var(--theme-muted-text)]">

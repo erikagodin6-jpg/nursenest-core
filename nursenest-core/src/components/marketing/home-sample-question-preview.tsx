@@ -28,11 +28,11 @@ export function HomeSampleQuestionPreview() {
 
   return (
     <section
-      className="border-b border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_06%,var(--page-bg))]"
+      className="nn-section-block border-b border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_06%,var(--page-bg))]"
       aria-labelledby="home-sample-question-heading"
       data-testid="section-home-sample-question"
     >
-      <div className="nn-section-shell py-10 sm:py-12">
+      <div className="nn-section-shell">
         <div className="mx-auto max-w-3xl">
           <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--semantic-info)]">
             {formatTitleCase(t("pages.home.sampleQuestion.sectionKicker"), locale)}

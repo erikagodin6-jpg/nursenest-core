@@ -39,6 +39,11 @@ test("proxy sets x-nn-admin-path for /admin and /api/admin (RBAC header for guar
   assert.match(proxySrc, /x-nn-admin-path/);
   assert.match(proxySrc, /x-nn-request-pathname/);
   assert.match(proxySrc, /x-nn-request-url/);
+  assert.match(
+    proxySrc,
+    /Some auth middleware "continue" responses omit `x-middleware-next: 1`/,
+    "admin continue must still forward pathname headers when merge is a no-op",
+  );
   assert.match(proxySrc, /startsWith\("\/admin"\)/);
 });
 
@@ -86,18 +91,18 @@ test("admin dashboard href constant is /admin", () => {
 
 test("marketing header: staff see Admin link to /admin; learners use Dashboard to /app only", () => {
   const header = readFileSync(join(dir, "components", "layout", "site-header.tsx"), "utf8");
-  assert.match(header, /const ADMIN_DASHBOARD_ROUTE = "\/admin"/);
-  assert.match(header, /href=\{ADMIN_DASHBOARD_ROUTE\}/);
+  assert.match(header, /ADMIN_DASHBOARD_HREF/);
+  assert.match(header, /href=\{ADMIN_DASHBOARD_HREF\}/);
   assert.match(header, /isAdminAuthenticated/);
-  assert.match(header, /isStaffRole\(user\.role\)/);
+  assert.match(header, /shouldShowAdminDashboardNav/);
   assert.match(header, /isLearnerRole/);
   assert.match(header, /<Link href="\/app"/);
 });
 
 test("learner shell user bar: admin link when JWT staff or server staff hint", () => {
   const bar = readFileSync(join(dir, "components", "auth", "learner-shell-user-bar.tsx"), "utf8");
-  assert.match(bar, /const ADMIN_DASHBOARD_ROUTE = "\/admin"/);
-  assert.match(bar, /href=\{ADMIN_DASHBOARD_ROUTE\}/);
-  assert.match(bar, /serverHasStaffSession === true \|\| isStaffRole\(user\.role\)/);
+  assert.match(bar, /ADMIN_DASHBOARD_HREF/);
+  assert.match(bar, /href=\{ADMIN_DASHBOARD_HREF\}/);
+  assert.match(bar, /shouldShowAdminDashboardNav/);
   assert.match(bar, /\{admin \? \(/);
 });

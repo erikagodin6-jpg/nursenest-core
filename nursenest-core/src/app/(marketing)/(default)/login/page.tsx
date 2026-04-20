@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { MarketingLoginPage } from "@/components/marketing/marketing-login-page";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -33,6 +32,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function LoginPage() {
-  const locale = await getMarketingLocaleForDefaultRoute();
-  return <MarketingLoginPage locale={locale} />;
+  /**
+   * Unprefixed marketing layout pins `MarketingI18nProvider` + `pages` shards to English (`DEFAULT_MARKETING_LOCALE`).
+   * Using the locale cookie here caused SSR/client drift and missing keys vs `<main>` shard merges.
+   */
+  return <MarketingLoginPage locale={DEFAULT_MARKETING_LOCALE} />;
 }
