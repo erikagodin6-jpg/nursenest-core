@@ -7,6 +7,7 @@ import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { MARKETING_HOME_FAQ_JSONLD } from "@/lib/seo/marketing-home-faq-schema";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { HomeRestoredWithDeferredStats } from "@/components/marketing/home-restored-with-deferred-stats.server";
+import { GlobalMarketingHomeIntro } from "@/components/marketing/global-marketing-home-intro.server";
 import { MarketingHomeEmergencyFallback } from "@/components/marketing/marketing-home-emergency-fallback";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -309,6 +310,7 @@ export default async function HomePage() {
                 <BreadcrumbTrail items={crumbs} />
               </div>
             ) : null}
+            <GlobalMarketingHomeIntro />
             <HomeRestoredWithDeferredStats
               skipOptionalDbReads={skipOptionalDbReads}
               publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}

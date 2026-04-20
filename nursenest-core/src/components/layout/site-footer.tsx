@@ -23,6 +23,8 @@ import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { SiteFooterFeedbackTrigger } from "@/components/layout/site-footer-feedback-trigger";
 import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 import { useActiveNavContext } from "@/lib/navigation/use-active-nav-context";
+import { useMarketingChromeCountry } from "@/components/marketing/marketing-country-chrome-context";
+import { getCountryNavConfig } from "@/lib/marketing/countries/registry";
 
 function formatFooterNode(children: React.ReactNode, locale: string): React.ReactNode {
   return typeof children === "string" ? formatTitleCase(children, locale) : children;
@@ -62,6 +64,8 @@ export function SiteFooter() {
   const { theme } = useTheme();
   const navChromeStyle = getNavChromeStyle(theme);
   const { region } = useNursenestRegion();
+  const marketingChromeCountry = useMarketingChromeCountry();
+  const countryNav = getCountryNavConfig(marketingChromeCountry);
   const examHubs = publicExamPrepHubDestinations(region);
   const explore = publicMarketingExploreDestinations(region);
   const pnRoleLabel = getNursingRoleLabel({ country: region, role: "PN" });
@@ -108,7 +112,7 @@ export function SiteFooter() {
               </p>
             </div>
 
-            <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-5">
               <div className="space-y-4">
                 <div className="flex items-center bg-transparent">
                   <SiteBrandLogoMark variant="footer" logoVariant="leaf" />
@@ -160,6 +164,19 @@ export function SiteFooter() {
                   <li>
                     <FLink href={explore.tools}>Tools</FLink>
                   </li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">
+                  {formatTitleCase(`Featured · ${countryNav.regionLabel}`, locale)}
+                </h3>
+                <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
+                  {countryNav.footerFeatured.map((item) => (
+                    <li key={item.href}>
+                      <FLink href={item.href}>{item.label}</FLink>
+                    </li>
+                  ))}
                 </ul>
               </div>
 

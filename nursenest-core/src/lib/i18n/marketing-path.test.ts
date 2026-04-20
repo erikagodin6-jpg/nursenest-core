@@ -35,6 +35,11 @@ test("withMarketingLocale does not prefix global expansion /exams/ hubs (avoid /
   assert.equal(withMarketingLocale("fr", "/exams/india"), "/exams/india");
 });
 
+test("withMarketingLocale does not prefix top-level country marketing hubs (Philippines, Middle East)", () => {
+  assert.equal(withMarketingLocale("tl", "/philippines"), "/philippines");
+  assert.equal(withMarketingLocale("fr", "/middle-east/dha-exam"), "/middle-east/dha-exam");
+});
+
 test("withMarketingLocale does not prefix subscriber app or admin (avoid /fr/app/... marketing tree)", () => {
   assert.equal(withMarketingLocale("fr", "/app/lessons"), "/app/lessons");
   assert.equal(withMarketingLocale("de", "/app"), "/app");

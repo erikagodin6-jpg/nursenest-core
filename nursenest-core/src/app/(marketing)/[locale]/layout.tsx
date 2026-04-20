@@ -1,4 +1,8 @@
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
+import { MarketingCountryChromeProvider } from "@/components/marketing/marketing-country-chrome-context";
+import { getEffectiveMarketingCountry } from "@/lib/marketing/get-effective-country";
+import { readOptionalMarketingRegionToggleForCountry } from "@/lib/marketing/read-optional-marketing-region-cookie.server";
 import { MarketingLocaleUrlSync } from "@/components/i18n/marketing-locale-url-sync";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -8,9 +12,9 @@ import { MarketingMainI18nShards } from "@/components/i18n/marketing-main-i18n-s
 import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { assertMarketingLayoutMessagesIntegrity } from "@/lib/marketing-i18n/marketing-layout-message-integrity";
 import { getMarketingLocaleLayoutChromePayload } from "@/lib/marketing-i18n/marketing-layout-chrome-messages.server";
-import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { MarketingMainErrorBoundary } from "@/components/marketing/marketing-main-error-boundary";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
+import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
@@ -61,25 +65,36 @@ export default async function MarketingLocaleLayout({
     fallbackMessages,
   });
 
+  let marketingRequestPath = "/";
+  try {
+    marketingRequestPath = (await headers()).get("x-nn-request-pathname")?.trim() ?? "/";
+  } catch {
+    marketingRequestPath = "/";
+  }
+  const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry();
+  const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingRegionCookie);
+
   return (
     <MarketingI18nProvider key={locale} locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
       <NursenestRegionRoot serverRegion={serverRegion}>
-        <MarketingLocaleUrlSync locale={locale} />
-        <OrganizationJsonLd />
-        <WebSiteJsonLd />
-        <MarketingFeedbackShell>
-          <div className="nn-marketing-surface flex min-h-screen flex-col">
-            <SiteHeader />
-            <main className="flex-1">
-              <MarketingMainI18nShards locale={locale}>
-                <MarketingMainErrorBoundary name="marketing_locale_main">
-                  <PageTransitionShell>{children}</PageTransitionShell>
-                </MarketingMainErrorBoundary>
-              </MarketingMainI18nShards>
-            </main>
-            <SiteFooter />
-          </div>
-        </MarketingFeedbackShell>
+        <MarketingCountryChromeProvider country={marketingCountry}>
+          <MarketingLocaleUrlSync locale={locale} />
+          <OrganizationJsonLd />
+          <WebSiteJsonLd />
+          <MarketingFeedbackShell>
+            <div className="nn-marketing-surface flex min-h-screen flex-col">
+              <SiteHeader />
+              <main className="flex-1">
+                <MarketingMainI18nShards locale={locale}>
+                  <MarketingMainErrorBoundary name="marketing_locale_main">
+                    <PageTransitionShell>{children}</PageTransitionShell>
+                  </MarketingMainErrorBoundary>
+                </MarketingMainI18nShards>
+              </main>
+              <SiteFooter />
+            </div>
+          </MarketingFeedbackShell>
+        </MarketingCountryChromeProvider>
       </NursenestRegionRoot>
     </MarketingI18nProvider>
   );

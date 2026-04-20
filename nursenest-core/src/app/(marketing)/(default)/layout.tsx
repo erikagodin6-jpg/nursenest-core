@@ -1,4 +1,7 @@
 import { headers } from "next/headers";
+import { MarketingCountryChromeProvider } from "@/components/marketing/marketing-country-chrome-context";
+import { getEffectiveMarketingCountry } from "@/lib/marketing/get-effective-country";
+import { readOptionalMarketingRegionToggleForCountry } from "@/lib/marketing/read-optional-marketing-region-cookie.server";
 import { MarketingMainI18nShards } from "@/components/i18n/marketing-main-i18n-shards";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -221,6 +224,15 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         }
       }
 
+      let marketingRequestPath = "/";
+      try {
+        marketingRequestPath = (await headers()).get("x-nn-request-pathname")?.trim() ?? "/";
+      } catch {
+        marketingRequestPath = "/";
+      }
+      const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry();
+      const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingRegionCookie);
+
       return (
         <MarketingI18nProvider
           key={resolvedLocale}
@@ -229,24 +241,26 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
           fallbackMessages={fallbackMessages}
         >
           <NursenestRegionRoot serverRegion={serverRegion}>
-            <OrganizationJsonLd />
-            <WebSiteJsonLd />
-            <MarketingFeedbackShell>
-              <div className="nn-marketing-surface flex min-h-screen flex-col">
-                <SiteHeader />
-                <PathwayLessonProgressRefreshListener />
-                <main className="flex min-h-0 flex-1 flex-col">
-                  {shouldLayerMainPageShards() ? (
-                    <MarketingMainI18nShards locale={resolvedLocale}>
+            <MarketingCountryChromeProvider country={marketingCountry}>
+              <OrganizationJsonLd />
+              <WebSiteJsonLd />
+              <MarketingFeedbackShell>
+                <div className="nn-marketing-surface flex min-h-screen flex-col">
+                  <SiteHeader />
+                  <PathwayLessonProgressRefreshListener />
+                  <main className="flex min-h-0 flex-1 flex-col">
+                    {shouldLayerMainPageShards() ? (
+                      <MarketingMainI18nShards locale={resolvedLocale}>
+                        <PageTransitionShell>{children}</PageTransitionShell>
+                      </MarketingMainI18nShards>
+                    ) : (
                       <PageTransitionShell>{children}</PageTransitionShell>
-                    </MarketingMainI18nShards>
-                  ) : (
-                    <PageTransitionShell>{children}</PageTransitionShell>
-                  )}
-                </main>
-                <SiteFooter />
-              </div>
-            </MarketingFeedbackShell>
+                    )}
+                  </main>
+                  <SiteFooter />
+                </div>
+              </MarketingFeedbackShell>
+            </MarketingCountryChromeProvider>
           </NursenestRegionRoot>
         </MarketingI18nProvider>
       );

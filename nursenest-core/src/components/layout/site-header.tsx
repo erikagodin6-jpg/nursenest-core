@@ -33,6 +33,7 @@ import { formatEyebrow, formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { CountrySelector } from "@/components/layout/global-context-switcher";
+import { MarketingCountryHubStrip } from "@/components/marketing/marketing-country-hub-strip";
 const ADMIN_DASHBOARD_ROUTE = "/admin" as const;
 
 /** Primary filled header CTAs — white label on theme primary fill for consistent contrast. */
@@ -365,6 +366,7 @@ export function SiteHeader() {
 
   const marketingDesktopUtilityControls = (
     <div className="flex shrink-0 items-center gap-1.5 xl:gap-2">
+      <MarketingCountryHubStrip />
       <div className="relative shrink-0" ref={desktopCountryRef}>
         <button
           type="button"

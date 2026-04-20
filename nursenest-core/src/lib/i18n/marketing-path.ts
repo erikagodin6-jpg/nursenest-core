@@ -1,6 +1,7 @@
 import { isExamHubMarketingPath, isExpansionExamMarketingPath } from "@/lib/i18n/exam-hub-path";
 import { DEFAULT_MARKETING_LOCALE, isMarketingLocaleCode } from "@/lib/i18n/marketing-locale-policy";
 import { stripMarketingLocalePrefix } from "@/lib/i18n/marketing-locale-prefix";
+import { isMarketingCountryEntryPath } from "@/lib/marketing/marketing-country-hub-path";
 
 export { stripMarketingLocalePrefix } from "@/lib/i18n/marketing-locale-prefix";
 
@@ -23,6 +24,7 @@ export function withMarketingLocale(locale: string, href: string): string {
    */
   if (path.startsWith("/app") || path.startsWith("/admin")) return path;
   if (isExamHubMarketingPath(path) || isExpansionExamMarketingPath(path)) return path;
+  if (isMarketingCountryEntryPath(path)) return path;
   if (path === "/") return `/${locale}`;
   return `/${locale}${path}`;
 }
