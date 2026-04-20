@@ -19,6 +19,24 @@ export function resolveStandaloneServerPath(root = packageRoot) {
   return getStandaloneServerCandidates(root).find((candidate) => existsSync(candidate)) ?? null;
 }
 
+/**
+ * Every `server.js` path present under `.next/standalone/**` needs its own
+ * sibling `.next/static` (Next resolves hashed assets next to the server file).
+ * Monorepo builds can emit both `standalone/nursenest-core/server.js` and
+ * `standalone/server.js`; syncing only one copy manifests as `/_next/static/*` → HTML.
+ */
+export function getStandaloneStaticSyncTargets(root = packageRoot) {
+  const targets = [];
+  for (const serverPath of getStandaloneServerCandidates(root)) {
+    if (!existsSync(serverPath)) continue;
+    targets.push({
+      serverPath,
+      destStatic: path.join(path.dirname(serverPath), ".next", "static"),
+    });
+  }
+  return targets;
+}
+
 export function verifyStandaloneArtifact(root = packageRoot) {
   const standaloneServerPath = resolveStandaloneServerPath(root);
   if (!standaloneServerPath) {

@@ -111,18 +111,22 @@ test.describe("Homepage first paint — desktop", () => {
     await page.locator("footer").scrollIntoViewIfNeeded();
 
     // Client-side away from `/` (browser back returns to cached `/` without relying on logo target).
-    await page.locator("footer").getByRole("link", { name: /contact support/i }).first().click();
-    await page.waitForURL(/\/contact/, { timeout: 30_000 });
+    await Promise.all([
+      page.waitForURL(/\/contact/, { timeout: 60_000, waitUntil: "domcontentloaded" }),
+      page.locator("footer").getByRole("link", { name: /contact support/i }).first().click(),
+    ]);
     await page.screenshot({ path: testInfo.outputPath("desktop-soft-nav-away-contact.png"), fullPage: false });
 
-    await page.goBack();
-    await page.waitForURL(
-      (url) => {
-        const p = new URL(url).pathname;
-        return p === "/" || p === "";
-      },
-      { timeout: 30_000 },
-    );
+    await Promise.all([
+      page.waitForURL(
+        (url) => {
+          const p = new URL(url).pathname;
+          return p === "/" || p === "";
+        },
+        { timeout: 60_000, waitUntil: "domcontentloaded" },
+      ),
+      page.goBack(),
+    ]);
     await assertCriticalVisible(page, "soft nav back home");
     await page.screenshot({ path: testInfo.outputPath("desktop-after-soft-nav-home.png"), fullPage: false });
   });

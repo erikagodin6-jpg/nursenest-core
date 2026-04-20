@@ -28,6 +28,7 @@ function createTempScriptRoot(prefix, scriptNames) {
 const STARTUP_RUNTIME_SCRIPTS = [
   "start-standalone.mjs",
   "start-standalone-runtime.cjs",
+  "resolve-bootstrap-mode.mjs",
   "standalone-bootstrap-probe-pathname.mjs",
   "standalone-startup-watchdog-preload.cjs",
   "standalone-startup-watchdog-preload-shared.cjs",
@@ -184,6 +185,78 @@ test("next config keeps standalone output enabled", () => {
   assert.match(nextConfig, /output:\s*"standalone"/);
 });
 
+test("ensure-standalone-static copies .next/static beside nested standalone server.js", async () => {
+  const tempRoot = createTempScriptRoot("nn-ensure-standalone-static-", [
+    "ensure-standalone-static.mjs",
+    "verify-standalone-artifact.mjs",
+  ]);
+  const standaloneEntry = path.join(tempRoot, ".next", "standalone", "nursenest-core", "server.js");
+  fs.mkdirSync(path.dirname(standaloneEntry), { recursive: true });
+  fs.writeFileSync(standaloneEntry, "module.exports = {};\n", "utf8");
+
+  const srcStatic = path.join(tempRoot, ".next", "static");
+  fs.mkdirSync(path.join(srcStatic, "css"), { recursive: true });
+  fs.mkdirSync(path.join(srcStatic, "chunks"), { recursive: true });
+  fs.mkdirSync(path.join(srcStatic, "media"), { recursive: true });
+  fs.writeFileSync(path.join(srcStatic, "css", "app.css"), "body{}\n", "utf8");
+  fs.writeFileSync(path.join(srcStatic, "chunks", "main.js"), "export {}\n", "utf8");
+  fs.writeFileSync(path.join(srcStatic, "media", "x.woff2"), Buffer.from([0, 1, 2, 3]), "utf8");
+
+  try {
+    const result = spawnSync(process.execPath, [path.join(tempRoot, "scripts", "ensure-standalone-static.mjs")], {
+      encoding: "utf8",
+      timeout: 5000,
+      cwd: tempRoot,
+    });
+    assert.equal(result.status, 0, result.stderr + result.stdout);
+    const destCss = path.join(tempRoot, ".next", "standalone", "nursenest-core", ".next", "static", "css", "app.css");
+    const destJs = path.join(tempRoot, ".next", "standalone", "nursenest-core", ".next", "static", "chunks", "main.js");
+    const destFont = path.join(tempRoot, ".next", "standalone", "nursenest-core", ".next", "static", "media", "x.woff2");
+    assert.ok(fs.existsSync(destCss));
+    assert.ok(fs.existsSync(destJs));
+    assert.ok(fs.existsSync(destFont));
+    assert.match(result.stdout, /\[ensure-standalone-static\] synced/);
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
+
+test("ensure-standalone-static copies .next/static beside both nested and top-level standalone server.js", async () => {
+  const tempRoot = createTempScriptRoot("nn-ensure-standalone-static-dual-", [
+    "ensure-standalone-static.mjs",
+    "verify-standalone-artifact.mjs",
+  ]);
+  const nestedServer = path.join(tempRoot, ".next", "standalone", "nursenest-core", "server.js");
+  const topServer = path.join(tempRoot, ".next", "standalone", "server.js");
+  fs.mkdirSync(path.dirname(nestedServer), { recursive: true });
+  fs.mkdirSync(path.dirname(topServer), { recursive: true });
+  fs.writeFileSync(nestedServer, "module.exports = {};\n", "utf8");
+  fs.writeFileSync(topServer, "module.exports = {};\n", "utf8");
+
+  const srcStatic = path.join(tempRoot, ".next", "static");
+  fs.mkdirSync(path.join(srcStatic, "css"), { recursive: true });
+  fs.mkdirSync(path.join(srcStatic, "chunks"), { recursive: true });
+  fs.writeFileSync(path.join(srcStatic, "css", "app.css"), "body{}\n", "utf8");
+  fs.writeFileSync(path.join(srcStatic, "chunks", "main.js"), "export {}\n", "utf8");
+
+  try {
+    const result = spawnSync(process.execPath, [path.join(tempRoot, "scripts", "ensure-standalone-static.mjs")], {
+      encoding: "utf8",
+      timeout: 5000,
+      cwd: tempRoot,
+    });
+    assert.equal(result.status, 0, result.stderr + result.stdout);
+    const nestedCss = path.join(tempRoot, ".next", "standalone", "nursenest-core", ".next", "static", "css", "app.css");
+    const topCss = path.join(tempRoot, ".next", "standalone", ".next", "static", "css", "app.css");
+    assert.ok(fs.existsSync(nestedCss));
+    assert.ok(fs.existsSync(topCss));
+    const lines = result.stdout.trim().split("\n").filter((l) => l.includes("[ensure-standalone-static] synced"));
+    assert.equal(lines.length, 2);
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
+
 test("deploy build script verifies the standalone artifact without duplicating next build in build:deploy", () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
   assert.equal(pkg.scripts.build.includes("next build"), true);
@@ -199,6 +272,10 @@ test("deploy build script verifies the standalone artifact without duplicating n
   assert.match(
     pkg.scripts["build:deploy:full"],
     /npm run build && npm run verify:standalone-artifact && node scripts\/ensure-standalone-static\.mjs/,
+  );
+  assert.match(
+    pkg.scripts["build:deploy:full"],
+    /ensure-standalone-static\.mjs && node scripts\/post-build-prune\.mjs$/,
   );
   assert.equal(pkg.scripts.start, "node scripts/start-standalone.mjs");
 });
@@ -326,7 +403,10 @@ test("start-standalone exits fatally on readiness timeout with probe URL, timeou
 
   assert.equal(exitCode, 1, combined.join(""));
   assert.match(combined.join(""), /startup_watchdog handlers_init_failed/);
-  assert.match(combined.join(""), /probeUrl=http:\/\/127\.0\.0\.1:\d+\/api\/health/);
+  assert.match(
+    combined.join(""),
+    /probeUrl=http:\/\/127\.0\.0\.1:\d+\/_nn_bootstrap_ready_check__/,
+  );
   assert.match(combined.join(""), /readiness_fatal_(timeout|max_attempts)/);
   assert.match(combined.join(""), /FATAL: readiness watchdog/);
   assert.match(combined.join(""), /timeoutMs=300/);
