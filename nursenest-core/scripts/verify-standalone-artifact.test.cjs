@@ -194,9 +194,12 @@ test("deploy build script verifies the standalone artifact without duplicating n
   assert.equal(pkg.scripts["verify:standalone-artifact"], "node scripts/verify-standalone-artifact.mjs");
   assert.equal(
     pkg.scripts["build:deploy"],
-    "npm run verify:bootstrap-probe-pathname && npm run verify:standalone-artifact && node scripts/post-build-prune.mjs",
+    "npm run verify:bootstrap-probe-pathname && npm run build && npm run verify:standalone-artifact && node scripts/ensure-standalone-static.mjs && node scripts/post-build-prune.mjs",
   );
-  assert.match(pkg.scripts["build:deploy:full"], /npm run build && npm run verify:standalone-artifact/);
+  assert.match(
+    pkg.scripts["build:deploy:full"],
+    /npm run build && npm run verify:standalone-artifact && node scripts\/ensure-standalone-static\.mjs/,
+  );
   assert.equal(pkg.scripts.start, "node scripts/start-standalone.mjs");
 });
 

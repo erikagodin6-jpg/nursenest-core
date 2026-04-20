@@ -59,13 +59,18 @@ export function HomeConversionHero({
 
   return (
     <section
-      className="nn-gradient-safe nn-hero-branded nn-hero-branded--ambient-depth relative overflow-hidden border-b border-[var(--header-nav-border)]"
+      className="nn-gradient-safe nn-hero-branded nn-hero-branded--ambient-depth relative overflow-x-hidden border-b border-[var(--header-nav-border)]"
       data-testid="hero-section"
       aria-labelledby="home-conversion-hero-heading"
     >
       <div className="relative pt-10 pb-12 md:pt-12 md:pb-14">
         <div className="nn-section-shell">
-          <StaggerGroup className="mx-auto min-w-0 max-w-3xl space-y-6 lg:max-w-4xl" whenInView once viewMargin="-12px">
+          {/*
+            Above-the-fold: never gate on IntersectionObserver. `overflow-hidden` on the section
+            plus motion transforms has caused WebKit paint/clipping edge cases; `overflow-x-hidden`
+            keeps horizontal containment without vertically clipping staggered content.
+          */}
+          <StaggerGroup className="mx-auto min-w-0 max-w-3xl space-y-6 lg:max-w-4xl" whenInView={false}>
               <StaggerItem variant="softReveal" timing="hero">
                 <p className="nn-marketing-caption inline-block max-w-full text-balance break-words rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] px-3.5 py-1.5 font-semibold tracking-wide text-[var(--pill-fg)]">
                   {formatTitleCase(t("pages.home.hero.eyebrowBrand"), locale)}
