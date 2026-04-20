@@ -1,6 +1,7 @@
 import { redactMetaForLog } from "@/lib/env/redact-secrets";
 import { importSentryNextjs } from "@/lib/observability/sentry-nextjs-dynamic";
 import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 type SentryMetaValue = string | number | boolean | undefined;
 type SentryMeta = Record<string, SentryMetaValue>;
@@ -27,15 +28,25 @@ export async function withSentryServerSpan<T>(
 ): Promise<T> {
   if (!isSentryServerRuntimeEnabled()) return fn();
   const attributes = scrubMeta(opts.attributes);
-  const Sentry = await importSentryNextjs();
-  return Sentry.startSpan(
-    {
-      name: opts.name,
+  try {
+    const Sentry = await importSentryNextjs();
+    return await Sentry.startSpan(
+      {
+        name: opts.name,
+        op: opts.op,
+        ...(attributes ? { attributes } : {}),
+      },
+      fn,
+    );
+  } catch (e) {
+    safeServerLog("observability", "sentry_span_skipped_fail_open", {
+      spanName: opts.name.slice(0, 120),
       op: opts.op,
-      ...(attributes ? { attributes } : {}),
-    },
-    fn,
-  );
+      errorName: e instanceof Error ? e.name : typeof e,
+      severity: "warning",
+    });
+    return fn();
+  }
 }
 
 export function captureSentrySoftError(opts: {

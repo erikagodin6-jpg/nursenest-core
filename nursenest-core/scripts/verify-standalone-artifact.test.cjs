@@ -106,6 +106,60 @@ test("verifyStandaloneArtifact falls back to the top-level standalone server pat
   }
 });
 
+test("verifyStandaloneArtifact discovers a non-canonical standalone server.js under .next/standalone", async () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "nn-standalone-artifact-deep-"));
+  const standaloneEntry = path.join(tempRoot, ".next", "standalone", "packages", "web", "server.js");
+  fs.mkdirSync(path.dirname(standaloneEntry), { recursive: true });
+  fs.writeFileSync(standaloneEntry, "module.exports = {};\n", "utf8");
+
+  try {
+    const { verifyStandaloneArtifact, getStandaloneStaticSyncTargets } = await loadVerifier();
+    assert.equal(verifyStandaloneArtifact(tempRoot), standaloneEntry);
+    const targets = getStandaloneStaticSyncTargets(tempRoot);
+    assert.equal(targets.length, 1);
+    assert.equal(targets[0].serverPath, standaloneEntry);
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
+
+test("verifyStandaloneArtifact prefers nested nursenest-core server when an extra standalone server.js also exists", async () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "nn-standalone-artifact-prefer-nested-"));
+  const nestedEntry = path.join(tempRoot, ".next", "standalone", "nursenest-core", "server.js");
+  const extraEntry = path.join(tempRoot, ".next", "standalone", "alt", "server.js");
+  fs.mkdirSync(path.dirname(nestedEntry), { recursive: true });
+  fs.mkdirSync(path.dirname(extraEntry), { recursive: true });
+  fs.writeFileSync(nestedEntry, "module.exports = {};\n", "utf8");
+  fs.writeFileSync(extraEntry, "module.exports = {};\n", "utf8");
+
+  try {
+    const { verifyStandaloneArtifact, getStandaloneStaticSyncTargets } = await loadVerifier();
+    assert.equal(verifyStandaloneArtifact(tempRoot), nestedEntry);
+    assert.equal(getStandaloneStaticSyncTargets(tempRoot).length, 2);
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
+
+test("discoverStandaloneServerJsPaths skips node_modules", async () => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "nn-standalone-skip-nm-"));
+  const good = path.join(tempRoot, ".next", "standalone", "app", "server.js");
+  const bad = path.join(tempRoot, ".next", "standalone", "node_modules", "pkg", "server.js");
+  fs.mkdirSync(path.dirname(good), { recursive: true });
+  fs.mkdirSync(path.dirname(bad), { recursive: true });
+  fs.writeFileSync(good, "module.exports = {};\n", "utf8");
+  fs.writeFileSync(bad, "module.exports = {};\n", "utf8");
+
+  try {
+    const { discoverStandaloneServerJsPaths } = await loadVerifier();
+    const paths = discoverStandaloneServerJsPaths(tempRoot);
+    assert.equal(paths.length, 1);
+    assert.equal(paths[0], good);
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
+
 test("verifyStandaloneArtifact hard-fails when both standalone server paths are missing", async () => {
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "nn-standalone-artifact-missing-"));
 
@@ -113,7 +167,7 @@ test("verifyStandaloneArtifact hard-fails when both standalone server paths are 
     const { verifyStandaloneArtifact } = await loadVerifier();
     assert.throws(
       () => verifyStandaloneArtifact(tempRoot),
-      /standalone server\.js not found\. Expected one of:\n  - .*\.next\/standalone\/nursenest-core\/server\.js\n  - .*\.next\/standalone\/server\.js/,
+      /standalone server\.js not found under \.next\/standalone \(excluding node_modules\)\.\nChecked canonical paths:\n  - .*\.next\/standalone\/nursenest-core\/server\.js\n  - .*\.next\/standalone\/server\.js/,
     );
   } finally {
     fs.rmSync(tempRoot, { recursive: true, force: true });
@@ -152,7 +206,7 @@ test("verify-standalone-artifact CLI exits 1 with a clear FATAL when the nested 
     assert.equal(result.status, 1);
     assert.match(
       result.stderr,
-      /FATAL: standalone server\.js not found\. Expected one of:\n  - .*\.next\/standalone\/nursenest-core\/server\.js\n  - .*\.next\/standalone\/server\.js\nRun `npm run build` \(or `npm run build:deploy:full`\) from nursenest-core to generate a fresh standalone build\./,
+      /FATAL: standalone server\.js not found under \.next\/standalone \(excluding node_modules\)\.\nChecked canonical paths:\n  - .*\.next\/standalone\/nursenest-core\/server\.js\n  - .*\.next\/standalone\/server\.js\nRun `npm run build` \(or `npm run build:deploy:full`\) from nursenest-core to generate a fresh standalone build\./,
     );
     assert.equal(result.stdout, "");
   } finally {
@@ -281,6 +335,7 @@ test("deploy scripts: App Platform build:deploy is post-build only (no second ne
     /ensure-standalone-static\.mjs && node scripts\/post-build-prune\.mjs$/,
   );
   assert.equal(pkg.scripts.start, "node scripts/start-standalone.mjs");
+  assert.match(pkg.scripts["ci:verify"], /node scripts\/ensure-standalone-static\.mjs/);
 });
 
 test("active DigitalOcean app spec builds before runtime, starts through npm run start, and routes readiness through /readyz", () => {
@@ -309,7 +364,7 @@ test("start-standalone hard-fails immediately when the standalone server artifac
     assert.equal(result.status, 1);
     assert.match(
       result.stderr,
-      /FATAL: standalone server\.js not found\. Expected one of:\n  - .*\.next\/standalone\/nursenest-core\/server\.js\n  - .*\.next\/standalone\/server\.js\nRun `npm run build` \(or `npm run build:deploy:full`\) from nursenest-core to generate a fresh standalone build\./,
+      /FATAL: standalone server\.js not found under \.next\/standalone \(excluding node_modules\)\.\nChecked canonical paths:\n  - .*\.next\/standalone\/nursenest-core\/server\.js\n  - .*\.next\/standalone\/server\.js\nRun `npm run build` \(or `npm run build:deploy:full`\) from nursenest-core to generate a fresh standalone build\./,
     );
     assert.equal(result.stdout, "");
   } finally {

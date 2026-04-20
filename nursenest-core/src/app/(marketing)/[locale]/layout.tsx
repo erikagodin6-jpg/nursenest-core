@@ -12,6 +12,7 @@ import { MarketingMainI18nShards } from "@/components/i18n/marketing-main-i18n-s
 import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { assertMarketingLayoutMessagesIntegrity } from "@/lib/marketing-i18n/marketing-layout-message-integrity";
 import { getMarketingLocaleLayoutChromePayload } from "@/lib/marketing-i18n/marketing-layout-chrome-messages.server";
+import { mergeMinimalMarketingLayoutShellMessages } from "@/lib/marketing-i18n/minimal-marketing-layout-shell-fallback";
 import { MarketingMainErrorBoundary } from "@/components/marketing/marketing-main-error-boundary";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
@@ -60,12 +61,29 @@ export default async function MarketingLocaleLayout({
       meta: { locale },
     });
   }
-  assertMarketingLayoutMessagesIntegrity({
-    route: "marketing-locale-layout",
-    locale,
-    messages,
-    fallbackMessages,
-  });
+  try {
+    assertMarketingLayoutMessagesIntegrity({
+      route: "marketing-locale-layout",
+      locale,
+      messages,
+      fallbackMessages,
+    });
+  } catch (integrityErr) {
+    console.error("[marketing-locale-layout] layout message integrity failed — merging shell fallbacks", {
+      error: integrityErr instanceof Error ? integrityErr.message : String(integrityErr),
+      locale,
+    });
+    const { captureSentryRuntimeSoftError } = await marketingLocaleLayoutSentryRuntimePromise;
+    captureSentryRuntimeSoftError({
+      scope: "marketing_layout",
+      event: "locale_layout_integrity_merge",
+      error: integrityErr,
+      route: "marketing-locale-layout",
+      feature: "marketing_layout",
+      meta: { locale },
+    });
+    messages = mergeMinimalMarketingLayoutShellMessages(messages);
+  }
 
   let marketingRequestPath = "/";
   try {

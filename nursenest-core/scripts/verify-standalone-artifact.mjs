@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -15,8 +15,44 @@ export function getExpectedStandaloneServerPath(root = packageRoot) {
   return getStandaloneServerCandidates(root)[0];
 }
 
+/**
+ * All `server.js` files under `.next/standalone` (skipping `node_modules`), sorted for stable
+ * fallback order. Next / monorepo layouts can emit more than the two canonical paths; each
+ * entry needs a sibling `.next/static` copy (see `getStandaloneStaticSyncTargets`).
+ */
+export function discoverStandaloneServerJsPaths(root = packageRoot) {
+  const standaloneRoot = path.join(root, ".next", "standalone");
+  const out = [];
+
+  function walk(dir) {
+    if (!existsSync(dir)) return;
+    let entries;
+    try {
+      entries = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const ent of entries) {
+      if (ent.name === "node_modules") continue;
+      const full = path.join(dir, ent.name);
+      if (ent.isDirectory()) {
+        walk(full);
+      } else if (ent.name === "server.js") {
+        out.push(full);
+      }
+    }
+  }
+
+  walk(standaloneRoot);
+  out.sort((a, b) => a.localeCompare(b));
+  return out;
+}
+
 export function resolveStandaloneServerPath(root = packageRoot) {
-  return getStandaloneServerCandidates(root).find((candidate) => existsSync(candidate)) ?? null;
+  const preferred = getStandaloneServerCandidates(root).find((candidate) => existsSync(candidate));
+  if (preferred) return preferred;
+  const discovered = discoverStandaloneServerJsPaths(root);
+  return discovered[0] ?? null;
 }
 
 /**
@@ -26,15 +62,10 @@ export function resolveStandaloneServerPath(root = packageRoot) {
  * `standalone/server.js`; syncing only one copy manifests as `/_next/static/*` → HTML.
  */
 export function getStandaloneStaticSyncTargets(root = packageRoot) {
-  const targets = [];
-  for (const serverPath of getStandaloneServerCandidates(root)) {
-    if (!existsSync(serverPath)) continue;
-    targets.push({
-      serverPath,
-      destStatic: path.join(path.dirname(serverPath), ".next", "static"),
-    });
-  }
-  return targets;
+  return discoverStandaloneServerJsPaths(root).map((serverPath) => ({
+    serverPath,
+    destStatic: path.join(path.dirname(serverPath), ".next", "static"),
+  }));
 }
 
 export function verifyStandaloneArtifact(root = packageRoot) {
@@ -42,7 +73,8 @@ export function verifyStandaloneArtifact(root = packageRoot) {
   if (!standaloneServerPath) {
     const candidates = getStandaloneServerCandidates(root);
     throw new Error(
-      "standalone server.js not found. Expected one of:\n" +
+      "standalone server.js not found under .next/standalone (excluding node_modules).\n" +
+        "Checked canonical paths:\n" +
         candidates.map((candidate) => `  - ${candidate}`).join("\n") +
         "\nRun `npm run build` (or `npm run build:deploy:full`) from nursenest-core to generate a fresh standalone build.",
     );

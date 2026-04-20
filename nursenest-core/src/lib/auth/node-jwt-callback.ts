@@ -2,7 +2,8 @@ import "server-only";
 
 import type { JWT } from "next-auth/jwt";
 import { authCallbacks } from "@/lib/auth-callbacks";
-import { getSessionIdentityPayload } from "@/lib/auth/session-identity-from-db";
+import { loadSessionIdentityResult } from "@/lib/auth/session-identity-from-db";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { prisma } from "@/lib/db";
 
 /** Derive from the concrete callback — `NextAuthConfig["callbacks"]["jwt"]` is optional in typings. */
@@ -28,13 +29,19 @@ export async function nodeJwtCallback(params: JwtParams): Promise<JWT> {
   }
 
   if (params.trigger === "update" && typeof token.sub === "string" && token.sub.length > 0) {
-    const identity = await getSessionIdentityPayload(token.sub);
-    if (identity) {
-      token.tier = identity.tier ?? token.tier;
-      token.country = identity.country ?? token.country;
-      token.subscriptionStatus = identity.subscriptionStatus;
-      token.role = identity.role;
-      token.credentialVersion = identity.credentialVersion;
+    const identity = await loadSessionIdentityResult(token.sub);
+    if (identity.status === "ok") {
+      const p = identity.payload;
+      token.tier = p.tier ?? token.tier;
+      token.country = p.country ?? token.country;
+      token.subscriptionStatus = p.subscriptionStatus;
+      token.role = p.role;
+      token.credentialVersion = p.credentialVersion;
+    } else if (identity.status === "db_unavailable") {
+      safeServerLog("entitlement", "jwt_update_identity_skipped_db", {
+        userIdPrefix: token.sub.slice(0, 8),
+        severity: "warning",
+      });
     }
     return invalidateIfCredentialMismatch(token, true);
   }

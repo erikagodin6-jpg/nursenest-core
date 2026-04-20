@@ -31,7 +31,7 @@
     "typecheck": "NODE_OPTIONS=--max-old-space-size=8192 tsc --noEmit",
     "loadtest:k6": "k6 run tools/loadtest/k6-smoke.js",
     "loadtest:k6:horizontal": "k6 run tools/loadtest/k6-app-platform-horizontal.js",
-    "ci:verify": "npm run db:generate && npm run typecheck && npm run build:prechecks && npm run build",
+    "ci:verify": "npm run db:generate && npm run typecheck && npm run build:prechecks && npm run build && node scripts/ensure-standalone-static.mjs",
     "deploy:precheck": "npm run ci:verify",
     "qa:verify:health": "node scripts/verify-deploy-health.mjs",
     "admin:staff-users": "tsx scripts/admin-staff-users.mts",

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { Session } from "next-auth";
 import { DM_Sans } from "next/font/google";
 import Script from "next/script";
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
@@ -73,7 +74,15 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   layoutStderrTrace("root_layout", "root layout start", { route: "shared-root-layout" });
-  const session = await auth();
+  let session: Session | null = null;
+  try {
+    session = await auth();
+  } catch (e) {
+    layoutStderrTrace("root_layout", "auth() failed — continuing with null session", {
+      route: "shared-root-layout",
+      detail: e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200),
+    });
+  }
   const themeBoot = `(function(){try{var k=${JSON.stringify(THEME_STORAGE_KEY)};var d=${JSON.stringify(NURSENEST_DEFAULT_THEME)};var v=localStorage.getItem(k);if(v==null||v===""){v=d;localStorage.setItem(k,v);}document.documentElement.setAttribute("data-theme",v);}catch(e){}})();`;
 
   /** Duplicates the first layout rules from `globals.css` so the parser can paint before the main stylesheet finishes. */
