@@ -2,6 +2,8 @@
 
 Goals: **no broken build reaches production**, **no traffic until liveness passes**, **rollback path is known**, **post-deploy verification** confirms the live URL.
 
+**Edge vs origin incidents** (CDN, DNS, TLS, `/` stalls while `/healthz` works): see **[`edge-origin-troubleshooting.md`](./edge-origin-troubleshooting.md)**.
+
 ---
 
 ## 1) Safe deploy sequence
@@ -11,7 +13,7 @@ Goals: **no broken build reaches production**, **no traffic until liveness passe
 | 1. **Precheck** | CI + local | `npm run deploy:precheck` (= `ci:verify`: Prisma client, `tsc`, `next build`). Same as GitHub **Verify Build** on every push/PR. |
 | 2. **Migrations** | Before or with deploy | Managed Postgres: run **Prisma migrate** (`.github/workflows/prisma-migrate.yml` workflow_dispatch, or droplet `prisma migrate deploy` before/at deploy). Use the **same** `DATABASE_URL` as the running app. |
 | 3. **Build & run** | App Platform / Droplet | App Platform: `build_command` / `run_command` in `.do/app-nursenest-core-next.yaml`. Droplet: `deploy/droplet/deploy-app.sh` (build → PM2 reload). |
-| 4. **Health before trusting traffic** | Platform | **DigitalOcean:** `health_check` on `GET /healthz` (see app spec) — load balancer waits for success before routing. The standalone startup watchdog now logs `startup_watchdog server_listening`, Next's `Ready in …`, and `startup_watchdog handlers_ready` so pre-handler stalls are visible in platform logs. **Droplet:** script waits for `GET /healthz`, then runs `scripts/verify-deploy-health.mjs` for `/healthz` + `/api/health`. |
+| 4. **Health before trusting traffic** | Platform | **DigitalOcean (`.do/app-nursenest-core-next.yaml`):** `health_check` → **`GET /readyz`** (routing readiness); `liveness_health_check` → **`GET /healthz`** (liveness); **`http_port` 8080**. **Droplet:** script waits for `GET /healthz`, then runs `scripts/verify-deploy-health.mjs`. |
 | 5. **Verification** | After DNS/live | `BASE_URL=https://your-domain npm run qa:verify:production` (HTTP health first, then Playwright). Or `npm run qa:verify:health` only for a quick ping. |
 
 Optional DB readiness on the public URL: `VERIFY_READINESS=1 npm run qa:verify:health` (adds `GET /api/health/ready`; returns **503** if Postgres is down — use for staged canaries, not as the only liveness probe).
@@ -33,7 +35,7 @@ Optional DB readiness on the public URL: `VERIFY_READINESS=1 npm run qa:verify:h
 | Risk | Mitigation |
 | --- | --- |
 | TypeScript / build failure in production | CI **Verify Build** + `deploy:precheck` match production build path; droplet runs **typecheck before migrate/build**. |
-| Routing traffic to a dead process | DO **health_check** on `/healthz`; droplet **curl + verify-deploy-health** after PM2. |
+| Routing traffic to a dead process | DO **`health_check` on `/readyz`** + **`liveness_health_check` on `/healthz`**; droplet **curl + verify-deploy-health** after PM2. |
 | Silent broken deploy | Deploy script **exits non-zero** if health fails; post-deploy **`qa:verify:production`** fails fast on bad HTTP. |
 | No rollback story | Documented **App Platform previous deployment** + **git checkout** on droplet. |
 
@@ -41,7 +43,7 @@ Optional DB readiness on the public URL: `VERIFY_READINESS=1 npm run qa:verify:h
 
 ## 3.1 App Platform sizing note
 
-`/healthz` is intentionally minimal and does not hit Prisma, auth, or remote services. If App Platform still reports `timeout awaiting headers` on `/healthz`, the likely failure mode is **pre-handler startup stall** inside Next standalone, where the process is listening but request handlers are not ready yet.
+`/healthz` is intentionally minimal (liveness). **`/readyz`** gates **routing readiness** until handlers can serve real routes. If App Platform reports **`timeout awaiting headers` on `/readyz`**, the likely failure mode is **pre-handler startup stall** inside Next standalone.
 
 For this repo's current workload, **`basic-xs` is not recommended for production**. The safest first infra response is to move off `basic-xs` before attempting broader application refactors, because weak shared CPU headroom can stretch the standalone handler-initialization window enough to fail health checks even when the `/healthz` route body itself is cheap.
 
@@ -60,4 +62,28 @@ cd nursenest-core && export BASE_URL="https://www.example.com" && npm run qa:ver
 cd nursenest-core && export BASE_URL="https://www.example.com" && npm run qa:verify:health
 ```
 
-See also: [`release-deploy-checklist.md`](./release-deploy-checklist.md), [`release-verification.md`](./release-verification.md).
+---
+
+## 5) Post-deploy edge + origin verification (checklist)
+
+Run after every production deploy (or promote), **before** declaring the release good:
+
+- [ ] **Public canonical URL:** `BASE_URL=https://www.<your-domain>` `npm run qa:verify:health`
+- [ ] **Optional — default App Platform host:** set `ORIGIN_BASE_URL=https://<app>.ondigitalocean.app` (exact value from **DO → App → default domain**) and re-run the same command — catches **DNS/proxy drift** vs the app’s live default host.
+- [ ] **Optional — document path:** `VERIFY_CANONICAL_HOME=1` — also **`GET /`** (redirects followed, bounded) so **“/healthz OK but homepage hangs”** fails the script.
+- [ ] **IPv6 (manual):** from a network with working IPv6, `curl -6 -I --max-time 20 "$BASE_URL/healthz"` — log result; fix **AAAA / proxy IPv6** if v4 works and v6 fails.
+- [ ] **Cloudflare (if used):** **SSL/TLS** = **Full** or **Full (strict)** with valid origin cert — document chosen mode in your runbook; avoid **Flexible** as permanent posture.
+- [ ] **DO Domains:** `www` **and** apex **Active**, certificate **Issued** (if you serve both).
+- [ ] **Alerting:** configure GitHub **production-public-health-watch** secrets (`PRODUCTION_VERIFY_BASE_URL`, optional `PRODUCTION_VERIFY_ORIGIN_BASE_URL`) and **notify on workflow failure**; add **DO** uptime or **UptimeRobot** on `/` + `/healthz` if not already.
+
+```bash
+cd nursenest-core
+export BASE_URL="https://www.example.com"
+export ORIGIN_BASE_URL="https://your-app.ondigitalocean.app"   # optional
+export VERIFY_CANONICAL_HOME=1
+npm run qa:verify:health
+```
+
+`verify-deploy-health.mjs` prints **Tier 1** (liveness/readiness), **Tier 2** (optional `GET /`), **Tier 3** (`/api/health`); on failure it summarizes which tier broke and calls out when **Tier 3** alone fails after Tier 1/2 pass.
+
+See also: [`edge-origin-troubleshooting.md`](./edge-origin-troubleshooting.md), [`release-deploy-checklist.md`](./release-deploy-checklist.md), [`release-verification.md`](./release-verification.md).

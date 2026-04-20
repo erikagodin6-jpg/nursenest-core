@@ -122,7 +122,10 @@ test("standalone runtime reaches ready without bypass via the internal bootstrap
   assert.match(logsBeforeProbe, /startup_watchdog server_listening/);
   assert.match(logsBeforeProbe, /startup_watchdog standalone_spawn/);
   assert.match(logsBeforeProbe, /"runtimeBootstrap":"[^"]*start-standalone-runtime\.cjs"/);
-  assert.match(logsBeforeProbe, /startup_watchdog preload_patch_next_done/);
+  assert.match(logsBeforeProbe, /startup_watchdog preload_patch_http_done/);
+  assert.match(logsBeforeProbe, /startup_watchdog preload_patch_https_done/);
+  assert.doesNotMatch(logsBeforeProbe, /server_emit/);
+  assert.doesNotMatch(logsBeforeProbe, /"wrap":"server_emit"/);
   assert.doesNotMatch(logsBeforeProbe, /startup_watchdog handlers_ready/);
 
   const publicProbeRes = await fetch(`http://127.0.0.1:${port}/_nn_bootstrap_ready_check__`);

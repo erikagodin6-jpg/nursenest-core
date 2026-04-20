@@ -61,6 +61,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           url: alt.canonical,
           type: "website",
         },
+        twitter: {
+          card: "summary_large_image",
+          title,
+          description,
+        },
       };
     },
     { pathname: `/${locale}`, locale, routeGroup: "marketing.locale.home" },

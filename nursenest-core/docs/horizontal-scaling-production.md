@@ -7,8 +7,9 @@
 | `min_instance_count` | **2** | Never one instance. |
 | `max_instance_count` | **3** | Hard cap — do not raise without budget approval. |
 | `autoscaling.metrics.cpu.percent` | **60** | **Only** CPU drives scale; no hidden RPS/memory metrics. |
-| Health (liveness) | `GET /healthz` | No DB; `failure_threshold: 9` reduces thrash on cold start. |
-| Readiness (operators) | `GET /api/health/ready` | DB probe with timeout (`HEALTH_READY_DB_TIMEOUT_MS`). |
+| Liveness (`liveness_health_check`) | `GET /healthz` | No DB; `failure_threshold: 12` in spec. |
+| Deployment readiness (`health_check`) | `GET /readyz` | Gates routing until child handlers answer internal probe (see app YAML comments). |
+| DB readiness (operators / optional) | `GET /api/health/ready` | `VERIFY_READINESS=1` in `qa:verify:health`; not the App Platform `health_check` path. |
 
 Scale-down behavior is platform-default (gradual). Tune `initial_delay_seconds` / `period_seconds` in the UI if probes flap after deploy.
 
@@ -25,7 +26,7 @@ Scale-down behavior is platform-default (gradual). Tune `initial_delay_seconds` 
 
 ## Request logging (`http-access-log-hook.ts`)
 
-When `ACCESS_LOG_STRUCTURED` is on (default in production): every non-static request logs `request_complete` with `responseTimeMs`, `statusCode`, `route`, `cpuUsageUserUs`, `cpuUsageSystemUs`, `memoryUsageHeapMb`, `memoryUsageRssMb`. **> 1000ms** → `slow_request`. **5xx** → `request_error_response`. Server errors also flow to `instrumentation.ts` `onRequestError`.
+When `ACCESS_LOG_STRUCTURED` is on (default in production): hooks **`http.createServer` / `https.createServer`** (listener wrap) so every non-static request logs `request_complete` with `responseTimeMs`, `statusCode`, `route`, `cpuUsageUserUs`, `cpuUsageSystemUs`, `memoryUsageHeapMb`, `memoryUsageRssMb`. **> 1000ms** → `slow_request`. **5xx** → `request_error_response`. Server errors also flow to `instrumentation.ts` `onRequestError`. (No `Server.prototype.emit` patching — compatible with standalone bootstrap `createServer` wrapping.)
 
 ## Rate limiting (`proxy.ts` → `enforceApiRateLimit`)
 

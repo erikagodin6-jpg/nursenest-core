@@ -16,11 +16,13 @@ export function buildMarketingWebPageJsonLdProps(args: {
   enPath: string;
   title: string;
   description: string;
+  /** BCP 47 tag for JSON-LD (e.g. en-CA for Canada-first default marketing `/`). */
+  inLanguage?: string;
 }): MarketingWebPageJsonLdProps {
   return {
     title: args.title,
     description: args.description,
     path: marketingCanonicalPathForLocale(args.locale, args.enPath),
-    inLanguage: args.locale,
+    inLanguage: args.inLanguage ?? args.locale,
   };
 }

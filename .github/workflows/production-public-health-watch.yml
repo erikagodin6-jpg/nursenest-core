@@ -1,0 +1,47 @@
+# Optional external synthetic checks against production public (and optional origin) URLs.
+# Catches edge/origin splits: e.g. /healthz OK through CDN but GET / stalls.
+#
+# Configure repository secrets (Settings → Secrets and variables → Actions):
+#   PRODUCTION_VERIFY_BASE_URL          — e.g. https://www.nursenest.ca (unset = job skips)
+#   PRODUCTION_VERIFY_ORIGIN_BASE_URL   — optional; default *.ondigitalocean.app host from DO UI
+#
+# Notifications: enable workflow failure alerts in GitHub repo settings / watch rules, or forward to Slack.
+name: production-public-health-watch
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15,45 * * * *"
+
+concurrency:
+  group: production-public-health-watch
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Public + origin HTTP verification
+        env:
+          BASE_URL: ${{ secrets.PRODUCTION_VERIFY_BASE_URL }}
+          ORIGIN_BASE_URL: ${{ secrets.PRODUCTION_VERIFY_ORIGIN_BASE_URL }}
+          VERIFY_CANONICAL_HOME: "1"
+          VERIFY_HTTP_TIMEOUT_MS: "20000"
+          VERIFY_HOME_TIMEOUT_MS: "45000"
+        run: |
+          set -euo pipefail
+          if [[ -z "${BASE_URL:-}" ]]; then
+            echo "PRODUCTION_VERIFY_BASE_URL not set — skipping (configure secret to enable)."
+            exit 0
+          fi
+          node nursenest-core/scripts/verify-deploy-health.mjs
+          echo "--- optional IPv6 /healthz (informational) ---"
+          set +e
+          curl -6 --http1.1 -m 15 -I -sS "${BASE_URL}/healthz" -w "ipv6 http:%{http_code} time:%{time_total}\n" -o /dev/null
+          v6=$?
+          set -e
+          if [[ "$v6" -ne 0 ]]; then
+            echo "IPv6 curl exited $v6 (runner may lack IPv6). Manually test from an IPv6-capable network if users report issues."
+          fi

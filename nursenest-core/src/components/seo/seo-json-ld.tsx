@@ -26,7 +26,7 @@ export function OrganizationJsonLd() {
         name: "NurseNest",
         url: absoluteUrl("/"),
         description:
-          "Healthcare exam preparation platform for nursing and allied health learners in Canada and the United States.",
+          "Canada-first nursing and allied health exam preparation platform with globally relevant pathways—including NCLEX and US licensing hubs where applicable.",
         sameAs: [] as string[],
       }}
     />

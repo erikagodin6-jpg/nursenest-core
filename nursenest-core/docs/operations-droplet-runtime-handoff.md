@@ -14,7 +14,7 @@
 - **Runtime command:** `npm run start` → `package.json` → `NODE_ENV=production node ... .next/standalone/nursenest-core/server.js` (Next `output: "standalone"`; **`next start` is not supported** — see Next.js warning at boot). `PORT` / `HOSTNAME` come from the environment (standalone defaults `HOSTNAME` to `0.0.0.0`).
 - **App Platform sets:** `PORT=8080`, `http_port: 8080` — the listening port in production there is **8080** inside the container (mapped by the platform).
 - **Process model:** Node runs **one Next.js server process per instance** (autoscaling min 2 / max 3 per spec). **Not** PM2 inside the container unless you added it (default is **not** PM2 on App Platform).
-- **Health check (platform):** `GET /healthz` (initial delay 120s per spec).
+- **Health checks (App Platform, per `.do/app-nursenest-core-next.yaml`):** deployment **`health_check`** → `GET /readyz`; **`liveness_health_check`** → `GET /healthz`. Initial delay **240s** per spec for each.
 
 ### Alternate: Droplet with PM2
 

@@ -28,11 +28,11 @@ const ROOT_LAYOUT_OPEN_GRAPH_IMAGE =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "NurseNest | Healthcare Exam Prep",
+    default: "NurseNest | Canada-First Nursing Exam Prep for RN, RPN, NP & Allied Health",
     template: "%s | NurseNest",
   },
   description:
-    "Premium NCLEX and global licensing prep for nurses worldwide—strongest pathways in the US and Canada (RPN, LVN/LPN, RN, NP), plus regional hubs across Asia and the Middle East.",
+    "NurseNest offers Canada-first, globally relevant nursing and allied health exam prep with practice questions, clinical lessons, flashcards, and mock exams for RN, RPN, NP, NCLEX, and more.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
@@ -45,9 +45,9 @@ export const metadata: Metadata = {
     locale: "en_CA",
     url: siteUrl,
     siteName: "NurseNest",
-    title: "NurseNest | Healthcare Exam Prep",
+    title: "NurseNest | Canada-First Nursing Exam Prep for RN, RPN, NP & Allied Health",
     description:
-      "Premium NCLEX and global licensing prep for nurses worldwide—strongest pathways in the US and Canada (RPN, LVN/LPN, RN, NP), plus regional hubs across Asia and the Middle East.",
+      "NurseNest offers Canada-first, globally relevant nursing and allied health exam prep with practice questions, clinical lessons, flashcards, and mock exams for RN, RPN, NP, NCLEX, and more.",
     images: [
       {
         url: ROOT_LAYOUT_OPEN_GRAPH_IMAGE,
@@ -59,9 +59,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "NurseNest | Healthcare Exam Prep",
+    title: "NurseNest | Canada-First Nursing Exam Prep for RN, RPN, NP & Allied Health",
     description:
-      "Premium NCLEX and global licensing prep for nurses worldwide—strongest pathways in the US and Canada (RPN, LVN/LPN, RN, NP), plus regional hubs across Asia and the Middle East.",
+      "NurseNest offers Canada-first, globally relevant nursing and allied health exam prep with practice questions, clinical lessons, flashcards, and mock exams for RN, RPN, NP, NCLEX, and more.",
     images: [ROOT_LAYOUT_OPEN_GRAPH_IMAGE],
   },
 };

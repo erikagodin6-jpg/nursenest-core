@@ -27,6 +27,17 @@ test("buildMarketingWebPageJsonLdProps prefixes localized route paths", () => {
   assert.equal(props.inLanguage, "fr");
 });
 
+test("buildMarketingWebPageJsonLdProps optional inLanguage overrides locale tag", () => {
+  const props = buildMarketingWebPageJsonLdProps({
+    locale: DEFAULT_MARKETING_LOCALE,
+    enPath: "/",
+    title: "Home",
+    description: "Desc",
+    inLanguage: "en-CA",
+  });
+  assert.equal(props.inLanguage, "en-CA");
+});
+
 type TargetRouteExpectation = {
   file: string;
   enPath: string;
@@ -34,7 +45,7 @@ type TargetRouteExpectation = {
 };
 
 const TARGET_ROUTE_EXPECTATIONS: TargetRouteExpectation[] = [
-  { file: "src/app/(marketing)/(default)/page.tsx", enPath: "/", localeSnippet: "locale," },
+  { file: "src/app/(marketing)/(default)/page.tsx", enPath: "/", localeSnippet: "locale: STATIC_LOCALE," },
   { file: "src/app/(marketing)/[locale]/page.tsx", enPath: "/", localeSnippet: "locale," },
   {
     file: "src/app/(marketing)/(default)/pricing/page.tsx",

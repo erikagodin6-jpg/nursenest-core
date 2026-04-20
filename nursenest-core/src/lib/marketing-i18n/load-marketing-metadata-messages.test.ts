@@ -6,7 +6,7 @@ import { loadMarketingMetadataMessagesSync } from "@/lib/marketing-i18n/load-mar
 
 describe("loadMarketingMetadataMessagesSync", () => {
   it("returns only the requested metadata keys", () => {
-    const keys = ["pages.home.metaTitleUS", "tools.hub.metaTitle"] as const;
+    const keys = ["pages.home.metaTitleCA", "tools.hub.metaTitle"] as const;
 
     const messages = loadMarketingMetadataMessagesSync(DEFAULT_MARKETING_LOCALE, keys, [
       ...MARKETING_CHROME_MESSAGE_SHARDS,
@@ -14,7 +14,7 @@ describe("loadMarketingMetadataMessagesSync", () => {
     ]);
 
     assert.deepEqual(Object.keys(messages).sort(), [...keys].sort());
-    assert.equal(typeof messages["pages.home.metaTitleUS"], "string");
+    assert.equal(typeof messages["pages.home.metaTitleCA"], "string");
     assert.equal(typeof messages["tools.hub.metaTitle"], "string");
     assert.equal(messages["nav.home"], undefined);
   });

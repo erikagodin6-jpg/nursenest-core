@@ -49,4 +49,6 @@ Pair with **`npm run validate:release`**, **`npm run qa:release-gate`** (pre-pro
 ## After deploy
 
 - [ ] `npm run qa:verify:production` with production `BASE_URL` (or staging first).
+- [ ] **Edge + origin:** optional `ORIGIN_BASE_URL` (DO `*.ondigitalocean.app`) + `VERIFY_CANONICAL_HOME=1` with `npm run qa:verify:health` — see **`deploy-safety.md`** §5 and **`edge-origin-troubleshooting.md`**.
+- [ ] Enable **`production-public-health-watch`** GitHub Actions secrets + failure notifications if not already (external HTTP / `/` regression guard).
 - [ ] Scan dashboards for 5xx, checkout errors, auth errors (see `release-verification.md` monitoring table).

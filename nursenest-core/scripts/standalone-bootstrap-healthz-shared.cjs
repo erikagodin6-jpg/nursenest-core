@@ -57,10 +57,6 @@ function isBootstrapHealthzRequest(req) {
   return pn === "/healthz" || pn === "/readyz";
 }
 
-function logProbeDebug(line, meta) {
-  console.error(`[probe_debug] ${line} ${JSON.stringify(meta)}`);
-}
-
 function isReadinessProbeLikeRequest(rawUrl, normalizedPathname) {
   return (
     normalizedPathname === CHILD_BOOTSTRAP_READY_PATH ||
@@ -129,7 +125,12 @@ function maybeServeBootstrapHealthz(req, res, state, logger) {
 
     if (!res.writableEnded) {
       console.error(
-        `[probe_debug] ERROR probe response not writableEnded after end() ${JSON.stringify({ method, pathname: rawPath, rawUrl })}`,
+        formatStartupWatchdogLine("bootstrap_probe_invariant_failed", {
+          method,
+          pathname: rawPath,
+          rawUrl,
+          detail: "response not writableEnded after end()",
+        }),
       );
     }
 

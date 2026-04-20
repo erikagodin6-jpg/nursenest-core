@@ -55,15 +55,6 @@ function createStartupWatchdogLogger({
     logPreloadPatchFailed(module, meta = {}) {
       emit(`preload_patch_${module}_failed`, { ...meta, msSinceBoot: now() - bootAt });
     },
-    logPreloadPatchNextBegin(meta = {}) {
-      emit("preload_patch_next_begin", { ...meta, msSinceBoot: now() - bootAt });
-    },
-    logPreloadPatchNextDone(meta = {}) {
-      emit("preload_patch_next_done", { ...meta, msSinceBoot: now() - bootAt });
-    },
-    logPreloadPatchNextFailed(meta = {}) {
-      emit("preload_patch_next_failed", { ...meta, msSinceBoot: now() - bootAt });
-    },
     logPreloadServerWrapInstalled(meta = {}) {
       emit("preload_server_wrap_installed", { ...meta, msSinceBoot: now() - bootAt });
     },

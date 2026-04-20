@@ -1,9 +1,19 @@
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
 const test = require("node:test");
 const http = require("node:http");
 
 const { createStartupWatchdogLogger } = require("./standalone-startup-watchdog-shared.cjs");
 const { installStandaloneStartupWatchdog } = require("./standalone-startup-watchdog-preload-shared.cjs");
+
+test("preload shared uses only createServer wrapping (no Server.prototype.emit monkeypatch)", () => {
+  const src = fs.readFileSync(path.join(__dirname, "standalone-startup-watchdog-preload-shared.cjs"), "utf8");
+  assert.equal(/Server\.prototype\.emit\s*=/.test(src), false);
+  assert.equal(/server_emit/.test(src), false);
+  assert.equal(/wrap:\s*["']server_emit["']/.test(src), false);
+  assert.match(src, /createServer/);
+});
 
 function request({ port, method, path: reqPath }) {
   return new Promise((resolve, reject) => {
@@ -37,7 +47,7 @@ function request({ port, method, path: reqPath }) {
   });
 }
 
-test("patched createServer: preload installs, emit sees probe, short-circuits before Next", async () => {
+test("patched createServer: preload installs, intercepts probe before Next listener", async () => {
   const stderrLines = [];
   const origErr = console.error;
   const logger = createStartupWatchdogLogger({
@@ -46,7 +56,7 @@ test("patched createServer: preload installs, emit sees probe, short-circuits be
       origErr(line);
     },
   });
-  installStandaloneStartupWatchdog({
+  const { startupState } = installStandaloneStartupWatchdog({
     standaloneEntry: "",
     logger,
   });
@@ -90,8 +100,7 @@ test("patched createServer: preload installs, emit sees probe, short-circuits be
     assert.match(joined(), /"forwardingToNext":false/);
     assert.match(joined(), /startup_watchdog bootstrap_probe_helper_eval/);
     assert.match(joined(), /"outcome":"intercepted"/);
-    assert.match(joined(), /\[probe_debug\] short-circuit before Next/);
-    assert.doesNotMatch(joined(), /\[probe_debug\] forwarding to Next/);
+    assert.match(joined(), /"via":"create_server_wrap"/);
 
     stderrLines.length = 0;
 
@@ -101,7 +110,6 @@ test("patched createServer: preload installs, emit sees probe, short-circuits be
     assert.equal(nextListenerInvoked, false);
     assert.match(joined(), /startup_watchdog preload_probe_seen/);
     assert.match(joined(), /"intercepted":true/);
-    assert.match(joined(), /\[probe_debug\] short-circuit before Next/);
 
     stderrLines.length = 0;
     nextListenerInvoked = false;
@@ -116,7 +124,6 @@ test("patched createServer: preload installs, emit sees probe, short-circuits be
     assert.equal(nextListenerInvoked, false);
     assert.match(joined(), /startup_watchdog preload_probe_seen/);
     assert.match(joined(), /"intercepted":true/);
-    assert.match(joined(), /\[probe_debug\] short-circuit before Next/);
 
     stderrLines.length = 0;
     nextListenerInvoked = false;
@@ -141,7 +148,44 @@ test("patched createServer: preload installs, emit sees probe, short-circuits be
     assert.equal(nextListenerInvoked, true);
     assert.doesNotMatch(joined(), /startup_watchdog preload_probe_seen/);
     assert.doesNotMatch(joined(), /startup_watchdog bootstrap_probe_helper_eval/);
-    assert.doesNotMatch(joined(), /\[probe_debug\] forwarding to Next/);
+
+    stderrLines.length = 0;
+    nextListenerInvoked = false;
+    assert.equal(startupState.handlersReady, false);
+    const healthWhileBooting = await request({ port, method: "GET", path: "/healthz" });
+    assert.equal(healthWhileBooting.statusCode, 200);
+    assert.equal(healthWhileBooting.body, "ok");
+    assert.equal(nextListenerInvoked, false);
+
+    stderrLines.length = 0;
+    nextListenerInvoked = false;
+    const readyWhileBooting = await request({ port, method: "GET", path: "/readyz" });
+    assert.equal(readyWhileBooting.statusCode, 200);
+    assert.equal(readyWhileBooting.body, "ok");
+    assert.equal(nextListenerInvoked, false);
+
+    startupState.handlersReady = true;
+    stderrLines.length = 0;
+    nextListenerInvoked = false;
+    const healthAfterReady = await request({ port, method: "GET", path: "/healthz" });
+    assert.equal(healthAfterReady.statusCode, 200);
+    assert.equal(healthAfterReady.body, "via-next");
+    assert.equal(nextListenerInvoked, true);
+
+    stderrLines.length = 0;
+    nextListenerInvoked = false;
+    const readyAfterReady = await request({ port, method: "GET", path: "/readyz" });
+    assert.equal(readyAfterReady.statusCode, 200);
+    assert.equal(readyAfterReady.body, "via-next");
+    assert.equal(nextListenerInvoked, true);
+
+    stderrLines.length = 0;
+    nextListenerInvoked = false;
+    const appLike = await request({ port, method: "GET", path: "/app/dashboard" });
+    assert.equal(appLike.statusCode, 200);
+    assert.equal(appLike.body, "via-next");
+    assert.equal(nextListenerInvoked, true);
+    assert.doesNotMatch(joined(), /preload_probe_seen/);
   } finally {
     console.error = origErr;
     await new Promise((resolve) => server.close(resolve));

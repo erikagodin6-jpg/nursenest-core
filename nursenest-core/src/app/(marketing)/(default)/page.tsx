@@ -46,7 +46,8 @@ const HOME_SENTRY_RUNTIME_BUDGET_MS = 2000;
 export const revalidate = 3600;
 
 const STATIC_LOCALE = DEFAULT_MARKETING_LOCALE;
-const STATIC_REGION = "US" as const;
+/** Default marketing `/` is Canada-first and globally inclusive; US-heavy SEO uses `pages.home.metaTitleUS` on `/[locale]` when the visitor region cookie is US. */
+const STATIC_REGION = "CA" as const;
 const MARKETING_BUILD_PHASE = "phase-production-build";
 const HOME_FALLBACK_TITLE = defaultHomeMetaTitle(STATIC_REGION);
 const HOME_FALLBACK_DESCRIPTION = defaultHomeMetaDescription(STATIC_REGION);
@@ -57,6 +58,12 @@ const HOME_FALLBACK_METADATA: Metadata = {
     title: HOME_FALLBACK_TITLE,
     description: HOME_FALLBACK_DESCRIPTION,
     type: "website",
+    locale: "en_CA",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: HOME_FALLBACK_TITLE,
+    description: HOME_FALLBACK_DESCRIPTION,
   },
 };
 
@@ -131,10 +138,10 @@ export async function generateMetadata(): Promise<Metadata> {
           elapsed_ms: nnHomeDiagNowMs() - tDiag,
           message_key_count: Object.keys(m).length,
         });
-        const title = resolveMarketingCopy(m, "pages.home.metaTitleUS", m, defaultHomeMetaTitle(STATIC_REGION));
+        const title = resolveMarketingCopy(m, "pages.home.metaTitleCA", m, defaultHomeMetaTitle(STATIC_REGION));
         const description = resolveMarketingCopy(
           m,
-          "pages.home.metaDescriptionUS",
+          "pages.home.metaDescriptionCA",
           m,
           defaultHomeMetaDescription(STATIC_REGION),
         );
@@ -148,6 +155,12 @@ export async function generateMetadata(): Promise<Metadata> {
             description,
             url: alt.canonical,
             type: "website",
+            locale: "en_CA",
+          },
+          twitter: {
+            card: "summary_large_image",
+            title,
+            description,
           },
         };
       },
@@ -254,10 +267,10 @@ export default async function HomePage() {
           optionalDbSkipped: skipOptionalDbReads,
         });
 
-        const title = resolveMarketingCopy(m, "pages.home.metaTitleUS", m, defaultHomeMetaTitle(STATIC_REGION));
+        const title = resolveMarketingCopy(m, "pages.home.metaTitleCA", m, defaultHomeMetaTitle(STATIC_REGION));
         const description = resolveMarketingCopy(
           m,
-          "pages.home.metaDescriptionUS",
+          "pages.home.metaDescriptionCA",
           m,
           defaultHomeMetaDescription(STATIC_REGION),
         );
@@ -282,6 +295,7 @@ export default async function HomePage() {
           enPath: "/",
           title,
           description,
+          inLanguage: "en-CA",
         });
 
         emitNnHomeRouteDiag({ segment: "page_before_return_jsx", elapsed_ms: nnHomeDiagNowMs() - tDiag });

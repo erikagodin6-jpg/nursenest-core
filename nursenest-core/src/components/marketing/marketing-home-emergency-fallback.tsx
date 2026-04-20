@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
 
-const FALLBACK_REGION = "US" as const;
+const FALLBACK_REGION = "CA" as const;
 
 /**
  * Last-resort homepage body when the normal marketing home tree throws.

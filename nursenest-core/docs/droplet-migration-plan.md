@@ -25,6 +25,8 @@ This document is for operators moving **nursenest-core** (Next.js 16, Prisma, Ne
 
 Point uptime monitors and load balancers at **`/healthz`** for liveness. Use **`/api/health/ready`** only if you want to drain traffic when Postgres fails.
 
+**While still on App Platform:** `.do/app-nursenest-core-next.yaml` uses **`health_check` → `/readyz`** for deployment readiness and **`liveness_health_check` → `/healthz`** for liveness — do not conflate those with droplet-only `curl /healthz` checks alone.
+
 ### App Platform–specific behavior to replace
 
 - **Automatic HTTPS** → Caddy or Nginx + Let’s Encrypt on the Droplet.
