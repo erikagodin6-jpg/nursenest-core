@@ -15,12 +15,13 @@ import { loadMarketingMessages, mergeMissingMarketingMessageKeys } from "@/lib/m
 
 /**
  * `LoginForm` is a client component that uses `useSearchParams()`; Next streams a Suspense fallback first.
- * E2E and a11y expect `#login-identifier` / `#login-password` in the initial HTML — match those ids here
- * (read-only placeholders) until the real form replaces this subtree.
+ * E2E expect `#login-identifier` / `#login-password` in the initial HTML — match those ids here
+ * (read-only placeholders) until the real form replaces this subtree. Do not use `aria-hidden` on these
+ * controls: Playwright visibility + screen readers treat them as absent while the shell is still loading.
  */
 function LoginFormStreamFallback() {
   const inputClass =
-    "w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm opacity-60 pointer-events-none";
+    "w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm pointer-events-none";
   return (
     <div className="mt-6 space-y-4" aria-busy="true">
       <div className="space-y-1.5">
@@ -33,7 +34,7 @@ function LoginFormStreamFallback() {
           tabIndex={-1}
           className={inputClass}
           autoComplete="username"
-          aria-hidden="true"
+          aria-disabled="true"
         />
       </div>
       <div className="space-y-1.5">
@@ -46,7 +47,7 @@ function LoginFormStreamFallback() {
           tabIndex={-1}
           className={inputClass}
           autoComplete="current-password"
-          aria-hidden="true"
+          aria-disabled="true"
         />
       </div>
       <div className="h-10 w-full animate-pulse rounded-xl bg-border/40" aria-hidden />

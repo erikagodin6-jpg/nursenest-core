@@ -49,9 +49,11 @@ test.describe("Admin JWT gate regression — unauthenticated", () => {
         }
       }
     });
+    await page.context().clearCookies();
     await page.goto(`${origin}/admin`, { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT_MS });
     await expect(page).toHaveURL(/\/login/i, { timeout: 45_000 });
     await expect(page.locator("#login-identifier")).toBeVisible({ timeout: 15_000 });
+    await expect(page.locator("#login-identifier")).toBeEnabled({ timeout: 10_000 });
     const tail = urls.slice(-12);
     const oscillation =
       tail.length >= 6 &&
