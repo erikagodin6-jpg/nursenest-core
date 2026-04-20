@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MarketingLoginPage } from "@/components/marketing/marketing-login-page";
+import { resolveLoginMarketingLocaleFromUrlSegment } from "@/lib/i18n/resolve-login-marketing-locale";
 import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -10,10 +11,11 @@ const LOGIN_META_KEYS = ["pages.login.title", "pages.login.description"] as cons
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  const resolvedLocale = resolveLoginMarketingLocaleFromUrlSegment(locale);
   return safeGenerateMetadata(
     async () => {
-      const m = await loadMarketingMetadataMessages(locale, [...LOGIN_META_KEYS]);
-      const alt = marketingAlternatesSharedPage(locale, "/login");
+      const m = await loadMarketingMetadataMessages(resolvedLocale, [...LOGIN_META_KEYS]);
+      const alt = marketingAlternatesSharedPage(resolvedLocale, "/login");
       return {
         title: m["pages.login.title"]!,
         description: m["pages.login.description"]!,
@@ -22,11 +24,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         openGraph: { title: m["pages.login.title"]!, url: alt.canonical, type: "website" },
       };
     },
-    { pathname: `/${locale}/login`, locale, routeGroup: "marketing.locale.auth" },
+    { pathname: `/${locale}/login`, locale: resolvedLocale, routeGroup: "marketing.locale.auth" },
   );
 }
 
 export default async function LocalizedLoginPage({ params }: Props) {
   const { locale } = await params;
-  return <MarketingLoginPage locale={locale} />;
+  return <MarketingLoginPage localeMode="localized" localeHint={locale} />;
 }

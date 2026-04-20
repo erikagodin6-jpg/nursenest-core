@@ -36,5 +36,5 @@ export default async function LoginPage() {
    * Unprefixed marketing layout pins `MarketingI18nProvider` + `pages` shards to English (`DEFAULT_MARKETING_LOCALE`).
    * Using the locale cookie here caused SSR/client drift and missing keys vs `<main>` shard merges.
    */
-  return <MarketingLoginPage locale={DEFAULT_MARKETING_LOCALE} />;
+  return <MarketingLoginPage localeMode="pinned-english" />;
 }
