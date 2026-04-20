@@ -7,13 +7,13 @@ import {
 } from "@/lib/auth/post-login-resume-path";
 
 describe("marketingResumeCallbackFromLocation", () => {
-  it("returns localized home for bare /login", () => {
-    assert.equal(marketingResumeCallbackFromLocation("/login", "", "en"), "/");
-    assert.equal(marketingResumeCallbackFromLocation("/login", "", "fr"), "/fr");
+  it("returns /app for bare /login (never marketing /)", () => {
+    assert.equal(marketingResumeCallbackFromLocation("/login", "", "en"), "/app");
+    assert.equal(marketingResumeCallbackFromLocation("/login", "", "fr"), "/app");
   });
 
-  it("returns localized home for locale-prefixed login", () => {
-    assert.equal(marketingResumeCallbackFromLocation("/fr/login", "?x=1", "fr"), "/fr");
+  it("returns /app for locale-prefixed login", () => {
+    assert.equal(marketingResumeCallbackFromLocation("/fr/login", "?x=1", "fr"), "/app");
   });
 
   it("preserves marketing pricing path + query", () => {
@@ -34,16 +34,16 @@ describe("postLoginMarketingHomePath", () => {
 });
 
 describe("resolveMarketingAuthRedirectTarget", () => {
-  it("ignores bare /app callback on login and falls back to marketing home", () => {
+  it("ignores bare /app callback on login and falls back to /app", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/app");
-    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/");
+    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/app");
   });
 
   it("ignores deep /app routes as callbacks on auth pages", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/app/lessons");
-    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/");
+    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/app");
   });
 
   it("honors marketing callback paths", () => {
@@ -85,10 +85,10 @@ describe("resolveMarketingAuthRedirectTarget", () => {
     assert.equal(resolveMarketingAuthRedirectTarget("/question-bank", sp, "en"), "/question-bank");
   });
 
-  it("sends blocked auth pages to localized home when callback is bare /app", () => {
+  it("sends blocked auth pages to /app when callback is bare /app", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/app");
-    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/");
-    assert.match(resolveMarketingAuthRedirectTarget("/fr/login", sp, "fr"), /^\/fr\/?$/);
+    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/app");
+    assert.equal(resolveMarketingAuthRedirectTarget("/fr/login", sp, "fr"), "/app");
   });
 });

@@ -22,9 +22,11 @@ function isBlockedResumeStrippedPath(strippedPathname: string): boolean {
 /**
  * Resolves where to send the user after credentials auth on marketing surfaces.
  * - Honors explicit same-origin `callbackUrl` except `/app` and `/app/*` (learner shell), which are ignored
- *   so post-login does not swap the marketing shell for subscriber chrome.
+ *   when resolving from the query so arbitrary deep links cannot be injected via URL alone.
  * - Falls back to {@link marketingResumeCallbackFromLocation} using the current pathname and query
  *   (with `callbackUrl` stripped from the query so it cannot echo back into the resume URL).
+ *   Auth-only blocklist paths (e.g. `/login`) resume to `/app`, not marketing `/`, so `/login` is never
+ *   treated as “resolved” to home.
  */
 export function resolveMarketingAuthRedirectTarget(
   pathname: string,
@@ -49,8 +51,9 @@ export function postLoginMarketingHomePath(locale: string): string {
 }
 
 /**
- * Same-page resume target for `callbackUrl` when the user did not pass an explicit callback.
- * Keeps guests on the **marketing** shell they were browsing; avoids defaulting to `/app` (learner chrome).
+ * Same-page resume target when there is no usable `callbackUrl` (or it was stripped).
+ * Marketing paths resume in-place; auth-only routes (`/login`, `/signup`, …) resume to `/app` so
+ * post-login navigation never swaps them for marketing home `/`.
  */
 export function marketingResumeCallbackFromLocation(
   pathname: string,
@@ -60,7 +63,7 @@ export function marketingResumeCallbackFromLocation(
   const path = pathname.startsWith("/") ? pathname : `/${pathname}`;
   const { pathname: stripped } = stripMarketingLocalePrefix(path);
   if (isBlockedResumeStrippedPath(stripped)) {
-    return postLoginMarketingHomePath(locale);
+    return withMarketingLocale(locale, "/app");
   }
   if (path === "/api" || path.startsWith("/api/")) {
     return postLoginMarketingHomePath(locale);

@@ -13,6 +13,47 @@ import { resolveLoginMarketingLocaleFromUrlSegment } from "@/lib/i18n/resolve-lo
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { loadMarketingMessages, mergeMissingMarketingMessageKeys } from "@/lib/marketing-i18n/load-marketing-messages";
 
+/**
+ * `LoginForm` is a client component that uses `useSearchParams()`; Next streams a Suspense fallback first.
+ * E2E and a11y expect `#login-identifier` / `#login-password` in the initial HTML — match those ids here
+ * (read-only placeholders) until the real form replaces this subtree.
+ */
+function LoginFormStreamFallback() {
+  const inputClass =
+    "w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm opacity-60 pointer-events-none";
+  return (
+    <div className="mt-6 space-y-4" aria-busy="true">
+      <div className="space-y-1.5">
+        <div className="h-4 w-28 animate-pulse rounded bg-border/50" aria-hidden />
+        <input
+          id="login-identifier"
+          name="email"
+          type="text"
+          readOnly
+          tabIndex={-1}
+          className={inputClass}
+          autoComplete="username"
+          aria-hidden="true"
+        />
+      </div>
+      <div className="space-y-1.5">
+        <div className="h-4 w-24 animate-pulse rounded bg-border/50" aria-hidden />
+        <input
+          id="login-password"
+          name="password"
+          type="password"
+          readOnly
+          tabIndex={-1}
+          className={inputClass}
+          autoComplete="current-password"
+          aria-hidden="true"
+        />
+      </div>
+      <div className="h-10 w-full animate-pulse rounded-xl bg-border/40" aria-hidden />
+    </div>
+  );
+}
+
 export type MarketingLoginLocaleMode = "pinned-english" | "localized";
 
 /**
@@ -59,7 +100,7 @@ export async function MarketingLoginPage({
               <p className="mt-2 text-center text-sm text-muted-foreground sm:text-base">{m["pages.login.subtitle"]}</p>
             </header>
             <AuthFlowTrustReassurance variant="login" />
-            <Suspense fallback={<div className="mt-6 h-32 animate-pulse rounded-xl bg-border/40" aria-hidden />}>
+            <Suspense fallback={<LoginFormStreamFallback />}>
               <LoginForm
                 forgotPasswordHref={forgotHref}
                 termsHref={withMarketingLocale(resolved, "/terms")}
