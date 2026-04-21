@@ -16,6 +16,8 @@ type MarketingPublicStudyLandingProps = {
   primaryCta: MarketingPublicStudyCta;
   secondaryCta?: MarketingPublicStudyCta;
   signupCta?: MarketingPublicStudyCta;
+  /** `wide` matches legacy lesson index rhythm: hero + full-width pathway blocks. */
+  containerWidth?: "standard" | "wide";
   children?: ReactNode;
 };
 
@@ -28,10 +30,15 @@ export function MarketingPublicStudyLanding({
   primaryCta,
   secondaryCta,
   signupCta,
+  containerWidth = "standard",
   children,
 }: MarketingPublicStudyLandingProps) {
+  const shellMax =
+    containerWidth === "wide" ? "max-w-7xl w-full" : "max-w-3xl";
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-[var(--nn-rhythm-section-y)] nn-marketing-x nn-rhythm-page pb-16">
+    <div
+      className={`mx-auto flex ${shellMax} flex-col gap-[var(--nn-rhythm-section-y)] nn-marketing-x nn-rhythm-page pb-16`}
+    >
       <div className="rounded-2xl border border-[var(--accent-surface-b-border)] bg-[var(--accent-surface-b)] p-5 sm:p-6">
         <div className="nn-stack-hero-heading">
           <h1 className="nn-marketing-h1 text-balance">{h1}</h1>

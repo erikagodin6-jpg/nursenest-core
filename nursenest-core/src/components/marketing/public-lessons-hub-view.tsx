@@ -32,6 +32,7 @@ export async function PublicLessonsHubView({ locale }: { locale: string }) {
         <BreadcrumbTrail items={crumbs} navClassName="nn-marketing-caption" />
       </div>
       <MarketingPublicStudyLanding
+        containerWidth="wide"
         h1={t(h1Key)}
         intro={t(introKey)}
         primaryCta={{

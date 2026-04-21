@@ -41,7 +41,8 @@ import { recordCredentialsLoginFailure } from "@/lib/observability/production-si
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import {
-  assertCredentialsLoginRateLimits,
+  consumeCredentialsLoginFailure,
+  isCredentialsLoginRateLimited,
   resetCredentialsLoginRateLimitKeys,
 } from "@/lib/server/credentials-login-rate-limit";
 
@@ -251,6 +252,49 @@ export const authConfig: NextAuthConfig = {
         const authMode = isEmailLikeIdentifier(enteredEmailLower) ? "email" : "username";
         const lockKey = `login-lock:${idHash || ip}`;
 
+        const bumpCredentialsFailureRateLimitOrReject = async (): Promise<void> => {
+          if (!idHash) return;
+          const r = await consumeCredentialsLoginFailure(ipKey, idHash);
+          if (!r.ok) {
+            safeServerLog("auth", "login_rate_limited", {
+              ip: ip.slice(0, 64),
+              idHashPresent: true,
+              source: "redis_failure_window",
+            });
+            captureAuthWarningSentry("login_rate_limited", {
+              level: "warning",
+              tags: { flow: "auth", kind: "rate_limit" },
+            });
+            logAuthIncidentLine({
+              event: "credentials_login",
+              outcome: "failure",
+              requestReachedAuthorize: true,
+              enteredEmailRaw,
+              enteredEmailSanitized,
+              enteredEmailLower,
+              enteredEmailNormalized,
+              lookupStrategyTried: [],
+              exactEmailUserCount: 0,
+              normalizedEmailUserCount: 0,
+              trimmedEmailUserCount: 0,
+              usernameMatchCount: 0,
+              matchedUserId: null,
+              matchedUserEmail: null,
+              matchedUserNormalizedEmail: null,
+              hasPasswordHash: false,
+              accountLockedOut: false,
+              passwordCompareOk: false,
+              sessionIssued: false,
+              finalFailureReason: "unknown_auth_failure",
+              ip: ip.slice(0, 64),
+              idHash,
+              authMode,
+            });
+            recordCredentialsLoginFailure("rate_limited", request);
+            rejectCredentialsRateLimited();
+          }
+        };
+
         if (!enteredEmailLower || !password) {
           safeServerLog("auth", "login_failed", {
             reason: "missing_fields",
@@ -284,9 +328,12 @@ export const authConfig: NextAuthConfig = {
           return rejectCredentialsOrNull("missing_credentials");
         }
 
-        const rl = await assertCredentialsLoginRateLimits(ipKey, idHash);
-        if (!rl.ok) {
-          safeServerLog("auth", "login_rate_limited", { ip: ip.slice(0, 64), idHashPresent: Boolean(idHash) });
+        if (idHash && (await isCredentialsLoginRateLimited(ipKey, idHash))) {
+          safeServerLog("auth", "login_rate_limited", {
+            ip: ip.slice(0, 64),
+            idHashPresent: true,
+            source: "redis_preflight_window",
+          });
           captureAuthWarningSentry("login_rate_limited", {
             level: "warning",
             tags: { flow: "auth", kind: "rate_limit" },
@@ -422,6 +469,7 @@ export const authConfig: NextAuthConfig = {
                 ip: ip.slice(0, 64),
               });
               recordCredentialsLoginFailure("duplicate_user_match", request);
+              await bumpCredentialsFailureRateLimitOrReject();
               return rejectCredentialsOrNull("duplicate_user");
             }
 
@@ -499,6 +547,7 @@ export const authConfig: NextAuthConfig = {
                 ip: ip.slice(0, 64),
               });
               recordCredentialsLoginFailure("duplicate_user_match", request);
+              await bumpCredentialsFailureRateLimitOrReject();
               return rejectCredentialsOrNull("duplicate_user");
             }
             user = await prisma.user.findFirst({
@@ -631,6 +680,7 @@ export const authConfig: NextAuthConfig = {
           });
           recordCredentialsLoginFailure("not_found", request);
           traceCredentialsAuthorizeDev("reject", { reason: "user_not_found", authMode });
+          await bumpCredentialsFailureRateLimitOrReject();
           return rejectCredentialsOrNull("user_missing");
         }
 
@@ -654,6 +704,7 @@ export const authConfig: NextAuthConfig = {
           });
           recordCredentialsLoginFailure("no_password_hash", request);
           traceCredentialsAuthorizeDev("reject", { reason: "missing_password_hash", userIdPrefix: user.id.slice(0, 8) });
+          await bumpCredentialsFailureRateLimitOrReject();
           return rejectCredentialsOrNull("no_password_hash");
         }
 
@@ -717,6 +768,7 @@ export const authConfig: NextAuthConfig = {
           });
           recordCredentialsLoginFailure("bad_password", request);
           traceCredentialsAuthorizeDev("reject", { reason: "password_mismatch", userIdPrefix: user.id.slice(0, 8) });
+          await bumpCredentialsFailureRateLimitOrReject();
           return rejectCredentialsOrNull("password_invalid");
         }
 

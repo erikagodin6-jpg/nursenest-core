@@ -4,6 +4,7 @@ import { ArrowRight, Stethoscope, HeartPulse, Award, Dna, GraduationCap } from "
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
+import { publicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
@@ -37,6 +38,7 @@ export function HomeExamSelectionSection() {
   const { region } = useNursenestRegion();
   const loc = (path: string) => withMarketingLocale(locale, path);
   const hubs = publicExamPrepHubDestinations(region);
+  const newGradDest = publicNewGradStudyDestinations(region, hubs.rn);
 
   const cards: ExamCard[] = [
     {
@@ -76,9 +78,9 @@ export function HomeExamSelectionSection() {
       iconColor: "text-[var(--semantic-chart-4)]",
       accentColor: "var(--semantic-chart-4)",
       titleLabel: "New Grad",
-      descLabel: "Build your fundamentals with structured lessons, flashcards, practice, and exam-mode prep.",
+      descLabel: "Transition-to-practice lessons, questions, adaptive prep, and study tools for your first year on the floor.",
       pathwayLabel: "New Grad",
-      href: loc("/pre-nursing"),
+      href: loc(newGradDest.hubHref),
     },
     {
       id: "allied",

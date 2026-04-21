@@ -15,10 +15,12 @@
 import { cookies } from "next/headers";
 import { isGlobalRegionSlug, isGlobalLocaleCode } from "@/lib/i18n/global-regions";
 import type { GlobalRegionSlug, GlobalLocaleCode } from "@/lib/i18n/global-regions";
+import { GLOBAL_REGION_COOKIE } from "@/lib/region/global-region-cookie";
 import {
-  GLOBAL_REGION_COOKIE,
-  globalRegionSetCookieValue,
-} from "@/lib/region/global-region-cookie";
+  CHECKOUT_GLOBAL_REGION_CONTEXT_MAX_AGE_SEC,
+  encodeCheckoutGlobalRegionContextToken,
+  GLOBAL_CHECKOUT_REGION_CONTEXT_COOKIE,
+} from "@/lib/region/checkout-global-region-context";
 import { MARKETING_LOCALE_COOKIE } from "@/lib/i18n/marketing-locale-cookie";
 
 const PROFESSION_COOKIE = "nn_preferred_profession";
@@ -45,6 +47,23 @@ export async function saveContextPreferences(input: {
         maxAge: COOKIE_MAX_AGE,
         sameSite: "lax",
       });
+      const httpOnlyOpts = {
+        path: "/" as const,
+        sameSite: "lax" as const,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+      };
+      if (input.region === "us" || input.region === "canada") {
+        jar.set(GLOBAL_CHECKOUT_REGION_CONTEXT_COOKIE, "", { ...httpOnlyOpts, maxAge: 0 });
+      } else {
+        const stamp = encodeCheckoutGlobalRegionContextToken(input.region);
+        if (stamp) {
+          jar.set(GLOBAL_CHECKOUT_REGION_CONTEXT_COOKIE, stamp, {
+            ...httpOnlyOpts,
+            maxAge: CHECKOUT_GLOBAL_REGION_CONTEXT_MAX_AGE_SEC,
+          });
+        }
+      }
     }
 
     if (input.locale) {

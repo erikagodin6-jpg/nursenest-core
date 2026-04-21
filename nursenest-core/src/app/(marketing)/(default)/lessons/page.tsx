@@ -135,6 +135,7 @@ export default async function PublicLessonsLandingPage() {
         <BreadcrumbTrail items={crumbs} navClassName="nn-marketing-caption" />
       </div>
       <MarketingPublicStudyLanding
+        containerWidth="wide"
         h1={t(h1Key)}
         intro={t(introKey)}
         primaryCta={{

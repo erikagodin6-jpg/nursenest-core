@@ -13,6 +13,8 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { useClientGlobalRegionCookie } from "@/lib/region/use-client-global-region";
+import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
+import { isGlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { canShowPricing } from "@/lib/navigation/market-readiness";
 import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
@@ -246,10 +248,13 @@ export function PricingPageClient({
   heading,
   intro,
   heroSub,
+  serverCheckoutRegionSlugs = [],
 }: {
   heading: string;
   intro: string;
   heroSub: string;
+  /** Server union of `nn_global_region` + signed explicit checkout context (HttpOnly); keeps pricing gate aligned with POST checkout. */
+  serverCheckoutRegionSlugs?: readonly GlobalRegionSlug[];
 }) {
   const [segment, setSegment] = useState<Segment>("rn");
   const [selectedAlliedCareer, setSelectedAlliedCareer] = useState<AlliedCareerKey>("paramedic");
@@ -265,7 +270,7 @@ export function PricingPageClient({
   const [pendingCheckoutDuration, setPendingCheckoutDuration] = useState<BillingDuration | null>(null);
   const [checkoutIntentHandled, setCheckoutIntentHandled] = useState(false);
   const [plansLoaded, setPlansLoaded] = useState(false);
-  /** Soft gate (policy B): partial/marketing global regions may checkout only after explicit NA billing acknowledgment. */
+  /** Soft gate: partial global regions (cookie + signed explicit context) require NA billing acknowledgment before checkout. */
   const [naPathwayAcknowledged, setNaPathwayAcknowledged] = useState(false);
   const { locale, t } = useMarketingI18n();
   /** `t` is recreated when marketing shards merge — do not use it as a fetch effect dep (can starve in-flight loads). */
@@ -273,6 +278,22 @@ export function PricingPageClient({
   tRef.current = t;
   const { region } = useNursenestRegion();
   const globalMarketSlug = useClientGlobalRegionCookie();
+  const authoritativeRegionSlugs = useMemo(() => {
+    const s = new Set<GlobalRegionSlug>();
+    for (const x of serverCheckoutRegionSlugs) {
+      if (isGlobalRegionSlug(x)) s.add(x);
+    }
+    if (globalMarketSlug) s.add(globalMarketSlug);
+    return [...s];
+  }, [serverCheckoutRegionSlugs, globalMarketSlug]);
+
+  const checkoutBodyGlobalSlug = useMemo((): GlobalRegionSlug => {
+    if (globalMarketSlug) return globalMarketSlug;
+    const fromServer = serverCheckoutRegionSlugs.find((slug) => isGlobalRegionSlug(slug));
+    if (fromServer) return fromServer;
+    return region === "US" ? "us" : "canada";
+  }, [globalMarketSlug, serverCheckoutRegionSlugs, region]);
+
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { status: authStatus } = useSession();
@@ -390,16 +411,17 @@ export function PricingPageClient({
 
   const showPricingGrid = plansLoaded && loadError === null && !trackDataGap;
 
-  const showNorthAmericaStripeScopeNote = useMemo(() => {
-    if (!globalMarketSlug) return false;
-    return !canShowPricing(globalMarketSlug);
-  }, [globalMarketSlug]);
+  const showNorthAmericaStripeScopeNote = useMemo(
+    () => authoritativeRegionSlugs.some((slug) => !canShowPricing(slug)),
+    [authoritativeRegionSlugs],
+  );
 
   const pricingCheckoutSoftGate = showNorthAmericaStripeScopeNote;
 
+  const authoritativeRegionKey = authoritativeRegionSlugs.join(",");
   useEffect(() => {
     setNaPathwayAcknowledged(false);
-  }, [globalMarketSlug]);
+  }, [authoritativeRegionKey]);
 
   const heroCtaLabel = useMemo(
     () =>
@@ -432,7 +454,8 @@ export function PricingPageClient({
         pricing_segment: segment,
         pricing_checkout_soft_gate: pricingCheckoutSoftGate,
         na_pathway_acknowledged: naPathwayAcknowledged,
-        global_market_slug: globalMarketSlug ?? "",
+        global_market_slug: checkoutBodyGlobalSlug,
+        authoritative_region_slugs: authoritativeRegionSlugs.join(","),
         ...(isAllied ? { allied_career: selectedAlliedCareer } : {}),
       });
       try {
@@ -441,7 +464,7 @@ export function PricingPageClient({
           duration,
           acceptPolicies: true,
           policyVersion: LEGAL_POLICY_BUNDLE_VERSION,
-          region,
+          region: checkoutBodyGlobalSlug,
           ...(pricingCheckoutSoftGate && naPathwayAcknowledged ? { naBillingScopeAcknowledged: true as const } : {}),
         };
         if (isAllied) {
@@ -554,7 +577,8 @@ export function PricingPageClient({
       segment,
       pricingCheckoutSoftGate,
       naPathwayAcknowledged,
-      globalMarketSlug,
+      checkoutBodyGlobalSlug,
+      authoritativeRegionKey,
     ],
   );
 

@@ -15,7 +15,8 @@ const nursenestCoreRoot = join(here, "..", "..", "..");
 describe("security regression (source contracts)", () => {
   it("credentials authorize uses burst+combo Redis limits and progressive lockout key", () => {
     const auth = readFileSync(join(nursenestCoreRoot, "src", "lib", "auth.ts"), "utf8");
-    assert.match(auth, /assertCredentialsLoginRateLimits/);
+    assert.match(auth, /isCredentialsLoginRateLimited/);
+    assert.match(auth, /consumeCredentialsLoginFailure/);
     assert.match(auth, /resetCredentialsLoginRateLimitKeys/);
     assert.match(auth, /login-lock:/);
     assert.match(auth, /isLoginLocked\(/);

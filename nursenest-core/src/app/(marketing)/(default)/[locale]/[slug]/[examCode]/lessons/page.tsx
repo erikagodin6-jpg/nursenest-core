@@ -36,6 +36,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study-mode-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
+import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
 
@@ -134,6 +135,14 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const catHref = buildExamPathwayPath(pathway, "cat");
   const canStartCat = questionSnapshot.status === "ok" && questionSnapshot.adaptiveEligibleCount >= CAT_MIN_COMPLETE_POOL;
 
+  const lessonHubSurfaceChips = [
+    { label: "Practice questions", href: questionsHref },
+    { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT unavailable", href: catHref },
+    { label: "Flashcards", href: HUB.flashcards },
+    { label: "Practice exams", href: HUB.practiceExams },
+    { label: "Exam overview", href: overviewHref },
+  ];
+
   const querySuffix = qEffective ? `?q=${encodeURIComponent(qEffective)}` : "";
   const canadaHref =
     pathway.countrySlug === "canada"
@@ -165,6 +174,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         backLink={{ label: `${examName} overview`, href: overviewHref }}
       >
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
+        <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
         <div className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
           <p className="text-sm font-medium text-[var(--theme-heading-text)]">
             {qEffective ? `No lessons match "${qEffective}".` : "No lessons available yet for this topic."}
@@ -248,6 +258,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       backLink={{ label: `${examName} overview`, href: overviewHref }}
     >
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
+      <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
 
       <section id="pathway-lesson-library" className="mt-4 scroll-mt-24" aria-labelledby="lesson-library-heading">
         {/* Section toolbar: heading + count badge */}

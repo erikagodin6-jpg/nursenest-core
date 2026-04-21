@@ -98,16 +98,20 @@ export const API_SIGNUP_PER_IP_RATE_LIMIT = {
 
 /** Per auth *kind* so login throttles don’t consume forgot-password quota (and vice versa). */
 const AUTH_KIND_LIMITS: Record<string, { windowMs: number; max: number }> = {
-  /** Sign-in page + provider links — allow refreshes / RSC without locking humans out. */
-  signin: { windowMs: 60_000, max: 18 },
+  /**
+   * POST `/api/auth/signin/*` (non-credentials OAuth entry) — keep separate from credential POST.
+   * GET sign-in HTML is throttled via {@link AUTH_BOOTSTRAP_SIGNIN_GET_MAX} instead of this bucket.
+   */
+  signin: { windowMs: 60_000, max: 48 },
   /**
    * Credential POST (`/api/auth/callback/credentials`) — isolated from generic OAuth callbacks so
    * shared egress / CI does not exhaust the same bucket as Google/GitHub returns.
    */
-  credentials_callback: { windowMs: 60_000, max: 72 },
+  credentials_callback: { windowMs: 60_000, max: 120 },
   /** OAuth + non-credential callbacks — shared IPs (schools, offices) need headroom. */
   callback: { windowMs: 60_000, max: 48 },
-  csrf: { windowMs: 60_000, max: 96 },
+  /** POST-only CSRF surfaces; GET `/api/auth/csrf` uses {@link AUTH_BOOTSTRAP_CSRF_GET_MAX}. */
+  csrf: { windowMs: 60_000, max: 120 },
   forgot: { windowMs: 60_000, max: 8 },
   reset: { windowMs: 60_000, max: 8 },
   change: { windowMs: 60_000, max: 8 },
@@ -122,6 +126,14 @@ const PUBLIC_MAX = 56;
 /** Authenticated NextAuth session polling — per-user so NAT/shared IP does not evict real sessions. */
 const AUTH_SESSION_WINDOW_MS = 60_000;
 const AUTH_SESSION_MAX_PER_USER = 6000;
+
+/** GET CSRF bootstrap — not a password attempt; must not share the tight legacy `csrf` POST bucket. */
+const AUTH_BOOTSTRAP_CSRF_WINDOW_MS = 60_000;
+const AUTH_BOOTSTRAP_CSRF_GET_MAX = 420;
+
+/** GET Auth.js sign-in HTML — prefetch/RSC can fan out; keep far from credential POST ceilings. */
+const AUTH_BOOTSTRAP_SIGNIN_GET_WINDOW_MS = 60_000;
+const AUTH_BOOTSTRAP_SIGNIN_GET_MAX = 320;
 
 /** Marketing / public JSON under `/api/public/*` (cached counts, tags) — scanners love these. */
 const PUBLIC_JSON_WINDOW_MS = 60_000;
@@ -598,18 +610,71 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   }
 
   if (isAuthStrictPath(pathname)) {
+    /** Passive browser bootstrap — never debit the POST credential / OAuth callback budgets. */
+    if (method === "GET" && pathname === "/api/auth/csrf") {
+      const key = `ratelimit:auth:bootstrap:csrf_get:ip:${ipKey}`;
+      const max = effectiveAuthStrictMax(AUTH_BOOTSTRAP_CSRF_GET_MAX);
+      const { ok, remaining } = await checkRateLimitUnified(key, {
+        windowMs: AUTH_BOOTSTRAP_CSRF_WINDOW_MS,
+        max,
+      });
+      if (!ok) {
+        safeServerLog("security", "rate_limit_exceeded", {
+          kind: "auth_bootstrap_csrf_get",
+          limiter: "auth_bootstrap_csrf_get",
+          keyShape: "ip_partition",
+          method,
+          path: pathname.slice(0, 96),
+          windowMs: AUTH_BOOTSTRAP_CSRF_WINDOW_MS,
+          max,
+          remaining,
+        });
+        return await json429WithBackoff(ipKey, request);
+      }
+      return null;
+    }
+    if (method === "GET" && (pathname === "/api/auth/signin" || pathname.startsWith("/api/auth/signin/"))) {
+      const key = `ratelimit:auth:bootstrap:signin_get:ip:${ipKey}`;
+      const max = effectiveAuthStrictMax(AUTH_BOOTSTRAP_SIGNIN_GET_MAX);
+      const { ok, remaining } = await checkRateLimitUnified(key, {
+        windowMs: AUTH_BOOTSTRAP_SIGNIN_GET_WINDOW_MS,
+        max,
+      });
+      if (!ok) {
+        safeServerLog("security", "rate_limit_exceeded", {
+          kind: "auth_bootstrap_signin_get",
+          limiter: "auth_bootstrap_signin_get",
+          keyShape: "ip_partition",
+          method,
+          path: pathname.slice(0, 96),
+          windowMs: AUTH_BOOTSTRAP_SIGNIN_GET_WINDOW_MS,
+          max,
+          remaining,
+        });
+        return await json429WithBackoff(ipKey, request);
+      }
+      return null;
+    }
+
     const kind = authRouteKind(pathname);
     const limits = AUTH_KIND_LIMITS[kind] ?? AUTH_KIND_LIMITS.auth_other;
     const key = `ratelimit:auth:${kind}:ip:${ipKey}`;
-    const { ok } = await checkRateLimitUnified(key, {
+    const max = effectiveAuthStrictMax(limits.max);
+    const { ok, remaining } = await checkRateLimitUnified(key, {
       windowMs: limits.windowMs,
-      max: effectiveAuthStrictMax(limits.max),
+      max,
     });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", {
         kind: "auth_kind",
+        limiter: `auth_strict:${kind}`,
         authKind: kind,
+        keyShape: "ip_partition",
+        method,
         path: pathname.slice(0, 96),
+        windowMs: limits.windowMs,
+        max,
+        remaining,
       });
       return await json429WithBackoff(ipKey, request);
     }
@@ -619,14 +684,20 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   if (pathname.startsWith("/api/auth/session")) {
     if (userId) {
       const key = `ratelimit:auth_session:user:${userId}`;
-      const { ok } = await checkRateLimitUnified(key, {
+      const { ok, remaining } = await checkRateLimitUnified(key, {
         windowMs: AUTH_SESSION_WINDOW_MS,
         max: AUTH_SESSION_MAX_PER_USER,
       });
       if (!ok) {
         safeServerLog("security", "rate_limit_exceeded", {
           kind: "auth_session_user",
+          limiter: "auth_session_user",
+          keyShape: "user_id",
+          method,
           path: "/api/auth/session",
+          windowMs: AUTH_SESSION_WINDOW_MS,
+          max: AUTH_SESSION_MAX_PER_USER,
+          remaining,
         });
         return json429LearnerFixed();
       }
@@ -634,9 +705,18 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     }
     const cap = await publicCapForIpAsync(ipKey, tightenPublicCap(200));
     const key = `ratelimit:auth_session:ip:${ipKey}`;
-    const { ok } = await checkRateLimitUnified(key, { windowMs: PUBLIC_WINDOW_MS, max: cap });
+    const { ok, remaining } = await checkRateLimitUnified(key, { windowMs: PUBLIC_WINDOW_MS, max: cap });
     if (!ok) {
-      safeServerLog("security", "rate_limit_exceeded", { kind: "auth_session", path: "/api/auth/session" });
+      safeServerLog("security", "rate_limit_exceeded", {
+        kind: "auth_session_ip",
+        limiter: "auth_session_ip",
+        keyShape: "ip_partition",
+        method,
+        path: "/api/auth/session",
+        windowMs: PUBLIC_WINDOW_MS,
+        max: cap,
+        remaining,
+      });
       const res = await json429WithBackoff(ipKey, request);
       if (await recordStrikeAndTighten(ipKey)) {
         safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ipKey) });

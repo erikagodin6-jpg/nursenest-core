@@ -32,6 +32,7 @@ import { HUB, signupWithCallback } from "@/lib/marketing/marketing-entry-routes"
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import { useActiveNavContext } from "@/lib/navigation/use-active-nav-context";
 import { buildMarketingMegaMenus, type ExamMenuKey } from "@/lib/navigation/marketing-mega-menu";
+import { MEGA_MENU_STRIPPED_ACTIVE_PREFIXES } from "@/lib/navigation/marketing-pathway-nav-destinations";
 import { marketingHeaderExposeSecondaryTracksInline } from "@/lib/navigation/marketing-header-pricing-surface";
 import { formatEyebrow, formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
@@ -75,14 +76,8 @@ function isActivePath(current: string, base: string): boolean {
  * client-only APIs).
  */
 function isMegaMenuKeyActive(key: ExamMenuKey, strippedPath: string): boolean {
-  const prefixes: Record<ExamMenuKey, string[]> = {
-    rn:     ["/us/rn/", "/canada/rn/"],
-    pn:     ["/us/pn/", "/canada/pn/"],
-    np:     ["/us/np/", "/canada/np/"],
-    newgrad:[ "/pre-nursing/", "/lessons", "/question-bank", "/flashcards", "/practice-exams" ],
-    allied: ["/us/allied/", "/canada/allied/"],
-  };
-  return (prefixes[key] ?? []).some((p) => strippedPath.startsWith(p));
+  const prefixes = MEGA_MENU_STRIPPED_ACTIVE_PREFIXES[key];
+  return (prefixes ?? []).some((p) => strippedPath.startsWith(p));
 }
 
 function examIndicatorLabel(

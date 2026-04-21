@@ -18,7 +18,9 @@ import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
 import { MarketingDefaultLayoutChromeFailsafeShell } from "@/components/marketing/marketing-default-layout-chrome-failsafe";
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
+import { CheckoutGlobalRegionContextPathStamp } from "@/components/marketing/checkout-global-region-context-path-stamp";
 import { MarketingHeaderGlobalRegionServerBridge } from "@/lib/region/marketing-header-global-region-server-bridge";
+import { readMarketingNaBillingSoftGateFromCookies } from "@/lib/region/read-marketing-na-billing-soft-gate.server";
 import { readOptionalGlobalRegionSlugFromCookie } from "@/lib/region/read-optional-global-region-cookie.server";
 import { safeAwait } from "@/lib/async/safe-await";
 import { homePerfFinalForGetRoot, homePerfLogForGetRoot } from "@/lib/observability/home-perf-trace";
@@ -55,12 +57,14 @@ function marketingDefaultLayoutStaticShellForHome({
   serverRegion,
   trustClientPersistedRegion,
   serverGlobalRegion,
+  serverNaBillingSoftGate,
 }: {
   children: React.ReactNode;
   serverRegion: MarketingRegionToggle;
   trustClientPersistedRegion: boolean;
   /** Server `nn_global_region` (or null) so client hooks match SSR under static `/` shell. */
   serverGlobalRegion: GlobalRegionSlug | null;
+  serverNaBillingSoftGate: boolean;
 }) {
   const shellMessages = mergeMinimalMarketingLayoutShellMessages({});
   return (
@@ -73,7 +77,11 @@ function marketingDefaultLayoutStaticShellForHome({
       <NursenestRegionRoot serverRegion={serverRegion} trustClientPersistedRegion={trustClientPersistedRegion}>
         <MarketingCountryChromeProvider country="canada">
           <MarketingFeedbackShell>
-            <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegion}>
+            <MarketingHeaderGlobalRegionServerBridge
+              serverGlobalRegion={serverGlobalRegion}
+              serverNaBillingSoftGate={serverNaBillingSoftGate}
+            >
+              <CheckoutGlobalRegionContextPathStamp />
               <MarketingDefaultLayoutChromeFailsafeShell>
                 <PageTransitionShell>{children}</PageTransitionShell>
               </MarketingDefaultLayoutChromeFailsafeShell>
@@ -109,11 +117,13 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         const staticShellRegionCookie = await readOptionalMarketingRegionToggleForCountry();
         const staticShellServerRegion: MarketingRegionToggle = staticShellRegionCookie ?? "CA";
         const staticShellGlobalRegion = await readOptionalGlobalRegionSlugFromCookie();
+        const staticShellNaBillingGate = await readMarketingNaBillingSoftGateFromCookies();
         return marketingDefaultLayoutStaticShellForHome({
           children,
           serverRegion: staticShellServerRegion,
           trustClientPersistedRegion: staticShellRegionCookie !== undefined,
           serverGlobalRegion: staticShellGlobalRegion,
+          serverNaBillingSoftGate: staticShellNaBillingGate,
         });
       }
     } catch {
@@ -271,6 +281,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       const trustClientPersistedRegion = marketingRegionCookie !== undefined;
       const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingRegionCookie);
       const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie();
+      const serverNaBillingSoftGate = await readMarketingNaBillingSoftGateFromCookies();
       const staffSession = await getStaffSession().catch(() => null);
 
       return (
@@ -285,7 +296,11 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
               <OrganizationJsonLd />
               <WebSiteJsonLd />
               <MarketingFeedbackShell>
-                <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
+                <MarketingHeaderGlobalRegionServerBridge
+                  serverGlobalRegion={serverGlobalRegionCookie}
+                  serverNaBillingSoftGate={serverNaBillingSoftGate}
+                >
+                  <CheckoutGlobalRegionContextPathStamp />
                   <div className="nn-marketing-surface flex min-h-screen flex-col">
                     <SiteHeader serverHasStaffSession={staffSession != null} />
                     <PathwayLessonProgressRefreshListener />
@@ -320,6 +335,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       });
       const shellMessages = mergeMinimalMarketingLayoutShellMessages({});
       const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie();
+      const serverNaBillingSoftGate = await readMarketingNaBillingSoftGateFromCookies();
       return (
         <MarketingI18nProvider
           key={DEFAULT_MARKETING_LOCALE}
@@ -330,7 +346,11 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
           <NursenestRegionRoot serverRegion={"CA"} trustClientPersistedRegion={false}>
             <MarketingCountryChromeProvider country="canada">
               <MarketingFeedbackShell>
-                <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
+                <MarketingHeaderGlobalRegionServerBridge
+                  serverGlobalRegion={serverGlobalRegionCookie}
+                  serverNaBillingSoftGate={serverNaBillingSoftGate}
+                >
+                  <CheckoutGlobalRegionContextPathStamp />
                   <MarketingDefaultLayoutChromeFailsafeShell>
                     <PageTransitionShell>{children}</PageTransitionShell>
                   </MarketingDefaultLayoutChromeFailsafeShell>

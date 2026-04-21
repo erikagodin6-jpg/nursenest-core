@@ -28,6 +28,7 @@ import {
   hasExistingPreferences,
   wasSelectorDismissed,
 } from "@/lib/context/context-persistence";
+import { saveContextPreferences } from "@/app/actions/save-context-preferences";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { isEnglishDefaultHomeMarketingRegion } from "@/lib/i18n/geo-resolver";
 
@@ -120,6 +121,12 @@ export function ExamSelector({ geoRegion }: ExamSelectorProps) {
       locale,
       profession,
       exam: resolved.exam,
+    });
+    void saveContextPreferences({
+      region,
+      locale,
+      profession,
+      ...(resolved.exam ? { exam: resolved.exam } : {}),
     });
 
     trackClientEvent(EVT.completed, {

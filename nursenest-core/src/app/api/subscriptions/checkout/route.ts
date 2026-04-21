@@ -40,6 +40,11 @@ import { JSON_BODY_CHECKOUT, parseJsonBodyWithLimit } from "@/lib/http/json-body
 import { getRegionalPricing } from "@/lib/pricing/regional-pricing-map";
 import { isGlobalRegionSlug, type GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { GLOBAL_REGION_COOKIE, parseGlobalRegionCookie } from "@/lib/region/global-region-cookie";
+import {
+  checkoutRegionGateTelemetry,
+  collectAuthoritativeCheckoutGlobalRegionSlugs,
+  GLOBAL_CHECKOUT_REGION_CONTEXT_COOKIE,
+} from "@/lib/region/checkout-global-region-context";
 import type { TierCode } from "@prisma/client";
 
 /**
@@ -56,7 +61,7 @@ const bodySchema = z
     region: z.string().optional(),
     acceptPolicies: z.literal(true),
     policyVersion: z.string().min(1).max(64),
-    /** Required when `nn_global_region` is a partial/marketing market (see checkout-na-billing-scope-gate). */
+    /** Required when any authoritative global region (cookie, signed context, or body) is a partial market — see checkout-na-billing-scope-gate. */
     naBillingScopeAcknowledged: z.literal(true).optional(),
   })
   .strict();
@@ -207,18 +212,44 @@ export async function POST(req: Request) {
       );
     }
 
-    const globalRegionCookie = (await cookies()).get(GLOBAL_REGION_COOKIE)?.value;
-    if (
-      naBillingScopeAckRequiredForCheckout({
-        globalRegionCookieRaw: globalRegionCookie,
-        checkoutBodyRegionSlug: resolvedRegion,
-      }) &&
-      naBillingScopeAcknowledged !== true
-    ) {
+    const jar = await cookies();
+    const globalRegionCookie = jar.get(GLOBAL_REGION_COOKIE)?.value;
+    const checkoutRegionContextCookie = jar.get(GLOBAL_CHECKOUT_REGION_CONTEXT_COOKIE)?.value;
+    const authoritativeSlugs = collectAuthoritativeCheckoutGlobalRegionSlugs({
+      globalRegionCookieRaw: globalRegionCookie,
+      checkoutRegionContextCookieRaw: checkoutRegionContextCookie,
+      checkoutBodyRegionSlug: resolvedRegion,
+    });
+    const naAckRequired = naBillingScopeAckRequiredForCheckout({
+      globalRegionCookieRaw: globalRegionCookie,
+      checkoutRegionContextCookieRaw: checkoutRegionContextCookie,
+      checkoutBodyRegionSlug: resolvedRegion,
+    });
+    const gateTelemetry = checkoutRegionGateTelemetry({
+      globalRegionCookieRaw: globalRegionCookie,
+      checkoutRegionContextCookieRaw: checkoutRegionContextCookie,
+      checkoutBodyRegionSlug: resolvedRegion,
+    });
+    emitStructuredLog("checkout_region_gate_eval", "info", {
+      correlationId: correlation,
+      route: "/api/subscriptions/checkout",
+      flow: "billing",
+      contextSources: gateTelemetry.contextSources,
+      unionSlugs: gateTelemetry.unionSlugs,
+      gateRequired: gateTelemetry.gateRequired,
+      naAckRequired: naAckRequired ? 1 : 0,
+      naAckPresent: naBillingScopeAcknowledged ? 1 : 0,
+    });
+    if (naAckRequired && naBillingScopeAcknowledged !== true) {
       safeServerLog("stripe_checkout", "checkout_na_billing_scope_ack_required", {
         route: "/api/subscriptions/checkout",
         cookieRegion: parseGlobalRegionCookie(globalRegionCookie) ?? "",
+        stampedRegionPresent: Boolean(checkoutRegionContextCookie && checkoutRegionContextCookie.length > 0),
         bodyRegion: resolvedRegion ?? "",
+        authoritative_slugs: authoritativeSlugs.join(","),
+        context_sources: gateTelemetry.contextSources,
+        na_ack_required: 1,
+        na_ack_present: 0,
       });
       auditCheckoutFailed({ correlation, reason: "na_billing_scope_ack_required", userId });
       recordCheckoutFailure("na_billing_scope_ack_required", req);
@@ -248,6 +279,9 @@ export async function POST(req: Request) {
       duration: durationCode,
       pathway: requestedPathway,
       region: resolvedRegion ?? "",
+      authoritative_slugs: authoritativeSlugs.join(","),
+      na_ack_required: naAckRequired ? 1 : 0,
+      na_ack_present: naBillingScopeAcknowledged ? 1 : 0,
     });
 
     // Try regional pricing first (covers all 18 global markets), fall back to legacy CA/US map

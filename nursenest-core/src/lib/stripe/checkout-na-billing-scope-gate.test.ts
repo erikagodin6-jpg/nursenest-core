@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import { describe, it, beforeEach, afterEach } from "node:test";
+import { encodeCheckoutGlobalRegionContextToken } from "@/lib/region/checkout-global-region-context";
 import {
   naBillingScopeAckRequiredForCheckout,
   naBillingScopeAckRequiredForCookieValue,
@@ -26,6 +27,21 @@ describe("naBillingScopeAckRequiredForCookieValue", () => {
 });
 
 describe("naBillingScopeAckRequiredForCheckout", () => {
+  const prevAuth = process.env.AUTH_SECRET;
+  const prevNext = process.env.NEXTAUTH_SECRET;
+
+  beforeEach(() => {
+    process.env.AUTH_SECRET = "test-checkout-context-secret-min-32-characters-long";
+    delete process.env.NEXTAUTH_SECRET;
+  });
+
+  afterEach(() => {
+    if (prevAuth === undefined) delete process.env.AUTH_SECRET;
+    else process.env.AUTH_SECRET = prevAuth;
+    if (prevNext === undefined) delete process.env.NEXTAUTH_SECRET;
+    else process.env.NEXTAUTH_SECRET = prevNext;
+  });
+
   it("requires ack when checkout body targets a partial region even without cookie", () => {
     assert.equal(
       naBillingScopeAckRequiredForCheckout({
@@ -36,10 +52,24 @@ describe("naBillingScopeAckRequiredForCheckout", () => {
     );
   });
 
+  it("requires ack when HttpOnly signed context is gated and plain global cookie is absent", () => {
+    const tok = encodeCheckoutGlobalRegionContextToken("philippines");
+    assert.ok(tok);
+    assert.equal(
+      naBillingScopeAckRequiredForCheckout({
+        globalRegionCookieRaw: undefined,
+        checkoutRegionContextCookieRaw: tok,
+      }),
+      true,
+    );
+    assert.equal(naBillingScopeAckRequiredForCookieValue(undefined, tok), true);
+  });
+
   it("requires ack when cookie is partial even if body slug is full (stricter union)", () => {
     assert.equal(
       naBillingScopeAckRequiredForCheckout({
         globalRegionCookieRaw: "philippines",
+        checkoutRegionContextCookieRaw: undefined,
         checkoutBodyRegionSlug: "us",
       }),
       true,
@@ -50,6 +80,7 @@ describe("naBillingScopeAckRequiredForCheckout", () => {
     assert.equal(
       naBillingScopeAckRequiredForCheckout({
         globalRegionCookieRaw: "us",
+        checkoutRegionContextCookieRaw: undefined,
         checkoutBodyRegionSlug: "canada",
       }),
       false,
@@ -57,6 +88,7 @@ describe("naBillingScopeAckRequiredForCheckout", () => {
     assert.equal(
       naBillingScopeAckRequiredForCheckout({
         globalRegionCookieRaw: undefined,
+        checkoutRegionContextCookieRaw: undefined,
         checkoutBodyRegionSlug: "us",
       }),
       false,

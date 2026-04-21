@@ -7,6 +7,8 @@ type RedisFixedWindowClient = {
 
 type RedisWithDel = RedisFixedWindowClient & { del: (key: string) => Promise<unknown> };
 
+type RedisReadClient = { get: (key: string) => Promise<unknown> };
+
 function fixedWindowTtlSeconds(windowMs: number): number {
   return Math.max(1, Math.ceil(windowMs / 1000));
 }
@@ -17,7 +19,7 @@ const CREDENTIALS_LOGIN_COMBO_WINDOW_MS = 60_000;
 
 function credentialsLoginBurstMax(): number {
   if (process.env.NODE_ENV !== "production") return 120;
-  return 48;
+  return 60;
 }
 
 function credentialsLoginComboMax(): number {
@@ -33,13 +35,47 @@ export function credentialsLoginComboRedisKey(ipKey: string, acctHash: string): 
   return `ratelimit:auth:credentials_login:combo:ip:${ipKey}:acct:${acctHash}`;
 }
 
+async function readRedisWindowCount(key: string, redis?: RedisReadClient | null): Promise<number> {
+  let client: RedisReadClient | null | undefined = redis;
+  if (client === undefined) {
+    try {
+      const { getRedisClient } = await import("@/lib/server/redis");
+      client = getRedisClient();
+    } catch {
+      client = null;
+    }
+  }
+  if (!client) return 0;
+  try {
+    const v = await client.get(key);
+    const n = typeof v === "number" ? v : typeof v === "string" ? Number.parseInt(v, 10) : Number.NaN;
+    return Number.isFinite(n) && n > 0 ? n : 0;
+  } catch (error) {
+    safeServerLog("security", "redis_fixed_window_read_fail_open", {
+      keyPrefix: key.slice(0, 48),
+      detail: error instanceof Error ? error.message.slice(0, 160) : "unknown",
+    });
+    return 0;
+  }
+}
+
 /**
- * Fixed-window limits for credential `authorize` (Redis). Returns false when either bucket is exhausted.
+ * Read-only guard: if a prior burst of failures already exhausted windows, reject before expensive work.
+ * Successful logins do not increment these keys (see {@link consumeCredentialsLoginFailure}).
  */
-export async function assertCredentialsLoginRateLimits(
-  ipKey: string,
-  acctHash: string,
-): Promise<{ ok: boolean }> {
+export async function isCredentialsLoginRateLimited(ipKey: string, acctHash: string): Promise<boolean> {
+  if (!acctHash) return false;
+  const burst = await readRedisWindowCount(credentialsLoginBurstRedisKey(ipKey));
+  const combo = await readRedisWindowCount(credentialsLoginComboRedisKey(ipKey, acctHash));
+  return burst >= credentialsLoginBurstMax() || combo >= credentialsLoginComboMax();
+}
+
+/**
+ * Increment fixed-window counters after a **failed** credential authentication outcome only.
+ * Successful password checks must not call this (and should call {@link resetCredentialsLoginRateLimitKeys}).
+ */
+export async function consumeCredentialsLoginFailure(ipKey: string, acctHash: string): Promise<{ ok: boolean }> {
+  if (!acctHash) return { ok: true };
   const burst = await checkRedisFixedWindowLimit(credentialsLoginBurstRedisKey(ipKey), {
     windowMs: CREDENTIALS_LOGIN_BURST_WINDOW_MS,
     max: credentialsLoginBurstMax(),

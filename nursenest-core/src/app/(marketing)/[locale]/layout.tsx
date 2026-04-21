@@ -19,7 +19,9 @@ import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-ser
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
+import { CheckoutGlobalRegionContextPathStamp } from "@/components/marketing/checkout-global-region-context-path-stamp";
 import { MarketingHeaderGlobalRegionServerBridge } from "@/lib/region/marketing-header-global-region-server-bridge";
+import { readMarketingNaBillingSoftGateFromCookies } from "@/lib/region/read-marketing-na-billing-soft-gate.server";
 import { readOptionalGlobalRegionSlugFromCookie } from "@/lib/region/read-optional-global-region-cookie.server";
 
 import { getStaffSession } from "@/lib/auth/staff-session";
@@ -95,6 +97,7 @@ export default async function MarketingLocaleLayout({
   const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry();
   const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingRegionCookie);
   const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie();
+  const serverNaBillingSoftGate = await readMarketingNaBillingSoftGateFromCookies();
   const staffSession = await getStaffSession().catch(() => null);
 
   return (
@@ -105,7 +108,11 @@ export default async function MarketingLocaleLayout({
           <OrganizationJsonLd />
           <WebSiteJsonLd />
           <MarketingFeedbackShell>
-            <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
+            <MarketingHeaderGlobalRegionServerBridge
+              serverGlobalRegion={serverGlobalRegionCookie}
+              serverNaBillingSoftGate={serverNaBillingSoftGate}
+            >
+              <CheckoutGlobalRegionContextPathStamp />
               <div className="nn-marketing-surface flex min-h-screen flex-col">
                 <SiteHeader serverHasStaffSession={staffSession != null} />
                 <main className="flex-1">

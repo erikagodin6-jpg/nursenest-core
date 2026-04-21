@@ -5,7 +5,6 @@
 
 import { ALLIED_HUB_CATEGORY_ORDER, ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import {
-  alliedCareersMarketingUrl,
   alliedHub,
   HUB,
   NP,
@@ -18,6 +17,7 @@ import {
 } from "@/lib/marketing/marketing-entry-routes";
 import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
 import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
+import { publicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
 
 export type ExamMenuKey = "rn" | "pn" | "np" | "newgrad" | "allied";
 
@@ -53,13 +53,8 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
   const npLessons = region === "US" ? NP.fnpLessons : NP.caNpLessons;
   const npQuestionHref = npNpQuestionsForRegion(region);
   const studyPlanSignupHref = signupWithCallback("/pre-nursing/study-plan");
-  const alliedCareerPathwaysHref = alliedCareersMarketingUrl();
-  const newGradHub = "/pre-nursing";
-  const newGradLessons = HUB.examLessons;
-  const newGradPractice = HUB.questionBank;
-  const newGradExams = HUB.practiceExams;
-  const newGradFlashcards = HUB.flashcards;
-  const newGradHowItWorks = "/how-it-works";
+  const newGrad = publicNewGradStudyDestinations(region, rnHub);
+  const newGradStudyPlanHref = signupWithCallback(newGrad.lessons);
 
   const gl = () => t("nav.mega.group.learn");
   const gp = () => t("nav.mega.group.practice");
@@ -165,32 +160,32 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
     {
       key: "newgrad",
       label: t("nav.mega.newGrad.label"),
-      hubHref: newGradHub,
+      hubHref: newGrad.hubHref,
       hubDescription: t("nav.mega.newGrad.hubDescription"),
       groups: [
         {
           key: "learn",
           heading: gl(),
           links: [
-            { key: "ng-lessons", label: ll(), href: newGradLessons },
-            { key: "ng-flashcards", label: lf(), href: newGradFlashcards },
+            { key: "ng-lessons", label: ll(), href: newGrad.lessons },
+            { key: "ng-flashcards", label: lf(), href: newGrad.flashcards },
           ],
         },
         {
           key: "practice",
           heading: gp(),
           links: [
-            { key: "ng-questions", label: lq(), href: newGradPractice },
-            { key: "ng-exams", label: lex(), href: newGradExams },
-            { key: "ng-readiness", label: lcat(), href: publicMarketingCatHrefForOffering(region, "rn") },
+            { key: "ng-questions", label: lq(), href: newGrad.questions },
+            { key: "ng-exams", label: lex(), href: newGrad.practiceExams },
+            { key: "ng-readiness", label: lcat(), href: newGrad.cat },
           ],
         },
         {
           key: "tools",
           heading: gt(),
           links: [
-            { key: "ng-study-plan", label: lplan(), href: studyPlanSignupHref },
-            { key: "ng-how", label: lhow(), href: newGradHowItWorks },
+            { key: "ng-study-plan", label: lplan(), href: newGradStudyPlanHref },
+            { key: "ng-how", label: lhow(), href: newGrad.howItWorks },
           ],
         },
       ],
