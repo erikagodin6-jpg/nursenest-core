@@ -78,6 +78,25 @@ if (beforeHeap.includes("max-old-space-size") && !beforeHeap.includes(`--max-old
 
 logEffectiveHeapMb("before_spawn_next_child");
 
+/** One-line snapshot for DO build triage (hypothesis: env drift vs next.config). No secrets — flags/short strings only. */
+const diag = (k) => String(process.env[k] ?? "");
+const diagB = (k) => (diag(k).trim() ? "1" : "0");
+console.log(
+  "[build-diagnostic] " +
+    [
+      `sentry=${diag("SENTRY_ENABLED") || "unset"}`,
+      `heavyTasks=${diag("RUN_HEAVY_BUILD_TASKS") || "unset"}`,
+      `skipI18n=${diag("SKIP_I18N_PREBUILD") || "unset"}`,
+      `forceSingle=${diagB("NN_FORCE_SINGLE_BUILD_WORKER")}`,
+      `nnAppPlatform=${diagB("NN_APP_PLATFORM_BUILD")}`,
+      `lowMemGen=${diagB("BUILD_LOW_MEMORY_STATIC_GENERATION")}`,
+      `allowMulti=${diagB("NN_ALLOW_MULTI_BUILD_WORKERS")}`,
+      `webpackPar=${diag("BUILD_WEBPACK_PARALLELISM") || "unset"}`,
+      `heapMbEnv=${diag("BUILD_NODE_MAX_OLD_SPACE_SIZE_MB") || "unset"}`,
+      `doId=${diagB("DIGITALOCEAN_APP_ID")}`,
+    ].join(" "),
+);
+
 let nextBin;
 try {
   const nextPkg = require.resolve("next/package.json");
