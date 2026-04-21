@@ -1,0 +1,49 @@
+{
+  "instructions": "From Search Console: Performance → Queries (impressions >20, clicks ~0, position 10–30). Open each URL; set slug to the segment after /blog/ (single segment, no leading slash), enabled to true. From nursenest-core: npx tsx scripts/blog-apply-gsc-opportunity-upgrades.mts (dry-run by default, no DB writes). After review: npx tsx scripts/blog-apply-gsc-opportunity-upgrades.mts --apply",
+  "upgrades": [
+    {
+      "enabled": false,
+      "slug": "",
+      "queriesTargeted": [
+        "hyperkalemia physiology of the heart",
+        "hyperkalemia effects on heart",
+        "hyperkalemia ecg nclex"
+      ],
+      "title": "Hyperkalemia Effects on the Heart (NCLEX Mechanism + ECG Changes)",
+      "seoTitle": "Hyperkalemia Effects on the Heart (NCLEX Mechanism + ECG Changes)",
+      "seoDescription": "How high potassium changes cardiac resting potential, slows conduction, and produces peaked T waves → wide QRS → sine wave. Exam-focused pathophysiology plus where to practice.",
+      "excerpt": "High potassium shifts cardiac resting membrane potential and inactivates sodium channels—peaked T waves first, then conduction delays. Learn the mechanism NCLEX ties to priority actions.",
+      "targetKeyword": "hyperkalemia physiology of the heart",
+      "keywordCluster": "electrolytes-hyperkalemia-cardiac",
+      "bodyLeadHtml": "<!-- nn:gsc-lead -->\n<p><strong>Answer in one beat:</strong> hyperkalemia raises extracellular potassium, making the resting membrane potential less negative (partial depolarization). Myocytes become irritable early, then sodium-channel inactivation slows phase 0—so conduction delays. On ECG expect <strong>peaked T waves</strong> first, then <strong>PR prolongation</strong>, <strong>QRS widening</strong>, sine waves, and lethal arrhythmias without treatment. That is the physiology the heart “shows” on the monitor and the stem wants you to link to <strong>immediate stabilization and treatment</strong>.</p>\n<p>Reinforce actions and monitoring in the <a href=\"/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold\">fluids &amp; electrolyte emergencies</a> lesson and <a href=\"/question-bank\">question bank</a>.</p>",
+      "bodyClusterHtml": "<!-- nn:gsc-cluster -->\n<section aria-labelledby=\"gsc-cluster-k\">\n<h2 id=\"gsc-cluster-k\">Cluster: potassium &amp; the ECG</h2>\n<ul>\n<li><a href=\"/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold\">Hypo- vs hyperkalemia / emergencies (lesson)</a></li>\n<li><a href=\"/us/rn/nclex-rn/lessons\">NCLEX-RN lesson hub</a></li>\n<li><a href=\"/question-bank\">Question bank</a></li>\n</ul>\n</section>",
+      "mergeRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/fluids-electrolytes-emergencies-gold",
+        "/us/rn/nclex-rn/lessons"
+      ],
+      "appendTags": ["hyperkalemia", "ECG", "electrolytes", "NCLEX"]
+    },
+    {
+      "enabled": false,
+      "slug": "",
+      "queriesTargeted": [
+        "copd barrel chest air trapping mechanism",
+        "why barrel chest copd",
+        "copd air trapping nursing"
+      ],
+      "title": "COPD Barrel Chest & Air Trapping (Mechanism for NCLEX)",
+      "seoTitle": "COPD Barrel Chest & Air Trapping (Mechanism for NCLEX)",
+      "seoDescription": "Why COPD can show a barrel-shaped thorax: loss of elastic recoil, dynamic airway collapse on exhale, hyperinflation—and how exam items test it.",
+      "excerpt": "Barrel chest in COPD reflects chronic hyperinflation and air trapping: destroyed alveolar support lets small airways collapse on exhale while gas stays distal—AP diameter increases.",
+      "targetKeyword": "copd barrel chest air trapping mechanism",
+      "keywordCluster": "copd-respiratory-mechanics",
+      "bodyLeadHtml": "<!-- nn:gsc-lead -->\n<p><strong>Answer in one breath:</strong> in emphysema-heavy COPD, loss of alveolar elastic recoil removes radial traction on small airways. During <strong>exhalation</strong>, those airways narrow or collapse while distal gas is <strong>trapped</strong> (air trapping). The chest chronically sits nearer <strong>total lung capacity</strong>—ribs ride more horizontal and <strong>anteroposterior diameter increases</strong>, which is the classic <strong>barrel chest</strong> silhouette. It signals <strong>chronic hyperinflation</strong>, not by itself a new acute event.</p>\n<p>Apply GOLD-style priorities and O₂ teaching in the <a href=\"/us/rn/nclex-rn/lessons/copd-gold-standard\">COPD management</a> lesson and drill scenarios in the <a href=\"/question-bank\">question bank</a>.</p>",
+      "bodyClusterHtml": "<!-- nn:gsc-cluster -->\n<section aria-labelledby=\"gsc-cluster-copd\">\n<h2 id=\"gsc-cluster-copd\">Cluster: COPD mechanics &amp; oxygen</h2>\n<ul>\n<li><a href=\"/us/rn/nclex-rn/lessons/copd-gold-standard\">COPD management (lesson)</a></li>\n<li><a href=\"/us/rn/nclex-rn/lessons\">NCLEX-RN lesson hub</a></li>\n<li><a href=\"/question-bank\">Question bank</a></li>\n</ul>\n</section>",
+      "mergeRelatedLessonPaths": [
+        "/us/rn/nclex-rn/lessons/copd-gold-standard",
+        "/us/rn/nclex-rn/lessons"
+      ],
+      "appendTags": ["COPD", "air trapping", "barrel chest", "respiratory", "NCLEX"]
+    }
+  ]
+}

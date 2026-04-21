@@ -9,6 +9,11 @@ const ANTI_FILLER = `Quality bar (non-negotiable):
 - Prefer specific cues (vitals, labs, behaviors) and "if you see X, think Y" patterns over abstract advice.
 - Do not invent pass rates, facility policies, or statistics. If uncertain, stay descriptive and conservative.`;
 
+const PEOPLE_FIRST_SEO = `People-first SEO (non-negotiable):
+- Write for nurses and students preparing for licensure exams — clarity and usefulness first; do not optimize wording purely to game rankings.
+- Never promise or imply guaranteed search rankings, "#1 on Google", or similar claims. Avoid manipulative patterns (keyword stuffing, hidden text, doorway-style repetition).
+- Titles and meta copy should sound trustworthy and specific to the clinical topic, not like generic SEO spam.`;
+
 export function buildStructuredPlanSystemPrompt(): string {
   return `You are a senior clinical-education editor for NurseNest (nursing licensure exam prep).
 Return a single JSON object only (no markdown fences, no commentary).
@@ -35,6 +40,8 @@ Required keys (exact names):
 - optional schemaOpportunities: array of { "type", "rationale" } — suggest 1-4 JSON-LD types that could apply **if** metadata is validated (BlogPosting is default on public pages; add FAQPage only when FAQs are substantive; BreadcrumbList when crumb trail is stable; HowTo only if steps are explicit and safe). Rationale must be one sentence — no fabricated review scores or ratings.
 
 ${ANTI_FILLER}
+
+${PEOPLE_FIRST_SEO}
 Do not invent statistics or pass rates.`;
 }
 
@@ -70,6 +77,8 @@ export function buildArticleBodySystemPrompt(): string {
 Output valid HTML only: <h2>, <h3>, <p>, <ul>, <li>, <strong>, <table>, <thead>, <tbody>, <tr>, <th>, <td>. No markdown. No <h1>.
 
 ${ANTI_FILLER}
+
+${PEOPLE_FIRST_SEO}
 
 Rules:
 - Do **not** output <img> tags or empty image placeholders. Inline visuals are attached later in the CMS; prose may reference concepts only.

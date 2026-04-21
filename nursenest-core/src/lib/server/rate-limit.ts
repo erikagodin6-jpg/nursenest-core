@@ -54,6 +54,12 @@ const BILLING_RATE_PATH_PREFIXES = ["/api/subscriptions/checkout", "/api/subscri
 /** Public pricing matrix — scraped by bots; dedicated cap before generic `/api/*`. */
 const PRICING_PATH_PREFIX = "/api/pricing";
 
+/**
+ * `POST` signup uses {@link API_SIGNUP_PER_IP_RATE_LIMIT} only inside `src/app/api/signup/route.ts`.
+ * Skip the proxy catch-all so unrelated `/api/*` traffic on the same IP cannot starve signup.
+ */
+const API_SIGNUP_POST_ROUTE = `${"/api"}${"/signup"}` as const;
+
 /** Subscription APIs (portal, status) — tighter per-IP cap than generic `/api/*` (webhook exempt in {@link isExemptPath}). */
 const SUBSCRIPTION_API_STRICT_PREFIX = "/api/subscriptions/";
 const SUBSCRIPTION_STRICT_WINDOW_MS = 60_000;
@@ -67,7 +73,7 @@ const BILLING_MAX = 18;
 
 const PRICING_WINDOW_MS = 60_000;
 /** Default per-IP ceiling for `GET /api/pricing/*` (NAT + prefetch + reloads). Override: `NN_PRICING_READ_MAX_PER_IP`. */
-const PRICING_MAX_IP_DEFAULT = 300;
+const PRICING_MAX_IP_DEFAULT = 360;
 /** JWT-present pricing reads — per-user so NAT does not starve checkout. Override: `NN_PRICING_READ_MAX_PER_USER`. */
 const PRICING_MAX_USER_DEFAULT = 600;
 const PRICING_READ_RETRY_AFTER_SEC = 45;
@@ -143,11 +149,11 @@ const AUTH_BOOTSTRAP_SIGNIN_GET_MAX = 320;
 
 /** Marketing / public JSON under `/api/public/*` (cached counts, tags) — scanners love these. */
 const PUBLIC_JSON_WINDOW_MS = 60_000;
-const PUBLIC_JSON_MAX = 24;
+const PUBLIC_JSON_MAX = 36;
 
 /** Hot stats endpoint — hammered by bots + homepage; tight per IP before generic public_json. */
 const HOME_STATS_WINDOW_MS = 60_000;
-const HOME_STATS_MAX = 14;
+const HOME_STATS_MAX = 20;
 
 /** Flashcard tag list — DB join; tighter than generic `/api/public/*` now that route is cache-backed. */
 const FLASHCARD_TAGS_WINDOW_MS = 60_000;
@@ -1005,6 +1011,10 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     return null;
   }
 
+  if (method === "POST" && pathname === API_SIGNUP_POST_ROUTE) {
+    return null;
+  }
+
   const ip = getTrustedClientIp(request);
   const ipKey = rateLimitClientPartition(request, ip);
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
@@ -1127,6 +1137,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
         safeServerLog("security", "rate_limit_exceeded", {
           kind: "pricing_read_user",
           limiter: "pricing_read_user",
+          identity_basis: "jwt_partition",
           path: pathShort,
           windowMs: PRICING_WINDOW_MS,
           max: maxUser,
@@ -1151,6 +1162,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
       safeServerLog("security", "rate_limit_exceeded", {
         kind: "pricing_read_ip",
         limiter: "pricing_read_ip",
+        identity_basis: "ip_partition",
         path: pathShort,
         windowMs: PRICING_WINDOW_MS,
         max: maxIp,
@@ -1384,9 +1396,18 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
 
   const cap = await publicCapForIpAsync(ipKey, tightenPublicCap(PUBLIC_MAX));
   const key = `ratelimit:public:ip:${ipKey}`;
-  const { ok } = await checkRateLimitUnified(key, { windowMs: PUBLIC_WINDOW_MS, max: cap });
+  const { ok, remaining } = await checkRateLimitUnified(key, { windowMs: PUBLIC_WINDOW_MS, max: cap });
   if (!ok) {
-    safeServerLog("security", "rate_limit_exceeded", { kind: "public", path: pathname.slice(0, 96) });
+    safeServerLog("security", "rate_limit_exceeded", {
+      kind: "public",
+      limiter: "public_api_catchall",
+      identity_basis: "ip_partition",
+      path: pathname.slice(0, 96),
+      windowMs: PUBLIC_WINDOW_MS,
+      max: cap,
+      ipHash: hashIp(ipKey),
+      remaining,
+    });
     const res = await json429WithBackoff(ipKey);
     if (await recordStrikeAndTighten(ipKey)) {
       safeServerLog("security", "rate_limit_abuse_tighten", { ipHash: hashIp(ipKey) });
@@ -1399,8 +1420,5 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
 function hashIp(ip: string): string {
   let h = 0;
   for (let i = 0; i < ip.length; i++) h = (h * 31 + ip.charCodeAt(i)) | 0;
-  return String(h >>> 0);
-}
-0;
   return String(h >>> 0);
 }

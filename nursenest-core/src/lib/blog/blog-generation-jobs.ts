@@ -8,6 +8,7 @@ import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { processDraftGenerationBatchItems } from "@/lib/blog/blog-draft-generation-batch";
 import { DRAFT_BATCH_MAX_ITEMS_PER_PROCESS } from "@/lib/blog/blog-draft-generation-batch-constants";
+import { isRnTopicMapShellGenerationBatch } from "@/lib/blog/blog-topic-map-shell-batch-constants";
 
 /** UI + API job phase (maps from persisted batch + item states). */
 export type BlogGenerationJobPhase = "queued" | "running" | "completed" | "cancelled" | "partial";
@@ -80,6 +81,8 @@ export type BlogGenerationJobPayload = {
   lastProcessorError: string | null;
   createdAt: string;
   updatedAt: string;
+  /** True when this job creates RN topic-map DRAFT shells (no AI). */
+  rnTopicMapShellJob: boolean;
   items: BlogGenerationJobItemPayload[];
 };
 
@@ -95,6 +98,7 @@ function serializeJob(
   const pending = batch.items.filter((i) => i.status === BlogDraftGenerationBatchItemStatus.PENDING).length;
   const generating = batch.items.filter((i) => i.status === BlogDraftGenerationBatchItemStatus.GENERATING).length;
   const phase = mapBlogDraftBatchToJobPhase(batch, pending, generating);
+  const rnTopicMapShellJob = isRnTopicMapShellGenerationBatch(batch);
   return {
     id: batch.id,
     phase,
@@ -122,6 +126,7 @@ function serializeJob(
     lastProcessorError: batch.lastProcessorError,
     createdAt: batch.createdAt.toISOString(),
     updatedAt: batch.updatedAt.toISOString(),
+    rnTopicMapShellJob,
     items: batch.items.map((i) => ({
       id: i.id,
       ordinal: i.ordinal,

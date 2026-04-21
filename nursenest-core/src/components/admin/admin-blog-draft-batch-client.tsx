@@ -72,6 +72,7 @@ type BatchDetail = BatchRow & {
 type GenerationJobApiPayload = {
   id: string;
   phase: NonNullable<BatchDetail["jobPhase"]>;
+  rnTopicMapShellJob?: boolean;
   batchStatus: BlogDraftGenerationBatchStatus;
   exam: string;
   country: string;

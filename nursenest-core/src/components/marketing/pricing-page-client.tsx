@@ -37,6 +37,7 @@ import {
   ALLIED_CAREER_DISPLAY_NAMES,
   type AlliedCareerKey,
 } from "@/lib/pricing/display-catalog";
+import { fetchPricingOptionsPayloadDeduped } from "@/lib/pricing/pricing-options-client-fetch";
 import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,

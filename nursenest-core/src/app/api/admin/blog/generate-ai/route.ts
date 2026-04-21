@@ -78,6 +78,7 @@ type AdminBlogGenerateRowResult =
       };
       warnings: string[];
       localized: Array<{ locale: string; region: string; localizedSlug: string; mode: "created" | "updated" }>;
+      seoReadiness: BlogAutomationSeoReadiness;
     }
   | {
       ok: true;
@@ -228,6 +229,7 @@ async function executeOneAdminBlogGeneration(params: {
         : []),
     ],
     localized: result.localized,
+    seoReadiness: result.seoReadiness,
   };
   console.info("[admin_blog_generate] success", {
     topic,
@@ -280,6 +282,8 @@ async function runAllTopicsSequential(params: {
       outcome: row.ok ? (row.skipped ? "skipped" : "created") : "failed",
       slug: row.ok && !row.skipped ? row.post.slug : undefined,
       error: !row.ok ? row.error : undefined,
+      publishHeldAsDraft:
+        row.ok && !row.skipped && row.seoReadiness.publishHeldAsDraft === true ? true : undefined,
     });
   }
   return results;

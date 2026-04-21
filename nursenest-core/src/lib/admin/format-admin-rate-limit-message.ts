@@ -31,6 +31,9 @@ export function formatAdminRateLimitMessageFromJson(body: unknown): string {
       : null;
 
   const parts: string[] = ["Too many requests"];
+  if (scope === "admin_blog_generation_jobs" || limiter === "admin_blog_generation_jobs") {
+    parts.push("(Admin blog background job / generation-jobs API — not the general content editor limit.)");
+  }
   parts.push(`[${limiter}${action ? ` · ${action}` : ""}]`);
   if (bucketKeyType) parts.push(`bucket: ${bucketKeyType}`);
   if (path) parts.push(`path: ${path}`);

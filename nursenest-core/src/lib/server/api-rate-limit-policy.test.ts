@@ -2,6 +2,9 @@
  * Global API rate limit path classification (Edge proxy) — no HTTP, no buckets.
  */
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, it } from "node:test";
 import {
   authRouteKind,
@@ -17,7 +20,16 @@ import {
   retryAfterSecondsFrom429Streak,
 } from "@/lib/server/rate-limit";
 
+const rateLimitTsPath = join(dirname(fileURLToPath(import.meta.url)), "rate-limit.ts");
+
 describe("enforceApiRateLimit path classification", () => {
+  it("skips proxy RL for POST /api/signup so only the signup route bucket applies", () => {
+    const src = readFileSync(rateLimitTsPath, "utf8");
+    assert.match(src, /API_SIGNUP_POST_ROUTE/);
+    assert.match(src, /pathname === API_SIGNUP_POST_ROUTE/);
+    assert.doesNotMatch(src, /if \(pathname === "\/api\/signup"/);
+  });
+
   it("marks admin API subtree for dedicated RL (nn-db-final-002)", () => {
     assert.equal(isAdminApiRateLimitPath("/api/admin"), true);
     assert.equal(isAdminApiRateLimitPath("/api/admin/ops/run"), true);

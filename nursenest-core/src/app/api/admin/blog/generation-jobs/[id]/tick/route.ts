@@ -5,6 +5,7 @@ import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { processDraftGenerationBatchItems } from "@/lib/blog/blog-draft-generation-batch";
 import { DRAFT_BATCH_MAX_ITEMS_PER_PROCESS } from "@/lib/blog/blog-draft-generation-batch-constants";
+import { isRnTopicMapShellGenerationBatch } from "@/lib/blog/blog-topic-map-shell-batch-constants";
 import { prisma } from "@/lib/db";
 import { loadBlogGenerationJobForAdmin } from "@/lib/blog/blog-generation-jobs";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -23,25 +24,29 @@ export async function POST(req: Request, ctx: RouteContext) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
-  if (!isAdminAiGenerationEnabled()) {
-    return NextResponse.json(
-      { error: "AI admin generation disabled", hint: "Set AI_ADMIN_GENERATION_ENABLED=true" },
-      { status: 403 },
-    );
-  }
-  const keyCheck = assertOpenAiKeyConfigured();
-  if (!keyCheck.ok) {
-    return NextResponse.json({ error: keyCheck.message }, { status: 503 });
-  }
-
   const { id } = await ctx.params;
   const batch = await prisma.blogDraftGenerationBatch.findUnique({
     where: { id },
-    select: { id: true, backgroundProcessing: true },
+    select: { id: true, backgroundProcessing: true, exam: true },
   });
   if (!batch) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
+
+  const shellJob = isRnTopicMapShellGenerationBatch(batch);
+  if (!shellJob) {
+    if (!isAdminAiGenerationEnabled()) {
+      return NextResponse.json(
+        { error: "AI admin generation disabled", hint: "Set AI_ADMIN_GENERATION_ENABLED=true" },
+        { status: 403 },
+      );
+    }
+    const keyCheck = assertOpenAiKeyConfigured();
+    if (!keyCheck.ok) {
+      return NextResponse.json({ error: keyCheck.message }, { status: 503 });
+    }
+  }
+
   if (!batch.backgroundProcessing) {
     return NextResponse.json(
       { error: "This batch is not a background job; use /api/admin/blog/draft-batch/:id/process instead." },

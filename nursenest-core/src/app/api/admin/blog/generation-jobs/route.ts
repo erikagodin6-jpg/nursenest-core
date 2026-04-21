@@ -31,6 +31,84 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid body", details: parsed.error.flatten() }, { status: 400 });
   }
   const d = parsed.data;
+  const isShell = "jobKind" in d && d.jobKind === "rn_topic_map_shell";
+
+  const tryIdempotentReplay = async (idempotencyKey: string | null | undefined, droppedShortLines: number) => {
+    if (!idempotencyKey || !gate.admin.userId) return null;
+    const existing = await prisma.blogDraftGenerationBatch.findFirst({
+      where: {
+        createdById: gate.admin.userId,
+        idempotencyKey,
+        createdAt: { gte: new Date(Date.now() - IDEMPOTENCY_WINDOW_MS) },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+    if (!existing) return null;
+    const job = await loadBlogGenerationJobForAdmin(existing.id);
+    return NextResponse.json({
+      ok: true,
+      jobId: existing.id,
+      idempotentReplay: true,
+      droppedShortLines,
+      job,
+    });
+  };
+
+  if (isShell) {
+    const replay = await tryIdempotentReplay(d.idempotencyKey, 0);
+    if (replay) return replay;
+
+    const rows = loadRnTopicMapBatchRows(RN_TOPIC_MAP_SHELL_MAX_ITEMS);
+    const shellErr = assertRnTopicMapShellRowCount(rows.length);
+    if (shellErr) {
+      return NextResponse.json({ error: shellErr }, { status: 400 });
+    }
+
+    const batch = await prisma.blogDraftGenerationBatch.create({
+      data: {
+        exam: RN_TOPIC_MAP_SHELL_BATCH_EXAM,
+        country: "unspecified",
+        defaultTemplate: BlogPostTemplate.TOPIC_EXPLAINED,
+        defaultIntent: null,
+        funnelStage: null,
+        tone: "professional",
+        keywords: null,
+        keywordCluster: null,
+        countryTarget: null,
+        includeImage: true,
+        includeAiImage: false,
+        allowDuplicateCanonicalTopic: false,
+        totalItems: rows.length,
+        createdById: gate.admin.userId,
+        backgroundProcessing: true,
+        idempotencyKey: d.idempotencyKey ?? null,
+        items: {
+          create: rows.map((row, ordinal) => ({
+            ordinal,
+            topicRaw: row.slug,
+            canonicalTopicKey: normalizeBlogTopicKey(row.tags[1] ?? row.title) || null,
+          })),
+        },
+      },
+      select: { id: true, totalItems: true },
+    });
+
+    safeServerLog("admin", "blog_generation_job_created", {
+      jobId: batch.id,
+      totalItems: batch.totalItems,
+      droppedShortLines: 0,
+      jobKind: "rn_topic_map_shell",
+    });
+
+    const job = await loadBlogGenerationJobForAdmin(batch.id);
+    return NextResponse.json({
+      ok: true,
+      jobId: batch.id,
+      droppedShortLines: 0,
+      job,
+    });
+  }
+
   const { topics, droppedShortLines } = parseDraftBatchTopicLines(d.topicsText);
   if (topics.length === 0) {
     return NextResponse.json(
@@ -43,26 +121,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: overLimit }, { status: 400 });
   }
 
-  if (d.idempotencyKey && gate.admin.userId) {
-    const existing = await prisma.blogDraftGenerationBatch.findFirst({
-      where: {
-        createdById: gate.admin.userId,
-        idempotencyKey: d.idempotencyKey,
-        createdAt: { gte: new Date(Date.now() - IDEMPOTENCY_WINDOW_MS) },
-      },
-      orderBy: { createdAt: "desc" },
-    });
-    if (existing) {
-      const job = await loadBlogGenerationJobForAdmin(existing.id);
-      return NextResponse.json({
-        ok: true,
-        jobId: existing.id,
-        idempotentReplay: true,
-        droppedShortLines,
-        job,
-      });
-    }
-  }
+  const replayAi = await tryIdempotentReplay(d.idempotencyKey, droppedShortLines);
+  if (replayAi) return replayAi;
 
   const country = d.country ?? "unspecified";
   const batch = await prisma.blogDraftGenerationBatch.create({
@@ -98,6 +158,7 @@ export async function POST(req: Request) {
     jobId: batch.id,
     totalItems: batch.totalItems,
     droppedShortLines,
+    jobKind: "ai_topics",
   });
 
   const job = await loadBlogGenerationJobForAdmin(batch.id);

@@ -5,12 +5,19 @@ import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/clien
 import { ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN } from "@/lib/admin/blog-generate-ai-constants";
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
+import type { BlogAutomationSeoReadiness } from "@/lib/blog/blog-automation-engine";
 
 type GenerateAiJsonBody = {
   ok?: boolean;
   summary?: { created: number; skipped: number; failed: number; requested?: number };
   results?: Array<
-    | { ok: true; skipped?: false; post?: { slug: string }; topic?: string }
+    | {
+        ok: true;
+        skipped?: false;
+        topic?: string;
+        post?: { slug: string };
+        seoReadiness?: BlogAutomationSeoReadiness;
+      }
     | { ok: true; skipped: true; topic?: string; reason?: string }
     | { ok: false; topic: string; error: string }
   >;
@@ -91,14 +98,29 @@ function summarizeGenerateAiResponse(json: GenerateAiJsonBody): string {
   const failed = json.summary?.failed ?? 0;
   const requested = json.summary?.requested ?? json.results?.length;
   const firstSlug = json.results?.find((r) => "post" in r && r.post?.slug)?.post?.slug;
+  const seoRows = (json.results ?? []).filter(
+    (r): r is { ok: true; seoReadiness?: BlogAutomationSeoReadiness } =>
+      "ok" in r && r.ok === true && !("skipped" in r && r.skipped === true),
+  );
+  const publishHeldCount = seoRows.filter((r) => r.seoReadiness?.publishHeldAsDraft === true).length;
+  const blockingSample = seoRows
+    .flatMap((r) => r.seoReadiness?.blocking ?? [])
+    .slice(0, 2)
+    .map((b) => b.message.slice(0, 80) + (b.message.length > 80 ? "…" : ""));
+  const seoSuffix =
+    publishHeldCount > 0
+      ? ` SEO: ${publishHeldCount} draft(s) held from auto-publish (review checklist).${
+          blockingSample.length ? ` Examples: ${blockingSample.join(" | ")}` : ""
+        }`
+      : "";
   const failSamples = (json.results ?? [])
     .filter((r): r is { ok: false; topic: string; error: string } => "ok" in r && r.ok === false)
     .slice(0, 5)
     .map((r) => `${r.topic}: ${r.error.slice(0, 100)}${r.error.length > 100 ? "…" : ""}`);
   const failSuffix = failSamples.length ? ` Failures: ${failSamples.join(" | ")}` : "";
   return created > 0
-    ? `Completed batch (${requested ?? "?"} requested): created ${created}${firstSlug ? ` (e.g. ${firstSlug})` : ""}, skipped ${skipped}, failed ${failed}.${failSuffix}`
-    : `No posts created (${requested ?? "?"} requested). Skipped ${skipped}, failed ${failed}.${failSuffix}`;
+    ? `Completed batch (${requested ?? "?"} requested): created ${created}${firstSlug ? ` (e.g. ${firstSlug})` : ""}, skipped ${skipped}, failed ${failed}.${seoSuffix}${failSuffix}`
+    : `No posts created (${requested ?? "?"} requested). Skipped ${skipped}, failed ${failed}.${seoSuffix}${failSuffix}`;
 }
 
 const templates: BlogPostTemplate[] = [
@@ -209,7 +231,9 @@ export function AdminBlogGenerateClient() {
             typeof evt.total === "number"
           ) {
             const outcome = typeof evt.outcome === "string" ? evt.outcome : "done";
-            setBatchStatus(`Finished ${evt.current}/${evt.total} (${outcome})`);
+            const held =
+              evt.publishHeldAsDraft === true ? " — draft (SEO checks)" : "";
+            setBatchStatus(`Finished ${evt.current}/${evt.total} (${outcome})${held}`);
           }
         });
         setMsg(summarizeGenerateAiResponse(final));
