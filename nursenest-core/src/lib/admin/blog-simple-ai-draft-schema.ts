@@ -1,5 +1,6 @@
 import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
 import { z } from "zod";
+import { ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN } from "@/lib/admin/blog-generate-ai-constants";
 import { GLOBAL_LOCALE_CODES, GLOBAL_REGION_SLUGS } from "@/lib/i18n/global-regions";
 
 /** Shared body schema for legacy single-post AI draft + automation-log retries. */
@@ -63,19 +64,38 @@ export const blogSimpleAiDraftBodySchema = z.object({
 
 export type BlogSimpleAiDraftBody = z.infer<typeof blogSimpleAiDraftBodySchema>;
 
-/** Admin API payload: single topic or up to 3 topics per run for cost control. */
+/** Admin API payload: single topic or bounded multi-topic batch (one server job per POST). */
 export const blogGenerateByTopicRequestSchema = z
   .object({
     topic: z.string().min(3).max(200).optional(),
-    topics: z.array(z.string().min(3).max(200)).min(1).max(3).optional(),
+    topics: z
+      .array(z.string().min(3).max(200))
+      .min(1)
+      .max(ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN)
+      .optional(),
   })
   .and(blogSimpleAiDraftBodySchema.omit({ topic: true }))
   .superRefine((data, ctx) => {
+    const topicCount = data.topics?.length ?? (data.topic ? 1 : 0);
     if (!data.topic && (!data.topics || data.topics.length === 0)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["topic"],
-        message: "Provide `topic` or `topics` (max 3).",
+        message: `Provide \`topic\` or \`topics\` (max ${ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN}).`,
+      });
+    }
+    if (topicCount > 1 && data.generateTranslations === true) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["generateTranslations"],
+        message: "Use generateTranslations only with a single topic per request.",
+      });
+    }
+    if (data.topic && data.topics && data.topics.length > 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["topics"],
+        message: "Provide either `topic` or `topics`, not both.",
       });
     }
   });

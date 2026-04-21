@@ -2,18 +2,27 @@ import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import {
   assertTopicsWithinBatchLimit,
-  blogDraftGenerationBatchCreateBodySchema,
+  blogGenerationJobCreateBodySchema,
 } from "@/lib/blog/blog-draft-generation-batch-create-body";
 import { parseDraftBatchTopicLines } from "@/lib/blog/blog-draft-generation-batch-parse";
 import { normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { prisma } from "@/lib/db";
+import {
+  loadBlogGenerationJobForAdmin,
+  listBlogGenerationJobsForAdmin,
+  type BlogGenerationJobPhase,
+} from "@/lib/blog/blog-generation-jobs";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
-/** Create a persisted draft-generation batch from a newline-separated topic list. */
+const IDEMPOTENCY_WINDOW_MS = 120_000;
+
+/** Create one durable background job (returns immediately; cron advances items). */
 export async function POST(req: Request) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
-  const parsed = blogDraftGenerationBatchCreateBodySchema.safeParse(await req.json());
+  const raw = await req.json();
+  const parsed = blogGenerationJobCreateBodySchema.safeParse(raw);
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid body", details: parsed.error.flatten() }, { status: 400 });
   }
@@ -28,6 +37,27 @@ export async function POST(req: Request) {
   const overLimit = assertTopicsWithinBatchLimit(topics.length);
   if (overLimit) {
     return NextResponse.json({ error: overLimit }, { status: 400 });
+  }
+
+  if (d.idempotencyKey && gate.admin.userId) {
+    const existing = await prisma.blogDraftGenerationBatch.findFirst({
+      where: {
+        createdById: gate.admin.userId,
+        idempotencyKey: d.idempotencyKey,
+        createdAt: { gte: new Date(Date.now() - IDEMPOTENCY_WINDOW_MS) },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+    if (existing) {
+      const job = await loadBlogGenerationJobForAdmin(existing.id);
+      return NextResponse.json({
+        ok: true,
+        jobId: existing.id,
+        idempotentReplay: true,
+        droppedShortLines,
+        job,
+      });
+    }
   }
 
   const country = d.country ?? "unspecified";
@@ -47,6 +77,8 @@ export async function POST(req: Request) {
       allowDuplicateCanonicalTopic: d.allowDuplicateCanonicalTopic ?? false,
       totalItems: topics.length,
       createdById: gate.admin.userId,
+      backgroundProcessing: true,
+      idempotencyKey: d.idempotencyKey ?? null,
       items: {
         create: topics.map((topicRaw, ordinal) => ({
           ordinal,
@@ -55,49 +87,43 @@ export async function POST(req: Request) {
         })),
       },
     },
-    select: {
-      id: true,
-      totalItems: true,
-      createdAt: true,
-      items: {
-        orderBy: { ordinal: "asc" },
-        select: { id: true, ordinal: true, topicRaw: true, status: true },
-      },
-    },
+    select: { id: true, totalItems: true },
   });
 
+  safeServerLog("admin", "blog_generation_job_created", {
+    jobId: batch.id,
+    totalItems: batch.totalItems,
+    droppedShortLines,
+  });
+
+  const job = await loadBlogGenerationJobForAdmin(batch.id);
   return NextResponse.json({
     ok: true,
-    batch,
+    jobId: batch.id,
     droppedShortLines,
+    job,
   });
 }
 
-/** Recent draft batches (newest first). */
+/** List recent generation jobs (background batches). */
 export async function GET(req: Request) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { searchParams } = new URL(req.url);
   const limit = Math.min(50, Math.max(1, Number(searchParams.get("limit") ?? "20") || 20));
+  const phaseRaw = searchParams.get("status")?.trim().toLowerCase();
+  const all = searchParams.get("all") === "1";
+  const phase =
+    phaseRaw === "queued" || phaseRaw === "running" || phaseRaw === "completed" || phaseRaw === "cancelled" || phaseRaw === "partial"
+      ? (phaseRaw as BlogGenerationJobPhase)
+      : undefined;
 
-  const rows = await prisma.blogDraftGenerationBatch.findMany({
-    orderBy: { createdAt: "desc" },
-    take: limit,
-    select: {
-      id: true,
-      status: true,
-      exam: true,
-      country: true,
-      totalItems: true,
-      completedCount: true,
-      failedCount: true,
-      skippedCount: true,
-      allowDuplicateCanonicalTopic: true,
-      backgroundProcessing: true,
-      createdAt: true,
-    },
+  const jobs = await listBlogGenerationJobsForAdmin({
+    limit,
+    phase,
+    backgroundOnly: !all,
   });
 
-  return NextResponse.json({ ok: true, batches: rows });
+  return NextResponse.json({ ok: true, jobs });
 }

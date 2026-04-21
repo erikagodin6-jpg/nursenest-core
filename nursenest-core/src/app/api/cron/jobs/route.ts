@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { enforceCronSecretOrResponse } from "@/lib/cron/enforce-cron-secret";
+import { pumpBackgroundBlogDraftBatches } from "@/lib/blog/blog-generation-jobs";
 import { processPendingJobs } from "@/lib/jobs/process-pending";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -14,6 +15,11 @@ export async function POST(req: Request) {
 
   const started = Date.now();
   const result = await processPendingJobs();
-  safeServerLog("cron", "background_jobs_batch", { durationMs: Date.now() - started, ...result });
-  return NextResponse.json({ ok: true, ...result });
+  const blogDraftGen = await pumpBackgroundBlogDraftBatches();
+  safeServerLog("cron", "background_jobs_batch", {
+    durationMs: Date.now() - started,
+    ...result,
+    blogDraftGeneration: blogDraftGen,
+  });
+  return NextResponse.json({ ok: true, ...result, blogDraftGeneration: blogDraftGen });
 }

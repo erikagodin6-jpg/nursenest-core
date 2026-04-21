@@ -17,8 +17,9 @@ import {
 } from "@/lib/blog/blog-draft-generation-batch-constants";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
 
-function sleepMs(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+function newIdempotencyKey(): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
+  return `idem_${Date.now()}_${Math.random().toString(36).slice(2, 12)}`;
 }
 
 const templates: BlogPostTemplate[] = [
@@ -39,6 +40,7 @@ type BatchRow = {
   failedCount: number;
   skippedCount: number;
   allowDuplicateCanonicalTopic: boolean;
+  backgroundProcessing?: boolean;
   createdAt: string;
 };
 
@@ -63,7 +65,80 @@ type BatchDetail = BatchRow & {
   includeImage: boolean;
   includeAiImage: boolean;
   items: ItemRow[];
+  jobPhase?: "queued" | "running" | "completed" | "cancelled" | "partial";
+  lastProcessorError?: string | null;
 };
+
+type GenerationJobApiPayload = {
+  id: string;
+  phase: NonNullable<BatchDetail["jobPhase"]>;
+  batchStatus: BlogDraftGenerationBatchStatus;
+  exam: string;
+  country: string;
+  backgroundProcessing: boolean;
+  defaultTemplate: BlogPostTemplate;
+  defaultIntent: BlogPostIntent | null;
+  funnelStage: BlogFunnelStage | null;
+  tone: string;
+  keywords: string | null;
+  keywordCluster: string | null;
+  countryTarget: CountryCode | null;
+  includeImage: boolean;
+  includeAiImage: boolean;
+  allowDuplicateCanonicalTopic: boolean;
+  totalItems: number;
+  completedItems: number;
+  failedItems: number;
+  skippedItems: number;
+  lastProcessorError: string | null;
+  items: ItemRow[];
+};
+
+function mapJobPayloadToBatchDetail(job: GenerationJobApiPayload): BatchDetail {
+  return {
+    id: job.id,
+    status: job.batchStatus,
+    exam: job.exam,
+    country: job.country,
+    totalItems: job.totalItems,
+    completedCount: job.completedItems,
+    failedCount: job.failedItems,
+    skippedCount: job.skippedItems,
+    allowDuplicateCanonicalTopic: job.allowDuplicateCanonicalTopic,
+    backgroundProcessing: job.backgroundProcessing,
+    createdAt: "",
+    defaultTemplate: job.defaultTemplate,
+    defaultIntent: job.defaultIntent,
+    funnelStage: job.funnelStage,
+    tone: job.tone,
+    keywords: job.keywords,
+    keywordCluster: job.keywordCluster,
+    countryTarget: job.countryTarget,
+    includeImage: job.includeImage,
+    includeAiImage: job.includeAiImage,
+    items: job.items,
+    jobPhase: job.phase,
+    lastProcessorError: job.lastProcessorError,
+  };
+}
+
+function jobPhaseBadge(phase: NonNullable<BatchDetail["jobPhase"]>) {
+  const base = "inline-flex rounded-full px-2 py-0.5 text-xs font-semibold";
+  switch (phase) {
+    case "queued":
+      return `${base} bg-violet-500/15 text-violet-950 dark:text-violet-100`;
+    case "running":
+      return `${base} bg-amber-500/20 text-amber-950 dark:text-amber-100`;
+    case "partial":
+      return `${base} bg-orange-500/15 text-orange-950 dark:text-orange-100`;
+    case "completed":
+      return `${base} bg-emerald-500/15 text-emerald-950 dark:text-emerald-100`;
+    case "cancelled":
+      return `${base} bg-zinc-500/15 text-zinc-800 dark:text-zinc-200`;
+    default:
+      return `${base} bg-muted text-foreground`;
+  }
+}
 
 function statusBadge(status: BlogDraftGenerationBatchItemStatus | BlogDraftGenerationBatchStatus) {
   const base = "inline-flex rounded-full px-2 py-0.5 text-xs font-semibold";
@@ -109,18 +184,19 @@ export function AdminBlogDraftBatchClient() {
   const [batchId, setBatchId] = useState<string | null>(null);
   const [batch, setBatch] = useState<BatchDetail | null>(null);
   const [recent, setRecent] = useState<BatchRow[]>([]);
-  const [processChunk, setProcessChunk] = useState(4);
+  const [processChunk, setProcessChunk] = useState(2);
+  const [idempotencyKey, setIdempotencyKey] = useState(newIdempotencyKey);
 
   const loadRecent = useCallback(async () => {
-    const res = await fetch("/api/admin/blog/draft-batch?limit=15", { credentials: "include" });
+    const res = await fetch("/api/admin/blog/draft-batch?limit=15", { credentials: "include", cache: "no-store" });
     const json = (await res.json()) as { ok?: boolean; batches?: BatchRow[] };
     if (res.ok && json.batches) setRecent(json.batches);
   }, []);
 
   const loadBatch = useCallback(async (id: string) => {
-    const res = await fetch(`/api/admin/blog/draft-batch/${id}`, { credentials: "include" });
-    const json = (await res.json()) as { ok?: boolean; batch?: BatchDetail };
-    if (!res.ok || !json.batch) {
+    const res = await fetch(`/api/admin/blog/generation-jobs/${id}`, { credentials: "include", cache: "no-store" });
+    const json = (await res.json()) as { ok?: boolean; job?: GenerationJobApiPayload; error?: string };
+    if (!res.ok || !json.job) {
       setErr(
         res.status === 429
           ? formatAdminRateLimitMessageFromJson(json)
@@ -130,7 +206,7 @@ export function AdminBlogDraftBatchClient() {
       );
       return;
     }
-    setBatch(json.batch);
+    setBatch(mapJobPayloadToBatchDetail(json.job));
     setErr(null);
   }, []);
 
@@ -157,13 +233,22 @@ export function AdminBlogDraftBatchClient() {
     return batch.items.some((i) => i.status === BlogDraftGenerationBatchItemStatus.GENERATING);
   }, [batch]);
 
+  const shouldPollJob = useMemo(() => {
+    if (!batchId || !batch) return false;
+    if (batch.status !== BlogDraftGenerationBatchStatus.ACTIVE) return false;
+    if (!batch.backgroundProcessing) return false;
+    const ph = batch.jobPhase;
+    if (ph === "queued" || ph === "running") return true;
+    return pendingCount > 0 || isProcessing;
+  }, [batchId, batch, pendingCount, isProcessing]);
+
   useEffect(() => {
-    if (!batchId || !isProcessing) return;
+    if (!batchId || !shouldPollJob) return;
     const t = setInterval(() => {
       void loadBatch(batchId);
-    }, 2500);
+    }, 3000);
     return () => clearInterval(t);
-  }, [batchId, isProcessing, loadBatch]);
+  }, [batchId, shouldPollJob, loadBatch]);
 
   async function onCreate(e: React.FormEvent) {
     e.preventDefault();
@@ -171,9 +256,10 @@ export function AdminBlogDraftBatchClient() {
     setMsg(null);
     setErr(null);
     try {
-      const res = await fetch("/api/admin/blog/draft-batch", {
+      const res = await fetch("/api/admin/blog/generation-jobs", {
         method: "POST",
         credentials: "include",
+        cache: "no-store",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           topicsText,
@@ -189,33 +275,39 @@ export function AdminBlogDraftBatchClient() {
           includeImage,
           includeAiImage,
           allowDuplicateCanonicalTopic,
+          idempotencyKey,
         }),
       });
       const json = (await res.json()) as {
         ok?: boolean;
         error?: string;
-        batch?: { id: string };
+        jobId?: string;
+        job?: GenerationJobApiPayload;
         droppedShortLines?: number;
+        idempotentReplay?: boolean;
       };
       if (!res.ok) {
         setErr(res.status === 429 ? formatAdminRateLimitMessageFromJson(json) : (json.error ?? "Create failed"));
         return;
       }
-      const id = json.batch?.id;
-      if (!id) {
-        setErr("Missing batch id");
+      const id = json.jobId ?? json.job?.id;
+      if (!id || !json.job) {
+        setErr("Missing job id");
         return;
       }
       setBatchId(id);
+      setBatch(mapJobPayloadToBatchDetail(json.job));
+      if (!json.idempotentReplay) {
+        setIdempotencyKey(newIdempotencyKey());
+      }
       setMsg(
-        `Batch created (${json.batch ? "items queued" : ""}).${json.droppedShortLines ? ` Dropped ${json.droppedShortLines} short lines.` : ""} Run processing below.`,
+        `${json.idempotentReplay ? "Returned existing job (same idempotency key)." : "Server job created."} Progress updates automatically; cron runs every few minutes. Use “Process chunk” to nudge sooner.${json.droppedShortLines ? ` Dropped ${json.droppedShortLines} short lines.` : ""}`,
       );
       if (typeof window !== "undefined") {
         const url = new URL(window.location.href);
         url.searchParams.set("batch", id);
         window.history.replaceState({}, "", url.toString());
       }
-      await loadBatch(id);
       await loadRecent();
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e));
@@ -229,13 +321,25 @@ export function AdminBlogDraftBatchClient() {
     setBusy(true);
     setErr(null);
     try {
-      const res = await fetch(`/api/admin/blog/draft-batch/${batchId}/process`, {
+      const useTick = batch?.backgroundProcessing === true;
+      const safeLimit = Math.min(DRAFT_BATCH_MAX_ITEMS_PER_PROCESS, Math.max(1, limit));
+      const url = useTick
+        ? `/api/admin/blog/generation-jobs/${batchId}/tick`
+        : `/api/admin/blog/draft-batch/${batchId}/process`;
+      const res = await fetch(url, {
         method: "POST",
         credentials: "include",
+        cache: "no-store",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ limit }),
+        body: JSON.stringify({ limit: safeLimit }),
       });
-      const json = (await res.json()) as { ok?: boolean; error?: string; processed?: number; errors?: string[] };
+      const json = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        processed?: number;
+        errors?: string[];
+        job?: GenerationJobApiPayload;
+      };
       if (!res.ok) {
         setErr(
           res.status === 429
@@ -245,55 +349,11 @@ export function AdminBlogDraftBatchClient() {
         return;
       }
       setMsg(`Processed ${json.processed ?? 0} item(s) in this request.`);
-      await loadBatch(batchId);
-      await loadRecent();
-    } catch (e) {
-      setErr(e instanceof Error ? e.message : String(e));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function onProcessAll() {
-    if (!batchId) return;
-    setBusy(true);
-    setErr(null);
-    try {
-      let guard = 0;
-      while (guard < 80) {
-        guard += 1;
-        const detailRes = await fetch(`/api/admin/blog/draft-batch/${batchId}`, { credentials: "include" });
-        const detailJson = (await detailRes.json()) as { batch?: BatchDetail };
-        if (!detailRes.ok) {
-          setErr(detailRes.status === 429 ? formatAdminRateLimitMessageFromJson(detailJson) : "Could not refresh batch.");
-          break;
-        }
-        const current = detailJson.batch;
-        if (!current) break;
-        setBatch(current);
-        const pending = current.items.filter((i) => i.status === BlogDraftGenerationBatchItemStatus.PENDING).length;
-        if (pending === 0) break;
-
-        const res = await fetch(`/api/admin/blog/draft-batch/${batchId}/process`, {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ limit: DRAFT_BATCH_MAX_ITEMS_PER_PROCESS }),
-        });
-        const json = (await res.json()) as { ok?: boolean; error?: string; processed?: number; errors?: string[] };
-        if (!res.ok) {
-          setErr(
-            res.status === 429
-              ? formatAdminRateLimitMessageFromJson(json)
-              : (json.error ?? json.errors?.[0] ?? "Process failed"),
-          );
-          break;
-        }
-        if ((json.processed ?? 0) === 0) break;
-        await sleepMs(200);
+      if (useTick && json.job) {
+        setBatch(mapJobPayloadToBatchDetail(json.job));
+      } else {
+        await loadBatch(batchId);
       }
-      setMsg("Batch run finished (or stopped early).");
-      await loadBatch(batchId);
       await loadRecent();
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e));

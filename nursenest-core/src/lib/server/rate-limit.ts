@@ -417,7 +417,10 @@ const ADMIN_LEGACY_BLOG_TOOLING_WINDOW_MS = 60_000;
 
 /** Per authenticated staff user — AI writes are expensive; chunk endpoint may loop many times for “run all”. */
 const ADMIN_LEGACY_BLOG_TOOLING_MAX_USER: Record<AdminLegacyBlogToolingKind, number> = {
-  /** Single POST per click; headroom for dev refresh + QA without sharing the generic admin bucket. */
+  /**
+   * Counts HTTP POSTs to `/api/admin/blog/generate-ai` (one POST can process a multi-topic batch internally).
+   * Budget is per minute, not per generated article — legitimate 10+ topic batches stay one increment.
+   */
   generate_ai: 240,
   batch_chunk: 2400,
 };
@@ -446,6 +449,135 @@ export function adminBlogBatchRateLimitKind(pathname: string, method: string): A
   return null;
 }
 
+/** Queue-backed blog generation jobs (create + poll + optional tick) — separate from heavy `admin_blog_content` writes. */
+export const ADMIN_BLOG_GENERATION_JOBS_API_PREFIX = "/api/admin/blog/generation-jobs";
+
+export type AdminBlogGenerationJobsKind = "read" | "write" | "run";
+
+export function adminBlogGenerationJobsRateLimitKind(pathname: string, method: string): AdminBlogGenerationJobsKind | null {
+  const pre = ADMIN_BLOG_GENERATION_JOBS_API_PREFIX;
+  if (pathname !== pre && !pathname.startsWith(`${pre}/`)) return null;
+  const m = method.toUpperCase();
+  if (pathname === pre && m === "GET") return "read";
+  if (pathname === pre && m === "POST") return "write";
+  if (pathname.endsWith("/tick") && m === "POST") return "run";
+  if (m === "GET" && pathname.startsWith(`${pre}/`) && pathname !== pre) return "read";
+  return null;
+}
+
+const ADMIN_BLOG_GENERATION_JOBS_WINDOW_MS = 60_000;
+
+const ADMIN_BLOG_GENERATION_JOBS_MAX_USER: Record<AdminBlogGenerationJobsKind, number> = {
+  read: 2400,
+  write: 120,
+  run: 200,
+};
+
+const ADMIN_BLOG_GENERATION_JOBS_MAX_IP_BASE: Record<AdminBlogGenerationJobsKind, number> = {
+  read: 900,
+  write: 48,
+  run: 90,
+};
+
+function json429AdminBlogGenerationJobs(
+  kind: AdminBlogGenerationJobsKind,
+  meta: { path: string; bucketKeyType: "user" | "ip_unauth"; windowMs: number; max: number },
+): NextResponse {
+  const retry = 30;
+  return NextResponse.json(
+    {
+      error: "Too many requests",
+      code: "rate_limit_exceeded",
+      scope: "admin_blog_generation_jobs",
+      action: kind,
+      limiter: "admin_blog_generation_jobs",
+      bucketType: "dedicated",
+      bucketKeyType: meta.bucketKeyType,
+      path: meta.path,
+      windowMs: meta.windowMs,
+      max: meta.max,
+      retryAfterSec: retry,
+    },
+    {
+      status: 429,
+      headers: {
+        "Retry-After": String(retry),
+        "Cache-Control": "no-store",
+        "X-NN-RateLimit-Scope": "admin_blog_generation_jobs",
+        "X-NN-RateLimit-Action": kind,
+        "X-NN-RateLimiter": "admin_blog_generation_jobs",
+        "X-NN-RateLimit-Bucket": meta.bucketKeyType,
+      },
+    },
+  );
+}
+
+async function enforceDedicatedAdminBlogGenerationJobsRateLimit(
+  pathname: string,
+  method: string,
+  userId: string | null,
+  ipKey: string,
+): Promise<NextResponse | null> {
+  const kind = adminBlogGenerationJobsRateLimitKind(pathname, method);
+  if (kind == null) return null;
+
+  const pathShort = pathname.slice(0, 160);
+  const userMax = ADMIN_BLOG_GENERATION_JOBS_MAX_USER[kind];
+  const ipMax = tightenPublicCap(ADMIN_BLOG_GENERATION_JOBS_MAX_IP_BASE[kind]);
+
+  if (userId) {
+    const key = `ratelimit:admin:blog_generation_jobs:${kind}:user:${userId}`;
+    const { ok, remaining } = await checkRateLimitUnified(key, {
+      windowMs: ADMIN_BLOG_GENERATION_JOBS_WINDOW_MS,
+      max: userMax,
+    });
+    if (!ok) {
+      safeServerLog("security", "admin_blog_generation_jobs_rate_limit_exceeded", {
+        kind: "admin_blog_generation_jobs_user",
+        jobsKind: kind,
+        bucketKeyType: "user",
+        path: pathShort,
+        windowMs: ADMIN_BLOG_GENERATION_JOBS_WINDOW_MS,
+        max: userMax,
+        ipHash: hashIp(ipKey),
+        remaining,
+      });
+      return json429AdminBlogGenerationJobs(kind, {
+        path: pathShort,
+        bucketKeyType: "user",
+        windowMs: ADMIN_BLOG_GENERATION_JOBS_WINDOW_MS,
+        max: userMax,
+      });
+    }
+    return null;
+  }
+
+  const key = `ratelimit:admin:blog_generation_jobs:${kind}:ip_unauth:${ipKey}`;
+  const { ok, remaining } = await checkRateLimitUnified(key, {
+    windowMs: ADMIN_BLOG_GENERATION_JOBS_WINDOW_MS,
+    max: ipMax,
+  });
+  if (!ok) {
+    safeServerLog("security", "admin_blog_generation_jobs_rate_limit_exceeded", {
+      kind: "admin_blog_generation_jobs_ip",
+      jobsKind: kind,
+      bucketKeyType: "ip_unauth",
+      path: pathShort,
+      windowMs: ADMIN_BLOG_GENERATION_JOBS_WINDOW_MS,
+      max: ipMax,
+      ipHash: hashIp(ipKey),
+      remaining,
+    });
+    return json429AdminBlogGenerationJobs(kind, {
+      path: pathShort,
+      bucketKeyType: "ip_unauth",
+      windowMs: ADMIN_BLOG_GENERATION_JOBS_WINDOW_MS,
+      max: ipMax,
+    });
+  }
+  return null;
+}
+
 /** `/api/admin/blog/*` except batch-schedule + legacy generator paths (those use their own buckets). */
 const ADMIN_BLOG_CONTENT_API_PREFIX = "/api/admin/blog";
 
@@ -461,6 +593,7 @@ export function adminBlogContentApiRateLimitKind(pathname: string, method: strin
   }
   if (adminBlogBatchRateLimitKind(pathname, method) != null) return null;
   if (adminLegacyBlogToolingRateLimitKind(pathname, method) != null) return null;
+  if (adminBlogGenerationJobsRateLimitKind(pathname, method) != null) return null;
   const m = method.toUpperCase();
   if (m === "GET" || m === "HEAD") return "read";
   if (m === "POST" || m === "PUT" || m === "PATCH" || m === "DELETE") return "write";
@@ -859,6 +992,12 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     const legacyLimited = await enforceDedicatedAdminLegacyBlogToolingRateLimit(pathname, method, userId, ipKey);
     if (legacyLimited) return legacyLimited;
     if (adminLegacyBlogToolingRateLimitKind(pathname, method) != null) {
+      return null;
+    }
+
+    const genJobsLimited = await enforceDedicatedAdminBlogGenerationJobsRateLimit(pathname, method, userId, ipKey);
+    if (genJobsLimited) return genJobsLimited;
+    if (adminBlogGenerationJobsRateLimitKind(pathname, method) != null) {
       return null;
     }
 

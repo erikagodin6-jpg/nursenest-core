@@ -135,6 +135,17 @@ describe("security regression (source contracts)", () => {
     assert.match(src, /admin_blog_content/);
   });
 
+  it("admin blog generation jobs API uses dedicated rate limit keys and requireAdmin", () => {
+    const rl = readFileSync(join(nursenestCoreRoot, "src", "lib", "server", "rate-limit.ts"), "utf8");
+    assert.match(rl, /ratelimit:admin:blog_generation_jobs:/);
+    assert.match(rl, /admin_blog_generation_jobs/);
+    const jobs = readFileSync(
+      join(nursenestCoreRoot, "src", "app", "api", "admin", "blog", "generation-jobs", "route.ts"),
+      "utf8",
+    );
+    assert.match(jobs, /requireAdmin\(req\)/);
+  });
+
   it("admin/debug API routes do not use requireAdmin(_req)", () => {
     const out = execSync(
       `cd "${nursenestCoreRoot}" && (rg -l 'requireAdmin\\(_req\\)' src/app/api/admin src/app/api/debug 2>/dev/null || true)`,

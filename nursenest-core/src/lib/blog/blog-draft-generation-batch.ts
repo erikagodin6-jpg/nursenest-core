@@ -11,7 +11,31 @@ import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { logDraftBatchItemRun } from "@/lib/admin/blog-content-automation-log";
 import { prisma } from "@/lib/db";
 import { DRAFT_BATCH_MAX_ITEMS_PER_PROCESS } from "@/lib/blog/blog-draft-generation-batch-constants";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+
 const STALE_GENERATING_MS = 25 * 60 * 1000;
+
+function sleepMs(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/** Heuristic for OpenAI / upstream overload — used to slow the batch loop (no retry storm). */
+export function isLikelyTransientProviderOverload(errorText: string): boolean {
+  const m = errorText.toLowerCase();
+  return (
+    m.includes("429") ||
+    m.includes("rate limit") ||
+    m.includes("too many requests") ||
+    m.includes("throttl") ||
+    m.includes("overloaded") ||
+    m.includes("slow down") ||
+    m.includes("resource exhausted") ||
+    m.includes("temporarily unavailable") ||
+    m.includes("econnreset") ||
+    m.includes("socket hang up") ||
+    m.includes("timed out")
+  );
+}
 
 export async function refreshDraftGenerationBatchStats(batchId: string): Promise<void> {
   const batch = await prisma.blogDraftGenerationBatch.findUnique({
@@ -122,6 +146,12 @@ export async function processDraftGenerationBatchItems(
   const tone: "professional" | "supportive" | "direct" =
     batch.tone === "supportive" || batch.tone === "direct" || batch.tone === "professional" ? batch.tone : "professional";
 
+  const throttleBase = Math.min(
+    60_000,
+    Math.max(2000, Number(process.env.BLOG_BG_DRAFT_THROTTLE_BACKOFF_MS?.trim()) || 10_000),
+  );
+  let providerThrottleBackoffMs = throttleBase;
+
   for (const item of items) {
     try {
       await prisma.blogDraftGenerationBatchItem.update({
@@ -170,6 +200,15 @@ export async function processDraftGenerationBatchItems(
           message: result.error,
           createdById: batch.createdById,
         });
+        if (isLikelyTransientProviderOverload(result.error)) {
+          safeServerLog("blog", "draft_batch_provider_throttle_backoff", {
+            batchId,
+            itemOrdinal: item.ordinal,
+            backoffMs: providerThrottleBackoffMs,
+          });
+          await sleepMs(providerThrottleBackoffMs);
+          providerThrottleBackoffMs = Math.min(60_000, Math.floor(providerThrottleBackoffMs * 1.5));
+        }
         continue;
       }
 
@@ -267,6 +306,15 @@ export async function processDraftGenerationBatchItems(
         message: msg,
         createdById: batch.createdById,
       });
+      if (isLikelyTransientProviderOverload(msg)) {
+        safeServerLog("blog", "draft_batch_provider_throttle_backoff", {
+          batchId,
+          itemOrdinal: item.ordinal,
+          backoffMs: providerThrottleBackoffMs,
+        });
+        await sleepMs(providerThrottleBackoffMs);
+        providerThrottleBackoffMs = Math.min(60_000, Math.floor(providerThrottleBackoffMs * 1.5));
+      }
     }
   }
 

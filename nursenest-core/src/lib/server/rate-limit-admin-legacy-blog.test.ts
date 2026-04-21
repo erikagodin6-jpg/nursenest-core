@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   adminBlogBatchRateLimitKind,
   adminBlogContentApiRateLimitKind,
+  adminBlogGenerationJobsRateLimitKind,
   adminLegacyBlogToolingRateLimitKind,
   rateLimitUserPartitionFromSessionJwt,
 } from "@/lib/server/rate-limit";
@@ -32,6 +33,18 @@ test("adminBlogContentApiRateLimitKind covers blog APIs except batch-schedule an
   assert.equal(adminBlogContentApiRateLimitKind("/api/admin/blog/batch-schedule/run", "POST"), null);
   assert.equal(adminBlogContentApiRateLimitKind("/api/admin/blog/generate-ai", "POST"), null);
   assert.equal(adminBlogContentApiRateLimitKind("/api/admin/blog/batch-chunk", "POST"), null);
+  assert.equal(adminBlogContentApiRateLimitKind("/api/admin/blog/generation-jobs", "GET"), null);
+  assert.equal(adminBlogContentApiRateLimitKind("/api/admin/blog/generation-jobs", "POST"), null);
+  assert.equal(adminBlogContentApiRateLimitKind("/api/admin/blog/generation-jobs/abc", "GET"), null);
+  assert.equal(adminBlogContentApiRateLimitKind("/api/admin/blog/generation-jobs/abc/tick", "POST"), null);
+});
+
+test("adminBlogGenerationJobsRateLimitKind classifies queue job API traffic", () => {
+  assert.equal(adminBlogGenerationJobsRateLimitKind("/api/admin/blog/generation-jobs", "GET"), "read");
+  assert.equal(adminBlogGenerationJobsRateLimitKind("/api/admin/blog/generation-jobs", "POST"), "write");
+  assert.equal(adminBlogGenerationJobsRateLimitKind("/api/admin/blog/generation-jobs/abc", "GET"), "read");
+  assert.equal(adminBlogGenerationJobsRateLimitKind("/api/admin/blog/generation-jobs/abc/tick", "POST"), "run");
+  assert.equal(adminBlogGenerationJobsRateLimitKind("/api/admin/blog/generation-jobs/abc/tick", "GET"), null);
 });
 
 test("rateLimitUserPartitionFromSessionJwt prefers sub, then id, then stable email partition", () => {
