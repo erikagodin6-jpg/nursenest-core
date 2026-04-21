@@ -85,7 +85,13 @@ export async function GET(req: Request) {
       });
       return new Response(
         `Sitemap withheld: HTTP validation failed for ${e.failures.length} URL(s). See logs (seo_http_validation_strict).`,
-        { status: 503, headers: { "Content-Type": "text/plain; charset=utf-8" } },
+        {
+          status: 503,
+          headers: {
+            "Content-Type": "text/plain; charset=utf-8",
+            "Cache-Control": "private, no-store",
+          },
+        },
       );
     }
     const ms = Date.now() - t0;

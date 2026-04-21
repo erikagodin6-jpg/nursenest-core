@@ -1,8 +1,8 @@
 import type { Prisma } from "@prisma/client";
 
 /**
- * Page payloads for `/questions/{slug}` — kept in a dedicated module so the lookup map
- * can load without bundling this copy-heavy array into unrelated graphs when split further.
+ * Page payloads for `/questions/{slug}` — loaded on first registry use from
+ * {@link ./programmatic-question-topic-registry} (see `getProgrammaticQuestionTopicPages`).
  */
 export type ProgrammaticQuestionTopicDefinition = {
   slug: string;

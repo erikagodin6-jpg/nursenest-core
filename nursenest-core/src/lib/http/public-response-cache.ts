@@ -1,7 +1,8 @@
 import "server-only";
 
 import { createHash } from "node:crypto";
-export const PUBLIC_ROUTE_CACHE_CONTROL = "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400" as const;
+export const PUBLIC_ROUTE_CACHE_CONTROL =
+  "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400, stale-if-error=86400" as const;
 
 export function buildPublicResponseEtag(body: string): string {
   const digest = createHash("sha256").update(body, "utf8").digest("base64url").slice(0, 27);

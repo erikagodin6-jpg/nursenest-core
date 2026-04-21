@@ -46,7 +46,7 @@ export async function GET(
       status: 200,
       headers: {
         "Content-Type": "application/json; charset=utf-8",
-        "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
+        "Cache-Control": "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400, stale-if-error=86400",
       },
     });
   } catch {
