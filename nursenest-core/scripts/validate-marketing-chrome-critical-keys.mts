@@ -4,7 +4,12 @@
  * key in {@link MARKETING_HERO_NAV_CRITICAL_KEYS}, and `pages.json` must include required
  * `pages.home.hero.*` strings. Invoked from `validate-marketing-production-surface.mjs`.
  */
-import { validateEnglishMarketingChromeBuildGate } from "@/lib/marketing/marketing-build-time-chrome-validation";
+/**
+ * Use a relative import (not `@/…`) so `node --import tsx` always resolves the same module as the
+ * filesystem under Heroku/DigitalOcean builds. Some tsx/tsconfig-paths combinations have resolved
+ * `@/lib/...` to a namespace object missing named exports in CI.
+ */
+import { validateEnglishMarketingChromeBuildGate } from "../src/lib/marketing/marketing-build-time-chrome-validation.ts";
 
 const r = validateEnglishMarketingChromeBuildGate();
 if (!r.ok) {
