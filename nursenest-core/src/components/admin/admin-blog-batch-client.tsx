@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -68,15 +69,17 @@ export function AdminBlogBatchClient() {
         if (res.status === 429 && attempt < 3) {
           setLog((l) => [
             ...l,
-            `HTTP 429 (rate limit) — retry ${attempt + 1}/3 after backoff (${(json as { scope?: string }).scope ?? "unknown"})`,
+            `HTTP 429 — retry ${attempt + 1}/3 after backoff: ${formatAdminRateLimitMessageFromJson(json)}`,
           ]);
           await backoffAfter429(res, json, attempt + 1);
           continue;
         }
         const msg =
-          typeof json.error === "string"
-            ? json.error
-            : `HTTP ${res.status}${(json as { scope?: string }).scope ? ` (${(json as { scope: string }).scope})` : ""}`;
+          res.status === 429
+            ? formatAdminRateLimitMessageFromJson(json)
+            : typeof json.error === "string"
+              ? json.error
+              : `HTTP ${res.status}${(json as { scope?: string }).scope ? ` (${(json as { scope: string }).scope})` : ""}`;
         setLog((l) => [...l, msg]);
         return;
       }
@@ -143,7 +146,7 @@ export function AdminBlogBatchClient() {
           if (res.status === 429 && attempt < 3) {
             setLog((l) => [
               ...l,
-              `cursor ${c}: HTTP 429 — retry ${attempt + 1}/3 (${(json as { scope?: string }).scope ?? "rate limit"})`,
+              `cursor ${c}: HTTP 429 — retry ${attempt + 1}/3: ${formatAdminRateLimitMessageFromJson(json)}`,
             ]);
             await backoffAfter429(res, json as Record<string, unknown>, attempt + 1);
             continue;
@@ -153,9 +156,11 @@ export function AdminBlogBatchClient() {
         if (!res?.ok) {
           setLog((l) => [
             ...l,
-            typeof (json as { error?: string }).error === "string"
-              ? (json as { error: string }).error
-              : `Stopped: HTTP ${res?.status ?? "error"}`,
+            res.status === 429
+              ? formatAdminRateLimitMessageFromJson(json)
+              : typeof (json as { error?: string }).error === "string"
+                ? (json as { error: string }).error
+                : `Stopped: HTTP ${res?.status ?? "error"}`,
           ]);
           setDone(false);
           return;

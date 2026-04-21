@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { BlogPostTemplate } from "@prisma/client";
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
+import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
 
 type ApiResult =
   | {
@@ -40,7 +41,12 @@ export function AdminBlogGeminiDraftClient() {
           minWordCount,
         }),
       });
-      const json = (await res.json()) as ApiResult;
+      const bodyUnknown = await res.json();
+      if (res.status === 429) {
+        setResult({ ok: false, error: formatAdminRateLimitMessageFromJson(bodyUnknown) });
+        return;
+      }
+      const json = bodyUnknown as ApiResult;
       setResult(json);
     } catch (error) {
       setResult({ ok: false, error: error instanceof Error ? error.message : String(error) });

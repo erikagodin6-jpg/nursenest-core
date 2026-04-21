@@ -400,17 +400,17 @@ export type AdminBlogBatchRateLimitKind = "read" | "preview" | "write" | "run";
 const ADMIN_BLOG_BATCH_WINDOW_MS = 60_000;
 
 const ADMIN_BLOG_BATCH_MAX_USER: Record<AdminBlogBatchRateLimitKind, number> = {
-  read: 520,
-  preview: 220,
-  write: 260,
-  run: 200,
+  read: 720,
+  preview: 280,
+  write: 380,
+  run: 280,
 };
 
 const ADMIN_BLOG_BATCH_MAX_IP_BASE: Record<AdminBlogBatchRateLimitKind, number> = {
-  read: 240,
-  preview: 120,
-  write: 120,
-  run: 96,
+  read: 280,
+  preview: 140,
+  write: 140,
+  run: 110,
 };
 
 const ADMIN_LEGACY_BLOG_TOOLING_WINDOW_MS = 60_000;
@@ -470,13 +470,13 @@ export function adminBlogContentApiRateLimitKind(pathname: string, method: strin
 const ADMIN_BLOG_CONTENT_WINDOW_MS = 60_000;
 
 const ADMIN_BLOG_CONTENT_MAX_USER: Record<AdminBlogContentApiKind, number> = {
-  read: 900,
-  write: 640,
+  read: 1400,
+  write: 900,
 };
 
 const ADMIN_BLOG_CONTENT_MAX_IP_BASE: Record<AdminBlogContentApiKind, number> = {
-  read: 420,
-  write: 280,
+  read: 560,
+  write: 380,
 };
 
 function json429AdminBlogContent(
@@ -578,7 +578,10 @@ async function enforceDedicatedAdminBlogContentRateLimit(
   return null;
 }
 
-function json429AdminBlogBatch(kind: AdminBlogBatchRateLimitKind): NextResponse {
+function json429AdminBlogBatch(
+  kind: AdminBlogBatchRateLimitKind,
+  meta: { path: string; bucketKeyType: "user" | "ip_unauth"; max: number; windowMs: number },
+): NextResponse {
   const retry = 60;
   return NextResponse.json(
     {
@@ -588,6 +591,10 @@ function json429AdminBlogBatch(kind: AdminBlogBatchRateLimitKind): NextResponse 
       action: kind,
       limiter: "admin_blog_batch",
       bucketType: "dedicated",
+      bucketKeyType: meta.bucketKeyType,
+      path: meta.path,
+      windowMs: meta.windowMs,
+      max: meta.max,
       retryAfterSec: retry,
     },
     {
@@ -598,6 +605,7 @@ function json429AdminBlogBatch(kind: AdminBlogBatchRateLimitKind): NextResponse 
         "X-NN-RateLimit-Scope": "admin_blog_batch",
         "X-NN-RateLimit-Action": kind,
         "X-NN-RateLimiter": "admin_blog_batch",
+        "X-NN-RateLimit-Bucket": meta.bucketKeyType,
       },
     },
   );
@@ -717,11 +725,13 @@ async function enforceDedicatedAdminBlogBatchRateLimit(
   const blogKind = adminBlogBatchRateLimitKind(pathname, method);
   if (blogKind == null) return null;
 
+  const pathShort = pathname.slice(0, 160);
   if (userId) {
+    const userMax = ADMIN_BLOG_BATCH_MAX_USER[blogKind];
     const key = `ratelimit:admin:blog_batch:${blogKind}:user:${userId}`;
     const { ok } = await checkRateLimitUnified(key, {
       windowMs: ADMIN_BLOG_BATCH_WINDOW_MS,
-      max: ADMIN_BLOG_BATCH_MAX_USER[blogKind],
+      max: userMax,
     });
     if (!ok) {
       safeServerLog("security", "admin_blog_batch_rate_limit_exceeded", {
@@ -730,15 +740,21 @@ async function enforceDedicatedAdminBlogBatchRateLimit(
         path: pathname.slice(0, 96),
         ipHash: hashIp(ipKey),
       });
-      return json429AdminBlogBatch(blogKind);
+      return json429AdminBlogBatch(blogKind, {
+        path: pathShort,
+        bucketKeyType: "user",
+        max: userMax,
+        windowMs: ADMIN_BLOG_BATCH_WINDOW_MS,
+      });
     }
     return null;
   }
 
+  const ipMax = tightenPublicCap(ADMIN_BLOG_BATCH_MAX_IP_BASE[blogKind]);
   const key = `ratelimit:admin:blog_batch:${blogKind}:ip_unauth:${ipKey}`;
   const { ok } = await checkRateLimitUnified(key, {
     windowMs: ADMIN_BLOG_BATCH_WINDOW_MS,
-    max: tightenPublicCap(ADMIN_BLOG_BATCH_MAX_IP_BASE[blogKind]),
+    max: ipMax,
   });
   if (!ok) {
     safeServerLog("security", "admin_blog_batch_rate_limit_exceeded", {
@@ -747,7 +763,12 @@ async function enforceDedicatedAdminBlogBatchRateLimit(
       path: pathname.slice(0, 96),
       ipHash: hashIp(ipKey),
     });
-    return json429AdminBlogBatch(blogKind);
+    return json429AdminBlogBatch(blogKind, {
+      path: pathShort,
+      bucketKeyType: "ip_unauth",
+      max: ipMax,
+      windowMs: ADMIN_BLOG_BATCH_WINDOW_MS,
+    });
   }
   return null;
 }

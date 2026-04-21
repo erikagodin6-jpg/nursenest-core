@@ -15,6 +15,11 @@ import {
   DRAFT_BATCH_MAX_ITEMS_PER_PROCESS,
   DRAFT_BATCH_MAX_TOPICS,
 } from "@/lib/blog/blog-draft-generation-batch-constants";
+import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
+
+function sleepMs(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 const templates: BlogPostTemplate[] = [
   BlogPostTemplate.HOW_TO_PASS,
@@ -116,7 +121,13 @@ export function AdminBlogDraftBatchClient() {
     const res = await fetch(`/api/admin/blog/draft-batch/${id}`, { credentials: "include" });
     const json = (await res.json()) as { ok?: boolean; batch?: BatchDetail };
     if (!res.ok || !json.batch) {
-      setErr(json && typeof json === "object" && "error" in json ? String((json as { error?: string }).error) : "Load failed");
+      setErr(
+        res.status === 429
+          ? formatAdminRateLimitMessageFromJson(json)
+          : json && typeof json === "object" && "error" in json
+            ? String((json as { error?: string }).error)
+            : "Load failed",
+      );
       return;
     }
     setBatch(json.batch);
@@ -187,7 +198,7 @@ export function AdminBlogDraftBatchClient() {
         droppedShortLines?: number;
       };
       if (!res.ok) {
-        setErr(json.error ?? "Create failed");
+        setErr(res.status === 429 ? formatAdminRateLimitMessageFromJson(json) : (json.error ?? "Create failed"));
         return;
       }
       const id = json.batch?.id;
@@ -226,7 +237,11 @@ export function AdminBlogDraftBatchClient() {
       });
       const json = (await res.json()) as { ok?: boolean; error?: string; processed?: number; errors?: string[] };
       if (!res.ok) {
-        setErr(json.error ?? json.errors?.[0] ?? "Process failed");
+        setErr(
+          res.status === 429
+            ? formatAdminRateLimitMessageFromJson(json)
+            : (json.error ?? json.errors?.[0] ?? "Process failed"),
+        );
         return;
       }
       setMsg(`Processed ${json.processed ?? 0} item(s) in this request.`);
@@ -249,6 +264,10 @@ export function AdminBlogDraftBatchClient() {
         guard += 1;
         const detailRes = await fetch(`/api/admin/blog/draft-batch/${batchId}`, { credentials: "include" });
         const detailJson = (await detailRes.json()) as { batch?: BatchDetail };
+        if (!detailRes.ok) {
+          setErr(detailRes.status === 429 ? formatAdminRateLimitMessageFromJson(detailJson) : "Could not refresh batch.");
+          break;
+        }
         const current = detailJson.batch;
         if (!current) break;
         setBatch(current);
@@ -263,10 +282,15 @@ export function AdminBlogDraftBatchClient() {
         });
         const json = (await res.json()) as { ok?: boolean; error?: string; processed?: number; errors?: string[] };
         if (!res.ok) {
-          setErr(json.error ?? json.errors?.[0] ?? "Process failed");
+          setErr(
+            res.status === 429
+              ? formatAdminRateLimitMessageFromJson(json)
+              : (json.error ?? json.errors?.[0] ?? "Process failed"),
+          );
           break;
         }
         if ((json.processed ?? 0) === 0) break;
+        await sleepMs(200);
       }
       setMsg("Batch run finished (or stopped early).");
       await loadBatch(batchId);

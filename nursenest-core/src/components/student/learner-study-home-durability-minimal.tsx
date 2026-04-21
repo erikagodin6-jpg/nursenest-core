@@ -1,10 +1,10 @@
-import Link from "next/link";
 import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
-import { LearnerCoreStudyShortcuts } from "@/components/student/learner-core-study-shortcuts";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import type { DashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { LearnerStudySurfaceSection } from "@/components/learner-ui";
 import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
+import { LearnerDashboardUserPanelBand } from "@/components/student/learner-dashboard-user-panel-band";
 
 /**
  * Minimal study hub when durability flags skip heavy dashboard queries — keeps core links usable.
@@ -17,6 +17,7 @@ export function LearnerStudyHomeDurabilityMinimal({
   identity,
   heroHeading,
   pathwayId,
+  entitlement,
   banner,
   showShell = true,
 }: {
@@ -27,6 +28,7 @@ export function LearnerStudyHomeDurabilityMinimal({
   identity: DashboardIdentity;
   heroHeading: string;
   pathwayId: string | null;
+  entitlement: AccessScope;
   banner: "degraded" | "error_fallback";
   showShell?: boolean;
 }) {
@@ -37,37 +39,25 @@ export function LearnerStudyHomeDurabilityMinimal({
 
   const content = (
     <>
+      <LearnerDashboardUserPanelBand
+        t={t}
+        locale={locale}
+        pathwayId={pathwayId}
+        examsNavLabel={examsNavLabel}
+        entitlement={entitlement}
+        includeStudyShortcuts
+      />
+
       <LearnerStudySurfaceSection
         id="durability-notice"
-        eyebrow={null}
-        title="Study access"
+        eyebrow={t("learner.studyHome.pageEyebrow")}
+        title={t("learner.dashboard.title")}
         intro={null}
         tone="supportive"
         surfacePadding="md"
         className="nn-dash-band"
       >
         <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{notice}</p>
-        <p className="mt-3 text-sm">
-          <Link href="/app/account/overview" className="font-semibold text-[var(--semantic-brand)] hover:underline">
-            Account hub
-          </Link>
-          <span className="text-[var(--semantic-text-secondary)]"> · </span>
-          <Link href="/app/lessons" className="font-semibold text-[var(--semantic-brand)] hover:underline">
-            Lessons
-          </Link>
-        </p>
-      </LearnerStudySurfaceSection>
-
-      <LearnerStudySurfaceSection
-        id="study-core-surfaces-min"
-        eyebrow={null}
-        title={t("learner.studyHome.shortcutsNavLabel")}
-        intro={null}
-        tone="secondary"
-        surfacePadding="md"
-        className="nn-dash-band nn-dash-band--core-shortcuts"
-      >
-        <LearnerCoreStudyShortcuts pathwayId={pathwayId} examsLabel={examsNavLabel} t={t} locale={locale} />
       </LearnerStudySurfaceSection>
     </>
   );

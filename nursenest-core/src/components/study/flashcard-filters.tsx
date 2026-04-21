@@ -68,13 +68,12 @@ function SourceChip({
           ? {
               background: `color-mix(in srgb, ${accent} 18%, var(--bg-card, #fff))`,
               color: accent,
-              border: `1px solid color-mix(in srgb, ${accent} 35%, transparent)`,
+              border: `2px solid color-mix(in srgb, ${accent} 40%, var(--semantic-border-soft))`,
             }
           : {
-              background:
-                "color-mix(in srgb, var(--surface-soft-a, var(--theme-primary)) 6%, var(--bg-page, #f9fafb))",
-              color: "var(--theme-muted-text)",
-              border: "1px solid var(--border-subtle, var(--theme-card-border))",
+              background: "color-mix(in srgb, var(--semantic-panel-cool) 28%, var(--theme-card-bg))",
+              color: "var(--semantic-text-secondary)",
+              border: "2px solid color-mix(in srgb, var(--semantic-border-soft) 92%, var(--semantic-text-muted))",
             }
       }
     >
@@ -93,12 +92,7 @@ export function FlashcardFilters({
     <div className="flex flex-col gap-4">
       {/* Source type chips */}
       <div>
-        <p
-          className="mb-2 text-xs font-semibold uppercase tracking-wide"
-          style={{ color: "var(--theme-muted-text)" }}
-        >
-          Deck type
-        </p>
+        <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-[var(--semantic-text-secondary)]">Deck type</p>
         <div className="flex flex-wrap gap-2">
           {SOURCE_CHIPS.map((chip) => (
             <SourceChip
@@ -115,17 +109,14 @@ export function FlashcardFilters({
       <div className="grid gap-3 sm:grid-cols-3">
         {pathwayOptions.length > 0 ? (
           <div>
-            <label
-              className="block text-xs font-semibold"
-              style={{ color: "var(--theme-muted-text)" }}
-            >
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--semantic-text-secondary)]">
               Pathway
               <select
-                className="mt-1 w-full rounded-lg border px-2 py-2 text-sm"
+                className="mt-1.5 w-full rounded-xl border-2 px-3 py-2.5 text-sm font-medium shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)]"
                 style={{
-                  background: "var(--bg-card, var(--theme-card-bg))",
-                  borderColor: "var(--border-subtle, var(--theme-card-border))",
-                  color: "var(--theme-heading-text)",
+                  background: "var(--theme-card-bg)",
+                  borderColor: "var(--semantic-border-soft)",
+                  color: "var(--semantic-text-primary)",
                 }}
                 value={value.pathwayId}
                 onChange={(e) => onChange({ pathwayId: e.target.value })}
@@ -142,17 +133,14 @@ export function FlashcardFilters({
         ) : null}
 
         <div>
-          <label
-            className="block text-xs font-semibold"
-            style={{ color: "var(--theme-muted-text)" }}
-          >
+          <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--semantic-text-secondary)]">
             Exam type
             <select
-              className="mt-1 w-full rounded-lg border px-2 py-2 text-sm"
+              className="mt-1.5 w-full rounded-xl border-2 px-3 py-2.5 text-sm font-medium shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)]"
               style={{
-                background: "var(--bg-card, var(--theme-card-bg))",
-                borderColor: "var(--border-subtle, var(--theme-card-border))",
-                color: "var(--theme-heading-text)",
+                background: "var(--theme-card-bg)",
+                borderColor: "var(--semantic-border-soft)",
+                color: "var(--semantic-text-primary)",
               }}
               value={value.examFamily}
               onChange={(e) => onChange({ examFamily: e.target.value })}

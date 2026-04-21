@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  adminBlogBatchRateLimitKind,
   adminBlogContentApiRateLimitKind,
   adminLegacyBlogToolingRateLimitKind,
   rateLimitUserPartitionFromSessionJwt,
@@ -11,6 +12,16 @@ test("adminLegacyBlogToolingRateLimitKind classifies legacy generator POSTs", ()
   assert.equal(adminLegacyBlogToolingRateLimitKind("/api/admin/blog/batch-chunk", "POST"), "batch_chunk");
   assert.equal(adminLegacyBlogToolingRateLimitKind("/api/admin/blog/generate-ai", "GET"), null);
   assert.equal(adminLegacyBlogToolingRateLimitKind("/api/admin/blog/other", "POST"), null);
+});
+
+test("adminBlogBatchRateLimitKind classifies batch-schedule subtree", () => {
+  assert.equal(adminBlogBatchRateLimitKind("/api/admin/blog/batch-schedule", "GET"), "read");
+  assert.equal(adminBlogBatchRateLimitKind("/api/admin/blog/batch-schedule", "POST"), "write");
+  assert.equal(adminBlogBatchRateLimitKind("/api/admin/blog/batch-schedule/run", "POST"), "run");
+  assert.equal(adminBlogBatchRateLimitKind("/api/admin/blog/batch-schedule/preview", "POST"), "preview");
+  assert.equal(adminBlogBatchRateLimitKind("/api/admin/blog/batch-schedule/abc-123", "GET"), "read");
+  assert.equal(adminBlogBatchRateLimitKind("/api/admin/blog/batch-schedule/abc-123", "PATCH"), "write");
+  assert.equal(adminBlogBatchRateLimitKind("/api/admin/blog/batch-schedule/abc-123", "DELETE"), null);
 });
 
 test("adminBlogContentApiRateLimitKind covers blog APIs except batch-schedule and legacy tooling", () => {

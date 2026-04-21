@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
+import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
 
 const templates: BlogPostTemplate[] = [
   BlogPostTemplate.HOW_TO_PASS,
@@ -82,16 +83,7 @@ export function AdminBlogGenerateClient() {
       };
       if (!res.ok) {
         if (res.status === 429) {
-          const hint = [json.scope, json.limiter, json.bucketKeyType, json.path].filter(Boolean).join(" · ");
-          const cap =
-            json.max != null && json.windowMs != null
-              ? ` — cap ${json.max}/${Math.round(json.windowMs / 1000)}s`
-              : "";
-          setErr(
-            json.error
-              ? `${json.error}${hint ? ` (${hint})` : ""}${cap}${json.retryAfterSec != null ? ` — retry after ~${json.retryAfterSec}s` : ""}`
-              : `Too many requests${hint ? ` (${hint})` : ""}${cap}`,
-          );
+          setErr(formatAdminRateLimitMessageFromJson(json));
           return;
         }
         setErr(json.error ?? "Request failed");

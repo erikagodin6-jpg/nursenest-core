@@ -10,7 +10,7 @@ import { LearnerDashboardCommandCenter } from "@/components/student/learner-dash
 import { LearnerDashboardInsightPanels } from "@/components/student/learner-dashboard-insight-panels";
 import { BenchmarkCard } from "@/components/student/dashboard/benchmark-card";
 import { WeaknessHeatmap, type HeatmapTopic } from "@/components/student/dashboard/weakness-heatmap";
-import { LearnerCoreStudyShortcuts } from "@/components/student/learner-core-study-shortcuts";
+import { LearnerDashboardUserPanelBand } from "@/components/student/learner-dashboard-user-panel-band";
 import { LearnerAdaptiveFocusCard } from "@/components/student/learner-adaptive-focus-card";
 import { WeakAreasDashboardClient } from "@/components/student/weak-areas-dashboard-client";
 import { LearnerContinueLearningCard } from "@/components/student/learner-continue-learning-card";
@@ -33,6 +33,7 @@ import type { BenchmarkData } from "@/lib/learner/benchmark-engine";
 import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import type { DashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { CoachDashboardSummary } from "@/lib/coach/study-coach-types";
 import type { StudySettings } from "@/lib/learner/study-settings";
 import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
@@ -128,6 +129,8 @@ export type LearnerStudyHomeProps = {
   /** Eyebrow for the priority band — new learners vs returning. */
   priorityEyebrowKey?: string;
   showShell?: boolean;
+  /** Server entitlement — drives plan line + billing visibility in the user-panel band. */
+  entitlement: AccessScope;
 };
 
 export function LearnerStudyHome({
@@ -161,6 +164,7 @@ export function LearnerStudyHome({
   studySettings,
   priorityEyebrowKey = "learner.studyHome.sectionPriorityEyebrow",
   showShell = true,
+  entitlement,
 }: LearnerStudyHomeProps) {
   const trends = studySnap?.topicTrends ?? [];
   const strongHighlight = studySnap?.strongTopicsHighlight ?? [];
@@ -183,6 +187,16 @@ export function LearnerStudyHome({
 
   const content = (
     <>
+      {/* Legacy dashboard: account/subscription/help + quick study links above the fold */}
+      <LearnerDashboardUserPanelBand
+        t={t}
+        locale={locale}
+        pathwayId={preferredPathwayId}
+        examsNavLabel={examsNavLabel}
+        entitlement={entitlement}
+        includeStudyShortcuts
+      />
+
       {/* Continue + exam pacing (legacy: `continue_where_left_off` + exam context) */}
       <LearnerStudySurfaceSection
         id="study-priority"
@@ -201,24 +215,6 @@ export function LearnerStudyHome({
             <ExamCountdownCard countdown={countdown} questionsPerDay={questionsPerDay} />
           </div>
         </div>
-      </LearnerStudySurfaceSection>
-
-      {/* Core study surfaces — legacy dashboard `quick_links` + shell primary row */}
-      <LearnerStudySurfaceSection
-        id="study-core-surfaces"
-        eyebrow={null}
-        title={t("learner.studyHome.shortcutsNavLabel")}
-        intro={null}
-        tone="secondary"
-        surfacePadding="md"
-        className="nn-dash-band nn-dash-band--core-shortcuts"
-      >
-        <LearnerCoreStudyShortcuts
-          pathwayId={preferredPathwayId}
-          examsLabel={examsNavLabel}
-          t={t}
-          locale={locale}
-        />
       </LearnerStudySurfaceSection>
 
       {/* Resume list — legacy `recent_lessons` widget */}

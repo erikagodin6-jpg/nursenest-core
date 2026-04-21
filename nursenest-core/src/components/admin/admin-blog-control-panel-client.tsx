@@ -40,6 +40,10 @@ import { buildPersistedSeoBundle, buildSchemaSummaryPayload } from "@/lib/blog/b
 import { AdminBlogDraftEditorShell, DraftSectionCard } from "@/components/admin/blog/admin-blog-draft-editor-shell";
 import { AdminBlogHtmlPreview } from "@/components/admin/blog/admin-blog-html-preview";
 import { AdminMediaPickerDialog } from "@/components/admin/media/admin-media-picker-dialog";
+import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
+
+/** Same-origin admin blog + media upload require session cookies (avoid ip_unauth RL buckets). */
+const ADMIN_BLOG_COOKIE_FETCH: Pick<RequestInit, "credentials" | "cache"> = { credentials: "include", cache: "no-store" };
 
 function escapeAttrHtml(s: string) {
   return s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -202,6 +206,10 @@ export function AdminBlogControlPanelClient({
   /** Open HTML preview column when arriving from library “Preview” for non-live posts */
   initialPreviewOpen?: boolean;
 }) {
+  function httpErr(res: Response, body: unknown, fallback: string): string {
+    return res.status === 429 ? formatAdminRateLimitMessageFromJson(body) : fallback;
+  }
+
   const [topic, setTopic] = useState("");
   const [exam, setExam] = useState(ADMIN_BLOG_TARGET_EXAM_OPTIONS[0].value);
   const [country, setCountry] = useState<"US" | "CA" | "unspecified">("unspecified");
@@ -327,9 +335,15 @@ export function AdminBlogControlPanelClient({
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch(`/api/admin/blog/${initialPostId}`);
+        const res = await fetch(`/api/admin/blog/${initialPostId}`, ADMIN_BLOG_COOKIE_FETCH);
         const json = (await res.json()) as { post?: AdminPostPayload; error?: string };
-        if (!res.ok || !json.post) return;
+        if (!res.ok || !json.post) {
+          if (!cancelled && res.status === 429) {
+            setGenState("failed");
+            setGenError(formatAdminRateLimitMessageFromJson(json));
+          }
+          return;
+        }
         if (!cancelled) hydrateFromPost(json.post);
         setGenState("success");
       } catch {
@@ -348,7 +362,7 @@ export function AdminBlogControlPanelClient({
     }
     setPrePublishLoading(true);
     try {
-      const res = await fetch(`/api/admin/blog/${id}/pre-publish-validation`, { cache: "no-store" });
+      const res = await fetch(`/api/admin/blog/${id}/pre-publish-validation`, ADMIN_BLOG_COOKIE_FETCH);
       const json = (await res.json()) as { ok?: boolean; prePublish?: PrePublishResultClient; error?: string };
       if (res.ok && json.prePublish) {
         setPrePublish(json.prePublish);
@@ -417,6 +431,7 @@ export function AdminBlogControlPanelClient({
     setCitationRecoveryMode(false);
     try {
       const res = await fetch("/api/admin/blog/control-panel/generate", {
+        ...ADMIN_BLOG_COOKIE_FETCH,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -488,7 +503,7 @@ export function AdminBlogControlPanelClient({
 
       if (!res.ok) {
         setGenState("failed");
-        setGenError(json.message ?? json.error ?? "Generation failed");
+        setGenError(httpErr(res, json, json.message ?? json.error ?? "Generation failed"));
         if (json.plan) {
           setPlan(json.plan);
           setImageAttachments((prev) => mergeAttachmentRowsForPlan(json.plan!, prev));
@@ -516,14 +531,17 @@ export function AdminBlogControlPanelClient({
         }
         loaded = true;
       } else if (json.postId) {
-        const g = await fetch(`/api/admin/blog/${json.postId}`);
+        const g = await fetch(`/api/admin/blog/${json.postId}`, ADMIN_BLOG_COOKIE_FETCH);
         const gj = (await g.json()) as { post?: AdminPostPayload };
         if (g.ok && gj.post) {
           hydrateFromPost(gj.post);
           if (json.plan) setPlan(json.plan);
           loaded = true;
         } else {
-          loadErr = "Draft created but could not load post — try Blog hub or ?id=" + json.postId;
+          loadErr =
+            g.status === 429
+              ? formatAdminRateLimitMessageFromJson(gj)
+              : "Draft created but could not load post — try Blog hub or ?id=" + json.postId;
         }
       }
       setWarnings(json.warnings ?? []);
@@ -551,6 +569,7 @@ export function AdminBlogControlPanelClient({
       }
       try {
         const res = await fetch("/api/admin/blog/control-panel/persist-draft", {
+          ...ADMIN_BLOG_COOKIE_FETCH,
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(controlPanelPersistPayload(plan)),
@@ -573,7 +592,7 @@ export function AdminBlogControlPanelClient({
           return;
         }
         if (!res.ok) {
-          setSaveErr(json.message ?? json.error ?? "Persist failed");
+          setSaveErr(httpErr(res, json, json.message ?? json.error ?? "Persist failed"));
           return;
         }
         if (json.post) {
@@ -587,7 +606,7 @@ export function AdminBlogControlPanelClient({
           return;
         }
         if (json.postId) {
-          const g = await fetch(`/api/admin/blog/${json.postId}`);
+          const g = await fetch(`/api/admin/blog/${json.postId}`, ADMIN_BLOG_COOKIE_FETCH);
           const gj = (await g.json()) as { post?: AdminPostPayload };
           if (g.ok && gj.post) {
             hydrateFromPost(gj.post);
@@ -645,6 +664,7 @@ export function AdminBlogControlPanelClient({
       : undefined;
     try {
       const res = await fetch(`/api/admin/blog/${postId}`, {
+        ...ADMIN_BLOG_COOKIE_FETCH,
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -677,7 +697,7 @@ export function AdminBlogControlPanelClient({
         setSaveErr(
           res.status === 409
             ? (json.error ?? "Slug already taken — pick another.")
-            : (json.error ?? "Save failed"),
+            : httpErr(res, json, json.error ?? "Save failed"),
         );
         return;
       }
@@ -697,6 +717,7 @@ export function AdminBlogControlPanelClient({
     setSaveErr(null);
     try {
       const res = await fetch(`/api/admin/blog/${postId}`, {
+        ...ADMIN_BLOG_COOKIE_FETCH,
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -726,7 +747,7 @@ export function AdminBlogControlPanelClient({
             return;
           }
         }
-        setSaveErr(json.error ?? "Publish failed");
+        setSaveErr(httpErr(res, json, json.error ?? "Publish failed"));
         return;
       }
       if (json.post) hydrateFromPost(json.post);
@@ -744,6 +765,7 @@ export function AdminBlogControlPanelClient({
     setSaveErr(null);
     try {
       const res = await fetch(`/api/admin/blog/${postId}`, {
+        ...ADMIN_BLOG_COOKIE_FETCH,
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -767,7 +789,7 @@ export function AdminBlogControlPanelClient({
             return;
           }
         }
-        setSaveErr(json.error ?? "Update failed");
+        setSaveErr(httpErr(res, json, json.error ?? "Update failed"));
         return;
       }
       if (json.post) hydrateFromPost(json.post);
@@ -792,6 +814,7 @@ export function AdminBlogControlPanelClient({
     setSaveErr(null);
     try {
       const res = await fetch("/api/admin/blog/control-panel/regenerate", {
+        ...ADMIN_BLOG_COOKIE_FETCH,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(
@@ -817,7 +840,7 @@ export function AdminBlogControlPanelClient({
         result?: Record<string, unknown>;
       };
       if (!res.ok) {
-        setSaveErr(json.message ?? json.error ?? "Regeneration failed");
+        setSaveErr(httpErr(res, json, json.message ?? json.error ?? "Regeneration failed"));
         return;
       }
       const r = json.result;
@@ -1001,13 +1024,14 @@ export function AdminBlogControlPanelClient({
     setSaveErr(null);
     try {
       const res = await fetch(`/api/admin/blog/${postId}`, {
+        ...ADMIN_BLOG_COOKIE_FETCH,
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "revert_to_draft" }),
       });
       const json = (await res.json()) as { error?: string; post?: AdminPostPayload };
       if (!res.ok) {
-        setSaveErr(json.error ?? "Could not revert to draft");
+        setSaveErr(httpErr(res, json, json.error ?? "Could not revert to draft"));
         return;
       }
       if (json.post) hydrateFromPost(json.post);
@@ -1031,6 +1055,7 @@ export function AdminBlogControlPanelClient({
     }
     try {
       const res = await fetch(`/api/admin/blog/${postId}`, {
+        ...ADMIN_BLOG_COOKIE_FETCH,
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1061,7 +1086,7 @@ export function AdminBlogControlPanelClient({
             return;
           }
         }
-        setSaveErr(json.error ?? "Schedule failed");
+        setSaveErr(httpErr(res, json, json.error ?? "Schedule failed"));
         return;
       }
       if (json.post) hydrateFromPost(json.post);
@@ -1077,10 +1102,10 @@ export function AdminBlogControlPanelClient({
     const fd = new FormData();
     fd.append("file", file);
     fd.append("kind", "image");
-    const res = await fetch("/api/admin/media/upload", { method: "POST", body: fd });
+    const res = await fetch("/api/admin/media/upload", { ...ADMIN_BLOG_COOKIE_FETCH, method: "POST", body: fd });
     const j = (await res.json()) as { publicUrl?: string; error?: string; asset?: { publicUrl?: string } };
     if (!res.ok) {
-      setImageWorkflowMsg(j.error ?? "Upload failed");
+      setImageWorkflowMsg(httpErr(res, j, j.error ?? "Upload failed"));
       return null;
     }
     return j.publicUrl ?? j.asset?.publicUrl ?? null;
@@ -1138,13 +1163,14 @@ export function AdminBlogControlPanelClient({
     setImageWorkflowMsg(null);
     try {
       const res = await fetch(`/api/admin/blog/${postId}/image-generate`, {
+        ...ADMIN_BLOG_COOKIE_FETCH,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: coverImagePromptInput.trim() || undefined }),
       });
       const j = (await res.json()) as { ok?: boolean; error?: string };
       if (!res.ok) {
-        setImageWorkflowMsg(j.error ?? "Could not queue image job");
+        setImageWorkflowMsg(httpErr(res, j, j.error ?? "Could not queue image job"));
         return;
       }
       setImageWorkflowMsg("Featured image job queued (async). Reload post after the worker runs.");

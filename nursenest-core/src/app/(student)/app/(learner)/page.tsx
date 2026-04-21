@@ -47,6 +47,7 @@ import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-fl
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { LearnerStudyHomeDurabilityMinimal } from "@/components/student/learner-study-home-durability-minimal";
 import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
+import { LearnerDashboardUserPanelBand } from "@/components/student/learner-dashboard-user-panel-band";
 
 type DashboardSessionLike = {
   user?: {
@@ -258,6 +259,7 @@ async function LearnerDashboardHeavyContent({
           locale={locale}
           examsNavLabel={examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier)}
           identity={identity}
+          entitlement={entitlement}
           heroHeading={userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
           snapshot={premiumSnapshot}
           studySnap={studySnap}
@@ -308,6 +310,7 @@ async function LearnerDashboardHeavyContent({
       identity={identityFallback}
       heroHeading={userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
       pathwayId={userLearnerPath}
+      entitlement={entitlement}
       banner="error_fallback"
       showShell={false}
     />
@@ -383,6 +386,14 @@ async function LearnerDashboardDeferredContent({
   if (entitlement === "error") {
     return (
       <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={heroHeading} identity={identity}>
+        <LearnerDashboardUserPanelBand
+          t={t}
+          locale={locale}
+          pathwayId={userLearnerPath}
+          examsNavLabel={examsNavLabel}
+          entitlement="error"
+          includeStudyShortcuts={false}
+        />
         <PremiumEmptyState
           headline={t("learner.dashboard.title")}
           body={t("learner.entitlement.verifyFailed")}
@@ -411,6 +422,7 @@ async function LearnerDashboardDeferredContent({
           identity={identity}
           heroHeading={heroHeading}
           pathwayId={userLearnerPath}
+          entitlement={entitlement}
           banner="degraded"
           showShell={false}
         />
@@ -421,6 +433,14 @@ async function LearnerDashboardDeferredContent({
   if (!entitlement.hasAccess) {
     return (
       <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={heroHeading} identity={identity}>
+        <LearnerDashboardUserPanelBand
+          t={t}
+          locale={locale}
+          pathwayId={userLearnerPath}
+          examsNavLabel={examsNavLabel}
+          entitlement={entitlement}
+          includeStudyShortcuts
+        />
         <section className="nn-dash-section">
           <div className="nn-learner-page-hero">
             <p className="mt-2.5 max-w-2xl text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">

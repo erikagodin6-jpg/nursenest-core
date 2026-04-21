@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -45,6 +46,22 @@ type BuilderSummary = {
   revisitOnly?: boolean;
   cardLimit: string;
 };
+
+const panelShellStyle: CSSProperties = {
+  borderColor: "color-mix(in srgb, var(--semantic-brand) 24%, var(--semantic-border-soft))",
+  background: "color-mix(in srgb, var(--semantic-panel-cool) 38%, var(--theme-card-bg))",
+  boxShadow: "var(--semantic-shadow-soft)",
+};
+
+const innerWellStyle: CSSProperties = {
+  borderColor: "var(--semantic-border-soft)",
+  background: "color-mix(in srgb, var(--semantic-surface) 88%, var(--theme-card-bg))",
+};
+
+const fieldLabelClass =
+  "block text-[11px] font-bold uppercase tracking-wider text-[var(--semantic-text-secondary)]";
+const controlClass =
+  "mt-1.5 w-full rounded-xl border-2 px-3 py-2.5 text-sm font-medium text-[var(--semantic-text-primary)] bg-[var(--theme-card-bg)] border-[var(--semantic-border-soft)] shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]";
 
 export function FlashcardsHubClient({
   pathwayOptions = [],
@@ -213,7 +230,7 @@ export function FlashcardsHubClient({
       : decks.filter((d) => {
           // Use the same derivation as FlashcardDeckCard
           const tags = d.tags ?? [];
-          const tagSlugs = tags.map((t) => t.slug);
+          const tagSlugs = tags.map((tg) => tg.slug);
           const slug = d.slug;
           if (filters.source === "Rationale-Derived")
             return tagSlugs.some((s) => s.includes("rationale")) || slug.includes("rationale");
@@ -308,228 +325,54 @@ export function FlashcardsHubClient({
   };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
+    <div className="mx-auto max-w-5xl px-4 py-8">
       {/* Page header */}
       <div className="mb-8">
-        <h1
-          className="text-3xl font-bold tracking-tight"
-          style={{ color: "var(--theme-heading-text)" }}
-        >
+        <h1 className="text-3xl font-bold tracking-tight" style={{ color: "var(--theme-heading-text)" }}>
           {t("learner.flashcards.hub.title")}
         </h1>
-        <p className="mt-2 text-sm" style={{ color: "var(--theme-muted-text)" }}>
-          {t("learner.flashcards.hub.subtitle")}
-        </p>
+        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.flashcards.hub.subtitle")}</p>
 
-        {/* Quick-action CTAs */}
-        <div className="mt-4 flex flex-wrap gap-2">
+        {/* Quick study row — weak areas + coherent test-bank links (no marketing/SEO) */}
+        <div className="mt-5 flex flex-wrap items-center gap-2">
           <Link
             href="/app/flashcards/weak-areas"
-            className="inline-flex rounded-full px-4 py-2 text-sm font-semibold transition"
+            className="inline-flex rounded-full px-4 py-2.5 text-sm font-semibold shadow-sm transition hover:opacity-95"
             style={{
-              background: "var(--role-cta, var(--theme-primary))",
-              color: "var(--role-cta-foreground, #fff)",
+              background: "var(--role-cta, var(--semantic-brand))",
+              color: "var(--role-cta-foreground, var(--semantic-text-on-brand, #fff))",
             }}
           >
             {t("learner.flashcards.hub.weakAreasCta")}
           </Link>
           <Link
-            href="/flashcards"
-            className="inline-flex rounded-full border px-4 py-2 text-sm font-semibold transition hover:opacity-80"
+            href="/app/questions"
+            className="inline-flex rounded-full border-2 px-4 py-2.5 text-sm font-semibold transition hover:opacity-90"
             style={{
-              borderColor: "var(--border-subtle, var(--theme-card-border))",
-              color: "var(--theme-heading-text)",
+              borderColor: "color-mix(in srgb, var(--semantic-info) 35%, var(--semantic-border-soft))",
+              color: "var(--semantic-text-primary)",
+              background: "color-mix(in srgb, var(--semantic-info) 10%, var(--theme-card-bg))",
             }}
           >
-            {t("learner.flashcards.hub.publicSeoCta")}
+            {t("learner.flashcards.hub.quickQuestionBank")}
           </Link>
+          <a
+            href="#deck-library"
+            className="inline-flex rounded-full border-2 border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-4 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))]"
+          >
+            {t("learner.flashcards.hub.browseDecksAnchor")}
+          </a>
         </div>
       </div>
 
-      {/* Quizlet-style custom builder (primary experience) */}
-      <section className="mb-8 rounded-2xl border border-border bg-[var(--theme-card-bg)] p-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Step 1: Build Your Session</p>
-        <h2 className="mt-1 text-xl font-bold text-[var(--theme-heading-text)]">Custom Flashcards Study Builder</h2>
-        <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
-          Choose body systems, customize your study options, then start one mixed session.
-        </p>
-
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <label className="block text-xs font-semibold text-[var(--theme-muted-text)]">
-            Pathway
-            <select
-              className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
-              value={filters.pathwayId}
-              onChange={(e) => applyFilters({ pathwayId: e.target.value })}
-            >
-              <option value="">Use my scoped plan</option>
-              {pathwayOptions.map((o) => (
-                <option key={o.id} value={o.id}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="block text-xs font-semibold text-[var(--theme-muted-text)]">
-            Number of cards
-            <select className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm" value={cardLimit} onChange={(e) => setCardLimit(e.target.value)}>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="30">30</option>
-              <option value="50">50</option>
-              <option value="all">All available</option>
-            </select>
-          </label>
-          <label className="block text-xs font-semibold text-[var(--theme-muted-text)]">
-            Study mode
-            <select className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm" value={studyMode} onChange={(e) => setStudyMode(e.target.value as BuilderMode)}>
-              <option value="term_to_definition">Active Recall</option>
-              <option value="definition_to_term">Reverse Recall</option>
-              <option value="mixed">Mixed Recall</option>
-            </select>
-          </label>
-        </div>
-
-        <div className="mt-4 flex flex-wrap items-center gap-3">
-          <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)]">
-            <input type="checkbox" checked={shuffleOn} onChange={(e) => setShuffleOn(e.target.checked)} />
-            Shuffle cards
-          </label>
-        </div>
-
-        <div className="mt-4">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Body Systems</p>
-          <div className="flex flex-wrap gap-2">
-            {builderCategories.map((category) => {
-              const selected = selectedCategoryIds.includes(category.id);
-              return (
-                <button
-                  key={category.id}
-                  type="button"
-                  onClick={() => toggleCategory(category.id)}
-                  className="rounded-full border px-3 py-1.5 text-xs font-semibold transition"
-                  style={
-                    selected
-                      ? {
-                          borderColor: "var(--semantic-brand)",
-                          background: "color-mix(in srgb, var(--semantic-brand) 14%, transparent)",
-                          color: "var(--theme-heading-text)",
-                        }
-                      : {
-                          borderColor: "var(--border-subtle)",
-                          background: "color-mix(in srgb, var(--semantic-panel-cool) 12%, transparent)",
-                          color: "var(--theme-muted-text)",
-                        }
-                  }
-                >
-                  {formatTitleCase(category.title)} ({category.count})
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <details className="mt-4 rounded-xl border border-border bg-muted/10 p-3">
-          <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-            Review Filters
-          </summary>
-          <p className="mt-2 text-xs text-[var(--theme-muted-text)]">
-            Server-backed filters: Weak Areas, Previously Incorrect. Local review filters from this browser: Starred, Saved, Notes, Marked for Revisit.
-          </p>
-          <div className="mt-3 grid gap-2 sm:grid-cols-2">
-            <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)]">
-              <input type="checkbox" checked={weakOnly} onChange={(e) => setWeakOnly(e.target.checked)} />
-              Include only weak areas
-            </label>
-            <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)]">
-              <input type="checkbox" checked={incorrectOnly} onChange={(e) => setIncorrectOnly(e.target.checked)} />
-              Include previously incorrect cards
-            </label>
-            <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)]">
-              <input type="checkbox" checked={starredOnly} onChange={(e) => setStarredOnly(e.target.checked)} />
-              Starred Only ({savedStats.starred})
-            </label>
-            <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)]">
-              <input type="checkbox" checked={savedOnly} onChange={(e) => setSavedOnly(e.target.checked)} />
-              Saved Only ({savedStats.saved})
-            </label>
-            <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)]">
-              <input type="checkbox" checked={notesOnly} onChange={(e) => setNotesOnly(e.target.checked)} />
-              Notes Only ({savedStats.noted})
-            </label>
-            <label className="flex items-center gap-2 text-xs text-[var(--theme-muted-text)]">
-              <input type="checkbox" checked={revisitOnly} onChange={(e) => setRevisitOnly(e.target.checked)} />
-              Marked for Revisit ({savedStats.confusing})
-            </label>
-          </div>
-        </details>
-
-        <div className="mt-4 rounded-xl border border-border bg-muted/20 p-3 text-sm text-[var(--theme-muted-text)]">
-          <p>
-            Pathway: {filters.pathwayId ? pathwayOptions.find((p) => p.id === filters.pathwayId)?.label ?? filters.pathwayId : "Scoped to your entitlement"}
-          </p>
-          <p>
-            Categories: {selectedCategoryIds.length > 0 ? builderCategories.filter((c) => selectedCategoryIds.includes(c.id)).map((c) => formatTitleCase(c.title)).join(", ") : "All available"}
-          </p>
-          <p>
-            Cards: {builderSummary?.returnedCards ?? 0} of {builderSummary?.matchingCards ?? 0} · Mode: {modeLabel[studyMode]} · Shuffle:{" "}
-            {shuffleOn ? "On" : "Off"}
-          </p>
-          {(starredOnly || savedOnly || notesOnly || revisitOnly) ? (
-            <p>
-              Review Filters: {[
-                starredOnly ? "Starred" : null,
-                savedOnly ? "Saved" : null,
-                notesOnly ? "With Notes" : null,
-                revisitOnly ? "Marked for Revisit" : null,
-              ]
-                .filter(Boolean)
-                .join(", ")}{" "}
-              (from this browser)
-            </p>
-          ) : null}
-          {(starredOnly || savedOnly || notesOnly || revisitOnly) ? (
-            <p>Counts are estimated before local review filters are applied.</p>
-          ) : null}
-        </div>
-
-        <div className="mt-4 flex flex-wrap gap-3">
-          <Link href={startHref} className="inline-flex rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground">
-            Start Flashcards
-          </Link>
-          <button
-            type="button"
-            onClick={() => void previewCustomCards()}
-            className="inline-flex rounded-full border border-border px-5 py-2.5 text-sm font-semibold text-[var(--theme-heading-text)]"
-          >
-            Preview Cards
-          </button>
-        </div>
-        {builderLoading ? <p className="mt-2 text-xs text-[var(--theme-muted-text)]">Refreshing session options…</p> : null}
-        {builderError ? <p className="mt-2 text-xs text-[var(--semantic-danger)]">{builderError}</p> : null}
-        {previewCards.length > 0 ? (
-          <div className="mt-4 rounded-xl border border-border bg-[var(--theme-card-bg)] p-3">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Preview</p>
-            <ul className="space-y-2 text-sm">
-              {previewCards.map((card) => (
-                <li key={card.id} className="rounded-lg border border-border/70 p-2">
-                  <p className="font-medium text-[var(--theme-heading-text)]">{card.front}</p>
-                  {card.topic ? <p className="text-xs text-[var(--theme-muted-text)]">{card.topic}</p> : null}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-      </section>
-
-      {/* Mastery / retention KPI row — same learner product family as exam shells */}
+      {/* Retention overview first (legacy test-bank: stats → configure → start) */}
       {(dueSummary || stats) ? (
         <section className="mb-8 space-y-4" aria-label={t("learner.flashcards.hub.masteryOverview")}>
-          <p className="text-xs font-semibold uppercase tracking-widest text-[var(--theme-muted-text)]">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-text-secondary)]">
             {t("learner.flashcards.hub.masteryOverview")}
           </p>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]">
+            <div className="rounded-2xl border-2 border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]">
               <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
                 {t("learner.flashcards.hub.kpiDueToday")}
               </p>
@@ -537,7 +380,7 @@ export function FlashcardsHubClient({
                 {dueSummary != null ? dueSummary.dueToday : "—"}
               </p>
             </div>
-            <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]">
+            <div className="rounded-2xl border-2 border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]">
               <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
                 {t("learner.flashcards.hub.kpiOverdue")}
               </p>
@@ -549,7 +392,7 @@ export function FlashcardsHubClient({
                 {dueSummary != null ? dueSummary.overdue : "—"}
               </p>
             </div>
-            <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]">
+            <div className="rounded-2xl border-2 border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]">
               <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
                 {t("learner.flashcards.hub.kpiStreak")}
               </p>
@@ -563,7 +406,7 @@ export function FlashcardsHubClient({
                 </p>
               ) : null}
             </div>
-            <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]">
+            <div className="rounded-2xl border-2 border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]">
               <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
                 {t("learner.flashcards.hub.kpiReviewed")}
               </p>
@@ -581,7 +424,7 @@ export function FlashcardsHubClient({
           {totalDue > 0 ? (
             <Link
               href="/app/flashcards/weak-areas"
-              className="block w-full rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] py-3 text-center text-sm font-semibold text-[var(--theme-heading-text)] shadow-sm transition hover:opacity-95"
+              className="block w-full rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] py-3.5 text-center text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:opacity-95"
             >
               Review {totalDue} due now →
             </Link>
@@ -589,37 +432,224 @@ export function FlashcardsHubClient({
         </section>
       ) : null}
 
-      {/* Ready-made decks (secondary) */}
-      <h2 className="mb-2 text-lg font-semibold text-[var(--theme-heading-text)]">Browse Ready-Made Decks</h2>
-      <p className="mb-4 text-sm text-[var(--theme-muted-text)]">
-        Prebuilt decks are still available, but the custom builder above is the primary study flow.
-      </p>
+      {/* Custom session — primary study setup (legacy IA: configure → act) */}
+      <section id="study-session" className="mb-10 rounded-2xl border-2 p-6 sm:p-7" style={panelShellStyle}>
+        <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-brand)]">{t("learner.flashcards.hub.studySessionEyebrow")}</p>
+        <h2 className="mt-1 text-xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-2xl">
+          {t("learner.flashcards.hub.customStudyTitle")}
+        </h2>
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.flashcards.hub.customStudyIntro")}</p>
 
-      {/* Deck filters */}
-      <div
-        className="mb-8 rounded-2xl p-5"
-        style={{
-          background:
-            "color-mix(in srgb, var(--surface-soft-a, var(--theme-primary)) 5%, var(--bg-card, var(--theme-card-bg)))",
-          border: "1px solid var(--border-subtle, var(--theme-card-border))",
-        }}
-      >
-        <FlashcardFilters
-          value={filters}
-          onChange={applyFilters}
-          pathwayOptions={pathwayOptions}
-          tagList={tagList}
-        />
+        <div className="mt-6 h-px bg-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)]" aria-hidden />
+
+        <div className="mt-6 grid gap-5 lg:grid-cols-12">
+          <div className="space-y-4 lg:col-span-5">
+            <label className={fieldLabelClass}>
+              Pathway
+              <select className={controlClass} value={filters.pathwayId} onChange={(e) => applyFilters({ pathwayId: e.target.value })}>
+                <option value="">Use my scoped plan</option>
+                {pathwayOptions.map((o) => (
+                  <option key={o.id} value={o.id}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              <label className={fieldLabelClass}>
+                Number of cards
+                <select className={controlClass} value={cardLimit} onChange={(e) => setCardLimit(e.target.value)}>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                  <option value="50">50</option>
+                  <option value="all">All available</option>
+                </select>
+              </label>
+              <label className={fieldLabelClass}>
+                Study mode
+                <select className={controlClass} value={studyMode} onChange={(e) => setStudyMode(e.target.value as BuilderMode)}>
+                  <option value="term_to_definition">Active Recall</option>
+                  <option value="definition_to_term">Reverse Recall</option>
+                  <option value="mixed">Mixed Recall</option>
+                </select>
+              </label>
+            </div>
+            <label className="flex cursor-pointer items-center gap-2.5 rounded-xl border-2 border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_12%,var(--theme-card-bg))] px-3 py-2.5 text-sm font-medium text-[var(--semantic-text-primary)]">
+              <input
+                type="checkbox"
+                className="size-4 rounded border-[var(--semantic-border-soft)] text-[var(--semantic-brand)]"
+                checked={shuffleOn}
+                onChange={(e) => setShuffleOn(e.target.checked)}
+              />
+              Shuffle cards
+            </label>
+          </div>
+
+          <div className="lg:col-span-7">
+            <p className={fieldLabelClass}>{t("learner.flashcards.hub.bodySystemsHeading")}</p>
+            <div className="mt-2 flex min-h-[4.5rem] flex-wrap gap-2 rounded-xl border-2 border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] p-3">
+              {builderCategories.length === 0 && !builderLoading ? (
+                <p className="text-sm text-[var(--semantic-text-muted)]">Select a pathway to load topics.</p>
+              ) : null}
+              {builderCategories.map((category) => {
+                const selected = selectedCategoryIds.includes(category.id);
+                return (
+                  <button
+                    key={category.id}
+                    type="button"
+                    onClick={() => toggleCategory(category.id)}
+                    className="rounded-full border-2 px-3 py-1.5 text-xs font-semibold transition"
+                    style={
+                      selected
+                        ? {
+                            borderColor: "var(--semantic-brand)",
+                            background: "color-mix(in srgb, var(--semantic-brand) 18%, var(--theme-card-bg))",
+                            color: "var(--semantic-text-primary)",
+                          }
+                        : {
+                            borderColor: "var(--semantic-border-soft)",
+                            background: "color-mix(in srgb, var(--semantic-panel-cool) 22%, var(--theme-card-bg))",
+                            color: "var(--semantic-text-secondary)",
+                          }
+                    }
+                  >
+                    {formatTitleCase(category.title)} ({category.count})
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <div
+          className="mt-6 rounded-xl border-2 p-4 sm:p-5"
+          style={{
+            ...innerWellStyle,
+            background: "color-mix(in srgb, var(--semantic-panel-warm) 14%, var(--semantic-surface))",
+          }}
+        >
+          <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-text-secondary)]">
+            {t("learner.flashcards.hub.reviewFiltersHeading")}
+          </p>
+          <p className="mt-2 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+            Server-backed: weak areas, previously incorrect. This device: starred, saved, notes, marked for revisit.
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <label className="flex items-center gap-2.5 text-sm font-medium text-[var(--semantic-text-primary)]">
+              <input type="checkbox" className="size-4 rounded border-[var(--semantic-border-soft)]" checked={weakOnly} onChange={(e) => setWeakOnly(e.target.checked)} />
+              Weak areas only
+            </label>
+            <label className="flex items-center gap-2.5 text-sm font-medium text-[var(--semantic-text-primary)]">
+              <input type="checkbox" className="size-4 rounded border-[var(--semantic-border-soft)]" checked={incorrectOnly} onChange={(e) => setIncorrectOnly(e.target.checked)} />
+              Previously incorrect
+            </label>
+            <label className="flex items-center gap-2.5 text-sm font-medium text-[var(--semantic-text-primary)]">
+              <input type="checkbox" className="size-4 rounded border-[var(--semantic-border-soft)]" checked={starredOnly} onChange={(e) => setStarredOnly(e.target.checked)} />
+              Starred ({savedStats.starred})
+            </label>
+            <label className="flex items-center gap-2.5 text-sm font-medium text-[var(--semantic-text-primary)]">
+              <input type="checkbox" className="size-4 rounded border-[var(--semantic-border-soft)]" checked={savedOnly} onChange={(e) => setSavedOnly(e.target.checked)} />
+              Saved ({savedStats.saved})
+            </label>
+            <label className="flex items-center gap-2.5 text-sm font-medium text-[var(--semantic-text-primary)]">
+              <input type="checkbox" className="size-4 rounded border-[var(--semantic-border-soft)]" checked={notesOnly} onChange={(e) => setNotesOnly(e.target.checked)} />
+              With notes ({savedStats.noted})
+            </label>
+            <label className="flex items-center gap-2.5 text-sm font-medium text-[var(--semantic-text-primary)]">
+              <input type="checkbox" className="size-4 rounded border-[var(--semantic-border-soft)]" checked={revisitOnly} onChange={(e) => setRevisitOnly(e.target.checked)} />
+              Marked revisit ({savedStats.confusing})
+            </label>
+          </div>
+        </div>
+
+        <div
+          className="mt-5 rounded-xl border-2 p-4 sm:p-5"
+          style={{
+            borderColor: "color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft))",
+            background: "color-mix(in srgb, var(--semantic-info) 8%, var(--theme-card-bg))",
+          }}
+        >
+          <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-info)]">{t("learner.flashcards.hub.sessionSummaryHeading")}</p>
+          <ul className="mt-3 space-y-2 text-sm text-[var(--semantic-text-secondary)]">
+            <li>
+              <span className="font-semibold text-[var(--semantic-text-primary)]">Pathway: </span>
+              {filters.pathwayId ? pathwayOptions.find((p) => p.id === filters.pathwayId)?.label ?? filters.pathwayId : "Scoped to your entitlement"}
+            </li>
+            <li>
+              <span className="font-semibold text-[var(--semantic-text-primary)]">Topics: </span>
+              {selectedCategoryIds.length > 0
+                ? builderCategories.filter((c) => selectedCategoryIds.includes(c.id)).map((c) => formatTitleCase(c.title)).join(", ")
+                : "All available"}
+            </li>
+            <li>
+              <span className="font-semibold text-[var(--semantic-text-primary)]">Deck: </span>
+              <span className="tabular-nums font-semibold text-[var(--semantic-chart-2)]">{builderSummary?.returnedCards ?? 0}</span>
+              <span className="text-[var(--semantic-text-muted)]"> / </span>
+              <span className="tabular-nums text-[var(--semantic-text-primary)]">{builderSummary?.matchingCards ?? 0}</span>
+              <span className="text-[var(--semantic-text-muted)]"> cards · </span>
+              <span className="font-medium text-[var(--semantic-text-primary)]">{modeLabel[studyMode]}</span>
+              <span className="text-[var(--semantic-text-muted)]"> · shuffle </span>
+              <span className="font-medium text-[var(--semantic-text-primary)]">{shuffleOn ? "on" : "off"}</span>
+            </li>
+            {(starredOnly || savedOnly || notesOnly || revisitOnly) ? (
+              <li className="text-[var(--semantic-text-muted)]">
+                Local filters:{" "}
+                {[starredOnly ? "Starred" : null, savedOnly ? "Saved" : null, notesOnly ? "Notes" : null, revisitOnly ? "Revisit" : null].filter(Boolean).join(", ")}
+                . Counts are estimated before local filters apply.
+              </li>
+            ) : null}
+          </ul>
+        </div>
+
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link
+            href={startHref}
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full px-6 py-2.5 text-sm font-bold shadow-md transition hover:opacity-95"
+            style={{
+              background: "var(--role-cta, var(--semantic-brand))",
+              color: "var(--role-cta-foreground, var(--semantic-text-on-brand, #fff))",
+            }}
+          >
+            {t("learner.flashcards.hub.startStudying")}
+          </Link>
+          <button
+            type="button"
+            onClick={() => void previewCustomCards()}
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full border-2 border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-6 py-2.5 text-sm font-bold text-[var(--semantic-text-primary)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))]"
+          >
+            {t("learner.flashcards.hub.previewCards")}
+          </button>
+        </div>
+        {builderLoading ? <p className="mt-3 text-xs font-medium text-[var(--semantic-text-muted)]">Refreshing session options…</p> : null}
+        {builderError ? <p className="mt-3 text-xs font-semibold text-[var(--semantic-danger)]">{builderError}</p> : null}
+        {previewCards.length > 0 ? (
+          <div className="mt-5 rounded-xl border-2 border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] p-4">
+            <p className="mb-3 text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-text-secondary)]">Preview</p>
+            <ul className="space-y-2 text-sm">
+              {previewCards.map((card) => (
+                <li key={card.id} className="rounded-lg border-2 border-[color-mix(in_srgb,var(--semantic-border-soft)_80%,transparent)] p-3">
+                  <p className="font-semibold text-[var(--semantic-text-primary)]">{card.front}</p>
+                  {card.topic ? <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">{card.topic}</p> : null}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+      </section>
+
+      {/* Deck library */}
+      <div id="deck-library" className="scroll-mt-8">
+        <h2 className="text-lg font-bold text-[var(--semantic-text-primary)] sm:text-xl">{t("learner.flashcards.hub.deckLibraryHeading")}</h2>
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.flashcards.hub.deckLibraryIntro")}</p>
       </div>
 
-      {/* Error */}
-      {error ? (
-        <p className="mb-6 text-sm" style={{ color: "var(--semantic-danger, #ef4444)" }}>
-          {error}
-        </p>
-      ) : null}
+      <div className="mb-8 mt-5 rounded-2xl border-2 p-5 sm:p-6" style={panelShellStyle}>
+        <FlashcardFilters value={filters} onChange={applyFilters} pathwayOptions={pathwayOptions} tagList={tagList} />
+      </div>
 
-      {/* Deck grid */}
+      {error ? <p className="mb-6 text-sm font-medium text-[var(--semantic-danger)]">{error}</p> : null}
+
       <FlashcardDeckGrid
         decks={visibleDecks}
         loading={loading}
@@ -628,21 +658,16 @@ export function FlashcardsHubClient({
             ? `No ${filters.source} decks found. Try a different filter.`
             : isNpPathwayFilter
               ? "Flashcard coverage for this NP pathway is in progress. Use Question Bank and Lessons while decks are being populated."
-              : t("learner.flashcards.hub.loadingDecks")
+              : `${t("learner.flashcards.hub.emptyPrefix")} ${t("learner.flashcards.hub.emptyLink")}.`
         }
       />
 
-      {/* Pagination */}
       {totalPages > 1 && !loading ? (
-        <nav
-          className="mt-10 flex items-center justify-between text-sm"
-          aria-label={t("learner.flashcards.hub.paginationAria")}
-        >
+        <nav className="mt-10 flex items-center justify-between text-sm" aria-label={t("learner.flashcards.hub.paginationAria")}>
           <button
             type="button"
             disabled={page <= 1 || loading}
-            className="font-medium disabled:opacity-40"
-            style={{ color: "var(--theme-primary)" }}
+            className="font-semibold text-[var(--semantic-brand)] disabled:opacity-40"
             onClick={() => {
               const qs = new URLSearchParams(urlParams.toString());
               qs.set("page", String(page - 1));
@@ -651,14 +676,11 @@ export function FlashcardsHubClient({
           >
             {t("learner.flashcards.hub.previous")}
           </button>
-          <span style={{ color: "var(--theme-muted-text)" }}>
-            {t("learner.flashcards.hub.pageOf", { page, total: totalPages })}
-          </span>
+          <span className="font-medium text-[var(--semantic-text-secondary)]">{t("learner.flashcards.hub.pageOf", { page, total: totalPages })}</span>
           <button
             type="button"
             disabled={page >= totalPages || loading}
-            className="font-medium disabled:opacity-40"
-            style={{ color: "var(--theme-primary)" }}
+            className="font-semibold text-[var(--semantic-brand)] disabled:opacity-40"
             onClick={() => {
               const qs = new URLSearchParams(urlParams.toString());
               qs.set("page", String(page + 1));
@@ -670,35 +692,22 @@ export function FlashcardsHubClient({
         </nav>
       ) : null}
 
-      {/* Bottom cross-links */}
-      <div className="mt-10 flex flex-wrap gap-2">
+      <div className="mt-10 flex flex-wrap gap-2 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] pt-8">
         <Link
           href="/app/questions"
-          className="rounded-full border px-4 py-2 text-sm font-semibold transition hover:opacity-80"
-          style={{
-            borderColor: "var(--border-subtle, var(--theme-card-border))",
-            color: "var(--theme-heading-text)",
-          }}
+          className="rounded-full border-2 border-[var(--semantic-border-soft)] px-4 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))]"
         >
           {t("learner.flashcards.hub.bottomQuestionBank")}
         </Link>
         <Link
           href="/lessons"
-          className="rounded-full border px-4 py-2 text-sm font-semibold transition hover:opacity-80"
-          style={{
-            borderColor: "var(--border-subtle, var(--theme-card-border))",
-            color: "var(--theme-heading-text)",
-          }}
+          className="rounded-full border-2 border-[var(--semantic-border-soft)] px-4 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))]"
         >
           {t("learner.flashcards.hub.bottomExamLessons")}
         </Link>
         <Link
           href="/app/review"
-          className="rounded-full border px-4 py-2 text-sm font-semibold transition hover:opacity-80"
-          style={{
-            borderColor: "var(--border-subtle, var(--theme-card-border))",
-            color: "var(--theme-heading-text)",
-          }}
+          className="rounded-full border-2 border-[var(--semantic-border-soft)] px-4 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))]"
         >
           Spaced Review Queue
         </Link>

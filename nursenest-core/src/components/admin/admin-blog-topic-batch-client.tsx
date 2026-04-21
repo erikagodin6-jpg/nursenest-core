@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from "react";
 import type { BlogBatchPublishMode, BlogBatchScheduleStatus, BlogPostTemplate } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
 
 type ScheduleListRow = {
   id: string;
@@ -120,7 +121,7 @@ export function AdminBlogTopicBatchClient({
       });
       const data = await res.json();
       if (!res.ok) {
-        setMessage(data.error ?? "Preview failed");
+        setMessage(res.status === 429 ? formatAdminRateLimitMessageFromJson(data) : (data.error ?? "Preview failed"));
         setPreview(null);
         return;
       }
@@ -158,7 +159,7 @@ export function AdminBlogTopicBatchClient({
       });
       const data = await res.json();
       if (!res.ok) {
-        setMessage(data.error ?? "Save failed");
+        setMessage(res.status === 429 ? formatAdminRateLimitMessageFromJson(data) : (data.error ?? "Save failed"));
         return;
       }
       setMessage(`Saved schedule ${data.schedule?.id}. Dropped duplicate lines in paste: ${data.droppedDuplicateLines ?? 0}.`);
@@ -205,7 +206,9 @@ export function AdminBlogTopicBatchClient({
       const res = await fetch("/api/admin/blog/batch-schedule/run", { method: "POST", credentials: "include" });
       const data = await res.json();
       if (!res.ok) {
-        setMessage(data.errors?.[0] ?? "Run failed");
+        setMessage(
+          res.status === 429 ? formatAdminRateLimitMessageFromJson(data) : (data.errors?.[0] ?? "Run failed"),
+        );
         return;
       }
       setMessage(

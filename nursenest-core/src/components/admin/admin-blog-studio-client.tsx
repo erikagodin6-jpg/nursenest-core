@@ -6,6 +6,7 @@ import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/clien
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 import { parseBlogSeoBundle } from "@/lib/blog/blog-seo-automation";
+import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
 
 const templates = Object.values(BlogPostTemplate);
 
@@ -105,6 +106,7 @@ export function AdminBlogStudioClient() {
       const res = await fetch("/api/admin/blog/control-panel/generate", {
         method: "POST",
         credentials: "include",
+        cache: "no-store",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           topic,
@@ -144,7 +146,11 @@ export function AdminBlogStudioClient() {
         return;
       }
       if (!res.ok) {
-        setErr(json.message ?? json.error ?? "Generation failed");
+        setErr(
+          res.status === 429
+            ? formatAdminRateLimitMessageFromJson(json)
+            : (json.message ?? json.error ?? "Generation failed"),
+        );
         if (json.plan) setPlan(json.plan);
         return;
       }
