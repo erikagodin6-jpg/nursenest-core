@@ -12,7 +12,8 @@
  * **Strip vs hero:** RN/PN/NP/Allied use canonical pathway hub URLs from the registry.
  * Order is always RN → PN → NP → Allied (`EXAM_PATHWAY_ORDER`).
  */
-import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";

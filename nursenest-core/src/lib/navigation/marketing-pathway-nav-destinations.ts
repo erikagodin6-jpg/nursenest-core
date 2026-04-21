@@ -3,7 +3,8 @@
  * mega menus, homepage cards, and other entry surfaces (not global `/lessons` shortcuts).
  */
 import { marketingCatPathForPathwayId } from "@/lib/exam-pathways/practice-exams-cat-start";
-import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { HUB, rnLessons, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";

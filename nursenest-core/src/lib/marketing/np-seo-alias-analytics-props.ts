@@ -1,5 +1,5 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 
 /** Shared PostHog dimensions for NP SEO alias landings (additive; keeps existing keys for dashboards). */
 export function npSeoAliasContextProps(

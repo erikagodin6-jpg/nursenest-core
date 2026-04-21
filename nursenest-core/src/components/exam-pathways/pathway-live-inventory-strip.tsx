@@ -4,7 +4,7 @@ import Link from "next/link";
 import { SafePathwayHubLink } from "@/components/marketing/safe-pathway-hub-link";
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { EMPTY_QUESTION_SNAPSHOT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";

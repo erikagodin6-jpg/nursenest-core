@@ -3,11 +3,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import {
-  buildExamPathwayPath,
-  getExamPathwayByRoute,
-  listExamPathways,
-} from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { getExamPathwayByRoute, listExamPathways } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { loadPathwayHubResumePayload } from "@/lib/learner/pathway-lesson-continuation";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";

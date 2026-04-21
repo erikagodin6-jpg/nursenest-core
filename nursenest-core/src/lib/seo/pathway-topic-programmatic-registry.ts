@@ -9,7 +9,8 @@
  * `MAX_PATHWAY_TOPIC_PROGRAMMATIC_SITEMAP_URLS`.
  */
 import { ExamFamily } from "@prisma/client";
-import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import type { SeoCluster, SeoPageDefinition } from "@/lib/seo/programmatic-registry";

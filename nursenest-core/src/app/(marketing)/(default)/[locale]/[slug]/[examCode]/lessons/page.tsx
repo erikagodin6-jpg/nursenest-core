@@ -7,7 +7,7 @@ import { LessonsToolbar } from "@/components/pathway-lessons/lessons-toolbar";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { loadPathwayLessonsHubAggregates } from "@/lib/exam-pathways/marketing-hub-optional-data";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { marketingPathwayLessonsIndexPath, marketingExamHubBasePath } from "@/lib/lessons/lesson-routes";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";

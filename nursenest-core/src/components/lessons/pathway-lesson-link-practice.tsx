@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements";
 import type { StudyLoopCatAuthState } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { resolveStudyLoopCatDestination } from "@/lib/exam-pathways/study-loop-cat-routing";

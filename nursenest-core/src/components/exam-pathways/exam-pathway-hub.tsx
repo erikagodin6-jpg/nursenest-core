@@ -13,7 +13,7 @@ import { ExamPathwayHubBody } from "@/components/exam-pathways/exam-pathway-hub-
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { NpSeoAliasHubAnalytics } from "@/components/marketing/np-seo-alias-hub-analytics";
 import { validateLearnerCopyForExamContext } from "@/lib/learner/validate-learner-copy-context";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { EMPTY_QUESTION_SNAPSHOT, ZERO_LESSON_COUNT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import type { NpPathwayInventoryGate } from "@/lib/np/np-pathway-inventory-gate";

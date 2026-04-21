@@ -18,7 +18,6 @@ import { LearnerAppSectionAnalytics } from "@/components/observability/learner-a
 import { SentryLearnerShell } from "@/components/observability/sentry-learner-shell";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadLearnerStudyNextBlock } from "@/lib/learner/load-learner-study-next-block";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { learnerPathwayHubChromeHrefForTierFallback } from "@/lib/learner/learner-pathway-hub-chrome-href";
 import {
   DEFAULT_LEARNER_PATHWAY_NAV_METADATA,
@@ -119,34 +118,37 @@ export default async function LearnerShellLayout({ children }: { children: React
 
   if (!pathwayHubHref) {
     const tier = ((session?.user as { tier?: string | null })?.tier ?? "").toUpperCase();
-    const tierHub = learnerPathwayHubChromeHrefForTierFallback(tier);
+    const tierHub = await learnerPathwayHubChromeHrefForTierFallback(tier);
     if (tierHub) {
       pathwayHubHref = tierHub;
       if (tier === "RN" || tier === "RPN" || tier === "LVN_LPN" || tier === "NP") examsLabel = "CAT Exams";
     }
   }
 
-  if (!pathwayContextBar && pathwayId) {
-    const p = getExamPathwayById(pathwayId);
-    if (p) pathwayContextBar = formatPathwayContextBar(p);
-  }
-  if (!pathwayContextBar && pathwayHubHref) {
-    const tier = ((session?.user as { tier?: string | null })?.tier ?? "").toUpperCase();
-    const fallbackPathwayId =
-      tier === "RN"
-        ? "us-rn-nclex-rn"
-        : tier === "RPN"
-          ? "ca-rpn-rex-pn"
-          : tier === "LVN_LPN"
-            ? "us-lpn-nclex-pn"
-            : tier === "NP"
-              ? "us-np-fnp"
-              : tier === "ALLIED"
-                ? "us-allied-core"
-                : null;
-    if (fallbackPathwayId) {
-      const p = getExamPathwayById(fallbackPathwayId);
+  if (!pathwayContextBar && (pathwayId || pathwayHubHref)) {
+    const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
+    if (pathwayId) {
+      const p = getExamPathwayById(pathwayId);
       if (p) pathwayContextBar = formatPathwayContextBar(p);
+    }
+    if (!pathwayContextBar && pathwayHubHref) {
+      const tier = ((session?.user as { tier?: string | null })?.tier ?? "").toUpperCase();
+      const fallbackPathwayId =
+        tier === "RN"
+          ? "us-rn-nclex-rn"
+          : tier === "RPN"
+            ? "ca-rpn-rex-pn"
+            : tier === "LVN_LPN"
+              ? "us-lpn-nclex-pn"
+              : tier === "NP"
+                ? "us-np-fnp"
+                : tier === "ALLIED"
+                  ? "us-allied-core"
+                  : null;
+      if (fallbackPathwayId) {
+        const p = getExamPathwayById(fallbackPathwayId);
+        if (p) pathwayContextBar = formatPathwayContextBar(p);
+      }
     }
   }
 

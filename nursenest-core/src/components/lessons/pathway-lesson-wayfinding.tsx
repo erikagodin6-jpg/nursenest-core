@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BookOpen, ClipboardList, GraduationCap, Layers, Library, Newspaper, Wrench } from "lucide-react";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import {
   humanizeTopicSlug,

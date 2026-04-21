@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
 import { PathwayTopicClusterGroupedNav } from "@/components/pathway-lessons/pathway-topic-cluster-grouped-nav";

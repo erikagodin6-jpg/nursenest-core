@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { BookOpen, ClipboardList, Layers, LineChart, Timer } from "lucide-react";
 import { NpQuestionsHubBoardLinks } from "@/components/exam-pathways/np-questions-hub-board-links";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";

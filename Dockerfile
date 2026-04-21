@@ -4,12 +4,13 @@
 # Monorepo paths: next.config `outputFileTracingRoot` is the repo parent of `nursenest-core/`
 # (needs `shared/`, `client/` for `@shared/*` / `@legacy-client/*`).
 #
-# Build pipeline (unchanged scripts):
-#   1) `npm ci` in `nursenest-core/`
+# Build pipeline (same `package.json` scripts as the Node buildpack path):
+#   1) `npm ci` in `nursenest-core/` (includes devDependencies: prisma, tsx, typescript, eslint-config-next, …)
 #   2) `npm run db:generate` (Prisma client; dummy DATABASE_URL at image build only)
-#   3) `npm run heroku-postbuild` → verify + `NN_POSTBUILD_NEXT_BUILD=1 npm run build` → `build:compile` / `next build`
+#   3) `npm run heroku-postbuild` → hints + verify + `NN_POSTBUILD_NEXT_BUILD=1 npm run build` → `build:compile` / `next build`
 #   4) `npm run build:deploy` → verify standalone + static sync + post-build prune
 #   5) `npm prune --omit=dev` (matches former App Platform `build_command` tail)
+#   6) `rm -rf .next/cache` — shrink runtime image (Docker layer cache covers deps; not DO buildpack cache)
 #
 # Run: `npm run start` → `scripts/start-standalone.mjs` (bootstrap + `.next/standalone/**/server.js`).
 
@@ -26,7 +27,7 @@ COPY nursenest-core/package.json nursenest-core/package-lock.json ./nursenest-co
 
 WORKDIR /app/nursenest-core
 ENV NODE_ENV=development
-RUN npm ci
+RUN npm ci --no-fund --no-audit
 
 WORKDIR /app
 COPY shared ./shared

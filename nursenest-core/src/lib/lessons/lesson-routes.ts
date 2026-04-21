@@ -5,7 +5,7 @@
  * `ExamPathwayDefinition` and Next.js marketing segments (`[locale]` = countrySlug, `[slug]` = roleTrack).
  */
 
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
 /** Marketing landing that lists all exam pathway lesson hubs. */

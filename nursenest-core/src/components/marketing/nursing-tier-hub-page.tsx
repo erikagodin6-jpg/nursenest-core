@@ -13,7 +13,7 @@ import type { PathwayHubResumePayload } from "@/lib/learner/pathway-lesson-conti
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { pathwayAnalyticsDimensions, trackProductEvent } from "@/lib/observability/product-analytics";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 
 const ACTION_ICON: Record<NursingTierHubActionId, LucideIcon> = {
   lessons: BookOpen,

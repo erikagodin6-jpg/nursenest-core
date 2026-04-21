@@ -41,7 +41,7 @@ import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice"
 import { PathwayLessonQuickReview } from "@/components/lessons/pathway-lesson-quick-review";
 import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import {
   alliedHealthLessonDetailPath,
   alliedHealthLessonsIndexPath,

@@ -6,7 +6,7 @@ import { startTransition, useEffect, useMemo, useRef, useState, type ReactNode }
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";

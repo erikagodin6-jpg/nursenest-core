@@ -12,7 +12,7 @@ import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-action
 import { PathwayLessonProgressBadgeLive } from "@/components/lessons/pathway-lesson-progress-badge-live";
 import { PathwayLessonProgressTracker } from "@/components/lessons/pathway-lesson-progress-tracker";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";

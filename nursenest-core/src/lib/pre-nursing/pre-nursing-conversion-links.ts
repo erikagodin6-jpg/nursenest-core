@@ -1,4 +1,5 @@
-import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 
 export type PreNursingFuturePathwayHint = "rn" | "rpn" | "pn" | "np" | "unsure";

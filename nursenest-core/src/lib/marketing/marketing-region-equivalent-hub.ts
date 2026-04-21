@@ -1,6 +1,6 @@
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import {
-  buildExamPathwayPath,
   getExamPathwayById,
   resolveExamPathwayFromMarketingHubSegment,
 } from "@/lib/exam-pathways/exam-product-registry";

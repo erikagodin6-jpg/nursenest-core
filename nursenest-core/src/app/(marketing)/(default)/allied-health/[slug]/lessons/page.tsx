@@ -21,7 +21,7 @@ import {
   normalizePathwayHubSearchQuery,
   PATHWAY_HUB_PAGE_SIZE_MAX,
 } from "@/lib/lessons/pathway-lesson-loader";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import {
   pathwayLessonHasRenderableHubSlug,
 } from "@/lib/lessons/pathway-lesson-types";

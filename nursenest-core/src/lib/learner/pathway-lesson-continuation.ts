@@ -2,7 +2,7 @@ import { ExamFamily } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { listPathwaysCompatibleWithSubscription, pathwayFromLearnerPath } from "@/lib/exam-pathways/pathway-entitlements";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";

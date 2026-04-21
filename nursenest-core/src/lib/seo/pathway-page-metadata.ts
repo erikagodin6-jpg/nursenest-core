@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 function truncateMeta(s: string, max: number): string {

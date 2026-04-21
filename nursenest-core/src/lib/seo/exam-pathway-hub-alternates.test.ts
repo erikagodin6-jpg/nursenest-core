@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { examPathwayRegionalHreflang, examPathwayTopicRegionalHreflang } from "@/lib/seo/exam-pathway-hub-alternates";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 

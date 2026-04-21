@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { examPathwayTopicRegionalHreflang } from "@/lib/seo/exam-pathway-hub-alternates";
 import type { SeoPageDefinition } from "@/lib/seo/programmatic-registry";
 import { absoluteUrl } from "@/lib/seo/site-origin";

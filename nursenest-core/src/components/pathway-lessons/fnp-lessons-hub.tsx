@@ -27,7 +27,7 @@ const FnpLessonExplorer = dynamic(
     ),
   },
 );
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import {
   buildFnpExplorerPayload,
   fnpExplorerCounts,

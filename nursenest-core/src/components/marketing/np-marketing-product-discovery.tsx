@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ExamFamily } from "@prisma/client";
-import { buildExamPathwayPath, EXAM_PATHWAYS, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { EXAM_PATHWAYS, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";

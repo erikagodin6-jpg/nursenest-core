@@ -9,7 +9,7 @@
  *
  * Does not crawl the full DOM — deterministic URL list only (performance-safe).
  */
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { listPublishedExpansionExamMarketingPaths } from "@/lib/marketing/published-regional-marketing-urls";
 

@@ -4,6 +4,9 @@
 .cursor
 **/.DS_Store
 
+# Optional local monorepo checkouts / huge trees (not part of DO GitHub context; keep tar small)
+external
+
 # Dependencies & build outputs (reinstalled / rebuilt in image)
 **/node_modules
 **/.next

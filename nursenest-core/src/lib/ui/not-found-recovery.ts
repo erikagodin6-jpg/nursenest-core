@@ -1,5 +1,5 @@
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import {
-  buildExamPathwayPath,
   EXAM_PATHWAYS,
   getExamPathwayByRoute,
   resolveExamPathwayFromMarketingHubSegment,

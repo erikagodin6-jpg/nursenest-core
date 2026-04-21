@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { pathwayCountryLabel, pathwayLessonHubH1, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonsHubLead } from "@/lib/lessons/pathway-lessons-hub-intro";
 import { PathwayLessonsHubSearch } from "@/components/pathway-lessons/pathway-lessons-hub-search";

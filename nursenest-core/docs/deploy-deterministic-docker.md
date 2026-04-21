@@ -4,8 +4,8 @@ This complements `.do/app-nursenest-core-next.yaml` (Heroku Node buildpack path)
 
 ## Primary path today
 
-- **Active:** `environment_slug: node-js`, `source_dir: nursenest-core`, `build_command` + `heroku-postbuild` orchestration (see comments in the app spec).
-- **Dockerfile:** opt-in until ops flips the spec (see “Switching to Docker” below).
+- **Active:** `.do/app-nursenest-core-next.yaml` uses **`dockerfile_path: Dockerfile`**, **`source_dir: .`** (repo root), no `environment_slug` / no App Platform `build_command` — compile + prune run **inside the image** (same `package.json` scripts as before).
+- **Rollback:** restore `environment_slug: node-js`, `source_dir: nursenest-core`, and the documented `build_command` from git history (see “Rollback checklist” below).
 
 ## Buildpack path (before) — mental model
 

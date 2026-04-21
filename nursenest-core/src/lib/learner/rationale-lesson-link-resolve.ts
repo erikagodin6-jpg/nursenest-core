@@ -5,7 +5,8 @@ import type { PrismaClient } from "@prisma/client";
 import { ContentStatus, CountryCode } from "@prisma/client";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { pathwayLessonWhere } from "@/lib/exam-context/query-scope";
-import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import {
   inferRationaleLessonSlugCandidates,
   normalizedTopicCodeForQuestion,

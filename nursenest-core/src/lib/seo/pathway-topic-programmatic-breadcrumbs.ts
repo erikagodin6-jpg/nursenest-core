@@ -1,4 +1,4 @@
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { BreadcrumbResolution } from "@/lib/seo/breadcrumb-types";
 import { toAbsoluteSiteUrl } from "@/lib/seo/breadcrumb-utils";

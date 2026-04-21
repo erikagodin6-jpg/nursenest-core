@@ -2,7 +2,6 @@ import { userShouldSeeBaselinePrompt } from "@/lib/baseline/baseline-assessment"
 import { CountryCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { learnerPathwayHubChromeHref } from "@/lib/learner/learner-pathway-hub-chrome-href";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { countryLabelFromSlug, formatRoleTrackLabel } from "@/lib/seo/breadcrumb-utils";
@@ -82,6 +81,7 @@ export async function loadLearnerPathwayNavMetadata(userId: string): Promise<Lea
   let examsLabel: "CAT Exams" | "Exams" = "Exams";
 
   if (u != null) {
+    const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
     showBaselinePrompt = userShouldSeeBaselinePrompt(u);
     const lp = u.learnerPath?.trim();
     pathwayId = lp && lp.length > 0 ? lp : null;

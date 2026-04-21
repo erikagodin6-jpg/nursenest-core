@@ -2,7 +2,7 @@ import { ClipboardList, LineChart } from "lucide-react";
 import { SafePathwayHubLink } from "@/components/marketing/safe-pathway-hub-link";
 import { catPathwayRegionalExamLine, catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 
 type Props = {
   pathway: ExamPathwayDefinition;

@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { PathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 
 export type NpQuestionsHubBoardLinkContext = PathwayMarketingHubLinkContext;

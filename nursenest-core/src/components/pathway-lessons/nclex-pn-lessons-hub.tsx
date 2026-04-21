@@ -14,7 +14,7 @@ import {
   NCLEX_PN_US_COMMON_MISTAKES,
   REX_PN_CA_COMMON_MISTAKES,
 } from "@/lib/lessons/nclex-pn-us-lesson-enrichment";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
