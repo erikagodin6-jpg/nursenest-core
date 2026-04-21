@@ -230,16 +230,6 @@ export async function POST(req: Request) {
       checkoutRegionContextCookieRaw: checkoutRegionContextCookie,
       checkoutBodyRegionSlug: resolvedRegion,
     });
-    emitStructuredLog("checkout_region_gate_eval", "info", {
-      correlationId: correlation,
-      route: "/api/subscriptions/checkout",
-      flow: "billing",
-      contextSources: gateTelemetry.contextSources,
-      unionSlugs: gateTelemetry.unionSlugs,
-      gateRequired: gateTelemetry.gateRequired,
-      naAckRequired: naAckRequired ? 1 : 0,
-      naAckPresent: naBillingScopeAcknowledged ? 1 : 0,
-    });
     if (naAckRequired && naBillingScopeAcknowledged !== true) {
       safeServerLog("stripe_checkout", "checkout_na_billing_scope_ack_required", {
         route: "/api/subscriptions/checkout",
@@ -280,6 +270,9 @@ export async function POST(req: Request) {
       pathway: requestedPathway,
       region: resolvedRegion ?? "",
       authoritative_slugs: authoritativeSlugs.join(","),
+      checkout_region_context_sources: gateTelemetry.contextSources,
+      checkout_region_union_slugs: gateTelemetry.unionSlugs,
+      checkout_region_gate_required: gateTelemetry.gateRequired ? 1 : 0,
       na_ack_required: naAckRequired ? 1 : 0,
       na_ack_present: naBillingScopeAcknowledged ? 1 : 0,
     });

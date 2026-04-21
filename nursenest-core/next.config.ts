@@ -18,9 +18,10 @@
  * **Build / compile cache (DigitalOcean App Platform):** Next.js writes `.next/cache` during `next build`.
  * The Heroku Node buildpack runs `npm run build` (see `scripts/run-buildpack-build.mjs` — on DO it skips a
  * duplicate `next build` so compile runs once in `build_command` via `build:compile`). `cacheDirectories`
- * includes `node_modules` and `.next/cache`; `post-build-prune.mjs` preserves `.next/cache` by default so
- * incremental caches survive deploys (opt out with `NN_POST_BUILD_PRUNE_NEXT_CACHE=1`).
- * Remote cache (e.g. Vercel) remains opt-in when the team adopts a supported workflow for this Next version.
+ * must list **both** `node_modules` and `.next/cache` — custom `cacheDirectories` replaces buildpack defaults
+ * (see DO Node.js buildpack “Custom Caching”). `post-build-prune.mjs` preserves `.next/cache` by default so
+ * snapshots stay warm (opt out with `NN_POST_BUILD_PRUNE_NEXT_CACHE=1`). `heroku-postbuild` logs cache hints.
+ * Remote task cache (Turborepo/Nx) is not wired: deploy vertical is `nursenest-core/` + DO build cache.
  */
 import { createRequire } from "module";
 import os from "node:os";

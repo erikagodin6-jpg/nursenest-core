@@ -43,6 +43,13 @@ function runStep(label, fn) {
 
 const tPipeline = Date.now();
 
+console.log(
+  `[build-deploy-full] pipeline_start ts_iso=${new Date().toISOString()} package_root=${packageRoot}`,
+);
+console.log(
+  "[build-deploy-full] cache_note=Heroku/DO Node buildpack restores package.json cacheDirectories before install; keep node_modules+.next/cache listed for warm next compile.",
+);
+
 runStep("verify:bootstrap-probe-pathname", () => npmRun("verify:bootstrap-probe-pathname"));
 runStep("validate-marketing-production-surface", () =>
   nodeScript(path.join("scripts", "validate-marketing-production-surface.mjs")),

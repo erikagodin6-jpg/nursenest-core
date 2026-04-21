@@ -323,6 +323,7 @@ test("ensure-standalone-static copies .next/static beside both nested and top-le
 test("deploy scripts: build:deploy aliases full chain; postbuild helper has no next build", () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
   assert.deepEqual(pkg.cacheDirectories, ["node_modules", ".next/cache"]);
+  assert.equal(pkg.scripts["heroku-postbuild"], "node scripts/log-build-cache-hints.mjs");
   assert.equal(pkg.scripts.build, "node scripts/run-buildpack-build.mjs");
   assert.equal(pkg.scripts["build:compile"].includes("next build"), true);
   assert.match(

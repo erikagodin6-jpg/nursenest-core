@@ -31,5 +31,7 @@ if (onDigitalOceanAppPlatform && !forceBuildpackNextBuild) {
   process.exit(0);
 }
 
+const t0 = Date.now();
 const r = spawnSync(npm, ["run", "build:compile"], { cwd: packageRoot, stdio: "inherit" });
+console.log(`[buildpack-build] npm_run_build_compile duration_ms=${Date.now() - t0}`);
 process.exit(r.status === 0 ? 0 : r.status ?? 1);

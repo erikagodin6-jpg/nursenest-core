@@ -16,6 +16,7 @@
     }
   },
   "scripts": {
+    "heroku-postbuild": "node scripts/log-build-cache-hints.mjs",
     "prepare": "node scripts/install-husky.mjs",
     "dev": "TMPDIR=${TMPDIR:-/tmp} next dev",
     "build:prechecks": "node scripts/run-build-prechecks.mjs",
