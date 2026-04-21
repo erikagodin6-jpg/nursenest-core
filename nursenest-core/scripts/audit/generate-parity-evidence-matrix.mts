@@ -24,7 +24,6 @@ import {
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { DB_PUBLISHED } from "@/lib/entitlements/content-access-scope";
 import { getMonorepoRoot } from "@/lib/monorepo-root";
-import { getAllProgrammaticSlugs } from "@/lib/seo/programmatic-registry";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const APP_ROOT = join(__dirname, "../..");
@@ -146,6 +145,7 @@ async function main() {
   }
   const pathways = listPublicExamPathways();
 
+  const { getAllProgrammaticSlugs } = await import("@/lib/seo/programmatic-registry");
   const programmaticSlugs = getAllProgrammaticSlugs().length;
   const dbOk = isDatabaseUrlConfigured();
   let dbPublishedLessons: number | null = null;

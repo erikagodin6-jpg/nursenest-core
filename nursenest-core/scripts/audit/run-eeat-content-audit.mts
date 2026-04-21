@@ -7,7 +7,6 @@ import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { BlogPostStatus, PrismaClient } from "@prisma/client";
-import { getAllProgrammaticSlugs } from "@/lib/seo/programmatic-registry";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const APP_ROOT = join(__dirname, "../..");
@@ -135,6 +134,7 @@ async function main() {
   const thinLessons = lessonRows.filter((r) => r.thin);
   const incompleteEeat = lessonRows.filter((r) => r.missingEeatLabels.length > 0);
 
+  const { getAllProgrammaticSlugs } = await import("@/lib/seo/programmatic-registry");
   const seoProgrammatic = {
     slugCount: getAllProgrammaticSlugs().length,
     note: "Programmatic SEO pages are registry-backed; validate depth with npm run validate:programmatic-seo where applicable.",

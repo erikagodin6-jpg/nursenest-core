@@ -16,11 +16,6 @@ import {
   sectionCompletenessFraction,
   type LessonLike,
 } from "../../src/lib/eeat/eeat-scoring";
-import {
-  getAllProgrammaticSeoPages,
-  getRelatedProgrammaticPages,
-} from "../../src/lib/seo/programmatic-registry";
-
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const APP_ROOT = join(__dirname, "../..");
 const REPO_ROOT = join(APP_ROOT, "..");
@@ -181,6 +176,9 @@ async function main() {
     console.warn("Blog audit skipped:", e instanceof Error ? e.message : e);
   }
 
+  const { getAllProgrammaticSeoPages, getRelatedProgrammaticPages } = await import(
+    "../../src/lib/seo/programmatic-registry",
+  );
   const programmaticPages = getAllProgrammaticSeoPages();
   for (const p of programmaticPages) {
     const wc = p.sections.reduce((a, s) => a + s.body.reduce((b, line) => b + countWords(line), 0), 0);

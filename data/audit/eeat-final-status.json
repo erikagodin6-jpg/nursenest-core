@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-04-14T17:24:48.380Z",
+  "generatedAt": "2026-04-21T19:49:32.255Z",
   "runMode": "safe_batch",
-  "averageEeatScore": 61,
-  "pagesBelowThreshold70": 547,
+  "averageEeatScore": 65.8,
+  "pagesBelowThreshold70": 433,
   "totalPagesScored": 601,
   "missingAuthorSignals": {
     "blogPostsWithoutNamedAuthor": 0,
     "note": "Lessons use institutional author in JSON-LD (Organization); optional per-lesson bylines are future work."
   },
   "missingSchema": 0,
-  "internalLinkingGaps": 538,
-  "contentCompletenessPercent": 89.2,
-  "seoReadinessScore": 63,
+  "internalLinkingGaps": 534,
+  "contentCompletenessPercent": 91,
+  "seoReadinessScore": 70,
   "trustPages": {
     "about": "/about",
     "editorialPolicy": "/editorial-policy",

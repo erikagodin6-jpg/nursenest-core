@@ -1,12 +1,22 @@
-import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
+import { EXAM_PATHWAYS_SEGMENT_A } from "@/lib/exam-pathways/exam-pathways-data-segment-a";
+import { EXAM_PATHWAYS_SEGMENT_C } from "@/lib/exam-pathways/exam-pathways-data-segment-c";
 import type { NormalizeErr, NormalizeOk } from "@/lib/replit-import/replit-question-normalize";
 import type { NormalizedExamQuestion } from "@/lib/replit-import/replit-question-types";
 import { inferCountryFromRaw, mapTrackAndCountryToExamFields } from "@/lib/replit-import/replit-exam-country-map";
 import type { ImportCountry } from "@/lib/replit-import/replit-question-types";
 
+/**
+ * NP pathways today: Canadian NP in segment A, US NP specialties in segment C.
+ * Keep in sync with `exam-product-registry` ordering — do not drop keys if NP rows move segments.
+ */
+const NP_PATHWAYS_FOR_REGISTRY_KEYS = [
+  ...EXAM_PATHWAYS_SEGMENT_A.filter((p) => p.roleTrack === "np"),
+  ...EXAM_PATHWAYS_SEGMENT_C,
+];
+
 /** Registry NP `contentExamKeys` (uppercase) for matching export `exam` labels. */
 const NP_EXAM_FROM_REGISTRY = new Set(
-  EXAM_PATHWAYS.filter((p) => p.roleTrack === "np").flatMap((p) => p.contentExamKeys.map((k) => k.toUpperCase())),
+  NP_PATHWAYS_FOR_REGISTRY_KEYS.flatMap((p) => p.contentExamKeys.map((k) => k.toUpperCase())),
 );
 
 /**

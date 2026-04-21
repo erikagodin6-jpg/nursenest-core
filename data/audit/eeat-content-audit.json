@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T17:23:48.307Z",
+  "generatedAt": "2026-04-21T19:49:26.868Z",
   "scope": {
     "pathwayCatalogFile": "nursenest-core/src/content/pathway-lessons/catalog.json",
     "note": "DB-backed pathway lessons not fully enumerated here; production uses pathway_lessons + loader. Section-kind checklist maps both premium spine kinds and legacy five-block kinds (e.g. clinical_meaning → overview). Re-run after major imports."
@@ -7,433 +7,13 @@
   "summary": {
     "pathwayCount": 5,
     "catalogLessonCount": 562,
-    "thinContentFlagged": 424,
+    "thinContentFlagged": 282,
     "duplicateTitleGroups": 8,
     "lessonsMissingAnyEeatSection": 456,
-    "seoProgrammaticSlugCount": 31
+    "seoProgrammaticSlugCount": 39
   },
   "lessons": {
     "thin": [
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "heart-failure-nursing-priorities-hy",
-        "title": "Heart Failure Nursing Priorities (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "acute-myocardial-infarction-troponin",
-        "title": "Acute Myocardial Infarction & Troponin (NCLEX-RN, Canada)",
-        "totalWords": 203,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "shock-recognition-fluids",
-        "title": "Shock Recognition & Fluids (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "hypertensive-crisis-vs-urgency",
-        "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "atrial-fibrillation-rate-control",
-        "title": "Atrial Fibrillation & Rate Control (NCLEX-RN, Canada)",
-        "totalWords": 203,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "endocarditis-blood-cultures",
-        "title": "Endocarditis & Blood Cultures (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "pericarditis-ecg-clues",
-        "title": "Pericarditis & ECG Clues (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "dvt-pe-nursing-priorities",
-        "title": "DVT & PE Nursing Priorities (NCLEX-RN, Canada)",
-        "totalWords": 203,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "abg-interpretation-basics-hy",
-        "title": "ABG Interpretation Basics (NCLEX-RN, Canada)",
-        "totalWords": 197,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "copd-exacerbation-oxygen",
-        "title": "COPD Exacerbation & Oxygen (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "asthma-status-asthmaticus",
-        "title": "Asthma & Status Asthmaticus (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "ards-ventilation-basics",
-        "title": "ARDS & Ventilation Basics (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "pneumonia-oxygenation",
-        "title": "Pneumonia & Oxygenation (NCLEX-RN, Canada)",
-        "totalWords": 197,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "pulmonary-embolism-clues",
-        "title": "Pulmonary Embolism Clues (NCLEX-RN, Canada)",
-        "totalWords": 197,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "tb-isolation-compliance",
-        "title": "TB Isolation & Compliance (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "pleural-effusion-chest-tubes",
-        "title": "Pleural Effusion & Chest Tubes (NCLEX-RN, Canada)",
-        "totalWords": 203,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "insulin-hypoglycemia-hy",
-        "title": "Insulin & Hypoglycemia (NCLEX-RN, Canada)",
-        "totalWords": 197,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "anticoagulants-bleeding-risk",
-        "title": "Anticoagulants & Bleeding Risk (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "antibiotic-classes-allergies-hy",
-        "title": "Antibiotic Classes & Allergies (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "opioids-respiratory-depression",
-        "title": "Opioids & Respiratory Depression (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "cardiac-glycosides-toxicity",
-        "title": "Cardiac Glycosides & Toxicity (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
       {
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "diuretics-electrolyte-shifts",
@@ -456,848 +36,8 @@
       },
       {
         "pathwayId": "ca-rn-nclex-rn",
-        "slug": "antihypertensive-combos",
-        "title": "Antihypertensive Combos (NCLEX-RN, Canada)",
-        "totalWords": 194,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "chemo-safe-handling-extravasation",
-        "title": "Chemo Safe Handling & Extravasation (NCLEX-RN, Canada)",
-        "totalWords": 203,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "hyponatremia-vs-hypernatremia-hy",
-        "title": "Hyponatremia vs Hypernatremia (NCLEX-RN, Canada)",
-        "totalWords": 201,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "hypo-vs-hyperkalemia-hy",
-        "title": "Hypo- vs Hyperkalemia (NCLEX-RN, Canada)",
-        "totalWords": 201,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "fluid-volume-deficit",
-        "title": "Fluid Volume Deficit (NCLEX-RN, Canada)",
-        "totalWords": 201,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "fluid-volume-excess",
-        "title": "Fluid Volume Excess (NCLEX-RN, Canada)",
-        "totalWords": 201,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "magnesium-arrhythmia-risk",
-        "title": "Magnesium & Arrhythmia Risk (NCLEX-RN, Canada)",
-        "totalWords": 204,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "calcium-tetany",
-        "title": "Calcium & Tetany (NCLEX-RN, Canada)",
-        "totalWords": 201,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "phosphate-shifts-in-renal",
-        "title": "Phosphate Shifts in Renal (NCLEX-RN, Canada)",
-        "totalWords": 204,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "mixed-acid-base-patterns",
-        "title": "Mixed Acid-Base Patterns (NCLEX-RN, Canada)",
-        "totalWords": 201,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "liver-failure-hepatic-encephalopathy",
-        "title": "Liver Failure & Hepatic Encephalopathy (NCLEX-RN, Canada)",
-        "totalWords": 203,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "acute-pancreatitis-nursing-care",
-        "title": "Acute Pancreatitis Nursing Care (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "bowel-obstruction-vs-paralytic-ileus",
-        "title": "Bowel Obstruction vs Paralytic Ileus (NCLEX-RN, Canada)",
-        "totalWords": 203,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "gerd-pud-bleeding-clues",
-        "title": "GERD & PUD Bleeding Clues (NCLEX-RN, Canada)",
-        "totalWords": 203,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "gi-bleed-assessment",
-        "title": "GI Bleed Assessment (NCLEX-RN, Canada)",
-        "totalWords": 197,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "c-diff-infection-control",
-        "title": "C. diff Infection Control (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "ostomy-skin-protection",
-        "title": "Ostomy & Skin Protection (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "stroke-assessment-tpa-window",
-        "title": "Stroke Assessment & tPA Window (NCLEX-RN, Canada)",
-        "totalWords": 203,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "seizure-precautions-rescue-meds",
-        "title": "Seizure Precautions & Rescue Meds (NCLEX-RN, Canada)",
-        "totalWords": 203,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "increased-icp-positioning",
-        "title": "Increased ICP & Positioning (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "spinal-cord-injury-autonomic-dysreflexia",
-        "title": "Spinal Cord Injury Autonomic Dysreflexia (NCLEX-RN, Canada)",
-        "totalWords": 203,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "meningitis-isolation-assessment",
-        "title": "Meningitis Isolation & Assessment (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "migraine-vs-red-flag-headache",
-        "title": "Migraine vs Red-Flag Headache (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "parkinson-disease-med-timing",
-        "title": "Parkinson Disease Med Timing (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "dka-vs-hhs-priorities-hy",
-        "title": "DKA vs HHS Priorities (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "thyroid-storm-myxedema-clues",
-        "title": "Thyroid Storm & Myxedema Clues (NCLEX-RN, Canada)",
-        "totalWords": 203,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "addisonian-crisis",
-        "title": "Addisonian Crisis (NCLEX-RN, Canada)",
-        "totalWords": 194,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "cushing-syndrome-assessment",
-        "title": "Cushing Syndrome Assessment (NCLEX-RN, Canada)",
-        "totalWords": 197,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
         "slug": "diabetes-self-management-teaching",
         "title": "Diabetes Self-Management Teaching (NCLEX-RN, Canada)",
-        "totalWords": 197,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "siadh-vs-di-basics",
-        "title": "SIADH vs DI Basics (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "aki-prerenal-vs-intrarenal",
-        "title": "AKI: Prerenal vs Intrarenal (NCLEX-RN, Canada)",
-        "totalWords": 204,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "hemodialysis-access-care",
-        "title": "Hemodialysis Access Care (NCLEX-RN, Canada)",
-        "totalWords": 201,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "peritoneal-dialysis-complications",
-        "title": "Peritoneal Dialysis Complications (NCLEX-RN, Canada)",
-        "totalWords": 201,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "kidney-stones-strain-management",
-        "title": "Kidney Stones & Strain Management (NCLEX-RN, Canada)",
-        "totalWords": 207,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "uti-vs-pyelonephritis",
-        "title": "UTI vs Pyelonephritis (NCLEX-RN, Canada)",
-        "totalWords": 201,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "indwelling-catheter-risks",
-        "title": "Indwelling Catheter Risks (NCLEX-RN, Canada)",
-        "totalWords": 201,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "anemia-types-transfusion-thresholds",
-        "title": "Anemia Types & Transfusion Thresholds (NCLEX-RN, Canada)",
-        "totalWords": 205,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "transfusion-reaction-recognition",
-        "title": "Transfusion Reaction Recognition (NCLEX-RN, Canada)",
-        "totalWords": 199,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "neutropenic-precautions",
-        "title": "Neutropenic Precautions (NCLEX-RN, Canada)",
-        "totalWords": 196,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "sickle-cell-pain-acs",
-        "title": "Sickle Cell Pain & ACS (NCLEX-RN, Canada)",
-        "totalWords": 205,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "hip-fracture-fall-risk",
-        "title": "Hip Fracture & Fall Risk (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "ra-flare-immune-modulators",
-        "title": "RA Flare & Immune Modulators (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "immobility-dvt-prophylaxis",
-        "title": "Immobility & DVT Prophylaxis (NCLEX-RN, Canada)",
         "totalWords": 197,
         "sectionCount": 5,
         "thin": true,
@@ -1336,633 +76,24 @@
       },
       {
         "pathwayId": "ca-rn-nclex-rn",
-        "slug": "hiv-confidentiality-pep-basics",
-        "title": "HIV Confidentiality & PEP Basics (NCLEX-RN, Canada)",
-        "totalWords": 203,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "isolation-precautions-in-practice",
-        "title": "Isolation Precautions in Practice (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "wound-infection-vs-colonization",
-        "title": "Wound Infection vs Colonization (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "burn-depth-fluid-resuscitation-basics",
-        "title": "Burn Depth & Fluid Resuscitation Basics (NCLEX-RN, Canada)",
-        "totalWords": 203,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "pressure-injury-staging",
-        "title": "Pressure Injury Staging (NCLEX-RN, Canada)",
-        "totalWords": 194,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "severe-dermatitis-skin-care",
-        "title": "Severe Dermatitis Skin Care (NCLEX-RN, Canada)",
-        "totalWords": 197,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "suicide-risk-assessment-hy",
-        "title": "Suicide Risk Assessment (NCLEX-RN, Canada)",
-        "totalWords": 197,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "psychotropic-side-effects",
-        "title": "Psychotropic Side Effects (NCLEX-RN, Canada)",
-        "totalWords": 196,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "alcohol-withdrawal-ciwa",
-        "title": "Alcohol Withdrawal CIWA (NCLEX-RN, Canada)",
-        "totalWords": 196,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "preeclampsia-vs-eclampsia",
-        "title": "Preeclampsia vs Eclampsia (NCLEX-RN, Canada)",
-        "totalWords": 196,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "postpartum-hemorrhage",
-        "title": "Postpartum Hemorrhage (NCLEX-RN, Canada)",
-        "totalWords": 193,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "late-decelerations-fhr",
-        "title": "Late Decelerations & FHR (NCLEX-RN, Canada)",
-        "totalWords": 199,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "newborn-thermoregulation-feeding",
-        "title": "Newborn Thermoregulation & Feeding (NCLEX-RN, Canada)",
-        "totalWords": 199,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "rh-incompatibility-basics",
-        "title": "Rh Incompatibility Basics (NCLEX-RN, Canada)",
-        "totalWords": 196,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "pediatric-fever-dehydration",
-        "title": "Pediatric Fever & Dehydration (NCLEX-RN, Canada)",
-        "totalWords": 199,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "rsv-pediatric-resp-distress",
-        "title": "RSV & Pediatric Resp Distress (NCLEX-RN, Canada)",
-        "totalWords": 202,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "immunization-schedule-essentials",
-        "title": "Immunization Schedule Essentials (NCLEX-RN, Canada)",
-        "totalWords": 196,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "growth-failure-red-flags",
-        "title": "Growth Failure Red Flags (NCLEX-RN, Canada)",
-        "totalWords": 199,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "non-accidental-trauma-suspicion",
-        "title": "Non-Accidental Trauma Suspicion (NCLEX-RN, Canada)",
-        "totalWords": 196,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "assignment-vs-delegation",
-        "title": "Assignment vs Delegation (NCLEX-RN, Canada)",
-        "totalWords": 199,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "ethical-distress-advocacy",
-        "title": "Ethical Distress & Advocacy (NCLEX-RN, Canada)",
-        "totalWords": 202,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "legal-nurse-practice-act",
-        "title": "Legal: Nurse Practice Act (NCLEX-RN, Canada)",
-        "totalWords": 202,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "qi-incident-reporting",
-        "title": "QI & Incident Reporting (NCLEX-RN, Canada)",
-        "totalWords": 202,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "falls-hourly-rounding",
-        "title": "Falls & Hourly Rounding (NCLEX-RN, Canada)",
-        "totalWords": 204,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "restraint-alternatives-policy",
-        "title": "Restraint Alternatives & Policy (NCLEX-RN, Canada)",
-        "totalWords": 204,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "medication-error-disclosure",
-        "title": "Medication Error Disclosure (NCLEX-RN, Canada)",
-        "totalWords": 201,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "sharp-safety-exposure",
-        "title": "Sharp Safety & Exposure (NCLEX-RN, Canada)",
-        "totalWords": 204,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "enteral-feeding-tube-safety",
-        "title": "Enteral Feeding Tube Safety (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "tpn-line-care-basics",
-        "title": "TPN Line Care Basics (NCLEX-RN, Canada)",
-        "totalWords": 200,
-        "sectionCount": 5,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": true,
-          "pathophysiology": true,
-          "signs_symptoms": true,
-          "nursing_interventions": true,
-          "clinical_pearls": true,
-          "exam_tips": true,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "abdominal-aortic-aneurysm-nclex-rn",
-        "title": "Abdominal Aortic Aneurysm (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": false,
-          "pathophysiology": false,
-          "signs_symptoms": false,
-          "nursing_interventions": false,
-          "clinical_pearls": false,
-          "exam_tips": false,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "overview",
-          "pathophysiology",
-          "signs_symptoms",
-          "nursing_interventions",
-          "clinical_pearls",
-          "exam_tips",
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
         "slug": "acute-coronary-syndrome-nclex-rn",
         "title": "Acute Coronary Syndrome (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 167,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -1970,77 +101,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "atrial-fibrillation-nclex-rn",
         "title": "Atrial Fibrillation (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 170,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
-        "title": "CABG and Postoperative CABG Complications (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": false,
-          "pathophysiology": false,
-          "signs_symptoms": false,
-          "nursing_interventions": false,
-          "clinical_pearls": false,
-          "exam_tips": false,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "overview",
-          "pathophysiology",
-          "signs_symptoms",
-          "nursing_interventions",
-          "clinical_pearls",
-          "exam_tips",
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "cardiac-tamponade-nclex-rn",
-        "title": "Cardiac Tamponade (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": false,
-          "pathophysiology": false,
-          "signs_symptoms": false,
-          "nursing_interventions": false,
-          "clinical_pearls": false,
-          "exam_tips": false,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "overview",
-          "pathophysiology",
-          "signs_symptoms",
-          "nursing_interventions",
-          "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -2048,25 +124,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
         "title": "Deep Vein Thrombosis (DVT): Prevention and Nursing Management (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 169,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -2074,25 +147,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "defibrillation-vs-synchronized-cardioversion-nclex-rn",
         "title": "Defibrillation vs Synchronized Cardioversion (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 164,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -2100,25 +170,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "heart-failure-nclex-rn",
         "title": "Heart Failure (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 186,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -2126,25 +193,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "hypertensive-encephalopathy-nclex-rn",
         "title": "Hypertensive Encephalopathy (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 162,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -2152,25 +216,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "infective-endocarditis-nclex-rn",
         "title": "Infective Endocarditis (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 175,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -2178,25 +239,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "myocardial-infarction-nclex-rn",
         "title": "Myocardial Infarction (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 194,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -2204,77 +262,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "peripheral-artery-disease-nclex-rn",
         "title": "Peripheral Artery Disease (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 195,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "phlebostatic-axis-nclex-rn",
-        "title": "Phlebostatic Axis (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": false,
-          "pathophysiology": false,
-          "signs_symptoms": false,
-          "nursing_interventions": false,
-          "clinical_pearls": false,
-          "exam_tips": false,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "overview",
-          "pathophysiology",
-          "signs_symptoms",
-          "nursing_interventions",
-          "clinical_pearls",
-          "exam_tips",
-          "practice_question"
-        ]
-      },
-      {
-        "pathwayId": "ca-rn-nclex-rn",
-        "slug": "pulmonary-embolism-nclex-rn",
-        "title": "Pulmonary Embolism (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
-        "thin": true,
-        "eeatCoverage": {
-          "overview": false,
-          "pathophysiology": false,
-          "signs_symptoms": false,
-          "nursing_interventions": false,
-          "clinical_pearls": false,
-          "exam_tips": false,
-          "practice_question": false
-        },
-        "missingEeatLabels": [
-          "overview",
-          "pathophysiology",
-          "signs_symptoms",
-          "nursing_interventions",
-          "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -4048,9 +2051,1952 @@
         "missingEeatLabels": [
           "practice_question"
         ]
+      },
+      {
+        "pathwayId": "ca-rpn-rex-pn",
+        "slug": "bp26-carpn-x024-wrong-patient-near-miss-reporting",
+        "title": "Wrong-patient near-miss reporting — REx-PN (Canada)",
+        "totalWords": 396,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "ca-rpn-rex-pn",
+        "slug": "bp26-carpn-x025-barcode-scanning-discipline",
+        "title": "Barcode scanning discipline — REx-PN (Canada)",
+        "totalWords": 396,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "tb-isolation-compliance",
+        "title": "TB Isolation & Compliance (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "pleural-effusion-chest-tubes",
+        "title": "Pleural Effusion & Chest Tubes (NCLEX-RN, US)",
+        "totalWords": 202,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "insulin-hypoglycemia-hy",
+        "title": "Insulin & Hypoglycemia (NCLEX-RN, US)",
+        "totalWords": 196,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "anticoagulants-bleeding-risk",
+        "title": "Anticoagulants & Bleeding Risk (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "antibiotic-classes-allergies-hy",
+        "title": "Antibiotic Classes & Allergies (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "opioids-respiratory-depression",
+        "title": "Opioids & Respiratory Depression (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "cardiac-glycosides-toxicity",
+        "title": "Cardiac Glycosides & Toxicity (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "diuretics-electrolyte-shifts",
+        "title": "Diuretics & Electrolyte Shifts (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "antihypertensive-combos",
+        "title": "Antihypertensive Combos (NCLEX-RN, US)",
+        "totalWords": 193,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "chemo-safe-handling-extravasation",
+        "title": "Chemo Safe Handling & Extravasation (NCLEX-RN, US)",
+        "totalWords": 202,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "hyponatremia-vs-hypernatremia-hy",
+        "title": "Hyponatremia vs Hypernatremia (NCLEX-RN, US)",
+        "totalWords": 200,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "hypo-vs-hyperkalemia-hy",
+        "title": "Hypo- vs Hyperkalemia (NCLEX-RN, US)",
+        "totalWords": 200,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "fluid-volume-deficit",
+        "title": "Fluid Volume Deficit (NCLEX-RN, US)",
+        "totalWords": 200,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "fluid-volume-excess",
+        "title": "Fluid Volume Excess (NCLEX-RN, US)",
+        "totalWords": 200,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "magnesium-arrhythmia-risk",
+        "title": "Magnesium & Arrhythmia Risk (NCLEX-RN, US)",
+        "totalWords": 203,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "phosphate-shifts-in-renal",
+        "title": "Phosphate Shifts in Renal (NCLEX-RN, US)",
+        "totalWords": 203,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "mixed-acid-base-patterns",
+        "title": "Mixed Acid-Base Patterns (NCLEX-RN, US)",
+        "totalWords": 200,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "liver-failure-hepatic-encephalopathy",
+        "title": "Liver Failure & Hepatic Encephalopathy (NCLEX-RN, US)",
+        "totalWords": 202,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "gerd-pud-bleeding-clues",
+        "title": "GERD & PUD Bleeding Clues (NCLEX-RN, US)",
+        "totalWords": 202,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "gi-bleed-assessment",
+        "title": "GI Bleed Assessment (NCLEX-RN, US)",
+        "totalWords": 196,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "c-diff-infection-control",
+        "title": "C. diff Infection Control (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "ostomy-skin-protection",
+        "title": "Ostomy & Skin Protection (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "stroke-assessment-tpa-window",
+        "title": "Stroke Assessment & tPA Window (NCLEX-RN, US)",
+        "totalWords": 202,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "seizure-precautions-rescue-meds",
+        "title": "Seizure Precautions & Rescue Meds (NCLEX-RN, US)",
+        "totalWords": 202,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "increased-icp-positioning",
+        "title": "Increased ICP & Positioning (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "spinal-cord-injury-autonomic-dysreflexia",
+        "title": "Spinal Cord Injury Autonomic Dysreflexia (NCLEX-RN, US)",
+        "totalWords": 202,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "meningitis-isolation-assessment",
+        "title": "Meningitis Isolation & Assessment (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "migraine-vs-red-flag-headache",
+        "title": "Migraine vs Red-Flag Headache (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "parkinson-disease-med-timing",
+        "title": "Parkinson Disease Med Timing (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "thyroid-storm-myxedema-clues",
+        "title": "Thyroid Storm & Myxedema Clues (NCLEX-RN, US)",
+        "totalWords": 202,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "diabetes-self-management-teaching",
+        "title": "Diabetes Self-Management Teaching (NCLEX-RN, US)",
+        "totalWords": 196,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "siadh-vs-di-basics",
+        "title": "SIADH vs DI Basics (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "hemodialysis-access-care",
+        "title": "Hemodialysis Access Care (NCLEX-RN, US)",
+        "totalWords": 200,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "peritoneal-dialysis-complications",
+        "title": "Peritoneal Dialysis Complications (NCLEX-RN, US)",
+        "totalWords": 200,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "kidney-stones-strain-management",
+        "title": "Kidney Stones & Strain Management (NCLEX-RN, US)",
+        "totalWords": 206,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "uti-vs-pyelonephritis",
+        "title": "UTI vs Pyelonephritis (NCLEX-RN, US)",
+        "totalWords": 200,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "indwelling-catheter-risks",
+        "title": "Indwelling Catheter Risks (NCLEX-RN, US)",
+        "totalWords": 200,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "transfusion-reaction-recognition",
+        "title": "Transfusion Reaction Recognition (NCLEX-RN, US)",
+        "totalWords": 198,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "neutropenic-precautions",
+        "title": "Neutropenic Precautions (NCLEX-RN, US)",
+        "totalWords": 195,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "sickle-cell-pain-acs",
+        "title": "Sickle Cell Pain & ACS (NCLEX-RN, US)",
+        "totalWords": 204,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "hip-fracture-fall-risk",
+        "title": "Hip Fracture & Fall Risk (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "ra-flare-immune-modulators",
+        "title": "RA Flare & Immune Modulators (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "immobility-dvt-prophylaxis",
+        "title": "Immobility & DVT Prophylaxis (NCLEX-RN, US)",
+        "totalWords": 196,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "sepsis-early-recognition-hy",
+        "title": "Sepsis Early Recognition (NCLEX-RN, US)",
+        "totalWords": 197,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "hiv-confidentiality-pep-basics",
+        "title": "HIV Confidentiality & PEP Basics (NCLEX-RN, US)",
+        "totalWords": 202,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "isolation-precautions-in-practice",
+        "title": "Isolation Precautions in Practice (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "wound-infection-vs-colonization",
+        "title": "Wound Infection vs Colonization (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "pressure-injury-staging",
+        "title": "Pressure Injury Staging (NCLEX-RN, US)",
+        "totalWords": 193,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "severe-dermatitis-skin-care",
+        "title": "Severe Dermatitis Skin Care (NCLEX-RN, US)",
+        "totalWords": 196,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "suicide-risk-assessment-hy",
+        "title": "Suicide Risk Assessment (NCLEX-RN, US)",
+        "totalWords": 196,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "psychotropic-side-effects",
+        "title": "Psychotropic Side Effects (NCLEX-RN, US)",
+        "totalWords": 195,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "preeclampsia-vs-eclampsia",
+        "title": "Preeclampsia vs Eclampsia (NCLEX-RN, US)",
+        "totalWords": 195,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "postpartum-hemorrhage",
+        "title": "Postpartum Hemorrhage (NCLEX-RN, US)",
+        "totalWords": 192,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "late-decelerations-fhr",
+        "title": "Late Decelerations & FHR (NCLEX-RN, US)",
+        "totalWords": 198,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "newborn-thermoregulation-feeding",
+        "title": "Newborn Thermoregulation & Feeding (NCLEX-RN, US)",
+        "totalWords": 198,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "rh-incompatibility-basics",
+        "title": "Rh Incompatibility Basics (NCLEX-RN, US)",
+        "totalWords": 195,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "pediatric-fever-dehydration",
+        "title": "Pediatric Fever & Dehydration (NCLEX-RN, US)",
+        "totalWords": 198,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "rsv-pediatric-resp-distress",
+        "title": "RSV & Pediatric Resp Distress (NCLEX-RN, US)",
+        "totalWords": 201,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "immunization-schedule-essentials",
+        "title": "Immunization Schedule Essentials (NCLEX-RN, US)",
+        "totalWords": 195,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "growth-failure-red-flags",
+        "title": "Growth Failure Red Flags (NCLEX-RN, US)",
+        "totalWords": 198,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "non-accidental-trauma-suspicion",
+        "title": "Non-Accidental Trauma Suspicion (NCLEX-RN, US)",
+        "totalWords": 195,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "ethical-distress-advocacy",
+        "title": "Ethical Distress & Advocacy (NCLEX-RN, US)",
+        "totalWords": 201,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "legal-nurse-practice-act",
+        "title": "Legal: Nurse Practice Act (NCLEX-RN, US)",
+        "totalWords": 201,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "qi-incident-reporting",
+        "title": "QI & Incident Reporting (NCLEX-RN, US)",
+        "totalWords": 201,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "falls-hourly-rounding",
+        "title": "Falls & Hourly Rounding (NCLEX-RN, US)",
+        "totalWords": 203,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "restraint-alternatives-policy",
+        "title": "Restraint Alternatives & Policy (NCLEX-RN, US)",
+        "totalWords": 203,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "medication-error-disclosure",
+        "title": "Medication Error Disclosure (NCLEX-RN, US)",
+        "totalWords": 200,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "sharp-safety-exposure",
+        "title": "Sharp Safety & Exposure (NCLEX-RN, US)",
+        "totalWords": 203,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "tpn-line-care-basics",
+        "title": "TPN Line Care Basics (NCLEX-RN, US)",
+        "totalWords": 199,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "abdominal-aortic-aneurysm-nclex-rn",
+        "title": "Abdominal Aortic Aneurysm (NCLEX-RN, US)",
+        "totalWords": 175,
+        "sectionCount": 4,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": false,
+          "signs_symptoms": false,
+          "nursing_interventions": true,
+          "clinical_pearls": false,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "pathophysiology",
+          "signs_symptoms",
+          "clinical_pearls",
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "acute-coronary-syndrome-nclex-rn",
+        "title": "Acute Coronary Syndrome (NCLEX-RN, US)",
+        "totalWords": 167,
+        "sectionCount": 4,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": false,
+          "signs_symptoms": false,
+          "nursing_interventions": true,
+          "clinical_pearls": false,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "pathophysiology",
+          "signs_symptoms",
+          "clinical_pearls",
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "atrial-fibrillation-nclex-rn",
+        "title": "Atrial Fibrillation (NCLEX-RN, US)",
+        "totalWords": 170,
+        "sectionCount": 4,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": false,
+          "signs_symptoms": false,
+          "nursing_interventions": true,
+          "clinical_pearls": false,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "pathophysiology",
+          "signs_symptoms",
+          "clinical_pearls",
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+        "title": "Deep Vein Thrombosis (DVT): Prevention and Nursing Management (NCLEX-RN, US)",
+        "totalWords": 169,
+        "sectionCount": 4,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": false,
+          "signs_symptoms": false,
+          "nursing_interventions": true,
+          "clinical_pearls": false,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "pathophysiology",
+          "signs_symptoms",
+          "clinical_pearls",
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "defibrillation-vs-synchronized-cardioversion-nclex-rn",
+        "title": "Defibrillation vs Synchronized Cardioversion (NCLEX-RN, US)",
+        "totalWords": 164,
+        "sectionCount": 4,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": false,
+          "signs_symptoms": false,
+          "nursing_interventions": true,
+          "clinical_pearls": false,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "pathophysiology",
+          "signs_symptoms",
+          "clinical_pearls",
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "heart-failure-nclex-rn",
+        "title": "Heart Failure (NCLEX-RN, US)",
+        "totalWords": 186,
+        "sectionCount": 4,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": false,
+          "signs_symptoms": false,
+          "nursing_interventions": true,
+          "clinical_pearls": false,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "pathophysiology",
+          "signs_symptoms",
+          "clinical_pearls",
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "hypertensive-encephalopathy-nclex-rn",
+        "title": "Hypertensive Encephalopathy (NCLEX-RN, US)",
+        "totalWords": 162,
+        "sectionCount": 4,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": false,
+          "signs_symptoms": false,
+          "nursing_interventions": true,
+          "clinical_pearls": false,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "pathophysiology",
+          "signs_symptoms",
+          "clinical_pearls",
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "infective-endocarditis-nclex-rn",
+        "title": "Infective Endocarditis (NCLEX-RN, US)",
+        "totalWords": 175,
+        "sectionCount": 4,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": false,
+          "signs_symptoms": false,
+          "nursing_interventions": true,
+          "clinical_pearls": false,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "pathophysiology",
+          "signs_symptoms",
+          "clinical_pearls",
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "myocardial-infarction-nclex-rn",
+        "title": "Myocardial Infarction (NCLEX-RN, US)",
+        "totalWords": 194,
+        "sectionCount": 4,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": false,
+          "signs_symptoms": false,
+          "nursing_interventions": true,
+          "clinical_pearls": false,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "pathophysiology",
+          "signs_symptoms",
+          "clinical_pearls",
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "peripheral-artery-disease-nclex-rn",
+        "title": "Peripheral Artery Disease (NCLEX-RN, US)",
+        "totalWords": 195,
+        "sectionCount": 4,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": false,
+          "signs_symptoms": false,
+          "nursing_interventions": true,
+          "clinical_pearls": false,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "pathophysiology",
+          "signs_symptoms",
+          "clinical_pearls",
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "lpn-scope-delegation-priority",
+        "title": "PN scope, delegation & prioritization (NCLEX-PN, US)",
+        "totalWords": 123,
+        "sectionCount": 4,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": false,
+          "signs_symptoms": false,
+          "nursing_interventions": true,
+          "clinical_pearls": false,
+          "exam_tips": true,
+          "practice_question": false
+        },
+        "missingEeatLabels": [
+          "pathophysiology",
+          "signs_symptoms",
+          "clinical_pearls",
+          "practice_question"
+        ]
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-pulmonary-embolism",
+        "title": "Pulmonary embolism — PN scope (NCLEX-PN, US)",
+        "totalWords": 133,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": true
+        },
+        "missingEeatLabels": []
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-heart-failure",
+        "title": "Heart failure — PN scope (NCLEX-PN, US)",
+        "totalWords": 133,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": true
+        },
+        "missingEeatLabels": []
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-myocardial-infarction",
+        "title": "Myocardial infarction — PN scope (NCLEX-PN, US)",
+        "totalWords": 133,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": true
+        },
+        "missingEeatLabels": []
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-angina",
+        "title": "Angina — PN scope (NCLEX-PN, US)",
+        "totalWords": 132,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": true
+        },
+        "missingEeatLabels": []
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-dysrhythmias",
+        "title": "Dysrhythmias — PN scope (NCLEX-PN, US)",
+        "totalWords": 132,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": true
+        },
+        "missingEeatLabels": []
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-hypertension",
+        "title": "Hypertension — PN scope (NCLEX-PN, US)",
+        "totalWords": 132,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": true
+        },
+        "missingEeatLabels": []
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-shock",
+        "title": "Shock — PN scope (NCLEX-PN, US)",
+        "totalWords": 132,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": true
+        },
+        "missingEeatLabels": []
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-asthma",
+        "title": "Asthma — PN scope (NCLEX-PN, US)",
+        "totalWords": 132,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": true
+        },
+        "missingEeatLabels": []
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-ards",
+        "title": "ARDS — PN scope (NCLEX-PN, US)",
+        "totalWords": 132,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": true
+        },
+        "missingEeatLabels": []
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-pneumonia",
+        "title": "Pneumonia — PN scope (NCLEX-PN, US)",
+        "totalWords": 132,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": true
+        },
+        "missingEeatLabels": []
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-copd-respiratory",
+        "title": "COPD & respiratory basics — PN scope (NCLEX-PN, US)",
+        "totalWords": 135,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": true
+        },
+        "missingEeatLabels": []
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-abg-interpretation",
+        "title": "ABG interpretation — PN scope (NCLEX-PN, US)",
+        "totalWords": 133,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": true
+        },
+        "missingEeatLabels": []
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-acid-base-advanced",
+        "title": "Acid–base disorders (advanced) — PN scope (NCLEX-PN, US)",
+        "totalWords": 134,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": true
+        },
+        "missingEeatLabels": []
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-sodium-imbalance",
+        "title": "Sodium imbalance — PN scope (NCLEX-PN, US)",
+        "totalWords": 133,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": true
+        },
+        "missingEeatLabels": []
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-potassium-imbalance",
+        "title": "Potassium imbalance — PN scope (NCLEX-PN, US)",
+        "totalWords": 133,
+        "sectionCount": 5,
+        "thin": true,
+        "eeatCoverage": {
+          "overview": true,
+          "pathophysiology": true,
+          "signs_symptoms": true,
+          "nursing_interventions": true,
+          "clinical_pearls": true,
+          "exam_tips": true,
+          "practice_question": true
+        },
+        "missingEeatLabels": []
       }
     ],
-    "thinTotal": 424,
+    "thinTotal": 282,
     "duplicateTitles": [
       {
         "normalizedTitle": "pulmonary embolism (nclex-rn, canada)",
@@ -4106,9 +4052,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "heart-failure-nursing-priorities-hy",
         "title": "Heart Failure Nursing Priorities (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 529,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4126,9 +4072,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "acute-myocardial-infarction-troponin",
         "title": "Acute Myocardial Infarction & Troponin (NCLEX-RN, Canada)",
-        "totalWords": 203,
+        "totalWords": 474,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4146,9 +4092,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "shock-recognition-fluids",
         "title": "Shock Recognition & Fluids (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 495,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4166,9 +4112,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "hypertensive-crisis-vs-urgency",
         "title": "Hypertensive Crisis vs Urgency (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 489,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4186,9 +4132,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "atrial-fibrillation-rate-control",
         "title": "Atrial Fibrillation & Rate Control (NCLEX-RN, Canada)",
-        "totalWords": 203,
+        "totalWords": 535,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4206,9 +4152,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "endocarditis-blood-cultures",
         "title": "Endocarditis & Blood Cultures (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 594,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4226,9 +4172,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "pericarditis-ecg-clues",
         "title": "Pericarditis & ECG Clues (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 528,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4246,9 +4192,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "dvt-pe-nursing-priorities",
         "title": "DVT & PE Nursing Priorities (NCLEX-RN, Canada)",
-        "totalWords": 203,
+        "totalWords": 506,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4266,9 +4212,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "abg-interpretation-basics-hy",
         "title": "ABG Interpretation Basics (NCLEX-RN, Canada)",
-        "totalWords": 197,
+        "totalWords": 597,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4286,9 +4232,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "copd-exacerbation-oxygen",
         "title": "COPD Exacerbation & Oxygen (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 493,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4306,9 +4252,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "asthma-status-asthmaticus",
         "title": "Asthma & Status Asthmaticus (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 558,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4326,9 +4272,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "ards-ventilation-basics",
         "title": "ARDS & Ventilation Basics (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 551,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4346,9 +4292,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "pneumonia-oxygenation",
         "title": "Pneumonia & Oxygenation (NCLEX-RN, Canada)",
-        "totalWords": 197,
+        "totalWords": 487,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4366,9 +4312,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "pulmonary-embolism-clues",
         "title": "Pulmonary Embolism Clues (NCLEX-RN, Canada)",
-        "totalWords": 197,
+        "totalWords": 509,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4386,9 +4332,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "tb-isolation-compliance",
         "title": "TB Isolation & Compliance (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 428,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4406,9 +4352,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "pleural-effusion-chest-tubes",
         "title": "Pleural Effusion & Chest Tubes (NCLEX-RN, Canada)",
-        "totalWords": 203,
+        "totalWords": 434,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4426,9 +4372,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "insulin-hypoglycemia-hy",
         "title": "Insulin & Hypoglycemia (NCLEX-RN, Canada)",
-        "totalWords": 197,
+        "totalWords": 422,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4446,9 +4392,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "anticoagulants-bleeding-risk",
         "title": "Anticoagulants & Bleeding Risk (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 428,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4466,9 +4412,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "antibiotic-classes-allergies-hy",
         "title": "Antibiotic Classes & Allergies (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 428,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4486,9 +4432,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "opioids-respiratory-depression",
         "title": "Opioids & Respiratory Depression (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 424,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4506,9 +4452,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "cardiac-glycosides-toxicity",
         "title": "Cardiac Glycosides & Toxicity (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 428,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4546,9 +4492,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "antihypertensive-combos",
         "title": "Antihypertensive Combos (NCLEX-RN, Canada)",
-        "totalWords": 194,
+        "totalWords": 416,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4566,9 +4512,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "chemo-safe-handling-extravasation",
         "title": "Chemo Safe Handling & Extravasation (NCLEX-RN, Canada)",
-        "totalWords": 203,
+        "totalWords": 434,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4586,9 +4532,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "hyponatremia-vs-hypernatremia-hy",
         "title": "Hyponatremia vs Hypernatremia (NCLEX-RN, Canada)",
-        "totalWords": 201,
+        "totalWords": 426,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4606,9 +4552,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "hypo-vs-hyperkalemia-hy",
         "title": "Hypo- vs Hyperkalemia (NCLEX-RN, Canada)",
-        "totalWords": 201,
+        "totalWords": 426,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4626,9 +4572,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "fluid-volume-deficit",
         "title": "Fluid Volume Deficit (NCLEX-RN, Canada)",
-        "totalWords": 201,
+        "totalWords": 426,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4646,9 +4592,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "fluid-volume-excess",
         "title": "Fluid Volume Excess (NCLEX-RN, Canada)",
-        "totalWords": 201,
+        "totalWords": 426,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4666,9 +4612,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "magnesium-arrhythmia-risk",
         "title": "Magnesium & Arrhythmia Risk (NCLEX-RN, Canada)",
-        "totalWords": 204,
+        "totalWords": 432,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4686,9 +4632,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "calcium-tetany",
         "title": "Calcium & Tetany (NCLEX-RN, Canada)",
-        "totalWords": 201,
+        "totalWords": 479,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4706,9 +4652,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "phosphate-shifts-in-renal",
         "title": "Phosphate Shifts in Renal (NCLEX-RN, Canada)",
-        "totalWords": 204,
+        "totalWords": 429,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4726,9 +4672,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "mixed-acid-base-patterns",
         "title": "Mixed Acid-Base Patterns (NCLEX-RN, Canada)",
-        "totalWords": 201,
+        "totalWords": 426,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4746,9 +4692,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "liver-failure-hepatic-encephalopathy",
         "title": "Liver Failure & Hepatic Encephalopathy (NCLEX-RN, Canada)",
-        "totalWords": 203,
+        "totalWords": 434,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4766,9 +4712,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "acute-pancreatitis-nursing-care",
         "title": "Acute Pancreatitis Nursing Care (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 618,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4786,9 +4732,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "bowel-obstruction-vs-paralytic-ileus",
         "title": "Bowel Obstruction vs Paralytic Ileus (NCLEX-RN, Canada)",
-        "totalWords": 203,
+        "totalWords": 483,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4806,9 +4752,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "gerd-pud-bleeding-clues",
         "title": "GERD & PUD Bleeding Clues (NCLEX-RN, Canada)",
-        "totalWords": 203,
+        "totalWords": 434,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4826,9 +4772,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "gi-bleed-assessment",
         "title": "GI Bleed Assessment (NCLEX-RN, Canada)",
-        "totalWords": 197,
+        "totalWords": 422,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4846,9 +4792,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "c-diff-infection-control",
         "title": "C. diff Infection Control (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 428,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4866,9 +4812,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "ostomy-skin-protection",
         "title": "Ostomy & Skin Protection (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 428,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4886,9 +4832,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "stroke-assessment-tpa-window",
         "title": "Stroke Assessment & tPA Window (NCLEX-RN, Canada)",
-        "totalWords": 203,
+        "totalWords": 434,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4906,9 +4852,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "seizure-precautions-rescue-meds",
         "title": "Seizure Precautions & Rescue Meds (NCLEX-RN, Canada)",
-        "totalWords": 203,
+        "totalWords": 434,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4926,9 +4872,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "increased-icp-positioning",
         "title": "Increased ICP & Positioning (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 428,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4946,9 +4892,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "spinal-cord-injury-autonomic-dysreflexia",
         "title": "Spinal Cord Injury Autonomic Dysreflexia (NCLEX-RN, Canada)",
-        "totalWords": 203,
+        "totalWords": 434,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4966,9 +4912,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "meningitis-isolation-assessment",
         "title": "Meningitis Isolation & Assessment (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 428,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -4986,9 +4932,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "migraine-vs-red-flag-headache",
         "title": "Migraine vs Red-Flag Headache (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 428,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5006,9 +4952,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "parkinson-disease-med-timing",
         "title": "Parkinson Disease Med Timing (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 428,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5026,9 +4972,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "dka-vs-hhs-priorities-hy",
         "title": "DKA vs HHS Priorities (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 488,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5046,9 +4992,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "thyroid-storm-myxedema-clues",
         "title": "Thyroid Storm & Myxedema Clues (NCLEX-RN, Canada)",
-        "totalWords": 203,
+        "totalWords": 434,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5066,9 +5012,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "addisonian-crisis",
         "title": "Addisonian Crisis (NCLEX-RN, Canada)",
-        "totalWords": 194,
+        "totalWords": 513,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5086,9 +5032,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "cushing-syndrome-assessment",
         "title": "Cushing Syndrome Assessment (NCLEX-RN, Canada)",
-        "totalWords": 197,
+        "totalWords": 499,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5126,9 +5072,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "siadh-vs-di-basics",
         "title": "SIADH vs DI Basics (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 428,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5146,9 +5092,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "aki-prerenal-vs-intrarenal",
         "title": "AKI: Prerenal vs Intrarenal (NCLEX-RN, Canada)",
-        "totalWords": 204,
+        "totalWords": 536,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5166,9 +5112,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "hemodialysis-access-care",
         "title": "Hemodialysis Access Care (NCLEX-RN, Canada)",
-        "totalWords": 201,
+        "totalWords": 423,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5186,9 +5132,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "peritoneal-dialysis-complications",
         "title": "Peritoneal Dialysis Complications (NCLEX-RN, Canada)",
-        "totalWords": 201,
+        "totalWords": 423,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5206,9 +5152,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "kidney-stones-strain-management",
         "title": "Kidney Stones & Strain Management (NCLEX-RN, Canada)",
-        "totalWords": 207,
+        "totalWords": 438,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5226,9 +5172,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "uti-vs-pyelonephritis",
         "title": "UTI vs Pyelonephritis (NCLEX-RN, Canada)",
-        "totalWords": 201,
+        "totalWords": 426,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5246,9 +5192,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "indwelling-catheter-risks",
         "title": "Indwelling Catheter Risks (NCLEX-RN, Canada)",
-        "totalWords": 201,
+        "totalWords": 426,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5266,9 +5212,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "anemia-types-transfusion-thresholds",
         "title": "Anemia Types & Transfusion Thresholds (NCLEX-RN, Canada)",
-        "totalWords": 205,
+        "totalWords": 534,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5286,9 +5232,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "transfusion-reaction-recognition",
         "title": "Transfusion Reaction Recognition (NCLEX-RN, Canada)",
-        "totalWords": 199,
+        "totalWords": 424,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5306,9 +5252,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "neutropenic-precautions",
         "title": "Neutropenic Precautions (NCLEX-RN, Canada)",
-        "totalWords": 196,
+        "totalWords": 418,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5326,9 +5272,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "sickle-cell-pain-acs",
         "title": "Sickle Cell Pain & ACS (NCLEX-RN, Canada)",
-        "totalWords": 205,
+        "totalWords": 433,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5346,9 +5292,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "hip-fracture-fall-risk",
         "title": "Hip Fracture & Fall Risk (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 431,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5366,9 +5312,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "ra-flare-immune-modulators",
         "title": "RA Flare & Immune Modulators (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 431,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5386,9 +5332,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "immobility-dvt-prophylaxis",
         "title": "Immobility & DVT Prophylaxis (NCLEX-RN, Canada)",
-        "totalWords": 197,
+        "totalWords": 421,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5426,9 +5372,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "hiv-confidentiality-pep-basics",
         "title": "HIV Confidentiality & PEP Basics (NCLEX-RN, Canada)",
-        "totalWords": 203,
+        "totalWords": 434,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5446,9 +5392,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "isolation-precautions-in-practice",
         "title": "Isolation Precautions in Practice (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 428,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5466,9 +5412,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "wound-infection-vs-colonization",
         "title": "Wound Infection vs Colonization (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 428,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5486,9 +5432,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "burn-depth-fluid-resuscitation-basics",
         "title": "Burn Depth & Fluid Resuscitation Basics (NCLEX-RN, Canada)",
-        "totalWords": 203,
+        "totalWords": 480,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5506,9 +5452,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "pressure-injury-staging",
         "title": "Pressure Injury Staging (NCLEX-RN, Canada)",
-        "totalWords": 194,
+        "totalWords": 419,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5526,9 +5472,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "severe-dermatitis-skin-care",
         "title": "Severe Dermatitis Skin Care (NCLEX-RN, Canada)",
-        "totalWords": 197,
+        "totalWords": 425,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5546,9 +5492,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "suicide-risk-assessment-hy",
         "title": "Suicide Risk Assessment (NCLEX-RN, Canada)",
-        "totalWords": 197,
+        "totalWords": 422,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5566,9 +5512,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "psychotropic-side-effects",
         "title": "Psychotropic Side Effects (NCLEX-RN, Canada)",
-        "totalWords": 196,
+        "totalWords": 421,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5586,9 +5532,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "alcohol-withdrawal-ciwa",
         "title": "Alcohol Withdrawal CIWA (NCLEX-RN, Canada)",
-        "totalWords": 196,
+        "totalWords": 618,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5606,9 +5552,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "preeclampsia-vs-eclampsia",
         "title": "Preeclampsia vs Eclampsia (NCLEX-RN, Canada)",
-        "totalWords": 196,
+        "totalWords": 421,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5626,9 +5572,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "postpartum-hemorrhage",
         "title": "Postpartum Hemorrhage (NCLEX-RN, Canada)",
-        "totalWords": 193,
+        "totalWords": 415,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5646,9 +5592,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "late-decelerations-fhr",
         "title": "Late Decelerations & FHR (NCLEX-RN, Canada)",
-        "totalWords": 199,
+        "totalWords": 427,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5666,9 +5612,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "newborn-thermoregulation-feeding",
         "title": "Newborn Thermoregulation & Feeding (NCLEX-RN, Canada)",
-        "totalWords": 199,
+        "totalWords": 427,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5686,9 +5632,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "rh-incompatibility-basics",
         "title": "Rh Incompatibility Basics (NCLEX-RN, Canada)",
-        "totalWords": 196,
+        "totalWords": 421,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5706,9 +5652,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "pediatric-fever-dehydration",
         "title": "Pediatric Fever & Dehydration (NCLEX-RN, Canada)",
-        "totalWords": 199,
+        "totalWords": 427,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5726,9 +5672,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "rsv-pediatric-resp-distress",
         "title": "RSV & Pediatric Resp Distress (NCLEX-RN, Canada)",
-        "totalWords": 202,
+        "totalWords": 433,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5746,9 +5692,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "immunization-schedule-essentials",
         "title": "Immunization Schedule Essentials (NCLEX-RN, Canada)",
-        "totalWords": 196,
+        "totalWords": 421,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5766,9 +5712,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "growth-failure-red-flags",
         "title": "Growth Failure Red Flags (NCLEX-RN, Canada)",
-        "totalWords": 199,
+        "totalWords": 427,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5786,9 +5732,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "non-accidental-trauma-suspicion",
         "title": "Non-Accidental Trauma Suspicion (NCLEX-RN, Canada)",
-        "totalWords": 196,
+        "totalWords": 421,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5806,9 +5752,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "assignment-vs-delegation",
         "title": "Assignment vs Delegation (NCLEX-RN, Canada)",
-        "totalWords": 199,
+        "totalWords": 511,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5826,9 +5772,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "ethical-distress-advocacy",
         "title": "Ethical Distress & Advocacy (NCLEX-RN, Canada)",
-        "totalWords": 202,
+        "totalWords": 430,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5846,9 +5792,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "legal-nurse-practice-act",
         "title": "Legal: Nurse Practice Act (NCLEX-RN, Canada)",
-        "totalWords": 202,
+        "totalWords": 430,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5866,9 +5812,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "qi-incident-reporting",
         "title": "QI & Incident Reporting (NCLEX-RN, Canada)",
-        "totalWords": 202,
+        "totalWords": 430,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5886,9 +5832,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "falls-hourly-rounding",
         "title": "Falls & Hourly Rounding (NCLEX-RN, Canada)",
-        "totalWords": 204,
+        "totalWords": 432,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5906,9 +5852,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "restraint-alternatives-policy",
         "title": "Restraint Alternatives & Policy (NCLEX-RN, Canada)",
-        "totalWords": 204,
+        "totalWords": 432,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5926,9 +5872,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "medication-error-disclosure",
         "title": "Medication Error Disclosure (NCLEX-RN, Canada)",
-        "totalWords": 201,
+        "totalWords": 426,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5946,9 +5892,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "sharp-safety-exposure",
         "title": "Sharp Safety & Exposure (NCLEX-RN, Canada)",
-        "totalWords": 204,
+        "totalWords": 432,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5966,9 +5912,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "enteral-feeding-tube-safety",
         "title": "Enteral Feeding Tube Safety (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 475,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -5986,9 +5932,9 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "tpn-line-care-basics",
         "title": "TPN Line Care Basics (NCLEX-RN, Canada)",
-        "totalWords": 200,
+        "totalWords": 428,
         "sectionCount": 5,
-        "thin": true,
+        "thin": false,
         "eeatCoverage": {
           "overview": true,
           "pathophysiology": true,
@@ -6006,25 +5952,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "abdominal-aortic-aneurysm-nclex-rn",
         "title": "Abdominal Aortic Aneurysm (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
-        "thin": true,
+        "totalWords": 400,
+        "sectionCount": 4,
+        "thin": false,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -6032,25 +5975,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "acute-coronary-syndrome-nclex-rn",
         "title": "Acute Coronary Syndrome (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 167,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -6058,25 +5998,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "atrial-fibrillation-nclex-rn",
         "title": "Atrial Fibrillation (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 170,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -6084,25 +6021,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
         "title": "CABG and Postoperative CABG Complications (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
-        "thin": true,
+        "totalWords": 599,
+        "sectionCount": 4,
+        "thin": false,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -6110,25 +6044,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "cardiac-tamponade-nclex-rn",
         "title": "Cardiac Tamponade (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
-        "thin": true,
+        "totalWords": 537,
+        "sectionCount": 4,
+        "thin": false,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -6136,25 +6067,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
         "title": "Deep Vein Thrombosis (DVT): Prevention and Nursing Management (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 169,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -6162,25 +6090,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "defibrillation-vs-synchronized-cardioversion-nclex-rn",
         "title": "Defibrillation vs Synchronized Cardioversion (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 164,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -6188,25 +6113,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "heart-failure-nclex-rn",
         "title": "Heart Failure (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 186,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -6214,25 +6136,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "hypertensive-encephalopathy-nclex-rn",
         "title": "Hypertensive Encephalopathy (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 162,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -6240,25 +6159,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "infective-endocarditis-nclex-rn",
         "title": "Infective Endocarditis (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 175,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -6266,25 +6182,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "myocardial-infarction-nclex-rn",
         "title": "Myocardial Infarction (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 194,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -6292,25 +6205,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "peripheral-artery-disease-nclex-rn",
         "title": "Peripheral Artery Disease (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
+        "totalWords": 195,
+        "sectionCount": 4,
         "thin": true,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -6318,25 +6228,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "phlebostatic-axis-nclex-rn",
         "title": "Phlebostatic Axis (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
-        "thin": true,
+        "totalWords": 549,
+        "sectionCount": 4,
+        "thin": false,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -6344,25 +6251,22 @@
         "pathwayId": "ca-rn-nclex-rn",
         "slug": "pulmonary-embolism-nclex-rn",
         "title": "Pulmonary Embolism (NCLEX-RN, Canada)",
-        "totalWords": 0,
-        "sectionCount": 0,
-        "thin": true,
+        "totalWords": 498,
+        "sectionCount": 4,
+        "thin": false,
         "eeatCoverage": {
-          "overview": false,
+          "overview": true,
           "pathophysiology": false,
           "signs_symptoms": false,
-          "nursing_interventions": false,
+          "nursing_interventions": true,
           "clinical_pearls": false,
-          "exam_tips": false,
+          "exam_tips": true,
           "practice_question": false
         },
         "missingEeatLabels": [
-          "overview",
           "pathophysiology",
           "signs_symptoms",
-          "nursing_interventions",
           "clinical_pearls",
-          "exam_tips",
           "practice_question"
         ]
       },
@@ -7197,7 +7101,7 @@
     "reason": "DATABASE_URL not set"
   },
   "seoPages": {
-    "slugCount": 31,
+    "slugCount": 39,
     "note": "Programmatic SEO pages are registry-backed; validate depth with npm run validate:programmatic-seo where applicable."
   },
   "internalLinking": {

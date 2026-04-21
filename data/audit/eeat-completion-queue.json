@@ -1,18 +1,9 @@
 {
-  "generatedAt": "2026-04-14T17:24:48.380Z",
+  "generatedAt": "2026-04-21T19:49:32.255Z",
   "totalFlagged": 601,
   "prioritized": [
     {
       "id": "lesson:ca-rpn-rex-pn:pn-scope-safety-basics",
-      "score": 45,
-      "flags": [
-        "below_score_70",
-        "internal_links_low",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:respiratory-assessment-ngn",
       "score": 45,
       "flags": [
         "below_score_70",
@@ -30,250 +21,12 @@
       ]
     },
     {
-      "id": "lesson:us-np-fnp:fnp-differential-primary-care",
-      "score": 45,
-      "flags": [
-        "below_score_70",
-        "internal_links_low",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-np-fnp:fnp-womens-prenatal-anemia-workup",
-      "score": 45,
-      "flags": [
-        "below_score_70",
-        "internal_links_low",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-np-fnp:fnp-pediatric-fever-urgency",
-      "score": 45,
-      "flags": [
-        "below_score_70",
-        "internal_links_low",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-np-fnp:fnp-adolescent-mental-health-screening",
-      "score": 45,
-      "flags": [
-        "below_score_70",
-        "internal_links_low",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-np-fnp:fnp-adult-hypertension-intensification",
-      "score": 45,
-      "flags": [
-        "below_score_70",
-        "internal_links_low",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-np-fnp:fnp-geriatric-falls-syncope",
-      "score": 45,
-      "flags": [
-        "below_score_70",
-        "internal_links_low",
-        "structure_incomplete"
-      ]
-    },
-    {
       "id": "seo:nursing-flashcards-nclex",
       "score": 46,
       "flags": [
         "below_score_70",
         "internal_links_low",
         "thin_programmatic"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:abdominal-aortic-aneurysm-nclex-rn",
-      "score": 49,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:acute-coronary-syndrome-nclex-rn",
-      "score": 49,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:atrial-fibrillation-nclex-rn",
-      "score": 49,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:cabg-and-postoperative-cabg-complications-nclex-rn",
-      "score": 49,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:cardiac-tamponade-nclex-rn",
-      "score": 49,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
-      "score": 49,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:defibrillation-vs-synchronized-cardioversion-nclex-rn",
-      "score": 49,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:heart-failure-nclex-rn",
-      "score": 49,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:hypertensive-encephalopathy-nclex-rn",
-      "score": 49,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:infective-endocarditis-nclex-rn",
-      "score": 49,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:myocardial-infarction-nclex-rn",
-      "score": 49,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:peripheral-artery-disease-nclex-rn",
-      "score": 49,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:phlebostatic-axis-nclex-rn",
-      "score": 49,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:pulmonary-embolism-nclex-rn",
-      "score": 49,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-np-fnp:fnp-overlay-heart-failure",
-      "score": 52,
-      "flags": [
-        "below_score_70",
-        "internal_links_low",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-np-fnp:fnp-overlay-myocardial-infarction",
-      "score": 52,
-      "flags": [
-        "below_score_70",
-        "internal_links_low",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-np-fnp:fnp-overlay-shock",
-      "score": 52,
-      "flags": [
-        "below_score_70",
-        "internal_links_low",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-np-fnp:fnp-overlay-abg-acid-base",
-      "score": 52,
-      "flags": [
-        "below_score_70",
-        "internal_links_low",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-np-fnp:fnp-overlay-respiratory-acute",
-      "score": 52,
-      "flags": [
-        "below_score_70",
-        "internal_links_low",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-np-fnp:fnp-overlay-sepsis-infection",
-      "score": 52,
-      "flags": [
-        "below_score_70",
-        "internal_links_low",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-np-fnp:fnp-overlay-electrolytes-volume",
-      "score": 52,
-      "flags": [
-        "below_score_70",
-        "internal_links_low",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-np-fnp:fnp-overlay-np-differential-prescribing-chronic",
-      "score": 52,
-      "flags": [
-        "below_score_70",
-        "internal_links_low",
-        "structure_incomplete"
       ]
     },
     {
@@ -304,408 +57,7 @@
       ]
     },
     {
-      "id": "lesson:us-np-fnp:fnp-overlay-diabetes-metabolic",
-      "score": 56,
-      "flags": [
-        "below_score_70",
-        "internal_links_low",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:heart-failure-nursing-priorities-hy",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:acute-myocardial-infarction-troponin",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:shock-recognition-fluids",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:hypertensive-crisis-vs-urgency",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:atrial-fibrillation-rate-control",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:endocarditis-blood-cultures",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:pericarditis-ecg-clues",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:dvt-pe-nursing-priorities",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:abg-interpretation-basics-hy",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:copd-exacerbation-oxygen",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:asthma-status-asthmaticus",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:ards-ventilation-basics",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:pneumonia-oxygenation",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:pulmonary-embolism-clues",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:tb-isolation-compliance",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:pleural-effusion-chest-tubes",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:insulin-hypoglycemia-hy",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:anticoagulants-bleeding-risk",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:antibiotic-classes-allergies-hy",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:opioids-respiratory-depression",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:cardiac-glycosides-toxicity",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
       "id": "lesson:ca-rn-nclex-rn:diuretics-electrolyte-shifts",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:antihypertensive-combos",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:chemo-safe-handling-extravasation",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:hyponatremia-vs-hypernatremia-hy",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:hypo-vs-hyperkalemia-hy",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:fluid-volume-deficit",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:fluid-volume-excess",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:magnesium-arrhythmia-risk",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:calcium-tetany",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:phosphate-shifts-in-renal",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:mixed-acid-base-patterns",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:liver-failure-hepatic-encephalopathy",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:acute-pancreatitis-nursing-care",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:bowel-obstruction-vs-paralytic-ileus",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:gerd-pud-bleeding-clues",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:gi-bleed-assessment",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:c-diff-infection-control",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:ostomy-skin-protection",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:stroke-assessment-tpa-window",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:seizure-precautions-rescue-meds",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:increased-icp-positioning",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:spinal-cord-injury-autonomic-dysreflexia",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:meningitis-isolation-assessment",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:migraine-vs-red-flag-headache",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:parkinson-disease-med-timing",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:dka-vs-hhs-priorities-hy",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:thyroid-storm-myxedema-clues",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:addisonian-crisis",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:cushing-syndrome-assessment",
       "score": 58,
       "flags": [
         "below_score_70",
@@ -721,118 +73,6 @@
       ]
     },
     {
-      "id": "lesson:ca-rn-nclex-rn:siadh-vs-di-basics",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:aki-prerenal-vs-intrarenal",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:hemodialysis-access-care",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:peritoneal-dialysis-complications",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:kidney-stones-strain-management",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:uti-vs-pyelonephritis",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:indwelling-catheter-risks",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:anemia-types-transfusion-thresholds",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:transfusion-reaction-recognition",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:neutropenic-precautions",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:sickle-cell-pain-acs",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:hip-fracture-fall-risk",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:ra-flare-immune-modulators",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:immobility-dvt-prophylaxis",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
       "id": "lesson:ca-rn-nclex-rn:sepsis-early-recognition-hy",
       "score": 58,
       "flags": [
@@ -841,235 +81,75 @@
       ]
     },
     {
-      "id": "lesson:ca-rn-nclex-rn:hiv-confidentiality-pep-basics",
+      "id": "lesson:ca-rn-nclex-rn:acute-coronary-syndrome-nclex-rn",
       "score": 58,
       "flags": [
         "below_score_70",
-        "internal_links_low"
+        "structure_incomplete"
       ]
     },
     {
-      "id": "lesson:ca-rn-nclex-rn:isolation-precautions-in-practice",
+      "id": "lesson:ca-rn-nclex-rn:atrial-fibrillation-nclex-rn",
       "score": 58,
       "flags": [
         "below_score_70",
-        "internal_links_low"
+        "structure_incomplete"
       ]
     },
     {
-      "id": "lesson:ca-rn-nclex-rn:wound-infection-vs-colonization",
+      "id": "lesson:ca-rn-nclex-rn:deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
       "score": 58,
       "flags": [
         "below_score_70",
-        "internal_links_low"
+        "structure_incomplete"
       ]
     },
     {
-      "id": "lesson:ca-rn-nclex-rn:burn-depth-fluid-resuscitation-basics",
+      "id": "lesson:ca-rn-nclex-rn:defibrillation-vs-synchronized-cardioversion-nclex-rn",
       "score": 58,
       "flags": [
         "below_score_70",
-        "internal_links_low"
+        "structure_incomplete"
       ]
     },
     {
-      "id": "lesson:ca-rn-nclex-rn:pressure-injury-staging",
+      "id": "lesson:ca-rn-nclex-rn:heart-failure-nclex-rn",
       "score": 58,
       "flags": [
         "below_score_70",
-        "internal_links_low"
+        "structure_incomplete"
       ]
     },
     {
-      "id": "lesson:ca-rn-nclex-rn:severe-dermatitis-skin-care",
+      "id": "lesson:ca-rn-nclex-rn:hypertensive-encephalopathy-nclex-rn",
       "score": 58,
       "flags": [
         "below_score_70",
-        "internal_links_low"
+        "structure_incomplete"
       ]
     },
     {
-      "id": "lesson:ca-rn-nclex-rn:suicide-risk-assessment-hy",
+      "id": "lesson:ca-rn-nclex-rn:infective-endocarditis-nclex-rn",
       "score": 58,
       "flags": [
         "below_score_70",
-        "internal_links_low"
+        "structure_incomplete"
       ]
     },
     {
-      "id": "lesson:ca-rn-nclex-rn:psychotropic-side-effects",
+      "id": "lesson:ca-rn-nclex-rn:myocardial-infarction-nclex-rn",
       "score": 58,
       "flags": [
         "below_score_70",
-        "internal_links_low"
+        "structure_incomplete"
       ]
     },
     {
-      "id": "lesson:ca-rn-nclex-rn:alcohol-withdrawal-ciwa",
+      "id": "lesson:ca-rn-nclex-rn:peripheral-artery-disease-nclex-rn",
       "score": 58,
       "flags": [
         "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:preeclampsia-vs-eclampsia",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:postpartum-hemorrhage",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:late-decelerations-fhr",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:newborn-thermoregulation-feeding",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:rh-incompatibility-basics",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:pediatric-fever-dehydration",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:rsv-pediatric-resp-distress",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:immunization-schedule-essentials",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:growth-failure-red-flags",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:non-accidental-trauma-suspicion",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:assignment-vs-delegation",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:ethical-distress-advocacy",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:legal-nurse-practice-act",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:qi-incident-reporting",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:falls-hourly-rounding",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:restraint-alternatives-policy",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:medication-error-disclosure",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:sharp-safety-exposure",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:enteral-feeding-tube-safety",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:ca-rn-nclex-rn:tpn-line-care-basics",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
+        "structure_incomplete"
       ]
     },
     {
@@ -1345,118 +425,6 @@
       ]
     },
     {
-      "id": "lesson:us-rn-nclex-rn:heart-failure-nursing-priorities-hy",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:acute-myocardial-infarction-troponin",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:shock-recognition-fluids",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:hypertensive-crisis-vs-urgency",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:atrial-fibrillation-rate-control",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:endocarditis-blood-cultures",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:pericarditis-ecg-clues",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:dvt-pe-nursing-priorities",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:abg-interpretation-basics-hy",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:copd-exacerbation-oxygen",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:asthma-status-asthmaticus",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:ards-ventilation-basics",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:pneumonia-oxygenation",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:pulmonary-embolism-clues",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
       "id": "lesson:us-rn-nclex-rn:tb-isolation-compliance",
       "score": 58,
       "flags": [
@@ -1577,14 +545,6 @@
       ]
     },
     {
-      "id": "lesson:us-rn-nclex-rn:calcium-tetany",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
       "id": "lesson:us-rn-nclex-rn:phosphate-shifts-in-renal",
       "score": 58,
       "flags": [
@@ -1602,22 +562,6 @@
     },
     {
       "id": "lesson:us-rn-nclex-rn:liver-failure-hepatic-encephalopathy",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:acute-pancreatitis-nursing-care",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:bowel-obstruction-vs-paralytic-ileus",
       "score": 58,
       "flags": [
         "below_score_70",
@@ -1713,31 +657,7 @@
       ]
     },
     {
-      "id": "lesson:us-rn-nclex-rn:dka-vs-hhs-priorities-hy",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
       "id": "lesson:us-rn-nclex-rn:thyroid-storm-myxedema-clues",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:addisonian-crisis",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:cushing-syndrome-assessment",
       "score": 58,
       "flags": [
         "below_score_70",
@@ -1754,14 +674,6 @@
     },
     {
       "id": "lesson:us-rn-nclex-rn:siadh-vs-di-basics",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:aki-prerenal-vs-intrarenal",
       "score": 58,
       "flags": [
         "below_score_70",
@@ -1802,14 +714,6 @@
     },
     {
       "id": "lesson:us-rn-nclex-rn:indwelling-catheter-risks",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:anemia-types-transfusion-thresholds",
       "score": 58,
       "flags": [
         "below_score_70",
@@ -1897,14 +801,6 @@
       ]
     },
     {
-      "id": "lesson:us-rn-nclex-rn:burn-depth-fluid-resuscitation-basics",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
       "id": "lesson:us-rn-nclex-rn:pressure-injury-staging",
       "score": 58,
       "flags": [
@@ -1930,14 +826,6 @@
     },
     {
       "id": "lesson:us-rn-nclex-rn:psychotropic-side-effects",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:alcohol-withdrawal-ciwa",
       "score": 58,
       "flags": [
         "below_score_70",
@@ -2025,14 +913,6 @@
       ]
     },
     {
-      "id": "lesson:us-rn-nclex-rn:assignment-vs-delegation",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
       "id": "lesson:us-rn-nclex-rn:ethical-distress-advocacy",
       "score": 58,
       "flags": [
@@ -2089,14 +969,6 @@
       ]
     },
     {
-      "id": "lesson:us-rn-nclex-rn:enteral-feeding-tube-safety",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "internal_links_low"
-      ]
-    },
-    {
       "id": "lesson:us-rn-nclex-rn:tpn-line-care-basics",
       "score": 58,
       "flags": [
@@ -2122,22 +994,6 @@
     },
     {
       "id": "lesson:us-rn-nclex-rn:atrial-fibrillation-nclex-rn",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:cabg-and-postoperative-cabg-complications-nclex-rn",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:cardiac-tamponade-nclex-rn",
       "score": 58,
       "flags": [
         "below_score_70",
@@ -2194,22 +1050,6 @@
     },
     {
       "id": "lesson:us-rn-nclex-rn:peripheral-artery-disease-nclex-rn",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:phlebostatic-axis-nclex-rn",
-      "score": 58,
-      "flags": [
-        "below_score_70",
-        "structure_incomplete"
-      ]
-    },
-    {
-      "id": "lesson:us-rn-nclex-rn:pulmonary-embolism-nclex-rn",
       "score": 58,
       "flags": [
         "below_score_70",
@@ -2486,6 +1326,15 @@
       "flags": [
         "below_score_70",
         "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-rn-nclex-rn:respiratory-assessment-ngn",
+      "score": 59,
+      "flags": [
+        "below_score_70",
+        "internal_links_low",
+        "structure_incomplete"
       ]
     },
     {
@@ -3025,6 +1874,14 @@
       ]
     },
     {
+      "id": "lesson:ca-rn-nclex-rn:shock-recognition-fluids",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
       "id": "lesson:ca-rpn-rex-pn:bp26-carpn-pa-htn-crisis",
       "score": 62,
       "flags": [
@@ -3219,6 +2076,1121 @@
     {
       "id": "lesson:ca-rpn-rex-pn:bp26-carpn-x013-diuretic-teaching-orthostasis",
       "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rpn-rex-pn:bp26-carpn-x014-steroid-taper-teaching",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rpn-rex-pn:bp26-carpn-x015-delirium-vs-dementia-nursing-differentia",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rpn-rex-pn:bp26-carpn-x016-substance-withdrawal-monitoring",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rpn-rex-pn:bp26-carpn-x017-trauma-informed-care-basics",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rpn-rex-pn:bp26-carpn-x018-preeclampsia-symptom-triad",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rpn-rex-pn:bp26-carpn-x019-newborn-thermoregulation",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rpn-rex-pn:bp26-carpn-x020-breastfeeding-latch-troubleshooting",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rpn-rex-pn:bp26-carpn-x021-pediatric-dosing-verification-mindset",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rpn-rex-pn:bp26-carpn-x022-airway-obstruction-in-toddlers",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rpn-rex-pn:bp26-carpn-x023-immunization-catch-up-planning",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rpn-rex-pn:bp26-carpn-x024-wrong-patient-near-miss-reporting",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rpn-rex-pn:bp26-carpn-x025-barcode-scanning-discipline",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rpn-rex-pn:bp26-carpn-x026-line-identification-labeling",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-rn-nclex-rn:shock-recognition-fluids",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-sf-falls-bed-exit",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-sf-restraint-alternatives",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-sf-med-reconciliation",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-sf-ppe-isolation",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-mo-delegate-uap",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-mo-shift-report-sbar",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-mo-ethical-concern",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-mo-care-conference",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-ph-insulin-safety",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-ph-anticoag-bridging",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-ph-abx-stewardship",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-ph-opioid-resp-depr",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-pa-sepsis-trending",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-pa-shock-classify",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-pa-aki-urine-labs",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-pa-dka-vs-hhs",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-pa-chf-volume",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-pa-copd-exac",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-pa-pe-suspect",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-pa-stroke-window",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-pa-ich-nih",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-pa-gi-bleed-stable",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-pa-pneumonia-curbs",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-pa-asthma-exac",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-pa-hyperk-emerg",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-pa-hyponat-symp",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-rr-pressure-injury",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-rr-vte-mechanical",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-psy-anxiety-therapeutic",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-psy-suicide-safety",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-mat-postpartum-hem",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-mat-labor-fhr",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-ped-febrile-infant",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-ped-growth-chart",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-hp-immunization-ed",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-bc-comfort-dying",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-cs-multiorgan-triage",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-lpn-nclex-pn:bp26-uslpn-cs-two-patients",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-np-fnp:bp26-usnp-x030-chronic-disease-self-management-coaching",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-np-fnp:bp26-usnp-x031-health-literacy-teach-back",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:us-np-fnp:bp26-usnp-x032-social-determinants-screening",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "seo:nclex-rn-practice-questions",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "thin_programmatic"
+      ]
+    },
+    {
+      "id": "seo:nclex-rn-lessons",
+      "score": 62,
+      "flags": [
+        "below_score_70"
+      ]
+    },
+    {
+      "id": "seo:canada-np-exam-prep",
+      "score": 62,
+      "flags": [
+        "below_score_70"
+      ]
+    },
+    {
+      "id": "seo:cardiovascular-nursing-practice-questions",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "thin_programmatic"
+      ]
+    },
+    {
+      "id": "seo:respiratory-nursing-practice-questions",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "thin_programmatic"
+      ]
+    },
+    {
+      "id": "seo:pharmacology-nursing-practice-questions",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "thin_programmatic"
+      ]
+    },
+    {
+      "id": "seo:pediatric-nursing-practice-questions",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "thin_programmatic"
+      ]
+    },
+    {
+      "id": "seo:med-surg-nursing-practice-questions",
+      "score": 62,
+      "flags": [
+        "below_score_70",
+        "thin_programmatic"
+      ]
+    },
+    {
+      "id": "seo:np-study-guide-canada",
+      "score": 63,
+      "flags": [
+        "below_score_70",
+        "thin_programmatic"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:abdominal-aortic-aneurysm-nclex-rn",
+      "score": 65,
+      "flags": [
+        "below_score_70",
+        "structure_incomplete"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:pulmonary-embolism-nclex-rn",
+      "score": 65,
+      "flags": [
+        "below_score_70",
+        "structure_incomplete"
+      ]
+    },
+    {
+      "id": "lesson:us-rn-nclex-rn:pulmonary-embolism-nclex-rn",
+      "score": 65,
+      "flags": [
+        "below_score_70",
+        "structure_incomplete"
+      ]
+    },
+    {
+      "id": "seo:nclex-study-plan",
+      "score": 65,
+      "flags": [
+        "below_score_70"
+      ]
+    },
+    {
+      "id": "lesson:us-np-fnp:fnp-differential-primary-care",
+      "score": 66,
+      "flags": [
+        "below_score_70",
+        "structure_incomplete"
+      ]
+    },
+    {
+      "id": "lesson:us-np-fnp:fnp-womens-prenatal-anemia-workup",
+      "score": 66,
+      "flags": [
+        "below_score_70",
+        "structure_incomplete"
+      ]
+    },
+    {
+      "id": "lesson:us-np-fnp:fnp-pediatric-fever-urgency",
+      "score": 66,
+      "flags": [
+        "below_score_70",
+        "structure_incomplete"
+      ]
+    },
+    {
+      "id": "lesson:us-np-fnp:fnp-adult-hypertension-intensification",
+      "score": 66,
+      "flags": [
+        "below_score_70",
+        "structure_incomplete"
+      ]
+    },
+    {
+      "id": "seo:nclex-two-week-prep-schedule",
+      "score": 66,
+      "flags": [
+        "below_score_70"
+      ]
+    },
+    {
+      "id": "seo:heart-failure-nclex-review",
+      "score": 66,
+      "flags": [
+        "below_score_70"
+      ]
+    },
+    {
+      "id": "seo:siadh-vs-diabetes-insipidus-nclex",
+      "score": 66,
+      "flags": [
+        "below_score_70"
+      ]
+    },
+    {
+      "id": "seo:dka-vs-hhs-nclex-comparison",
+      "score": 66,
+      "flags": [
+        "below_score_70"
+      ]
+    },
+    {
+      "id": "seo:hyperkalemia-vs-hypokalemia-nclex",
+      "score": 66,
+      "flags": [
+        "below_score_70"
+      ]
+    },
+    {
+      "id": "seo:copd-nclex-clinical-guide",
+      "score": 66,
+      "flags": [
+        "below_score_70"
+      ]
+    },
+    {
+      "id": "seo:sepsis-nclex-early-recognition",
+      "score": 66,
+      "flags": [
+        "below_score_70"
+      ]
+    },
+    {
+      "id": "seo:pe-vs-dvt-nclex-comparison",
+      "score": 66,
+      "flags": [
+        "below_score_70"
+      ]
+    },
+    {
+      "id": "seo:acute-kidney-injury-nclex-guide",
+      "score": 66,
+      "flags": [
+        "below_score_70"
+      ]
+    },
+    {
+      "id": "seo:left-vs-right-heart-failure-nclex",
+      "score": 66,
+      "flags": [
+        "below_score_70"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:acute-myocardial-infarction-troponin",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:hypertensive-crisis-vs-urgency",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:copd-exacerbation-oxygen",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:pneumonia-oxygenation",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:tb-isolation-compliance",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:pleural-effusion-chest-tubes",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:insulin-hypoglycemia-hy",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:anticoagulants-bleeding-risk",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:antibiotic-classes-allergies-hy",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:opioids-respiratory-depression",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:cardiac-glycosides-toxicity",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:antihypertensive-combos",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:chemo-safe-handling-extravasation",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:hyponatremia-vs-hypernatremia-hy",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:hypo-vs-hyperkalemia-hy",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:fluid-volume-deficit",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:fluid-volume-excess",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:magnesium-arrhythmia-risk",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:calcium-tetany",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:phosphate-shifts-in-renal",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:mixed-acid-base-patterns",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:liver-failure-hepatic-encephalopathy",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:bowel-obstruction-vs-paralytic-ileus",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:gerd-pud-bleeding-clues",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:gi-bleed-assessment",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:c-diff-infection-control",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:ostomy-skin-protection",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:stroke-assessment-tpa-window",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:seizure-precautions-rescue-meds",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:increased-icp-positioning",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:spinal-cord-injury-autonomic-dysreflexia",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:meningitis-isolation-assessment",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:migraine-vs-red-flag-headache",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:parkinson-disease-med-timing",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:dka-vs-hhs-priorities-hy",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:thyroid-storm-myxedema-clues",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:cushing-syndrome-assessment",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:siadh-vs-di-basics",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:hemodialysis-access-care",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:peritoneal-dialysis-complications",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:kidney-stones-strain-management",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:uti-vs-pyelonephritis",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:indwelling-catheter-risks",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:transfusion-reaction-recognition",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:neutropenic-precautions",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:sickle-cell-pain-acs",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:hip-fracture-fall-risk",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:ra-flare-immune-modulators",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:immobility-dvt-prophylaxis",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:hiv-confidentiality-pep-basics",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:isolation-precautions-in-practice",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:wound-infection-vs-colonization",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:burn-depth-fluid-resuscitation-basics",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:pressure-injury-staging",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:severe-dermatitis-skin-care",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:suicide-risk-assessment-hy",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:psychotropic-side-effects",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:preeclampsia-vs-eclampsia",
+      "score": 68,
+      "flags": [
+        "below_score_70",
+        "internal_links_low"
+      ]
+    },
+    {
+      "id": "lesson:ca-rn-nclex-rn:postpartum-hemorrhage",
+      "score": 68,
       "flags": [
         "below_score_70",
         "internal_links_low"
