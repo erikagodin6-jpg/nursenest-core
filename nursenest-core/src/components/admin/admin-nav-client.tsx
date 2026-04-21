@@ -146,27 +146,28 @@ function isActive(pathname: string, href: string): boolean {
 
 export function AdminNavClient({ staffTier = "super" }: { staffTier?: StaffTier }) {
   const pathname = usePathname() || "/admin";
-  const [mobileOpen, setMobileOpen] = useState(false);
+  /** Overlay drawer — default closed at all breakpoints so main content is not offset by a flex-column sidebar. */
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const groups = GROUPS.map((g) => ({
     ...g,
     items: g.items.filter((item) => isNavHrefAllowedForStaffTier(staffTier, item.href)),
   })).filter((g) => g.items.length > 0);
 
-  const close = useCallback(() => setMobileOpen(false), []);
+  const close = useCallback(() => setSidebarOpen(false), []);
 
   useEffect(() => {
     close();
   }, [pathname, close]);
 
   useEffect(() => {
-    if (!mobileOpen) return;
+    if (!sidebarOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [mobileOpen, close]);
+  }, [sidebarOpen, close]);
 
   const NavBody = (
     <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-3 py-4">
@@ -219,34 +220,37 @@ export function AdminNavClient({ staffTier = "super" }: { staffTier?: StaffTier 
 
   return (
     <>
-      <div className="sticky top-0 z-30 flex items-center justify-between border-b border-border/80 bg-[var(--theme-card-bg)] px-4 py-3 lg:hidden">
+      <div className="sticky top-0 z-30 flex items-center justify-between border-b border-border/80 bg-[var(--theme-card-bg)] px-4 py-3">
         <Link href="/admin" className="text-sm font-bold text-[var(--theme-heading-text)]">
           NurseNest admin
         </Link>
         <button
           type="button"
           className="inline-flex items-center gap-2 rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm font-medium"
-          aria-expanded={mobileOpen}
-          onClick={() => setMobileOpen((o) => !o)}
+          aria-expanded={sidebarOpen}
+          aria-controls="admin-nav-drawer"
+          onClick={() => setSidebarOpen((o) => !o)}
         >
-          {mobileOpen ? <X className="h-4 w-4" aria-hidden /> : <Menu className="h-4 w-4" aria-hidden />}
+          {sidebarOpen ? <X className="h-4 w-4" aria-hidden /> : <Menu className="h-4 w-4" aria-hidden />}
           Menu
         </button>
       </div>
 
-      {mobileOpen ? (
+      {sidebarOpen ? (
         <button
           type="button"
-          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/40"
           aria-label="Close menu"
           onClick={close}
         />
       ) : null}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-[min(18rem,92vw)] flex-col border-r border-border/80 bg-[var(--theme-card-bg)] shadow-xl transition-transform duration-200 lg:sticky lg:top-0 lg:max-h-screen lg:min-h-0 lg:w-56 lg:shrink-0 lg:self-start lg:shadow-none ${
-          mobileOpen ? "translate-x-0" : "-translate-full lg:translate-x-0"
+        id="admin-nav-drawer"
+        className={`fixed inset-y-0 left-0 z-50 flex w-[min(18rem,92vw)] max-w-[18rem] flex-col border-r border-border/80 bg-[var(--theme-card-bg)] shadow-xl transition-transform duration-200 ease-out lg:max-h-screen ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full pointer-events-none"
         }`}
+        aria-hidden={!sidebarOpen}
         aria-label="Admin navigation"
       >
         {NavBody}

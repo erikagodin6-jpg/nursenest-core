@@ -11,7 +11,7 @@ export default async function AdminSubLayout({ children }: { children: React.Rea
   const tier: StaffTier = staff?.tier ?? "super";
 
   return (
-    <div className="flex min-h-[70vh] flex-col bg-[var(--theme-bg)] lg:min-h-screen lg:flex-row">
+    <div className="flex min-h-[70vh] min-w-0 flex-col bg-[var(--theme-bg)] lg:min-h-screen">
       <AdminNavClient staffTier={tier} />
       <div className="min-w-0 flex-1">{children}</div>
     </div>
