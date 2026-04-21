@@ -94,27 +94,49 @@ export function classifyLearningTopic(
   const text = topicLabel.toLowerCase();
   void pathwayId;
 
+  /**
+   * Order matters: map **specific organ / system** keywords before broad “fundamentals” or
+   * “professional practice” patterns so titles like “Prioritization in acute kidney injury” classify
+   * as GU/Renal, not Fundamentals.
+   */
   if (hasAny(text, [/cardio|heart|coronary|ecg|arrhythm|hypertension|mi\b|stemi|heart failure|acs\b|angina|a-fib|afib|shock|resusc|hemodynamic/])) return { categoryId: "cardiovascular" };
   if (hasAny(text, [/respir|airway|asthma|copd|oxygen|ventilat|pneumonia|pulmonary|abg|\bpe\b/])) return { categoryId: "respiratory" };
   if (hasAny(text, [/neuro|stroke|seizure|cns|icp|delirium|tbi|gcs|tia\b|mening|parkinson|neuropathy/])) return { categoryId: "neurology" };
-  if (hasAny(text, [/infection control|hand hygiene|aseptic|sterile technique|standard precautions|isolation precautions|ppe|patient safety basics|foundational nursing skills|\bsafety\b|\bprioritization\b/])) {
-    return { categoryId: "fundamentals" };
-  }
   if (hasAny(text, [/\bgi\b|gastro|hepatic|liver|pancrea|bowel|ibd|crohn|colitis|cirrhosis|constipation|diarrhea/])) return { categoryId: "gastrointestinal" };
-  if (hasAny(text, [/renal|kidney|aki|ckd|dialysis|nephro|urinar|uti|pyelo|prostat|\bbph\b|gu\b|bladder|electrolyte|fluid balance/])) return { categoryId: "renal-genitourinary" };
+  if (
+    hasAny(text, [
+      /renal|kidney|nephro|glomerul|tubular|creatinine|\bbun\b|urinalysis|dialysis|dialysate|\baki\b|\bckd\b|oliguria|anuria|polyuria|nephrotic|nephritic|kidney stone|urolith|urinary|urolog|uti\b|pyelo|cystitis|prostat|\bbph\b|\bgu\b|genitourinary|bladder|incontinence|foley|urinary catheter|catheter-associated|electrolyte|fluid balance|euvolemia|volume overload|hyperkalem|hypokalem|hypernatr|hyponatr|metabolic acidosis|respiratory acidosis|acid-base|phosphat|parathy|polycystic kidney|nephrect/,
+    ])
+  ) {
+    return { categoryId: "renal-genitourinary" };
+  }
   if (hasAny(text, [/endocrine|diabet|thyroid|dka|hhs|adrenal|pituitary|hypoglyc|hyperglyc|metabolic syndrome/])) return { categoryId: "endocrine" };
   if (hasAny(text, [/musculo|orthop|fracture|cast|arthritis|sprain|strain|joint|bone|spine|rheumat/])) return { categoryId: "musculoskeletal" };
   if (hasAny(text, [/heme|hemat|oncolog|anemia|leukemia|lymphoma|sickle|thrombocytopen|chemo|neutropenia|coagul/])) return { categoryId: "hematology-oncology" };
-  if (hasAny(text, [/sepsis|septic|infect|antimicrobial|antibiotic stewardship|cauti|clabsi|hiv|tb\b|immune|immun|autoimmune/])) return { categoryId: "immune-infectious" };
+  if (
+    hasAny(text, [
+      /sepsis|septic|\binfection\b|infectious disease|antimicrobial|antibiotic stewardship|\bcauti\b|\bclabsi\b|hiv|tb\b|immune|immunocomprom|autoimmune/,
+    ])
+  ) {
+    return { categoryId: "immune-infectious" };
+  }
   if (hasAny(text, [/dermat|skin|rash|eczema|psoriasis|wound|pressure injury|burn|ulcer|cellulitis/])) return { categoryId: "dermatology" };
   if (hasAny(text, [/reproductive|obstetric|ob-gyn|pregnan|antepartum|postpartum|intrapartum|fetal|neonat|labor|delivery|placenta|lactation|contracept|gyne/])) return { categoryId: "reproductive-ob-gyn" };
   if (hasAny(text, [/pediatric|paediatric|child|infant|adolescent|newborn|well-child|immunization schedule/])) return { categoryId: "pediatrics" };
   if (hasAny(text, [/mental|psychi|depress|anxiety|suicid|behavioral|bipolar|schizo|ptsd|substance use/])) return { categoryId: "mental-health" };
   if (hasAny(text, [/pharmac|medication|drug|dosage|contraindication|adverse effect|insulin|anticoagulant|opioid|med.?admin/])) return { categoryId: "pharmacology" };
-  if (hasAny(text, [/ethic|legal|scope|consent|delegat|prioritiz|handoff|documentation|sbar|communication|professional|leadership/])) {
+  /** Narrow fundamentals — skills-lab / infection basics only (not generic “safety” or “prioritization”). */
+  if (
+    hasAny(text, [
+      /infection control|hand hygiene|aseptic technique|sterile technique|standard precautions|isolation precautions|chain of infection|surgical asepsis|clean technique|foundational nursing skills|vital signs assessment basics|bedmaking|transfer techniques|body mechanics for nurses/,
+    ])
+  ) {
+    return { categoryId: "fundamentals" };
+  }
+  if (hasAny(text, [/ethic|legal|scope of practice|consent|delegat|handoff|documentation standards|sbar|professional boundaries|nurse practice act/])) {
     return { categoryId: "professional-practice-ethics" };
   }
-  if (hasAny(text, [/fundamental|foundational|vital signs|infection control|hand hygiene|aseptic|ppe|standard precautions|basic nursing|patient safety basics|therapeutic communication basics/])) {
+  if (hasAny(text, [/fundamental|foundational nursing|nursing basics|basic care skills|comfort measures|hygiene care|therapeutic communication basics/])) {
     return { categoryId: "fundamentals" };
   }
   return { categoryId: "professional-practice-ethics" };

@@ -3,9 +3,9 @@
  *
  * **Safety:** set `NN_CONFIRM_CREDENTIALS_RL_CLEAR=1` in the environment for this script to perform deletes.
  *
- * Keys (after interpolation):
- *   ratelimit:auth:credentials_login:burst:ip:<ipKey>
- *   ratelimit:auth:credentials_login:combo:ip:<ipKey>:acct:<acctHash>
+ * Keys (after interpolation; shared prefix `ratelimit:auth:credentials_login:`):
+ *   …burst:ip:<ipKey>   (legacy — no longer incremented after 2026-04 hotfix; TTL expires or use admin:clear-credentials-login-rl-all)
+ *   …combo:ip:<ipKey>:acct:<acctHash>
  *
  * `<ipKey>` is {@link rateLimitClientPartition}'s output (usually the trusted client IP; for `unknown` it is `unknown:<partition>`).
  * `<acctHash>` is the first 12 hex chars of SHA-256 of the **normalized** login identifier (email or username), matching `authorize()`.

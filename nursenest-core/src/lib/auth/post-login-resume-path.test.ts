@@ -55,10 +55,10 @@ describe("resolveMarketingAuthRedirectTarget", () => {
     assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/blog");
   });
 
-  it("ignores /api callback and resumes current marketing path", () => {
+  it("ignores /api callback and falls back to marketing home", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/api/auth/session");
-    assert.equal(resolveMarketingAuthRedirectTarget("/blog", sp, "en"), "/blog");
+    assert.equal(resolveMarketingAuthRedirectTarget("/blog", sp, "en"), "/");
   });
 
   it("honors marketing callback with query on path", () => {
@@ -73,16 +73,16 @@ describe("resolveMarketingAuthRedirectTarget", () => {
     assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/fr/pricing");
   });
 
-  it("ignores generic /app callback and resumes current marketing path", () => {
+  it("ignores generic /app callback and falls back to marketing home", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/app");
-    assert.equal(resolveMarketingAuthRedirectTarget("/us/rn/nclex-rn/lessons", sp, "en"), "/us/rn/nclex-rn/lessons");
+    assert.equal(resolveMarketingAuthRedirectTarget("/us/rn/nclex-rn/lessons", sp, "en"), "/");
   });
 
-  it("ignores /app/lessons callback and resumes marketing path when on marketing", () => {
+  it("ignores /app/lessons callback and falls back to marketing home", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/app/lessons");
-    assert.equal(resolveMarketingAuthRedirectTarget("/question-bank", sp, "en"), "/question-bank");
+    assert.equal(resolveMarketingAuthRedirectTarget("/question-bank", sp, "en"), "/");
   });
 
   it("sends blocked auth pages to marketing home when callback is bare /app", () => {

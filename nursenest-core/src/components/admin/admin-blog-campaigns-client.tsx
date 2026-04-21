@@ -33,7 +33,7 @@ export function AdminBlogCampaignsClient({ initialCampaigns }: { initialCampaign
   });
 
   async function reload() {
-    const res = await fetch("/api/admin/blog/campaigns");
+    const res = await fetch("/api/admin/blog/campaigns", { credentials: "include" });
     const json = (await res.json()) as { campaigns?: CampaignSummary[] };
     if (res.ok) setCampaigns(json.campaigns ?? []);
   }
@@ -41,6 +41,7 @@ export function AdminBlogCampaignsClient({ initialCampaigns }: { initialCampaign
   async function createCampaign() {
     const res = await fetch("/api/admin/blog/campaigns", {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ...form,
@@ -58,6 +59,7 @@ export function AdminBlogCampaignsClient({ initialCampaigns }: { initialCampaign
     try {
       await fetch(`/api/admin/blog/campaigns/${id}/run-chunk`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ limit: 3, mode: "generate" }),
       });

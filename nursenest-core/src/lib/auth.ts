@@ -40,11 +40,7 @@ import { logAuthIncidentLine } from "@/lib/auth/auth-incident-log";
 import { recordCredentialsLoginFailure } from "@/lib/observability/production-signal-metrics";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
-import {
-  consumeCredentialsLoginFailure,
-  isCredentialsLoginRateLimited,
-  resetCredentialsLoginRateLimitKeys,
-} from "@/lib/server/credentials-login-rate-limit";
+import { consumeCredentialsLoginFailure, resetCredentialsLoginRateLimitKeys } from "@/lib/server/credentials-login-rate-limit";
 
 if (process.env.NODE_ENV === "production") {
   const hasSecret = Boolean(
@@ -339,45 +335,6 @@ export const authConfig: NextAuthConfig = {
           });
           recordCredentialsLoginFailure("missing_fields", request);
           return rejectCredentialsOrNull("missing_credentials");
-        }
-
-        if (idHash && (await isCredentialsLoginRateLimited(ipKey, idHash))) {
-          safeServerLog("auth", "login_rate_limited", {
-            ip: ip.slice(0, 64),
-            idHashPresent: true,
-            source: "redis_preflight_window",
-          });
-          captureAuthWarningSentry("login_rate_limited", {
-            level: "warning",
-            tags: { flow: "auth", kind: "rate_limit" },
-          });
-          logAuthIncidentLine({
-            event: "credentials_login",
-            outcome: "failure",
-            requestReachedAuthorize: true,
-            enteredEmailRaw,
-            enteredEmailSanitized,
-            enteredEmailLower,
-            enteredEmailNormalized,
-            lookupStrategyTried: [],
-            exactEmailUserCount: 0,
-            normalizedEmailUserCount: 0,
-            trimmedEmailUserCount: 0,
-            usernameMatchCount: 0,
-            matchedUserId: null,
-            matchedUserEmail: null,
-            matchedUserNormalizedEmail: null,
-            hasPasswordHash: false,
-            accountLockedOut: false,
-            passwordCompareOk: false,
-            sessionIssued: false,
-            finalFailureReason: "unknown_auth_failure",
-            ip: ip.slice(0, 64),
-            idHash,
-            authMode,
-          });
-          recordCredentialsLoginFailure("rate_limited", request);
-          rejectCredentialsRateLimited();
         }
 
         const lockStatus = await isLoginLocked(lockKey);

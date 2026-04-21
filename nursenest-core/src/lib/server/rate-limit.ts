@@ -6,9 +6,11 @@
  * Priority: authenticated learner traffic gets a higher per-user ceiling; auth + public scraping get tight per-IP caps.
  * Repeated 429s from an IP increase `Retry-After` (exponential backoff) to protect real users from bot floods.
  */
+import { createHash } from "node:crypto";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { getAuthSessionJwtFromRequest } from "@/lib/auth/nextauth-request-jwt";
+import type { SessionJwtPayload } from "@/lib/auth/nextauth-request-jwt";
 import { tightenPublicCap } from "@/lib/config/rate-limit-tightening";
 import {
   checkRateLimitUnified,
@@ -77,8 +79,8 @@ const EXEMPT_PREFIXES = ["/api/subscriptions/webhook", "/api/health"] as const;
  * still bounded. Unauthenticated probes use a separate per-IP bucket.
  */
 const ADMIN_API_WINDOW_MS = 60_000;
-/** ~5 req/s sustained — legitimate admin UIs; blocks hammering with a stolen cookie. */
-const ADMIN_API_MAX_PER_USER = 300;
+/** ~7 req/s sustained — legitimate admin UIs; blocks hammering with a stolen cookie. Blog subtree uses dedicated buckets. */
+const ADMIN_API_MAX_PER_USER = 420;
 /** Stricter than {@link PUBLIC_MAX} — anonymous hits to `/api/admin/*` should be rare. */
 const ADMIN_API_MAX_PER_IP_UNAUTH = 120;
 
@@ -398,31 +400,32 @@ export type AdminBlogBatchRateLimitKind = "read" | "preview" | "write" | "run";
 const ADMIN_BLOG_BATCH_WINDOW_MS = 60_000;
 
 const ADMIN_BLOG_BATCH_MAX_USER: Record<AdminBlogBatchRateLimitKind, number> = {
-  read: 220,
-  preview: 90,
-  write: 48,
-  run: 22,
+  read: 520,
+  preview: 220,
+  write: 260,
+  run: 200,
 };
 
 const ADMIN_BLOG_BATCH_MAX_IP_BASE: Record<AdminBlogBatchRateLimitKind, number> = {
-  read: 96,
-  preview: 36,
-  write: 32,
-  run: 18,
+  read: 240,
+  preview: 120,
+  write: 120,
+  run: 96,
 };
 
 const ADMIN_LEGACY_BLOG_TOOLING_WINDOW_MS = 60_000;
 
 /** Per authenticated staff user — AI writes are expensive; chunk endpoint may loop many times for “run all”. */
 const ADMIN_LEGACY_BLOG_TOOLING_MAX_USER: Record<AdminLegacyBlogToolingKind, number> = {
-  generate_ai: 72,
-  batch_chunk: 960,
+  /** Single POST per click; headroom for dev refresh + QA without sharing the generic admin bucket. */
+  generate_ai: 240,
+  batch_chunk: 2400,
 };
 
 /** Unauthenticated hits still reach `requireAdmin` (403) — keep bounded; generous enough for JWT-read quirks + NAT. */
 const ADMIN_LEGACY_BLOG_TOOLING_MAX_IP_BASE: Record<AdminLegacyBlogToolingKind, number> = {
-  generate_ai: 36,
-  batch_chunk: 240,
+  generate_ai: 160,
+  batch_chunk: 720,
 };
 
 /**
@@ -439,6 +442,138 @@ export function adminBlogBatchRateLimitKind(pathname: string, method: string): A
   if (pathname.startsWith(`${p}/`) && pathname !== `${p}/run` && pathname !== `${p}/preview`) {
     if (m === "GET") return "read";
     if (m === "PATCH") return "write";
+  }
+  return null;
+}
+
+/** `/api/admin/blog/*` except batch-schedule + legacy generator paths (those use their own buckets). */
+const ADMIN_BLOG_CONTENT_API_PREFIX = "/api/admin/blog";
+
+export type AdminBlogContentApiKind = "read" | "write";
+
+/**
+ * Library, campaigns, draft-batch, control panel, localized flows, etc. — high enough for real editors
+ * without debiting the global {@link ADMIN_API_MAX_PER_USER} pool.
+ */
+export function adminBlogContentApiRateLimitKind(pathname: string, method: string): AdminBlogContentApiKind | null {
+  if (pathname !== ADMIN_BLOG_CONTENT_API_PREFIX && !pathname.startsWith(`${ADMIN_BLOG_CONTENT_API_PREFIX}/`)) {
+    return null;
+  }
+  if (adminBlogBatchRateLimitKind(pathname, method) != null) return null;
+  if (adminLegacyBlogToolingRateLimitKind(pathname, method) != null) return null;
+  const m = method.toUpperCase();
+  if (m === "GET" || m === "HEAD") return "read";
+  if (m === "POST" || m === "PUT" || m === "PATCH" || m === "DELETE") return "write";
+  return null;
+}
+
+const ADMIN_BLOG_CONTENT_WINDOW_MS = 60_000;
+
+const ADMIN_BLOG_CONTENT_MAX_USER: Record<AdminBlogContentApiKind, number> = {
+  read: 900,
+  write: 640,
+};
+
+const ADMIN_BLOG_CONTENT_MAX_IP_BASE: Record<AdminBlogContentApiKind, number> = {
+  read: 420,
+  write: 280,
+};
+
+function json429AdminBlogContent(
+  kind: AdminBlogContentApiKind,
+  meta: { path: string; bucketKeyType: "user" | "ip_unauth"; windowMs: number; max: number },
+): NextResponse {
+  const retry = 30;
+  return NextResponse.json(
+    {
+      error: "Too many requests",
+      code: "rate_limit_exceeded",
+      scope: "admin_blog_content",
+      action: kind,
+      limiter: "admin_blog_content",
+      bucketType: "dedicated",
+      bucketKeyType: meta.bucketKeyType,
+      path: meta.path,
+      windowMs: meta.windowMs,
+      max: meta.max,
+      retryAfterSec: retry,
+    },
+    {
+      status: 429,
+      headers: {
+        "Retry-After": String(retry),
+        "Cache-Control": "no-store",
+        "X-NN-RateLimit-Scope": "admin_blog_content",
+        "X-NN-RateLimit-Action": kind,
+        "X-NN-RateLimiter": "admin_blog_content",
+        "X-NN-RateLimit-Bucket": meta.bucketKeyType,
+      },
+    },
+  );
+}
+
+async function enforceDedicatedAdminBlogContentRateLimit(
+  pathname: string,
+  method: string,
+  userId: string | null,
+  ipKey: string,
+): Promise<NextResponse | null> {
+  const kind = adminBlogContentApiRateLimitKind(pathname, method);
+  if (kind == null) return null;
+
+  const pathShort = pathname.slice(0, 160);
+  const userMax = ADMIN_BLOG_CONTENT_MAX_USER[kind];
+  const ipMax = tightenPublicCap(ADMIN_BLOG_CONTENT_MAX_IP_BASE[kind]);
+
+  if (userId) {
+    const key = `ratelimit:admin:blog_content:${kind}:user:${userId}`;
+    const { ok, remaining } = await checkRateLimitUnified(key, {
+      windowMs: ADMIN_BLOG_CONTENT_WINDOW_MS,
+      max: userMax,
+    });
+    if (!ok) {
+      safeServerLog("security", "admin_blog_content_rate_limit_exceeded", {
+        kind: "admin_blog_content_user",
+        contentKind: kind,
+        bucketKeyType: "user",
+        path: pathShort,
+        windowMs: ADMIN_BLOG_CONTENT_WINDOW_MS,
+        max: userMax,
+        ipHash: hashIp(ipKey),
+        remaining,
+      });
+      return json429AdminBlogContent(kind, {
+        path: pathShort,
+        bucketKeyType: "user",
+        windowMs: ADMIN_BLOG_CONTENT_WINDOW_MS,
+        max: userMax,
+      });
+    }
+    return null;
+  }
+
+  const key = `ratelimit:admin:blog_content:${kind}:ip_unauth:${ipKey}`;
+  const { ok, remaining } = await checkRateLimitUnified(key, {
+    windowMs: ADMIN_BLOG_CONTENT_WINDOW_MS,
+    max: ipMax,
+  });
+  if (!ok) {
+    safeServerLog("security", "admin_blog_content_rate_limit_exceeded", {
+      kind: "admin_blog_content_ip",
+      contentKind: kind,
+      bucketKeyType: "ip_unauth",
+      path: pathShort,
+      windowMs: ADMIN_BLOG_CONTENT_WINDOW_MS,
+      max: ipMax,
+      ipHash: hashIp(ipKey),
+      remaining,
+    });
+    return json429AdminBlogContent(kind, {
+      path: pathShort,
+      bucketKeyType: "ip_unauth",
+      windowMs: ADMIN_BLOG_CONTENT_WINDOW_MS,
+      max: ipMax,
+    });
   }
   return null;
 }
@@ -468,7 +603,15 @@ function json429AdminBlogBatch(kind: AdminBlogBatchRateLimitKind): NextResponse 
   );
 }
 
-function json429AdminLegacyBlogTooling(kind: AdminLegacyBlogToolingKind): NextResponse {
+function json429AdminLegacyBlogTooling(
+  kind: AdminLegacyBlogToolingKind,
+  meta: {
+    path: string;
+    bucketKeyType: "user" | "ip_unauth";
+    windowMs: number;
+    max: number;
+  },
+): NextResponse {
   /** Shorter than generic admin 60s — operators hitting the dedicated cap should cool off briefly, not sit idle a minute per retry. */
   const retry = 25;
   return NextResponse.json(
@@ -479,6 +622,10 @@ function json429AdminLegacyBlogTooling(kind: AdminLegacyBlogToolingKind): NextRe
       action: kind,
       limiter: "admin_legacy_blog_tooling",
       bucketType: "dedicated",
+      bucketKeyType: meta.bucketKeyType,
+      path: meta.path,
+      windowMs: meta.windowMs,
+      max: meta.max,
       retryAfterSec: retry,
     },
     {
@@ -489,6 +636,7 @@ function json429AdminLegacyBlogTooling(kind: AdminLegacyBlogToolingKind): NextRe
         "X-NN-RateLimit-Scope": "admin_legacy_blog_tooling",
         "X-NN-RateLimit-Action": kind,
         "X-NN-RateLimiter": "admin_legacy_blog_tooling",
+        "X-NN-RateLimit-Bucket": meta.bucketKeyType,
       },
     },
   );
@@ -503,21 +651,33 @@ async function enforceDedicatedAdminLegacyBlogToolingRateLimit(
   const kind = adminLegacyBlogToolingRateLimitKind(pathname, method);
   if (kind == null) return null;
 
+  const pathShort = pathname.slice(0, 160);
+  const userMax = ADMIN_LEGACY_BLOG_TOOLING_MAX_USER[kind];
+  const ipMax = tightenPublicCap(ADMIN_LEGACY_BLOG_TOOLING_MAX_IP_BASE[kind]);
+
   if (userId) {
     const key = `ratelimit:admin:legacy_blog:${kind}:user:${userId}`;
     const { ok, remaining } = await checkRateLimitUnified(key, {
       windowMs: ADMIN_LEGACY_BLOG_TOOLING_WINDOW_MS,
-      max: ADMIN_LEGACY_BLOG_TOOLING_MAX_USER[kind],
+      max: userMax,
     });
     if (!ok) {
       safeServerLog("security", "admin_legacy_blog_tooling_rate_limit_exceeded", {
         kind: "admin_legacy_blog_user",
         toolingKind: kind,
-        path: pathname.slice(0, 96),
+        bucketKeyType: "user",
+        path: pathShort,
+        windowMs: ADMIN_LEGACY_BLOG_TOOLING_WINDOW_MS,
+        max: userMax,
         ipHash: hashIp(ipKey),
         remaining,
       });
-      return json429AdminLegacyBlogTooling(kind);
+      return json429AdminLegacyBlogTooling(kind, {
+        path: pathShort,
+        bucketKeyType: "user",
+        windowMs: ADMIN_LEGACY_BLOG_TOOLING_WINDOW_MS,
+        max: userMax,
+      });
     }
     return null;
   }
@@ -525,17 +685,25 @@ async function enforceDedicatedAdminLegacyBlogToolingRateLimit(
   const key = `ratelimit:admin:legacy_blog:${kind}:ip_unauth:${ipKey}`;
   const { ok, remaining } = await checkRateLimitUnified(key, {
     windowMs: ADMIN_LEGACY_BLOG_TOOLING_WINDOW_MS,
-    max: tightenPublicCap(ADMIN_LEGACY_BLOG_TOOLING_MAX_IP_BASE[kind]),
+    max: ipMax,
   });
   if (!ok) {
     safeServerLog("security", "admin_legacy_blog_tooling_rate_limit_exceeded", {
       kind: "admin_legacy_blog_ip",
       toolingKind: kind,
-      path: pathname.slice(0, 96),
+      bucketKeyType: "ip_unauth",
+      path: pathShort,
+      windowMs: ADMIN_LEGACY_BLOG_TOOLING_WINDOW_MS,
+      max: ipMax,
       ipHash: hashIp(ipKey),
       remaining,
     });
-    return json429AdminLegacyBlogTooling(kind);
+    return json429AdminLegacyBlogTooling(kind, {
+      path: pathShort,
+      bucketKeyType: "ip_unauth",
+      windowMs: ADMIN_LEGACY_BLOG_TOOLING_WINDOW_MS,
+      max: ipMax,
+    });
   }
   return null;
 }
@@ -593,6 +761,26 @@ function effectiveAuthStrictMax(base: number): number {
 }
 
 /**
+ * Prefer DB-style user id from JWT for per-user API limits. Falls back to a stable hash of email when
+ * `sub`/`id` are absent so authenticated staff are not lumped into the anonymous per-IP admin bucket
+ * (which caused spurious 429s on `/api/admin/*` while route-level `requireAdmin` still succeeded).
+ */
+export function rateLimitUserPartitionFromSessionJwt(token: SessionJwtPayload | null): string | null {
+  if (!token || typeof token !== "object") return null;
+  const t = token as { sub?: string; id?: string | null; email?: string | null };
+  const sub = typeof t.sub === "string" ? t.sub.trim() : "";
+  if (sub.length > 0) return sub;
+  const legacyIdRaw = t.id;
+  const legacyId = typeof legacyIdRaw === "string" ? legacyIdRaw.trim() : "";
+  if (legacyId.length > 0) return legacyId;
+  const email = typeof t.email === "string" ? t.email.trim().toLowerCase() : "";
+  if (email.length > 0) {
+    return `jwt_email:${createHash("sha256").update(email, "utf8").digest("hex").slice(0, 32)}`;
+  }
+  return null;
+}
+
+/**
  * Returns a 429 response when over limit; otherwise `null` (caller continues).
  */
 export async function enforceApiRateLimit(request: NextRequest): Promise<NextResponse | null> {
@@ -617,10 +805,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   const ipKey = rateLimitClientPartition(request, ip);
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
   const token = secret ? await getAuthSessionJwtFromRequest(request, secret) : null;
-  const userId =
-    (typeof token?.sub === "string" && token.sub) ||
-    (token as { id?: string } | null)?.id ||
-    null;
+  const userId = rateLimitUserPartitionFromSessionJwt(token);
 
   if (isAdminApiRateLimitPath(pathname)) {
     const blogLimited = await enforceDedicatedAdminBlogBatchRateLimit(pathname, method, userId, ipKey);
@@ -632,6 +817,12 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     const legacyLimited = await enforceDedicatedAdminLegacyBlogToolingRateLimit(pathname, method, userId, ipKey);
     if (legacyLimited) return legacyLimited;
     if (adminLegacyBlogToolingRateLimitKind(pathname, method) != null) {
+      return null;
+    }
+
+    const blogContentLimited = await enforceDedicatedAdminBlogContentRateLimit(pathname, method, userId, ipKey);
+    if (blogContentLimited) return blogContentLimited;
+    if (adminBlogContentApiRateLimitKind(pathname, method) != null) {
       return null;
     }
 

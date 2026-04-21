@@ -45,6 +45,7 @@
     "admin:staff-users": "tsx scripts/admin-staff-users.mts",
     "admin:diagnose-login": "tsx scripts/diagnose-staff-login.mts",
     "admin:clear-credentials-login-rl": "tsx scripts/clear-credentials-login-rate-limit.mts",
+    "admin:clear-credentials-login-rl-all": "tsx scripts/clear-all-credentials-login-rate-limit.mts",
     "admin:reset-password": "tsx scripts/reset-staff-user-password.mts",
     "admin:bootstrap-super-admin": "tsx scripts/bootstrap-super-admin.mts",
     "admin:qa-paid-test-reset": "tsx scripts/qa-paid-test-account-reset.mts",

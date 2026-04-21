@@ -107,13 +107,13 @@ export function AdminBlogDraftBatchClient() {
   const [processChunk, setProcessChunk] = useState(4);
 
   const loadRecent = useCallback(async () => {
-    const res = await fetch("/api/admin/blog/draft-batch?limit=15");
+    const res = await fetch("/api/admin/blog/draft-batch?limit=15", { credentials: "include" });
     const json = (await res.json()) as { ok?: boolean; batches?: BatchRow[] };
     if (res.ok && json.batches) setRecent(json.batches);
   }, []);
 
   const loadBatch = useCallback(async (id: string) => {
-    const res = await fetch(`/api/admin/blog/draft-batch/${id}`);
+    const res = await fetch(`/api/admin/blog/draft-batch/${id}`, { credentials: "include" });
     const json = (await res.json()) as { ok?: boolean; batch?: BatchDetail };
     if (!res.ok || !json.batch) {
       setErr(json && typeof json === "object" && "error" in json ? String((json as { error?: string }).error) : "Load failed");
@@ -162,6 +162,7 @@ export function AdminBlogDraftBatchClient() {
     try {
       const res = await fetch("/api/admin/blog/draft-batch", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           topicsText,
@@ -219,6 +220,7 @@ export function AdminBlogDraftBatchClient() {
     try {
       const res = await fetch(`/api/admin/blog/draft-batch/${batchId}/process`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ limit }),
       });
@@ -245,7 +247,7 @@ export function AdminBlogDraftBatchClient() {
       let guard = 0;
       while (guard < 80) {
         guard += 1;
-        const detailRes = await fetch(`/api/admin/blog/draft-batch/${batchId}`);
+        const detailRes = await fetch(`/api/admin/blog/draft-batch/${batchId}`, { credentials: "include" });
         const detailJson = (await detailRes.json()) as { batch?: BatchDetail };
         const current = detailJson.batch;
         if (!current) break;
@@ -255,6 +257,7 @@ export function AdminBlogDraftBatchClient() {
 
         const res = await fetch(`/api/admin/blog/draft-batch/${batchId}/process`, {
           method: "POST",
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ limit: DRAFT_BATCH_MAX_ITEMS_PER_PROCESS }),
         });

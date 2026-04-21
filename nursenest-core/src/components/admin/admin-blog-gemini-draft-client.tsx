@@ -30,6 +30,7 @@ export function AdminBlogGeminiDraftClient() {
     try {
       const res = await fetch("/api/admin/blog/generate-gemini-draft", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           topic,

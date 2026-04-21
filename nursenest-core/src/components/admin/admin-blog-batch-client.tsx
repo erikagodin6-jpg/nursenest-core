@@ -170,7 +170,8 @@ export function AdminBlogBatchClient() {
           ...(json.errors ?? []),
         ]);
         if (finished) break;
-        await sleep(150);
+        /** Space chunk POSTs so “run all” does not burst the dedicated legacy batch limiter or DB. */
+        await sleep(520);
       }
       setDone(true);
     } finally {

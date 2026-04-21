@@ -104,6 +104,7 @@ export function AdminBlogStudioClient() {
       }
       const res = await fetch("/api/admin/blog/control-panel/generate", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           topic,
@@ -166,7 +167,10 @@ export function AdminBlogStudioClient() {
     setPrePubErr(null);
     setPrePub(null);
     try {
-      const res = await fetch(`/api/admin/blog/${post.id}/pre-publish-validation`, { cache: "no-store" });
+      const res = await fetch(`/api/admin/blog/${post.id}/pre-publish-validation`, {
+        cache: "no-store",
+        credentials: "include",
+      });
       const json = (await res.json()) as {
         prePublish?: { okToPublish: boolean; blocking: unknown[]; warnings: unknown[] };
         error?: string;

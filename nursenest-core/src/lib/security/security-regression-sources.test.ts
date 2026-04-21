@@ -13,18 +13,18 @@ const here = dirname(fileURLToPath(import.meta.url));
 const nursenestCoreRoot = join(here, "..", "..", "..");
 
 describe("security regression (source contracts)", () => {
-  it("credentials authorize uses combo-preflight + burst+combo consume Redis limits and progressive lockout key", () => {
+  it("credentials authorize wires combo-only Redis failure limits + progressive lockout key", () => {
     const auth = readFileSync(join(nursenestCoreRoot, "src", "lib", "auth.ts"), "utf8");
     const rl = readFileSync(
       join(nursenestCoreRoot, "src", "lib", "server", "credentials-login-rate-limit.ts"),
       "utf8",
     );
-    assert.match(auth, /isCredentialsLoginRateLimited/);
+    assert.match(rl, /isCredentialsLoginRateLimited/);
     assert.match(auth, /consumeCredentialsLoginFailure/);
     assert.match(auth, /resetCredentialsLoginRateLimitKeys/);
     assert.match(auth, /login-lock:/);
     assert.match(auth, /isLoginLocked\(/);
-    assert.match(rl, /Preflight uses the combo counter only/);
+    assert.match(rl, /no longer uses a per-IP-only/);
   });
 
   it("forgot-password returns generic success copy (no account enumeration)", () => {
@@ -127,6 +127,12 @@ describe("security regression (source contracts)", () => {
     const src = readFileSync(join(nursenestCoreRoot, "src", "lib", "server", "rate-limit.ts"), "utf8");
     assert.match(src, /ratelimit:admin:legacy_blog:/);
     assert.match(src, /admin_legacy_blog_tooling/);
+  });
+
+  it("admin blog library and schedulers use dedicated blog_content rate limit keys", () => {
+    const src = readFileSync(join(nursenestCoreRoot, "src", "lib", "server", "rate-limit.ts"), "utf8");
+    assert.match(src, /ratelimit:admin:blog_content:/);
+    assert.match(src, /admin_blog_content/);
   });
 
   it("admin/debug API routes do not use requireAdmin(_req)", () => {

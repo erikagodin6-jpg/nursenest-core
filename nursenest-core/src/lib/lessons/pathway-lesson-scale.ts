@@ -17,7 +17,7 @@ export const MIN_PATHWAY_LESSONS_SCALE_TARGET = 150;
 export const PATHWAY_LESSONS_SCALE_CEILING = 500;
 
 /** Default rows per marketing pathway hub page (tunable; keep ≤ max for predictable memory). */
-export const PATHWAY_HUB_PAGE_SIZE_DEFAULT = 48;
+export const PATHWAY_HUB_PAGE_SIZE_DEFAULT = 72;
 /**
  * Upper bound for a single hub request — raised to match the architecture scale ceiling so the
  * lessons hub can render all hub-metadata rows in a single page (no full lesson bodies are loaded).

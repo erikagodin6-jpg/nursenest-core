@@ -29,7 +29,7 @@ export function LessonRow({ href, title, progressStatus, durationLabel, difficul
   return (
     <Link
       href={href}
-      className="group block rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
+      className="group block rounded-xl px-3 py-2 text-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
     >
       <div className="flex items-start gap-3">
         <StatusIcon status={progressStatus} />
@@ -37,7 +37,7 @@ export function LessonRow({ href, title, progressStatus, durationLabel, difficul
           <p className="line-clamp-3 text-sm font-medium leading-snug text-[var(--theme-heading-text)] sm:line-clamp-2">
             {displayTitle}
           </p>
-          <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+          <div className="mt-1 flex flex-wrap items-center gap-1.5">
             {yieldBadgeLabel ? (
               <span className="rounded-full border border-[var(--semantic-border-soft)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                 {yieldBadgeLabel}

@@ -35,6 +35,7 @@ export function AdminBlogGenerateClient() {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (busy) return;
     setBusy(true);
     setMsg(null);
     setErr(null);
@@ -73,15 +74,23 @@ export function AdminBlogGenerateClient() {
         code?: string;
         scope?: string;
         limiter?: string;
+        bucketKeyType?: string;
+        path?: string;
+        max?: number;
+        windowMs?: number;
         retryAfterSec?: number;
       };
       if (!res.ok) {
         if (res.status === 429) {
-          const hint = [json.scope, json.limiter].filter(Boolean).join(" · ");
+          const hint = [json.scope, json.limiter, json.bucketKeyType, json.path].filter(Boolean).join(" · ");
+          const cap =
+            json.max != null && json.windowMs != null
+              ? ` — cap ${json.max}/${Math.round(json.windowMs / 1000)}s`
+              : "";
           setErr(
             json.error
-              ? `${json.error}${hint ? ` (${hint})` : ""}${json.retryAfterSec != null ? ` — retry after ~${json.retryAfterSec}s` : ""}`
-              : `Too many requests${hint ? ` (${hint})` : ""}`,
+              ? `${json.error}${hint ? ` (${hint})` : ""}${cap}${json.retryAfterSec != null ? ` — retry after ~${json.retryAfterSec}s` : ""}`
+              : `Too many requests${hint ? ` (${hint})` : ""}${cap}`,
           );
           return;
         }

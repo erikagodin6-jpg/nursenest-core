@@ -81,6 +81,7 @@ export function AdminBlogSchedulerPanel({
     try {
       await fetch(`/api/admin/blog/${id}`, {
         method: "PATCH",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
@@ -105,6 +106,7 @@ export function AdminBlogSchedulerPanel({
       };
       await fetch("/api/admin/blog", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
@@ -325,7 +327,7 @@ export function AdminBlogSchedulerPanel({
                       onClick={async () => {
                         setBusyId(p.id);
                         try {
-                          await fetch(`/api/admin/blog/${p.id}/image-generate`, { method: "POST" });
+                          await fetch(`/api/admin/blog/${p.id}/image-generate`, { method: "POST", credentials: "include" });
                           router.refresh();
                         } finally {
                           setBusyId(null);

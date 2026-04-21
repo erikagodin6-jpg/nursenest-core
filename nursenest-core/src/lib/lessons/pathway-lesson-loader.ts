@@ -119,7 +119,8 @@ export function normalizePathwayHubSearchQuery(raw: string | undefined): string 
 }
 
 function hubSearchHaystackLessonInput(l: LessonInput): string {
-  return `${l.title}\n${l.slug}\n${l.topic}\n${l.topicSlug}`.toLowerCase();
+  const system = typeof l.system === "string" ? l.system : "";
+  return `${l.title}\n${l.slug}\n${l.topic}\n${l.topicSlug}\n${system}\n${l.bodySystem}\n${l.seoDescription}`.toLowerCase();
 }
 
 function lessonInputMatchesHubSearch(l: LessonInput, qLower: string): boolean {
@@ -143,6 +144,8 @@ function pathwayLessonHubSearchWhere(q: string): Prisma.PathwayLessonWhereInput 
       { topic: { contains: q, mode: "insensitive" } },
       { slug: { contains: q, mode: "insensitive" } },
       { topicSlug: { contains: q, mode: "insensitive" } },
+      { bodySystem: { contains: q, mode: "insensitive" } },
+      { seoDescription: { contains: q, mode: "insensitive" } },
     ],
   };
 }

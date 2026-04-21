@@ -91,7 +91,7 @@ export function AdminBlogTopicBatchClient({
   }, [locEn, locFr, locEs, locTl, locHi]);
 
   const refreshList = useCallback(async () => {
-    const res = await fetch("/api/admin/blog/batch-schedule");
+    const res = await fetch("/api/admin/blog/batch-schedule", { credentials: "include" });
     if (!res.ok) return;
     const data = (await res.json()) as { schedules: ScheduleListRow[] };
     setSchedules(data.schedules);
@@ -104,6 +104,7 @@ export function AdminBlogTopicBatchClient({
       const startAt = new Date(startAtLocal).toISOString();
       const res = await fetch("/api/admin/blog/batch-schedule", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           topicsText,
@@ -142,6 +143,7 @@ export function AdminBlogTopicBatchClient({
       const startAt = new Date(startAtLocal).toISOString();
       const res = await fetch("/api/admin/blog/batch-schedule", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           topicsText,
@@ -172,7 +174,7 @@ export function AdminBlogTopicBatchClient({
   }, [topicsText, cadencePerDay, startAtLocal, exam, country, template, publishMode, localizationPayload, refreshList]);
 
   const loadDetail = useCallback(async (id: string) => {
-    const res = await fetch(`/api/admin/blog/batch-schedule/${id}`);
+    const res = await fetch(`/api/admin/blog/batch-schedule/${id}`, { credentials: "include" });
     if (!res.ok) return;
     const data = (await res.json()) as { schedule: ScheduleDetail };
     setDetail(data.schedule);
@@ -182,6 +184,7 @@ export function AdminBlogTopicBatchClient({
     async (id: string, status: BlogBatchScheduleStatus) => {
       const res = await fetch(`/api/admin/blog/batch-schedule/${id}`, {
         method: "PATCH",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
       });
@@ -199,7 +202,7 @@ export function AdminBlogTopicBatchClient({
     setRunLoading(true);
     setMessage(null);
     try {
-      const res = await fetch("/api/admin/blog/batch-schedule/run", { method: "POST" });
+      const res = await fetch("/api/admin/blog/batch-schedule/run", { method: "POST", credentials: "include" });
       const data = await res.json();
       if (!res.ok) {
         setMessage(data.errors?.[0] ?? "Run failed");

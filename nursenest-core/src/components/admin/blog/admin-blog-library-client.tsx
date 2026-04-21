@@ -96,7 +96,7 @@ export function AdminBlogLibraryClient() {
     setLoading(true);
     setErr(null);
     try {
-      const res = await fetch(`/api/admin/blog?${queryString}`, { cache: "no-store" });
+      const res = await fetch(`/api/admin/blog?${queryString}`, { cache: "no-store", credentials: "include" });
       const json = (await res.json()) as ListResponse & { error?: string };
       if (!res.ok) {
         setErr(json.error ?? "Failed to load");
@@ -122,6 +122,7 @@ export function AdminBlogLibraryClient() {
     try {
       const res = await fetch(`/api/admin/blog/${id}`, {
         method: "PATCH",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
@@ -154,7 +155,7 @@ export function AdminBlogLibraryClient() {
     setBusyId(row.id);
     setErr(null);
     try {
-      const res = await fetch(`/api/admin/blog/${row.id}`, { method: "DELETE" });
+      const res = await fetch(`/api/admin/blog/${row.id}`, { method: "DELETE", credentials: "include" });
       const j = (await res.json()) as { error?: string };
       if (!res.ok) {
         setErr(j.error ?? "Delete failed");
@@ -170,7 +171,7 @@ export function AdminBlogLibraryClient() {
     setBusyId(id);
     setErr(null);
     try {
-      const res = await fetch(`/api/admin/blog/${id}/duplicate`, { method: "POST" });
+      const res = await fetch(`/api/admin/blog/${id}/duplicate`, { method: "POST", credentials: "include" });
       const j = (await res.json()) as { error?: string; post?: { id: string } };
       if (!res.ok) {
         setErr(j.error ?? "Duplicate failed");

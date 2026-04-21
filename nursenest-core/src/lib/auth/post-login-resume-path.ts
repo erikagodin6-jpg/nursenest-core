@@ -23,10 +23,8 @@ function isBlockedResumeStrippedPath(strippedPathname: string): boolean {
  * Resolves where to send the user after credentials auth on marketing surfaces.
  * - Honors explicit same-origin `callbackUrl` except `/app` and `/app/*` (learner shell), which are ignored
  *   when resolving from the query so arbitrary deep links cannot be injected via URL alone.
- * - Falls back to {@link marketingResumeCallbackFromLocation} using the current pathname and query
- *   (with `callbackUrl` stripped from the query so it cannot echo back into the resume URL).
- *   Auth-only blocklist paths (e.g. `/login`) resume to localized marketing home (`/`, `/fr`, …), not `/app`,
- *   so generic login does not trap users in the learner shell; explicit `callbackUrl` still wins when allowed.
+ * - **Default (no valid `callbackUrl`):** localized marketing homepage (`/`, `/fr`, …). This avoids
+ *   surprising post-login destinations and matches the product default after the 2026-04 hotfix.
  */
 export function resolveMarketingAuthRedirectTarget(
   pathname: string,
@@ -37,12 +35,7 @@ export function resolveMarketingAuthRedirectTarget(
   if (fromQuery) {
     return fromQuery;
   }
-  const sp = new URLSearchParams(searchParams.toString());
-  sp.delete("callbackUrl");
-  const qs = sp.toString();
-  const q = qs ? `?${qs}` : "";
-  const path = pathname.startsWith("/") ? pathname : `/${pathname}`;
-  return marketingResumeCallbackFromLocation(path, q, locale);
+  return postLoginMarketingHomePath(locale);
 }
 
 /** Localized marketing home (`/` or `/fr`, …). */
