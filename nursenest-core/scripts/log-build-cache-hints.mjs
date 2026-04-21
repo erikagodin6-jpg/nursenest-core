@@ -65,6 +65,20 @@ function cacheDirEntryCountVisibleOnly(absPath) {
   return topLevelSplit(absPath).visibleCount;
 }
 
+/** Sorted visible (non-dot) names under `absPath`, capped for logs. */
+function listVisibleNames(absPath, max) {
+  const cap = max ?? 48;
+  if (!existsSync(absPath)) return [];
+  try {
+    return readdirSync(absPath)
+      .filter((n) => !n.startsWith("."))
+      .sort()
+      .slice(0, cap);
+  } catch {
+    return [];
+  }
+}
+
 /**
  * Count nested **files** under `absRoot` (BFS), skipping dotfile / dotdir names at any depth.
  * Stops after `maxFiles` files to avoid huge walks on pathological trees.
@@ -191,6 +205,24 @@ if (split.visible.length > 0) {
   console.log("[build-cache-hints] dot_next_cache_top_visible_names=" + JSON.stringify(split.visible.slice(0, 32)));
 }
 console.log(
+  "[build-cache-hints] dot_next_cache_level1_visible_sorted=" + JSON.stringify(listVisibleNames(cacheDir, 48)),
+);
+if (existsSync(webpackCacheDir)) {
+  console.log(
+    "[build-cache-hints] dot_next_cache_webpack_level1_visible_sorted=" +
+      JSON.stringify(listVisibleNames(webpackCacheDir, 48)),
+  );
+}
+if (isAfterCompile || isCleanup) {
+  console.log(
+    "[build-cache-hints] build_env_turbopack=" +
+      JSON.stringify(process.env.TURBOPACK ?? "") +
+      " build_env_next_rspack=" +
+      JSON.stringify(process.env.NEXT_RSPACK ?? "") +
+      " (if Turbopack ran, webpack cache dir often stays empty; build uses scripts/run-next-prod-build.mjs to strip these during compile)",
+  );
+}
+console.log(
   "[build-cache-hints] dot_next_cache_entry_count_visible_only=" +
     String(cacheDirEntryCountVisibleOnly(cacheDir)) +
     " (non-hidden top-level only; prefer nested metrics below)",
@@ -226,4 +258,8 @@ console.log(
     String(swcNested.approxBytes) +
     " dot_next_cache_swc_nested_truncated=" +
     (swcNested.truncated ? "1" : "0"),
+);
+console.log(
+  "[build-cache-hints] dot_next_cache_combined_webpack_swc_approx_bytes=" +
+    String(webpackNested.approxBytes + swcNested.approxBytes),
 );

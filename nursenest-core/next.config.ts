@@ -19,6 +19,10 @@
  * `.next/cache/webpack` (needed for Heroku/DO `cacheDirectories`). Setting `true` forces forked compiler
  * workers even when a custom `webpack()` exists, which can leave `.next/cache` empty between builds.
  *
+ * **Bundler env:** Next 16 defaults to Turbopack when no CLI flag applies (`next/dist/lib/bundler.js`). A host
+ * `TURBOPACK` env var can force Turbopack, which uses `turbopackBuild` and **does not** fill `.next/cache/webpack`.
+ * Production compile uses `scripts/run-next-prod-build.mjs` to strip `TURBOPACK` / rspack test env before `next build --webpack`.
+ *
  * **Build / compile cache (DigitalOcean App Platform):** Next.js writes `.next/cache` during `next build`.
  * `heroku-postbuild` runs bootstrap guard + `NN_POSTBUILD_NEXT_BUILD=1 npm run build` **before** buildpack prune/cache
  * so `.next/cache` is snapshotted (`validate:marketing-production-surface` is CI-only — see `.github/workflows/verify-build.yml`).

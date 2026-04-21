@@ -85,6 +85,8 @@ services:
       - key: SKIP_I18N_PREBUILD
         value: "1"
         scope: BUILD_TIME
+      # Do not set `TURBOPACK` / `NEXT_RSPACK` at build time — Next 16 would select Turbopack/Rspack and skip
+      # `.next/cache/webpack`. Compile uses `scripts/run-next-prod-build.mjs` which strips accidental host values.
       # Signals App Platform–aware scripts (e.g. marketing guards). `.next/cache` is preserved by default in post-build-prune.
       - key: NN_APP_PLATFORM_BUILD
         value: "true"

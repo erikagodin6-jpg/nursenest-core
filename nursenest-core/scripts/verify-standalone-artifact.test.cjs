@@ -328,7 +328,7 @@ test("deploy scripts: build:deploy is post-compile only; heroku-postbuild runs c
     "node scripts/log-build-cache-hints.mjs && npm run verify:bootstrap-probe-pathname && NN_POSTBUILD_NEXT_BUILD=1 npm run build && node scripts/log-build-cache-hints.mjs --phase=heroku_postbuild_after_compile",
   );
   assert.equal(pkg.scripts.build, "node scripts/run-buildpack-build.mjs");
-  assert.equal(pkg.scripts["build:compile"].includes("next build"), true);
+  assert.equal(pkg.scripts["build:compile"].includes("scripts/run-next-prod-build.mjs"), true);
   assert.match(
     pkg.scripts["build:compile"],
     /NODE_OPTIONS=\$\{NODE_OPTIONS:-"--max-old-space-size=\$\{BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-3584\}"\}/,
