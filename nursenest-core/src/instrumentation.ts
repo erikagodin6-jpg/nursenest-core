@@ -29,7 +29,8 @@ export async function register() {
   }
 }
 
-export async function onRequestError(...args: Parameters<typeof import("@sentry/nextjs").captureRequestError>) {
+/** `unknown[]` avoids a compile-time `import("@sentry/nextjs")` type probe that pulls Sentry into the server graph when Sentry is build-disabled. */
+export async function onRequestError(...args: unknown[]) {
   const err = args[0];
   const req = args[1] as { url?: string } | undefined;
   const msg = err instanceof Error ? err.message : String(err);
@@ -40,5 +41,7 @@ export async function onRequestError(...args: Parameters<typeof import("@sentry/
   });
   if (!isSentryServerRuntimeEnabled()) return;
   const Sentry = await importSentryNextjs();
-  return Sentry.captureRequestError(...args);
+  return (
+    Sentry.captureRequestError as (error: unknown, request: unknown, ...rest: unknown[]) => unknown | Promise<unknown>
+  )(...args);
 }

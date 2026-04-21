@@ -23,6 +23,9 @@ const dmSans = DM_Sans({
   preload: true,
 });
 
+/** Same as `not-found.tsx`: static prerender must not call `auth()` (uses headers; forces dynamic / noisy catch). */
+const BUILD_PHASE = "phase-production-build";
+
 const siteUrl = MARKETING_SITE_ORIGIN;
 const ROOT_LAYOUT_OPEN_GRAPH_IMAGE =
   "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot1.png";
@@ -75,13 +78,17 @@ export default async function RootLayout({
 }>) {
   layoutStderrTrace("root_layout", "root layout start", { route: "shared-root-layout" });
   let session: Session | null = null;
-  try {
-    session = await auth();
-  } catch (e) {
-    layoutStderrTrace("root_layout", "auth() failed — continuing with null session", {
-      route: "shared-root-layout",
-      detail: e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200),
-    });
+  if (process.env.NEXT_PHASE === BUILD_PHASE) {
+    session = null;
+  } else {
+    try {
+      session = await auth();
+    } catch (e) {
+      layoutStderrTrace("root_layout", "auth() failed — continuing with null session", {
+        route: "shared-root-layout",
+        detail: e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200),
+      });
+    }
   }
   const themeBoot = `(function(){try{var k=${JSON.stringify(THEME_STORAGE_KEY)};var d=${JSON.stringify(NURSENEST_DEFAULT_THEME)};var v=localStorage.getItem(k);if(v==null||v===""){v=d;localStorage.setItem(k,v);}document.documentElement.setAttribute("data-theme",v);}catch(e){}})();`;
 
