@@ -26,7 +26,7 @@ export const CANADA_NAV: CountryNavConfig = {
         { label: "CAT Exams", href: "/canada/pn/rex-pn/cat" },
       ],
     },
-    { label: "NCLEX-RN", href: "/canada/rn/nclex-rn", kind: "primary" },
+    { label: "NCLEX-RN", href: "/lessons", kind: "primary" },
     { label: "PN", href: "/canada/pn", kind: "primary" },
     { label: "RN", href: "/canada/rn", kind: "primary" },
     { label: "Lessons", href: "/lessons", kind: "secondary" },
@@ -39,7 +39,7 @@ export const CANADA_NAV: CountryNavConfig = {
   ],
   footerFeatured: [
     { label: "REx-PN prep", href: "/canada/pn/rex-pn" },
-    { label: "Canadian NCLEX-RN", href: "/canada/rn/nclex-rn" },
+    { label: "Canadian NCLEX-RN", href: "/lessons" },
     { label: "Nursing in Canada", href: "/canada" },
   ],
 };
@@ -49,7 +49,7 @@ export const US_NAV: CountryNavConfig = {
   regionLabel: "United States",
   heroExamLabel: "US nursing exam prep",
   primary: [
-    { label: "NCLEX-RN", href: "/us/rn/nclex-rn", kind: "primary" },
+    { label: "NCLEX-RN", href: "/lessons", kind: "primary" },
     { label: "NCLEX-PN", href: "/us/pn/nclex-pn", kind: "primary" },
     { label: "RN", href: "/us/rn", kind: "primary" },
     { label: "PN", href: "/us/pn", kind: "primary" },
@@ -62,7 +62,7 @@ export const US_NAV: CountryNavConfig = {
     { label: "About", href: "/about" },
   ],
   footerFeatured: [
-    { label: "NCLEX-RN", href: "/us/rn/nclex-rn" },
+    { label: "NCLEX-RN", href: "/lessons" },
     { label: "NCLEX-PN", href: "/us/pn/nclex-pn" },
     { label: "US exam hub", href: "/us" },
   ],
@@ -81,7 +81,7 @@ export const PHILIPPINES_NAV: CountryNavConfig = {
   ],
   secondary: [
     { label: "REx-PN (Canada)", href: "/canada/pn/rex-pn" },
-    { label: "NCLEX-RN (Canada)", href: "/canada/rn/nclex-rn" },
+    { label: "NCLEX-RN (Canada)", href: "/lessons" },
     { label: "Blog", href: "/blog" },
     { label: "About", href: "/about" },
   ],
@@ -136,7 +136,7 @@ export const CANADA_HOMEPAGE: CountryHomepageContent = {
   secondaryCta: { label: "Explore Canada pathways", href: "/canada/rn" },
   pathwayCards: [
     { title: "REx-PN", href: "/canada/pn/rex-pn", description: "Practical nurse entry exam for Canada." },
-    { title: "NCLEX-RN", href: "/canada/rn/nclex-rn", description: "Registered nurse licensing aligned to Canadian regulators." },
+    { title: "NCLEX-RN", href: "/lessons", description: "Registered nurse licensing aligned to Canadian regulators." },
     { title: "PN in Canada", href: "/canada/pn", description: "PN tracks, lessons, and practice built for Canadian scope." },
     { title: "RN in Canada", href: "/canada/rn", description: "RN hubs, lessons, and question banks for Canadian pathways." },
   ],
@@ -152,10 +152,10 @@ export const US_HOMEPAGE: CountryHomepageContent = {
   headline: "US nursing exam prep built around NCLEX",
   subheadline: "Study for NCLEX-RN and NCLEX-PN with structured lessons, flashcards, question banks, and CAT exams.",
   brandLine: "Country-specific nursing exam prep, with exclusive REx-PN support in Canada.",
-  primaryCta: { label: "Start NCLEX-RN", href: "/us/rn/nclex-rn" },
+  primaryCta: { label: "Start NCLEX-RN", href: "/lessons" },
   secondaryCta: { label: "Explore US pathways", href: "/us/rn" },
   pathwayCards: [
-    { title: "NCLEX-RN", href: "/us/rn/nclex-rn", description: "Clinical judgment, lessons, and timed practice for RN candidates." },
+    { title: "NCLEX-RN", href: "/lessons", description: "Clinical judgment, lessons, and timed practice for RN candidates." },
     { title: "NCLEX-PN", href: "/us/pn/nclex-pn", description: "PN-focused prep with questions, flashcards, and CAT-style exams." },
     { title: "RN", href: "/us/rn", description: "RN hub: browse lessons, banks, and tools for US RN tracks." },
     { title: "PN", href: "/us/pn", description: "PN hub: structured study paths for US practical nursing exams." },

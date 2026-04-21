@@ -19,7 +19,7 @@ export type MarketingPathwayMegaMenuKey = "rn" | "pn" | "np" | "newgrad" | "alli
  * not activate "New Grad" just because the mega menu once linked there.
  */
 export const MEGA_MENU_STRIPPED_ACTIVE_PREFIXES: Record<MarketingPathwayMegaMenuKey, readonly string[]> = {
-  rn: ["/us/rn/", "/canada/rn/"],
+  rn: ["/us/rn/", "/canada/rn/", "/lessons", "/question-bank"],
   pn: ["/us/pn/", "/canada/pn/"],
   np: ["/us/np/", "/canada/np/"],
   newgrad: ["/us/rn/new-grad-transition/", "/us/new-grad", "/canada/new-grad"],

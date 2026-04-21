@@ -16,7 +16,7 @@
  *   VERIFY_NEXT_STATIC=1 — after Tier 1, fetch `/` (redirects followed), extract first `/_next/static/….(js|css)`,
  *     then GET with `Range: bytes=0-0` and cancel the body; fails if status is not 2xx or `Content-Type` is `text/html`
  *     (typical when standalone is missing `.next/static` and the app returns HTML for asset URLs)
- *   VERIFY_MARKETING_SENTINELS=1 — GET `/`, `/pricing`, `/login` (HTML); fail on placeholder pricing copy,
+ *   VERIFY_MARKETING_SENTINELS=1 — GET `/`, `/pricing`, `/login`, `/us/rn/nclex-rn` (HTML); fail on placeholder pricing copy,
  *     obvious stub strings, duplicate public headers, or missing `<html lang="en"` (default marketing root).
  *
  * Output is grouped into tiers (per BASE_URL / ORIGIN_BASE_URL):
@@ -24,7 +24,7 @@
  *   Tier 1b — Next static asset MIME probe when VERIFY_NEXT_STATIC=1
  *   Tier 2 — canonical homepage (GET /) when VERIFY_CANONICAL_HOME=1
  *   Tier 3 — deeper API health (/api/health, optional /api/health/ready)
- *   Tier 4 — marketing HTML sentinels (/, /pricing, /login) when VERIFY_MARKETING_SENTINELS=1
+ *   Tier 4 — marketing HTML sentinels (/, /pricing, /login, /us/rn/nclex-rn) when VERIFY_MARKETING_SENTINELS=1
  *
  * Exit: 0 = all checks passed, non-zero = failure.
  */
@@ -107,7 +107,8 @@ async function getHome(base) {
   return { ok: false, status: 0, url: current, err: "redirect loop cap" };
 }
 
-const MARKETING_SENTINEL_PATHS = ["/", "/pricing", "/login"];
+/** Core marketing HTML + primary US RN exam hub (SSR path that must stay non-fatal under DB noise). */
+const MARKETING_SENTINEL_PATHS = ["/", "/pricing", "/login", "/us/rn/nclex-rn"];
 
 const MARKETING_SENTINEL_FORBIDDEN = [
   "Loading pricing...",
@@ -166,7 +167,7 @@ async function verifyMarketingSentinels(base) {
       clearTimeout(t);
     }
   }
-  return { ok: true, detail: "marketing HTML sentinels OK for /, /pricing, /login" };
+  return { ok: true, detail: "marketing HTML sentinels OK for /, /pricing, /login, /us/rn/nclex-rn" };
 }
 
 /** @typedef {{ base: string, tier1Failed: boolean, tier2State: "skip" | "pass" | "fail", tier2bState: "skip" | "pass" | "fail", tier3Failed: boolean, tier4State: "skip" | "pass" | "fail" }} TierSummary */
@@ -352,7 +353,7 @@ for (const base of bases) {
 
   if (wantMarketingSentinels) {
     summary.tier4State = "fail";
-    console.log("\n[Tier 4] Marketing HTML sentinels (/, /pricing, /login)");
+    console.log("\n[Tier 4] Marketing HTML sentinels (/, /pricing, /login, /us/rn/nclex-rn)");
     try {
       const r = await verifyMarketingSentinels(base);
       if (r.ok) {

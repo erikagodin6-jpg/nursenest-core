@@ -157,17 +157,14 @@ export function FlashcardFilters({
 
         {tagList.length > 0 ? (
           <div>
-            <label
-              className="block text-xs font-semibold"
-              style={{ color: "var(--theme-muted-text)" }}
-            >
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--semantic-text-secondary)]">
               Topic tag
               <select
-                className="mt-1 w-full rounded-lg border px-2 py-2 text-sm"
+                className="mt-1.5 w-full rounded-xl border-2 px-3 py-2.5 text-sm font-medium shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)]"
                 style={{
-                  background: "var(--bg-card, var(--theme-card-bg))",
-                  borderColor: "var(--border-subtle, var(--theme-card-border))",
-                  color: "var(--theme-heading-text)",
+                  background: "var(--theme-card-bg)",
+                  borderColor: "var(--semantic-border-soft)",
+                  color: "var(--semantic-text-primary)",
                 }}
                 value={value.tagSlug}
                 onChange={(e) => onChange({ tagSlug: e.target.value })}
@@ -186,19 +183,16 @@ export function FlashcardFilters({
 
       {/* Search */}
       <div>
-        <label
-          className="block text-xs font-semibold"
-          style={{ color: "var(--theme-muted-text)" }}
-        >
+        <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--semantic-text-secondary)]">
           Search decks
           <input
             type="search"
             placeholder="Pharmacology, Cardiovascular…"
-            className="mt-1 w-full rounded-lg border px-3 py-2 text-sm"
+            className="mt-1.5 w-full rounded-xl border-2 px-3 py-2.5 text-sm font-medium shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)]"
             style={{
-              background: "var(--bg-card, var(--theme-card-bg))",
-              borderColor: "var(--border-subtle, var(--theme-card-border))",
-              color: "var(--theme-heading-text)",
+              background: "var(--theme-card-bg)",
+              borderColor: "var(--semantic-border-soft)",
+              color: "var(--semantic-text-primary)",
             }}
             value={value.q}
             onChange={(e) => onChange({ q: e.target.value })}

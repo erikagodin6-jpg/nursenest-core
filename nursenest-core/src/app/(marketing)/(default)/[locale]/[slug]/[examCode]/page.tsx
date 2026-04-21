@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { NursingTierHubPage } from "@/components/marketing/nursing-tier-hub-page";
 import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
+import { rnNclexExamHubOverviewRedirectTarget } from "@/lib/exam-pathways/rn-nclex-public-hub-policy";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
+import { rnNclexExamHubOverviewRedirectTarget } from "@/lib/exam-pathways/rn-nclex-public-hub-policy";
 import { buildNursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
 import { examPathwayRegionalHreflang } from "@/lib/seo/exam-pathway-hub-alternates";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -23,6 +25,9 @@ type Props = { params: Promise<{ locale: string; slug: string; examCode: string 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug, examCode } = await params;
   const pathname = `/${locale}/${slug}/${examCode}`;
+  const pathwayPre = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
+  const rnHubRedirect = rnNclexExamHubOverviewRedirectTarget(pathwayPre);
+  if (rnHubRedirect) permanentRedirect(rnHubRedirect);
   return safeGenerateMetadata(async () => {
     const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
     if (!pathway) return {};
@@ -61,6 +66,8 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   const pathname = `/${locale}/${slug}/${examCode}`;
   return withCrawlSurfacePageRender("marketing.exam_hub", pathname, async () => {
     const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
+    const rnHubRedirect = rnNclexExamHubOverviewRedirectTarget(pathway);
+    if (rnHubRedirect) permanentRedirect(rnHubRedirect);
     if (!pathway) notFound();
 
     const npPracticeSeo = getNpPracticeTestLandingCopy(locale, slug, examCode) ?? null;
