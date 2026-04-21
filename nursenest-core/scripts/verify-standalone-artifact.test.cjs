@@ -320,10 +320,13 @@ test("ensure-standalone-static copies .next/static beside both nested and top-le
   }
 });
 
-test("deploy scripts: build:deploy aliases full chain; postbuild helper has no next build", () => {
+test("deploy scripts: build:deploy is post-compile only; heroku-postbuild runs compile before cache", () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
   assert.deepEqual(pkg.cacheDirectories, ["node_modules", ".next/cache"]);
-  assert.equal(pkg.scripts["heroku-postbuild"], "node scripts/log-build-cache-hints.mjs");
+  assert.equal(
+    pkg.scripts["heroku-postbuild"],
+    "node scripts/log-build-cache-hints.mjs && npm run verify:bootstrap-probe-pathname && npm run validate:marketing-production-surface && NN_POSTBUILD_NEXT_BUILD=1 npm run build",
+  );
   assert.equal(pkg.scripts.build, "node scripts/run-buildpack-build.mjs");
   assert.equal(pkg.scripts["build:compile"].includes("next build"), true);
   assert.match(
@@ -331,7 +334,7 @@ test("deploy scripts: build:deploy aliases full chain; postbuild helper has no n
     /NODE_OPTIONS=\$\{NODE_OPTIONS:-"--max-old-space-size=\$\{BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-3584\}"\}/,
   );
   assert.equal(pkg.scripts["verify:standalone-artifact"], "node scripts/verify-standalone-artifact.mjs");
-  assert.equal(pkg.scripts["build:deploy"], "npm run build:deploy:full");
+  assert.equal(pkg.scripts["build:deploy"], "npm run build:deploy:postbuild");
   assert.equal(pkg.scripts["build:deploy:app-platform"], "npm run build:deploy");
   assert.equal(pkg.scripts["build:deploy:postbuild"].includes("npm run build"), false);
   assert.equal(pkg.scripts["build:deploy:full"], "node scripts/run-build-deploy-full.mjs");

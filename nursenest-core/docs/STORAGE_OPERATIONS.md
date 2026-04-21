@@ -34,7 +34,7 @@ Quick reference for **safe** content and disk operations. Full policy: `STORAGE_
 ## Cleaning build artifacts (local / CI)
 
 1. **`npm run clean:next`** — removes `.next`.
-2. **`npm run build`** (App Platform buildpack) or **`npm run build:deploy:full`** (single local/droplet command) — App Platform **`npm run build:deploy`** then runs verify + static sync + **`post-build-prune`** (preserves **`.next/cache`** by default for buildpack cache; no second `next build`; `build:deploy:app-platform` aliases `build:deploy`).
+2. **`heroku-postbuild` + `npm run build`** (App Platform: `next build` in `heroku-postbuild` warms **`.next/cache`** before cache save; second `npm run build` skips compile on DO) or **`npm run build:deploy:full`** (single local/droplet command) — App Platform **`npm run build:deploy`** runs `build:deploy:postbuild` (verify + static sync + **`post-build-prune`**; `build:deploy:app-platform` aliases `build:deploy`).
 3. After production install on builders: **`npm prune --omit=dev`** (already in App Platform spec).
 4. Remove **`reports/i18n-status.json`** only if safe (regenerated); not required in production.
 

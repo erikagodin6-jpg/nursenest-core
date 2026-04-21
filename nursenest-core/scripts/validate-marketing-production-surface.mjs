@@ -9,6 +9,7 @@
  *
  * Exit 1 on any failure.
  */
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -30,7 +31,12 @@ const DEFAULT_MARKETING_LAYOUT = path.join(pkgRoot, "src", "app", "(marketing)",
 const REQUIRED_PAGE_KEYS = [
   "pages.home.hero.headline",
   "pages.home.hero.subheading",
+  "pages.home.hero.subheading2",
   "pages.home.hero.eyebrowBrand",
+  "pages.home.hero.scanItem1",
+  "pages.home.hero.scanItem2",
+  "pages.home.hero.scanItem3",
+  "pages.home.hero.scanItem4",
   "pages.home.carouselHandoff.kicker",
   "pages.home.carouselHandoff.lead",
   "pages.home.howItWorks.kicker",
@@ -260,8 +266,14 @@ function main() {
     process.exit(1);
   }
 
+  const chromeScript = path.join(pkgRoot, "scripts", "validate-marketing-chrome-critical-keys.mts");
+  execFileSync(process.execPath, ["--import", "tsx", chromeScript], {
+    cwd: pkgRoot,
+    stdio: "inherit",
+  });
+
   console.log(
-    "[validate-marketing-production-surface] OK — en pages/nav homepage + pricing conversion clarity + shell checks passed.",
+    "[validate-marketing-production-surface] OK — en pages/nav homepage + pricing conversion clarity + shell checks + merged chrome/hero shape passed.",
   );
 }
 

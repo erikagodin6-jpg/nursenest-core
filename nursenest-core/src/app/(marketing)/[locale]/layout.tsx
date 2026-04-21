@@ -11,7 +11,10 @@ import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld"
 import { MarketingMainI18nShards } from "@/components/i18n/marketing-main-i18n-shards";
 import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { assertMarketingLayoutMessagesIntegrity } from "@/lib/marketing-i18n/marketing-layout-message-integrity";
-import { getMarketingLocaleLayoutChromePayload } from "@/lib/marketing-i18n/marketing-layout-chrome-messages.server";
+import {
+  getMarketingDefaultLayoutChromeMessages,
+  getMarketingLocaleLayoutChromePayload,
+} from "@/lib/marketing-i18n/marketing-layout-chrome-messages.server";
 import { mergeMinimalMarketingLayoutShellMessages } from "@/lib/marketing-i18n/minimal-marketing-layout-shell-fallback";
 import { MarketingMainErrorBoundary } from "@/components/marketing/marketing-main-error-boundary";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
@@ -71,7 +74,7 @@ export default async function MarketingLocaleLayout({
       fallbackMessages,
     });
   } catch (integrityErr) {
-    console.error("[marketing-locale-layout] layout message integrity failed — merging shell fallbacks", {
+    console.error("[marketing-locale-layout] layout message integrity failed — recovering English chrome", {
       error: integrityErr instanceof Error ? integrityErr.message : String(integrityErr),
       locale,
     });
@@ -84,7 +87,11 @@ export default async function MarketingLocaleLayout({
       feature: "marketing_layout",
       meta: { locale },
     });
-    messages = mergeMinimalMarketingLayoutShellMessages(messages);
+    try {
+      messages = mergeMinimalMarketingLayoutShellMessages(await getMarketingDefaultLayoutChromeMessages());
+    } catch {
+      messages = mergeMinimalMarketingLayoutShellMessages(messages);
+    }
   }
 
   let marketingRequestPath = "/";

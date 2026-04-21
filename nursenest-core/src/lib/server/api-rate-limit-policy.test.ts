@@ -30,6 +30,16 @@ describe("enforceApiRateLimit path classification", () => {
     assert.doesNotMatch(src, /if \(pathname === "\/api\/signup"/);
   });
 
+  it("orders signup bypass before generic public catch-all so POST /api/signup does not debit ratelimit:public:ip", () => {
+    const src = readFileSync(rateLimitTsPath, "utf8");
+    const fn = src.indexOf("export async function enforceApiRateLimit");
+    assert.ok(fn >= 0);
+    const idxSignup = src.indexOf("pathname === API_SIGNUP_POST_ROUTE", fn);
+    const idxPublic = src.indexOf("`ratelimit:public:ip:${ipKey}`", fn);
+    assert.ok(idxSignup > 0 && idxPublic > 0, "expected signup bypass and public catch-all markers");
+    assert.ok(idxSignup < idxPublic, "signup bypass must appear before generic public RL");
+  });
+
   it("marks admin API subtree for dedicated RL (nn-db-final-002)", () => {
     assert.equal(isAdminApiRateLimitPath("/api/admin"), true);
     assert.equal(isAdminApiRateLimitPath("/api/admin/ops/run"), true);
@@ -47,6 +57,11 @@ describe("enforceApiRateLimit path classification", () => {
     assert.equal(isPricingRateLimitPath("/api/pricing"), true);
     assert.equal(isPricingRateLimitPath("/api/pricing/options"), true);
     assert.equal(isPricingRateLimitPath("/api/pricing-matrix"), false);
+  });
+
+  it("does not classify /api/pricing/options under public_json RL (dedicated pricing branch in proxy)", () => {
+    assert.equal(isPublicJsonRateLimitPath("/api/pricing/options"), false);
+    assert.equal(isPricingRateLimitPath("/api/pricing/options"), true);
   });
 
   it("marks anonymous questions/lessons API paths for stricter per-IP bucket", () => {

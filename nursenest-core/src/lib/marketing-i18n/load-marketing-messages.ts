@@ -88,12 +88,21 @@ export function mergeMissingMarketingMessageKeys(
   return out;
 }
 
-/** Two scoped candidates only — no `..` so paths never escape the package root. */
+/** Matches {@link load-marketing-message-shards} — cwd + optional `NN_MARKETING_I18N_DIR` + Node entry dir. */
 function resolveNextI18nPublicDir(): string | null {
-  const candidates = [
+  const envOverride = process.env.NN_MARKETING_I18N_DIR?.trim();
+  if (envOverride) {
+    const normalized = path.resolve(envOverride);
+    if (existsSync(normalized)) return normalized;
+  }
+  const candidates: string[] = [
     path.join(process.cwd(), "public", "i18n"),
     path.join(process.cwd(), "nursenest-core", "public", "i18n"),
   ];
+  const mainScript = process.argv[1];
+  if (typeof mainScript === "string" && mainScript.length > 0) {
+    candidates.push(path.join(path.dirname(path.resolve(mainScript)), "public", "i18n"));
+  }
   for (const p of candidates) {
     if (existsSync(p)) return p;
   }

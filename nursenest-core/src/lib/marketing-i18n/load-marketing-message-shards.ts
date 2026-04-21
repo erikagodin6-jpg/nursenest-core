@@ -35,12 +35,28 @@ function marketingShardsAsyncCacheKey(locale: string, shards: readonly I18nShard
   return `${locale}|${shards.join(",")}`;
 }
 
-/** Two cwd candidates — matches `load-marketing-messages.ts`. */
+/**
+ * Directory containing per-locale shard folders (`en/pages.json`, …).
+ * Standalone / platform cwd is not always the app package root — also try the Node entry directory
+ * (`public/` is emitted next to `server.js` in traced standalone output).
+ *
+ * Override: set `NN_MARKETING_I18N_DIR` to the absolute path of the `i18n` folder (parent of `en/`, `fr/`, …).
+ */
 function resolveNextI18nPublicDir(): string | null {
-  const candidates = [
+  const envOverride = process.env.NN_MARKETING_I18N_DIR?.trim();
+  if (envOverride) {
+    const normalized = path.resolve(envOverride);
+    if (existsSync(normalized)) return normalized;
+  }
+  const candidates: string[] = [
     path.join(process.cwd(), "public", "i18n"),
     path.join(process.cwd(), "nursenest-core", "public", "i18n"),
   ];
+  const mainScript = process.argv[1];
+  if (typeof mainScript === "string" && mainScript.length > 0) {
+    const entryDir = path.dirname(path.resolve(mainScript));
+    candidates.push(path.join(entryDir, "public", "i18n"));
+  }
   for (const p of candidates) {
     if (existsSync(p)) return p;
   }

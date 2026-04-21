@@ -90,6 +90,14 @@ export function formatMarketingMessage(
       logI18nStructured("marketing_message_key_missing", safeKey, locale, {
         hadFallbackMap: Boolean(fallbackMessages),
       });
+      /**
+       * Missing `pages.*` strings used to surface as humanized tail segments ("Title", "Lead", …)
+       * when bundles failed to load — that reads like unfinished UI. In production, prefer an explicit
+       * recovery line for page copy keys (dev keeps humanized text for faster iteration).
+       */
+      if (process.env.NODE_ENV === "production" && safeKey.startsWith("pages.")) {
+        return "Content unavailable right now. Please refresh the page.";
+      }
       return humanizedKeyFallback(safeKey);
     }
 
@@ -107,7 +115,11 @@ export function formatMarketingMessage(
       errorName: e instanceof Error ? e.name.slice(0, 80) : "non_error",
     });
     try {
-      return humanizedKeyFallback(safeKey || "message");
+      const sk = safeKey || "message";
+      if (process.env.NODE_ENV === "production" && sk.startsWith("pages.")) {
+        return "Content unavailable right now. Please refresh the page.";
+      }
+      return humanizedKeyFallback(sk);
     } catch {
       return "NurseNest";
     }

@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 /**
- * Heroku / DigitalOcean App Platform invoke `npm run build` after `npm install`.
- * Our real production pipeline runs `next build` once inside `build_command` via
- * `npm run build:deploy` → `build:compile`. Running `next build` here too doubles
- * compile time on App Platform.
+ * Heroku / DigitalOcean App Platform invoke `npm run build` after `npm install` and `heroku-postbuild`.
  *
- * When `DIGITALOCEAN_APP_ID` is set (injected on DO builds), skip this step unless
- * `NN_RUN_BUILDPACK_NEXT_BUILD=1` forces a compile (debug / parity checks).
+ * DigitalOcean documents `heroku-postbuild` as running **before** prune/cache. We run
+ * `NN_POSTBUILD_NEXT_BUILD=1 npm run build` there so `next build` creates `.next/cache` for the
+ * `cacheDirectories` snapshot.
  *
- * CI, droplets, and local dev omit `DIGITALOCEAN_APP_ID` → runs `npm run build:compile`.
+ * The buildpack then runs `npm run build` again without that env var; on App Platform we skip that
+ * duplicate compile. Local / CI / droplets omit `DIGITALOCEAN_APP_ID` → always compile here.
+ *
+ * Set `NN_RUN_BUILDPACK_NEXT_BUILD=1` on DO to force a second `next build` (debug / parity).
  */
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import path from "node:path";
 
 function truthyEnv(name) {
   return /^(1|true|yes)$/i.test(String(process.env[name] ?? ""));
@@ -22,11 +22,12 @@ const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const npm = process.platform === "win32" ? "npm.cmd" : "npm";
 
 const onDigitalOceanAppPlatform = Boolean(String(process.env.DIGITALOCEAN_APP_ID ?? "").trim());
-const forceBuildpackNextBuild = truthyEnv("NN_RUN_BUILDPACK_NEXT_BUILD");
+const postbuildCompilePass = truthyEnv("NN_POSTBUILD_NEXT_BUILD");
+const forceSecondBuild = truthyEnv("NN_RUN_BUILDPACK_NEXT_BUILD");
 
-if (onDigitalOceanAppPlatform && !forceBuildpackNextBuild) {
+if (onDigitalOceanAppPlatform && !postbuildCompilePass && !forceSecondBuild) {
   console.log(
-    "[build] DigitalOcean App Platform: skipping duplicate `next build` in buildpack phase (runs once in build_command via build:compile). Set NN_RUN_BUILDPACK_NEXT_BUILD=1 to force build here.",
+    "[build] DigitalOcean App Platform: skipping duplicate `next build` (already ran in heroku-postbuild with NN_POSTBUILD_NEXT_BUILD=1 so `.next/cache` is included in the buildpack cache snapshot). Set NN_RUN_BUILDPACK_NEXT_BUILD=1 to force compile here.",
   );
   process.exit(0);
 }

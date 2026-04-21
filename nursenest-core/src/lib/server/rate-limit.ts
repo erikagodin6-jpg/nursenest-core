@@ -1150,6 +1150,17 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
           bucketKeyType: "user",
         });
       }
+      if (process.env.NN_PRICING_RL_DIAG?.trim() === "1") {
+        safeServerLog("billing", "pricing_read_allowed", {
+          path: pathShort,
+          limiter: "pricing_read_user",
+          identity_basis: "jwt_partition",
+          blocked: false,
+          windowMs: PRICING_WINDOW_MS,
+          max: maxUser,
+          remaining,
+        });
+      }
       return null;
     }
 
@@ -1174,6 +1185,18 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
         windowMs: PRICING_WINDOW_MS,
         max: maxIp,
         bucketKeyType: "ip_partition",
+      });
+    }
+    if (process.env.NN_PRICING_RL_DIAG?.trim() === "1") {
+      safeServerLog("billing", "pricing_read_allowed", {
+        path: pathShort,
+        limiter: "pricing_read_ip",
+        identity_basis: "ip_partition",
+        blocked: false,
+        windowMs: PRICING_WINDOW_MS,
+        max: maxIp,
+        remaining,
+        ipHash: hashIp(ipKey),
       });
     }
     return null;

@@ -16,7 +16,7 @@
     }
   },
   "scripts": {
-    "heroku-postbuild": "node scripts/log-build-cache-hints.mjs",
+    "heroku-postbuild": "node scripts/log-build-cache-hints.mjs && npm run verify:bootstrap-probe-pathname && npm run validate:marketing-production-surface && NN_POSTBUILD_NEXT_BUILD=1 npm run build",
     "prepare": "node scripts/install-husky.mjs",
     "dev": "TMPDIR=${TMPDIR:-/tmp} next dev",
     "build:prechecks": "node scripts/run-build-prechecks.mjs",
@@ -30,7 +30,7 @@
     "build:deploy:postbuild": "npm run verify:bootstrap-probe-pathname && npm run verify:standalone-artifact && node scripts/ensure-standalone-static.mjs && node scripts/post-build-prune.mjs",
     "validate:marketing-production-surface": "node scripts/validate-marketing-production-surface.mjs",
     "build:deploy:full": "node scripts/run-build-deploy-full.mjs",
-    "build:deploy": "npm run build:deploy:full",
+    "build:deploy": "npm run build:deploy:postbuild",
     "build:deploy:app-platform": "npm run build:deploy",
     "build:deploy:timed": "node scripts/run-build-deploy-full.mjs",
     "start": "node scripts/start-standalone.mjs",

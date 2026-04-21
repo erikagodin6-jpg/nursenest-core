@@ -97,6 +97,15 @@ const localeChromeInflight = new Map<string, Promise<LocaleChromePayload>>();
 /**
  * Singleton chrome bundle for `(marketing)/[locale]` layout.
  */
+function fillLocaleChromeFromSync(locale: string): LocaleChromePayload {
+  const messages = loadMarketingMessageShardsSync(locale, MARKETING_CHROME_MESSAGE_SHARDS);
+  const fallbackMessages =
+    locale === DEFAULT_MARKETING_LOCALE
+      ? undefined
+      : loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS);
+  return { messages, fallbackMessages };
+}
+
 export async function getMarketingLocaleLayoutChromePayload(locale: string): Promise<LocaleChromePayload> {
   const hit = localeChromeResolved.get(locale);
   if (hit) return hit;
@@ -104,33 +113,50 @@ export async function getMarketingLocaleLayoutChromePayload(locale: string): Pro
   let p = localeChromeInflight.get(locale);
   if (!p) {
     p = (async () => {
-      const messages =
-        (await safeAwait(
-          loadMarketingMessageShards(locale, MARKETING_CHROME_MESSAGE_SHARDS),
-          `marketing_layout.locale_chrome:${locale}`,
-          LOCALE_CHROME_SHARD_TIMEOUT_MS,
-        )) ?? {};
-      const fallbackMessages =
-        locale === DEFAULT_MARKETING_LOCALE
-          ? undefined
-          : ((await safeAwait(
-              loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS),
-              `marketing_layout.locale_chrome_en`,
-              LOCALE_CHROME_SHARD_TIMEOUT_MS,
-            )) ?? {});
-      const payload: LocaleChromePayload = { messages, fallbackMessages };
-      localeChromeResolved.set(locale, payload);
-      localeChromeInflight.delete(locale);
-      return payload;
-    })().catch(() => {
-      localeChromeInflight.delete(locale);
-      const empty: LocaleChromePayload = {
-        messages: {},
-        fallbackMessages: locale === DEFAULT_MARKETING_LOCALE ? undefined : {},
-      };
-      localeChromeResolved.set(locale, empty);
-      return empty;
-    });
+      try {
+        let messages =
+          (await safeAwait(
+            loadMarketingMessageShards(locale, MARKETING_CHROME_MESSAGE_SHARDS),
+            `marketing_layout.locale_chrome:${locale}`,
+            LOCALE_CHROME_SHARD_TIMEOUT_MS,
+          )) ?? {};
+        let fallbackMessages: Record<string, string> | undefined =
+          locale === DEFAULT_MARKETING_LOCALE
+            ? undefined
+            : ((await safeAwait(
+                loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS),
+                `marketing_layout.locale_chrome_en`,
+                LOCALE_CHROME_SHARD_TIMEOUT_MS,
+              )) ?? {});
+
+        if (Object.keys(messages).length === 0) {
+          const syncFill = fillLocaleChromeFromSync(locale);
+          if (Object.keys(syncFill.messages).length > 0) messages = syncFill.messages;
+          if (locale !== DEFAULT_MARKETING_LOCALE && syncFill.fallbackMessages) {
+            fallbackMessages = syncFill.fallbackMessages;
+          }
+        }
+        if (Object.keys(messages).length === 0) {
+          throw new Error(
+            `[marketing_layout] chrome shards empty for locale="${locale}" after async+sync fill (check public/i18n on disk or set NN_MARKETING_I18N_DIR)`,
+          );
+        }
+        if (
+          locale !== DEFAULT_MARKETING_LOCALE &&
+          fallbackMessages &&
+          Object.keys(fallbackMessages).length === 0
+        ) {
+          const enOnly = loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS);
+          if (Object.keys(enOnly).length > 0) fallbackMessages = enOnly;
+        }
+
+        const payload: LocaleChromePayload = { messages, fallbackMessages };
+        localeChromeResolved.set(locale, payload);
+        return payload;
+      } finally {
+        localeChromeInflight.delete(locale);
+      }
+    })();
     localeChromeInflight.set(locale, p);
   }
   return p;

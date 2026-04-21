@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { homeHeroSlideTitleKey } from "@/config/home-hero-carousel";
 import { MARKETING_CHROME_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { assertMarketingLayoutMessagesIntegrity } from "@/lib/marketing-i18n/marketing-layout-message-integrity";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
@@ -29,6 +30,23 @@ test("Do not allow messageCount: 0 to render the marketing shell as healthy", ()
         messages: {},
       }),
     /loaded 0 primary messages/,
+  );
+});
+
+test("marketing layout integrity throws when hero carousel chrome key is missing", () => {
+  const messages = readChromeBundle();
+  const slideTitleKey = homeHeroSlideTitleKey(1);
+  assert.equal(typeof messages[slideTitleKey], "string");
+  delete messages[slideTitleKey];
+
+  assert.throws(
+    () =>
+      assertMarketingLayoutMessagesIntegrity({
+        route: "shared-marketing-default",
+        locale: "en",
+        messages,
+      }),
+    /missing or empty marketing chrome keys/,
   );
 });
 

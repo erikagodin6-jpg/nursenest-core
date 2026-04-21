@@ -1,6 +1,6 @@
 import { isProductionBuildInvocation } from "@/lib/build/build-safe-mode";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { validateMarketingHeroNavCriticalKeys } from "@/lib/marketing/marketing-hero-nav-critical-keys";
+import { assertMarketingHeroNavCriticalOrThrow } from "@/lib/marketing/marketing-build-time-chrome-validation";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 
 const REQUIRED_EN_MARKETING_SHELL_KEYS = [
@@ -21,15 +21,6 @@ function missingRequiredEnMarketingShellKeys(messages: MarketingMessages): strin
   });
 }
 
-/** Production Node server (not `next build`) — avoid hard-failing requests on i18n merge gaps. */
-function isMarketingLayoutProductionRuntime(): boolean {
-  return process.env.NODE_ENV === "production" && !isProductionBuildInvocation();
-}
-
-function logMarketingLayoutIntegritySoftFail(message: string): void {
-  console.error(message);
-}
-
 export function assertMarketingLayoutMessagesIntegrity({
   route,
   locale,
@@ -41,27 +32,20 @@ export function assertMarketingLayoutMessagesIntegrity({
   messages: MarketingMessages;
   fallbackMessages?: MarketingMessages;
 }) {
-  const softRuntime = isMarketingLayoutProductionRuntime();
   const messageCount = Object.keys(messages).length;
   if (messageCount === 0) {
     const fallbackCount = fallbackMessages ? Object.keys(fallbackMessages).length : 0;
-    const detail = `[marketing-layout] ${route} loaded 0 primary messages for locale "${locale}" (fallbackCount=${fallbackCount}); refusing to render degraded chrome.`;
-    if (softRuntime) {
-      logMarketingLayoutIntegritySoftFail(detail);
-      return;
-    }
-    throw new Error(detail);
+    throw new Error(
+      `[marketing-layout] ${route} loaded 0 primary messages for locale "${locale}" (fallbackCount=${fallbackCount}); refusing to render degraded chrome.`,
+    );
   }
 
   if (locale === DEFAULT_MARKETING_LOCALE) {
     const missingRequiredKeys = missingRequiredEnMarketingShellKeys(messages);
     if (missingRequiredKeys.length > 0) {
-      const detail = `[marketing-layout] ${route} is missing required English marketing shell keys: ${missingRequiredKeys.join(", ")}`;
-      if (softRuntime) {
-        logMarketingLayoutIntegritySoftFail(detail);
-      } else {
-        throw new Error(detail);
-      }
+      throw new Error(
+        `[marketing-layout] ${route} is missing required English marketing shell keys: ${missingRequiredKeys.join(", ")}`,
+      );
     }
   }
 
@@ -73,17 +57,5 @@ export function assertMarketingLayoutMessagesIntegrity({
     return;
   }
 
-  const { ok, missing } = validateMarketingHeroNavCriticalKeys(messages);
-  if (!ok) {
-    const preview =
-      missing.length > 48 ? `${missing.slice(0, 48).join(", ")} …(+${missing.length - 48} more)` : missing.join(", ");
-    const detail = `[marketing-layout] ${route} is missing critical marketing chrome keys for locale "${locale}": ${preview}`;
-    if (softRuntime) {
-      logMarketingLayoutIntegritySoftFail(detail);
-      return;
-    }
-    throw new Error(
-      `[marketing-layout] ${route} is missing critical marketing chrome keys for locale "${locale}": ${missing.join(", ")}`,
-    );
-  }
+  assertMarketingHeroNavCriticalOrThrow(messages, `[marketing-layout] ${route} locale="${locale}"`);
 }

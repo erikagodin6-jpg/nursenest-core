@@ -41,6 +41,15 @@ export async function GET(req: NextRequest) {
       pricingCountry: "CA",
     });
   }
+  if (process.env.NN_PRICING_RL_DIAG?.trim() === "1") {
+    safeServerLog("billing", "pricing_options_handler_reached", {
+      routeId: "GET /api/pricing/options",
+      nursingPlans: nursingCount,
+      alliedPlans: alliedCount,
+      rateLimitNote:
+        "429s for this path use dedicated pricing_read_* in Node proxy (enforceApiRateLimit), not ratelimit:public:ip. Set NN_PRICING_RL_DIAG=1 on the app to log pricing_read_allowed after proxy checks.",
+    });
+  }
 
   const res = NextResponse.json(body, { headers: CACHE_HEADER_PRICING_OPTIONS });
   recordApiRouteTelemetry({
