@@ -118,7 +118,7 @@ async function loadQuestionsForPageUncached(
 
 const loadProgrammaticQuestionTopicQuestionsCached = unstable_cache(
   async (slug: string, safePage: number) => {
-    const def = getProgrammaticQuestionTopicDefinition(slug);
+    const def = await getProgrammaticQuestionTopicDefinition(slug);
     if (!def) return null;
     return loadQuestionsForPageUncached(def, safePage);
   },
@@ -135,7 +135,7 @@ export async function loadProgrammaticQuestionTopicQuestions(
   pageCount: number;
   usedFallback: boolean;
 } | null> {
-  const def = getProgrammaticQuestionTopicDefinition(slug);
+  const def = await getProgrammaticQuestionTopicDefinition(slug);
   if (!def) return null;
   const safePage = Math.min(Math.max(1, page), PROGRAMMATIC_QUESTION_TOPIC_MAX_PAGE);
   const result = await loadProgrammaticQuestionTopicQuestionsCached(slug, safePage);
@@ -193,7 +193,7 @@ async function loadRelatedLessonsUncached(def: ProgrammaticQuestionTopicDefiniti
 
 const loadProgrammaticQuestionTopicRelatedLessonsCached = unstable_cache(
   async (slug: string) => {
-    const def = getProgrammaticQuestionTopicDefinition(slug);
+    const def = await getProgrammaticQuestionTopicDefinition(slug);
     if (!def) return [];
     return loadRelatedLessonsUncached(def);
   },

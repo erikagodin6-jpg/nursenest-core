@@ -173,14 +173,14 @@ function loadHeavyRoutingDeps(): Promise<HeavyRoutingDeps> {
       import("./src/lib/exam-pathways/programmatic-slug-redirects"),
       import("./src/lib/marketing/canonical-pathway-hubs"),
       import("./src/lib/lessons/pathway-lesson-slug-redirects"),
-      import("./src/lib/seo/programmatic-registry"),
-    ]).then(([i18n, pathways, canonical, lessons, seo]) => ({
+      import("./src/lib/seo/programmatic-registry-slugs"),
+    ]).then(([i18n, pathways, canonical, lessons, progSlugs]) => ({
       CORE_HOSTED_MARKETING_LOCALES: i18n.CORE_HOSTED_MARKETING_LOCALES,
       PROGRAMMATIC_SLUG_TO_PATHWAY_PATH: pathways.PROGRAMMATIC_SLUG_TO_PATHWAY_PATH,
       LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT: canonical.LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT,
       buildLegacyProgrammaticSeoRedirectsToPathwayHubs: canonical.buildLegacyProgrammaticSeoRedirectsToPathwayHubs,
       buildPathwayLessonSlugRedirectsForNextConfig: lessons.buildPathwayLessonSlugRedirectsForNextConfig,
-      getAllProgrammaticSlugs: seo.getAllProgrammaticSlugs,
+      getAllProgrammaticSlugs: progSlugs.getAllProgrammaticSlugs,
     }));
   }
   return heavyRoutingDepsPromise;

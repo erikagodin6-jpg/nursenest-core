@@ -2,7 +2,7 @@ import type { Prisma } from "@prisma/client";
 
 /**
  * Page payloads for `/questions/{slug}` — loaded on first registry use from
- * {@link ./programmatic-question-topic-registry} (see `getProgrammaticQuestionTopicPages`).
+ * {@link ./programmatic-question-topic-registry} via dynamic `import()` (see `getProgrammaticQuestionTopicPages`).
  */
 export type ProgrammaticQuestionTopicDefinition = {
   slug: string;

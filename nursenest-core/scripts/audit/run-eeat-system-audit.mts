@@ -179,12 +179,12 @@ async function main() {
   const { getAllProgrammaticSeoPages, getRelatedProgrammaticPages } = await import(
     "../../src/lib/seo/programmatic-registry",
   );
-  const programmaticPages = getAllProgrammaticSeoPages();
+  const programmaticPages = await getAllProgrammaticSeoPages();
   for (const p of programmaticPages) {
     const wc = p.sections.reduce((a, s) => a + s.body.reduce((b, line) => b + countWords(line), 0), 0);
     const bodyText = p.sections.map((s) => s.body.join(" ")).join(" ");
-    const links =
-      countInternalLinksInText(bodyText) + getRelatedProgrammaticPages(p.slug, 8).length;
+    const related = await getRelatedProgrammaticPages(p.slug, 8);
+    const links = countInternalLinksInText(bodyText) + related.length;
     const faqBonus = p.faq?.length ? 0.05 : 0;
     const sec = Math.min(1, 0.55 + faqBonus + Math.min(0.35, p.sections.length * 0.05));
     const score = computeEeatScore({

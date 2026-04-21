@@ -1,5 +1,5 @@
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
-import { isProgrammaticSeoSlug } from "@/lib/seo/programmatic-registry";
+import { isProgrammaticSeoSlug } from "@/lib/seo/programmatic-registry-slugs";
 
 /**
  * Maps legacy SPA paths from `shared/platform-manifest` and marketing copy to NurseNest Core routes.

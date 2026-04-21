@@ -37,7 +37,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const { slug } = await params;
   const sp = await searchParams;
   const marketingLocale = await getMarketingLocaleForDefaultRoute();
-  const def = getProgrammaticQuestionTopicDefinition(slug);
+  const def = await getProgrammaticQuestionTopicDefinition(slug);
   const pathname = `/questions/${slug}`;
   const pageRaw = Number(sp.page ?? "1");
   const page = Number.isFinite(pageRaw) && pageRaw >= 1 ? Math.floor(pageRaw) : 1;
@@ -64,7 +64,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 export default async function ProgrammaticQuestionTopicPage({ params, searchParams }: Props) {
   const { slug } = await params;
   const sp = await searchParams;
-  const def = getProgrammaticQuestionTopicDefinition(slug);
+  const def = await getProgrammaticQuestionTopicDefinition(slug);
   if (!def) notFound();
 
   const pageRaw = Number(sp.page ?? "1");
@@ -89,12 +89,14 @@ export default async function ProgrammaticQuestionTopicPage({ params, searchPara
     .map((id) => getExamPathwayById(id))
     .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
-  const relatedTopicLinks = (def.relatedQuestionPageSlugs ?? [])
-    .map((s) => {
-      const p = getProgrammaticQuestionTopicDefinition(s);
-      return p ? { href: `/questions/${p.slug}`, label: p.h1 } : null;
-    })
-    .filter((x): x is { href: string; label: string } => Boolean(x));
+  const relatedTopicLinks = (
+    await Promise.all(
+      (def.relatedQuestionPageSlugs ?? []).map(async (s) => {
+        const p = await getProgrammaticQuestionTopicDefinition(s);
+        return p ? { href: `/questions/${p.slug}`, label: p.h1 } : null;
+      }),
+    )
+  ).filter((x): x is { href: string; label: string } => Boolean(x));
 
   const regionalDha = "/middle-east/dha-exam";
   const showDhaGuide = slug === "dha-exam-practice" && isRegionalMarketingUrlPublished(regionalDha);

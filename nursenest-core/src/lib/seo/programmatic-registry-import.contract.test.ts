@@ -20,6 +20,7 @@ test("programmatic-registry does not static-import page payload modules", () => 
     !/from\s+["']\.\/programmatic-seo-authority-batch["']/m.test(src),
     "registry must not static-import authority batch",
   );
-  assert.match(src, /createRequire/);
-  assert.match(src, /require\(\s*["']\.\/programmatic-registry-pages-part-1["']\s*\)/);
+  assert.doesNotMatch(src, /createRequire/);
+  assert.ok(!src.includes(["node", ":", "module"].join("")), "registry must not import Node built-in module scheme");
+  assert.match(src, /import\(\s*["']\.\/programmatic-registry-pages-part-1["']\s*\)/);
 });

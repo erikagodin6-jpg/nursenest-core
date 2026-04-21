@@ -12,9 +12,9 @@ test("programmatic question topic slugs include requested landing pages", () => 
   assert.ok(slugs.has("dha-exam-practice"));
 });
 
-test("each registry row has SSR copy, FAQ, and pathway scope", () => {
+test("each registry row has SSR copy, FAQ, and pathway scope", async () => {
   for (const slug of getAllProgrammaticQuestionTopicSlugs()) {
-    const p = getProgrammaticQuestionTopicDefinition(slug);
+    const p = await getProgrammaticQuestionTopicDefinition(slug);
     assert.ok(p, slug);
     const words = p!.paragraphs.join(" ").split(/\s+/).filter(Boolean).length;
     assert.ok(words >= 150 && words <= 320, `${slug}: intro target 150–300 words`);

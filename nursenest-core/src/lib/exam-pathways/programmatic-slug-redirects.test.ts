@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "@/lib/exam-pathways/programmatic-slug-redirects";
-import { getAllProgrammaticSlugs } from "@/lib/seo/programmatic-registry";
+import { getAllProgrammaticSlugs } from "@/lib/seo/programmatic-registry-slugs";
 
 test("no programmatic slug redirects to a single exam hub (multi-audience slugs stay on /{slug})", () => {
   assert.equal(Object.keys(PROGRAMMATIC_SLUG_TO_PATHWAY_PATH).length, 0);

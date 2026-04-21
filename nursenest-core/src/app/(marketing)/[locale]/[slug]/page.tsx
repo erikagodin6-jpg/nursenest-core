@@ -22,7 +22,7 @@ export async function generateMetadata({
   const { locale, slug } = await params;
   return safeGenerateMetadata(
     async () => {
-      const resolved = resolveProgrammaticSeoForLocale(slug, locale);
+      const resolved = await resolveProgrammaticSeoForLocale(slug, locale);
       if (!resolved) return {};
       return buildProgrammaticMetadata(resolved.page, locale);
     },
@@ -37,7 +37,7 @@ export default async function ProgrammaticSeoLocaleRoute({
 }) {
   const { locale, slug } = await params;
   const marketingRegion = await getMarketingRegionFromCookies();
-  const resolved = resolveProgrammaticSeoForLocale(slug, locale);
+  const resolved = await resolveProgrammaticSeoForLocale(slug, locale);
   if (!resolved) notFound();
   return (
     <ProgrammaticSeoPage

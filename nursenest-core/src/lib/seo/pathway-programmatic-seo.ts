@@ -27,10 +27,12 @@ const PATHWAY_ID_TO_PROGRAMMATIC_SLUG: Record<string, string> = {
   "us-allied-core": "allied-health-career-guides",
 };
 
-export function getPathwayProgrammaticSeoLanding(pathway: ExamPathwayDefinition): { path: string; label: string } | null {
+export async function getPathwayProgrammaticSeoLanding(
+  pathway: ExamPathwayDefinition,
+): Promise<{ path: string; label: string } | null> {
   const slug = PATHWAY_ID_TO_PROGRAMMATIC_SLUG[pathway.id];
   if (!slug) return null;
-  const page = getProgrammaticSeoPage(slug);
+  const page = await getProgrammaticSeoPage(slug);
   if (!page) return null;
   return { path: `/${slug}`, label: page.h1 };
 }

@@ -16,6 +16,7 @@ test("programmatic-question-topic-registry does not static-import the pages payl
     /^import type \{[^}]*ProgrammaticQuestionTopicDefinition/m.test(src),
     "registry should use type-only import from pages module",
   );
-  assert.match(src, /createRequire/);
-  assert.match(src, /require\(\s*["']\.\/programmatic-question-topic-registry-pages["']\s*\)/);
+  assert.doesNotMatch(src, /createRequire/);
+  assert.ok(!src.includes(["node", ":", "module"].join("")), "registry must not import Node built-in module scheme");
+  assert.match(src, /import\(\s*["']\.\/programmatic-question-topic-registry-pages["']\s*\)/);
 });

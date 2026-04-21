@@ -46,11 +46,9 @@ import { logSeoEmittedUrlBatch } from "@/lib/seo/seo-url-emission-audit";
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
 import { shouldSkipDbBackedSitemapUrlsForBuild } from "@/lib/seo/sitemap-build-skip";
 import { getSitemapIncludedLocales } from "@/lib/i18n/language-readiness";
-import {
-  getAllProgrammaticSlugs,
-  MAX_PROGRAMMATIC_SEO_SITEMAP_SLUGS,
-} from "@/lib/seo/programmatic-registry";
-import { getAllProgrammaticQuestionTopicSlugs } from "@/lib/seo/programmatic-question-topic-registry";
+import { MAX_PROGRAMMATIC_SEO_SITEMAP_SLUGS } from "@/lib/seo/programmatic-registry-constants";
+import { getAllProgrammaticSlugs } from "@/lib/seo/programmatic-registry-slugs";
+import { getAllProgrammaticQuestionTopicSlugs } from "@/lib/seo/programmatic-question-topic-registry-slugs";
 import { getAllToolSlugs } from "@/lib/tools/tool-registry";
 import {
   isRegionalMarketingUrlPublished,
