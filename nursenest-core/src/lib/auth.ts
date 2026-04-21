@@ -43,7 +43,7 @@ import { emitStructuredLog } from "@/lib/observability/structured-log";
 import {
   assertCredentialsLoginRateLimits,
   resetCredentialsLoginRateLimitKeys,
-} from "@/lib/server/rate-limit";
+} from "@/lib/server/credentials-login-rate-limit";
 
 if (process.env.NODE_ENV === "production") {
   const hasSecret = Boolean(

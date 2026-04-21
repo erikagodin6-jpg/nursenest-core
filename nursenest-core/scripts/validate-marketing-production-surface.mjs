@@ -52,6 +52,13 @@ const REQUIRED_PAGE_KEYS = [
   "pages.pricing.plan.rowDataIncomplete",
   /** Pricing page when global region has no regional Stripe scope (partial / marketing hubs). */
   "pages.pricing.globalContext.northAmericaStripeScope",
+  "pages.pricing.globalContext.northAmericaStripeScopeAria",
+  "pages.pricing.globalContext.ackNorthAmericaBillingLabel",
+  "pages.pricing.globalContext.mustAckBeforeCheckout",
+  "pages.pricing.checkout.ctaJoinNorthAmericaPathways",
+  "pages.pricing.checkout.northAmericaBillingSubcopy",
+  "pages.pricing.checkout.continueToSecureCheckout",
+  "pages.pricing.checkout.continueToNorthAmericaCheckout",
 ];
 
 const REQUIRED_NAV_KEYS = ["footer.emailBannerTitle", "footer.emailBannerSubtitle"];

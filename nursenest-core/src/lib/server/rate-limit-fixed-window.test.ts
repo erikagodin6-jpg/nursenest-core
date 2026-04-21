@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { checkRedisFixedWindowLimit } from "@/lib/server/rate-limit";
+import { checkRedisFixedWindowLimit } from "@/lib/server/credentials-login-rate-limit";
 
 test("checkRedisFixedWindowLimit allows requests within the window", async () => {
   const expireCalls: Array<[string, number]> = [];

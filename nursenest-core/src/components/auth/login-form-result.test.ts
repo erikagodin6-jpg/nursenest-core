@@ -70,4 +70,14 @@ describe("resolveLoginSubmitOutcome", () => {
     const result: LoginSubmitResultLike = { ok: false, status: 429 };
     assert.equal(resolveLoginSubmitOutcome(result, false), "rate_limited");
   });
+
+  it("classifies authorize-thrown rate limit (CredentialsSignin + rate_limit_exceeded) before invalid-credentials branch", () => {
+    const result: LoginSubmitResultLike = {
+      error: "CredentialsSignin",
+      code: "rate_limit_exceeded",
+      status: 401,
+      ok: false,
+    };
+    assert.equal(resolveLoginSubmitOutcome(result, false), "rate_limited");
+  });
 });

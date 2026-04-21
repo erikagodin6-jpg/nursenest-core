@@ -263,6 +263,8 @@ export function PricingPageClient({
   const [pendingCheckoutDuration, setPendingCheckoutDuration] = useState<BillingDuration | null>(null);
   const [checkoutIntentHandled, setCheckoutIntentHandled] = useState(false);
   const [plansLoaded, setPlansLoaded] = useState(false);
+  /** Soft gate (policy B): partial/marketing global regions may checkout only after explicit NA billing acknowledgment. */
+  const [naPathwayAcknowledged, setNaPathwayAcknowledged] = useState(false);
   const { locale, t } = useMarketingI18n();
   /** `t` is recreated when marketing shards merge — do not use it as a fetch effect dep (can starve in-flight loads). */
   const tRef = useRef(t);
@@ -273,7 +275,6 @@ export function PricingPageClient({
   const searchParams = useSearchParams();
   const { status: authStatus } = useSession();
 
-  const heroCtaLabel = TRIAL_PRIMARY_COPY;
   const trialSubtext = TRIAL_SECONDARY_COPY;
   const pricingCurrencyLine = useMemo(
     () =>
@@ -392,6 +393,20 @@ export function PricingPageClient({
     return !canShowPricing(globalMarketSlug);
   }, [globalMarketSlug]);
 
+  const pricingCheckoutSoftGate = showNorthAmericaStripeScopeNote;
+
+  useEffect(() => {
+    setNaPathwayAcknowledged(false);
+  }, [globalMarketSlug]);
+
+  const heroCtaLabel = useMemo(
+    () =>
+      pricingCheckoutSoftGate
+        ? t("pages.pricing.checkout.ctaJoinNorthAmericaPathways")
+        : TRIAL_PRIMARY_COPY,
+    [pricingCheckoutSoftGate, t],
+  );
+
   const tryQuestionsHref = localize(rnQuestions(region));
   const termsHref = localize("/terms");
   const privacyHref = localize("/privacy");
@@ -413,6 +428,9 @@ export function PricingPageClient({
         marketing_locale: locale,
         marketing_region: region,
         pricing_segment: segment,
+        pricing_checkout_soft_gate: pricingCheckoutSoftGate,
+        na_pathway_acknowledged: naPathwayAcknowledged,
+        global_market_slug: globalMarketSlug ?? "",
         ...(isAllied ? { allied_career: selectedAlliedCareer } : {}),
       });
       try {
@@ -522,13 +540,29 @@ export function PricingPageClient({
         setCheckoutLoading(false);
       }
     },
-    [tier, trialDays, t, isAllied, selectedAlliedCareer, region, locale, segment],
+    [
+      tier,
+      trialDays,
+      t,
+      isAllied,
+      selectedAlliedCareer,
+      region,
+      locale,
+      segment,
+      pricingCheckoutSoftGate,
+      naPathwayAcknowledged,
+      globalMarketSlug,
+    ],
   );
 
   const requestCheckout = useCallback(
     (duration: BillingDuration) => {
       setCheckoutError(null);
       setCheckoutOpsHint(null);
+      if (pricingCheckoutSoftGate && !naPathwayAcknowledged) {
+        setCheckoutError(t("pages.pricing.globalContext.mustAckBeforeCheckout"));
+        return;
+      }
       if (authStatus === "loading") return;
       if (authStatus !== "authenticated") {
         const callbackParams = new URLSearchParams(searchParams.toString());
@@ -550,11 +584,28 @@ export function PricingPageClient({
       setPendingCheckoutDuration(duration);
       setShowConsentPrompt(true);
     },
-    [authStatus, isAllied, localize, pathname, policiesAccepted, searchParams, selectedAlliedCareer, startCheckout, tier],
+    [
+      authStatus,
+      isAllied,
+      localize,
+      pathname,
+      policiesAccepted,
+      pricingCheckoutSoftGate,
+      naPathwayAcknowledged,
+      searchParams,
+      selectedAlliedCareer,
+      startCheckout,
+      t,
+      tier,
+    ],
   );
 
   const confirmConsentAndCheckout = useCallback(() => {
     if (!pendingCheckoutDuration) return;
+    if (pricingCheckoutSoftGate && !naPathwayAcknowledged) {
+      setCheckoutError(t("pages.pricing.globalContext.mustAckBeforeCheckout"));
+      return;
+    }
     if (!policiesAccepted) {
       setCheckoutError(t("pages.pricing.checkout.mustAcceptPolicies"));
       return;
@@ -563,7 +614,7 @@ export function PricingPageClient({
     const duration = pendingCheckoutDuration;
     setPendingCheckoutDuration(null);
     void startCheckout(duration);
-  }, [pendingCheckoutDuration, policiesAccepted, startCheckout, t]);
+  }, [pendingCheckoutDuration, policiesAccepted, pricingCheckoutSoftGate, naPathwayAcknowledged, startCheckout, t]);
 
   const SEGMENT_ORDER: Segment[] = ["prenursing", "newgrad", "rn", "pn", "np", "allied"];
 
@@ -618,9 +669,22 @@ export function PricingPageClient({
       {showNorthAmericaStripeScopeNote ? (
         <div
           className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_08%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]"
-          role="status"
+          role="region"
+          aria-label={t("pages.pricing.globalContext.northAmericaStripeScopeAria")}
         >
           <p>{t("pages.pricing.globalContext.northAmericaStripeScope")}</p>
+          <label className="mt-3 flex cursor-pointer items-start gap-3 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_04%,var(--color-card))] p-3 text-left text-[13px] leading-snug text-[var(--palette-text)]">
+            <input
+              type="checkbox"
+              className="mt-0.5 h-4 w-4 shrink-0 rounded border-border"
+              checked={naPathwayAcknowledged}
+              onChange={(e) => {
+                setNaPathwayAcknowledged(e.target.checked);
+                if (e.target.checked) setCheckoutError(null);
+              }}
+            />
+            <span>{t("pages.pricing.globalContext.ackNorthAmericaBillingLabel")}</span>
+          </label>
         </div>
       ) : null}
 
@@ -829,15 +893,32 @@ export function PricingPageClient({
 
                     <button
                       type="button"
-                      disabled={checkoutLoading || !row.checkoutAvailable}
+                      disabled={
+                        checkoutLoading ||
+                        !row.checkoutAvailable ||
+                        (pricingCheckoutSoftGate && !naPathwayAcknowledged)
+                      }
                       onClick={() => requestCheckout(duration)}
                       className={`${isHighlighted ? MARKETING_PRIMARY_CTA_CLASS : MARKETING_SECONDARY_CTA_CLASS} mt-6 w-full justify-center disabled:pointer-events-none disabled:opacity-50`}
                     >
-                      {row.checkoutAvailable ? TRIAL_PRIMARY_COPY : t("pages.pricing.checkout.comingSoon")}
+                      {row.checkoutAvailable
+                        ? pricingCheckoutSoftGate
+                          ? t("pages.pricing.checkout.ctaJoinNorthAmericaPathways")
+                          : TRIAL_PRIMARY_COPY
+                        : t("pages.pricing.checkout.comingSoon")}
                     </button>
                     {row.checkoutAvailable ? (
                       <>
-                        <p className={`mt-3 text-center text-xs leading-snug ${isPop ? "font-semibold text-[var(--semantic-info)]" : "text-muted-foreground"}`}>
+                        {pricingCheckoutSoftGate ? (
+                          <p className="mt-3 text-center text-xs leading-snug text-muted-foreground">
+                            {t("pages.pricing.checkout.northAmericaBillingSubcopy")}
+                          </p>
+                        ) : null}
+                        <p
+                          className={`${pricingCheckoutSoftGate ? "mt-2" : "mt-3"} text-center text-xs leading-snug ${
+                            isPop ? "font-semibold text-[var(--semantic-info)]" : "text-muted-foreground"
+                          }`}
+                        >
                           {TRIAL_SECONDARY_COPY}
                         </p>
                         <p className="mt-1 text-center text-[11px] leading-snug text-muted-foreground">
@@ -893,6 +974,23 @@ export function PricingPageClient({
                 </label>
               </div>
 
+              {pricingCheckoutSoftGate ? (
+                <div className="mt-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_06%,var(--color-card))] p-4 text-sm">
+                  <label className="flex cursor-pointer gap-3">
+                    <input
+                      type="checkbox"
+                      className="mt-1 h-4 w-4 shrink-0 rounded border-border"
+                      checked={naPathwayAcknowledged}
+                      onChange={(e) => {
+                        setNaPathwayAcknowledged(e.target.checked);
+                        if (e.target.checked) setCheckoutError(null);
+                      }}
+                    />
+                    <span className="text-[var(--palette-text)]">{t("pages.pricing.globalContext.ackNorthAmericaBillingLabel")}</span>
+                  </label>
+                </div>
+              ) : null}
+
               <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
                 <button
                   type="button"
@@ -910,9 +1008,15 @@ export function PricingPageClient({
                   type="button"
                   className={MARKETING_PRIMARY_CTA_CLASS}
                   onClick={confirmConsentAndCheckout}
-                  disabled={checkoutLoading || !policiesAccepted}
+                  disabled={
+                    checkoutLoading ||
+                    !policiesAccepted ||
+                    (pricingCheckoutSoftGate && !naPathwayAcknowledged)
+                  }
                 >
-                  Continue to secure checkout
+                  {pricingCheckoutSoftGate
+                    ? t("pages.pricing.checkout.continueToNorthAmericaCheckout")
+                    : t("pages.pricing.checkout.continueToSecureCheckout")}
                 </button>
               </div>
             </div>
