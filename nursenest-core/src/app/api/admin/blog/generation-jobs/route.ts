@@ -1,12 +1,16 @@
+import { BlogPostTemplate } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { loadRnTopicMapBatchRows } from "@/lib/admin/blog-topic-map-batch";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import {
+  assertRnTopicMapShellRowCount,
   assertTopicsWithinBatchLimit,
   blogGenerationJobCreateBodySchema,
 } from "@/lib/blog/blog-draft-generation-batch-create-body";
 import { parseDraftBatchTopicLines } from "@/lib/blog/blog-draft-generation-batch-parse";
 import { normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { prisma } from "@/lib/db";
+import { RN_TOPIC_MAP_SHELL_BATCH_EXAM, RN_TOPIC_MAP_SHELL_MAX_ITEMS } from "@/lib/blog/blog-topic-map-shell-batch-constants";
 import {
   loadBlogGenerationJobForAdmin,
   listBlogGenerationJobsForAdmin,

@@ -66,7 +66,11 @@ const BILLING_WINDOW_MS = 60_000;
 const BILLING_MAX = 18;
 
 const PRICING_WINDOW_MS = 60_000;
-const PRICING_MAX = 20;
+/** Default per-IP ceiling for `GET /api/pricing/*` (NAT + prefetch + reloads). Override: `NN_PRICING_READ_MAX_PER_IP`. */
+const PRICING_MAX_IP_DEFAULT = 300;
+/** JWT-present pricing reads — per-user so NAT does not starve checkout. Override: `NN_PRICING_READ_MAX_PER_USER`. */
+const PRICING_MAX_USER_DEFAULT = 600;
+const PRICING_READ_RETRY_AFTER_SEC = 45;
 
 const AI_EXPENSIVE_WINDOW_MS = 60_000;
 const AI_EXPENSIVE_MAX = 36;
@@ -301,6 +305,39 @@ function isAuthStrictPathForDocumentRateLimitRedirect(pathname: string): boolean
  *
  * For proxy rate limits on `/api/auth/*` strict paths, include a stable **UI** `url` (see {@link buildAuthStrictRateLimit429Json}).
  */
+function json429PricingRead(meta: {
+  path: string;
+  windowMs: number;
+  max: number;
+  bucketKeyType: "ip_partition" | "user";
+}): NextResponse {
+  const retry = PRICING_READ_RETRY_AFTER_SEC;
+  return NextResponse.json(
+    {
+      error: "Too many requests",
+      code: "rate_limit_exceeded",
+      scope: "pricing_read",
+      limiter: "pricing_read",
+      bucketType: "dedicated",
+      bucketKeyType: meta.bucketKeyType,
+      path: meta.path,
+      windowMs: meta.windowMs,
+      max: meta.max,
+      retryAfterSec: retry,
+    },
+    {
+      status: 429,
+      headers: {
+        "Retry-After": String(retry),
+        "Cache-Control": "no-store",
+        "X-NN-RateLimit-Scope": "pricing_read",
+        "X-NN-RateLimiter": "pricing_read",
+        "X-NN-RateLimit-Bucket": meta.bucketKeyType,
+      },
+    },
+  );
+}
+
 async function json429WithBackoff(ip: string, request?: NextRequest): Promise<NextResponse> {
   const r = await consumeRateLimitUnified(streakMetaKey(ip), 1, {
     windowMs: STREAK_WINDOW_MS,
@@ -458,10 +495,17 @@ export function adminBlogGenerationJobsRateLimitKind(pathname: string, method: s
   const pre = ADMIN_BLOG_GENERATION_JOBS_API_PREFIX;
   if (pathname !== pre && !pathname.startsWith(`${pre}/`)) return null;
   const m = method.toUpperCase();
+  if (pathname.endsWith("/tick")) {
+    if (m === "POST") return "run";
+    return null;
+  }
   if (pathname === pre && m === "GET") return "read";
   if (pathname === pre && m === "POST") return "write";
-  if (pathname.endsWith("/tick") && m === "POST") return "run";
-  if (m === "GET" && pathname.startsWith(`${pre}/`) && pathname !== pre) return "read";
+  if (m === "GET" && pathname.startsWith(`${pre}/`) && pathname !== pre) {
+    const rest = pathname.slice(pre.length + 1);
+    if (rest.includes("/")) return null;
+    return "read";
+  }
   return null;
 }
 
@@ -1061,14 +1105,64 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   }
 
   if (isPricingRateLimitPath(pathname)) {
+    const pathShort = pathname.slice(0, 160);
+    const maxIpRaw = process.env.NN_PRICING_READ_MAX_PER_IP?.trim();
+    const maxIpParsed = maxIpRaw ? Number(maxIpRaw) : NaN;
+    const maxIpBase =
+      Number.isFinite(maxIpParsed) && maxIpParsed >= 30 ? Math.floor(maxIpParsed) : PRICING_MAX_IP_DEFAULT;
+    const maxIp = tightenPublicCap(maxIpBase);
+
+    const maxUserRaw = process.env.NN_PRICING_READ_MAX_PER_USER?.trim();
+    const maxUserParsed = maxUserRaw ? Number(maxUserRaw) : NaN;
+    const maxUser =
+      Number.isFinite(maxUserParsed) && maxUserParsed >= 60 ? Math.floor(maxUserParsed) : PRICING_MAX_USER_DEFAULT;
+
+    if (method === "GET" && userId) {
+      const key = `ratelimit:pricing:user:${userId}`;
+      const { ok, remaining } = await checkRateLimitUnified(key, {
+        windowMs: PRICING_WINDOW_MS,
+        max: maxUser,
+      });
+      if (!ok) {
+        safeServerLog("security", "rate_limit_exceeded", {
+          kind: "pricing_read_user",
+          limiter: "pricing_read_user",
+          path: pathShort,
+          windowMs: PRICING_WINDOW_MS,
+          max: maxUser,
+          remaining,
+        });
+        return json429PricingRead({
+          path: pathShort,
+          windowMs: PRICING_WINDOW_MS,
+          max: maxUser,
+          bucketKeyType: "user",
+        });
+      }
+      return null;
+    }
+
     const key = `ratelimit:pricing:ip:${ipKey}`;
-    const { ok } = await checkRateLimitUnified(key, {
+    const { ok, remaining } = await checkRateLimitUnified(key, {
       windowMs: PRICING_WINDOW_MS,
-      max: tightenPublicCap(PRICING_MAX),
+      max: maxIp,
     });
     if (!ok) {
-      safeServerLog("security", "rate_limit_exceeded", { kind: "pricing", path: pathname.slice(0, 96) });
-      return await json429WithBackoff(ipKey);
+      safeServerLog("security", "rate_limit_exceeded", {
+        kind: "pricing_read_ip",
+        limiter: "pricing_read_ip",
+        path: pathShort,
+        windowMs: PRICING_WINDOW_MS,
+        max: maxIp,
+        ipHash: hashIp(ipKey),
+        remaining,
+      });
+      return json429PricingRead({
+        path: pathShort,
+        windowMs: PRICING_WINDOW_MS,
+        max: maxIp,
+        bucketKeyType: "ip_partition",
+      });
     }
     return null;
   }
@@ -1230,7 +1324,11 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     return null;
   }
 
-  if (pathname.startsWith(SUBSCRIPTION_API_STRICT_PREFIX) && !pathname.startsWith("/api/subscriptions/webhook")) {
+  if (
+    pathname.startsWith(SUBSCRIPTION_API_STRICT_PREFIX) &&
+    !pathname.startsWith("/api/subscriptions/webhook") &&
+    !pathname.startsWith("/api/subscriptions/checkout")
+  ) {
     const key = `ratelimit:subscriptions:ip:${ipKey}`;
     const { ok } = await checkRateLimitUnified(key, {
       windowMs: SUBSCRIPTION_STRICT_WINDOW_MS,
@@ -1301,5 +1399,8 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
 function hashIp(ip: string): string {
   let h = 0;
   for (let i = 0; i < ip.length; i++) h = (h * 31 + ip.charCodeAt(i)) | 0;
+  return String(h >>> 0);
+}
+0;
   return String(h >>> 0);
 }

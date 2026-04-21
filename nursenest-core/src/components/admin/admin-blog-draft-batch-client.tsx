@@ -126,11 +126,11 @@ function jobPhaseBadge(phase: NonNullable<BatchDetail["jobPhase"]>) {
   const base = "inline-flex rounded-full px-2 py-0.5 text-xs font-semibold";
   switch (phase) {
     case "queued":
-      return `${base} bg-violet-500/15 text-violet-950 dark:text-violet-100`;
+      return `${base} bg-sky-500/15 text-sky-950 dark:text-sky-100`;
     case "running":
       return `${base} bg-amber-500/20 text-amber-950 dark:text-amber-100`;
     case "partial":
-      return `${base} bg-orange-500/15 text-orange-950 dark:text-orange-100`;
+      return `${base} bg-amber-500/15 text-amber-950 dark:text-amber-100`;
     case "completed":
       return `${base} bg-emerald-500/15 text-emerald-950 dark:text-emerald-100`;
     case "cancelled":
@@ -379,9 +379,9 @@ export function AdminBlogDraftBatchClient() {
       <form onSubmit={onCreate} className="space-y-4 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-6">
         <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Batch AI draft generation</h2>
         <p className="text-sm text-muted-foreground">
-          One draft per non-empty line. Results are stored on each <code className="rounded bg-muted px-1">BlogPost</code> row; queue
-          state is persisted so you can refresh safely. Process in chunks (
-          {DRAFT_BATCH_MAX_ITEMS_PER_PROCESS} max per request) to avoid timeouts. Requires{" "}
+          One draft per non-empty line. Create starts a single server job (no browser loop): the platform cron advances
+          items every few minutes; this page polls status. Use “Process chunk” to nudge up to{" "}
+          {DRAFT_BATCH_MAX_ITEMS_PER_PROCESS} items sooner. Requires{" "}
           <code className="rounded bg-muted px-1">AI_ADMIN_GENERATION_ENABLED=true</code> and OpenAI.
         </p>
         <label className="block space-y-1">
@@ -527,7 +527,7 @@ export function AdminBlogDraftBatchClient() {
           disabled={busy}
           className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
         >
-          {busy ? "Working…" : "Create batch queue"}
+          {busy ? "Working…" : "Create server job"}
         </button>
         {msg ? <p className="text-sm text-emerald-700 dark:text-emerald-300">{msg}</p> : null}
         {err ? <p className="text-sm text-rose-700 dark:text-rose-300">{err}</p> : null}
@@ -540,8 +540,20 @@ export function AdminBlogDraftBatchClient() {
               <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">Current batch</h3>
               <p className="text-xs text-muted-foreground">
                 ID <code className="rounded bg-muted px-1">{batchId}</code> ·{" "}
-                <span className={statusBadge(batch.status)}>{batch.status}</span> · pending {pendingCount} / {batch.totalItems}
+                <span className={statusBadge(batch.status)}>{batch.status}</span>
+                {batch.jobPhase ? (
+                  <>
+                    {" "}
+                    · job <span className={jobPhaseBadge(batch.jobPhase)}>{batch.jobPhase}</span>
+                  </>
+                ) : null}{" "}
+                · pending {pendingCount} / {batch.totalItems}
               </p>
+              {batch.lastProcessorError ? (
+                <p className="mt-1 max-w-2xl text-xs text-rose-700 dark:text-rose-300">
+                  Last processor note: {batch.lastProcessorError}
+                </p>
+              ) : null}
             </div>
             <div className="flex flex-wrap gap-2">
               <label className="flex items-center gap-2 text-sm">
@@ -551,7 +563,7 @@ export function AdminBlogDraftBatchClient() {
                   value={processChunk}
                   onChange={(e) => setProcessChunk(Number(e.target.value))}
                 >
-                  {[1, 2, 3, 4, 6, 8].map((n) => (
+                  {Array.from({ length: DRAFT_BATCH_MAX_ITEMS_PER_PROCESS }, (_, i) => i + 1).map((n) => (
                     <option key={n} value={n}>
                       {n}
                     </option>
@@ -564,16 +576,13 @@ export function AdminBlogDraftBatchClient() {
                 className="rounded-full border border-border px-4 py-2 text-sm font-semibold disabled:opacity-50"
                 onClick={() => void onProcess(processChunk)}
               >
-                Process chunk
+                {batch.backgroundProcessing ? "Nudge server (chunk)" : "Process chunk"}
               </button>
-              <button
-                type="button"
-                disabled={busy || pendingCount === 0}
-                className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
-                onClick={() => void onProcessAll()}
-              >
-                Process all (loop)
-              </button>
+              {batch.backgroundProcessing ? (
+                <p className="w-full max-w-xl text-xs text-muted-foreground sm:w-auto">
+                  No tab-long loops: cron plus optional nudges advance this job. Large batches stay within rate limits.
+                </p>
+              ) : null}
               <Link
                 href="/admin/blog/control-panel"
                 className="rounded-full border border-primary/40 px-4 py-2 text-sm font-semibold text-primary"

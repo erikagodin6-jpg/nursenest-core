@@ -323,10 +323,8 @@ export function PricingPageClient({
     let cancelled = false;
     (async () => {
       try {
-        /** Avoid stale browser HTTP cache for anonymous pricing JSON (CDN is still authoritative at origin). */
-        const res = await fetch("/api/pricing/options", { cache: "no-store" });
-        if (!res.ok) throw new Error("load_failed");
-        const data = (await res.json()) as Record<string, unknown>;
+        /** Deduped fetch avoids duplicate requests (e.g. StrictMode) hammering the pricing RL bucket. */
+        const data = await fetchPricingOptionsPayloadDeduped();
         const plans = data.plans;
         const allied = data.alliedPlans;
         if (!Array.isArray(plans) || !Array.isArray(allied)) {

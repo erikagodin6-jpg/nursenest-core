@@ -25,7 +25,10 @@ export type PrePublishCheckId =
   | "image_workflow"
   | "breadcrumb"
   | "seo_bundle"
-  | "faq_schema";
+  | "faq_schema"
+  | "schema_summary_json"
+  | "meta_title_duplicate_h1"
+  | "meta_description_substance";
 
 export type PrePublishSeverity = "block" | "warn";
 
@@ -250,16 +253,43 @@ export async function validateBlogPrePublish(
       message: "Meta / SEO title is empty.",
       fix: "Fill Meta title in the Meta & SEO section (or meta title variant).",
     });
+  } else if (title.length >= 3 && metaTitle.toLowerCase() === title.toLowerCase()) {
+    push(issues, {
+      id: "meta_title_duplicate_h1",
+      severity: "warn",
+      message: "SEO title matches the on-page H1 exactly — consider a tighter title tag that adds search-specific context (without keyword stuffing).",
+      fix: "Differentiate meta title from H1 in Meta & SEO (e.g., exam angle, learner outcome).",
+    });
   }
 
   const metaDesc = effectiveMetaDescription(row);
-  if (metaDesc.length < 10) {
+  if (metaDesc.length < 50) {
     push(issues, {
       id: "meta_description",
       severity: "block",
-      message: "Meta description is missing or too short.",
-      fix: "Add a compelling meta description (~20–320 characters).",
+      message: "Meta description is missing or too short for a substantive listing (min ~50 characters).",
+      fix: "Write a unique, descriptive meta summary aligned with the first screen of the article (roughly 50–160 characters; avoid repeating the title verbatim).",
     });
+  } else if (metaDesc.length < 120) {
+    push(issues, {
+      id: "meta_description_substance",
+      severity: "warn",
+      message: "Meta description is short — longer, specific copy often matches search snippets better when Google uses it.",
+      fix: "Expand toward ~120–160 characters with concrete learner value (still aligned with visible content).",
+    });
+  }
+
+  if (row.schemaSummary?.trim()) {
+    try {
+      JSON.parse(row.schemaSummary);
+    } catch {
+      push(issues, {
+        id: "schema_summary_json",
+        severity: "block",
+        message: "Structured schema summary JSON is invalid — JSON-LD tooling may misbehave.",
+        fix: "Regenerate from the blog pipeline or fix schemaSummary to valid JSON before publishing.",
+      });
+    }
   }
 
   const excerpt = row.excerpt.trim();

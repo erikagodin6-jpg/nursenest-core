@@ -3,13 +3,17 @@ import {
   BlogDraftGenerationBatchStatus,
   BlogFunnelStage,
   BlogPostIntent,
+  BlogPostStatus,
   BlogPostTemplate,
 } from "@prisma/client";
+import { loadRnTopicMapBatchRows } from "@/lib/admin/blog-topic-map-batch";
 import { generateAutomatedBlogPost } from "@/lib/blog/blog-automation-engine";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { logDraftBatchItemRun } from "@/lib/admin/blog-content-automation-log";
+import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { prisma } from "@/lib/db";
+import { isRnTopicMapShellGenerationBatch, RN_TOPIC_MAP_SHELL_MAX_ITEMS } from "@/lib/blog/blog-topic-map-shell-batch-constants";
 import { DRAFT_BATCH_MAX_ITEMS_PER_PROCESS } from "@/lib/blog/blog-draft-generation-batch-constants";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -101,6 +105,176 @@ export type ProcessDraftBatchItemsResult = {
   errors: string[];
 };
 
+/** RN topic-map shells — DB only; caller already ran stale reset. */
+async function processRnTopicMapShellBatchItems(batchId: string, limit: number): Promise<ProcessDraftBatchItemsResult> {
+  const errors: string[] = [];
+  const results: ProcessDraftBatchItemsResult["results"] = [];
+
+  const safeLimit = Math.max(1, Math.min(DRAFT_BATCH_MAX_ITEMS_PER_PROCESS, limit));
+  const items = await prisma.blogDraftGenerationBatchItem.findMany({
+    where: { batchId, status: BlogDraftGenerationBatchItemStatus.PENDING },
+    orderBy: { ordinal: "asc" },
+    take: safeLimit,
+  });
+
+  const allRows = loadRnTopicMapBatchRows(RN_TOPIC_MAP_SHELL_MAX_ITEMS);
+  const slugToRow = new Map(allRows.map((r) => [r.slug, r]));
+  if (allRows.length === 0) {
+    errors.push("master-topic-map.json missing or has no RN topics");
+    return { processed: 0, results: [], errors };
+  }
+
+  const throttleBase = Math.min(
+    60_000,
+    Math.max(2000, Number(process.env.BLOG_BG_DRAFT_THROTTLE_BACKOFF_MS?.trim()) || 10_000),
+  );
+  let throttleBackoffMs = throttleBase;
+  const seenTopicKeys = new Set<string>();
+
+  for (const item of items) {
+    try {
+      await prisma.blogDraftGenerationBatchItem.update({
+        where: { id: item.id },
+        data: { status: BlogDraftGenerationBatchItemStatus.GENERATING, error: null },
+      });
+
+      const row = slugToRow.get(item.topicRaw);
+      if (!row) {
+        await prisma.blogDraftGenerationBatchItem.update({
+          where: { id: item.id },
+          data: { status: BlogDraftGenerationBatchItemStatus.FAILED, error: "map_row_missing" },
+        });
+        results.push({
+          itemId: item.id,
+          ordinal: item.ordinal,
+          topicRaw: item.topicRaw,
+          outcome: "failed",
+          message: "map_row_missing",
+        });
+        await refreshDraftGenerationBatchStats(batchId);
+        continue;
+      }
+
+      const exists = await prisma.blogPost.findUnique({ where: { slug: row.slug }, select: { id: true } });
+      if (exists) {
+        await prisma.blogDraftGenerationBatchItem.update({
+          where: { id: item.id },
+          data: {
+            status: BlogDraftGenerationBatchItemStatus.SKIPPED,
+            error: "already_exists",
+            blogPostId: exists.id,
+          },
+        });
+        results.push({
+          itemId: item.id,
+          ordinal: item.ordinal,
+          topicRaw: item.topicRaw,
+          outcome: "skipped",
+          message: "already_exists",
+        });
+        await refreshDraftGenerationBatchStats(batchId);
+        continue;
+      }
+
+      const normalizedTopic = normalizeBlogTopicKey(row.tags[1] ?? row.title);
+      if (normalizedTopic) {
+        if (seenTopicKeys.has(normalizedTopic)) {
+          await prisma.blogDraftGenerationBatchItem.update({
+            where: { id: item.id },
+            data: { status: BlogDraftGenerationBatchItemStatus.SKIPPED, error: "topic_duplicate_in_tick" },
+          });
+          results.push({
+            itemId: item.id,
+            ordinal: item.ordinal,
+            topicRaw: item.topicRaw,
+            outcome: "skipped",
+            message: "topic_duplicate_in_tick",
+          });
+          await refreshDraftGenerationBatchStats(batchId);
+          continue;
+        }
+        const dupTopic = await findExistingBlogByCanonicalIntent({ exam: row.exam, normalizedTopic });
+        if (dupTopic) {
+          await prisma.blogDraftGenerationBatchItem.update({
+            where: { id: item.id },
+            data: { status: BlogDraftGenerationBatchItemStatus.SKIPPED, error: "topic_duplicate" },
+          });
+          results.push({
+            itemId: item.id,
+            ordinal: item.ordinal,
+            topicRaw: item.topicRaw,
+            outcome: "skipped",
+            message: "topic_duplicate",
+          });
+          await refreshDraftGenerationBatchStats(batchId);
+          continue;
+        }
+        seenTopicKeys.add(normalizedTopic);
+      }
+
+      const created = await prisma.blogPost.create({
+        data: {
+          slug: row.slug,
+          title: row.title,
+          excerpt: row.excerpt,
+          body: row.body,
+          exam: row.exam,
+          category: row.category,
+          tags: row.tags,
+          postTemplate: row.postTemplate,
+          postStatus: BlogPostStatus.DRAFT,
+          relatedLessonPaths: [row.relatedLessonPath],
+          seoTitle: row.title.slice(0, 200),
+          seoDescription: row.excerpt.slice(0, 480),
+          targetKeyword: normalizedTopic || null,
+        },
+      });
+
+      await prisma.blogDraftGenerationBatchItem.update({
+        where: { id: item.id },
+        data: { status: BlogDraftGenerationBatchItemStatus.COMPLETED, blogPostId: created.id, error: null },
+      });
+      results.push({
+        itemId: item.id,
+        ordinal: item.ordinal,
+        topicRaw: item.topicRaw,
+        outcome: "completed",
+        slug: created.slug,
+        postId: created.id,
+      });
+      await refreshDraftGenerationBatchStats(batchId);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      errors.push(`${item.id}: ${msg}`);
+      await prisma.blogDraftGenerationBatchItem
+        .update({
+          where: { id: item.id },
+          data: { status: BlogDraftGenerationBatchItemStatus.FAILED, error: msg.slice(0, 4000) },
+        })
+        .catch(() => {});
+      results.push({
+        itemId: item.id,
+        ordinal: item.ordinal,
+        topicRaw: item.topicRaw,
+        outcome: "failed",
+        message: msg,
+      });
+      await refreshDraftGenerationBatchStats(batchId);
+      if (isLikelyTransientProviderOverload(msg)) {
+        safeServerLog("blog", "shell_batch_db_throttle_backoff", {
+          batchId,
+          itemOrdinal: item.ordinal,
+          backoffMs: throttleBackoffMs,
+        });
+        await sleepMs(throttleBackoffMs);
+        throttleBackoffMs = Math.min(60_000, Math.floor(throttleBackoffMs * 1.5));
+      }
+    }
+  }
+
+  return { processed: results.length, results, errors };
+}
+
 /**
  * Processes up to `limit` PENDING items: one failure does not stop siblings in this chunk.
  */
@@ -114,13 +288,6 @@ export async function processDraftGenerationBatchItems(
 
   await resetStaleGeneratingItems(batchId, now);
 
-  const aiEnabled = isAdminAiGenerationEnabled();
-  const keyCheck = assertOpenAiKeyConfigured();
-  if (!aiEnabled || !keyCheck.ok) {
-    const hint = !keyCheck.ok ? keyCheck.message : "AI_ADMIN_GENERATION_ENABLED=false";
-    return { processed: 0, results: [], errors: [hint] };
-  }
-
   const batch = await prisma.blogDraftGenerationBatch.findUnique({
     where: { id: batchId },
   });
@@ -129,6 +296,17 @@ export async function processDraftGenerationBatchItems(
   }
   if (batch.status === BlogDraftGenerationBatchStatus.CANCELLED) {
     return { processed: 0, results: [], errors: ["batch_cancelled"] };
+  }
+
+  if (isRnTopicMapShellGenerationBatch(batch)) {
+    return processRnTopicMapShellBatchItems(batchId, limit);
+  }
+
+  const aiEnabled = isAdminAiGenerationEnabled();
+  const keyCheck = assertOpenAiKeyConfigured();
+  if (!aiEnabled || !keyCheck.ok) {
+    const hint = !keyCheck.ok ? keyCheck.message : "AI_ADMIN_GENERATION_ENABLED=false";
+    return { processed: 0, results: [], errors: [hint] };
   }
 
   const safeLimit = Math.max(1, Math.min(DRAFT_BATCH_MAX_ITEMS_PER_PROCESS, limit));

@@ -20,6 +20,10 @@ import { prisma } from "@/lib/db";
 import type { BlogSourceRecord } from "@/lib/blog/apa7";
 import { coerceBlogSourceRows } from "@/lib/blog/apa7";
 import {
+  blogPrePublishValidationSelect,
+  validateBlogPrePublish,
+} from "@/lib/blog/blog-pre-publish-validation";
+import {
   GLOBAL_LOCALE_CODES,
   isAllowedLocaleForRegion,
   type GlobalLocaleCode,
@@ -56,6 +60,15 @@ function sourceRecordsJsonForPipeline(v: Prisma.JsonValue | undefined): BlogSour
   return coerceBlogSourceRows(v);
 }
 
+/** Subset of pre-publish review returned to callers after generation (no ranking claims). */
+export type BlogAutomationSeoReadiness = {
+  okToPublish: boolean;
+  /** True when publish/schedule was requested but withheld until editors fix blocking checks. */
+  publishHeldAsDraft: boolean;
+  blocking: Array<{ id: string; message: string }>;
+  warnings: Array<{ id: string; message: string }>;
+};
+
 export type AutomationResult =
   | {
       ok: true;
@@ -77,6 +90,7 @@ export type AutomationResult =
       warnings: string[];
       localized: Array<{ locale: string; region: string; localizedSlug: string; mode: "created" | "updated" }>;
       localizationErrors: string[];
+      seoReadiness: BlogAutomationSeoReadiness;
     }
   | { ok: false; error: string };
 
@@ -347,16 +361,59 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
     return { ok: false, error: "No persisted post returned from generation pipeline." };
   }
 
-  const publish = resolvePublishState(input.autoPublish ?? true, input.publishAt, new Date());
+  const prePublishRow = await prisma.blogPost.findUnique({
+    where: { id: persisted.post.id },
+    select: blogPrePublishValidationSelect,
+  });
+  if (!prePublishRow) {
+    return { ok: false, error: "Post persisted but could not be loaded for SEO/quality review." };
+  }
+  const prePublish = await validateBlogPrePublish(prePublishRow, persisted.post.id);
+  const publishRequested = resolvePublishState(input.autoPublish ?? true, input.publishAt, new Date());
+  let finalPublish = publishRequested;
+  let publishHeldAsDraft = false;
+  if (
+    (publishRequested.postStatus === BlogPostStatus.PUBLISHED ||
+      publishRequested.postStatus === BlogPostStatus.SCHEDULED) &&
+    !prePublish.okToPublish
+  ) {
+    finalPublish = {
+      postStatus: BlogPostStatus.DRAFT,
+      publishAt: null,
+      workflowStatus: BlogWorkflowStatus.GENERATED,
+    };
+    publishHeldAsDraft = true;
+  }
+
   const post = await prisma.blogPost.update({
     where: { id: persisted.post.id },
     data: {
-      postStatus: publish.postStatus,
-      publishAt: publish.publishAt,
-      workflowStatus: publish.workflowStatus,
+      postStatus: finalPublish.postStatus,
+      publishAt: finalPublish.publishAt,
+      workflowStatus: finalPublish.workflowStatus,
     },
     select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
   });
+
+  const seoReadiness: BlogAutomationSeoReadiness = {
+    okToPublish: prePublish.okToPublish,
+    publishHeldAsDraft,
+    blocking: prePublish.blocking.map((i) => ({ id: i.id, message: i.message })),
+    warnings: prePublish.warnings.map((i) => ({ id: i.id, message: i.message })),
+  };
+
+  const mergedWarnings = [...persisted.warnings];
+  if (publishHeldAsDraft) {
+    mergedWarnings.push(
+      "Publish/schedule withheld: SEO or quality checks failed. Post kept as draft—review blocking items, then publish manually when ready.",
+    );
+  }
+  for (const b of prePublish.blocking) {
+    mergedWarnings.push(`[blocking] ${b.message}`);
+  }
+  for (const w of prePublish.warnings) {
+    mergedWarnings.push(`[warning] ${w.message}`);
+  }
 
   const localized: Array<{ locale: string; region: string; localizedSlug: string; mode: "created" | "updated" }> = [];
   const localizationErrors: string[] = [];
@@ -407,9 +464,10 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
     ok: true,
     skipped: false,
     post,
-    warnings: persisted.warnings,
+    warnings: mergedWarnings,
     localized,
     localizationErrors,
+    seoReadiness,
   };
 }
 

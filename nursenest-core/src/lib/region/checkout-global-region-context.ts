@@ -4,7 +4,7 @@
  * `nn_global_region` is readable from client JS and can be cleared or drift from marketing UI.
  * This cookie is **HttpOnly** + **signed** + **bounded TTL**, stamped when the user explicitly
  * saves a global region via {@link saveContextPreferences} and when marketing pathname implies a
- * regional hub/topic tree (`stampCheckoutGlobalRegionContextFromPathname` server action). `POST
+ * regional hub/topic tree (`POST /api/marketing/stamp-checkout-global-region-context`). `POST
  * /api/subscriptions/checkout` and marketing SSR merge it with `nn_global_region` and optional
  * JSON body slug for NA billing scope (Policy A: preserve last explicit / path-derived context).
  */

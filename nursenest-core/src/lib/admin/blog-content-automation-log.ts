@@ -1,6 +1,7 @@
 import { ContentAutomationLogCategory, ContentAutomationLogStatus } from "@prisma/client";
 import { createContentAutomationLogSafe } from "@/lib/admin/content-automation-log";
 import type { BlogSimpleAiDraftBody } from "@/lib/admin/blog-simple-ai-draft-schema";
+import type { AutomationResult } from "@/lib/blog/blog-automation-engine";
 import type { GenerateBlogAiDraftResult } from "@/lib/blog/generate-blog-ai-draft";
 import { summarizeBrokenInternalLessonLinks } from "@/lib/blog/blog-automation-internal-links";
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
@@ -13,10 +14,13 @@ export const BLOG_AUTOMATION_LOG_JOB_TYPES = {
   UPGRADE_WEAK: "upgrade_weak",
 } as const;
 
+/** Control-panel pipeline + `/generate-ai` automation share this log entry shape. */
+export type SimpleAiDraftLogResult = GenerateBlogAiDraftResult | AutomationResult;
+
 export async function logSimpleAiDraftRun(opts: {
   createdById: string;
   body: BlogSimpleAiDraftBody;
-  result: GenerateBlogAiDraftResult;
+  result: SimpleAiDraftLogResult;
   retryOfId?: string | null;
 }): Promise<void> {
   const { createdById, body, result, retryOfId } = opts;
@@ -45,7 +49,11 @@ export async function logSimpleAiDraftRun(opts: {
       topic: body.topic,
       summary: result.reason,
       error: result.reason === "duplicate_topic" ? `existing:${result.existingSlug ?? "?"}` : result.reason,
-      metadata: { ...meta, existingSlug: result.existingSlug, normalizedTopic: result.normalizedTopic },
+      metadata: {
+        ...meta,
+        existingSlug: result.existingSlug,
+        normalizedTopic: "normalizedTopic" in result ? result.normalizedTopic : undefined,
+      },
       blogPostId: null,
       createdById,
       retryOfId: retryOfId ?? null,
@@ -53,14 +61,15 @@ export async function logSimpleAiDraftRun(opts: {
     return;
   }
 
+  const seoReadiness = "seoReadiness" in result ? result.seoReadiness : undefined;
   await createContentAutomationLogSafe({
     category: ContentAutomationLogCategory.BLOG_AI_SIMPLE,
     jobType: BLOG_AUTOMATION_LOG_JOB_TYPES.GENERATE_AI,
     status: ContentAutomationLogStatus.SUCCEEDED,
     topic: body.topic,
     summary: result.post.slug,
-    error: null,
-    metadata: meta,
+    error: seoReadiness?.publishHeldAsDraft ? "publish_withheld_seo_quality" : null,
+    metadata: { ...meta, seoReadiness },
     blogPostId: result.post.id,
     createdById,
     retryOfId: retryOfId ?? null,

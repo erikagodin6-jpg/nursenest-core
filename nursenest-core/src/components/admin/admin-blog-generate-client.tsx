@@ -27,6 +27,15 @@ type GenerateAiJsonBody = {
 
 type NdjsonCompleteEvent = GenerateAiJsonBody & { type: "complete"; httpStatus?: number };
 
+function parseNdjsonLine(line: string, context: string): Record<string, unknown> {
+  try {
+    return JSON.parse(line) as Record<string, unknown>;
+  } catch {
+    const preview = line.length > 200 ? `${line.slice(0, 200)}…` : line;
+    throw new Error(`Invalid NDJSON line (${context}): ${preview}`);
+  }
+}
+
 async function consumeAdminBlogGenerateNdjson(
   res: Response,
   onEvent: (evt: Record<string, unknown>) => void,
@@ -38,6 +47,7 @@ async function consumeAdminBlogGenerateNdjson(
   const decoder = new TextDecoder();
   let buffer = "";
   let complete: NdjsonCompleteEvent | null = null;
+  let lineIndex = 0;
   while (true) {
     const { done, value } = await reader.read();
     buffer += decoder.decode(value ?? new Uint8Array(), { stream: !done });
@@ -45,7 +55,8 @@ async function consumeAdminBlogGenerateNdjson(
     buffer = lines.pop() ?? "";
     for (const line of lines) {
       if (!line.trim()) continue;
-      const evt = JSON.parse(line) as Record<string, unknown>;
+      lineIndex += 1;
+      const evt = parseNdjsonLine(line, `line ${lineIndex}`);
       onEvent(evt);
       if (evt.type === "fatal") {
         throw new Error(typeof evt.error === "string" ? evt.error : "Batch failed");
@@ -58,7 +69,8 @@ async function consumeAdminBlogGenerateNdjson(
   }
   const tail = buffer.trim();
   if (tail) {
-    const evt = JSON.parse(tail) as Record<string, unknown>;
+    lineIndex += 1;
+    const evt = parseNdjsonLine(tail, `tail line ${lineIndex}`);
     onEvent(evt);
     if (evt.type === "fatal") {
       throw new Error(typeof evt.error === "string" ? evt.error : "Batch failed");
@@ -68,7 +80,7 @@ async function consumeAdminBlogGenerateNdjson(
     }
   }
   if (!complete) {
-    throw new Error("Batch stream ended without a complete event.");
+    throw new Error("Batch stream ended without a complete event (truncated response or proxy stripped the stream).");
   }
   return complete;
 }

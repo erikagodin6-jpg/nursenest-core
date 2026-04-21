@@ -1,4 +1,4 @@
-"use server";
+import "server-only";
 
 import { cookies } from "next/headers";
 import { globalRegionSlugFromRegionalMarketingPublicPath } from "@/lib/marketing/regional-marketing-public-gate";
@@ -11,7 +11,7 @@ import {
 
 /**
  * Stamps HttpOnly signed checkout region context from the current marketing pathname.
- * No-op when the path does not map to a regional hub/topic tree (preserves prior stamp on e.g. `/pricing`).
+ * Shared by the marketing path-stamp API route (stable across deploys) — not a Server Action.
  */
 export async function stampCheckoutGlobalRegionContextFromPathname(
   pathname: string,

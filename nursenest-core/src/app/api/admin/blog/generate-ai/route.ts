@@ -16,6 +16,7 @@ import {
   generateAutomatedBlogPost,
   normalizeUniqueTopics,
   type AutomationResult,
+  type BlogAutomationSeoReadiness,
 } from "@/lib/blog/blog-automation-engine";
 import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import type { Prisma } from "@prisma/client";
@@ -404,7 +405,7 @@ export async function POST(req: Request) {
   return NextResponse.json(
     {
       ok: failedCount === 0,
-      mode: topics.length > 1 ? "batch" : "single",
+      mode: "single",
       publishNow,
       limits: { maxTopicsPerRun: ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN },
       summary: {
