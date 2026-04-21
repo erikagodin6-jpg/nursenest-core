@@ -103,7 +103,7 @@ export default async function PricingPage() {
       />
       <BreadcrumbJsonLd items={schemaItems} />
       <FaqJsonLd items={pricingFaqJsonLd} />
-      <div className="mx-auto max-w-6xl nn-marketing-x pb-[var(--nn-rhythm-tight-y)] pt-[var(--nn-rhythm-page-y)]">
+      <div className="mx-auto max-w-6xl nn-marketing-x pb-2 pt-2 sm:pb-3 sm:pt-3">
         <BreadcrumbTrail items={crumbs} />
       </div>
       <MarketingPricingPage locale={locale} />

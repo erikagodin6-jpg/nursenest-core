@@ -24,6 +24,24 @@ export async function GET(req: NextRequest) {
     safeServerLog("billing", "pricing_options_cache_unavailable", { message });
     body = buildPricingOptionsPayload();
   }
+
+  const nursingCount = body.plans.length;
+  const alliedCount = body.alliedPlans.length;
+  if (nursingCount === 0 && alliedCount === 0) {
+    safeServerLog("billing", "pricing_options_empty_payload", {
+      source: "buildPricingOptionsPayload",
+      pricingCountry: "CA",
+    });
+  }
+  if (process.env.NN_PRICING_OPTIONS_DEBUG?.trim() === "1") {
+    safeServerLog("billing", "pricing_options_debug", {
+      nursingPlans: nursingCount,
+      alliedPlans: alliedCount,
+      source: "display_catalog_plus_stripe_checkout_flags",
+      pricingCountry: "CA",
+    });
+  }
+
   const res = NextResponse.json(body, { headers: CACHE_HEADER_PRICING_OPTIONS });
   recordApiRouteTelemetry({
     req,

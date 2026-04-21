@@ -42,6 +42,13 @@ const REQUIRED_PAGE_KEYS = [
   "pages.home.metaDescriptionCA",
   /** Non-empty i18n for pricing loading state (deploy sentinels reject stuck English “Loading pricing…”). */
   "pages.pricing.rowPlansLoading",
+  /** Catalog gap slots (e.g. no 3-month New Grad row) must not show raw i18n keys. */
+  "pages.pricing.plan.durationNotOffered",
+  /** Empty API payload / degraded pricing must not show raw i18n keys. */
+  "pages.pricing.error.pricingTemporarilyUnavailable",
+  "pages.pricing.error.trackTemporarilyUnavailable",
+  "pages.pricing.checkout.unavailableBody",
+  "pages.pricing.plan.rowDataIncomplete",
 ];
 
 const REQUIRED_NAV_KEYS = ["footer.emailBannerTitle", "footer.emailBannerSubtitle"];

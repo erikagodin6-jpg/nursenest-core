@@ -18,7 +18,7 @@ import {
   getRegionFlag,
 } from "@/lib/navigation/context-switch-helpers";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
-import { isPublicCountrySwitcherReady } from "@/lib/navigation/market-readiness";
+import { isGlobalRegionListedInCountrySwitcher } from "@/lib/navigation/market-readiness";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -117,11 +117,11 @@ export type CountryChoice = {
 };
 
 /**
- * Country choices for step 2 — **fully published markets only** (same gate as the marketing country switcher).
+ * Country choices for step 2 — same listing gate as the marketing country switcher ({@link isGlobalRegionListedInCountrySwitcher}).
  * Ordering: US, Canada, then any additional ready regions alphabetically.
  */
 export function getCountryChoices(): CountryChoice[] {
-  const ready = (Object.keys(REGION_CONFIG) as GlobalRegionSlug[]).filter(isPublicCountrySwitcherReady);
+  const ready = (Object.keys(REGION_CONFIG) as GlobalRegionSlug[]).filter(isGlobalRegionListedInCountrySwitcher);
   const rank = (slug: GlobalRegionSlug) => (slug === "us" ? 0 : slug === "canada" ? 1 : 2);
   ready.sort((a, b) => {
     const d = rank(a) - rank(b);

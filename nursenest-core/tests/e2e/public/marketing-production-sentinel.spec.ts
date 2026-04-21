@@ -55,7 +55,7 @@ test.describe("Marketing production sentinels", () => {
     await page.goto("/pricing", { waitUntil: "load", timeout: 90_000 });
     await dismissMarketingScrims(page);
     const clarity = page.getByTestId("section-pricing-conversion-clarity");
-    await expect(clarity).toContainText("Straight answers before you subscribe");
+    await expect(clarity).toContainText("Straight Answers Before You Subscribe");
     await expect(clarity).toContainText("Pathway-scoped study depth");
   });
 
@@ -69,5 +69,25 @@ test.describe("Marketing production sentinels", () => {
     expect(res.ok(), "/api/pricing/options should return 200").toBeTruthy();
     const body = (await page.locator("body").innerText()).toLowerCase();
     expect(body, "pricing cards should render Stripe-derived CAD totals").toMatch(/\$\s*\d+\.\d{2}\s*cad/);
+  });
+});
+
+test.describe("Marketing pricing header polish", () => {
+  test.use({ viewport: { width: 1536, height: 900 } });
+
+  test("pricing — wide desktop shows New Grad and Allied in the lower tier row (no desktop More Tracks)", async ({ page }) => {
+    await page.goto("/pricing", { waitUntil: "load", timeout: 90_000 });
+    await dismissMarketingScrims(page);
+    await expect(page.getByRole("button", { name: "New Grad" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Allied" })).toBeVisible();
+    await expect(page.locator(".nn-header-hide-until-xl").getByRole("button", { name: /more tracks/i })).toHaveCount(0);
+  });
+
+  test("pricing — marketing hero shows a region currency line", async ({ page }) => {
+    await page.goto("/pricing", { waitUntil: "load", timeout: 90_000 });
+    await dismissMarketingScrims(page);
+    const hero = page.getByTestId("pricing-marketing-hero");
+    await expect(hero).toBeVisible();
+    await expect(hero).toContainText(/Canadian dollars|U\.S\. dollars/);
   });
 });

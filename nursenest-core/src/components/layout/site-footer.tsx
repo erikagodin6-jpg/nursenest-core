@@ -132,8 +132,9 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
           <div className="relative z-[1] space-y-6">
             <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-5">
               <div className="space-y-4">
-                <div className="flex items-center bg-transparent">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 bg-transparent">
                   <SiteBrandLogoMark variant="footer" logoVariant="leaf" />
+                  <span className="text-lg font-semibold tracking-tight text-[var(--footer-fg)]">NurseNest</span>
                 </div>
                 <p className="max-w-xs text-sm leading-relaxed text-[var(--footer-muted)]">
                   {formatTitleCase(t("footer.supportingNursesGlobally"), locale)}

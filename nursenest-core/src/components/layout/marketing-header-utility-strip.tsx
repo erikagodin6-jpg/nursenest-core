@@ -17,6 +17,10 @@ import { effectiveMarketingHeaderGlobalRegion } from "@/lib/marketing/marketing-
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { isStaffRole } from "@/lib/auth/staff-roles";
+import { MarketingUtilityFloatingPanel } from "@/components/layout/marketing-utility-floating-panel";
+
+const COUNTRY_PANEL_WIDTH_PX = 288; /* matches CountrySelector popover w-72 */
+const LANGUAGE_PANEL_WIDTH_PX = 208; /* w-52 */
 
 /**
  * Desktop-only preferences rail.
@@ -56,13 +60,18 @@ export function MarketingHeaderUtilityStrip({
   const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, regionToggleAnalytics);
   const [langOpen, setLangOpen] = useState(false);
   const [countryOpen, setCountryOpen] = useState(false);
-  const langRef = useRef<HTMLDivElement>(null);
-  const countryRef = useRef<HTMLDivElement>(null);
+  const countryAnchorRef = useRef<HTMLDivElement>(null);
+  const countryPanelRef = useRef<HTMLDivElement>(null);
+  const langAnchorRef = useRef<HTMLDivElement>(null);
+  const langPanelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const close = (e: MouseEvent) => {
-      if (!langRef.current?.contains(e.target as Node)) setLangOpen(false);
-      if (!countryRef.current?.contains(e.target as Node)) setCountryOpen(false);
+      const t = e.target as Node;
+      if (countryAnchorRef.current?.contains(t) || countryPanelRef.current?.contains(t)) return;
+      if (langAnchorRef.current?.contains(t) || langPanelRef.current?.contains(t)) return;
+      setLangOpen(false);
+      setCountryOpen(false);
     };
     const onEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -127,52 +136,60 @@ export function MarketingHeaderUtilityStrip({
   const shellJustify = leading ? "justify-between" : "justify-end";
 
   return (
-    <div className={`w-full ${variant === "dark-bar" ? "nn-header-utility-dark" : "nn-header-utility"}`}>
+    <div className={`relative z-[25] w-full ${variant === "dark-bar" ? "nn-header-utility-dark" : "nn-header-utility"}`}>
       <div
-        className={`nn-section-shell flex items-center gap-1.5 lg:gap-2 ${shellJustify} ${
+        className={`nn-section-shell flex items-center gap-2 lg:gap-2.5 ${shellJustify} ${
           variant === "dark-bar"
             ? "min-h-[30px] py-[2px] md:min-h-[32px] md:py-0.5"
             : "min-h-[30px] gap-2 py-[1px]"
         }`}
       >
         {leading ? <div className="min-w-0 flex-1 overflow-hidden pe-2">{leading}</div> : null}
-        <div className="flex shrink-0 items-center justify-end gap-1.5 lg:gap-2">
-        {/* Country selector — replaces old US/CA toggle with global selector */}
-        <div className="relative" ref={countryRef}>
-          <CompactCountryTrigger
-            region={effectiveGlobalRegion}
-            onClick={() => setCountryOpen((o) => !o)}
-            className={chromeTrigger}
-          />
-          {countryOpen && (
-            <div className="absolute end-0 z-[120] mt-1">
-              <CountrySelector
-                currentRegion={effectiveGlobalRegion}
-                onSelect={handleCountrySelect}
-                onClose={() => setCountryOpen(false)}
-                variant="popover"
-                includeUnpublishedRegions={countrySelectorIncludeUnpublished}
-              />
-            </div>
-          )}
-        </div>
-
-        <div className="relative" ref={langRef}>
-          <button
-            type="button"
-            onClick={() => setLangOpen((o) => !o)}
-            className={
-              variant === "dark-bar"
-                ? "inline-flex h-[26px] items-center gap-0.5 rounded-lg border border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] bg-white px-2.5 text-[11px] font-normal tracking-tight text-[var(--theme-heading-text)] shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-colors hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))]"
-                : "flex items-center gap-0.5 rounded-full bg-transparent px-2 py-0.5 text-[11px] font-normal tracking-wide text-[var(--header-utility-text)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)]"
-            }
-            aria-expanded={langOpen}
+        <div className="flex shrink-0 items-center justify-end gap-2 lg:gap-2.5">
+          <div className="shrink-0" ref={countryAnchorRef}>
+            <CompactCountryTrigger
+              region={effectiveGlobalRegion}
+              onClick={() => setCountryOpen((o) => !o)}
+              className={chromeTrigger}
+            />
+          </div>
+          <MarketingUtilityFloatingPanel
+            open={countryOpen}
+            anchorRef={countryAnchorRef}
+            panelRef={countryPanelRef}
+            widthPx={COUNTRY_PANEL_WIDTH_PX}
           >
-            {t("nav.language")}
-            <ChevronDown className={`h-3 w-3 shrink-0 opacity-50 transition-transform ${langOpen ? "rotate-180" : ""}`} />
-          </button>
-          {langOpen ? (
-            <div className="absolute end-0 z-[120] mt-1 max-h-56 w-52 overflow-y-auto rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] p-1 shadow-[var(--shadow-card-hover)]">
+            <CountrySelector
+              currentRegion={effectiveGlobalRegion}
+              onSelect={handleCountrySelect}
+              onClose={() => setCountryOpen(false)}
+              variant="popover"
+              includeUnpublishedRegions={countrySelectorIncludeUnpublished}
+            />
+          </MarketingUtilityFloatingPanel>
+
+          <div className="shrink-0" ref={langAnchorRef}>
+            <button
+              type="button"
+              onClick={() => setLangOpen((o) => !o)}
+              className={
+                variant === "dark-bar"
+                  ? "inline-flex h-[26px] items-center gap-0.5 rounded-lg border border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] bg-white px-2.5 text-[11px] font-normal tracking-tight text-[var(--theme-heading-text)] shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-colors hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))]"
+                  : "flex items-center gap-0.5 rounded-full bg-transparent px-2 py-0.5 text-[11px] font-normal tracking-wide text-[var(--header-utility-text)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)]"
+              }
+              aria-expanded={langOpen}
+            >
+              {t("nav.language")}
+              <ChevronDown className={`h-3 w-3 shrink-0 opacity-50 transition-transform ${langOpen ? "rotate-180" : ""}`} />
+            </button>
+          </div>
+          <MarketingUtilityFloatingPanel
+            open={langOpen}
+            anchorRef={langAnchorRef}
+            panelRef={langPanelRef}
+            widthPx={LANGUAGE_PANEL_WIDTH_PX}
+          >
+            <div className="rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] p-1 shadow-[var(--shadow-card-hover)]">
               <MarketingLanguagePreferenceList
                 onDone={() => setLangOpen(false)}
                 renderItem={({ code, name, flag, disabled, onSelect }) => (
@@ -190,25 +207,25 @@ export function MarketingHeaderUtilityStrip({
                 )}
               />
             </div>
-          ) : null}
-        </div>
+          </MarketingUtilityFloatingPanel>
 
-        <div
-          className={
-            variant === "dark-bar"
-              ? "text-[var(--theme-heading-text)] [&_button]:h-[26px] [&_button]:min-h-0 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] [&_button]:bg-white [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:text-[var(--theme-heading-text)] [&_button]:shadow-[0_1px_2px_rgba(15,23,42,0.05)] [&_button]:hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))]"
-              : "text-[var(--header-utility-text)] [&_button]:min-h-0 [&_button]:border-[var(--header-utility-border)] [&_button]:bg-transparent [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:shadow-none [&_button]:hover:bg-[var(--nav-hover)] [&_button]:hover:text-[var(--nav-fg)]"
-          }
-        >
-          <ThemePicker
-            className="shrink-0"
-            labels={{
-              navTheme: t("nav.theme"),
-              themeGroupLight: t("nav.themeGroupLight"),
-              themeGroupDark: t("nav.themeGroupDark"),
-            }}
-          />
-        </div>
+          <div
+            className={
+              variant === "dark-bar"
+                ? "text-[var(--theme-heading-text)] [&_button]:h-[26px] [&_button]:min-h-0 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] [&_button]:bg-white [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:text-[var(--theme-heading-text)] [&_button]:shadow-[0_1px_2px_rgba(15,23,42,0.05)] [&_button]:hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))]"
+                : "text-[var(--header-utility-text)] [&_button]:min-h-0 [&_button]:border-[var(--header-utility-border)] [&_button]:bg-transparent [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:shadow-none [&_button]:hover:bg-[var(--nav-hover)] [&_button]:hover:text-[var(--nav-fg)]"
+            }
+          >
+            <ThemePicker
+              className="shrink-0"
+              dropdownPortal
+              labels={{
+                navTheme: t("nav.theme"),
+                themeGroupLight: t("nav.themeGroupLight"),
+                themeGroupDark: t("nav.themeGroupDark"),
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -156,17 +156,31 @@ export function themeLogoSpaceKeyForRegisteredTheme(
   return THEME_LOGO_SPACE_KEYS[themeId] ?? null;
 }
 
+/** Same-origin leaf mark: Spaces `arcticfrost…_leaf.png` is a horizontal brand; header/footer use this SVG. */
+const ARCTIC_FROST_LEAF_PUBLIC_PATH = "/logos/arctic-frost-leaf.svg";
+
 /**
  * Single entry point for the in-app theme wordmark URL.
  * No filename derivation, no family load-chain, no implicit theme borrowing.
  */
+
 export function resolveThemeLogo(
   themeId: string | null | undefined,
   logoVariant: ThemeLogoVariant = "full",
 ): ResolvedThemeLogo {
-  void logoVariant;
   const registered = parseRegisteredThemeId(themeId);
   const requestedThemeId = registered ?? NURSENEST_DEFAULT_THEME;
+
+  if (registered === "arctic-frost" && logoVariant === "leaf") {
+    return {
+      url: ARCTIC_FROST_LEAF_PUBLIC_PATH,
+      kind: "local",
+      objectKey: "logos/arctic-frost-leaf.svg",
+      assetThemeId: "arctic-frost",
+    };
+  }
+
+  void logoVariant;
   const fallbackThemeId = NURSENEST_DEFAULT_THEME;
   const url =
     THEME_LOGO_CDN_BY_THEME_ID[requestedThemeId] ??

@@ -6,15 +6,19 @@ export function PricingHero({
   ctaLabel = "Start your 3-day free trial",
   trialSubtext = "No charge today. Cancel anytime before your trial ends.",
   trialFinePrint = "Billing begins automatically after 3 days unless cancelled.",
+  pricesShownLine = "All prices are shown in Canadian dollars.",
 }: {
   studySystemHref: string;
   ctaLabel?: string;
   trialSubtext?: string;
   trialFinePrint?: string;
+  /** Region-aware checkout currency hint (marketing pricing only). */
+  pricesShownLine?: string;
 }) {
   return (
     <section
-      className="nn-gradient-safe relative overflow-hidden rounded-3xl px-6 py-20 text-center sm:px-14 sm:py-28"
+      data-testid="pricing-marketing-hero"
+      className="nn-gradient-safe relative overflow-hidden rounded-3xl px-6 pt-14 pb-16 text-center sm:px-14 sm:pt-16 sm:pb-20"
       style={{
         background: `
           linear-gradient(
@@ -66,7 +70,7 @@ export function PricingHero({
             color: "var(--semantic-text-secondary)",
           }}
         >
-          All Prices Are Shown in Canadian Dollars
+          {pricesShownLine}
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">

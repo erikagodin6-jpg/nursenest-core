@@ -24,6 +24,7 @@ export { MARKET_READINESS } from "./market-readiness-data";
 import { MARKET_READINESS } from "./market-readiness-data";
 import type { MarketReadinessConfig } from "./market-readiness-data";
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
+import { getExamHubForGlobalRegion } from "@/lib/marketing/global-region-exam-hubs";
 import { evaluateGlobalRegionLaunchReadiness } from "./country-exam-launch-readiness";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -37,19 +38,35 @@ export function isMarketFullySupported(region: GlobalRegionSlug): boolean {
 }
 
 /**
- * **Public marketing / learner UI gate:** regions that appear in the country switcher, onboarding,
- * and account region lists for non-staff users. Requires market prep **and** pathway launch readiness
- * (committed snapshot + required NCLEX hubs + editorial approval). See `country-exam-launch-readiness.ts`.
+ * **Strict product-launch gate (US/CA + expansion):** `published` in `country-exam-launch-readiness.ts`.
+ * Use for surfaces that require the full pathway + market bar (e.g. treating a region as “fully live”).
  */
 export function isPublicCountrySwitcherReady(region: GlobalRegionSlug): boolean {
   return evaluateGlobalRegionLaunchReadiness(region).status === "published";
 }
 
-/** Default when a legacy cookie/path points at a non-published market — keeps dropdown selection valid. */
+/**
+ * **Public country switcher listing** (marketing header, onboarding country step, learner region prefs).
+ *
+ * - **United States & Canada:** must pass {@link isPublicCountrySwitcherReady} (unchanged NCLEX launch bar).
+ * - **International:** `MARKET_READINESS` row is SEO-enabled, not `planned`, and a **shipped** `/exams/…`
+ *   hub exists in {@link getExamHubForGlobalRegion} so {@link applyGlobalRegionSelection} never no-ops into a dead route.
+ */
+export function isGlobalRegionListedInCountrySwitcher(region: GlobalRegionSlug): boolean {
+  if (region === "us" || region === "canada") {
+    return isPublicCountrySwitcherReady(region);
+  }
+  const m = MARKET_READINESS[region];
+  if (!m?.seoEnabled) return false;
+  if (m.supportTier === "planned") return false;
+  return getExamHubForGlobalRegion(region) != null;
+}
+
+/** Default when a legacy cookie/path points at a non-selectable market — keeps dropdown selection valid. */
 export const DEFAULT_PUBLIC_GLOBAL_REGION: GlobalRegionSlug = "us";
 
 export function coerceToPublicCountrySwitcherRegion(region: GlobalRegionSlug): GlobalRegionSlug {
-  return isPublicCountrySwitcherReady(region) ? region : DEFAULT_PUBLIC_GLOBAL_REGION;
+  return isGlobalRegionListedInCountrySwitcher(region) ? region : DEFAULT_PUBLIC_GLOBAL_REGION;
 }
 
 export function canShowPricing(region: GlobalRegionSlug): boolean {
@@ -76,8 +93,7 @@ export function regionsWithSeoEnabled(): GlobalRegionSlug[] {
 
 /**
  * Internal / admin label for market support tier (draft, SEO-only, etc.).
- * **Do not use in public marketing chrome** — use {@link isPublicCountrySwitcherReady} to hide
- * incomplete regions instead of showing "coming soon" in the live dropdown.
+ * **Do not use in public marketing chrome** for listing — use {@link isGlobalRegionListedInCountrySwitcher}.
  */
 export function marketAdminSupportLabel(region: GlobalRegionSlug): string {
   const tier = MARKET_READINESS[region].supportTier;

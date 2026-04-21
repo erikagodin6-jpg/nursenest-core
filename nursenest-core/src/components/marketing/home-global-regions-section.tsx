@@ -7,6 +7,7 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
+import { homeGlobalRegionHasPublishedExpansionHub } from "@/lib/marketing/published-regional-marketing-urls";
 
 type RegionCard = {
   id: string;
@@ -64,6 +65,7 @@ export type HomeGlobalRegionsSectionProps = {
  */
 export function HomeGlobalRegionsSection({ visibleCardIds }: HomeGlobalRegionsSectionProps) {
   const { locale, t } = useMarketingI18n();
+  const showExpansionRoadmapNote = !homeGlobalRegionHasPublishedExpansionHub(visibleCardIds);
   const cards = useMemo(() => {
     const l = (path: string) => withMarketingLocale(locale, path);
     const source = HOME_GLOBAL_REGION_CARDS.filter((c) => visibleCardIds.includes(c.id));
@@ -120,6 +122,12 @@ export function HomeGlobalRegionsSection({ visibleCardIds }: HomeGlobalRegionsSe
             </MarketingTrackedLink>
           ))}
         </div>
+
+        {showExpansionRoadmapNote ? (
+          <p className="nn-marketing-body-sm mt-6 max-w-3xl text-pretty text-[var(--palette-text-muted)]">
+            {formatSentenceCase(t("pages.home.globalRegions.expansionFootnote"), locale)}
+          </p>
+        ) : null}
       </div>
     </section>
   );

@@ -38,6 +38,16 @@ describe("resolveThemeLogo", () => {
     assert.equal(r.url, "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/Logos/slate-leaf_transparent.png");
   });
 
+  it("uses same-origin leaf-only SVG for arctic-frost leaf variant (CDN asset is full brand)", () => {
+    const r = resolveThemeLogo("arctic-frost", "leaf");
+    assert.equal(r.kind, "local");
+    assert.equal(r.assetThemeId, "arctic-frost");
+    assert.equal(r.url, "/logos/arctic-frost-leaf.svg");
+    assert.equal(r.objectKey, "logos/arctic-frost-leaf.svg");
+    const full = resolveThemeLogo("arctic-frost", "full");
+    assert.ok(full.url?.includes("arcticfrost"), "full variant still uses CDN map for non-header callers");
+  });
+
   it("resolves every registered theme to a mapped CDN URL", () => {
     for (const t of THEME_OPTIONS) {
       const r = resolveThemeLogo(t.id, "full");

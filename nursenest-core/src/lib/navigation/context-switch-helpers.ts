@@ -19,7 +19,7 @@ import {
 import { getExamHubForGlobalRegion } from "@/lib/marketing/global-region-exam-hubs";
 import { buildExamPathwayPath, type ExamPathwayDefinition } from "@/lib/exam-pathways";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
-import { isPublicCountrySwitcherReady } from "@/lib/navigation/market-readiness";
+import { isGlobalRegionListedInCountrySwitcher } from "@/lib/navigation/market-readiness";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -348,20 +348,21 @@ export type RegionGroup = {
 export type RegionGroupOptions = {
   /**
    * When true, list every region in {@link REGION_CONFIG} (for admin tools).
-   * Default false: only {@link isPublicCountrySwitcherReady} regions (live site).
+   * Default false: only {@link isGlobalRegionListedInCountrySwitcher} regions (live site).
    */
   includeUnpublishedRegions?: boolean;
 };
 
 /**
  * Country groups for the marketing header / mobile drawer.
- * By default, only **fully published** markets (US/CA today) — no draft or “coming soon” rows.
+ * By default, only markets {@link isGlobalRegionListedInCountrySwitcher} allows (US/CA under strict launch;
+ * international when a shipped `/exams/…` hub exists). Staff can pass `includeUnpublishedRegions` for the full registry.
  */
 export function getRegionGroups(opts?: RegionGroupOptions): RegionGroup[] {
   const includeAll = opts?.includeUnpublishedRegions === true;
 
   const usCanadaSlugs = (["us", "canada"] as const).filter((slug) =>
-    includeAll ? true : isPublicCountrySwitcherReady(slug),
+    includeAll ? true : isGlobalRegionListedInCountrySwitcher(slug),
   );
 
   const usCanada: RegionGroup = {
@@ -382,7 +383,7 @@ export function getRegionGroups(opts?: RegionGroupOptions): RegionGroup[] {
 
   const filteredInternational = includeAll
     ? internationalSlugs
-    : internationalSlugs.filter((slug) => isPublicCountrySwitcherReady(slug));
+    : internationalSlugs.filter((slug) => isGlobalRegionListedInCountrySwitcher(slug));
 
   const international: RegionGroup = {
     label: "International",

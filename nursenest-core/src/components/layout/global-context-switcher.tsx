@@ -26,7 +26,7 @@ import {
   type ProfessionOption,
   type ExamOption,
 } from "@/lib/navigation/context-switch-helpers";
-import { isPublicCountrySwitcherReady } from "@/lib/navigation/market-readiness";
+import { isGlobalRegionListedInCountrySwitcher } from "@/lib/navigation/market-readiness";
 
 // ── Country Selector ─────────────────────────────────────────────────────────
 
@@ -37,7 +37,7 @@ type CountrySelectorProps = {
   /** Render as inline list (mobile drawer) vs floating popover (desktop). */
   variant?: "popover" | "inline";
   /**
-   * Admin/internal: list all regions with draft status. Default false — only fully published markets.
+   * Admin/internal: list all regions with draft status. Default false — same listing gate as the live marketing switcher.
    */
   includeUnpublishedRegions?: boolean;
 };
@@ -54,7 +54,7 @@ export function CountrySelector({
   const inputRef = useRef<HTMLInputElement>(null);
   const groups = getRegionGroups({ includeUnpublishedRegions });
   const highlightRegion =
-    includeUnpublishedRegions || isPublicCountrySwitcherReady(currentRegion) ? currentRegion : null;
+    includeUnpublishedRegions || isGlobalRegionListedInCountrySwitcher(currentRegion) ? currentRegion : null;
 
   useEffect(() => {
     if (variant === "popover") inputRef.current?.focus();

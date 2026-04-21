@@ -32,6 +32,7 @@ import { HUB, signupWithCallback } from "@/lib/marketing/marketing-entry-routes"
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import { useActiveNavContext } from "@/lib/navigation/use-active-nav-context";
 import { buildMarketingMegaMenus, type ExamMenuKey } from "@/lib/navigation/marketing-mega-menu";
+import { marketingHeaderExposeSecondaryTracksInline } from "@/lib/navigation/marketing-header-pricing-surface";
 import { formatEyebrow, formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
@@ -48,6 +49,9 @@ const NAV_TIER_LINK_CLASS =
   "nn-marketing-body-sm nn-marketing-nav-link inline-flex items-center justify-center whitespace-nowrap text-center font-medium leading-[1.2] tracking-normal";
 const HEADER_SECONDARY_ACTION_CLASS =
   "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
+/** Guest marketing header: match primary CTA horizontal padding for consistent pill width. */
+const HEADER_GUEST_SECONDARY_ACTION_CLASS =
+  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-4 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
 type LearnerTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
 type LearnerCountry = "CA" | "US";
 type HeaderResumeCta = { href: string; label: string } | null;
@@ -322,6 +326,10 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
     () => megaMenus.filter((m) => m.key === "newgrad" || m.key === "allied"),
     [megaMenus],
   );
+  const exposeSecondaryTracksOnPricing = marketingHeaderExposeSecondaryTracksInline(strippedPath);
+  const desktopTierMegaMenus = exposeSecondaryTracksOnPricing
+    ? [...primaryMegaMenus, ...secondaryMegaMenus]
+    : primaryMegaMenus;
   const openMega = megaMenus.find((menu) => menu.key === openMegaMenu) ?? null;
 
   const darkHeaderShadow = useMemo(() => {
@@ -591,7 +599,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                 <div className="flex shrink-0 items-center gap-2">
                   <Link
                     href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
-                    className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}
+                    className={`${HEADER_GUEST_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}
                     onClick={closeMegaBeforeAuthNav}
                     aria-label="Log in to your NurseNest account"
                   >
@@ -599,7 +607,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                   </Link>
                   <Link
                     href={guestMarketingSignupHref}
-                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
+                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[44px] shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
                     onClick={closeMegaBeforeAuthNav}
                     aria-label="Start free account — nursing and healthcare exam prep"
                     title="Start free — no credit card required"
@@ -676,7 +684,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               aria-label={t("nav.marketingExplore")}
               className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-0 xl:gap-0.5"
             >
-              {primaryMegaMenus.map((menu) => {
+              {desktopTierMegaMenus.map((menu) => {
                 const expanded = openMegaMenu === menu.key;
                 return (
                   <div
@@ -702,7 +710,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                   </div>
                 );
               })}
-              {secondaryMegaMenus.length > 0 ? (
+              {!exposeSecondaryTracksOnPricing && secondaryMegaMenus.length > 0 ? (
                 <div className="relative" ref={desktopMoreTracksRef}>
                   <button
                     type="button"

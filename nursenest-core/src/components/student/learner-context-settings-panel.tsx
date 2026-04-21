@@ -30,7 +30,7 @@ import {
 } from "@/lib/navigation/context-switch-helpers";
 import {
   coerceToPublicCountrySwitcherRegion,
-  isPublicCountrySwitcherReady,
+  isGlobalRegionListedInCountrySwitcher,
 } from "@/lib/navigation/market-readiness";
 import { saveContextPreferences } from "@/app/actions/save-context-preferences";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
@@ -58,7 +58,7 @@ export function LearnerContextSettingsPanel({
   const [isPending, startTransition] = useTransition();
 
   const selectableRegionSlugs = useMemo(
-    () => GLOBAL_REGION_SLUGS.filter((slug) => isPublicCountrySwitcherReady(slug)),
+    () => GLOBAL_REGION_SLUGS.filter((slug) => isGlobalRegionListedInCountrySwitcher(slug)),
     [],
   );
 

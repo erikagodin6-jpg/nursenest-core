@@ -87,6 +87,14 @@ type AlliedPlanRow = {
 
 type Segment = "prenursing" | "newgrad" | "rn" | "pn" | "np" | "allied";
 
+function isRenderablePlanRow(row: NursingPlanRow | AlliedPlanRow): boolean {
+  return Boolean(
+    row.totalLabel?.trim() &&
+      row.monthlyEquivalentLabel?.trim() &&
+      row.planCode?.trim(),
+  );
+}
+
 type CheckoutRequestError = Error & {
   parsed?: ParsedCheckoutErrorBody;
   status?: number;
@@ -153,6 +161,66 @@ function checkoutErrorUserMessage(
   return t("pages.pricing.error.checkoutUnavailable");
 }
 
+function PricingPlanGridSkeleton() {
+  return (
+    <div
+      className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4 xl:gap-6 xl:items-start"
+      aria-busy="true"
+      aria-label="Loading pricing plans"
+    >
+      {BILLING_DURATION_ORDER.map((duration) => (
+        <article
+          key={duration}
+          className="relative flex min-h-[26rem] flex-col rounded-2xl border border-[var(--palette-border)] bg-card p-6 shadow-[var(--elevation-rest)] xl:min-h-[25.5rem]"
+        >
+          <div className="h-7 w-28 max-w-[70%] animate-pulse rounded-md bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-border-soft))]" />
+          <div className="mt-2 h-4 w-[88%] max-w-xs animate-pulse rounded-md bg-[color-mix(in_srgb,var(--semantic-panel-muted)_45%,var(--semantic-border-soft))]" />
+          <div className="mt-2 h-3 w-24 animate-pulse rounded-md bg-[color-mix(in_srgb,var(--semantic-panel-muted)_35%,var(--semantic-border-soft))]" />
+          <div className="mt-6 border-t border-[var(--semantic-border-soft)] pt-5">
+            <div className="h-4 w-20 animate-pulse rounded-md bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,var(--semantic-border-soft))]" />
+            <div className="mt-3 h-9 w-36 animate-pulse rounded-md bg-[color-mix(in_srgb,var(--semantic-panel-muted)_50%,var(--semantic-border-soft))]" />
+            <div className="mt-2 h-3 w-44 animate-pulse rounded-md bg-[color-mix(in_srgb,var(--semantic-panel-muted)_35%,var(--semantic-border-soft))]" />
+          </div>
+          <div className="mt-6 flex flex-1 flex-col gap-2.5">
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="flex gap-2">
+                <div className="mt-0.5 h-4 w-4 shrink-0 animate-pulse rounded-sm bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,var(--semantic-border-soft))]" />
+                <div className="h-4 flex-1 animate-pulse rounded-md bg-[color-mix(in_srgb,var(--semantic-panel-muted)_35%,var(--semantic-border-soft))]" />
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 h-11 w-full animate-pulse rounded-xl bg-[color-mix(in_srgb,var(--semantic-panel-muted)_45%,var(--semantic-border-soft))]" />
+          <div className="mx-auto mt-3 h-3 w-48 animate-pulse rounded-md bg-[color-mix(in_srgb,var(--semantic-panel-muted)_30%,var(--semantic-border-soft))]" />
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function PricingPlansStatusPanel({
+  message,
+  onRetry,
+}: {
+  message: string;
+  onRetry: () => void;
+}) {
+  return (
+    <div
+      className="mx-auto max-w-lg rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_06%,var(--semantic-surface))] px-4 py-3 text-center text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]"
+      role="status"
+    >
+      <p>{message}</p>
+      <button
+        type="button"
+        className="mt-2 text-sm font-semibold text-primary underline underline-offset-2 hover:opacity-90"
+        onClick={onRetry}
+      >
+        Refresh page
+      </button>
+    </div>
+  );
+}
+
 function CheckoutCancelledNotice() {
   const sp = useSearchParams();
   const [dismissed, setDismissed] = useState(false);
@@ -204,6 +272,13 @@ export function PricingPageClient({
 
   const heroCtaLabel = TRIAL_PRIMARY_COPY;
   const trialSubtext = TRIAL_SECONDARY_COPY;
+  const pricingCurrencyLine = useMemo(
+    () =>
+      region === "US"
+        ? "All prices are shown in U.S. dollars."
+        : "All prices are shown in Canadian dollars.",
+    [region],
+  );
 
   useEffect(() => {
     trackProductEvent("pricing_page_viewed", {
@@ -224,10 +299,31 @@ export function PricingPageClient({
         /** Avoid stale browser HTTP cache for anonymous pricing JSON (CDN is still authoritative at origin). */
         const res = await fetch("/api/pricing/options", { cache: "no-store" });
         if (!res.ok) throw new Error("load_failed");
-        const data = await res.json();
+        const data = (await res.json()) as Record<string, unknown>;
+        const plans = data.plans;
+        const allied = data.alliedPlans;
+        if (!Array.isArray(plans) || !Array.isArray(allied)) {
+          if (!cancelled) {
+            setNursingPlans([]);
+            setAlliedPlans([]);
+            setLoadError(tRef.current("pages.pricing.error.pricingTemporarilyUnavailable"));
+            setPlansLoaded(true);
+          }
+          return;
+        }
+        if (plans.length === 0 && allied.length === 0) {
+          if (!cancelled) {
+            setNursingPlans([]);
+            setAlliedPlans([]);
+            setLoadError(tRef.current("pages.pricing.error.pricingTemporarilyUnavailable"));
+            setPlansLoaded(true);
+          }
+          return;
+        }
         if (!cancelled) {
-          setNursingPlans(data.plans ?? []);
-          setAlliedPlans(data.alliedPlans ?? []);
+          setLoadError(null);
+          setNursingPlans(plans as NursingPlanRow[]);
+          setAlliedPlans(allied as AlliedPlanRow[]);
           if (typeof data.trialDays === "number") setTrialDays(data.trialDays);
           setPlansLoaded(true);
         }
@@ -276,6 +372,17 @@ export function PricingPageClient({
     for (const p of displayPlans) m.set(p.duration, p);
     return m;
   }, [displayPlans]);
+
+  const trackDataGap = useMemo(
+    () =>
+      plansLoaded &&
+      loadError === null &&
+      displayPlans.length === 0 &&
+      (nursingPlans.length > 0 || alliedPlans.length > 0),
+    [plansLoaded, loadError, displayPlans.length, nursingPlans.length, alliedPlans.length],
+  );
+
+  const showPricingGrid = plansLoaded && loadError === null && !trackDataGap;
 
   const tryQuestionsHref = localize(rnQuestions(region));
   const termsHref = localize("/terms");
@@ -497,6 +604,7 @@ export function PricingPageClient({
         ctaLabel={heroCtaLabel}
         trialSubtext={trialSubtext}
         trialFinePrint={TRIAL_FINE_PRINT_COPY}
+        pricesShownLine={pricingCurrencyLine}
       />
 
       {/* ── Section 2: Trust + Value Strip ── */}
@@ -542,7 +650,7 @@ export function PricingPageClient({
                   setSegment(id);
                   trackProductEvent("tier_selected", {
                     segment: id,
-                    tier: segmentToTier(id),
+                    tier: segmentToTier(id, region === "US"),
                     marketing_locale: locale,
                     marketing_region: region,
                   });
@@ -592,35 +700,38 @@ export function PricingPageClient({
           </div>
         )}
 
-        {loadError ? (
-          <div
-            className="mx-auto max-w-lg rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_06%,var(--semantic-surface))] px-4 py-3 text-center text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]"
-            role="status"
-          >
-            <p>{loadError}</p>
-            <button
-              type="button"
-              className="mt-2 text-sm font-semibold text-primary underline underline-offset-2 hover:opacity-90"
-              onClick={() => window.location.reload()}
-            >
-              Refresh page
-            </button>
-          </div>
-        ) : null}
-
         <Suspense fallback={null}>
           <CheckoutCancelledNotice />
         </Suspense>
 
-        {/* Pricing cards */}
+        {!plansLoaded && !loadError ? <PricingPlanGridSkeleton /> : null}
+
+        {plansLoaded && loadError ? (
+          <PricingPlansStatusPanel message={loadError} onRetry={() => window.location.reload()} />
+        ) : null}
+
+        {plansLoaded && !loadError && trackDataGap ? (
+          <PricingPlansStatusPanel
+            message={t("pages.pricing.error.trackTemporarilyUnavailable")}
+            onRetry={() => window.location.reload()}
+          />
+        ) : null}
+
+        {/* Pricing cards — real list prices from `/api/pricing/options` (display catalog + Stripe checkout flags). */}
+        {showPricingGrid ? (
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4 xl:gap-6 xl:items-start">
           {BILLING_DURATION_ORDER.map((duration) => {
-            const row = rowByDuration.get(duration);
-            // Once plans have loaded, skip cards for durations that don't exist for this tier
-            if (plansLoaded && !row) return null;
-            const isBest = row?.isBestValue ?? duration === "yearly";
-            const isPop = row?.isMostPopular ?? false;
-            const isHighlighted = isBest || isPop;
+            const rawRow = rowByDuration.get(duration);
+            const row = rawRow && isRenderablePlanRow(rawRow) ? rawRow : undefined;
+            /**
+             * Catalog gaps: e.g. NEW_GRAD / PRE_NURSING have no 3-month row in `display-catalog` (no Stripe
+             * price for that combo). We must **not** drop the grid cell — that read as “pricing never loaded”.
+             */
+            const slotUnavailable = Boolean(!rawRow);
+            const rowDataInvalid = Boolean(rawRow && !row);
+            const isBest = Boolean(row?.isBestValue);
+            const isPop = Boolean(row?.isMostPopular);
+            const isHighlighted = Boolean(row) && !slotUnavailable && !rowDataInvalid && (isBest || isPop);
 
             return (
               <article
@@ -656,7 +767,15 @@ export function PricingPageClient({
                   </p>
                 )}
 
-                {row ? (
+                {rowDataInvalid ? (
+                  <div className="mt-8 flex flex-1 flex-col justify-end gap-2">
+                    <p className="text-sm text-muted-foreground">{t("pages.pricing.plan.rowDataIncomplete")}</p>
+                  </div>
+                ) : slotUnavailable ? (
+                  <div className="mt-8 flex flex-1 flex-col justify-end gap-2">
+                    <p className="text-sm text-muted-foreground">{t("pages.pricing.plan.durationNotOffered")}</p>
+                  </div>
+                ) : row ? (
                   <>
                     <div
                       className="mt-6 border-t pt-5"
@@ -714,15 +833,12 @@ export function PricingPageClient({
                       </p>
                     )}
                   </>
-                ) : (
-                  <div className="mt-8 flex flex-1 flex-col justify-end">
-                    <p className="text-sm text-muted-foreground">{t("pages.pricing.rowPlansLoading")}</p>
-                  </div>
-                )}
+                ) : null}
               </article>
             );
           })}
         </div>
+        ) : null}
 
         {showConsentPrompt ? (
           <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 px-4 pb-4 pt-24 sm:items-center sm:pb-6">
