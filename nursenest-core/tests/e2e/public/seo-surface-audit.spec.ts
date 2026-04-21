@@ -34,9 +34,9 @@ const ROUTES: SeoRouteConfig[] = [
   { path: "/for-institutions", mustBeIndexable: true, expectCanonical: true, minAlternateLinks: 3, expectBreadcrumb: false, minInternalLinks: 2 },
   { path: "/flashcards", mustBeIndexable: true, expectCanonical: true, minAlternateLinks: 3, expectBreadcrumb: false, minInternalLinks: 2 },
   { path: "/practice-exams", mustBeIndexable: true, expectCanonical: true, minAlternateLinks: 3, expectBreadcrumb: false, minInternalLinks: 2 },
-  /** Hub root `…/[examCode]/page.tsx` — no visible `BreadcrumbTrail` (child routes add it). */
-  { path: "/us/rn/nclex-rn", mustBeIndexable: true, expectCanonical: true, minAlternateLinks: 2, expectBreadcrumb: false, minInternalLinks: 2 },
-  { path: "/canada/rn/nclex-rn", mustBeIndexable: true, expectCanonical: true, minAlternateLinks: 2, expectBreadcrumb: false, minInternalLinks: 2 },
+  /** RN NCLEX hub overview 308 → `/lessons`; audit the stable pathway lessons surface instead. */
+  { path: "/us/rn/nclex-rn/lessons", mustBeIndexable: true, expectCanonical: true, minAlternateLinks: 2, expectBreadcrumb: false, minInternalLinks: 2 },
+  { path: "/canada/rn/nclex-rn/lessons", mustBeIndexable: true, expectCanonical: true, minAlternateLinks: 2, expectBreadcrumb: false, minInternalLinks: 2 },
   { path: "/allied-health", mustBeIndexable: true, expectCanonical: true, minAlternateLinks: 2, expectBreadcrumb: true, minInternalLinks: 2 },
   { path: "/login", mustBeIndexable: false, expectCanonical: true, minAlternateLinks: 0, expectBreadcrumb: false, minInternalLinks: 1 },
   { path: "/signup", mustBeIndexable: false, expectCanonical: true, minAlternateLinks: 0, expectBreadcrumb: false, minInternalLinks: 1 },

@@ -441,7 +441,7 @@ export function adminBlogBatchRateLimitKind(pathname: string, method: string): A
   if (pathname === p && m === "POST") return "write";
   if (pathname.startsWith(`${p}/`) && pathname !== `${p}/run` && pathname !== `${p}/preview`) {
     if (m === "GET") return "read";
-    if (m === "PATCH") return "write";
+    if (m === "PATCH" || m === "DELETE") return "write";
   }
   return null;
 }
@@ -801,6 +801,12 @@ export function rateLimitUserPartitionFromSessionJwt(token: SessionJwtPayload | 
   return null;
 }
 
+/** Set `NN_ADMIN_RL_ATTRIBUTION_DIAG=1` briefly to log when `/api/admin/blog/*` hits `ip_unauth` buckets despite session-looking cookies (JWT partition null). */
+function shouldLogAdminBlogRlAttributionMismatch(): boolean {
+  const v = process.env.NN_ADMIN_RL_ATTRIBUTION_DIAG?.trim().toLowerCase();
+  return v === "1" || v === "true";
+}
+
 /**
  * Returns a 429 response when over limit; otherwise `null` (caller continues).
  */
@@ -827,6 +833,21 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
   const token = secret ? await getAuthSessionJwtFromRequest(request, secret) : null;
   const userId = rateLimitUserPartitionFromSessionJwt(token);
+
+  if (
+    shouldLogAdminBlogRlAttributionMismatch() &&
+    !userId &&
+    pathname.startsWith("/api/admin/blog")
+  ) {
+    const ck = request.headers.get("cookie") ?? "";
+    if (ck.includes("session-token") || ck.includes("authjs") || ck.includes("next-auth")) {
+      safeServerLog("security", "admin_blog_rl_jwt_partition_null_session_cookie_present", {
+        path: pathname.slice(0, 120),
+        method,
+        ipHash: hashIp(ipKey),
+      });
+    }
+  }
 
   if (isAdminApiRateLimitPath(pathname)) {
     const blogLimited = await enforceDedicatedAdminBlogBatchRateLimit(pathname, method, userId, ipKey);

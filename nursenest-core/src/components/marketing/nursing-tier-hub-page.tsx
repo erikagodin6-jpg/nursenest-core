@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Activity, ArrowRight, BookOpen, ClipboardList, Target } from "lucide-react";
+import { Activity, BookOpen, ClipboardList, Target } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { ExamPathwayWaitlistBanner } from "@/components/exam-pathways/exam-pathway-waitlist-banner";
@@ -9,6 +9,7 @@ import { NpSeoAliasHubAnalytics } from "@/components/marketing/np-seo-alias-hub-
 import { FunnelExamHubViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { StudyCard } from "@/components/ui/study-card";
 import type { NursingTierHubActionId, NursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
+import type { PathwayHubResumePayload } from "@/lib/learner/pathway-lesson-continuation";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { pathwayAnalyticsDimensions, trackProductEvent } from "@/lib/observability/product-analytics";
@@ -56,20 +57,24 @@ export function NursingTierHubPage({
   hubPath,
   content,
   npSeoAliasSegment,
+  hubResume,
 }: {
   pathway: ExamPathwayDefinition;
   hubPath: string;
   content: NursingTierHubContent;
   npSeoAliasSegment?: string;
+  /** Subscriber-only: when present with a lesson target, shows a compact “continue” row under the four cards. */
+  hubResume?: PathwayHubResumePayload | null;
 }) {
   const linkCtx = pathwayMarketingHubLinkContext(pathway, npSeoAliasSegment);
   const actionsById = new Map(content.actions.map((action) => [action.id, action]));
   const orderedActions = ACTION_ORDER.map((actionId) => actionsById.get(actionId)).filter(
     (action): action is NonNullable<typeof action> => Boolean(action),
   );
-  const lessonsHref = actionsById.get("lessons")?.href ?? buildExamPathwayPath(pathway, "lessons");
-  const questionsHref = actionsById.get("practice_questions")?.href ?? buildExamPathwayPath(pathway, "questions");
-  const examsHref = actionsById.get("exams")?.href ?? buildExamPathwayPath(pathway, "cat");
+  const resumeLesson = hubResume?.lastTouched ?? hubResume?.nextRecommended ?? null;
+  const resumeLessonIsLastTouched = Boolean(hubResume?.lastTouched && resumeLesson === hubResume.lastTouched);
+  const resumeLessonCompleted = resumeLessonIsLastTouched ? Boolean(hubResume?.lastTouched?.completed) : false;
+  const questionsAppHref = `/app/questions?pathwayId=${encodeURIComponent(pathway.id)}`;
   /** Same headline pattern for RN, PN, NP (from {@link buildNursingTierHubContent}). */
   const title = content.title;
   const geographyLabel = pathway.countrySlug === "canada" ? "Canada" : "United States";
@@ -146,36 +151,23 @@ export function NursingTierHubPage({
         </ul>
       </section>
 
-      <section aria-labelledby="tier-hub-lesson-library" className="mt-6">
-        <div className="nn-card border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--semantic-info)_5.5%,var(--theme-card-bg))] p-4 sm:p-5">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div className="max-w-2xl">
-              <h2 id="tier-hub-lesson-library" className="nn-marketing-h4">
-                Lesson Library
-              </h2>
-              <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">{content.startHere}</p>
-            </div>
-            <Link
-              href={lessonsHref}
-              className="inline-flex min-h-10 items-center gap-1.5 rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold"
-            >
-              Open Lessons
-              <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+      {resumeLesson ? (
+        <div className="mt-4 rounded-lg border border-[var(--border-subtle)] px-3 py-3 sm:px-4">
+          <p className="text-xs font-medium text-[var(--theme-muted-text)]">Continue where you left off</p>
+          <div className="mt-2 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+            <Link href={resumeLesson.href} className="font-medium text-primary hover:underline">
+              <span className="block">Resume lesson</span>
+              <span className="mt-0.5 block text-xs font-normal text-[var(--theme-muted-text)]">
+                {resumeLesson.title}
+                {resumeLessonCompleted ? " · completed" : ""}
+              </span>
             </Link>
-          </div>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Link
-              href={questionsHref}
-              className="inline-flex min-h-10 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
-            >
-              Practice Questions
-            </Link>
-            <Link href={examsHref} className="inline-flex min-h-10 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold">
-              Exams
+            <Link href={questionsAppHref} className="font-medium text-primary hover:underline">
+              Resume questions
             </Link>
           </div>
         </div>
-      </section>
+      ) : null}
 
       {pathway.status === "upcoming" || pathway.acquisitionMode === "waitlist" ? (
         <ExamPathwayWaitlistBanner

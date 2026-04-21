@@ -16,6 +16,21 @@ async function getOrExplainConnect(request: APIRequestContext, url: string, labe
 }
 
 test.describe("Release — health APIs", () => {
+  test("US RN NCLEX marketing hub overview permanently redirects to /lessons", async ({ request, baseURL }) => {
+    const origin = baseURL ?? "http://127.0.0.1:3000";
+    const url = `${origin}/us/rn/nclex-rn`;
+    let r;
+    try {
+      r = await request.fetch(url, { maxRedirects: 0 });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      throw new Error(`RN hub redirect: cannot reach ${url}. category=health underlying=${msg}`);
+    }
+    expect([301, 308], `expected redirect from obsolete hub, got ${r.status()}`).toContain(r.status());
+    const loc = r.headers()["location"] ?? "";
+    expect(loc.endsWith("/lessons") || loc.includes("/lessons"), `Location should target /lessons, got ${loc}`).toBeTruthy();
+  });
+
   test("/api/health returns ok (liveness)", async ({ request, baseURL }) => {
     const origin = baseURL ?? "http://127.0.0.1:3000";
     const res = await getOrExplainConnect(request, `${origin}/api/health`, "API health (liveness)");

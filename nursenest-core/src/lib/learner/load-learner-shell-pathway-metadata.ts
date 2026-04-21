@@ -2,7 +2,8 @@ import { userShouldSeeBaselinePrompt } from "@/lib/baseline/baseline-assessment"
 import { CountryCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { learnerPathwayHubChromeHref } from "@/lib/learner/learner-pathway-hub-chrome-href";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { countryLabelFromSlug, formatRoleTrackLabel } from "@/lib/seo/breadcrumb-utils";
 
@@ -88,7 +89,7 @@ export async function loadLearnerPathwayNavMetadata(userId: string): Promise<Lea
       const p = getExamPathwayById(lp);
       pathwayShortLabel = p ? pillLabelForRoleTrack(p.roleTrack) : lp.slice(0, 48);
       if (p) {
-        pathwayHubHref = buildExamPathwayPath(p);
+        pathwayHubHref = learnerPathwayHubChromeHref(p);
         pathwayContextBar = formatPathwayContextBar(p);
         if (p.roleTrack === "rn" || p.roleTrack === "rpn" || p.roleTrack === "lpn" || p.roleTrack === "np") {
           examsLabel = "CAT Exams";
@@ -98,7 +99,7 @@ export async function loadLearnerPathwayNavMetadata(userId: string): Promise<Lea
       pathwayShortLabel = "Allied";
       const alliedId = u.country === CountryCode.CA ? "ca-allied-core" : "us-allied-core";
       const alliedPath = getExamPathwayById(alliedId);
-      pathwayHubHref = alliedPath ? buildExamPathwayPath(alliedPath) : "/us/allied/allied-health";
+      pathwayHubHref = alliedPath ? learnerPathwayHubChromeHref(alliedPath) : "/us/allied/allied-health";
       pathwayContextBar = alliedPath ? formatPathwayContextBar(alliedPath) : "Allied • United States • Allied health";
     }
   }

@@ -2,12 +2,16 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { equivalentExamHubUrlAfterRegionToggle } from "./marketing-region-equivalent-hub";
 
-test("maps US RN hub to Canada RN when switching to CA", () => {
-  assert.equal(equivalentExamHubUrlAfterRegionToggle("/us/rn/nclex-rn", "CA"), "/canada/rn/nclex-rn");
+test("maps US RN hub overview to shared lessons entry when switching to CA", () => {
+  assert.equal(equivalentExamHubUrlAfterRegionToggle("/us/rn/nclex-rn", "CA"), "/lessons");
+});
+
+test("maps Canada RN hub overview to shared lessons entry when switching to US", () => {
+  assert.equal(equivalentExamHubUrlAfterRegionToggle("/canada/rn/nclex-rn", "US"), "/lessons");
 });
 
 test("maps Canada PN hub to US PN when switching to US", () => {
-  assert.equal(equivalentExamHubUrlAfterRegionToggle("/canada/rpn/rex-pn", "US"), "/us/lpn/nclex-pn");
+  assert.equal(equivalentExamHubUrlAfterRegionToggle("/canada/rpn/rex-pn", "US"), "/us/pn/nclex-pn");
 });
 
 test("returns null when already in target country", () => {

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { BlogIndexPost } from "@/lib/blog/safe-blog-queries";
 import { logBlogLatestLinkHrefs } from "@/lib/seo/seo-url-emission-audit";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 type Props = {
   /** How many recent posts to surface (keep small for crawl budget + layout). */
@@ -58,13 +59,21 @@ export async function MarketingBlogLatestLinks({ take = 3, className, heading, p
   if (postsProp !== undefined) {
     return <MarketingBlogLatestLinksWithPosts take={take} className={className} heading={heading} posts={postsProp} />;
   }
-  const posts = (
-    await (await import("@/lib/blog/safe-blog-queries")).getPublishedBlogPostsPage(
-      1,
-      safeTake,
-      undefined,
-      { includeTotal: false },
-    )
-  ).posts;
-  return <MarketingBlogLatestLinksWithPosts take={take} className={className} heading={heading} posts={posts} />;
+  try {
+    const posts = (
+      await (await import("@/lib/blog/safe-blog-queries")).getPublishedBlogPostsPage(
+        1,
+        safeTake,
+        undefined,
+        { includeTotal: false },
+      )
+    ).posts;
+    return <MarketingBlogLatestLinksWithPosts take={take} className={className} heading={heading} posts={posts} />;
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    safeServerLog("blog", "marketing_blog_latest_links_degraded", {
+      reason: msg.slice(0, 200),
+    });
+    return null;
+  }
 }

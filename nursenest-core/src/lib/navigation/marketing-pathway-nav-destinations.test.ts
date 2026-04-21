@@ -12,11 +12,11 @@ describe("publicNewGradStudyDestinations", () => {
   });
 
   it("CA: aligns to canonical RN hub + RN lesson entry (matches /[locale]/new-grad redirect policy)", () => {
-    const rnHub = "/canada/rn/nclex-rn";
+    const rnHub = "/lessons";
     const d = publicNewGradStudyDestinations("CA", rnHub);
     assert.equal(d.hubHref, rnHub);
-    assert.equal(d.lessons, "/canada/rn/nclex-rn/lessons");
-    assert.equal(d.questions, "/canada/rn/nclex-rn/questions");
+    assert.equal(d.lessons, "/lessons");
+    assert.equal(d.questions, "/question-bank");
     assert.match(d.cat, /\/canada\/rn\/nclex-rn\/cat$/);
   });
 });

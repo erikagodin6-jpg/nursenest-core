@@ -1,5 +1,6 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { RN_NCLEX_EXAM_HUB_OVERVIEW_REDIRECT, isRnNclexMarketingPathwayId } from "@/lib/exam-pathways/rn-nclex-public-hub-policy";
 import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { HUB } from "@/lib/navigation/canonical-destinations";
 import type { BreadcrumbCrumb, BreadcrumbSchemaItem } from "@/lib/seo/breadcrumb-types";
@@ -44,12 +45,18 @@ function examLessonsIndexSchema(): BreadcrumbSchemaItem {
   };
 }
 
-function pathwayHubBase(pathway: ExamPathwayDefinition, hubBasePath?: string): string {
+function pathwaySegmentBaseForChildUrls(pathway: ExamPathwayDefinition, hubBasePath?: string): string {
   return hubBasePath ?? buildExamPathwayPath(pathway);
 }
 
+function pathwayHubOverviewCrumbHref(pathway: ExamPathwayDefinition, hubBasePath?: string): string {
+  if (hubBasePath) return hubBasePath;
+  if (isRnNclexMarketingPathwayId(pathway.id)) return RN_NCLEX_EXAM_HUB_OVERVIEW_REDIRECT;
+  return buildExamPathwayPath(pathway);
+}
+
 function pathwayHubChildPath(pathway: ExamPathwayDefinition, hubBasePath: string | undefined, subpath: string): string {
-  const base = pathwayHubBase(pathway, hubBasePath);
+  const base = pathwaySegmentBaseForChildUrls(pathway, hubBasePath);
   const tail = subpath.replace(/^\//, "");
   return tail ? `${base}/${tail}` : base;
 }
@@ -62,7 +69,7 @@ function examPathwaySurfacePrefix(
   pathway: ExamPathwayDefinition,
   opts?: PathwayMarketingHubBreadcrumbOpts,
 ): {
-  hubBase: string;
+  hubOverviewHref: string;
   countryCrumb: (linked: boolean) => BreadcrumbCrumb;
   roleCrumb: (linked: boolean) => BreadcrumbCrumb;
   hubCrumb: (linked: boolean) => BreadcrumbCrumb;
@@ -70,7 +77,7 @@ function examPathwaySurfacePrefix(
   roleSchema: () => BreadcrumbSchemaItem;
   hubSchema: () => BreadcrumbSchemaItem;
 } {
-  const hubBase = pathwayHubBase(pathway, opts?.hubBasePath);
+  const hubOverviewHref = pathwayHubOverviewCrumbHref(pathway, opts?.hubBasePath);
   const countrySlug = pathway.countrySlug;
   const rolePath = `/${countrySlug}/${pathway.roleTrack}`;
   const examName = pathwayRegionAwareExamName(pathway);
@@ -79,13 +86,13 @@ function examPathwaySurfacePrefix(
   const countryHref = countryExamGuideHref(countrySlug);
 
   return {
-    hubBase,
+    hubOverviewHref,
     countryCrumb: (linked) => (linked ? { name: countryName, href: countryHref } : { name: countryName, href: undefined }),
     roleCrumb: (linked) => (linked ? { name: roleLabel, href: rolePath } : { name: roleLabel, href: undefined }),
-    hubCrumb: (linked) => (linked ? { name: examName, href: hubBase } : { name: examName, href: undefined }),
+    hubCrumb: (linked) => (linked ? { name: examName, href: hubOverviewHref } : { name: examName, href: undefined }),
     countrySchema: () => ({ name: countryName, item: toAbsoluteSiteUrl(countryHref) }),
     roleSchema: () => ({ name: roleLabel, item: toAbsoluteSiteUrl(rolePath) }),
-    hubSchema: () => ({ name: examName, item: toAbsoluteSiteUrl(hubBase) }),
+    hubSchema: () => ({ name: examName, item: toAbsoluteSiteUrl(hubOverviewHref) }),
   };
 }
 

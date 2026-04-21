@@ -21,13 +21,14 @@ test("adminBlogBatchRateLimitKind classifies batch-schedule subtree", () => {
   assert.equal(adminBlogBatchRateLimitKind("/api/admin/blog/batch-schedule/preview", "POST"), "preview");
   assert.equal(adminBlogBatchRateLimitKind("/api/admin/blog/batch-schedule/abc-123", "GET"), "read");
   assert.equal(adminBlogBatchRateLimitKind("/api/admin/blog/batch-schedule/abc-123", "PATCH"), "write");
-  assert.equal(adminBlogBatchRateLimitKind("/api/admin/blog/batch-schedule/abc-123", "DELETE"), null);
+  assert.equal(adminBlogBatchRateLimitKind("/api/admin/blog/batch-schedule/abc-123", "DELETE"), "write");
 });
 
 test("adminBlogContentApiRateLimitKind covers blog APIs except batch-schedule and legacy tooling", () => {
   assert.equal(adminBlogContentApiRateLimitKind("/api/admin/blog/campaigns", "GET"), "read");
   assert.equal(adminBlogContentApiRateLimitKind("/api/admin/blog/campaigns/abc/run-chunk", "POST"), "write");
   assert.equal(adminBlogContentApiRateLimitKind("/api/admin/blog/batch-schedule", "GET"), null);
+  assert.equal(adminBlogContentApiRateLimitKind("/api/admin/blog/batch-schedule/schedule-id-1", "DELETE"), null);
   assert.equal(adminBlogContentApiRateLimitKind("/api/admin/blog/batch-schedule/run", "POST"), null);
   assert.equal(adminBlogContentApiRateLimitKind("/api/admin/blog/generate-ai", "POST"), null);
   assert.equal(adminBlogContentApiRateLimitKind("/api/admin/blog/batch-chunk", "POST"), null);

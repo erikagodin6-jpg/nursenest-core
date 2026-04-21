@@ -103,7 +103,7 @@ export function AdminBlogTopicBatchClient({
     setLoading(true);
     try {
       const startAt = new Date(startAtLocal).toISOString();
-      const res = await fetch("/api/admin/blog/batch-schedule", {
+      const res = await fetch("/api/admin/blog/batch-schedule/preview", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -116,7 +116,6 @@ export function AdminBlogTopicBatchClient({
           defaultTemplate: template,
           publishMode,
           localizationOptions: localizationPayload,
-          dryRun: true,
         }),
       });
       const data = await res.json();

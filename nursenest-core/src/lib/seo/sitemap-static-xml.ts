@@ -28,6 +28,7 @@ import { getPreNursingOverlaySlugsForLocale } from "@/lib/i18n/pre-nursing-conte
 import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "@/lib/exam-pathways/programmatic-slug-redirects";
 import { LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT } from "@/lib/marketing/canonical-pathway-hubs";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { isRnNclexMarketingPathwayId } from "@/lib/exam-pathways/rn-nclex-public-hub-policy";
 import {
   isPathwayPublishedForPublicSite,
   listPublishedExamPathwaysForPublicSite,
@@ -108,7 +109,9 @@ export function collectExamPathwayUrls(origin: string): string[] {
   const o = normalizeOrigin(origin);
   const urls: string[] = [];
   for (const p of listPublishedExamPathwaysForPublicSite()) {
-    urls.push(`${o}${buildExamPathwayPath(p)}`);
+    if (!isRnNclexMarketingPathwayId(p.id)) {
+      urls.push(`${o}${buildExamPathwayPath(p)}`);
+    }
     urls.push(`${o}${buildExamPathwayPath(p, "pricing")}`);
     urls.push(`${o}${buildExamPathwayPath(p, "questions")}`);
   }

@@ -10,12 +10,12 @@ test("isWellFormedExamHubPath accepts canonical three-segment hubs", () => {
   assert.equal(isWellFormedExamHubPath("/us/rn/nclex-rn"), true);
   assert.equal(isWellFormedExamHubPath("/canada/rpn/rex-pn"), true);
   assert.equal(isWellFormedExamHubPath("/us"), false);
-  assert.equal(isWellFormedExamHubPath("/lessons"), false);
+  assert.equal(isWellFormedExamHubPath("/lessons"), true);
 });
 
 test("ensureMarketingExamHubPath falls back to RN hub when href is malformed", () => {
-  assert.equal(ensureMarketingExamHubPath("US", ""), "/us/rn/nclex-rn");
-  assert.equal(ensureMarketingExamHubPath("CA", "/bad"), "/canada/rn/nclex-rn");
+  assert.equal(ensureMarketingExamHubPath("US", ""), "/lessons");
+  assert.equal(ensureMarketingExamHubPath("CA", "/bad"), "/lessons");
 });
 
 test("marketingExamHubPath returns well-formed hubs for US and CA (RN / PN / NP / allied)", () => {

@@ -5,11 +5,16 @@ import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { NursingTierHubPage } from "@/components/marketing/nursing-tier-hub-page";
 import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
+import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
+import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { rnNclexExamHubOverviewRedirectTarget } from "@/lib/exam-pathways/rn-nclex-public-hub-policy";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
-import { rnNclexExamHubOverviewRedirectTarget } from "@/lib/exam-pathways/rn-nclex-public-hub-policy";
+import { loadPathwayHubResumePayload, type PathwayHubResumePayload } from "@/lib/learner/pathway-lesson-continuation";
+import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 import { buildNursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
 import { examPathwayRegionalHreflang } from "@/lib/seo/exam-pathway-hub-alternates";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -29,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const rnHubRedirect = rnNclexExamHubOverviewRedirectTarget(pathwayPre);
   if (rnHubRedirect) permanentRedirect(rnHubRedirect);
   return safeGenerateMetadata(async () => {
-    const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
+    const pathway = pathwayPre;
     if (!pathway) return {};
     const seo = getNpPracticeTestLandingCopy(locale, slug, examCode);
     const requestPath = `/${locale}/${slug}/${examCode}`;
@@ -64,12 +69,45 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ExamPathwayOverviewPage({ params }: Props) {
   const { locale, slug, examCode } = await params;
   const pathname = `/${locale}/${slug}/${examCode}`;
-  return withCrawlSurfacePageRender("marketing.exam_hub", pathname, async () => {
-    const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
-    const rnHubRedirect = rnNclexExamHubOverviewRedirectTarget(pathway);
-    if (rnHubRedirect) permanentRedirect(rnHubRedirect);
-    if (!pathway) notFound();
+  const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
+  const rnHubRedirect = rnNclexExamHubOverviewRedirectTarget(pathway);
+  if (rnHubRedirect) permanentRedirect(rnHubRedirect);
+  if (!pathway) notFound();
 
+  let hubResume: PathwayHubResumePayload | null = null;
+  try {
+    const session = await getOptionalPublicSession({ pathname, surface: "marketing.exam_hub" });
+    const userId = (session?.user as { id?: string } | undefined)?.id ?? "";
+    if (userId && isDatabaseUrlConfigured()) {
+      const entitlement = await resolveEntitlementForPage(userId);
+      if (entitlement !== "error" && entitlement.hasAccess) {
+        let learnerPath: string | null = null;
+        try {
+          const u = await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } });
+          learnerPath = u?.learnerPath ?? null;
+        } catch {
+          learnerPath = null;
+        }
+        if (canViewFullPathwayLesson(entitlement, pathway, learnerPath)) {
+          const lessonsBasePath = buildExamPathwayPath(pathway, "lessons");
+          const resume = await loadPathwayHubResumePayload(
+            userId,
+            entitlement,
+            learnerPath,
+            pathway,
+            lessonsBasePath,
+          );
+          if (resume.lastTouched != null || resume.nextRecommended != null) {
+            hubResume = resume;
+          }
+        }
+      }
+    }
+  } catch {
+    hubResume = null;
+  }
+
+  return withCrawlSurfacePageRender("marketing.exam_hub", pathname, async () => {
     const npPracticeSeo = getNpPracticeTestLandingCopy(locale, slug, examCode) ?? null;
     const content = buildNursingTierHubContent(pathway);
     const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(pathway, { hubBasePath: pathname });
@@ -90,11 +128,12 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
           hubPath={pathname}
           content={content}
           npSeoAliasSegment={npPracticeSeo ? examCode : undefined}
+          hubResume={hubResume}
         />
-        <section className="mt-6">
+        <section className="mt-8 border-t border-[var(--border-subtle)] pt-6">
           <div className="nn-card border border-[color-mix(in_srgb,var(--semantic-info)_16%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--semantic-info)_4.5%,var(--theme-card-bg))] p-4 sm:p-5">
-            <h2 className="nn-marketing-h4">Recommended blog reading</h2>
-            <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">
+            <h2 className="nn-marketing-h4 text-[var(--theme-muted-text)]">Optional reading</h2>
+            <p className="nn-marketing-body-sm mt-1 text-[var(--theme-muted-text)]">
               Explore exam-focused blog posts to reinforce lessons and question practice.
             </p>
             <div className="mt-3 flex flex-wrap gap-3 text-sm">

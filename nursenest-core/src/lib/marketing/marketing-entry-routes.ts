@@ -10,14 +10,27 @@ import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 
 export type MarketingRegionToggle = "US" | "CA";
 
+export const HUB = {
+  /** Canonical public lessons landing (legacy `/exam-lessons` redirects here). */
+  examLessons: "/lessons",
+  questionBank: "/question-bank",
+  practiceExams: "/practice-exams",
+  /** Public flashcards index (pathway-specific decks under `/flashcards/[slug]`). */
+  flashcards: "/flashcards",
+  tools: "/tools",
+  pricing: "/pricing",
+  signup: "/signup",
+  login: "/login",
+} as const;
+
 /** RN / NCLEX-RN */
 export const RN = {
-  /** Legacy name: canonical US RN pathway hub (not the old `/nclex-rn-practice-questions` slug). */
+  /** Legacy name: canonical public RN entry (retired `/us/rn/nclex-rn` overview). */
   practiceProgrammatic: CANONICAL_PATHWAY_HUB.usRn,
-  usLessons: "/us/rn/nclex-rn/lessons",
-  caLessons: "/canada/rn/nclex-rn/lessons",
-  usQuestions: "/us/rn/nclex-rn/questions",
-  caQuestions: "/canada/rn/nclex-rn/questions",
+  usLessons: HUB.examLessons,
+  caLessons: HUB.examLessons,
+  usQuestions: HUB.questionBank,
+  caQuestions: HUB.questionBank,
   /** Subscriber app route (timed practice exams, history). Public entry: {@link HUB.practiceExams}. */
   appExams: "/app/exams",
 } as const;
@@ -63,19 +76,6 @@ export const ALLIED = {
   usQuestions: "/us/allied/allied-health/questions",
   caHub: "/canada/allied/allied-health",
   caQuestions: "/canada/allied/allied-health/questions",
-} as const;
-
-export const HUB = {
-  /** Canonical public lessons landing (legacy `/exam-lessons` redirects here). */
-  examLessons: "/lessons",
-  questionBank: "/question-bank",
-  practiceExams: "/practice-exams",
-  /** Public flashcards index (pathway-specific decks under `/flashcards/[slug]`). */
-  flashcards: "/flashcards",
-  tools: "/tools",
-  pricing: "/pricing",
-  signup: "/signup",
-  login: "/login",
 } as const;
 
 export function loginWithCallback(path: string): string {

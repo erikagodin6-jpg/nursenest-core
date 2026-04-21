@@ -21,14 +21,19 @@ describe("buildMarketingMegaMenus", () => {
   it("CA New Grad mega menu stays on canonical RN surfaces (region policy)", () => {
     const menus = buildMarketingMegaMenus("CA", t);
     const ng = menus.find((m) => m.key === "newgrad");
-    assert.equal(ng?.hubHref, "/canada/rn/nclex-rn");
+    assert.equal(ng?.hubHref, "/lessons");
     const flat = ng?.groups.flatMap((g) => g.links) ?? [];
-    assert.equal(flat.find((l) => l.key === "ng-lessons")?.href, "/canada/rn/nclex-rn/lessons");
+    assert.equal(flat.find((l) => l.key === "ng-lessons")?.href, "/lessons");
   });
 
-  it("RN / PN / NP mega menus still resolve to pathway-scoped lessons (not the global lessons index)", () => {
+  it("RN mega menu uses global lessons + question bank; PN/NP stay pathway-scoped", () => {
     const menus = buildMarketingMegaMenus("US", t);
-    for (const key of ["rn", "pn", "np"] as const) {
+    const rn = menus.find((x) => x.key === "rn");
+    const rnLessons = rn?.groups.flatMap((g) => g.links).find((l) => l.key === "rn-lessons");
+    assert.equal(rnLessons?.href, "/lessons");
+    const rnQuestions = rn?.groups.flatMap((g) => g.links).find((l) => l.key === "rn-questions");
+    assert.equal(rnQuestions?.href, "/question-bank");
+    for (const key of ["pn", "np"] as const) {
       const m = menus.find((x) => x.key === key);
       const lessons = m?.groups.flatMap((g) => g.links).find((l) => l.key === `${key}-lessons`);
       assert.equal(lessons?.href.startsWith("/lessons"), false);

@@ -16,7 +16,7 @@ import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/ex
 import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import { alliedHub, pnPrimaryHub } from "@/lib/marketing/marketing-entry-routes";
+import { alliedHub, HUB, pnPrimaryHub } from "@/lib/marketing/marketing-entry-routes";
 import { ensureMarketingExamHubPath } from "@/lib/marketing/nursing-exam-nav-validation";
 
 export type CountryExamOfferingId = "rn" | "pn" | "np" | "allied";
@@ -70,7 +70,7 @@ export function marketingExamHubPath(region: MarketingRegionToggle, id: CountryE
   const p = getExamPathwayById(pathwayId);
   let href: string;
   if (p) {
-    href = buildExamPathwayPath(p);
+    href = id === "rn" ? HUB.examLessons : buildExamPathwayPath(p);
   } else {
     switch (id) {
       case "rn":

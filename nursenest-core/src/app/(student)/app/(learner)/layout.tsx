@@ -10,6 +10,7 @@ import { SentryLearnerShell } from "@/components/observability/sentry-learner-sh
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadLearnerStudyNextBlock } from "@/lib/learner/load-learner-study-next-block";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { learnerPathwayHubChromeHrefForTierFallback } from "@/lib/learner/learner-pathway-hub-chrome-href";
 import {
   DEFAULT_LEARNER_PATHWAY_NAV_METADATA,
   formatPathwayContextBar,
@@ -109,19 +110,11 @@ export default async function LearnerShellLayout({ children }: { children: React
 
   if (!pathwayHubHref) {
     const tier = ((session?.user as { tier?: string | null })?.tier ?? "").toUpperCase();
-    if (tier === "RN") {
-      pathwayHubHref = "/us/rn/nclex-rn";
-      examsLabel = "CAT Exams";
-    } else if (tier === "RPN") {
-      pathwayHubHref = "/canada/rpn/rex-pn";
-      examsLabel = "CAT Exams";
-    } else if (tier === "LVN_LPN") {
-      pathwayHubHref = "/us/lpn/nclex-pn";
-      examsLabel = "CAT Exams";
-    } else if (tier === "NP") {
-      pathwayHubHref = "/us/np/fnp";
-      examsLabel = "CAT Exams";
-    } else if (tier === "ALLIED") pathwayHubHref = "/us/allied/allied-health";
+    const tierHub = learnerPathwayHubChromeHrefForTierFallback(tier);
+    if (tierHub) {
+      pathwayHubHref = tierHub;
+      if (tier === "RN" || tier === "RPN" || tier === "LVN_LPN" || tier === "NP") examsLabel = "CAT Exams";
+    }
   }
 
   if (!pathwayContextBar && pathwayId) {
