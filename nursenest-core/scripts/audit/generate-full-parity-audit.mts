@@ -9,7 +9,8 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { ContentStatus } from "@prisma/client";
-import { listPublicExamPathways, buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
 import { MARKETING_LOCALE_CODES } from "@/lib/i18n/marketing-locale-policy";
 import {
   getCatalogPathwayLessonsSync,

@@ -7,7 +7,6 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { enforcePracticeTestsListProtection } from "@/lib/http/api-protection";
 import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { readinessConfigForPathwayId } from "@/lib/exam-pathways/pathway-readiness-config";
 import {
   listPathwaysCompatibleWithSubscription,
@@ -70,19 +69,6 @@ const createSchema = z
     message: "Adaptive (CAT) mode needs at least 10 as the maximum question cap input.",
     path: ["questionCount"],
   })
-  .refine(
-    (d) => {
-      if (d.selectionMode !== "cat" || d.catPresentationMode !== "exam_simulation" || d.questionCount <= 145) {
-        return true;
-      }
-      const p = d.pathwayId?.trim() ? getExamPathwayById(d.pathwayId.trim()) : null;
-      return p?.examFamily === ExamFamily.NP;
-    },
-    {
-      message: "NCLEX-RN exam simulation maximum is 145. Pass pathwayId for an NP track for up to 150 (AANP-style simulator).",
-      path: ["questionCount"],
-    },
-  )
   .refine((d) => d.catPresentationMode !== "exam_simulation" || d.selectionMode === "cat", {
     message: "Exam simulation requires adaptive (CAT) mode.",
     path: ["catPresentationMode"],
@@ -204,6 +190,32 @@ export async function POST(req: Request) {
   }
 
   const d = parsed.data;
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
+  if (
+    d.selectionMode === "cat" &&
+    d.catPresentationMode === "exam_simulation" &&
+    d.questionCount > 145
+  ) {
+    const p = d.pathwayId?.trim() ? getExamPathwayById(d.pathwayId.trim()) : null;
+    if (p?.examFamily !== ExamFamily.NP) {
+      return NextResponse.json(
+        {
+          error:
+            "NCLEX-RN exam simulation maximum is 145. Pass pathwayId for an NP track for up to 150 (AANP-style simulator).",
+          code: PRACTICE_TEST_CAT_CREATE_CODE.cat_invalid_question_count,
+          details: {
+            formErrors: [],
+            fieldErrors: {
+              questionCount: [
+                "NCLEX-RN exam simulation maximum is 145. Pass pathwayId for an NP track for up to 150 (AANP-style simulator).",
+              ],
+            },
+          },
+        },
+        { status: 400 },
+      );
+    }
+  }
   const isDev = process.env.NODE_ENV !== "production";
   const topicNames = d.topicNames ?? [];
   const difficultyMin = d.difficultyMin ?? null;

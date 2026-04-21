@@ -14,7 +14,7 @@ import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { CountryCode, TierCode } from "@prisma/client";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
 import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements";
 import { seedMinimalQuestionBankIfEmpty } from "@/lib/exams/seed-minimal-question-bank";
@@ -268,6 +268,7 @@ export async function GET(req: NextRequest) {
     }
 
     try {
+      const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
       const previewSelect = {
         id: true,
         stem: true,
@@ -289,7 +290,7 @@ export async function GET(req: NextRequest) {
         exam: true,
       } as const;
 
-      let pathway: ReturnType<typeof getExamPathwayById> | null = pathwayIdParam
+      let pathway: ExamPathwayDefinition | null = pathwayIdParam
         ? getExamPathwayById(pathwayIdParam) ?? null
         : null;
       if (pathway && !subscriptionCoversPathwayBase(gate.entitlement, pathway)) {

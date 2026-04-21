@@ -3,7 +3,6 @@ import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 import { getPathwayLessonForProgress } from "@/lib/lessons/pathway-lesson-loader";
 import { requireSubscriberSession, notSubscribedResponse } from "@/lib/entitlements/require-subscriber-session";
@@ -39,6 +38,8 @@ export async function POST(req: Request) {
   }
 
   setSentryServerContext({ route: "/api/lessons/pathway-progress", feature: SERVER_FEATURE.lesson, userId });
+
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
 
   const parsed = bodySchema.safeParse(await req.json());
   if (!parsed.success) {

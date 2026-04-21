@@ -42,7 +42,7 @@ import { resolveDisplayName } from "@/lib/user/resolve-display-name";
 import { resolveDashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { LearnerStudyHomeDurabilityMinimal } from "@/components/student/learner-study-home-durability-minimal";
@@ -58,6 +58,7 @@ type DashboardSessionLike = {
 
 /** Match learner shell: CAT entry for nursing exam tracks; generic exams hub otherwise. */
 function examsNavLabelFromLearnerContext(
+  getExamPathwayById: (id: string) => ExamPathwayDefinition | undefined,
   learnerPath: string | null | undefined,
   tier: string | null | undefined,
 ): "CAT Exams" | "Exams" {
@@ -153,6 +154,7 @@ async function LearnerDashboardHeavyContent({
   let benchmark: BenchmarkData | null = null;
   const studySettings = await loadStudySettings(userId);
   const skipNonCriticalHome = shouldSkipNonCriticalLearnerWork();
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
 
   try {
     const snap = await loadPremiumDashboardSnapshot(userId, entitlement);
@@ -257,7 +259,7 @@ async function LearnerDashboardHeavyContent({
           crumbs={crumbs}
           t={t}
           locale={locale}
-          examsNavLabel={examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier)}
+          examsNavLabel={examsNavLabelFromLearnerContext(getExamPathwayById, userLearnerPath, session?.user?.tier)}
           identity={identity}
           entitlement={entitlement}
           heroHeading={userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
@@ -306,7 +308,7 @@ async function LearnerDashboardHeavyContent({
       crumbs={crumbs}
       t={t}
       locale={locale}
-      examsNavLabel={examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier)}
+      examsNavLabel={examsNavLabelFromLearnerContext(getExamPathwayById, userLearnerPath, session?.user?.tier)}
       identity={identityFallback}
       heroHeading={userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
       pathwayId={userLearnerPath}
@@ -381,7 +383,8 @@ async function LearnerDashboardDeferredContent({
     alliedProfessionKey: userAlliedProfessionKey,
   });
   const heroHeading = userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title");
-  const examsNavLabel = examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier);
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
+  const examsNavLabel = examsNavLabelFromLearnerContext(getExamPathwayById, userLearnerPath, session?.user?.tier);
 
   if (entitlement === "error") {
     return (

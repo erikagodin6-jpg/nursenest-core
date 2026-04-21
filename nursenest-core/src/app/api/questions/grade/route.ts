@@ -16,7 +16,6 @@ import { ContentStatus } from "@prisma/client";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { mergeQuestionOverlayForGradeResponse } from "@/lib/i18n/educational-content-overlay";
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveRationaleLessonLinksForQuestion } from "@/lib/learner/rationale-lesson-link-resolve";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { PH } from "@/lib/observability/posthog-conversion-events";
@@ -32,21 +31,22 @@ function topicRoutingConfidence(row: { subtopic?: string | null; topic?: string 
   return "low";
 }
 
-function effectivePathwayIdForGrade(
-  requestPathway: unknown,
-  storedLearnerPath: string | null | undefined,
-): string | null {
-  const req = typeof requestPathway === "string" ? requestPathway.trim() : "";
-  if (req && getExamPathwayById(req)) return req;
-  const stored = (storedLearnerPath ?? "").trim();
-  if (stored && getExamPathwayById(stored)) return stored;
-  return null;
-}
-
 export async function POST(req: Request) {
   return runWithApiTelemetry(req, "POST /api/questions/grade", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
+
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
+  function effectivePathwayIdForGrade(
+    requestPathway: unknown,
+    storedLearnerPath: string | null | undefined,
+  ): string | null {
+    const req = typeof requestPathway === "string" ? requestPathway.trim() : "";
+    if (req && getExamPathwayById(req)) return req;
+    const stored = (storedLearnerPath ?? "").trim();
+    if (stored && getExamPathwayById(stored)) return stored;
+    return null;
+  }
 
   setSentryServerContext({ route: "/api/questions/grade", feature: SERVER_FEATURE.question, userId: gate.userId });
 

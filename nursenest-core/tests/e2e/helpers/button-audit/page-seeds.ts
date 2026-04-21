@@ -1,4 +1,5 @@
-import { buildExamPathwayPath, getExamPathwayById } from "../../../../src/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "../../../../src/lib/exam-pathways/build-exam-pathway-path";
+import { getExamPathwayById } from "../../../../src/lib/exam-pathways/exam-product-registry";
 import { LESSON_FLOW_PATHWAY_QA } from "../../../../src/lib/qa/lesson-flow-pathways";
 
 export type SeedSet = {
