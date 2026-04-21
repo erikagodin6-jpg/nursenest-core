@@ -17,8 +17,8 @@
  *
  * **Build / compile cache (DigitalOcean App Platform):** Next.js writes `.next/cache` during `next build`.
  * `heroku-postbuild` runs guards + `NN_POSTBUILD_NEXT_BUILD=1 npm run build` **before** buildpack prune/cache
- * so `.next/cache` is snapshotted. The buildpack’s second `npm run build` skips compile on DO
- * (`scripts/run-buildpack-build.mjs`). `build_command` runs `build:deploy` → post-compile verify only.
+ * so `.next/cache` is snapshotted. With both `heroku-postbuild` and `build`, the Heroku buildpack only runs
+ * `heroku-postbuild` (the `build` script is not invoked by the buildpack). `build_command` runs `build:deploy` → post-compile verify only.
  * `cacheDirectories` must list **both** `node_modules` and `.next/cache`. `post-build-prune.mjs` preserves
  * `.next/cache` by default (opt out with `NN_POST_BUILD_PRUNE_NEXT_CACHE=1`). Droplet one-shot: `build:deploy:full`.
  * Remote task cache (Turborepo/Nx) is not wired: deploy vertical is `nursenest-core/` + DO build cache.

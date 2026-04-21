@@ -6,8 +6,9 @@
  * `NN_POSTBUILD_NEXT_BUILD=1 npm run build` there so `next build` creates `.next/cache` for the
  * `cacheDirectories` snapshot.
  *
- * The buildpack then runs `npm run build` again without that env var; on App Platform we skip that
- * duplicate compile. Local / CI / droplets omit `DIGITALOCEAN_APP_ID` → always compile here.
+ * When **both** `heroku-postbuild` and `build` exist, the Heroku Node buildpack runs **only**
+ * `heroku-postbuild` (not the `build` script). That `npm run build` chain still runs from inside
+ * `heroku-postbuild` above. Local / CI / droplets omit `DIGITALOCEAN_APP_ID` → compile here when invoked.
  *
  * Set `NN_RUN_BUILDPACK_NEXT_BUILD=1` on DO to force a second `next build` (debug / parity).
  */
@@ -27,7 +28,7 @@ const forceSecondBuild = truthyEnv("NN_RUN_BUILDPACK_NEXT_BUILD");
 
 if (onDigitalOceanAppPlatform && !postbuildCompilePass && !forceSecondBuild) {
   console.log(
-    "[build] DigitalOcean App Platform: skipping duplicate `next build` (already ran in heroku-postbuild with NN_POSTBUILD_NEXT_BUILD=1 so `.next/cache` is included in the buildpack cache snapshot). Set NN_RUN_BUILDPACK_NEXT_BUILD=1 to force compile here.",
+    "[build] DigitalOcean App Platform: skipping `next build` here (compile ran in heroku-postbuild with NN_POSTBUILD_NEXT_BUILD=1; Heroku buildpack does not invoke this `build` script when heroku-postbuild exists). Set NN_RUN_BUILDPACK_NEXT_BUILD=1 to force compile here.",
   );
   process.exit(0);
 }

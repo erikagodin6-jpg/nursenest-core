@@ -29,7 +29,8 @@ services:
     # `package.json` `cacheDirectories` lists **both** `node_modules` and `.next/cache` (custom list replaces
     # buildpack defaults — see DO Node.js buildpack "Custom Caching"). `heroku-postbuild` runs hints + guards +
     # `NN_POSTBUILD_NEXT_BUILD=1 npm run build` so `next build` runs **before** prune/cache (warm `.next/cache`).
-    # The buildpack’s second `npm run build` skips compile on DO (`run-buildpack-build.mjs`).
+    # With both `heroku-postbuild` and `build`, the Heroku buildpack runs only `heroku-postbuild` (not `build`).
+    # `heroku-cleanup` → `log-build-cache-hints.mjs --phase=heroku_cleanup` runs **after** cache save + prune (ordering check).
     # `post-build-prune.mjs` preserves `.next/cache` by default (`NN_POST_BUILD_PRUNE_NEXT_CACHE=1` deletes).
     # `build_command`: `npm run build:deploy` → `build:deploy:postbuild` (verify standalone, ensure static, prune).
     # One-shot compile + deploy: `npm run build:deploy:full`. Do NOT add `npm ci` here — install is already done.
