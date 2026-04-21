@@ -26,6 +26,10 @@ const onDigitalOceanAppPlatform = Boolean(String(process.env.DIGITALOCEAN_APP_ID
 const postbuildCompilePass = truthyEnv("NN_POSTBUILD_NEXT_BUILD");
 const forceSecondBuild = truthyEnv("NN_RUN_BUILDPACK_NEXT_BUILD");
 
+console.log(
+  `[buildpack-build] gate digitalOcean=${onDigitalOceanAppPlatform ? 1 : 0} postbuild_next_build=${postbuildCompilePass ? 1 : 0} force_second_build=${forceSecondBuild ? 1 : 0}`,
+);
+
 if (onDigitalOceanAppPlatform && !postbuildCompilePass && !forceSecondBuild) {
   console.log(
     "[build] DigitalOcean App Platform: skipping `next build` here (compile ran in heroku-postbuild with NN_POSTBUILD_NEXT_BUILD=1; Heroku buildpack does not invoke this `build` script when heroku-postbuild exists). Set NN_RUN_BUILDPACK_NEXT_BUILD=1 to force compile here.",
