@@ -25,6 +25,7 @@ import {
   CHECKOUT_SESSION_FAILED_CODE,
   CHECKOUT_STRIPE_UNAVAILABLE_CODE,
   CHECKOUT_UNAUTHORIZED_CODE,
+  CHECKOUT_FREE_PATHWAY_NO_STRIPE_CODE,
   parseCheckoutApiErrorBody,
   showStripePriceEnvKeyOnCheckoutError,
   STRIPE_PRICE_NOT_CONFIGURED_CODE,
@@ -35,9 +36,11 @@ import {
   BILLING_DURATION_ORDER,
   ALLIED_CAREER_KEYS,
   ALLIED_CAREER_DISPLAY_NAMES,
+  isFreeStripeBillingNursingTier,
   type AlliedCareerKey,
 } from "@/lib/pricing/display-catalog";
 import { fetchPricingOptionsPayloadDeduped } from "@/lib/pricing/pricing-options-client-fetch";
+import type { PricingOptionsPayload } from "@/lib/pricing/pricing-options-payload-types";
 import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
@@ -90,6 +93,14 @@ type AlliedPlanRow = {
   isMostPopular: boolean;
   planCode: string;
 };
+
+function marketingPricingPayloadHasRenderablePlans(p: PricingOptionsPayload): boolean {
+  const plans = p.plans;
+  const allied = p.alliedPlans;
+  return (
+    (Array.isArray(plans) && plans.length > 0) || (Array.isArray(allied) && allied.length > 0)
+  );
+}
 
 type Segment = "prenursing" | "newgrad" | "rn" | "pn" | "np" | "allied";
 
@@ -157,6 +168,7 @@ function checkoutErrorUserMessage(
 ): string {
   const { code, message } = parsed;
   if (code === STRIPE_PRICE_NOT_CONFIGURED_CODE) return t("pages.pricing.error.checkoutPlanNotConfigured");
+  if (code === CHECKOUT_FREE_PATHWAY_NO_STRIPE_CODE) return t("pages.pricing.error.checkoutFreePathway");
   if (code === CHECKOUT_UNAUTHORIZED_CODE || httpStatus === 401) return t("pages.pricing.error.checkoutSignIn");
   if (code === CHECKOUT_POLICY_VERSION_MISMATCH_CODE) return t("pages.pricing.error.checkoutPolicyStale");
   if (code === CHECKOUT_NA_BILLING_SCOPE_ACK_REQUIRED_CODE) return t("pages.pricing.globalContext.mustAckBeforeCheckout");
@@ -250,18 +262,31 @@ export function PricingPageClient({
   intro,
   heroSub,
   serverCheckoutRegionSlugs = [],
+  initialPricingOptions,
 }: {
   heading: string;
   intro: string;
   heroSub: string;
   /** Server union of `nn_global_region` + signed explicit checkout context (HttpOnly); keeps pricing gate aligned with POST checkout. */
   serverCheckoutRegionSlugs?: readonly GlobalRegionSlug[];
+  /**
+   * Same payload as `GET /api/pricing/options`, built during RSC render so the grid is not blocked
+   * by a second client fetch (rate limits, CDN, or transient `/api` failures).
+   */
+  initialPricingOptions: PricingOptionsPayload;
 }) {
+  const hasServerCatalogRef = useRef(marketingPricingPayloadHasRenderablePlans(initialPricingOptions));
   const [segment, setSegment] = useState<Segment>("rn");
   const [selectedAlliedCareer, setSelectedAlliedCareer] = useState<AlliedCareerKey>("paramedic");
-  const [nursingPlans, setNursingPlans] = useState<NursingPlanRow[]>([]);
-  const [alliedPlans, setAlliedPlans] = useState<AlliedPlanRow[]>([]);
-  const [trialDays, setTrialDays] = useState(3);
+  const [nursingPlans, setNursingPlans] = useState<NursingPlanRow[]>(() =>
+    Array.isArray(initialPricingOptions.plans) ? (initialPricingOptions.plans as NursingPlanRow[]) : [],
+  );
+  const [alliedPlans, setAlliedPlans] = useState<AlliedPlanRow[]>(() =>
+    Array.isArray(initialPricingOptions.alliedPlans) ? (initialPricingOptions.alliedPlans as AlliedPlanRow[]) : [],
+  );
+  const [trialDays, setTrialDays] = useState(() =>
+    typeof initialPricingOptions.trialDays === "number" ? initialPricingOptions.trialDays : 3,
+  );
   const [loadError, setLoadError] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [checkoutOpsHint, setCheckoutOpsHint] = useState<string | null>(null);
@@ -270,7 +295,7 @@ export function PricingPageClient({
   const [showConsentPrompt, setShowConsentPrompt] = useState(false);
   const [pendingCheckoutDuration, setPendingCheckoutDuration] = useState<BillingDuration | null>(null);
   const [checkoutIntentHandled, setCheckoutIntentHandled] = useState(false);
-  const [plansLoaded, setPlansLoaded] = useState(false);
+  const [plansLoaded, setPlansLoaded] = useState(() => hasServerCatalogRef.current);
   /** Soft gate: partial global regions (cookie + signed explicit context) require NA billing acknowledgment before checkout. */
   const [naPathwayAcknowledged, setNaPathwayAcknowledged] = useState(false);
   const { locale, t } = useMarketingI18n();
@@ -330,18 +355,22 @@ export function PricingPageClient({
         const allied = data.alliedPlans;
         if (!Array.isArray(plans) || !Array.isArray(allied)) {
           if (!cancelled) {
-            setNursingPlans([]);
-            setAlliedPlans([]);
-            setLoadError(tRef.current("pages.pricing.error.pricingTemporarilyUnavailable"));
+            if (!hasServerCatalogRef.current) {
+              setNursingPlans([]);
+              setAlliedPlans([]);
+              setLoadError(tRef.current("pages.pricing.error.pricingTemporarilyUnavailable"));
+            }
             setPlansLoaded(true);
           }
           return;
         }
         if (plans.length === 0 && allied.length === 0) {
           if (!cancelled) {
-            setNursingPlans([]);
-            setAlliedPlans([]);
-            setLoadError(tRef.current("pages.pricing.error.pricingTemporarilyUnavailable"));
+            if (!hasServerCatalogRef.current) {
+              setNursingPlans([]);
+              setAlliedPlans([]);
+              setLoadError(tRef.current("pages.pricing.error.pricingTemporarilyUnavailable"));
+            }
             setPlansLoaded(true);
           }
           return;
@@ -355,7 +384,9 @@ export function PricingPageClient({
         }
       } catch {
         if (!cancelled) {
-          setLoadError(tRef.current("pages.pricing.error.loadPlans"));
+          if (!hasServerCatalogRef.current) {
+            setLoadError(tRef.current("pages.pricing.error.loadPlans"));
+          }
           setPlansLoaded(true);
         }
       }
@@ -380,6 +411,7 @@ export function PricingPageClient({
   const tier = segmentToTier(segment, isUS);
   const narrative = buildTierPricingNarrative(t, tier);
   const isAllied = segment === "allied";
+  const isFreeNursingPricingTrack = !isAllied && isFreeStripeBillingNursingTier(tier);
 
   const filteredNursingPlans = useMemo(
     () => nursingPlans.filter((p) => p.tier === tier),
@@ -401,14 +433,16 @@ export function PricingPageClient({
 
   const trackDataGap = useMemo(
     () =>
+      !isFreeNursingPricingTrack &&
       plansLoaded &&
       loadError === null &&
       displayPlans.length === 0 &&
       (nursingPlans.length > 0 || alliedPlans.length > 0),
-    [plansLoaded, loadError, displayPlans.length, nursingPlans.length, alliedPlans.length],
+    [isFreeNursingPricingTrack, plansLoaded, loadError, displayPlans.length, nursingPlans.length, alliedPlans.length],
   );
 
   const showPricingGrid = plansLoaded && loadError === null && !trackDataGap;
+  const showPaidPlanDurationGrid = showPricingGrid && !isFreeNursingPricingTrack;
 
   const showNorthAmericaStripeScopeNote = useMemo(
     () => authoritativeRegionSlugs.some((slug) => !canShowPricing(slug)),
@@ -455,6 +489,10 @@ export function PricingPageClient({
     async (duration: BillingDuration) => {
       setCheckoutError(null);
       setCheckoutOpsHint(null);
+      if (isFreeStripeBillingNursingTier(tier)) {
+        window.location.assign(localize("/pre-nursing"));
+        return;
+      }
       if (authStatus !== "authenticated") {
         redirectGuestToLoginForCheckout(duration);
         return;
@@ -597,6 +635,7 @@ export function PricingPageClient({
     },
     [
       authStatus,
+      localize,
       redirectGuestToLoginForCheckout,
       tier,
       trialDays,
@@ -617,6 +656,10 @@ export function PricingPageClient({
     (duration: BillingDuration) => {
       setCheckoutError(null);
       setCheckoutOpsHint(null);
+      if (segment === "prenursing") {
+        window.location.assign(localize("/pre-nursing"));
+        return;
+      }
       if (pricingCheckoutSoftGate && !naPathwayAcknowledged) {
         setCheckoutError(t("pages.pricing.globalContext.mustAckBeforeCheckout"));
         return;
@@ -636,11 +679,13 @@ export function PricingPageClient({
     [
       authStatus,
       isAllied,
+      localize,
       pathname,
       policiesAccepted,
       pricingCheckoutSoftGate,
       naPathwayAcknowledged,
       redirectGuestToLoginForCheckout,
+      segment,
       selectedAlliedCareer,
       startCheckout,
       t,
@@ -674,6 +719,20 @@ export function PricingPageClient({
     const checkoutDuration = searchParams.get("checkoutDuration");
     if (!checkoutTier || !checkoutDuration) return;
 
+    if (checkoutTier === "PRE_NURSING") {
+      setCheckoutIntentHandled(true);
+      const cleanParamsEarly = new URLSearchParams(searchParams.toString());
+      cleanParamsEarly.delete("checkoutIntent");
+      cleanParamsEarly.delete("checkoutTier");
+      cleanParamsEarly.delete("checkoutDuration");
+      cleanParamsEarly.delete("checkoutAlliedCareer");
+      const cleanUrlEarly =
+        cleanParamsEarly.size > 0 ? `${pathname}?${cleanParamsEarly.toString()}` : pathname;
+      window.history.replaceState({}, "", cleanUrlEarly);
+      window.location.assign(localize("/pre-nursing"));
+      return;
+    }
+
     const allowedTiers: TierCode[] = ["PRE_NURSING", "NEW_GRAD", "RPN", "LVN_LPN", "RN", "NP", "ALLIED"];
     const allowedDurations: BillingDuration[] = ["monthly", "3-month", "6-month", "yearly"];
     if (!allowedTiers.includes(checkoutTier as TierCode) || !allowedDurations.includes(checkoutDuration as BillingDuration)) {
@@ -700,7 +759,7 @@ export function PricingPageClient({
     cleanParams.delete("checkoutAlliedCareer");
     const cleanUrl = cleanParams.size > 0 ? `${pathname}?${cleanParams.toString()}` : pathname;
     window.history.replaceState({}, "", cleanUrl);
-  }, [authStatus, checkoutIntentHandled, pathname, region, searchParams]);
+  }, [authStatus, checkoutIntentHandled, localize, pathname, region, searchParams]);
 
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-20 nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0 md:gap-24">
@@ -708,10 +767,14 @@ export function PricingPageClient({
       {/* ── Section 1: Hero ── */}
       <PricingHero
         studySystemHref={localize("/how-it-works")}
-        ctaLabel={heroCtaLabel}
-        trialSubtext={trialSubtext}
-        trialFinePrint={TRIAL_FINE_PRINT_COPY}
+        ctaLabel={segment === "prenursing" ? t("pages.pricing.freePreNursing.heroCta") : heroCtaLabel}
+        trialSubtext={segment === "prenursing" ? t("pages.pricing.freePreNursing.heroSub") : trialSubtext}
+        trialFinePrint={segment === "prenursing" ? t("pages.pricing.freePreNursing.heroFinePrint") : TRIAL_FINE_PRINT_COPY}
         pricesShownLine={pricingCurrencyLine}
+        primaryCtaHref={segment === "prenursing" ? localize("/pre-nursing") : undefined}
+        secondaryCtaHref={segment === "prenursing" ? "#pricing-plans-heading" : undefined}
+        secondaryLabel={segment === "prenursing" ? t("pages.pricing.freePreNursing.viewPaidPlans") : undefined}
+        compactFooter={segment === "prenursing"}
       />
 
       {showNorthAmericaStripeScopeNote ? (
@@ -846,15 +909,15 @@ export function PricingPageClient({
           />
         ) : null}
 
-        {/* Pricing cards — real list prices from `/api/pricing/options` (display catalog + Stripe checkout flags). */}
-        {showPricingGrid ? (
+        {/* Paid duration cards — list prices from server-hydrated catalog; client may refresh from `/api/pricing/options`. */}
+        {showPaidPlanDurationGrid ? (
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4 xl:gap-6 xl:items-start">
           {BILLING_DURATION_ORDER.map((duration) => {
             const rawRow = rowByDuration.get(duration);
             const row = rawRow && isRenderablePlanRow(rawRow) ? rawRow : undefined;
             /**
-             * Catalog gaps: e.g. NEW_GRAD / PRE_NURSING have no 3-month row in `display-catalog` (no Stripe
-             * price for that combo). We must **not** drop the grid cell — that read as “pricing never loaded”.
+             * Catalog gaps: e.g. NEW_GRAD has no 3-month row in `display-catalog` (no Stripe price).
+             * We must **not** drop the grid cell — that read as “pricing never loaded”.
              */
             const slotUnavailable = Boolean(!rawRow);
             const rowDataInvalid = Boolean(rawRow && !row);
@@ -985,6 +1048,27 @@ export function PricingPageClient({
             );
           })}
         </div>
+        ) : null}
+
+        {isFreeNursingPricingTrack && plansLoaded && !loadError ? (
+          <div
+            data-testid="pricing-free-prenursing-panel"
+            className="mx-auto max-w-xl rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_12%,var(--color-card))] p-8 text-center shadow-[var(--elevation-rest)]"
+          >
+            <p className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-success)]">
+              {t("pages.pricing.freePreNursing.kicker")}
+            </p>
+            <h3 className="nn-marketing-h3 mt-2 text-balance">{t("pages.pricing.freePreNursing.panelTitle")}</h3>
+            <p className="nn-marketing-body-sm mx-auto mt-3 max-w-md text-muted-foreground">
+              {t("pages.pricing.freePreNursing.panelBody")}
+            </p>
+            <Link
+              href={localize("/pre-nursing")}
+              className={`${MARKETING_PRIMARY_CTA_CLASS} mt-6 inline-flex justify-center`}
+            >
+              {t("pages.pricing.freePreNursing.primaryCta")}
+            </Link>
+          </div>
         ) : null}
 
         {showConsentPrompt ? (

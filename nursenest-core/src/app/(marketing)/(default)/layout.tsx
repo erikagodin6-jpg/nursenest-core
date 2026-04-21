@@ -32,6 +32,8 @@ import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 import { loadMarketingLayoutObservability } from "@/lib/observability/deferred-marketing-layout-observability";
 import { loadRenderTrace } from "@/lib/observability/deferred-render-trace";
 import { getStaffSession } from "@/lib/auth/staff-session";
+import { MarketingPublicContentEditProvider } from "@/components/marketing/marketing-public-content-edit-provider";
+import { loadMarketingPublicContentOverridesForLocale } from "@/lib/marketing/load-marketing-public-content-overrides";
 
 /** Layout reads `headers()` (pathname probe + staff chrome); avoid wasted static-generation attempts during `next build`. */
 export const dynamic = "force-dynamic";
@@ -282,7 +284,10 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       const trustClientPersistedRegion = marketingRegionCookie !== undefined;
       const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingRegionCookie);
       const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie();
-      const staffSession = await getStaffSession().catch(() => null);
+      const [publicContentOverrides, staffSession] = await Promise.all([
+        loadMarketingPublicContentOverridesForLocale(resolvedLocale).catch(() => ({} as Record<string, string>)),
+        getStaffSession().catch(() => null),
+      ]);
 
       return (
         <MarketingI18nProvider
@@ -291,30 +296,35 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
           messages={messages}
           fallbackMessages={fallbackMessages}
         >
-          <NursenestRegionRoot serverRegion={serverRegion} trustClientPersistedRegion={trustClientPersistedRegion}>
-            <MarketingCountryChromeProvider country={marketingCountry}>
-              <OrganizationJsonLd />
-              <WebSiteJsonLd />
-              <MarketingFeedbackShell>
-                <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
-                  <CheckoutGlobalRegionContextPathStamp />
-                  <div className="nn-marketing-surface flex min-h-screen flex-col">
-                    <SiteHeader serverHasStaffSession={staffSession != null} />
-                    <main className="flex min-h-0 flex-1 flex-col">
-                      {shouldLayerMainPageShards() ? (
-                        <MarketingMainI18nShards locale={resolvedLocale}>
+          <MarketingPublicContentEditProvider isStaff={Boolean(staffSession)}>
+            <NursenestRegionRoot serverRegion={serverRegion} trustClientPersistedRegion={trustClientPersistedRegion}>
+              <MarketingCountryChromeProvider country={marketingCountry}>
+                <OrganizationJsonLd />
+                <WebSiteJsonLd />
+                <MarketingFeedbackShell>
+                  <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
+                    <CheckoutGlobalRegionContextPathStamp />
+                    <div className="nn-marketing-surface flex min-h-screen flex-col">
+                      <SiteHeader serverHasStaffSession={staffSession != null} />
+                      <main className="flex min-h-0 flex-1 flex-col">
+                        {shouldLayerMainPageShards() ? (
+                          <MarketingMainI18nShards
+                            locale={resolvedLocale}
+                            publicContentOverrides={publicContentOverrides}
+                          >
+                            <PageTransitionShell>{children}</PageTransitionShell>
+                          </MarketingMainI18nShards>
+                        ) : (
                           <PageTransitionShell>{children}</PageTransitionShell>
-                        </MarketingMainI18nShards>
-                      ) : (
-                        <PageTransitionShell>{children}</PageTransitionShell>
-                      )}
-                    </main>
-                    <SiteFooter serverHasStaffSession={staffSession != null} />
-                  </div>
-                </MarketingHeaderGlobalRegionServerBridge>
-              </MarketingFeedbackShell>
-            </MarketingCountryChromeProvider>
-          </NursenestRegionRoot>
+                        )}
+                      </main>
+                      <SiteFooter serverHasStaffSession={staffSession != null} />
+                    </div>
+                  </MarketingHeaderGlobalRegionServerBridge>
+                </MarketingFeedbackShell>
+              </MarketingCountryChromeProvider>
+            </NursenestRegionRoot>
+          </MarketingPublicContentEditProvider>
         </MarketingI18nProvider>
       );
     } catch (e) {

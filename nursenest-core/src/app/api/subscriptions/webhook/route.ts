@@ -8,10 +8,6 @@ import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-s
 import { getStripeClient } from "@/lib/stripe/stripe-client";
 import { productEvent } from "@/lib/observability/product-events";
 import { captureServerExceptionIfEnabled, captureServerMessageIfEnabled } from "@/lib/observability/sentry-if-enabled";
-import {
-  sentryCaptureExceptionWhenEnabled,
-  sentryCaptureMessageWhenEnabled,
-} from "@/lib/observability/sentry-nextjs-dynamic";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { recordStripeWebhookFailure } from "@/lib/observability/production-signal-metrics";
 import { applyStripeWebhookEvent } from "@/lib/stripe/apply-stripe-webhook-event";

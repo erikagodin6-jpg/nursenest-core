@@ -27,6 +27,8 @@ import { MarketingHeaderGlobalRegionServerBridge } from "@/lib/region/marketing-
 import { readOptionalGlobalRegionSlugFromCookie } from "@/lib/region/read-optional-global-region-cookie.server";
 
 import { getStaffSession } from "@/lib/auth/staff-session";
+import { MarketingPublicContentEditProvider } from "@/components/marketing/marketing-public-content-edit-provider";
+import { loadMarketingPublicContentOverridesForLocale } from "@/lib/marketing/load-marketing-public-content-overrides";
 const marketingLocaleLayoutSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
 
 export const dynamic = "force-dynamic";
@@ -103,33 +105,38 @@ export default async function MarketingLocaleLayout({
   const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry();
   const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingRegionCookie);
   const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie();
-  const staffSession = await getStaffSession().catch(() => null);
+  const [publicContentOverrides, staffSession] = await Promise.all([
+    loadMarketingPublicContentOverridesForLocale(locale).catch(() => ({} as Record<string, string>)),
+    getStaffSession().catch(() => null),
+  ]);
 
   return (
     <MarketingI18nProvider key={locale} locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
-      <NursenestRegionRoot serverRegion={serverRegion}>
-        <MarketingCountryChromeProvider country={marketingCountry}>
-          <MarketingLocaleUrlSync locale={locale} />
-          <OrganizationJsonLd />
-          <WebSiteJsonLd />
-          <MarketingFeedbackShell>
-            <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
-              <CheckoutGlobalRegionContextPathStamp />
-              <div className="nn-marketing-surface flex min-h-screen flex-col">
-                <SiteHeader serverHasStaffSession={staffSession != null} />
-                <main className="flex-1">
-                  <MarketingMainI18nShards locale={locale}>
-                    <MarketingMainErrorBoundary name="marketing_locale_main">
-                      <PageTransitionShell>{children}</PageTransitionShell>
-                    </MarketingMainErrorBoundary>
-                  </MarketingMainI18nShards>
-                </main>
-                <SiteFooter serverHasStaffSession={staffSession != null} />
-              </div>
-            </MarketingHeaderGlobalRegionServerBridge>
-          </MarketingFeedbackShell>
-        </MarketingCountryChromeProvider>
-      </NursenestRegionRoot>
+      <MarketingPublicContentEditProvider isStaff={Boolean(staffSession)}>
+        <NursenestRegionRoot serverRegion={serverRegion}>
+          <MarketingCountryChromeProvider country={marketingCountry}>
+            <MarketingLocaleUrlSync locale={locale} />
+            <OrganizationJsonLd />
+            <WebSiteJsonLd />
+            <MarketingFeedbackShell>
+              <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
+                <CheckoutGlobalRegionContextPathStamp />
+                <div className="nn-marketing-surface flex min-h-screen flex-col">
+                  <SiteHeader serverHasStaffSession={staffSession != null} />
+                  <main className="flex-1">
+                    <MarketingMainI18nShards locale={locale} publicContentOverrides={publicContentOverrides}>
+                      <MarketingMainErrorBoundary name="marketing_locale_main">
+                        <PageTransitionShell>{children}</PageTransitionShell>
+                      </MarketingMainErrorBoundary>
+                    </MarketingMainI18nShards>
+                  </main>
+                  <SiteFooter serverHasStaffSession={staffSession != null} />
+                </div>
+              </MarketingHeaderGlobalRegionServerBridge>
+            </MarketingFeedbackShell>
+          </MarketingCountryChromeProvider>
+        </NursenestRegionRoot>
+      </MarketingPublicContentEditProvider>
     </MarketingI18nProvider>
   );
 }

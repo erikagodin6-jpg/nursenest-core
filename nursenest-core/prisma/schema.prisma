@@ -137,6 +137,8 @@ model User {
   abuseReviewsDismissed         ProtectionAbuseReview[]     @relation("ProtectionAbuseReviewDismissedBy")
   protectionAbuseReviews        ProtectionAbuseReview[]
   inlineContentEdits            InlineContentEntry[]   @relation("InlineContentUpdatedBy")
+  marketingPublicContentOverrides       MarketingPublicContentOverride[]
+  marketingPublicContentOverrideRevisions MarketingPublicContentOverrideRevision[]
 
   @@index([alliedProfessionKey])
   @@index([normalizedEmail])
@@ -1390,6 +1392,41 @@ model InlineContentEntry {
 
   @@index([updatedAt])
   @@map("inline_content_entries")
+}
+
+/// * Admin-published overrides for allowlisted marketing copy (flat message keys + locale).
+model MarketingPublicContentOverride {
+  id              String   @id @default(cuid())
+  messageKey      String   @map("message_key") @db.VarChar(320)
+  locale          String   @default("en") @db.VarChar(32)
+  surface         String   @db.VarChar(64)
+  value           String   @db.Text
+  previousValue   String?  @map("previous_value") @db.Text
+  isPublished     Boolean  @default(true) @map("is_published")
+  updatedByUserId String   @map("updated_by_user_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  updatedBy       User     @relation(fields: [updatedByUserId], references: [id], onDelete: Restrict)
+
+  @@unique([messageKey, locale], map: "marketing_public_content_overrides_message_key_locale_key")
+  @@index([surface, locale])
+  @@index([updatedAt(sort: Desc)])
+  @@map("marketing_public_content_overrides")
+}
+
+/// * Append-only audit trail for marketing public content overrides (upsert + reset).
+model MarketingPublicContentOverrideRevision {
+  id          String   @id @default(cuid())
+  messageKey  String   @map("message_key") @db.VarChar(320)
+  locale      String   @db.VarChar(32)
+  value       String   @db.Text
+  action      String   @default("upsert") @db.VarChar(24)
+  actorUserId String   @map("actor_user_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  actor       User     @relation(fields: [actorUserId], references: [id], onDelete: Restrict)
+
+  @@index([messageKey, locale, createdAt(sort: Desc)])
+  @@map("marketing_public_content_override_revisions")
 }
 
 /// *

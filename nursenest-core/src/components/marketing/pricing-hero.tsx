@@ -7,6 +7,10 @@ export function PricingHero({
   trialSubtext = "No charge today. Cancel anytime before your trial ends.",
   trialFinePrint = "Billing begins automatically after 3 days unless cancelled.",
   pricesShownLine = "All prices are shown in Canadian dollars.",
+  primaryCtaHref = "#pricing-plans-heading",
+  secondaryCtaHref = "#pricing-plans-heading",
+  secondaryLabel = "View Plans",
+  compactFooter = false,
 }: {
   studySystemHref: string;
   ctaLabel?: string;
@@ -14,6 +18,12 @@ export function PricingHero({
   trialFinePrint?: string;
   /** Region-aware checkout currency hint (marketing pricing only). */
   pricesShownLine?: string;
+  /** Primary hero CTA target (defaults to in-page plan grid). */
+  primaryCtaHref?: string;
+  secondaryCtaHref?: string;
+  secondaryLabel?: string;
+  /** Hide trial billing microcopy (e.g. free pathways like Pre-Nursing). */
+  compactFooter?: boolean;
 }) {
   return (
     <section
@@ -74,20 +84,20 @@ export function PricingHero({
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <Link href="#pricing-plans-heading" className={MARKETING_PRIMARY_CTA_CLASS}>
+          <Link href={primaryCtaHref} className={MARKETING_PRIMARY_CTA_CLASS}>
             {ctaLabel}
           </Link>
-          <Link href="#pricing-plans-heading" className={MARKETING_SECONDARY_CTA_CLASS}>
-            View Plans
+          <Link href={secondaryCtaHref} className={MARKETING_SECONDARY_CTA_CLASS}>
+            {secondaryLabel}
           </Link>
         </div>
 
-        <p className="mt-3 text-xs text-muted-foreground">
-          {trialSubtext}
-        </p>
-        <p className="mt-1 text-[11px] text-muted-foreground">
-          {trialFinePrint}
-        </p>
+        {!compactFooter ? (
+          <>
+            <p className="mt-3 text-xs text-muted-foreground">{trialSubtext}</p>
+            <p className="mt-1 text-[11px] text-muted-foreground">{trialFinePrint}</p>
+          </>
+        ) : null}
       </div>
     </section>
   );

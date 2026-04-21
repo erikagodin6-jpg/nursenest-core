@@ -210,7 +210,7 @@ export const MIDDLE_EAST_HOMEPAGE: CountryHomepageContent = {
 
 /** Canada-first global root: same structure as country pages, tuned for `/`. */
 export const GLOBAL_ROOT_HOMEPAGE: CountryHomepageContent = {
-  headline: "Canada-first nursing exam prep, built for nurses worldwide",
+  headline: "Canada-First Nursing Exam Prep, Built for Nurses Worldwide",
   subheadline:
     "NurseNest is a global study platform with Canada-first depth: REx-PN, NCLEX-RN, PN/RN pathways, lessons, flashcards, question banks, and CAT exams.",
   brandLine: "Country-specific nursing exam prep, with exclusive REx-PN support in Canada.",

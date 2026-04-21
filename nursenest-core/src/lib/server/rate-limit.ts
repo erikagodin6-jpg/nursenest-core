@@ -990,6 +990,111 @@ function shouldLogAdminBlogRlAttributionMismatch(): boolean {
   return v === "1" || v === "true";
 }
 
+/** Marketing public DB copy overrides — dedicated bucket (does not debit global `ratelimit:admin:user:*`). */
+export const ADMIN_MARKETING_PUBLIC_CONTENT_API_PREFIX = "/api/admin/marketing-public-content";
+
+export function adminMarketingPublicContentRateLimitKind(pathname: string, method: string): "write" | null {
+  const m = method.toUpperCase();
+  if (m !== "POST") return null;
+  return pathname === ADMIN_MARKETING_PUBLIC_CONTENT_API_PREFIX ||
+    pathname.startsWith(`${ADMIN_MARKETING_PUBLIC_CONTENT_API_PREFIX}/`)
+    ? "write"
+    : null;
+}
+
+const ADMIN_MARKETING_PUBLIC_CONTENT_WINDOW_MS = 60_000;
+const ADMIN_MARKETING_PUBLIC_CONTENT_MAX_USER = 4000;
+const ADMIN_MARKETING_PUBLIC_CONTENT_MAX_IP_UNAUTH = 240;
+
+function json429AdminMarketingPublicContent(meta: {
+  path: string;
+  bucketKeyType: "user" | "ip_unauth";
+  windowMs: number;
+  max: number;
+}): NextResponse {
+  const retry = 30;
+  return NextResponse.json(
+    {
+      error: "Too many requests",
+      code: "rate_limit_exceeded",
+      scope: "admin_marketing_public_content",
+      limiter: "admin_marketing_public_content",
+      bucketType: "dedicated",
+      bucketKeyType: meta.bucketKeyType,
+      path: meta.path,
+      windowMs: meta.windowMs,
+      max: meta.max,
+      retryAfterSec: retry,
+    },
+    {
+      status: 429,
+      headers: {
+        "Retry-After": String(retry),
+        "Cache-Control": "no-store",
+        "X-NN-RateLimit-Scope": "admin_marketing_public_content",
+        "X-NN-RateLimiter": "admin_marketing_public_content",
+        "X-NN-RateLimit-Bucket": meta.bucketKeyType,
+      },
+    },
+  );
+}
+
+async function enforceDedicatedAdminMarketingPublicContentRateLimit(
+  pathname: string,
+  method: string,
+  userId: string | null,
+  ipKey: string,
+): Promise<NextResponse | null> {
+  const kind = adminMarketingPublicContentRateLimitKind(pathname, method);
+  if (kind == null) return null;
+  const pathShort = pathname.slice(0, 160);
+  const windowMs = ADMIN_MARKETING_PUBLIC_CONTENT_WINDOW_MS;
+  const userMax = ADMIN_MARKETING_PUBLIC_CONTENT_MAX_USER;
+  const ipMax = tightenPublicCap(ADMIN_MARKETING_PUBLIC_CONTENT_MAX_IP_UNAUTH);
+
+  if (userId) {
+    const key = `ratelimit:admin:marketing_public_content:write:user:${userId}`;
+    const { ok, remaining } = await checkRateLimitUnified(key, { windowMs, max: userMax });
+    if (!ok) {
+      safeServerLog("security", "admin_marketing_public_content_rate_limit_exceeded", {
+        kind: "marketing_public_content_user",
+        path: pathShort,
+        windowMs,
+        max: userMax,
+        ipHash: hashIp(ipKey),
+        remaining,
+      });
+      return json429AdminMarketingPublicContent({
+        path: pathShort,
+        bucketKeyType: "user",
+        windowMs,
+        max: userMax,
+      });
+    }
+    return null;
+  }
+
+  const key = `ratelimit:admin:marketing_public_content:write:ip_unauth:${ipKey}`;
+  const { ok, remaining } = await checkRateLimitUnified(key, { windowMs, max: ipMax });
+  if (!ok) {
+    safeServerLog("security", "admin_marketing_public_content_rate_limit_exceeded", {
+      kind: "marketing_public_content_ip",
+      path: pathShort,
+      windowMs,
+      max: ipMax,
+      ipHash: hashIp(ipKey),
+      remaining,
+    });
+    return json429AdminMarketingPublicContent({
+      path: pathShort,
+      bucketKeyType: "ip_unauth",
+      windowMs,
+      max: ipMax,
+    });
+  }
+  return null;
+}
+
 /**
  * Returns a 429 response when over limit; otherwise `null` (caller continues).
  */
@@ -1037,6 +1142,17 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   }
 
   if (isAdminApiRateLimitPath(pathname)) {
+    const marketingPcLimited = await enforceDedicatedAdminMarketingPublicContentRateLimit(
+      pathname,
+      method,
+      userId,
+      ipKey,
+    );
+    if (marketingPcLimited) return marketingPcLimited;
+    if (adminMarketingPublicContentRateLimitKind(pathname, method) != null) {
+      return null;
+    }
+
     const blogLimited = await enforceDedicatedAdminBlogBatchRateLimit(pathname, method, userId, ipKey);
     if (blogLimited) return blogLimited;
     if (adminBlogBatchRateLimitKind(pathname, method) != null) {

@@ -9,6 +9,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { MARKETING_TERTIARY_LINK_CLASS } from "@/lib/theme/marketing-hero-pattern";
+import { MarketingEditableI18nText } from "@/components/marketing/marketing-editable-i18n-text";
 
 const CHOICE_KEYS = [
   "pages.home.sampleQuestion.choiceA",
@@ -38,7 +39,12 @@ export function HomeSampleQuestionPreview() {
             {formatTitleCase(t("pages.home.sampleQuestion.sectionKicker"), locale)}
           </p>
           <h2 className="nn-marketing-h2 mt-2 max-w-2xl text-balance text-[var(--palette-heading)]">
-            {formatTitleCase(t("pages.home.sampleQuestion.sectionTitle"), locale)}
+            <MarketingEditableI18nText
+              messageKey="pages.home.sampleQuestion.sectionTitle"
+              initialDraft={formatTitleCase(t("pages.home.sampleQuestion.sectionTitle"), locale)}
+            >
+              {formatTitleCase(t("pages.home.sampleQuestion.sectionTitle"), locale)}
+            </MarketingEditableI18nText>
           </h2>
           <div
             className="mt-4 grid max-w-3xl gap-2.5 sm:grid-cols-2 sm:gap-3"

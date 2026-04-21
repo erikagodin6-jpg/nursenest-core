@@ -8,6 +8,7 @@ import {
   loadMarketingMessageShardsSync,
 } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { safeAwait } from "@/lib/async/safe-await";
+import { mergeMarketingMessagesWithPublicOverrides } from "@/lib/marketing/merge-marketing-messages-with-public-overrides";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 
 /** Must exceed `MARKETING_SHARD_ASYNC_FACTORY_BUDGET_MS` in `load-marketing-message-shards.ts` (2500). */
@@ -23,9 +24,11 @@ const marketingMainShardTraceLogged = new Set<string>();
 function MarketingMainI18nShardsStreamingFallback({
   locale,
   children,
+  publicContentOverrides,
 }: {
   locale: string;
   children: ReactNode;
+  publicContentOverrides?: Record<string, string>;
 }) {
   const traceKey = `fallback:${locale}`;
   if (!marketingMainShardTraceLogged.has(traceKey)) {
@@ -56,8 +59,12 @@ function MarketingMainI18nShardsStreamingFallback({
             }
           })();
   }
+  const mergedPrimary = mergeMarketingMessagesWithPublicOverrides(primary, publicContentOverrides);
+  const mergedFallback = fallback
+    ? mergeMarketingMessagesWithPublicOverrides(fallback, publicContentOverrides)
+    : undefined;
   return (
-    <MarketingI18nShardLayer messages={primary} fallbackMessages={fallback}>
+    <MarketingI18nShardLayer messages={mergedPrimary} fallbackMessages={mergedFallback}>
       {children}
     </MarketingI18nShardLayer>
   );
@@ -66,9 +73,11 @@ function MarketingMainI18nShardsStreamingFallback({
 async function MarketingMainI18nShardsDeferred({
   locale,
   children,
+  publicContentOverrides,
 }: {
   locale: string;
   children: ReactNode;
+  publicContentOverrides?: Record<string, string>;
 }) {
   const traceKeyStart = `deferred_start:${locale}`;
   if (!marketingMainShardTraceLogged.has(traceKeyStart)) {
@@ -102,8 +111,12 @@ async function MarketingMainI18nShardsDeferred({
       fallbackCount: fallback ? Object.keys(fallback).length : 0,
     });
   }
+  const mergedPrimary = mergeMarketingMessagesWithPublicOverrides(primary, publicContentOverrides);
+  const mergedFallback = fallback
+    ? mergeMarketingMessagesWithPublicOverrides(fallback, publicContentOverrides)
+    : undefined;
   return (
-    <MarketingI18nShardLayer messages={primary} fallbackMessages={fallback}>
+    <MarketingI18nShardLayer messages={mergedPrimary} fallbackMessages={mergedFallback}>
       {children}
     </MarketingI18nShardLayer>
   );
@@ -117,17 +130,24 @@ async function MarketingMainI18nShardsDeferred({
 export function MarketingMainI18nShards({
   locale,
   children,
+  publicContentOverrides,
 }: {
   locale: string;
   children: ReactNode;
+  /** Merged after `pages` shard JSON — allowlisted keys only (see marketing-public-content-policy). */
+  publicContentOverrides?: Record<string, string>;
 }) {
   return (
     <Suspense
       fallback={
-        <MarketingMainI18nShardsStreamingFallback locale={locale}>{children}</MarketingMainI18nShardsStreamingFallback>
+        <MarketingMainI18nShardsStreamingFallback locale={locale} publicContentOverrides={publicContentOverrides}>
+          {children}
+        </MarketingMainI18nShardsStreamingFallback>
       }
     >
-      <MarketingMainI18nShardsDeferred locale={locale}>{children}</MarketingMainI18nShardsDeferred>
+      <MarketingMainI18nShardsDeferred locale={locale} publicContentOverrides={publicContentOverrides}>
+        {children}
+      </MarketingMainI18nShardsDeferred>
     </Suspense>
   );
 }

@@ -19,6 +19,7 @@ import {
   alliedStripePriceEnvKey,
   STRIPE_TRIAL_DAYS,
   ALLIED_CAREER_KEYS,
+  isFreeStripeBillingNursingTier,
   type AlliedCareerKey,
 } from "@/lib/pricing/display-catalog";
 import {
@@ -31,6 +32,7 @@ import {
   CHECKOUT_SESSION_FAILED_CODE,
   CHECKOUT_STRIPE_UNAVAILABLE_CODE,
   CHECKOUT_UNAUTHORIZED_CODE,
+  CHECKOUT_FREE_PATHWAY_NO_STRIPE_CODE,
   includeStripePriceEnvKeyInCheckoutResponse,
   STRIPE_PRICE_NOT_CONFIGURED_CODE,
 } from "@/lib/stripe/checkout-api-diagnostics";
@@ -182,6 +184,19 @@ export async function POST(req: Request) {
 
     const { tier, duration, policyVersion, alliedCareer, region: rawRegion, naBillingScopeAcknowledged } =
       parsed.data;
+
+    if (isFreeStripeBillingNursingTier(tier)) {
+      auditCheckoutFailed({ correlation, reason: "free_pathway_no_checkout", userId });
+      recordCheckoutFailure("invalid_payload", req);
+      const msg =
+        tier === "PRE_NURSING"
+          ? "Pre-Nursing is free. Open the Pre-Nursing hub to start — no checkout required."
+          : "This pathway is free and does not use paid checkout.";
+      return NextResponse.json(
+        { code: CHECKOUT_FREE_PATHWAY_NO_STRIPE_CODE, message: msg, error: msg },
+        { status: 400 },
+      );
+    }
 
     const resolvedRegion: GlobalRegionSlug | undefined =
       rawRegion && isGlobalRegionSlug(rawRegion) ? rawRegion : undefined;

@@ -9,6 +9,9 @@ import type { BillingDuration } from "@/lib/pricing/billing-types";
  *
  * Allied Health pricing is per-career; each career has its own Stripe price
  * IDs and entitlement scope.
+ *
+ * **Free Stripe-billing exclusions:** tiers listed in {@link FREE_STRIPE_BILLING_NURSING_TIERS}
+ * are not sold via Stripe — no `STRIPE_PRICE_*` env vars, no checkout line items.
  */
 
 // ── Allied career keys (stable identifiers used in env vars, plan codes, and DB) ─
@@ -53,14 +56,22 @@ export function professionKeyToCareerKey(professionKey: string): AlliedCareerKey
 //
 // Source of truth: Stripe prices exported 2026-03-14.
 // NEW_GRAD has no 3-month Stripe price — that duration is intentionally absent.
-// PRE_NURSING / LVN_LPN: display amounts mirror adjacent tracks until dedicated Stripe
-// rows exist; checkout still requires matching STRIPE_PRICE_* envs (see pricing-map).
+// Pre-Nursing is **free** (see FREE_STRIPE_BILLING_NURSING_TIERS) — no list prices here.
+// LVN_LPN: display amounts mirror Canadian PN until dedicated Stripe rows exist; checkout requires STRIPE_PRICE_*.
 // Amounts must match what is configured in Stripe for tiers that checkout; checkout charges the Stripe
 // price, not these display values.
 
+/** Nursing tiers with no Stripe subscription / no STRIPE_PRICE_* requirements. */
+export const FREE_STRIPE_BILLING_NURSING_TIERS = ["PRE_NURSING"] as const satisfies readonly TierCode[];
+
+const FREE_STRIPE_BILLING_NURSING_SET = new Set<TierCode>(FREE_STRIPE_BILLING_NURSING_TIERS);
+
+/** True when this nursing tier must never use Stripe checkout or price env validation. */
+export function isFreeStripeBillingNursingTier(tier: TierCode): boolean {
+  return FREE_STRIPE_BILLING_NURSING_SET.has(tier);
+}
+
 const LIST_PRICE_MAJOR: Partial<Record<TierCode, Partial<Record<BillingDuration, number>>>> = {
-  // Pre-nursing — list mirrors New Grad until a dedicated Stripe matrix ships
-  PRE_NURSING: { monthly: 9.99, "6-month": 39.99, yearly: 59.99 },
   // New Grad Prep — 3 plans only (no 3-month in Stripe)
   NEW_GRAD: { monthly: 9.99, "6-month": 39.99, yearly: 59.99 },
   // Canada RPN / REx-PN
@@ -94,9 +105,13 @@ const ANCHOR_PRICE_MAJOR: Partial<Record<TierCode, Partial<Record<BillingDuratio
   NP: { "3-month": 149.99, "6-month": 249.99, yearly: 389.99 },
 };
 
-// ── Tiers sold ──────────────────────────────────────────────────────────────
+// ── Tiers (marketing + profile) ───────────────────────────────────────────────
 
+/** All nursing tabs on marketing pricing (includes free Pre-Nursing). */
 export const NURSING_TIERS: TierCode[] = ["PRE_NURSING", "NEW_GRAD", "RPN", "LVN_LPN", "RN", "NP"];
+
+/** Nursing tiers that participate in Stripe-backed paid plans (subset of {@link NURSING_TIERS}). */
+export const STRIPE_BILLED_NURSING_TIERS: TierCode[] = NURSING_TIERS.filter((t) => !isFreeStripeBillingNursingTier(t));
 
 /** @deprecated Kept for backward compat with code that still expects the old shape. */
 export const NURSING_TIERS_BY_COUNTRY: Record<"CA" | "US", TierCode[]> = {
@@ -222,9 +237,9 @@ export type PricedCombination = {
   planCode: string;
 };
 
-/** Yields every priced nursing plan. */
+/** Yields every **Stripe-billed** nursing plan (excludes free tracks like Pre-Nursing). */
 export function* eachNursingPricedCombination(_markets?: readonly ("CA" | "US")[]): Generator<PricedCombination> {
-  for (const tier of NURSING_TIERS) {
+  for (const tier of STRIPE_BILLED_NURSING_TIERS) {
     for (const duration of BILLING_DURATION_ORDER) {
       if (getDisplayTotalMajorUnits("CA", tier, duration) !== undefined) {
         yield { country: "CA", tier, duration, planCode: nursingPlanCode("CA", tier, duration) };

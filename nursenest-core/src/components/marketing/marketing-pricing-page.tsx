@@ -11,6 +11,18 @@ import {
   collectAuthoritativeCheckoutGlobalRegionSlugs,
   GLOBAL_CHECKOUT_REGION_CONTEXT_COOKIE,
 } from "@/lib/region/checkout-global-region-context";
+import {
+  buildPricingOptionsPayload,
+  getCachedPricingOptionsPayload,
+} from "@/lib/pricing/pricing-options-cached-payload";
+
+async function loadPricingOptionsForMarketingPage() {
+  try {
+    return await getCachedPricingOptionsPayload();
+  } catch {
+    return buildPricingOptionsPayload();
+  }
+}
 
 export async function MarketingPricingPage({ locale }: { locale: string }) {
   const jar = await cookies();
@@ -33,6 +45,7 @@ export async function MarketingPricingPage({ locale }: { locale: string }) {
     en,
     "Choose your exam track, country, and billing term. Totals are shown before you pay; longer terms usually lower your effective monthly cost.",
   );
+  const initialPricingOptions = await loadPricingOptionsForMarketingPage();
   return (
     <PricingPageErrorBoundary>
       {/**
@@ -46,6 +59,7 @@ export async function MarketingPricingPage({ locale }: { locale: string }) {
           intro={intro}
           heroSub={heroSub}
           serverCheckoutRegionSlugs={serverCheckoutRegionSlugs}
+          initialPricingOptions={initialPricingOptions}
         />
       </Suspense>
     </PricingPageErrorBoundary>

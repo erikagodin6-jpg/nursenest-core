@@ -1,8 +1,6 @@
 import "server-only";
 
 import { unstable_cache } from "next/cache";
-import type { TierCode } from "@prisma/client";
-import type { BillingDuration } from "@/lib/pricing/billing-types";
 import {
   BILLING_DURATION_ORDER,
   NURSING_TIERS,
@@ -17,57 +15,28 @@ import {
   getAlliedDisplayPrice,
   getAnchorPriceMajorUnits,
   STRIPE_TRIAL_DAYS,
-  type AlliedCareerKey,
 } from "@/lib/pricing/display-catalog";
+import type {
+  AlliedPlanRowPayload,
+  NursingPlanRowPayload,
+  PricingOptionsPayload,
+} from "@/lib/pricing/pricing-options-payload-types";
 import { findPriceEntry, findAlliedPriceEntry } from "@/lib/stripe/pricing-map";
 import { cacheDeploymentRevision } from "@/lib/cache/cache-revision";
 import { CACHE_TAG_MARKETING_PRICING_OPTIONS } from "@/lib/cache/cache-tags";
 import { PRICING_OPTIONS_DATA_REVALIDATE_SEC } from "@/lib/cache/public-edge-cache";
 
+export type {
+  AlliedPlanRowPayload as AlliedPlanRow,
+  NursingPlanRowPayload as NursingPlanRow,
+  PricingOptionsPayload,
+} from "@/lib/pricing/pricing-options-payload-types";
+
 /** Display catalog is CA-only today; keep explicit so future US rows never share a cache line. */
 const PRICING_OPTIONS_COUNTRY = "CA" as const;
 
-export type NursingPlanRow = {
-  tier: TierCode;
-  country: "CA";
-  duration: BillingDuration;
-  checkoutAvailable: boolean;
-  totalLabel: string;
-  monthlyEquivalentLabel: string;
-  savingsVsMonthlyPercent: number;
-  isBestValue: boolean;
-  isMostPopular: boolean;
-  anchorPriceLabel: string | null;
-  planCode: string;
-};
-
-export type AlliedPlanRow = {
-  tier: "ALLIED";
-  alliedCareer: AlliedCareerKey;
-  alliedCareerLabel: string;
-  country: "CA";
-  duration: BillingDuration;
-  checkoutAvailable: boolean;
-  totalLabel: string;
-  monthlyEquivalentLabel: string;
-  savingsVsMonthlyPercent: number;
-  isBestValue: boolean;
-  isMostPopular: boolean;
-  planCode: string;
-};
-
-export type PricingOptionsPayload = {
-  durations: typeof BILLING_DURATION_ORDER;
-  nursingTiers: typeof NURSING_TIERS;
-  alliedCareers: typeof ALLIED_CAREER_KEYS;
-  alliedCareerLabels: typeof ALLIED_CAREER_DISPLAY_NAMES;
-  plans: NursingPlanRow[];
-  alliedPlans: AlliedPlanRow[];
-  trialDays: typeof STRIPE_TRIAL_DAYS;
-};
-
 export function buildPricingOptionsPayload(): PricingOptionsPayload {
-  const nursingPlans: NursingPlanRow[] = [];
+  const nursingPlans: NursingPlanRowPayload[] = [];
   for (const combo of eachNursingPricedCombination()) {
     const { tier, duration, planCode } = combo;
     const total = getDisplayTotalMajorUnits(PRICING_OPTIONS_COUNTRY, tier, duration);
@@ -103,7 +72,7 @@ export function buildPricingOptionsPayload(): PricingOptionsPayload {
     });
   }
 
-  const alliedPlans: AlliedPlanRow[] = [];
+  const alliedPlans: AlliedPlanRowPayload[] = [];
   for (const combo of eachAlliedPricedCombination()) {
     const { duration, alliedCareer, planCode } = combo;
     if (!alliedCareer) continue;
@@ -143,7 +112,7 @@ export function buildPricingOptionsPayload(): PricingOptionsPayload {
     plans: nursingPlans,
     alliedPlans,
     trialDays: STRIPE_TRIAL_DAYS,
-  };
+  } satisfies PricingOptionsPayload;
 }
 
 /**
