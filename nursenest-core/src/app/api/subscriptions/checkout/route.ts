@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
@@ -24,6 +25,8 @@ import {
   CHECKOUT_APP_ORIGIN_MISCONFIGURED_CODE,
   CHECKOUT_DEMO_USER_FORBIDDEN_CODE,
   CHECKOUT_INVALID_PAYLOAD_CODE,
+  CHECKOUT_NA_BILLING_SCOPE_ACK_REQUIRED_CODE,
+  CHECKOUT_NA_BILLING_SCOPE_ACK_REQUIRED_MESSAGE,
   CHECKOUT_POLICY_VERSION_MISMATCH_CODE,
   CHECKOUT_SESSION_FAILED_CODE,
   CHECKOUT_STRIPE_UNAVAILABLE_CODE,
@@ -31,10 +34,12 @@ import {
   includeStripePriceEnvKeyInCheckoutResponse,
   STRIPE_PRICE_NOT_CONFIGURED_CODE,
 } from "@/lib/stripe/checkout-api-diagnostics";
+import { naBillingScopeAckRequiredForCheckout } from "@/lib/stripe/checkout-na-billing-scope-gate";
 import { findPriceEntry, findAlliedPriceEntry, type BillingDuration } from "@/lib/stripe/pricing-map";
 import { JSON_BODY_CHECKOUT, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { getRegionalPricing } from "@/lib/pricing/regional-pricing-map";
 import { isGlobalRegionSlug, type GlobalRegionSlug } from "@/lib/i18n/global-regions";
+import { GLOBAL_REGION_COOKIE, parseGlobalRegionCookie } from "@/lib/region/global-region-cookie";
 import type { TierCode } from "@prisma/client";
 
 /**
@@ -51,6 +56,8 @@ const bodySchema = z
     region: z.string().optional(),
     acceptPolicies: z.literal(true),
     policyVersion: z.string().min(1).max(64),
+    /** Required when `nn_global_region` is a partial/marketing market (see checkout-na-billing-scope-gate). */
+    naBillingScopeAcknowledged: z.literal(true).optional(),
   })
   .strict();
 
@@ -168,7 +175,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const { tier, duration, policyVersion, alliedCareer, region: rawRegion } = parsed.data;
+    const { tier, duration, policyVersion, alliedCareer, region: rawRegion, naBillingScopeAcknowledged } =
+      parsed.data;
 
     const resolvedRegion: GlobalRegionSlug | undefined =
       rawRegion && isGlobalRegionSlug(rawRegion) ? rawRegion : undefined;
@@ -195,6 +203,28 @@ export async function POST(req: Request) {
       const msg = "Policy version outdated. Refresh the page and try again.";
       return NextResponse.json(
         { code: CHECKOUT_POLICY_VERSION_MISMATCH_CODE, message: msg, error: msg },
+        { status: 400 },
+      );
+    }
+
+    const globalRegionCookie = (await cookies()).get(GLOBAL_REGION_COOKIE)?.value;
+    if (
+      naBillingScopeAckRequiredForCheckout({
+        globalRegionCookieRaw: globalRegionCookie,
+        checkoutBodyRegionSlug: resolvedRegion,
+      }) &&
+      naBillingScopeAcknowledged !== true
+    ) {
+      safeServerLog("stripe_checkout", "checkout_na_billing_scope_ack_required", {
+        route: "/api/subscriptions/checkout",
+        cookieRegion: parseGlobalRegionCookie(globalRegionCookie) ?? "",
+        bodyRegion: resolvedRegion ?? "",
+      });
+      auditCheckoutFailed({ correlation, reason: "na_billing_scope_ack_required", userId });
+      recordCheckoutFailure("na_billing_scope_ack_required", req);
+      const msg = CHECKOUT_NA_BILLING_SCOPE_ACK_REQUIRED_MESSAGE;
+      return NextResponse.json(
+        { code: CHECKOUT_NA_BILLING_SCOPE_ACK_REQUIRED_CODE, message: msg, error: msg },
         { status: 400 },
       );
     }

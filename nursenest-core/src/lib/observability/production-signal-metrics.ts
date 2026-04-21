@@ -94,6 +94,7 @@ export type CheckoutFailureReason =
   | "unauthorized"
   | "demo_forbidden"
   | "invalid_payload"
+  | "na_billing_scope_ack_required"
   | "policy_mismatch"
   | "price_not_configured"
   | "stripe_unavailable"

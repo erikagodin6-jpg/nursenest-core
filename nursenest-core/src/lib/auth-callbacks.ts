@@ -46,6 +46,9 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
       const ttlSec = rememberMe ? JWT_SESSION_REMEMBER_MAX_AGE_SEC : JWT_SESSION_BRIEF_MAX_AGE_SEC;
       const nowSec = Math.floor(Date.now() / 1000);
       token.exp = nowSec + ttlSec;
+      token.rememberLong = rememberMe;
+      token.loginAtSec = nowSec;
+      token.activityRollAtSec = nowSec;
     }
     return token;
   },

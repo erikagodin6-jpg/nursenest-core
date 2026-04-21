@@ -18,6 +18,7 @@ import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
 import {
   CHECKOUT_INVALID_PAYLOAD_CODE,
+  CHECKOUT_NA_BILLING_SCOPE_ACK_REQUIRED_CODE,
   CHECKOUT_POLICY_VERSION_MISMATCH_CODE,
   CHECKOUT_SESSION_FAILED_CODE,
   CHECKOUT_STRIPE_UNAVAILABLE_CODE,
@@ -155,6 +156,7 @@ function checkoutErrorUserMessage(
   if (code === STRIPE_PRICE_NOT_CONFIGURED_CODE) return t("pages.pricing.error.checkoutPlanNotConfigured");
   if (code === CHECKOUT_UNAUTHORIZED_CODE || httpStatus === 401) return t("pages.pricing.error.checkoutSignIn");
   if (code === CHECKOUT_POLICY_VERSION_MISMATCH_CODE) return t("pages.pricing.error.checkoutPolicyStale");
+  if (code === CHECKOUT_NA_BILLING_SCOPE_ACK_REQUIRED_CODE) return t("pages.pricing.globalContext.mustAckBeforeCheckout");
   if (code === CHECKOUT_INVALID_PAYLOAD_CODE) return t("pages.pricing.error.checkoutInvalidRequest");
   if (code === CHECKOUT_STRIPE_UNAVAILABLE_CODE || code === CHECKOUT_SESSION_FAILED_CODE) {
     return t("pages.pricing.error.checkoutTemporarilyUnavailable");
@@ -440,6 +442,7 @@ export function PricingPageClient({
           acceptPolicies: true,
           policyVersion: LEGAL_POLICY_BUNDLE_VERSION,
           region,
+          ...(pricingCheckoutSoftGate && naPathwayAcknowledged ? { naBillingScopeAcknowledged: true as const } : {}),
         };
         if (isAllied) {
           body.alliedCareer = selectedAlliedCareer;

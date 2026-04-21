@@ -2,6 +2,7 @@ import "server-only";
 
 import type { JWT } from "next-auth/jwt";
 import { authCallbacks } from "@/lib/auth-callbacks";
+import { rollSlidingJwtExpiry } from "@/lib/auth/jwt-session-slide";
 import { loadSessionIdentityResult } from "@/lib/auth/session-identity-from-db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { prisma } from "@/lib/db";
@@ -43,10 +44,14 @@ export async function nodeJwtCallback(params: JwtParams): Promise<JWT> {
         severity: "warning",
       });
     }
-    return invalidateIfCredentialMismatch(token, true);
+    const t = await invalidateIfCredentialMismatch(token, true);
+    rollSlidingJwtExpiry(t);
+    return t;
   }
 
-  return invalidateIfCredentialMismatch(token, false);
+  const t = await invalidateIfCredentialMismatch(token, false);
+  rollSlidingJwtExpiry(t);
+  return t;
 }
 
 async function invalidateIfCredentialMismatch(

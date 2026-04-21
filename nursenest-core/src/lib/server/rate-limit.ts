@@ -119,6 +119,10 @@ const AUTH_KIND_LIMITS: Record<string, { windowMs: number; max: number }> = {
 const PUBLIC_WINDOW_MS = 60_000;
 const PUBLIC_MAX = 56;
 
+/** Authenticated NextAuth session polling — per-user so NAT/shared IP does not evict real sessions. */
+const AUTH_SESSION_WINDOW_MS = 60_000;
+const AUTH_SESSION_MAX_PER_USER = 6000;
+
 /** Marketing / public JSON under `/api/public/*` (cached counts, tags) — scanners love these. */
 const PUBLIC_JSON_WINDOW_MS = 60_000;
 const PUBLIC_JSON_MAX = 24;
@@ -613,6 +617,21 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
   }
 
   if (pathname.startsWith("/api/auth/session")) {
+    if (userId) {
+      const key = `ratelimit:auth_session:user:${userId}`;
+      const { ok } = await checkRateLimitUnified(key, {
+        windowMs: AUTH_SESSION_WINDOW_MS,
+        max: AUTH_SESSION_MAX_PER_USER,
+      });
+      if (!ok) {
+        safeServerLog("security", "rate_limit_exceeded", {
+          kind: "auth_session_user",
+          path: "/api/auth/session",
+        });
+        return json429LearnerFixed();
+      }
+      return null;
+    }
     const cap = await publicCapForIpAsync(ipKey, tightenPublicCap(200));
     const key = `ratelimit:auth_session:ip:${ipKey}`;
     const { ok } = await checkRateLimitUnified(key, { windowMs: PUBLIC_WINDOW_MS, max: cap });

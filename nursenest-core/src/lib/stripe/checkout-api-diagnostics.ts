@@ -6,6 +6,14 @@ export const CHECKOUT_UNAUTHORIZED_CODE = "checkout_unauthorized";
 /** Demo / QA accounts cannot start real Stripe checkout. */
 export const CHECKOUT_DEMO_USER_FORBIDDEN_CODE = "checkout_demo_user_forbidden";
 export const CHECKOUT_INVALID_PAYLOAD_CODE = "checkout_invalid_payload";
+/** Partial/marketing global regions: NA billing scope must be acknowledged before Stripe session creation. */
+export const CHECKOUT_NA_BILLING_SCOPE_ACK_REQUIRED_CODE = "checkout_na_billing_scope_ack_required";
+/**
+ * Keep in sync with `pages.pricing.globalContext.mustAckBeforeCheckout` (English shard).
+ * Returned on 400 so clients without the new i18n key still show the correct billing-scope text.
+ */
+export const CHECKOUT_NA_BILLING_SCOPE_ACK_REQUIRED_MESSAGE =
+  "Please confirm United States / Canada billing above before continuing to checkout.";
 export const CHECKOUT_POLICY_VERSION_MISMATCH_CODE = "checkout_policy_version_mismatch";
 export const CHECKOUT_STRIPE_UNAVAILABLE_CODE = "checkout_stripe_unavailable";
 export const CHECKOUT_SESSION_FAILED_CODE = "checkout_session_failed";

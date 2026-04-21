@@ -44,5 +44,11 @@ declare module "next-auth/jwt" {
     credentialVersion?: number;
     /** Node JWT: last DB credential check (throttle), internal — not exposed to clients. */
     credentialCheckedAt?: number;
+    /** Credentials login: mirrors "Stay signed in" — drives sliding {@link JWT} expiry caps. */
+    rememberLong?: boolean;
+    /** First successful credentials login (unix sec) — absolute ceiling for brief sessions. */
+    loginAtSec?: number;
+    /** Last time sliding expiry was applied (unix sec), throttled by {@link JWT_SESSION_UPDATE_AGE_SEC}. */
+    activityRollAtSec?: number;
   }
 }
