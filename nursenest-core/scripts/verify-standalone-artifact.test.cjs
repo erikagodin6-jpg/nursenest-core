@@ -331,7 +331,7 @@ test("deploy scripts: build:deploy is post-compile only; heroku-postbuild runs c
   assert.equal(pkg.scripts["build:compile"].includes("scripts/run-next-prod-build.mjs"), true);
   assert.match(
     pkg.scripts["build:compile"],
-    /NODE_OPTIONS=\$\{NODE_OPTIONS:-"--max-old-space-size=\$\{BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-4096\}"\}/,
+    /NODE_OPTIONS=--max-old-space-size=\$\{BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-4096\}/,
   );
   assert.equal(pkg.scripts["verify:standalone-artifact"], "node scripts/verify-standalone-artifact.mjs");
   assert.equal(pkg.scripts["build:deploy"], "npm run build:deploy:postbuild");
@@ -347,6 +347,7 @@ test("active DigitalOcean app spec builds before runtime, starts through npm run
   assert.match(appSpec, /build_command: npm run build:deploy/);
   assert.match(appSpec, /NN_TIMED_INCLUDE_NPM_PRUNE/);
   assert.match(appSpec, /- key: BUILD_WEBPACK_PARALLELISM\n\s+value: "1"/);
+  assert.match(appSpec, /- key: NODE_OPTIONS\n\s+value: "--max-old-space-size=4096"\n\s+scope: BUILD_TIME/);
   assert.match(appSpec, /run_command: npm run start/);
   assert.match(appSpec, /health_check:\n(?:.*\n)*?\s+http_path: \/readyz/);
   assert.match(appSpec, /liveness_health_check:\n(?:.*\n)*?\s+http_path: \/healthz/);

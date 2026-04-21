@@ -52,6 +52,20 @@ function resolveBuildWebpackParallelism(): number {
 
 const buildWebpackParallelism = resolveBuildWebpackParallelism();
 
+/**
+ * Heavy optional instrumentation trees (OpenTelemetry, Sentry, Prisma instrumentation) blow up RSS
+ * during `Collecting build traces` / `@vercel/nft`. Next only folds `outputFileTracingExcludes` into
+ * the NFT `ignore` list when the exclude **key** matches `picomatch(key)('next-server')` — `"/**"` does
+ * not, but `"*"` does. Keep the same globs on `"/**"` so per-route `.nft.json` post-processing stays aligned.
+ *
+ * These are top-level `NextConfig` fields in Next 16+, not under `experimental`.
+ */
+const outputFileTracingInstrumentationExcludes = [
+  "**/@opentelemetry/**",
+  "**/@sentry/**",
+  "**/@prisma/instrumentation/**",
+] as const;
+
 // Default off so plain `next build` does not require TS-only route generators from config evaluation.
 const runHeavyBuildTasks = process.env.RUN_HEAVY_BUILD_TASKS === "true";
 const sentryEnabled = process.env.SENTRY_ENABLED === "true";
@@ -206,7 +220,13 @@ const nextConfig: NextConfig = {
   // dynamic process.cwd() usage in load-marketing-messages.ts does not trigger the
   // "unexpected file in NFT list" Turbopack warning.
   outputFileTracingExcludes: {
-    "/**": ["./next.config.ts", "./next.config.js", "./next.config.mjs"],
+    "*": [...outputFileTracingInstrumentationExcludes],
+    "/**": [
+      "./next.config.ts",
+      "./next.config.js",
+      "./next.config.mjs",
+      ...outputFileTracingInstrumentationExcludes,
+    ],
   },
   // Explicitly include merged i18n bundles so server components can readFileSync them at runtime.
   outputFileTracingIncludes: {

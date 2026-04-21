@@ -9,8 +9,11 @@
  * `.next/cache` stays empty and the buildpack logs ".next/cache (not cached - skipping)".
  *
  * This wrapper deletes bundler-selection env keys, normalizes **`NODE_OPTIONS` `--max-old-space-size`**
- * against **`BUILD_NODE_MAX_OLD_SPACE_SIZE_MB`** (so platform UI cannot pin 6144 MB for compile), then
- * spawns the Next CLI. Runtime behavior of the app is unchanged (build-time only).
+ * against **`BUILD_NODE_MAX_OLD_SPACE_SIZE_MB`** (so a global 6144-style heap cannot leak into the Next child), then
+ * spawns the Next CLI. **`package.json` `build:compile`** sets `NODE_OPTIONS=--max-old-space-size=…` from
+ * `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` only (does not inherit `${NODE_OPTIONS:-…}`) so the **wrapper** Node process
+ * is not started with a platform-wide 6144 MB heap. App Platform: set `NODE_OPTIONS` + `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB`
+ * to the same value under **BUILD_TIME** in `.do/app-nursenest-core-next.yaml`. Runtime behavior of the app is unchanged.
  */
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
@@ -20,6 +23,18 @@ import { fileURLToPath } from "node:url";
 
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const require = createRequire(import.meta.url);
+
+function logEffectiveHeapMb(label) {
+  const m = String(process.env.NODE_OPTIONS ?? "").match(/--max-old-space-size=(\d+)/);
+  console.log(
+    "[next-prod-build] " +
+      label +
+      " max_old_space_size_mb=" +
+      (m ? m[1] : "(none)") +
+      " build_node_max_mb_env=" +
+      JSON.stringify(process.env.BUILD_NODE_MAX_OLD_SPACE_SIZE_MB ?? ""),
+  );
+}
 
 const BUNDLER_ENV_KEYS = ["TURBOPACK", "IS_TURBOPACK_TEST", "NEXT_RSPACK", "NEXT_TEST_USE_RSPACK"];
 
@@ -40,6 +55,8 @@ if (stripped.length > 0) {
   console.log("[next-prod-build] stripped_bundler_env=[] note=webpack disk cache path should populate under .next/cache/webpack");
 }
 
+logEffectiveHeapMb("build_start_parent_process");
+
 /** Prefer `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` for the Next child; strip any inherited heap flags (e.g. UI 6144). */
 const heapMbRaw = String(process.env.BUILD_NODE_MAX_OLD_SPACE_SIZE_MB ?? "4096").trim();
 const heapMb = /^\d+$/.test(heapMbRaw) ? heapMbRaw : "4096";
@@ -58,6 +75,8 @@ if (beforeHeap.includes("max-old-space-size") && !beforeHeap.includes(`--max-old
       " note=replaced or appended NODE_OPTIONS heap for next build child (BUILD_NODE_MAX_OLD_SPACE_SIZE_MB)",
   );
 }
+
+logEffectiveHeapMb("before_spawn_next_child");
 
 let nextBin;
 try {
