@@ -55,13 +55,11 @@ export function NursingTierHubPage({
   pathway,
   hubPath,
   content,
-  heroTitle,
   npSeoAliasSegment,
 }: {
   pathway: ExamPathwayDefinition;
   hubPath: string;
   content: NursingTierHubContent;
-  heroTitle?: string;
   npSeoAliasSegment?: string;
 }) {
   const linkCtx = pathwayMarketingHubLinkContext(pathway, npSeoAliasSegment);
@@ -72,7 +70,8 @@ export function NursingTierHubPage({
   const lessonsHref = actionsById.get("lessons")?.href ?? buildExamPathwayPath(pathway, "lessons");
   const questionsHref = actionsById.get("practice_questions")?.href ?? buildExamPathwayPath(pathway, "questions");
   const examsHref = actionsById.get("exams")?.href ?? buildExamPathwayPath(pathway, "cat");
-  const title = heroTitle ?? content.audienceLabel;
+  /** Same headline pattern for RN, PN, NP (from {@link buildNursingTierHubContent}). */
+  const title = content.title;
   const geographyLabel = pathway.countrySlug === "canada" ? "Canada" : "United States";
   const examLabel = pathway.shortName === content.audienceLabel ? null : pathway.shortName;
 
@@ -90,21 +89,21 @@ export function NursingTierHubPage({
       ) : null}
 
       <section aria-labelledby="tier-hub-title" data-nn-tier-hub="actions">
-        <h1 id="tier-hub-title" className="nn-marketing-h2 max-w-3xl text-balance">
-          {title}
-        </h1>
-        <p className="nn-marketing-body mt-1.5 max-w-3xl text-pretty text-[var(--theme-muted-text)]">
-          Choose how you want to study today.
-        </p>
-        <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-medium">
-          <span className="rounded-full border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] px-2.5 py-1 text-[var(--theme-muted-text)]">
-            {geographyLabel}
-          </span>
-          {examLabel ? (
-            <span className="rounded-full border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] px-2.5 py-1 text-[var(--theme-muted-text)]">
-              {examLabel}
+        <div className="nn-nursing-tier-hub-hero-band -mx-1 px-1 sm:-mx-0 sm:px-0">
+          <h1 id="tier-hub-title" className="nn-marketing-h2 max-w-3xl text-balance">
+            {title}
+          </h1>
+          <p className="nn-marketing-body mt-1.5 max-w-3xl text-pretty text-[var(--theme-muted-text)]">{content.intro}</p>
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-xs font-medium">
+            <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--border-subtle))] bg-[var(--semantic-panel-cool)] px-2.5 py-1 text-[var(--theme-muted-text)]">
+              {geographyLabel}
             </span>
-          ) : null}
+            {examLabel ? (
+              <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--border-subtle))] bg-[var(--semantic-panel-cool)] px-2.5 py-1 text-[var(--theme-muted-text)]">
+                {examLabel}
+              </span>
+            ) : null}
+          </div>
         </div>
         <ul className="mt-4 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-4">
           {orderedActions.map((action) => {
@@ -148,15 +147,13 @@ export function NursingTierHubPage({
       </section>
 
       <section aria-labelledby="tier-hub-lesson-library" className="mt-6">
-        <div className="nn-card border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-4 sm:p-5">
+        <div className="nn-card border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--semantic-info)_5.5%,var(--theme-card-bg))] p-4 sm:p-5">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="max-w-2xl">
               <h2 id="tier-hub-lesson-library" className="nn-marketing-h4">
                 Lesson Library
               </h2>
-              <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">
-                Start with focused lessons, then move into questions and exams as your confidence grows.
-              </p>
+              <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">{content.startHere}</p>
             </div>
             <Link
               href={lessonsHref}

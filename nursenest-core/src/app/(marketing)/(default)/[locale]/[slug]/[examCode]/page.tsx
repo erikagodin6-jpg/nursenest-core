@@ -68,7 +68,10 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
     const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(pathway, { hubBasePath: pathname });
 
     return (
-      <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+      <div
+        className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8"
+        data-nn-nursing-tier-hub="surface"
+      >
         <WebPageJsonLd
           title={npPracticeSeo?.title ?? pathway.seoTitle}
           description={npPracticeSeo?.description ?? pathway.seoDescription}
@@ -79,11 +82,10 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
           pathway={pathway}
           hubPath={pathname}
           content={content}
-          heroTitle={npPracticeSeo?.heroTitle}
           npSeoAliasSegment={npPracticeSeo ? examCode : undefined}
         />
         <section className="mt-6">
-          <div className="nn-card border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-4 sm:p-5">
+          <div className="nn-card border border-[color-mix(in_srgb,var(--semantic-info)_16%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--semantic-info)_4.5%,var(--theme-card-bg))] p-4 sm:p-5">
             <h2 className="nn-marketing-h4">Recommended blog reading</h2>
             <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">
               Explore exam-focused blog posts to reinforce lessons and question practice.

@@ -53,7 +53,7 @@ function LessonProgressPip({
       <span className="text-[12px] font-medium leading-none text-[var(--theme-muted-text)]">
         {t("nav.hub.lessonProgress", { completed, total: denominator })}
       </span>
-      <span className="h-1.5 w-full overflow-hidden rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_12%,var(--theme-page-bg))]">
+      <span className="nn-nursing-tier-hub-lesson-progress-track h-1.5 w-full overflow-hidden rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_12%,var(--theme-page-bg))]">
         <span
           className="nn-progress-fill-semantic-success block h-full rounded-full transition-[width] duration-500"
           style={{ width: `${pct}%` }}

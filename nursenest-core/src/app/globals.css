@@ -4256,6 +4256,125 @@ html[data-theme="deep-twilight"] .nn-question-rationale-card__verdict--miss {
   border-color: var(--border-medium);
 }
 
+/*
+ * RN / NP / PN pathway hubs — cool secondary layer from `--semantic-info` (mint/cool companion
+ * per `semantic-status-tokens.css`; ocean/clinical = #76b6c4). Scoped so `.nn-exam-hub-*` elsewhere
+ * stays unchanged. Primary CTAs and `--theme-primary` emphasis remain authoritative.
+ */
+[data-nn-nursing-tier-hub="surface"] .nn-nursing-tier-hub-hero-band {
+  padding: clamp(0.85rem, 2.2vw, 1.15rem) clamp(0.75rem, 2vw, 1.1rem);
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 14%, var(--border-subtle));
+  background: linear-gradient(
+    125deg,
+    color-mix(in srgb, var(--semantic-info) 7%, var(--theme-page-bg)) 0%,
+    color-mix(in srgb, var(--semantic-info) 2.5%, var(--theme-page-bg)) 48%,
+    transparent 100%
+  );
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-exam-hub-conversion {
+  border-color: color-mix(in srgb, var(--semantic-info) 16%, color-mix(in srgb, var(--theme-primary) 10%, var(--border-subtle)));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-info) 8%, var(--theme-page-bg)) 0%,
+    color-mix(in srgb, var(--theme-primary) 5%, var(--theme-page-bg)) 40%,
+    var(--theme-page-bg) 68%,
+    color-mix(in srgb, var(--semantic-info) 5%, var(--theme-page-bg)) 100%
+  );
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-info) 11%,
+    color-mix(in srgb, var(--theme-primary) 12%, var(--border-subtle))
+  );
+  background: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--semantic-info) 6%, color-mix(in srgb, var(--theme-primary) 9%, var(--theme-card-bg))) 0%,
+    color-mix(in srgb, var(--theme-primary) 2.5%, color-mix(in srgb, var(--semantic-info) 4%, var(--theme-page-bg))) 52%,
+    var(--theme-card-bg) 100%
+  );
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-info) 14%,
+    color-mix(in srgb, var(--theme-primary) 18%, var(--border-subtle))
+  );
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card--lessons {
+  background: linear-gradient(
+    148deg,
+    color-mix(in srgb, var(--semantic-info) 5%, color-mix(in srgb, var(--theme-primary) 7%, var(--theme-card-bg))) 0%,
+    color-mix(in srgb, var(--semantic-info) 3%, color-mix(in srgb, var(--theme-primary) 2.5%, var(--theme-page-bg))) 55%,
+    var(--theme-card-bg) 100%
+  );
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-info) 9%,
+    color-mix(in srgb, var(--theme-primary) 10%, var(--border-subtle))
+  );
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card--featured {
+  border-color: color-mix(
+    in srgb,
+    var(--theme-primary) 22%,
+    color-mix(in srgb, var(--semantic-info) 14%, var(--border-subtle))
+  );
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--semantic-info) 7%, color-mix(in srgb, var(--theme-primary) 16%, var(--theme-card-bg))) 0%,
+    color-mix(in srgb, var(--theme-primary) 6%, var(--theme-page-bg)) 45%,
+    var(--theme-card-bg) 100%
+  );
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card--featured:hover {
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--theme-heading-text) 5%, transparent),
+    0 6px 22px -8px color-mix(in srgb, var(--theme-heading-text) 9%, transparent),
+    0 22px 52px -22px color-mix(in srgb, var(--theme-primary) 14%, transparent),
+    0 26px 56px -24px color-mix(in srgb, var(--semantic-info) 12%, transparent);
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card--cat {
+  background: linear-gradient(
+    152deg,
+    color-mix(in srgb, var(--semantic-info) 5%, color-mix(in srgb, var(--theme-primary) 11%, var(--theme-card-bg))) 0%,
+    color-mix(in srgb, var(--theme-primary) 3.5%, color-mix(in srgb, var(--semantic-info) 3.5%, var(--theme-page-bg))) 50%,
+    var(--theme-card-bg) 100%
+  );
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-info) 10%,
+    color-mix(in srgb, var(--theme-primary) 13%, var(--border-subtle))
+  );
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card__icon {
+  background: color-mix(in srgb, var(--semantic-info) 13%, var(--theme-card-bg));
+  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--border-subtle));
+  color: var(--theme-primary);
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-exam-hub-study-card--featured .nn-exam-hub-study-card__icon {
+  background: color-mix(in srgb, var(--semantic-info) 10%, color-mix(in srgb, var(--theme-primary) 12%, var(--theme-card-bg)));
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-info) 16%,
+    color-mix(in srgb, var(--theme-primary) 18%, var(--border-subtle))
+  );
+}
+
+[data-nn-nursing-tier-hub="surface"] .nn-nursing-tier-hub-lesson-progress-track {
+  background: color-mix(in srgb, var(--semantic-info) 14%, var(--theme-page-bg));
+}
+
 /* Completed — list / lesson cards (nn-study-card--completed) */
 .nn-study-card--completed {
   border-left: 3px solid var(--role-success);

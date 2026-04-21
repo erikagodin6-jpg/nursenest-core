@@ -46,6 +46,7 @@ export function AdminBlogGenerateClient() {
         .slice(0, 3);
       const res = await fetch("/api/admin/blog/generate-ai", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           topic: enableBatch ? undefined : topic,
@@ -69,8 +70,21 @@ export function AdminBlogGenerateClient() {
         summary?: { created: number; skipped: number; failed: number };
         results?: Array<{ post?: { slug: string }; reason?: string }>;
         error?: string;
+        code?: string;
+        scope?: string;
+        limiter?: string;
+        retryAfterSec?: number;
       };
       if (!res.ok) {
+        if (res.status === 429) {
+          const hint = [json.scope, json.limiter].filter(Boolean).join(" · ");
+          setErr(
+            json.error
+              ? `${json.error}${hint ? ` (${hint})` : ""}${json.retryAfterSec != null ? ` — retry after ~${json.retryAfterSec}s` : ""}`
+              : `Too many requests${hint ? ` (${hint})` : ""}`,
+          );
+          return;
+        }
         setErr(json.error ?? "Request failed");
         return;
       }

@@ -436,13 +436,33 @@ export function PricingPageClient({
   const privacyHref = localize("/privacy");
   const refundHref = localize("/refund-policy");
 
+  /** Guest → `/login?callbackUrl=…` with checkout intent on the pricing URL (same contract as {@link requestCheckout}). */
+  const redirectGuestToLoginForCheckout = useCallback(
+    (duration: BillingDuration) => {
+      const callbackParams = new URLSearchParams(searchParams.toString());
+      callbackParams.set("checkoutIntent", "1");
+      callbackParams.set("checkoutTier", tier);
+      callbackParams.set("checkoutDuration", duration);
+      if (isAllied) callbackParams.set("checkoutAlliedCareer", selectedAlliedCareer);
+      else callbackParams.delete("checkoutAlliedCareer");
+      const callbackPath = `${pathname}?${callbackParams.toString()}`;
+      const loginPath = localize("/login");
+      window.location.assign(`${loginPath}?callbackUrl=${encodeURIComponent(callbackPath)}`);
+    },
+    [isAllied, localize, pathname, searchParams, selectedAlliedCareer, tier],
+  );
+
   const startCheckout = useCallback(
     async (duration: BillingDuration) => {
       setCheckoutError(null);
       setCheckoutOpsHint(null);
+      if (authStatus !== "authenticated") {
+        redirectGuestToLoginForCheckout(duration);
+        return;
+      }
       setCheckoutLoading(true);
       trackProductEvent(PH.checkoutStarted, {
-        actor: "anonymous",
+        actor: "user",
         funnel_step: "checkout_initiated",
         stripe_tier: String(tier),
         tier: String(tier),
@@ -475,6 +495,7 @@ export function PricingPageClient({
         const res = await fetch("/api/subscriptions/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify(body),
         });
         console.info("[pricing_checkout] response_status", {
@@ -512,6 +533,11 @@ export function PricingPageClient({
         if (!res.ok) {
           const parsed = parseCheckoutApiErrorBody(parsedBody);
           console.error("[pricing_checkout] parsed_error_body", parsed);
+          if (parsed.code === CHECKOUT_UNAUTHORIZED_CODE || res.status === 401) {
+            setCheckoutLoading(false);
+            redirectGuestToLoginForCheckout(duration);
+            return;
+          }
           const err = new Error(checkoutErrorUserMessage(parsed, res.status, t)) as CheckoutRequestError;
           err.parsed = parsed;
           err.status = res.status;
@@ -541,6 +567,10 @@ export function PricingPageClient({
         console.error("[pricing_checkout] start checkout failed", error);
         setCheckoutOpsHint(null);
         const checkoutErr = error as CheckoutRequestError;
+        if (checkoutErr.status === 401 || checkoutErr.parsed?.code === CHECKOUT_UNAUTHORIZED_CODE) {
+          redirectGuestToLoginForCheckout(duration);
+          return;
+        }
         if (checkoutErr.parsed?.code === STRIPE_PRICE_NOT_CONFIGURED_CODE) {
           setCheckoutError(t("pages.pricing.error.checkoutPlanNotConfigured"));
           if (showStripePriceEnvKeyOnCheckoutError() && checkoutErr.parsed.envKey) {
@@ -567,6 +597,8 @@ export function PricingPageClient({
       }
     },
     [
+      authStatus,
+      redirectGuestToLoginForCheckout,
       tier,
       trialDays,
       t,
@@ -592,16 +624,7 @@ export function PricingPageClient({
       }
       if (authStatus === "loading") return;
       if (authStatus !== "authenticated") {
-        const callbackParams = new URLSearchParams(searchParams.toString());
-        callbackParams.set("checkoutIntent", "1");
-        callbackParams.set("checkoutTier", tier);
-        callbackParams.set("checkoutDuration", duration);
-        if (isAllied) callbackParams.set("checkoutAlliedCareer", selectedAlliedCareer);
-        else callbackParams.delete("checkoutAlliedCareer");
-        const callbackPath = `${pathname}?${callbackParams.toString()}`;
-        const loginPath = localize("/login");
-        const signInUrl = `${loginPath}?callbackUrl=${encodeURIComponent(callbackPath)}`;
-        window.location.assign(signInUrl);
+        redirectGuestToLoginForCheckout(duration);
         return;
       }
       if (policiesAccepted) {
@@ -614,12 +637,11 @@ export function PricingPageClient({
     [
       authStatus,
       isAllied,
-      localize,
       pathname,
       policiesAccepted,
       pricingCheckoutSoftGate,
       naPathwayAcknowledged,
-      searchParams,
+      redirectGuestToLoginForCheckout,
       selectedAlliedCareer,
       startCheckout,
       t,
@@ -922,6 +944,7 @@ export function PricingPageClient({
                       type="button"
                       disabled={
                         checkoutLoading ||
+                        authStatus === "loading" ||
                         !row.checkoutAvailable ||
                         (pricingCheckoutSoftGate && !naPathwayAcknowledged)
                       }

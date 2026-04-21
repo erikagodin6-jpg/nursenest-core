@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { getSession, signIn, useSession } from "next-auth/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { refreshThenReplaceIfDifferent } from "@/lib/auth/post-login-client-navigation";
 import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
 import { resolveLoginSubmitOutcome } from "@/components/auth/login-form-result";
@@ -38,6 +39,16 @@ export function LoginForm({
     () => resolveMarketingAuthRedirectTarget(pathname ?? "/", searchParams, locale),
     [searchParams, pathname, locale],
   );
+
+  /** Preserves `callbackUrl` (e.g. pricing + checkout intent) when switching to signup. */
+  const signupHrefWithResume = useMemo(() => {
+    const signupBase = withMarketingLocale(locale, "/signup");
+    const rawCb = searchParams.get("callbackUrl");
+    if (rawCb && rawCb.trim()) {
+      return `${signupBase}?${new URLSearchParams({ callbackUrl: rawCb }).toString()}`;
+    }
+    return signupBase;
+  }, [locale, searchParams]);
 
   /** Staff session present in JWT but server could not verify admin row — controlled message, not generic app error. */
   useEffect(() => {
@@ -302,6 +313,14 @@ export function LoginForm({
       >
         {pending ? t("pages.login.signingIn") : t("pages.login.submit")}
       </button>
+      {!alreadySignedIn ? (
+        <p className="text-center text-sm text-muted-foreground">
+          {t("pages.login.signUpPrompt")}{" "}
+          <Link href={signupHrefWithResume} className="font-semibold text-primary underline-offset-4 hover:underline">
+            {t("pages.login.signUpCta")}
+          </Link>
+        </p>
+      ) : null}
     </form>
   );
 }

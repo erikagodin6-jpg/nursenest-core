@@ -63,7 +63,7 @@ export function ExamPathwayHub({
   const countryLine = pathway.countrySlug === "canada" ? "Canada" : "United States";
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-6 sm:py-8">
+    <div className="mx-auto max-w-4xl px-4 py-6 sm:py-8" data-nn-nursing-tier-hub="surface">
       <FunnelExamHubViewBeacon pathway={pathway} hubPath={marketingHubPath} />
       {npSeoAliasSegment ? (
         <NpSeoAliasHubAnalytics
@@ -76,13 +76,15 @@ export function ExamPathwayHub({
       ) : null}
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <FaqJsonLd items={pathwayHubFaqSchema(pathway)} />
-      <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-primary)]">
-        {countryLine} · {pathway.boardLabel ?? pathway.roleTrack.toUpperCase()}
-      </p>
-      <h1 className="nn-marketing-h1 mt-2">{heroTitle ?? pathway.displayName}</h1>
-      <p className="nn-marketing-body mt-4 max-w-2xl text-[var(--theme-muted-text)] sm:text-[1.0625rem] sm:leading-relaxed">
-        {heroLead ?? pathway.seoDescription}
-      </p>
+      <div className="nn-nursing-tier-hub-hero-band mt-1">
+        <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-primary)]">
+          {countryLine} · {pathway.boardLabel ?? pathway.roleTrack.toUpperCase()}
+        </p>
+        <h1 className="nn-marketing-h1 mt-2">{heroTitle ?? pathway.displayName}</h1>
+        <p className="nn-marketing-body mt-4 max-w-2xl text-[var(--theme-muted-text)] sm:text-[1.0625rem] sm:leading-relaxed">
+          {heroLead ?? pathway.seoDescription}
+        </p>
+      </div>
 
       <div className="mt-4 max-w-2xl">
         <MarketingTrustSignalsStrip variant="compact" examHub />

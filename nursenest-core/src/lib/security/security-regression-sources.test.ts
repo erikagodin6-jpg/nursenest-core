@@ -123,6 +123,12 @@ describe("security regression (source contracts)", () => {
     assert.match(src, /ratelimit:meta:abuse_strike:ip:/);
   });
 
+  it("legacy blog generator admin APIs use dedicated Postgres RL keys (not only shared admin user bucket)", () => {
+    const src = readFileSync(join(nursenestCoreRoot, "src", "lib", "server", "rate-limit.ts"), "utf8");
+    assert.match(src, /ratelimit:admin:legacy_blog:/);
+    assert.match(src, /admin_legacy_blog_tooling/);
+  });
+
   it("admin/debug API routes do not use requireAdmin(_req)", () => {
     const out = execSync(
       `cd "${nursenestCoreRoot}" && (rg -l 'requireAdmin\\(_req\\)' src/app/api/admin src/app/api/debug 2>/dev/null || true)`,

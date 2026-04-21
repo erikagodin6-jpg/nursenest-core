@@ -351,18 +351,47 @@ function json429LearnerFixed(): NextResponse {
 }
 
 /** Admin API bucket — fixed Retry-After; per-user key resists stolen-session floods. */
-function json429AdminFixed(): NextResponse {
+function json429AdminFixed(meta: { limiter: string; path: string; bucketType: "admin_user" | "admin_ip_unauth" }): NextResponse {
   return NextResponse.json(
-    { error: "Too many requests", code: "rate_limit_exceeded", scope: "admin_api", retryAfterSec: 60 },
+    {
+      error: "Too many requests",
+      code: "rate_limit_exceeded",
+      scope: "admin_api",
+      limiter: meta.limiter,
+      bucketType: meta.bucketType,
+      path: meta.path,
+      retryAfterSec: 60,
+    },
     {
       status: 429,
-      headers: { "Retry-After": "60", "Cache-Control": "no-store" },
+      headers: {
+        "Retry-After": "60",
+        "Cache-Control": "no-store",
+        "X-NN-RateLimit-Scope": "admin_api",
+        "X-NN-RateLimiter": meta.limiter,
+        "X-NN-RateLimit-Bucket": meta.bucketType,
+      },
     },
   );
 }
 
 /** Blog batch scheduler subtree — dedicated buckets per action (avoids one hot `ratelimit:admin:user:*` row + separates preview vs writes vs run). */
 export const ADMIN_BLOG_BATCH_SCHEDULE_API_PREFIX = "/api/admin/blog/batch-schedule";
+
+/**
+ * Legacy `/admin/blog/generate` tooling — heavy AI + chunked shell writes.
+ * Uses dedicated buckets so normal admin traffic elsewhere does not evict these flows from the shared
+ * {@link ADMIN_API_MAX_PER_USER} ceiling, and JWT-miss / shared-IP cases get a realistic operator budget.
+ */
+export type AdminLegacyBlogToolingKind = "generate_ai" | "batch_chunk";
+
+export function adminLegacyBlogToolingRateLimitKind(pathname: string, method: string): AdminLegacyBlogToolingKind | null {
+  const m = method.toUpperCase();
+  if (m !== "POST") return null;
+  if (pathname === "/api/admin/blog/generate-ai") return "generate_ai";
+  if (pathname === "/api/admin/blog/batch-chunk") return "batch_chunk";
+  return null;
+}
 
 export type AdminBlogBatchRateLimitKind = "read" | "preview" | "write" | "run";
 
@@ -380,6 +409,20 @@ const ADMIN_BLOG_BATCH_MAX_IP_BASE: Record<AdminBlogBatchRateLimitKind, number> 
   preview: 36,
   write: 32,
   run: 18,
+};
+
+const ADMIN_LEGACY_BLOG_TOOLING_WINDOW_MS = 60_000;
+
+/** Per authenticated staff user — AI writes are expensive; chunk endpoint may loop many times for “run all”. */
+const ADMIN_LEGACY_BLOG_TOOLING_MAX_USER: Record<AdminLegacyBlogToolingKind, number> = {
+  generate_ai: 72,
+  batch_chunk: 960,
+};
+
+/** Unauthenticated hits still reach `requireAdmin` (403) — keep bounded; generous enough for JWT-read quirks + NAT. */
+const ADMIN_LEGACY_BLOG_TOOLING_MAX_IP_BASE: Record<AdminLegacyBlogToolingKind, number> = {
+  generate_ai: 36,
+  batch_chunk: 240,
 };
 
 /**
@@ -408,6 +451,8 @@ function json429AdminBlogBatch(kind: AdminBlogBatchRateLimitKind): NextResponse 
       code: "rate_limit_exceeded",
       scope: "admin_blog_batch",
       action: kind,
+      limiter: "admin_blog_batch",
+      bucketType: "dedicated",
       retryAfterSec: retry,
     },
     {
@@ -417,9 +462,82 @@ function json429AdminBlogBatch(kind: AdminBlogBatchRateLimitKind): NextResponse 
         "Cache-Control": "no-store",
         "X-NN-RateLimit-Scope": "admin_blog_batch",
         "X-NN-RateLimit-Action": kind,
+        "X-NN-RateLimiter": "admin_blog_batch",
       },
     },
   );
+}
+
+function json429AdminLegacyBlogTooling(kind: AdminLegacyBlogToolingKind): NextResponse {
+  /** Shorter than generic admin 60s — operators hitting the dedicated cap should cool off briefly, not sit idle a minute per retry. */
+  const retry = 25;
+  return NextResponse.json(
+    {
+      error: "Too many requests",
+      code: "rate_limit_exceeded",
+      scope: "admin_legacy_blog_tooling",
+      action: kind,
+      limiter: "admin_legacy_blog_tooling",
+      bucketType: "dedicated",
+      retryAfterSec: retry,
+    },
+    {
+      status: 429,
+      headers: {
+        "Retry-After": String(retry),
+        "Cache-Control": "no-store",
+        "X-NN-RateLimit-Scope": "admin_legacy_blog_tooling",
+        "X-NN-RateLimit-Action": kind,
+        "X-NN-RateLimiter": "admin_legacy_blog_tooling",
+      },
+    },
+  );
+}
+
+async function enforceDedicatedAdminLegacyBlogToolingRateLimit(
+  pathname: string,
+  method: string,
+  userId: string | null,
+  ipKey: string,
+): Promise<NextResponse | null> {
+  const kind = adminLegacyBlogToolingRateLimitKind(pathname, method);
+  if (kind == null) return null;
+
+  if (userId) {
+    const key = `ratelimit:admin:legacy_blog:${kind}:user:${userId}`;
+    const { ok, remaining } = await checkRateLimitUnified(key, {
+      windowMs: ADMIN_LEGACY_BLOG_TOOLING_WINDOW_MS,
+      max: ADMIN_LEGACY_BLOG_TOOLING_MAX_USER[kind],
+    });
+    if (!ok) {
+      safeServerLog("security", "admin_legacy_blog_tooling_rate_limit_exceeded", {
+        kind: "admin_legacy_blog_user",
+        toolingKind: kind,
+        path: pathname.slice(0, 96),
+        ipHash: hashIp(ipKey),
+        remaining,
+      });
+      return json429AdminLegacyBlogTooling(kind);
+    }
+    return null;
+  }
+
+  const key = `ratelimit:admin:legacy_blog:${kind}:ip_unauth:${ipKey}`;
+  const { ok, remaining } = await checkRateLimitUnified(key, {
+    windowMs: ADMIN_LEGACY_BLOG_TOOLING_WINDOW_MS,
+    max: tightenPublicCap(ADMIN_LEGACY_BLOG_TOOLING_MAX_IP_BASE[kind]),
+  });
+  if (!ok) {
+    safeServerLog("security", "admin_legacy_blog_tooling_rate_limit_exceeded", {
+      kind: "admin_legacy_blog_ip",
+      toolingKind: kind,
+      path: pathname.slice(0, 96),
+      ipHash: hashIp(ipKey),
+      remaining,
+    });
+    return json429AdminLegacyBlogTooling(kind);
+  }
+  return null;
 }
 
 async function enforceDedicatedAdminBlogBatchRateLimit(
@@ -511,31 +629,45 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
       return null;
     }
 
+    const legacyLimited = await enforceDedicatedAdminLegacyBlogToolingRateLimit(pathname, method, userId, ipKey);
+    if (legacyLimited) return legacyLimited;
+    if (adminLegacyBlogToolingRateLimitKind(pathname, method) != null) {
+      return null;
+    }
+
     if (userId) {
       const key = `ratelimit:admin:user:${userId}`;
-      const { ok } = await checkRateLimitUnified(key, {
+      const { ok, remaining } = await checkRateLimitUnified(key, {
         windowMs: ADMIN_API_WINDOW_MS,
         max: ADMIN_API_MAX_PER_USER,
       });
       if (!ok) {
         safeServerLog("security", "admin_api_rate_limit_exceeded", {
           kind: "admin_api_user",
+          limiter: "admin_api_user",
           path: pathname.slice(0, 96),
           ipHash: hashIp(ipKey),
+          remaining,
         });
-        return json429AdminFixed();
+        return json429AdminFixed({
+          limiter: "admin_api_user",
+          path: pathname.slice(0, 96),
+          bucketType: "admin_user",
+        });
       }
     } else {
       const key = `ratelimit:admin:ip_unauth:${ipKey}`;
-      const { ok } = await checkRateLimitUnified(key, {
+      const { ok, remaining } = await checkRateLimitUnified(key, {
         windowMs: ADMIN_API_WINDOW_MS,
         max: tightenPublicCap(ADMIN_API_MAX_PER_IP_UNAUTH),
       });
       if (!ok) {
         safeServerLog("security", "admin_api_rate_limit_exceeded", {
           kind: "admin_api_ip",
+          limiter: "admin_api_ip_unauth",
           path: pathname.slice(0, 96),
           ipHash: hashIp(ipKey),
+          remaining,
         });
         return await json429WithBackoff(ipKey);
       }
