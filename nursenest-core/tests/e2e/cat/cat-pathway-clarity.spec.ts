@@ -5,10 +5,11 @@ import { getE2eBaseURL } from "../helpers/e2e-env";
 const baseURL = getE2eBaseURL();
 
 test.describe("CAT pathway pre-click clarity (marketing)", () => {
-  test("US NCLEX-RN hub exposes exam-scoped CAT card", async ({ page, context }) => {
+  test("US NCLEX-RN CAT entry names the exam on the marketing surface", async ({ page, context }) => {
     await context.addCookies([{ name: MARKETING_REGION_COOKIE, value: "US", url: baseURL }]);
-    await page.goto(`${baseURL}/us/rn/nclex-rn`, { waitUntil: "domcontentloaded" });
-    await expect(page.getByRole("link", { name: /CAT prep - NCLEX-RN/i })).toBeVisible();
+    await page.goto(`${baseURL}/us/rn/nclex-rn/cat`, { waitUntil: "domcontentloaded" });
+    await expect(page.getByRole("heading", { name: /Readiness Exam/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /NCLEX-RN overview/i })).toBeVisible();
   });
 
   test("REx-PN CAT landing shows exam in primary controls", async ({ page, context }) => {
