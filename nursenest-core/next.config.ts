@@ -11,6 +11,10 @@
  * **RUN_HEAVY_BUILD_TASKS:** set to `false` to skip loading large redirect/rewrite graphs during `next build`
  * (lower memory — production deploys should set this in CI/build env). See `docs/OPERATOR_DATA_IMPORT_AND_BUILD.md`.
  *
+ * **NN_APP_PLATFORM_BUILD / BUILD_LOW_MEMORY_STATIC_GENERATION:** when `true`, sets
+ * `experimental.staticGenerationMaxConcurrency: 1` so prerender work does not default to 8 concurrent
+ * pages per worker (reduces cgroup OOM risk alongside `BUILD_WEBPACK_PARALLELISM=1`).
+ *
  * **BUILD_WEBPACK_PARALLELISM:** optional positive integer (default `1`). Webpack `parallelism` and
  * `experimental.cpus` use this value capped by `os.cpus().length` — keeps small-builder memory safety by
  * default; set `2`–`4` on larger CI runners / higher `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` to cut compile time.
@@ -64,7 +68,31 @@ const outputFileTracingInstrumentationExcludes = [
   "**/@opentelemetry/**",
   "**/@sentry/**",
   "**/@prisma/instrumentation/**",
+  /** Build-time / CLI only; not needed in standalone runtime when Sentry sourcemaps are off. */
+  "**/node_modules/@sentry/cli/**",
+  "**/node_modules/@sentry/bundler-plugin-core/**",
 ] as const;
+
+/**
+ * `outputFileTracingRoot` is the monorepo root — NFT can still see these paths via resolution;
+ * they are never part of the Next server runtime graph.
+ */
+const outputFileTracingMonorepoNonRuntimeExcludes = [
+  "./.git/**",
+  "./.worktrees/**",
+  "./.cursor/**",
+  "./.legacy-extract/**",
+  "./backup-system/**",
+] as const;
+
+const outputFileTracingHeavyExcludes = [
+  ...outputFileTracingInstrumentationExcludes,
+  ...outputFileTracingMonorepoNonRuntimeExcludes,
+] as const;
+
+/** App Platform / small CI: serialize prerender work inside each static worker (default is 8 concurrent pages). */
+const lowMemoryStaticGeneration =
+  process.env.NN_APP_PLATFORM_BUILD === "true" || process.env.BUILD_LOW_MEMORY_STATIC_GENERATION === "true";
 
 // Default off so plain `next build` does not require TS-only route generators from config evaluation.
 const runHeavyBuildTasks = process.env.RUN_HEAVY_BUILD_TASKS === "true";
@@ -211,6 +239,13 @@ const nextConfig: NextConfig = {
     webpackBuildWorker: false,
     webpackMemoryOptimizations: true,
     externalDir: true,
+    /**
+     * Default 8 concurrent pages per static worker (`next/dist/export/worker.js`). With
+     * `isolatedMemory: true`, child workers strip `--max-old-space-size`, so peak RSS can exceed the
+     * parent heap cap — lowering concurrency on App Platform reduces “Job Terminated” / cgroup OOM.
+     * Opt in locally with `BUILD_LOW_MEMORY_STATIC_GENERATION=true`.
+     */
+    ...(lowMemoryStaticGeneration ? { staticGenerationMaxConcurrency: 1 } : {}),
   },
   webpack: (config) => {
     config.parallelism = buildWebpackParallelism;
@@ -220,12 +255,12 @@ const nextConfig: NextConfig = {
   // dynamic process.cwd() usage in load-marketing-messages.ts does not trigger the
   // "unexpected file in NFT list" Turbopack warning.
   outputFileTracingExcludes: {
-    "*": [...outputFileTracingInstrumentationExcludes],
+    "*": [...outputFileTracingHeavyExcludes],
     "/**": [
       "./next.config.ts",
       "./next.config.js",
       "./next.config.mjs",
-      ...outputFileTracingInstrumentationExcludes,
+      ...outputFileTracingHeavyExcludes,
     ],
   },
   // Explicitly include merged i18n bundles so server components can readFileSync them at runtime.

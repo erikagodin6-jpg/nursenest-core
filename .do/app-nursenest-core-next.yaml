@@ -91,6 +91,10 @@ services:
       - key: NN_APP_PLATFORM_BUILD
         value: "true"
         scope: BUILD_TIME
+      # Optional: same effect as NN_APP_PLATFORM_BUILD for static prerender concurrency (next.config).
+      # - key: BUILD_LOW_MEMORY_STATIC_GENERATION
+      #   value: "true"
+      #   scope: BUILD_TIME
       # Run `npm prune --omit=dev` as the final orchestrated step (avoids a second shell `npm prune` and records duration).
       - key: NN_TIMED_INCLUDE_NPM_PRUNE
         value: "1"
@@ -101,6 +105,11 @@ services:
       # Global build heap: applies to npm/node during install + heroku-postbuild (not only the Next child). Must match
       # `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB`. Remove any duplicate `NODE_OPTIONS` from the App UI (especially 6144) or
       # merge behavior can keep the higher value for BUILD_AND_RUN_TIME.
+      #
+      # If the build job is still **terminated** (cgroup OOM) after static prerender concurrency fixes in
+      # `next.config.ts`, try **3072** here and on `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` so the parent Node process
+      # leaves more RSS headroom for static workers (they strip `--max-old-space-size` when `isolatedMemory` is on)
+      # and for the NFT trace pass.
       - key: NODE_OPTIONS
         value: "--max-old-space-size=4096"
         scope: BUILD_TIME
