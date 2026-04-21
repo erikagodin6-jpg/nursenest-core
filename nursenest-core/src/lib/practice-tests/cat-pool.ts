@@ -2,7 +2,6 @@ import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
@@ -72,6 +71,7 @@ export async function fetchCatPracticePool(
   entitlement: AccessScope,
   input: PickQuestionsInput,
 ): Promise<CatPoolRow[]> {
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
   const pathwayIdTrim = input.pathwayId?.trim() ?? "";
   let pathway: ExamPathwayDefinition | null = pathwayIdTrim ? getExamPathwayById(pathwayIdTrim) ?? null : null;
   if (pathwayIdTrim && !pathway) {

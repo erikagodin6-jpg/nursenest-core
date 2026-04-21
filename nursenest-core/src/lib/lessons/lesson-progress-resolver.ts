@@ -48,11 +48,12 @@ export async function resolveLessonRefFromProgressId(params: {
 
   const parsedPathway = parsePathwaySyntheticProgressId(lessonId);
   if (parsedPathway) {
+    const pathwayScope = entitlement ? await pathwayLessonsAppListWhere(entitlement, learnerPath) : null;
     const row = await prisma.pathwayLesson.findFirst({
-      where: entitlement
+      where: entitlement && pathwayScope
         ? {
             AND: [
-              pathwayLessonsAppListWhere(entitlement, learnerPath),
+              pathwayScope,
               {
                 pathwayId: parsedPathway.pathwayId,
                 slug: parsedPathway.slug,
@@ -81,9 +82,10 @@ export async function resolveLessonRefFromProgressId(params: {
   });
   if (content) return { title: content.title, href: `/app/lessons/${content.id}`, kind: "content" };
 
+  const pathwayScopeForId = entitlement ? await pathwayLessonsAppListWhere(entitlement, learnerPath) : null;
   const pathwayById = await prisma.pathwayLesson.findFirst({
-    where: entitlement
-      ? { AND: [pathwayLessonsAppListWhere(entitlement, learnerPath), { id: lessonId }] }
+    where: entitlement && pathwayScopeForId
+      ? { AND: [pathwayScopeForId, { id: lessonId }] }
       : { id: lessonId },
     select: { id: true, title: true },
   });

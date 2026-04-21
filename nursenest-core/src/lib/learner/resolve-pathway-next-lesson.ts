@@ -42,10 +42,10 @@ export async function resolvePathwayNextLesson(
 ): Promise<PathwayNextLesson | null> {
   if (!userId || !entitlement.hasAccess) return null;
 
-  const visible = visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+  const visible = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
   if (visible.length === 0) return null;
 
-  const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
+  const pathwayWhere = await pathwayLessonsAppListWhere(entitlement, learnerPath);
   const stallDays = options?.stallDays ?? 14;
   const stallMs = stallDays * 86400000;
   const now = Date.now();
@@ -125,10 +125,10 @@ export async function resolveNextIncompleteMarketingPathwayLesson(
 ): Promise<{ title: string; href: string; slug: string } | null> {
   if (!userId || !entitlement.hasAccess) return null;
 
-  const visible = visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+  const visible = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
   if (!visible.includes(pathwayId)) return null;
 
-  const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
+  const pathwayWhere = await pathwayLessonsAppListWhere(entitlement, learnerPath);
   const lessonsRaw = await prisma.pathwayLesson.findMany({
     where: { AND: [pathwayWhere, { pathwayId }] },
     orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
@@ -184,10 +184,10 @@ export async function resolvePathwayLessonForWeakTopic(
   const target = normalizeTopicKey(weakTopicNormalized);
   if (target.length < 2) return null;
 
-  const visible = visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+  const visible = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
   if (visible.length === 0) return null;
 
-  const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
+  const pathwayWhere = await pathwayLessonsAppListWhere(entitlement, learnerPath);
 
   for (const pathwayId of orderedPathwayIds(learnerPath, visible)) {
     const rowsRaw = await prisma.pathwayLesson.findMany({

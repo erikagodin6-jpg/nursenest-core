@@ -1,26 +1,16 @@
 import { ExamFamily } from "@prisma/client";
 import { buildExamPathwayPath as buildExamPathwayPathPure } from "./build-exam-pathway-path";
+import { EXAM_PATHWAYS, getExamPathwayById } from "./exam-pathways-catalog";
 import { getNpPracticeTestLandingCopy } from "./np-practice-test-segments";
 import type { CountrySlug, ExamPathwayDefinition, ExamPathwayStatus, RoleTrackSlug } from "./types";
-import { EXAM_PATHWAYS_SEGMENT_A } from "./exam-pathways-data-segment-a";
-import { EXAM_PATHWAYS_SEGMENT_B } from "./exam-pathways-data-segment-b";
-import { EXAM_PATHWAYS_SEGMENT_C } from "./exam-pathways-data-segment-c";
-import { EXAM_PATHWAYS_SEGMENT_D } from "./exam-pathways-data-segment-d";
 
+export { EXAM_PATHWAYS, getExamPathwayById } from "./exam-pathways-catalog";
 
 /**
- * Central exam / product catalog — concatenates ordered segments from `exam-pathways-data-segment-*.ts`.
- * Add or edit pathway rows in those modules (preserve segment order) to expose new pathways without rewiring the app.
- * User.learnerPath should eventually store `ExamPathwayDefinition.id` for granular NP tracks.
+ * Central exam / product facade — re-exports the pathway catalog and adds marketing route resolution,
+ * NP SEO aliases, and pool helpers. Edit pathway rows in `exam-pathways-data-segment-*.ts` (via
+ * {@link EXAM_PATHWAYS} in `exam-pathways-catalog.ts`).
  */
-export const EXAM_PATHWAYS: ExamPathwayDefinition[] = [
-  ...EXAM_PATHWAYS_SEGMENT_A,
-  ...EXAM_PATHWAYS_SEGMENT_B,
-  ...EXAM_PATHWAYS_SEGMENT_C,
-  ...EXAM_PATHWAYS_SEGMENT_D,
-];
-
-
 /** Distinct `exam_questions.exam` values used across NP pathways (diagnostics + pool scoping). */
 export function npPoolExamColumnValues(): string[] {
   const s = new Set<string>();
@@ -34,7 +24,6 @@ export function npPoolExamColumnValues(): string[] {
 }
 
 const byRoute = new Map<string, ExamPathwayDefinition>();
-const byId = new Map<string, ExamPathwayDefinition>();
 
 function routeKey(countrySlug: CountrySlug, roleTrack: RoleTrackSlug, examCode: string): string {
   return `${countrySlug}/${roleTrack}/${examCode}`;
@@ -42,7 +31,6 @@ function routeKey(countrySlug: CountrySlug, roleTrack: RoleTrackSlug, examCode: 
 
 for (const p of EXAM_PATHWAYS) {
   byRoute.set(routeKey(p.countrySlug, p.roleTrack, p.examCode), p);
-  byId.set(p.id, p);
 }
 
 /** Normalize marketing hub URL segments (case/whitespace) so registry lookups match Prisma-backed rows. */
@@ -67,9 +55,7 @@ export function getExamPathwayByRoute(
   const normalizedCountry = normalizeMarketingHubSegment(countrySlug);
   const normalizedRole = normalizeRoleTrackSegmentForCountry(countrySlug, roleTrack, examCode);
   const normalizedExam = normalizeMarketingHubSegment(examCode);
-  return byRoute.get(
-    `${normalizedCountry}/${normalizedRole}/${normalizedExam}`,
-  );
+  return byRoute.get(`${normalizedCountry}/${normalizedRole}/${normalizedExam}`);
 }
 
 /**
@@ -95,10 +81,6 @@ export function resolveExamPathwayFromMarketingHubSegment(
   const aliased = getExamPathwayById(seo.pathwayId);
   if (!aliased || aliased.status === "hidden") return undefined;
   return aliased;
-}
-
-export function getExamPathwayById(id: string): ExamPathwayDefinition | undefined {
-  return byId.get(id);
 }
 
 export function listExamPathways(filter?: { status?: ExamPathwayStatus | ExamPathwayStatus[] }): ExamPathwayDefinition[] {

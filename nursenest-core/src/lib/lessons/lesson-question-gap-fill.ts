@@ -5,7 +5,6 @@
  * Does not invent stems. One exam_question row is assigned to at most one lesson per plan.
  */
 import { prisma } from "@/lib/db";
-import { getExamPathwayById, listExamPathways } from "@/lib/exam-pathways/exam-product-registry";
 import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import {
   countRelatedExamQuestionsForPathwayLesson,
@@ -49,6 +48,7 @@ export async function buildLessonGapSalvagePlan(options: {
   items: LessonGapSalvageItem[];
   notes: string[];
 }> {
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
   const maxUpdates = options.maxQuestionUpdates ?? 2000;
   const notes: string[] = [
     "Salvage only targets published questions in the pathway marketing pool with empty topic and matching body_system.",
@@ -165,6 +165,7 @@ export async function recountLessonsAfterSalvage(items: LessonGapSalvageItem[]):
     relatedQuestionCount: number;
   }>
 > {
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
   const keys = new Map<string, { pathwayId: string; slug: string }>();
   for (const it of items) {
     keys.set(`${it.pathwayId}:${it.lessonSlug}`, { pathwayId: it.pathwayId, slug: it.lessonSlug });

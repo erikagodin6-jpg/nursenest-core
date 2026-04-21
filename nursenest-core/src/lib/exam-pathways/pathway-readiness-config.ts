@@ -1,5 +1,5 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 export type PathwayReadinessType = "CAT" | "SIMULATION";
 export type PathwayReadinessMode = "production_ready" | "beta" | "mini_adaptive" | "simulation";
 

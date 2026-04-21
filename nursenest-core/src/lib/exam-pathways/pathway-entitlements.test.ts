@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { subscriptionCoversPathwayBase } from "./pathway-entitlements";
+import { subscriptionCoversPathwayBase } from "./pathway-entitlements-policy";
 
 function scope(
   partial: Pick<AccessScope, "hasAccess" | "reason" | "tier" | "country"> & { alliedCareer?: AccessScope["alliedCareer"] },

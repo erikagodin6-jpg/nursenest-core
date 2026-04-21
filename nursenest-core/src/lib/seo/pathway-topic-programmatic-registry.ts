@@ -10,7 +10,6 @@
  */
 import { ExamFamily } from "@prisma/client";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import type { SeoCluster, SeoPageDefinition } from "@/lib/seo/programmatic-registry";
@@ -472,6 +471,8 @@ function buildPrioPage(pathway: ExamPathwayDefinition, topic: PrioTopic, seoSlug
 export type PathwayTopicProgrammaticRow = {
   pathwayId: string;
   seoSlug: string;
+  /** Precomputed marketing hub path (`/{country}/{role}/{exam}/{seoSlug}`) for sitemap emission without re-resolving the pathway. */
+  publicRelativePath: string;
   page: SeoPageDefinition;
 };
 
@@ -483,19 +484,34 @@ function expandRowsForPathway(pathway: ExamPathwayDefinition): PathwayTopicProgr
   if (prefix) {
     for (const body of BODY_SYSTEMS) {
       const seoSlug = `${prefix}-${body.key}`;
-      rows.push({ pathwayId: pathway.id, seoSlug, page: buildBodyPracticePage(pathway, body, seoSlug) });
+      rows.push({
+        pathwayId: pathway.id,
+        seoSlug,
+        publicRelativePath: buildExamPathwayPath(pathway, seoSlug),
+        page: buildBodyPracticePage(pathway, body, seoSlug),
+      });
     }
   }
 
   for (const body of BODY_SYSTEMS) {
     const seoSlug = lessonsAngleSlug(pathway.id, body);
-    rows.push({ pathwayId: pathway.id, seoSlug, page: buildLessonsAnglePage(pathway, body, seoSlug) });
+    rows.push({
+      pathwayId: pathway.id,
+      seoSlug,
+      publicRelativePath: buildExamPathwayPath(pathway, seoSlug),
+      page: buildLessonsAnglePage(pathway, body, seoSlug),
+    });
   }
 
   if (!pathway.id.includes("allied")) {
     for (const ph of PHARM_TOPICS) {
       const seoSlug = `pharmacology-nursing-${ph.key}`;
-      rows.push({ pathwayId: pathway.id, seoSlug, page: buildPharmPage(pathway, ph, seoSlug) });
+      rows.push({
+        pathwayId: pathway.id,
+        seoSlug,
+        publicRelativePath: buildExamPathwayPath(pathway, seoSlug),
+        page: buildPharmPage(pathway, ph, seoSlug),
+      });
     }
   }
 
@@ -506,7 +522,12 @@ function expandRowsForPathway(pathway: ExamPathwayDefinition): PathwayTopicProgr
   if (labEligible) {
     for (const lab of LAB_TOPICS) {
       const seoSlug = `lab-values-${lab.key}`;
-      rows.push({ pathwayId: pathway.id, seoSlug, page: buildLabPage(pathway, lab, seoSlug) });
+      rows.push({
+        pathwayId: pathway.id,
+        seoSlug,
+        publicRelativePath: buildExamPathwayPath(pathway, seoSlug),
+        page: buildLabPage(pathway, lab, seoSlug),
+      });
     }
   }
 
@@ -517,7 +538,12 @@ function expandRowsForPathway(pathway: ExamPathwayDefinition): PathwayTopicProgr
   if (prioEligible) {
     for (const pr of PRIORITIZATION_TOPICS) {
       const seoSlug = `prioritization-nclex-${pr.key}`;
-      rows.push({ pathwayId: pathway.id, seoSlug, page: buildPrioPage(pathway, pr, seoSlug) });
+      rows.push({
+        pathwayId: pathway.id,
+        seoSlug,
+        publicRelativePath: buildExamPathwayPath(pathway, seoSlug),
+        page: buildPrioPage(pathway, pr, seoSlug),
+      });
     }
   }
 
@@ -584,9 +610,7 @@ export function collectPathwayTopicProgrammaticPublicPaths(): string[] {
   const out: string[] = [];
   for (const row of getPathwayTopicRegistryMaps().rows) {
     if (out.length >= MAX_PATHWAY_TOPIC_PROGRAMMATIC_SITEMAP_URLS) break;
-    const p = getExamPathwayById(row.pathwayId);
-    if (!p || p.status === "hidden") continue;
-    out.push(buildExamPathwayPath(p, row.seoSlug));
+    out.push(row.publicRelativePath);
   }
   return out;
 }

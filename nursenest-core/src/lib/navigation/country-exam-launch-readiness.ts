@@ -11,15 +11,16 @@ import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { REGION_CONFIG } from "@/lib/i18n/global-regions";
 import type { CountrySlug } from "@/lib/exam-pathways/types";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import {
-  buildExamPathwayPath,
-  EXAM_PATHWAYS,
-  listPublicExamPathways,
-} from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { getExamHubForGlobalRegion } from "@/lib/marketing/global-region-exam-hubs";
 import { MIN_PATHWAY_LESSONS_SCALE_TARGET } from "@/lib/lessons/pathway-lesson-scale";
 import { MARKET_READINESS } from "@/lib/navigation/market-readiness-data";
 import { getSnapshotCounts } from "@/lib/navigation/country-exam-readiness-snapshot";
+
+function listPublicExamPathways(): ExamPathwayDefinition[] {
+  return EXAM_PATHWAYS.filter((p) => p.status !== "hidden");
+}
 
 // ── Constants ────────────────────────────────────────────────────────────────
 

@@ -3,10 +3,10 @@ import test from "node:test";
 import {
   buildNotFoundRecoveryModel,
   resolveNotFoundRouteContext,
-} from "@/lib/routing/not-found-recovery";
+} from "@/lib/routing/not-found-route-context";
 
-test("missing lesson routes recover to the pathway lessons hub", () => {
-  const context = resolveNotFoundRouteContext("/us/np/fnp/lessons/missing-slug");
+test("missing lesson routes recover to the pathway lessons hub", async () => {
+  const context = await resolveNotFoundRouteContext("/us/np/fnp/lessons/missing-slug");
 
   assert.equal(context.kind, "pathway_lessons");
   assert.equal(context.pathway?.id, "us-np-fnp");
@@ -20,8 +20,8 @@ test("missing lesson routes recover to the pathway lessons hub", () => {
   assert.ok(recovery.secondaryCtas.some((cta) => cta.label === "Go Home" && cta.href === "/"));
 });
 
-test("pathway child routes recover to the matching pathway hub", () => {
-  const context = resolveNotFoundRouteContext("/canada/rpn/rex-pn/unknown-child");
+test("pathway child routes recover to the matching pathway hub", async () => {
+  const context = await resolveNotFoundRouteContext("/canada/rpn/rex-pn/unknown-child");
 
   assert.equal(context.kind, "pathway_overview");
   assert.equal(context.pathway?.id, "ca-rpn-rex-pn");
@@ -29,14 +29,14 @@ test("pathway child routes recover to the matching pathway hub", () => {
   const recovery = buildNotFoundRecoveryModel(context);
 
   assert.equal(recovery.primaryCta.label, "Open Pathway Hub");
-  assert.equal(recovery.primaryCta.href, "/canada/rpn/rex-pn");
+  assert.equal(recovery.primaryCta.href, "/canada/pn/rex-pn");
   assert.ok(
-    recovery.secondaryCtas.some((cta) => cta.label === "Browse Lessons" && cta.href === "/canada/rpn/rex-pn/lessons"),
+    recovery.secondaryCtas.some((cta) => cta.label === "Browse Lessons" && cta.href === "/canada/pn/rex-pn/lessons"),
   );
 });
 
-test("unique typo-like exam segments suggest the closest pathway landing page", () => {
-  const context = resolveNotFoundRouteContext("/us/np/pmhn/overview");
+test("unique typo-like exam segments suggest the closest pathway landing page", async () => {
+  const context = await resolveNotFoundRouteContext("/us/np/pmhn/overview");
 
   assert.equal(context.kind, "closest_pathway");
   assert.equal(context.pathway?.id, "us-np-pmhnp");
@@ -47,8 +47,8 @@ test("unique typo-like exam segments suggest the closest pathway landing page", 
   assert.ok(recovery.body.includes("PMHNP"));
 });
 
-test("signed-in recovery can include resume and dashboard links without losing core CTAs", () => {
-  const context = resolveNotFoundRouteContext("/missing-page");
+test("signed-in recovery can include resume and dashboard links without losing core CTAs", async () => {
+  const context = await resolveNotFoundRouteContext("/missing-page");
   const recovery = buildNotFoundRecoveryModel(context, {
     dashboardHref: "/app",
     resumeHref: "/us/rn/nclex-rn/lessons/fluid-balance",

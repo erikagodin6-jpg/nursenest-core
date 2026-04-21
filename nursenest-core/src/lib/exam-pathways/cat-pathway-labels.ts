@@ -3,7 +3,6 @@
  * Keeps country + exam/tier wording aligned with {@link ExamPathwayDefinition} registry data.
  */
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 
 /** "US RN", "Canada RPN", "US NP", etc. */
 export function catPathwayRegionRoleLabel(pathway: ExamPathwayDefinition): string {
@@ -41,9 +40,3 @@ export function catPathwayShortCatLabel(pathway: ExamPathwayDefinition): string 
   return `${catPathwayExamCodeLabel(pathway)} CAT`;
 }
 
-/** Resolve registry row for id; undefined when unknown */
-export function tryCatPathwayFromId(pathwayId: string | null | undefined): ExamPathwayDefinition | undefined {
-  const id = pathwayId?.trim();
-  if (!id) return undefined;
-  return getExamPathwayById(id);
-}

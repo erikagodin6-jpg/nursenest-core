@@ -28,7 +28,7 @@ import { getPreNursingOverlaySlugsForLocale } from "@/lib/i18n/pre-nursing-conte
 import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "@/lib/exam-pathways/programmatic-slug-redirects";
 import { LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT } from "@/lib/marketing/canonical-pathway-hubs";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { isRnNclexMarketingPathwayId } from "@/lib/exam-pathways/rn-nclex-public-hub-policy";
 import {
   isPathwayPublishedForPublicSite,

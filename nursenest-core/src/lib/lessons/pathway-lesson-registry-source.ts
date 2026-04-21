@@ -2,7 +2,6 @@
  * Ops-facing matrix: registry pathways vs pathway_lessons DB vs static catalog.json.
  * Used by `npm run ops:pathway-lesson-sources` and admin scalability-style tooling.
  */
-import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { PATHWAY_LESSON_DB_TIMEOUT_MS } from "@/lib/lessons/pathway-lesson-loader-config";
@@ -49,6 +48,7 @@ export type RegistryPathwayLessonSourceReport = {
 };
 
 export async function buildRegistryPathwayLessonSourceReport(): Promise<RegistryPathwayLessonSourceReport> {
+  const { EXAM_PATHWAYS } = await import("@/lib/exam-pathways/exam-product-registry");
   const generatedAt = new Date().toISOString();
   const databaseConfigured = isDatabaseUrlConfigured();
   const cat = getCatalog();

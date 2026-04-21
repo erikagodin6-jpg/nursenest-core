@@ -16,6 +16,7 @@ export {
 export { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
 export {
   listPathwaysCompatibleWithSubscription,
+  pathwayAllowsCatAdaptiveStart,
   pathwayFromLearnerPath,
   subscriptionCoversPathwayBase,
 } from "@/lib/exam-pathways/pathway-entitlements";

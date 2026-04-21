@@ -4,28 +4,26 @@ import { prismaTierCodesForProfileTier } from "@/lib/entitlements/accessible-tie
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 
 /** Pathway IDs the learner may see in `/app/lessons` (tier, country, NP specialty). */
-export function visiblePathwayIdsForAppLessons(
+export async function visiblePathwayIdsForAppLessons(
   scope: AccessScope,
   learnerPath: string | null | undefined,
-): string[] {
-  return listPathwaysCompatibleWithSubscription(scope)
-    .filter((p) => canViewFullPathwayLesson(scope, p, learnerPath))
-    .map((p) => p.id);
+): Promise<string[]> {
+  const compatible = await listPathwaysCompatibleWithSubscription(scope);
+  return compatible.filter((p) => canViewFullPathwayLesson(scope, p, learnerPath)).map((p) => p.id);
 }
 
 /**
  * Prisma filter for published pathway lessons shown when `content_items` lessons are empty.
  * Aligns with pathway hub entitlement + optional row-level country/tier overrides.
  */
-export function pathwayLessonsAppListWhere(
+export async function pathwayLessonsAppListWhere(
   scope: AccessScope,
   learnerPath: string | null | undefined,
-): Prisma.PathwayLessonWhereInput {
-  const pathwayIds = visiblePathwayIdsForAppLessons(scope, learnerPath);
+): Promise<Prisma.PathwayLessonWhereInput> {
+  const pathwayIds = await visiblePathwayIdsForAppLessons(scope, learnerPath);
   if (pathwayIds.length === 0) {
     return { id: { in: [] } };
   }
@@ -66,12 +64,12 @@ export function pathwayLessonsAppListWhere(
 /**
  * Narrows pathway lessons by catalog `topic` or `topic_slug` (from weak-area / post-test links).
  */
-export function pathwayLessonsAppListWhereWithTopicFilter(
+export async function pathwayLessonsAppListWhereWithTopicFilter(
   scope: AccessScope,
   learnerPath: string | null | undefined,
   filter: { topic?: string | null; topicSlug?: string | null; pathwayId?: string | null },
-): Prisma.PathwayLessonWhereInput {
-  const base = pathwayLessonsAppListWhere(scope, learnerPath);
+): Promise<Prisma.PathwayLessonWhereInput> {
+  const base = await pathwayLessonsAppListWhere(scope, learnerPath);
   const slugTrim = filter.topicSlug?.trim().toLowerCase();
   const topicTrim = filter.topic?.trim();
   const pathwayTrim = filter.pathwayId?.trim();
@@ -92,15 +90,16 @@ export function pathwayLessonsAppListWhereWithTopicFilter(
 }
 
 /** Gate `/app/lessons/[id]` for a pathway_lessons row (subscriber or admin). */
-export function appPathwayLessonVisibleToSubscriber(
+export async function appPathwayLessonVisibleToSubscriber(
   scope: AccessScope,
   row: Pick<
     { pathwayId: string; countryCode: CountryCode | null; tierCode: TierCode | null; status?: ContentStatus | null },
     "pathwayId" | "countryCode" | "tierCode" | "status"
   >,
   learnerPath: string | null | undefined,
-): boolean {
+): Promise<boolean> {
   if (row.status && row.status !== ContentStatus.PUBLISHED) return false;
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
   const pathway = getExamPathwayById(row.pathwayId);
   if (!pathway) return false;
   if (!canViewFullPathwayLesson(scope, pathway, learnerPath)) return false;

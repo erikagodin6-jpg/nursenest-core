@@ -2,7 +2,6 @@ import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import {
   pathwayAllowsCatAdaptiveStart,
@@ -220,6 +219,7 @@ export async function createCatPracticeTestPayload(
     }
   | { ok: false; message: string; code?: string }
 > {
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
   const sim = presentationMode === "exam_simulation";
   const requestedPathwayId = input.pathwayId?.trim() || null;
   let pathway: ExamPathwayDefinition | null = null;

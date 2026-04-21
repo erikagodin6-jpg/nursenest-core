@@ -152,11 +152,12 @@ export type LessonContinuationRow = {
 
 function pickPreferredPathway(
   compatible: ExamPathwayDefinition[],
-  learnerPath: string | null | undefined,
+  learnerPathway: ExamPathwayDefinition | undefined,
   predicate: (p: ExamPathwayDefinition) => boolean,
 ): ExamPathwayDefinition | null {
-  const lp = pathwayFromLearnerPath(learnerPath);
-  if (lp && compatible.some((c) => c.id === lp.id) && predicate(lp)) return lp;
+  if (learnerPathway && compatible.some((c) => c.id === learnerPathway.id) && predicate(learnerPathway)) {
+    return learnerPathway;
+  }
   return compatible.find(predicate) ?? null;
 }
 
@@ -171,24 +172,26 @@ export async function loadLessonContinuationRows(
 ): Promise<LessonContinuationRow[]> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return [];
 
-  const compatible = listPathwaysCompatibleWithSubscription(entitlement);
+  const compatible = await listPathwaysCompatibleWithSubscription(entitlement);
   if (compatible.length === 0) return [];
+
+  const learnerPathway = await pathwayFromLearnerPath(learnerPath);
 
   const rn = pickPreferredPathway(
     compatible,
-    learnerPath,
+    learnerPathway,
     (p) => p.examFamily === ExamFamily.NCLEX_RN && p.roleTrack === "rn",
   );
   const pn = pickPreferredPathway(
     compatible,
-    learnerPath,
+    learnerPathway,
     (p) =>
       (p.examFamily === ExamFamily.NCLEX_PN && p.roleTrack === "lpn") ||
       (p.examFamily === ExamFamily.REX_PN && p.roleTrack === "rpn"),
   );
   const np = pickPreferredPathway(
     compatible,
-    learnerPath,
+    learnerPathway,
     (p) => p.examFamily === ExamFamily.NP && p.status === "active" && p.acquisitionMode === "subscribe",
   );
 
