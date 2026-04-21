@@ -9,10 +9,6 @@ import { runProductionEnvGuard } from "@/lib/env/production-env-guard";
 import { logStartupContext } from "@/lib/env/server-env";
 import { logHighMemory } from "@/lib/observability/perf-log-core";
 import { logMemoryPressureSample } from "@/lib/observability/perf-log-host-memory";
-import {
-  logStripeCheckoutEnvStartupStatus,
-  logStripeProductionPricingMisconfiguration,
-} from "@/lib/stripe/pricing-map";
 import { assertPinnedAuthBasePath } from "@/lib/auth/auth-base-path";
 import { importSentryNextjs } from "@/lib/observability/sentry-nextjs-dynamic";
 import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
@@ -44,8 +40,15 @@ export async function registerNodeInstrumentation(): Promise<void> {
   void import("@/lib/observability/http-access-log-hook").then((m) => {
     m.installHttpAccessLogHook();
   });
-  logStripeCheckoutEnvStartupStatus();
-  logStripeProductionPricingMisconfiguration();
+  /** Defer: pulls `pricing-map` + matrix walk off the instrumentation critical path (readiness / handlers). */
+  setImmediate(() => {
+    void import("@/lib/stripe/pricing-map")
+      .then((m) => {
+        m.logStripeCheckoutEnvStartupStatus();
+        m.logStripeProductionPricingMisconfiguration();
+      })
+      .catch(() => {});
+  });
 
   process.on("unhandledRejection", (reason) => {
     const msg = reason instanceof Error ? reason.message : String(reason);

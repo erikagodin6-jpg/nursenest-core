@@ -1,4 +1,5 @@
-import * as Sentry from "@sentry/nextjs";
+import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
+import { importSentryNextjs } from "@/lib/observability/sentry-nextjs-dynamic";
 import { safeServerLog, type SafeLogMeta } from "@/lib/observability/safe-server-log";
 
 export type ProductEventName =
@@ -19,10 +20,15 @@ export type ProductEventName =
  */
 export function productEvent(name: ProductEventName, meta?: SafeLogMeta): void {
   safeServerLog("product_event", name, meta);
-  Sentry.addBreadcrumb({
-    category: "product",
-    message: name,
-    level: "info",
-    data: (meta ?? {}) as Record<string, unknown>,
-  });
+  if (!isSentryServerRuntimeEnabled()) return;
+  void importSentryNextjs()
+    .then((Sentry) => {
+      Sentry.addBreadcrumb({
+        category: "product",
+        message: name,
+        level: "info",
+        data: (meta ?? {}) as Record<string, unknown>,
+      });
+    })
+    .catch(() => {});
 }

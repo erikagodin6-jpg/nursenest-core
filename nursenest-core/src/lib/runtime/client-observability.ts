@@ -3,7 +3,7 @@
  * Sentry receives deduplicated signals; dev gets at most one console line per unique key per minute.
  */
 
-import * as Sentry from "@sentry/nextjs";
+import { captureClientExceptionIfEnabled } from "@/lib/observability/sentry-if-enabled";
 
 const recent = new Map<string, number>();
 const DEDUPE_MS = 60_000;
@@ -40,7 +40,7 @@ export function captureClientException(
 
   const err = error instanceof Error ? error : new Error(String(error));
 
-  Sentry.captureException(err, {
+  captureClientExceptionIfEnabled(err, {
     tags: { surface, feature: "client_observability" },
     extra: extras,
   });

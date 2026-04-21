@@ -2,7 +2,7 @@
 
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import Link from "next/link";
-import * as Sentry from "@sentry/nextjs";
+import { captureClientExceptionIfEnabled } from "@/lib/observability/sentry-if-enabled";
 
 type Props = {
   children: ReactNode;

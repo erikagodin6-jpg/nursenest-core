@@ -6,7 +6,7 @@
  *
  * Never pass passwords, tokens, or full PII in `message`.
  */
-import * as Sentry from "@sentry/nextjs";
+import { addClientBreadcrumbIfEnabled } from "@/lib/observability/sentry-if-enabled";
 import { captureUxFailure } from "@/lib/observability/frontend-ux-tracking";
 
 /** Keep aligned with {@link STRUCTURED_LOG_SCHEMA} in `structured-log.ts`. */
@@ -37,7 +37,7 @@ export function emitClientStructuredLog(
   if (process.env.NODE_ENV === "development") {
     console.info("[nn-structured]", data);
   }
-  Sentry.addBreadcrumb({
+  addClientBreadcrumbIfEnabled({
     category: "structured",
     message: event,
     level: fields.httpStatus && fields.httpStatus >= 500 ? "error" : "warning",

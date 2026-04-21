@@ -1,5 +1,4 @@
 import { hash } from "bcryptjs";
-import * as Sentry from "@sentry/nextjs";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
@@ -19,6 +18,8 @@ import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { captureServerMessageIfEnabled } from "@/lib/observability/sentry-if-enabled";
+import { sentryCaptureMessageWhenEnabled } from "@/lib/observability/sentry-nextjs-dynamic";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { triggerWelcomeEmailRequested } from "@/lib/server/inngest";
 
@@ -73,7 +74,7 @@ export async function POST(req: Request) {
   if (!rl.ok) {
     signupStructuredFailed(req, "rate_limited");
     productEvent("signup_rate_limited", {});
-    Sentry.captureMessage("signup_rate_limited", {
+    captureServerMessageIfEnabled("signup_rate_limited", {
       level: "warning",
       tags: { flow: "auth", kind: "signup_rate_limit" },
     });

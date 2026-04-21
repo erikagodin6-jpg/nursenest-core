@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { ProductErrorState } from "@/components/ui/product-error-state";
-import { isSentryClientRuntimeEnabled } from "@/lib/observability/sentry-flags";
+import { captureClientExceptionIfEnabled } from "@/lib/observability/sentry-if-enabled";
 import { getErrorMessageDevLine, shouldShowErrorBoundaryDevDetail } from "@/lib/runtime/error-message";
 
 export default function AppError({
@@ -15,12 +15,7 @@ export default function AppError({
   reset: () => void;
 }) {
   useEffect(() => {
-    if (!isSentryClientRuntimeEnabled()) return;
-    void import("@sentry/nextjs")
-      .then(({ captureException }) => {
-        captureException(error, { tags: { route: "app_error", feature: "react_error_boundary" } });
-      })
-      .catch(() => {});
+    captureClientExceptionIfEnabled(error, { tags: { route: "app_error", feature: "react_error_boundary" } });
   }, [error]);
 
   const digest = error.digest;

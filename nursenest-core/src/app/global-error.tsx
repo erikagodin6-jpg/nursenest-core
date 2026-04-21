@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import * as Sentry from "@sentry/nextjs";
 import { ThemeProvider } from "next-themes";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import {
@@ -9,6 +8,7 @@ import {
   THEME_OPTIONS,
   THEME_STORAGE_KEY,
 } from "@/lib/theme/theme-registry";
+import { captureClientExceptionIfEnabled } from "@/lib/observability/sentry-if-enabled";
 import { useErrorBoundaryAutoRetry } from "@/lib/runtime/use-error-boundary-auto-retry";
 
 export default function GlobalError({
@@ -19,7 +19,7 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    Sentry.captureException(error, {
+    captureClientExceptionIfEnabled(error, {
       tags: { route: "global-error", feature: "root" },
     });
   }, [error]);

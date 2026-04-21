@@ -1,6 +1,5 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import * as Sentry from "@sentry/nextjs";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { emitBillingAudit } from "@/lib/observability/billing-entitlement-audit";
@@ -8,6 +7,11 @@ import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
 import { productEvent } from "@/lib/observability/product-events";
+import { captureServerExceptionIfEnabled, captureServerMessageIfEnabled } from "@/lib/observability/sentry-if-enabled";
+import {
+  sentryCaptureExceptionWhenEnabled,
+  sentryCaptureMessageWhenEnabled,
+} from "@/lib/observability/sentry-nextjs-dynamic";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { recordStripeWebhookFailure } from "@/lib/observability/production-signal-metrics";
 import { applyStripeWebhookEvent } from "@/lib/stripe/apply-stripe-webhook-event";
@@ -100,7 +104,7 @@ export async function POST(req: Request) {
       reason: "signature_verification_failed",
       severity: "warn",
     });
-    Sentry.captureMessage("stripe_webhook_invalid_signature", {
+    captureServerMessageIfEnabled("stripe_webhook_invalid_signature", {
       level: "warning",
       tags: { flow: "stripe_webhook", kind: "signature" },
     });
@@ -152,7 +156,7 @@ export async function POST(req: Request) {
       { type: event.type, correlation, severity: "error" },
       e,
     );
-    Sentry.captureException(e, {
+    captureServerExceptionIfEnabled(e, {
       level: "error",
       tags: { flow: "stripe_webhook_claim", stripe_event_type: event.type },
       fingerprint: ["stripe_webhook_claim", event.id],
@@ -214,7 +218,7 @@ export async function POST(req: Request) {
       { type: event.type, correlation, severity: "error" },
       e,
     );
-    Sentry.captureException(e, {
+    captureServerExceptionIfEnabled(e, {
       level: "error",
       tags: {
         flow: "stripe_webhook",

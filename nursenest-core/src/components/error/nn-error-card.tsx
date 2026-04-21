@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import * as Sentry from "@sentry/nextjs";
-import { captureUxFailure, enrichSentryScopeWithUx } from "@/lib/observability/frontend-ux-tracking";
+import { captureClientExceptionIfEnabled } from "@/lib/observability/sentry-if-enabled";
 import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { useErrorBoundaryAutoRetry } from "@/lib/runtime/use-error-boundary-auto-retry";
@@ -56,7 +55,7 @@ export function NnErrorCard({
   });
 
   useEffect(() => {
-    Sentry.captureException(error, {
+    captureClientExceptionIfEnabled(error, {
       tags: { surface, feature: "react_error_boundary" },
     });
     if (process.env.NODE_ENV === "development") {

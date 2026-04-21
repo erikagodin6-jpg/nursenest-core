@@ -1,6 +1,6 @@
 "use client";
 
-import * as Sentry from "@sentry/nextjs";
+import { captureClientMessageIfEnabled } from "@/lib/observability/sentry-if-enabled";
 
 /**
  * Logs a failed raster load for the site brand mark (before advancing to the next URL in the chain).
@@ -17,7 +17,7 @@ export function logBrandLogoLoadFailure(attemptedUrl: string, themeId: string, c
     feature: "brand_logo" as const,
   };
   console.error("[brand_logo] image failed to load", payload);
-  Sentry.captureMessage("brand_logo_image_failed", {
+  captureClientMessageIfEnabled("brand_logo_image_failed", {
     level: "warning",
     tags: { feature: "brand_logo", theme_id: themeId.slice(0, 48) },
     fingerprint: ["brand_logo_image_failed", themeId],

@@ -110,7 +110,14 @@ function buildPriceMap(): PriceEntry[] {
     }));
 }
 
-export const priceMap: PriceEntry[] = buildPriceMap();
+let cachedPriceMap: PriceEntry[] | undefined;
+
+function priceMap(): PriceEntry[] {
+  if (!cachedPriceMap) {
+    cachedPriceMap = buildPriceMap();
+  }
+  return cachedPriceMap;
+}
 
 /** Find a nursing tier price entry. */
 export function findPriceEntry(
@@ -118,7 +125,7 @@ export function findPriceEntry(
   tier: TierCode,
   duration: BillingDuration,
 ): PriceEntry | undefined {
-  return priceMap.find(
+  return priceMap().find(
     (p) => p.country === country && p.tier === tier && p.duration === duration && !p.alliedCareer,
   );
 }
@@ -129,21 +136,21 @@ export function findAlliedPriceEntry(
   career: AlliedCareerKey,
   duration: BillingDuration,
 ): PriceEntry | undefined {
-  return priceMap.find(
+  return priceMap().find(
     (p) => p.country === country && p.tier === "ALLIED" && p.alliedCareer === career && p.duration === duration,
   );
 }
 
 /** Find any price entry by plan code. */
 export function findPriceEntryByPlanCode(planCode: string): PriceEntry | undefined {
-  return priceMap.find((p) => p.planCode === planCode);
+  return priceMap().find((p) => p.planCode === planCode);
 }
 
 /** Reverse lookup: Stripe Price id to plan identity. */
 export function findTierCountryByPriceId(
   priceId: string,
 ): { tier: TierCode; country: "CA" | "US"; duration: BillingDuration; alliedCareer?: AlliedCareerKey } | undefined {
-  const row = priceMap.find((p) => p.priceId === priceId);
+  const row = priceMap().find((p) => p.priceId === priceId);
   if (!row) return undefined;
   return { tier: row.tier, country: row.country, duration: row.duration, alliedCareer: row.alliedCareer };
 }

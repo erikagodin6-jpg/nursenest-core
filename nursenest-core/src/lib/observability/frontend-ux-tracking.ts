@@ -6,9 +6,16 @@
  */
 import { stripMarketingLocalePrefix } from "@/lib/i18n/marketing-locale-prefix";
 import { readMarketingRegionFromDocument } from "@/lib/observability/learner-analytics-context.client";
+import { importSentryNextjs } from "@/lib/observability/sentry-nextjs-dynamic";
 
-type SentryScope = import("@sentry/nextjs").Scope;
-type SentrySeverityLevel = import("@sentry/nextjs").SeverityLevel;
+/** Structural scope surface used by ErrorBoundary `beforeCapture` — avoids static `@sentry/nextjs` type imports. */
+export type SentryScopeLike = {
+  setTag: (key: string, value: string) => void;
+  setContext: (key: string, value: Record<string, unknown>) => void;
+  setFingerprint: (fingerprint: string[]) => void;
+};
+
+type SentrySeverityLevel = "fatal" | "error" | "warning" | "log" | "info" | "debug";
 
 export type UxFailureKind =
   | "runtime_exception"
@@ -63,7 +70,7 @@ export function getUxTrackingContext(): UxTrackingContext {
   };
 }
 
-function applyUxContextToScope(scope: SentryScope, ctx: UxTrackingContext): void {
+function applyUxContextToScope(scope: SentryScopeLike, ctx: UxTrackingContext): void {
   scope.setTag("ux.route", ctx.route.slice(0, 120));
   scope.setTag("ux.locale", ctx.locale);
   scope.setTag("ux.country", ctx.country);
@@ -78,7 +85,7 @@ function applyUxContextToScope(scope: SentryScope, ctx: UxTrackingContext): void
 
 /** Tag the *current* Sentry event (e.g. ErrorBoundary capture) without emitting a second issue. */
 export function enrichSentryScopeWithUx(
-  scope: SentryScope,
+  scope: SentryScopeLike,
   opts: {
     kind: UxFailureKind | string;
     fallbackShown?: boolean;
@@ -130,7 +137,7 @@ export function captureUxFailure(opts: CaptureUxFailureOpts): void {
       ...opts.extra,
     },
   };
-  void import("@sentry/nextjs")
+  void importSentryNextjs()
     .then((Sentry) => {
       Sentry.addBreadcrumb(crumb);
       Sentry.withScope((scope) => {

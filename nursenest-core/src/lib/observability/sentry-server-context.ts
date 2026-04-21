@@ -1,5 +1,5 @@
-import * as Sentry from "@sentry/nextjs";
-import { getSentryEnvironmentServer } from "@/lib/observability/sentry-flags";
+import { getSentryEnvironmentServer, isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
+import { importSentryNextjs } from "@/lib/observability/sentry-nextjs-dynamic";
 import { sentryUserHash } from "@/lib/observability/sentry-user-hash";
 import type { ServerFeatureTag } from "@/lib/observability/server-feature-tags";
 
@@ -15,13 +15,18 @@ export function setSentryServerContext(opts: {
   feature: ServerFeatureTag;
   userId?: string | null;
 }): void {
-  Sentry.setTag("feature", opts.feature);
-  Sentry.setTag("route", opts.route);
-  Sentry.setContext("nursenest", {
-    environment: getSentryEnvironmentServer(),
-    route: opts.route,
-  });
-  if (opts.userId) {
-    Sentry.setUser({ id: sentryUserHash(opts.userId) });
-  }
+  if (!isSentryServerRuntimeEnabled()) return;
+  void importSentryNextjs()
+    .then((Sentry) => {
+      Sentry.setTag("feature", opts.feature);
+      Sentry.setTag("route", opts.route);
+      Sentry.setContext("nursenest", {
+        environment: getSentryEnvironmentServer(),
+        route: opts.route,
+      });
+      if (opts.userId) {
+        Sentry.setUser({ id: sentryUserHash(opts.userId) });
+      }
+    })
+    .catch(() => {});
 }
