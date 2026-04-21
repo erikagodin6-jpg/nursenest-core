@@ -181,7 +181,7 @@ export function MarketingHeaderUtilityStrip({
                     disabled={disabled}
                     onClick={onSelect}
                     className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-xs hover:bg-[var(--nav-hover)] ${
-                      code === locale ? "bg-[var(--nav-active)] font-medium text-[var(--nav-fg)]" : "text-[var(--nav-muted)]"
+                      code === locale ? "bg-[var(--nav-active)] font-medium text-[var(--nav-on-active-fg)]" : "text-[var(--nav-muted)]"
                     }`}
                   >
                     <span>{flag}</span>

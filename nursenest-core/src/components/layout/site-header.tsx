@@ -802,7 +802,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                                 <Link
                                   href={localizeHref(link.href)}
                                   aria-current={isActivePath(strippedPath, link.href) ? "page" : undefined}
-                                  className={`flex w-full items-center justify-start gap-1.5 rounded-lg px-2 py-2 text-left text-sm tracking-[0.01em] transition-[background-color,color,transform] duration-100 ease-[var(--motion-ease)] focus-visible:outline-2 focus-visible:outline-[var(--ring)] ${isActivePath(strippedPath, link.href) ? "bg-[var(--nav-active)] font-semibold text-[var(--nav-link-active)]" : "font-normal text-[var(--theme-heading-text)] hover:translate-x-0.5 hover:bg-[var(--nav-hover)] hover:text-[var(--nav-link-hover)]"}`}
+                                  className={`flex w-full items-center justify-start gap-1.5 rounded-lg px-2 py-2 text-left text-sm tracking-[0.01em] transition-[background-color,color,transform] duration-100 ease-[var(--motion-ease)] focus-visible:outline-2 focus-visible:outline-[var(--ring)] ${isActivePath(strippedPath, link.href) ? "bg-[var(--nav-active)] font-semibold text-[var(--nav-on-active-fg)]" : "font-normal text-[var(--theme-heading-text)] hover:translate-x-0.5 hover:bg-[var(--nav-hover)] hover:text-[var(--nav-link-hover)]"}`}
                                   onClick={() => {
                                     setOpenMegaMenu(null);
                                     trackClientEvent(PH.marketingNavClick, {
@@ -1005,7 +1005,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                                         <Link
                                           href={localizeHref(link.href)}
                                           aria-current={isActivePath(strippedPath, link.href) ? "page" : undefined}
-                                          className={`flex items-center gap-2 rounded-lg px-2 py-2 text-[14px] tracking-[0.01em] transition-colors ${isActivePath(strippedPath, link.href) ? "bg-[var(--nav-active)] font-semibold text-[var(--nav-link-active)]" : "font-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                                          className={`flex items-center gap-2 rounded-lg px-2 py-2 text-[14px] tracking-[0.01em] transition-colors ${isActivePath(strippedPath, link.href) ? "bg-[var(--nav-active)] font-semibold text-[var(--nav-on-active-fg)]" : "font-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
                                           onClick={() => {
                                             trackClientEvent(PH.marketingNavClick, {
                                               actor: navActor,
@@ -1261,8 +1261,10 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                           type="button"
                           disabled={disabled}
                           onClick={onSelect}
-                          className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] ${
-                            code === locale ? "bg-[var(--nav-active)]" : ""
+                          className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left nn-marketing-body-sm font-medium tracking-normal hover:bg-[var(--nav-hover)] ${
+                            code === locale
+                              ? "bg-[var(--nav-active)] text-[var(--nav-on-active-fg)]"
+                              : "text-[var(--nav-fg)]"
                           }`}
                         >
                           <span>{flag}</span>

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Production `build:deploy:full` orchestrator (single `next build` via `npm run build`).
+ * Production `build:deploy:full` orchestrator (single `next build` via `npm run build:compile`).
  * Logs wall-clock ms per blocking step for App Platform / CI visibility.
  *
  * Set `NN_TIMED_INCLUDE_NPM_PRUNE=1` to run `npm prune --omit=dev` as the final timed step
@@ -47,7 +47,7 @@ runStep("verify:bootstrap-probe-pathname", () => npmRun("verify:bootstrap-probe-
 runStep("validate-marketing-production-surface", () =>
   nodeScript(path.join("scripts", "validate-marketing-production-surface.mjs")),
 );
-runStep("npm_run_build", () => npmRun("build"));
+runStep("npm_run_build", () => npmRun("build:compile"));
 runStep("verify_standalone_artifact", () => npmRun("verify:standalone-artifact"));
 runStep("ensure_standalone_static", () => nodeScript(path.join("scripts", "ensure-standalone-static.mjs")));
 runStep("post_build_prune", () => nodeScript(path.join("scripts", "post-build-prune.mjs")));

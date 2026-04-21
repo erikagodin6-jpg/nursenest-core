@@ -269,7 +269,7 @@ test("ensure-standalone-static copies .next/static beside nested standalone serv
     assert.ok(fs.existsSync(destCss));
     assert.ok(fs.existsSync(destJs));
     assert.ok(fs.existsSync(destFont));
-    assert.match(result.stdout, /\[ensure-standalone-static\] synced/);
+    assert.match(result.stdout, /\[ensure-standalone-static\] copied/);
   } finally {
     fs.rmSync(tempRoot, { recursive: true, force: true });
   }
@@ -302,10 +302,19 @@ test("ensure-standalone-static copies .next/static beside both nested and top-le
     assert.equal(result.status, 0, result.stderr + result.stdout);
     const nestedCss = path.join(tempRoot, ".next", "standalone", "nursenest-core", ".next", "static", "css", "app.css");
     const topCss = path.join(tempRoot, ".next", "standalone", ".next", "static", "css", "app.css");
+    const topStaticDir = path.join(tempRoot, ".next", "standalone", ".next", "static");
     assert.ok(fs.existsSync(nestedCss));
     assert.ok(fs.existsSync(topCss));
-    const lines = result.stdout.trim().split("\n").filter((l) => l.includes("[ensure-standalone-static] synced"));
-    assert.equal(lines.length, 2);
+    const copied = (result.stdout.match(/\[ensure-standalone-static\] copied/g) || []).length;
+    const symlinked = (result.stdout.match(/\[ensure-standalone-static\] symlinked/g) || []).length;
+    if (process.platform === "win32") {
+      assert.equal(copied, 2);
+      assert.equal(symlinked, 0);
+    } else {
+      assert.equal(copied, 1);
+      assert.equal(symlinked, 1);
+      assert.ok(fs.lstatSync(topStaticDir).isSymbolicLink());
+    }
   } finally {
     fs.rmSync(tempRoot, { recursive: true, force: true });
   }
@@ -314,30 +323,25 @@ test("ensure-standalone-static copies .next/static beside both nested and top-le
 test("deploy scripts: build:deploy aliases full chain; postbuild helper has no next build", () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
   assert.deepEqual(pkg.cacheDirectories, ["node_modules", ".next/cache"]);
-  assert.equal(pkg.scripts.build.includes("next build"), true);
+  assert.equal(pkg.scripts.build, "node scripts/run-buildpack-build.mjs");
+  assert.equal(pkg.scripts["build:compile"].includes("next build"), true);
   assert.match(
-    pkg.scripts.build,
+    pkg.scripts["build:compile"],
     /NODE_OPTIONS=\$\{NODE_OPTIONS:-"--max-old-space-size=\$\{BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-3584\}"\}/,
   );
   assert.equal(pkg.scripts["verify:standalone-artifact"], "node scripts/verify-standalone-artifact.mjs");
   assert.equal(pkg.scripts["build:deploy"], "npm run build:deploy:full");
   assert.equal(pkg.scripts["build:deploy:app-platform"], "npm run build:deploy");
   assert.equal(pkg.scripts["build:deploy:postbuild"].includes("npm run build"), false);
-  assert.match(
-    pkg.scripts["build:deploy:full"],
-    /npm run build && npm run verify:standalone-artifact && node scripts\/ensure-standalone-static\.mjs/,
-  );
-  assert.match(
-    pkg.scripts["build:deploy:full"],
-    /ensure-standalone-static\.mjs && node scripts\/post-build-prune\.mjs$/,
-  );
+  assert.equal(pkg.scripts["build:deploy:full"], "node scripts/run-build-deploy-full.mjs");
   assert.equal(pkg.scripts.start, "node scripts/start-standalone.mjs");
   assert.match(pkg.scripts["ci:verify"], /node scripts\/ensure-standalone-static\.mjs/);
 });
 
 test("active DigitalOcean app spec builds before runtime, starts through npm run start, and routes readiness through /readyz", () => {
   const appSpec = fs.readFileSync(path.join(__dirname, "..", "..", ".do", "app-nursenest-core-next.yaml"), "utf8");
-  assert.match(appSpec, /build_command: npm run build:deploy && npm prune --omit=dev/);
+  assert.match(appSpec, /build_command: npm run build:deploy/);
+  assert.match(appSpec, /NN_TIMED_INCLUDE_NPM_PRUNE/);
   assert.match(appSpec, /run_command: npm run start/);
   assert.match(appSpec, /health_check:\n(?:.*\n)*?\s+http_path: \/readyz/);
   assert.match(appSpec, /liveness_health_check:\n(?:.*\n)*?\s+http_path: \/healthz/);

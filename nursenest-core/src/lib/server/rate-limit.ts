@@ -374,6 +374,111 @@ function json429AdminFixed(): NextResponse {
   );
 }
 
+/** Blog batch scheduler subtree — dedicated buckets per action (avoids one hot `ratelimit:admin:user:*` row + separates preview vs writes vs run). */
+export const ADMIN_BLOG_BATCH_SCHEDULE_API_PREFIX = "/api/admin/blog/batch-schedule";
+
+export type AdminBlogBatchRateLimitKind = "read" | "preview" | "write" | "run";
+
+const ADMIN_BLOG_BATCH_WINDOW_MS = 60_000;
+
+const ADMIN_BLOG_BATCH_MAX_USER: Record<AdminBlogBatchRateLimitKind, number> = {
+  read: 220,
+  preview: 90,
+  write: 48,
+  run: 22,
+};
+
+const ADMIN_BLOG_BATCH_MAX_IP_BASE: Record<AdminBlogBatchRateLimitKind, number> = {
+  read: 96,
+  preview: 36,
+  write: 32,
+  run: 18,
+};
+
+/**
+ * Classifies blog batch scheduling API traffic for dedicated rate limits (path + method only — no body read in proxy).
+ */
+export function adminBlogBatchRateLimitKind(pathname: string, method: string): AdminBlogBatchRateLimitKind | null {
+  const m = method.toUpperCase();
+  const p = ADMIN_BLOG_BATCH_SCHEDULE_API_PREFIX;
+  if (pathname !== p && !pathname.startsWith(`${p}/`)) return null;
+  if (pathname === `${p}/preview` && m === "POST") return "preview";
+  if (pathname === `${p}/run` && m === "POST") return "run";
+  if (pathname === p && m === "GET") return "read";
+  if (pathname === p && m === "POST") return "write";
+  if (pathname.startsWith(`${p}/`) && pathname !== `${p}/run` && pathname !== `${p}/preview`) {
+    if (m === "GET") return "read";
+    if (m === "PATCH") return "write";
+  }
+  return null;
+}
+
+function json429AdminBlogBatch(kind: AdminBlogBatchRateLimitKind): NextResponse {
+  const retry = 60;
+  return NextResponse.json(
+    {
+      error: "Too many requests",
+      code: "rate_limit_exceeded",
+      scope: "admin_blog_batch",
+      action: kind,
+      retryAfterSec: retry,
+    },
+    {
+      status: 429,
+      headers: {
+        "Retry-After": String(retry),
+        "Cache-Control": "no-store",
+        "X-NN-RateLimit-Scope": "admin_blog_batch",
+        "X-NN-RateLimit-Action": kind,
+      },
+    },
+  );
+}
+
+async function enforceDedicatedAdminBlogBatchRateLimit(
+  pathname: string,
+  method: string,
+  userId: string | null,
+  ipKey: string,
+): Promise<NextResponse | null> {
+  const blogKind = adminBlogBatchRateLimitKind(pathname, method);
+  if (blogKind == null) return null;
+
+  if (userId) {
+    const key = `ratelimit:admin:blog_batch:${blogKind}:user:${userId}`;
+    const { ok } = await checkRateLimitUnified(key, {
+      windowMs: ADMIN_BLOG_BATCH_WINDOW_MS,
+      max: ADMIN_BLOG_BATCH_MAX_USER[blogKind],
+    });
+    if (!ok) {
+      safeServerLog("security", "admin_blog_batch_rate_limit_exceeded", {
+        kind: "admin_blog_batch_user",
+        blogKind,
+        path: pathname.slice(0, 96),
+        ipHash: hashIp(ipKey),
+      });
+      return json429AdminBlogBatch(blogKind);
+    }
+    return null;
+  }
+
+  const key = `ratelimit:admin:blog_batch:${blogKind}:ip_unauth:${ipKey}`;
+  const { ok } = await checkRateLimitUnified(key, {
+    windowMs: ADMIN_BLOG_BATCH_WINDOW_MS,
+    max: tightenPublicCap(ADMIN_BLOG_BATCH_MAX_IP_BASE[blogKind]),
+  });
+  if (!ok) {
+    safeServerLog("security", "admin_blog_batch_rate_limit_exceeded", {
+      kind: "admin_blog_batch_ip",
+      blogKind,
+      path: pathname.slice(0, 96),
+      ipHash: hashIp(ipKey),
+    });
+    return json429AdminBlogBatch(blogKind);
+  }
+  return null;
+}
+
 /**
  * Returns a 429 response when over limit; otherwise `null` (caller continues).
  */
@@ -405,6 +510,12 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     null;
 
   if (isAdminApiRateLimitPath(pathname)) {
+    const blogLimited = await enforceDedicatedAdminBlogBatchRateLimit(pathname, method, userId, ipKey);
+    if (blogLimited) return blogLimited;
+    if (adminBlogBatchRateLimitKind(pathname, method) != null) {
+      return null;
+    }
+
     if (userId) {
       const key = `ratelimit:admin:user:${userId}`;
       const { ok } = await checkRateLimitUnified(key, {

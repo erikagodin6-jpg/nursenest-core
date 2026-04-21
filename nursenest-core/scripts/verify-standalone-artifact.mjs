@@ -56,10 +56,11 @@ export function resolveStandaloneServerPath(root = packageRoot) {
 }
 
 /**
- * Every `server.js` path present under `.next/standalone/**` needs its own
- * sibling `.next/static` (Next resolves hashed assets next to the server file).
- * Monorepo builds can emit both `standalone/nursenest-core/server.js` and
- * `standalone/server.js`; syncing only one copy manifests as `/_next/static/*` → HTML.
+ * Every `server.js` path present under `.next/standalone/**` needs a sibling
+ * `.next/static` (Next resolves hashed assets next to the server file). On Unix,
+ * `ensure-standalone-static.mjs` copies once and symlinks additional targets to avoid
+ * duplicating large trees. Monorepo builds can emit both `standalone/nursenest-core/server.js`
+ * and `standalone/server.js`; leaving one unpopulated manifests as `/_next/static/*` → HTML.
  */
 export function getStandaloneStaticSyncTargets(root = packageRoot) {
   return discoverStandaloneServerJsPaths(root).map((serverPath) => ({

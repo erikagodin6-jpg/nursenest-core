@@ -16,11 +16,10 @@
  * default; set `2`–`4` on larger CI runners / higher `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` to cut compile time.
  *
  * **Build / compile cache (DigitalOcean App Platform):** Next.js writes `.next/cache` during `next build`.
- * The Heroku Node buildpack (used by DO) saves the cache **after** `npm run build` and **before** App
- * Platform’s `build_command`. `package.json` → `cacheDirectories` includes `node_modules` and
- * `.next/cache` so warm webpack/Turbopack data can restore on the next deploy; `post-build-prune.mjs` still
- * removes `.next/cache` from the **deploy artifact** in `build_command` (after the cache snapshot). If the
- * cache is cleared (stack/Node/npm signature change or “Clear build cache”), Next logs “No build cache found”.
+ * The Heroku Node buildpack runs `npm run build` (see `scripts/run-buildpack-build.mjs` — on DO it skips a
+ * duplicate `next build` so compile runs once in `build_command` via `build:compile`). `cacheDirectories`
+ * includes `node_modules` and `.next/cache`; `post-build-prune.mjs` preserves `.next/cache` by default so
+ * incremental caches survive deploys (opt out with `NN_POST_BUILD_PRUNE_NEXT_CACHE=1`).
  * Remote cache (e.g. Vercel) remains opt-in when the team adopts a supported workflow for this Next version.
  */
 import { createRequire } from "module";
