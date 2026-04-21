@@ -4,17 +4,7 @@
  */
 
 import { ALLIED_HUB_CATEGORY_ORDER, ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
-import {
-  alliedHub,
-  HUB,
-  NP,
-  npNpQuestionsForRegion,
-  pnLessons,
-  pnQuestions,
-  rnLessons,
-  rnQuestions,
-  signupWithCallback,
-} from "@/lib/marketing/marketing-entry-routes";
+import { alliedHub, HUB, NP, npNpQuestionsForRegion, signupWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
 import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
 import type { MarketingPathwayMegaMenuKey } from "@/lib/navigation/marketing-mega-menu-active-prefixes";
@@ -79,7 +69,7 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
           key: "learn",
           heading: gl(),
           links: [
-            { key: "rn-lessons", label: ll(), href: rnLessons(region) },
+            { key: "rn-lessons", label: ll(), href: `${rnHub}/lessons` },
             { key: "rn-flashcards", label: lf(), href: HUB.flashcards },
           ],
         },
@@ -87,7 +77,7 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
           key: "practice",
           heading: gp(),
           links: [
-            { key: "rn-questions", label: lq(), href: rnQuestions(region) },
+            { key: "rn-questions", label: lq(), href: `${rnHub}/questions` },
             { key: "rn-readiness", label: lcat(), href: publicMarketingCatHrefForOffering(region, "rn") },
           ],
         },
@@ -109,7 +99,7 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
           key: "learn",
           heading: gl(),
           links: [
-            { key: "pn-lessons", label: ll(), href: pnLessons(region) },
+            { key: "pn-lessons", label: ll(), href: `${pnHub}/lessons` },
             { key: "pn-flashcards", label: lf(), href: HUB.flashcards },
           ],
         },
@@ -117,7 +107,7 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
           key: "practice",
           heading: gp(),
           links: [
-            { key: "pn-questions", label: lq(), href: pnQuestions(region) },
+            { key: "pn-questions", label: lq(), href: `${pnHub}/questions` },
             { key: "pn-readiness", label: lcat(), href: publicMarketingCatHrefForOffering(region, "pn") },
           ],
         },

@@ -88,8 +88,8 @@ export function getInMemoryRateLimitStoreSingleton(): RateLimitStore {
 }
 
 /**
- * Lazily constructs the Postgres-backed store. Returns `null` if dynamic import fails (missing Prisma, etc.) —
- * callers must **not** permanently fall back to memory in production without failing closed.
+ * Lazily constructs the Postgres-backed store. Returns `null` if dynamic import fails (missing Prisma, etc.).
+ * {@link checkRateLimitUnified} / {@link consumeRateLimitUnified} then fail open in production Node (see there).
  */
 export async function getPostgresRateLimitStore(): Promise<RateLimitStore | null> {
   if (postgresSingleton) return postgresSingleton;
@@ -107,5 +107,8 @@ let rateLimitPgUnavailableLogged = false;
 export function logRateLimitPgUnavailableOnce(): void {
   if (rateLimitPgUnavailableLogged) return;
   rateLimitPgUnavailableLogged = true;
-  safeServerLog("security", "rate_limit_unified_pg_unavailable", { action: "fail_closed" });
+  safeServerLog("security", "rate_limit_unified_pg_unavailable", {
+    action: "degraded_fail_open_checks",
+    hint: "check/consume return ok:true; meta reads return count:0 until Postgres store is reachable",
+  });
 }

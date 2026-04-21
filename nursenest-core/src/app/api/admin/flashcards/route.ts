@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ContentStatus } from "@prisma/client";
+import { ContentStatus, FlashcardItemKind, type Prisma } from "@prisma/client";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
 import { ADMIN_API_LIST_PAGE, parseBoundedPageSize, parseListPage } from "@/lib/api/api-pagination-limits";
+import {
+  correctAnswerLine,
+  validateExamMicroQuestionInput,
+  type ExamMicroQuestionPayload,
+} from "@/lib/flashcards/flashcard-exam-style";
 
 const createSchema = z.object({
   front: z.string().min(4),
@@ -15,6 +20,18 @@ const createSchema = z.object({
   examFamily: z.enum(["NCLEX_RN", "NCLEX_PN", "REX_PN", "NP", "ALLIED", "GENERIC"]).optional(),
   deckId: z.string().min(3).optional(),
   positionInDeck: z.number().int().min(0).optional(),
+  examItemKind: z.nativeEnum(FlashcardItemKind).optional(),
+  questionStem: z.string().min(8).optional(),
+  answerOptions: z
+    .array(z.object({ letter: z.string().min(1), text: z.string().min(2) }))
+    .min(3)
+    .max(4)
+    .optional(),
+  correctAnswer: z.string().min(1).optional(),
+  rationaleCorrect: z.string().min(8).optional(),
+  rationaleIncorrect: z
+    .array(z.object({ letter: z.string().min(1), rationale: z.string().min(4) }))
+    .optional(),
 });
 
 export async function GET(req: NextRequest) {
@@ -63,13 +80,85 @@ export async function POST(req: Request) {
   const parsed = createSchema.safeParse(await req.json());
   if (!parsed.success) return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
 
+  const d = parsed.data;
+  const examTouched =
+    d.examItemKind != null ||
+    d.questionStem != null ||
+    d.answerOptions != null ||
+    d.correctAnswer != null ||
+    d.rationaleCorrect != null ||
+    (d.rationaleIncorrect != null && d.rationaleIncorrect.length > 0);
+
+  let examPayload: ExamMicroQuestionPayload | null = null;
+  if (examTouched) {
+    if (
+      !d.examItemKind ||
+      !d.questionStem ||
+      !d.answerOptions ||
+      !d.correctAnswer ||
+      !d.rationaleCorrect ||
+      !d.rationaleIncorrect?.length
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "Exam-style cards require examItemKind, questionStem, answerOptions (3–4), correctAnswer, rationaleCorrect, and rationaleIncorrect for each distractor.",
+        },
+        { status: 400 },
+      );
+    }
+    const v = validateExamMicroQuestionInput({
+      examItemKind: d.examItemKind,
+      questionStem: d.questionStem,
+      answerOptions: d.answerOptions,
+      correctAnswer: d.correctAnswer,
+      rationaleCorrect: d.rationaleCorrect,
+      rationaleIncorrect: d.rationaleIncorrect,
+    });
+    if (!v.ok) {
+      return NextResponse.json({ error: v.error }, { status: 400 });
+    }
+    examPayload = v.payload;
+  }
+
   if (parsed.data.status === ContentStatus.PUBLISHED) {
-    if (parsed.data.front.trim().length < 4 || parsed.data.back.trim().length < 4) {
+    if (!examTouched && (parsed.data.front.trim().length < 4 || parsed.data.back.trim().length < 4)) {
       return NextResponse.json({ error: "Front/back too short to publish" }, { status: 400 });
     }
   }
 
-  const { deckId, positionInDeck, examFamily, ...cardFields } = parsed.data;
+  const {
+    deckId,
+    positionInDeck,
+    examFamily,
+    examItemKind: _ek,
+    questionStem: _qs,
+    answerOptions: _ao,
+    correctAnswer: _ca,
+    rationaleCorrect: _rc,
+    rationaleIncorrect: _ri,
+    ...restCard
+  } = parsed.data;
+  void _ek;
+  void _qs;
+  void _ao;
+  void _ca;
+  void _rc;
+  void _ri;
+
+  const front = examPayload ? examPayload.questionStem : restCard.front;
+  const back = examPayload ? correctAnswerLine(examPayload) : restCard.back;
+
+  const examCreateData = examPayload
+    ? {
+        examItemKind: examPayload.itemKind,
+        questionStem: examPayload.questionStem,
+        answerOptions: examPayload.answerOptions as unknown as Prisma.InputJsonValue,
+        correctAnswer: examPayload.correctLetter,
+        rationaleCorrect: examPayload.rationaleCorrect,
+        rationaleIncorrect: examPayload.rationaleIncorrect as unknown as Prisma.InputJsonValue,
+      }
+    : {};
 
   const card = await prisma.$transaction(async (tx) => {
     const nextPos =
@@ -80,7 +169,10 @@ export async function POST(req: Request) {
 
     const created = await tx.flashcard.create({
       data: {
-        ...cardFields,
+        ...restCard,
+        front,
+        back,
+        ...examCreateData,
         examFamily: examFamily ?? "GENERIC",
         deckId: deckId ?? null,
         positionInDeck: deckId ? nextPos : 0,

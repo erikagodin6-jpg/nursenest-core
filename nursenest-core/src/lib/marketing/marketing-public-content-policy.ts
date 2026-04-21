@@ -1,5 +1,5 @@
 /** Route grouping for revalidation + admin UX (not a security boundary). */
-export type MarketingPublicContentSurface = "home" | "pricing" | "exam_hub" | "registry";
+export type MarketingPublicContentSurface = "home" | "pricing" | "registry";
 
 export type MarketingPublicContentEditableKeyDef = {
   surface: MarketingPublicContentSurface;

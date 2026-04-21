@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import * as Sentry from "@sentry/nextjs";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { ProductErrorState } from "@/components/ui/product-error-state";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { captureClientExceptionIfEnabled } from "@/lib/observability/sentry-if-enabled";
 import { getErrorMessageDevLine, shouldShowErrorBoundaryDevDetail } from "@/lib/runtime/error-message";
 
 export default function LessonsError({
@@ -18,7 +18,7 @@ export default function LessonsError({
   const { t } = useMarketingI18n();
 
   useEffect(() => {
-    Sentry.captureException(error, { tags: { route: "learner_lessons_list_error", feature: "react_error_boundary" } });
+    captureClientExceptionIfEnabled(error, { tags: { route: "learner_lessons_list_error", feature: "react_error_boundary" } });
   }, [error]);
 
   const digest = error.digest;

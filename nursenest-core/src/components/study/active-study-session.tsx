@@ -15,12 +15,15 @@ import { ExamSessionProgressStrip } from "@/components/exam/exam-session-shell";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
 import { FlashcardStudyQuestionStack } from "@/components/flashcards/flashcard-study-question-stack";
+import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 
 export type ActiveStudyCard = {
   id: string;
   prompt: string;
   answer: string;
   explanation?: string;
+  /** NCLEX-style micro-question payload when the API serialized `examMicroQuestion`. */
+  examMicroQuestion?: ExamMicroQuestionPayload | null;
   topic?: string | null;
   subtopic?: string | null;
   sourceKey?: string | null;
@@ -65,7 +68,29 @@ type Props = {
   onSessionRestart?: () => void;
 };
 
+function examItemKindCaptionForCard(
+  exam: ExamMicroQuestionPayload | null | undefined,
+  t: (key: string, params?: Record<string, string | number | undefined>) => string,
+): string | null {
+  if (!exam) return null;
+  const labelKey: Record<string, string> = {
+    RECALL: "learner.flashcards.session.examItemKindRecall",
+    CLINICAL: "learner.flashcards.session.examItemKindClinical",
+    PRIORITY: "learner.flashcards.session.examItemKindPriority",
+    CONCEPT: "learner.flashcards.session.examItemKindConcept",
+  };
+  const lk = labelKey[String(exam.itemKind)] ?? "learner.flashcards.session.examItemKindConcept";
+  return t("learner.flashcards.session.examItemKindBadge", { label: t(lk) });
+}
+
 function buildClinicalPearl(card: ActiveStudyCard, emptyPearlMessage: string): string {
+  if (card.examMicroQuestion?.rationaleCorrect?.trim()) {
+    const firstSentence = card.examMicroQuestion.rationaleCorrect
+      .split(".")
+      .map((part) => part.trim())
+      .find(Boolean);
+    if (firstSentence) return firstSentence.endsWith(".") ? firstSentence : `${firstSentence}.`;
+  }
   if (card.explanation?.trim()) {
     const firstSentence = card.explanation
       .split(".")
@@ -666,6 +691,8 @@ export function ActiveStudySession({
                     ? `${current.topic ?? t("learner.flashcards.session.topicGeneral")}${current.subtopic ? ` · ${current.subtopic}` : ""}`
                     : null
                 }
+                examMicroQuestion={current.examMicroQuestion ?? null}
+                itemKindCaption={examItemKindCaptionForCard(current.examMicroQuestion, t)}
                 prompt={current.prompt}
                 answer={current.answer}
                 explanation={current.explanation}
@@ -678,6 +705,8 @@ export function ActiveStudySession({
                   answerHeading: t("learner.flashcards.session.correctAnswerHeading"),
                   rationaleHeading: t("learner.flashcards.session.rationaleBlockHeading"),
                   takeawayHeading: t("learner.flashcards.session.keyTakeawayHeading"),
+                  answerChoicesHeading: t("learner.flashcards.session.answerChoicesHeading"),
+                  distractorAnalysisHeading: t("learner.flashcards.session.rationaleStepWhyWrong"),
                   emptyPearlMessage: t("learner.flashcards.session.clinicalPearlMissing"),
                 }}
               />
@@ -822,6 +851,26 @@ export function ActiveStudySession({
               <FlashcardRichContent text={current.prompt} />
             </div>
           </div>
+          {current.examMicroQuestion ? (
+            <div className="mt-4 space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--theme-muted-text)]">
+                {t("learner.flashcards.session.answerChoicesHeading")}
+              </p>
+              <ul className="space-y-2" aria-label={t("learner.flashcards.session.answerChoicesHeading")}>
+                {current.examMicroQuestion.answerOptions.map((o) => (
+                  <li
+                    key={o.letter}
+                    className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_42%,var(--semantic-surface))] px-3 py-2.5 text-sm leading-snug text-[var(--semantic-text-primary)]"
+                  >
+                    <div className="flex gap-2">
+                      <span className="shrink-0 font-mono text-xs font-bold text-[var(--semantic-chart-2)]">{o.letter}.</span>
+                      <FlashcardRichContent text={o.text} className="min-w-0 flex-1 [&_p]:mb-1 [&_p:last-child]:mb-0" />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
           {current.topic || current.subtopic ? (
             <p className="mt-2 text-xs text-[var(--theme-muted-text)]">
               {current.topic ?? t("learner.flashcards.session.topicGeneral")}

@@ -17,9 +17,21 @@ import { freemiumLessonsExhausted, freemiumQuestionsExhausted } from "@/lib/conv
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
+import { resolveSubscribedQuestionBankPathways } from "@/lib/learner/tier-scoped-study-routes";
 
-export default async function QuestionBankPage() {
+type PageProps = { searchParams: Promise<{ pathwayId?: string | string[] }> };
+
+export default async function QuestionBankPage({ searchParams }: PageProps) {
   const { t } = await getLearnerMarketingBundle();
+  const sp = await searchParams;
+  const rawPid = sp.pathwayId;
+  const requestedPathwayId =
+    typeof rawPid === "string" && rawPid.trim().length > 2
+      ? rawPid.trim()
+      : Array.isArray(rawPid) && typeof rawPid[0] === "string" && rawPid[0].trim().length > 2
+        ? rawPid[0].trim()
+        : null;
+
   const session = await getProtectedRouteSession("(student).app.(learner).questions");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
@@ -45,18 +57,61 @@ export default async function QuestionBankPage() {
   if (userId && entitlement.hasAccess && isDatabaseUrlConfigured()) {
     try {
       const compatible = await listPathwaysCompatibleWithSubscription(entitlement);
-      pathwayOptions = compatible.map((p) => ({ id: p.id, label: p.shortName }));
-      for (const p of compatible) {
-        pathwayExamKeysByPathwayId[p.id] = [...p.contentExamKeys];
-        pathwayCountryByPathwayId[p.id] = String(p.countryCode);
-      }
       const u = await prisma.user.findUnique({
         where: { id: userId },
         select: { learnerPath: true },
       });
-      const lp = u?.learnerPath?.trim();
-      defaultPathwayId =
-        lp && compatible.some((pathway) => pathway.id === lp) ? lp : (compatible[0]?.id ?? null);
+      const lp = u?.learnerPath?.trim() ?? null;
+      const resolved = resolveSubscribedQuestionBankPathways({
+        requestedPathwayId,
+        compatible: compatible.map((p) => ({ id: p.id, shortName: p.shortName })),
+        learnerPath: lp,
+      });
+
+      if (resolved.state === "invalid_requested") {
+        return (
+          <PremiumEmptyState
+            headline={t("learner.questions.title")}
+            body="The exam track in the address is not included on your current plan. Use a hub link for your track, or choose an exam in study preferences."
+            tone="default"
+            primaryCta={{
+              label: t("learner.dashboard.openAccountHub"),
+              href: "/app/account/study-preferences",
+              variant: "primary",
+            }}
+            secondaryCtas={[{ label: t("nav.lessons"), href: "/app/lessons", variant: "secondary" }]}
+            visualLayout="stack"
+            ctaLayout="stack"
+          />
+        );
+      }
+
+      if (resolved.state === "no_pathway_context") {
+        return (
+          <PremiumEmptyState
+            headline={t("learner.questions.title")}
+            body="Choose your exam track in study preferences so practice questions stay scoped to one pathway."
+            tone="default"
+            primaryCta={{
+              label: t("learner.dashboard.openAccountHub"),
+              href: "/app/account/study-preferences",
+              variant: "primary",
+            }}
+            secondaryCtas={[{ label: t("nav.lessons"), href: "/app/lessons", variant: "secondary" }]}
+            visualLayout="stack"
+            ctaLayout="stack"
+          />
+        );
+      }
+
+      const scopedIds = new Set(resolved.pathwayOptions.map((p) => p.id));
+      const scopedRows = compatible.filter((p) => scopedIds.has(p.id));
+      pathwayOptions = resolved.pathwayOptions.map((p) => ({ id: p.id, label: p.shortName }));
+      defaultPathwayId = resolved.defaultPathwayId;
+      for (const p of scopedRows) {
+        pathwayExamKeysByPathwayId[p.id] = [...p.contentExamKeys];
+        pathwayCountryByPathwayId[p.id] = String(p.countryCode);
+      }
     } catch {
       /* optional */
     }

@@ -98,9 +98,11 @@ export async function loadLearnerPathwayNavMetadata(userId: string): Promise<Lea
     } else if (u.alliedProfessionKey) {
       pathwayShortLabel = "Allied";
       const alliedId = u.country === CountryCode.CA ? "ca-allied-core" : "us-allied-core";
+      pathwayId = alliedId;
       const alliedPath = getExamPathwayById(alliedId);
       pathwayHubHref = alliedPath ? learnerPathwayHubChromeHref(alliedPath) : "/us/allied/allied-health";
       pathwayContextBar = alliedPath ? formatPathwayContextBar(alliedPath) : "Allied • United States • Allied health";
+      examsLabel = "CAT Exams";
     }
   }
 

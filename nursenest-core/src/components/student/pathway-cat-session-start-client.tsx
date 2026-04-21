@@ -6,6 +6,7 @@ import type { PracticeTestPathwayClientShell, PracticeTestPathwayOption } from "
 import { catPathwayRegionalExamLine, catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { publicCopyForReadinessConfig, readinessConfigForPathway } from "@/lib/exam-pathways/pathway-readiness-config";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import type { CatPracticeReadinessResult } from "@/lib/practice-tests/cat-practice-readiness";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import { ExamPreExamCustomizeModal } from "@/components/exam/exam-study-theme-modal";
@@ -353,7 +354,12 @@ export function PathwayCatSessionStartClient({
               </Link>
             </li>
             <li>
-              <Link className="font-medium text-primary underline" href="/app/questions">
+              <Link
+                className="font-medium text-primary underline"
+                href={
+                  normalizedPathwayId ? pathwayHubAppQuestionsHref(normalizedPathwayId) : "/app/account/study-preferences"
+                }
+              >
                 App question bank
               </Link>
             </li>

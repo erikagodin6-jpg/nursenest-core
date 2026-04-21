@@ -9,20 +9,29 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const dynamic = "force-dynamic";
 
-const FOR_INSTITUTIONS_META_KEYS = ["pages.forInstitutions.title", "pages.forInstitutions.description"] as const;
+const FOR_INSTITUTIONS_META_KEYS = [
+  "pages.forInstitutions.forNursingSchoolsAndPrograms",
+  "pages.forInstitutions.institutionalLicensingForNursingEducation",
+  /** Fallbacks when legacy keys are absent from a shard. */
+  "pages.forInstitutions.title",
+  "pages.forInstitutions.description",
+] as const;
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {
       const m = await loadMarketingMetadataMessages(DEFAULT_MARKETING_LOCALE, [...FOR_INSTITUTIONS_META_KEYS]);
       const alt = marketingAlternatesSharedPage(DEFAULT_MARKETING_LOCALE, "/for-institutions");
+      const title = m["pages.forInstitutions.forNursingSchoolsAndPrograms"]?.trim() || m["pages.forInstitutions.title"]!;
+      const description =
+        m["pages.forInstitutions.institutionalLicensingForNursingEducation"]?.trim() || m["pages.forInstitutions.description"]!;
       return {
-        title: m["pages.forInstitutions.title"]!,
-        description: m["pages.forInstitutions.description"]!,
+        title,
+        description,
         alternates: { canonical: alt.canonical, languages: alt.languages },
         openGraph: {
-          title: m["pages.forInstitutions.title"]!,
-          description: m["pages.forInstitutions.description"]!,
+          title,
+          description,
           url: alt.canonical,
           type: "website",
         },

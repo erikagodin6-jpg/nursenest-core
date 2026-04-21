@@ -102,7 +102,8 @@ function marketingPricingPayloadHasRenderablePlans(p: PricingOptionsPayload): bo
   );
 }
 
-type Segment = "prenursing" | "newgrad" | "rn" | "pn" | "np" | "allied";
+/** Paid exam tracks only — pre-nursing is free and lives under `/pre-nursing`, not on `/pricing`. */
+type Segment = "newgrad" | "rn" | "pn" | "np" | "allied";
 
 function isRenderablePlanRow(row: NursingPlanRow | AlliedPlanRow): boolean {
   return Boolean(
@@ -119,7 +120,6 @@ type CheckoutRequestError = Error & {
 
 function segmentToTier(segment: Segment, isUS?: boolean): TierCode {
   switch (segment) {
-    case "prenursing": return "PRE_NURSING";
     case "newgrad": return "NEW_GRAD";
     // "pn" covers both Canada RPN and US LVN_LPN — resolve by region
     case "pn": return isUS ? "LVN_LPN" : "RPN";
@@ -132,7 +132,8 @@ function segmentToTier(segment: Segment, isUS?: boolean): TierCode {
 
 function tierToSegment(tier: TierCode, isUS?: boolean): Segment {
   switch (tier) {
-    case "PRE_NURSING": return "prenursing";
+    /** Not listed on pricing; avoid impossible UI state if URL ever references this tier. */
+    case "PRE_NURSING": return "rn";
     case "NEW_GRAD": return "newgrad";
     case "LVN_LPN":
     case "RPN": return "pn";
@@ -399,7 +400,6 @@ export function PricingPageClient({
   const isUS = region === "US";
   const segmentLabels: Record<Segment, string> = useMemo(
     () => ({
-      prenursing: "Pre-Nursing",
       newgrad: "New Grad",
       rn: "RN / NCLEX-RN",
       pn: `${getNursingRoleLabel({ country: region, role: "PN" })} / ${getExamLabel({ country: region, role: "PN" })}`,
@@ -656,10 +656,6 @@ export function PricingPageClient({
     (duration: BillingDuration) => {
       setCheckoutError(null);
       setCheckoutOpsHint(null);
-      if (segment === "prenursing") {
-        window.location.assign(localize("/pre-nursing"));
-        return;
-      }
       if (pricingCheckoutSoftGate && !naPathwayAcknowledged) {
         setCheckoutError(t("pages.pricing.globalContext.mustAckBeforeCheckout"));
         return;
@@ -685,7 +681,6 @@ export function PricingPageClient({
       pricingCheckoutSoftGate,
       naPathwayAcknowledged,
       redirectGuestToLoginForCheckout,
-      segment,
       selectedAlliedCareer,
       startCheckout,
       t,
@@ -709,7 +704,7 @@ export function PricingPageClient({
     void startCheckout(duration);
   }, [pendingCheckoutDuration, policiesAccepted, pricingCheckoutSoftGate, naPathwayAcknowledged, startCheckout, t]);
 
-  const SEGMENT_ORDER: Segment[] = ["prenursing", "newgrad", "rn", "pn", "np", "allied"];
+  const SEGMENT_ORDER: Segment[] = ["newgrad", "rn", "pn", "np", "allied"];
 
   useEffect(() => {
     if (checkoutIntentHandled || authStatus !== "authenticated") return;
@@ -733,7 +728,7 @@ export function PricingPageClient({
       return;
     }
 
-    const allowedTiers: TierCode[] = ["PRE_NURSING", "NEW_GRAD", "RPN", "LVN_LPN", "RN", "NP", "ALLIED"];
+    const allowedTiers: TierCode[] = ["NEW_GRAD", "RPN", "LVN_LPN", "RN", "NP", "ALLIED"];
     const allowedDurations: BillingDuration[] = ["monthly", "3-month", "6-month", "yearly"];
     if (!allowedTiers.includes(checkoutTier as TierCode) || !allowedDurations.includes(checkoutDuration as BillingDuration)) {
       return;
@@ -767,14 +762,10 @@ export function PricingPageClient({
       {/* ── Section 1: Hero ── */}
       <PricingHero
         studySystemHref={localize("/how-it-works")}
-        ctaLabel={segment === "prenursing" ? t("pages.pricing.freePreNursing.heroCta") : heroCtaLabel}
-        trialSubtext={segment === "prenursing" ? t("pages.pricing.freePreNursing.heroSub") : trialSubtext}
-        trialFinePrint={segment === "prenursing" ? t("pages.pricing.freePreNursing.heroFinePrint") : TRIAL_FINE_PRINT_COPY}
+        ctaLabel={heroCtaLabel}
+        trialSubtext={trialSubtext}
+        trialFinePrint={TRIAL_FINE_PRINT_COPY}
         pricesShownLine={pricingCurrencyLine}
-        primaryCtaHref={segment === "prenursing" ? localize("/pre-nursing") : undefined}
-        secondaryCtaHref={segment === "prenursing" ? "#pricing-plans-heading" : undefined}
-        secondaryLabel={segment === "prenursing" ? t("pages.pricing.freePreNursing.viewPaidPlans") : undefined}
-        compactFooter={segment === "prenursing"}
       />
 
       {showNorthAmericaStripeScopeNote ? (
@@ -1048,27 +1039,6 @@ export function PricingPageClient({
             );
           })}
         </div>
-        ) : null}
-
-        {isFreeNursingPricingTrack && plansLoaded && !loadError ? (
-          <div
-            data-testid="pricing-free-prenursing-panel"
-            className="mx-auto max-w-xl rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_12%,var(--color-card))] p-8 text-center shadow-[var(--elevation-rest)]"
-          >
-            <p className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-success)]">
-              {t("pages.pricing.freePreNursing.kicker")}
-            </p>
-            <h3 className="nn-marketing-h3 mt-2 text-balance">{t("pages.pricing.freePreNursing.panelTitle")}</h3>
-            <p className="nn-marketing-body-sm mx-auto mt-3 max-w-md text-muted-foreground">
-              {t("pages.pricing.freePreNursing.panelBody")}
-            </p>
-            <Link
-              href={localize("/pre-nursing")}
-              className={`${MARKETING_PRIMARY_CTA_CLASS} mt-6 inline-flex justify-center`}
-            >
-              {t("pages.pricing.freePreNursing.primaryCta")}
-            </Link>
-          </div>
         ) : null}
 
         {showConsentPrompt ? (

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import * as Sentry from "@sentry/nextjs";
 import { ProductErrorState } from "@/components/ui/product-error-state";
+import { captureClientExceptionIfEnabled } from "@/lib/observability/sentry-if-enabled";
 import { getErrorMessageDevLine, shouldShowErrorBoundaryDevDetail } from "@/lib/runtime/error-message";
 
 export default function AdminError({
@@ -13,7 +13,7 @@ export default function AdminError({
   reset: () => void;
 }) {
   useEffect(() => {
-    Sentry.captureException(error, { tags: { route: "admin_error", feature: "react_error_boundary" } });
+    captureClientExceptionIfEnabled(error, { tags: { route: "admin_error", feature: "react_error_boundary" } });
   }, [error]);
 
   const digest = error.digest;

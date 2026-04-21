@@ -18,6 +18,9 @@ function legacyMarketingExactRoutesTable(): Record<string, string> {
     "/institutional-pricing": "/for-institutions",
     "/pricing/institutional": "/for-institutions",
     "/for-schools": "/for-institutions",
+    /** Alternate marketing paths → canonical institutional page. */
+    "/institutions": "/for-institutions",
+    "/schools": "/for-institutions",
     /** Public lesson index (exam-scoped hubs); avoid sending “exam prep” intent to pricing. */
     "/exam-prep": "/lessons",
     "/register": "/signup",
@@ -63,6 +66,8 @@ function legacyMarketingExactRoutesTable(): Record<string, string> {
     "/new-graduate-support": `${origin}/new-graduate-support`,
     "/healthcare-careers": `${origin}/healthcare-careers`,
     "/blog": "/blog",
+    /** Legacy alternate path — canonical public Terms route is `/terms`. */
+    "/terms-of-service": "/terms",
     "/case-studies": "/case-studies",
     "/paramedic": `${origin}/allied-health/paramedic`,
     "/rrt": `${origin}/allied-health/rrt`,

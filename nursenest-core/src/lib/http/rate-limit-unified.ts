@@ -4,10 +4,11 @@
  * - **Active store:** {@link getPostgresRateLimitStore} when {@link shouldUsePostgresRateLimitStore}; otherwise
  *   {@link getInMemoryRateLimitStoreSingleton} (dev/tests/Edge).
  * - **Edge runtime:** Prisma unavailable — in-memory only (per region/instance). App `proxy.ts` defaults to **Node** in Next.js 16+, so production global API limits use Postgres.
- * - **Production Node with Postgres:** if the shared store throws (DB down, migration missing, etc.),
- *   we **fail closed** (`ok: false` → callers typically map to HTTP 429). We do **not** fall back to
- *   in-memory there — that would diverge per instance. Non-production still falls back to in-memory
- *   so local dev keeps working when Postgres is stopped.
+ * - **Production Node when Postgres is unavailable or errors:** we **fail open** (`ok: true`) for
+ *   {@link checkRateLimitUnified} / {@link consumeRateLimitUnified} so auth, checkout, and admin flows are
+ *   not falsely 429’d when the limiter store is degraded. Abuse paths still have route-level and
+ *   application guards (credentials combo RL, login lockout, `requireAdmin`, etc.). Meta reads return
+ *   `count: 0` so abuse-strike tightening does not punish everyone when the store is down.
  *
  * @see RateLimitStore — abstraction for future Redis/KV backends
  */
@@ -39,7 +40,11 @@ export async function checkRateLimitUnified(
   if (!pg) {
     if (process.env.NODE_ENV === "production") {
       logRateLimitPgUnavailableOnce();
-      return { ok: false, remaining: 0 };
+      safeServerLog("security", "rate_limit_unified_store_degraded", {
+        action: "check_fail_open",
+        keyPrefix: key.slice(0, 64),
+      });
+      return { ok: true, remaining: opts.max };
     }
     return getInMemoryRateLimitStoreSingleton().check(key, opts);
   }
@@ -48,7 +53,11 @@ export async function checkRateLimitUnified(
   } catch {
     if (process.env.NODE_ENV === "production") {
       logRateLimitPgUnavailableOnce();
-      return { ok: false, remaining: 0 };
+      safeServerLog("security", "rate_limit_unified_store_degraded", {
+        action: "check_throw_fail_open",
+        keyPrefix: key.slice(0, 64),
+      });
+      return { ok: true, remaining: opts.max };
     }
     return getInMemoryRateLimitStoreSingleton().check(key, opts);
   }
@@ -56,8 +65,8 @@ export async function checkRateLimitUnified(
 
 /**
  * Read current window usage for `key` without mutating. Used for distributed abuse metadata (strike counts).
- * When Postgres is required but unavailable in production, returns **fail-closed** `count: opts.max` so callers
- * can treat anonymous caps as fully tightened.
+ * When Postgres is unavailable in production, returns `count: 0` (fail-open) so anonymous caps are not
+ * globally tightened for every visitor during store outages.
  */
 export async function readRateLimitWindowCountUnified(
   key: string,
@@ -71,10 +80,10 @@ export async function readRateLimitWindowCountUnified(
     if (process.env.NODE_ENV === "production") {
       logRateLimitPgUnavailableOnce();
       safeServerLog("security", "rate_limit_meta_read_degraded", {
-        action: "fail_closed_count_max",
+        action: "fail_open_count_zero",
         keyPrefix: key.slice(0, 48),
       });
-      return { count: opts.max };
+      return { count: 0 };
     }
     return { count: peekRateLimitWindow(key, opts).count };
   }
@@ -85,10 +94,10 @@ export async function readRateLimitWindowCountUnified(
     if (process.env.NODE_ENV === "production") {
       logRateLimitPgUnavailableOnce();
       safeServerLog("security", "rate_limit_meta_read_degraded", {
-        action: "fail_closed_count_max",
+        action: "fail_open_count_zero",
         keyPrefix: key.slice(0, 48),
       });
-      return { count: opts.max };
+      return { count: 0 };
     }
     return { count: peekRateLimitWindow(key, opts).count };
   }
@@ -106,7 +115,11 @@ export async function consumeRateLimitUnified(
   if (!pg) {
     if (process.env.NODE_ENV === "production") {
       logRateLimitPgUnavailableOnce();
-      return { ok: false, remaining: 0 };
+      safeServerLog("security", "rate_limit_unified_store_degraded", {
+        action: "consume_fail_open",
+        keyPrefix: key.slice(0, 64),
+      });
+      return { ok: true, remaining: opts.max };
     }
     return getInMemoryRateLimitStoreSingleton().consume(key, cost, opts);
   }
@@ -115,7 +128,11 @@ export async function consumeRateLimitUnified(
   } catch {
     if (process.env.NODE_ENV === "production") {
       logRateLimitPgUnavailableOnce();
-      return { ok: false, remaining: 0 };
+      safeServerLog("security", "rate_limit_unified_store_degraded", {
+        action: "consume_throw_fail_open",
+        keyPrefix: key.slice(0, 64),
+      });
+      return { ok: true, remaining: opts.max };
     }
     return getInMemoryRateLimitStoreSingleton().consume(key, cost, opts);
   }

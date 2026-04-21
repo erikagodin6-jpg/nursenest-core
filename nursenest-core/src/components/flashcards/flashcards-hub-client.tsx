@@ -11,6 +11,7 @@ import { FlashcardFilters, type FlashcardFiltersValue } from "@/components/study
 import type { DeckCardRow } from "@/components/study/flashcard-deck-card";
 import { countSavedStudyItems } from "@/lib/flashcards/study-session-persistence";
 import { formatTitleCase } from "@/lib/format/text-case";
+import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 
 type TagRow = { slug: string; name: string };
 
@@ -33,6 +34,8 @@ type BuilderCategory = { id: string; title: string; description?: string; count:
 type BuilderMode = "term_to_definition" | "definition_to_term" | "mixed";
 type BuilderSummary = {
   pathwayId: string | null;
+  topicCode?: string | null;
+  lessonId?: string | null;
   selectedCategories: string[];
   matchingCards: number;
   returnedCards: number;
@@ -65,8 +68,11 @@ const controlClass =
 
 export function FlashcardsHubClient({
   pathwayOptions = [],
+  practiceQuestionsHref,
 }: {
   pathwayOptions?: { id: string; label: string }[];
+  /** Server-resolved tier-scoped question bank entry; URL `pathwayId` overrides when present. */
+  practiceQuestionsHref: string;
 }) {
   const { t } = useMarketingI18n();
   const router = useRouter();
@@ -74,6 +80,13 @@ export function FlashcardsHubClient({
 
   // Derive filters from URL
   const pathwayId = urlParams.get("pathwayId") ?? "";
+  const quickQuestionBankHref =
+    pathwayId.trim().length > 0 ? pathwayHubAppQuestionsHref(pathwayId.trim()) : practiceQuestionsHref;
+  const weakAreasStudyHref =
+    pathwayId.trim().length > 0
+      ? `/app/flashcards/weak-areas?pathwayId=${encodeURIComponent(pathwayId.trim())}`
+      : "/app/flashcards/weak-areas";
+  const topicCodeFromUrl = urlParams.get("topicCode") ?? "";
   const examFamily = urlParams.get("examFamily") ?? "";
   const tagSlug = urlParams.get("tagSlug") ?? "";
   const q = urlParams.get("q") ?? "";
@@ -82,6 +95,7 @@ export function FlashcardsHubClient({
   const [filters, setFiltersState] = useState<FlashcardFiltersValue>({
     source: "",
     pathwayId,
+    topicCode: topicCodeFromUrl,
     examFamily,
     tagSlug,
     q,
@@ -92,11 +106,12 @@ export function FlashcardsHubClient({
     setFiltersState({
       source: "",
       pathwayId,
+      topicCode: topicCodeFromUrl,
       examFamily,
       tagSlug,
       q,
     });
-  }, [pathwayId, examFamily, tagSlug, q]);
+  }, [pathwayId, topicCodeFromUrl, examFamily, tagSlug, q]);
 
   const [decks, setDecks] = useState<ApiDeckRow[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
@@ -146,6 +161,7 @@ export function FlashcardsHubClient({
       try {
         const qs = new URLSearchParams({ page: String(p), pageSize: "18" });
         if (f.pathwayId) qs.set("pathwayId", f.pathwayId);
+        if (f.topicCode.trim()) qs.set("topicCode", f.topicCode.trim().toLowerCase());
         if (f.examFamily) qs.set("examFamily", f.examFamily);
         if (f.tagSlug) qs.set("tagSlug", f.tagSlug);
         const qTrim = f.q.trim();
@@ -191,7 +207,7 @@ export function FlashcardsHubClient({
     const p = Number(pageFromUrl);
     void load(Number.isFinite(p) && p >= 1 ? p : 1, filters);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [load, pageFromUrl, pathwayId, examFamily, tagSlug, q]);
+  }, [load, pageFromUrl, pathwayId, topicCodeFromUrl, examFamily, tagSlug, q]);
 
   const applyFilters = useCallback(
     (next: Partial<FlashcardFiltersValue>) => {
@@ -215,6 +231,7 @@ export function FlashcardsHubClient({
   const pushFiltersToUrl = (f: FlashcardFiltersValue) => {
     const qs = new URLSearchParams();
     if (f.pathwayId) qs.set("pathwayId", f.pathwayId);
+    if (f.topicCode.trim()) qs.set("topicCode", f.topicCode.trim().toLowerCase());
     if (f.examFamily) qs.set("examFamily", f.examFamily);
     if (f.tagSlug) qs.set("tagSlug", f.tagSlug);
     const qTrim = f.q.trim();
@@ -261,6 +278,7 @@ export function FlashcardsHubClient({
     try {
       const params = new URLSearchParams();
       if (filters.pathwayId) params.set("pathwayId", filters.pathwayId);
+      if (filters.topicCode.trim()) params.set("topicCode", filters.topicCode.trim().toLowerCase());
       if (selectedCategoryIds.length > 0) params.set("categories", selectedCategoryIds.join(","));
       params.set("cardLimit", cardLimit);
       params.set("mode", studyMode);
@@ -284,7 +302,7 @@ export function FlashcardsHubClient({
     } finally {
       setBuilderLoading(false);
     }
-  }, [filters.pathwayId, selectedCategoryIds, cardLimit, studyMode, shuffleOn, weakOnly, incorrectOnly]);
+  }, [filters.pathwayId, filters.topicCode, selectedCategoryIds, cardLimit, studyMode, shuffleOn, weakOnly, incorrectOnly]);
 
   useEffect(() => {
     void runBuilderSummary();
@@ -298,6 +316,7 @@ export function FlashcardsHubClient({
 
   const builderParams = new URLSearchParams();
   if (filters.pathwayId) builderParams.set("pathwayId", filters.pathwayId);
+  if (filters.topicCode.trim()) builderParams.set("topicCode", filters.topicCode.trim().toLowerCase());
   if (selectedCategoryIds.length > 0) builderParams.set("categories", selectedCategoryIds.join(","));
   builderParams.set("cardLimit", cardLimit);
   builderParams.set("mode", studyMode);
@@ -336,7 +355,7 @@ export function FlashcardsHubClient({
         {/* Quick study row — weak areas + coherent test-bank links (no marketing/SEO) */}
         <div className="mt-5 flex flex-wrap items-center gap-2">
           <Link
-            href="/app/flashcards/weak-areas"
+            href={weakAreasStudyHref}
             className="inline-flex rounded-full px-4 py-2.5 text-sm font-semibold shadow-sm transition hover:opacity-95"
             style={{
               background: "var(--role-cta, var(--semantic-brand))",
@@ -346,7 +365,7 @@ export function FlashcardsHubClient({
             {t("learner.flashcards.hub.weakAreasCta")}
           </Link>
           <Link
-            href="/app/questions"
+            href={quickQuestionBankHref}
             className="inline-flex rounded-full border-2 px-4 py-2.5 text-sm font-semibold transition hover:opacity-90"
             style={{
               borderColor: "color-mix(in srgb, var(--semantic-info) 35%, var(--semantic-border-soft))",
@@ -423,7 +442,7 @@ export function FlashcardsHubClient({
           </div>
           {totalDue > 0 ? (
             <Link
-              href="/app/flashcards/weak-areas"
+              href={weakAreasStudyHref}
               className="block w-full rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] py-3.5 text-center text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:opacity-95"
             >
               Review {totalDue} due now →
@@ -694,7 +713,7 @@ export function FlashcardsHubClient({
 
       <div className="mt-10 flex flex-wrap gap-2 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] pt-8">
         <Link
-          href="/app/questions"
+          href={quickQuestionBankHref}
           className="rounded-full border-2 border-[var(--semantic-border-soft)] px-4 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))]"
         >
           {t("learner.flashcards.hub.bottomQuestionBank")}

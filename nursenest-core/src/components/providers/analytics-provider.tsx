@@ -4,6 +4,7 @@ import { Suspense, useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { FrontendUxInit } from "@/components/observability/frontend-ux-init";
 import { touchUxNavigation } from "@/lib/observability/frontend-ux-tracking";
+import { addClientBreadcrumbIfEnabled } from "@/lib/observability/sentry-if-enabled";
 import { capturePosthogPageview, initPosthogClient, trackClientEvent } from "@/lib/observability/posthog-client";
 
 function PostHogPageViews() {
@@ -26,13 +27,7 @@ function PostHogPageViews() {
     void capturePosthogPageview(pathname, window.location.href).catch(() => {
       void trackClientEvent("page_view_fallback", { path: pathname });
     });
-    if (process.env.NEXT_PUBLIC_SENTRY_ENABLED === "true") {
-      void import("@sentry/nextjs")
-        .then((Sentry) => {
-          Sentry.addBreadcrumb({ category: "navigation", message: pathname, level: "info" });
-        })
-        .catch(() => {});
-    }
+    addClientBreadcrumbIfEnabled({ category: "navigation", message: pathname, level: "info" });
   }, [pathname, searchParams]);
 
   return null;

@@ -1,5 +1,6 @@
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { safeCallbackPath } from "@/lib/auth/safe-callback-path";
+import { parseTierScopedAppStudyCallbackPath } from "@/lib/learner/tier-scoped-study-routes";
 
 /**
  * Surfaces where resuming the same URL after auth would loop or leak API bodies into the document.
@@ -21,8 +22,12 @@ function isBlockedResumeStrippedPath(strippedPathname: string): boolean {
 
 /**
  * Resolves where to send the user after credentials auth on marketing surfaces.
- * - Honors explicit same-origin `callbackUrl` except `/app` and `/app/*` (learner shell), which are ignored
- *   when resolving from the query so arbitrary deep links cannot be injected via URL alone.
+ * - Honors explicit same-origin `callbackUrl` except generic `/app` and most `/app/*` learner-shell paths,
+ *   which are ignored when resolving from the query so arbitrary deep links cannot be injected via URL alone.
+ * - **Exception:** tier-scoped study entry points `/app/questions?pathwayId=…`,
+ *   `/app/practice-tests/start?pathwayId=…`, and `/app/flashcards?pathwayId=…` are honored when
+ *   `pathwayId` matches a safe slug pattern,
+ *   so marketing sign-in can return to the same exam track the learner chose on a hub.
  * - **Default (no valid `callbackUrl`):** localized marketing homepage (`/`, `/fr`, …). This avoids
  *   surprising post-login destinations and matches the product default after the 2026-04 hotfix.
  */
@@ -34,6 +39,10 @@ export function resolveMarketingAuthRedirectTarget(
   const fromQuery = safeCallbackPath(searchParams.get("callbackUrl"), { rejectLearnerAppShell: true });
   if (fromQuery) {
     return fromQuery;
+  }
+  const tierScoped = parseTierScopedAppStudyCallbackPath(searchParams.get("callbackUrl"));
+  if (tierScoped) {
+    return tierScoped;
   }
   return postLoginMarketingHomePath(locale);
 }

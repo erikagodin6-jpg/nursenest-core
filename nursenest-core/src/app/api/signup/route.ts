@@ -11,6 +11,7 @@ import { prisma } from "@/lib/db";
 import { JSON_BODY_SIGNUP, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { tightenPublicCap } from "@/lib/config/rate-limit-tightening";
 import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
+import { getTrustedClientIp } from "@/lib/http/client-ip";
 import { API_SIGNUP_PER_IP_RATE_LIMIT } from "@/lib/server/rate-limit";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { productEvent } from "@/lib/observability/product-events";
@@ -31,14 +32,6 @@ function signupStructuredFailed(req: Request, errorClass: string, severity: "war
     errorClass,
     message: `signup failed: ${errorClass}`,
   });
-}
-
-function clientIp(req: Request): string {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    req.headers.get("x-real-ip") ??
-    "unknown"
-  );
 }
 
 const emptyToUndef = (v: unknown) => (v === "" || v === null ? undefined : v);
@@ -65,7 +58,7 @@ const schema = z.object({
 export async function POST(req: Request) {
   return runWithApiTelemetry(req, "POST /api/signup", "auth", async () => {
   setSentryServerContext({ route: "/api/signup", feature: SERVER_FEATURE.signup });
-  const ip = clientIp(req);
+  const ip = getTrustedClientIp(req);
   const rl = await checkRateLimitUnified(API_SIGNUP_PER_IP_RATE_LIMIT.rateLimitKeyForIp(ip), {
     windowMs: API_SIGNUP_PER_IP_RATE_LIMIT.windowMs,
     max: tightenPublicCap(API_SIGNUP_PER_IP_RATE_LIMIT.max),

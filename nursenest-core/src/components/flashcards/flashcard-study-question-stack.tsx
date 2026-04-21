@@ -2,10 +2,15 @@
 
 import { CheckCircle2, BookOpen, Lightbulb } from "lucide-react";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
+import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 
 export type FlashcardStudyQuestionStackProps = {
   sessionModeLabel: string;
   topicLine: string | null;
+  /** When set, stem shows as an NCLEX-style micro-question with A–D choices before reveal. */
+  examMicroQuestion?: ExamMicroQuestionPayload | null;
+  /** Short badge (e.g. “Item focus: Clinical judgment”). */
+  itemKindCaption?: string | null;
   prompt: string;
   answer: string;
   explanation: string | null | undefined;
@@ -18,6 +23,8 @@ export type FlashcardStudyQuestionStackProps = {
     answerHeading: string;
     rationaleHeading: string;
     takeawayHeading: string;
+    answerChoicesHeading: string;
+    distractorAnalysisHeading: string;
     /** Suppress empty-state pearl text in the takeaway block */
     emptyPearlMessage: string;
   };
@@ -30,6 +37,8 @@ export type FlashcardStudyQuestionStackProps = {
 export function FlashcardStudyQuestionStack({
   sessionModeLabel,
   topicLine,
+  examMicroQuestion = null,
+  itemKindCaption = null,
   prompt,
   answer,
   explanation,
@@ -38,7 +47,8 @@ export function FlashcardStudyQuestionStack({
   onReveal,
   labels,
 }: FlashcardStudyQuestionStackProps) {
-  const exp = explanation?.trim() ?? "";
+  const exam = examMicroQuestion;
+  const exp = exam ? exam.rationaleCorrect.trim() : explanation?.trim() ?? "";
   const pearlTrim = pearl.trim();
   const missing = labels.emptyPearlMessage.trim();
   /** When a full rationale exists, it carries the teaching — avoid repeating a “pearl” excerpt. */
@@ -56,9 +66,38 @@ export function FlashcardStudyQuestionStack({
         {topicLine ? (
           <p className="mb-3 text-xs font-medium text-[var(--semantic-text-secondary)]">{topicLine}</p>
         ) : null}
+        {itemKindCaption ? (
+          <p className="mb-3 inline-flex max-w-full rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_34%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+            {itemKindCaption}
+          </p>
+        ) : null}
         <div className="nn-question-stem-wrap">
           <FlashcardRichContent text={prompt} />
         </div>
+
+        {exam ? (
+          <div className="mt-5 space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">
+              {labels.answerChoicesHeading}
+            </p>
+            <ul className="space-y-2" aria-label={labels.answerChoicesHeading}>
+              {exam.answerOptions.map((o) => (
+                <li
+                  key={o.letter}
+                  className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_42%,var(--semantic-surface))] px-3 py-2.5 text-sm leading-snug text-[var(--semantic-text-primary)]"
+                >
+                  <div className="flex gap-2">
+                    <span className="shrink-0 font-mono text-xs font-bold text-[var(--semantic-chart-2)]">{o.letter}.</span>
+                    <FlashcardRichContent
+                      text={o.text}
+                      className="min-w-0 flex-1 [&_p]:mb-1 [&_p:last-child]:mb-0"
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
 
         {!revealed ? (
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -102,6 +141,36 @@ export function FlashcardStudyQuestionStack({
                 text={exp}
                 className="!text-[var(--semantic-text-primary)] text-sm leading-relaxed [&_p]:mb-2 [&_p:last-child]:mb-0"
               />
+            </section>
+          ) : null}
+
+          {exam && revealed ? (
+            <section
+              className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-4)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_35%,var(--semantic-surface))] p-4 sm:p-5"
+              aria-labelledby="fc-distractor-heading"
+            >
+              <h3
+                className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]"
+                id="fc-distractor-heading"
+              >
+                {labels.distractorAnalysisHeading}
+              </h3>
+              <ul className="mt-3 space-y-3">
+                {exam.rationaleIncorrect.map((row) => (
+                  <li
+                    key={row.letter}
+                    className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-3 py-2.5 text-sm leading-relaxed text-[var(--semantic-text-primary)]"
+                  >
+                    <div className="flex gap-2">
+                      <span className="shrink-0 font-mono text-xs font-bold text-[var(--semantic-danger)]">{row.letter}.</span>
+                      <FlashcardRichContent
+                        text={row.rationale}
+                        className="min-w-0 flex-1 [&_p]:mb-1 [&_p:last-child]:mb-0"
+                      />
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </section>
           ) : null}
 

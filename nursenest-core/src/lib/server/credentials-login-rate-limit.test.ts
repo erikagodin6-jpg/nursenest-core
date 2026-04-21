@@ -4,6 +4,7 @@ import {
   checkRedisFixedWindowLimit,
   credentialsLoginBurstRedisKey,
   credentialsLoginComboRedisKey,
+  credentialsLoginComboRedisKeyStaff,
 } from "@/lib/server/credentials-login-rate-limit";
 
 test("credentials RL Redis key shapes are stable for operators and scripts", () => {
@@ -11,6 +12,10 @@ test("credentials RL Redis key shapes are stable for operators and scripts", () 
   assert.equal(
     credentialsLoginComboRedisKey("203.0.113.1", "abc123def456"),
     "ratelimit:auth:credentials_login:combo:ip:203.0.113.1:acct:abc123def456",
+  );
+  assert.equal(
+    credentialsLoginComboRedisKeyStaff("203.0.113.1", "abc123def456"),
+    "ratelimit:auth:credentials_login:combo:staff:ip:203.0.113.1:acct:abc123def456",
   );
 });
 

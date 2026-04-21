@@ -24,7 +24,8 @@ import {
 } from "@/lib/auth/normalize-login-identifier";
 import { getTrustedClientIp, rateLimitClientPartition } from "@/lib/http/client-ip";
 import { Prisma } from "@prisma/client";
-import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
+import { isLearnerEntitlementStaffBypassRole, isStaffRole } from "@/lib/auth/staff-roles";
+import { loadStaffRoleHintForLoginIdentifier } from "@/lib/auth/credentials-login-staff-hint";
 import { emitBillingAudit, prefixUserId } from "@/lib/observability/billing-entitlement-audit";
 import {
   getUserAccess,
@@ -256,19 +257,68 @@ export const authConfig: NextAuthConfig = {
           ipKeyPrefix: ipKey.slice(0, 48),
         });
 
+        if (!enteredEmailLower || !password) {
+          safeServerLog("auth", "login_failed", {
+            reason: "missing_fields",
+            ip: ip.slice(0, 64),
+          });
+          logAuthIncidentLine({
+            event: "credentials_login",
+            outcome: "failure",
+            requestReachedAuthorize: true,
+            enteredEmailRaw,
+            enteredEmailSanitized,
+            enteredEmailLower,
+            enteredEmailNormalized,
+            lookupStrategyTried: [],
+            exactEmailUserCount: 0,
+            normalizedEmailUserCount: 0,
+            trimmedEmailUserCount: 0,
+            usernameMatchCount: 0,
+            matchedUserId: null,
+            matchedUserEmail: null,
+            matchedUserNormalizedEmail: null,
+            hasPasswordHash: false,
+            accountLockedOut: false,
+            passwordCompareOk: false,
+            sessionIssued: false,
+            finalFailureReason: "unknown_auth_failure",
+            ip: ip.slice(0, 64),
+            authMode,
+          });
+          recordCredentialsLoginFailure("missing_fields", request);
+          return rejectCredentialsOrNull("missing_credentials");
+        }
+
+        /** Route failed credential attempts to staff-only Redis combo bucket when identifier matches a staff row. */
+        let staffCredentialsRl = false;
+        try {
+          const staffRoleHint = await loadStaffRoleHintForLoginIdentifier(enteredEmailLower, authMode);
+          staffCredentialsRl = staffRoleHint != null && isStaffRole(staffRoleHint);
+          if (staffCredentialsRl) {
+            traceCredentialsAuthorize("staff_credentials_rl_bucket", {
+              idHashPrefix: idHash ? idHash.slice(0, 8) : "",
+            });
+          }
+        } catch {
+          staffCredentialsRl = false;
+        }
+
         const bumpCredentialsFailureRateLimitOrReject = async (failureKind: string): Promise<void> => {
           if (!idHash) return;
           traceCredentialsAuthorize("redis_failure_increment", {
             failureKind,
             idHashPrefix: idHash.slice(0, 8),
             ipKeyPrefix: ipKey.slice(0, 48),
+            staffCredentialsRl,
           });
-          const r = await consumeCredentialsLoginFailure(ipKey, idHash);
+          const r = await consumeCredentialsLoginFailure(ipKey, idHash, { staffAccount: staffCredentialsRl });
           if (!r.ok) {
             safeServerLog("auth", "login_rate_limited", {
               ip: ip.slice(0, 64),
               idHashPresent: true,
-              source: "redis_failure_window",
+              source: staffCredentialsRl ? "redis_staff_combo_window" : "redis_failure_window",
+              credentialsRlBucket: staffCredentialsRl ? "staff" : "public",
             });
             captureAuthWarningSentry("login_rate_limited", {
               level: "warning",
@@ -303,39 +353,6 @@ export const authConfig: NextAuthConfig = {
             rejectCredentialsRateLimited();
           }
         };
-
-        if (!enteredEmailLower || !password) {
-          safeServerLog("auth", "login_failed", {
-            reason: "missing_fields",
-            ip: ip.slice(0, 64),
-          });
-          logAuthIncidentLine({
-            event: "credentials_login",
-            outcome: "failure",
-            requestReachedAuthorize: true,
-            enteredEmailRaw,
-            enteredEmailSanitized,
-            enteredEmailLower,
-            enteredEmailNormalized,
-            lookupStrategyTried: [],
-            exactEmailUserCount: 0,
-            normalizedEmailUserCount: 0,
-            trimmedEmailUserCount: 0,
-            usernameMatchCount: 0,
-            matchedUserId: null,
-            matchedUserEmail: null,
-            matchedUserNormalizedEmail: null,
-            hasPasswordHash: false,
-            accountLockedOut: false,
-            passwordCompareOk: false,
-            sessionIssued: false,
-            finalFailureReason: "unknown_auth_failure",
-            ip: ip.slice(0, 64),
-            authMode,
-          });
-          recordCredentialsLoginFailure("missing_fields", request);
-          return rejectCredentialsOrNull("missing_credentials");
-        }
 
         const lockStatus = await isLoginLocked(lockKey);
         if (lockStatus.locked) {

@@ -29,4 +29,6 @@ test("offeringIdForTier + learnerMarketingPathwayIdFromSession align with defaul
   const id = learnerMarketingPathwayIdFromSession({ tier: "RN", country: "US" });
   assert.equal(id, "us-rn-nclex-rn");
   assert.equal(learnerMarketingPathwayIdFromSession(null), null);
+  assert.equal(learnerMarketingPathwayIdFromSession({ tier: "PRE_NURSING", country: "US" }), null);
+  assert.equal(learnerMarketingPathwayIdFromSession({ tier: "NEW_GRAD", country: "US" }), null);
 });

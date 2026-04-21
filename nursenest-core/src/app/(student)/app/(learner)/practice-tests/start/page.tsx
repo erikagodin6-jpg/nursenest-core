@@ -13,6 +13,7 @@ import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types"
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -70,6 +71,33 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
   const compatiblePathways = await listPathwaysCompatibleWithSubscription(entitlement);
   const catEligiblePathways = compatiblePathways.filter(pathwayAllowsCatAdaptiveStart);
   const waitlistOnlyPathways = compatiblePathways.filter((p) => !pathwayAllowsCatAdaptiveStart(p));
+
+  if (
+    requestedPathwayId &&
+    !catEligiblePathways.some((p) => p.id === requestedPathwayId)
+  ) {
+    return (
+      <div>
+        <div className="mb-4">
+          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+        </div>
+        <PremiumEmptyState
+          headline="Adaptive CAT"
+          body="This exam track is not available for adaptive sessions on your current plan, or CAT is not enabled for that track yet. Open practice questions from your pathway hub, or pick an eligible track in study preferences."
+          tone="default"
+          primaryCta={{
+            label: t("learner.dashboard.openAccountHub"),
+            href: "/app/account/study-preferences",
+            variant: "primary",
+          }}
+          secondaryCtas={[{ label: t("nav.lessons"), href: "/app/lessons", variant: "secondary" }]}
+          visualLayout="stack"
+          ctaLayout="stack"
+        />
+      </div>
+    );
+  }
+
   /** When several CAT-eligible tracks exist, require an explicit choice (URL or dropdown) — no silent default. */
   const initialPathwayId =
     requestedPathwayId && catEligiblePathways.some((p) => p.id === requestedPathwayId)

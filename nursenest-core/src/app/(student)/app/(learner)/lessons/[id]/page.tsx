@@ -41,6 +41,7 @@ import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-less
 import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
 import { PathwayLessonPracticeBridge } from "@/components/lessons/pathway-lesson-practice-bridge";
 import { buildAppQuestionBankTopicDrillHref } from "@/components/lessons/pathway-lesson-link-practice";
+import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { buildAppPracticeTestsHubHref } from "@/lib/learner/study-loop-recommendations";
 import {
   getRelatedPathwayLessons,
@@ -325,6 +326,11 @@ export default async function LessonDetailPage({ params }: Props) {
         legacyContinue = null;
       }
     }
+    const legacyPathway = learnerPath?.trim() && getExamPathwayById(learnerPath.trim()) ? learnerPath.trim() : null;
+    const legacyQuestionBankHref = legacyPathway
+      ? pathwayHubAppQuestionsHref(legacyPathway)
+      : "/app/account/study-preferences";
+
     return (
       <div className="nn-lesson-page">
         <header className="nn-lesson-page-header">
@@ -359,7 +365,7 @@ export default async function LessonDetailPage({ params }: Props) {
           <LessonContinueStudyNextBlock bundle={legacyContinue} />
           <div className="mt-10 flex flex-wrap gap-3 border-t pt-6" style={{ borderColor: "var(--border-subtle)" }}>
             <Link
-              href="/app/questions"
+              href={legacyQuestionBankHref}
               className="inline-flex items-center rounded-xl px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90"
               style={{ background: "var(--semantic-brand)", color: "#fff" }}
             >

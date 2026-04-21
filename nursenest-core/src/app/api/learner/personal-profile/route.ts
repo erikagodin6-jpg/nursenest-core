@@ -6,6 +6,7 @@ import { prisma } from "@/lib/db";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
+import { getTrustedClientIp } from "@/lib/http/client-ip";
 import { loadPersonalProfilePayload } from "@/lib/learner/load-personal-profile";
 import {
   learnerPathIsAllowed,
@@ -32,14 +33,6 @@ const patchSchema = z
     dailyQuestionGoal: z.union([z.number().int().min(5).max(120), z.null()]).optional(),
   })
   .refine((o) => Object.keys(o).length > 0, { message: "At least one field is required." });
-
-function clientIp(req: Request): string {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    req.headers.get("x-real-ip") ??
-    "unknown"
-  );
-}
 
 export async function GET(req: Request) {
   return runWithApiTelemetry(req, "GET /api/learner/personal-profile", "content", async () => {
@@ -80,7 +73,7 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const ip = clientIp(req);
+  const ip = getTrustedClientIp(req);
   const rl = await checkRateLimitUnified(`personal-profile:${userId}:${ip}`, { windowMs: 60_000, max: 20 });
   if (!rl.ok) {
     return NextResponse.json({ error: "Too many updates. Try again shortly." }, { status: 429 });

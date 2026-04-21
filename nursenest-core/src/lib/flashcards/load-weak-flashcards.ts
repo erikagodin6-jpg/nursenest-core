@@ -5,6 +5,7 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { getWeakTopicTargetsForPractice, loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { confidenceFromSignal, type RecommendationConfidence } from "@/lib/learner/topic-linking";
 import { shuffleIdsStableSeed } from "@/lib/flashcards/study-queue";
+import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/flashcard-pathway-scope";
 
 const MAX_WEAK_TOPIC_TERMS = 8;
 const FETCH_CAP = 96;
@@ -24,10 +25,15 @@ export type WeakFlashcardRow = {
 
 /**
  * Pulls published cards in-scope for the learner whose category label overlaps weak topics from practice stats.
+ *
+ * @param pathwayId - Same semantics as custom-study: passed to {@link flashcardPathwayAccessOptionsFromPathwayId}
+ *   and then {@link flashcardAccessWhere} so tier/country/deck pathway gates match the learner's selected exam path
+ *   (intersection cap — no broader tier expansion beyond the pathway ladder).
  */
 export async function loadWeakAreaFlashcardsForUser(
   userId: string,
   entitlement: AccessScope,
+  pathwayId: string | null = null,
 ): Promise<{ weakTopics: string[]; topicCodes: string[]; cards: WeakFlashcardRow[] }> {
   const perf = await loadUnifiedTopicPerformance(userId, entitlement, MAX_WEAK_TOPIC_TERMS);
   const topics = perf.weakTopics.map((w) => w.topic.trim()).filter((t) => t.length > 1);
@@ -43,12 +49,15 @@ export async function loadWeakAreaFlashcardsForUser(
   const confidenceByCode = new Map(targets.map((t) => [t.topicCode, t.confidence]));
   const or: Prisma.FlashcardWhereInput[] = topicCodes.map((code) => ({ category: { topicCode: code } }));
 
+  const pathwayOpts = flashcardPathwayAccessOptionsFromPathwayId(pathwayId);
+  const accessWhere = flashcardAccessWhere(entitlement, pathwayOpts);
+
   const rows = await prisma.flashcard.findMany({
     where: {
       AND: [
         { status: ContentStatus.PUBLISHED, deckId: { not: null } },
         { deck: { status: ContentStatus.PUBLISHED } },
-        flashcardAccessWhere(entitlement),
+        accessWhere,
         { OR: or },
       ],
     },

@@ -1,75 +1,134 @@
-import Link from "next/link";
-import { resolveMarketingHref } from "@/lib/marketing/marketing-chrome-href";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import {
-  MARKETING_PRIMARY_CTA_COMPACT_CLASS,
-  MARKETING_SECONDARY_CTA_COMPACT_CLASS,
-} from "@/lib/theme/marketing-hero-pattern";
+  MarketingForInstitutionsLegacyClient,
+  type ForInstitutionsLegacyMessages,
+} from "@/components/marketing/marketing-for-institutions-legacy-client";
+
+const FOR_INSTITUTIONS_MESSAGE_KEYS = [
+  "pages.forInstitutions.forNursingSchoolsAndPrograms",
+  "pages.forInstitutions.eyebrow",
+  "pages.forInstitutions.heroTitle",
+  "pages.forInstitutions.heroLead",
+  "pages.forInstitutions.requestDemo",
+  "pages.forInstitutions.viewPricing",
+  "pages.forInstitutions.whyProgramsChooseNursenest",
+  "pages.forInstitutions.builtSpecificallyForCanadianAnd",
+  "pages.forInstitutions.feature1Title",
+  "pages.forInstitutions.feature1Desc",
+  "pages.forInstitutions.feature2Title",
+  "pages.forInstitutions.feature2Desc",
+  "pages.forInstitutions.feature3Title",
+  "pages.forInstitutions.feature3Desc",
+  "pages.forInstitutions.feature4Title",
+  "pages.forInstitutions.feature4Desc",
+  "pages.forInstitutions.feature5Title",
+  "pages.forInstitutions.feature5Desc",
+  "pages.forInstitutions.feature6Title",
+  "pages.forInstitutions.feature6Desc",
+  "pages.forInstitutions.whatStudentsGet",
+  "pages.forInstitutions.everythingTheyNeedToPrepare",
+  "pages.forInstitutions.studentBenefit1",
+  "pages.forInstitutions.studentBenefit2",
+  "pages.forInstitutions.studentBenefit3",
+  "pages.forInstitutions.studentBenefit4",
+  "pages.forInstitutions.studentBenefit5",
+  "pages.forInstitutions.studentBenefit6",
+  "pages.forInstitutions.studentBenefit7",
+  "pages.forInstitutions.studentBenefit8",
+  "pages.forInstitutions.institutionalPricing",
+  "pages.forInstitutions.volumePricingThatScalesWith",
+  "pages.forInstitutions.provenToImproveNclexPass",
+  "pages.forInstitutions.smallProgram",
+  "pages.forInstitutions.upTo50Seats",
+  "pages.forInstitutions.pricingSmallSeatLine",
+  "pages.forInstitutions.pricingSmallBillLine",
+  "pages.forInstitutions.fullPlatformAccess",
+  "pages.forInstitutions.instructorDashboard",
+  "pages.forInstitutions.studentProgressTracking",
+  "pages.forInstitutions.assignmentManagement",
+  "pages.forInstitutions.enrollmentCodes",
+  "pages.forInstitutions.mostPopular",
+  "pages.forInstitutions.mediumProgram",
+  "pages.forInstitutions.51150Seats",
+  "pages.forInstitutions.pricingMediumSeatLine",
+  "pages.forInstitutions.pricingMediumBillLine",
+  "pages.forInstitutions.everythingInSmall",
+  "pages.forInstitutions.institutionAnalytics",
+  "pages.forInstitutions.programBenchmarking",
+  "pages.forInstitutions.csvBulkEnrollment",
+  "pages.forInstitutions.certificateGeneration",
+  "pages.forInstitutions.largeProgram",
+  "pages.forInstitutions.151300Seats",
+  "pages.forInstitutions.pricingLargeSeatLine",
+  "pages.forInstitutions.pricingLargeBillLine",
+  "pages.forInstitutions.everythingInMedium",
+  "pages.forInstitutions.prioritySupport",
+  "pages.forInstitutions.customReporting",
+  "pages.forInstitutions.apiAccess",
+  "pages.forInstitutions.dedicatedAccountManager",
+  "pages.forInstitutions.lmsIntegrationCanvasBlackboard",
+  "pages.forInstitutions.enterprise",
+  "pages.forInstitutions.300Seats",
+  "pages.forInstitutions.custom",
+  "pages.forInstitutions.tailoredToYourProgram",
+  "pages.forInstitutions.everythingInLarge",
+  "pages.forInstitutions.unlimitedProgramSupport",
+  "pages.forInstitutions.customIntegrations",
+  "pages.forInstitutions.enterpriseAnalytics",
+  "pages.forInstitutions.dedicatedOnboarding",
+  "pages.forInstitutions.lmsIntegrationCanvasBlackboard2",
+  "pages.forInstitutions.contactSales",
+  "pages.forInstitutions.contactInstitutionalTeam",
+  "pages.forInstitutions.pricingAnnualNote",
+  "pages.forInstitutions.ctaPricing",
+  "pages.forInstitutions.ctaContact",
+  "pages.forInstitutions.whyNursingProgramsChooseNursenest",
+  "pages.forInstitutions.trustPoint1",
+  "pages.forInstitutions.trustPoint2",
+  "pages.forInstitutions.trustPoint3",
+  "pages.forInstitutions.trustPoint4",
+  "pages.forInstitutions.trustPoint5",
+  "pages.forInstitutions.getStarted",
+  "pages.forInstitutions.tellUsAboutYourProgram",
+  "pages.forInstitutions.thankYou",
+  "pages.forInstitutions.weHaveReceivedYourInquiry",
+  "pages.forInstitutions.leadSubmitSuccess",
+  "pages.forInstitutions.institutionName",
+  "pages.forInstitutions.programType",
+  "pages.forInstitutions.estimatedStudents",
+  "pages.forInstitutions.country",
+  "pages.forInstitutions.contactName",
+  "pages.forInstitutions.email",
+  "pages.forInstitutions.phone",
+  "pages.forInstitutions.messageOptional",
+  "pages.forInstitutions.rpnLpn",
+  "pages.forInstitutions.rnBscn",
+  "pages.forInstitutions.nursePractitioner",
+  "pages.forInstitutions.pswCna",
+  "pages.forInstitutions.multiplePrograms",
+  "pages.forInstitutions.canada",
+  "pages.forInstitutions.unitedStates",
+  "pages.forInstitutions.unitedKingdom",
+  "pages.forInstitutions.australia",
+  "pages.forInstitutions.other",
+  "pages.forInstitutions.yourFullName",
+  "pages.forInstitutions.youinstitutionedu",
+  "pages.forInstitutions.tellUsAboutYourProgram2",
+  "pages.forInstitutions.requestInformation",
+  "pages.forInstitutions.leadRequiredFields",
+  "pages.forInstitutions.leadSubmitError",
+] as const;
 
 export async function MarketingForInstitutionsPage({ locale }: { locale: string }) {
-  const m = await loadMarketingMessages(locale);
-  const contactHref = resolveMarketingHref("/contact");
+  const full = await loadMarketingMessages(locale);
+  const messages = {} as ForInstitutionsLegacyMessages;
+  for (const key of FOR_INSTITUTIONS_MESSAGE_KEYS) {
+    const v = full[key];
+    if (typeof v === "string" && v.length > 0) {
+      messages[key] = v;
+    }
+  }
   const pricingHref = withMarketingLocale(locale, "/pricing");
-
-  const offers = [
-    m["pages.forInstitutions.offer1"],
-    m["pages.forInstitutions.offer2"],
-    m["pages.forInstitutions.offer3"],
-    m["pages.forInstitutions.offer4"],
-    m["pages.forInstitutions.offer5"],
-  ];
-  const audiences = [
-    m["pages.forInstitutions.audience1"],
-    m["pages.forInstitutions.audience2"],
-    m["pages.forInstitutions.audience3"],
-  ];
-
-  return (
-    <main className="mx-auto w-full max-w-6xl px-6 py-12">
-      <p className="nn-marketing-label nn-marketing-label--accent">{m["pages.forInstitutions.eyebrow"]}</p>
-      <h1 className="nn-marketing-h1 mt-2">{m["pages.forInstitutions.h1"]}</h1>
-      <p className="nn-marketing-body-sm mt-3 max-w-2xl text-muted">{m["pages.forInstitutions.intro"]}</p>
-
-      <div className="mt-10 grid gap-8 lg:grid-cols-2">
-        <section className="nn-card p-6">
-          <h2 className="nn-marketing-h2">{m["pages.forInstitutions.sectionOffer"]}</h2>
-          <ul className="mt-4 list-inside list-disc space-y-2 text-sm text-muted">
-            {offers.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="nn-card p-6">
-          <h2 className="nn-marketing-h2">{m["pages.forInstitutions.sectionAudience"]}</h2>
-          <ul className="mt-4 list-inside list-disc space-y-2 text-sm text-muted">
-            {audiences.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
-          <div className="mt-6 border-t border-border pt-6">
-            <p className="nn-marketing-h4">{m["pages.pricing.trust.guaranteeTitle"]}</p>
-            <p className="mt-2 text-sm text-muted">{m["pages.pricing.trust.guaranteeBody"]}</p>
-          </div>
-        </section>
-      </div>
-
-      <section className="mt-10 rounded-2xl border border-[var(--accent-surface-b-border)] bg-[var(--accent-surface-b)] p-8">
-        <h2 className="nn-marketing-h2">{m["pages.forInstitutions.sectionNext"]}</h2>
-        <p className="mt-3 max-w-3xl text-muted">{m["pages.forInstitutions.nextBody"]}</p>
-        <div className="mt-6 flex flex-wrap gap-3">
-          <a href={contactHref} className={MARKETING_PRIMARY_CTA_COMPACT_CLASS} rel="noopener noreferrer">
-            {m["pages.forInstitutions.ctaContact"]}
-          </a>
-          <Link
-            href={pricingHref}
-            className={MARKETING_SECONDARY_CTA_COMPACT_CLASS}
-          >
-            {m["pages.forInstitutions.ctaPricing"]}
-          </Link>
-        </div>
-      </section>
-    </main>
-  );
+  return <MarketingForInstitutionsLegacyClient locale={locale} messages={messages} pricingHref={pricingHref} />;
 }

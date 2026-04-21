@@ -3,18 +3,19 @@
  * Sentry.init lives in `sentry.client.config.ts` (Session Replay + tracing).
  */
 import { isSentryClientRuntimeEnabled } from "@/lib/observability/sentry-flags";
+import { importSentryNextjs } from "@/lib/observability/sentry-nextjs-dynamic";
 
 if (isSentryClientRuntimeEnabled()) {
   void import("./sentry.client.config");
 }
 
-export function onRouterTransitionStart(
-  ...args: Parameters<typeof import("@sentry/nextjs").captureRouterTransitionStart>
-): void {
+/** Args forwarded to `captureRouterTransitionStart` — typed as `unknown[]` to avoid a compile-time `@sentry/nextjs` type probe. */
+export function onRouterTransitionStart(...args: unknown[]): void {
   if (!isSentryClientRuntimeEnabled()) return;
-  void import("@sentry/nextjs")
+  void importSentryNextjs()
     .then((Sentry) => {
-      Sentry.captureRouterTransitionStart(...args);
+      const fn = Sentry.captureRouterTransitionStart as (...a: unknown[]) => void;
+      fn(...args);
     })
     .catch(() => {});
 }

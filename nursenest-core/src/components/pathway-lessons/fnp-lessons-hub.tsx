@@ -43,7 +43,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-types";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
-import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 
 type Props = {
   pathway: ExamPathwayDefinition;
@@ -348,7 +348,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
             Case-based question hub
           </Link>
           <span aria-hidden>·</span>
-          <Link href="/app/questions" className="font-semibold text-primary">
+          <Link href={pathwayHubAppQuestionsHref(pathway.id)} className="font-semibold text-primary">
             App question bank
           </Link>
           <span aria-hidden>·</span>
@@ -447,7 +447,10 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
           <Link href={catHub} className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold">
             See how you perform across age groups
           </Link>
-          <Link href="/app/questions" className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold">
+          <Link
+            href={pathwayHubAppQuestionsHref(pathway.id)}
+            className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold"
+          >
             Open app question bank
           </Link>
         </div>

@@ -31,6 +31,10 @@ import type { GlobalRegionSlug, GlobalLocaleCode } from "@/lib/i18n/global-regio
 import { HUB, signupWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { useActiveNavContext } from "@/lib/navigation/use-active-nav-context";
 import {
+  marketingHeaderLearnPracticeFlowDestinations,
+  type MarketingHeaderFlowTier,
+} from "@/lib/navigation/canonical-destinations";
+import {
   MEGA_MENU_STRIPPED_ACTIVE_PREFIXES,
   type MarketingPathwayMegaMenuKey,
 } from "@/lib/navigation/marketing-mega-menu-active-prefixes";
@@ -326,18 +330,25 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
     ? (user.tier === "RPN" || user.tier === "LVN_LPN" ? "pn" : user.tier === "NP" ? "np" : user.tier === "ALLIED" ? "allied" : "rn")
     : "rn";
   const activeExam: string | null = null;
+  const marketingFlowDestinations = useMemo(() => {
+    const tier: MarketingHeaderFlowTier | null =
+      isMarketingEntitledLearner && user?.tier ? (user.tier as MarketingHeaderFlowTier) : null;
+    const country = (user?.country as "US" | "CA" | null) ?? null;
+    return marketingHeaderLearnPracticeFlowDestinations(region, { tier, country });
+  }, [isMarketingEntitledLearner, user?.tier, user?.country, region]);
+
   const marketingFlowLinks: HeaderNavLink[] = useMemo(
     () => [
       {
         key: "flow-learn",
-        href: HUB.examLessons,
-        matchBase: HUB.examLessons,
+        href: marketingFlowDestinations.learnHref,
+        matchBase: marketingFlowDestinations.learnMatchBase,
         label: formatTitleCase(t("nav.marketingFlow.learn"), locale),
       },
       {
         key: "flow-practice",
-        href: HUB.questionBank,
-        matchBase: HUB.questionBank,
+        href: marketingFlowDestinations.practiceHref,
+        matchBase: marketingFlowDestinations.practiceMatchBase,
         label: formatTitleCase(t("nav.marketingFlow.practice"), locale),
       },
       {
@@ -347,7 +358,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
         label: formatTitleCase(t("nav.marketingFlow.track"), locale),
       },
     ],
-    [t, locale],
+    [marketingFlowDestinations, t, locale],
   );
   const marketingMoreLinks: HeaderNavLink[] = useMemo(
     () => [

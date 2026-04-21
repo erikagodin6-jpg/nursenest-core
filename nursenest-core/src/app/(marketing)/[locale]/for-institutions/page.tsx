@@ -6,7 +6,12 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ locale: string }> };
 
-const FOR_INSTITUTIONS_META_KEYS = ["pages.forInstitutions.title", "pages.forInstitutions.description"] as const;
+const FOR_INSTITUTIONS_META_KEYS = [
+  "pages.forInstitutions.forNursingSchoolsAndPrograms",
+  "pages.forInstitutions.institutionalLicensingForNursingEducation",
+  "pages.forInstitutions.title",
+  "pages.forInstitutions.description",
+] as const;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -14,13 +19,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     async () => {
       const m = await loadMarketingMetadataMessages(locale, [...FOR_INSTITUTIONS_META_KEYS]);
       const alt = marketingAlternatesSharedPage(locale, "/for-institutions");
+      const title = m["pages.forInstitutions.forNursingSchoolsAndPrograms"]?.trim() || m["pages.forInstitutions.title"]!;
+      const description =
+        m["pages.forInstitutions.institutionalLicensingForNursingEducation"]?.trim() || m["pages.forInstitutions.description"]!;
       return {
-        title: m["pages.forInstitutions.title"]!,
-        description: m["pages.forInstitutions.description"]!,
+        title,
+        description,
         alternates: { canonical: alt.canonical, languages: alt.languages },
         openGraph: {
-          title: m["pages.forInstitutions.title"]!,
-          description: m["pages.forInstitutions.description"]!,
+          title,
+          description,
           url: alt.canonical,
           type: "website",
         },

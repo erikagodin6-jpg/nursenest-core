@@ -537,8 +537,10 @@ export function QuestionBankPracticeClient({
     if (pid) {
       if (validPathwayIdSet.size === 0 || validPathwayIdSet.has(pid)) {
         setPathwayIdFilter(pid);
+      } else if (pathwayOptions.length === 1) {
+        setPathwayIdFilter(pathwayOptions[0]!.id);
       } else {
-        setPathwayIdFilter(defaultPathwayId ?? null);
+        setPathwayIdFilter(null);
       }
     }
     if (pr === "random" || pr === "random_bank") setPreset("random_bank");
@@ -554,7 +556,7 @@ export function QuestionBankPracticeClient({
       setExamShell(false);
       setExamShowExplanation(true);
     }
-  }, [defaultPathwayId, searchParams, validPathwayIdSet]);
+  }, [defaultPathwayId, searchParams, validPathwayIdSet, pathwayOptions]);
 
   useEffect(() => {
     if (phase !== "ready") return;

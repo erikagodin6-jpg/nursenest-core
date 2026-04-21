@@ -1,21 +1,20 @@
+import { deriveTrustedClientIp } from "@/lib/http/client-ip-derive";
+
 /**
- * Best-effort client IP for rate limiting behind proxies (Vercel, Cloudflare, nginx).
+ * Best-effort client IP for rate limiting behind proxies (Vercel, Cloudflare, DigitalOcean, nginx).
  * Not a security boundary; treat as abuse-signal only.
  */
 export function getTrustedClientIp(req: { headers: Headers }): string {
-  const forwarded = req.headers.get("x-forwarded-for");
-  if (forwarded) {
-    const first = forwarded.split(",")[0]?.trim();
-    if (first) return first;
-  }
-  const real = req.headers.get("x-real-ip")?.trim();
-  if (real) return real;
-  const cf = req.headers.get("cf-connecting-ip")?.trim();
-  if (cf) return cf;
-  const trueClient = req.headers.get("true-client-ip")?.trim();
-  if (trueClient) return trueClient;
-  return "unknown";
+  return deriveTrustedClientIp(req).ip;
 }
+
+export {
+  deriveTrustedClientIp,
+  isNonRoutableOrPrivateIpv4,
+  pickClientIpFromXForwardedFor,
+  type TrustedClientIpDerivation,
+  type TrustedClientIpSource,
+} from "@/lib/http/client-ip-derive";
 
 /**
  * When {@link getTrustedClientIp} is `unknown`, every client would otherwise share one global bucket

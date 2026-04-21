@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { FlashcardWeakStudyClient } from "@/components/flashcards/flashcard-weak-study-client";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
@@ -27,5 +28,15 @@ export default async function FlashcardWeakAreasPage() {
     );
   }
 
-  return <FlashcardWeakStudyClient userId={userId} userLabel={userLabel} protectionFlags={protectionFlags} />;
+  return (
+    <Suspense
+      fallback={
+        <div className="mx-auto max-w-lg px-4 py-16 text-center text-sm text-[var(--theme-muted-text)]">
+          Loading weak-area study…
+        </div>
+      }
+    >
+      <FlashcardWeakStudyClient userId={userId} userLabel={userLabel} protectionFlags={protectionFlags} />
+    </Suspense>
+  );
 }

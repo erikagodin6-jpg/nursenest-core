@@ -32,12 +32,26 @@ function credentialsLoginComboMax(): number {
   return parseEnvPositiveInt("NN_CREDENTIALS_RL_COMBO_MAX", 80);
 }
 
+/** Staff/admin accounts: separate Redis key + higher ceiling — not shared with public learner combo buckets. */
+function credentialsLoginComboMaxStaff(): number {
+  if (process.env.NODE_ENV !== "production") {
+    return parseEnvPositiveInt("NN_CREDENTIALS_RL_STAFF_COMBO_MAX", 480);
+  }
+  return parseEnvPositiveInt("NN_CREDENTIALS_RL_STAFF_COMBO_MAX", 480);
+}
+
 export function credentialsLoginBurstRedisKey(ipKey: string): string {
   return `${CREDENTIALS_LOGIN_RATE_LIMIT_KEY_PREFIX}burst:ip:${ipKey}`;
 }
 
+/** Public (learner) credentials failures — per (ip partition, identifier hash). */
 export function credentialsLoginComboRedisKey(ipKey: string, acctHash: string): string {
   return `${CREDENTIALS_LOGIN_RATE_LIMIT_KEY_PREFIX}combo:ip:${ipKey}:acct:${acctHash}`;
+}
+
+/** Staff/admin credentials failures — isolated from public combo so ops traffic does not collide. */
+export function credentialsLoginComboRedisKeyStaff(ipKey: string, acctHash: string): string {
+  return `${CREDENTIALS_LOGIN_RATE_LIMIT_KEY_PREFIX}combo:staff:ip:${ipKey}:acct:${acctHash}`;
 }
 
 /**
@@ -60,11 +74,18 @@ export async function isCredentialsLoginRateLimited(_ipKey: string, _acctHash: s
  * the same NAT partition and caused false positives when unrelated accounts exhausted the IP window.
  * Only the per-(ipKey, acctHash) combo counter is incremented here.
  */
-export async function consumeCredentialsLoginFailure(ipKey: string, acctHash: string): Promise<{ ok: boolean }> {
+export async function consumeCredentialsLoginFailure(
+  ipKey: string,
+  acctHash: string,
+  opts?: { staffAccount?: boolean },
+): Promise<{ ok: boolean }> {
   if (!acctHash) return { ok: true };
-  const combo = await checkRedisFixedWindowLimit(credentialsLoginComboRedisKey(ipKey, acctHash), {
+  const staff = Boolean(opts?.staffAccount);
+  const key = staff ? credentialsLoginComboRedisKeyStaff(ipKey, acctHash) : credentialsLoginComboRedisKey(ipKey, acctHash);
+  const max = staff ? credentialsLoginComboMaxStaff() : credentialsLoginComboMax();
+  const combo = await checkRedisFixedWindowLimit(key, {
     windowMs: CREDENTIALS_LOGIN_COMBO_WINDOW_MS,
-    max: credentialsLoginComboMax(),
+    max,
   });
   return { ok: combo.ok };
 }
@@ -78,6 +99,7 @@ export async function resetCredentialsLoginRateLimitKeys(ipKey: string, acctHash
     await Promise.all([
       redis.del(credentialsLoginBurstRedisKey(ipKey)),
       redis.del(credentialsLoginComboRedisKey(ipKey, acctHash)),
+      redis.del(credentialsLoginComboRedisKeyStaff(ipKey, acctHash)),
     ]);
   } catch (error) {
     safeServerLog("security", "credentials_login_rl_reset_failed", {

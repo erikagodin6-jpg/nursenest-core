@@ -6,7 +6,7 @@ import { marketingCatPathForPathwayId } from "@/lib/exam-pathways/practice-exams
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import { HUB, rnLessons, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
 import {
   MEGA_MENU_STRIPPED_ACTIVE_PREFIXES,
@@ -45,8 +45,8 @@ export function publicNewGradStudyDestinations(
     if (!pathway) {
       return {
         hubHref: rnHub,
-        lessons: rnLessons(region),
-        questions: rnQuestions(region),
+        lessons: `${rnHub}/lessons`,
+        questions: `${rnHub}/questions`,
         cat: publicMarketingCatHrefForOffering(region, "rn"),
         flashcards,
         practiceExams,
@@ -56,8 +56,9 @@ export function publicNewGradStudyDestinations(
     const lessons = buildExamPathwayPath(pathway, "lessons");
     const cat =
       marketingCatPathForPathwayId(US_NEW_GRAD_TRANSITION_PATHWAY_ID) ?? buildExamPathwayPath(pathway, "cat");
+    const hubRoot = buildExamPathwayPath(pathway);
     return {
-      hubHref: lessons,
+      hubHref: hubRoot,
       lessons,
       questions: buildExamPathwayPath(pathway, "questions"),
       cat,
@@ -69,8 +70,8 @@ export function publicNewGradStudyDestinations(
 
   return {
     hubHref: rnHub,
-    lessons: rnLessons(region),
-    questions: rnQuestions(region),
+    lessons: `${rnHub}/lessons`,
+    questions: `${rnHub}/questions`,
     cat: publicMarketingCatHrefForOffering(region, "rn"),
     flashcards,
     practiceExams,

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
@@ -27,6 +28,12 @@ export function FlashcardWeakStudyClient({
   userLabel: string;
   protectionFlags: PremiumProtectionFlags;
 }) {
+  const searchParams = useSearchParams();
+  const pathwayId = searchParams.get("pathwayId")?.trim() || null;
+  const flashcardsHubHref = pathwayId
+    ? `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}`
+    : "/app/flashcards";
+
   const [queue, setQueue] = useState<WeakCard[]>([]);
   const [weakTopics, setWeakTopics] = useState<string[]>([]);
   const [hint, setHint] = useState<string | null>(null);
@@ -37,7 +44,10 @@ export function FlashcardWeakStudyClient({
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/flashcards/weak-queue", { credentials: "include" });
+      const qs = new URLSearchParams();
+      if (pathwayId) qs.set("pathwayId", pathwayId);
+      const url = qs.toString() ? `/api/flashcards/weak-queue?${qs.toString()}` : "/api/flashcards/weak-queue";
+      const res = await fetch(url, { credentials: "include" });
       const data = (await res.json()) as {
         cards?: WeakCard[];
         weakTopics?: string[];
@@ -56,7 +66,7 @@ export function FlashcardWeakStudyClient({
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [pathwayId]);
 
   useEffect(() => {
     void load();
@@ -94,7 +104,7 @@ export function FlashcardWeakStudyClient({
     return (
       <div className="mx-auto max-w-lg px-4 py-16">
         <p className="text-sm text-red-600">{error}</p>
-        <Link href="/app/flashcards" className="mt-4 inline-block text-sm font-semibold text-primary">
+        <Link href={flashcardsHubHref} className="mt-4 inline-block text-sm font-semibold text-primary">
           ← All decks
         </Link>
       </div>
@@ -110,7 +120,7 @@ export function FlashcardWeakStudyClient({
           <p className="mt-2 text-xs text-[var(--theme-muted-text)]">Topics we are watching: {weakTopics.join(", ")}</p>
         ) : null}
         <div className="mt-8 flex flex-col gap-3">
-          <Link href="/app/flashcards" className="rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground">
+          <Link href={flashcardsHubHref} className="rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground">
             Browse decks
           </Link>
           <Link href="/app/questions" className="rounded-full border border-border px-5 py-2.5 text-sm font-semibold">
@@ -135,7 +145,7 @@ export function FlashcardWeakStudyClient({
   return (
     <div className="mx-auto max-w-6xl px-4 py-6">
       <div className="mb-3 flex items-center justify-between gap-2">
-        <Link href="/app/flashcards" className="text-sm font-medium text-primary">
+        <Link href={flashcardsHubHref} className="text-sm font-medium text-primary">
           ← Back to Flashcards
         </Link>
         <button type="button" className="text-xs font-medium text-[var(--theme-muted-text)] underline" onClick={() => void load()}>
@@ -156,7 +166,7 @@ export function FlashcardWeakStudyClient({
           sessionTitle: "Weak-Area Study Session",
           modeLabel: "Active Recall",
           categoriesLabel: weakTopics.length > 0 ? weakTopics.join(", ") : "Weak Areas",
-          exitHref: "/app/flashcards",
+          exitHref: flashcardsHubHref,
         }}
         onRate={onRate}
       />

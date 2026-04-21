@@ -14,10 +14,13 @@
 
 import type { DeckDisplaySource } from "@/lib/flashcards/flashcard-generation";
 import { deckSourceAccentVar } from "@/lib/flashcards/flashcard-generation";
+import { formatTitleCase } from "@/lib/format/text-case";
 
 export type FlashcardFiltersValue = {
   source: DeckDisplaySource | "";
   pathwayId: string;
+  /** Category `topicCode` from lesson deep-links (`/app/flashcards?...&topicCode=`). */
+  topicCode: string;
   examFamily: string;
   tagSlug: string;
   q: string;
@@ -148,7 +151,7 @@ export function FlashcardFilters({
               <option value="">All exams</option>
               {EXAM_FAMILIES.map((ef) => (
                 <option key={ef} value={ef}>
-                  {ef.replace(/_/g, " ")}
+                  {formatTitleCase(ef.replace(/_/g, " ").toLowerCase())}
                 </option>
               ))}
             </select>

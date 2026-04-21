@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
 import { cardMatchesStudyFilters, hasActiveStudyFilters } from "@/lib/flashcards/study-session-persistence";
 import { formatTitleCase } from "@/lib/format/text-case";
+import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 
 type SessionPayload = {
   ok: boolean;
@@ -31,6 +32,7 @@ type SessionPayload = {
     topic?: string | null;
     subtopic?: string | null;
     explanation?: string;
+    examMicroQuestion?: ExamMicroQuestionPayload;
     sourceKey?: string | null;
     pathwayId?: string | null;
   }>;
@@ -121,7 +123,14 @@ export function FlashcardCustomStudyClient() {
     id: card.id,
     prompt: card.front,
     answer: card.back,
-    explanation: card.explanation,
+    explanation: card.examMicroQuestion?.rationaleCorrect ?? card.explanation,
+    examMicroQuestion: card.examMicroQuestion ?? null,
+    distractors: card.examMicroQuestion
+      ? card.examMicroQuestion.rationaleIncorrect.map((d) => ({
+          option: `${d.letter})`,
+          rationale: d.rationale,
+        }))
+      : undefined,
     topic: card.topic,
     subtopic: card.subtopic,
     sourceKey: card.sourceKey ?? null,

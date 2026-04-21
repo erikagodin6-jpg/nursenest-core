@@ -9,16 +9,13 @@
  */
 
 import type { CountryExamOfferingId } from "@/lib/marketing/country-exam-offerings";
-import { defaultPathwayIdForMarketingOffering } from "@/lib/marketing/country-exam-offerings";
-import {
-  HUB,
-  type MarketingRegionToggle,
-  rnQuestions,
-} from "@/lib/marketing/marketing-entry-routes";
+import { defaultPathwayIdForMarketingOffering, marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
+import { HUB, type MarketingRegionToggle, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import {
   defaultNursingExamMarketingHub as defaultNursingExamMarketingHubFromNav,
   marketingExamPrepHubs,
 } from "@/lib/marketing/marketing-exam-navigation";
+import { publicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
 
 export type { MarketingRegionToggle };
 
@@ -63,8 +60,66 @@ export function learnerMarketingPathwayIdFromSession(user: {
   country?: "US" | "CA" | null;
 } | null): string | null {
   if (!user?.tier || !user.country) return null;
-  const tier = user.tier as NavSessionTier;
-  return defaultPathwayIdForMarketingOffering(user.country, offeringIdForTier(tier));
+  const tier = String(user.tier);
+  if (tier === "PRE_NURSING" || tier === "NEW_GRAD") return null;
+  return defaultPathwayIdForMarketingOffering(user.country, offeringIdForTier(tier as NavSessionTier));
+}
+
+/** Tiers that map to marketing exam hubs / pre-nursing surfaces (header Learn–Practice row). */
+export type MarketingHeaderFlowTier = NavSessionTier | "PRE_NURSING" | "NEW_GRAD";
+
+export type MarketingHeaderFlowContext = {
+  tier: MarketingHeaderFlowTier | null;
+  country: "US" | "CA" | null;
+};
+
+/**
+ * Mobile marketing header “Learn → Practice” row: always stay inside a single tier’s hub
+ * (never `/lessons` or `/question-bank` mixed-tier indexes once we know the user’s tier).
+ */
+export function marketingHeaderLearnPracticeFlowDestinations(
+  region: MarketingRegionToggle,
+  ctx: MarketingHeaderFlowContext,
+): { learnHref: string; practiceHref: string; learnMatchBase: string; practiceMatchBase: string } {
+  const rnHub = marketingExamHubPath(region, "rn");
+
+  if (ctx.tier === "PRE_NURSING") {
+    return {
+      learnHref: "/pre-nursing/lessons",
+      practiceHref: "/pre-nursing",
+      learnMatchBase: "/pre-nursing",
+      practiceMatchBase: "/pre-nursing",
+    };
+  }
+
+  if (ctx.tier === "NEW_GRAD") {
+    const d = publicNewGradStudyDestinations(region, rnHub);
+    const base = d.hubHref;
+    return {
+      learnHref: d.lessons,
+      practiceHref: d.questions,
+      learnMatchBase: base,
+      practiceMatchBase: base,
+    };
+  }
+
+  if (ctx.tier && ctx.country) {
+    const hub = marketingExamHubPath(region, offeringIdForTier(ctx.tier as NavSessionTier));
+    return {
+      learnHref: `${hub}/lessons`,
+      practiceHref: `${hub}/questions`,
+      learnMatchBase: hub,
+      practiceMatchBase: hub,
+    };
+  }
+
+  const hub = marketingExamHubPath(region, "rn");
+  return {
+    learnHref: `${hub}/lessons`,
+    practiceHref: `${hub}/questions`,
+    learnMatchBase: hub,
+    practiceMatchBase: hub,
+  };
 }
 
 // —— Public marketing (anonymous + public nav mode) ——

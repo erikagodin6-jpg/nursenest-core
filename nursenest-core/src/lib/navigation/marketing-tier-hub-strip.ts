@@ -1,12 +1,14 @@
 /**
  * Public marketing header tier hub row (RN / PN / NP / New grad / Allied) — labels + hub URLs only.
  *
- * Uses {@link marketing-entry-routes} hub helpers only (no `exam-product-registry`, no allied
- * profession catalog). Keep URLs aligned with {@link marketingExamHubPath} / canonical hubs.
+ * Hub URLs align with {@link marketingExamHubPath} / mega menus (same pathway roots as
+ * {@link publicExamPrepHubDestinations}); do not send tier clicks to the shared `/lessons` index unless
+ * that surface is the canonical hub for an offering (it is not for RN).
  */
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import { alliedHub, HUB, NP, pnPrimaryHub } from "@/lib/marketing/marketing-entry-routes";
+import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
 import type { MarketingPathwayMegaMenuKey } from "@/lib/navigation/marketing-mega-menu-active-prefixes";
+import { publicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
 
 export type MarketingTierHubKey = MarketingPathwayMegaMenuKey;
 
@@ -16,19 +18,10 @@ export type MarketingTierHubStripItem = {
   hubHref: string;
 };
 
-/**
- * US new-grad transition lessons hub — must stay aligned with pathway `us-rn-new-grad-transition`
- * (`buildExamPathwayPath` → `/us/rn/new-grad-transition/lessons`).
- */
-const US_NEW_GRAD_TRANSITION_LESSONS_HREF = "/us/rn/new-grad-transition/lessons" as const;
-
 type TFn = (key: string) => string;
 
 function tierHubHrefForOffering(region: MarketingRegionToggle, offering: "rn" | "pn" | "np" | "allied"): string {
-  if (offering === "rn") return HUB.examLessons;
-  if (offering === "pn") return pnPrimaryHub(region);
-  if (offering === "np") return region === "US" ? NP.practiceProgrammatic : NP.practiceProgrammaticCa;
-  return alliedHub(region);
+  return marketingExamHubPath(region, offering);
 }
 
 export function buildMarketingTierHubStrip(region: MarketingRegionToggle, t: TFn): MarketingTierHubStripItem[] {
@@ -36,7 +29,7 @@ export function buildMarketingTierHubStrip(region: MarketingRegionToggle, t: TFn
   const pnHub = tierHubHrefForOffering(region, "pn");
   const npHub = tierHubHrefForOffering(region, "np");
   const alliedHubHref = tierHubHrefForOffering(region, "allied");
-  const newGradHubHref = region === "US" ? US_NEW_GRAD_TRANSITION_LESSONS_HREF : rnHub;
+  const newGradHubHref = publicNewGradStudyDestinations(region, rnHub).hubHref;
 
   return [
     { key: "rn", label: t("nav.mega.rn.label"), hubHref: rnHub },

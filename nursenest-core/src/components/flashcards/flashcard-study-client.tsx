@@ -12,6 +12,7 @@ import {
   saveDeckSessionCheckpoint,
 } from "@/lib/flashcards/study-session-persistence";
 import { ExamSessionShell } from "@/components/exam/exam-session-shell";
+import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 
 type CardPayload = {
   id: string;
@@ -20,6 +21,8 @@ type CardPayload = {
   fullBackAvailable: boolean;
   /** Optional teaching line from locale overlay (`educational-overlays/<locale>/flashcards.json`). */
   explanation?: string;
+  /** NCLEX-style micro-question (stem + options + rationales). */
+  examMicroQuestion?: ExamMicroQuestionPayload;
   topic?: string;
   subtopic?: string | null;
   sourceKey?: string | null;
@@ -190,7 +193,8 @@ export function FlashcardStudyClient({
         id: card.id,
         prompt: card.front,
         answer: card.back,
-        explanation: card.explanation,
+        explanation: card.examMicroQuestion ? undefined : card.explanation,
+        examMicroQuestion: card.examMicroQuestion,
         topic: card.topic ?? null,
         subtopic: card.subtopic ?? null,
         sourceKey: card.sourceKey ?? null,

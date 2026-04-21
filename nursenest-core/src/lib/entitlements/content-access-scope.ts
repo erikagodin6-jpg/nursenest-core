@@ -5,6 +5,7 @@ import {
   examQuestionTierStringsForProfileTier,
   prismaTierCodesForProfileTier,
 } from "@/lib/entitlements/accessible-tiers";
+import type { FlashcardPathwayAccessOptions } from "@/lib/flashcards/flashcard-pathway-scope";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 
@@ -197,21 +198,47 @@ export function freemiumQuestionWhereForProfile(country: CountryCode, tier: Tier
 }
 
 /** Flashcards: schema still uses ContentStatus + country/tier (may not match `flashcard_bank` until remapped). */
-export function flashcardAccessWhere(entitlement: AccessScope): Prisma.FlashcardWhereInput {
+export function flashcardAccessWhere(
+  entitlement: AccessScope,
+  pathway?: FlashcardPathwayAccessOptions | null,
+): Prisma.FlashcardWhereInput {
   if (!entitlement.hasAccess) return { id: { in: [] } };
   if (entitlement.reason === "admin_override") {
     const country = entitlement.country as CountryCode | null;
-    if (!country) return { status: ContentStatus.PUBLISHED };
-    return { status: ContentStatus.PUBLISHED, country };
+    const base: Prisma.FlashcardWhereInput =
+      !country ? { status: ContentStatus.PUBLISHED } : { status: ContentStatus.PUBLISHED, country };
+    if (!pathway?.deckPathwayId && !pathway?.tierIntersectWith?.length && !pathway?.includePreNursingFoundation) {
+      return base;
+    }
+    const parts: Prisma.FlashcardWhereInput[] = [base];
+    if (pathway.deckPathwayId) parts.push({ deck: { pathwayId: pathway.deckPathwayId } });
+    if (pathway.includePreNursingFoundation) parts.push({ tier: "PRE_NURSING" });
+    else if (pathway.tierIntersectWith?.length) parts.push({ tier: { in: [...pathway.tierIntersectWith] } });
+    return parts.length === 1 ? base : { AND: parts };
   }
   const country = entitlement.country as CountryCode | null;
   const tier = entitlement.tier as TierCode | null;
   if (!country || !tier) return { id: { in: [] } };
-  return {
+  const userLadder = prismaTierCodesForProfileTier(tier);
+  let tierIn: TierCode[];
+  if (pathway?.includePreNursingFoundation) {
+    tierIn = ["PRE_NURSING"];
+  } else if (pathway?.tierIntersectWith?.length) {
+    const cap = [...pathway.tierIntersectWith];
+    tierIn = userLadder.filter((t) => cap.includes(t));
+  } else {
+    tierIn = userLadder;
+  }
+  if (tierIn.length === 0) return { id: { in: [] } };
+  const scoped: Prisma.FlashcardWhereInput = {
     status: ContentStatus.PUBLISHED,
     country,
-    tier: { in: prismaTierCodesForProfileTier(tier) },
+    tier: { in: tierIn },
   };
+  if (pathway?.deckPathwayId) {
+    return { AND: [scoped, { deck: { pathwayId: pathway.deckPathwayId } }] };
+  }
+  return scoped;
 }
 
 export function flashcardBankWhereForProfile(country: CountryCode, tier: TierCode): Prisma.FlashcardWhereInput {

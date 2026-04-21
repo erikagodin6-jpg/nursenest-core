@@ -28,10 +28,12 @@ import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-s
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { Prisma } from "@prisma/client";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { applyFlashcardCardOverlay } from "@/lib/i18n/educational-content-overlay";
 import { resolveMergedFlashcardEducationalBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
-import { buildFlashcardExplanationFromSources } from "@/lib/content-quality/controlled-rationale-enrichment";
+import {
+  serializeFlashcardForDeckStudy,
+  type FlashcardStudySelectRow,
+} from "@/lib/flashcards/flashcard-study-serialize";
 
 const NO_ACCESS: AccessScope = {
   hasAccess: false,
@@ -112,6 +114,12 @@ export async function GET(req: NextRequest, { params }: Props) {
             front: true,
             back: true,
             sourceKey: true,
+            examItemKind: true,
+            questionStem: true,
+            answerOptions: true,
+            correctAnswer: true,
+            rationaleCorrect: true,
+            rationaleIncorrect: true,
             category: { select: { name: true, topicCode: true } },
             deck: { select: { pathwayId: true } },
           },
@@ -123,29 +131,14 @@ export async function GET(req: NextRequest, { params }: Props) {
         deckId: deck.id,
         slug: deck.slug,
         cards: cards.map((c) => {
-          const loc = applyFlashcardCardOverlay(
-            { id: c.id, front: c.front, back: c.back },
+          const row = serializeFlashcardForDeckStudy(c, {
             educationalLocale,
             flashcardBundle,
-          );
-          const explanation =
-            loc.explanation ??
-            buildFlashcardExplanationFromSources({
-              front: loc.front,
-              back: loc.back,
-              topic: c.category.name,
-              subtopic: c.category.topicCode,
-            });
-          return {
-            id: c.id,
-            front: loc.front,
-            back: truncateForPreview(loc.back),
             fullBackAvailable: false,
-            topic: c.category.name,
-            subtopic: c.category.topicCode,
-            sourceKey: c.sourceKey,
-            pathwayId: c.deck?.pathwayId ?? null,
-            ...(explanation ? { explanation } : {}),
+          });
+          return {
+            ...row,
+            back: truncateForPreview(row.back),
           };
         }),
         session: null,
@@ -265,6 +258,12 @@ export async function GET(req: NextRequest, { params }: Props) {
           front: true,
           back: true,
           sourceKey: true,
+          examItemKind: true,
+          questionStem: true,
+          answerOptions: true,
+          correctAnswer: true,
+          rationaleCorrect: true,
+          rationaleIncorrect: true,
           category: { select: { name: true, topicCode: true } },
           deck: { select: { pathwayId: true } },
         },
@@ -272,45 +271,19 @@ export async function GET(req: NextRequest, { params }: Props) {
       }),
     );
     const byId = new Map(cardPayload.map((c) => [c.id, c]));
-    const ordered = sliceIds.map((id) => byId.get(id)).filter(Boolean) as Array<{
-      id: string;
-      front: string;
-      back: string;
-      sourceKey: string | null;
-      category: { name: string; topicCode: string | null };
-      deck: { pathwayId: string | null } | null;
-    }>;
+    const ordered = sliceIds.map((id) => byId.get(id)).filter(Boolean) as FlashcardStudySelectRow[];
 
     const body = {
       mode: "subscriber" as const,
       deckId: deck.id,
       slug: deck.slug,
-      cards: ordered.map((c) => {
-        const loc = applyFlashcardCardOverlay(
-          { id: c.id, front: c.front, back: c.back },
+      cards: ordered.map((c) =>
+        serializeFlashcardForDeckStudy(c, {
           educationalLocale,
           flashcardBundle,
-        );
-        const explanation =
-          loc.explanation ??
-          buildFlashcardExplanationFromSources({
-            front: loc.front,
-            back: loc.back,
-            topic: c.category.name,
-            subtopic: c.category.topicCode,
-          });
-        return {
-          id: c.id,
-          front: loc.front,
-          back: loc.back,
           fullBackAvailable: true,
-          topic: c.category.name,
-          subtopic: c.category.topicCode,
-          sourceKey: c.sourceKey,
-          pathwayId: c.deck?.pathwayId ?? null,
-          ...(explanation ? { explanation } : {}),
-        };
-      }),
+        }),
+      ),
       session: {
         cursor,
         queueLength: storedQueue.length,

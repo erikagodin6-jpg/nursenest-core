@@ -6,26 +6,15 @@ import { prisma } from "@/lib/db";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
+import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/flashcard-pathway-scope";
 import {
   applyCountsToBuilderCategories,
   builderCategoryTitleForId,
   resolveBuilderCategoryId,
 } from "@/lib/flashcards/flashcard-builder-taxonomy";
-import { buildFlashcardExplanationFromSources } from "@/lib/content-quality/controlled-rationale-enrichment";
+import { serializeFlashcardForCustomSession } from "@/lib/flashcards/flashcard-study-serialize";
 
 type StudyMode = "term_to_definition" | "definition_to_term" | "mixed";
-
-function pathwayScope(pathwayId: string | null): { tier?: "RN" | "RPN" | "NP"; country?: "US" | "CA" } {
-  if (!pathwayId) return {};
-  const lower = pathwayId.toLowerCase();
-  const country = lower.startsWith("ca-") ? "CA" : lower.startsWith("us-") ? "US" : undefined;
-  const tier =
-    lower.includes("-np-") ? "NP"
-    : lower.includes("-rpn-") || lower.includes("-pn-") || lower.includes("rex-pn") ? "RPN"
-    : lower.includes("-rn-") ? "RN"
-    : undefined;
-  return { tier, country };
-}
 
 function parseCategories(value: string | null): string[] {
   return (value ?? "")
@@ -78,6 +67,8 @@ export async function GET(req: NextRequest) {
 
   const sp = req.nextUrl.searchParams;
   const pathwayId = sp.get("pathwayId")?.trim() || null;
+  const topicCode = sp.get("topicCode")?.trim().toLowerCase() || null;
+  const lessonId = sp.get("lessonId")?.trim() || null;
   const selectedCategories = parseCategories(sp.get("categories"));
   const stateIds = parseCategories(sp.get("stateIds"));
   const weakOnly = sp.get("weakOnly") === "1";
@@ -91,22 +82,12 @@ export async function GET(req: NextRequest) {
   const limit = parseCardLimit(sp.get("cardLimit"));
   const includeCards = sp.get("includeCards") === "1";
 
-  const baseWhere: Prisma.FlashcardWhereInput = {
-    AND: [{ status: ContentStatus.PUBLISHED }, flashcardAccessWhere(entitlement)],
-  };
-
-  const scope = pathwayScope(pathwayId);
-  const scopedClauses: Prisma.FlashcardWhereInput[] = [];
-  if (scope.tier) scopedClauses.push({ tier: scope.tier });
-  if (scope.country) scopedClauses.push({ country: scope.country });
-  const pathwayFilter: Prisma.FlashcardWhereInput | null = pathwayId
-    ? scopedClauses.length > 0
-      ? { AND: scopedClauses }
-      : null
-    : null;
-
-  const where: Prisma.FlashcardWhereInput =
-    pathwayFilter ? { AND: [baseWhere, pathwayFilter] } : baseWhere;
+  const pathwayOpts = flashcardPathwayAccessOptionsFromPathwayId(pathwayId);
+  const accessWhere = flashcardAccessWhere(entitlement, pathwayOpts);
+  const clauses: Prisma.FlashcardWhereInput[] = [{ status: ContentStatus.PUBLISHED }, accessWhere];
+  if (topicCode) clauses.push({ category: { topicCode } });
+  if (lessonId) clauses.push({ lessonId });
+  const where: Prisma.FlashcardWhereInput = { AND: clauses };
 
   const cards = await prisma.flashcard.findMany({
     where,
@@ -115,6 +96,12 @@ export async function GET(req: NextRequest) {
       front: true,
       back: true,
       sourceKey: true,
+      examItemKind: true,
+      questionStem: true,
+      answerOptions: true,
+      correctAnswer: true,
+      rationaleCorrect: true,
+      rationaleIncorrect: true,
       category: { select: { name: true, topicCode: true } },
       deck: { select: { pathwayId: true, title: true } },
     },
@@ -181,27 +168,15 @@ export async function GET(req: NextRequest) {
     ? limited.map((card, index) => {
         const mixedSwap = mode === "mixed" && index % 2 === 1;
         const swap = mode === "definition_to_term" || mixedSwap;
-        const front = swap ? card.back : card.front;
-        const back = swap ? card.front : card.back;
         const topic = builderCategoryTitleForId(pathwayId, card.builderCategoryId);
-        const subtopic = card.category.topicCode;
-        const explanation = buildFlashcardExplanationFromSources({
-          front,
-          back,
+        const { builderCategoryId: _bc, ...dbRow } = card;
+        void _bc;
+        const serialized = serializeFlashcardForCustomSession(dbRow, {
+          swapFrontBack: swap,
           topic,
-          subtopic,
-        });
-        return {
-          id: card.id,
-          front,
-          back,
-          topic,
-          subtopic,
-          rawTopic: card.category.name,
-          sourceKey: card.sourceKey,
           pathwayId: card.deck?.pathwayId ?? pathwayId,
-          ...(explanation ? { explanation } : {}),
-        };
+        });
+        return serialized;
       })
     : [];
 
@@ -210,6 +185,8 @@ export async function GET(req: NextRequest) {
     unsupportedFilters: [],
     summary: {
       pathwayId,
+      topicCode,
+      lessonId,
       selectedCategories,
       matchingCards: scoped.length,
       returnedCards: plannedCount,

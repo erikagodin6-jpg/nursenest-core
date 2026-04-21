@@ -1,23 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { consumeVerificationToken } from "@/lib/auth/email-verification";
 import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
+import { getTrustedClientIp } from "@/lib/http/client-ip";
 import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/posthog-server";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const runtime = "nodejs";
 
-function clientIp(req: Request): string {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    req.headers.get("x-real-ip") ??
-    "unknown"
-  );
-}
-
 export async function GET(req: NextRequest) {
   const base = req.nextUrl.origin;
 
-  const ip = clientIp(req);
+  const ip = getTrustedClientIp(req);
   const rl = await checkRateLimitUnified(`verify-email:${ip}`, { windowMs: 60_000, max: 15 });
   if (!rl.ok) {
     return NextResponse.redirect(`${base}/login?verify=rate_limited`);

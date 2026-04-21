@@ -17,7 +17,8 @@ import {
   consumeRateLimitUnified,
   readRateLimitWindowCountUnified,
 } from "@/lib/http/rate-limit-unified";
-import { getTrustedClientIp, rateLimitClientPartition } from "@/lib/http/client-ip";
+import { deriveTrustedClientIp, rateLimitClientPartition } from "@/lib/http/client-ip";
+import { PINNED_AUTH_BASE_PATH } from "@/lib/auth/auth-base-path";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
   buildAuthStrictRateLimit429Json,
@@ -1120,7 +1121,17 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     return null;
   }
 
-  const ip = getTrustedClientIp(request);
+  /**
+   * Credential POST is throttled inside `authorize` (Redis per-account combo + progressive DB lockout).
+   * The proxy `ratelimit:auth:credentials_callback:ip:*` bucket keyed only by (often wrong) IP/NAT collapsed
+   * unrelated users and surfaced `pages.login.errorRateLimited` before password verification.
+   */
+  if (method === "POST" && pathname === `${PINNED_AUTH_BASE_PATH}/callback/credentials`) {
+    return null;
+  }
+
+  const ipDerivation = deriveTrustedClientIp(request);
+  const ip = ipDerivation.ip;
   const ipKey = rateLimitClientPartition(request, ip);
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
   const token = secret ? await getAuthSessionJwtFromRequest(request, secret) : null;
@@ -1419,6 +1430,8 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
         limiter: `auth_strict:${kind}`,
         authKind: kind,
         keyShape: "ip_partition",
+        clientIpSource: ipDerivation.source,
+        clientIpHeader: ipDerivation.headerName,
         method,
         path: pathname.slice(0, 96),
         windowMs: limits.windowMs,

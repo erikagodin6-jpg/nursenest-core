@@ -7,6 +7,7 @@ import { normalizeStoredPasswordHash } from "@/lib/auth/normalize-stored-passwor
 import { strongPasswordSchema } from "@/lib/auth/password-policy";
 import { JSON_BODY_AUTH_FORM, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
+import { getTrustedClientIp } from "@/lib/http/client-ip";
 import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
@@ -26,14 +27,6 @@ const bodySchema = z
     path: ["confirmPassword"],
   });
 
-function clientIp(req: Request): string {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    req.headers.get("x-real-ip") ??
-    "unknown"
-  );
-}
-
 export async function POST(req: Request) {
   return runWithApiTelemetry(req, "POST /api/auth/change-password", "auth", async () => {
   const correlation = correlationIdFromRequest(req) ?? "";
@@ -45,7 +38,7 @@ export async function POST(req: Request) {
 
   void readStepUpHeader(req);
 
-  const ip = clientIp(req);
+  const ip = getTrustedClientIp(req);
   const rl = await checkRateLimitUnified(`change-password:${userId}:${ip}`, { windowMs: 60_000, max: 8 });
   if (!rl.ok) {
     return NextResponse.json({ ok: false, error: "Too many attempts. Try again shortly." }, { status: 429 });

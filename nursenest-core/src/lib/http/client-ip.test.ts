@@ -20,7 +20,12 @@ describe("rateLimitClientPartition", () => {
 });
 
 describe("getTrustedClientIp", () => {
-  it("reads first x-forwarded-for hop", () => {
+  it("reads first public x-forwarded-for hop (skips leading internal LB)", () => {
+    const h = new Headers({ "x-forwarded-for": "10.0.0.1, 198.51.100.2" });
+    assert.equal(getTrustedClientIp({ headers: h }), "198.51.100.2");
+  });
+
+  it("still returns client-first ordering when already correct", () => {
     const h = new Headers({ "x-forwarded-for": "198.51.100.2, 10.0.0.1" });
     assert.equal(getTrustedClientIp({ headers: h }), "198.51.100.2");
   });

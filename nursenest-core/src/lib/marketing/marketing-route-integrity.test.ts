@@ -61,13 +61,13 @@ describe("marketing route integrity", () => {
   it("homepage hero primary track paths match US/CA matrix (no mixed slugs)", () => {
     const expectedPaths = {
       US: {
-        rn: "/lessons",
+        rn: "/us/rn/nclex-rn",
         pn: "/us/pn/nclex-pn",
         np: "/us/np/fnp",
         allied: "/us/allied/allied-health",
       },
       CA: {
-        rn: "/lessons",
+        rn: "/canada/rn/nclex-rn",
         pn: "/canada/pn/rex-pn",
         np: "/canada/np/cnple",
         allied: "/canada/allied/allied-health",

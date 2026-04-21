@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import * as Sentry from "@sentry/nextjs";
 import { ProductErrorState } from "@/components/ui/product-error-state";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { captureClientExceptionIfEnabled } from "@/lib/observability/sentry-if-enabled";
 import { getErrorMessageDevLine, shouldShowErrorBoundaryDevDetail } from "@/lib/runtime/error-message";
 
 export default function PracticeTestRunSegmentError({
@@ -17,7 +17,7 @@ export default function PracticeTestRunSegmentError({
   const { t } = useMarketingI18n();
 
   useEffect(() => {
-    Sentry.captureException(error, { tags: { surface: "practice_test_run_page", feature: "react_error_boundary" } });
+    captureClientExceptionIfEnabled(error, { tags: { surface: "practice_test_run_page", feature: "react_error_boundary" } });
   }, [error]);
 
   const showDetail = process.env.NODE_ENV === "development";

@@ -134,3 +134,15 @@ export function setClientTagIfEnabled(key: string, value: string): void {
     })
     .catch(() => {});
 }
+
+export function setClientContextIfEnabled(name: string, context: Record<string, unknown> | null): void {
+  if (!isSentryClientRuntimeEnabled()) return;
+  void importSentryNextjs()
+    .then((S) => {
+      S.setContext(name, context);
+    })
+    .catch(() => {});
+}
+
+/** Alias for server-only `withScope` helper (name matches common Sentry docs). */
+export { withSentryServerScopeIfEnabled as withSentryIfEnabled };

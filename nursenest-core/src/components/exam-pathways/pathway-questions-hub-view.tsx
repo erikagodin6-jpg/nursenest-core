@@ -327,7 +327,7 @@ export function PathwayQuestionsHubView({
             title="Full question bank session"
             description="Open the in-app bank with all filters and topic drill. Tracks rationale reads, correct rate, and topic gaps."
             ctaLabel="Open practice"
-            ctaHref="/app/questions"
+            ctaHref={appQuestionsScoped}
           />
           <StudyModeCard
             icon={Brain}

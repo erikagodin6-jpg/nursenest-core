@@ -30,6 +30,12 @@ describe("enforceApiRateLimit path classification", () => {
     assert.doesNotMatch(src, /if \(pathname === "\/api\/signup"/);
   });
 
+  it("skips proxy RL for POST /api/auth/callback/credentials (authorize handles combo RL + lockout)", () => {
+    const src = readFileSync(rateLimitTsPath, "utf8");
+    assert.match(src, /\/callback\/credentials/);
+    assert.match(src, /PINNED_AUTH_BASE_PATH/);
+  });
+
   it("orders signup bypass before generic public catch-all so POST /api/signup does not debit ratelimit:public:ip", () => {
     const src = readFileSync(rateLimitTsPath, "utf8");
     const fn = src.indexOf("export async function enforceApiRateLimit");
@@ -40,11 +46,31 @@ describe("enforceApiRateLimit path classification", () => {
     assert.ok(idxSignup < idxPublic, "signup bypass must appear before generic public RL");
   });
 
+  it("orders credentials callback bypass before auth strict debit so first login is not blocked by proxy IP bucket", () => {
+    const src = readFileSync(rateLimitTsPath, "utf8");
+    const fn = src.indexOf("export async function enforceApiRateLimit");
+    assert.ok(fn >= 0);
+    const idxCred = src.indexOf("callback/credentials", fn);
+    const idxAuthStrict = src.indexOf("isAuthStrictPath(pathname)", fn);
+    assert.ok(idxCred > 0 && idxAuthStrict > 0, "expected credentials bypass and auth strict markers");
+    assert.ok(idxCred < idxAuthStrict, "credentials bypass must appear before auth strict branch");
+  });
+
   it("marks admin API subtree for dedicated RL (nn-db-final-002)", () => {
     assert.equal(isAdminApiRateLimitPath("/api/admin"), true);
     assert.equal(isAdminApiRateLimitPath("/api/admin/ops/run"), true);
     assert.equal(isAdminApiRateLimitPath("/api/administration"), false);
     assert.equal(isAdminApiRateLimitPath("/api/questions"), false);
+  });
+
+  it("runs dedicated marketing public content RL branch before shared admin:user debit", () => {
+    const src = readFileSync(rateLimitTsPath, "utf8");
+    const fn = src.indexOf("export async function enforceApiRateLimit");
+    assert.ok(fn >= 0);
+    const idxMarketing = src.indexOf("enforceDedicatedAdminMarketingPublicContentRateLimit", fn);
+    const idxBlogBatch = src.indexOf("enforceDedicatedAdminBlogBatchRateLimit", fn);
+    assert.ok(idxMarketing > 0 && idxBlogBatch > 0);
+    assert.ok(idxMarketing < idxBlogBatch, "marketing public content must short-circuit before blog batch RL");
   });
 
   it("marks billing / checkout + subscribe", () => {

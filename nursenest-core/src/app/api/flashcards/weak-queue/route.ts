@@ -17,8 +17,14 @@ export async function GET(req: NextRequest) {
   setSentryServerContext({ route: "/api/flashcards/weak-queue", feature: SERVER_FEATURE.flashcard, userId: gate.userId });
 
   try {
-    const { weakTopics, topicCodes, cards } = await loadWeakAreaFlashcardsForUser(gate.userId, gate.entitlement);
+    const pathwayId = req.nextUrl.searchParams.get("pathwayId")?.trim() || null;
+    const { weakTopics, topicCodes, cards } = await loadWeakAreaFlashcardsForUser(
+      gate.userId,
+      gate.entitlement,
+      pathwayId,
+    );
     return NextResponse.json({
+      pathwayId,
       weakTopics,
       topicCodes,
       cards,

@@ -18,7 +18,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
-import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { PathwayHubSection } from "@/components/pathway-lessons/pathway-hub-section";
 
 /** US NCLEX-PN vs Canada REx-PN — shared PN hub, exam-specific copy only. */
@@ -261,7 +261,7 @@ export function NclexPnLessonsHub({
             Question bank hub
           </Link>
           <span aria-hidden>·</span>
-          <Link href="/app/questions" className="font-semibold text-primary">
+          <Link href={pathwayHubAppQuestionsHref(pathway.id)} className="font-semibold text-primary">
             App question bank
           </Link>
           <span aria-hidden>·</span>
@@ -349,7 +349,10 @@ export function NclexPnLessonsHub({
           >
             Start quick quiz (pathway-scoped)
           </Link>
-          <Link href="/app/questions" className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold">
+          <Link
+            href={pathwayHubAppQuestionsHref(pathway.id)}
+            className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold"
+          >
             Open app question bank
           </Link>
           <Link href={catHub} className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold">

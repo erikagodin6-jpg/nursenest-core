@@ -137,7 +137,7 @@ model User {
   abuseReviewsDismissed         ProtectionAbuseReview[]     @relation("ProtectionAbuseReviewDismissedBy")
   protectionAbuseReviews        ProtectionAbuseReview[]
   inlineContentEdits            InlineContentEntry[]   @relation("InlineContentUpdatedBy")
-  marketingPublicContentOverrides       MarketingPublicContentOverride[]
+  marketingPublicContentOverrides         MarketingPublicContentOverride[]
   marketingPublicContentOverrideRevisions MarketingPublicContentOverrideRevision[]
 
   @@index([alliedProfessionKey])
@@ -1000,6 +1000,15 @@ model Flashcard {
   /// * Format: "{sourceType}:{sourceId}" — e.g. "exam_q:abc123", "lesson:cardio-basics:intro:0"
   /// * Null for manually authored cards. Unique so sync scripts can upsert without duplicating.
   sourceKey       String?             @unique(map: "flashcards_source_key_key") @map("source_key")
+  /// * When set with JSON fields, card is studied as a mini NCLEX item (stem + A–D + rationales).
+  examItemKind       FlashcardItemKind? @map("exam_item_kind")
+  questionStem       String?            @map("question_stem")
+  /// * JSON: [{ "letter": "A", "text": "..." }, ...] — expect 3–4 options for published exam-style cards.
+  answerOptions      Json?              @map("answer_options")
+  correctAnswer      String?            @map("correct_answer")
+  rationaleCorrect   String?            @map("rationale_correct")
+  /// * JSON: [{ "letter": "B", "rationale": "..." }, ...] — one entry per distractor letter.
+  rationaleIncorrect Json?              @map("rationale_incorrect")
   category        Category            @relation(fields: [categoryId], references: [id])
   deck            FlashcardDeck?      @relation(fields: [deckId], references: [id])
   progressRecords FlashcardProgress[]
@@ -2329,6 +2338,14 @@ enum FlashcardDeckVisibility {
   PUBLIC_PREVIEW
   SUBSCRIBER
   HIDDEN
+}
+
+/// * Exam-style micro-question tagging for flashcards (NCLEX-like stems + rationales).
+enum FlashcardItemKind {
+  RECALL
+  CLINICAL
+  PRIORITY
+  CONCEPT
 }
 
 /// * Learner / visitor product feedback and bug intake (admin triage).

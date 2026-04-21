@@ -21,4 +21,15 @@ describe("legacy-marketing-routes", () => {
     assert.equal(resolveMarketingHref("/anatomy"), "/tools");
     assert.equal(resolveMarketingHref("/lessons"), "/lessons");
   });
+
+  it("maps legacy /terms-of-service to canonical /terms and keeps it on-origin", () => {
+    assert.equal(mapLegacyMarketingHref("/terms-of-service"), "/terms");
+    assert.equal(resolveMarketingHref("/terms-of-service"), "/terms");
+  });
+
+  it("maps legacy institutional marketing paths to /for-institutions", () => {
+    assert.equal(mapLegacyMarketingHref("/institutions"), "/for-institutions");
+    assert.equal(mapLegacyMarketingHref("/schools"), "/for-institutions");
+    assert.equal(resolveMarketingHref("/institutions"), "/for-institutions");
+  });
 });

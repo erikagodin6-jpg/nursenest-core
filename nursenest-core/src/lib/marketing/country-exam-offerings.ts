@@ -9,7 +9,7 @@
  * **NP:** US → default pathway hub `/us/np/fnp` (FNP). Canada → canonical CNPLE hub (`/canada/np/cnple`).
  * Legacy programmatic SEO slugs 301 to these hubs (`canonical-pathway-hubs` + `next.config` redirects).
  *
- * **Strip vs hero:** RN/PN/NP/Allied use canonical pathway hub URLs from the registry.
+ * **Strip vs hero:** RN/PN/NP/Allied use pathway hub roots from the registry (`buildExamPathwayPath`).
  * Order is always RN → PN → NP → Allied (`EXAM_PATHWAY_ORDER`).
  */
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
@@ -17,7 +17,7 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import { alliedHub, HUB, pnPrimaryHub } from "@/lib/marketing/marketing-entry-routes";
+import { alliedHub, pnPrimaryHub } from "@/lib/marketing/marketing-entry-routes";
 import { ensureMarketingExamHubPath } from "@/lib/marketing/nursing-exam-nav-validation";
 
 export type CountryExamOfferingId = "rn" | "pn" | "np" | "allied";
@@ -71,7 +71,7 @@ export function marketingExamHubPath(region: MarketingRegionToggle, id: CountryE
   const p = getExamPathwayById(pathwayId);
   let href: string;
   if (p) {
-    href = id === "rn" ? HUB.examLessons : buildExamPathwayPath(p);
+    href = buildExamPathwayPath(p);
   } else {
     switch (id) {
       case "rn":

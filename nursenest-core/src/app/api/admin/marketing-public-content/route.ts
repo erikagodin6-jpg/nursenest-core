@@ -52,12 +52,6 @@ function revalidateSurfacesForKey(locale: string, messageKey: string): void {
       revalidatePath("/pricing");
       if (loc !== "en") revalidatePath(`/${loc}/pricing`);
     }
-    if (def.surface === "exam_hub") {
-      revalidatePath("/canada");
-      revalidatePath("/us");
-      revalidatePath("/philippines");
-      revalidatePath("/middle-east");
-    }
   } catch {
     /* revalidatePath throws on invalid path in some contexts — tag bust still applies */
   }
@@ -70,6 +64,7 @@ export async function POST(req: Request) {
     denied.headers.set("Cache-Control", "no-store");
     return denied;
   }
+  const admin = gate.admin;
 
   let raw: unknown;
   try {
@@ -85,7 +80,7 @@ export async function POST(req: Request) {
       messageKeyPrefix: "(parse)",
       locale: "(unknown)",
       surface: "(unknown)",
-      actorPrefix: gate.admin.userId.slice(0, 8),
+      actorPrefix: admin.userId.slice(0, 8),
       detail: parsed.error.message.slice(0, 200),
     });
     return NextResponse.json(
@@ -103,7 +98,7 @@ export async function POST(req: Request) {
       messageKeyPrefix: body.messageKey.slice(0, 64),
       locale,
       surface: "(disallowed)",
-      actorPrefix: gate.admin.userId.slice(0, 8),
+      actorPrefix: admin.userId.slice(0, 8),
     });
     return NextResponse.json(
       { error: "Key is not allowlisted for marketing overrides", code: "key_not_allowed" },
@@ -117,7 +112,7 @@ export async function POST(req: Request) {
     messageKeyPrefix: body.messageKey.slice(0, 64),
     locale,
     surface: def.surface,
-    actorPrefix: gate.admin.userId.slice(0, 8),
+    actorPrefix: admin.userId.slice(0, 8),
   });
 
   if (body.action === "reset") {
@@ -135,7 +130,7 @@ export async function POST(req: Request) {
           locale,
           value: existing?.value ?? "",
           action: "reset",
-          actorUserId: gate.admin.userId,
+          actorUserId: admin.userId,
         },
       });
     } catch (e) {
@@ -144,7 +139,7 @@ export async function POST(req: Request) {
         messageKeyPrefix: body.messageKey.slice(0, 64),
         locale,
         surface: def.surface,
-        actorPrefix: gate.admin.userId.slice(0, 8),
+        actorPrefix: admin.userId.slice(0, 8),
         detail: (e instanceof Error ? e.message : String(e)).slice(0, 400),
       });
       return NextResponse.json(
@@ -163,7 +158,7 @@ export async function POST(req: Request) {
         messageKeyPrefix: body.messageKey.slice(0, 64),
         locale,
         surface: def.surface,
-        actorPrefix: gate.admin.userId.slice(0, 8),
+        actorPrefix: admin.userId.slice(0, 8),
         detail: (e instanceof Error ? e.message : String(e)).slice(0, 400),
       });
       return NextResponse.json(
@@ -177,7 +172,7 @@ export async function POST(req: Request) {
       messageKeyPrefix: body.messageKey.slice(0, 64),
       locale,
       surface: def.surface,
-      actorPrefix: gate.admin.userId.slice(0, 8),
+      actorPrefix: admin.userId.slice(0, 8),
     });
     return NextResponse.json({ ok: true, action: "reset", messageKey: body.messageKey, locale }, noStoreJsonInit);
   }
@@ -190,7 +185,7 @@ export async function POST(req: Request) {
       messageKeyPrefix: body.messageKey.slice(0, 64),
       locale,
       surface: def.surface,
-      actorPrefix: gate.admin.userId.slice(0, 8),
+      actorPrefix: admin.userId.slice(0, 8),
       detail: (e instanceof Error ? e.message : String(e)).slice(0, 400),
     });
     return NextResponse.json(
@@ -213,14 +208,14 @@ export async function POST(req: Request) {
         value: body.value,
         previousValue: null,
         isPublished: true,
-        updatedByUserId: gate.admin.userId,
+        updatedByUserId: admin.userId,
       },
       update: {
         value: body.value,
         previousValue: existing?.value ?? null,
         surface: def.surface,
         isPublished: true,
-        updatedByUserId: gate.admin.userId,
+        updatedByUserId: admin.userId,
       },
     });
     await prisma.marketingPublicContentOverrideRevision.create({
@@ -229,7 +224,7 @@ export async function POST(req: Request) {
         locale,
         value: body.value,
         action: "upsert",
-        actorUserId: gate.admin.userId,
+        actorUserId: admin.userId,
       },
     });
   } catch (e) {
@@ -238,7 +233,7 @@ export async function POST(req: Request) {
       messageKeyPrefix: body.messageKey.slice(0, 64),
       locale,
       surface: def.surface,
-      actorPrefix: gate.admin.userId.slice(0, 8),
+      actorPrefix: admin.userId.slice(0, 8),
       detail: (e instanceof Error ? e.message : String(e)).slice(0, 400),
     });
     return NextResponse.json({ error: "Database error", code: "db_error" }, { status: 500, ...noStoreJsonInit });
@@ -254,7 +249,7 @@ export async function POST(req: Request) {
       messageKeyPrefix: body.messageKey.slice(0, 64),
       locale,
       surface: def.surface,
-      actorPrefix: gate.admin.userId.slice(0, 8),
+      actorPrefix: admin.userId.slice(0, 8),
       detail: (e instanceof Error ? e.message : String(e)).slice(0, 400),
     });
     return NextResponse.json(
@@ -268,7 +263,7 @@ export async function POST(req: Request) {
     messageKeyPrefix: body.messageKey.slice(0, 64),
     locale,
     surface: def.surface,
-    actorPrefix: gate.admin.userId.slice(0, 8),
+    actorPrefix: admin.userId.slice(0, 8),
   });
   return NextResponse.json({ ok: true, action: "upsert", messageKey: body.messageKey, locale }, noStoreJsonInit);
 }

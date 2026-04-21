@@ -8,6 +8,7 @@ import {
 } from "@/lib/auth/normalize-login-identifier";
 import { JSON_BODY_AUTH_FORM, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { clearLoginFailures } from "@/lib/auth/login-lockout";
+import { getTrustedClientIp } from "@/lib/http/client-ip";
 
 export const dynamic = "force-dynamic";
 
@@ -34,10 +35,7 @@ export async function POST(req: Request) {
 
   const normalized = normalizeLoginIdentifier(sanitizeRawLoginIdentifier(parsed.data.identifier));
   const idHash = normalized ? hashLoginIdentifierForLog(normalized) : "";
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    req.headers.get("x-real-ip") ??
-    "unknown";
+  const ip = getTrustedClientIp(req);
   const lockKey = `login-lock:${idHash || ip}`;
   await clearLoginFailures(lockKey);
 

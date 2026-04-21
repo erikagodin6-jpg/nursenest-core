@@ -8,6 +8,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { catPathwayExamCodeLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
+import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { ExamPathwayHubPrimaryStudyCards, type HubLessonProgress } from "@/components/exam-pathways/exam-pathway-hub-study-modes";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
@@ -277,7 +278,7 @@ export function ExamPathwayHubBody({
           >
             <li>
               <MarketingTrackedLink
-                href="/app/questions"
+                href={pathwayHubAppQuestionsHref(pathway.id)}
                 event={PH.marketingPathwayHubCta}
                 eventProps={{
                   ...linkCtx,

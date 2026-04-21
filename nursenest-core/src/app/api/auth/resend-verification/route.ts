@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { createAndSendVerificationEmail } from "@/lib/auth/email-verification";
 import { JSON_BODY_AUTH_FORM, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { checkRateLimitUnified } from "@/lib/http/rate-limit-unified";
+import { getTrustedClientIp } from "@/lib/http/client-ip";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const runtime = "nodejs";
@@ -13,17 +14,9 @@ const bodySchema = z.object({
   email: z.string().email().max(320),
 });
 
-function clientIp(req: Request): string {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    req.headers.get("x-real-ip") ??
-    "unknown"
-  );
-}
-
 export async function POST(req: Request) {
   return runWithApiTelemetry(req, "POST /api/auth/resend-verification", "auth", async () => {
-  const ip = clientIp(req);
+  const ip = getTrustedClientIp(req);
   const rl = await checkRateLimitUnified(`resend-verify:${ip}`, { windowMs: 60_000, max: 4 });
   if (!rl.ok) {
     return NextResponse.json(

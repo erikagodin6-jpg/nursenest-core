@@ -7,6 +7,7 @@ import {
   BookOpen,
   ChevronDown,
   Dna,
+  GraduationCap,
   HeartPulse,
   Stethoscope,
   Wrench,
@@ -16,6 +17,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { publicExamPrepHubDestinations, HUB } from "@/lib/navigation/canonical-destinations";
+import { publicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
@@ -46,6 +48,7 @@ export function TierGatewayDropdown({
 
   const localize = (href: string) => withMarketingLocale(locale, href);
   const hubs = publicExamPrepHubDestinations(region);
+  const newGradHubHref = publicNewGradStudyDestinations(region, hubs.rn).hubHref;
 
   const items: TierItem[] = [
     {
@@ -68,6 +71,13 @@ export function TierGatewayDropdown({
       titleKey: "nav.tierDrop.npTitle",
       descKey: "nav.tierDrop.npDesc",
       href: hubs.np,
+    },
+    {
+      key: "new-grad",
+      icon: GraduationCap,
+      titleKey: "nav.mega.newGrad.label",
+      descKey: "nav.mega.newGrad.hubDescription",
+      href: newGradHubHref,
     },
     {
       key: "allied",

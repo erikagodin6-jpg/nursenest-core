@@ -1,7 +1,7 @@
 "use client";
 
-import * as Sentry from "@sentry/nextjs";
 import { Component, type ErrorInfo, type ReactNode } from "react";
+import { captureClientExceptionIfEnabled } from "@/lib/observability/sentry-if-enabled";
 import { MARKETING_PRIMARY_CTA_COMPACT_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 type Props = { children: ReactNode };
@@ -22,7 +22,7 @@ export class PricingPageErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
-    Sentry.captureException(error, {
+    captureClientExceptionIfEnabled(error, {
       tags: { feature: "marketing_pricing", boundary: "PricingPageErrorBoundary" },
       extra: { componentStack: info.componentStack?.slice(0, 800) },
     });

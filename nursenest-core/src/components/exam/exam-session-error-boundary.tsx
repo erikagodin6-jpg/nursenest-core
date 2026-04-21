@@ -23,7 +23,7 @@ export class ExamSessionErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    Sentry.captureException(error, {
+    captureClientExceptionIfEnabled(error, {
       tags: { surface: this.props.surface ?? "exam_session", feature: "ExamSessionErrorBoundary" },
       extra: { componentStack: info.componentStack?.slice(0, 800) },
     });

@@ -85,6 +85,38 @@ describe("resolveMarketingAuthRedirectTarget", () => {
     assert.equal(resolveMarketingAuthRedirectTarget("/question-bank", sp, "en"), "/");
   });
 
+  it("honors tier-scoped /app/questions?pathwayId=… callback after login", () => {
+    const sp = new URLSearchParams();
+    sp.set("callbackUrl", "/app/questions?pathwayId=us-rn-nclex-rn");
+    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/app/questions?pathwayId=us-rn-nclex-rn");
+  });
+
+  it("honors tier-scoped /app/practice-tests/start?pathwayId=… callback after login", () => {
+    const sp = new URLSearchParams();
+    sp.set("callbackUrl", "/app/practice-tests/start?pathwayId=us-lpn-nclex-pn");
+    assert.equal(
+      resolveMarketingAuthRedirectTarget("/login", sp, "en"),
+      "/app/practice-tests/start?pathwayId=us-lpn-nclex-pn",
+    );
+  });
+
+  it("honors tier-scoped /app/flashcards?pathwayId=… callback after login", () => {
+    const sp = new URLSearchParams();
+    sp.set("callbackUrl", "/app/flashcards?pathwayId=ca-rn-nclex-rn");
+    assert.equal(
+      resolveMarketingAuthRedirectTarget("/login", sp, "en"),
+      "/app/flashcards?pathwayId=ca-rn-nclex-rn",
+    );
+  });
+
+  it("honors marketing pathway hub callbacks (country prefix preserved)", () => {
+    const sp = new URLSearchParams();
+    sp.set("callbackUrl", "/canada/rn/nclex-rn/questions");
+    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/canada/rn/nclex-rn/questions");
+    sp.set("callbackUrl", "/us/pn/nclex-pn/cat");
+    assert.equal(resolveMarketingAuthRedirectTarget("/signup", sp, "en"), "/us/pn/nclex-pn/cat");
+  });
+
   it("sends blocked auth pages to marketing home when callback is bare /app", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/app");

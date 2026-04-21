@@ -173,6 +173,9 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                     <FLink href={explore.pricing}>Pricing</FLink>
                   </li>
                   <li>
+                    <FLink href="/for-institutions">{formatTitleCase(t("footer.forSchools"), locale)}</FLink>
+                  </li>
+                  <li>
                     <FLink href={explore.lessons}>Lessons</FLink>
                   </li>
                   <li>
@@ -340,9 +343,16 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
           <EmailSignupBanner />
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_5%,var(--footer-bg))] px-4 py-5 md:flex-row">
+        <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_5%,var(--footer-bg))] px-4 py-5 md:flex-row md:justify-between md:gap-4">
           <div className="text-sm text-[var(--footer-muted)]">
             © {new Date().getFullYear()} {t("brand.nurseNest")}. {t("footer.rights")}
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-[var(--footer-muted)]">
+            <FLink href="/terms">{formatTitleCase(t("footer.terms"), locale)}</FLink>
+            <span className="select-none text-[var(--footer-muted)]" aria-hidden="true">
+              ·
+            </span>
+            <FLink href="/privacy">{formatTitleCase(t("footer.privacy"), locale)}</FLink>
           </div>
         </div>
 

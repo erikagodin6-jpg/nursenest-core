@@ -341,7 +341,8 @@ body {
    */
   --accent-surface-b: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 14%, var(--bg-card));
   --accent-surface-b-border: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 28%, var(--palette-border, var(--theme-border)));
-  --accent-surface-b-text: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 80%, var(--palette-heading, var(--theme-heading-text)));
+  /* Strong heading ink on pale accent-b chips — avoids light-on-light when --theme-accent is pastel */
+  --accent-surface-b-text: var(--palette-heading, var(--theme-heading-text));
   --accent-surface-c: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 10%, var(--bg-page));
   --accent-surface-c-border: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 24%, var(--palette-border, var(--theme-border)));
   /*
@@ -493,6 +494,21 @@ body {
   --nn-aesthetic-frame-shine: none;
 }
 
+/*
+ * Foreground readability on any `[data-theme]` host (non-:where) so these beat
+ * `:root` / `:where([data-theme])` for `--semantic-text-muted` (see semantic-status-tokens.css).
+ * Dark palettes reset readable tokens in the `html[data-theme="dark-*"]` block below.
+ */
+[data-theme] {
+  --theme-muted-foreground-readable: color-mix(
+    in srgb,
+    var(--theme-muted-text) 58%,
+    var(--theme-heading-text)
+  );
+  --theme-card-foreground-readable: var(--theme-card-text, var(--theme-body-text));
+  --semantic-text-muted: var(--theme-muted-foreground-readable);
+}
+
 /* Dark palettes: stronger separation (flat navy + same accent reads as one blob) */
 html[data-theme="dark-clinical"],
 html[data-theme="dark-academia"],
@@ -503,6 +519,8 @@ html[data-theme="evergreen-steel"],
 html[data-theme="midnight-ink"],
 html[data-theme="storm-slate"] {
   --theme-luminance: dark;
+  --theme-muted-foreground-readable: var(--theme-muted-text);
+  --theme-card-foreground-readable: var(--theme-card-text);
   --text-primary: color-mix(in srgb, var(--theme-heading-text) 96%, #ffffff);
   --text-secondary: color-mix(in srgb, var(--theme-body-text) 90%, #ffffff);
   --text-muted: color-mix(in srgb, var(--theme-muted-text) 88%, #ffffff);
@@ -653,7 +671,7 @@ html[data-theme="storm-slate"] {
   --color-heading: var(--theme-heading-text);
   /* Single chain: Tailwind semantic tokens track tonal layers so surfaces separate cleanly */
   --color-card: var(--bg-card, var(--theme-card-bg));
-  --color-card-foreground: var(--theme-card-text);
+  --color-card-foreground: var(--theme-card-foreground-readable);
   --color-popover: var(--bg-elevated, var(--theme-card-bg));
   --color-popover-foreground: var(--theme-body-text);
   --color-primary: var(--accent-primary, var(--theme-primary));
@@ -666,7 +684,7 @@ html[data-theme="storm-slate"] {
   --color-ring: var(--theme-ring);
   /* Muted row/chip surfaces — 9% body text gives perceptible separation on near-white pastel pages */
   --color-muted: color-mix(in srgb, var(--theme-body-text) 9%, var(--bg-page, var(--theme-page-bg)));
-  --color-muted-foreground: var(--theme-muted-text);
+  --color-muted-foreground: var(--theme-muted-foreground-readable);
   /* Form fields track input surface token when theme is active */
   --color-input: var(--surface-input, var(--theme-input-bg));
 
@@ -765,6 +783,17 @@ html[data-theme="storm-slate"] {
   /* Lucide / inline icons often set stroke via currentColor; force contrast on solid primary CTAs. */
   .bg-primary svg {
     color: var(--color-primary-foreground) !important;
+  }
+
+  /*
+   * Pastel `bg-accent` shells (--theme-accent is often a whisper tint). Pair with heading
+   * ink so copy never inherits pale accent-foreground from identity tokens.
+   */
+  .bg-accent {
+    color: var(--color-heading, var(--theme-heading-text)) !important;
+  }
+  .bg-accent svg {
+    color: var(--color-heading, var(--theme-heading-text)) !important;
   }
 
   /* Main conversion CTAs — always --role-cta, not ad-hoc brand purple */
@@ -873,6 +902,7 @@ a {
   background: var(--bg-card, var(--theme-card-bg));
   border: 1px solid var(--border-subtle, var(--theme-card-border));
   border-radius: var(--radius-xl);
+  color: var(--theme-card-foreground-readable, var(--theme-body-text));
   /* Border defines the card; avoid border + shadow double-stacking on default cards */
   box-shadow: none;
 }

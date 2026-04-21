@@ -20,6 +20,7 @@ import {
   isPasswordResetEmailConfigured,
   sendPasswordResetEmail,
 } from "@/lib/send-password-reset-email";
+import { getTrustedClientIp } from "@/lib/http/client-ip";
 
 export const runtime = "nodejs";
 /** Never cache POST bodies or vary auth flows. */
@@ -33,14 +34,6 @@ const successPayload = {
   ok: true as const,
   message: "If an account exists for that email, a reset link has been sent.",
 };
-
-function clientIp(req: Request): string {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    req.headers.get("x-real-ip") ??
-    "unknown"
-  );
-}
 
 /** Align with credentials login: strip invisible chars, trim, lowercase. */
 function normalizeForgotPasswordEmail(raw: string): string {
@@ -159,7 +152,7 @@ async function runForgotPasswordFlow(
  */
 export async function POST(req: Request) {
   return runWithApiTelemetry(req, "POST /api/auth/forgot-password", "auth", async () => {
-  const ip = clientIp(req);
+  const ip = getTrustedClientIp(req);
   const correlation = correlationIdFromRequest(req) ?? "";
   const isProd = process.env.NODE_ENV === "production";
   if (isProd && !isPasswordResetEmailConfigured()) {

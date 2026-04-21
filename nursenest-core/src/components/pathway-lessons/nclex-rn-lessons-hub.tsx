@@ -18,7 +18,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
-import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { PathwayHubSection } from "@/components/pathway-lessons/pathway-hub-section";
 
 type Props = {
@@ -288,7 +288,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
             Question bank hub
           </Link>
           <span aria-hidden>·</span>
-          <Link href="/app/questions" className="font-semibold text-primary">
+          <Link href={pathwayHubAppQuestionsHref(pathway.id)} className="font-semibold text-primary">
             App question bank
           </Link>
           <span aria-hidden>·</span>
@@ -378,7 +378,10 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
               Start 5-question quiz from this topic
             </Link>
           )}
-          <Link href="/app/questions" className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold">
+          <Link
+            href={pathwayHubAppQuestionsHref(pathway.id)}
+            className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold"
+          >
             Open app question bank
           </Link>
           <Link href={catHub} className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold">

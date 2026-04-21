@@ -5,14 +5,9 @@ import { auth } from "@/lib/auth";
 import { attemptStartTrial } from "@/lib/trial/attempt-start-trial";
 import { TRIAL_DEVICE_COOKIE } from "@/lib/trial/trial-constants";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+import { getTrustedClientIp } from "@/lib/http/client-ip";
 
 export const runtime = "nodejs";
-
-function clientIp(req: Request): string {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? req.headers.get("x-real-ip") ?? "unknown"
-  );
-}
 
 function sessionUserId(session: { user?: unknown } | null): string | undefined {
   const u = session?.user;
@@ -36,7 +31,7 @@ export async function POST(req: Request) {
   const newDevice = !deviceId;
   if (!deviceId) deviceId = randomUUID();
 
-  const result = await attemptStartTrial({ userId, deviceId, ip: clientIp(req) });
+  const result = await attemptStartTrial({ userId, deviceId, ip: getTrustedClientIp(req) });
 
   if (result.ok) {
     const res = NextResponse.json({ ok: true, trialEndsAt: result.trialEndsAt });

@@ -21,6 +21,8 @@ describe("security regression (source contracts)", () => {
     );
     assert.match(rl, /isCredentialsLoginRateLimited/);
     assert.match(auth, /consumeCredentialsLoginFailure/);
+    assert.match(auth, /staffAccount:\s*staffCredentialsRl/);
+    assert.match(auth, /loadStaffRoleHintForLoginIdentifier/);
     assert.match(auth, /resetCredentialsLoginRateLimitKeys/);
     assert.match(auth, /login-lock:/);
     assert.match(auth, /isLoginLocked\(/);
@@ -82,25 +84,26 @@ describe("security regression (source contracts)", () => {
     assert.match(src, /rate_limit_store_memory_ignored_in_production/);
   });
 
-  it("unified rate limit fails closed in production when Postgres path throws", () => {
+  it("unified rate limit fails open in production when Postgres path is unavailable", () => {
     const src = readFileSync(
       join(nursenestCoreRoot, "src", "lib", "http", "rate-limit-unified.ts"),
       "utf8",
     );
     assert.match(src, /NODE_ENV === "production"/);
     assert.match(src, /logRateLimitPgUnavailableOnce/);
-    assert.match(src, /return \{ ok: false, remaining: 0 \}/);
+    assert.match(src, /rate_limit_unified_store_degraded/);
+    assert.match(src, /return \{ ok: true, remaining: opts.max \}/);
     assert.match(src, /getInMemoryRateLimitStoreSingleton\(\)\.check/);
   });
 
-  it("unified meta read fails closed in production when Postgres is unavailable", () => {
+  it("unified meta read fail-opens in production when Postgres is unavailable", () => {
     const src = readFileSync(
       join(nursenestCoreRoot, "src", "lib", "http", "rate-limit-unified.ts"),
       "utf8",
     );
     assert.match(src, /readRateLimitWindowCountUnified/);
     assert.match(src, /rate_limit_meta_read_degraded/);
-    assert.match(src, /fail_closed_count_max/);
+    assert.match(src, /fail_open_count_zero/);
   });
 
   it("Postgres RL check() binds prisma before $transaction", () => {

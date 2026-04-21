@@ -11,16 +11,9 @@ import { captureServerEvent, analyticsDistinctId } from "@/lib/observability/pos
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { getTrustedClientIp } from "@/lib/http/client-ip";
 
 export const runtime = "nodejs";
-
-function clientIp(req: Request): string {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    req.headers.get("x-real-ip") ??
-    "unknown"
-  );
-}
 
 const bodySchema = z.object({
   token: z.string().min(20).max(512),
@@ -29,7 +22,7 @@ const bodySchema = z.object({
 
 export async function POST(req: Request) {
   return runWithApiTelemetry(req, "POST /api/auth/reset-password", "auth", async () => {
-  const ip = clientIp(req);
+  const ip = getTrustedClientIp(req);
   const correlation = correlationIdFromRequest(req) ?? "";
   /** Per-IP limit: global proxy uses `ratelimit:auth:reset:ip:*` (see {@link enforceApiRateLimit}) — not duplicated here. */
 

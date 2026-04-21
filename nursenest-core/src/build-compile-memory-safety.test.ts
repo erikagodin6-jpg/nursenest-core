@@ -91,7 +91,8 @@ test("on-demand marketing routes do not keep empty generateStaticParams exports"
 test("root app error boundary defers optional Sentry import", () => {
   const appError = readFileSync(join(root, "src", "app", "error.tsx"), "utf8");
   assert.doesNotMatch(appError, /^import \* as Sentry from ["']@sentry\/nextjs["'];?$/m);
-  assert.match(appError, /import\(["']@sentry\/nextjs["']\)/);
+  assert.doesNotMatch(appError, /import\(["']@sentry\/nextjs["']\)/);
+  assert.match(appError, /captureClientExceptionIfEnabled/);
 });
 
 test("safe server log helper avoids async Sentry import in shared build graph", () => {

@@ -43,6 +43,7 @@ import { createRequire } from "module";
 import os from "node:os";
 import { fileURLToPath } from "url";
 import type { NextConfig } from "next";
+import { CORE_HOSTED_MARKETING_LOCALES } from "./src/lib/i18n/marketing-locale-policy";
 
 /** Parent of `nursenest-core/` (repo root); avoids `path` in config bundle (fixes ESM load). */
 const monorepoRoot = fileURLToPath(new URL("..", import.meta.url));
@@ -199,6 +200,33 @@ const legacyMedMathRedirect = {
   permanent: true,
 } as const;
 
+/** Legacy `/terms-of-service` URLs → canonical `/terms` (default + each hosted marketing locale prefix). */
+function buildTermsOfServiceRedirects(): RedirectEntry[] {
+  return [
+    { source: "/terms-of-service", destination: "/terms", permanent: true },
+    ...CORE_HOSTED_MARKETING_LOCALES.map((loc) => ({
+      source: `/${loc}/terms-of-service`,
+      destination: `/${loc}/terms`,
+      permanent: true,
+    })),
+  ];
+}
+
+/** Legacy marketing URLs → `/for-institutions` (canonical). */
+function buildInstitutionalMarketingRedirects(): RedirectEntry[] {
+  const rows: RedirectEntry[] = [
+    { source: "/institutions", destination: "/for-institutions", permanent: true },
+    { source: "/schools", destination: "/for-institutions", permanent: true },
+  ];
+  for (const loc of CORE_HOSTED_MARKETING_LOCALES) {
+    rows.push(
+      { source: `/${loc}/institutions`, destination: `/${loc}/for-institutions`, permanent: true },
+      { source: `/${loc}/schools`, destination: `/${loc}/for-institutions`, permanent: true },
+    );
+  }
+  return rows;
+}
+
 /** Matches `/api/marketing-assets/*` success responses and recommended DO Spaces CDN object metadata (see marketing-cdn.catalog.json). */
 const STATIC_ASSET_CACHE_CONTROL = "public, max-age=31536000, immutable" as const;
 
@@ -293,7 +321,7 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     if (!runHeavyBuildTasks) {
-      return [legacyMedMathRedirect];
+      return [legacyMedMathRedirect, ...buildTermsOfServiceRedirects(), ...buildInstitutionalMarketingRedirects()];
     }
     const {
       CORE_HOSTED_MARKETING_LOCALES,
@@ -319,6 +347,8 @@ const nextConfig: NextConfig = {
 
     return [
       legacyMedMathRedirect,
+      ...buildTermsOfServiceRedirects(),
+      ...buildInstitutionalMarketingRedirects(),
       /**
        * Legacy programmatic SEO slugs (`/{slug}`, `/seo/{slug}`, `/{locale}/{slug}`) → canonical pathway hubs.
        * Runs before rewrites so broken umbrella landings never 500; backlinks consolidate on exam hubs.
