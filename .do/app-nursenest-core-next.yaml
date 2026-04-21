@@ -73,6 +73,9 @@ services:
       success_threshold: 1
       failure_threshold: 12
     envs:
+      # Build env: App Platform UI can override values from this YAML. `next.config.ts` forces single-worker
+      # low-memory mode when `DIGITALOCEAN_APP_ID` is set (no need to duplicate `NN_APP_PLATFORM_BUILD` in UI).
+      # Set `NN_ALLOW_MULTI_BUILD_WORKERS=true` only on a larger builder to honor `BUILD_WEBPACK_PARALLELISM` again.
       - key: NODE_ENV
         value: production
         scope: BUILD_AND_RUN_TIME

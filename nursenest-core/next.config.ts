@@ -11,9 +11,13 @@
  * **RUN_HEAVY_BUILD_TASKS:** set to `false` to skip loading large redirect/rewrite graphs during `next build`
  * (lower memory — production deploys should set this in CI/build env). See `docs/OPERATOR_DATA_IMPORT_AND_BUILD.md`.
  *
- * **NN_APP_PLATFORM_BUILD / BUILD_LOW_MEMORY_STATIC_GENERATION:** when `true`, sets
- * `experimental.staticGenerationMaxConcurrency: 1` so prerender work does not default to 8 concurrent
- * pages per worker (reduces cgroup OOM risk alongside `BUILD_WEBPACK_PARALLELISM=1`).
+ * **DigitalOcean App Platform:** `DIGITALOCEAN_APP_ID` is set during App Platform builds even when
+ * `NN_APP_PLATFORM_BUILD` is missing from the UI env list — we treat that as a memory-bound build:
+ * `experimental.cpus` / webpack `parallelism` are forced to **1** (ignores UI `BUILD_WEBPACK_PARALLELISM=2`).
+ * Opt out with `NN_ALLOW_MULTI_BUILD_WORKERS=true` on a larger builder (then `BUILD_WEBPACK_PARALLELISM` applies again).
+ *
+ * **NN_APP_PLATFORM_BUILD / BUILD_LOW_MEMORY_STATIC_GENERATION / NN_FORCE_SINGLE_BUILD_WORKER:** same
+ * single-worker + `staticGenerationMaxConcurrency: 1` behavior on other hosts.
  *
  * **BUILD_WEBPACK_PARALLELISM:** optional positive integer (default `1`). Webpack `parallelism` and
  * `experimental.cpus` use this value capped by `os.cpus().length` — keeps small-builder memory safety by
@@ -45,6 +49,10 @@ import type { NextConfig } from "next";
 const monorepoRoot = fileURLToPath(new URL("..", import.meta.url));
 const require = createRequire(import.meta.url);
 
+function truthyEnv(name: string): boolean {
+  return /^(1|true|yes)$/i.test(String(process.env[name] ?? "").trim());
+}
+
 /** Default 1 for memory-bound builders; opt-in via `BUILD_WEBPACK_PARALLELISM` on larger runners. */
 function resolveBuildWebpackParallelism(): number {
   const raw = process.env.BUILD_WEBPACK_PARALLELISM?.trim();
@@ -54,7 +62,23 @@ function resolveBuildWebpackParallelism(): number {
   return Math.min(n, Math.max(1, os.cpus().length));
 }
 
-const buildWebpackParallelism = resolveBuildWebpackParallelism();
+/** App Platform sets this during build; dashboard env can override YAML and set `BUILD_WEBPACK_PARALLELISM>1`. */
+const digitalOceanAppIdPresent = Boolean(String(process.env.DIGITALOCEAN_APP_ID ?? "").trim());
+/** When truthy, honor `BUILD_WEBPACK_PARALLELISM` / multi-worker static generation (large CI only). */
+const allowMultiBuildWorkers = truthyEnv("NN_ALLOW_MULTI_BUILD_WORKERS");
+
+/**
+ * Single gate for low-memory `next build`: DO App Platform (`DIGITALOCEAN_APP_ID`) or explicit flags,
+ * unless `NN_ALLOW_MULTI_BUILD_WORKERS` opts out.
+ */
+const lowMemoryBuildMode =
+  !allowMultiBuildWorkers &&
+  (digitalOceanAppIdPresent ||
+    truthyEnv("NN_APP_PLATFORM_BUILD") ||
+    truthyEnv("BUILD_LOW_MEMORY_STATIC_GENERATION") ||
+    truthyEnv("NN_FORCE_SINGLE_BUILD_WORKER"));
+
+const buildWebpackParallelism = lowMemoryBuildMode ? 1 : resolveBuildWebpackParallelism();
 
 /**
  * Heavy optional instrumentation trees (OpenTelemetry, Sentry, Prisma instrumentation) blow up RSS
@@ -90,9 +114,6 @@ const outputFileTracingHeavyExcludes = [
   ...outputFileTracingMonorepoNonRuntimeExcludes,
 ] as const;
 
-/** App Platform / small CI: serialize prerender work inside each static worker (default is 8 concurrent pages). */
-const lowMemoryStaticGeneration =
-  process.env.NN_APP_PLATFORM_BUILD === "true" || process.env.BUILD_LOW_MEMORY_STATIC_GENERATION === "true";
 
 // Default off so plain `next build` does not require TS-only route generators from config evaluation.
 const runHeavyBuildTasks = process.env.RUN_HEAVY_BUILD_TASKS === "true";
@@ -243,9 +264,9 @@ const nextConfig: NextConfig = {
      * Default 8 concurrent pages per static worker (`next/dist/export/worker.js`). With
      * `isolatedMemory: true`, child workers strip `--max-old-space-size`, so peak RSS can exceed the
      * parent heap cap — lowering concurrency on App Platform reduces “Job Terminated” / cgroup OOM.
-     * Opt in locally with `BUILD_LOW_MEMORY_STATIC_GENERATION=true`.
+     * Controlled by `lowMemoryBuildMode` (same gate as `experimental.cpus` / webpack parallelism).
      */
-    ...(lowMemoryStaticGeneration ? { staticGenerationMaxConcurrency: 1 } : {}),
+    ...(lowMemoryBuildMode ? { staticGenerationMaxConcurrency: 1 } : {}),
   },
   webpack: (config) => {
     config.parallelism = buildWebpackParallelism;
