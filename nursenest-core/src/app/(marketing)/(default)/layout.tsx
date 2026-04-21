@@ -5,7 +5,6 @@ import { readOptionalMarketingRegionToggleForCountry } from "@/lib/marketing/rea
 import { MarketingMainI18nShards } from "@/components/i18n/marketing-main-i18n-shards";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
-import { PathwayLessonProgressRefreshListener } from "@/components/lessons/pathway-lesson-progress-refresh-listener";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -30,6 +29,8 @@ import {
   shouldEmitNnHomeRouteDiag,
 } from "@/lib/observability/nn-home-isolation-flags";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
+import { loadMarketingLayoutObservability } from "@/lib/observability/deferred-marketing-layout-observability";
+import { loadRenderTrace } from "@/lib/observability/deferred-render-trace";
 import { getStaffSession } from "@/lib/auth/staff-session";
 
 /** Layout reads `headers()` (pathname probe + staff chrome); avoid wasted static-generation attempts during `next build`. */
@@ -89,6 +90,14 @@ function marketingDefaultLayoutStaticShellForHome({
 
 export default async function MarketingDefaultLocaleLayout({ children }: { children: React.ReactNode }) {
   const layoutBootT0 = nnHomeDiagNowMs();
+  void loadRenderTrace()
+    .then((m) => m.renderTrace("marketing_default_layout", { route: "shared-marketing-default" }))
+    .catch(() => {
+      /* best-effort */
+    });
+  void loadMarketingLayoutObservability().catch(() => {
+    /* optional Sentry span helpers — never block layout */
+  });
 
   if (nnHomeStaticMarketingLayoutEnabled()) {
     try {
@@ -291,7 +300,6 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                   <CheckoutGlobalRegionContextPathStamp />
                   <div className="nn-marketing-surface flex min-h-screen flex-col">
                     <SiteHeader serverHasStaffSession={staffSession != null} />
-                    <PathwayLessonProgressRefreshListener />
                     <main className="flex min-h-0 flex-1 flex-col">
                       {shouldLayerMainPageShards() ? (
                         <MarketingMainI18nShards locale={resolvedLocale}>

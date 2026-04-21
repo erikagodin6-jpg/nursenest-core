@@ -18,7 +18,9 @@ test("publicMarketingExploreDestinations exposes stable marketing keys", () => {
   const us = publicMarketingExploreDestinations("US");
   assert.equal(us.pricing, "/pricing");
   assert.equal(us.lessons, "/lessons");
-  assert.ok(us.practiceQuestions.includes("/questions"));
+  assert.equal(us.practiceQuestions, "/question-bank");
+  const ca = publicMarketingExploreDestinations("CA");
+  assert.equal(ca.practiceQuestions, "/question-bank");
 });
 
 test("offeringIdForTier + learnerMarketingPathwayIdFromSession align with default pathway ids", () => {

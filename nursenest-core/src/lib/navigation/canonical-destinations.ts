@@ -2,7 +2,7 @@
  * Canonical pathway and study destinations — single facade for header, footer, homepage, and CTAs.
  *
  * - **Public marketing** routes: region-aware exam hubs + shared “Explore” targets (pricing, lessons, etc.).
- * - **Learner** `/app` routes: delegate to {@link buildLearnerPrimaryNavItems} / {@link CANONICAL_LEARNER_ROUTES}.
+ * - **Learner** `/app` routes: import `@/lib/navigation/learner-primary-nav` (or {@link getLearnerPrimaryNavModule}).
  *
  * Do not duplicate ad hoc `/us/rn/...` strings in UI components; import from here or the underlying
  * `marketing-entry-routes` / `country-exam-offerings` modules via this file’s re-exports.
@@ -19,19 +19,21 @@ import {
   defaultNursingExamMarketingHub as defaultNursingExamMarketingHubFromNav,
   marketingExamPrepHubs,
 } from "@/lib/marketing/marketing-exam-navigation";
-import type { LearnerExamsSurfaceLabel } from "@/lib/navigation/learner-primary-nav";
-import {
-  buildLearnerPrimaryNavItems as buildLearnerPrimaryNavItemsImpl,
-  CANONICAL_LEARNER_ROUTES,
-  learnerPrimaryNavLabelKey as learnerPrimaryNavLabelKeyImpl,
-} from "@/lib/navigation/learner-primary-nav";
 
 export type { MarketingRegionToggle };
 
-type LearnerPrimaryNavKey = Parameters<typeof learnerPrimaryNavLabelKeyImpl>[0];
-
 /** Session tier aligned with NextAuth user.tier + SiteHeader learner helpers. */
 export type NavSessionTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
+
+/**
+ * Deferred learner nav module — keeps `pathway-cat-flow` and full nav graph off the marketing
+ * static import path (see `build-compile-memory-safety.test.ts`).
+ */
+export function getLearnerPrimaryNavModule() {
+  return import("@/lib/navigation/learner-primary-nav");
+}
+
+export type { LearnerExamsSurfaceLabel } from "@/lib/navigation/learner-primary-nav";
 
 /**
  * Maps subscription tier → exam offering id for default marketing pathway id resolution
@@ -92,36 +94,8 @@ export function publicMarketingExploreDestinations(region: MarketingRegionToggle
   } as const;
 }
 
-export { CANONICAL_LEARNER_ROUTES };
-
 export function defaultNursingExamMarketingHub(region: MarketingRegionToggle): string {
   return defaultNursingExamMarketingHubFromNav(region);
 }
 
 export { HUB };
-
-// —— Learner ——
-
-export type { LearnerExamsSurfaceLabel };
-
-export function buildLearnerPrimaryNavItems(
-  pathwayId: string | null,
-  options?: { examsLabel?: LearnerExamsSurfaceLabel },
-) {
-  return buildLearnerPrimaryNavItemsImpl(pathwayId, options);
-}
-
-export function learnerPrimaryNavLabelKey(key: LearnerPrimaryNavKey): string {
-  return learnerPrimaryNavLabelKeyImpl(key);
-}
-
-/**
- * Ordered learner study links — same hrefs as {@link buildLearnerPrimaryNavItems} (learner shell).
- * Marketing chrome keeps public “Explore” links; these remain for in-app / learner surfaces.
- */
-export function learnerPrimaryStudyDestinations(
-  pathwayId: string | null,
-  options?: { examsLabel?: LearnerExamsSurfaceLabel },
-) {
-  return buildLearnerPrimaryNavItemsImpl(pathwayId, options);
-}

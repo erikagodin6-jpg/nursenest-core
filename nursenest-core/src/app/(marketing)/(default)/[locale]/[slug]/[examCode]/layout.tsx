@@ -1,4 +1,5 @@
 import { notFound, redirect } from "next/navigation";
+import { PathwayLessonProgressRefreshListener } from "@/components/lessons/pathway-lesson-progress-refresh-listener";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 
@@ -30,5 +31,10 @@ export default async function ExamPathwayLayout({ children, params }: Props) {
   if (!isPathwayPublishedForPublicSite(pathway.id)) {
     redirect("/lessons");
   }
-  return <>{children}</>;
+  return (
+    <>
+      <PathwayLessonProgressRefreshListener />
+      {children}
+    </>
+  );
 }

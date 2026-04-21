@@ -1,4 +1,13 @@
+import type { ReactNode } from "react";
 import { Suspense } from "react";
+import { MarketingI18nShardLayer } from "@/components/i18n/marketing-i18n-provider";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import {
+  loadMarketingMessageShards,
+  loadMarketingMessageShardsSync,
+} from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { LearnerShellUserBar } from "@/components/auth/learner-shell-user-bar";
 import { LearnerShellLanguageControl } from "@/components/student/learner-shell-language-control";
@@ -159,6 +168,29 @@ export default async function LearnerShellLayout({ children }: { children: React
       ? { pathwayId, pathwayLabel: pathwayShortLabel }
       : null;
 
+  let paywalledRouteBody: ReactNode = (
+    <LearnerSilentSectionBoundary name="route_body">{children}</LearnerSilentSectionBoundary>
+  );
+  if (entitlement !== "error" && !entitlement.hasAccess) {
+    try {
+      const locale = await getMarketingLocaleForDefaultRoute();
+      const pagesMessages = await loadMarketingMessageShards(locale, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
+      const pagesFallback =
+        locale === DEFAULT_MARKETING_LOCALE
+          ? undefined
+          : loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
+      paywalledRouteBody = (
+        <MarketingI18nShardLayer messages={pagesMessages} fallbackMessages={pagesFallback}>
+          <LearnerSilentSectionBoundary name="route_body">{children}</LearnerSilentSectionBoundary>
+        </MarketingI18nShardLayer>
+      );
+    } catch (e) {
+      layoutStderrTrace("learner_shell", "paywall_pages_shard_failed", {
+        detail: e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200),
+      });
+    }
+  }
+
   // Keep optional shell features out of the shared learner layout graph unless the current request needs them.
   const LearnerStudyNextBlockComponent = studyNextBlock
     ? (await import("@/components/student/learner-study-next-block")).LearnerStudyNextBlock
@@ -247,7 +279,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                   className="min-w-0 outline-none"
                   tabIndex={-1}
                 >
-                  <LearnerSilentSectionBoundary name="route_body">{children}</LearnerSilentSectionBoundary>
+                  {paywalledRouteBody}
                 </main>
               </PageTransitionShell>
               {tutorContext ? (

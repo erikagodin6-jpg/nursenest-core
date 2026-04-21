@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { MarketingI18nShardLayer } from "@/components/i18n/marketing-i18n-provider";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { BookX, Flame } from "lucide-react";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
@@ -13,6 +14,13 @@ import { remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import { MistakeNotebookClient } from "@/components/mistakes/mistake-notebook-client";
 import { loadMistakeNotebookAction } from "./actions";
 import { BROWSE_QUESTIONS_CTA, SIGN_IN_CTA } from "@/lib/copy/cta-copy";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import {
+  loadMarketingMessageShards,
+  loadMarketingMessageShardsSync,
+} from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -53,12 +61,27 @@ export default async function MistakeNotebookPage() {
   // ── Entitlement gate ────────────────────────────────────────────────────────
   const entitlement = await resolveEntitlementForPage(userId);
   if (entitlement === "error" || !entitlement.hasAccess) {
-    return (
+    const gate = (
       <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
         <SubscriptionPaywall context="lessons" />
       </div>
     );
+    /** Layout merges `pages` for `!hasAccess`; entitlement `"error"` skips that path — merge here for paywall copy. */
+    if (entitlement === "error") {
+      const locale = await getMarketingLocaleForDefaultRoute();
+      const pagesMessages = await loadMarketingMessageShards(locale, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
+      const pagesFallback =
+        locale === DEFAULT_MARKETING_LOCALE
+          ? undefined
+          : loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
+      return (
+        <MarketingI18nShardLayer messages={pagesMessages} fallbackMessages={pagesFallback}>
+          {gate}
+        </MarketingI18nShardLayer>
+      );
+    }
+    return gate;
   }
 
   // ── Data load ───────────────────────────────────────────────────────────────

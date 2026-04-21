@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Suspense } from "react";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
+import { getStaffSession } from "@/lib/auth/staff-session";
 
 /** Shared marketing/locale dictionary for all `/app/*` routes (learner shell, exams, practice). */
 export const dynamic = "force-dynamic";
@@ -11,16 +13,13 @@ export const metadata: Metadata = {
 };
 
 export default async function AppSegmentLayout({ children }: { children: React.ReactNode }) {
-  const [{ AdminGlobalCommandPalette }, { getLearnerMarketingBundle }] = await Promise.all([
-    import("@/components/admin/admin-global-command-palette"),
-    import("@/lib/learner/learner-marketing-server"),
-  ]);
   let locale = "en";
   let messages: Record<string, string> = {};
   let fallbackMessages: Record<string, string> | undefined = undefined;
 
   try {
-    const bundle = await getLearnerMarketingBundle();
+    const { getLearnerShellMarketingBundle } = await import("@/lib/learner/learner-marketing-server");
+    const bundle = await getLearnerShellMarketingBundle();
     locale = bundle.locale;
     messages = bundle.messages;
     fallbackMessages = bundle.fallbackMessages;
@@ -31,12 +30,27 @@ export default async function AppSegmentLayout({ children }: { children: React.R
     // Fall through with English defaults — the learner app renders without translations rather than crashing.
   }
 
+  let adminPalette: ReactNode = null;
+  try {
+    const staff = await getStaffSession();
+    if (staff) {
+      const { AdminGlobalCommandPalette } = await import("@/components/admin/admin-global-command-palette");
+      adminPalette = (
+        <Suspense fallback={null}>
+          <AdminGlobalCommandPalette />
+        </Suspense>
+      );
+    }
+  } catch (e) {
+    console.error("[app-segment-layout] staff session / admin palette skipped", {
+      error: e instanceof Error ? e.message : String(e),
+    });
+  }
+
   return (
     <MarketingI18nProvider locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
       {children}
-      <Suspense fallback={null}>
-        <AdminGlobalCommandPalette />
-      </Suspense>
+      {adminPalette}
     </MarketingI18nProvider>
   );
 }

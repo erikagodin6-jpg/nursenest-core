@@ -6,6 +6,7 @@ import { blogLiveWhere, blogPostIsLive } from "@/lib/blog/blog-visibility";
 import {
   getStaticBlogPost,
   listStaticBlogPostsForIndex,
+  publishedBlogPostFromStaticRecord,
 } from "@/lib/blog/static-blog-posts";
 import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
 
@@ -27,8 +28,41 @@ async function withBlogTimeoutFallback<T>(
   });
 }
 
+const MARKETING_BUILD_PHASE = "phase-production-build";
+
+/**
+ * Skip Prisma for public blog reads during `next build` (mirrors homepage optional-DB guard).
+ * Uses bundled static posts only. Set `MARKETING_BLOG_SKIP_DB_FOR_BUILD=false` when CI must
+ * compile blog HTML from Postgres.
+ */
+function shouldSkipBlogDbForProductionBuild(): boolean {
+  const raw = process.env.MARKETING_BLOG_SKIP_DB_FOR_BUILD?.trim().toLowerCase();
+  if (raw === "true") return true;
+  if (raw === "false") return false;
+  return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE;
+}
+
+function blogIndexPostsFromStaticCorpusOnly(
+  safePage: number,
+  safeSize: number,
+): { posts: BlogIndexPost[]; total: number; page: number; pageSize: number } {
+  const all = listStaticBlogPostsForIndex().map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    excerpt: p.excerpt,
+    category: p.category,
+    createdAt: new Date(`${p.createdAt}T12:00:00Z`),
+    publishAt: null,
+    postStatus: BlogPostStatus.PUBLISHED,
+  }));
+  const total = all.length;
+  const posts = all.slice((safePage - 1) * safeSize, (safePage - 1) * safeSize + safeSize);
+  return { posts, total, page: safePage, pageSize: safeSize };
+}
+
 export async function canUseStaticBlogFallback(): Promise<boolean> {
   if (listStaticBlogPostsForIndex().length === 0) return false;
+  if (shouldSkipBlogDbForProductionBuild()) return true;
   const totalRows = await withBlogTimeoutFallback(() => prisma.blogPost.count(), 0, "blog_static_fallback_probe");
   return totalRows === 0;
 }
@@ -56,6 +90,9 @@ type BlogQueryScope = {
 export const BLOG_LIST_PAGE_SIZE = 24;
 
 export async function countPublishedBlogPosts(): Promise<number> {
+  if (shouldSkipBlogDbForProductionBuild()) {
+    return listStaticBlogPostsForIndex().length;
+  }
   const now = new Date();
   return withBlogTimeoutFallback(
     () => prisma.blogPost.count({ where: blogLiveWhere(now) }),
@@ -72,6 +109,9 @@ export async function getPublishedBlogPostsPage(
 ): Promise<{ posts: BlogIndexPost[]; total: number; page: number; pageSize: number }> {
   const safePage = Math.max(1, page);
   const safeSize = Math.min(API_LIST_PAGE_SIZE_HARD_MAX, Math.max(1, Math.floor(pageSize)));
+  if (shouldSkipBlogDbForProductionBuild()) {
+    return blogIndexPostsFromStaticCorpusOnly(safePage, safeSize);
+  }
   const includeTotal = options?.includeTotal !== false;
   const where = {
     AND: [
@@ -250,6 +290,23 @@ async function resolveScopedBlogPostBySlug(slug: string, scope?: BlogQueryScope)
 }
 
 export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope): Promise<BlogPostMeta | null> {
+  if (shouldSkipBlogDbForProductionBuild()) {
+    const s = getStaticBlogPost(slug);
+    if (!s) return null;
+    return {
+      title: s.title,
+      excerpt: s.excerpt,
+      postStatus: BlogPostStatus.PUBLISHED,
+      publishAt: null,
+      scheduledAt: null,
+      seoTitle: null,
+      seoDescription: null,
+      createdAt: new Date(`${s.createdAt}T12:00:00Z`),
+      internalLinkPlan: null,
+      tags: s.tags ?? [],
+      category: s.category ?? null,
+    };
+  }
   const db = await resolveScopedBlogPostBySlug(slug, scope);
   if (db) {
     return {
@@ -301,10 +358,17 @@ export async function isBlogPostMetaVisible(slug: string, scope?: BlogQueryScope
 
 export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQueryScope): Promise<BlogPost | null> {
   const now = new Date();
+  if (shouldSkipBlogDbForProductionBuild()) {
+    const s = getStaticBlogPost(slug);
+    if (!s) return null;
+    return publishedBlogPostFromStaticRecord(s);
+  }
   const row = await resolveScopedBlogPostBySlug(slug, scope);
   if (!row) {
     if (!(await canUseStaticBlogFallback())) return null;
-    return null;
+    const s = getStaticBlogPost(slug);
+    if (!s) return null;
+    return publishedBlogPostFromStaticRecord(s);
   }
   if (row.postStatus !== BlogPostStatus.PUBLISHED) return null;
   if (
@@ -319,6 +383,9 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
 }
 
 export async function countPublishedPostsWithTag(tag: string): Promise<number> {
+  if (shouldSkipBlogDbForProductionBuild()) {
+    return listStaticBlogPostsForIndex().filter((p) => (p.tags ?? []).includes(tag)).length;
+  }
   const now = new Date();
   return withBlogTimeoutFallback(
     () =>
@@ -347,6 +414,20 @@ export async function getPublishedBlogPostsByTagPage(
 ): Promise<{ posts: BlogTagListPost[]; total: number; page: number; pageSize: number }> {
   const safePage = Math.max(1, page);
   const safeSize = Math.min(API_LIST_PAGE_SIZE_HARD_MAX, Math.max(1, Math.floor(pageSize)));
+  if (shouldSkipBlogDbForProductionBuild()) {
+    const all = listStaticBlogPostsForIndex()
+      .filter((p) => (p.tags ?? []).includes(tag))
+      .map((p) => ({
+        slug: p.slug,
+        title: p.title,
+        excerpt: p.excerpt,
+        createdAt: new Date(`${p.createdAt}T12:00:00Z`),
+        publishAt: null as Date | null,
+      }));
+    const total = all.length;
+    const posts = all.slice((safePage - 1) * safeSize, (safePage - 1) * safeSize + safeSize);
+    return { posts, total, page: safePage, pageSize: safeSize };
+  }
   const now = new Date();
   const where = { AND: [blogLiveWhere(now), { tags: { has: tag } }] };
   const [posts, total] = await Promise.all([

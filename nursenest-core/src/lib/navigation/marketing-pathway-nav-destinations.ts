@@ -7,24 +7,15 @@ import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/ex
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { HUB, rnLessons, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
+import {
+  MEGA_MENU_STRIPPED_ACTIVE_PREFIXES,
+  type MarketingPathwayMegaMenuKey,
+} from "@/lib/navigation/marketing-mega-menu-active-prefixes";
+
+export { MEGA_MENU_STRIPPED_ACTIVE_PREFIXES, type MarketingPathwayMegaMenuKey };
 
 /** US-only product pathway: new graduate RN transition lessons (not pre-nursing). */
 export const US_NEW_GRAD_TRANSITION_PATHWAY_ID = "us-rn-new-grad-transition" as const;
-
-export type MarketingPathwayMegaMenuKey = "rn" | "pn" | "np" | "newgrad" | "allied";
-
-/**
- * Stripped marketing pathname prefixes (after {@link stripMarketingLocalePrefix}) that
- * should light up each exam mega-menu tab. Keep narrow: shared hubs like `/lessons` must
- * not activate "New Grad" just because the mega menu once linked there.
- */
-export const MEGA_MENU_STRIPPED_ACTIVE_PREFIXES: Record<MarketingPathwayMegaMenuKey, readonly string[]> = {
-  rn: ["/us/rn/", "/canada/rn/", "/lessons", "/question-bank"],
-  pn: ["/us/pn/", "/canada/pn/"],
-  np: ["/us/np/", "/canada/np/"],
-  newgrad: ["/us/rn/new-grad-transition/", "/us/new-grad", "/canada/new-grad"],
-  allied: ["/us/allied/", "/canada/allied/"],
-} as const;
 
 export type PublicNewGradStudyDestinations = {
   hubHref: string;

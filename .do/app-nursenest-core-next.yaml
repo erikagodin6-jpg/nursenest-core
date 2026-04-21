@@ -3,6 +3,12 @@
 # Active DigitalOcean App Platform spec for the standalone Next app in `nursenest-core/`.
 # Apply with: doctl apps update --spec .do/app-nursenest-core-next.yaml
 #
+# --- Optional Dockerfile path (deterministic; repo-root context) ---
+# Repo-root `/Dockerfile` needs build context to include `nursenest-core/`, `shared/`, `client/`.
+# To switch: set `source_dir` to `/` (repo root), add `dockerfile_path: Dockerfile`, remove
+# `environment_slug: node-js`, clear `build_command` (compile is inside the image). Keep
+# `run_command: npm run start` and `http_port: 8080`. See nursenest-core/docs/deploy-deterministic-docker.md.
+#
 name: nursenest-core-next
 region: tor
 

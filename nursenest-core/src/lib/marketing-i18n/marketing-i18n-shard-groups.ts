@@ -45,11 +45,17 @@ export const MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS = [
 export const MARKETING_ALLIED_VERTICAL_MESSAGE_SHARDS = ["allied"] as const satisfies readonly I18nShardFilename[];
 
 /**
- * Subscriber `/app/*` surfaces: full product copy without the allied marketing vertical.
- * Includes `pages` for a few shared snippets (e.g. paywall sample question copy).
+ * Subscriber `/app/*` shell (layout + chrome): marketing/nav/auth/billing/etc. without the large
+ * `pages` route-body table. Paywalled surfaces merge {@link MARKETING_PAGE_BODY_MESSAGE_SHARDS}
+ * locally (see learner layout + route pages that call {@link getLearnerMarketingBundle}).
+ */
+export const LEARNER_APP_SHELL_MESSAGE_SHARDS = [...MARKETING_CHROME_MESSAGE_SHARDS] as const satisfies readonly I18nShardFilename[];
+
+/**
+ * Subscriber `/app/*` when copy needs `pages.*` (metadata, paywall sample question, etc.).
  */
 export const LEARNER_APP_MESSAGE_SHARDS = [
-  ...MARKETING_CHROME_MESSAGE_SHARDS,
+  ...LEARNER_APP_SHELL_MESSAGE_SHARDS,
   ...MARKETING_PAGE_BODY_MESSAGE_SHARDS,
 ] as const satisfies readonly I18nShardFilename[];
 

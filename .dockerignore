@@ -1,0 +1,18 @@
+# Repo-root build context for nursenest-core Next app (see /Dockerfile).
+# Exclude host artifacts; dependencies are installed fresh in the image.
+
+**/.git
+**/.github
+**/.cursor
+**/.vscode
+**/node_modules
+**/.next
+**/dist
+**/.turbo
+**/*.log
+**/.env.local
+**/.env.*.local
+.worktrees
+.legacy-extract
+.cache
+**/.cache

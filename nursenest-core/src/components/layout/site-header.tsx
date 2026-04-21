@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -27,16 +28,33 @@ import { SignOutButton } from "@/components/auth/sign-out-button";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { MobileContextDrawer } from "@/components/layout/mobile-context-drawer";
-import { REGION_CONFIG, type GlobalRegionSlug, type GlobalLocaleCode } from "@/lib/i18n/global-regions";
+import type { GlobalRegionSlug, GlobalLocaleCode } from "@/lib/i18n/global-regions";
 import { HUB, signupWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import { useActiveNavContext } from "@/lib/navigation/use-active-nav-context";
-import { buildMarketingMegaMenus, type ExamMenuKey } from "@/lib/navigation/marketing-mega-menu";
-import { MEGA_MENU_STRIPPED_ACTIVE_PREFIXES } from "@/lib/navigation/marketing-pathway-nav-destinations";
+import {
+  MEGA_MENU_STRIPPED_ACTIVE_PREFIXES,
+  type MarketingPathwayMegaMenuKey,
+} from "@/lib/navigation/marketing-mega-menu-active-prefixes";
+import type { MarketingTierHubStripItem } from "@/lib/navigation/marketing-tier-hub-strip";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
-import { MarketingHeaderUtilityStrip } from "@/components/layout/marketing-header-utility-strip";
+
+const MarketingHeaderUtilityStrip = dynamic(
+  () =>
+    import("@/components/layout/marketing-header-utility-strip").then((mod) => ({
+      default: mod.MarketingHeaderUtilityStrip,
+    })),
+  {
+    loading: () => (
+      <div
+        className="nn-header-hide-until-xl w-full min-h-[40px] border-b border-transparent"
+        aria-busy="true"
+      />
+    ),
+  },
+);
+
 /** Primary filled header CTAs — white label on theme primary fill for consistent contrast. */
 const HEADER_NAV_PRIMARY_CTA = "nn-nav-cta text-white";
 
@@ -74,28 +92,32 @@ function isActivePath(current: string, base: string): boolean {
  * family across both US and Canada routes — SSR-safe (pure function, no
  * client-only APIs).
  */
+type ExamMenuKey = MarketingPathwayMegaMenuKey;
+
+function formatRegionSlugFallback(slug: string): string {
+  return slug
+    .split("-")
+    .map((w) => (w ? w.charAt(0).toUpperCase() + w.slice(1).toLowerCase() : ""))
+    .join(" ");
+}
+
 function isMegaMenuKeyActive(key: ExamMenuKey, strippedPath: string): boolean {
   const prefixes = MEGA_MENU_STRIPPED_ACTIVE_PREFIXES[key];
   return (prefixes ?? []).some((p) => strippedPath.startsWith(p));
 }
 
-function examIndicatorLabel(
+/** Sync badge line — allied-specific abbreviation is resolved client-side via dynamic import. */
+function examIndicatorLabelSync(
   t: (key: string) => string,
   country: LearnerCountry,
   tier: LearnerTier,
-  alliedProfessionKey?: string | null,
+  alliedAbbrev: string | null,
 ): string {
   const regionShort = country === "CA" ? t("nav.badge.regionCA") : t("nav.badge.regionUS");
   if (tier === "LVN_LPN") return `${regionShort} ${t("nav.badge.roleLvnLpn")}`;
   if (tier === "RPN") return `${regionShort} ${t("nav.badge.roleRpn")}`;
   if (tier === "ALLIED") {
-    if (alliedProfessionKey) {
-      const prof = ALLIED_PROFESSIONS.find((p) => p.professionKey === alliedProfessionKey);
-      if (prof) {
-        const match = prof.h1.match(/\(([A-Z/]+)\)/);
-        return match ? match[1] : prof.professionKey.toUpperCase();
-      }
-    }
+    if (alliedAbbrev) return `${regionShort} ${alliedAbbrev}`;
     return t("nav.badge.alliedHealth");
   }
   if (tier === "RN") return `${regionShort} ${t("nav.badge.roleRn")}`;
@@ -110,6 +132,8 @@ export type SiteHeaderProps = {
 
 export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   const { t, locale } = useMarketingI18n();
+  const tRef = useRef(t);
+  tRef.current = t;
   const router = useRouter();
   const pathname = usePathname() ?? "/";
   const searchParams = useSearchParams();
@@ -155,6 +179,34 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
     [strippedPath, clientGlobalRegion, region, user?.country],
   );
   const globalLocale: GlobalLocaleCode = (locale as GlobalLocaleCode) ?? "en";
+
+  useEffect(() => {
+    let cancelled = false;
+    void import("@/lib/navigation/marketing-tier-hub-strip").then((m) => {
+      if (cancelled) return;
+      setTierHubMenus(m.buildMarketingTierHubStrip(region, (k) => tRef.current(k)));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [region, locale]);
+
+  useEffect(() => {
+    if (effectiveGlobalRegion === "canada" || effectiveGlobalRegion === "us") {
+      queueMicrotask(() => setIntlRegionDisplayName(null));
+      return;
+    }
+    let cancelled = false;
+    const slug = effectiveGlobalRegion;
+    void import("@/lib/i18n/global-regions").then((m) => {
+      if (cancelled) return;
+      const row = m.REGION_CONFIG[slug as GlobalRegionSlug];
+      setIntlRegionDisplayName(row?.displayName ?? formatRegionSlugFallback(slug));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [effectiveGlobalRegion]);
 
   const localizeHref = (href: string) => {
     const mapped = mapLegacyMarketingHref(href);
@@ -209,7 +261,9 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   }, [pathname, locale, region]);
 
   const activeNav = useActiveNavContext();
-  const megaMenus = useMemo(() => buildMarketingMegaMenus(region, t), [region, t]);
+  const [tierHubMenus, setTierHubMenus] = useState<MarketingTierHubStripItem[]>([]);
+  const [intlRegionDisplayName, setIntlRegionDisplayName] = useState<string | null>(null);
+  const [alliedProfessionAbbrev, setAlliedProfessionAbbrev] = useState<string | null>(null);
   const isAuthenticated = Boolean(sessionStatus === "authenticated" && user);
   const isAdminAuthenticated = Boolean(
     isAuthenticated && shouldShowAdminDashboardNav({ serverHasStaffSession, sessionRole: user?.role }),
@@ -224,9 +278,36 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   const isMarketingEntitledLearner =
     isLearnerRole && activeNav.entitlement === "entitled";
   const navActor = isAdminAuthenticated ? "admin" : isLearnerRole ? "learner" : "anonymous";
+  const alliedProfessionKey = (user as { alliedProfessionKey?: string | null } | undefined)?.alliedProfessionKey;
+  useEffect(() => {
+    if (!isMarketingEntitledLearner || !user || user.tier !== "ALLIED") {
+      queueMicrotask(() => setAlliedProfessionAbbrev(null));
+      return;
+    }
+    const key = alliedProfessionKey?.trim();
+    if (!key) {
+      queueMicrotask(() => setAlliedProfessionAbbrev(null));
+      return;
+    }
+    let cancelled = false;
+    void import("@/lib/allied/allied-professions-registry").then((m) => {
+      if (cancelled) return;
+      const prof = m["ALLIED_PROFESSIONS"].find((p) => p.professionKey === key);
+      if (!prof) {
+        setAlliedProfessionAbbrev(null);
+        return;
+      }
+      const match = prof.h1.match(/\(([A-Z/]+)\)/);
+      setAlliedProfessionAbbrev(match ? match[1] : prof.professionKey.toUpperCase());
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [isMarketingEntitledLearner, user, alliedProfessionKey]);
+
   const learnerExamBadge =
     isMarketingEntitledLearner && user
-      ? examIndicatorLabel(t, user.country as LearnerCountry, user.tier as LearnerTier, (user as { alliedProfessionKey?: string | null }).alliedProfessionKey)
+      ? examIndicatorLabelSync(t, user.country as LearnerCountry, user.tier as LearnerTier, alliedProfessionAbbrev)
       : null;
   const activeProfession: string = isLearnerRole && user?.tier
     ? (user.tier === "RPN" || user.tier === "LVN_LPN" ? "pn" : user.tier === "NP" ? "np" : user.tier === "ALLIED" ? "allied" : "rn")
@@ -280,9 +361,6 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
     ],
     [t, locale],
   );
-  /** Primary exam hubs — same order/URLs as {@link buildMarketingMegaMenus} `hubHref` (region-aware). */
-  const tierHubMenus = megaMenus;
-
   const darkHeaderShadow = useMemo(() => {
     const inset = "inset 0 1px 0 0 rgba(255,255,255,0.15)";
     if (!isScrolled) return inset;
@@ -951,7 +1029,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                       ? formatTitleCase(t("home.region.ca"), locale)
                       : effectiveGlobalRegion === "us"
                         ? formatTitleCase(t("home.region.us"), locale)
-                        : REGION_CONFIG[effectiveGlobalRegion].displayName}
+                        : intlRegionDisplayName ?? formatRegionSlugFallback(effectiveGlobalRegion)}
                   </span>
                   . {t("nav.regionChangeHint")}
                 </span>

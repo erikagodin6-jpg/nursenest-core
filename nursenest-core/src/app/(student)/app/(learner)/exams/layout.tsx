@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
-import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { getLearnerShellMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import "./exam-shell.css";
 
 /**
@@ -15,7 +15,7 @@ export default async function ExamShellLayout({ children }: { children: React.Re
 
   try {
     [session] = await Promise.all([getProtectedRouteSession("(student).app.(learner).exams")]);
-    const bundle = await getLearnerMarketingBundle();
+    const bundle = await getLearnerShellMarketingBundle();
     t = bundle.t;
   } catch (e) {
     console.error("[exam-shell-layout] failed to load session or i18n bundle", {

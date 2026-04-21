@@ -1,7 +1,7 @@
-import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { getLearnerShellMarketingBundle } from "@/lib/learner/learner-marketing-server";
 
 export default async function LearnerSectionLoading() {
-  const { t } = await getLearnerMarketingBundle();
+  const { t } = await getLearnerShellMarketingBundle();
   return (
     <div className="nn-card overflow-hidden p-5 sm:p-6" aria-busy="true" aria-label={t("learner.loading.section")}>
       <div className="flex items-center gap-3">

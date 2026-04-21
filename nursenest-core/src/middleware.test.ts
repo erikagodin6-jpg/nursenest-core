@@ -128,10 +128,37 @@ test("marketing desktop white nav: explore links are top-level (no desktop More 
   assert.ok(!header.includes("desktopMoreOpen"), "desktop product nav must not use a More menu");
 });
 
-test("learner shell user bar: admin link when JWT staff or server staff hint", () => {
-  const bar = readFileSync(join(dir, "components", "auth", "learner-shell-user-bar.tsx"), "utf8");
-  assert.match(bar, /ADMIN_DASHBOARD_HREF/);
-  assert.match(bar, /href=\{ADMIN_DASHBOARD_HREF\}/);
-  assert.match(bar, /shouldShowAdminDashboardNav/);
-  assert.match(bar, /\{admin \? \(/);
+test("marketing header: no static import of allied profession registry or full mega-menu builder", () => {
+  const header = readFileSync(join(dir, "components", "layout", "site-header.tsx"), "utf8");
+  assert.ok(
+    !header.includes('from "@/lib/allied/allied-professions-registry"'),
+    "SiteHeader must not statically import allied-professions-registry (dynamic import() is allowed for badge)",
+  );
+  assert.ok(
+    !header.includes("buildMarketingMegaMenus"),
+    "SiteHeader must use lightweight tier hub strip instead of buildMarketingMegaMenus",
+  );
 });
+
+test("marketing header: tier hub strip, global-regions registry, and utility strip are not eager static imports", () => {
+  const header = readFileSync(join(dir, "components", "layout", "site-header.tsx"), "utf8");
+  assert.ok(
+    !header.includes('from "@/lib/navigation/marketing-tier-hub-strip"'),
+    "SiteHeader must dynamically import marketing-tier-hub-strip so the builder is not on the sync graph",
+  );
+  assert.ok(
+    !/\bimport\s*\{[^}]*\bREGION_CONFIG\b/.test(header),
+    "SiteHeader must not static-import REGION_CONFIG from global-regions (dynamic import for intl labels is OK)",
+  );
+  assert.ok(
+    !header.includes('from "@/components/layout/marketing-header-utility-strip"'),
+    "SiteHeader must code-split MarketingHeaderUtilityStrip (dynamic import / next/dynamic)",
+  );
+  assert.ok(
+    header.includes("next/dynamic") && header.includes("marketing-header-utility-strip"),
+    "SiteHeader must use next/dynamic for the preferences utility strip",
+  );
+});
+
+test("learner shell user bar: admin link when JWT staff or server staff hint", () => {
+  const bar = readFile

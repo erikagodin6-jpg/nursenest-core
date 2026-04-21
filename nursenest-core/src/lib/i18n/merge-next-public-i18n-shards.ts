@@ -2,7 +2,7 @@ import { existsSync } from "fs";
 import path from "path";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { PUBLIC_I18N_SHARD_FILENAMES } from "@shared/i18n-shard-policy";
+import { PUBLIC_I18N_SHARD_FILENAMES, type I18nShardFilename } from "@shared/i18n-shard-policy";
 import { stripStaffKeysFromPublicMergedBundle } from "@/lib/i18n/strip-staff-i18n-keys";
 import { readCachedI18nJsonFile } from "@/lib/i18n/i18n-translation-cache";
 
@@ -48,6 +48,12 @@ export type LoadMergedNextPublicOptions = {
    * Default false — public API and marketing surfaces must not receive staff strings.
    */
   includeStaffShards?: boolean;
+  /**
+   * When set, only these shard files are read from `public/i18n/{locale}/` (omit for full merge).
+   * Used during `next build` to avoid loading large route tables (`pages.json`, `allied.json`, …) when
+   * a merged bundle is only needed for chrome / fallback glue.
+   */
+  shardFilenames?: readonly I18nShardFilename[];
 };
 
 /**
@@ -61,20 +67,28 @@ export function loadMergedMarketingMessagesFromNextPublicDir(
   options?: LoadMergedNextPublicOptions,
 ): MarketingMessages | null {
   const includeStaffShards = options?.includeStaffShards === true;
+  const shardFilenames: readonly string[] =
+    options?.shardFilenames && options.shardFilenames.length > 0
+      ? options.shardFilenames
+      : PUBLIC_I18N_SHARD_FILENAMES;
 
   const legacy = path.resolve(path.join(i18nDir, `${locale}.json`));
   if (existsSync(legacy)) {
-    const normalized = readCachedI18nJsonFile(legacy, { locale, shard: "legacy" });
-    if (!normalized || Object.keys(normalized).length === 0) return null;
-    if (!includeStaffShards) {
-      return stripStaffKeysFromPublicMergedBundle(normalized);
+    if (options?.shardFilenames && options.shardFilenames.length > 0) {
+      /** Per-shard mode: ignore monolithic legacy file so callers can bound I/O during `next build`. */
+    } else {
+      const normalized = readCachedI18nJsonFile(legacy, { locale, shard: "legacy" });
+      if (!normalized || Object.keys(normalized).length === 0) return null;
+      if (!includeStaffShards) {
+        return stripStaffKeysFromPublicMergedBundle(normalized);
+      }
+      return normalized;
     }
-    return normalized;
   }
   const localeDir = path.join(i18nDir, locale);
   if (!existsSync(localeDir)) return null;
   const merged: MarketingMessages = {};
-  mergeShardJsonFiles(localeDir, PUBLIC_I18N_SHARD_FILENAMES, merged, locale);
+  mergeShardJsonFiles(localeDir, shardFilenames, merged, locale);
 
   if (includeStaffShards) {
     const adminRoot = resolveAdminOnlyI18nDir();

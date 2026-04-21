@@ -17,9 +17,10 @@ import {
 } from "@/lib/marketing/marketing-entry-routes";
 import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
 import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
+import type { MarketingPathwayMegaMenuKey } from "@/lib/navigation/marketing-mega-menu-active-prefixes";
 import { publicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
 
-export type ExamMenuKey = "rn" | "pn" | "np" | "newgrad" | "allied";
+export type ExamMenuKey = MarketingPathwayMegaMenuKey;
 
 export type MegaMenuLink = {
   key: string;

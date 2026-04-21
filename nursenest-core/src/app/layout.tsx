@@ -9,6 +9,7 @@ import { AppThemeProvider } from "@/components/theme/app-theme-provider";
 import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
 import { NURSENEST_DEFAULT_THEME, THEME_STORAGE_KEY } from "@/lib/theme/theme-registry";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
+import { loadRenderTrace } from "@/lib/observability/deferred-render-trace";
 import "./globals.css";
 /** Bundled with root layout CSS so marketing pages avoid a second render-blocking stylesheet (rules are dark-theme + `.nn-marketing-surface` scoped). */
 import "./(marketing)/marketing-dark-utilities.css";
@@ -77,6 +78,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   layoutStderrTrace("root_layout", "root layout start", { route: "shared-root-layout" });
+  void loadRenderTrace()
+    .then((m) => m.renderTrace("root_layout", { route: "shared-root-layout" }))
+    .catch(() => {
+      /* render-trace is best-effort */
+    });
   let session: Session | null = null;
   if (process.env.NEXT_PHASE === BUILD_PHASE) {
     session = null;
