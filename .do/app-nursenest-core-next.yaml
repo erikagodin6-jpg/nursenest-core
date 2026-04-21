@@ -73,9 +73,8 @@ services:
       success_threshold: 1
       failure_threshold: 12
     envs:
-      # Build env: App Platform UI can override values from this YAML. `next.config.ts` forces single-worker
-      # low-memory mode when `DIGITALOCEAN_APP_ID` is set (no need to duplicate `NN_APP_PLATFORM_BUILD` in UI).
-      # Set `NN_ALLOW_MULTI_BUILD_WORKERS=true` only on a larger builder to honor `BUILD_WEBPACK_PARALLELISM` again.
+      # Dashboard build env can override YAML. Single-worker forcing is explicit via `NN_FORCE_SINGLE_BUILD_WORKER`
+      # (fail-safe) and automatic when `DIGITALOCEAN_APP_ID` is set; opt out only with `NN_ALLOW_MULTI_BUILD_WORKERS=true`.
       - key: NODE_ENV
         value: production
         scope: BUILD_AND_RUN_TIME
@@ -92,6 +91,10 @@ services:
       # `.next/cache/webpack`. Compile uses `scripts/run-next-prod-build.mjs` which strips accidental host values.
       # Signals App Platform–aware scripts (e.g. marketing guards). `.next/cache` is preserved by default in post-build-prune.
       - key: NN_APP_PLATFORM_BUILD
+        value: "true"
+        scope: BUILD_TIME
+      # Fail-safe: guarantees `next.config.ts` low-memory worker path even if UI strips other flags.
+      - key: NN_FORCE_SINGLE_BUILD_WORKER
         value: "true"
         scope: BUILD_TIME
       # Optional: same effect as NN_APP_PLATFORM_BUILD for static prerender concurrency (next.config).
