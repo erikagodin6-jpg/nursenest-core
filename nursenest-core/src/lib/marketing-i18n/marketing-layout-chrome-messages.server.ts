@@ -73,7 +73,10 @@ export async function getMarketingDefaultLayoutChromeMessages(): Promise<Record<
           /* keep out */
         }
       }
-      defaultChromeState.resolved = out;
+      /** Same contract as locale chrome: never cache `{}` — a later request can retry after FS/cwd fixes. */
+      if (Object.keys(out).length > 0) {
+        defaultChromeState.resolved = out;
+      }
       return out;
     } catch {
       /* Leave `resolved` null so a later request can retry after transient FS/network issues. */
