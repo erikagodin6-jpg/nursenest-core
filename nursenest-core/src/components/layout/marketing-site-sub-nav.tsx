@@ -7,7 +7,7 @@ import { useTheme } from "next-themes";
 import { getNavChromeStyle } from "@/lib/theme/nav-chrome";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
+import { mapLegacyMarketingHref } from "@/lib/marketing/marketing-chrome-href";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";

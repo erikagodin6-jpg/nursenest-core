@@ -1,68 +1,76 @@
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
+import { marketingPublicSiteOrigin } from "@/lib/marketing/marketing-public-site-origin";
 import { isProgrammaticSeoSlug } from "@/lib/seo/programmatic-registry-slugs";
 
 /**
  * Maps legacy SPA paths from `shared/platform-manifest` and marketing copy to NurseNest Core routes.
  * External deep links fall back to the public marketing site when not implemented in Core.
  */
-const PUBLIC_SITE = process.env.NEXT_PUBLIC_NURSENEST_ASSETS_BASE?.replace(/\/$/, "") ?? "https://www.nursenest.ca";
 
-const EXACT: Record<string, string> = {
-  /** Legacy / alternate URLs → canonical institutional page */
-  "/institutional-pricing": "/for-institutions",
-  "/pricing/institutional": "/for-institutions",
-  "/for-schools": "/for-institutions",
-  /** Public lesson index (exam-scoped hubs); avoid sending “exam prep” intent to pricing. */
-  "/exam-prep": "/lessons",
-  "/register": "/signup",
-  /** PN Canada: canonical pathway hub (lessons, questions, CAT from hub). */
-  "/rex-pn": "/canada/rpn/rex-pn",
-  /** Legacy short path: send to public lessons index (region + exam picked there and in nav). */
-  "/nclex-rn": "/lessons",
-  "/np-exam-practice-questions": CANONICAL_PATHWAY_HUB.usNp,
-  "/nursing-certifications": `${PUBLIC_SITE}/nursing-certifications`,
-  "/newgrad": `${PUBLIC_SITE}/newgrad`,
-  "/new-grad": `${PUBLIC_SITE}/new-grad`,
-  /** Public marketing landings (do not map these to /app/*). */
-  "/lessons": "/lessons",
-  "/exam-lessons": "/lessons",
-  "/flashcards": "/flashcards",
-  /** Core hosts Med Math under tools; keep footer/header links on-origin. */
-  "/med-math": "/tools/med-math",
-  "/mock-exams": "/practice-exams",
-  "/mock-exam": "/practice-exams",
-  "/study": "/lessons",
-  "/test-bank": "/lessons",
-  "/analytics": "/app",
-  "/clinical-scenarios": "/lessons",
-  "/languages": `${PUBLIC_SITE}/languages`,
-  "/free-practice": "/lessons",
-  "/study-plan": "/app/study-plan",
-  "/reports": "/app",
-  "/career-journey": `${PUBLIC_SITE}/career-journey`,
-  "/career-journey/nursing": `${PUBLIC_SITE}/career-journey/nursing`,
-  "/start-free": "/signup",
-  "/faq": "/faq",
-  "/rex-pn-guide": `${PUBLIC_SITE}/rex-pn-guide`,
-  "/nclex-rn-guide": `${PUBLIC_SITE}/nclex-rn-guide`,
-  "/shop": `${PUBLIC_SITE}/shop`,
-  "/pre-nursing": "/pre-nursing",
-  /** No dedicated anatomy route in Core; tools index is the closest internal hub. */
-  "/anatomy": "/tools",
-  "/rex-pn-practice-questions": CANONICAL_PATHWAY_HUB.caPn,
-  "/nclex-rn-practice-questions": CANONICAL_PATHWAY_HUB.usRn,
-  "/nclex-pn-practice-questions": CANONICAL_PATHWAY_HUB.usPn,
-  "/cnple-practice-questions": CANONICAL_PATHWAY_HUB.caNp,
-  "/nursing-specialties": "/lessons",
-  "/new-graduate-support": `${PUBLIC_SITE}/new-graduate-support`,
-  "/healthcare-careers": `${PUBLIC_SITE}/healthcare-careers`,
-  "/blog": "/blog",
-  "/case-studies": "/case-studies",
-  "/paramedic": `${PUBLIC_SITE}/allied-health/paramedic`,
-  "/rrt": `${PUBLIC_SITE}/allied-health/rrt`,
-  "/mlt": `${PUBLIC_SITE}/allied-health/mlt`,
-  "/imaging": `${PUBLIC_SITE}/allied-health/imaging`,
-};
+let legacyMarketingExactRoutes: Record<string, string> | null = null;
+
+/** Large legacy path table — built on first `mapLegacyMarketingHref` / `resolveMarketingHref` use (not at module init). */
+function legacyMarketingExactRoutesTable(): Record<string, string> {
+  if (legacyMarketingExactRoutes) return legacyMarketingExactRoutes;
+  const origin = marketingPublicSiteOrigin();
+  legacyMarketingExactRoutes = {
+    /** Legacy / alternate URLs → canonical institutional page */
+    "/institutional-pricing": "/for-institutions",
+    "/pricing/institutional": "/for-institutions",
+    "/for-schools": "/for-institutions",
+    /** Public lesson index (exam-scoped hubs); avoid sending “exam prep” intent to pricing. */
+    "/exam-prep": "/lessons",
+    "/register": "/signup",
+    /** PN Canada: canonical pathway hub (lessons, questions, CAT from hub). */
+    "/rex-pn": "/canada/rpn/rex-pn",
+    /** Legacy short path: send to public lessons index (region + exam picked there and in nav). */
+    "/nclex-rn": "/lessons",
+    "/np-exam-practice-questions": CANONICAL_PATHWAY_HUB.usNp,
+    "/nursing-certifications": `${origin}/nursing-certifications`,
+    "/newgrad": `${origin}/newgrad`,
+    "/new-grad": `${origin}/new-grad`,
+    /** Public marketing landings (do not map these to /app/*). */
+    "/lessons": "/lessons",
+    "/exam-lessons": "/lessons",
+    "/flashcards": "/flashcards",
+    /** Core hosts Med Math under tools; keep footer/header links on-origin. */
+    "/med-math": "/tools/med-math",
+    "/mock-exams": "/practice-exams",
+    "/mock-exam": "/practice-exams",
+    "/study": "/lessons",
+    "/test-bank": "/lessons",
+    "/analytics": "/app",
+    "/clinical-scenarios": "/lessons",
+    "/languages": `${origin}/languages`,
+    "/free-practice": "/lessons",
+    "/study-plan": "/app/study-plan",
+    "/reports": "/app",
+    "/career-journey": `${origin}/career-journey`,
+    "/career-journey/nursing": `${origin}/career-journey/nursing`,
+    "/start-free": "/signup",
+    "/faq": "/faq",
+    "/rex-pn-guide": `${origin}/rex-pn-guide`,
+    "/nclex-rn-guide": `${origin}/nclex-rn-guide`,
+    "/shop": `${origin}/shop`,
+    "/pre-nursing": "/pre-nursing",
+    /** No dedicated anatomy route in Core; tools index is the closest internal hub. */
+    "/anatomy": "/tools",
+    "/rex-pn-practice-questions": CANONICAL_PATHWAY_HUB.caPn,
+    "/nclex-rn-practice-questions": CANONICAL_PATHWAY_HUB.usRn,
+    "/nclex-pn-practice-questions": CANONICAL_PATHWAY_HUB.usPn,
+    "/cnple-practice-questions": CANONICAL_PATHWAY_HUB.caNp,
+    "/nursing-specialties": "/lessons",
+    "/new-graduate-support": `${origin}/new-graduate-support`,
+    "/healthcare-careers": `${origin}/healthcare-careers`,
+    "/blog": "/blog",
+    "/case-studies": "/case-studies",
+    "/paramedic": `${origin}/allied-health/paramedic`,
+    "/rrt": `${origin}/allied-health/rrt`,
+    "/mlt": `${origin}/allied-health/mlt`,
+    "/imaging": `${origin}/allied-health/imaging`,
+  };
+  return legacyMarketingExactRoutes;
+}
 
 /** Core-hosted Allied marketing (must not be rewritten to the legacy public site). */
 export function isCoreAlliedMarketingPath(href: string): boolean {
@@ -75,9 +83,9 @@ export function mapLegacyMarketingHref(href: string): string {
   if (isCoreAlliedMarketingPath(href)) return href;
   /** Monolith storefront only; Core allied marketing is handled above. */
   if (href.startsWith("/shop")) {
-    return `${PUBLIC_SITE}${href}`;
+    return `${marketingPublicSiteOrigin()}${href}`;
   }
-  return EXACT[href] ?? href;
+  return legacyMarketingExactRoutesTable()[href] ?? href;
 }
 
 /** Prefer Core routes for app/pricing/auth; send other marketing paths to the public site to avoid 404s. */
@@ -126,10 +134,10 @@ export function resolveMarketingHref(href: string): string {
   ) {
     return mapped;
   }
-  return `${PUBLIC_SITE}${mapped.startsWith("/") ? mapped : `/${mapped}`}`;
+  return `${marketingPublicSiteOrigin()}${mapped.startsWith("/") ? mapped : `/${mapped}`}`;
 }
 
 export function marketingAssetUrl(path: string): string {
   if (path.startsWith("http")) return path;
-  return `${PUBLIC_SITE}${path.startsWith("/") ? path : `/${path}`}`;
+  return `${marketingPublicSiteOrigin()}${path.startsWith("/") ? path : `/${path}`}`;
 }

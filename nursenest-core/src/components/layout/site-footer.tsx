@@ -8,7 +8,8 @@ import { useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { getNavChromeStyle } from "@/lib/theme/nav-chrome";
-import { mapLegacyMarketingHref, resolveMarketingHref } from "@/lib/legacy-marketing-routes";
+import { resolveMarketingHref } from "@/lib/marketing/marketing-chrome-href";
+import { externalMarketingLanguagesHref } from "@/lib/marketing/marketing-public-site-origin";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { EmailSignupBanner } from "@/components/marketing/email-signup-banner";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
@@ -330,7 +331,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
               )}
             />
           </div>
-          <Link href={mapLegacyMarketingHref("/languages")} className="nn-footer-link text-xs">
+          <Link href={externalMarketingLanguagesHref()} className="nn-footer-link text-xs">
             {formatTitleCase(t("footer.viewAllLanguages"), locale)}
           </Link>
         </div>

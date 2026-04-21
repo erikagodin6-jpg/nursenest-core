@@ -13,7 +13,7 @@ import { CompactCountryTrigger, CountrySelector } from "@/components/layout/glob
 import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { useClientGlobalRegionCookie } from "@/lib/region/use-client-global-region";
 import { effectiveMarketingHeaderGlobalRegion } from "@/lib/marketing/marketing-header-global-region";
-import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
+import { mapLegacyMarketingHref } from "@/lib/marketing/marketing-chrome-href";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { isStaffRole } from "@/lib/auth/staff-roles";
 import { MarketingUtilityFloatingPanel } from "@/components/layout/marketing-utility-floating-panel";

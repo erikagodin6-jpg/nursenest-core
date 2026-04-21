@@ -5,7 +5,6 @@
  * Note: No Unicode em dashes in user-facing copy that references these (use hyphens or colons).
  */
 
-import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 
 export type MarketingRegionToggle = "US" | "CA";
@@ -70,8 +69,8 @@ export const NP = {
 
 /** Allied (in-app hubs) */
 export const ALLIED = {
-  /** Legacy marketing URL (often off Core; use for “brochure” context). */
-  marketingLanding: () => mapLegacyMarketingHref("/allied-health"),
+  /** Core allied marketing index (unchanged from prior `mapLegacyMarketingHref("/allied-health")` — allied paths stay on Core). */
+  marketingLanding: () => "/allied-health",
   usHub: "/us/allied/allied-health",
   usQuestions: "/us/allied/allied-health/questions",
   caHub: "/canada/allied/allied-health",

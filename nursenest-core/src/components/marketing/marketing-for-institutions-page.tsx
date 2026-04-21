@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { resolveMarketingHref } from "@/lib/legacy-marketing-routes";
+import { resolveMarketingHref } from "@/lib/marketing/marketing-chrome-href";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import {

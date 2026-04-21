@@ -9,7 +9,7 @@ import { createPortal } from "react-dom";
 import { useTheme } from "next-themes";
 import { getNavChromeStyle, getNavChromeVars } from "@/lib/theme/nav-chrome";
 import { ChevronDown, MapPin, Menu, Settings, User, X } from "lucide-react";
-import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
+import { mapLegacyMarketingHref } from "@/lib/marketing/marketing-chrome-href";
 import { isStaffRole, shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
 import { ADMIN_DASHBOARD_HREF, navigateAdminDashboardHard } from "@/lib/auth/admin-dashboard-link";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
@@ -385,9 +385,9 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
     const base = `/signup?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`;
     const isHome = strippedPath === "/" || strippedPath === "";
     const raw = isHome ? `${base}&entry=homepage` : base;
-    const mapped = mapLegacyMarketingHref(raw);
-    if (mapped.startsWith("http://") || mapped.startsWith("https://")) return mapped;
-    return withMarketingLocale(locale, mapped);
+    /** `mapLegacyMarketingHref` only matches bare paths; query strings pass through unchanged. */
+    if (raw.startsWith("http://") || raw.startsWith("https://")) return raw;
+    return withMarketingLocale(locale, raw);
   }, [locale, strippedPath, postLoginCallbackPath]);
 
   useEffect(() => {

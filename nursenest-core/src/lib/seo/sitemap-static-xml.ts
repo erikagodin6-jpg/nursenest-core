@@ -29,17 +29,7 @@ import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "@/lib/exam-pathways/programma
 import { LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT } from "@/lib/marketing/canonical-pathway-hubs";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { isRnNclexMarketingPathwayId } from "@/lib/exam-pathways/rn-nclex-public-hub-policy";
-import {
-  isPathwayPublishedForPublicSite,
-  listPublishedExamPathwaysForPublicSite,
-} from "@/lib/navigation/country-exam-launch-readiness";
 import { listNpPracticeTestSegmentPaths } from "@/lib/exam-pathways/np-practice-test-segments";
-import {
-  PATHWAY_LESSON_SITEMAP_BATCH,
-  listPathwayIdsWithLessons,
-  listPathwayLessonSlugBatch,
-  listTopicClustersForSitemap,
-} from "@/lib/lessons/pathway-lesson-loader";
 import { PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { logSeoEmittedUrlBatch } from "@/lib/seo/seo-url-emission-audit";
@@ -84,8 +74,9 @@ export function normalizeOrigin(origin: string): string {
 }
 
 /** NP keyword practice-test hubs (`/us/np/aanp-practice-test`, …) — indexable alongside canonical exam codes. */
-export function collectNpPracticeTestHubUrls(origin: string): string[] {
+export async function collectNpPracticeTestHubUrls(origin: string): Promise<string[]> {
   const o = normalizeOrigin(origin);
+  const { isPathwayPublishedForPublicSite } = await import("@/lib/navigation/country-exam-launch-readiness");
   return listNpPracticeTestSegmentPaths()
     .filter(({ countrySlug, roleTrack, segment }) => {
       const copy = getNpPracticeTestLandingCopy(countrySlug, roleTrack, segment);
@@ -103,8 +94,9 @@ export async function collectPathwayTopicProgrammaticUrls(origin: string): Promi
 }
 
 /** Exam hub URLs: /{country}/{role}/{exam} + pricing + questions landing */
-export function collectExamPathwayUrls(origin: string): string[] {
+export async function collectExamPathwayUrls(origin: string): Promise<string[]> {
   const o = normalizeOrigin(origin);
+  const { listPublishedExamPathwaysForPublicSite } = await import("@/lib/navigation/country-exam-launch-readiness");
   const urls: string[] = [];
   for (const p of listPublishedExamPathwaysForPublicSite()) {
     if (!isRnNclexMarketingPathwayId(p.id)) {
@@ -160,6 +152,13 @@ export async function collectPathwayLessonSeoUrls(origin: string): Promise<strin
     return urls;
   }
 
+  const { isPathwayPublishedForPublicSite } = await import("@/lib/navigation/country-exam-launch-readiness");
+  const {
+    PATHWAY_LESSON_SITEMAP_BATCH,
+    listPathwayIdsWithLessons,
+    listPathwayLessonSlugBatch,
+    listTopicClustersForSitemap,
+  } = await import("@/lib/lessons/pathway-lesson-loader");
   const pathwayIds = await listPathwayIdsWithLessons();
   const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-pathways-catalog");
   for (const pid of pathwayIds) {
@@ -333,10 +332,11 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
   ];
   const lessonUrls = await collectPathwayLessonSeoUrls(o);
   const pathwayTopicUrls = await collectPathwayTopicProgrammaticUrls(o);
+  const [examHubUrls, npPracticeHubUrls] = await Promise.all([collectExamPathwayUrls(o), collectNpPracticeTestHubUrls(o)]);
   return [
     ...expandedBase,
-    ...collectExamPathwayUrls(o),
-    ...collectNpPracticeTestHubUrls(o),
+    ...examHubUrls,
+    ...npPracticeHubUrls,
     ...pathwayTopicUrls,
     ...collectAlliedMarketingUrls(o),
     ...collectPreNursingSeoUrls(o),

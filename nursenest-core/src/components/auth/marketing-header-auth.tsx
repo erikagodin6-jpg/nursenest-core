@@ -9,7 +9,7 @@ import { useTheme } from "next-themes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
+import { mapLegacyMarketingHref } from "@/lib/marketing/marketing-chrome-href";
 import { ADMIN_DASHBOARD_HREF, navigateAdminDashboardHard } from "@/lib/auth/admin-dashboard-link";
 import { shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
 import { formatTitleCase } from "@/lib/format/text-case";
