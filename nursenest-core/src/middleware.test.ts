@@ -143,8 +143,8 @@ test("marketing header: no static import of allied profession registry or full m
 test("marketing header: tier hub strip, global-regions registry, and utility strip are not eager static imports", () => {
   const header = readFileSync(join(dir, "components", "layout", "site-header.tsx"), "utf8");
   assert.ok(
-    !header.includes('from "@/lib/navigation/marketing-tier-hub-strip"'),
-    "SiteHeader must dynamically import marketing-tier-hub-strip so the builder is not on the sync graph",
+    !/^\s*import\s+(?!type)\{[^}]*\}\s*from\s*["']@\/lib\/navigation\/marketing-tier-hub-strip["']/m.test(header),
+    "SiteHeader must not value-import marketing-tier-hub-strip (type-only or dynamic import() is OK)",
   );
   assert.ok(
     !/\bimport\s*\{[^}]*\bREGION_CONFIG\b/.test(header),
@@ -158,7 +158,20 @@ test("marketing header: tier hub strip, global-regions registry, and utility str
     header.includes("next/dynamic") && header.includes("marketing-header-utility-strip"),
     "SiteHeader must use next/dynamic for the preferences utility strip",
   );
+  assert.ok(
+    !header.includes("import { MobileContextDrawer"),
+    "SiteHeader must lazy-load MobileContextDrawer (type-only import from mobile-context-drawer is OK)",
+  );
+  assert.ok(
+    !header.includes('from "@/lib/marketing/apply-global-region-selection"'),
+    "SiteHeader must defer apply-global-region-selection until region change (dynamic import)",
+  );
 });
 
 test("learner shell user bar: admin link when JWT staff or server staff hint", () => {
-  const bar = readFile
+  const bar = readFileSync(join(dir, "components", "auth", "learner-shell-user-bar.tsx"), "utf8");
+  assert.match(bar, /ADMIN_DASHBOARD_HREF/);
+  assert.match(bar, /href=\{ADMIN_DASHBOARD_HREF\}/);
+  assert.match(bar, /shouldShowAdminDashboardNav/);
+  assert.match(bar, /\{admin \? \(/);
+});

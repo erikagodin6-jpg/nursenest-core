@@ -549,19 +549,39 @@ function buildRegistryMaps(): {
   return { byKey, rows };
 }
 
-const { byKey: PATHWAY_TOPIC_REGISTRY, rows: PATHWAY_TOPIC_ROWS } = buildRegistryMaps();
+/**
+ * Lazy registry: expanding every published pathway × topic matrix is thousands of rows.
+ * Importing this module (route compilation, unrelated SEO helpers) must not synchronously
+ * allocate the full maps — work runs on first lookup or sitemap collection instead.
+ */
+let pathwayTopicRegistryMaps:
+  | {
+      byKey: Map<string, PathwayTopicProgrammaticRow>;
+      rows: PathwayTopicProgrammaticRow[];
+    }
+  | undefined;
+
+function getPathwayTopicRegistryMaps(): {
+  byKey: Map<string, PathwayTopicProgrammaticRow>;
+  rows: PathwayTopicProgrammaticRow[];
+} {
+  if (!pathwayTopicRegistryMaps) {
+    pathwayTopicRegistryMaps = buildRegistryMaps();
+  }
+  return pathwayTopicRegistryMaps;
+}
 
 export function getPathwayTopicProgrammaticRow(
   pathwayId: string,
   seoSlug: string,
 ): PathwayTopicProgrammaticRow | undefined {
-  return PATHWAY_TOPIC_REGISTRY.get(registryKey(pathwayId, seoSlug));
+  return getPathwayTopicRegistryMaps().byKey.get(registryKey(pathwayId, seoSlug));
 }
 
 /** Relative URL paths (English-default hub shape) for sitemap — capped. */
 export function collectPathwayTopicProgrammaticPublicPaths(): string[] {
   const out: string[] = [];
-  for (const row of PATHWAY_TOPIC_ROWS) {
+  for (const row of getPathwayTopicRegistryMaps().rows) {
     if (out.length >= MAX_PATHWAY_TOPIC_PROGRAMMATIC_SITEMAP_URLS) break;
     const p = getExamPathwayById(row.pathwayId);
     if (!p || p.status === "hidden") continue;
@@ -571,5 +591,5 @@ export function collectPathwayTopicProgrammaticPublicPaths(): string[] {
 }
 
 export function pathwayTopicProgrammaticRowCount(): number {
-  return PATHWAY_TOPIC_ROWS.length;
+  return getPathwayTopicRegistryMaps().rows.length;
 }

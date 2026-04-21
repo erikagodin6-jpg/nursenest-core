@@ -11,7 +11,6 @@ import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { useMarketingRegionToggleWithRefresh } from "@/lib/region/use-marketing-region-toggle";
 import { CompactCountryTrigger, CountrySelector } from "@/components/layout/global-context-switcher";
 import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
-import { applyGlobalRegionSelection } from "@/lib/marketing/apply-global-region-selection";
 import { useClientGlobalRegionCookie } from "@/lib/region/use-client-global-region";
 import { effectiveMarketingHeaderGlobalRegion } from "@/lib/marketing/marketing-header-global-region";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
@@ -117,6 +116,7 @@ export function MarketingHeaderUtilityStrip({
 
   const handleCountrySelect = useCallback(
     async (newRegion: GlobalRegionSlug) => {
+      const { applyGlobalRegionSelection } = await import("@/lib/marketing/apply-global-region-selection");
       await applyGlobalRegionSelection(newRegion, {
         marketingLocale: globalLocale,
         setUsCaMarketingRegion: setRegionAndRefresh,

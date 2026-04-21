@@ -4,7 +4,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType } from "react";
 import { createPortal } from "react-dom";
 import { useTheme } from "next-themes";
 import { getNavChromeStyle, getNavChromeVars } from "@/lib/theme/nav-chrome";
@@ -16,7 +16,6 @@ import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { useClientGlobalRegionCookie } from "@/lib/region/use-client-global-region";
 import { useMarketingRegionToggleWithRefresh } from "@/lib/region/use-marketing-region-toggle";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { applyGlobalRegionSelection } from "@/lib/marketing/apply-global-region-selection";
 import { effectiveMarketingHeaderGlobalRegion } from "@/lib/marketing/marketing-header-global-region";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
 import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
@@ -27,7 +26,7 @@ import { Button } from "@/components/ui/button";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { MobileContextDrawer } from "@/components/layout/mobile-context-drawer";
+import type { MobileContextDrawerProps } from "@/components/layout/mobile-context-drawer";
 import type { GlobalRegionSlug, GlobalLocaleCode } from "@/lib/i18n/global-regions";
 import { HUB, signupWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { useActiveNavContext } from "@/lib/navigation/use-active-nav-context";
@@ -156,6 +155,9 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, regionToggleAnalytics);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileContextOpen, setMobileContextOpen] = useState(false);
+  const [MobileContextDrawerMod, setMobileContextDrawerMod] = useState<ComponentType<
+    MobileContextDrawerProps
+  > | null>(null);
   const [mobileLangOpen, setMobileLangOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [resumeStudyingCta, setResumeStudyingCta] = useState<HeaderResumeCta>(null);
@@ -259,6 +261,17 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
       setMobileLangOpen(false);
     });
   }, [pathname, locale, region]);
+
+  useEffect(() => {
+    if (!mobileContextOpen || MobileContextDrawerMod) return;
+    let cancelled = false;
+    void import("@/components/layout/mobile-context-drawer").then((m) => {
+      if (!cancelled) setMobileContextDrawerMod(() => m.MobileContextDrawer);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [mobileContextOpen, MobileContextDrawerMod]);
 
   const activeNav = useActiveNavContext();
   const [tierHubMenus, setTierHubMenus] = useState<MarketingTierHubStripItem[]>([]);
@@ -738,39 +751,51 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
         </div>
       </header>
 
-      {/* Mobile context/settings drawer — separate from main nav */}
-      <MobileContextDrawer
-        open={mobileContextOpen}
-        onClose={() => setMobileContextOpen(false)}
-        region={effectiveGlobalRegion}
-        locale={globalLocale}
-        profession={activeProfession}
-        exam={activeExam}
-        countrySelectorIncludeUnpublished={isAdminAuthenticated}
-        onRegionChange={async (newRegion) => {
-          await applyGlobalRegionSelection(newRegion, {
-            marketingLocale: globalLocale,
-            setUsCaMarketingRegion: setRegionAndRefresh,
-            router,
-            buildLocalizedPath: buildLocalizedMarketingPath,
-          });
-          setMobileContextOpen(false);
-        }}
-        onLocaleChange={() => {
-          setMobileContextOpen(false);
-        }}
-        onProfessionChange={() => {
-          setMobileContextOpen(false);
-        }}
-        onExamChange={() => {
-          setMobileContextOpen(false);
-        }}
-        themeLabels={{
-          navTheme: t("nav.theme"),
-          themeGroupLight: t("nav.themeGroupLight"),
-          themeGroupDark: t("nav.themeGroupDark"),
-        }}
-      />
+      {/* Mobile context/settings drawer — chunk loads only after user opens settings (heavy REGION_CONFIG + pathway helpers). */}
+      {mobileContextOpen && !MobileContextDrawerMod ? (
+        <div
+          className="fixed inset-0 z-[209] flex items-end justify-center bg-black/40 md:hidden"
+          aria-busy="true"
+          aria-live="polite"
+        >
+          <div className="mb-8 h-10 w-10 animate-spin rounded-full border-2 border-white/30 border-t-white/90" />
+        </div>
+      ) : null}
+      {MobileContextDrawerMod ? (
+        <MobileContextDrawerMod
+          open={mobileContextOpen}
+          onClose={() => setMobileContextOpen(false)}
+          region={effectiveGlobalRegion}
+          locale={globalLocale}
+          profession={activeProfession}
+          exam={activeExam}
+          countrySelectorIncludeUnpublished={isAdminAuthenticated}
+          onRegionChange={async (newRegion) => {
+            const { applyGlobalRegionSelection } = await import("@/lib/marketing/apply-global-region-selection");
+            await applyGlobalRegionSelection(newRegion, {
+              marketingLocale: globalLocale,
+              setUsCaMarketingRegion: setRegionAndRefresh,
+              router,
+              buildLocalizedPath: buildLocalizedMarketingPath,
+            });
+            setMobileContextOpen(false);
+          }}
+          onLocaleChange={() => {
+            setMobileContextOpen(false);
+          }}
+          onProfessionChange={() => {
+            setMobileContextOpen(false);
+          }}
+          onExamChange={() => {
+            setMobileContextOpen(false);
+          }}
+          themeLabels={{
+            navTheme: t("nav.theme"),
+            themeGroupLight: t("nav.themeGroupLight"),
+            themeGroupDark: t("nav.themeGroupDark"),
+          }}
+        />
+      ) : null}
 
       {mobileOpen && typeof document !== "undefined"
         ? createPortal(

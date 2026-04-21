@@ -61,7 +61,9 @@ test("merged marketing loader avoids full-bundle fallback during production buil
   const source = fs.readFileSync(path.join(__dirname, "load-marketing-messages.ts"), "utf8");
 
   assert.equal(source.includes('const MARKETING_BUILD_PHASE = "phase-production-build"'), true);
-  assert.equal(source.includes("process.env.NEXT_PHASE === MARKETING_BUILD_PHASE"), true);
+  assert.equal(source.includes("isMarketingI18nProductionBuildPhase()"), true);
+  assert.equal(source.includes("return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE"), true);
+  assert.equal(source.includes("diskMergeOptionsForBuildPhase()"), true);
   assert.equal(source.includes('"marketing_i18n_build_shard_only"'), true);
   assert.equal(source.includes('mode: "build_shard_only"'), true);
   assert.equal(source.includes("loadMarketingMessageShardsSync(locale, MARKETING_CHROME_MESSAGE_SHARDS)"), true);

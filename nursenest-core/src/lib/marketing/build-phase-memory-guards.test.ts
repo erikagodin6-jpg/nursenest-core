@@ -27,6 +27,7 @@ test("marketing default layout uses chrome-only shards and layers main page shar
 
   assert.match(defaultLayout, /MarketingMainI18nShards/);
   assert.match(chromeServer, /process\.env\.NEXT_PHASE === MARKETING_BUILD_PHASE/);
+  assert.match(chromeServer, /layoutChromeShardList/);
   assert.match(chromeServer, /MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS/);
   assert.match(chromeServer, /MARKETING_CHROME_MESSAGE_SHARDS/);
   assert.match(mainShards, /Suspense/);

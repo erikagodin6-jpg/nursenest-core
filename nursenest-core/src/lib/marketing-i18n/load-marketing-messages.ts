@@ -7,7 +7,10 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-marketing-messages";
 import { loadMarketingMessageShardsSync } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { MARKETING_CHROME_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
-import { loadMergedMarketingMessagesFromNextPublicDir } from "@/lib/i18n/merge-next-public-i18n-shards";
+import {
+  loadMergedMarketingMessagesFromNextPublicDir,
+  type LoadMergedNextPublicOptions,
+} from "@/lib/i18n/merge-next-public-i18n-shards";
 import { getTranslationCacheGeneration } from "@/lib/i18n/i18n-translation-cache";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
@@ -37,6 +40,19 @@ const MAX_MERGED_BUNDLE_BYTES = 12 * 1024 * 1024;
 const MARKETING_I18N_TIMEOUT_MS = 1500;
 const MARKETING_BUILD_PHASE = "phase-production-build";
 const diskMergedLocaleCache = new Map<string, MarketingMessages>();
+
+function isMarketingI18nProductionBuildPhase(): boolean {
+  return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE;
+}
+
+/**
+ * During `next build`, merged-disk reads must not pull `pages.json` / `allied.json` into Node for
+ * CDN fallbacks or sync helpers — chrome shards cover prerender/header/footer glue.
+ */
+function diskMergeOptionsForBuildPhase(): LoadMergedNextPublicOptions | undefined {
+  if (!isMarketingI18nProductionBuildPhase()) return undefined;
+  return { shardFilenames: MARKETING_CHROME_MESSAGE_SHARDS };
+}
 
 /** Avoid re-reading/parsing the full English merged tree on every marketing load during `next build`. */
 let englishDiskBundleSingleton: MarketingMessages | null | undefined;
@@ -129,13 +145,17 @@ function tryLoadEnglishDiskBundle(): MarketingMessages | null {
     englishDiskBundleSingleton = null;
     return null;
   }
+  const buildDiskOpts = diskMergeOptionsForBuildPhase();
   try {
     const legacy = path.join(dir, `${DEFAULT_MARKETING_LOCALE}.json`);
     let bytes = 0;
-    if (existsSync(legacy)) {
+    if (existsSync(legacy) && !buildDiskOpts?.shardFilenames?.length) {
       bytes = statSync(/* turbopackIgnore: true */ legacy).size;
     } else {
-      for (const name of PUBLIC_I18N_SHARD_FILENAMES) {
+      const shardNames = buildDiskOpts?.shardFilenames?.length
+        ? buildDiskOpts.shardFilenames
+        : PUBLIC_I18N_SHARD_FILENAMES;
+      for (const name of shardNames) {
         const fp = path.join(dir, DEFAULT_MARKETING_LOCALE, `${name}.json`);
         if (existsSync(fp)) bytes += statSync(/* turbopackIgnore: true */ fp).size;
       }
@@ -150,7 +170,7 @@ function tryLoadEnglishDiskBundle(): MarketingMessages | null {
     /* best-effort stat */
   }
   try {
-    const parsed = loadMergedMarketingMessagesFromNextPublicDir(dir, DEFAULT_MARKETING_LOCALE);
+    const parsed = loadMergedMarketingMessagesFromNextPublicDir(dir, DEFAULT_MARKETING_LOCALE, buildDiskOpts);
     if (!parsed || Object.keys(parsed).length === 0) {
       safeServerLog("i18n", "merged_bundle_read_failed", { locale: DEFAULT_MARKETING_LOCALE });
       englishDiskBundleSingleton = null;
@@ -176,7 +196,7 @@ function loadFromDiskSync(locale: string): MarketingMessages | null {
   const dir = resolveNextI18nPublicDir();
   if (!dir) return null;
   try {
-    const parsed = loadMergedMarketingMessagesFromNextPublicDir(dir, locale);
+    const parsed = loadMergedMarketingMessagesFromNextPublicDir(dir, locale, diskMergeOptionsForBuildPhase());
     if (!parsed || Object.keys(parsed).length === 0) return null;
     diskMergedLocaleCache.set(locale, parsed);
     return parsed;
@@ -351,6 +371,14 @@ async function loadFromCdn(locale: string): Promise<MarketingMessages | null> {
  * @deprecated Use `loadMarketingMessages` — CDN-backed bundles require async fetch when files are not on disk.
  */
 export function loadMarketingMessagesSync(locale: string): MarketingMessages {
+  if (isMarketingI18nProductionBuildPhase()) {
+    const chromeMessages = loadMarketingMessageShardsSync(locale, MARKETING_CHROME_MESSAGE_SHARDS);
+    const fallbackChromeMessages =
+      locale === DEFAULT_MARKETING_LOCALE
+        ? chromeMessages
+        : loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS);
+    return mergeMissingMarketingMessageKeys(chromeMessages, fallbackChromeMessages);
+  }
   const disk = loadFromDiskSync(locale);
   if (disk) return disk;
   safeServerLog("i18n", "merged_bundle_missing", { locale, syncOnly: true });
@@ -377,7 +405,7 @@ async function loadMarketingMessagesImpl(locale: string): Promise<MarketingMessa
         return loadEnglishBundleFromDisk();
       }
 
-      if (process.env.NEXT_PHASE === MARKETING_BUILD_PHASE) {
+      if (isMarketingI18nProductionBuildPhase()) {
         safeServerLog("i18n", "marketing_i18n_build_shard_only", {
           locale,
           mode: "build_shard_only",

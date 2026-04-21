@@ -40,7 +40,7 @@ import {
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-type MobileContextDrawerProps = {
+export type MobileContextDrawerProps = {
   open: boolean;
   onClose: () => void;
   region: GlobalRegionSlug;

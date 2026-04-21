@@ -23,6 +23,11 @@ function defaultLayoutShardList() {
     : MARKETING_CHROME_MESSAGE_SHARDS;
 }
 
+/** Locale marketing layout mirrors default layout: narrower shard list during `next build`. */
+function layoutChromeShardList() {
+  return defaultLayoutShardList();
+}
+
 type DefaultChromeState = {
   shardKey: string;
   resolved: Record<string, string> | null;
@@ -101,11 +106,12 @@ const localeChromeInflight = new Map<string, Promise<LocaleChromePayload>>();
  * Singleton chrome bundle for `(marketing)/[locale]` layout.
  */
 function fillLocaleChromeFromSync(locale: string): LocaleChromePayload {
-  const messages = loadMarketingMessageShardsSync(locale, MARKETING_CHROME_MESSAGE_SHARDS);
+  const shards = layoutChromeShardList();
+  const messages = loadMarketingMessageShardsSync(locale, shards);
   const fallbackMessages =
     locale === DEFAULT_MARKETING_LOCALE
       ? undefined
-      : loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS);
+      : loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards);
   return { messages, fallbackMessages };
 }
 
@@ -117,9 +123,10 @@ export async function getMarketingLocaleLayoutChromePayload(locale: string): Pro
   if (!p) {
     p = (async () => {
       try {
+        const shards = layoutChromeShardList();
         let messages =
           (await safeAwait(
-            loadMarketingMessageShards(locale, MARKETING_CHROME_MESSAGE_SHARDS),
+            loadMarketingMessageShards(locale, shards),
             `marketing_layout.locale_chrome:${locale}`,
             LOCALE_CHROME_SHARD_TIMEOUT_MS,
           )) ?? {};
@@ -127,7 +134,7 @@ export async function getMarketingLocaleLayoutChromePayload(locale: string): Pro
           locale === DEFAULT_MARKETING_LOCALE
             ? undefined
             : ((await safeAwait(
-                loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS),
+                loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, shards),
                 `marketing_layout.locale_chrome_en`,
                 LOCALE_CHROME_SHARD_TIMEOUT_MS,
               )) ?? {});
@@ -149,7 +156,7 @@ export async function getMarketingLocaleLayoutChromePayload(locale: string): Pro
           fallbackMessages &&
           Object.keys(fallbackMessages).length === 0
         ) {
-          const enOnly = loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, MARKETING_CHROME_MESSAGE_SHARDS);
+          const enOnly = loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, layoutChromeShardList());
           if (Object.keys(enOnly).length > 0) fallbackMessages = enOnly;
         }
 
