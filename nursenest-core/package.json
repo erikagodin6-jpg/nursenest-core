@@ -16,7 +16,7 @@
     }
   },
   "scripts": {
-    "heroku-postbuild": "node scripts/log-build-cache-hints.mjs && npm run verify:bootstrap-probe-pathname && NN_POSTBUILD_NEXT_BUILD=1 npm run build",
+    "heroku-postbuild": "node scripts/log-build-cache-hints.mjs && npm run verify:bootstrap-probe-pathname && NN_POSTBUILD_NEXT_BUILD=1 npm run build && node scripts/log-build-cache-hints.mjs --phase=heroku_postbuild_after_compile",
     "heroku-cleanup": "node scripts/log-build-cache-hints.mjs --phase=heroku_cleanup",
     "prepare": "node scripts/install-husky.mjs",
     "dev": "TMPDIR=${TMPDIR:-/tmp} next dev",

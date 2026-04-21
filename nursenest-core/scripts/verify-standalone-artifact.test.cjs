@@ -325,7 +325,7 @@ test("deploy scripts: build:deploy is post-compile only; heroku-postbuild runs c
   assert.deepEqual(pkg.cacheDirectories, ["node_modules", ".next/cache"]);
   assert.equal(
     pkg.scripts["heroku-postbuild"],
-    "node scripts/log-build-cache-hints.mjs && npm run verify:bootstrap-probe-pathname && NN_POSTBUILD_NEXT_BUILD=1 npm run build",
+    "node scripts/log-build-cache-hints.mjs && npm run verify:bootstrap-probe-pathname && NN_POSTBUILD_NEXT_BUILD=1 npm run build && node scripts/log-build-cache-hints.mjs --phase=heroku_postbuild_after_compile",
   );
   assert.equal(pkg.scripts.build, "node scripts/run-buildpack-build.mjs");
   assert.equal(pkg.scripts["build:compile"].includes("next build"), true);

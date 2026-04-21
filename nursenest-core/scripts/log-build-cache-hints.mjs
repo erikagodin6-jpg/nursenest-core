@@ -2,13 +2,15 @@
 /**
  * Build-cache diagnostics for Heroku / DigitalOcean App Platform Node buildpack.
  *
- * **heroku-postbuild** (default): runs after `npm install` / cache **restore**, before `NN_POSTBUILD_NEXT_BUILD=1 npm run build`.
- * Ensures `.next/cache` exists so Next.js’s CI probe (`getCacheDir` when `isCI && !hasNextSupport`) does not treat the
- * tree as “uncached” solely because the directory was missing (cold restore / first deploy). Logs `dot_next_cache_entry_count`
- * to distinguish an empty scaffold (`0`) from a restored webpack/swc cache (`>0`).
+ * **heroku-postbuild (first run, default phase):** after `npm install` / cache **restore**, **before** `next build`.
+ * Creates `.next/cache` if missing so Next’s `getCacheDir` path exists in CI-ish builders (see `next/dist/build/index.js`).
  *
- * **heroku-cleanup** (`--phase=heroku_cleanup`): runs after the buildpack **saves** `cacheDirectories` and prunes
- * devDependencies — confirms `.next/cache` is still on disk for the slug (sanity check for DO/Heroku ordering).
+ * **heroku-postbuild_after_compile:** run **after** `next build` in the same `heroku-postbuild` chain — reports real
+ * `.next/cache/webpack` / `swc` population (nested file counts). The first run’s `dot_next_cache_entry_count_visible_only`
+ * is often `0` on a cold tree; that does **not** mean webpack wrote nothing later.
+ *
+ * **heroku-cleanup** (`--phase=heroku_cleanup`): after buildpack **save-cache** + prune — confirms `.next/cache` still
+ * exists for the slug (ordering / accidental delete check).
  *
  * @see https://docs.digitalocean.com/products/app-platform/reference/buildpacks/nodejs/#custom-caching
  */
@@ -20,7 +22,14 @@ import { fileURLToPath } from "node:url";
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const npm = process.platform === "win32" ? "npm.cmd" : "npm";
 
-const phase = process.argv.includes("--phase=heroku_cleanup") ? "heroku_cleanup" : "heroku_postbuild";
+const phaseArg = process.argv.find((a) => a.startsWith("--phase="));
+const phase = phaseArg ? phaseArg.slice("--phase=".length) : "heroku_postbuild";
+
+const cacheDir = path.join(packageRoot, ".next", "cache");
+const webpackCacheDir = path.join(cacheDir, "webpack");
+const swcCacheDir = path.join(cacheDir, "swc");
+const nextDir = path.join(packageRoot, ".next");
+const nm = path.join(packageRoot, "node_modules");
 
 function statHint(absPath) {
   try {
@@ -31,68 +40,190 @@ function statHint(absPath) {
   }
 }
 
-function cacheDirEntryCount(absPath) {
-  if (!existsSync(absPath)) return 0;
+/** Direct children of `absPath`, split into hidden vs visible (leading `.`). */
+function topLevelSplit(absPath) {
+  if (!existsSync(absPath)) {
+    return { visible: [], hidden: [], visibleCount: 0, hiddenCount: 0 };
+  }
   try {
-    return readdirSync(absPath).filter((n) => !n.startsWith(".")).length;
+    const names = readdirSync(absPath);
+    const visible = names.filter((n) => !n.startsWith("."));
+    const hidden = names.filter((n) => n.startsWith("."));
+    return {
+      visible,
+      hidden,
+      visibleCount: visible.length,
+      hiddenCount: hidden.length,
+    };
   } catch {
-    return 0;
+    return { visible: [], hidden: [], visibleCount: 0, hiddenCount: 0 };
   }
 }
 
-const cacheDir = path.join(packageRoot, ".next", "cache");
-const webpackCacheDir = path.join(cacheDir, "webpack");
-const nextDir = path.join(packageRoot, ".next");
-const nm = path.join(packageRoot, "node_modules");
+/** Legacy metric: non-hidden top-level entries only (can be 0 while `webpack/` exists if everything were hidden — rare). */
+function cacheDirEntryCountVisibleOnly(absPath) {
+  return topLevelSplit(absPath).visibleCount;
+}
+
+/**
+ * Count nested **files** under `absRoot` (BFS), skipping dotfile / dotdir names at any depth.
+ * Stops after `maxFiles` files to avoid huge walks on pathological trees.
+ */
+function countNestedFiles(absRoot, maxFiles) {
+  const cap = maxFiles ?? 250_000;
+  if (!existsSync(absRoot)) {
+    return { files: 0, dirsVisited: 0, approxBytes: 0, truncated: false };
+  }
+  let files = 0;
+  let dirsVisited = 0;
+  let approxBytes = 0;
+  let truncated = false;
+  const stack = [absRoot];
+  while (stack.length > 0) {
+    const cur = stack.pop();
+    let entries;
+    try {
+      entries = readdirSync(cur, { withFileTypes: true });
+    } catch {
+      continue;
+    }
+    for (const ent of entries) {
+      if (ent.name.startsWith(".")) continue;
+      const p = path.join(cur, ent.name);
+      if (ent.isDirectory()) {
+        dirsVisited++;
+        stack.push(p);
+      } else if (ent.isFile()) {
+        files++;
+        try {
+          approxBytes += statSync(p).size;
+        } catch {
+          // ignore
+        }
+        if (files >= cap) {
+          truncated = true;
+          stack.length = 0;
+          break;
+        }
+      }
+    }
+  }
+  return { files, dirsVisited, approxBytes, truncated };
+}
 
 const npmCache = spawnSync(npm, ["config", "get", "cache"], { cwd: packageRoot, encoding: "utf8" });
 
-const preScaffold = phase === "heroku_postbuild" ? statHint(cacheDir) : { exists: false };
-const preEntryCount = phase === "heroku_postbuild" ? cacheDirEntryCount(cacheDir) : 0;
+const isPreCompilePostbuild = phase === "heroku_postbuild";
+const isAfterCompile = phase === "heroku_postbuild_after_compile";
+const isCleanup = phase === "heroku_cleanup";
 
-if (phase === "heroku_postbuild") {
-  // Next.js warns when `.next/cache` is missing in CI; restoring tarball may still skip until the first warm save.
+if (isPreCompilePostbuild) {
+  const preScaffold = statHint(cacheDir);
+  const preSplit = topLevelSplit(cacheDir);
+  const preEntryCountVisible = preSplit.visibleCount;
   mkdirSync(cacheDir, { recursive: true });
-}
 
-console.log("[build-cache-hints] phase=" + phase + " ts_iso=" + new Date().toISOString());
-if (phase === "heroku_cleanup") {
+  console.log("[build-cache-hints] phase=" + phase + " ts_iso=" + new Date().toISOString());
   console.log(
-    "[build-cache-hints] cache_snapshot_note=runs after buildpack save-cache + prune; expect dot_next_cache_present=1 when compile succeeded",
+    "[build-cache-hints] cache_snapshot_note=before next build: empty or restored .next/cache is normal; use phase=heroku_postbuild_after_compile for post-compile counts",
   );
-} else {
   console.log(
-    "[build-cache-hints] cache_snapshot_note=heroku_postbuild runs after cache restore; pre_scaffold_* is before mkdir; dot_next_cache_entry_count after scaffold reflects restore+warmth",
+    "[build-cache-hints] platform=" +
+      (String(process.env.DIGITALOCEAN_APP_ID ?? "").trim() ? "digitalocean_app_platform" : "other"),
   );
-}
-console.log(
-  "[build-cache-hints] platform=" +
-    (String(process.env.DIGITALOCEAN_APP_ID ?? "").trim() ? "digitalocean_app_platform" : "other"),
-);
-console.log("[build-cache-hints] node_modules_cache_env=" + JSON.stringify(process.env.NODE_MODULES_CACHE ?? ""));
-console.log("[build-cache-hints] npm_cache_dir=" + JSON.stringify((npmCache.stdout ?? "").trim()));
-console.log("[build-cache-hints] node_modules_present=" + (existsSync(nm) ? "1" : "0"));
-console.log("[build-cache-hints] dot_next_present=" + (existsSync(nextDir) ? "1" : "0"));
-if (phase === "heroku_postbuild") {
+  console.log("[build-cache-hints] node_modules_cache_env=" + JSON.stringify(process.env.NODE_MODULES_CACHE ?? ""));
+  console.log("[build-cache-hints] npm_cache_dir=" + JSON.stringify((npmCache.stdout ?? "").trim()));
+  console.log("[build-cache-hints] node_modules_present=" + (existsSync(nm) ? "1" : "0"));
+  console.log("[build-cache-hints] dot_next_present=" + (existsSync(nextDir) ? "1" : "0"));
   console.log(
     "[build-cache-hints] pre_scaffold_dot_next_cache_present=" +
       (preScaffold.exists ? "1" : "0") +
-      " pre_scaffold_dot_next_cache_entry_count=" +
-      String(preEntryCount),
+      " pre_scaffold_dot_next_cache_top_visible=" +
+      String(preEntryCountVisible) +
+      " pre_scaffold_dot_next_cache_top_hidden=" +
+      String(preSplit.hiddenCount),
   );
+  if (preSplit.visible.length > 0) {
+    console.log(
+      "[build-cache-hints] pre_scaffold_dot_next_cache_top_visible_names=" +
+        JSON.stringify(preSplit.visible.slice(0, 24)),
+    );
+  }
+} else {
+  console.log("[build-cache-hints] phase=" + phase + " ts_iso=" + new Date().toISOString());
+  if (isCleanup) {
+    console.log(
+      "[build-cache-hints] cache_snapshot_note=after buildpack save-cache + prune; webpack/swc should still exist if compile + cache save succeeded",
+    );
+  } else if (isAfterCompile) {
+    console.log(
+      "[build-cache-hints] cache_snapshot_note=immediately after next build (before buildpack cache save); nested file counts reflect real webpack/swc disk cache",
+    );
+  }
+  console.log(
+    "[build-cache-hints] platform=" +
+      (String(process.env.DIGITALOCEAN_APP_ID ?? "").trim() ? "digitalocean_app_platform" : "other"),
+  );
+  console.log("[build-cache-hints] node_modules_cache_env=" + JSON.stringify(process.env.NODE_MODULES_CACHE ?? ""));
+  console.log("[build-cache-hints] npm_cache_dir=" + JSON.stringify((npmCache.stdout ?? "").trim()));
+  console.log("[build-cache-hints] node_modules_present=" + (existsSync(nm) ? "1" : "0"));
+  console.log("[build-cache-hints] dot_next_present=" + (existsSync(nextDir) ? "1" : "0"));
 }
+
 const c = statHint(cacheDir);
-const entryCount = cacheDirEntryCount(cacheDir);
+const split = topLevelSplit(cacheDir);
+const entryCountVisible = split.visibleCount;
+const webpackNested = countNestedFiles(webpackCacheDir);
+const swcNested = countNestedFiles(swcCacheDir);
+
 console.log(
   "[build-cache-hints] dot_next_cache_present=" +
     (c.exists ? "1" : "0") +
     (c.exists && c.isDirectory ? " dot_next_cache_mtime_ms=" + String(Math.floor(c.mtimeMs)) : ""),
 );
-console.log("[build-cache-hints] dot_next_cache_entry_count=" + String(entryCount));
-const webpackEntryCount = cacheDirEntryCount(webpackCacheDir);
+console.log(
+  "[build-cache-hints] dot_next_cache_top_visible=" +
+    String(entryCountVisible) +
+    " dot_next_cache_top_hidden=" +
+    String(split.hiddenCount),
+);
+if (split.visible.length > 0) {
+  console.log("[build-cache-hints] dot_next_cache_top_visible_names=" + JSON.stringify(split.visible.slice(0, 32)));
+}
+console.log(
+  "[build-cache-hints] dot_next_cache_entry_count_visible_only=" +
+    String(cacheDirEntryCountVisibleOnly(cacheDir)) +
+    " (non-hidden top-level only; prefer nested metrics below)",
+);
 console.log(
   "[build-cache-hints] dot_next_cache_webpack_present=" +
     (existsSync(webpackCacheDir) ? "1" : "0") +
-    " dot_next_cache_webpack_entry_count=" +
-    String(webpackEntryCount),
+    " dot_next_cache_webpack_top_visible=" +
+    String(topLevelSplit(webpackCacheDir).visibleCount),
+);
+console.log(
+  "[build-cache-hints] dot_next_cache_webpack_nested_files=" +
+    String(webpackNested.files) +
+    " dot_next_cache_webpack_nested_dirs_visited=" +
+    String(webpackNested.dirsVisited) +
+    " dot_next_cache_webpack_approx_bytes=" +
+    String(webpackNested.approxBytes) +
+    " dot_next_cache_webpack_nested_truncated=" +
+    (webpackNested.truncated ? "1" : "0"),
+);
+console.log(
+  "[build-cache-hints] dot_next_cache_swc_present=" +
+    (existsSync(swcCacheDir) ? "1" : "0") +
+    " dot_next_cache_swc_top_visible=" +
+    String(topLevelSplit(swcCacheDir).visibleCount),
+);
+console.log(
+  "[build-cache-hints] dot_next_cache_swc_nested_files=" +
+    String(swcNested.files) +
+    " dot_next_cache_swc_nested_dirs_visited=" +
+    String(swcNested.dirsVisited) +
+    " dot_next_cache_swc_approx_bytes=" +
+    String(swcNested.approxBytes) +
+    " dot_next_cache_swc_nested_truncated=" +
+    (swcNested.truncated ? "1" : "0"),
 );
