@@ -42,6 +42,8 @@ import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-trans
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 import { JSON_BODY_STANDARD, readTextBodyWithByteLimit } from "@/lib/http/json-body-limit";
 
+export const dynamic = "force-dynamic";
+
 const DEFAULT_POOL_LIMIT = Math.min(20, MAX_SESSION_QUESTION_IDS);
 /** Large enough to shuffle 75-Q full exams from tagged pools without starving draws. */
 const TAG_POOL_FETCH = Math.min(800, MAX_SESSION_QUESTION_IDS);

@@ -3,18 +3,16 @@
 # Active DigitalOcean App Platform spec for the standalone Next app in `nursenest-core/`.
 # Apply with: doctl apps update --spec .do/app-nursenest-core-next.yaml
 #
-# --- Optional Dockerfile path (deterministic; repo-root context) ---
-# Repo-root `/Dockerfile` needs build context to include `nursenest-core/`, `shared/`, `client/`.
-# To switch: set `source_dir` to `/` (repo root), add `dockerfile_path: Dockerfile`, remove
-# `environment_slug: node-js`, clear `build_command` (compile is inside the image). Keep
-# `run_command: npm run start` and `http_port: 8080`. See nursenest-core/docs/deploy-deterministic-docker.md.
+# Deterministic image build (repo-root context): `Dockerfile` + `shared/`, `client/`, `nursenest-core/`.
+# Compile + prune run inside the image (no Heroku Node buildpack — no buildpack cache invalidation).
+# See nursenest-core/docs/deploy-deterministic-docker.md.
 #
 name: nursenest-core-next
 region: tor
 
 services:
   - name: web
-    environment_slug: node-js
+    dockerfile_path: Dockerfile
     # CPU-only autoscaling (App Platform). No memory/RPS/custom metrics — scale-ups follow CPU only.
     # min=2: never a single instance; max=3: HARD CAP — do not raise without budget review.
     # Scale-down uses platform defaults (gradual; health_check failure_threshold avoids flapping).
@@ -29,21 +27,13 @@ services:
       repo: erikagodin6-jpg/nursenest-core
       branch: main
       deploy_on_push: true
-    source_dir: nursenest-core
+    source_dir: .
     # DB: set `DATABASE_URL` (SECRET) to DigitalOcean Managed Postgres URI. Prisma uses this only.
     # Migrations: GitHub Actions → “Prisma migrate” workflow with secret `DATABASE_URL` (same URI as here).
-    # `package.json` `cacheDirectories` lists **both** `node_modules` and `.next/cache` (custom list replaces
-    # buildpack defaults — see DO Node.js buildpack "Custom Caching"). `heroku-postbuild` runs hints + bootstrap guard +
-    # `NN_POSTBUILD_NEXT_BUILD=1 npm run build` so `next build` runs **before** prune/cache (warm `.next/cache`; webpack
-    # cache under `.next/cache/webpack`). Marketing production-surface validate runs in GitHub `verify-build.yml` only.
-    # With both `heroku-postbuild` and `build`, the Heroku buildpack runs only `heroku-postbuild` (not `build`).
-    # `heroku-postbuild` ends with `log-build-cache-hints.mjs --phase=heroku_postbuild_after_compile` (post-`next build`
-    # nested counts under `.next/cache/webpack` / `swc`). `heroku-cleanup` → `log-build-cache-hints.mjs --phase=heroku_cleanup`
-    # runs **after** cache save + prune (ordering check).
-    # `post-build-prune.mjs` preserves `.next/cache` by default (`NN_POST_BUILD_PRUNE_NEXT_CACHE=1` deletes).
-    # `build_command`: `npm run build:deploy` → `build:deploy:postbuild` (verify standalone, ensure static, prune).
-    # One-shot compile + deploy: `npm run build:deploy:full`. Do NOT add `npm ci` here — install is already done.
-    build_command: npm run build:deploy && npm prune --omit=dev --no-fund --no-audit
+    # Docker image: same scripts as the former buildpack path — `heroku-postbuild` (hints + bootstrap + `next build`)
+    # then `build:deploy` (standalone verify + static sync + `post-build-prune.mjs`) + `npm prune --omit=dev`.
+    # `.next/cache` is removed in the image after compile to keep the runtime image smaller (layer cache handles deps).
+    # Marketing production-surface validate remains in GitHub `verify-build.yml` only.
     # Standalone server only (next.config output:standalone). Do not use `next start`.
     run_command: npm run start
     http_port: 8080
@@ -79,6 +69,11 @@ services:
       success_threshold: 1
       failure_threshold: 12
     envs:
+      # Pin Node for the Heroku/DO Node buildpack cache key (must match `nursenest-core/package.json` `engines.node`).
+      # Without this, platform stack updates can change the default Node line and invalidate `node_modules` / `.next/cache`.
+      - key: NODE_VERSION
+        value: "22.22.2"
+        scope: BUILD_AND_RUN_TIME
       # Dashboard build env can override YAML. Single-worker forcing is explicit via `NN_FORCE_SINGLE_BUILD_WORKER`
       # (fail-safe) and automatic when `DIGITALOCEAN_APP_ID` is set; opt out only with `NN_ALLOW_MULTI_BUILD_WORKERS=true`.
       - key: NODE_ENV

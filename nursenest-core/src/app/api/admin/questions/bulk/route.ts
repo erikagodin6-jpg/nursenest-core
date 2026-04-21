@@ -8,6 +8,8 @@ import { prisma } from "@/lib/db";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 
+export const dynamic = "force-dynamic";
+
 const schema = z.discriminatedUnion("action", [
   z.object({
     action: z.literal("set_status"),

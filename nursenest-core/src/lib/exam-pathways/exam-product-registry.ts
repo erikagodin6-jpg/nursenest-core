@@ -1,4 +1,5 @@
 import { ExamFamily } from "@prisma/client";
+import { buildExamPathwayPath as buildExamPathwayPathPure } from "./build-exam-pathway-path";
 import { getNpPracticeTestLandingCopy } from "./np-practice-test-segments";
 import type { CountrySlug, ExamPathwayDefinition, ExamPathwayStatus, RoleTrackSlug } from "./types";
 import { EXAM_PATHWAYS_SEGMENT_A } from "./exam-pathways-data-segment-a";
@@ -111,12 +112,4 @@ export function listPublicExamPathways(): ExamPathwayDefinition[] {
   return EXAM_PATHWAYS.filter((p) => p.status !== "hidden");
 }
 
-export function buildExamPathwayPath(
-  p: Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode">,
-  subpath?: string,
-): string {
-  const roleSlug = p.roleTrack === "lpn" || p.roleTrack === "rpn" ? "pn" : p.roleTrack;
-  const base = `/${p.countrySlug}/${roleSlug}/${p.examCode}`;
-  if (!subpath) return base;
-  return `${base}/${subpath.replace(/^\//, "")}`;
-}
+export const buildExamPathwayPath = buildExamPathwayPathPure;

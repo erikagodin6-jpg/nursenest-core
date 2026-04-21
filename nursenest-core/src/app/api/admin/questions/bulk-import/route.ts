@@ -9,6 +9,8 @@ import {
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 
+export const dynamic = "force-dynamic";
+
 export const runtime = "nodejs";
 export const maxDuration = 120;
 

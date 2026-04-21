@@ -8,6 +8,8 @@ import type { AdminAiLessonDraftNormalized } from "@/lib/lessons/admin-ai-lesson
 import { ADMIN_AI_LESSON_GENERATOR_TOOL, regenerateAdminAiLessonSection } from "@/lib/lessons/admin-ai-lesson-pipeline";
 import { prisma } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export const runtime = "nodejs";
 export const maxDuration = 120;
 

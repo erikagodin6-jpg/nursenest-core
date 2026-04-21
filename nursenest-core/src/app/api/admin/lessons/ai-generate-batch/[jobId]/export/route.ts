@@ -7,6 +7,8 @@ import {
 } from "@/lib/lessons/admin-ai-lesson-batch";
 import { prisma } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export const runtime = "nodejs";
 
 type Props = { params: Promise<{ jobId: string }> };

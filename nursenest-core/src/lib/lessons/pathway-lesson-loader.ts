@@ -9,7 +9,6 @@
  * **Scope:** Intentional route-scoped heavy loader. Do not import this into root/shared layouts, the
  * homepage shell, or header/nav chrome; use metadata/preview helpers on shared surfaces instead.
  */
-import { scopedGoldHubRowsForPathway } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
 import { prisma } from "@/lib/db";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
@@ -275,6 +274,7 @@ async function listMissingScopedGoldHubRows(
   locale: string,
   topicSlugsIn?: string[],
 ): Promise<LessonInput[]> {
+  const { scopedGoldHubRowsForPathway } = await import("@/lib/lessons/scoped-lessons/scoped-gold-registry");
   const candidates = scopedGoldHubRowsForPathway(pathwayId, topicSlugsIn);
   const catalogFullBySlug = new Map(getCatalogLessonsRaw(pathwayId).map((l) => [l.slug, l]));
   const out: LessonInput[] = [];

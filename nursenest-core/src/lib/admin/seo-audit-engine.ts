@@ -1,7 +1,7 @@
 import "server-only";
 
 import { listStaticBlogPostsForIndex } from "@/lib/blog/static-blog-posts";
-import { isProgrammaticSeoSlug, PROGRAMMATIC_SEO_PAGES } from "@/lib/seo/programmatic-registry";
+import { getProgrammaticSeoPages, isProgrammaticSeoSlug } from "@/lib/seo/programmatic-registry";
 import type { PrismaClient } from "@prisma/client";
 
 export type SeoAuditContext = {
@@ -24,7 +24,7 @@ export async function buildSeoAuditContext(prisma: PrismaClient): Promise<SeoAud
     staticBlogSlugs: new Set(listStaticBlogPostsForIndex().map((p) => p.slug)),
     lessonSlugs: new Set(lessonRows.map((r) => r.slug)),
     pathwayLessonSlugs: new Set(pathwayRows.map((r) => r.slug)),
-    programmaticSlugs: new Set(PROGRAMMATIC_SEO_PAGES.map((p) => p.slug)),
+    programmaticSlugs: new Set(getProgrammaticSeoPages().map((p) => p.slug)),
   };
 }
 

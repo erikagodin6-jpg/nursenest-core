@@ -9,6 +9,8 @@ import { isSkipBeyondLimit, listSkipRows, parseListPage } from "@/lib/api/api-pa
 import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
 import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
+export const dynamic = "force-dynamic";
+
 const PAGE_SIZE = 12;
 
 export type CatInsightRow = {

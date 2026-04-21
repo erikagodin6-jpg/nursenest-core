@@ -21,6 +21,8 @@ import { captureLearnerProductEvent } from "@/lib/observability/learner-product-
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import type { PostTestStudyNextBundle } from "@/lib/learner/adaptive-recommendations";
 
+export const dynamic = "force-dynamic";
+
 const schema = z
   .object({
     examId: z.string().min(5),

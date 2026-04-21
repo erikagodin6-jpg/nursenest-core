@@ -12,6 +12,8 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { enforcePracticeTestDetailProtection } from "@/lib/http/api-protection";
 import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
 
+export const dynamic = "force-dynamic";
+
 function asIdList(raw: unknown): string[] {
   if (!Array.isArray(raw)) return [];
   return raw.filter((x): x is string => typeof x === "string" && x.length > 4);

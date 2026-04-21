@@ -18,7 +18,7 @@ This complements `.do/app-nursenest-core-next.yaml` (Heroku Node buildpack path)
 
 1. **Context:** repo root (`.`), not only `nursenest-core/`.
 2. **Stages:** `deps` (`npm ci` in `nursenest-core`) → `builder` (copy app sources, dummy `DATABASE_URL` for `prisma generate`, `verify:bootstrap-probe-pathname`, **`build:compile` once**, `build:deploy`) → `runner` (copy built tree + `npm run start`).
-3. **No Heroku buildpack:** Node version comes from the image (`ARG NODE_VERSION`, default `22.22.1` aligned with production logs / `engines`).
+3. **No Heroku buildpack:** Node version comes from the image (`ARG NODE_VERSION`, default `22.22.2` aligned with production logs / `engines`).
 4. **Low-memory flags:** set in Dockerfile for the compile stage (`NN_FORCE_SINGLE_BUILD_WORKER`, `NN_APP_PLATFORM_BUILD`, single webpack parallelism, heap cap). Keep parity with YAML build env when switching.
 
 ## Switching App Platform to Docker

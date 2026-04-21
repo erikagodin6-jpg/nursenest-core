@@ -14,6 +14,8 @@ import {
   tierCodeToExamDbTier,
 } from "@/lib/prisma/exam-question-maps";
 
+export const dynamic = "force-dynamic";
+
 const patchSchema = z
   .object({
     stem: z.string().min(10).optional(),

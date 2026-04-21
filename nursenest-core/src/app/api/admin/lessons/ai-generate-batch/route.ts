@@ -26,6 +26,8 @@ import {
 } from "@/lib/ai/controlled-ai-batch";
 import { loadLessonBatchSummaryWithHydration } from "@/lib/lessons/admin-ai-lesson-batch";
 
+export const dynamic = "force-dynamic";
+
 export const runtime = "nodejs";
 
 const MAX_TOPICS = 35;

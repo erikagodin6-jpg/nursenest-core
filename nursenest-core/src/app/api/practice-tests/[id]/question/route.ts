@@ -15,6 +15,8 @@ import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
+export const dynamic = "force-dynamic";
+
 const previewSelect = {
   id: true,
   stem: true,

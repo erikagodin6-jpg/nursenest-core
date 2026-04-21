@@ -1,12 +1,12 @@
 /**
- * Quality gate for `PROGRAMMATIC_SEO_PAGES`: uniqueness, slug shape, minimum depth, title/description length.
+ * Quality gate for programmatic SEO pages: uniqueness, slug shape, minimum depth, title/description length.
  * Run: `npm run validate:programmatic-seo`
  *
  * Does not replace editorial review; blocks obvious thin or broken registry entries before merge.
  */
 import {
   getAllProgrammaticSlugs,
-  PROGRAMMATIC_SEO_PAGES,
+  getProgrammaticSeoPages,
   type SeoPageDefinition,
 } from "../src/lib/seo/programmatic-registry";
 
@@ -31,7 +31,8 @@ function main() {
   if (dup.length) fail(`Duplicate slugs: ${[...new Set(dup)].join(", ")}`);
 
   const titles = new Map<string, string>();
-  for (const p of PROGRAMMATIC_SEO_PAGES) {
+  const pages = getProgrammaticSeoPages();
+  for (const p of pages) {
     if (!SLUG_RE.test(p.slug)) fail(`Invalid slug format: "${p.slug}"`);
     if (p.title.length > MAX_TITLE_LEN) {
       fail(`Title too long (${p.title.length} > ${MAX_TITLE_LEN}): ${p.slug}`);
@@ -54,7 +55,7 @@ function main() {
   }
 
   console.log(
-    `[programmatic-seo] OK — ${PROGRAMMATIC_SEO_PAGES.length} pages, ${slugs.length} slugs, depth + uniqueness checks passed.`,
+    `[programmatic-seo] OK — ${pages.length} pages, ${slugs.length} slugs, depth + uniqueness checks passed.`,
   );
 }
 

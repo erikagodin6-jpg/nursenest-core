@@ -1,18 +1,29 @@
-# Repo-root build context for nursenest-core Next app (see /Dockerfile).
-# Exclude host artifacts; dependencies are installed fresh in the image.
+# Git / IDE
+.git
+.github
+.cursor
+**/.DS_Store
 
-**/.git
-**/.github
-**/.cursor
-**/.vscode
+# Dependencies & build outputs (reinstalled / rebuilt in image)
 **/node_modules
 **/.next
 **/dist
+**/build
 **/.turbo
+
+# Tests & Playwright (not needed for production image)
+**/coverage
+**/playwright-report
+**/test-results
+**/playwright/.cache
+nursenest-core/tests
+
+# Logs & env (never bake secrets)
 **/*.log
-**/.env.local
-**/.env.*.local
-.worktrees
-.legacy-extract
-.cache
-**/.cache
+.env
+.env.*
+!.env.example
+
+# Misc caches
+**/.eslintcache
+**/tsconfig.tsbuildinfo

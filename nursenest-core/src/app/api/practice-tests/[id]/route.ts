@@ -17,6 +17,8 @@ import { buildLinearCommitFeedback } from "@/lib/practice-tests/build-linear-com
 import { getLinearCommittedQuestionIds, mergeLinearCommittedQuestionId } from "@/lib/practice-tests/practice-linear-engine";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
+export const dynamic = "force-dynamic";
+
 function withCatSessionResultMeta(
   results: PracticeTestResultsJson,
   cfg: PracticeTestConfigJson,

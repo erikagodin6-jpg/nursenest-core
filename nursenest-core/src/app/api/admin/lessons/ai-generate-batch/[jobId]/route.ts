@@ -15,6 +15,8 @@ import {
 } from "@/lib/lessons/admin-ai-lesson-batch";
 import { prisma } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 type Props = { params: Promise<{ jobId: string }> };
 
 export async function GET(req: Request, ctx: Props) {

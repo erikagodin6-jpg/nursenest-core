@@ -18,6 +18,8 @@ import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
 
+export const dynamic = "force-dynamic";
+
 /** Max questions hydrated when `mode=full` — align with {@link MAX_SESSION_QUESTION_IDS}. */
 const SESSION_FULL_HYDRATE_MAX_QUESTIONS = MAX_SESSION_QUESTION_IDS;
 

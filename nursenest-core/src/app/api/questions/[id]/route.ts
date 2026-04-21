@@ -24,6 +24,8 @@ import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay"
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
   return runWithApiTelemetry(req, "GET /api/questions/[id]", "content", async () => {

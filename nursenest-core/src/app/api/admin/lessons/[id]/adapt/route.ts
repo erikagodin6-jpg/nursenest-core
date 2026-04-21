@@ -8,6 +8,8 @@ import { bodyStringFromContentJson, bodyStringToContentJson } from "@/lib/prisma
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import { tierCodeToContentItemTier } from "@/lib/prisma/exam-question-maps";
 
+export const dynamic = "force-dynamic";
+
 const bodySchema = z.object({
   targetTier: z.enum(["RPN", "LVN_LPN", "RN", "NP", "ALLIED"]),
   targetCountry: z.enum(["CA", "US"]),

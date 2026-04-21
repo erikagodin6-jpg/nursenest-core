@@ -1,6 +1,5 @@
 import { BlogPostTemplate } from "@prisma/client";
 import { NextResponse } from "next/server";
-import { loadRnTopicMapBatchRows } from "@/lib/admin/blog-topic-map-batch";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import {
   assertRnTopicMapShellRowCount,
@@ -58,6 +57,7 @@ export async function POST(req: Request) {
     const replay = await tryIdempotentReplay(d.idempotencyKey, 0);
     if (replay) return replay;
 
+    const { loadRnTopicMapBatchRows } = await import("@/lib/admin/blog-topic-map-batch");
     const rows = loadRnTopicMapBatchRows(RN_TOPIC_MAP_SHELL_MAX_ITEMS);
     const shellErr = assertRnTopicMapShellRowCount(rows.length);
     if (shellErr) {

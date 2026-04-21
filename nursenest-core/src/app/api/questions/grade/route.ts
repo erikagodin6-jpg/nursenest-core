@@ -23,6 +23,8 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { incrementBankQuestionsGradedToday } from "@/lib/learner/increment-bank-questions-graded-today";
 import { gradeMatches, normalizeCorrect } from "@/lib/questions/grade-answer-match";
 
+export const dynamic = "force-dynamic";
+
 function topicRoutingConfidence(row: { subtopic?: string | null; topic?: string | null; bodySystem?: string | null }): RecommendationConfidence {
   if ((row.subtopic ?? "").trim().length > 1) return "high";
   if ((row.topic ?? "").trim().length > 1) return "medium";

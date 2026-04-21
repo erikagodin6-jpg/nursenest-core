@@ -19,6 +19,8 @@ import {
 import { prisma } from "@/lib/db";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 
+export const dynamic = "force-dynamic";
+
 export const runtime = "nodejs";
 export const maxDuration = 120;
 

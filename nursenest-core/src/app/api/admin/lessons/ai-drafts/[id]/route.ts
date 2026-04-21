@@ -3,6 +3,8 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { ADMIN_AI_LESSON_GENERATOR_TOOL } from "@/lib/lessons/admin-ai-lesson-pipeline";
 import { prisma } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 type RouteContext = { params: Promise<{ id: string }> };
 
 export async function GET(req: Request, ctx: RouteContext) {

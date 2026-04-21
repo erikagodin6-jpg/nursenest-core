@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ExamQuestionsGateway } from "@/components/admin/ai/exam-questions-gateway";
 import { requireAdmin } from "@/lib/auth/guards";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminExamQuestionsPage() {
   await requireAdmin();
 

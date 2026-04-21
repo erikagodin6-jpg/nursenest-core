@@ -14,6 +14,8 @@ import { prisma } from "@/lib/db";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import { tierCodeToContentItemTier } from "@/lib/prisma/exam-question-maps";
 
+export const dynamic = "force-dynamic";
+
 const bodySchema = z.object({
   categoryId: z.string().min(5),
   /** Override slug if the AI slug collides after other edits */

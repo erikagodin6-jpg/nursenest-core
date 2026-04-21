@@ -17,6 +17,8 @@ import {
 } from "@/lib/observability/study-funnel-capture";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
+export const dynamic = "force-dynamic";
+
 const bodySchema = z
   .object({
     pathwayId: z.string().min(3),

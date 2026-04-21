@@ -6,6 +6,8 @@ import { prisma } from "@/lib/db";
 import { bodyStringFromContentJson, bodyStringToContentJson } from "@/lib/prisma/content-item-body";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 
+export const dynamic = "force-dynamic";
+
 type RouteContext = { params: Promise<{ id: string }> };
 
 /** Deep copy lesson as DRAFT with a new slug (ContentItem). */

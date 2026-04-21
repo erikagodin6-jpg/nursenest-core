@@ -22,6 +22,7 @@ test("default blog and lessons routes opt out of build-time static work", () => 
 test("marketing default layout uses chrome-only shards and layers main page shards during production build", () => {
   const defaultLayout = readAppFile("app/(marketing)/(default)/layout.tsx");
   const chromeServer = readAppFile("lib/marketing-i18n/marketing-layout-chrome-messages.server.ts");
+  const shardLoader = readAppFile("lib/marketing-i18n/load-marketing-message-shards.ts");
   const mainShards = readAppFile("components/i18n/marketing-main-i18n-shards.tsx");
   const shardGroups = readAppFile("lib/marketing-i18n/marketing-i18n-shard-groups.ts");
 
@@ -34,6 +35,9 @@ test("marketing default layout uses chrome-only shards and layers main page shar
   assert.match(shardGroups, /MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS = \[/);
   assert.match(shardGroups, /"marketing"/);
   assert.match(shardGroups, /"nav"/);
+
+  assert.match(shardLoader, /phase-production-build/);
+  assert.match(shardLoader, /effectiveLocale/);
 });
 
 test("fixed home and lessons surfaces use page-body shards during production build", () => {
@@ -58,8 +62,8 @@ test("next config keeps webpack memory guards enabled and disables forked build 
   assert.match(nextConfig, /webpackMemoryOptimizations:\s*true/);
   assert.match(nextConfig, /memoryBasedWorkersCount:\s*false/);
   assert.match(nextConfig, /resolveBuildWebpackParallelism/);
-  assert.match(nextConfig, /cpus:\s*buildWebpackParallelism/);
-  assert.match(nextConfig, /config\.parallelism = buildWebpackParallelism/);
+  assert.match(nextConfig, /cpus:\s*effectiveParallelism/);
+  assert.match(nextConfig, /config\.parallelism = effectiveParallelism/);
 });
 
 test("pre-nursing i18n provider avoids top-level JSON imports", () => {

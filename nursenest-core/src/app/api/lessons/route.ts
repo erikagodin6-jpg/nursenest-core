@@ -35,6 +35,8 @@ import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { jsonResponseGuarded } from "@/lib/server/response-guard";
 
+export const dynamic = "force-dynamic";
+
 /** Keep numeric literal — Next segment config must be statically analyzable (see `API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC`). */
 export const maxDuration = 60;
 

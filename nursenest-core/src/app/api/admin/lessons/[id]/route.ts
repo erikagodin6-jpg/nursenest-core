@@ -9,6 +9,8 @@ import { bodyStringFromContentJson, bodyStringToContentJson } from "@/lib/prisma
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import { tierCodeToContentItemTier } from "@/lib/prisma/exam-question-maps";
 
+export const dynamic = "force-dynamic";
+
 const patchSchema = z
   .object({
     title: z.string().min(4).optional(),

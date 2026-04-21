@@ -18,6 +18,8 @@ import {
   loadStudyFunnelBeforeSnapshot,
 } from "@/lib/observability/study-funnel-capture";
 
+export const dynamic = "force-dynamic";
+
 const bodySchema = z.object({
   lessonId: z.string().min(5),
   completed: z.boolean(),

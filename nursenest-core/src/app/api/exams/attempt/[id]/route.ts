@@ -6,6 +6,8 @@ import { loadExamAttemptDetailForSubscriber } from "@/lib/exams/load-exam-attemp
 import { enforceExamAttemptDetailProtection } from "@/lib/http/api-protection";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   return runWithApiTelemetry(req, "GET /api/exams/attempt/[id]", "content", async () => {
   const gate = await requireSubscriberSession();

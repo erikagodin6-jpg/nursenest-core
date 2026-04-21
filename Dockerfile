@@ -1,67 +1,82 @@
-# DigitalOcean App Platform — deterministic production image for Next.js standalone.
-# Build context: repository root (must include nursenest-core/, shared/, client/ for path aliases).
-# Pin Node to match nursenest-core/package.json engines (>=22 <23).
+# syntax=docker/dockerfile:1
 #
-# One compile: build:compile only (no heroku-postbuild / buildpack second path).
-# Post-build: build:deploy (standalone verify + static sync + prune).
+# Deterministic build + run (DigitalOcean App Platform, repo-root context).
+# Monorepo paths: next.config `outputFileTracingRoot` is the repo parent of `nursenest-core/`
+# (needs `shared/`, `client/` for `@shared/*` / `@legacy-client/*`).
 #
-# DO NOT add parallel webpack workers here; low-memory env matches .do spec.
+# Build pipeline (unchanged scripts):
+#   1) `npm ci` in `nursenest-core/`
+#   2) `npm run db:generate` (Prisma client; dummy DATABASE_URL at image build only)
+#   3) `npm run heroku-postbuild` → verify + `NN_POSTBUILD_NEXT_BUILD=1 npm run build` → `build:compile` / `next build`
+#   4) `npm run build:deploy` → verify standalone + static sync + post-build prune
+#   5) `npm prune --omit=dev` (matches former App Platform `build_command` tail)
+#
+# Run: `npm run start` → `scripts/start-standalone.mjs` (bootstrap + `.next/standalone/**/server.js`).
 
-ARG NODE_VERSION=22.22.1
+FROM node:22.22.2-alpine AS builder
 
-# --- deps: reproducible install ---
-FROM node:${NODE_VERSION}-bookworm-slim AS deps
+RUN apk add --no-cache libc6-compat openssl \
+  && corepack enable \
+  && corepack prepare npm@10.9.7 --activate
+
 WORKDIR /app
-ENV CI=1
-ENV HUSKY=0
-ENV npm_config_fund=false
-ENV npm_config_audit=false
 
-COPY shared ./shared
-COPY client ./client
+# Layer cache: lockfile only
 COPY nursenest-core/package.json nursenest-core/package-lock.json ./nursenest-core/
+
 WORKDIR /app/nursenest-core
+ENV NODE_ENV=development
 RUN npm ci
 
-# --- builder: one production compile ---
-FROM deps AS builder
+WORKDIR /app
+COPY shared ./shared
+COPY client ./client
+COPY nursenest-core ./nursenest-core
+
 WORKDIR /app/nursenest-core
-COPY nursenest-core/ ./
 
-ARG BUILD_NODE_MAX_OLD_SPACE_SIZE_MB=4096
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV RUN_HEAVY_BUILD_TASKS=false
-ENV SKIP_I18N_PREBUILD=1
-ENV SENTRY_ENABLED=false
-ENV NN_FORCE_SINGLE_BUILD_WORKER=1
-ENV NN_APP_PLATFORM_BUILD=1
-ENV BUILD_WEBPACK_PARALLELISM=1
-ENV TMPDIR=/tmp
-ENV NODE_OPTIONS=--max-old-space-size=${BUILD_NODE_MAX_OLD_SPACE_SIZE_MB}
-ENV BUILD_NODE_MAX_OLD_SPACE_SIZE_MB=${BUILD_NODE_MAX_OLD_SPACE_SIZE_MB}
+ENV NODE_ENV=production \
+  TMPDIR=/tmp \
+  NEXT_TELEMETRY_DISABLED=1 \
+  RUN_HEAVY_BUILD_TASKS=false \
+  SKIP_I18N_PREBUILD=1 \
+  NN_APP_PLATFORM_BUILD=true \
+  NN_FORCE_SINGLE_BUILD_WORKER=true \
+  SENTRY_ENABLED=false \
+  BUILD_NODE_MAX_OLD_SPACE_SIZE_MB=4096 \
+  NODE_OPTIONS=--max-old-space-size=4096 \
+  BUILD_WEBPACK_PARALLELISM=1
 
-# Prisma client — generate only (no DB connection). run-prisma-with-env requires DATABASE_URL.
-ENV DATABASE_URL="postgresql://build:build@127.0.0.1:5432/build?schema=public"
-RUN npm run db:generate
+# Prisma generate does not require a reachable DB; URL must be syntactically valid.
+ARG DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:5432/postgres?schema=public"
+ENV DATABASE_URL=${DATABASE_URL}
 
-RUN npm run verify:bootstrap-probe-pathname \
-  && npm run build:compile \
-  && npm run build:deploy
+RUN npm run db:generate \
+  && npm run heroku-postbuild \
+  && npm run build:deploy \
+  && npm prune --omit=dev --no-fund --no-audit \
+  && rm -rf .next/cache
 
-# --- runner: standalone + bootstrap entry ---
-FROM node:${NODE_VERSION}-bookworm-slim AS runner
+FROM node:22.22.2-alpine AS runner
+
+RUN apk add --no-cache libc6-compat openssl \
+  && corepack enable \
+  && corepack prepare npm@10.9.7 --activate
+
 WORKDIR /app/nursenest-core
-ENV NODE_ENV=production
-ENV PORT=8080
-ENV HOSTNAME=0.0.0.0
 
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends ca-certificates \
-  && rm -rf /var/lib/apt/lists/*
+ENV NODE_ENV=production \
+  PORT=8080 \
+  HOSTNAME=0.0.0.0 \
+  NEXT_TELEMETRY_DISABLED=1
 
-# Full post-build tree (standalone + pruned node_modules + public + start scripts).
-COPY --from=builder /app/nursenest-core ./
+COPY --from=builder /app/nursenest-core/.next ./.next
+COPY --from=builder /app/nursenest-core/public ./public
+COPY --from=builder /app/nursenest-core/scripts ./scripts
+COPY --from=builder /app/nursenest-core/package.json ./package.json
+COPY --from=builder /app/nursenest-core/package-lock.json ./package-lock.json
+COPY --from=builder /app/nursenest-core/node_modules ./node_modules
 
 EXPOSE 8080
+
 CMD ["npm", "run", "start"]

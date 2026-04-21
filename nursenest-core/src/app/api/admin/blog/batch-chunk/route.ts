@@ -2,7 +2,6 @@ import { BlogPostStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
-import { loadRnTopicMapBatchRows } from "@/lib/admin/blog-topic-map-batch";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { prisma } from "@/lib/db";
 
@@ -27,6 +26,7 @@ export async function POST(req: Request) {
   }
   const { cursor, limit, dryRun } = parsed.data;
 
+  const { loadRnTopicMapBatchRows } = await import("@/lib/admin/blog-topic-map-batch");
   const allRows = loadRnTopicMapBatchRows(100000);
   if (allRows.length === 0) {
     return NextResponse.json({

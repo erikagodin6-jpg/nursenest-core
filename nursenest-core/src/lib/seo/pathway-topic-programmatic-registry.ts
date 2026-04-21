@@ -14,7 +14,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import type { SeoCluster, SeoPageDefinition } from "@/lib/seo/programmatic-registry";
 import type { SeoPageKind } from "@/lib/seo/programmatic-page-kind";
-import { PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS } from "@/lib/seo/programmatic-registry";
+import { PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS } from "@/lib/seo/programmatic-registry-constants";
 
 export { PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS as PATHWAY_TOPIC_PROGRAMMATIC_REVALIDATE_SECONDS };
 

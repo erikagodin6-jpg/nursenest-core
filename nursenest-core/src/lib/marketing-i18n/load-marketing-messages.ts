@@ -193,10 +193,15 @@ function loadFromDiskSync(locale: string): MarketingMessages | null {
   const cached = diskMergedLocaleCache.get(locale);
   if (cached) return cached;
 
+  const readLocale =
+    isMarketingI18nProductionBuildPhase() && locale !== DEFAULT_MARKETING_LOCALE
+      ? DEFAULT_MARKETING_LOCALE
+      : locale;
+
   const dir = resolveNextI18nPublicDir();
   if (!dir) return null;
   try {
-    const parsed = loadMergedMarketingMessagesFromNextPublicDir(dir, locale, diskMergeOptionsForBuildPhase());
+    const parsed = loadMergedMarketingMessagesFromNextPublicDir(dir, readLocale, diskMergeOptionsForBuildPhase());
     if (!parsed || Object.keys(parsed).length === 0) return null;
     diskMergedLocaleCache.set(locale, parsed);
     return parsed;

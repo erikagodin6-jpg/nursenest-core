@@ -6,6 +6,8 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { assessCatPracticeReadinessForPathway } from "@/lib/practice-tests/cat-practice-readiness";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;

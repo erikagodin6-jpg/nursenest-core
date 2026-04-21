@@ -15,6 +15,8 @@ import {
 } from "@/lib/prisma/exam-question-maps";
 import { ADMIN_API_LIST_PAGE, parseBoundedPageSize, parseListPage } from "@/lib/api/api-pagination-limits";
 
+export const dynamic = "force-dynamic";
+
 const tierEnum = z.enum(["RPN", "LVN_LPN", "RN", "NP", "ALLIED"]);
 const qTypeEnum = z.enum(["MCQ", "SATA", "NGN_CASE", "ORDERING", "FIB_NUMERIC"]);
 

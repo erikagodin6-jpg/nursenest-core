@@ -24,6 +24,8 @@ import {
 import { executeLessonBatchItemForClaimedRow } from "@/lib/lessons/admin-ai-lesson-batch-step-handler";
 import { prisma } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export const runtime = "nodejs";
 export const maxDuration = 180;
 

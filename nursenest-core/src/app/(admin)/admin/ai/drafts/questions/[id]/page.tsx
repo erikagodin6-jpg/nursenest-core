@@ -2,6 +2,8 @@ import Link from "next/link";
 import { QuestionDraftStudioClient } from "@/components/admin/ai/question-draft-studio-client";
 import { requireAdmin } from "@/lib/auth/guards";
 
+export const dynamic = "force-dynamic";
+
 type Props = { params: Promise<{ id: string }> };
 
 export default async function AdminQuestionDraftPage(ctx: Props) {

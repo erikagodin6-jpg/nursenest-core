@@ -441,6 +441,7 @@ function applyHerokuStackBuildDefaults(): void {
     if (process.env[k] === undefined) process.env[k] = v;
   };
   def("SKIP_I18N_VALIDATION", "1");
+  def("SKIP_I18N_PREBUILD", "1");
   def("SKIP_I18N_COMPILE", "1");
   def("SKIP_BUILD_REPORTS", "1");
   def("VITE_SKIP_CIRCULAR_CHECK", "1");
@@ -472,7 +473,9 @@ async function buildAll() {
   await rm("dist", { recursive: true, force: true });
   log("skipping node_modules cache dirs (platform-safe build)");
 
-  const skipValidation = isProduction || process.env.SKIP_I18N_VALIDATION === "1";
+  const skipI18nPrebuild = /^(1|true|yes)$/i.test(String(process.env.SKIP_I18N_PREBUILD ?? "").trim());
+  const skipValidation =
+    isProduction || process.env.SKIP_I18N_VALIDATION === "1" || skipI18nPrebuild;
   const skipI18nCompile = isProduction || process.env.SKIP_I18N_COMPILE === "1";
   const skipBuildReports = isProduction || process.env.SKIP_BUILD_REPORTS === "1";
 

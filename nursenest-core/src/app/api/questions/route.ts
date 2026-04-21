@@ -56,6 +56,8 @@ import {
 import { getWeakTopicTargetsForPractice } from "@/lib/learner/topic-performance";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 
+export const dynamic = "force-dynamic";
+
 /** Keep numeric literal — Next segment config must be statically analyzable (see `API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC`). */
 export const maxDuration = 60;
 

@@ -3,6 +3,8 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { ADMIN_AI_LESSON_GENERATOR_TOOL } from "@/lib/lessons/admin-ai-lesson-pipeline";
 import { prisma } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;

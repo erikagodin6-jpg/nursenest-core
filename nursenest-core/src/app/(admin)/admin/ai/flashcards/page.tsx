@@ -2,6 +2,8 @@ import Link from "next/link";
 import { FlashcardsGateway } from "@/components/admin/ai/flashcards-gateway";
 import { requireAdmin } from "@/lib/auth/guards";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminFlashcardsAiPage() {
   await requireAdmin();
 

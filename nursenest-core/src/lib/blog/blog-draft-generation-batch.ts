@@ -6,7 +6,6 @@ import {
   BlogPostStatus,
   BlogPostTemplate,
 } from "@prisma/client";
-import { loadRnTopicMapBatchRows } from "@/lib/admin/blog-topic-map-batch";
 import { generateAutomatedBlogPost } from "@/lib/blog/blog-automation-engine";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
@@ -117,6 +116,7 @@ async function processRnTopicMapShellBatchItems(batchId: string, limit: number):
     take: safeLimit,
   });
 
+  const { loadRnTopicMapBatchRows } = await import("@/lib/admin/blog-topic-map-batch");
   const allRows = loadRnTopicMapBatchRows(RN_TOPIC_MAP_SHELL_MAX_ITEMS);
   const slugToRow = new Map(allRows.map((r) => [r.slug, r]));
   if (allRows.length === 0) {

@@ -12,6 +12,13 @@ import { loadSharedMarketingMessagesOnce } from "@/lib/marketing-i18n/shared-mar
 import { shouldBypassMarketingI18nAtStartup } from "@/lib/marketing-i18n/marketing-i18n-startup";
 import { coerceFlatMessageValue } from "@/lib/marketing-i18n/safe-marketing-messages";
 
+/** Matches `load-marketing-messages.ts` — during `next build`, avoid reading every locale's shard tree into Node/NFT. */
+const MARKETING_NEXT_BUILD_PHASE = "phase-production-build";
+
+function isNextMarketingProductionBuildPhase(): boolean {
+  return process.env.NEXT_PHASE === MARKETING_NEXT_BUILD_PHASE;
+}
+
 const mergedShardCache = new Map<string, MarketingMessages>();
 
 /**
@@ -196,10 +203,18 @@ export function loadMarketingMessageShardsSync(
   locale: string,
   shards: readonly I18nShardFilename[],
 ): MarketingMessages {
+  /**
+   * `next build` still evaluates layouts/metadata for localized routes; forcing non-default locales
+   * onto the English shard set keeps disk + trace work bounded (runtime requests use real locale).
+   */
+  const effectiveLocale =
+    isNextMarketingProductionBuildPhase() && locale !== DEFAULT_MARKETING_LOCALE
+      ? DEFAULT_MARKETING_LOCALE
+      : locale;
   try {
     const dir = resolveNextI18nPublicDir();
     if (!dir) return {};
-    return mergeShardMaps(dir, locale, shards);
+    return mergeShardMaps(dir, effectiveLocale, shards);
   } catch (e) {
     safeServerLog("i18n", "marketing_shard_sync_load_failed", {
       locale,

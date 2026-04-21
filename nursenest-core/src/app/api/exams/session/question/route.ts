@@ -15,6 +15,8 @@ import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay"
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 
+export const dynamic = "force-dynamic";
+
 /**
  * Fetch a single exam question by session + index (avoids loading full pool in one response).
  */

@@ -15,6 +15,8 @@ import { contentStatusToDb } from "@/lib/prisma/content-status";
 import { tierCodeToContentItemTier } from "@/lib/prisma/exam-question-maps";
 import { ADMIN_API_LIST_PAGE, parseBoundedPageSize, parseListPage } from "@/lib/api/api-pagination-limits";
 
+export const dynamic = "force-dynamic";
+
 const createSchema = z.object({
   title: z.string().min(4),
   slug: z.string().min(4),

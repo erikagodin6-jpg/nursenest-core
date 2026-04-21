@@ -30,6 +30,8 @@ import { captureLearnerProductEvent } from "@/lib/observability/learner-product-
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
+export const dynamic = "force-dynamic";
+
 const createSchema = z
   .object({
     title: z.string().max(120).optional(),

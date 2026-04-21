@@ -18,6 +18,8 @@ import { withRetry } from "@/lib/resilience/with-retry";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
 
+export const dynamic = "force-dynamic";
+
 /** Cap grouped rows returned to the client (must match SQL LIMITs in subscriber-discovery-aggregates). */
 const DISCOVERY_TOPIC_BUCKET_CAP = DISCOVERY_SQL_TOPIC_LIMIT;
 const DISCOVERY_EXAM_BUCKET_CAP = DISCOVERY_SQL_EXAM_LIMIT;

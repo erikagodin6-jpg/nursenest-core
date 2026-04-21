@@ -16,6 +16,8 @@ import { withRetry } from "@/lib/resilience/with-retry";
 import type { CountryCode, TierCode } from "@prisma/client";
 import { enforceQuestionGradeProtection } from "@/lib/http/api-protection";
 import { gradeMatches, normalizeCorrect } from "@/lib/questions/grade-answer-match";
+
+export const dynamic = "force-dynamic";
 export async function POST(req: NextRequest) {
   return runWithApiTelemetry(req, "POST /api/questions/freemium-grade", "content", async () => {
   const session = await auth();

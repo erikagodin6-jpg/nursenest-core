@@ -52,7 +52,6 @@ import {
 } from "@/lib/seo/programmatic-registry";
 import { getAllProgrammaticQuestionTopicSlugs } from "@/lib/seo/programmatic-question-topic-registry";
 import { getAllToolSlugs } from "@/lib/tools/tool-registry";
-import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
 import {
   isRegionalMarketingUrlPublished,
   listPublishedExpansionExamMarketingPaths,
@@ -99,8 +98,9 @@ export function collectNpPracticeTestHubUrls(origin: string): string[] {
 }
 
 /** Pathway hub long-tail programmatic SEO (`/{country}/{role}/{exam}/{seoSlug}`). */
-export function collectPathwayTopicProgrammaticUrls(origin: string): string[] {
+export async function collectPathwayTopicProgrammaticUrls(origin: string): Promise<string[]> {
   const o = normalizeOrigin(origin);
+  const { collectPathwayTopicProgrammaticPublicPaths } = await import("@/lib/seo/pathway-topic-programmatic-registry");
   return collectPathwayTopicProgrammaticPublicPaths().map((p) => `${o}${p}`);
 }
 
@@ -333,11 +333,12 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     ...regionalTopicPaths.map((p) => add(p)),
   ];
   const lessonUrls = await collectPathwayLessonSeoUrls(o);
+  const pathwayTopicUrls = await collectPathwayTopicProgrammaticUrls(o);
   return [
     ...expandedBase,
     ...collectExamPathwayUrls(o),
     ...collectNpPracticeTestHubUrls(o),
-    ...collectPathwayTopicProgrammaticUrls(o),
+    ...pathwayTopicUrls,
     ...collectAlliedMarketingUrls(o),
     ...collectPreNursingSeoUrls(o),
     ...lessonUrls,
