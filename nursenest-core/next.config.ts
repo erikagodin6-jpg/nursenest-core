@@ -187,7 +187,12 @@ const nextConfig: NextConfig = {
   // Allow importing shared monolith modules (`../shared/*`) without publishing a package.
   experimental: {
     cpus: buildWebpackParallelism,
-    memoryBasedWorkersCount: true,
+    /**
+     * Must stay `false` for small builders: when `memoryBasedWorkersCount` is true and `experimental.cpus`
+     * equals Next’s default (common on 1–2 vCPU hosts), `getNumberOfWorkers` in `next/dist/build/index.js`
+     * uses `Math.max(..., 4)` — forcing 3–4 static-generation workers and spiking RSS (App Platform OOM).
+     */
+    memoryBasedWorkersCount: false,
     /** `true` forces `webpack-build` child workers and can prevent populating `.next/cache` for DO/Heroku cache restore. */
     webpackBuildWorker: false,
     webpackMemoryOptimizations: true,

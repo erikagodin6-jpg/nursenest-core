@@ -55,6 +55,7 @@ test("next config keeps webpack memory guards enabled and disables forked build 
 
   assert.match(nextConfig, /webpackBuildWorker:\s*false/);
   assert.match(nextConfig, /webpackMemoryOptimizations:\s*true/);
+  assert.match(nextConfig, /memoryBasedWorkersCount:\s*false/);
   assert.match(nextConfig, /resolveBuildWebpackParallelism/);
   assert.match(nextConfig, /cpus:\s*buildWebpackParallelism/);
   assert.match(nextConfig, /config\.parallelism = buildWebpackParallelism/);

@@ -23,7 +23,7 @@ Use this runbook to avoid **OOM builds**, **accidental giant Git commits**, and 
 - **`RUN_HEAVY_BUILD_TASKS`**: Production builds default to **`false`** so `next build` does not eagerly load full SEO redirect graphs. Set to `true` only when you intentionally regenerate redirects and accept higher memory (release tooling).
 - **`SKIP_I18N_PREBUILD`**: `npm run build` sets **`1`** so `build:prechecks` skips heavy i18n validations during compile (faster CI/deploy); run `i18n:validate-production` / `i18n:validate-chrome` in a separate quality job when needed.
 - **`BUILD_WEBPACK_PARALLELISM`**: Optional integer (default **`1`** in `next.config.ts`) for webpack `parallelism` and `experimental.cpus`, capped by CPU count. Use **`2`–`4`** on larger runners with adequate `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` to shorten compile time; raise gradually and watch for OOM.
-- **Node heap**: `package.json` sets `NODE_OPTIONS=--max-old-space-size=3584` for `next build` (override via `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB`); `typecheck` uses a higher cap.
+- **Node heap**: `build:compile` runs `scripts/run-next-prod-build.mjs`, which applies `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` (default **4096** in `package.json` / App Platform spec) and strips conflicting `--max-old-space-size` from inherited `NODE_OPTIONS`. Runtime `NODE_OPTIONS` is unchanged. `typecheck` uses a higher cap.
 
 ---
 

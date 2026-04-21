@@ -98,10 +98,10 @@ services:
       - key: SENTRY_ENABLED
         value: "false"
         scope: BUILD_TIME
-      # Next `build:compile` reads this (default 3584 in package.json). Keep ≤4096 on memory-tight builders; do not raise
-      # via UI `NODE_OPTIONS` — large heaps increase OS OOM risk before V8 throws.
+      # Caps V8 heap for `next build` only (see `scripts/run-next-prod-build.mjs` — strips conflicting `--max-old-space-size`
+      # from inherited `NODE_OPTIONS` so UI cannot force 6144+). 4096 MB balances compile vs OS OOM on App Platform builders.
       - key: BUILD_NODE_MAX_OLD_SPACE_SIZE_MB
-        value: "3584"
+        value: "4096"
         scope: BUILD_TIME
       - key: BUILD_WEBPACK_PARALLELISM
         value: "1"

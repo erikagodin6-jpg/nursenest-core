@@ -8,8 +8,9 @@
  * `turbopackBuild` and do **not** populate `.next/cache/webpack`, so Heroku/DO `cacheDirectories` for
  * `.next/cache` stays empty and the buildpack logs ".next/cache (not cached - skipping)".
  *
- * This wrapper deletes only bundler-selection env keys, then spawns the Next CLI. Runtime behavior
- * of the app is unchanged (build-time only).
+ * This wrapper deletes bundler-selection env keys, normalizes **`NODE_OPTIONS` `--max-old-space-size`**
+ * against **`BUILD_NODE_MAX_OLD_SPACE_SIZE_MB`** (so platform UI cannot pin 6144 MB for compile), then
+ * spawns the Next CLI. Runtime behavior of the app is unchanged (build-time only).
  */
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
@@ -37,6 +38,25 @@ if (stripped.length > 0) {
   );
 } else {
   console.log("[next-prod-build] stripped_bundler_env=[] note=webpack disk cache path should populate under .next/cache/webpack");
+}
+
+/** Prefer `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` for the Next child; strip any inherited heap flags (e.g. UI 6144). */
+const heapMbRaw = String(process.env.BUILD_NODE_MAX_OLD_SPACE_SIZE_MB ?? "4096").trim();
+const heapMb = /^\d+$/.test(heapMbRaw) ? heapMbRaw : "4096";
+let nodeOpts = String(process.env.NODE_OPTIONS ?? "");
+const beforeHeap = nodeOpts;
+nodeOpts = nodeOpts
+  .replace(/\s*--max-old-space-size=\d+\s*/g, " ")
+  .replace(/\s+/g, " ")
+  .trim();
+const heapFlag = `--max-old-space-size=${heapMb}`;
+process.env.NODE_OPTIONS = nodeOpts ? `${nodeOpts} ${heapFlag}` : heapFlag;
+if (beforeHeap.includes("max-old-space-size") && !beforeHeap.includes(`--max-old-space-size=${heapMb}`)) {
+  console.log(
+    "[next-prod-build] normalized_node_heap_mb=" +
+      heapMb +
+      " note=replaced or appended NODE_OPTIONS heap for next build child (BUILD_NODE_MAX_OLD_SPACE_SIZE_MB)",
+  );
 }
 
 let nextBin;
