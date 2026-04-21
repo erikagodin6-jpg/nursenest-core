@@ -32,7 +32,6 @@ Full cross-tab in the underlying report is capped at **150** rows; the dashboard
 | **`GET /api/admin/qa`** | Draft counts, empty rationale, duplicate `stem_hash` groups, draft lessons. |
 | **`GET /api/admin/gaps`** | Low-coverage topics (SQL `LIMIT`), lesson count, exams per family. |
 | **`GET /api/admin/insights`** | Broader aggregate counts. |
-| **`GET /api/admin/i18n-diagnostics`** | Marketing i18n file status (optional disk cache). |
 | **`GET /api/admin/lessons`** | Paginated admin lesson list (see route for `page` / filters). |
 | **`GET /api/admin/questions`** | Paginated admin question list. |
 

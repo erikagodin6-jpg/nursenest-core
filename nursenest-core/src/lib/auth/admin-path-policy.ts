@@ -17,7 +17,6 @@ const SUPER_ONLY_PREFIXES = [
   "/admin/fraud",
   "/api/admin/fraud-dashboard",
   "/admin/i18n",
-  "/api/admin/i18n-diagnostics",
   "/admin/demo-users",
   "/api/admin/demo-users",
   /** Server-side ops worker + FS-adjacent actions — super only. */

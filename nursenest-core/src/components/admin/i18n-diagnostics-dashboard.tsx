@@ -130,8 +130,7 @@ export function I18nDiagnosticsDashboard() {
         <div>
           <h1 className="text-3xl font-bold">Translation / i18n diagnostics</h1>
           <p className="mt-2 text-sm text-muted">
-            Live data from <code className="rounded bg-black/5 px-1">server/i18n-diagnostics-report.ts</code> (repo root). See{" "}
-            <code className="rounded bg-black/5 px-1">docs/i18n-architecture.md</code>.
+            See <code className="rounded bg-black/5 px-1">docs/i18n-architecture.md</code> for how translations are built and validated.
           </p>
         </div>
         <div className="flex gap-2">

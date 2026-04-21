@@ -67,7 +67,6 @@ export const ADMIN_DIAGNOSTIC_HTTP = [
   { method: "GET", path: "/api/admin/qa", summary: "Draft / rationale / duplicate stem_hash issue counts." },
   { method: "GET", path: "/api/admin/gaps", summary: "Low-coverage topics + lesson counts (capped lists)." },
   { method: "GET", path: "/api/admin/insights", summary: "Aggregate DB metrics." },
-  { method: "GET", path: "/api/admin/i18n-diagnostics", summary: "Marketing i18n file coverage (may read cache)." },
   { method: "GET", path: "/api/admin/lessons", summary: "Paginated lesson admin list (existing query params)." },
   { method: "GET", path: "/api/admin/questions", summary: "Paginated question admin list (existing query params)." },
 ] as const;
