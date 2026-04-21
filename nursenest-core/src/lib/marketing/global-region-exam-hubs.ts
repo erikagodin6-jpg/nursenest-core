@@ -3,7 +3,7 @@
  * marketing exam hub URLs and default locales for post-switch navigation.
  */
 
-import { REGION_CONFIG, type GlobalLocaleCode, type GlobalRegionSlug } from "@/lib/i18n/global-regions";
+import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
 
 export type GlobalRegionExamHub = {
   /** English canonical path; localize with `withMarketingLocale`. */
@@ -44,15 +44,3 @@ export function listExpansionHubRegions(): GlobalRegionSlug[] {
   return Object.keys(HUB_BY_REGION) as GlobalRegionSlug[];
 }
 
-/**
- * Preferred locale after switching country: hub default if user’s current locale
- * is not allowed for the new region.
- */
-export function localeAfterRegionSwitch(
-  region: GlobalRegionSlug,
-  currentLocale: GlobalLocaleCode,
-): GlobalLocaleCode {
-  const cfg = REGION_CONFIG[region];
-  if (cfg.allowedLocales.includes(currentLocale)) return currentLocale;
-  return cfg.defaultLocale;
-}

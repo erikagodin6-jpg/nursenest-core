@@ -11,12 +11,19 @@ export type { ProgrammaticQuestionTopicDefinition };
 
 export { PROGRAMMATIC_QUESTION_TOPIC_PAGES };
 
-const bySlug = new Map(PROGRAMMATIC_QUESTION_TOPIC_PAGES.map((p) => [p.slug, p]));
+let bySlugCache: Map<string, ProgrammaticQuestionTopicDefinition> | null = null;
+
+function getBySlugMap(): Map<string, ProgrammaticQuestionTopicDefinition> {
+  if (!bySlugCache) {
+    bySlugCache = new Map(PROGRAMMATIC_QUESTION_TOPIC_PAGES.map((p) => [p.slug, p]));
+  }
+  return bySlugCache;
+}
 
 export function getProgrammaticQuestionTopicDefinition(
   slug: string,
 ): ProgrammaticQuestionTopicDefinition | undefined {
-  return bySlug.get(slug);
+  return getBySlugMap().get(slug);
 }
 
 export function getAllProgrammaticQuestionTopicSlugs(): string[] {

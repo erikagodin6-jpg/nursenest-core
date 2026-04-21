@@ -1,6 +1,7 @@
 import { saveContextPreferences } from "@/app/actions/save-context-preferences";
 import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
-import { getExamHubForGlobalRegion, localeAfterRegionSwitch } from "@/lib/marketing/global-region-exam-hubs";
+import { getExamHubForGlobalRegion } from "@/lib/marketing/global-region-exam-hubs";
+import { localeAfterRegionSwitch } from "@/lib/marketing/global-region-exam-hubs-locale";
 import { getMarketReadiness } from "@/lib/navigation/market-readiness";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackProductEvent } from "@/lib/observability/product-analytics";

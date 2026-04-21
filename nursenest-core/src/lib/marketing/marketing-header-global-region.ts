@@ -2,8 +2,11 @@ import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { HUB_BY_REGION } from "@/lib/marketing/global-region-exam-hubs";
 import type { NursenestRegion } from "@/lib/region/use-nursenest-region";
 
-/** First path segment under `/exams/…` → global region slug (from shipped marketing hubs). */
-const EXAMS_HUB_SEGMENT_TO_REGION: Partial<Record<string, GlobalRegionSlug>> = (() => {
+/** Lazily derived from {@link HUB_BY_REGION} — avoids scanning hubs at module load. */
+let examsHubSegmentToRegionCache: Partial<Record<string, GlobalRegionSlug>> | null = null;
+
+function getExamsHubSegmentToRegion(): Partial<Record<string, GlobalRegionSlug>> {
+  if (examsHubSegmentToRegionCache) return examsHubSegmentToRegionCache;
   const map: Partial<Record<string, GlobalRegionSlug>> = {};
   for (const [slug, hub] of Object.entries(HUB_BY_REGION)) {
     if (!hub) continue;
@@ -12,8 +15,9 @@ const EXAMS_HUB_SEGMENT_TO_REGION: Partial<Record<string, GlobalRegionSlug>> = (
       map[parts[1]] = slug as GlobalRegionSlug;
     }
   }
+  examsHubSegmentToRegionCache = map;
   return map;
-})();
+}
 
 function pathWithoutQuery(strippedPathname: string): string {
   return strippedPathname.split("?")[0] ?? strippedPathname;
@@ -41,7 +45,7 @@ function expansionRegionFromExamsPath(strippedPathname: string): GlobalRegionSlu
   const p = pathWithoutQuery(strippedPathname);
   const m = /^\/exams\/([^/]+)/.exec(p);
   if (!m?.[1]) return null;
-  return EXAMS_HUB_SEGMENT_TO_REGION[m[1]] ?? null;
+  return getExamsHubSegmentToRegion()[m[1]] ?? null;
 }
 
 function isUsOrCanadaSlug(r: GlobalRegionSlug): boolean {
