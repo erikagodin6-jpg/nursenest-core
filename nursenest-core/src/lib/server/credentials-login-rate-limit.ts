@@ -17,14 +17,25 @@ function fixedWindowTtlSeconds(windowMs: number): number {
 const CREDENTIALS_LOGIN_BURST_WINDOW_MS = 60_000;
 const CREDENTIALS_LOGIN_COMBO_WINDOW_MS = 60_000;
 
+function parseEnvPositiveInt(name: string, fallback: number): number {
+  const raw = process.env[name]?.trim();
+  if (!raw) return fallback;
+  const n = Number.parseInt(raw, 10);
+  return Number.isFinite(n) && n >= 1 ? n : fallback;
+}
+
 function credentialsLoginBurstMax(): number {
-  if (process.env.NODE_ENV !== "production") return 120;
-  return 60;
+  if (process.env.NODE_ENV !== "production") {
+    return parseEnvPositiveInt("NN_CREDENTIALS_RL_BURST_MAX", 120);
+  }
+  return parseEnvPositiveInt("NN_CREDENTIALS_RL_BURST_MAX", 60);
 }
 
 function credentialsLoginComboMax(): number {
-  if (process.env.NODE_ENV !== "production") return 24;
-  return 10;
+  if (process.env.NODE_ENV !== "production") {
+    return parseEnvPositiveInt("NN_CREDENTIALS_RL_COMBO_MAX", 24);
+  }
+  return parseEnvPositiveInt("NN_CREDENTIALS_RL_COMBO_MAX", 10);
 }
 
 export function credentialsLoginBurstRedisKey(ipKey: string): string {
@@ -33,6 +44,19 @@ export function credentialsLoginBurstRedisKey(ipKey: string): string {
 
 export function credentialsLoginComboRedisKey(ipKey: string, acctHash: string): string {
   return `ratelimit:auth:credentials_login:combo:ip:${ipKey}:acct:${acctHash}`;
+}
+
+function parseRedisCounterValue(v: unknown): number {
+  if (typeof v === "number" && Number.isFinite(v)) return v;
+  if (typeof v === "bigint") {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : 0;
+  }
+  if (typeof v === "string") {
+    const n = Number.parseInt(v, 10);
+    return Number.isFinite(n) ? n : 0;
+  }
+  return 0;
 }
 
 async function readRedisWindowCount(key: string, redis?: RedisReadClient | null): Promise<number> {
@@ -48,8 +72,8 @@ async function readRedisWindowCount(key: string, redis?: RedisReadClient | null)
   if (!client) return 0;
   try {
     const v = await client.get(key);
-    const n = typeof v === "number" ? v : typeof v === "string" ? Number.parseInt(v, 10) : Number.NaN;
-    return Number.isFinite(n) && n > 0 ? n : 0;
+    const n = parseRedisCounterValue(v);
+    return n > 0 ? n : 0;
   } catch (error) {
     safeServerLog("security", "redis_fixed_window_read_fail_open", {
       keyPrefix: key.slice(0, 48),
@@ -60,14 +84,21 @@ async function readRedisWindowCount(key: string, redis?: RedisReadClient | null)
 }
 
 /**
- * Read-only guard: if a prior burst of failures already exhausted windows, reject before expensive work.
- * Successful logins do not increment these keys (see {@link consumeCredentialsLoginFailure}).
+ * Read-only guard before expensive DB work.
+ *
+ * **Preflight uses the combo counter only** (per trusted IP partition + login identifier hash). The
+ * burst counter is shared by **all** identifiers behind the same `ipKey` (NAT, mobile gateways, VPN
+ * exit nodes). Using burst in preflight caused false "Too many sign-in attempts" for first-time
+ * logins after unrelated traffic exhausted the IP bucket. Burst is still enforced in
+ * {@link consumeCredentialsLoginFailure} on each attributed failure.
+ *
+ * Successful logins do not increment counters (see {@link consumeCredentialsLoginFailure} /
+ * {@link resetCredentialsLoginRateLimitKeys}).
  */
 export async function isCredentialsLoginRateLimited(ipKey: string, acctHash: string): Promise<boolean> {
   if (!acctHash) return false;
-  const burst = await readRedisWindowCount(credentialsLoginBurstRedisKey(ipKey));
   const combo = await readRedisWindowCount(credentialsLoginComboRedisKey(ipKey, acctHash));
-  return burst >= credentialsLoginBurstMax() || combo >= credentialsLoginComboMax();
+  return combo >= credentialsLoginComboMax();
 }
 
 /**
@@ -105,6 +136,21 @@ export async function resetCredentialsLoginRateLimitKeys(ipKey: string, acctHash
   }
 }
 
+/** Operator/debug: clear only the per-IP-partition burst bucket (NAT-wide noise), leaving per-account combo intact. */
+export async function resetCredentialsLoginBurstKeyOnly(ipKey: string): Promise<void> {
+  try {
+    const { getRedisClient } = await import("@/lib/server/redis");
+    const redis = getRedisClient() as RedisWithDel | null;
+    if (!redis) return;
+    await redis.del(credentialsLoginBurstRedisKey(ipKey));
+  } catch (error) {
+    safeServerLog("security", "credentials_login_rl_reset_failed", {
+      detail: error instanceof Error ? error.message.slice(0, 160) : "unknown",
+      surface: "burst_only",
+    });
+  }
+}
+
 export async function checkRedisFixedWindowLimit(
   key: string,
   opts: { windowMs: number; max: number; redis?: RedisFixedWindowClient | null },
@@ -123,14 +169,16 @@ export async function checkRedisFixedWindowLimit(
   }
 
   try {
-    const count = Number(await redis.incr(key));
-    if (count === 1) {
+    const rawCount = await redis.incr(key);
+    const count = typeof rawCount === "bigint" ? Number(rawCount) : Number(rawCount);
+    const safeCount = Number.isFinite(count) ? count : 0;
+    if (safeCount === 1) {
       await redis.expire(key, fixedWindowTtlSeconds(opts.windowMs));
     }
 
     return {
-      ok: count <= opts.max,
-      remaining: Math.max(0, opts.max - count),
+      ok: safeCount <= opts.max,
+      remaining: Math.max(0, opts.max - safeCount),
     };
   } catch (error) {
     safeServerLog("security", "redis_fixed_window_fail_open", {

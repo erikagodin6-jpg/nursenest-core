@@ -133,11 +133,13 @@ function logAuthDebugStartupConfigOnce(): void {
 
 logAuthDebugStartupConfigOnce();
 
-/** Dev-only: set `NN_TRACE_CREDENTIALS_LOGIN=1` (non-production) to log safe authorize milestones (no secrets). */
-function traceCredentialsAuthorizeDev(label: string, data: Record<string, unknown>): void {
-  if (process.env.NODE_ENV === "production") return;
+/**
+ * Opt-in tracing for credentials `authorize` (no raw email — use `idHashPrefix` only).
+ * Set `NN_TRACE_CREDENTIALS_LOGIN=1` in any environment to log milestones (investigate double POST / limiter).
+ */
+function traceCredentialsAuthorize(label: string, data: Record<string, unknown>): void {
   if (process.env.NN_TRACE_CREDENTIALS_LOGIN !== "1") return;
-  safeServerLog("auth", "credentials_authorize_dev_trace", { label, ...data });
+  safeServerLog("auth", "credentials_authorize_trace", { label, ...data });
 }
 
 /**
@@ -252,8 +254,19 @@ export const authConfig: NextAuthConfig = {
         const authMode = isEmailLikeIdentifier(enteredEmailLower) ? "email" : "username";
         const lockKey = `login-lock:${idHash || ip}`;
 
-        const bumpCredentialsFailureRateLimitOrReject = async (): Promise<void> => {
+        traceCredentialsAuthorize("authorize_enter", {
+          idHashPrefix: idHash ? idHash.slice(0, 8) : "",
+          authMode,
+          ipKeyPrefix: ipKey.slice(0, 48),
+        });
+
+        const bumpCredentialsFailureRateLimitOrReject = async (failureKind: string): Promise<void> => {
           if (!idHash) return;
+          traceCredentialsAuthorize("redis_failure_increment", {
+            failureKind,
+            idHashPrefix: idHash.slice(0, 8),
+            ipKeyPrefix: ipKey.slice(0, 48),
+          });
           const r = await consumeCredentialsLoginFailure(ipKey, idHash);
           if (!r.ok) {
             safeServerLog("auth", "login_rate_limited", {
@@ -469,7 +482,7 @@ export const authConfig: NextAuthConfig = {
                 ip: ip.slice(0, 64),
               });
               recordCredentialsLoginFailure("duplicate_user_match", request);
-              await bumpCredentialsFailureRateLimitOrReject();
+              await bumpCredentialsFailureRateLimitOrReject("duplicate_user");
               return rejectCredentialsOrNull("duplicate_user");
             }
 
@@ -547,7 +560,7 @@ export const authConfig: NextAuthConfig = {
                 ip: ip.slice(0, 64),
               });
               recordCredentialsLoginFailure("duplicate_user_match", request);
-              await bumpCredentialsFailureRateLimitOrReject();
+              await bumpCredentialsFailureRateLimitOrReject("duplicate_user");
               return rejectCredentialsOrNull("duplicate_user");
             }
             user = await prisma.user.findFirst({
@@ -597,7 +610,7 @@ export const authConfig: NextAuthConfig = {
             authMode,
           });
           recordCredentialsLoginFailure("db_error", request);
-          traceCredentialsAuthorizeDev("reject", {
+          traceCredentialsAuthorize("reject", {
             reason: postgresUrlAuthFailed ? "database_url_rejected" : "db_error",
             detail: detail.slice(0, 120),
           });
@@ -637,7 +650,7 @@ export const authConfig: NextAuthConfig = {
           lookupStrategy: lookupStrategy ?? "none",
           authMode,
         });
-        traceCredentialsAuthorizeDev("lookup_complete", {
+        traceCredentialsAuthorize("lookup_complete", {
           userFound: Boolean(user),
           lookupStrategy: lookupStrategy ?? "none",
           authMode,
@@ -679,8 +692,8 @@ export const authConfig: NextAuthConfig = {
               isEmailLikeIdentifier(enteredEmailLower) && isGmailLikeAddress(enteredEmailLower) ? "yes" : "no",
           });
           recordCredentialsLoginFailure("not_found", request);
-          traceCredentialsAuthorizeDev("reject", { reason: "user_not_found", authMode });
-          await bumpCredentialsFailureRateLimitOrReject();
+          traceCredentialsAuthorize("reject", { reason: "user_not_found", authMode });
+          await bumpCredentialsFailureRateLimitOrReject("user_missing");
           return rejectCredentialsOrNull("user_missing");
         }
 
@@ -703,8 +716,8 @@ export const authConfig: NextAuthConfig = {
             hasPasswordHash: false,
           });
           recordCredentialsLoginFailure("no_password_hash", request);
-          traceCredentialsAuthorizeDev("reject", { reason: "missing_password_hash", userIdPrefix: user.id.slice(0, 8) });
-          await bumpCredentialsFailureRateLimitOrReject();
+          traceCredentialsAuthorize("reject", { reason: "missing_password_hash", userIdPrefix: user.id.slice(0, 8) });
+          await bumpCredentialsFailureRateLimitOrReject("no_password_hash");
           return rejectCredentialsOrNull("no_password_hash");
         }
 
@@ -736,7 +749,7 @@ export const authConfig: NextAuthConfig = {
             detail,
           });
           recordCredentialsLoginFailure("system_error", request);
-          traceCredentialsAuthorizeDev("reject", { reason: "bcrypt_compare_error", userIdPrefix: user.id.slice(0, 8) });
+          traceCredentialsAuthorize("reject", { reason: "bcrypt_compare_error", userIdPrefix: user.id.slice(0, 8) });
           return rejectCredentialsOrNull("system_error");
         }
 
@@ -744,7 +757,7 @@ export const authConfig: NextAuthConfig = {
           passwordMatch: passwordOk,
           userIdPrefix: user.id.slice(0, 8),
         });
-        traceCredentialsAuthorizeDev("password_compare", {
+        traceCredentialsAuthorize("password_compare", {
           passwordMatch: passwordOk,
           userIdPrefix: user.id.slice(0, 8),
         });
@@ -767,13 +780,18 @@ export const authConfig: NextAuthConfig = {
             passwordCompareOk: false,
           });
           recordCredentialsLoginFailure("bad_password", request);
-          traceCredentialsAuthorizeDev("reject", { reason: "password_mismatch", userIdPrefix: user.id.slice(0, 8) });
-          await bumpCredentialsFailureRateLimitOrReject();
+          traceCredentialsAuthorize("reject", { reason: "password_mismatch", userIdPrefix: user.id.slice(0, 8) });
+          await bumpCredentialsFailureRateLimitOrReject("password_invalid");
           return rejectCredentialsOrNull("password_invalid");
         }
 
         await clearLoginFailures(lockKey);
         await resetCredentialsLoginRateLimitKeys(ipKey, idHash);
+        traceCredentialsAuthorize("authorize_success", {
+          userIdPrefix: user.id.slice(0, 8),
+          idHashPrefix: idHash ? idHash.slice(0, 8) : "",
+          ipKeyPrefix: ipKey.slice(0, 48),
+        });
 
         prisma.user.update({
           where: { id: user.id },

@@ -13,13 +13,18 @@ const here = dirname(fileURLToPath(import.meta.url));
 const nursenestCoreRoot = join(here, "..", "..", "..");
 
 describe("security regression (source contracts)", () => {
-  it("credentials authorize uses burst+combo Redis limits and progressive lockout key", () => {
+  it("credentials authorize uses combo-preflight + burst+combo consume Redis limits and progressive lockout key", () => {
     const auth = readFileSync(join(nursenestCoreRoot, "src", "lib", "auth.ts"), "utf8");
+    const rl = readFileSync(
+      join(nursenestCoreRoot, "src", "lib", "server", "credentials-login-rate-limit.ts"),
+      "utf8",
+    );
     assert.match(auth, /isCredentialsLoginRateLimited/);
     assert.match(auth, /consumeCredentialsLoginFailure/);
     assert.match(auth, /resetCredentialsLoginRateLimitKeys/);
     assert.match(auth, /login-lock:/);
     assert.match(auth, /isLoginLocked\(/);
+    assert.match(rl, /Preflight uses the combo counter only/);
   });
 
   it("forgot-password returns generic success copy (no account enumeration)", () => {
