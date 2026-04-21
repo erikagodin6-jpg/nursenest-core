@@ -41,6 +41,7 @@ function cacheDirEntryCount(absPath) {
 }
 
 const cacheDir = path.join(packageRoot, ".next", "cache");
+const webpackCacheDir = path.join(cacheDir, "webpack");
 const nextDir = path.join(packageRoot, ".next");
 const nm = path.join(packageRoot, "node_modules");
 
@@ -88,3 +89,10 @@ console.log(
     (c.exists && c.isDirectory ? " dot_next_cache_mtime_ms=" + String(Math.floor(c.mtimeMs)) : ""),
 );
 console.log("[build-cache-hints] dot_next_cache_entry_count=" + String(entryCount));
+const webpackEntryCount = cacheDirEntryCount(webpackCacheDir);
+console.log(
+  "[build-cache-hints] dot_next_cache_webpack_present=" +
+    (existsSync(webpackCacheDir) ? "1" : "0") +
+    " dot_next_cache_webpack_entry_count=" +
+    String(webpackEntryCount),
+);

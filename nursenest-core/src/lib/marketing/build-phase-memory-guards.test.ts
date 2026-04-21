@@ -50,10 +50,10 @@ test("fixed home and lessons surfaces use page-body shards during production bui
   assert.match(lessonSections, /MARKETING_PAGE_BODY_MESSAGE_SHARDS/);
 });
 
-test("next config keeps webpack memory guards enabled during custom builds", () => {
+test("next config keeps webpack memory guards enabled and disables forked build worker for persistent .next/cache", () => {
   const nextConfig = readAppFile("../next.config.ts");
 
-  assert.match(nextConfig, /webpackBuildWorker:\s*true/);
+  assert.match(nextConfig, /webpackBuildWorker:\s*false/);
   assert.match(nextConfig, /webpackMemoryOptimizations:\s*true/);
   assert.match(nextConfig, /resolveBuildWebpackParallelism/);
   assert.match(nextConfig, /cpus:\s*buildWebpackParallelism/);

@@ -27,8 +27,9 @@ services:
     # DB: set `DATABASE_URL` (SECRET) to DigitalOcean Managed Postgres URI. Prisma uses this only.
     # Migrations: GitHub Actions → “Prisma migrate” workflow with secret `DATABASE_URL` (same URI as here).
     # `package.json` `cacheDirectories` lists **both** `node_modules` and `.next/cache` (custom list replaces
-    # buildpack defaults — see DO Node.js buildpack "Custom Caching"). `heroku-postbuild` runs hints + guards +
-    # `NN_POSTBUILD_NEXT_BUILD=1 npm run build` so `next build` runs **before** prune/cache (warm `.next/cache`).
+    # buildpack defaults — see DO Node.js buildpack "Custom Caching"). `heroku-postbuild` runs hints + bootstrap guard +
+    # `NN_POSTBUILD_NEXT_BUILD=1 npm run build` so `next build` runs **before** prune/cache (warm `.next/cache`; webpack
+    # cache under `.next/cache/webpack`). Marketing production-surface validate runs in GitHub `verify-build.yml` only.
     # With both `heroku-postbuild` and `build`, the Heroku buildpack runs only `heroku-postbuild` (not `build`).
     # `heroku-cleanup` → `log-build-cache-hints.mjs --phase=heroku_cleanup` runs **after** cache save + prune (ordering check).
     # `post-build-prune.mjs` preserves `.next/cache` by default (`NN_POST_BUILD_PRUNE_NEXT_CACHE=1` deletes).
@@ -93,8 +94,13 @@ services:
       - key: SENTRY_ENABLED
         value: "false"
         scope: BUILD_TIME
+      # Next `build:compile` reads this (default 3584 in package.json). Keep ≤4096 on memory-tight builders; do not raise
+      # via UI `NODE_OPTIONS` — large heaps increase OS OOM risk before V8 throws.
       - key: BUILD_NODE_MAX_OLD_SPACE_SIZE_MB
         value: "3584"
+        scope: BUILD_TIME
+      - key: BUILD_WEBPACK_PARALLELISM
+        value: "1"
         scope: BUILD_TIME
       - key: TMPDIR
         value: /tmp

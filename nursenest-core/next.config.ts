@@ -15,9 +15,14 @@
  * `experimental.cpus` use this value capped by `os.cpus().length` — keeps small-builder memory safety by
  * default; set `2`–`4` on larger CI runners / higher `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` to cut compile time.
  *
+ * **`experimental.webpackBuildWorker`:** keep `false` for reliable webpack **filesystem** cache under
+ * `.next/cache/webpack` (needed for Heroku/DO `cacheDirectories`). Setting `true` forces forked compiler
+ * workers even when a custom `webpack()` exists, which can leave `.next/cache` empty between builds.
+ *
  * **Build / compile cache (DigitalOcean App Platform):** Next.js writes `.next/cache` during `next build`.
- * `heroku-postbuild` runs guards + `NN_POSTBUILD_NEXT_BUILD=1 npm run build` **before** buildpack prune/cache
- * so `.next/cache` is snapshotted. With both `heroku-postbuild` and `build`, the Heroku buildpack only runs
+ * `heroku-postbuild` runs bootstrap guard + `NN_POSTBUILD_NEXT_BUILD=1 npm run build` **before** buildpack prune/cache
+ * so `.next/cache` is snapshotted (`validate:marketing-production-surface` is CI-only — see `.github/workflows/verify-build.yml`).
+ * With both `heroku-postbuild` and `build`, the Heroku buildpack only runs
  * `heroku-postbuild` (the `build` script is not invoked by the buildpack). `build_command` runs `build:deploy` → post-compile verify only.
  * `cacheDirectories` must list **both** `node_modules` and `.next/cache`. `post-build-prune.mjs` preserves
  * `.next/cache` by default (opt out with `NN_POST_BUILD_PRUNE_NEXT_CACHE=1`). Droplet one-shot: `build:deploy:full`.
@@ -179,7 +184,8 @@ const nextConfig: NextConfig = {
   experimental: {
     cpus: buildWebpackParallelism,
     memoryBasedWorkersCount: true,
-    webpackBuildWorker: true,
+    /** `true` forces `webpack-build` child workers and can prevent populating `.next/cache` for DO/Heroku cache restore. */
+    webpackBuildWorker: false,
     webpackMemoryOptimizations: true,
     externalDir: true,
   },

@@ -53,7 +53,7 @@ Large folders at **monorepo root** (`attached_assets/`, legacy `client/`, `.loca
 
 - `npm run disk:audit` — largest paths under `nursenest-core` and build outputs.
 - `npm run storage:check` — warn on oversized `public/` files; `npm run storage:check -- --strict` fails CI if non‑i18n assets exceed 512 KiB.
-- `heroku-postbuild` (hints + guards + `NN_POSTBUILD_NEXT_BUILD=1 npm run build`) runs `next build` before the buildpack cache snapshot; the buildpack’s second `npm run build` skips duplicate compile on DO (`scripts/run-buildpack-build.mjs`). Then `npm run build:deploy` → `build:deploy:postbuild` verifies standalone, syncs `.next/static` into standalone, **preserves** `.next/cache` by default (see `scripts/post-build-prune.mjs`; set `NN_POST_BUILD_PRUNE_NEXT_CACHE=1` to delete). App Platform `build_command` also runs `npm prune --omit=dev`. Droplet one-shot: `npm run build:deploy:full`.
+- `heroku-postbuild` (hints + bootstrap guard + `NN_POSTBUILD_NEXT_BUILD=1 npm run build`) runs `next build` before the buildpack cache snapshot; the buildpack’s second `npm run build` skips duplicate compile on DO (`scripts/run-buildpack-build.mjs`). `validate:marketing-production-surface` is **not** in `heroku-postbuild` (runs in GitHub Verify Build). Then `npm run build:deploy` → `build:deploy:postbuild` verifies standalone, syncs `.next/static` into standalone, **preserves** `.next/cache` by default (see `scripts/post-build-prune.mjs`; set `NN_POST_BUILD_PRUNE_NEXT_CACHE=1` to delete). App Platform `build_command` also runs `npm prune --omit=dev`. Droplet one-shot: `npm run build:deploy:full`.
 - `npm run clean:next` — remove `.next` locally when reclaiming disk.
 
 ## Runtime resilience (summary)

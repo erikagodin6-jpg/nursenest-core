@@ -325,7 +325,7 @@ test("deploy scripts: build:deploy is post-compile only; heroku-postbuild runs c
   assert.deepEqual(pkg.cacheDirectories, ["node_modules", ".next/cache"]);
   assert.equal(
     pkg.scripts["heroku-postbuild"],
-    "node scripts/log-build-cache-hints.mjs && npm run verify:bootstrap-probe-pathname && npm run validate:marketing-production-surface && NN_POSTBUILD_NEXT_BUILD=1 npm run build",
+    "node scripts/log-build-cache-hints.mjs && npm run verify:bootstrap-probe-pathname && NN_POSTBUILD_NEXT_BUILD=1 npm run build",
   );
   assert.equal(pkg.scripts.build, "node scripts/run-buildpack-build.mjs");
   assert.equal(pkg.scripts["build:compile"].includes("next build"), true);
@@ -346,6 +346,7 @@ test("active DigitalOcean app spec builds before runtime, starts through npm run
   const appSpec = fs.readFileSync(path.join(__dirname, "..", "..", ".do", "app-nursenest-core-next.yaml"), "utf8");
   assert.match(appSpec, /build_command: npm run build:deploy/);
   assert.match(appSpec, /NN_TIMED_INCLUDE_NPM_PRUNE/);
+  assert.match(appSpec, /- key: BUILD_WEBPACK_PARALLELISM\n\s+value: "1"/);
   assert.match(appSpec, /run_command: npm run start/);
   assert.match(appSpec, /health_check:\n(?:.*\n)*?\s+http_path: \/readyz/);
   assert.match(appSpec, /liveness_health_check:\n(?:.*\n)*?\s+http_path: \/healthz/);
