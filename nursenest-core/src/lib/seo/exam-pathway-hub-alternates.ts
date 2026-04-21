@@ -2,7 +2,6 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-pathways-catalog";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
-import { getPathwayTopicProgrammaticRow } from "@/lib/seo/pathway-topic-programmatic-registry";
 import { filterPublicHreflangRecord } from "@/lib/seo/public-url-validator";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
@@ -47,10 +46,11 @@ export function examPathwayRegionalHreflang(pathway: ExamPathwayDefinition): Rec
  * Emits `en-US` / `en-CA` only when the same `topicSegment` exists in the pathway-topic registry for
  * that sibling hub; `x-default` prefers US when both exist (matches {@link examPathwayRegionalHreflang}).
  */
-export function examPathwayTopicRegionalHreflang(
+export async function examPathwayTopicRegionalHreflang(
   pathway: ExamPathwayDefinition,
   topicSegment: string,
-): Record<string, string> {
+): Promise<Record<string, string>> {
+  const { getPathwayTopicProgrammaticRow } = await import("@/lib/seo/pathway-topic-programmatic-registry");
   const siblings = EXAM_PATHWAYS.filter(
     (p) =>
       p.roleTrack === pathway.roleTrack &&

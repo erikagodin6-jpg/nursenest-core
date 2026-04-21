@@ -357,7 +357,7 @@ export function collectSeoPagesUrls(origin: string): string[] {
  * Per-locale marketing + programmatic (tools live in tools.xml).
  * `locale` must be a non-default hosted locale code (e.g. fr, es).
  */
-export function collectLocaleMarketingUrls(origin: string, locale: string): string[] {
+export async function collectLocaleMarketingUrls(origin: string, locale: string): Promise<string[]> {
   const o = normalizeOrigin(origin);
   const add = (path: string) => {
     const p = path.startsWith("/") ? path : `/${path}`;
@@ -399,7 +399,9 @@ export function collectLocaleMarketingUrls(origin: string, locale: string): stri
   // produced five-segment URLs like `/fr/us/np/fnp/...` that do not match any page (404 in GSC).
   // Canonical URLs for those pages are already emitted in `collectCoreUrls` via
   // `collectPathwayTopicProgrammaticUrls`.
-  const stripped = stripForbiddenLocalePrefixedPathwayTopics(urls, o, locale);
+  const { collectPathwayTopicProgrammaticPublicPaths } = await import("@/lib/seo/pathway-topic-programmatic-registry");
+  const pathwayTopicPublicPaths = collectPathwayTopicProgrammaticPublicPaths();
+  const stripped = stripForbiddenLocalePrefixedPathwayTopics(urls, o, locale, pathwayTopicPublicPaths);
   if (stripped.removed > 0) {
     safeServerLog("seo", "sitemap_locale_strip_prefixed_pathway_topics", {
       locale,

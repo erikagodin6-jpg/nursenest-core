@@ -26,12 +26,12 @@ describe("examPathwayRegionalHreflang", () => {
 });
 
 describe("examPathwayTopicRegionalHreflang", () => {
-  it("pairs en-US and en-CA topic URLs when both registries include the same topic slug (no fake /fr/…)", () => {
+  it("pairs en-US and en-CA topic URLs when both registries include the same topic slug (no fake /fr/…)", async () => {
     const usRn = getExamPathwayById("us-rn-nclex-rn");
     const caRn = getExamPathwayById("ca-rn-nclex-rn");
     assert.ok(usRn && caRn);
     const topic = "rn-lessons-cardiovascular";
-    const lang = examPathwayTopicRegionalHreflang(usRn!, topic);
+    const lang = await examPathwayTopicRegionalHreflang(usRn!, topic);
     assert.equal(lang["en-US"], absoluteUrl(buildExamPathwayPath(usRn!, topic)));
     assert.equal(lang["en-CA"], absoluteUrl(buildExamPathwayPath(caRn!, topic)));
     assert.equal(lang["x-default"], lang["en-US"]);

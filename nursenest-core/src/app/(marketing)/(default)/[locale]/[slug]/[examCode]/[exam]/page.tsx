@@ -6,11 +6,11 @@ import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-s
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import { getPathwayTopicProgrammaticRow } from "@/lib/seo/pathway-topic-programmatic-registry";
 import { buildPathwayTopicProgrammaticBreadcrumbResolution } from "@/lib/seo/pathway-topic-programmatic-breadcrumbs";
 import { buildPathwayTopicProgrammaticMetadata } from "@/lib/seo/pathway-topic-programmatic-metadata";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
+export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 /** Must be a numeric literal for Next static route config (keep aligned with `PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS`). */
 export const revalidate = 86400;
@@ -28,6 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     async () => {
       const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
       if (!pathway) return {};
+      const { getPathwayTopicProgrammaticRow } = await import("@/lib/seo/pathway-topic-programmatic-registry");
       const row = getPathwayTopicProgrammaticRow(pathway.id, exam);
       if (!row) return {};
       return buildPathwayTopicProgrammaticMetadata(row.page, pathway, exam);
@@ -41,6 +42,7 @@ export default async function PathwayTopicProgrammaticPage({ params }: Props) {
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}/${exam}`;
   const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) notFound();
+  const { getPathwayTopicProgrammaticRow } = await import("@/lib/seo/pathway-topic-programmatic-registry");
   const row = getPathwayTopicProgrammaticRow(pathway.id, exam);
   if (!row) notFound();
 

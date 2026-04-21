@@ -90,7 +90,7 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
       }
 
       for (const locale of getSitemapIncludedLocales()) {
-        for (const url of collectLocaleMarketingUrls(origin, locale)) {
+        for (const url of await collectLocaleMarketingUrls(origin, locale)) {
           pushStatic(url);
         }
       }

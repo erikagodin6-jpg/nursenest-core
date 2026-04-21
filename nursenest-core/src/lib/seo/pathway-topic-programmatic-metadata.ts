@@ -9,14 +9,14 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
  * Canonical + regional hreflang for hub-nested programmatic pages (`/{country}/{role}/{exam}/{seoSlug}`).
  * Does **not** emit global marketing-locale alternates (`/fr/…`, …) — those are not valid routes for this URL tree.
  */
-export function buildPathwayTopicProgrammaticMetadata(
+export async function buildPathwayTopicProgrammaticMetadata(
   page: SeoPageDefinition,
   pathway: ExamPathwayDefinition,
   topicSegment: string,
-): Metadata {
+): Promise<Metadata> {
   const enPath = buildExamPathwayPath(pathway, topicSegment);
   const canonical = absoluteUrl(enPath);
-  const languages = examPathwayTopicRegionalHreflang(pathway, topicSegment);
+  const languages = await examPathwayTopicRegionalHreflang(pathway, topicSegment);
   return {
     title: page.title,
     description: page.description,

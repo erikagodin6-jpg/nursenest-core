@@ -1,6 +1,5 @@
 import { listNpPracticeTestSegmentPaths } from "@/lib/exam-pathways/np-practice-test-segments";
 import { isDisallowedMarketingSeoPathname } from "@/lib/seo/marketing-locale-regional-url-invariants";
-import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
 
 /**
  * Exam-hub long-tail programmatic paths (`/{country}/{role}/{exam}/{slug}`) are only routed on the
@@ -12,15 +11,20 @@ import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-to
  *
  * **Tests / CI:** use {@link assertLocaleMarketingUrlsExcludePrefixedPathwayTopics} to fail fast when
  * the invariant breaks.
+ *
+ * `pathwayTopicPublicPaths` is caller-supplied (typically one `import()` of
+ * `pathway-topic-programmatic-registry` per batch) so this module stays free of that dependency at
+ * module scope and does not re-import the programmatic registry once per locale.
  */
 export function stripForbiddenLocalePrefixedPathwayTopics(
   urls: readonly string[],
   originNormalized: string,
   locale: string,
+  pathwayTopicPublicPaths: readonly string[],
 ): { urls: string[]; removed: number } {
   const o = originNormalized.endsWith("/") ? originNormalized.slice(0, -1) : originNormalized;
   const forbidden = new Set<string>();
-  for (const p of collectPathwayTopicProgrammaticPublicPaths()) {
+  for (const p of pathwayTopicPublicPaths) {
     const path = p.startsWith("/") ? p : `/${p}`;
     forbidden.add(`${o}/${locale}${path}`);
   }
@@ -54,8 +58,9 @@ export function assertLocaleMarketingUrlsExcludePrefixedPathwayTopics(
   urls: readonly string[],
   originNormalized: string,
   locale: string,
+  pathwayTopicPublicPaths: readonly string[],
 ): void {
-  const { removed } = stripForbiddenLocalePrefixedPathwayTopics(urls, originNormalized, locale);
+  const { removed } = stripForbiddenLocalePrefixedPathwayTopics(urls, originNormalized, locale, pathwayTopicPublicPaths);
   if (removed > 0) {
     throw new Error(
       `Locale marketing URL list must not include language-prefixed exam-hub programmatic URL (404): removed_count=${removed}`,

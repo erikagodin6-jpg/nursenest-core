@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { listNpPracticeTestSegmentPaths } from "@/lib/exam-pathways/np-practice-test-segments";
-import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
 import {
   assertLocaleMarketingUrlsExcludePrefixedPathwayTopics,
   stripForbiddenLocalePrefixedPathwayTopics,
@@ -9,25 +8,30 @@ import {
 
 const ORIGIN = "https://example.test";
 
-test("stripForbiddenLocalePrefixedPathwayTopics removes forbidden prefixed URLs", () => {
-  const p = collectPathwayTopicProgrammaticPublicPaths()[0];
+test("stripForbiddenLocalePrefixedPathwayTopics removes forbidden prefixed URLs", async () => {
+  const { collectPathwayTopicProgrammaticPublicPaths } = await import("@/lib/seo/pathway-topic-programmatic-registry");
+  const pathwayTopicPublicPaths = collectPathwayTopicProgrammaticPublicPaths();
+  const p = pathwayTopicPublicPaths[0];
   assert.ok(p, "registry should expose at least one pathway topic path");
   const poison = `${ORIGIN}/fr${p.startsWith("/") ? p : `/${p}`}`;
   const { urls, removed } = stripForbiddenLocalePrefixedPathwayTopics(
     [poison, `${ORIGIN}/fr/pricing`],
     ORIGIN,
     "fr",
+    pathwayTopicPublicPaths,
   );
   assert.equal(removed, 1);
   assert.deepEqual(urls, [`${ORIGIN}/fr/pricing`]);
 });
 
-test("assertLocaleMarketingUrlsExcludePrefixedPathwayTopics throws when a forbidden prefixed URL is present", () => {
-  const p = collectPathwayTopicProgrammaticPublicPaths()[0];
+test("assertLocaleMarketingUrlsExcludePrefixedPathwayTopics throws when a forbidden prefixed URL is present", async () => {
+  const { collectPathwayTopicProgrammaticPublicPaths } = await import("@/lib/seo/pathway-topic-programmatic-registry");
+  const pathwayTopicPublicPaths = collectPathwayTopicProgrammaticPublicPaths();
+  const p = pathwayTopicPublicPaths[0];
   assert.ok(p, "registry should expose at least one pathway topic path");
   const poison = `${ORIGIN}/fr${p.startsWith("/") ? p : `/${p}`}`;
   assert.throws(
-    () => assertLocaleMarketingUrlsExcludePrefixedPathwayTopics([poison], ORIGIN, "fr"),
+    () => assertLocaleMarketingUrlsExcludePrefixedPathwayTopics([poison], ORIGIN, "fr", pathwayTopicPublicPaths),
     /removed_count=/,
   );
 });
@@ -37,6 +41,7 @@ test("assertLocaleMarketingUrlsExcludePrefixedPathwayTopics passes for typical l
     [`${ORIGIN}/fr/pricing`, `${ORIGIN}/fr/lessons`],
     ORIGIN,
     "fr",
+    [],
   );
 });
 
@@ -48,6 +53,7 @@ test("stripForbiddenLocalePrefixedPathwayTopics removes locale-prefixed NP pract
     [poison, `${ORIGIN}/fr/pricing`],
     ORIGIN,
     "fr",
+    [],
   );
   assert.equal(removed, 1);
   assert.deepEqual(urls, [`${ORIGIN}/fr/pricing`]);
@@ -58,6 +64,7 @@ test("stripForbiddenLocalePrefixedPathwayTopics removes any /{locale}/us/… URL
     [`${ORIGIN}/fr/us/np/fnp`, `${ORIGIN}/fr/contact`],
     ORIGIN,
     "fr",
+    [],
   );
   assert.equal(removed, 1);
   assert.deepEqual(urls, [`${ORIGIN}/fr/contact`]);

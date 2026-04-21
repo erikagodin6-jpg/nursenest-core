@@ -7,7 +7,7 @@
  * In-app session start remains {@link appPathwayCatSessionStartPath} (`/app/practice-tests/start?pathwayId=…`).
  */
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import {
