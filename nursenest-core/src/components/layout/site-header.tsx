@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTheme } from "next-themes";
 import { getNavChromeStyle, getNavChromeVars } from "@/lib/theme/nav-chrome";
-import { ChevronDown, ChevronRight, MapPin, Menu, Settings, User, X } from "lucide-react";
+import { ChevronDown, MapPin, Menu, Settings, User, X } from "lucide-react";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { isStaffRole, shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
 import { ADMIN_DASHBOARD_HREF, navigateAdminDashboardHard } from "@/lib/auth/admin-dashboard-link";
@@ -33,8 +33,7 @@ import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import { useActiveNavContext } from "@/lib/navigation/use-active-nav-context";
 import { buildMarketingMegaMenus, type ExamMenuKey } from "@/lib/navigation/marketing-mega-menu";
 import { MEGA_MENU_STRIPPED_ACTIVE_PREFIXES } from "@/lib/navigation/marketing-pathway-nav-destinations";
-import { marketingHeaderExposeSecondaryTracksInline } from "@/lib/navigation/marketing-header-pricing-surface";
-import { formatEyebrow, formatTitleCase } from "@/lib/format/text-case";
+import { formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 import { MarketingHeaderUtilityStrip } from "@/components/layout/marketing-header-utility-strip";
@@ -133,14 +132,9 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, regionToggleAnalytics);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileContextOpen, setMobileContextOpen] = useState(false);
-  const [mobileExpandedMega, setMobileExpandedMega] = useState<ExamMenuKey | "moreTracks" | null>(null);
-  const [desktopMoreTracksOpen, setDesktopMoreTracksOpen] = useState(false);
   const [mobileLangOpen, setMobileLangOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [openMegaMenu, setOpenMegaMenu] = useState<ExamMenuKey | null>(null);
   const [resumeStudyingCta, setResumeStudyingCta] = useState<HeaderResumeCta>(null);
-  const closeMegaTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const desktopMoreTracksRef = useRef<HTMLDivElement>(null);
   const mobileLangRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -174,22 +168,8 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
     return withMarketingLocale(localeCode, mapped);
   }, []);
 
-  const clearMegaCloseTimer = () => {
-    if (!closeMegaTimeoutRef.current) return;
-    clearTimeout(closeMegaTimeoutRef.current);
-    closeMegaTimeoutRef.current = null;
-  };
-
-  const scheduleMegaClose = () => {
-    clearMegaCloseTimer();
-    closeMegaTimeoutRef.current = setTimeout(() => setOpenMegaMenu(null), 120);
-  };
-
-  /** Close mega menu before following in-header auth links so no high-z panel intercepts the next paint. */
-  const closeMegaBeforeAuthNav = useCallback(() => {
-    clearMegaCloseTimer();
-    setOpenMegaMenu(null);
-  }, []);
+  /** Legacy hook for auth links — tier mega panel removed; keep call sites stable. */
+  const closeMegaBeforeAuthNav = useCallback(() => {}, []);
 
   /** Defer drawer close so `Link` navigations (e.g. `/admin`) are not cancelled when the portal unmounts in the same tick. */
   const scheduleMobileDrawerClose = useCallback(() => {
@@ -198,14 +178,10 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
 
   useEffect(() => {
     const close = (e: PointerEvent) => {
-      if (!desktopMoreTracksRef.current?.contains(e.target as Node)) setDesktopMoreTracksOpen(false);
       if (!mobileLangRef.current?.contains(e.target as Node)) setMobileLangOpen(false);
-      if (!headerRef.current?.contains(e.target as Node)) setOpenMegaMenu(null);
     };
     const onEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setOpenMegaMenu(null);
-        setDesktopMoreTracksOpen(false);
         setMobileLangOpen(false);
       }
     };
@@ -228,21 +204,9 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
 
   useEffect(() => {
     queueMicrotask(() => {
-      setOpenMegaMenu(null);
-      setMobileExpandedMega(null);
-      setDesktopMoreTracksOpen(false);
       setMobileLangOpen(false);
     });
   }, [pathname, locale, region]);
-
-  useEffect(
-    () => () => {
-      if (closeMegaTimeoutRef.current) {
-        clearTimeout(closeMegaTimeoutRef.current);
-      }
-    },
-    [],
-  );
 
   const activeNav = useActiveNavContext();
   const megaMenus = useMemo(() => buildMarketingMegaMenus(region, t), [region, t]);
@@ -316,16 +280,8 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
     ],
     [t, locale],
   );
-  const primaryMegaMenus = useMemo(() => megaMenus.filter((m) => m.key === "rn" || m.key === "pn" || m.key === "np"), [megaMenus]);
-  const secondaryMegaMenus = useMemo(
-    () => megaMenus.filter((m) => m.key === "newgrad" || m.key === "allied"),
-    [megaMenus],
-  );
-  const exposeSecondaryTracksOnPricing = marketingHeaderExposeSecondaryTracksInline(strippedPath);
-  const desktopTierMegaMenus = exposeSecondaryTracksOnPricing
-    ? [...primaryMegaMenus, ...secondaryMegaMenus]
-    : primaryMegaMenus;
-  const openMega = megaMenus.find((menu) => menu.key === openMegaMenu) ?? null;
+  /** Primary exam hubs — same order/URLs as {@link buildMarketingMegaMenus} `hubHref` (region-aware). */
+  const tierHubMenus = megaMenus;
 
   const darkHeaderShadow = useMemo(() => {
     const inset = "inset 0 1px 0 0 rgba(255,255,255,0.15)";
@@ -394,8 +350,6 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
             ? ` nn-header-logo-row${isScrolled ? " nn-header-logo-row--scrolled" : ""}`
             : " nn-header-dark-surface"
         } overflow-visible`}
-        onMouseEnter={clearMegaCloseTimer}
-        onMouseLeave={scheduleMegaClose}
       >
         {/*
           Desktop (`xl+`): preferences rail — country, language, and theme.
@@ -679,162 +633,31 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               aria-label={t("nav.marketingExplore")}
               className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-0 xl:gap-0.5"
             >
-              {desktopTierMegaMenus.map((menu) => {
-                const expanded = openMegaMenu === menu.key;
-                return (
-                  <div
-                    key={menu.key}
-                    className="relative"
-                    onMouseEnter={() => {
-                      setDesktopMoreTracksOpen(false);
-                      setOpenMegaMenu(menu.key);
-                    }}
-                  >
-                    <button
-                      type="button"
-                      aria-expanded={expanded}
-                      aria-controls={`mega-menu-${menu.key}`}
-                      data-active={isMegaMenuKeyActive(menu.key, strippedPath) || undefined}
-                      className={`${NAV_TIER_LINK_CLASS} inline-flex items-center gap-1 text-center`}
-                      onClick={() => setOpenMegaMenu(expanded ? null : menu.key)}
-                      onFocus={() => setOpenMegaMenu(menu.key)}
-                    >
-                      {menu.label}
-                      <ChevronDown className={`h-3.5 w-3.5 transition-transform ${expanded ? "rotate-180" : ""}`} aria-hidden />
-                    </button>
-                  </div>
-                );
-              })}
-              {!exposeSecondaryTracksOnPricing && secondaryMegaMenus.length > 0 ? (
-                <div className="relative" ref={desktopMoreTracksRef}>
-                  <button
-                    type="button"
-                    aria-expanded={desktopMoreTracksOpen}
-                    className={`${NAV_TIER_LINK_CLASS} inline-flex items-center gap-1 text-center text-[var(--nav-muted)]`}
-                    onClick={() => setDesktopMoreTracksOpen((o) => !o)}
-                  >
-                    {formatTitleCase(t("nav.examTracks.more"), locale)}
-                    <ChevronDown className={`h-3.5 w-3.5 transition-transform ${desktopMoreTracksOpen ? "rotate-180" : ""}`} aria-hidden />
-                  </button>
-                  {desktopMoreTracksOpen ? (
-                    <div
-                      role="menu"
-                      className="absolute start-0 z-[130] mt-2 min-w-[14rem] rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] py-1 shadow-[var(--shadow-card-hover)]"
-                    >
-                      {secondaryMegaMenus.map((menu) => (
-                        <button
-                          key={menu.key}
-                          type="button"
-                          role="menuitem"
-                          className="flex w-full items-center px-3 py-2.5 text-left text-sm font-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
-                          onClick={() => {
-                            setOpenMegaMenu(menu.key);
-                            setDesktopMoreTracksOpen(false);
-                            trackClientEvent(PH.marketingNavClick, {
-                              actor: navActor,
-                              nav_id: `exam_tracks_more_${menu.key}`,
-                              surface: "site_header_desktop",
-                              marketing_region: region,
-                            });
-                          }}
-                        >
-                          {menu.label}
-                        </button>
-                      ))}
-                    </div>
-                  ) : null}
-                </div>
-              ) : null}
+              {tierHubMenus.map((menu) => (
+                <Link
+                  key={menu.key}
+                  href={localizeHref(menu.hubHref)}
+                  data-active={isMegaMenuKeyActive(menu.key, strippedPath) || undefined}
+                  className={`${NAV_TIER_LINK_CLASS} rounded-md px-1.5 py-1 text-center transition-colors hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${
+                    isMegaMenuKeyActive(menu.key, strippedPath)
+                      ? "font-semibold text-[var(--nav-link-active)]"
+                      : "text-[var(--nav-fg)]"
+                  }`}
+                  onClick={() => {
+                    trackClientEvent(PH.marketingNavClick, {
+                      actor: navActor,
+                      nav_id: `${menu.key}_tier_hub`,
+                      surface: "site_header_desktop",
+                      marketing_region: region,
+                    });
+                  }}
+                >
+                  {menu.label}
+                </Link>
+              ))}
             </nav>
           </div>
         </div>
-        {openMega ? (
-          <div
-            id={`mega-menu-${openMega.key}`}
-            role="dialog"
-            aria-label={`${openMega.label} menu`}
-            className="nn-header-hide-until-xl absolute inset-x-0 top-full z-[120] animate-[nn-mega-panel-enter_var(--brand-motion-normal)_var(--brand-motion-ease-luxury)_forwards]"
-          >
-            <div className="nn-section-shell pb-5 pt-1.5">
-              <div className="overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-strong)] shadow-[var(--shadow-elevated)] ring-1 ring-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border-subtle))]">
-                <div className="grid md:grid-cols-[5fr_7fr]">
-
-                  {/* ── Primary hub card (left) ── */}
-                  <Link
-                    href={localizeHref(openMega.hubHref)}
-                    className="group flex flex-col items-start justify-between gap-10 border-r border-[var(--border-subtle)] bg-[var(--accent-surface-a)] p-8 text-left ring-1 ring-inset ring-[var(--accent-surface-a-border)] transition-[background-color,box-shadow] duration-150 ease-[var(--motion-ease)] hover:bg-[var(--accent-surface-a-border)] hover:shadow-[var(--shadow-card-hover)] focus-visible:outline-2 focus-visible:outline-[var(--ring)]"
-                    onClick={() => {
-                      setOpenMegaMenu(null);
-                      trackClientEvent(PH.marketingNavClick, {
-                        actor: navActor,
-                        nav_id: `${openMega.key}_hub`,
-                        surface: "site_header_mega_primary",
-                        marketing_region: region,
-                      });
-                    }}
-                  >
-                    <div>
-                      {/* Badge pill */}
-                      <span className="mb-3 inline-flex items-center rounded-full border border-[var(--text-accent)] px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-[var(--text-accent)]">
-                        {openMega.hubBadge ?? t("nav.mega.startHere")}
-                      </span>
-                      <h3 className="text-lg font-medium leading-snug text-[var(--theme-heading-text)]">
-                        {formatTitleCase(`${openMega.label} — ${t("nav.mega.examHubSuffix")}`, locale)}
-                      </h3>
-                      <p className="mt-2 text-sm leading-relaxed text-[var(--theme-muted-text)]">
-                        {openMega.hubDescription}
-                      </p>
-                    </div>
-                    <span className="flex items-center gap-1 text-sm font-medium text-[var(--text-accent)] transition-[gap] group-hover:gap-2">
-                      {formatTitleCase(t("nav.mega.openHub"), locale)}
-                      <ChevronRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden />
-                    </span>
-                  </Link>
-
-                  {/* ── Secondary groups (right) ── */}
-                  <div className="p-8 text-left">
-                    <div className="grid w-full grid-cols-3 justify-items-start gap-x-8 gap-y-7">
-                      {openMega.groups.map((group) => (
-                        <div key={group.key} className="w-full min-w-0 text-left">
-                          <p className="mb-3 border-b border-[var(--border-subtle)] pb-2 text-[10px] font-bold uppercase tracking-widest text-[var(--theme-muted-text)]">
-                            {formatEyebrow(group.heading, locale)}
-                          </p>
-                          <ul className="w-full space-y-1.5">
-                            {group.links.map((link) => (
-                              <li key={link.key}>
-                                <Link
-                                  href={localizeHref(link.href)}
-                                  aria-current={isActivePath(strippedPath, link.href) ? "page" : undefined}
-                                  className={`flex w-full items-center justify-start gap-1.5 rounded-lg px-2 py-2 text-left text-sm tracking-[0.01em] transition-[background-color,color,transform] duration-100 ease-[var(--motion-ease)] focus-visible:outline-2 focus-visible:outline-[var(--ring)] ${isActivePath(strippedPath, link.href) ? "bg-[var(--nav-active)] font-semibold text-[var(--nav-on-active-fg)]" : "font-normal text-[var(--theme-heading-text)] hover:translate-x-0.5 hover:bg-[var(--nav-hover)] hover:text-[var(--nav-link-hover)]"}`}
-                                  onClick={() => {
-                                    setOpenMegaMenu(null);
-                                    trackClientEvent(PH.marketingNavClick, {
-                                      actor: navActor,
-                                      nav_id: `${openMega.key}_${link.key}`,
-                                      surface: "site_header_mega_menu",
-                                      marketing_region: region,
-                                    });
-                                  }}
-                                >
-                                  <span
-                                    className={`h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-100 ${isActivePath(strippedPath, link.href) ? "bg-[var(--text-accent)]" : "bg-transparent"}`}
-                                    aria-hidden
-                                  />
-                                  {formatTitleCase(link.label, locale)}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : null}
       </header>
 
       {/* Mobile context/settings drawer — separate from main nav */}
@@ -943,141 +766,30 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                         </>
                       );
                     })()}
-                    {primaryMegaMenus.map((menu) => {
-                      const expanded = mobileExpandedMega === menu.key;
-                      return (
-                        <div key={menu.key} className="rounded-xl border border-[var(--nav-border)] bg-[var(--surface)]">
-                          {/* Accordion toggle */}
-                          <button
-                            type="button"
-                            aria-expanded={expanded}
-                            aria-controls={`mobile-mega-${menu.key}`}
-                            data-active={isMegaMenuKeyActive(menu.key, strippedPath) || undefined}
-                            className={`flex w-full items-center justify-between px-3 py-3 text-left text-[15px] tracking-[0.01em] transition-colors ${isMegaMenuKeyActive(menu.key, strippedPath) ? "font-semibold text-[var(--nav-link-active)]" : "font-normal text-[var(--nav-fg)]"}`}
-                            onClick={() => setMobileExpandedMega(expanded ? null : menu.key)}
-                          >
-                            <span className="flex items-center gap-2">
-                              <span
-                                className={`h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-100 ${isMegaMenuKeyActive(menu.key, strippedPath) ? "bg-[var(--text-accent)]" : "bg-transparent"}`}
-                                aria-hidden
-                              />
-                              {menu.label}
-                            </span>
-                            <ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${expanded ? "rotate-180" : ""}`} aria-hidden />
-                          </button>
-
-                          {expanded ? (
-                            <div id={`mobile-mega-${menu.key}`} className="space-y-4 border-t border-[var(--nav-border)] px-3 pb-4 pt-3">
-                              {/* Primary hub link — featured entry block */}
-                              <Link
-                                href={localizeHref(menu.hubHref)}
-                                className="group flex items-start justify-between gap-3 rounded-xl border border-[var(--accent-surface-a-border)] bg-[var(--accent-surface-a)] p-4 ring-1 ring-inset ring-[var(--accent-surface-a-border)] transition-colors hover:bg-[var(--accent-surface-a-border)]"
-                                onClick={() => {
-                                  trackClientEvent(PH.marketingNavClick, {
-                                    actor: navActor,
-                                    nav_id: `${menu.key}_hub`,
-                                    surface: "site_header_mobile_mega",
-                                    marketing_region: region,
-                                  });
-                                  scheduleMobileDrawerClose();
-                                }}
-                              >
-                                <div className="min-w-0">
-                                  <span className="mb-1.5 inline-flex items-center rounded-full border border-[var(--text-accent)] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-[var(--text-accent)]">
-                                    {menu.hubBadge ?? t("nav.mega.startHere")}
-                                  </span>
-                                  <span className="block text-[14px] font-medium leading-snug text-[var(--nav-fg)]">
-                                    {formatTitleCase(`${menu.label} — ${t("nav.mega.examHubSuffix")}`, locale)}
-                                  </span>
-                                  <span className="mt-0.5 block text-[12px] leading-snug text-[var(--nav-muted)]">
-                                    {menu.hubDescription}
-                                  </span>
-                                </div>
-                                <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-[var(--text-accent)] transition-transform group-hover:translate-x-0.5" aria-hidden />
-                              </Link>
-
-                              {/* Secondary groups */}
-                              {menu.groups.map((group) => (
-                                <div key={`${menu.key}-${group.key}`}>
-                                  <p className="mb-2.5 border-b border-[var(--nav-border)] pb-1.5 text-[11px] font-bold uppercase tracking-widest text-[var(--nav-muted)]">
-                                    {formatEyebrow(group.heading, locale)}
-                                  </p>
-                                  <ul className="space-y-1">
-                                    {group.links.map((link) => (
-                                      <li key={link.key}>
-                                        <Link
-                                          href={localizeHref(link.href)}
-                                          aria-current={isActivePath(strippedPath, link.href) ? "page" : undefined}
-                                          className={`flex items-center gap-2 rounded-lg px-2 py-2 text-[14px] tracking-[0.01em] transition-colors ${isActivePath(strippedPath, link.href) ? "bg-[var(--nav-active)] font-semibold text-[var(--nav-on-active-fg)]" : "font-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
-                                          onClick={() => {
-                                            trackClientEvent(PH.marketingNavClick, {
-                                              actor: navActor,
-                                              nav_id: `${menu.key}_${link.key}`,
-                                              surface: "site_header_mobile_mega",
-                                              marketing_region: region,
-                                            });
-                                            scheduleMobileDrawerClose();
-                                          }}
-                                        >
-                                          <span
-                                            className={`h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-100 ${isActivePath(strippedPath, link.href) ? "bg-[var(--text-accent)]" : "bg-transparent"}`}
-                                            aria-hidden
-                                          />
-                                          {formatTitleCase(link.label, locale)}
-                                        </Link>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              ))}
-                            </div>
-                          ) : null}
-                        </div>
-                      );
-                    })}
-                    {secondaryMegaMenus.length > 0 ? (
-                      <div className="rounded-xl border border-[var(--nav-border)] bg-[var(--surface)]">
-                        <button
-                          type="button"
-                          aria-expanded={mobileExpandedMega === "moreTracks"}
-                          aria-controls="mobile-mega-more-tracks"
-                          className="flex w-full items-center justify-between px-3 py-3 text-left text-[15px] font-normal tracking-[0.01em] text-[var(--nav-muted)] transition-colors"
-                          onClick={() => setMobileExpandedMega(mobileExpandedMega === "moreTracks" ? null : "moreTracks")}
-                        >
-                          <span>{formatTitleCase(t("nav.examTracks.more"), locale)}</span>
-                          <ChevronDown
-                            className={`h-4 w-4 shrink-0 transition-transform ${mobileExpandedMega === "moreTracks" ? "rotate-180" : ""}`}
-                            aria-hidden
-                          />
-                        </button>
-                        {mobileExpandedMega === "moreTracks" ? (
-                          <div
-                            id="mobile-mega-more-tracks"
-                            className="space-y-2 border-t border-[var(--nav-border)] px-3 pb-4 pt-3"
-                          >
-                            {secondaryMegaMenus.map((menu) => (
-                              <Link
-                                key={menu.key}
-                                href={localizeHref(menu.hubHref)}
-                                className="flex flex-col gap-1 rounded-xl border border-[var(--accent-surface-a-border)] bg-[var(--accent-surface-a)] px-3 py-3 text-left ring-1 ring-inset ring-[var(--accent-surface-a-border)] transition-colors hover:bg-[var(--accent-surface-a-border)]"
-                                onClick={() => {
-                                  trackClientEvent(PH.marketingNavClick, {
-                                    actor: navActor,
-                                    nav_id: `${menu.key}_hub`,
-                                    surface: "site_header_mobile_mega",
-                                    marketing_region: region,
-                                  });
-                                  scheduleMobileDrawerClose();
-                                }}
-                              >
-                                <span className="text-[14px] font-semibold text-[var(--nav-fg)]">{menu.label}</span>
-                                <span className="text-[12px] leading-snug text-[var(--nav-muted)]">{menu.hubDescription}</span>
-                              </Link>
-                            ))}
-                          </div>
-                        ) : null}
-                      </div>
-                    ) : null}
+                    {tierHubMenus.map((menu) => (
+                      <Link
+                        key={menu.key}
+                        href={localizeHref(menu.hubHref)}
+                        aria-current={isMegaMenuKeyActive(menu.key, strippedPath) ? "page" : undefined}
+                        data-active={isMegaMenuKeyActive(menu.key, strippedPath) || undefined}
+                        className={`flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-medium transition-colors ${isMegaMenuKeyActive(menu.key, strippedPath) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                        onClick={() => {
+                          trackClientEvent(PH.marketingNavClick, {
+                            actor: navActor,
+                            nav_id: `${menu.key}_tier_hub`,
+                            surface: "site_header_mobile_drawer",
+                            marketing_region: region,
+                          });
+                          scheduleMobileDrawerClose();
+                        }}
+                      >
+                        <span
+                          className={`h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-100 ${isMegaMenuKeyActive(menu.key, strippedPath) ? "bg-[var(--text-accent)]" : "bg-transparent"}`}
+                          aria-hidden
+                        />
+                        {menu.label}
+                      </Link>
+                    ))}
                     <div className="space-y-1 border-t border-[var(--header-border)] pt-3">
                       <p className="px-2 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
                         {formatTitleCase(t("nav.marketingMore"), locale)}
